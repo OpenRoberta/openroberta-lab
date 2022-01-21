@@ -151,7 +151,7 @@ function initEvents() {
             var robot = GUISTATE_C.getRobot();
             var position = $('#simDiv').position();
             position.top += 12;
-            if (robot == 'calliope2016' || robot == 'calliope2017' || robot == 'calliope2017NoBlue' || robot =='microbit') {
+            if (robot == 'calliope2016' || robot == 'calliope2017' || robot == 'calliope2017NoBlue' || robot == 'microbit') {
                 position.left = $('#blocklyDiv').width() + 12;
                 $('#simRobotModal').css({
                     top: position.top,
@@ -348,6 +348,7 @@ function initNaoSimulation(result) {
 }
 
 function toggleSim() {
+    var toggle = new $.Deferred();
     if ($('.fromRight.rightActive').hasClass('shifting')) {
         return;
     }
@@ -378,14 +379,18 @@ function toggleSim() {
                     initNaoSimulation(result);
                 } else {
                     initSimulation(result);
+                    toggle.resolve();
                 }
             } else {
                 MSG.displayInformation(result, '', result.message, '');
+                toggle.resolve();
             }
             PROG_C.reloadProgram(result);
         });
     }
+    return toggle.promise();
 }
+export { toggleSim };
 
 function toggleSimEvent(event) {
     if ($('#simControl').hasClass('typcn-media-play-outline')) {

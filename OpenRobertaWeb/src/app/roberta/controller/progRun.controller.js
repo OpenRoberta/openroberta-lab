@@ -213,7 +213,10 @@ function runForAutoConnection(result) {
         }
     } else {
         GUISTATE_C.setConnectionState('wait');
-        MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+        //MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+        $('#specificChart').hide();
+        $('#volksbotStart').prop('disabled', false);
+        $('#tutorialStartView').modal('hide');
     }
 }
 

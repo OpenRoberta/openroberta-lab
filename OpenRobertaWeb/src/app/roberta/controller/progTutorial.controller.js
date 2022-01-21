@@ -5,55 +5,76 @@ import * as PROG_C from 'program.controller';
 import * as ROBOT_C from 'robot.controller';
 import * as IMPORT_C from 'import.controller';
 import * as Blockly from 'blockly';
-import * as U from 'util';
+import * as SIM from 'simulation.simulation';
 import * as $ from 'jquery';
 
 const INITIAL_WIDTH = 0.5;
 var blocklyWorkspace;
 var tutorialList;
-var tutorialId;
 var tutorial;
 var step = 0;
 var maxSteps = 0;
 var credits = [];
 var maxCredits = [];
 var quiz = false;
+var configData = {};
+var TIMEOUT = 25000;
+var myTimeoutID;
+var tutorialId;
+var initTutorial;
+var noTimeout = true;
 
 function init() {
     tutorialList = GUISTATE_C.getListOfTutorials();
     blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
     initEvents();
 }
-
+export { init };
 function initEvents() {
-    $('.menu.tutorial').onWrap('click', function (event) {
+    $('.menu.tutorial').on('click', function (event) {
         startTutorial(event.target.id);
     });
-    $('#tutorialButton').onWrap('click touchend', function () {
+    $('#tutorialButton').on('click touchend', function () {
         toggleTutorial();
         return false;
     });
+    $('#helpTutorial').on('click', function () {
+        clearTimeout(myTimeoutID);
+        $('#tutorialStartView').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: true,
+        });
+        $('#volksbotStart').hide('slow'); //prop('disabled', true);
+        $('#startVideo').one('ended', videoEnd);
+        $('#startVideo')[0].play();
+    });
 }
 
-function loadFromTutorial(tutId) {
+function loadFromTutorial(tutId, opt_init) {
     // initialize this tutorial
+    if (opt_init) {
+        initTutorial = tutId;
+    }
+    clearTimeout(myTimeoutID);
     tutorialId = tutId;
-    tutorial = tutorialList && tutorialList[tutId];
+    tutorial = tutorialList[tutId];
+    step = 0;
+    maxSteps = 0;
+    credits = [];
+    maxCredits = [];
+    quiz = false;
+    configData = {};
+    noTimeout = true;
+    myTimeoutID;
+    clearTimeout(myTimeoutID);
+    blocklyWorkspace.options.maxBlocks = null;
     if (tutorial) {
-        ROBOT_C.switchRobot(tutorial.robot, null, startTutorial);
+        ROBOT_C.switchRobot(tutorial.robot, undefined, startTutorial);
     }
 
     function startTutorial() {
-        $('#tabProgram').clickWrap();
-        if (GUISTATE_C.isKioskMode()) {
-            $('#infoButton').hide();
-            $('#feedbackButton').hide();
-            // for beginner tutorials the code view is more confusing than helpful, so we don't show the button in kiosk mode
-            if (tutorial.level.indexOf('1') === 0) {
-                $('#codeButton').hide();
-            }
-            U.removeLinks($('#legalDiv a'));
-        }
+        $('#tabProgram').trigger('click');
         if (tutorial.initXML) {
             IMPORT_C.loadProgramFromXML('egal', tutorial.initXML);
         }
@@ -89,7 +110,7 @@ function loadFromTutorial(tutId) {
 
         // prepare the view
         $('#tutorial-navigation').fadeIn(750);
-        $('#head-navigation').fadeOut(750);
+        $('#head-navigation').hide();
 
         $('#tutorial-list :first-child').addClass('active');
         $('#tutorialButton').show();
@@ -97,169 +118,318 @@ function loadFromTutorial(tutId) {
 
         initStepEvents();
         createInstruction();
-        openTutorialView();
+        if (tutorial.instructions) {
+            openTutorialView();
+        }
         showOverview();
+        //videoEnd();
     }
 }
-export { init, loadFromTutorial };
+export { loadFromTutorial };
 
-function initStepEvents() {
-    $('#tutorial-list.nav li.step a').on('click', function () {
-        Blockly.hideChaff();
-        step = $(this).text() - 2;
-        nextStep();
-        openTutorialView();
-    });
-    $('#tutorialEnd').oneWrap('click', function () {
-        exitTutorial();
-    });
+function reloadTutorial() {
+    clearTimeout(myTimeoutID);
+    var i = tutorialId.slice(-1);
+    var newTutorialId = tutorialId.slice(0, tutorialId.length - 1) + (parseInt(i) + 1);
+    tutorialId = tutorialList[newTutorialId] ? newTutorialId : initTutorial;
+    tutorialController.loadFromTutorial(tutorialId);
 }
 
-function showOverview() {
-    if (!tutorial.overview) return;
-    var html = tutorial.overview.description;
-    html += '</br></br><b>Lernziel: </b>';
-    html += tutorial.overview.goal;
-    html += '</br></br><b>Vorkenntnisse: </b>';
-    html += tutorial.overview.previous;
-    html += '<hr style="border: 2px solid #33B8CA; margin: 10px 0">';
-    html += '<span class="typcn typcn-stopwatch"/>&emsp;&emsp;';
-    html += tutorial.time;
-    html += '</br><span class="typcn typcn-group"/>&emsp;&emsp;';
-    html += tutorial.age;
-    html += '</br><span class="typcn typcn-simulation"/>&emsp;&emsp;';
-    html += tutorial.sim && (tutorial.sim === 'sim' || tutorial.sim === 1) ? 'ja' : 'nein';
-    if (tutorial.level) {
-        html += '</br><span class="typcn typcn-mortar-board"/>&emsp;&emsp;';
-        var maxLevel = isNaN(tutorial.level) ? tutorial.level.split('/')[1] : 3;
-        var thisLevel = isNaN(tutorial.level) ? tutorial.level.split('/')[0] : tutorial.level;
-        for (var i = 1; i <= maxLevel; i++) {
-            if (i <= thisLevel) {
-                html += '<span class="typcn typcn-star-full-outline"/>';
+function initStepEvents() {
+    if (tutorial.instructions) {
+        $('#tutorial-list.nav li.step a').on('click', function () {
+            ckly;
+            Blockly.hideChaff();
+            step = $(this).text() - 2;
+            nextStep();
+            openTutorialView();
+        });
+        $('#tutorialEnd').one('click', function () {
+            exitTutorial();
+        });
+    } else {
+        blocklyWorkspace.removeChangeListener(blocklyListener);
+        blocklyWorkspace.addChangeListener(blocklyListener);
+        $('#simControl').off('simTerminated', simTerminatedListener);
+        $('#simControl').on('simTerminated', simTerminatedListener);
+    }
+}
+
+function blocklyListener(event) {
+    clearTimeout(myTimeoutID);
+    if (event.blockId !== 'step_dummy' && event.newParentId && blocklyWorkspace.remainingCapacity() == 0) {
+        configData = SIM.exportConfigData();
+        noTimeout = true;
+        var blocks = blocklyWorkspace.getAllBlocks();
+        for (var i = 0; i < blocks.length; i++) {
+            blocks[i].setMovable(false);
+        }
+        // only allow blocks to be moved at the end of the program
+        if (blocks[blocks.length - 2].id !== event.blockId) {
+            blocklyWorkspace.getBlockById(event.blockId).dispose(true, true);
+            clearTimeout(myTimeoutID);
+            myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
+            return;
+        }
+        setTimeout(function () {
+            clearTimeout(myTimeoutID);
+            Blockly.hideChaff();
+            $('.blocklyWorkspace>.blocklyFlyout').fadeOut();
+            $('#simControl').trigger('click');
+        }, 500);
+    } else if (!noTimeout) {
+        clearTimeout(myTimeoutID);
+        myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
+    }
+}
+
+function simTerminatedListener() {
+    var blocks = blocklyWorkspace.getAllBlocks();
+    if (checkSolutionCorrect(blocks)) {
+        if (step + 1 >= maxSteps) {
+            clearTimeout(myTimeoutID);
+            var blocks = blocklyWorkspace.getAllBlocks();
+            blocks[blocks.length - 1].dispose(false, true);
+            for (var i = 0; i < blocks.length - 1; i++) {
+                blocks[i].setDisabled(false);
+                blocks[i].setMovable(false);
+            }
+
+            function waitClock(t) {
+                var tt = t - 1;
+                if (tt >= 0) {
+                    updateDonutChart('#specificChart', (100 / 120) * (120 - tt));
+                    setTimeout(function () {
+                        waitClock(tt);
+                    }, 1000);
+                }
+            }
+            $('#volksbotStart').one('click', function () {
+                setTimeout(function () {
+                    $('#menuRunProg').trigger('click');
+                    $('#tutorialStartView .modal-dialog').hide();
+                    $('#specificChart').show();
+                    waitClock(120);
+                }, 1000);
+            });
+            $('#tutorialStartViewText').html(tutorial.end);
+            $('#tutorialStartView').one('hidden.bs.modal', function (e) {
+                reloadTutorial();
+                return;
+            });
+            setTimeout(function () {
+                $('#tutorialStartView').modal({
+                    backdrop: 'static',
+                    keyboard: false,
+                    show: true,
+                });
+            });
+        } else {
+            // delete last dummy block from program
+            for (var i = 1; i < blocks.length; i++) {
+                blocks[i].setDisabled(true);
+            }
+            setTimeout(function () {
+                // $("#state").fadeOut(550, function() {
+                //     $("#state").removeClass("typcn-eye-outline").addClass("typcn-hand").fadeIn(550);
+                // });
+                Blockly.hideChaff();
+                $('.blocklyWorkspace>.blocklyFlyout').fadeIn(function () {
+                    nextStep();
+                });
+                clearTimeout(myTimeoutID);
+                myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
+                noTimeout = false;
+            }, 500);
+        }
+    } else {
+        setTimeout(function () {
+            SIM.relatives2coordinates(configData);
+            var blocks = blocklyWorkspace.getAllBlocks();
+            var toDelete = 1;
+            if (tutorial.step[step - 1]) {
+                toDelete = blocks.length - tutorial.step[step - 1].maxBlocks;
             } else {
-                html += '<span class="typcn typcn-star-outline"/>';
+                toDelete = blocks.length - 1; // start block always stays
+            }
+            for (i = 0; i < toDelete; i++) {
+                blocks[blocks.length - 2].dispose(true, true);
+                blocks = blocklyWorkspace.getAllBlocks();
+            }
+            // $("#state").fadeOut(550, function() {
+            //     $("#state").removeClass("typcn-eye-outline").addClass("typcn-hand").fadeIn(550);
+            // });
+            Blockly.hideChaff();
+            $('.blocklyWorkspace>.blocklyFlyout').fadeIn();
+            myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
+            noTimeout = false;
+        }, 500);
+    }
+}
+
+function checkSolutionCorrect(blocks) {
+    if (tutorial.step[step].solution) {
+        for (i = 0; i < tutorial.step[step].solution.length; i++) {
+            if (blocks[i + 1].type != tutorial.step[step].solution[i]) {
+                return false;
             }
         }
     }
-    html += '</br><span class="typcn typcn-roberta"/>&emsp;&emsp;';
-    html += GUISTATE_C.getMenuRobotRealName(tutorial.robot);
-    $('#tutorialOverviewText').html(html);
-    $('#tutorialOverviewTitle').html(tutorial.name);
-    if (GUISTATE_C.isKioskMode()) {
-        U.removeLinks($('#tutorialOverview a'));
-    }
-    $('#tutorialAbort').off('click.dismiss.bs.modal');
-    $('#tutorialAbort').onWrap(
-        'click.dismiss.bs.modal',
-        function (event) {
-            exitTutorial();
-        },
-        'tutorial exit'
-    );
-    $('#tutorialContinue').off('click.dismiss.bs.modal');
-    $('#tutorialContinue').onWrap(
-        'click.dismiss.bs.modal',
-        function (event) {
-            LOG.info('tutorial executed ' + tutorial.index + tutorialId);
-        },
-        'tuorial continue'
-    );
+    return true;
+}
 
-    $('#tutorialOverview').modal(
-        {
+function showOverview() {
+    if (tutorial.overview) {
+        var html = tutorial.overview.description;
+
+        $('#tutorialOverviewText').html(html);
+        $('#tutorialOverviewTitle').html(tutorial.name);
+        $('#tutorialAbort').off('click.dismiss.bs.modal');
+        $('#tutorialAbort').onWrap('click.dismiss.bs.modal', function (event) {
+            exitTutorial();
+            return false;
+        });
+        $('#tutorialContinue').off('click.dismiss.bs.modal');
+        $('#tutorialContinue').onWrap('click.dismiss.bs.modal', function (event) {
+            LOG.info('tutorial executed ' + tutorial.index + tutorialId);
+            return false;
+        });
+
+        $('#tutorialOverview').modal({
             backdrop: 'static',
             keyboard: false,
             show: true,
-        },
-        'tutorial overview'
-    );
+        });
+    } else if (tutorial.startView) {
+        GUISTATE_C.setRunEnabled(true);
+        $('#tutorialStartView .modal-dialog').show();
+        $('#tutorialStartViewText').html("<img height='401px' src='css/img/DieMaus_KV_Museum_mit_der_Maus_RGB.png' alt='Die Maus'>");
+        $('#volksbotStart').one('click', function () {
+            clearTimeout(myTimeoutID);
+            $('#startAudio').one('ended', audioEnd);
+            $('#volksbotStart').hide('slow'); //prop('disabled', true);
+            $('#startAudio')[0].play();
+            return;
+        });
+        clearTimeout(myTimeoutID);
+        $('#tutorialStartView').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: true,
+        });
+    }
+}
+
+function audioEnd() {
+    setTimeout(function () {
+        $('#tutorialStartViewText').hide().html(tutorial.startView).fadeIn('slow');
+        $('#startVideo').one('ended', videoEnd);
+        //$('#startVideo')[0].play();
+    }, 500);
+}
+
+function videoEnd() {
+    $('#volksbotStart').show('slow'); //prop('disabled', false);
+    $('#tutorialStartView').modal('hide');
+    clearTimeout(myTimeoutID);
+    myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
 }
 
 function createInstruction() {
     if (tutorial.step[step]) {
-        $('#tutorialContent').empty();
-        if (tutorial.step[step].instruction) {
-            if (tutorial.step[step].toolbox) {
-                try {
-                    PROG_C.loadExternalToolbox(tutorial.step[step].toolbox);
-                    Blockly.mainWorkspace.options.maxBlocks = tutorial.step[step].maxBlocks;
-                } catch (e) {
-                    console.log(e);
-                }
+        if (tutorial.step[step].toolbox) {
+            try {
+                blocklyWorkspace.options.maxBlocks = tutorial.step[step].maxBlocks;
+                PROG_C.loadExternalToolbox(tutorial.step[step].toolbox);
+            } catch (e) {
+                console.log(e);
             }
-            if (tutorial.step[step].header) {
-                $('#tutorialContent').append($('<h3>').attr('class', 'quiz header').append(tutorial.step[step].header));
-            }
-            $('#tutorialContent').append(tutorial.step[step].instruction);
-            if (tutorial.step[step].tip) {
-                $('#tutorialContent').append('<br><br>').append($('<ul>').attr('class', 'tip'));
-                if (Array.isArray(tutorial.step[step].tip)) {
-                    for (var i = 0; i < tutorial.step[step].tip.length; i++) {
-                        $('#tutorialContent ul.tip').append('<li>' + tutorial.step[step].tip[i] + '</li>');
-                    }
-                } else {
-                    $('#tutorialContent ul.tip').append('<li>' + tutorial.step[step].tip + '</li>');
-                }
-            }
-
-            if (tutorial.step[step].solution) {
-                $('#tutorialContent').append(
-                    $('<div>')
-                        .attr('id', 'helpDiv')
-                        .append(
-                            $('<button>', {
-                                text: 'Hilfe',
-                                id: 'quizHelp',
-                                class: 'btn test',
-                                click: function () {
-                                    showSolution();
-                                },
-                            })
-                        )
-                );
-            }
-
-            if (step == maxSteps - 1) {
-                // last step
-                $('#tutorialContent').append(
-                    $('<div>')
-                        .attr('class', 'quiz continue')
-                        .append(
-                            $('<button>', {
-                                text: 'Tutorial beenden',
-                                class: 'btn',
-                                click: function () {
-                                    MSG.displayMessage(tutorial.end, 'POPUP', '');
-                                    $('.modal').oneWrap('hide.bs.modal', function (e) {
-                                        $('#tutorialEnd').clickWrap();
-                                        return false;
-                                    });
-                                    return false;
-                                },
-                            })
-                        )
-                );
-            } else {
-                $('#tutorialContent').append(
-                    $('<div>')
-                        .attr('class', 'quiz continue')
-                        .append(
-                            $('<button>', {
-                                text: 'weiter',
-                                class: 'btn',
-                                click: function () {
-                                    createQuiz();
-                                },
-                            })
-                        )
-                );
-            }
-        } else {
-            // apparently a step without an instruction -> go directly to the quiz
-            createQuiz();
         }
-        if (GUISTATE_C.isKioskMode()) {
-            U.removeLinks($('#tutorialContent a'));
+        if (tutorial.instructions) {
+            $('#tutorialContent').empty();
+            if (tutorial.step[step].instruction) {
+                if (tutorial.step[step].toolbox) {
+                    try {
+                        PROG_C.loadExternalToolbox(tutorial.step[step].toolbox);
+                        blocklyWorkspace.options.maxBlocks = tutorial.step[step].maxBlocks;
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
+                if (tutorial.step[step].header) {
+                    $('#tutorialContent').append($('<h3>').attr('class', 'quiz header').append(tutorial.step[step].header));
+                }
+                $('#tutorialContent').append(tutorial.step[step].instruction);
+                if (tutorial.step[step].tip) {
+                    $('#tutorialContent').append('<br><br>').append($('<ul>').attr('class', 'tip'));
+                    if (Array.isArray(tutorial.step[step].tip)) {
+                        for (var i = 0; i < tutorial.step[step].tip.length; i++) {
+                            $('#tutorialContent ul.tip').append('<li>' + tutorial.step[step].tip[i] + '</li>');
+                        }
+                    } else {
+                        $('#tutorialContent ul.tip').append('<li>' + tutorial.step[step].tip + '</li>');
+                    }
+                }
+
+                if (tutorial.step[step].solution) {
+                    $('#tutorialContent').append(
+                        $('<div>')
+                            .attr('id', 'helpDiv')
+                            .append(
+                                $('<button>', {
+                                    text: 'Hilfe',
+                                    id: 'quizHelp',
+                                    class: 'btn test',
+                                    click: function () {
+                                        showSolution();
+                                    },
+                                })
+                            )
+                    );
+                }
+
+                if (step == maxSteps - 1) {
+                    // last step
+                    $('#tutorialContent').append(
+                        $('<div>')
+                            .attr('class', 'quiz continue')
+                            .append(
+                                $('<button>', {
+                                    text: 'Tutorial beenden',
+                                    class: 'btn',
+                                    click: function () {
+                                        MSG.displayMessage(tutorial.end, 'POPUP', '');
+                                        $('.modal').one('hide.bs.modal', function (e) {
+                                            $('#tutorialEnd').trigger('click');
+                                            return false;
+                                        });
+                                        return false;
+                                    },
+                                })
+                            )
+                    );
+                } else {
+                    $('#tutorialContent').append(
+                        $('<div>')
+                            .attr('class', 'quiz continue')
+                            .append(
+                                $('<button>', {
+                                    text: 'weiter',
+                                    class: 'btn',
+                                    click: function () {
+                                        createQuiz();
+                                    },
+                                })
+                            )
+                    );
+                }
+            } else {
+                // apparently a step without an instruction -> go directly to the quiz
+                createQuiz();
+            }
+        }
+        if (tutorial.step[step].simulationSettings) {
+            SIM.relatives2coordinates(tutorial.step[step].simulationSettings);
         }
     }
 }
@@ -412,7 +582,7 @@ function checkQuiz() {
     var totalQuestions = $('.quiz.question').length;
     var totalCorrect = $('.quiz.answer [value=true]').length;
     $('.quiz input').each(function (i, elem) {
-        let $label = $('label>span[for="' + $(this).attr('id') + '"]');
+        let $label = $('label>span[for="' + $this.attr('id') + '"]');
         if ($(this).is(':checked')) {
             countChecked++;
         }
@@ -500,23 +670,40 @@ function openTutorialView() {
 
 function closeTutorialView() {
     if ($('.rightMenuButton.rightActive').length >= 0) {
-        $('.rightMenuButton.rightActive').clickWrap();
+        $('.rightMenuButton.rightActive').trigger('click');
     }
 }
 
 function exitTutorial() {
     Blockly.hideChaff();
+    closeTutorialView();
     $('#tutorial-navigation').fadeOut(750);
     $('#head-navigation').fadeIn(750);
     $('#tutorialButton').fadeOut();
     $('.blocklyToolboxDiv>.levelTabs').removeClass('invisible');
     PROG_C.loadExternalToolbox(GUISTATE_C.getProgramToolbox());
     Blockly.mainWorkspace.options.maxBlocks = undefined;
-    if (GUISTATE_C.isKioskMode()) {
-        $('.modal').modal('hide');
-        loadFromTutorial(tutorialId);
-    } else {
-        closeTutorialView();
-        $('#tabTutorialList').clickWrap();
+    $('#tabTutorialList').trigger('click');
+}
+
+function updateDonutChart(el, percent) {
+    percent = Math.round(percent);
+    if (percent > 100) {
+        percent = 100;
+    } else if (percent < 0) {
+        percent = 0;
     }
+    var deg = Math.round(360 * (percent / 100));
+
+    if (percent > 50) {
+        $(el + ' .pie').css('clip', 'rect(auto, auto, auto, auto)');
+        $(el + ' .right-side').css('transform', 'rotate(180deg)');
+    } else {
+        $(el + ' .pie').css('clip', 'rect(0,1em, 1em, 0.5em)');
+        $(el + ' .right-side').css('transform', 'rotate(0deg)');
+    }
+    $(el + ' .right-side').css('border-width', '0.5em');
+    $(el + ' .left-side').css('border-width', '0.5em');
+    $(el + ' .shadow').css('border-width', '0.5em');
+    $(el + ' .left-side').css('transform', 'rotate(' + deg + 'deg)');
 }

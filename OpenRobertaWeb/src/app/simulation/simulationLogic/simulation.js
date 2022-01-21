@@ -53,6 +53,13 @@ var imgPattern = new Image();
 var imgRuler = new Image();
 var mouseX;
 var mouseY;
+var stepCounter = 0;
+var mouseOnRobotIndex = 0;
+var isDownRobots = [];
+var readyRobots = [];
+var isDownObstacle = false;
+var isDownRuler = false;
+var isDownColorArea = false;
 
 var colorpicker = new HUEBEE('#colorpicker', {
     shades: 1,
@@ -60,12 +67,12 @@ var colorpicker = new HUEBEE('#colorpicker', {
     setText: false,
 });
 var imgList = [
-    '/js/app/simulation/simBackgrounds/baustelle.svg',
-    '/js/app/simulation/simBackgrounds/ruler.svg',
+    '/js/app/simulation/simBackgrounds/elefant.png',
+    '/js/app/simulation/simBackgrounds/ruler.png',
     '/js/app/simulation/simBackgrounds/wallPattern.png',
     '/js/app/simulation/simBackgrounds/calliopeBackground.svg',
     '/js/app/simulation/simBackgrounds/microbitBackground.svg',
-    '/js/app/simulation/simBackgrounds/simpleBackground.svg',
+    '/js/app/simulation/simBackgrounds/volksbot.svg',
     '/js/app/simulation/simBackgrounds/drawBackground.svg',
     '/js/app/simulation/simBackgrounds/robertaBackground.svg',
     '/js/app/simulation/simBackgrounds/rescueBackground.svg',
@@ -74,7 +81,7 @@ var imgList = [
 ];
 var imgListIE = [
     '/js/app/simulation/simBackgrounds/baustelle.png',
-    '/js/app/simulation/simBackgrounds/ruler.png',
+    '/js/app/simulation/simBackgrounds/elefant.png',
     '/js/app/simulation/simBackgrounds/wallPattern.png',
     '/js/app/simulation/simBackgrounds/calliopeBackground.png',
     '/js/app/simulation/simBackgrounds/microbitBackground.png',
@@ -142,7 +149,7 @@ preloadImages();
 
 var currentBackground = 2;
 
-function setBackground(num) {
+export function setBackground(num) {
     num = num || -1;
     let configData = {};
     if (num === -1) {
@@ -189,19 +196,19 @@ function setBackground(num) {
     resizeAll();
 }
 
-function getBackground() {
+export function getBackground() {
     return currentBackground;
 }
 
-function getObstacleList() {
+export function getObstacleList() {
     return obstacleList;
 }
 
-function getColorAreaList() {
+export function getColorAreaList() {
     return colorAreaList;
 }
 
-function initMicrophone(robot) {
+export function initMicrophone(robot) {
     if (navigator.mediaDevices === undefined) {
         navigator.mediaDevices = {};
     }
@@ -241,7 +248,7 @@ var renderTime = 5; // approx. time in ms only for the first rendering
 
 var dt = 0;
 
-function getDt() {
+export function getDt() {
     return dt;
 }
 
@@ -266,14 +273,14 @@ export function setPause(value) {
 
 var runRenderUntil;
 
-function setStep() {
+export function setStep() {
     stepCounter = -50;
     setPause(false);
 }
 
 var info;
 
-function setInfo() {
+export function setInfo() {
     if (info === true) {
         info = false;
     } else {
@@ -281,7 +288,7 @@ function setInfo() {
     }
 }
 
-function resetPose() {
+export function resetPose() {
     for (var i = 0; i < robots.length; i++) {
         if (robots[i].resetPose) {
             robots[i].resetPose();
@@ -297,7 +304,7 @@ function resetPose() {
     scene.drawRuler();
 }
 
-function deleteSelectedObject() {
+export function deleteSelectedObject() {
     if (selectedColorArea >= 0) {
         colorAreaList.splice(selectedColorArea, 1);
         selectedColorArea = -1;
@@ -312,7 +319,7 @@ function deleteSelectedObject() {
     }
 }
 
-function addObstacle(shape) {
+export function addObstacle(shape) {
     let obstacle = addObject(shape, 'obstacle', obstacleList);
     if (selectedColorArea >= 0) {
         highLightCorners = [];
@@ -325,7 +332,7 @@ function addObstacle(shape) {
     updateObstacleLayer();
 }
 
-function addColorArea(shape) {
+export function addColorArea(shape) {
     let colorArea = addObject(shape, 'colorArea', colorAreaList);
     if (selectedObstacle >= 0) {
         highLightCorners = [];
@@ -399,7 +406,7 @@ function changeColorWithColorPicker(color) {
     }
 }
 
-function toggleColorPicker() {
+export function toggleColorPicker() {
     if ($('.huebee').length) {
         colorpicker.close();
     } else {
@@ -414,7 +421,7 @@ function resetColorpickerCursor(event) {
     colorpicker.cursor.classList.add('is-hidden');
 }
 
-function stopProgram() {
+export function stopProgram() {
     setPause(true);
     for (var i = 0; i < numRobots; i++) {
         robots[i].reset();
@@ -434,7 +441,7 @@ function stopProgram() {
 
 // obstacles
 // scaled playground
-ground = {
+var ground = {
     x: 0,
     y: 0,
     w: 500,
@@ -502,11 +509,12 @@ function callbackOnTermination() {
                 $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
             }
         }
+        $('#simControl').trigger('simTerminated');
     }
     console.log('END of Sim');
 }
 
-function init(programs, refresh, robotType) {
+export function init(programs, refresh, robotType) {
     mouseOnRobotIndex = -1;
     storedPrograms = programs;
     numRobots = programs.length;
@@ -532,17 +540,15 @@ function init(programs, refresh, robotType) {
     if (currentBackground > 1) {
         if (isIE() || isEdge()) {
             // TODO IE and Edge: Input event not firing for file type of input
-            $('.dropdown.sim, .simScene, #simEditButtons').show();
+            $('.dropdown.sim, .simScene').show();
             $('#simImport').hide();
         } else {
             $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simEditButtons').show();
         }
     }
-    $('#simButtons, #canvasDiv').show();
-    $('#webotsButtons, #webotsDiv').hide();
     interpreters = programs.map(function (x) {
         var src = JSON.parse(x.javaScriptProgram);
-        configurations.push(x.configuration.SENSORS);
+        configurations.push(x.javaScriptConfiguration);
         return new SIM_I.Interpreter(src, new MBED_R.RobotMbedBehaviour(), callbackOnTermination, breakpoints);
     });
     updateDebugMode(debugMode);
@@ -589,19 +595,19 @@ function init(programs, refresh, robotType) {
     }
 }
 
-function run(refresh, robotType) {
+export function run(refresh, robotType) {
     init(storedPrograms, refresh, robotType);
 }
 
-function getRobotIndex() {
+export function getRobotIndex() {
     return robotIndex;
 }
 
-function getSelectedRobot() {
+export function getSelectedRobot() {
     return selectedRobot;
 }
 
-function cancel() {
+export function cancel() {
     canceled = true;
     removeMouseEvents();
 }
@@ -715,7 +721,7 @@ function allInterpretersTerminated() {
 
 function resetButtons() {
     if (debugMode) {
-        $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
+        $('#simControl').addClass('typcn-media-play').removeClass('typcn-play-outline');
         $('#simStop').addClass('disabled');
     } else {
         $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
@@ -1566,6 +1572,7 @@ function updateSelectedObjects() {
 
 function addMouseEvents() {
     removeMouseEvents();
+    return; // no modifiation wanted
     $('#robotLayer').on('mousedown touchstart', function (e) {
         if (robots[robotIndex].handleMouseDown) {
             robots[robotIndex].handleMouseDown(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
@@ -1631,6 +1638,7 @@ function removeMouseEvents() {
     $('#robotLayer').off();
     $('#simDiv').off();
     $('#canvasDiv').off();
+    $('#simRobotModal').off();
     $('#robotIndex').off();
     $('#blocklyDiv').off('click touchstart', setFocusBlocklyDiv);
 }
@@ -1671,15 +1679,15 @@ function initScene() {
     render();
 }
 
-function getScale() {
+export function getScale() {
     return scale;
 }
 
-function getGround() {
+export function getGround() {
     return ground;
 }
 
-function getInfo() {
+export function getInfo() {
     return info;
 }
 
@@ -1700,7 +1708,7 @@ function isEdge() {
     return edge > -1;
 }
 
-function importConfigData() {
+export function importConfigData() {
     $('#backgroundFileSelector').val(null);
     $('#backgroundFileSelector').attr('accept', '.json');
     $('#backgroundFileSelector').clickWrap(); // opening dialog
@@ -1711,10 +1719,7 @@ function importConfigData() {
             return function (e) {
                 try {
                     const configData = JSON.parse(e.target.result);
-                    relatives2coordinates(configData);
-                    resetSelection();
-                    resetScene(obstacleList || [], colorAreaList || []);
-                    initScene();
+                    loadConfigData(configData);
                 } catch (ex) {
                     MSG.displayPopupMessage('Blockly.Msg.POPUP_BACKGROUND_STORAGE', Blockly.Msg.POPUP_CONFIG_UPLOAD_ERROR);
                 }
@@ -1726,7 +1731,14 @@ function importConfigData() {
     });
 }
 
-function exportConfigData() {
+export function loadConfigData(configData) {
+    relatives2coordinates(configData);
+    resetSelection();
+    resetScene(obstacleList || [], colorAreaList || []);
+    initScene();
+}
+
+export function exportConfigData() {
     return coordinates2relatives();
 }
 
@@ -1791,11 +1803,16 @@ function coordinates2relatives() {
     relatives.colorAreas = colorAreaList.map(function (object) {
         return calculateShape(object);
     });
-    relatives.ruler = ruler;
+    relatives.ruler = {};
+    relatives.ruler.x = ruler.x / width;
+    relatives.ruler.y = ruler.y / height;
+    relatives.ruler.w = ruler.w / width;
+    relatives.ruler.h = ruler.h / height;
+    relatives.ruler.img = imgRuler;
     return relatives;
 }
 
-function relatives2coordinates(relatives) {
+export function relatives2coordinates(relatives) {
     let height = $('#unitBackgroundLayer').height();
     let width = $('#unitBackgroundLayer').width();
     function calculateShape(object) {
@@ -1852,7 +1869,12 @@ function relatives2coordinates(relatives) {
     colorAreaList = relatives.colorAreas.map(function (object) {
         return calculateShape(object);
     });
-    ruler = relatives.ruler;
+    relatives.ruler = {};
+    relatives.ruler.x = ruler.x / width;
+    relatives.ruler.y = ruler.y / height;
+    relatives.ruler.w = ruler.w / width;
+    relatives.ruler.h = ruler.h / height;
+    relatives.ruler.img = imgRuler;
 }
 
 function resetScene(obstacleL, colorAreaL) {
@@ -1860,8 +1882,9 @@ function resetScene(obstacleL, colorAreaL) {
     colorAreaList = colorAreaL;
     copiedObject = null;
 }
+exports.resetScene = resetScene;
 
-function importImage() {
+export function importImage() {
     $('#backgroundFileSelector').val(null);
     $('#backgroundFileSelector').attr('accept', '.png, .jpg, .jpeg, .svg');
     $('#backgroundFileSelector').clickWrap(); // opening dialog
@@ -1978,7 +2001,8 @@ function createRobot(reqRobot, configuration, num, optYOffset, robotBehaviour) {
             },
             configuration,
             num,
-            robotBehaviour
+            robotBehaviour,
+            imgObstacle1
         );
         robot.canDraw = false;
     } else if (currentBackground == 3) {
@@ -2097,7 +2121,7 @@ function createRobot(reqRobot, configuration, num, optYOffset, robotBehaviour) {
     return robot;
 }
 
-function getWebAudio() {
+export function getWebAudio() {
     if (!this.webAudio) {
         this.webAudio = {};
         var AudioContext = window.AudioContext || window.webkitAudioContext || false;
@@ -2162,12 +2186,12 @@ function updateBreakpointEvent() {
     }
 }
 
-function getDebugMode() {
+export function getDebugMode() {
     return debugMode;
 }
 
 /** updates the debug mode for all interpreters */
-function updateDebugMode(mode) {
+export function updateDebugMode(mode) {
     debugMode = mode;
     if (interpreters !== null) {
         for (var i = 0; i < numRobots; i++) {
@@ -2192,7 +2216,7 @@ function removeBreakPoint(block) {
 }
 
 /** adds an event to the interpreters */
-function interpreterAddEvent(mode) {
+export function interpreterAddEvent(mode) {
     updateBreakpointEvent();
     if (interpreters !== null) {
         for (var i = 0; i < numRobots; i++) {
@@ -2202,7 +2226,7 @@ function interpreterAddEvent(mode) {
 }
 
 /** called to signify debugging is finished in simulation */
-function endDebugging() {
+export function endDebugging() {
     if (interpreters !== null) {
         for (var i = 0; i < numRobots; i++) {
             interpreters[i].setDebugMode(false);
@@ -2220,48 +2244,13 @@ function endDebugging() {
 }
 
 /** returns the simulations variables */
-function getSimVariables() {
+export function getSimVariables() {
     if (interpreters !== null) {
         return interpreters[0].getVariables();
     } else {
         return {};
     }
 }
-
-export {
-    setBackground,
-    getBackground,
-    getObstacleList,
-    getColorAreaList,
-    initMicrophone,
-    getDt,
-    setStep,
-    setInfo,
-    resetPose,
-    deleteSelectedObject,
-    addObstacle,
-    addColorArea,
-    toggleColorPicker,
-    stopProgram,
-    init,
-    run,
-    getRobotIndex,
-    getSelectedRobot,
-    cancel,
-    getScale,
-    getGround,
-    getInfo,
-    importConfigData,
-    exportConfigData,
-    resetScene,
-    importImage,
-    getWebAudio,
-    getDebugMode,
-    updateDebugMode,
-    interpreterAddEvent,
-    endDebugging,
-    getSimVariables,
-};
 
 //http://paulirish.com/2011/requestanimationframe-for-smart-animating/
 //http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating

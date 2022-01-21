@@ -71,7 +71,7 @@ define(["require", "exports"], function (require, exports) {
     exports.DURATION = "duration";
     exports.EACH_COUNTER = "eachcounter";
     exports.ELSE_STMTS = "elseStmts";
-    exports.ENC = 360.0 / (3.0 * Math.PI * 5.6);
+    exports.ENC = 360.0 / (3.0 * Math.PI * 12);
     exports.ENCODER_SENSOR_RESET = "encoderSensorReset";
     exports.ENCODER_SENSOR_SAMPLE = "encoder";
     exports.ENTER = "enter";
@@ -152,9 +152,9 @@ define(["require", "exports"], function (require, exports) {
     exports.MAX = "max";
     exports.MAXDIAG = 2500;
     // MAXPOWER is a double expression
-    exports.MAXPOWER = 0.351858377 * 3;
+    exports.MAXPOWER = 0.7037167544 * 3;
     exports.MAX_HEIGHT = 1000;
-    exports.MAX_ROTATION = 2.0;
+    exports.MAX_ROTATION = 1;
     exports.MAX_WIDTH = 2000;
     exports.MEDIAN = "median";
     exports.METHOD_CALL = "createMethodCall";
@@ -287,7 +287,7 @@ define(["require", "exports"], function (require, exports) {
     exports.TURN_ACTION = "TurnAction";
     exports.TURN_DIRECTION = "turnDirection";
     exports.TURN_LIGHT = "turnLight";
-    exports.TURN_RATIO = (40 / 3.) / 2.8;
+    exports.TURN_RATIO = (120 / 3.) / 12.;
     exports.TYPE = "type";
     exports.ULTRASONIC = "ultrasonic";
     exports.UNARY = "Unary";
@@ -302,7 +302,7 @@ define(["require", "exports"], function (require, exports) {
     exports.WAIT_STMT = "WaitStmt";
     exports.WAIT_TIME_STMT = "WaitTimeSTMT";
     exports.WAVE_LENGTH = 60;
-    exports.WHEEL_DIAMETER = 5.6;
+    exports.WHEEL_DIAMETER = 12;
     exports.WHERE1 = "where1";
     exports.WHERE2 = "where2";
     exports.WHILE = "WHILE";

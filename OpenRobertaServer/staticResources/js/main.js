@@ -81,6 +81,7 @@ require.config({
         'simulation.robot.simple': 'app/simulation/simulationLogic/robot.simple',
         'simulation.robot.ev3': 'app/simulation/simulationLogic/robot.ev3',
         'simulation.robot.nxt': 'app/simulation/simulationLogic/robot.nxt',
+        'simulation.robot.volksbot': 'app/simulation/simulationLogic/robot.volksbot',
         'simulation.scene': 'app/simulation/simulationLogic/scene',
         'simulation.simulation': 'app/simulation/simulationLogic/simulation',
         comm: 'helper/comm',
@@ -264,19 +265,15 @@ function init() {
         notificationController.init();
         nnController.init();
         menuController.init();
-        $('.cover').fadeOut(100, function () {
-            if (guiStateController.getStartWithoutPopup()) {
-                userModel.getStatusText(function (result) {
-                    if (result.statustext[0] !== '' && result.statustext[1] !== '') {
-                        $('#modal-statustext').modal('show');
-                    }
-                });
-            }
-            else {
-                $('#show-startup-message').modal('show');
-            }
+    })
+        .then(function () {
+        return progSimController.toggleSim();
+    })
+        .then(function () {
+        $('.pace').fadeOut(0);
+        $('.cover').fadeOut(500, function () {
+            tutorialController.loadFromTutorial('volksbot1', 'init');
         });
-        $('.pace').fadeOut(500);
     });
 }
 /**

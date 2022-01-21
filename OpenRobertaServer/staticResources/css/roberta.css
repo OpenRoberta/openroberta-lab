@@ -55,6 +55,12 @@ dl.grid dt {
     font-style: italic;
 }
 
+@font-face {
+    font-family: 'WDR';
+    src: url('fonts/WDRDieMaus-Regular.otf') format('truetype');
+    /* font-weight: 900; */
+}
+
 html,
 body {
     margin: 0;
@@ -187,6 +193,7 @@ body.blocklyMinimalBody * {
 
 .img-nepo {
     width: 180px;
+    pointer-events: none !important;
 }
 
 .imgFloatLeft {
@@ -200,15 +207,18 @@ body.blocklyMinimalBody * {
 
 .logo {
     position: absolute;
-    top: 10px;
+    top: -44px;
     right: 10px;
+    z-index: 1035;
 }
+
 
 /* #language {
     float: left;
     margin: 0;
     padding: 0;
 } */
+
 #language.nav > li > a {
     color: #333333;
     padding: 0;
@@ -314,7 +324,7 @@ body.blocklyMinimalBody * {
 }
 
 canvas.border {
-	border: 2px solid grey;
+    border: 2px solid grey;
 }
 
 #webotsDiv {
@@ -746,34 +756,34 @@ div.rightMenuButton:hover,
 }
 
 button#simCustomColorObject.typcn:before {
-	color: #FBED00;
+    color: #FBED00;
 }
 
 button#simCustomObstacle.typcn:before {
-	color: 009EE3;
+    color: #009EE3;
 }
 
 .huebee__container {
-  position: absolute;
-  left: 0;
-  top: 6px;
-  padding: 10px;
-  padding-top: 24px;
-  background: #e7e7e7;
-  border-radius: 2px;
-  box-shadow: none;
+    position: absolute;
+    left: 0;
+    top: 6px;
+    padding: 10px;
+    padding-top: 24px;
+    background: #e7e7e7;
+    border-radius: 2px;
+    box-shadow: none;
 }
 
 .huebee__cursor {
-  border: 5px solid #fff;
-  border-radius: 2px;
-  width: 30px;
-  height: 30px;
+    border: 5px solid #fff;
+    border-radius: 2px;
+    width: 30px;
+    height: 30px;
 }
 
 .huebee {
-  /* disable reveal/hide transition */
-  transition: none;
+    /* disable reveal/hide transition */
+    transition: none;
 }
 
 .huebee__close-button {
@@ -788,15 +798,16 @@ button#simCustomObstacle.typcn:before {
 }
 
 .huebee__close-button__x {
-  stroke-width: 2;
-  stroke: #bbb;
+    stroke-width: 2;
+    stroke: #bbb;
 }
+
 .huebee__close-button__x:hover, .huebee__close-button__x:focus {
-  stroke: #333;
+    stroke: #333;
 }
 
 .huebee__close-button:hover, .huebee__close-button:focus {
-  background: #e7e7e7;
+    background: #e7e7e7;
 }
 
 #codeButtons {
@@ -1023,7 +1034,7 @@ button#simCustomObstacle.typcn:before {
 }
 
 .dropdown-menu > li > a {
-	position: relative;
+    position: relative;
     padding-right: 70px;
 }
 
@@ -1270,7 +1281,7 @@ button#simCustomObstacle.typcn:before {
     border: 0;
     padding: 16px;
     padding-bottom: 20px;
-    text-align: left;
+    text-align: center;
 }
 
 .form-control:focus {
@@ -1346,12 +1357,29 @@ button#simCustomObstacle.typcn:before {
     box-shadow: none;
 }
 
+.btn.volksbot {
+    background-color: #E2001A;
+    color: #fff;
+    border: none;
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+    font-family: WDR;
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.btn.volksbot:hover,
+.btn.volksbot:active:focus,
+.btn.volksbot:focus,
+.btn.volksbot:active {
+    background-color: #ce0037;
+}
+
 .simbtn.btn:hover,
 .simbtn.btn:active:focus,
-.simbtn.btn:focus,
 .simbtn.btn.focus,
 .simbtn.btn:active,
-.simbtn.btn.active,
 .open > .dropdown-toggle.simbtn.btn {
     background-color: #f29400;
 }
@@ -1639,6 +1667,7 @@ table [data-toggle="collapse"].collapsed:after {
 .input-typcn:before {
     font-size: 22px;
 }
+
 
 /***** END typicons *****/
 
@@ -2385,7 +2414,7 @@ input[type=range]:focus::-ms-fill-upper {
     font-size: 28px;
 }
 
-.simChangeObject.disabled { 
+.simChangeObject.disabled {
 	color: #bbb;
 	cursor: not-allowed;
 }
@@ -2594,10 +2623,9 @@ img.img-responsive {
         display: none;
     }
 
-    .blocklyToolboxDiv {
+    /* .blocklyToolboxDiv {
         display: none !important;
-    }
-
+    } */
     .blocklyMainBackground {
         stroke: none !important;
     }
@@ -2681,15 +2709,13 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
     display: none;
 }
 
-#head-navigation, #tutorial-navigation {
-    /* box-shadow: 0 3px 5px #aeaeaf;
+#head-navigation,
+#tutorial-navigation {
+    box-shadow: 0 3px 5px #aeaeaf;
     -webkit-box-shadow: 0 3px 5px #aeaeaf;
     border: 0;
     margin: 0;
-}
-
-#head-navigation {
-    /* display: none; /* not needed in the tutorial form*/
+    height: 92px;
 }
 
 #tutorial-navigation ul {
@@ -2775,7 +2801,8 @@ ul#tutorial-close {
     background-image: url(../css/svg/step_connector_active_last.svg);
 }
 
-#tutorial-navigation .navbar-nav > .active > a, #tutorial-navigation .navbar-nav > li > a:hover {
+#tutorial-navigation .navbar-nav > .active > a,
+#tutorial-navigation .navbar-nav > li > a:hover {
     color: #333;
     background-color: transparent;
 }
@@ -2793,6 +2820,7 @@ ul#tutorial-close {
 #tutorial-header {
     overflow: hidden;
     height: 92px;
+    min-height: 92px;
     margin: 0;
     padding: 0;
     padding-left: 36px;
@@ -2866,14 +2894,18 @@ p.quiz {
     user-select: none;
 }
 
+
 /* Hide the browser's default checkbox */
+
 .quiz.answer input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
 }
 
+
 /* Create a custom checkbox */
+
 .checkmark {
     position: absolute;
     top: 2px;
@@ -2884,29 +2916,39 @@ p.quiz {
     border-radius: 2px;
 }
 
+
 /* On mouse-over, add a grey background color */
+
 .quiz.answer:hover input ~ .checkmark {
     background-color: #ccc;
 }
 
+
 /* When the checkbox is checked, add a blue background */
+
 .quiz.answer input:checked ~ .checkmark {
     background-color: #ccc;
 }
 
+
 /* Create the checkmark/indicator (hidden when not checked) */
+
 .quiz.answer > .checkmark:after {
     content: "";
     position: absolute;
     display: none;
 }
 
+
 /* Show the checkmark when checked */
+
 .quiz.answer input:checked ~ .checkmark:after {
     display: block;
 }
 
+
 /* Style the checkmark/indicator */
+
 .quiz.answer > .checkmark:after {
     left: 10px;
     top: 5px;
@@ -2943,7 +2985,9 @@ label.quiz.answer.fail {
     width: 40vw;
 }
 
+
 /*CSS FOR MULTIPLE SIMULATION POPUP*/
+
 #simModal .fixed-table-header {
     background-color: rgb(137, 137, 137);
     color: white;
@@ -3017,10 +3061,13 @@ label.quiz.answer.fail {
     }
 }
 
+
 /*CSS FOR MULTIPLE SIMULATION POPUP*/
+
 #simModal .fixed-table-header {
     background-color: #B3BFB8;
 }
+
 
 /* distance between steps in mbed/sensebox download modal: */
 
@@ -3033,7 +3080,8 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
 }
 
 #flaskEditor {
-    height: 100%; /*fix for FF calc thing*/
+    height: 100%;
+    /*fix for FF calc thing*/
 }
 
 #sourceCodeEditor pre {
@@ -3141,18 +3189,22 @@ pre code {
         background-color: #E2001A;
         border-bottom: 4px solid #E2001A;
     }
+
     49% {
         background-color: #E2001A;
         border-bottom: 4px solid #E2001A;
     }
+
     60% {
         background-color: transparent;
         border-bottom: 4px solid transparent;
     }
+
     99% {
         background-color: transparent;
         border-bottom: 4px solid transparent;
     }
+
     100% {
         background-color: #E2001A;
         border-bottom: 4px solid #E2001A;
@@ -3163,15 +3215,19 @@ pre code {
     0% {
         color: #fff;
     }
+
     49% {
         color: #fff;
     }
+
     60% {
         color: #333;
     }
+
     99% {
         color: #333;
     }
+
     100% {
         color: #fff;
     }
@@ -3232,4 +3288,197 @@ pre code {
 
 .port {
     cursor: default !important;
+}
+
+#mausLogo {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    margin: 12px;
+    pointer-events: none !important;
+}
+
+#mausLogo > img {
+    height: 200px;
+}
+
+#helpTutorial {
+    position: absolute;
+    left: 40%;
+    bottom: 0;
+    margin: 12px;
+    font-size: 36px;
+    z-index: 999;
+    border: solid 2px;
+    border-radius: 2px;
+    background-color: white;
+    width: 50px;
+    height: 50px;
+}
+
+.blocklyFlyoutBackground {
+    fill: #ffa300;
+    opacity: 0.45;
+}
+
+#simEditButtons,
+.container-fluid,
+#simButtons,
+.blocklyButtons,
+#rightMenuDiv,
+#sliderDiv {
+    display: none !important;
+}
+
+#headNavigationTabs {
+    visibility: hidden !important;
+}
+
+#simDiv {
+    background: transparent;
+}
+
+#blocklyDiv,
+#rightMenuDiv,
+#sliderDiv {
+    background: none !important;
+    border: none;
+}
+
+#program {
+    background: url(../../../../css/img/volksbotBackground.jpg) 0% 0% / 100% repeat;
+    height: 100%;
+}
+
+#state.typcn-eye-outline {
+    animation-name: eye;
+    animation-duration: 4s;
+}
+
+@keyframes eye {
+    0% {
+        transform: scale(1)
+    }
+
+    50% {
+        transform: scale(2.5) translateY(-30px)
+    }
+
+    100% {
+        transform: scale(1) translateY(0px)
+    }
+}
+
+#state.typcn-hand {
+    animation-name: finger;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+}
+
+#tutorialMaus.typcn-hand {
+    font-size: 40px;
+    position: absolute;
+    left: 55%;
+    bottom: 10px;
+    animation-name: fingerSmall;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes finger {
+    0% {
+        transform: translate(0, 0)
+    }
+
+    20% {
+        transform: translate(-50px, -100px)
+    }
+
+    40% {
+        transform: translate(0, 0)
+    }
+
+    100% {
+        transform: translate(0, 0)
+    }
+}
+
+@keyframes fingerSmall {
+    0% {
+        transform: translate(0, 0)
+    }
+
+    10% {
+        transform: translate(-50px, -25px)
+    }
+
+    20% {
+        transform: translate(0, 0)
+    }
+
+    100% {
+        transform: translate(0, 0)
+    }
+}
+
+#startAudio {
+    src: url('audio/startAudio.mp3') format('truetype');
+}
+
+.donut-size {
+    font-size: 12em;
+}
+
+.pie-wrapper {
+    position: relative;
+    width: 1em;
+    height: 1em;
+    margin: 0px auto;
+}
+
+.pie {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    clip: rect(0, 1em, 1em, 0.5em);
+}
+
+.half-circle {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    border: 0.1em solid #97d700;
+    border-radius: 50%;
+    clip: rect(0em, 0.5em, 1em, 0em);
+}
+
+.right-side {
+    transform: rotate(0deg);
+}
+
+.smaller {
+    padding-bottom: 20px;
+    color: $ pie-shadow;
+    font-size: .45em;
+    vertical-align: super;
+}
+
+.shadow {
+    width: 100%;
+    height: 100%;
+    border: 0.1em solid #44b59d;
+    border-radius: 50%;
+}
+
+path.blocklyPath.dummyBlock {
+    stroke: #FA8200;
+    stroke-width: 3px;
+    /* stroke-width: 4px; */
+
+    fill: #fff4e0;
+    /* paint-order: stroke; */
 }

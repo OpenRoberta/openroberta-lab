@@ -307,7 +307,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 return 0;
             }
             else {
-                var rotations = C.TURN_RATIO * (Math.abs(angle) / 720);
+                var rotations = C.TURN_RATIO * (Math.abs(angle) / 360);
                 return (rotations / rotationPerSecond) * 1000;
             }
         };

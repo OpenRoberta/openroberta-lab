@@ -1,0 +1,477 @@
+{
+    "name": "volksbot1",
+    "language": "DE",
+    "robot": "volksbot",
+    "sim": "sim",
+    "instructions": false,
+    "level": 1,
+    "index": 100,
+    "time": "30 min",
+    "age": "ab 8 Jahre",
+    "startView": "<video id='startVideo' width='500px' style='border: 2px solid black;' autoplay='' playsinline='' muted=''><source src='css/img/VolksbotIntro.mp4' type='video/mp4; codecs=\"avc1.42E01E, mp4a.40.2\"' /></video>",
+    "initXML": "<export xmlns=\"http://de.fhg.iais.roberta.blockly\"><program><block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" robottype=\"volksbot\" xmlversion=\"3.1\" description=\"\" tags=\"\"><instance x=\"250\" y=\"50\"><block movable=\"false\" type=\"start\" id=\"1\" intask=\"true\"></block><block id=\"step_dummy\" intask=\"true\" movable=\"false\" type=\"step_dummy\"></block></instance></block_set></program><config><block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" robottype=\"volksbot\" xmlversion=\"3.1\" description=\"\" tags=\"\"><instance x=\"138\" y=\"88\"><block type=\"robBrick_volksbot-Brick\" id=\"1\" intask=\"true\" deletable=\"false\"><field name=\"brick_label\">RASPBERRYPI</field><field name=\"IP_ADDRESS\">192.168.0.159</field><field name=\"PORT\">22</field><field name=\"USERNAME\">pi</field><field name=\"PASSWORD\">raspberry</field></block></instance></block_set></config></export>",
+    "end": "<img src='js/app/simulation/simBackgrounds/elefant.png' alt='Roboter' style='display: block; margin-left: auto; margin-right: auto; width: 350px;'>",
+    "step": [{
+            "header": "1",
+            "simulationSettings": {
+                "robotPoses": [{
+                    "x": 0.2034638789202727,
+                    "y": 0.7966708795987409,
+                    "theta": 4.712388980384787,
+                    "xOld": 0.2034638789202727,
+                    "yOld": 0.7966708795987409,
+                    "transX": 0,
+                    "transY": 0,
+                    "thetaDiff": 0
+                }],
+                "obstacles": [],
+                "colorAreas": [{
+                        "x": 0.10294117647058823,
+                        "y": 0.08588957055214724,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#ffffff",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.3014705882352941,
+                        "y": 0.08588957055214724,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#ffffff",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.08588957055214724,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#97d700",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.6985294117647058,
+                        "y": 0.08588957055214724,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#44b59d",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.10294117647058823,
+                        "y": 0.25153374233128833,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#ffffff",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.3014705882352941,
+                        "y": 0.25153374233128833,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#ffffff",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.25153374233128833,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#97d700",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.6985294117647058,
+                        "y": 0.25153374233128833,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#ffffff",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.10294117647058823,
+                        "y": 0.4171779141104294,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#97d700",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.3014705882352941,
+                        "y": 0.4171779141104294,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#97d700",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.4171779141104294,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#97d700",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.6985294117647058,
+                        "y": 0.4171779141104294,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#ffffff",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.10294117647058823,
+                        "y": 0.5828220858895705,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#97d700",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.3014705882352941,
+                        "y": 0.5828220858895705,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#ffffff",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.5828220858895705,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#ffffff",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.6985294117647058,
+                        "y": 0.5828220858895705,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#ffffff",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.10294117647058823,
+                        "y": 0.7484662576687117,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#44b59d",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.3014705882352941,
+                        "y": 0.7484662576687117,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#ffffff",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.7484662576687117,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#ffffff",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.6985294117647058,
+                        "y": 0.7484662576687117,
+                        "w": 0.19852941176470587,
+                        "h": 0.1656441717791411,
+                        "theta": 0,
+                        "color": "#ffffff",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.10294117647058823,
+                        "y": 0.08588957055214724,
+                        "w": 0.7941176470588235,
+                        "h": 0.0036809815950920245,
+                        "theta": 0,
+                        "color": "#000000",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.10294117647058823,
+                        "y": 0.25153374233128833,
+                        "w": 0.7941176470588235,
+                        "h": 0.0036809815950920245,
+                        "theta": 0,
+                        "color": "#000000",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.10294117647058823,
+                        "y": 0.4171779141104294,
+                        "w": 0.7941176470588235,
+                        "h": 0.0036809815950920245,
+                        "theta": 0,
+                        "color": "#000000",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.10294117647058823,
+                        "y": 0.5828220858895705,
+                        "w": 0.7941176470588235,
+                        "h": 0.0036809815950920245,
+                        "theta": 0,
+                        "color": "#000000",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.10294117647058823,
+                        "y": 0.7484662576687117,
+                        "w": 0.7941176470588235,
+                        "h": 0.0036809815950920245,
+                        "theta": 0,
+                        "color": "#000000",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.10294117647058823,
+                        "y": 0.9141104294478528,
+                        "w": 0.7941176470588235,
+                        "h": 0.0036809815950920245,
+                        "theta": 0,
+                        "color": "#000000",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.10294117647058823,
+                        "y": 0.08588957055214724,
+                        "w": 0.004411764705882353,
+                        "h": 0.8282208588957055,
+                        "theta": 0,
+                        "color": "#000000",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.3014705882352941,
+                        "y": 0.08588957055214724,
+                        "w": 0.004411764705882353,
+                        "h": 0.8282208588957055,
+                        "theta": 0,
+                        "color": "#000000",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.08588957055214724,
+                        "w": 0.004411764705882353,
+                        "h": 0.8282208588957055,
+                        "theta": 0,
+                        "color": "#000000",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.6985294117647058,
+                        "y": 0.08588957055214724,
+                        "w": 0.004411764705882353,
+                        "h": 0.8282208588957055,
+                        "theta": 0,
+                        "color": "#000000",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    },
+                    {
+                        "x": 0.8970588235294118,
+                        "y": 0.08588957055214724,
+                        "w": 0.004411764705882353,
+                        "h": 0.8282208588957055,
+                        "theta": 0,
+                        "color": "#000000",
+                        "form": "rectangle",
+                        "type": "colorArea"
+                    }
+                ],
+                "ruler": {
+                    "img": "",
+                    "color": null,
+                    "yOld": 0,
+                    "w": 0.19852941176470587,
+                    "wOld": 0,
+                    "x": 0.6985294117647058,
+                    "xOld": 0,
+                    "h": 0.1656441717791411,
+                    "y": 0.08588957055214724,
+                    "type": "ruler",
+                    "hOld": 0
+                }
+            },
+            "toolbox": "<toolbox_set id='toolbox'><block type='step_forward'></block></toolbox_set>",
+            "solution": [
+                "step_forward"
+            ],
+            "maxBlocks": 3
+        },
+        {
+            "header": "2",
+            "toolbox": "<toolbox_set id='toolbox'><block type='step_forward'></block></toolbox_set>",
+            "solution": [
+                "step_forward",
+                "step_forward"
+            ],
+            "maxBlocks": 4
+        },
+        {
+            "header": "3",
+            "toolbox": "<toolbox_set><block type='step_forward'></block><block type='rotate_right'></block></toolbox_set>",
+            "solution": [
+                "step_forward",
+                "step_forward",
+                "rotate_right"
+            ],
+            "maxBlocks": 5
+        },
+        {
+            "header": "5",
+            "toolbox": "<toolbox_set><block type='step_forward'></block><block type='rotate_right'></block></toolbox_set>",
+            "solution": [
+                "step_forward",
+                "step_forward",
+                "rotate_right",
+                "step_forward"
+            ],
+            "maxBlocks": 6
+        },
+        {
+            "header": "6",
+            "toolbox": "<toolbox_set><block type='step_forward'></block><block type='rotate_right'></block></toolbox_set>",
+            "solution": [
+                "step_forward",
+                "step_forward",
+                "rotate_right",
+                "step_forward",
+                "step_forward"
+            ],
+            "maxBlocks": 7
+        },
+        {
+            "header": "7",
+            "toolbox": "<toolbox_set><block type='step_forward'></block><block type='rotate_left'></block><block type='rotate_right'></block></toolbox_set>",
+            "solution": [
+                "step_forward",
+                "step_forward",
+                "rotate_right",
+                "step_forward",
+                "step_forward",
+                "rotate_left"
+            ],
+            "maxBlocks": 8
+        },
+        {
+            "header": "8",
+            "toolbox": "<toolbox_set><block type='step_forward'></block><block type='rotate_left'></block><block type='rotate_right'></block></toolbox_set>",
+            "solution": [
+                "step_forward",
+                "step_forward",
+                "rotate_right",
+                "step_forward",
+                "step_forward",
+                "rotate_left",
+                "step_forward"
+            ],
+            "maxBlocks": 9
+        },
+        {
+            "header": "9",
+            "toolbox": "<toolbox_set><block type='step_forward'></block><block type='rotate_left'></block><block type='rotate_right'></block></toolbox_set>",
+            "solution": [
+                "step_forward",
+                "step_forward",
+                "rotate_right",
+                "step_forward",
+                "step_forward",
+                "rotate_left",
+                "step_forward",
+                "step_forward"
+            ],
+            "maxBlocks": 10
+        },
+        {
+            "header": "10",
+            "toolbox": "<toolbox_set><block type='step_forward'></block><block type='rotate_left'></block><block type='rotate_right'></block></toolbox_set>",
+            "solution": [
+                "step_forward",
+                "step_forward",
+                "rotate_right",
+                "step_forward",
+                "step_forward",
+                "rotate_left",
+                "step_forward",
+                "step_forward",
+                "rotate_right"
+            ],
+            "maxBlocks": 11
+        },
+        {
+            "header": "11",
+            "toolbox": "<toolbox_set><block type='step_forward'></block><block type='rotate_left'></block><block type='rotate_right'></block></toolbox_set>",
+            "solution": [
+                "step_forward",
+                "step_forward",
+                "rotate_right",
+                "step_forward",
+                "step_forward",
+                "rotate_left",
+                "step_forward",
+                "step_forward",
+                "rotate_right",
+                "step_forward"
+            ],
+            "maxBlocks": 12
+        }
+    ]
+}

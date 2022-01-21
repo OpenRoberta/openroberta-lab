@@ -8,14 +8,7 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.raspberrypi.LedBlinkAction;
-import de.fhg.iais.roberta.syntax.action.raspberrypi.LedDimAction;
-import de.fhg.iais.roberta.syntax.action.raspberrypi.LedGetAction;
-import de.fhg.iais.roberta.syntax.action.raspberrypi.LedSetAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.lang.expr.ColorHexString;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
@@ -25,17 +18,16 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.IRaspberryPiVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
-public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implements IRaspberryPiVisitor<Void> {
+public class RaspberryPiPythonVisitor extends AbstractPythonVisitor implements IRaspberryPiVisitor<Void> {
     protected final ConfigurationAst brickConfiguration;
 
     /**
@@ -49,11 +41,6 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
         this.brickConfiguration = brickConfiguration;
     }
 
-    @Override
-    public Void visitColorHexString(ColorHexString<Void> colorHexString) {
-        this.sb.append(quote(colorHexString.getValue()));
-        return null;
-    }
 
     @Override
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
@@ -87,12 +74,6 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
             default:
                 throw new DbcException("Invalid Time Mode!");
         }
-        return null;
-    }
-
-    @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("hal.get_sensor_status()");
         return null;
     }
 
@@ -183,55 +164,6 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
         return "'" + value.toLowerCase() + "'";
     }
 
-    @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
-        this.sb.append("hal.set_color(").append(lightAction.getPort()).append(", ");
-        lightAction.getRgbLedColor().accept(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        this.sb.append("hal.light_off(").append(lightStatusAction.getUserDefinedPort()).append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitLedSetAction(LedSetAction<Void> ledSetAction) {
-        this.sb.append("hal.set_brightness(").append(ledSetAction.getPort()).append(", ");
-        ledSetAction.getBrightness().accept(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitLedBlinkAction(LedBlinkAction<Void> ledBlinkAction) {
-        this.sb.append("hal.blink(").append(ledBlinkAction.getPort()).append(", ");
-        ledBlinkAction.getFrequency().accept(this);
-        this.sb.append(", ");
-        ledBlinkAction.getDuration().accept(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitLedDimAction(LedDimAction<Void> ledDimAction) {
-        this.sb.append("hal.dim(").append(ledDimAction.getPort()).append(", ");
-        ledDimAction.getFrom().accept(this);
-        this.sb.append(", ");
-        ledDimAction.getTo().accept(this);
-        this.sb.append(", ");
-        ledDimAction.getDuration().accept(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitLedGetAction(LedGetAction<Void> ledGetAction) {
-        this.sb.append("hal.get_brightness(").append(ledGetAction.getPort()).append(")");
-        return null;
-    }
 
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {

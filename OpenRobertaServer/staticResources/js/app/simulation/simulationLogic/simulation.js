@@ -4,7 +4,7 @@
  */
 define(["require", "exports", "simulation.scene", "simulation.constants", "util", "interpreter.interpreter", "interpreter.robotSimBehaviour", "volume-meter", "message", "jquery", "huebee", "blockly"], function (require, exports, simulation_scene_1, simulation_constants_1, UTIL, SIM_I, MBED_R, Volume, MSG, $, HUEBEE, Blockly) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.getSimVariables = exports.endDebugging = exports.interpreterAddEvent = exports.updateDebugMode = exports.getDebugMode = exports.getWebAudio = exports.importImage = exports.resetScene = exports.exportConfigData = exports.importConfigData = exports.getInfo = exports.getGround = exports.getScale = exports.cancel = exports.getSelectedRobot = exports.getRobotIndex = exports.run = exports.init = exports.stopProgram = exports.toggleColorPicker = exports.addColorArea = exports.addObstacle = exports.deleteSelectedObject = exports.resetPose = exports.setInfo = exports.setStep = exports.getDt = exports.initMicrophone = exports.getColorAreaList = exports.getObstacleList = exports.getBackground = exports.setBackground = exports.getNumRobots = exports.setPause = void 0;
+    exports.getSimVariables = exports.endDebugging = exports.interpreterAddEvent = exports.updateDebugMode = exports.getDebugMode = exports.getWebAudio = exports.importImage = exports.relatives2coordinates = exports.exportConfigData = exports.loadConfigData = exports.importConfigData = exports.getInfo = exports.getGround = exports.getScale = exports.cancel = exports.getSelectedRobot = exports.getRobotIndex = exports.run = exports.init = exports.getNumRobots = exports.stopProgram = exports.toggleColorPicker = exports.addColorArea = exports.addObstacle = exports.deleteSelectedObject = exports.resetPose = exports.setInfo = exports.setStep = exports.setPause = exports.getDt = exports.initMicrophone = exports.getColorAreaList = exports.getObstacleList = exports.getBackground = exports.setBackground = void 0;
     var standColorObstacle = '#33B8CA';
     var standColorArea = '#FBED00';
     var interpreters;
@@ -40,18 +40,25 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
     var imgRuler = new Image();
     var mouseX;
     var mouseY;
+    var stepCounter = 0;
+    var mouseOnRobotIndex = 0;
+    var isDownRobots = [];
+    var readyRobots = [];
+    var isDownObstacle = false;
+    var isDownRuler = false;
+    var isDownColorArea = false;
     var colorpicker = new HUEBEE('#colorpicker', {
         shades: 1,
         hues: 8,
         setText: false,
     });
     var imgList = [
-        '/js/app/simulation/simBackgrounds/baustelle.svg',
-        '/js/app/simulation/simBackgrounds/ruler.svg',
+        '/js/app/simulation/simBackgrounds/elefant.png',
+        '/js/app/simulation/simBackgrounds/ruler.png',
         '/js/app/simulation/simBackgrounds/wallPattern.png',
         '/js/app/simulation/simBackgrounds/calliopeBackground.svg',
         '/js/app/simulation/simBackgrounds/microbitBackground.svg',
-        '/js/app/simulation/simBackgrounds/simpleBackground.svg',
+        '/js/app/simulation/simBackgrounds/volksbot.svg',
         '/js/app/simulation/simBackgrounds/drawBackground.svg',
         '/js/app/simulation/simBackgrounds/robertaBackground.svg',
         '/js/app/simulation/simBackgrounds/rescueBackground.svg',
@@ -60,7 +67,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
     ];
     var imgListIE = [
         '/js/app/simulation/simBackgrounds/baustelle.png',
-        '/js/app/simulation/simBackgrounds/ruler.png',
+        '/js/app/simulation/simBackgrounds/elefant.png',
         '/js/app/simulation/simBackgrounds/wallPattern.png',
         '/js/app/simulation/simBackgrounds/calliopeBackground.png',
         '/js/app/simulation/simBackgrounds/microbitBackground.png',
@@ -404,7 +411,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
     exports.stopProgram = stopProgram;
     // obstacles
     // scaled playground
-    ground = {
+    var ground = {
         x: 0,
         y: 0,
         w: 500,
@@ -468,6 +475,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
                     $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
                 }
             }
+            $('#simControl').trigger('simTerminated');
         }
         console.log('END of Sim');
     }
@@ -499,18 +507,16 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
         if (currentBackground > 1) {
             if (isIE() || isEdge()) {
                 // TODO IE and Edge: Input event not firing for file type of input
-                $('.dropdown.sim, .simScene, #simEditButtons').show();
+                $('.dropdown.sim, .simScene').show();
                 $('#simImport').hide();
             }
             else {
                 $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simEditButtons').show();
             }
         }
-        $('#simButtons, #canvasDiv').show();
-        $('#webotsButtons, #webotsDiv').hide();
         interpreters = programs.map(function (x) {
             var src = JSON.parse(x.javaScriptProgram);
-            configurations.push(x.configuration.SENSORS);
+            configurations.push(x.javaScriptConfiguration);
             return new SIM_I.Interpreter(src, new MBED_R.RobotMbedBehaviour(), callbackOnTermination, breakpoints);
         });
         updateDebugMode(debugMode);
@@ -674,7 +680,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
     }
     function resetButtons() {
         if (debugMode) {
-            $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
+            $('#simControl').addClass('typcn-media-play').removeClass('typcn-play-outline');
             $('#simStop').addClass('disabled');
         }
         else {
@@ -1040,17 +1046,17 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
         }
         for (var i = colorAreaList.length - 1; i >= 0; i--) {
             var colorArea = colorAreaList[i];
-            var isDownColorArea = false;
+            var isDownColorArea_1 = false;
             if (colorArea.form === 'rectangle') {
-                isDownColorArea = startX > colorArea.x && startX < colorArea.x + colorArea.w && startY > colorArea.y && startY < colorArea.y + colorArea.h;
+                isDownColorArea_1 = startX > colorArea.x && startX < colorArea.x + colorArea.w && startY > colorArea.y && startY < colorArea.y + colorArea.h;
             }
             else if (colorArea.form === 'triangle') {
-                isDownColorArea = checkDownTriangle(startX, startY, colorArea.ax, colorArea.ay, colorArea.bx, colorArea.by, colorArea.cx, colorArea.cy);
+                isDownColorArea_1 = checkDownTriangle(startX, startY, colorArea.ax, colorArea.ay, colorArea.bx, colorArea.by, colorArea.cx, colorArea.cy);
             }
             else if (colorArea.form === 'circle') {
-                isDownColorArea = checkDownCircle(startX, startY, colorArea.x, colorArea.y, colorArea.r);
+                isDownColorArea_1 = checkDownCircle(startX, startY, colorArea.x, colorArea.y, colorArea.r);
             }
-            if (isDownColorArea) {
+            if (isDownColorArea_1) {
                 downColorArea = i;
                 if (selectedColorArea !== i) {
                     enableChangeObjectButtons();
@@ -1517,6 +1523,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
     }
     function addMouseEvents() {
         removeMouseEvents();
+        return; // no modifiation wanted
         $('#robotLayer').on('mousedown touchstart', function (e) {
             if (robots[robotIndex].handleMouseDown) {
                 robots[robotIndex].handleMouseDown(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
@@ -1584,6 +1591,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
         $('#robotLayer').off();
         $('#simDiv').off();
         $('#canvasDiv').off();
+        $('#simRobotModal').off();
         $('#robotIndex').off();
         $('#blocklyDiv').off('click touchstart', setFocusBlocklyDiv);
     }
@@ -1659,10 +1667,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
                 return function (e) {
                     try {
                         var configData = JSON.parse(e.target.result);
-                        relatives2coordinates(configData);
-                        resetSelection();
-                        resetScene(obstacleList || [], colorAreaList || []);
-                        initScene();
+                        loadConfigData(configData);
                     }
                     catch (ex) {
                         MSG.displayPopupMessage('Blockly.Msg.POPUP_BACKGROUND_STORAGE', Blockly.Msg.POPUP_CONFIG_UPLOAD_ERROR);
@@ -1675,6 +1680,13 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
         });
     }
     exports.importConfigData = importConfigData;
+    function loadConfigData(configData) {
+        relatives2coordinates(configData);
+        resetSelection();
+        resetScene(obstacleList || [], colorAreaList || []);
+        initScene();
+    }
+    exports.loadConfigData = loadConfigData;
     function exportConfigData() {
         return coordinates2relatives();
     }
@@ -1740,7 +1752,12 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
         relatives.colorAreas = colorAreaList.map(function (object) {
             return calculateShape(object);
         });
-        relatives.ruler = ruler;
+        relatives.ruler = {};
+        relatives.ruler.x = ruler.x / width;
+        relatives.ruler.y = ruler.y / height;
+        relatives.ruler.w = ruler.w / width;
+        relatives.ruler.h = ruler.h / height;
+        relatives.ruler.img = imgRuler;
         return relatives;
     }
     function relatives2coordinates(relatives) {
@@ -1800,8 +1817,14 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
         colorAreaList = relatives.colorAreas.map(function (object) {
             return calculateShape(object);
         });
-        ruler = relatives.ruler;
+        relatives.ruler = {};
+        relatives.ruler.x = ruler.x / width;
+        relatives.ruler.y = ruler.y / height;
+        relatives.ruler.w = ruler.w / width;
+        relatives.ruler.h = ruler.h / height;
+        relatives.ruler.img = imgRuler;
     }
+    exports.relatives2coordinates = relatives2coordinates;
     function resetScene(obstacleL, colorAreaL) {
         obstacleList = obstacleL;
         colorAreaList = colorAreaL;
@@ -1917,7 +1940,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
                 yOld: 200 + yOffset,
                 transX: 0,
                 transY: 0,
-            }, configuration, num, robotBehaviour);
+            }, configuration, num, robotBehaviour, imgObstacle1);
             robot.canDraw = false;
         }
         else if (currentBackground == 3) {

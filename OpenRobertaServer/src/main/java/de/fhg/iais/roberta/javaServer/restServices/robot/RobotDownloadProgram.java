@@ -91,6 +91,10 @@ public class RobotDownloadProgram {
                     fileName = programName + ".bin";
                     filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
+                case "RaspberryPi":
+                    fileName = programName + ".py";
+                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/source";
+                    break;
                 default:
                     LOG.error("unsupported firmware name " + state.getFirmwareName());
                     return Response.serverError().build();

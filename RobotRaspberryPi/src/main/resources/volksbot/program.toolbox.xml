@@ -1,0 +1,10 @@
+<toolbox_set id="toolbox" style="display: none">
+        <block type="step_forward">
+        </block>      
+        <block type="step_backward">
+        </block> 
+        <block type="rotate_left">
+        </block> 
+        <block type="rotate_right">
+        </block> 
+</toolbox_set>

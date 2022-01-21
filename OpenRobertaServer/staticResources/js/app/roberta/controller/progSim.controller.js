@@ -1,6 +1,6 @@
 define(["require", "exports", "message", "util", "webots.simulation", "simulation.simulation", "simulation.constants", "guiState.controller", "nn.controller", "tour.controller", "program.controller", "program.model", "blockly", "jquery", "jquery-validate"], function (require, exports, MSG, UTIL, NAOSIM, SIM, simulation_constants_1, GUISTATE_C, NN_CTRL, TOUR_C, PROG_C, PROGRAM, Blockly, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.init = void 0;
+    exports.toggleSim = exports.init = void 0;
     var INITIAL_WIDTH = 0.5;
     var blocklyWorkspace;
     var debug = false;
@@ -235,6 +235,7 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
         $('#blockly').openRightView('sim', INITIAL_WIDTH, 'sim');
     }
     function toggleSim() {
+        var toggle = new $.Deferred();
         if ($('.fromRight.rightActive').hasClass('shifting')) {
             return;
         }
@@ -267,15 +268,19 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
                     }
                     else {
                         initSimulation(result);
+                        toggle.resolve();
                     }
                 }
                 else {
                     MSG.displayInformation(result, '', result.message, '');
+                    toggle.resolve();
                 }
                 PROG_C.reloadProgram(result);
             });
         }
+        return toggle.promise();
     }
+    exports.toggleSim = toggleSim;
     function toggleSimEvent(event) {
         if ($('#simControl').hasClass('typcn-media-play-outline')) {
             var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);

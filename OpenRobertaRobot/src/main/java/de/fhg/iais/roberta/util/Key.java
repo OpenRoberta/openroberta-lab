@@ -162,7 +162,7 @@ public enum Key {
     NOTIFICATION_SUCCESS( true ),
     NOTIFICATION_ERROR_INVALID_PERMISSION( false ),
     NOTIFICATION_ERROR_INVALID_SYNTAX( false ),
-    ACCESS_RIGHT_UNCHANGED( true );
+    ACCESS_RIGHT_UNCHANGED( true ), VOLKSBOT_PROGRAM_RUN_ERROR(false);
     /**
      * Creates a new Key and adds the needed ORA_ prefix for the blockly message.
      *

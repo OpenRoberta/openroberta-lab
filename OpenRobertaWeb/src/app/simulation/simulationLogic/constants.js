@@ -311,8 +311,6 @@ var CONST = {
 
     RED: 'red',
 
-    ANIMATION: 'animation',
-
     SUM: 'sum',
 
     RGB: 'rgb',
@@ -510,21 +508,21 @@ var CONST = {
 
     MATH_ON_LIST: 'createMathOnList',
 
-    TRACKWIDTH: 40,
+    // TRACKWIDTH: 120,
 
-    TURN_RATIO: 40 / 3 / 2.8,
+    // TURN_RATIO: (120 / 3.) / 12,
 
-    WHEEL_DIAMETER: 5.6,
+    // WHEEL_DIAMETER: 5.6,
 
     MAXDIAG: 2500,
 
-    MAXPOWER: 0.351858377 * 3, // real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix : 1cm
+    // MAXPOWER: 0.351858377 * 3, // real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix : 1cm
 
-    ENC: 360.0 / (3.0 * Math.PI * 5.6),
+    ENC: 360.0 / (3.0 * Math.PI * 12),
 
     MAX_WIDTH: 2000,
 
-    MAX_HEIGHT: 820,
+    MAX_HEIGHT: 840,
 
     WAVE_LENGTH: 60,
 

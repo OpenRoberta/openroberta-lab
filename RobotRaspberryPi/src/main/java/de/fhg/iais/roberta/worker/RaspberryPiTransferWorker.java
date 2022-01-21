@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.bean.CompilerSetupBean;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.components.raspberrypi.RaspberryPiCommunicator;
+import de.fhg.iais.roberta.components.RaspberryPiCommunicator;
 import de.fhg.iais.roberta.util.Key;
 
 public class RaspberryPiTransferWorker implements IWorker {

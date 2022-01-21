@@ -308,7 +308,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         if (rotationPerSecond == 0.0 || angle === undefined) {
             return 0;
         } else {
-            const rotations = C.TURN_RATIO * (Math.abs(angle) / 720);
+            const rotations = C.TURN_RATIO * (Math.abs(angle) / 360);
             return (rotations / rotationPerSecond) * 1000;
         }
     }

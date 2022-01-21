@@ -1,0 +1,26 @@
+#! /bin/bash
+
+### BEGIN INIT INFO
+# Provides:          foo
+# Required-Start:    $local_fs $network
+# Required-Stop:     $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: foo service
+# Description:       Run Foo service
+### END INIT INFO
+
+# Carry out specific functions when asked to by the system
+cd /home/pi/openroberta
+
+case "$1" in
+  start)
+    bash ./admin.sh start-server -d server.admin.dir=./Resources -d robot.crosscompiler.resourcebase=./Resources>admin/logs/init.log &
+    ;;
+  *)
+    echo "missing parameter"
+    exit 1
+    ;;
+esac
+
+exit 0

@@ -65,6 +65,11 @@ limitations under the License.
         </div>
         <!--/.container-fluid -->
     </nav>
+    <!-- Roberta-Logo -->
+    <div class="logo">
+        <img href="#" id="img-nepo" class="img-nepo" src="/css/img/openRobertaLogo.png" />
+    </div>
+    <div class='stage'></div>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="head-navigation">
         <!--  Brand and toggle get grouped for better mobile display -->
         <div class="container-fluid">
@@ -236,10 +241,6 @@ limitations under the License.
                 </ul>
             </div>
         </div>
-        <!-- Roberta-Logo -->
-        <div class="logo">
-            <img href="#" id="img-nepo" class="img-nepo" src="/css/svg/NEPO_Logo_RGB.svg" />
-        </div>
         <!-- Toasts -->
         <div class="panel-body" id="toastContainer">
             <div class="panel-body" id="toastLeftContainer">
@@ -308,7 +309,7 @@ limitations under the License.
             </div>
             <div id="simDiv" class="fromRight">
                 <div id="canvasDiv">
-                    <div id="uniDiv" style="position: absolute; left: 0; top: -2000; z-index: 0;">
+                    <div id="uniDiv" style="position: absolute; left: 0; top: -2000px; z-index: 0;">
                         <canvas id="unitBackgroundLayer" class="canvasSim unified" width=1 height=1></canvas>
                         <canvas id="unitDrawBackgroundLayer" class="canvasSim unified" style="z-index: 1" width=1 height=1></canvas>
                     </div>
@@ -449,6 +450,8 @@ limitations under the License.
                         rel="tooltip" data-original-title="" title=""></button>
                 </div>
             </div>
+            <!-- <div id="mausLogo"><img src="css/img/DieMaus_KV_Museum_mit_der_Maus_RGB.png" alt="Die Maus"></div>-->
+            <button id='helpTutorial' class='typcn typcn-questionmark'></button>
         </div>
         <div id="progList" class="tab-pane fade">
             <div id="progListToolbar">
@@ -1576,12 +1579,39 @@ limitations under the License.
             </div>
         </div>
     </div>
-    <div id="showDisplay" class="modal">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title" lkey="Blockly.Msg.POPUP_DISPLAY_HEADER">Ausgabe deines Programmes</h3>
+    <div class='modal fade' id='tutorialStartView' data-backdrop='static' data-keyboard='false'>
+        <div class='modal-dialog modal'>
+            <div class='modal-content'>
+                <audio id='startAudio'>
+                    <source src='css/audio/startAudio.mp3' type='audio/mpeg'>
+                </audio>
+                <div class='modal-header'>
+                    <h3 class='modal-title' id='tutorialStartViewTitle'></h3>
+                </div>
+                <div class='modal-body left-inner-addon' style='text-align: center; margin-bottom: 40px; height: 401px'>
+                    <span id='tutorialStartViewText'>Message to show</span>
+                </div>
+                <div class='modal-footer'>
+                    <button type='button' id='volksbotStart' class='btn volksbot' autofocus>Start</button>
+                </div>
+            </div>
+        </div>
+        <div id='specificChart' style='display: none; height:200px; margin-top: 200px;' class='donut-size'>
+            <div class='pie-wrapper '>
+                <div class='pie '>
+                    <div class='left-side half-circle '></div>
+                    <div class='right-side half-circle '></div>
+                </div>
+                <div class='shadow '></div>
+            </div>
+        </div>
+    </div>
+    <div id='showDisplay ' class='modal '>
+        <div class='modal-dialog modal-sm '>
+            <div class='modal-content '>
+                <div class='modal-header '>
+                    <button type='button ' class='close ' data-dismiss='modal ' aria-hidden='true '>&times;</button>
+                    <h3 class='modal-title ' lkey='Blockly.Msg.POPUP_DISPLAY_HEADER '>Ausgabe deines Programmes</h3>
                 </div>
                 <div class="modal-body left-inner-addon">
                     <div style="overflow-y: auto; height: 200px;" id="showDisplayText"></div>
