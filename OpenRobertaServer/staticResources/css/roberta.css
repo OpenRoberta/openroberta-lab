@@ -2665,7 +2665,6 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 
 .tutorialLevelStars {
     position: relative;
-    left: 116px;
 }
 
 .tutorialLevel.typcn::before {
@@ -2674,6 +2673,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
     font-size: 24px;
     top: 4px;
     color: #333;
+    display: table-cell;
 }
 
 #tutorialOverview .modal-dialog {

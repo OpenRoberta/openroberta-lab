@@ -227,7 +227,7 @@ define(["require", "exports", "util", "guiState.controller", "progTutorial.contr
                     html = '<span class="tutorialLevel typcn typcn-star-outline"/>' + html;
                 }
             }
-            html = '<span class="tutorialLevelStars" style="left:' + (maxLevel * 16 + 20) + ';">' + html;
+            html = '<span class="tutorialLevelStars">' + html;
             html += '</span>';
         }
         return html;
