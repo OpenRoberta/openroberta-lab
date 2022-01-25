@@ -12,7 +12,9 @@ define(["require", "exports", "log", "guiState.controller", "neuralnetwork.playg
         }, 'shown tabNN');
         $('#tabNN').onWrap('hide.bs.tab', function (e) {
             var nnstepBlock = getTheNNstepBlock();
-            nnstepBlock.data = PG.getStateAsJSONString();
+            if (nnstepBlock !== null) {
+                nnstepBlock.data = PG.getStateAsJSONString();
+            }
         }, 'hide tabNN');
         $('#tabNN').onWrap('hidden.bs.tab', function (e) { }, 'hidden tabNN');
     }

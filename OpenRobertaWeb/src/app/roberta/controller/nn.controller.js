@@ -29,7 +29,9 @@ export function init() {
         'hide.bs.tab',
         function (e) {
             var nnstepBlock = getTheNNstepBlock();
-            nnstepBlock.data = PG.getStateAsJSONString();
+            if (nnstepBlock !== null) {
+                nnstepBlock.data = PG.getStateAsJSONString();
+            }
         },
         'hide tabNN'
     );

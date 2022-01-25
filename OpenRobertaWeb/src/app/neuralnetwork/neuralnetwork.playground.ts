@@ -33,6 +33,13 @@ let colorScale = d3.scale.linear<string, number>().domain([-1, 0, 1]).range(['#f
 let network: nn.Node[][] = null;
 
 function makeGUI() {
+    d3.select('#goto-sim').on('click', () => {
+        // $('#tabProgram').trigger('click'); $('#simButton').trigger('click');
+        $.when($('#tabProgram').trigger('click')).done(function () {
+            $('#simButton').trigger('click');
+        });
+    });
+
     d3.select('#add-layers').on('click', () => {
         if (state.numHiddenLayers >= 6) {
             return;

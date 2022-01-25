@@ -26,6 +26,12 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
     var colorScale = d3.scale.linear().domain([-1, 0, 1]).range(['#f59322', '#e8eaeb', '#0877bd']).clamp(true);
     var network = null;
     function makeGUI() {
+        d3.select('#goto-sim').on('click', function () {
+            // $('#tabProgram').trigger('click'); $('#simButton').trigger('click');
+            $.when($('#tabProgram').trigger('click')).done(function () {
+                $('#simButton').trigger('click');
+            });
+        });
         d3.select('#add-layers').on('click', function () {
             if (state.numHiddenLayers >= 6) {
                 return;
