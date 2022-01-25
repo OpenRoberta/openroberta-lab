@@ -340,35 +340,46 @@ function updateHoverCard(type: HoverType, nodeOrLink?, coordinates?: [number, nu
         d3.select('#svg').on('click', null);
         return;
     }
+
+    function updateValueInHoverCard(type: HoverType, nodeOrLink, value: string) {
+        if (value != null) {
+            if (type === HoverType.WEIGHT) {
+                var weights = string2weight(value);
+                if (weights !== null) {
+                    nodeOrLink.weight = weights[0];
+                    nodeOrLink.weightOrig = weights[1];
+                }
+            } else {
+                var biases = string2bias(value);
+                if (biases !== null) {
+                    nodeOrLink.bias = biases[0];
+                    nodeOrLink.biasOrig = biases[1];
+                }
+            }
+
+            state.weights = extractWeights(network);
+            state.biases = extractBiases(network);
+
+            updateUI();
+        }
+    }
+
     d3.select('#svg').on('click', () => {
         hovercard.select('.value').style('display', 'none');
         let input = hovercard.select('input');
         input.style('display', null);
-        input.on('input', function () {
-            if (this.value != null) {
-                if (type === HoverType.WEIGHT) {
-                    var weights = string2weight(this.value);
-                    if (weights !== null) {
-                        nodeOrLink.weight = weights[0];
-                        nodeOrLink.weightOrig = weights[1];
-                    }
-                } else {
-                    var biases = strint2bias(this.value);
-                    if (biases !== null) {
-                        nodeOrLink.bias = biases[0];
-                        nodeOrLink.biasOrig = biases[1];
-                    }
-                }
-
-                state.weights = extractWeights(network);
-                state.biases = extractBiases(network);
-
-                updateUI();
-            }
+        input.on('input', () => {
+            var event = d3.event as any;
+            updateValueInHoverCard(type, nodeOrLink, event.target.value);
         });
         input.on('keypress', () => {
-            if ((d3.event as any).keyCode === 13) {
+            var event = d3.event as any;
+            if (event.keyCode === 13) {
                 updateHoverCard(type, nodeOrLink, coordinates);
+            } else if (event.key === 'h' || event.key === 'r') {
+                event.target.value = incrDecrValue(event.key === 'h', event.target.value);
+                event.preventDefault && event.preventDefault();
+                updateValueInHoverCard(type, nodeOrLink, event.target.value);
             }
         });
         (input.node() as HTMLInputElement).focus();
@@ -528,7 +539,7 @@ function replaceBiases(network: nn.Node[][], biasesAllLayers: string[][]): void 
                 if (node == null || nodeBias == null) {
                     break;
                 }
-                var biases = strint2bias(nodeBias);
+                var biases = string2bias(nodeBias);
                 node.bias = biases === null ? 0 : biases[0];
                 node.biasOrig = biases === null ? '0' : biases[1];
             }
@@ -563,7 +574,7 @@ function string2weight(value: string): [number, string] {
     }
 }
 
-function strint2bias(value: string): [number, string] {
+function string2bias(value: string): [number, string] {
     var valueTrimmed = value.trim();
     var valueNumber = +valueTrimmed;
     if (valueTrimmed === '') {
@@ -574,7 +585,27 @@ function strint2bias(value: string): [number, string] {
         } else {
             return [valueNumber, valueTrimmed];
         }
-        return [+valueTrimmed, valueTrimmed];
+    }
+}
+
+function incrDecrValue(isPlus: boolean, value: string): string {
+    var valueTrimmed = value.trim();
+    if (valueTrimmed === '') {
+        return '1';
+    } else {
+        var opOpt = valueTrimmed.substr(0, 1);
+        var number = 0;
+        if (opOpt === '*' || opOpt === ':' || opOpt === '/') {
+            number = +valueTrimmed.substr(1).trim();
+        } else {
+            opOpt = '';
+            number = +valueTrimmed;
+        }
+        if (isNaN(number)) {
+            return '1';
+        } else {
+            return opOpt + (isPlus ? number + 1 : number - 1);
+        }
     }
 }
 
