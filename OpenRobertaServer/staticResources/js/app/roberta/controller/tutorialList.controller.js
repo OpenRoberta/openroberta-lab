@@ -1,21 +1,7 @@
 define(["require", "exports", "util", "guiState.controller", "progTutorial.controller", "galleryList.controller", "jquery", "bootstrap-table", "bootstrap-tagsinput"], function (require, exports, UTIL, GUISTATE_C, TUTORIAL_C, GALLERYLIST_C, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.formatTags = exports.init = void 0;
-    var BACKGROUND_COLORS = [
-        '#33B8CA',
-        '#EBC300',
-        '#39378B',
-        '#005A94',
-        '#179C7D',
-        '#F29400',
-        '#E2001A',
-        '#EB6A0A',
-        '#8FA402',
-        '#BACC1E',
-        '#9085BA',
-        '#FF69B4',
-        '#DF01D7',
-    ];
+    var BACKGROUND_COLORS = ['#33B8CA', '#EBC300', '#005A94', '#179C7D', '#F29400', '#E2001A', '#EB6A0A', '#8FA402', '#BACC1E', '#9085BA', '#FF69B4', '#DF01D7'];
     var currentColorIndex;
     var tutorialList;
     /**
@@ -221,10 +207,10 @@ define(["require", "exports", "util", "guiState.controller", "progTutorial.contr
             var thisLevel = isNaN(level) ? level.split('/')[0] : level;
             for (var i = 1; i <= maxLevel; i++) {
                 if (i <= thisLevel) {
-                    html = '<span style="left: 0;" class="tutorialLevel typcn typcn-star-full-outline"/>' + html;
+                    html = html + '<span style="left: 0;" class="tutorialLevel typcn typcn-star-full-outline"/>';
                 }
                 else {
-                    html = '<span class="tutorialLevel typcn typcn-star-outline"/>' + html;
+                    html = html + '<span class="tutorialLevel typcn typcn-star-outline"/>';
                 }
             }
             html = '<span class="tutorialLevelStars">' + html;

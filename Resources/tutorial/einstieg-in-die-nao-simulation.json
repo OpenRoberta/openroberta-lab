@@ -1,5 +1,5 @@
 {
-  "name": "Einführung in die NAO Simulation",
+  "name": "NAO Schnelleinstieg",
   "overview": {
     "goal": "Erste Programmiererfahrung mit dem humanoiden Roboter NAO",
     "previous": "keine Vorkenntnisse nötig",
@@ -65,7 +65,7 @@
       "maxBlocks": 9
     }
   ],
-  "index": "1",
+  "index": "0a1",
   "group": "touchtomorrow",
   "time": "10 Min",
   "age": "ab 10 Jahre",

@@ -1976,46 +1976,42 @@ div.galleryDescription, div.tutorialOverview {
 }
 
 .galleryDescription.color2:after, .tutorialOverview.color2:after {
-    background: #39378B;
-}
-
-.galleryDescription.color3:after, .tutorialOverview.color3:after {
     background: #005A94;
 }
 
-.galleryDescription.color4:after, .tutorialOverview.color4:after {
+.galleryDescription.color3:after, .tutorialOverview.color3:after {
     background: #179C7D;
 }
 
-.galleryDescription.color5:after, .tutorialOverview.color5:after {
+.galleryDescription.color4:after, .tutorialOverview.color4:after {
     background: #F29400;
 }
 
-.galleryDescription.color6:after, .tutorialOverview.color6:after {
+.galleryDescription.color5:after, .tutorialOverview.color5:after {
     background: #E2001A;
 }
 
-.galleryDescription.color7:after, .tutorialOverview.color7:after {
+.galleryDescription.color6:after, .tutorialOverview.color6:after {
     background: #EB6A0A;
 }
 
-.galleryDescription.color8:after, .tutorialOverview.color8:after {
+.galleryDescription.color7:after, .tutorialOverview.color7:after {
     background: #8FA402;
 }
 
-.galleryDescription.color9:after, .tutorialOverview.color9:after {
+.galleryDescription.color8:after, .tutorialOverview.color8:after {
     background: #BACC1E;
 }
 
-.galleryDescription.color10:after, .tutorialOverview.color10:after {
+.galleryDescription.color9:after, .tutorialOverview.color9:after {
     background: #9085BA;
 }
 
-.galleryDescription.color11:after, .tutorialOverview.color11:after {
+.galleryDescription.color10:after, .tutorialOverview.color10:after {
     background: #FF69B4;
 }
 
-.galleryDescription.color12:after, .tutorialOverview.color12:after {
+.galleryDescription.color11:after, .tutorialOverview.color11:after {
     background: #DF01D7;
 }
 
