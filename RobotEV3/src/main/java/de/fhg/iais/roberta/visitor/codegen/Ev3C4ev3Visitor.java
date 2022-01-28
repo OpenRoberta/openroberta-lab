@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.Lists;
 
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
@@ -63,6 +64,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
+import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
@@ -175,6 +177,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         generateTTSInitialization();
         generateGyroInitialization();
         generateDebugInitialization(mainTask);
+        generateRandomSeed();
         nlIndent();
         return null;
     }
@@ -1372,5 +1375,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private void generateDefaultSpeedAndPitchArguments() {
         this.sb.append("30, 50");
+    }
+
+    private void generateRandomSeed() {
+        if ( this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().contains(FunctionNames.RANDOM)
+            || this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().contains(FunctionNames.RANDOM_DOUBLE) ) {
+            this.sb.append("srand (time(NULL));");
+            this.nlIndent();
+        }
     }
 }
