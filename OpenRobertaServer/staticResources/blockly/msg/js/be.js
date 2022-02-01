@@ -137,6 +137,7 @@ Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compa
 Blockly.Msg.COMPASS_TOOLTIP = "Прадстаўляе компас.";
 Blockly.Msg.COMPASS_TOOLTIP_EV3 = "Прадстаўляе HiTechnic NXT компас.";
 Blockly.Msg.CONFIGURATION_ERROR_ACTOR_MISSING = "Актуатар не падключаны да порту.";
+Blockly.Msg.CONFIGURATION_ERROR_MISSING_PIN = "The pin used by this component does not exist!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "Розны накірунак кручэння на левым і правым маторах!";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "У кафігурацыі адстунічае левы матор!";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED = "Левы матор не адрэгуляваны!";

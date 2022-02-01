@@ -25,11 +25,11 @@ public class ArduinoConfigurationValidator {
 
     public void validateConfiguration(List<String> freePins) {
         List<String> currentFreePins = new ArrayList<>(freePins);
-        project.getConfigurationAst().getConfigurationComponents().forEach((k, v) -> checkPinOverlap(v, currentFreePins));
+        project.getConfigurationAst().getConfigurationComponents().forEach((k, v) -> checkPinOverlap(v, currentFreePins, freePins));
         project.getConfigurationAst().getConfigurationComponents().forEach((k, v) -> checkRgbInternalUse(v));
     }
 
-    public void checkPinOverlap(ConfigurationComponent configurationComponent, List<String> currentFreePins) {
+    public void checkPinOverlap(ConfigurationComponent configurationComponent, List<String> currentFreePins, List<String> availablePins) {
         Map<String, String> componentProperties = configurationComponent.getComponentProperties();
         List<String> blockPins = new ArrayList<>();
         componentProperties.forEach((k, v) -> {
@@ -41,7 +41,11 @@ public class ArduinoConfigurationValidator {
                     project.addToErrorCounter(1, null);
                     project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
                     String blockId = configurationComponent.getProperty().getBlocklyId();
-                    project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
+                    if ( !availablePins.contains(v) ) {
+                        project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_MISSING_PIN"));
+                    } else {
+                        project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
+                    }
                 }
             }
         });

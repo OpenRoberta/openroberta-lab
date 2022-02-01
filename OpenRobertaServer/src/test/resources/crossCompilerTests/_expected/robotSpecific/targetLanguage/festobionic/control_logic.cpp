@@ -14,7 +14,7 @@ String ___stringVar;
 std::list<double> ___numberList;
 std::list<bool> ___booleanList;
 std::list<String> ___stringList;
-int _led_L = 13;
+int _led_L = LED_BUILTIN;
 
 void control() {
     if ( ___booleanVar ) {
