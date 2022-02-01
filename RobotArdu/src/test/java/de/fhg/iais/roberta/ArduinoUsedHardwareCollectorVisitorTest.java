@@ -24,9 +24,7 @@ import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
-import de.fhg.iais.roberta.visitor.collect.ArduinoUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.validate.ArduinoValidatorAndCollectorVisitor;
 
 public class ArduinoUsedHardwareCollectorVisitorTest {
