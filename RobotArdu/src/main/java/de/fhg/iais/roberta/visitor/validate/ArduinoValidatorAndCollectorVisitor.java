@@ -7,10 +7,12 @@ import java.util.Optional;
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
@@ -210,6 +212,12 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
         ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(lightAction.getPort());
         if ( usedConfigurationBlock == null ) {
             addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
+        } else {
+            if ( !lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) ) {
+                this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(lightAction.getPort(), SC.LED));
+            } else {
+                this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(lightAction.getPort(), SC.RGBLED));
+            }
         }
         return null;
     }
