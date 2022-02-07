@@ -160,13 +160,17 @@ public class ArduinoCompilerWorker implements IWorker {
                 resultKey = Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
             }
         }
+        String workflowMessage = result.getSecond();
         project.setResult(resultKey);
-        project.addResultParam("MESSAGE", result.getSecond());
+        project.addResultParam("MESSAGE", workflowMessage);
         String robot = project.getRobot();
         if ( resultKey == Key.COMPILERWORKFLOW_SUCCESS ) {
             LOG.info("compile {} program {} successful", robot, programName);
         } else {
-            LOG.error("compile {} program {} failed with {}", robot, programName, result.getSecond());
+            if ( project.isNativeEditorCode() ) {
+                workflowMessage = "user error (source code editor compilation error)";
+            }
+            LOG.error("compile {} program {} failed with {}", robot, programName, workflowMessage);
         }
     }
 }

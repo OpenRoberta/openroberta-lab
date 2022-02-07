@@ -27,12 +27,16 @@ public class CalliopeCompilerWorker implements IWorker {
 
         // TODO: check how to do this sensibly, without having the UsedHardwareWorker beforehand
         Pair<Key, String> workflowResult = this.runBuild(project);
+        String workflowMessage = workflowResult.getSecond();
         project.setResult(workflowResult.getFirst());
-        project.addResultParam("MESSAGE", workflowResult.getSecond());
+        project.addResultParam("MESSAGE", workflowMessage);
         if ( workflowResult.getFirst() == Key.COMPILERWORKFLOW_SUCCESS ) {
             LOG.info("compile {} program {} successful", robot, programName);
         } else {
-            LOG.error("compile {} program {} failed with {}", robot, programName, workflowResult);
+            if ( project.isNativeEditorCode() ) {
+                workflowMessage = "user error (source code editor compilation error)";
+            }
+            LOG.error("compile {} program {} failed with {}", robot, programName, workflowMessage);
         }
     }
 
