@@ -56,6 +56,7 @@ public final class Project {
     private RobotCommunicator robotCommunicator;
     private IRobotFactory robotFactory;
     private boolean withWrapping = true;
+    private boolean isNativeEditorCode = false;
     private ProgramAst<Void> program = null;
     private ConfigurationAst configuration = null;
     private StringBuilder sourceCodeBuilder = new StringBuilder();
@@ -164,6 +165,10 @@ public final class Project {
 
     public boolean isWithWrapping() {
         return this.withWrapping;
+    }
+
+    public boolean isNativeEditorCode() {
+        return this.isNativeEditorCode;
     }
 
     /**
@@ -414,6 +419,7 @@ public final class Project {
             } else if ( this.programNativeSource != null ) { // Used to run native code directly
                 Assert.isNull(this.programXml, "Program XML should not be set when using native compile");
                 this.project.setSourceCode(this.programNativeSource);
+                this.project.isNativeEditorCode = true;
             } else { // STANDARD CASE - Used to follow the default generation, compilation, run from blockly
                 if ( this.project.configuration == null ) {
                     transformConfiguration();

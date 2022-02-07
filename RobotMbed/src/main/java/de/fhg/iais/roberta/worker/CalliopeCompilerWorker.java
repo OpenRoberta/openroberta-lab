@@ -63,7 +63,7 @@ public class CalliopeCompilerWorker implements IWorker {
                 bluetoothParam
             };
 
-        Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource);
+        Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource, project.isNativeEditorCode());
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         if ( result.getFirst() ) {
             try {

@@ -29,7 +29,7 @@ public class Ev3LejosCompilerWorker implements IWorker {
             project.setResult(Key.COMPILERWORKFLOW_SUCCESS);
             project.addResultParam("MESSAGE", "");
         } else {
-            Util.logCrosscompilerError(LOG, scp.getCompilerResponse(), crosscompilerSource);
+            Util.logCrosscompilerError(LOG, scp.getCompilerResponse(), crosscompilerSource, project.isNativeEditorCode());
             project.setResult(Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED);
             project.addResultParam("MESSAGE", scp.getCompilerResponse());
         }

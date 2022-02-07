@@ -41,7 +41,7 @@ public class MicrobitCompilerWorker implements IWorker {
         if ( project.getCompiledHex() != null ) {
             return Key.COMPILERWORKFLOW_SUCCESS;
         } else {
-            Util.logCrosscompilerError(LOG, "no binary returned", sourceCode);
+            Util.logCrosscompilerError(LOG, "no binary returned", sourceCode, project.isNativeEditorCode());
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
     }

@@ -64,7 +64,7 @@ public class NxtCompilerWorker implements IWorker {
                 "-O=" + tempDir + token + "/" + mainFile + "/target/" + mainFile + "." + project.getBinaryFileExtension(),
                 "-I=" + base.resolve(path).toAbsolutePath().normalize()
             };
-        Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource);
+        Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource, project.isNativeEditorCode());
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         return Pair.of(resultKey, result.getSecond());
     }
