@@ -12,12 +12,12 @@ done
 
 if [ "$QUIET" = 'no' ]
 then
-  echo 'THIS SCRIPT EXECUTES DANGEROUS COMMANDS. MISUSE MAY CRASH THE OPENROBERTA SERVER.'
+  echo 'THIS SCRIPT EXECUTES COMMANDS WITHIN A DOCKER CONTAINER. ERRORS MAY CRASH THE OPENROBERTA SERVER.'
   echo 'admin.sh [-q] <CMD>'
   echo '-q quiet mode'
   echo ''
   echo '<CMD>s are:'
-  echo '  cleanup-temp-user-dirs  temporary directories allocated for crosscompilers are removed, if they are older than 1d'
+  echo '  example           example script (currently no commands are in use)'
 fi
 
 # get the command
@@ -25,19 +25,11 @@ CMD="$1"; shift
 
 RC=0
 case "$CMD" in
-  cleanup-temp-user-dirs) # the rm -rf is scary. Should be really made robust against errors. -mtime +1 is: older than 1 day
-                    AGE='-mtime +1'
-                    TMP_DIR='/tmp/openrobertaTmp'
-                    cd $TMP_DIR
-                    WD=$(pwd)
-                    if [[ "$WD" == $TMP_DIR ]]
-                    then
-                        find . -ignore_readdir_race -maxdepth 1 ! -name '.' ! -name '..' $AGE -exec rm -rf -- {} \;
-                        RC=$?
-                    else
-                        echo "cd $TMP_DIR did not succeed. This is dangerous! Analyse!"
-                        RC=12
-                    fi ;;
+  example)  echo 'use a bash on the server running our server in a docker container (e.g. server "test")'
+            echo 'excute in this bash the command ".../run.sh admin test example". Then:'
+            echo 'the run script will call INSIDE of the docker container of server "test" the script "admin.sh"'
+            echo 'with the only parameter "example". This in turn will output the echos you are reading :-)'
+            ;;
 # ----------------------------------------------------------------------------------------------------------------------------------------
   '')               echo "no command. Script terminates"
                     RC=12 ;;
