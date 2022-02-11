@@ -275,6 +275,7 @@ define(["require", "exports"], function (require, exports) {
         DEBUG_STEP_OVER: 'DebugStepOver',
         MIN_SIZE_OBJECT: 10,
         CORNER_RADIUS: 5,
+        ANIMATION_DURATION: 750
     };
     exports.default = CONST;
 });

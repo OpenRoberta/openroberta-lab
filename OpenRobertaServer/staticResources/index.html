@@ -1421,25 +1421,19 @@ limitations under the License.
         </div>
     </div>
     <!-- Popup for simulated robot -> EV3 -->
-    <div id="simRobotModal" class="modal fade simRobotModal" data-backdrop="false">
+    <div id="simRobotWindow" class="simWindow" data-backdrop="false">
         <div class="modal-dialog">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            </div>
+            <button type="button" class="close">&times;</button>
             <div id="simRobotContent"></div>
         </div>
     </div>
     <!-- Popup for simulation sensor data -->
-    <div id="simValuesModal" class="modal fade simRobotModal" data-backdrop="false">
-        <div class="modal-dialog">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            </div>
-            <div id="simValuesContent">
-                <div id="valuesContent">
-                    <div id="constantValue"></div>
-                    <div id="notConstantValue"></div>
-                </div>
+    <div id="simValuesWindow" class="simWindow slide-in" data-backdrop="false">
+        <button type="button" class="close">&times;</button>
+        <div id="simValuesContent">
+            <div id="valuesContent">
+                <div id="constantValue"></div>
+                <div id="notConstantValue"></div>
             </div>
         </div>
     </div>

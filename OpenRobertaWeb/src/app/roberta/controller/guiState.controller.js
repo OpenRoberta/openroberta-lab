@@ -1,4 +1,3 @@
-import * as exports from 'exports';
 import * as UTIL from 'util';
 import * as MSG from 'message';
 import * as GUISTATE from 'guiState.model';
@@ -285,6 +284,7 @@ function setRobot(robot, result, opt_init) {
     $('#head-navi-icon-robot').removeClass('typcn-open');
     $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
     $('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
+    $('.simWindow').removeClass('simWindow-openedButHidden');
 
     checkSim();
     setProgramOwnerName(null);

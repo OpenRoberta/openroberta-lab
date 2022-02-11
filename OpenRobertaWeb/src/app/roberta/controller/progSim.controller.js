@@ -45,8 +45,6 @@ function initEvents() {
         return false;
     });
 
-    $('#simRobotModal').removeClass('modal-backdrop');
-
     $('#simStop').onWrap(
         'click',
         function (event) {
@@ -135,8 +133,6 @@ function initEvents() {
         'simImport clicked'
     );
 
-    $('#simRobotModal').removeClass('modal-backdrop');
-
     $('.simInfo').onWrap(
         'click',
         function (event) {
@@ -145,51 +141,52 @@ function initEvents() {
         'sim info clicked'
     );
 
-    $('#simRobot').onWrap(
-        'click',
-        function (event) {
-            $('#simRobotModal').modal('toggle');
-            var robot = GUISTATE_C.getRobot();
-            var position = $('#simDiv').position();
-            position.top += 12;
-            if (robot == 'calliope2016' || robot == 'calliope2017' || robot == 'calliope2017NoBlue' || robot == 'microbit') {
-                position.left = $('#blocklyDiv').width() + 12;
-                $('#simRobotModal').css({
-                    top: position.top,
-                    left: position.left,
-                });
-            } else {
-                position.left += 48;
-                $('#simRobotModal').css({
-                    top: position.top,
-                    left: position.left,
-                });
-            }
-            $('#simRobotModal').draggable();
-        },
-        'sim show robot clicked'
-    );
+    $('#simRobot').onWrap('click', function (event) {
+        var robot = GUISTATE_C.getRobot();
+        var position = $('#simDiv').position();
 
-    $('#simValues').onWrap(
-        'click',
-        function (event) {
-            $('#simValuesModal').modal('toggle');
-            var position = $('#simDiv').position();
-            position.top += 12;
-            $('#simValuesModal').css({
-                top: position.top,
-                right: 12,
-                left: 'initial',
-                bottom: 'inherit',
+        if (robot == 'calliope2016' || robot == 'calliope2017' || robot == 'calliope2017NoBlue' || robot == 'microbit') {
+            position.left = $('#blocklyDiv').width() + 12;
+        } else {
+            position.left += 48;
+        }
+        toggleRobotWindow('#simRobotWindow', position);
+    }, 'sim show robot clicked');
+
+    $('#simValues').onWrap('click', function(event) {
+        var position = $('#simDiv').position();
+        position.left = $(window).width() - ($('#simValuesWindow').width() + 12);
+        toggleRobotWindow('#simValuesWindow', position);
+    }, 'sim show values clicked');
+
+    function toggleRobotWindow(id, position) {
+        if ($(id).is(':hidden')) {
+            $(id).css({
+                top: position.top + 12,
+                left: position.left
             });
-            $('#simValuesModal').draggable();
-        },
-        'sim show values clicked'
-    );
+        }
+        $(id).animate({
+            'opacity': 'toggle',
+            'top': 'toggle'
+        }, 300);
+        $(id).draggable(
+            {
+                constraint: 'window'
+            }
+        );
+    }
+
+    $('.simWindow .close').onWrap('click', function(event) {
+        $($(this).parents('.simWindow:first')).animate({
+            'opacity': 'hide',
+            'top': 'hide'
+        }, 300);
+    }, 'sim close robotWindow clicked');
 
     $('#simResetPose').onWrap(
         'click',
-        function (event) {
+        function(event) {
             if (GUISTATE_C.hasWebotsSim()) {
                 NAOSIM.resetPose();
                 return;
@@ -351,16 +348,19 @@ function toggleSim() {
     if ($('.fromRight.rightActive').hasClass('shifting')) {
         return;
     }
+
     if (($('#simButton').hasClass('rightActive') && !debug) || ($('#simDebugButton').hasClass('rightActive') && debug)) {
         if (!GUISTATE_C.hasWebotsSim()) {
             SIM.cancel();
         }
         $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play').removeClass('typcn-media-stop');
-        $('#blockly').closeRightView(function () {
+        $('#blockly').closeRightView(function() {
             $('.nav > li > ul > .robotType').removeClass('disabled');
             $('.' + GUISTATE_C.getRobot()).addClass('disabled');
         });
         $('#simStop, #simControlStepOver,#simControlStepInto').hide();
+        UTIL.closeSimRobotWindow(CONST.ANIMATION_DURATION);
+
         SIM.endDebugging();
     } else {
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
@@ -382,6 +382,7 @@ function toggleSim() {
             }
             PROG_C.reloadProgram(result);
         });
+        UTIL.openSimRobotWindow(CONST.ANIMATION_DURATION);
     }
 }
 
