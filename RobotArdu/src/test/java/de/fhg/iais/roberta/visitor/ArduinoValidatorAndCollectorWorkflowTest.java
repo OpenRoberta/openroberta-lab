@@ -314,7 +314,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends AbstractValidatorA
 
     @Test
     public void visitMotorOnAction() {
-        configurationComponents.add(new ConfigurationComponent(SC.MOTOR_DRIVE, true, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.STEPMOTOR, true, "P1", "P1", new HashMap<>()));
 
         MotionParam<Void> motionParam = new MotionParam.Builder<Void>()
             .speed(NumConst.make("10"))
@@ -363,7 +363,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends AbstractValidatorA
 
     @Test
     public void visitMotorOnAction_withoutDuration() {
-        configurationComponents.add(new ConfigurationComponent(SC.OTHER, true, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.STEPMOTOR, true, "P1", "P1", new HashMap<>()));
 
         MotionParam<Void> motionParam = new MotionParam.Builder<Void>()
             .speed(NumConst.make("10"))
@@ -379,7 +379,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends AbstractValidatorA
 
     @Test
     public void visitLightAction() {
-        configurationComponents.add(new ConfigurationComponent(SC.LIGHT, true, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.RGBLED, true, "P1", "P1", new HashMap<>()));
 
         RgbColor<Void> rgbColor = RgbColor.make(bp, null, NumConst.make("10"), NumConst.make("10"), NumConst.make("10"), NumConst.make("10"));
 
@@ -405,7 +405,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends AbstractValidatorA
 
     @Test
     public void visitPlayNoteAction() {
-        configurationComponents.add(new ConfigurationComponent(SC.MUSIC, true, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.BUZZER, true, "P1", "P1", new HashMap<>()));
 
         PlayNoteAction<Void> playNoteAction = PlayNoteAction.make("P1", "100", "100", bp, null, null);
         phrases.add(playNoteAction);
@@ -427,7 +427,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends AbstractValidatorA
 
     @Test
     public void visitLightStatusActionOff() {
-        configurationComponents.add(new ConfigurationComponent(SC.LIGHT, true, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.RGBLED, true, "P1", "P1", new HashMap<>()));
 
         LightStatusAction<Void> lightStatusAction = LightStatusAction.make("P1", LightStatusAction.Status.OFF, bp, null);
         phrases.add(lightStatusAction);
@@ -447,7 +447,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends AbstractValidatorA
 
     @Test
     public void visitLightStatusActionReset() {
-        configurationComponents.add(new ConfigurationComponent(SC.LIGHT, true, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.RGBLED, true, "P1", "P1", new HashMap<>()));
 
         LightStatusAction<Void> lightStatusAction = LightStatusAction.make("P1", LightStatusAction.Status.RESET, bp, null);
         phrases.add(lightStatusAction);
@@ -467,7 +467,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends AbstractValidatorA
 
     @Test
     public void visitRelayAction() {
-        configurationComponents.add(new ConfigurationComponent(SC.OTHER, true, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.RELAY, true, "P1", "P1", new HashMap<>()));
 
         RelayAction<Void> relayAction = RelayAction.make("P1", RelayMode.DEFAULT, bp, null);
         phrases.add(relayAction);
