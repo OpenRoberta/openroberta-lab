@@ -209,12 +209,15 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         optionalComponentVisited(lightAction.getRgbLedColor());
-        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(lightAction.getPort());
-        if ( usedConfigurationBlock == null ) {
-            addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
-        } else {
-            if ( !lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) ) {
+        if ( !lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) ) {
+            if ( !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
+                addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
+            } else {
                 this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(lightAction.getPort(), SC.LED));
+            }
+        } else {
+            if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
+                addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
             } else {
                 this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(lightAction.getPort(), SC.RGBLED));
             }
@@ -231,8 +234,7 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         if ( lightStatusAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(lightStatusAction.getUserDefinedPort());
-            if ( usedConfigurationBlock == null ) {
+            if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
                 addErrorToPhrase(lightStatusAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
             }
         }
@@ -373,8 +375,7 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(playNoteAction.getPort());
-        if ( usedConfigurationBlock == null ) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.BUZZER) ) {
             addErrorToPhrase(playNoteAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
         return null;
@@ -389,8 +390,7 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
 
     @Override
     public Void visitRelayAction(RelayAction<Void> relayAction) {
-        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(relayAction.getPort());
-        if ( usedConfigurationBlock == null ) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.RELAY) ) {
             addErrorToPhrase(relayAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
         return null;
@@ -440,8 +440,7 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         requiredComponentVisited(toneAction, toneAction.getDuration(), toneAction.getFrequency());
-        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(toneAction.getPort());
-        if ( usedConfigurationBlock == null ) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.BUZZER) ) {
             addErrorToPhrase(toneAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
         return null;

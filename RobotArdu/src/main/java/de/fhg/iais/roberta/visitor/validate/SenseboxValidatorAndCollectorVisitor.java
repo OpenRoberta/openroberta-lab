@@ -8,6 +8,8 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
+import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
@@ -143,6 +145,24 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
         checkSensorPort(soundSensor);
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(soundSensor.getUserDefinedPort(), SC.SOUND, soundSensor.getMode()));
+        return null;
+    }
+    
+    @Override
+    public Void visitShowTextAction(ShowTextAction<Void> showTextAction){
+        super.visitShowTextAction(showTextAction);
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
+            addErrorToPhrase(showTextAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction){
+        super.visitClearDisplayAction(clearDisplayAction);
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
+            addErrorToPhrase(clearDisplayAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
+        }
         return null;
     }
 }
