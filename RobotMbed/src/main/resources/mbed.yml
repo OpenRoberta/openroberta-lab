@@ -119,6 +119,7 @@ mode:
 configuration:
   LEDBAR: [robConf_ledbar]
   FOURDIGITDISPLAY: [robConf_fourdigitdisplay]
+  DCMOTOR: [robConf_dcmotor]
   CALLIBOT: [robConf_callibot]
   COLOUR: [robConf_colourtcs3472]
   ROBOT: [robConf_robot]

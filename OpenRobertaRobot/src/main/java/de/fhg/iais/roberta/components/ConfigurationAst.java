@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.components;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -168,6 +169,16 @@ public final class ConfigurationAst {
      */
     public Collection<ConfigurationComponent> getActors() {
         return new HashMap<>(this.configurationComponents).values().stream().filter(ConfigurationComponent::isActor).collect(Collectors.toList());
+    }
+    
+    public Collection<ConfigurationComponent> getActors(String type) {
+        return configurationComponents
+            .values()
+            .stream()
+            .filter(ConfigurationComponent::isActor)
+            .filter(actor -> type.equals(actor.getComponentType()))
+            .sorted((actor1, actor2) -> Comparator.comparing(ConfigurationComponent::getInternalPortName).compare(actor1, actor2))
+            .collect(Collectors.toList());
     }
 
     /**

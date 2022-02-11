@@ -1,11 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-<<<<<<< HEAD
-		"lastupdated": "2021-12-19 21:34:24.883947",
-=======
-		"lastupdated": "2022-01-06 10:56:55.141662",
->>>>>>> upstream/develop
+		"lastupdated": "2022-02-11 15:51:34.082965",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1782,8 +1778,19 @@
 	"POPUP_BACKGROUND_REPLACE": "A program with the same name already exists. <br> Would you like to replace it?",
 	"POPUP_BACKGROUND_REPLACE_CONFIGURATION": "A configuration with the same name already exists. <br> Would you like to replace it?",
 	"ORA_CONFIGURATION_SAVE_AS_ERROR_CONFIGURATION_EXISTS": "This configuration already exists.",
-	"DCMOTOR_M1": "Motor port 1",
-	"DCMOTOR_M2": "Motor port 2",
-	"DCMOTOR_M3": "Motor port 3",
-	"DCMOTOR_M4": "Motor port 4"
+	"DCMOTOR": "DC Motor",
+	"DCMOTOR_BACKWARD": "backward",
+	"DCMOTOR_BOARD": "DC Motor board",
+	"DCMOTOR_FORWARD": "forward",
+	"DCMOTOR_NUMERIC": "numeric",
+	"DCMOTOR_M1": "motor port 1",
+	"DCMOTOR_M2": "motor port 2",
+	"DCMOTOR_M3": "motor port 3",
+	"DCMOTOR_M4": "motor port 4",
+	"DCMOTOR_MOTOR": "motor port",
+	"DCMOTOR_SPEED": "speed",
+	"DCMOTOR_STOP": "stop",
+	"DCMOTOR_TOOLTIP": "DC Motor extention",
+	"I2CADDRESS": "I2C address",
+	"PERCENT": "%"
 }

@@ -248,7 +248,9 @@ public interface IMbedTransformerVisitor<V> extends ITransformerVisitor<V>, IMbe
     @Override
     default Phrase<V> visitDcMotorSetAction(DcMotorSetAction<Phrase<V>> dcMotorSetAction) {
         return DcMotorSetAction.make(
-            dcMotorSetAction.getPort(),
+            dcMotorSetAction.getActorPort(),
+            (Expr<V>) dcMotorSetAction.getMotor().modify(this),
+            dcMotorSetAction.getDirection(),
             (Expr<V>) dcMotorSetAction.getSpeed().modify(this),
             dcMotorSetAction.getProperty(),
             dcMotorSetAction.getComment()

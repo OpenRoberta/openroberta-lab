@@ -143,8 +143,17 @@
 				<field name="DIRECTION_RIGHT">FOREWARD</field>
 			</block>
 			<block type="mbedActions_dcmotor_set">
-				<field name="PORT">1</field>
-				<field name="POWER">0</field>
+				<field name="DIRECTION">Forward</field>
+				<value name="MOTOR">
+					<block type="math_number">
+						<field name="NUM">1</field>
+					</block>
+				</value>
+				<value name="SPEED">
+					<block type="math_number">
+						<field name="NUM">100</field>
+					</block>
+				</value>
 			</block>
 		</category>
 		<category name="TOOLBOX_SOUND" svg="true">

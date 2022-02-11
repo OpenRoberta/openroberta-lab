@@ -617,6 +617,8 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitDcMotorSetAction(DcMotorSetAction<Void> dcMotorSetAction) {
+        checkActorByTypeExists(dcMotorSetAction, "DCMOTOR");
+       
         requiredComponentVisited(dcMotorSetAction, dcMotorSetAction.getSpeed());
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DCMOTOR));
 
