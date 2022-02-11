@@ -117,7 +117,7 @@ int main () {
     NEPOInitEV3();
     NEPOSetAllSensors(NULL, NULL, NULL, NULL);
     startLoggingThread(OUT_BC);
-    
+    srand (time(NULL));
     
     math();
     lists();
