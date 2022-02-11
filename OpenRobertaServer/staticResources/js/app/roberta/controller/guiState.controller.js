@@ -278,6 +278,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         $('#head-navi-icon-robot').removeClass('typcn-open');
         $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
         $('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
+        $('.simWindow').removeClass('simWindow-openedButHidden');
         checkSim();
         setProgramOwnerName(null);
         setProgramAuthorName(null);

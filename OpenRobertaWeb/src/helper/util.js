@@ -4,12 +4,14 @@ import * as $ from 'jquery';
 import * as Blockly from 'blockly';
 import 'jquery-validate';
 import 'bootstrap';
+import CONST from 'simulation.constants';
 import * as GUISTATE_C from 'guiState.controller';
 import * as WEBOTSIM from 'webots.simulation';
 
-const ANIMATION_DURATION = 750;
+const ANIMATION_DURATION = CONST.ANIMATION_DURATION;
 
 var ratioWorkspace = 1;
+var simRobotWindowPositions = [];
 /**
  * Decode base64 string to array of bytes
  *
@@ -441,13 +443,13 @@ String.prototype.escapeHTML = function () {
     });
 };
 
-$.fn.draggable = function (opt) {
+$.fn.draggable = function(opt) {
     opt = $.extend(
         {
             handle: '',
             cursor: 'move',
             draggableClass: 'draggable',
-            activeHandleClass: 'active-handle',
+            activeHandleClass: 'active-handle'
         },
         opt
     );
@@ -475,6 +477,21 @@ $.fn.draggable = function (opt) {
                 .on('mousemove touchmove', function (e) {
                     var pageX = e.pageX || e.originalEvent.touches[0].pageX;
                     var pageY = e.pageY || e.originalEvent.touches[0].pageY;
+                    var newXPosition = pageX + pos_x - drg_w;
+                    var newYPosition = pageY + pos_y - drg_h;
+                    if (opt.constraint == 'window') {
+                        if (newXPosition >= $(window).width() - 19) {
+                            newXPosition = $(window).width() - 20;
+                        } else if (newXPosition <= 19 - $selected.width()) {
+                            newXPosition = 18 - $selected.width();
+                        }
+                        var headerSize = 92;
+                        if (newYPosition >= $(window).height() - 19 ) {
+                            newYPosition = $(window).height() - 20 ;
+                        } else if (newYPosition <= 19 -  $selected.height() + headerSize) {
+                            newYPosition = 18 - $selected.height() + headerSize;
+                        }
+                    }
                     // special case movable slider between workspace and right divs
                     if (opt.axis == 'x') {
                         var left = pageX + pos_x - drg_w;
@@ -482,7 +499,7 @@ $.fn.draggable = function (opt) {
                         var left = Math.max(left, 42);
                         $selected.offset({
                             top: 0,
-                            left: left - 4,
+                            left: left - 4
                         });
                         $('#blockly').width(left + 3);
                         $('.rightMenuButton').css({
@@ -495,10 +512,11 @@ $.fn.draggable = function (opt) {
                         $(window).resize();
                     } else {
                         $selected.offset({
-                            top: pageY + pos_y - drg_h,
-                            left: pageX + pos_x - drg_w,
+                            top: newYPosition,
+                            left: newXPosition
                         });
                     }
+
                     $selected.css({
                         right: 'auto',
                     });
@@ -614,6 +632,10 @@ $.fn.openRightView = function (viewName, initialViewWidth, opt_callBack) {
         if (typeof opt_callBack == 'function') {
             opt_callBack();
         }
+        if (buttonName != 'sim' && buttonName != 'simDebug') {
+            closeSimRobotWindow();
+        }
+
         return;
     }
 
@@ -682,6 +704,19 @@ $(window).resize(function () {
         $('#bricklyDiv').width(parentWidth);
         $('#bricklyDiv').height(height);
     }
+    for (const robotWindowElement of $('.simWindow:visible')) {
+        if (robotWindowElement.offsetLeft >= $(window).width() - 20) {
+            $('#' + robotWindowElement.id).css({
+                'left': '' + $(window).width() - 20
+            });
+        }
+        if (robotWindowElement.offsetTop >= $(window).height() - 20) {
+            $('#' + robotWindowElement.id).css({
+                'top': '' + $(window).height() - 20
+            });
+        }
+    }
+
     // here comes a fix for a strange browser behavior while zoom is not 100%. It is just in case (e.g. chrome 125% works fine, 110% not).
     // Seems that either the returned sizes from the browser sometimes include margins/borders and sometimes not or that the assigned sizes behave
     // different (with and without margins/borders).
@@ -755,12 +790,60 @@ function annotateBlocks(workspace, annotations) {
 
 function removeLinks($elem) {
     $elem
-        .filter(function () {
+        .filter(function() {
             return $(this).attr('href') && ($(this).attr('href').indexOf('http') === 0 || $(this).attr('href').indexOf('javascript:linkTo') === 0);
         })
-        .each(function () {
+        .each(function() {
             $(this).removeAttr('href');
         });
+}
+
+/**
+ * open simRobotWindow if it was previously closed with
+ * closeSimRobotWindow() and the robot has not been changed
+ * @param duration
+ *            {Number} - duration (optional) how long the simRobotWindow should take to show
+ */
+function openSimRobotWindow(duration) {
+    if (!duration) {
+        duration = 0;
+    }
+    for (const robotWindowElement of $('.simWindow-openedButHidden')) {
+        var position = $(window).width() * simRobotWindowPositions[robotWindowElement.id];
+
+        $('#' + robotWindowElement.id).animate({
+            'opacity': 'show',
+            'left': '' + position
+        }, duration);
+    }
+    $('.simWindow').removeClass('simWindow-openedButHidden');
+}
+/**
+ * close SimRobotWindow and remember it
+ * closing SimRobotWindow using this method will show it again if opeSimRobotWindow() is called
+ * @param duration
+ *            {Number} - duration (optional) how long the simRobotWindow should take to hide
+ */
+function closeSimRobotWindow(duration) {
+    if (!duration) {
+        duration = 0;
+    }
+    var SimWindows = $('.simWindow:visible');
+    for (const robotWindowElement of SimWindows) {
+        var relativePosition;
+        if ($(window).width() !== 0) {
+            relativePosition = Math.abs((robotWindowElement.offsetLeft / $(window).width()) % 1);
+        } else {
+            relativePosition = 0;
+        }
+        simRobotWindowPositions[robotWindowElement.id] = relativePosition;
+    }
+    SimWindows.addClass('simWindow-openedButHidden')
+        .animate({
+            'opacity': 'hide',
+            'left': '' + $(window).width()
+        }, duration);
+
 }
 
 export {
@@ -792,4 +875,6 @@ export {
     clearAnnotations,
     annotateBlocks,
     removeLinks,
+    openSimRobotWindow,
+    closeSimRobotWindow
 };

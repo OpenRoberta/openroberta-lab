@@ -1151,24 +1151,40 @@ button#simCustomObstacle.typcn:before {
     clear: both;
 }
 
-.modal.simRobotModal {
+.simWindow {
+    position: absolute;
     left: 50px;
     top: 100px;
-    right: inherit;
-    bottom: inherit;
+    z-index: 99;
+    display: none;
 }
 
-.modal#simRobotModal button.close {
-    margin-right: -10px;
-    margin-top: -14px;
+.simWindow#simValuesWindow button.close {
+    top: 4px;
+    right: 14px;
+    color: #bbb;
+    position: absolute;
+}
+
+.simWindow#simValuesWindow button.close:hover {
+    top: 4px;
+    right: 14px;
+    color: #333;
+}
+
+.simWindow#simRobotWindow button.close {
+    top: 4px;
+    right: 24px;
     color: #f1f1f1;
+    position: absolute;
 }
 
-.modal#simValuesModal button.close {
-    margin-right: -10px;
-    margin-top: -14px;
+.simWindow#simRobotWindow button.close:hover {
+    top: 4px;
+    right: 24px;
     color: #bbb;
 }
+
 
 #VariablesContent {
     height: 300px;
@@ -1189,6 +1205,8 @@ button#simCustomObstacle.typcn:before {
     white-space: nowrap;
     overflow: hidden;
     min-width: 250px;
+    max-height: 70vh;
+    overflow-y: auto;
 }
 
 #simValuesContent span {
@@ -1198,36 +1216,18 @@ button#simCustomObstacle.typcn:before {
     width: 60px;
 }
 
-
-.modal#simRobotModal button.close:hover {
-    margin-right: -10px;
-    margin-top: -14px;
-    color: #ffffff;
-}
-
-.modal#simValuesModal button.close:hover {
-    margin-right: -10px;
-    margin-top: -14px;
-    color: #333;
-}
-
 .bigNumber {
     color: #8fa402;
     font-size: large;
     font-weight: bold;
 }
 
-.simRobotModal .modal-header {
-    position: fixed;
-    right: 16;
-}
-
-.simRobotModal .modal-dialog {
+.simWindow .modal-dialog {
     width: inherit;
     margin: 0;
 }
 
-.simRobotModal text {
+.simWindow text {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -2489,7 +2489,7 @@ input[type=range]:focus::-ms-fill-upper {
         margin-bottom: 0;
     }
 
-    .modal.simRobotModal {
+    .simWindow {
         left: 6px;
         top: 60px;
     }

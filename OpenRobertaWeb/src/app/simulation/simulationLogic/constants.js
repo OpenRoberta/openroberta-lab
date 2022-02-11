@@ -537,6 +537,8 @@ var CONST = {
     MIN_SIZE_OBJECT: 10,
 
     CORNER_RADIUS: 5,
+
+    ANIMATION_DURATION: 750
 };
 
 export default CONST;

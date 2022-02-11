@@ -1949,7 +1949,6 @@ function arrToRgb(values) {
 
 function createRobots(reqRobot, numRobots) {
     $('#simRobotContent').empty();
-    $('#simRobotModal').modal('hide');
     robots = [];
     if (numRobots >= 1) {
         var tempRobot = createRobot(reqRobot, configurations[0], 0, 0, interpreters[0].getRobotBehaviour());

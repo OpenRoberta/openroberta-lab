@@ -30,7 +30,6 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
             toggleSim();
             return false;
         });
-        $('#simRobotModal').removeClass('modal-backdrop');
         $('#simStop').onWrap('click', function (event) {
             $('#simStop').addClass('disabled');
             $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
@@ -110,43 +109,46 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
         $('#simImport').onWrap('click', function (event) {
             SIM.importImage();
         }, 'simImport clicked');
-        $('#simRobotModal').removeClass('modal-backdrop');
         $('.simInfo').onWrap('click', function (event) {
             SIM.setInfo();
         }, 'sim info clicked');
         $('#simRobot').onWrap('click', function (event) {
-            $('#simRobotModal').modal('toggle');
             var robot = GUISTATE_C.getRobot();
             var position = $('#simDiv').position();
-            position.top += 12;
             if (robot == 'calliope2016' || robot == 'calliope2017' || robot == 'calliope2017NoBlue' || robot == 'microbit') {
                 position.left = $('#blocklyDiv').width() + 12;
-                $('#simRobotModal').css({
-                    top: position.top,
-                    left: position.left,
-                });
             }
             else {
                 position.left += 48;
-                $('#simRobotModal').css({
-                    top: position.top,
-                    left: position.left,
-                });
             }
-            $('#simRobotModal').draggable();
+            toggleRobotWindow('#simRobotWindow', position);
         }, 'sim show robot clicked');
         $('#simValues').onWrap('click', function (event) {
-            $('#simValuesModal').modal('toggle');
             var position = $('#simDiv').position();
-            position.top += 12;
-            $('#simValuesModal').css({
-                top: position.top,
-                right: 12,
-                left: 'initial',
-                bottom: 'inherit',
-            });
-            $('#simValuesModal').draggable();
+            position.left = $(window).width() - ($('#simValuesWindow').width() + 12);
+            toggleRobotWindow('#simValuesWindow', position);
         }, 'sim show values clicked');
+        function toggleRobotWindow(id, position) {
+            if ($(id).is(':hidden')) {
+                $(id).css({
+                    top: position.top + 12,
+                    left: position.left
+                });
+            }
+            $(id).animate({
+                'opacity': 'toggle',
+                'top': 'toggle'
+            }, 300);
+            $(id).draggable({
+                constraint: 'window'
+            });
+        }
+        $('.simWindow .close').onWrap('click', function (event) {
+            $($(this).parents('.simWindow:first')).animate({
+                'opacity': 'hide',
+                'top': 'hide'
+            }, 300);
+        }, 'sim close robotWindow clicked');
         $('#simResetPose').onWrap('click', function (event) {
             if (GUISTATE_C.hasWebotsSim()) {
                 NAOSIM.resetPose();
@@ -248,6 +250,7 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
                 $('.' + GUISTATE_C.getRobot()).addClass('disabled');
             });
             $('#simStop, #simControlStepOver,#simControlStepInto').hide();
+            UTIL.closeSimRobotWindow(simulation_constants_1.default.ANIMATION_DURATION);
             SIM.endDebugging();
         }
         else {
@@ -271,6 +274,7 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
                 }
                 PROG_C.reloadProgram(result);
             });
+            UTIL.openSimRobotWindow(simulation_constants_1.default.ANIMATION_DURATION);
         }
     }
     function toggleSimEvent(event) {
