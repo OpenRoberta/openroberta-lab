@@ -113,6 +113,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo.Severity;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.BaseVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IAllActorsVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
@@ -123,7 +124,7 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
  * This helper can be used in tests to validate the constraints on blockly toolboxes (generic ones and robot specific ones).
  * </p>
  */
-public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorVisitor<BlocklyType>, IAllActorsVisitor<BlocklyType> {
+public class TypecheckVisitor extends BaseVisitor<BlocklyType> implements ILanguageVisitor<BlocklyType>, ISensorVisitor<BlocklyType>, IAllActorsVisitor<BlocklyType> {
     private final int ERROR_LIMIT_FOR_TYPECHECK = 10;
 
     private final Phrase<BlocklyType> phrase;

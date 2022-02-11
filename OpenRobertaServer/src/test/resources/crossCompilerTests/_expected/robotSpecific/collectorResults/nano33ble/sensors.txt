@@ -1,5 +1,5 @@
 Sensors: 
-[UsedSensor [S2, PIN_VALUE, ANALOG], UsedSensor [S, PIN_VALUE, DIGITAL], UsedSensor [1, TIMER, VALUE], UsedSensor [T2, TEMPERATURE, TEMPERATURE], UsedSensor [U, ULTRASONIC, DISTANCE], UsedSensor [L2, LIGHT, LIGHT], UsedSensor [P, VOLTAGE, VALUE], UsedSensor [B, MOTION, PRESENCE], UsedSensor [P2, PULSE, VALUE], UsedSensor [T3, DROP, VALUE], UsedSensor [1, TIMER, RESET], UsedSensor [T2, TEMPERATURE, VALUE]]
+[UsedSensor [S2, PIN_VALUE, ANALOG], UsedSensor [S, PIN_VALUE, DIGITAL], UsedSensor [S3, PIN_VALUE, DIGITAL], UsedSensor [1, TIMER, VALUE], UsedSensor [T2, TEMPERATURE, TEMPERATURE], UsedSensor [U, ULTRASONIC, DISTANCE], UsedSensor [L2, LIGHT, LIGHT], UsedSensor [P, VOLTAGE, VALUE], UsedSensor [B, MOTION, PRESENCE], UsedSensor [P2, PULSE, VALUE], UsedSensor [T3, DROP, VALUE], UsedSensor [1, TIMER, RESET], UsedSensor [T2, TEMPERATURE, VALUE]]
 Actors: 
 [UsedActor [SERIAL, SERIAL]]
 Methods: 

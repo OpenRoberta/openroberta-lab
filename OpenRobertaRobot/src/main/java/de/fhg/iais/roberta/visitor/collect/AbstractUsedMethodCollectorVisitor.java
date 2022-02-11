@@ -17,11 +17,12 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
+import de.fhg.iais.roberta.visitor.BaseVisitor;
 
 /**
  * A visitor that keeps track of all methods visited at any point in the AST, that need an additional helper method definition.
  */
-public abstract class AbstractUsedMethodCollectorVisitor implements ICollectorVisitor {
+public abstract class AbstractUsedMethodCollectorVisitor extends BaseVisitor<Void> implements ICollectorVisitor {
 
     protected UsedMethodBean.Builder builder;
 

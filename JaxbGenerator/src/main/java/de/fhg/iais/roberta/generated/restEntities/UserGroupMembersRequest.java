@@ -14,8 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /userGroup/deleteGroupMembers and /userGroup/setUserGroupMembersDefaultPasswords REST request<br>
- * <br>
+ * the request description for the /userGroup/deleteGroupMembers and /userGroup/setUserGroupMembersDefaultPasswords REST request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -232,15 +231,7 @@ public class UserGroupMembersRequest extends BaseRequest {
 
     @Override
     public String toString() {
-        return "UserGroupMembersRequest [immutable="
-            + this.immutable
-            + ", cmd="
-            + this.cmd
-            + ", groupName="
-            + this.groupName
-            + ", groupMemberAccounts="
-            + this.groupMemberAccounts
-            + " ]";
+        return "UserGroupMembersRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", groupName=" + this.groupName + ", groupMemberAccounts=" + this.groupMemberAccounts + " ]";
     }
 
     @Override

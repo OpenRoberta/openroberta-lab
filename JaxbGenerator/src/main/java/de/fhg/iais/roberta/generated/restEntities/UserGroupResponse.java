@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the response for the /userGroup/getUserGroup REST request<br>
- * <br>
+ * the response for the /userGroup/getUserGroup REST request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -271,45 +270,7 @@ public class UserGroupResponse extends BaseResponse {
 
     @Override
     public String toString() {
-        return "UserGroupResponse [immutable="
-            + this.immutable
-            + ", cmd="
-            + this.cmd
-            + ", rc="
-            + this.rc
-            + ", message="
-            + this.message
-            + ", cause="
-            + this.cause
-            + ", parameters="
-            + this.parameters
-            + ", initToken="
-            + this.initToken
-            + ", serverTime="
-            + this.serverTime
-            + ", serverVersion="
-            + this.serverVersion
-            + ", robotWait="
-            + this.robotWait
-            + ", robotBattery="
-            + this.robotBattery
-            + ", robotName="
-            + this.robotName
-            + ", robotVersion="
-            + this.robotVersion
-            + ", robotFirmwareName="
-            + this.robotFirmwareName
-            + ", robotSensorvalues="
-            + this.robotSensorvalues
-            + ", robotNepoexitvalue="
-            + this.robotNepoexitvalue
-            + ", robotState="
-            + this.robotState
-            + ", notificationsAvailable="
-            + this.notificationsAvailable
-            + ", userGroup="
-            + this.userGroup
-            + " ]";
+        return "UserGroupResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", userGroup=" + this.userGroup + " ]";
     }
 
     @Override

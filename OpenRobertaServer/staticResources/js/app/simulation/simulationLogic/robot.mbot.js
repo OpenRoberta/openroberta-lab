@@ -1,4 +1,4 @@
-define(["require", "exports", "simulation.simulation", "interpreter.constants", "simulation.robot.ev3"], function (require, exports, simulation_simulation_1, interpreter_constants_1, simulation_robot_ev3_1) {
+define(["require", "exports", "simulation.simulation", "interpreter.constants", "simulation.robot.ev3"], function (require, exports, SIM, C, simulation_robot_ev3_1) {
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
      * Creates a new robot for a simulation.
@@ -278,7 +278,7 @@ define(["require", "exports", "simulation.simulation", "interpreter.constants", 
         if (this.leds) {
             for (var port in this.leds) {
                 this.leds[port].color = 'LIGHTGRAY';
-                this.leds[port].mode = interpreter_constants_1.default.OFF;
+                this.leds[port].mode = C.OFF;
                 this.leds[port].blink = 0;
             }
         }
@@ -313,7 +313,7 @@ define(["require", "exports", "simulation.simulation", "interpreter.constants", 
                 else if (left < -100) {
                     left = -100;
                 }
-                this.left = left * interpreter_constants_1.default.MAXPOWER;
+                this.left = left * C.MAXPOWER;
             }
             var right = motors.b;
             if (right !== undefined) {
@@ -323,14 +323,14 @@ define(["require", "exports", "simulation.simulation", "interpreter.constants", 
                 else if (right < -100) {
                     right = -100;
                 }
-                this.right = right * interpreter_constants_1.default.MAXPOWER;
+                this.right = right * C.MAXPOWER;
             }
         }
         var tempRight = this.right;
         var tempLeft = this.left;
         this.pose.theta = (this.pose.theta + 2 * Math.PI) % (2 * Math.PI);
-        this.encoder.left += this.left * simulation_simulation_1.default.getDt();
-        this.encoder.right += this.right * simulation_simulation_1.default.getDt();
+        this.encoder.left += this.left * SIM.getDt();
+        this.encoder.right += this.right * SIM.getDt();
         var encoder = this.robotBehaviour.getActionState('encoder', true);
         if (encoder) {
             if (encoder.leftReset) {
@@ -353,7 +353,7 @@ define(["require", "exports", "simulation.simulation", "interpreter.constants", 
             tempRight *= -1;
         }
         if (tempRight == tempLeft) {
-            var moveXY = tempRight * simulation_simulation_1.default.getDt();
+            var moveXY = tempRight * SIM.getDt();
             var mX = Math.cos(this.pose.theta) * moveXY;
             var mY = Math.sqrt(Math.pow(moveXY, 2) - Math.pow(mX, 2));
             this.pose.x += mX;
@@ -380,9 +380,9 @@ define(["require", "exports", "simulation.simulation", "interpreter.constants", 
             var rot = (tempLeft - tempRight) / this.trackwidth;
             var iccX = this.pose.x - R * Math.sin(this.pose.theta);
             var iccY = this.pose.y + R * Math.cos(this.pose.theta);
-            this.pose.x = Math.cos(rot * simulation_simulation_1.default.getDt()) * (this.pose.x - iccX) - Math.sin(rot * simulation_simulation_1.default.getDt()) * (this.pose.y - iccY) + iccX;
-            this.pose.y = Math.sin(rot * simulation_simulation_1.default.getDt()) * (this.pose.x - iccX) + Math.cos(rot * simulation_simulation_1.default.getDt()) * (this.pose.y - iccY) + iccY;
-            this.pose.thetaDiff = rot * simulation_simulation_1.default.getDt();
+            this.pose.x = Math.cos(rot * SIM.getDt()) * (this.pose.x - iccX) - Math.sin(rot * SIM.getDt()) * (this.pose.y - iccY) + iccX;
+            this.pose.y = Math.sin(rot * SIM.getDt()) * (this.pose.x - iccX) + Math.cos(rot * SIM.getDt()) * (this.pose.y - iccY) + iccY;
+            this.pose.thetaDiff = rot * SIM.getDt();
             this.pose.theta = this.pose.theta + this.pose.thetaDiff;
         }
         var sin = Math.sin(this.pose.theta);
@@ -414,19 +414,19 @@ define(["require", "exports", "simulation.simulation", "interpreter.constants", 
                         this.leds[port].blinkColor = color.toUpperCase();
                     }
                     switch (mode) {
-                        case interpreter_constants_1.default.OFF:
+                        case C.OFF:
                             this.leds[port].timer = 0;
                             this.leds[port].blink = 0;
                             this.leds[port].color = 'LIGHTGRAY';
                             break;
-                        case interpreter_constants_1.default.ON:
+                        case C.ON:
                             this.leds[port].timer = 0;
                             this.leds[port].blink = 0;
                             break;
-                        case interpreter_constants_1.default.FLASH:
+                        case C.FLASH:
                             this.leds[port].blink = 2;
                             break;
-                        case interpreter_constants_1.default.DOUBLE_FLASH:
+                        case C.DOUBLE_FLASH:
                             this.leds[port].blink = 4;
                             break;
                     }
@@ -441,7 +441,7 @@ define(["require", "exports", "simulation.simulation", "interpreter.constants", 
                     else {
                         this.leds[port].color = 'LIGHTGRAY';
                     }
-                    this.leds[port].timer += simulation_simulation_1.default.getDt();
+                    this.leds[port].timer += SIM.getDt();
                     if (this.leds[port].timer > 1.0) {
                         this.leds[port].timer = 0;
                     }
@@ -505,7 +505,7 @@ define(["require", "exports", "simulation.simulation", "interpreter.constants", 
                 f(textArray, that);
             }
             if (display.picture) {
-                if (display.mode == interpreter_constants_1.default.ANIMATION) {
+                if (display.mode == C.ANIMATION) {
                     var animation = display.picture;
                     var that = this;
                     function f(animation, index, that) {
@@ -546,7 +546,7 @@ define(["require", "exports", "simulation.simulation", "interpreter.constants", 
             if (display.pixel) {
                 var pixel = display.pixel;
                 if (0 <= pixel.y == pixel.y < this.display.leds.length && 0 <= pixel.x == pixel.x < this.display.leds[0].length) {
-                    this.display.leds[pixel.y][pixel.x] = pixel.brightness * interpreter_constants_1.default.BRIGHTNESS_MULTIPLIER;
+                    this.display.leds[pixel.y][pixel.x] = pixel.brightness * C.BRIGHTNESS_MULTIPLIER;
                 }
                 else {
                     if (0 <= pixel.y != pixel.y < this.display.leds.length) {

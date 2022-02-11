@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /save REST request<br>
- * <br>
+ * the request description for the /save REST request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -337,23 +336,7 @@ public class SaveRequest extends BaseRequest {
 
     @Override
     public String toString() {
-        return "SaveRequest [immutable="
-            + this.immutable
-            + ", cmd="
-            + this.cmd
-            + ", timestamp="
-            + this.timestamp
-            + ", programName="
-            + this.programName
-            + ", progXML="
-            + this.progXML
-            + ", configName="
-            + this.configName
-            + ", confXML="
-            + this.confXML
-            + ", ownerAccount="
-            + this.ownerAccount
-            + " ]";
+        return "SaveRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", timestamp=" + this.timestamp + ", programName=" + this.programName + ", progXML=" + this.progXML + ", configName=" + this.configName + ", confXML=" + this.confXML + ", ownerAccount=" + this.ownerAccount + " ]";
     }
 
     @Override

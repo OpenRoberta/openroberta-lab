@@ -18,6 +18,7 @@ std::list<double> ___numberList;
 std::list<bool> ___booleanList;
 std::list<String> ___stringList;
 std::list<unsigned int> ___colourList;
+int _input_S3 = 1;
 LSM6DS3 _imu_A(SPI_MODE, SPIIMU_SS);
 int _output_P2 = A2;
 int _output_B = 7;
@@ -50,6 +51,7 @@ double _getUltrasonicDistance(int trigger, int echo)
 void sensors() {
     Serial.println(analogRead(_input_S2));
     Serial.println(digitalRead(_input_S));
+    Serial.println(digitalRead(_input_S3));
     Serial.println((int) (millis() - __time_1));
     __time_1 = millis();
     Serial.println(digitalRead(_taster_T));
@@ -80,6 +82,12 @@ void sensorsWaitUntil() {
     }
     while (true) {
         if ( digitalRead(_input_S) == 1 ) {
+            break;
+        }
+        delay(1);
+    }
+    while (true) {
+        if ( digitalRead(_input_S) == 0 ) {
             break;
         }
         delay(1);
@@ -195,6 +203,7 @@ void sensorsWaitUntil() {
 void setup()
 {
     Serial.begin(9600);
+    pinMode(_input_S3, INPUT_PULLUP);
     _imu_A.begin();
     pinMode(_output_B, INPUT);
     _dht_L3.begin();

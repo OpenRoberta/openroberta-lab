@@ -148,7 +148,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
         var moduleName = 'simulation.robot.' + simRobotType;
         removeMouseEvents();
         resetSelection();
-        new Promise(function (resolve_1, reject_1) { require([moduleName], resolve_1, reject_1); }).then(function (ROBOT) {
+        require([moduleName], function (ROBOT) {
             createRobots(ROBOT.default, numRobots);
             for (var i = 0; i < robots.length; i++) {
                 robots[i].debug = debug;
@@ -499,7 +499,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
         if (currentBackground > 1) {
             if (isIE() || isEdge()) {
                 // TODO IE and Edge: Input event not firing for file type of input
-                $('.dropdown.sim, .simScene').show();
+                $('.dropdown.sim, .simScene, #simEditButtons').show();
                 $('#simImport').hide();
             }
             else {
@@ -523,7 +523,8 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
             robots = [];
             readyRobots = [];
             isDownRobots = [];
-            new Promise(function (resolve_2, reject_2) { require(['simulation.robot.' + simRobotType], resolve_2, reject_2); }).then(function (reqRobot) {
+            var moduleName = 'simulation.robot.' + simRobotType;
+            require([moduleName], function (reqRobot) {
                 createRobots(reqRobot.default, numRobots);
                 for (var i = 0; i < numRobots; i++) {
                     robots[i].reset();

@@ -19,14 +19,6 @@ import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
-import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
-import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -48,15 +40,11 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.visitor.IEv3Visitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.DifferentialMotorValidatorAndCollectorVisitor;
 
-public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IEv3Visitor<Void> {
-
-    private final DifferentialMotorValidatorAndCollectorVisitor differentialMotorValidatorAndCollectorVisitor;
+public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorAndCollectorVisitorEv3 implements IEv3Visitor<Void> {
 
     public Ev3ValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(robotConfiguration, beanBuilders);
-        differentialMotorValidatorAndCollectorVisitor = new DifferentialMotorValidatorAndCollectorVisitor(this, robotConfiguration, beanBuilders);
     }
 
     @Override
@@ -110,16 +98,6 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
         }
         usedHardwareBuilder.addUsedSensor(new UsedSensor(compassSensor.getUserDefinedPort(), SC.COMPASS, compassSensor.getMode()));
         return null;
-    }
-
-    @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
-        return differentialMotorValidatorAndCollectorVisitor.visitCurveAction(curveAction);
-    }
-
-    @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
-        return differentialMotorValidatorAndCollectorVisitor.visitDriveAction(driveAction);
     }
 
     @Override
@@ -185,31 +163,6 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor(lightStatusAction.getUserDefinedPort(), SC.LIGHT));
         return null;
-    }
-
-    @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        return differentialMotorValidatorAndCollectorVisitor.visitMotorDriveStopAction(stopAction);
-    }
-
-    @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        return differentialMotorValidatorAndCollectorVisitor.visitMotorGetPowerAction(motorGetPowerAction);
-    }
-
-    @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        return differentialMotorValidatorAndCollectorVisitor.visitMotorOnAction(motorOnAction);
-    }
-
-    @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        return differentialMotorValidatorAndCollectorVisitor.visitMotorSetPowerAction(motorSetPowerAction);
-    }
-
-    @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        return differentialMotorValidatorAndCollectorVisitor.visitMotorStopAction(motorStopAction);
     }
 
     @Override
@@ -288,11 +241,6 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
         checkSensorPort(touchSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(touchSensor.getUserDefinedPort(), SC.TOUCH, touchSensor.getMode()));
         return null;
-    }
-
-    @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
-        return differentialMotorValidatorAndCollectorVisitor.visitTurnAction(turnAction);
     }
 
     @Override

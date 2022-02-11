@@ -1,7 +1,7 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
         <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.1" description="" tags="">
-            <instance x="-2172" y="-664">
+            <instance x="-2183" y="-665">
                 <block type="robControls_start_ardu" id="D})/z!#B6yD@Yfz-dXMy" intask="true" deletable="false">
                     <mutation declare="true"></mutation>
                     <field name="DEBUG"></field>
@@ -164,6 +164,16 @@
                                     <mutation mode="DIGITAL"></mutation>
                                     <field name="MODE">DIGITAL</field>
                                     <field name="SENSORPORT">S</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_serial_print" id="Koy)xaQ@rCCGh.eRB`e*" intask="true">
+                            <value name="OUT">
+                                <block type="robSensors_out_getSample" id="+kkL?O!V^`Xh[g]!k7K;" intask="true">
+                                    <mutation mode="DIGITAL"></mutation>
+                                    <field name="MODE">DIGITAL</field>
+                                    <field name="SENSORPORT">S3</field>
                                     <field name="SLOT"></field>
                                 </block>
                             </value>
@@ -394,6 +404,26 @@
                                     <value name="B">
                                         <block type="math_number" id="uS:%k,k.Qp]D*rw9)n5!" intask="true">
                                             <field name="NUM">1</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_wait_for" id="]dT]~lbtnM4Tg%rZS}p2" intask="true">
+                            <value name="WAIT0">
+                                <block type="logic_compare" id="kv2=Hg5S/+fL|_?5:Akb" intask="true">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                        <block type="robSensors_getSample" id="e@PbBJ[fPhEUm7D2Aav]" intask="true">
+                                            <mutation input="OUT_DIGITAL"></mutation>
+                                            <field name="SENSORTYPE">OUT_DIGITAL</field>
+                                            <field name="SENSORPORT">S</field>
+                                            <field name="SLOT"></field>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="math_number" id="TI.P-*Lhk^)*Ep0Q8M54" intask="true">
+                                            <field name="NUM">0</field>
                                         </block>
                                     </value>
                                 </block>
@@ -826,10 +856,18 @@
     </program>
     <config>
         <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.1" description="" tags="">
-            <instance x="792" y="-875">
+            <instance x="816" y="-880">
                 <block type="robConf_digitalout" id="tgx7Iy*Zc8p!V(yR`n7e" intask="true">
                     <field name="NAME">S</field>
+                    <field name="PIN_PULL">PIN_PULL_NONE</field>
                     <field name="OUTPUT">0</field>
+                </block>
+            </instance>
+            <instance x="980" y="-881">
+                <block type="robConf_digitalout" id="DH;rhE/ywCmI4T]nLZM;" intask="true">
+                    <field name="NAME">S3</field>
+                    <field name="PIN_PULL">PIN_PULL_UP</field>
+                    <field name="OUTPUT">1</field>
                 </block>
             </instance>
             <instance x="1154" y="-836">
@@ -914,6 +952,11 @@
             <instance x="901" y="-401">
                 <block type="robConf_accelerometer" id="|/W?czJ4;:]zhD}dHkBT" intask="true">
                     <field name="NAME">A</field>
+                </block>
+            </instance>
+            <instance x="250" y="250">
+                <block type="robConf_robot" id="robot" intask="true">
+                    <field name="ROBOT">undefined</field>
                 </block>
             </instance>
         </block_set>

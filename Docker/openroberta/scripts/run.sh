@@ -96,6 +96,10 @@ case "${CMD}" in
                   source ${SCRIPT_HELPER}/_dbContainerBackup.sh ;;
     backup-save)  FROM_PATH=$1; TO_PATH=$2
                   source ${SCRIPT_HELPER}/_dbBackupSave.sh ;;
+    cleanup-temp-user-dirs)
+                  SERVER_NAME=$1; shift
+                  HOURS=$1; shift
+                  source ${SCRIPT_HELPER}/_cleanupTempUserDirs.sh ;;
     network)      headerMessage "network inspect"
                   docker network inspect ${DOCKER_NETWORK_NAME} ;;
     docker-info)  headerMessage "system df"

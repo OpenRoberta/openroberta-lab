@@ -16,7 +16,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
-import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
@@ -49,7 +48,7 @@ import de.fhg.iais.roberta.worker.MbedTwo2ThreeTransformerHelper;
  * Used to replace port names of old Mbed programs to fit with the new configuration. Also keeps track of configuration components used, in order to only use
  * the actually used ones.
  */
-public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<Void> {
+public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> implements IMbedTransformerVisitor<Void> {
 
     private final MbedTwo2ThreeTransformerHelper helper;
     private final NewUsedHardwareBean.Builder builder;
@@ -77,17 +76,7 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
         return LedOnAction
-            .make(ledOnAction.getProperty(), ledOnAction.getComment(), (Expr<Void>) ledOnAction.getLedColor().modify(this), compAndName.getSecond(), ledOnAction.hide );
-    }
-
-    @Override
-    public Phrase<Void> visitPinSetPullAction(PinSetPullAction<Phrase<Void>> pinSetPullAction) {
-        Pair<ConfigurationComponent, String> compAndName =
-            this.helper.getComponentAndName(pinSetPullAction.getKind().getName(), pinSetPullAction.getMode(), pinSetPullAction.getPort());
-
-        this.builder.addUsedConfigurationComponent(compAndName.getFirst());
-
-        return PinSetPullAction.make(pinSetPullAction.getMode(), compAndName.getSecond(), pinSetPullAction.getProperty(), pinSetPullAction.getComment());
+            .make(ledOnAction.getProperty(), ledOnAction.getComment(), (Expr<Void>) ledOnAction.getLedColor().modify(this), compAndName.getSecond(), ledOnAction.hide);
     }
 
     @Override

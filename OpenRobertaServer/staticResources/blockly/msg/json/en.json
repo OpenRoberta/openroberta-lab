@@ -1,7 +1,11 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
+<<<<<<< HEAD
 		"lastupdated": "2021-12-19 21:34:24.883947",
+=======
+		"lastupdated": "2022-01-06 10:56:55.141662",
+>>>>>>> upstream/develop
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -923,6 +927,7 @@
 	"PIN_PULL_DOWN": "down",
 	"PIN_PULL_NONE": "none",
 	"PIN_SET_PULL_TOOLTIP": "Sets the pull of the chosen pin",
+	"PIN_SET_PULL_BLOCK_WARNING": "This block got replaced. Please use the 'Sensor digital'-block from the robotconfiguration",
 	"CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION": "The direction of rotation of the left and right motor is different!",
 	"CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS": "You have multiple right motors assigned to your configuration!",
 	"CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS": "You have multiple left motors assigned to your configuration!",
@@ -1634,6 +1639,7 @@
 	"MOTIONKIT": "MotionKit",
 	"MOTIONKIT_SINGLE_TOOLTIP": "Sets the selected MotionKit motor/motors to the specified direction.",
 	"MOTIONKIT_DUAL_TOOLTIP": "Sets each MotionKit motor to the specified direction.",
+	"MOTIONKIT_PIN_OVERLAP_WARNING": "The MotionKit uses the pins P1, P2, A0, A1, C16 and C17, so please make sure no other configuration-block uses them!",
 	"MATH_SINGLE_OP_SQUARE": "square",
 	"MATH_SINGLE_TOOLTIP_SQUARE": "Return the number multiplied by itself.",
 	"GPS_TOOLTIP": "Represents a GPS receiver.",

@@ -37,7 +37,7 @@ int _led_L = LED_BUILTIN;
 #define OLED_RESET 4
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
-Adafruit_SSD1306 _lcd_O(SCREEN_WIDTH,SCREEN_HEIGHT,&Wire, OLED_RESET);
+Adafruit_SSD1306 _lcd_O(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 int _SPU_S2 = 2048;
 Stepper _stepper_S2(_SPU_S2, 1, 4, 2, 12);
 
@@ -61,12 +61,13 @@ void display() {
     Serial.println(___s);
     _lcd_L3.setCursor(___n,___n);
     _lcd_L3.print(___s);
-    
+
     _lcd_L3.clear();
     _lcd_O.setCursor(0,1);
     _lcd_O.print("Hallo");
     _lcd_O.display();
     _lcd_O.clearDisplay();
+    _lcd_O.display();
 }
 
 void sounds() {
@@ -105,6 +106,8 @@ void setup()
     _lcd_L3.begin();
     pinMode(_led_L, OUTPUT);
     _lcd_O.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
+    _lcd_O.clearDisplay();
+    _lcd_O.setTextColor(SSD1306_WHITE);
     ___n = 0;
     ___b = true;
     ___s = "";

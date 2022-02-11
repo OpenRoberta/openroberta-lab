@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class MbedThree2ThreeOneTransformerVisitor implements IMbedTransformerVisitor<Void> {
+public class MbedThree2ThreeOneTransformerVisitor extends BaseVisitor<Phrase<Void>> implements IMbedTransformerVisitor<Void> {
 
     private static final Map<String, String> NEW_NAMES = new HashMap<>();
     static {

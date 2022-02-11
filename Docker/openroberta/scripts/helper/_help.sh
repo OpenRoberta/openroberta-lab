@@ -11,6 +11,7 @@ echo "       start-all | stop-all                                          start
 echo "       gen-dbc | start-dbc | stop-dbc                                generate db server, start and stop db server using variable DATABASES"
 echo "       backup <database>                                             backup <database>. Note, that \"server-<database>\" (e.g. server-test) is a containerTRIGGERing the backup. Must be running"
 echo "       backup-save <dbBackup@<remote-host>:<from-path> <to-path>     save a db backup from a remote machine to this machine. <to-path> is relative to BASE-DIR"
+echo "       cleanup-temp-user-dirs <server> <hours>                       cleanup temp user dirs that or older than <hours> hours, default is 12"
 echo "       alive <url> [mail={always|error}] [msg=<msg>]                 is the server alive? When to send mail (default: always). Set an additional mail header"
 echo "       docker-info | network | logs | test-info                      container state, network and some log from running containers; info about deployed servers"
 echo ""

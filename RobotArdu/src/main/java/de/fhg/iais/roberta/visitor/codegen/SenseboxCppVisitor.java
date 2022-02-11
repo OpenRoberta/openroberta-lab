@@ -52,9 +52,9 @@ import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
+import de.fhg.iais.roberta.visitor.hardware.ISenseboxVisitor;
 
-public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implements IArduinoVisitor<Void> {
+public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implements ISenseboxVisitor<Void> {
 
     private final String SSID;
     private final String password;

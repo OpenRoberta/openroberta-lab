@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.visitor.validate;
 
+import java.util.Map;
+
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
@@ -7,7 +9,6 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.mode.action.mbed.DisplayImageMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
@@ -99,8 +100,8 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         boolean allActorsPresent = (usedActorA != null) && (usedActorB != null);
         if ( !allActorsPresent ) {
             addErrorToPhrase(bothMotorsOnAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
-        } else if ( (!usedActorA.getComponentType().equals("CALLIBOT")) && usedActorA.equals(usedActorB) ) {
-            addWarningToPhrase(bothMotorsOnAction, "BLOCK_NOT_EXECUTED");
+        } else if ( bothMotorsOnAction.getPortA().equals(bothMotorsOnAction.getPortB()) || !usedActorA.getComponentType().equals(usedActorB.getComponentType()) ) {
+            addErrorToPhrase(bothMotorsOnAction, "BLOCK_NOT_EXECUTED");
         } else if ( usedActorA.getComponentType().equals("CALLIBOT") ) {
             usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
         }
@@ -110,8 +111,11 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitBothMotorsStopAction(BothMotorsStopAction<Void> bothMotorsStopAction) {
-        checkActorByTypeExists(bothMotorsStopAction, "CALLIBOT");
-        usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
+        if ( robotConfiguration.isComponentTypePresent(SC.CALLIBOT) ) {
+            usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
+        } else if ( !robotConfiguration.isComponentTypePresent("MOTOR") ) {
+            addErrorToPhrase(bothMotorsStopAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
+        }
         return null;
     }
 
@@ -296,11 +300,21 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitMotionKitDualSetAction(MotionKitDualSetAction<Void> motionKitDualSetAction) {
+        if ( isMotionKitPinsOverlapping() ) {
+            addErrorToPhrase(motionKitDualSetAction, "MOTIONKIT_PIN_OVERLAP_WARNING");
+        } else {
+            usedHardwareBuilder.addUsedActor(new UsedActor("", "MOTIONKIT"));
+        }
         return null;
     }
 
     @Override
     public Void visitMotionKitSingleSetAction(MotionKitSingleSetAction<Void> motionKitSingleSetAction) {
+        if ( isMotionKitPinsOverlapping() ) {
+            addErrorToPhrase(motionKitSingleSetAction, "MOTIONKIT_PIN_OVERLAP_WARNING");
+        } else {
+            usedHardwareBuilder.addUsedActor(new UsedActor(motionKitSingleSetAction.getPort(), "MOTIONKIT"));
+        }
         return null;
     }
 
@@ -339,9 +353,8 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     }
 
     @Override
-    public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPull) {
-        checkActorByPortExists(pinSetPull, pinSetPull.getPort());
-        usedHardwareBuilder.addUsedActor(new UsedActor(pinSetPull.getPort(), SC.PIN_VALUE));
+    public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPullAction) {
+        addErrorToPhrase(pinSetPullAction, "");
         return null;
     }
 
@@ -540,6 +553,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return usedSensor;
     }
 
+
     protected ConfigurationComponent checkMotorPort(MoveAction<Void> action) {
         ConfigurationComponent configurationComponent = robotConfiguration.optConfigurationComponent(action.getUserDefinedPort());
         if ( configurationComponent == null ) {
@@ -560,7 +574,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     private Void addActorMaybeCallibot(WithUserDefinedPort<Void> phrase) {
         final String userDefinedPort = phrase.getUserDefinedPort();
         ConfigurationComponent configurationComponent = checkActorByPortExists((Phrase<Void>) phrase, userDefinedPort);
-        if (configurationComponent != null) {
+        if ( configurationComponent != null ) {
             return addActorMaybeCallibot(phrase, configurationComponent.getComponentType());
         } else {
             return null; // checkActorByPortExists added the error message
@@ -580,6 +594,27 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return null;
     }
     
+    private Boolean isMotionKitPinsOverlapping() {
+        Map<String, ConfigurationComponent> usedConfig = robotConfiguration.getConfigurationComponents();
+        if ( robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT) != null || robotConfiguration.isComponentTypePresent("LEDBAR") ||
+            robotConfiguration.isComponentTypePresent("FOURDIGITDISPLAY") ||
+            robotConfiguration.isComponentTypePresent(SC.ULTRASONIC) ||
+            robotConfiguration.isComponentTypePresent(SC.HUMIDITY) ||
+            robotConfiguration.isComponentTypePresent(SC.COLOUR) ) {
+            return true;
+        }
+        for ( Map.Entry<String, ConfigurationComponent> confComp : usedConfig.entrySet() ) {
+            String confType = confComp.getValue().getComponentType();
+            if ( confType.equals(SC.SERVOMOTOR) || confType.equals(SC.DIGITAL_INPUT) || confType.equals(SC.ANALOG_INPUT) ) {
+                String pin1 = confComp.getValue().getProperty("PIN1");
+                if ( pin1.equals("1") || pin1.equals("2") || pin1.equals("4") || pin1.equals("5") || pin1.equals("C16") || pin1.equals("C17") ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     public Void visitDcMotorSetAction(DcMotorSetAction<Void> dcMotorSetAction) {
         requiredComponentVisited(dcMotorSetAction, dcMotorSetAction.getSpeed());
@@ -587,5 +622,4 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
         return null;
     }
-
 }

@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /createUser and /updateUser REST request<br>
- * <br>
+ * the request description for the /createUser and /updateUser REST request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -345,25 +344,7 @@ public class UserRequest extends BaseRequest {
 
     @Override
     public String toString() {
-        return "UserRequest [immutable="
-            + this.immutable
-            + ", cmd="
-            + this.cmd
-            + ", accountName="
-            + this.accountName
-            + ", password="
-            + this.password
-            + ", userEmail="
-            + this.userEmail
-            + ", userName="
-            + this.userName
-            + ", role="
-            + this.role
-            + ", language="
-            + this.language
-            + ", isYoungerThen14="
-            + this.isYoungerThen14
-            + " ]";
+        return "UserRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", accountName=" + this.accountName + ", password=" + this.password + ", userEmail=" + this.userEmail + ", userName=" + this.userName + ", role=" + this.role + ", language=" + this.language + ", isYoungerThen14=" + this.isYoungerThen14 + " ]";
     }
 
     @Override

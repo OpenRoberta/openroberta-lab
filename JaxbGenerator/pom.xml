@@ -88,7 +88,7 @@
         <pluginRepository>
             <id>openroberta-release</id>
             <name>repository for the OpenRoberta OSS</name>
-            <url>http://maven.iais.fraunhofer.de/artifactory/openroberta-release</url>
+            <url>https://maven.iais.fraunhofer.de/artifactory/openroberta-release</url>
             <releases>
                 <enabled>true</enabled>
             </releases>

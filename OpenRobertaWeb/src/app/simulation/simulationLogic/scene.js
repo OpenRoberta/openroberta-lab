@@ -70,12 +70,12 @@ Scene.prototype.resetAllCanvas = function (opt_img) {
     $('.canvasSim').each(function () {
         if ($(this).hasClass('unified')) {
             if (resetUnified) {
-                this.width = w / sc;
-                this.height = h / sc;
+                this.width = Math.round(w / sc);
+                this.height = Math.round(h / sc);
             }
         } else {
-            this.width = w;
-            this.height = h;
+            this.width = Math.round(w);
+            this.height = Math.round(h);
         }
     });
     if (resetUnified) {
@@ -244,7 +244,7 @@ Scene.prototype.drawMbed = function () {
     $('#notConstantValue').append('<div><label>Time</label><span>' + UTIL.round(this.robots[0].time, 3) + 's</span></div>');
     $('#notConstantValue').append('<div><label>Compass</label><span>' + UTIL.round(this.robots[0].compass.degree, 0) + '°</span></div>');
     $('#notConstantValue').append('<div><label>Light Sensor</label><span>' + UTIL.round(this.robots[0].display.lightLevel, 0) + '%</span></div>');
-    $('#notConstantValue').append('<div><label>Temperature</label><span>' + UTIL.round(this.robots[0].temperature.degree, 2) + '°</span></div>');
+    $('#notConstantValue').append('<div><label>Temperature</label><span>' + UTIL.round(this.robots[0].temperature.degree, 0) + '°</span></div>');
     var gesture;
     for (var i in this.robots[0].gesture) {
         gesture = i;
@@ -262,9 +262,7 @@ Scene.prototype.drawMbed = function () {
             }
         }
     }
-    if (SIM.getDebugMode()) {
-        drawVariables();
-    }
+    drawVariables();
     this.rCtx.scale(SIM.getScale(), SIM.getScale());
     this.rCtx.save();
 
@@ -372,9 +370,7 @@ Scene.prototype.drawRobots = function () {
                     );
                 }
             }
-            if (SIM.getDebugMode()) {
-                drawVariables();
-            }
+            drawVariables();
         }
         this.rCtx.scale(SIM.getScale(), SIM.getScale());
         this.rCtx.save();

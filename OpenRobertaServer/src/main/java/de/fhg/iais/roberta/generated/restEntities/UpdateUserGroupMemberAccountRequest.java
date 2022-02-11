@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /userGroup/updateMemberAccount REST request, returns BaseResponse<br>
- * <br>
+ * the request description for the /userGroup/updateMemberAccount REST request, returns BaseResponse<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -215,17 +214,7 @@ public class UpdateUserGroupMemberAccountRequest extends BaseRequest {
 
     @Override
     public String toString() {
-        return "UpdateUserGroupMemberAccountRequest [immutable="
-            + this.immutable
-            + ", cmd="
-            + this.cmd
-            + ", groupName="
-            + this.groupName
-            + ", currentGroupMemberAccount="
-            + this.currentGroupMemberAccount
-            + ", newGroupMemberAccount="
-            + this.newGroupMemberAccount
-            + " ]";
+        return "UpdateUserGroupMemberAccountRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", groupName=" + this.groupName + ", currentGroupMemberAccount=" + this.currentGroupMemberAccount + ", newGroupMemberAccount=" + this.newGroupMemberAccount + " ]";
     }
 
     @Override

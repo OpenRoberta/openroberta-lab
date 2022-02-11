@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisit
 public abstract class AbstractValidatorAndCollectorWorker implements IWorker {
 
     @Override
-    public final void execute(Project project) {
+    public void execute(Project project) {
         Builder<IProjectBean.IBuilder<?>> mapBuilder = new ImmutableClassToInstanceMap.Builder<>();
 
         UsedMethodBean.Builder usedMethodBeanBuilder = new UsedMethodBean.Builder();

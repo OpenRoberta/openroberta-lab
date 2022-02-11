@@ -10,9 +10,9 @@ import * as d3 from 'd3';
 
 let mainWidth;
 
-const RECT_SIZE = 30;
-const SPACE_BETWEEN_NODES = 90;
-const BIAS_SIZE = 5;
+const RECT_SIZE = 50;
+const SPACE_BETWEEN_NODES = 60;
+const BIAS_SIZE = 10;
 
 enum HoverType {
     BIAS,
@@ -27,10 +27,9 @@ enum NodeType {
 
 let state = new State();
 
-let linkWidthScale = d3.scale.linear().domain([0, 5]).range([1, 10]).clamp(true);
+let linkWidthScale = d3.scale.linear().domain([0, 2]).range([1, 10]).clamp(true);
 let colorScale = d3.scale.linear<string, number>().domain([-1, 0, 1]).range(['#f59322', '#e8eaeb', '#0877bd']).clamp(true);
 
-let boundary: { [id: string]: number[][] } = {};
 let network: nn.Node[][] = null;
 
 function makeGUI() {
@@ -97,7 +96,7 @@ function updateWeightsUI(network: nn.Node[][], container) {
     }
 }
 
-function drawNode(cx: number, cy: number, nodeId: string, nodeType: NodeType, container, node?: nn.Node) {
+function drawNode(numberLabel: string, cx: number, cy: number, nodeId: string, nodeType: NodeType, container, node?: nn.Node) {
     let x = cx - RECT_SIZE / 2;
     let y = cy - RECT_SIZE / 2;
     let nodeClass = nodeType === NodeType.INPUT ? 'node_input' : nodeType === NodeType.HIDDEN ? 'node_hidden' : 'node_output';
@@ -114,39 +113,18 @@ function drawNode(cx: number, cy: number, nodeId: string, nodeType: NodeType, co
         width: RECT_SIZE,
         height: RECT_SIZE,
     });
+    let numberLabelNode = nodeGroup.append('text').attr({
+        class: 'main-label',
+        x: 10,
+        y: 20,
+        'text-anchor': 'start',
+    });
+    numberLabelNode.append('tspan').text(numberLabel === null ? nodeId : numberLabel);
     let activeOrNotClass = state[nodeId] ? 'active' : 'inactive';
     if (nodeType === NodeType.INPUT) {
-        let label = state.inputs[nodeId];
-        // Draw the input label.
-        let text = nodeGroup.append('text').attr({
-            class: 'main-label',
-            x: -10,
-            y: RECT_SIZE / 2,
-            'text-anchor': 'end',
-        });
-        if (/[_^]/.test(label)) {
-            let myRe = /(.*?)([_^])(.)/g;
-            let myArray;
-            let lastIndex;
-            while ((myArray = myRe.exec(label)) != null) {
-                lastIndex = myRe.lastIndex;
-                let prefix = myArray[1];
-                let sep = myArray[2];
-                let suffix = myArray[3];
-                if (prefix) {
-                    text.append('tspan').text(prefix);
-                }
-                text.append('tspan')
-                    .attr('baseline-shift', sep === '_' ? 'sub' : 'super')
-                    .style('font-size', '9px')
-                    .text(suffix);
-            }
-            if (label.substring(lastIndex)) {
-                text.append('tspan').text(label.substring(lastIndex));
-            }
-        } else {
-            text.append('tspan').text(label);
-        }
+        nodeGroup.classed(activeOrNotClass, true);
+    }
+    if (nodeType === NodeType.OUTPUT) {
         nodeGroup.classed(activeOrNotClass, true);
     }
     if (nodeType !== NodeType.INPUT) {
@@ -220,26 +198,26 @@ function drawNetwork(network: nn.Node[][]): void {
     let targetIdWithCallout = null;
 
     // Draw the input layer separately.
-    let cx = RECT_SIZE / 2 + 50;
-    let nodeIds = Object.keys(state.inputs);
+    let cxI = RECT_SIZE / 2 + 50;
+    let nodeIds = state.inputs;
     let maxY = nodeIndexScale(nodeIds.length);
     nodeIds.forEach((nodeId, i) => {
         let cy = nodeIndexScale(i) + RECT_SIZE / 2;
-        node2coord[nodeId] = { cx, cy };
-        drawNode(cx, cy, nodeId, NodeType.INPUT, container);
+        node2coord[nodeId] = { cx: cxI, cy: cy };
+        drawNode(null, cxI, cy, nodeId, NodeType.INPUT, container);
     });
 
     // Draw the intermediate layers, exclude input (id:0) and output (id:numLayers-1)
     for (let layerIdx = 1; layerIdx < numLayers - 1; layerIdx++) {
         let numNodes = network[layerIdx].length;
-        let cx = layerScale(layerIdx) + RECT_SIZE / 2;
+        let cxH = layerScale(layerIdx) + RECT_SIZE / 2;
         maxY = Math.max(maxY, nodeIndexScale(numNodes));
         addPlusMinusControl(layerScale(layerIdx), layerIdx);
         for (let i = 0; i < numNodes; i++) {
             let node = network[layerIdx][i];
             let cy = nodeIndexScale(i) + RECT_SIZE / 2;
-            node2coord[node.id] = { cx, cy };
-            drawNode(cx, cy, node.id, NodeType.HIDDEN, container, node);
+            node2coord[node.id] = { cx: cxH, cy: cy };
+            drawNode('h' + layerIdx + '.n' + (i + 1), cxH, cy, node.id, NodeType.HIDDEN, container, node);
 
             // Show callout to thumbnails.
             let numNodes = network[layerIdx].length;
@@ -248,7 +226,7 @@ function drawNetwork(network: nn.Node[][]): void {
                 calloutThumb.style({
                     display: null,
                     top: `${20 + 3 + cy}px`,
-                    left: `${cx}px`,
+                    left: `${cxH}px`,
                 });
                 idWithCallout = node.id;
             }
@@ -284,13 +262,13 @@ function drawNetwork(network: nn.Node[][]): void {
     {
         let outputLayer = network[numLayers - 1];
         let numOutputs = outputLayer.length;
-        let cx = width - 3 * RECT_SIZE;
+        let cxO = width - 3 * RECT_SIZE;
         maxY = Math.max(maxY, nodeIndexScale(numOutputs));
         for (let j = 0; j < numOutputs; j++) {
             let node = outputLayer[j];
             let cy = nodeIndexScale(j) + RECT_SIZE / 2;
-            node2coord[node.id] = { cx, cy };
-            drawNode(cx, cy, node.id, NodeType.OUTPUT, container, node);
+            node2coord[node.id] = { cx: cxO, cy: cy };
+            drawNode(null, cxO, cy, node.id, NodeType.OUTPUT, container, node);
             // Draw links.
             for (let i = 0; i < node.inputLinks.length; i++) {
                 let link = node.inputLinks[i];
@@ -354,7 +332,8 @@ function addPlusMinusControl(x: number, layerIdx: number) {
     div.append('div').text(state.networkShape[i] + ' neuron' + suffix);
 }
 
-function updateHoverCard(type: HoverType, nodeOrLink?: nn.Node | nn.Link, coordinates?: [number, number]) {
+function updateHoverCard(type: HoverType, nodeOrLink?, coordinates?: [number, number]) {
+    // nodeOrLink : nn.Node | nn.Link
     let hovercard = d3.select('#hovercard');
     if (type == null) {
         hovercard.style('display', 'none');
@@ -366,12 +345,24 @@ function updateHoverCard(type: HoverType, nodeOrLink?: nn.Node | nn.Link, coordi
         let input = hovercard.select('input');
         input.style('display', null);
         input.on('input', function () {
-            if (this.value != null && this.value !== '') {
+            if (this.value != null) {
                 if (type === HoverType.WEIGHT) {
-                    (nodeOrLink as nn.Link).weight = +this.value;
+                    var weights = string2weight(this.value);
+                    if (weights !== null) {
+                        nodeOrLink.weight = weights[0];
+                        nodeOrLink.weightOrig = weights[1];
+                    }
                 } else {
-                    (nodeOrLink as nn.Node).bias = +this.value;
+                    var biases = strint2bias(this.value);
+                    if (biases !== null) {
+                        nodeOrLink.bias = biases[0];
+                        nodeOrLink.biasOrig = biases[1];
+                    }
                 }
+
+                state.weights = extractWeights(network);
+                state.biases = extractBiases(network);
+
                 updateUI();
             }
         });
@@ -382,16 +373,16 @@ function updateHoverCard(type: HoverType, nodeOrLink?: nn.Node | nn.Link, coordi
         });
         (input.node() as HTMLInputElement).focus();
     });
-    let value = type === HoverType.WEIGHT ? (nodeOrLink as nn.Link).weight : (nodeOrLink as nn.Node).bias;
-    let name = type === HoverType.WEIGHT ? 'Weight' : 'Bias';
+    let value = type === HoverType.WEIGHT ? (nodeOrLink as nn.Link).weightOrig : (nodeOrLink as nn.Node).biasOrig;
+    let name = type === HoverType.WEIGHT ? 'Gewicht' : 'Bias';
     hovercard.style({
         left: `${coordinates[0] + 20}px`,
         top: `${coordinates[1]}px`,
         display: 'block',
     });
     hovercard.select('.type').text(name);
-    hovercard.select('.value').style('display', null).text(value.toPrecision(2));
-    hovercard.select('input').property('value', value.toPrecision(2)).style('display', 'none');
+    hovercard.select('.value').style('display', null).text(value);
+    hovercard.select('input').property('value', value).style('display', 'none');
 }
 
 function drawLink(
@@ -440,57 +431,37 @@ function drawLink(
 }
 
 function updateUI(firstStep = false) {
-    // Update the links visually.
     updateWeightsUI(network, d3.select('g.core'));
-    // Update the bias values visually.
     updateBiasesUI(network);
-
-    function zeroPad(n: number): string {
-        let pad = '000000';
-        return (pad + n).slice(-pad.length);
-    }
-
-    function addCommas(s: string): string {
-        return s.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
-
-    function humanReadable(n: number): string {
-        return n.toFixed(3);
-    }
 }
 
-function constructInputIds(): string[] {
-    let result: string[] = [];
-    for (let inputName in state.inputs) {
-        result.push(inputName);
-    }
-    return result;
-}
-
-function reset() {
+export function reset() {
     let suffix = state.numHiddenLayers !== 1 ? 's' : '';
     d3.select('#layers-label').text('Hidden layer' + suffix);
     d3.select('#num-layers').text(state.numHiddenLayers);
 
-    // Make a simple network.
-    let shape = [state.numInputs].concat(state.networkShape).concat([state.numOutputs]);
-    let outputActivation = nn.Activations.LINEAR; // was: TANH;
-    let oldWeights: number[][][] = extractWeights(network);
-    network = nn.buildNetwork(shape, state.activation, outputActivation, state.regularization, constructInputIds(), state.initZero);
-    replaceWeights(network, oldWeights);
+    makeSimpleNetwork();
     drawNetwork(network);
     updateUI(true);
 }
 
-function extractWeights(network: nn.Node[][]): number[][][] {
-    let weightsAllLayers: number[][][] = [];
+export function makeSimpleNetwork() {
+    let shape = [state.numInputs].concat(state.networkShape).concat([state.numOutputs]);
+    let outputActivation = nn.Activations.LINEAR; // was: TANH;
+    network = nn.buildNetwork(shape, state.activation, outputActivation, state.regularization, state.inputs, state.outputs, state.initZero);
+    replaceWeights(network, state.weights);
+    replaceBiases(network, state.biases);
+}
+
+function extractWeights(network: nn.Node[][]): string[][][] {
+    let weightsAllLayers: string[][][] = [];
     if (network != null && network.length > 0) {
         for (let layer of network) {
-            let weightsOneLayer: number[][] = [];
+            let weightsOneLayer: string[][] = [];
             for (let node of layer) {
-                let weightsOneNode: number[] = [];
+                let weightsOneNode: string[] = [];
                 for (let link of node.outputs) {
-                    weightsOneNode.push(link.weight);
+                    weightsOneNode.push(link.weightOrig);
                 }
                 weightsOneLayer.push(weightsOneNode);
             }
@@ -500,7 +471,21 @@ function extractWeights(network: nn.Node[][]): number[][][] {
     return weightsAllLayers;
 }
 
-function replaceWeights(network: nn.Node[][], weightsAllLayers: number[][][]): void {
+function extractBiases(network: nn.Node[][]): string[][] {
+    let biasesAllLayers: string[][] = [];
+    if (network != null && network.length > 0) {
+        for (let layer of network) {
+            let biasesOneLayer: string[] = [];
+            for (let node of layer) {
+                biasesOneLayer.push(node.biasOrig);
+            }
+            biasesAllLayers.push(biasesOneLayer);
+        }
+    }
+    return biasesAllLayers;
+}
+
+function replaceWeights(network: nn.Node[][], weightsAllLayers: string[][][]): void {
     if (network != null && network.length > 0 && weightsAllLayers != null) {
         for (let i = 0; i < weightsAllLayers.length && i < network.length; i += 1) {
             let layer = network[i];
@@ -520,11 +505,83 @@ function replaceWeights(network: nn.Node[][], weightsAllLayers: number[][][]): v
                     if (link == null || linkWeight == null) {
                         break;
                     }
-                    link.weight = linkWeight;
+                    var weights = string2weight(linkWeight);
+                    link.weight = weights === null ? 0 : weights[0];
+                    link.weightOrig = weights === null ? '0' : weights[1];
                 }
             }
         }
     }
+}
+
+function replaceBiases(network: nn.Node[][], biasesAllLayers: string[][]): void {
+    if (network != null && network.length > 0 && biasesAllLayers != null) {
+        for (let i = 0; i < biasesAllLayers.length && i < network.length; i += 1) {
+            let layer = network[i];
+            let layerBiases = biasesAllLayers[i];
+            if (layer == null || layerBiases == null) {
+                break;
+            }
+            for (let j = 0; j < layerBiases.length && j < layer.length; j += 1) {
+                let node = layer[j];
+                let nodeBias = layerBiases[j];
+                if (node == null || nodeBias == null) {
+                    break;
+                }
+                var biases = strint2bias(nodeBias);
+                node.bias = biases === null ? 0 : biases[0];
+                node.biasOrig = biases === null ? '0' : biases[1];
+            }
+        }
+    }
+}
+
+function string2weight(value: string): [number, string] {
+    var valueTrimmed = value.trim();
+    if (valueTrimmed === '') {
+        return [0, '0'];
+    } else {
+        var opOpt = valueTrimmed.substr(0, 1);
+        var weight = 0;
+        if (opOpt === '*') {
+            weight = +valueTrimmed.substr(1).trim();
+        } else if (opOpt === ':' || opOpt === '/') {
+            var divident = +valueTrimmed.substr(1).trim();
+            if (divident >= 1.0) {
+                weight = 1.0 / divident;
+            } else {
+                weight = divident;
+            }
+        } else {
+            weight = +valueTrimmed;
+        }
+        if (isNaN(weight)) {
+            return null;
+        } else {
+            return [weight, valueTrimmed];
+        }
+    }
+}
+
+function strint2bias(value: string): [number, string] {
+    var valueTrimmed = value.trim();
+    var valueNumber = +valueTrimmed;
+    if (valueTrimmed === '') {
+        return [0, '0'];
+    } else {
+        if (isNaN(valueNumber)) {
+            return null;
+        } else {
+            return [valueNumber, valueTrimmed];
+        }
+        return [+valueTrimmed, valueTrimmed];
+    }
+}
+
+export function setPlayground(stateFromNNstep: any, inputNeurons: string[], outputNeurons: string[]) {
+    state = new State();
+    state.setFromJson(stateFromNNstep, inputNeurons, outputNeurons);
+    makeSimpleNetwork();
 }
 
 export function runPlayground() {
@@ -541,4 +598,10 @@ export function oneStep(inputData: number[]): number[] {
         outputData.push(node.output);
     }
     return outputData;
+}
+
+export function getStateAsJSONString(): String {
+    state.weights = extractWeights(network);
+    state.biases = extractBiases(network);
+    return JSON.stringify(state);
 }

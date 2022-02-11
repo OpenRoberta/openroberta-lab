@@ -39,7 +39,7 @@ public class RelayAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link RelayAction}
      */
-    private static <V> RelayAction<V> make(String port, IRelayMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> RelayAction<V> make(String port, IRelayMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new RelayAction<>(port, mode, properties, comment);
     }
 

@@ -12,12 +12,13 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
+import de.fhg.iais.roberta.visitor.BaseVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
 /**
  * Abstract class which all ValidatorAndCollectorVisitor (delegated as well as not delegeated) should extend from
  */
-public abstract class AbstractValidatorAndCollectorVisitor implements IVisitor<Void> {
+public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<Void> {
     private final IVisitor<Void> mainVisitor;
 
     protected final ConfigurationAst robotConfiguration;

@@ -257,7 +257,7 @@ export class Interpreter {
                     break;
                 }
                 case C.NNSTEP_STMT:
-                    this.evalNNStep();
+                    this.evalNNStep(stmt[C.ARG1], stmt[C.ARG2]);
                     break;
                 case C.LED_ON_ACTION: {
                     const color = this.state.pop();
@@ -971,14 +971,17 @@ export class Interpreter {
         }
     }
 
-    private evalNNStep() {
-        console.log('NNStep encountered');
+    private evalNNStep(numberInputNeurons: number, numberOutputNeurons: number) {
         const s = this.state;
-        let i2 = s.pop();
-        let i1 = s.pop();
-        let i0 = s.pop();
-        let inputData = [i0, i1, i2];
+        let inputData = [];
+        for (let i = 0; i < numberInputNeurons; i++) {
+            inputData.push(s.pop());
+        }
+        inputData = inputData.reverse();
         let outputData = PG.oneStep(inputData);
+        if (outputData.length != numberOutputNeurons) {
+            U.dbcException('NN returned wrong number of outputs: ' + outputData.length.toString + ' !=' + numberOutputNeurons.toString);
+        }
         for (let i = outputData.length - 1; i >= 0; i--) {
             s.push(outputData[i]);
         }

@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /listing REST request<br>
- * <br>
+ * the request description for the /listing REST request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -240,19 +239,7 @@ public class ListingRequest extends BaseRequest {
 
     @Override
     public String toString() {
-        return "ListingRequest [immutable="
-            + this.immutable
-            + ", cmd="
-            + this.cmd
-            + ", programName="
-            + this.programName
-            + ", owner="
-            + this.owner
-            + ", author="
-            + this.author
-            + ", configName="
-            + this.configName
-            + " ]";
+        return "ListingRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", programName=" + this.programName + ", owner=" + this.owner + ", author=" + this.author + ", configName=" + this.configName + " ]";
     }
 
     @Override

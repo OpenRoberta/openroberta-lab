@@ -63,13 +63,13 @@ def sensorsWaitUntil():
         if microbit.pin3.read_analog() < 30:
             break
     while True:
-        if microbit.pin20.read_digital() < 30:
+        if microbit.pin5.read_digital() < 30:
             break
     while True:
-        if microbit.pin20.read_pulsehigh() < 30:
+        if microbit.pin6.read_pulsehigh() < 30:
             break
     while True:
-        if microbit.pin20.read_pulselow() < 30:
+        if microbit.pin7.read_pulselow() < 30:
             break
     while True:
         if microbit.accelerometer.get_x() > 30:
@@ -101,23 +101,16 @@ def sensors():
     microbit.display.scroll(str(microbit.pin0.is_touched()))
     microbit.display.scroll(str(microbit.pin1.is_touched()))
     microbit.display.scroll(str(microbit.pin2.is_touched()))
-    microbit.display.scroll(str(microbit.pin0.read_analog()))
     microbit.display.scroll(str(microbit.pin1.read_analog()))
     microbit.display.scroll(str(microbit.pin2.read_analog()))
     microbit.display.scroll(str(microbit.pin3.read_analog()))
     microbit.display.scroll(str(microbit.pin4.read_analog()))
     microbit.display.scroll(str(microbit.pin10.read_analog()))
-    microbit.display.scroll(str(microbit.pin0.read_digital()))
-    microbit.display.scroll(str(microbit.pin1.read_digital()))
-    microbit.display.scroll(str(microbit.pin2.read_digital()))
-    microbit.display.scroll(str(microbit.pin3.read_digital()))
-    microbit.display.scroll(str(microbit.pin4.read_digital()))
     microbit.display.scroll(str(microbit.pin5.read_digital()))
     microbit.display.scroll(str(microbit.pin6.read_digital()))
     microbit.display.scroll(str(microbit.pin7.read_digital()))
     microbit.display.scroll(str(microbit.pin8.read_digital()))
     microbit.display.scroll(str(microbit.pin9.read_digital()))
-    microbit.display.scroll(str(microbit.pin10.read_digital()))
     microbit.display.scroll(str(microbit.pin11.read_digital()))
     microbit.display.scroll(str(microbit.pin12.read_digital()))
     microbit.display.scroll(str(microbit.pin13.read_digital()))

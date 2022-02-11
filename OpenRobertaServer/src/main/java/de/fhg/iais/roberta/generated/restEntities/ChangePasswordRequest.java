@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /changePassword REST request<br>
- * <br>
+ * the request description for the /changePassword REST request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -219,17 +218,7 @@ public class ChangePasswordRequest extends BaseRequest {
 
     @Override
     public String toString() {
-        return "ChangePasswordRequest [immutable="
-            + this.immutable
-            + ", cmd="
-            + this.cmd
-            + ", accountName="
-            + this.accountName
-            + ", oldPassword="
-            + this.oldPassword
-            + ", newPassword="
-            + this.newPassword
-            + " ]";
+        return "ChangePasswordRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", accountName=" + this.accountName + ", oldPassword=" + this.oldPassword + ", newPassword=" + this.newPassword + " ]";
     }
 
     @Override

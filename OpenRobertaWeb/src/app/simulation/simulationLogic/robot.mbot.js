@@ -1,5 +1,5 @@
-import SIM from 'simulation.simulation';
-import C from 'interpreter.constants';
+import * as SIM from 'simulation.simulation';
+import * as C from 'interpreter.constants';
 import Ev3 from 'simulation.robot.ev3';
 
 /**
