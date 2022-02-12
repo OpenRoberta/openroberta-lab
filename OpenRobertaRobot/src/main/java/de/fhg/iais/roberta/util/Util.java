@@ -487,7 +487,7 @@ public class Util {
      * @param crosscompilerSourceForDebuggingOnly for logging if the crosscompiler fails. Allows debugging of erros in the code generators
      * @return true, when the crosscompiler succeeds; false, otherwise
      */
-    public static Pair<Boolean, String> runCrossCompiler(String[] executableWithParameters, String crosscompilerSourceForDebuggingOnly) {
+    public static Pair<Boolean, String> runCrossCompiler(String[] executableWithParameters, String crosscompilerSourceForDebuggingOnly, boolean isNativeEditorCode) {
         int ecode = -1;
         String crosscompilerResponse;
         try {
@@ -508,7 +508,7 @@ public class Util {
             ecode = -1;
         }
         if ( ecode != 0 ) {
-            Util.logCrosscompilerError(LOG, crosscompilerResponse, crosscompilerSourceForDebuggingOnly);
+            Util.logCrosscompilerError(LOG, crosscompilerResponse, crosscompilerSourceForDebuggingOnly, isNativeEditorCode);
         }
         return Pair.of(ecode == 0, crosscompilerResponse);
     }
@@ -520,14 +520,19 @@ public class Util {
      * @param reporterLogger the logger for the class, to which the error was returned
      * @param crosscompilerResponse the response of the crosscompiler
      * @param crosscompilerSourceForDebuggingOnly the program, that produced the error
+     * @param isNativeEditorCode flag to distinguish error source. True: Source code editor, False: NEPO generated
      */
-    public static void logCrosscompilerError(Logger reporterLogger, String crosscompilerResponse, String crosscompilerSourceForDebuggingOnly) {
-        reporterLogger.info("crosscompilation of program failed. Messages logged to logger 'crosscompiler_error'");
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n***** cross compilation failed with response:\n").append(crosscompilerResponse);
-        sb.append("\n***** for program:\n").append(crosscompilerSourceForDebuggingOnly).append("\n*****");
-        LoggerFactory.getLogger("crosscompiler_error").info(sb.toString());
-
+    public static void logCrosscompilerError(Logger reporterLogger, String crosscompilerResponse, String crosscompilerSourceForDebuggingOnly, boolean isNativeEditorCode) {
+        if ( isNativeEditorCode ) {
+            LoggerFactory.getLogger("crosscompiler_error").info("crosscompilation failed (source code editor compilation error.");
+        }
+        else {
+            reporterLogger.info("crosscompilation of program failed. Messages logged to logger 'crosscompiler_error'");
+            StringBuilder sb = new StringBuilder();
+            sb.append("\n***** cross compilation failed with response:\n").append(crosscompilerResponse);
+            sb.append("\n***** for program:\n").append(crosscompilerSourceForDebuggingOnly).append("\n*****");
+            LoggerFactory.getLogger("crosscompiler_error").info(sb.toString());
+        }
     }
 
     /**

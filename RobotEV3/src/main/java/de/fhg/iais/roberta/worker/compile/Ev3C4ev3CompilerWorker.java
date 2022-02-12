@@ -25,7 +25,7 @@ public class Ev3C4ev3CompilerWorker implements IWorker {
         String robot = project.getRobot();
         String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         String programName = project.getProgramName();
-        C4Ev3SourceCompiler compiler = new C4Ev3SourceCompiler(compilerResourcesDir);
+        C4Ev3SourceCompiler compiler = new C4Ev3SourceCompiler(compilerResourcesDir, project.isNativeEditorCode());
         Uf2Builder uf2Builder = new Uf2Builder(compilerResourcesDir);
         Pair<Key, String> workflowResult = this.runBuild(project, compiler, uf2Builder);
         project.setResult(workflowResult.getFirst());

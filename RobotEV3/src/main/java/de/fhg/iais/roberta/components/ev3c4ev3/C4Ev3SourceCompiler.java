@@ -10,11 +10,13 @@ public class C4Ev3SourceCompiler {
     private final String compilerResourcesDir;
     private final String compilerExecutableFileName;
     private final String staticLibraryFolderName;
+    private final boolean isNativeEditorCode;
 
-    public C4Ev3SourceCompiler(String compilerResourcesDir) {
+    public C4Ev3SourceCompiler(String compilerResourcesDir, boolean isNativeEditorCode) {
         this.compilerResourcesDir = compilerResourcesDir;
         this.compilerExecutableFileName = getCompilerExecutableFileName();
         this.staticLibraryFolderName = getStaticLibraryFolderName();
+        this.isNativeEditorCode = isNativeEditorCode;
     }
 
     private String getCompilerExecutableFileName() {
@@ -45,7 +47,7 @@ public class C4Ev3SourceCompiler {
 
     public Pair<Boolean, String> compile(String sourceCodeFileName, String binaryOutputFile, String crosscompilerSourceForDebuggingOnly) {
         String[] compilerArguments = getCompilerArguments(this.compilerExecutableFileName, sourceCodeFileName, binaryOutputFile);
-        return Util.runCrossCompiler(compilerArguments, crosscompilerSourceForDebuggingOnly);
+        return Util.runCrossCompiler(compilerArguments, crosscompilerSourceForDebuggingOnly, this.isNativeEditorCode);
     }
 
     private String[] getCompilerArguments(String compilerExecutableFileName, String sourceCodeFileName, String binaryOutputFile) {
