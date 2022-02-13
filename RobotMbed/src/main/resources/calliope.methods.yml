@@ -9,3 +9,12 @@ IS_GESTURE_SHAKE:
             || ( _uBit.accelerometer.getZ() > 1800 ));            
     }
 
+GET_ULTARSONIC_SAMPLE:
+  C: |
+    double getUltarsonicSample(double factor, MicroBitPin trigPin, MicroBitPin echoPin) {
+        trigPin.setDigitalValue(1);
+        _uBit.sleep(25);
+        trigPin.setDigitalValue(0);
+
+        return ((double)_uBit.io.P2.readPulseHigh()) / factor;
+    }

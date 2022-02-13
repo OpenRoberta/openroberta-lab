@@ -545,6 +545,12 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         String port = ultrasonicSensor.getUserDefinedPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
+
+        if ("robConf_ultrasonic_hcsr04".equals(confComp.getProperty().getBlockType())) {
+            visitUltrasonicSensorUltrasonicHCSR04(ultrasonicSensor, confComp);
+            return null;
+        }
+        
         String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
         switch ( pin1 ) {
             case "1":
@@ -1527,4 +1533,24 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         Set<String> motorPins = getMotorPins();
         return motorPins.stream().filter(s -> s.equals("A") || s.equals("B")).count() > 1;
     }
+ 
+    /************* Ultrasonic HC-SR04 extension **************************/
+    
+    private void visitUltrasonicSensorUltrasonicHCSR04(UltrasonicSensor<Void> ultrasonicSensor, ConfigurationComponent confComp) {
+        String factor = confComp.getProperty("FACTOR");
+        String trigPin = PIN_MAP.get(confComp.getProperty("TRIG"));
+        String echoPin = PIN_MAP.get(confComp.getProperty("ECHO"));
+                    
+        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(CalliopeMethods.GET_ULTARSONIC_SAMPLE))
+               .append("(")
+               .append(factor)
+               .append(", _uBit.io.")
+               .append(trigPin)
+               .append(", _uBit.io.")
+               .append(echoPin)
+               .append(")");        
+    }
+    
+    /************* Ultrasonic HC-SR04 extension **************************/
+    
 }

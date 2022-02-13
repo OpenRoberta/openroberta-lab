@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2021-12-01 11:09:28.460337",
+		"lastupdated": "2022-02-13 17:42:53.081478",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1775,5 +1775,7 @@
 	"POPUP_REPLACE": "Replace",
 	"POPUP_BACKGROUND_REPLACE": "A program with the same name already exists. <br> Would you like to replace it?",
 	"POPUP_BACKGROUND_REPLACE_CONFIGURATION": "A configuration with the same name already exists. <br> Would you like to replace it?",
-	"ORA_CONFIGURATION_SAVE_AS_ERROR_CONFIGURATION_EXISTS": "This configuration already exists."
+	"ORA_CONFIGURATION_SAVE_AS_ERROR_CONFIGURATION_EXISTS": "This configuration already exists.",
+	"ULTRASONIC_HCSR04": "Ultrasonic HC-SR04",
+	"FACTOR": "Factor"
 }

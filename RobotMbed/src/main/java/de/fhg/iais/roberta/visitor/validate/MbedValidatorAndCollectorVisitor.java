@@ -470,6 +470,13 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         checkSensorExists(ultrasonicSensor);
+        
+        String port = ultrasonicSensor.getUserDefinedPort();
+        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);        
+        if ("robConf_ultrasonic_hcsr04".equals(confComp.getProperty().getBlockType())) {
+            usedMethodBuilder.addUsedMethod(CalliopeMethods.GET_ULTARSONIC_SAMPLE);
+        }
+        
         return addActorMaybeCallibot(ultrasonicSensor, SC.ULTRASONIC);
     }
 

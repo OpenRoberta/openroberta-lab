@@ -137,4 +137,6 @@ public interface SC {
 
     String OLEDSSD1306I2C = "OLEDSSD1306I2C";
 
+    String ULTRASONIC_HCSR04 = "ULTRASONIC_HCSR04";
+
 }
