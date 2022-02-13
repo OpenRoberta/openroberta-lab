@@ -1,0 +1,12 @@
+
+(repeat [FOREVER, BoolConst[value: true]]
+Var [abstand] := SensorExpr [UltrasonicSensor [U1, DISTANCE, - EMPTY_SLOT -]]
+
+AktionStmt [DisplayTextAction [TEXT, FunctionExpr [MathSingleFunct [ROUND, [Var [abstand]]]]]]WaitTimeStmt[time: NumConst[value: 1000]]
+)
+
+Var [abstand] := SensorExpr [UltrasonicSensor [U2, DISTANCE, - EMPTY_SLOT -]]
+
+
+Var [abstand] := SensorExpr [UltrasonicSensor [U3, DISTANCE, - EMPTY_SLOT -]]
+
