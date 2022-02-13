@@ -22,17 +22,12 @@ public class NxtCompilerWorker implements IWorker {
         String programName = project.getProgramName();
         String robot = project.getRobot();
         Pair<Key, String> workflowResult = this.runBuild(project);
-        String workflowMessage = workflowResult.getSecond();
         project.setResult(workflowResult.getFirst());
-        project.addResultParam("MESSAGE", workflowMessage);
-        if ( project.isNativeEditorCode() )
+        project.addResultParam("MESSAGE", workflowResult.getSecond());
         if ( workflowResult.getFirst() == Key.COMPILERWORKFLOW_SUCCESS ) {
             LOG.info("compile {} program {} successful", robot, programName);
         } else {
-            if ( project.isNativeEditorCode() ) {
-                workflowMessage = "user error (source code editor compilation error)";
-            }
-            LOG.error("compile {} program {} failed with {}", robot, programName, workflowMessage);
+            LOG.error("compile {} program {} failed with {}", robot, programName, workflowResult);
         }
     }
 
