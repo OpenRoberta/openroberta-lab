@@ -514,20 +514,21 @@ public class Util {
     }
 
     /**
-     * log that the cross compiler returned with an error - the error message<br>
-     * - the program, that was erroreneous
+     * log that the cross compiler returned with an error, but only if the source is not from the source code editor
      *
      * @param reporterLogger the logger for the class, to which the error was returned
      * @param crosscompilerResponse the response of the crosscompiler
      * @param crosscompilerSourceForDebuggingOnly the program, that produced the error
      * @param isNativeEditorCode flag to distinguish error source. True: Source code editor, False: NEPO generated
      */
-    public static void logCrosscompilerError(Logger reporterLogger, String crosscompilerResponse, String crosscompilerSourceForDebuggingOnly, boolean isNativeEditorCode) {
-        if ( isNativeEditorCode ) {
-            LoggerFactory.getLogger("crosscompiler_error").info("crosscompilation failed (source code editor compilation error.");
-        }
-        else {
-            reporterLogger.info("crosscompilation of program failed. Messages logged to logger 'crosscompiler_error'");
+    public static void logCrosscompilerError(
+        Logger reporterLogger,
+        String crosscompilerResponse,
+        String crosscompilerSourceForDebuggingOnly,
+        boolean isNativeEditorCode) //
+    {
+        if ( !isNativeEditorCode ) {
+            reporterLogger.error("crosscompilation of NEPO generated program failed. Messages are logged to logger 'crosscompiler_error'");
             StringBuilder sb = new StringBuilder();
             sb.append("\n***** cross compilation failed with response:\n").append(crosscompilerResponse);
             sb.append("\n***** for program:\n").append(crosscompilerSourceForDebuggingOnly).append("\n*****");
