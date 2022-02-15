@@ -58,26 +58,30 @@ public class SessionFactoryWrapper {
     }
 
     /**
-     * get a new session-wrapper from the session factory. The session-wrapper and the session contained are <b>not</b> thread-safe.
+     * get a new {@link DbSession} from the session factory. This object contains convenience method for working with the data base.
+     * It is a wrapper around a Hibernate session. The {@link DbSession} object and the Hibernate session contained are <b>not</b> thread-safe.
      *
-     * @return the session-wrapper, never null
+     * @return a new db session with an initiated transaction; never null
      */
     public DbSession getSession() {
         Assert.notNull(this.sessionFactory, "previous attempt to initialize the session factory failed");
         Session session = this.sessionFactory.openSession();
+        session.beginTransaction();
         Assert.notNull(session, "creation of session failed");
         return new DbSession(session);
     }
 
     /**
-     * get a new NATIVE session from the session factory. The session is <b>not</b> thread-safe. <b>Use rarely - know what you do</b>
+     * get a new Hibernate session from the session factory. The session is <b>not</b> thread-safe. <b>Use rarely - know what you do</b><br>
+     * All parts of the application use {@link DbSession}, which is a wrapper arount a Hibernate session
      *
-     * @return the session-wrapper, never null
+     * @return the hibernate session, transaction begun, never null
      */
-    public Session getNativeSession() {
+    public Session getHibernateSession() {
         Assert.notNull(this.sessionFactory, "previous attempt to initialize the session factory failed");
         Session session = this.sessionFactory.openSession();
         Assert.notNull(session, "creation of session failed");
+        session.beginTransaction();
         return session;
     }
 }

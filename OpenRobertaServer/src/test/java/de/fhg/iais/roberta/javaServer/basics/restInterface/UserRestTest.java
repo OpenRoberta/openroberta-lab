@@ -1,9 +1,10 @@
 package de.fhg.iais.roberta.javaServer.basics.restInterface;
 
-import de.fhg.iais.roberta.util.Key;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import de.fhg.iais.roberta.util.Key;
 
 public class UserRestTest extends AbstractRestInterfaceTest {
 
@@ -14,7 +15,6 @@ public class UserRestTest extends AbstractRestInterfaceTest {
 
     @Test
     public void userWorkflowTest() throws Exception {
-        this.memoryDbSetup.deleteAllFromUserAndProgramTmpPasswords();
         createTwoUsers();
         activateUser();
         updateUser();

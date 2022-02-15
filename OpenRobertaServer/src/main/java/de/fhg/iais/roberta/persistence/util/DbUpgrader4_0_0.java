@@ -13,29 +13,28 @@ final class DbUpgrader4_0_0 implements DbUpgraderInterface {
 
     @Override
     public boolean isUpgradeDone() {
-        Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
-        DbExecutor dbExecutor = DbExecutor.make(nativeSession);
+        Session hibernateSession = this.sessionFactoryWrapper.getHibernateSession();
+        DbExecutor dbExecutor = DbExecutor.make(hibernateSession);
         try {
             int userGroupTableCount =
                 ((BigInteger) dbExecutor.oneValueSelect("select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'USERGROUP'")).intValue();
             return userGroupTableCount > 0;
         } finally {
-            nativeSession.close();
+            hibernateSession.close();
         }
     }
 
     @Override
     public void run() {
-        Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
-        nativeSession.beginTransaction();
-        DbSetup dbSetup = new DbSetup(nativeSession);
+        Session hibernateSession = this.sessionFactoryWrapper.getHibernateSession();
+        DbSetup dbSetup = new DbSetup(hibernateSession);
         dbSetup
             .sqlFile(
                 null, //
                 null,
                 "/dbUpgrade/4-0-0.sql");
-        nativeSession.getTransaction().commit();
-        nativeSession.close();
+        hibernateSession.getTransaction().commit();
+        hibernateSession.close();
 
     }
 

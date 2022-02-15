@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 /**
  * class for wrapping a hibernate session. This class eases the use of sessions. It creates transactions, after commits a new transaction is created
  * automatically. Closing a session forces a commit.<br>
- * <b>If neither close nor commit are called for this wrapper objects, changes of the database w.r.t. to the wrappped session are <i>not persisted</i>!</b>
+ * <b>If neither close nor commit are called for this wrapper object, changes of the database w.r.t. to the wrappped session are <i>not persisted</i>!</b>
  *
  * @author rbudde
  */
@@ -30,7 +30,7 @@ public class DbSession {
     /**
      * if a db session is older than this value, it will be logged as a potential resource misuse
      */
-    private static final long DURATION_TIMEOUT_MSEC_FOR_LOGGING = TimeUnit.SECONDS.toMillis(5);
+    private static final long DURATION_TIMEOUT_MSEC_FOR_LOGGING = TimeUnit.SECONDS.toMillis(10);
     /**
      * if a db session is older than this value, it will be closed and removed to avoid a resource leak
      */
@@ -39,6 +39,8 @@ public class DbSession {
     private Session session;
 
     // data for analyzing db session usage. Global storage, access MUST be atomically/synchronized
+    private static final int DBSESSION_LOG_LIMIT = 10000; // after so many db sessions created, log the open sessions for debugging
+    private static final AtomicLong dbSessionsSinceLastDebugLog = new AtomicLong(0);
     private static final AtomicLong currentOpenSessionCounter = new AtomicLong(0);
     private static final AtomicLong cleanedSessionCounter = new AtomicLong(0);
     private static final AtomicLong unusedSessionCounter = new AtomicLong(0);
@@ -53,14 +55,13 @@ public class DbSession {
 
     /**
      * wrap a hibernate session.<br>
-     * <b><i>Be very careful:</i> may only be called from {@link SessionFactoryWrapper} and the upgrader of the database</b>
+     * <b><i>Be very careful:</i> may only be called from {@link SessionFactoryWrapper}</b>
      *
      * @param session the hibernate session to be wrapped
      */
     DbSession(Session session) {
         LOG.debug("open session + start transaction");
         this.session = session;
-        this.session.beginTransaction();
 
         // for analyzing db session usage.
         currentOpenSessionCounter.incrementAndGet();
@@ -91,12 +92,8 @@ public class DbSession {
      */
     public void commit() {
         LOG.debug("commit + start transaction");
-        // LOG.debug("commit + start transaction [implicitly close session and open a new one]");
         addTransaction("commit"); // for analyzing db session usage.
-
-        Transaction transaction = this.session.getTransaction();
-        transaction.commit();
-
+        this.session.getTransaction().commit();
         this.session.beginTransaction();
     }
 
@@ -104,22 +101,33 @@ public class DbSession {
      * commit the current transaction and close the session
      */
     public void close() {
-        LOG.debug("close session (after commit)");
-        // enable NEVER on prod systems: LOG.error("session close\n" + DbSession.getFullInfo(); // for analyzing db session usage.
-        // session may be null, if a rollback occured, that will destroy the session explicitly
         if ( this.session != null ) {
-            commit();
+            addTransaction("commit + close"); // for analyzing db session usage.
+            Transaction transaction = this.session.getTransaction();
+            if ( !transaction.wasCommitted() ) {
+                transaction.commit();
+            }
             this.session.close();
             this.session = null;
-            addTransaction("close");
         } else {
-            addTransaction("close (but is already closed, rollback?)");
+            addTransaction("close (but was already closed)");
         }
 
-        // for analyzing db session usage.
+        // for analyzing db session usage
+        long currentDbSessionsSinceLastDebugLog = dbSessionsSinceLastDebugLog.incrementAndGet();
+        boolean logAnyway = currentDbSessionsSinceLastDebugLog >= DBSESSION_LOG_LIMIT;
         long sessionAge = new Date().getTime() - this.creationTime;
-        if ( new Date().getTime() - this.creationTime > DURATION_TIMEOUT_MSEC_FOR_LOGGING ) {
-            LOG.error("db session " + this.sessionId + " too old: " + sessionAge + "msec\n" + getFullInfo());
+        boolean logTooOld = sessionAge > DURATION_TIMEOUT_MSEC_FOR_LOGGING;
+        String reasonForLog = "";
+        if ( logAnyway ) {
+            dbSessionsSinceLastDebugLog.set(0);
+            reasonForLog = " shown for debugging";
+        }
+        if ( logTooOld ) {
+            reasonForLog = " is too old: created " + sessionAge + "msec ago";
+        }
+        if ( logAnyway || logTooOld ) {
+            LOG.error("db session " + this.sessionId + reasonForLog + ". State of sessions is:\n" + getInfoAboutOpenDbDessions());
         }
         if ( this.numberOfActions == 0 ) {
             unusedSessionCounter.getAndIncrement();
@@ -274,7 +282,7 @@ public class DbSession {
     }
 
     /**
-     * @return the number of unused db sessions since server start. Should be 0 or very close to zero, but isn't :-)
+     * @return the number of unused db sessions since server start. Should be 0
      */
     public static long getUnusedSessionCounter() {
         return unusedSessionCounter.get();
@@ -283,11 +291,11 @@ public class DbSession {
     /**
      * @return a full info about the state of open db sessions. May be a VERY LONG String!
      */
-    public static String getFullInfo() {
+    public static String getInfoAboutOpenDbDessions() {
         StringBuilder sb = new StringBuilder();
         sb.append("number of db sessions created: ").append(sessionIdGenerator).append("\n");
         sb.append("number of db sessions created but not used (should be 0): ").append(unusedSessionCounter).append("\n");
-        sb.append("number of db sessions currently in use: ").append(currentOpenSessionCounter).append("\n");
+        sb.append("number of db sessions currently in use (should be small): ").append(currentOpenSessionCounter).append("\n");
         sb.append("number of db sessions closed by the db cleanup thread: ").append(cleanedSessionCounter).append("\n");
         for ( DbSession dbSession : sessionMap.values() ) {
             sb.append("***** ").append(dbSession.sessionId).append(":\n").append(dbSession.actions);

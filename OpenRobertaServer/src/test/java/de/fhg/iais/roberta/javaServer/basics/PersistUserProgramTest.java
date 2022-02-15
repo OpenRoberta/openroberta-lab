@@ -5,6 +5,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.persistence.bo.Program;
@@ -18,30 +19,32 @@ import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.dao.UserProgramShareDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
-import de.fhg.iais.roberta.persistence.util.DbSetup;
-import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 
 public class PersistUserProgramTest {
-    private SessionFactoryWrapper sessionFactoryWrapper;
-    private DbSetup memoryDbSetup;
-
+    private static TestConfiguration tc;
     private static final int TOTAL_USERS = 100;
+
+    private DbSession hSession;
+
+    @BeforeClass
+    public static void mkSessionFactory() {
+        tc = TestConfiguration.setup();
+    }
 
     @Before
     public void setup() throws Exception {
-        TestConfiguration tc = TestConfiguration.setup();
-        this.sessionFactoryWrapper = tc.getSessionFactoryWrapper();
-        this.memoryDbSetup = tc.getMemoryDbSetup();
+        tc.deleteAllFromUserAndProgramTmpPasswords();
+        this.hSession = tc.getSessionFactoryWrapper().getSession();
     }
 
     @After
     public void tearDown() {
-        this.memoryDbSetup.deleteAllFromUserAndProgramTmpPasswords();
+        this.hSession.close();
     }
 
     @Test
     public void test() throws Exception {
-        DbSession hSession = this.sessionFactoryWrapper.getSession();
+        DbSession hSession = tc.getSessionFactoryWrapper().getSession();
         UserDao userDao = new UserDao(hSession);
         RobotDao robotDao = new RobotDao(hSession);
         ProgramDao programDao = new ProgramDao(hSession);
@@ -106,6 +109,6 @@ public class PersistUserProgramTest {
     }
 
     private long getOneBigInteger(String sqlStmt) {
-        return this.memoryDbSetup.getOneBigIntegerAsLong(sqlStmt);
+        return tc.getMemoryDbSetup().getOneBigIntegerAsLong(sqlStmt);
     }
 }

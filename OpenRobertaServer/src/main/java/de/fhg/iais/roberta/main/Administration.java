@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.main;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.math.BigInteger;
@@ -136,13 +135,12 @@ public class Administration {
     private void createEmptyDatabase() {
         expectArgs(2);
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
-        Session nativeSession = sessionFactoryWrapper.getNativeSession();
-        DbSetup dbSetup = new DbSetup(nativeSession);
-        nativeSession.beginTransaction();
+        Session hibernateSession = sessionFactoryWrapper.getHibernateSession();
+        DbSetup dbSetup = new DbSetup(hibernateSession);
         dbSetup.createEmptyDatabase();
-        nativeSession.getTransaction().commit();
-        nativeSession.createSQLQuery("shutdown").executeUpdate();
-        nativeSession.close();
+        hibernateSession.getTransaction().commit();
+        hibernateSession.createSQLQuery("shutdown").executeUpdate();
+        hibernateSession.close();
     }
 
     /**
@@ -156,9 +154,8 @@ public class Administration {
         Administration.LOG.info("info: database backup makes sense in SERVER mode ONLY ***");
         expectArgs(3);
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
-        Session nativeSession = sessionFactoryWrapper.getNativeSession();
-        DbExecutor dbExecutor = DbExecutor.make(nativeSession);
-        nativeSession.beginTransaction();
+        Session hibernateSession = sessionFactoryWrapper.getHibernateSession();
+        DbExecutor dbExecutor = DbExecutor.make(hibernateSession);
 
         long users = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from USER")).longValue();
         long programs = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from PROGRAM;")).longValue();
@@ -170,8 +167,8 @@ public class Administration {
         dbExecutor.ddl("BACKUP DATABASE TO '" + backupFileName + "' NOT BLOCKING;");
         LOG.info("backup succeeded for a database with " + users + " users and " + programs + " programs");
 
-        nativeSession.getTransaction().commit();
-        nativeSession.close();
+        hibernateSession.getTransaction().commit();
+        hibernateSession.close();
     }
 
     /**
@@ -181,9 +178,8 @@ public class Administration {
     private void dbShutdown() {
         expectArgs(2);
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
-        Session nativeSession = sessionFactoryWrapper.getNativeSession();
-        DbExecutor dbExecutor = DbExecutor.make(nativeSession);
-        nativeSession.beginTransaction();
+        Session hibernateSession = sessionFactoryWrapper.getHibernateSession();
+        DbExecutor dbExecutor = DbExecutor.make(hibernateSession);
 
         long users = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from USER")).longValue();
         long programs = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from PROGRAM;")).longValue();
@@ -202,40 +198,29 @@ public class Administration {
     private void sqlclient() {
         expectArgs(2);
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
-        Session nativeSession = sessionFactoryWrapper.getNativeSession();
-        DbExecutor dbExecutor = DbExecutor.make(nativeSession);
-        nativeSession.beginTransaction();
+        Session hibernateSession = sessionFactoryWrapper.getHibernateSession();
+        DbExecutor dbExecutor = DbExecutor.make(hibernateSession);
 
         try {
+            System.out.println("Enter sql commands. You may use many lines. Terminate the command by a semicolon ';'");
+            System.out.println("Terminate this sql client by 'BYE' or a command that contains a semicolon ';' only");
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             while ( true ) {
-                System.out.print("Enter sql command: ");
-                String line = br.readLine();
-                if ( line == null ) {
+                System.out.print("sql> ");
+                String sqlStmt = dbExecutor.readSqlStmtLinesUntilSemikolon(br);
+                if ( sqlStmt == null ) {
                     break;
-                }
-                String sqlStmt = line.trim();
-                if ( "".equals(sqlStmt) ) {
-                    break;
-                }
-                if ( DbExecutor.isSelect(sqlStmt) ) {
-                    List<Object> resultset = dbExecutor.select(sqlStmt);
-                    for ( Object result : resultset ) {
-                        if ( result instanceof Object[] ) {
-                            println(Arrays.toString((Object[]) result));
-                        } else if ( result == null ) {
-                            println(null);
-                        } else {
-                            println(result.toString());
-                        }
+                } else if ( true || DbExecutor.isSelect(sqlStmt) ) {
+                    // execute all sql stmts. If you think this is too dangerous, remove the true above
+                    try {
+                        dbExecutor.sqlStmt(sqlStmt);
+                    } catch ( Exception e ) {
+                        LOG.error("stmt could not be executed", e);
                     }
                 } else {
-                    // better execute NOT: dbExecutor.sqlStmt(sqlStmt);
-                    println("for safety reasons only SELECT statements are processed");
+                    println("for safety reasons this statements is not processed");
                 }
             }
-        } catch ( IOException e ) {
-            // termination is OK, it's an sql client
         } finally {
             LOG.info("sqlclient terminates");
         }
@@ -244,12 +229,11 @@ public class Administration {
     private void sqlexec() {
         expectArgs(3);
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
-        Session nativeSession = sessionFactoryWrapper.getNativeSession();
+        Session hibernateSession = sessionFactoryWrapper.getHibernateSession();
         String sqlQuery = this.args[2];
         if ( DbExecutor.isSelect(sqlQuery) ) {
-            nativeSession.beginTransaction();
             @SuppressWarnings("unchecked")
-            List<Object[]> resultSet = nativeSession.createSQLQuery(sqlQuery).list(); //NOSONAR : no sql injection possible here. Dangerous sql of course :-)
+            List<Object[]> resultSet = hibernateSession.createSQLQuery(sqlQuery).list(); //NOSONAR : no sql injection possible here. Dangerous sql of course :-)
             LOG.info("result set has " + resultSet.size() + " rows");
             for ( Object object : resultSet ) {
                 if ( object instanceof Object[] ) {
@@ -258,8 +242,8 @@ public class Administration {
                     LOG.info(">>>  " + object.toString());
                 }
             }
-            nativeSession.getTransaction().rollback();
-            nativeSession.close();
+            hibernateSession.getTransaction().rollback();
+            hibernateSession.close();
         } else {
             // better not: dbExecutor.sqlStmt(sqlQuery);
             println("for safety reasons only SELECT statements is processed");
@@ -346,8 +330,8 @@ public class Administration {
     }
 
     @SuppressWarnings("unused")
-    private List<Object[]> selectEV3programByName(Session nativeSession, String sqlGetProgramByName, String name) {
-        SQLQuery selectByProgramName = nativeSession.createSQLQuery(sqlGetProgramByName);
+    private List<Object[]> selectEV3programByName(Session hibernateSession, String sqlGetProgramByName, String name) {
+        SQLQuery selectByProgramName = hibernateSession.createSQLQuery(sqlGetProgramByName);
         selectByProgramName.setString("name", name);
         @SuppressWarnings("unchecked")
         List<Object[]> result = selectByProgramName.list();

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.persistence.bo.LostPassword;
@@ -12,26 +13,25 @@ import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.dao.LostPasswordDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
-import de.fhg.iais.roberta.persistence.util.DbSetup;
-import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class PersistLostPasswordTest {
-    private SessionFactoryWrapper sessionFactoryWrapper;
-    private DbSetup memoryDbSetup;
+    private static TestConfiguration tc;
     private DbSession hSession;
     private UserDao userDao;
     private LostPasswordDao lostPasswordDao;
 
     private static final int TOTAL_USERS = 5;
 
+    @BeforeClass
+    public static void mkSessionFactory() {
+        tc = TestConfiguration.setup();
+    }
+
     @Before
     public void setup() throws Exception {
-        TestConfiguration tc = TestConfiguration.setup();
-        this.sessionFactoryWrapper = tc.getSessionFactoryWrapper();
-        this.memoryDbSetup = tc.getMemoryDbSetup();
-
-        this.hSession = this.sessionFactoryWrapper.getSession();
+        tc.deleteAllFromUserAndProgramTmpPasswords();
+        this.hSession = tc.getSessionFactoryWrapper().getSession();
         this.userDao = new UserDao(this.hSession);
         this.lostPasswordDao = new LostPasswordDao(this.hSession);
 
@@ -52,7 +52,7 @@ public class PersistLostPasswordTest {
 
     @After
     public void tearDown() {
-        this.memoryDbSetup.deleteAllFromUserAndProgramTmpPasswords();
+        this.hSession.close();
     }
 
     @Test
@@ -92,5 +92,4 @@ public class PersistLostPasswordTest {
         User userChanged = this.userDao.loadUser(null, "account-2");
         Assert.isTrue(userChanged.isPasswordCorrect("1"));
     }
-
 }

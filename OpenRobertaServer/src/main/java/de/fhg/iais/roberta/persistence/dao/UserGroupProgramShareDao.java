@@ -31,8 +31,6 @@ public class UserGroupProgramShareDao extends AbstractDao<UserGroupProgramShare>
         Assert.notNull(userGroup);
         Assert.notNull(program);
         Assert.notNull(relation);
-
-        this.lockTable();
         UserGroupProgramShare userGroupProgramShare = this.loadUserGroupProgramShare(userGroup, program);
         if ( userGroupProgramShare == null ) {
             userGroupProgramShare = new UserGroupProgramShare(userGroup, program, relation);
@@ -50,7 +48,6 @@ public class UserGroupProgramShareDao extends AbstractDao<UserGroupProgramShare>
      * @param program the program
      */
     public void deleteUserGroupProgramShare(UserGroup userGroup, Program program) {
-        this.lockTable();
         UserGroupProgramShare toBeDeleted = this.loadUserGroupProgramShare(userGroup, program);
         if ( toBeDeleted != null ) {
             this.session.delete(toBeDeleted);
@@ -116,14 +113,5 @@ public class UserGroupProgramShareDao extends AbstractDao<UserGroupProgramShare>
         @SuppressWarnings("unchecked")
         List<UserGroupProgramShare> il = hql.list();
         return Collections.unmodifiableList(il);
-
-    }
-
-    /**
-     * create a write lock for the table USERGROUP_PROGRAM to avoid deadlocks. This is a no op if concurrency control is not 2PL, but MVCC
-     */
-    private void lockTable() {
-        this.session.createSqlQuery("lock table USERGROUP_PROGRAM write").executeUpdate();
-        this.session.addToLog("lock", "is now aquired");
     }
 }

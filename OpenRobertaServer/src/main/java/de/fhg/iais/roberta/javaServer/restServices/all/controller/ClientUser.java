@@ -4,7 +4,11 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import javax.mail.MessagingException;
 import javax.ws.rs.Consumes;
@@ -59,6 +63,24 @@ import de.fhg.iais.roberta.util.UtilForREST;
 @Path("/user")
 public class ClientUser {
     private static final Logger LOG = LoggerFactory.getLogger(ClientUser.class);
+
+    /**
+     * it is possible, that our frontend sends multiple overlapping create user requests to the server. We experience
+     * data base dead locks, that seem to be triggered by this. The serialization feature (module WRAP) seems not to
+     * help in this situation. Until this problem is fixed in the frontend, the following strategy is used using the
+     * concurrent map declared below:
+     * <ul>
+     *     <li>the create user REST-call arrives at the server</li>
+     *     <li>if the account name of a create user request is found in the map, the REST-call is aborted</li>
+     *     <li>otherwise it is saved in the map</li>
+     *     <li>if the create user REST-call terminates, the account name of a create user request is removed from the map</li>
+     *     <li>if an entry in the the map is older than TIMEOUT_CREATE_USER_REQUESTS, it is removed silently</li>
+     * </ul>
+     * - the account name of a create user request is saved in the concurrent hashmap declared below when the
+     * -
+     */
+    private static final long TIMEOUT_CREATE_USER_REQUESTS = TimeUnit.MINUTES.toMillis(10);
+    private static final ConcurrentHashMap<String, Long> mapOfOpenCreateUserRequests = new ConcurrentHashMap<>();
 
     private final RobotCommunicator brickCommunicator;
     private final MailManagement mailManagement;
@@ -132,7 +154,7 @@ public class ClientUser {
                 if ( userGroupOwnerAccount != null && userGroupName != null ) {
                     UserGroupProcessor ugp = new UserGroupProcessor(dbSession, httpSessionState, this.isPublicServer);
 
-                    User userGroupOwner = up.getUser(userGroupOwnerAccount);
+                    User userGroupOwner = up.getStandardUser(userGroupOwnerAccount);
                     if ( userGroupOwner == null ) {
                         UtilForREST.addResultInfo(response, up);
                         return UtilForREST.makeBaseResponseForError(Key.GROUP_GET_ONE_ERROR_NOT_FOUND, httpSessionState, this.brickCommunicator);
@@ -143,9 +165,9 @@ public class ClientUser {
                         return UtilForREST.makeBaseResponseForError(ugp.getMessage(), httpSessionState, this.brickCommunicator);
                     }
 
-                    user = up.getUser(userGroup, userAccountName, password);
+                    user = up.getGroupUserForLogin(userGroup, userAccountName, password);
                 } else {
-                    user = up.getUser(userAccountName, password);
+                    user = up.getStandardUserForLogin(userAccountName, password);
                     userGroupName = "";
                     userGroupOwnerAccount = "";
                 }
@@ -158,6 +180,7 @@ public class ClientUser {
                     String name = user.getUserName();
                     httpSessionState.setUserClearDataKeepTokenAndRobotId(id);
                     user.setLastLogin();
+                    dbSession.addToLog("login", "setLastLogin()");
                     response.setUserId(id);
                     response.setUserRole(user.getRole().toString());
                     response.setUserAccountName(account);
@@ -237,6 +260,7 @@ public class ClientUser {
                     String account = user.getAccount();
                     String userName = user.getUserName();
                     String email = user.getEmail();
+                    email = email == null ? "" : email; // because email is a required field in the response. Null occurs for group members only.
                     boolean age = user.isYoungerThen14();
                     response.setUserId(id);
                     response.setUserAccountName(account);
@@ -300,15 +324,36 @@ public class ClientUser {
     @Path("/createUser")
     public Response createUser(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
+        String account = "to:be:replaced:later";
         try {
             BaseResponse response = BaseResponse.make();
             UserRequest request = UserRequest.make(fullRequest.getData());
             String cmd = "createUser";
-            ClientUser.LOG.info("command is: " + cmd);
+            LOG.info("command is: " + cmd);
             response.setCmd(cmd);
-            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
 
-            String account = request.getAccountName();
+            // +++ avoid possible deadlocks (See doc at the beginning of this class)
+            long removeBarrier = new Date().getTime() - TIMEOUT_CREATE_USER_REQUESTS;
+            Set<String> accountsToRemove = new HashSet<>();
+            for ( Map.Entry<String, Long> accountTime : mapOfOpenCreateUserRequests.entrySet() ) {
+                if ( accountTime.getValue() < removeBarrier ) {
+                    accountsToRemove.add(accountTime.getKey());
+                }
+            }
+            for ( String accountToRemove : accountsToRemove ) {
+                LOG.error("a create user request for " + accountToRemove + " is outdated and removed - this should NEVER happen");
+                mapOfOpenCreateUserRequests.remove(accountToRemove);
+            }
+            account = request.getAccountName();
+            Long timeOfEarlierAttempt = mapOfOpenCreateUserRequests.putIfAbsent(account, new Date().getTime());
+            if ( timeOfEarlierAttempt != null ) {
+                LOG.error("a create user request for " + account + " is rejected, because it is duplicate - this should NEVER happen");
+                account = "no:valid:key:for:OPEN_CREATE_USER_REQUESTS"; // ... thus, the entry for account continues to be rejected
+                return UtilForREST.makeBaseResponseForError(Key.COMMAND_INVALID, httpSessionState, this.brickCommunicator);
+            }
+            // --- avoid possible deadlocks (See doc at the beginning of this class)
+
+            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
             String password = request.getPassword();
             String email = request.getUserEmail();
             email = email == null ? "" : email.trim();
@@ -316,20 +361,11 @@ public class ClientUser {
             String role = request.getRole();
             //String tag = request.getString("tag");
             boolean isYoungerThen14 = request.getIsYoungerThen14();
-            if ( !email.equals("") && !Util.isValidEmailAddress(email) ) {
-                return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_EMAIL_INVALID, httpSessionState, this.brickCommunicator);
-            } else if ( !email.equals("") ) {
-                final User userByEmail = up.getUserByEmail(email);
-                boolean emailInUseByAnotherUser = userByEmail != null;
-                if ( emailInUseByAnotherUser ) {
-                    return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_EMAIL_USED, httpSessionState, this.brickCommunicator);
-                }
-            }
-            up.createUser(account, password, userName, role, email, null, isYoungerThen14);
-            if ( this.isPublicServer && !email.equals("") && up.succeeded() ) {
+            User newUser = up.createUser(account, password, userName, role, email, null, isYoungerThen14);
+            if ( up.succeeded() && newUser != null && this.isPublicServer && !email.equals("") ) {
                 PendingEmailConfirmationsProcessor pendingConfirmationProcessor = new PendingEmailConfirmationsProcessor(dbSession, httpSessionState);
                 String lang = request.getLanguage();
-                PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
+                PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(newUser);
                 sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang, isYoungerThen14);
             }
             Statistics.info("UserCreate", "success", up.succeeded());
@@ -344,6 +380,9 @@ public class ClientUser {
             if ( dbSession != null ) {
                 dbSession.close();
             }
+            // +++ avoid possible deadlocks (See doc at the beginning of this class)
+            mapOfOpenCreateUserRequests.remove(account);
+            // --- avoid possible deadlocks (See doc at the beginning of this class)
         }
     }
 
@@ -390,7 +429,7 @@ public class ClientUser {
                 final boolean deactivateAccount = this.isPublicServer && isMailChanged;
                 up.updateUser(user, userName, role, email, null, isYoungerThen14, deactivateAccount);
                 if ( deactivateAccount && up.succeeded() ) {
-                    PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
+                    PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(user);
                     sendActivationMail(up, confirmation.getUrlPostfix(), account, email, request.getLanguage(), isYoungerThen14);
                 }
                 UtilForREST.addResultInfo(response, up);
@@ -467,8 +506,7 @@ public class ClientUser {
             User user = up.getUserByEmail(lostEmail);
             UtilForREST.addResultInfo(response, up);
             if ( user != null ) {
-                LostPassword lostPassword = lostPasswordProcessor.createLostPassword(user.getId());
-                ClientUser.LOG.info("url postfix generated: " + lostPassword.getUrlPostfix());
+                LostPassword lostPassword = lostPasswordProcessor.createLostPassword(user);
                 String[] body =
                     {
                         user.getAccount(),
@@ -646,11 +684,15 @@ public class ClientUser {
 
             String account = request.getAccountName();
             String lang = request.getLanguage();
-            User user = up.getUser(account);
-            if ( this.isPublicServer && user != null && !user.getEmail().equals("") ) {
-                PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
-                // TODO ask here again for the age
-                sendActivationMail(up, confirmation.getUrlPostfix(), account, user.getEmail(), lang, false);
+            User user = up.getStandardUser(account);
+            if ( this.isPublicServer && user != null ) {
+                String email = user.getEmail();
+                email = email == null ? "" : email;
+                if ( !email.equals("") ) {
+                    PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(user);
+                    // TODO ask here again for the age
+                    sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang, false);
+                }
             }
             UtilForREST.addResultInfo(response, up);
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);

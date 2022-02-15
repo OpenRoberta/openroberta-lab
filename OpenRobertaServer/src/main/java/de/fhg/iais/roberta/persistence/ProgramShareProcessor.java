@@ -62,7 +62,7 @@ public class ProgramShareProcessor extends AbstractProcessor {
      * @param programName
      * @param authorId The author of the program. Currently it is not possible to share programs, for which you are not the author.
      * @param entityToShareLabel the account name (a String!) of the user who should get access to a program, or the name of a user-group, with which's members
-     *        the program shall be shared
+     *     the program shall be shared
      * @param right "WRITE" or "READ"
      * @return A set of all entities to which the specified program was being shared to because of this action with their corresponding relation
      */

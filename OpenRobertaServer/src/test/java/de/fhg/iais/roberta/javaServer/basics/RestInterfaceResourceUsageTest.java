@@ -87,8 +87,8 @@
 //        this.sMinscha = HttpSessionState.initOnlyLegalForDebugging("minscha", robotPlugins, serverProperties, 2);
 //
 //        this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.connectionUrl);
-//        Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
-//        this.memoryDbSetup = new DbSetup(nativeSession);
+//        Session hibernateSession = this.sessionFactoryWrapper.getHibernateSession();
+//        this.memoryDbSetup = new DbSetup(hibernateSession);
 //        this.memoryDbSetup.createEmptyDatabase();
 //
 //        this.restServerData = new ServerData(this.robotCommunicator);

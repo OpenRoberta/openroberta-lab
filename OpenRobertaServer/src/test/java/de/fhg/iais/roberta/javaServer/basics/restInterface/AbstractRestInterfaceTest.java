@@ -1,15 +1,32 @@
 package de.fhg.iais.roberta.javaServer.basics.restInterface;
 
+import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.core.Response;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
+
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.javaServer.basics.TestConfiguration;
-import de.fhg.iais.roberta.javaServer.restServices.all.controller.*;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientConfiguration;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientProgramController;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.UserGroupController;
 import de.fhg.iais.roberta.main.MailManagement;
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Key;
@@ -17,19 +34,6 @@ import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.XsltTransformer;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
-
-import javax.ws.rs.core.Response;
-import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 /**
  * <b>Testing the REST interface of the OpenRoberta server</b><br>
@@ -86,14 +90,15 @@ public abstract class AbstractRestInterfaceTest {
             + "<value name=\\\"S1\\\"><block type=\\\"robBrick_touch\\\" id=\\\"2\\\" intask=\\\"true\\\"></block></value>"
             + "</block></instance></block_set>";
 
-    protected SessionFactoryWrapper sessionFactoryWrapper; // used by REST services to retrieve data base sessions
     protected XsltTransformer xsltTransformer;
-    protected DbSetup memoryDbSetup; // use to query the test data base, etc.
+
+    protected TestConfiguration tc;
+    protected DbSetup memoryDbSetup; // use to query the test data base, etc. Shortcut: Retrieved from TestConfiguration tc
 
     protected Response response; // store a REST response here
     protected HttpSessionState sPid; // reference user 1 is "pid"
     protected HttpSessionState sMinscha; // reference user 2 is "minscha"
-    
+
     protected HttpSessionState groupMember1;
     protected HttpSessionState groupMember2;
 
@@ -120,30 +125,29 @@ public abstract class AbstractRestInterfaceTest {
         MailManagement mailManagement = Mockito.mock(MailManagement.class);
         this.restUser = new ClientUser(this.robotCommunicator, this.serverProperties, mailManagement);
 
-        TestConfiguration tc = TestConfiguration.setup();
-        this.sessionFactoryWrapper = tc.getSessionFactoryWrapper();
-        this.xsltTransformer = new XsltTransformer();
+        tc = TestConfiguration.setup();
+        tc.deleteAllFromUserAndProgramTmpPasswords();
         this.memoryDbSetup = tc.getMemoryDbSetup();
+
+        this.xsltTransformer = new XsltTransformer();
 
         this.restProject = new ClientProgramController(this.serverProperties);
         this.restGroup = new UserGroupController(this.robotCommunicator, this.serverProperties);
         this.restClient = new ClientAdmin(robotCommunicator, serverProperties);
         this.restConfiguration = new ClientConfiguration(this.robotCommunicator);
         this.robotPlugins = ServerStarter.configureRobotPlugins(this.robotCommunicator, this.serverProperties, EMPTY_STRING_LIST);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession(); // session is closed in the method called below
+        DbSession dbSession = this.tc.getSessionFactoryWrapper().getSession(); // session is closed in the method called below
         ServerStarter.checkRobotPluginsDB(dbSession, robotPlugins.values());
         this.sPid = HttpSessionState.initOnlyLegalForDebugging("pid", robotPlugins, this.serverProperties, 1);
         this.sMinscha = HttpSessionState.initOnlyLegalForDebugging("minscha", robotPlugins, this.serverProperties, 2);
         this.groupMember1 = HttpSessionState.initOnlyLegalForDebugging("member1", robotPlugins, this.serverProperties, 3);
         this.groupMember2 = HttpSessionState.initOnlyLegalForDebugging("member2", robotPlugins, this.serverProperties, 4);
-
-        this.memoryDbSetup.deleteAllFromUserAndProgramTmpPasswords();
     }
 
     /**
      * this method should contain the setup() method and be the Before or first test of every test Class
      * should contain: setup();
-     * 
+     *
      * @throws Exception
      */
     public abstract void init() throws Exception;
@@ -154,7 +158,7 @@ public abstract class AbstractRestInterfaceTest {
      * creates two users with following data:<br>
      * accountName: 'pid' , userName: 'cavy' , password: 'dip', userEmail: 'cavy1@home.de'<br>
      * accountName: 'minscha' , userName: 'cavy' , password: '12', userEmail: null
-     * 
+     *
      * @throws Exception
      */
     protected void createUsers() throws Exception {
@@ -175,7 +179,7 @@ public abstract class AbstractRestInterfaceTest {
     }
 
     protected DbSession newDbSession() {
-        return this.sessionFactoryWrapper.getSession();
+        return this.tc.getSessionFactoryWrapper().getSession();
     }
 
     //creates FullRestRequest from String

@@ -394,9 +394,9 @@ public class ServerStarter {
         String databaseMode = properties.getProperty("database.mode");
         String dbUrl;
         if ( "embedded".equals(databaseMode) ) {
-            dbUrl = "jdbc:hsqldb:file:" + databaseParentDir + "/" + databaseName + ";ifexists=true;hsqldb.tx=mvcc";
+            dbUrl = "jdbc:hsqldb:file:" + databaseParentDir + "/" + databaseName + ";ifexists=true";
         } else if ( "server".equals(databaseMode) ) {
-            dbUrl = "jdbc:hsqldb:hsql://" + databaseUri + "/" + databaseName + ";hsqldb.tx=mvcc";
+            dbUrl = "jdbc:hsqldb:hsql://" + databaseUri + "/" + databaseName;
         } else {
             throw new DbcException("invalid database mode (use either embedded or server): " + databaseMode);
         }

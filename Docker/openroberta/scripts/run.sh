@@ -15,13 +15,13 @@ CMD=$1; shift
 while [  1 ]
 do
     case "${CMD}" in
-        '-q')   CMD=$1; shift
-                QUIET='true' ;;
-        '-yes') CMD=$1; shift
-                YES='true' ;;
-        '-D')   CMD=$1; shift
-                DEBUG='true' ;;
-        *)      break ;;
+        '-q')    CMD=$1; shift
+                 QUIET='true' ;;
+        '-yes')  CMD=$1; shift
+                 YES='true' ;;
+        '-D')    CMD=$1; shift
+                 DEBUG='true' ;;
+        *)       break ;;
     esac
 done
 
@@ -56,6 +56,12 @@ case "${CMD}" in
                   source ${SCRIPT_HELPER}/_fromHub.sh
                   headerMessage "pulling the image for server ${SERVER_NAME} from a hub finished. YOU have to start the server!" ;;
     start)        SERVER_NAME=$1; shift
+                  REMOTE_DEBUG=$1; shift
+                  case ${REMOTE_DEBUG} in
+                    '-rdbg') echo 'remote debugging uses tcp port 2000 LISTENing'
+                             REMOTE_DEBUG=true ;;
+                    *)       REMOTE_DEBUG=false ;;
+                  esac
                   source ${SCRIPT_HELPER}/_stop.sh
                   source ${SCRIPT_HELPER}/_start.sh ;;
     stop)         SERVER_NAME=$1

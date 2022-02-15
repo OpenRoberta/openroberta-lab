@@ -30,6 +30,6 @@ command:
                           the command terminates when the server terminates. Maybe you have to suffix the command with `&` :-)
 
 examples:
-  ./admin.sh git-mode create-empty-db    call from the git root directory to create an embedded database in OpenRobertaServer
-  ./admin.sh git-mode sql-gui            call from the git root directory to run a sql client. EXCLUSIVE USE OF THE DATABASE!
+  ./admin.sh -git-mode create-empty-db   call from the git root directory to create an embedded database in OpenRobertaServer
+  ./admin.sh -git-mode sql-gui           call from the git root directory to run a sql client. EXCLUSIVE USE OF THE DATABASE!
   ./admin.sh start-server                call from the directory created by './ora.sh export' to start the server

@@ -2,13 +2,11 @@ package de.fhg.iais.roberta.persistence.util;
 
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.List;
 
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class DbSetup {
@@ -63,19 +61,6 @@ public class DbSetup {
         } catch ( Exception e ) {
             DbSetup.LOG.error("failure during execution of sql statements from classpath resource(s) " + Arrays.toString(sqlResources), e);
         }
-    }
-
-    public void deleteAllFromUserAndProgramTmpPasswords() {
-        // this shows all tables from us:
-        // List<String> openRobertaTables = this.dbExecutor.select("select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA = 'PUBLIC'");
-        int counter = 0;
-        List<String> toDelete = Arrays.asList("PROGRAM", "USER", "LOST_PASSWORD");
-        for ( String openRobertaTable : toDelete ) {
-            counter += this.dbExecutor.update("delete from " + openRobertaTable);
-        }
-        this.dbExecutor.ddl("commit");
-        DbSetup.LOG.info("committed the deletion of " + counter + " rows in tables " + toDelete + ".");
-        Assert.isTrue(getOneBigIntegerAsLong("select count(*) from USER_PROGRAM") == 0, "the table USER_PROGRAM should be empty");
     }
 
     public long getOneBigIntegerAsLong(String sqlStmt) {

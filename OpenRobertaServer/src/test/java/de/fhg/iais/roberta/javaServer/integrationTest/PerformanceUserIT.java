@@ -108,7 +108,7 @@ public class PerformanceUserIT {
     @After
     public void showResourceUsage() throws Exception {
         Thread.sleep(20000);
-        LOG.info("state of the db sessions:\n" + DbSession.getFullInfo());
+        LOG.info("state of the db sessions:\n" + DbSession.getInfoAboutOpenDbDessions());
         DbSession dbSession = newDbSession();
         BigInteger users = (BigInteger) dbSession.createSqlQuery("select count(*) from USER").uniqueResult();
         BigInteger programs = (BigInteger) dbSession.createSqlQuery("select count(*) from PROGRAM").uniqueResult();
@@ -130,7 +130,8 @@ public class PerformanceUserIT {
         boolean success = true;
         int terminatedWorkflows = 0;
         int nextFreeUserNumber = baseNumber + MAX_PARALLEL_USERS + 1;
-        start: while ( terminatedWorkflows < MAX_TOTAL_USERS ) {
+        start:
+        while ( terminatedWorkflows < MAX_TOTAL_USERS ) {
             for ( int i = 0; i < MAX_PARALLEL_USERS; i++ ) {
                 if ( futures[i].isDone() ) {
                     success = success && futures[i].get();
@@ -251,7 +252,7 @@ public class PerformanceUserIT {
                     } catch ( InterruptedException e ) {
                         // do nothing. Ok in this debug setting
                     }
-                    LOG.info(DbSession.getFullInfo());
+                    LOG.info(DbSession.getInfoAboutOpenDbDessions());
                 }
             }
         };

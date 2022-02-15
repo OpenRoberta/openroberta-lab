@@ -40,7 +40,6 @@ public class UserProgramShareDao extends AbstractDao<UserProgramShare> {
         Assert.notNull(program);
         Assert.notNull(relation);
 
-        this.lockTable();
         UserProgramShare accessRight = this.loadUserProgramShare(user, program);
         if ( accessRight == null ) {
             accessRight = new UserProgramShare(user, program, relation);
@@ -58,7 +57,6 @@ public class UserProgramShareDao extends AbstractDao<UserProgramShare> {
      * @param program the program affected
      */
     public void deleteUserProgramShare(User user, Program program) {
-        this.lockTable();
         UserProgramShare toBeDeleted = this.loadUserProgramShare(user, program);
         if ( toBeDeleted != null ) {
             this.session.delete(toBeDeleted);
@@ -147,13 +145,4 @@ public class UserProgramShareDao extends AbstractDao<UserProgramShare> {
         Assert.isTrue(il.size() <= 1);
         return il.size() == 0 ? null : il.get(0);
     }
-
-    /**
-     * create a write lock for the table USER_PROGRAM to avoid deadlocks. This is a no op if concurrency control is not 2PL, but MVCC
-     */
-    private void lockTable() {
-        this.session.createSqlQuery("lock table USER_PROGRAM write").executeUpdate();
-        this.session.addToLog("lock", "is now aquired");
-    }
-
 }

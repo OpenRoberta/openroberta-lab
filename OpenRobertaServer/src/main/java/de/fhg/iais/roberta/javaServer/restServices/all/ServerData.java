@@ -86,7 +86,7 @@ public class ServerData {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Response tellUsageOfDatabaseSessions() throws Exception {
-        String dbSessionData = DbSession.getFullInfo();
+        String dbSessionData = DbSession.getInfoAboutOpenDbDessions();
         return Response.ok(dbSessionData).build();
     }
 }

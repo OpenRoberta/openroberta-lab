@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.persistence.util;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -32,32 +33,16 @@ public class DbExecutor {
         try {
             Reader reader = new InputStreamReader(sqlStmtFileStream, "UTF-8");
             BufferedReader in = new BufferedReader(reader);
-            StringBuilder sb = new StringBuilder();
-            while ( (line = in.readLine()) != null ) {
-                line = line.trim();
-                if ( line.startsWith("--") || line.equals("") ) {
-                    // next
-                } else if ( line.endsWith(";") ) {
-                    line = line.substring(0, line.length() - 1);
-                    sb.append(line);
-                    String sqlStmt = sb.toString().trim();
-                    if ( sqlStmt.equals("") ) {
-                        // leeres stmt
-                    } else {
-                        count++;
-                        sqlStmt(sqlStmt);
-                    }
-                    this.session.flush();
-                    sb = new StringBuilder();
-                } else {
-                    sb.append(line);
-                    sb.append(" \n");
-                }
+            String sqlStmt = null;
+            while ( (sqlStmt = readSqlStmtLinesUntilSemikolon(in)) != null ) {
+                count++;
+                sqlStmt(sqlStmt);
+                this.session.flush();
             }
             sqlStmtFileStream.close();
-            DbExecutor.LOG.info(count + " SQL-statements executed");
+            LOG.info(count + " SQL-statements executed");
         } catch ( Exception e ) {
-            DbExecutor.LOG.error("Exception in sql stmt: " + count, e);
+            LOG.error("Exception in sql stmt: " + count, e);
         } finally {
             if ( sqlStmtFileStream != null ) {
                 try {
@@ -69,53 +54,88 @@ public class DbExecutor {
         }
     }
 
+    /**
+     * read from a buffered reader sql statements line by line. The stmt is terminated by a semicolon ';'.
+     * Comments and empty lines are ignored. Null indicates, that no stmt could be read.
+     *
+     * @param reader the source of the sql stmts
+     * @return the sql stmt; return null, if the user types 'BYE' in a single line or the reader is exhausted
+     */
+    public String readSqlStmtLinesUntilSemikolon(BufferedReader reader) {
+        StringBuilder sb = new StringBuilder();
+        String line;
+        try {
+            while ( (line = reader.readLine()) != null ) {
+                line = line.trim();
+                if ( line.equals("BYE") ) {
+                    return null;
+                } else if ( line.startsWith("--") || line.equals("") ) {
+                    // next line
+                } else if ( line.endsWith(";") ) {
+                    line = line.substring(0, line.length() - 1);
+                    sb.append(line);
+                    String sqlStmt = sb.toString().trim();
+                    if ( sqlStmt.equals("") ) {
+                        return null; // signals end of stmts
+                    } else {
+                        return sqlStmt;
+                    }
+                } else {
+                    sb.append(line);
+                    sb.append(" \n");
+                }
+            }
+        } catch ( IOException e ) {
+            // is no error, stop processing only
+        }
+        return null; // signals end of stmts
+    }
+
     public void sqlStmt(String sqlStmt) {
         if ( DbExecutor.isSelect(sqlStmt) ) {
-            DbExecutor.LOG.debug("SQL: " + sqlStmt);
+            LOG.debug("SQL: " + sqlStmt);
             select(sqlStmt);
         } else if ( DbExecutor.isChange(sqlStmt) ) {
-            DbExecutor.LOG.debug("UPD: " + sqlStmt);
+            LOG.debug("UPD: " + sqlStmt);
             update(sqlStmt);
         } else if ( DbExecutor.isDDL(sqlStmt) ) {
-            DbExecutor.LOG.debug("DDL: " + sqlStmt);
+            LOG.debug("DDL: " + sqlStmt);
             ddl(sqlStmt);
         } else {
-            DbExecutor.LOG.error("Ignored: " + sqlStmt);
+            LOG.error("Ignored: " + sqlStmt);
         }
     }
 
-    @SuppressWarnings("unchecked")
     public <T> List<T> select(String sqlStmt) {
-        List<Object[]> resultSet = this.session.createSQLQuery(sqlStmt).list();
-        DbExecutor.LOG.debug("got " + resultSet.size() + " rows");
+        List<?> resultSet = this.session.createSQLQuery(sqlStmt).list();
+        LOG.debug("got " + resultSet.size() + " rows");
         for ( Object result : resultSet ) {
             if ( result instanceof Object[] ) {
-                DbExecutor.LOG.debug("  " + Arrays.toString((Object[]) result));
+                LOG.debug("  " + Arrays.toString((Object[]) result));
             } else {
-                DbExecutor.LOG.debug("  " + result);
+                LOG.debug("  " + result);
             }
         }
         return (List<T>) resultSet;
     }
 
     public Object oneValueSelect(String sqlStmt) {
-        @SuppressWarnings("unchecked")
         List<Object> resultSet = this.session.createSQLQuery(sqlStmt).list();
         Assert.isTrue(resultSet.size() == 1, "result set should contain 1 row, but contains " + resultSet.size() + " rows");
         Object result = resultSet.get(0);
-        DbExecutor.LOG.debug(result == null ? "null" : result.toString());
+        LOG.debug(result == null ? "null" : result.toString());
         return result;
     }
 
     public int update(String sqlStmt) {
         int result = this.session.createSQLQuery(sqlStmt).executeUpdate();
-        DbExecutor.LOG.debug("rows affected: " + result);
+        LOG.debug("rows affected: " + result);
         return result;
     }
 
     public int ddl(String sqlStmt) {
         int result = this.session.createSQLQuery(sqlStmt).executeUpdate();
-        DbExecutor.LOG.debug("rows affected (probably 0): " + result);
+        LOG.debug("rows affected (probably 0): " + result);
         return result;
     }
 
@@ -124,7 +144,10 @@ public class DbExecutor {
     }
 
     public static boolean isChange(String sqlStmt) {
-        return DbExecutor.sW(sqlStmt, "insert ") || DbExecutor.sW(sqlStmt, "update ") || DbExecutor.sW(sqlStmt, "delete ") || sqlStmt.trim().equals("commit");
+        return DbExecutor.sW(sqlStmt, "insert ")
+            || DbExecutor.sW(sqlStmt, "update ")
+            || DbExecutor.sW(sqlStmt, "delete ")
+            || sqlStmt.trim().equals("commit");
     }
 
     public static boolean isDDL(String sqlStmt) {

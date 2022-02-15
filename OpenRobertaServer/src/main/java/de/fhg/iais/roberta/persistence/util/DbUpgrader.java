@@ -28,7 +28,7 @@ public class DbUpgrader {
     public static void checkForUpgrade(SessionFactoryWrapper sessionFactoryWrapper) {
         try {
             if ( isAnEmptyDatabaseBeingCreated(sessionFactoryWrapper) ) {
-                LOG.info("a new, empty db is being created. No upgrades, of course");
+                LOG.error("no error: a new, empty db is being created. No upgrades, of course");
                 return;
             }
 
@@ -40,6 +40,7 @@ public class DbUpgrader {
             DbUpgrader3_1_0 dbUpgrader3_1_0 = new DbUpgrader3_1_0(sessionFactoryWrapper);
             boolean upgradeDone3_1_0 = dbUpgrader3_1_0.isUpgradeDone();
             if ( !upgradeDone3_1_0 ) {
+                LOG.error("no error: db upgrade to 3.1.0 is starting");
                 dbUpgrader3_1_0.run();
             }
             /*
@@ -48,21 +49,31 @@ public class DbUpgrader {
             DbUpgrader4_0_0 dbUpgrader4_0_0 = new DbUpgrader4_0_0(sessionFactoryWrapper);
             boolean upgradeDone4_0_0 = dbUpgrader4_0_0.isUpgradeDone();
             if ( !upgradeDone4_0_0 ) {
+                LOG.error("no error: db upgrade to 4.0.0 is starting");
                 dbUpgrader4_0_0.run();
+            }
+            /*
+             * 4.2.9 add index on email column of table user to accelerate the access
+             */
+            DbUpgrader4_2_9 dbUpgrader4_2_9 = new DbUpgrader4_2_9(sessionFactoryWrapper);
+            boolean upgradeDone4_2_9 = dbUpgrader4_2_9.isUpgradeDone();
+            if ( !upgradeDone4_2_9 ) {
+                LOG.error("no error: db upgrade to 4.2.9 is starting");
+                dbUpgrader4_2_9.run();
             }
 
             /*
-             * x.x.x ... ... ... copy the implementation from above. Start with a clone of the upgrader class DbUpgrader3_1_0
+             * x.x.x ... ... ... copy the implementation from above.
              */
 
             /*
              * check if at least one upgrade was performed
              */
-            boolean atLeastOneUpgrade = !upgradeDone3_1_0 || !upgradeDone4_0_0; // OR of !upgradeDone*
+            boolean atLeastOneUpgrade = !upgradeDone3_1_0 || !upgradeDone4_0_0 || !upgradeDone4_2_9; // OR of !upgradeDone*
             if ( !atLeastOneUpgrade ) {
-                LOG.info("no db upgrades needed");
+                LOG.error("no error: no db upgrades needed");
             } else {
-                LOG.info("at least one db upgrade was EXECUTED!");
+                LOG.error("no error: at least one db upgrade was EXECUTED!");
             }
         } catch ( Exception e ) {
             LOG.error("Abort: database upgrade fails. System exit 2", e);
@@ -77,11 +88,11 @@ public class DbUpgrader {
      * @return true if an empty database is being created; false otherwise
      */
     private static boolean isAnEmptyDatabaseBeingCreated(SessionFactoryWrapper sessionFactoryWrapper) {
-        Session nativeSession = sessionFactoryWrapper.getNativeSession();
-        DbExecutor dbExecutor = DbExecutor.make(nativeSession);
+        Session hibernateSession = sessionFactoryWrapper.getHibernateSession();
+        DbExecutor dbExecutor = DbExecutor.make(hibernateSession);
         String sqlStmt = "select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'USER'";
         int result = ((BigInteger) dbExecutor.oneValueSelect(sqlStmt)).intValue();
-        nativeSession.close();
+        hibernateSession.close();
         return result == 0;
     }
 

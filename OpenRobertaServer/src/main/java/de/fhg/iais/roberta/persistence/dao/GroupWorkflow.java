@@ -80,7 +80,7 @@ public class GroupWorkflow {
         }
         for ( int i = startNumber; i < startNumber + numberOfAccounts; i++ ) {
             try {
-                userDao.persistUser(group, accountPrefix + i, accountPrefix + i, Role.STUDENT.toString());
+                userDao.persistNewUser(group, accountPrefix + i, accountPrefix + i, Role.STUDENT.toString());
             } catch ( Exception e ) {
                 GroupWorkflow.LOG.error("Add account failed for " + accountPrefix + i + " of group " + groupName, e);
                 return Key.GROUP_ADD_ACCOUNT_PARTIAL;
