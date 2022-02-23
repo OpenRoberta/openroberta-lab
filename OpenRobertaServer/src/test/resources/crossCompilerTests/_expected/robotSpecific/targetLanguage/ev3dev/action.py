@@ -5,6 +5,7 @@ from roberta.ev3 import Hal
 from ev3dev import ev3 as ev3dev
 import math
 import os
+import time
 
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
@@ -89,10 +90,10 @@ def drive():
     hal.rotateDirectionAngle('C', 'B', False, 'left', ___numberVar, ___numberVar)
     hal.rotateDirectionRegulated('C', 'B', False, 'right', ___numberVar)
     hal.rotateDirectionRegulated('C', 'B', False, 'left', ___numberVar)
-    hal.driveInCurve('foreward', 'C', ___numberVar, 'B', ___numberVar, ___numberVar)
-    hal.driveInCurve('backward', 'C', ___numberVar, 'B', ___numberVar, ___numberVar)
-    hal.driveInCurve('foreward', 'C', ___numberVar, 'B', ___numberVar)
-    hal.driveInCurve('backward', 'C', ___numberVar, 'B', ___numberVar)
+    _driveInCurve('foreward', 'C', ___numberVar, 'B', ___numberVar, ___numberVar)
+    _driveInCurve('backward', 'C', ___numberVar, 'B', ___numberVar, ___numberVar)
+    _driveInCurve('foreward', 'C', ___numberVar, 'B', ___numberVar)
+    _driveInCurve('backward', 'C', ___numberVar, 'B', ___numberVar)
 
 def display():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
@@ -163,6 +164,48 @@ def main():
         hal.drawText('Press any key', 0, 4)
         while not hal.isKeyPressed('any'): hal.waitFor(500)
         raise
+
+def _busyWait():
+    time.sleep(0.0)
+
+def _clamp(v, mi, ma):
+    return mi if v < mi else ma if v > ma else v
+
+def _driveInCurve(direction, left_port, left_speed_pct, right_port, right_speed_pct, distance=None):
+    # direction: foreward, backward
+    ml = _brickConfiguration['actors'][left_port]
+    mr = _brickConfiguration['actors'][right_port]
+    left_speed_pct = _scaleSpeed(ml, _clamp(left_speed_pct, -100, 100))
+    right_speed_pct = _scaleSpeed(mr, _clamp(right_speed_pct, -100, 100))
+    if distance:
+        left_dc = right_dc = 0.0
+        speed_pct = (left_speed_pct + right_speed_pct) / 2.0
+        if speed_pct:
+            circ = math.pi * _brickConfiguration['wheel-diameter']
+            dc = distance / circ
+            if direction == 'backward':
+                dc = -dc
+            left_dc = dc * left_speed_pct / speed_pct
+            right_dc = dc * right_speed_pct / speed_pct
+        # set all attributes
+        ml.stop_action = 'brake'
+        ml.speed_sp = int(left_speed_pct)
+        mr.stop_action = 'brake'
+        mr.speed_sp = int(right_speed_pct)
+        ml.position_sp = int(left_dc * ml.count_per_rot)
+        mr.position_sp = int(right_dc * mr.count_per_rot)
+        # start motors
+        ml.run_to_rel_pos()
+        mr.run_to_rel_pos()
+        while ((ml.state and left_speed_pct) or (mr.state and right_speed_pct)):
+            _busyWait()
+    else:
+        multiplier = -1 if direction == 'backward' else 1
+        ml.run_forever(speed_sp = multiplier * int(left_speed_pct))
+        mr.run_forever(speed_sp = multiplier * int(right_speed_pct))
+
+def _scaleSpeed(m, speed_pct):
+    return int(speed_pct * m.max_speed / 100.0)
 
 if __name__ == "__main__":
     main()

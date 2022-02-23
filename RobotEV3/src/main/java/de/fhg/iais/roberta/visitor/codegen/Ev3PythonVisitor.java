@@ -66,6 +66,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.EV3DevMethods;
 import de.fhg.iais.roberta.visitor.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.codegen.utilities.TTSLanguageMapper;
@@ -373,8 +374,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         String rightMotorPort = this.brickConfiguration.getFirstMotorPort(SC.RIGHT);
         if ( isActorOnPort(leftMotorPort) && isActorOnPort(rightMotorPort) ) {
             MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
-
-            this.sb.append("hal.driveInCurve(");
+            this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EV3DevMethods.DRIVE_IN_CURVE)).append("(");
             this.sb.append(getEnumCode(curveAction.getDirection()) + ", ");
             this.sb.append("'" + leftMotorPort + "', ");
             curveAction.getParamLeft().getSpeed().accept(this);
@@ -672,6 +672,8 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         this.sb.append("import math");
         nlIndent();
         this.sb.append("import os");
+        nlIndent();
+        this.sb.append("import time");
         nlIndent();
         nlIndent();
         this.sb.append("class BreakOutOfALoop(Exception): pass");

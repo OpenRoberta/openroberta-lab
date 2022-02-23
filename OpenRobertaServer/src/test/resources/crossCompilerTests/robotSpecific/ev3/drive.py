@@ -5,6 +5,7 @@ from roberta.ev3 import Hal
 from roberta.BlocklyMethods import BlocklyMethods
 from ev3dev import ev3 as ev3dev
 import math
+import time
 
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass

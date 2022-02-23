@@ -1,6 +1,9 @@
 package de.fhg.iais.roberta.visitor.validate;
 
+import java.util.EnumSet;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -17,6 +20,7 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.visitor.EV3DevMethods;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDifferentialMotorVisitor;
 
 public abstract class DifferentialMotorValidatorAndCollectorVisitorEv3 extends MotorValidatorAndCollectorVisitor implements IDifferentialMotorVisitor<Void> {
@@ -29,6 +33,16 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitorEv3 extends M
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
+        if ( Objects.equals(robotConfiguration.getRobotName(), "ev3dev") ) {
+            /*
+             Only add the helper methods for "ev3dev". Following methods are needed for visitCurveAction:
+             -  EV3DevMethods.BUSY_WAIT, EV3DevMethods.CLAMP, EV3DevMethods.DRIVE_IN_CURVE, EV3DevMethods.SCALE_SPEED
+            */
+            usedMethodBuilder.addUsedMethod(EV3DevMethods.BUSY_WAIT);
+            usedMethodBuilder.addUsedMethod(EV3DevMethods.CLAMP);
+            usedMethodBuilder.addUsedMethod(EV3DevMethods.DRIVE_IN_CURVE);
+            usedMethodBuilder.addUsedMethod(EV3DevMethods.SCALE_SPEED);
+        }
         requiredComponentVisited(curveAction, curveAction.getParamLeft().getSpeed(), curveAction.getParamRight().getSpeed());
         Optional.ofNullable(curveAction.getParamLeft().getDuration())
             .ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
