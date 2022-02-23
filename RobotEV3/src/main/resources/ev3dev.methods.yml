@@ -8,7 +8,58 @@ RANDOM:
             return min_val + (val % ((max_val - min_val) + 1))
         else:
             return max_val + (val % ((min_val - max_val) + 1))
+
 RANDOM_DOUBLE:
   PYTHON: |
     def _randDouble():
         return 1.0*int.from_bytes(os.urandom(4), byteorder='big') / 0xffffffff
+
+DRIVE_IN_CURVE:
+  PYTHON: |
+    def _driveInCurve(direction, left_port, left_speed_pct, right_port, right_speed_pct, distance=None):
+        # direction: foreward, backward
+        ml = _brickConfiguration['actors'][left_port]
+        mr = _brickConfiguration['actors'][right_port]
+        left_speed_pct = _scaleSpeed(ml, _clamp(left_speed_pct, -100, 100))
+        right_speed_pct = _scaleSpeed(mr, _clamp(right_speed_pct, -100, 100))
+        if distance:
+            left_dc = right_dc = 0.0
+            speed_pct = (left_speed_pct + right_speed_pct) / 2.0
+            if speed_pct:
+                circ = math.pi * _brickConfiguration['wheel-diameter']
+                dc = distance / circ
+                if direction == 'backward':
+                    dc = -dc
+                left_dc = dc * left_speed_pct / speed_pct
+                right_dc = dc * right_speed_pct / speed_pct
+            # set all attributes
+            ml.stop_action = 'brake'
+            ml.speed_sp = int(left_speed_pct)
+            mr.stop_action = 'brake'
+            mr.speed_sp = int(right_speed_pct)
+            ml.position_sp = int(left_dc * ml.count_per_rot)
+            mr.position_sp = int(right_dc * mr.count_per_rot)
+            # start motors
+            ml.run_to_rel_pos()
+            mr.run_to_rel_pos()
+            while ((ml.state and left_speed_pct) or (mr.state and right_speed_pct)):
+                _busyWait()
+        else:
+            multiplier = -1 if direction == 'backward' else 1
+            ml.run_forever(speed_sp = multiplier * int(left_speed_pct))
+            mr.run_forever(speed_sp = multiplier * int(right_speed_pct))
+
+BUSY_WAIT:
+  PYTHON: |
+    def _busyWait():
+        time.sleep(0.0)
+
+CLAMP:
+  PYTHON: |
+    def _clamp(v, mi, ma):
+        return mi if v < mi else ma if v > ma else v
+
+SCALE_SPEED:
+  PYTHON: |
+    def _scaleSpeed(m, speed_pct):
+        return int(speed_pct * m.max_speed / 100.0)
