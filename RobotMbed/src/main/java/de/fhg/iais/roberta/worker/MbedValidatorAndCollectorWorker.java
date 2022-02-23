@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.worker;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
@@ -10,19 +11,31 @@ import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 import de.fhg.iais.roberta.visitor.validate.MbedValidatorAndCollectorVisitor;
 
-public abstract class MbedValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
-    private final List<String> FREE_PINS;
-    private final List<String> DEFAULT_PROPERTIES;
 
-    public MbedValidatorAndCollectorWorker(List<String> freePins, List<String> defaultProperties) {
-        this.FREE_PINS = Collections.unmodifiableList(freePins);
-        this.DEFAULT_PROPERTIES = Collections.unmodifiableList(defaultProperties);
+public abstract class MbedValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
+    private final List<String> freePins;
+    private final List<String> defaultProperties;
+    private final List<String> existingPins;
+    private final HashMap<String, String> mapCorrectConfigPins;
+
+    /**
+     * @param freePins All the pins that can be used on the calliope/microbit by the configuration blocks. Also used for checking if the configuration blocks only
+     *     contain existing pins (variable existingPins)
+     * @param defaultProps The default properties to get the pins from the calliope/microbit.
+     * @param mapCorrectConfigPins There are a few configuration blocks that either have no property to get the pins or the pins aren't mapped correctly so this
+     *     hashmap maps them to their specific pins, so they can be checked.
+     */
+    public MbedValidatorAndCollectorWorker(List<String> freePins, List<String> defaultProps, HashMap<String, String> mapCorrectConfigPins) {
+        this.freePins = Collections.unmodifiableList(freePins);
+        this.defaultProperties = Collections.unmodifiableList(defaultProps);
+        this.existingPins = Collections.unmodifiableList(freePins);
+        this.mapCorrectConfigPins = mapCorrectConfigPins;
     }
 
     @Override
     public void execute(Project project) {
         MbedConfigurationValidatorWorker mbedConfigurationValidatorWorker = new MbedConfigurationValidatorWorker(project);
-        mbedConfigurationValidatorWorker.validateConfiguration(FREE_PINS, DEFAULT_PROPERTIES);
+        mbedConfigurationValidatorWorker.validateConfiguration(freePins, defaultProperties, existingPins, mapCorrectConfigPins);
         super.execute(project);
     }
 
