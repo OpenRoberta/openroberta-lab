@@ -545,16 +545,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         String port = ultrasonicSensor.getUserDefinedPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
-        switch ( pin1 ) {
-            case "1":
-                this.sb.append("(_uBit.io.P2.readPulseHigh() * 0.017)");
-                break;
-            case "2":
-                this.sb.append("_cbGetSampleUltrasonic(_buf, &_i2c)");
-                break;
-            default:
-                throw new DbcException("UltrasonicSensor; Invalid ultrasonic port: " + pin1);
+        boolean isCallibot = confComp.getComponentType().equals("CALLIBOT");
+        if ( isCallibot ) {
+            this.sb.append("_cbGetSampleUltrasonic(_buf, &_i2c)");
+        } else {
+            this.sb.append("(_uBit.io.P2.readPulseHigh() * 0.017)");
         }
         return null;
     }
@@ -1306,7 +1301,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
         super.visitListGetIndex(listGetIndex);
-        if ( ((ListElementOperations) listGetIndex.getElementOperation()).equals(ListElementOperations.REMOVE) ) {
+        if ( listGetIndex.getElementOperation().equals(ListElementOperations.REMOVE) ) {
             this.sb.append(";");
         }
         return null;
@@ -1321,7 +1316,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     private void writeToSerial(Expr<Void> valueToWrite) {
         if ( valueToWrite instanceof RgbColor<?>
             || valueToWrite instanceof ColorConst<?>
-            || valueToWrite instanceof Var && ((Var<Void>) valueToWrite).getVarType().equals(BlocklyType.COLOR) ) {
+            || valueToWrite instanceof Var && valueToWrite.getVarType().equals(BlocklyType.COLOR) ) {
             this.sb.append("_uBit.serial.setTxBufferSize(ManagedString(_castColorToString(");
             valueToWrite.accept(this);
             this.sb.append(")).length() + 2);");
@@ -1394,13 +1389,14 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitServoSetAction(ServoSetAction<Void> servoSetAction) {
         String port = servoSetAction.getUserDefinedPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
-        if ( pin1.equals("0x14") || pin1.equals("0x15") ) {
+        if ( confComp.getComponentType().equals("CALLIBOT") ) {
             this.sb.append("_cbSetServo(_buf, &_i2c, ");
-            this.sb.append(pin1);
+            String i2cAddress = getCallibotPin(confComp, port);
+            this.sb.append(i2cAddress);
             this.sb.append(", ");
         } else {
-            this.sb.append("_uBit.io.").append(PIN_MAP.get(pin1)).append(".setServoValue(");
+            String pin = PIN_MAP.get(confComp.getProperty("PIN1"));
+            this.sb.append("_uBit.io.").append(pin).append(".setServoValue(");
         }
         servoSetAction.getValue().accept(this);
         this.sb.append(");");

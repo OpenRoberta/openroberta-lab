@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.syntax;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
@@ -19,8 +22,8 @@ import de.fhg.iais.roberta.visitor.IVisitor;
  * To find out which kind a {@link #Phrase}-object is use {@link #getKind()}
  */
 abstract public class Phrase<V> {
+    private static final Logger LOG = LoggerFactory.getLogger(Phrase.class);
     private boolean readOnly = false;
-
     private final BlocklyBlockProperties property;
     private final BlocklyComment comment;
     private final BlockType kind;
@@ -86,6 +89,9 @@ abstract public class Phrase<V> {
      */
     public final void addInfo(NepoInfo info) {
         this.infos.addInfo(info);
+        if ( infos.getErrorCount() > 1 ) {
+            LOG.error(infos.getErrorCount() + " errors for " + this.kind.getName() + ". Last error message: " + info.getMessage());
+        }
     }
 
     public final NepoInfos getInfos() {

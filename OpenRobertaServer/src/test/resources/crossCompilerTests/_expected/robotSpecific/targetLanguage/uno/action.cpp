@@ -61,7 +61,7 @@ void display() {
     Serial.println(___s);
     _lcd_L3.setCursor(___n,___n);
     _lcd_L3.print(___s);
-
+    
     _lcd_L3.clear();
     _lcd_O.setCursor(0,1);
     _lcd_O.print("Hallo");

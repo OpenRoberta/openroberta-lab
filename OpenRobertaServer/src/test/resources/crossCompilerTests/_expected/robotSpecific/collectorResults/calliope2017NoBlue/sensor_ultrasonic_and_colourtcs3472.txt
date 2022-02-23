@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [F, COLOR, COLOUR], UsedSensor [F, COLOR, LIGHT]]
+Actors: 
+[UsedActor [U, ULTRASONIC], UsedActor [, DISPLAY]]
+Methods: 
+[]
