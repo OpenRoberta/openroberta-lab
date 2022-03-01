@@ -32,7 +32,7 @@ public class CalliopeCompilerWorker implements IWorker {
         if ( workflowResult.getFirst() == Key.COMPILERWORKFLOW_SUCCESS ) {
             LOG.info("compile {} program {} successful", robot, programName);
         } else {
-            LOG.error("compile {} program {} failed with {}", robot, programName, workflowResult);
+            LOG.error("compile of program {} for robot {} failed with message: {}", programName, robot, workflowResult);
         }
     }
 

@@ -502,15 +502,16 @@ public class Util {
             crosscompilerResponse = sj.toString();
             ecode = p.waitFor();
             p.destroy();
+            if ( ecode != 0 ) {
+                Util.logCrosscompilerError(LOG, crosscompilerResponse, crosscompilerSourceForDebuggingOnly, isNativeEditorCode);
+                crosscompilerResponse = ""; // already logged above
+            }
+            return Pair.of(ecode == 0, crosscompilerResponse);
         } catch ( Exception e ) {
             crosscompilerResponse = "exception when calling the cross compiler";
             LOG.error(crosscompilerResponse, e);
-            ecode = -1;
+            return Pair.of(false, crosscompilerResponse);
         }
-        if ( ecode != 0 ) {
-            Util.logCrosscompilerError(LOG, crosscompilerResponse, crosscompilerSourceForDebuggingOnly, isNativeEditorCode);
-        }
-        return Pair.of(ecode == 0, crosscompilerResponse);
     }
 
     /**
