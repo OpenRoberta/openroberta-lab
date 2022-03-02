@@ -13,22 +13,38 @@ block:
   ROTATE_RIGHT:
     category: ACTOR
     implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateRight
-    type: [ rotate_right ]
+    type: [ rotate_right, t_rotate_right ]
 
   ROTATE_LEFT:
     category: ACTOR
     implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateLeft
-    type: [ rotate_left ]
+    type: [ rotate_left, t_rotate_left ]
+
   STEP_DUMMY:
     category: ACTOR
     implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.Dummy
-    type: [ step_dummy ]
+    type: [ step_dummy, t_step_dummy ]
 
   MAIN_TASK_SIMPLE:
     category: TASK
     implementor: de.fhg.iais.roberta.syntax.lang.blocksequence.raspberrypi.MainTaskSimple
-    type: [ start ]
+    type: [ start, t_start ]
+
+  T_STEP_FORWARD:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.TStepForward
+    type: [ t_step_forward ]
+
+  T_STEP_BACKWARD:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.TStepBackward
+    type: [ t_step_backward ]
+
+  T_COLLECT_COLOR:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.TCollectColor
+    type: [ t_collect_color]
 
 configuration:
-  VOLKSBOT: [robBrick_volksbot-Brick]
+  VOLKSBOT: [ robBrick_volksbot-Brick ]
     

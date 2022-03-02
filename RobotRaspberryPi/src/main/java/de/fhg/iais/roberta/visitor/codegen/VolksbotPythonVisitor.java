@@ -13,6 +13,9 @@ import de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateLeft;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateRight;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.StepBackward;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.StepForward;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.TCollectColor;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.TStepBackward;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.TStepForward;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.raspberrypi.MainTaskSimple;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.IVolksbotVisitor;
@@ -54,14 +57,41 @@ public class VolksbotPythonVisitor extends RaspberryPiPythonVisitor implements I
         nlIndent();
         this.sb.append("import math");
         nlIndent();
+        this.sb.append("import neopixel");
+        nlIndent();
+        this.sb.append("import board");
+        nlIndent();
         nlIndent();
         if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
-            String helperMethodImpls =
+            /*String helperMethodImpls =
                 this
                     .getBean(CodeGeneratorSetupBean.class)
                     .getHelperMethodGenerator()
                     .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
-            this.sb.append(helperMethodImpls);
+            this.sb.append(helperMethodImpls);*/
+            this.sb.append("def _light(pixels, num):");
+            incrIndentation();
+            nlIndent();
+            this.sb.append("for j in range(0, num):");
+            incrIndentation();
+            nlIndent();
+            this.sb.append("for i in range(0,12):");
+            incrIndentation();
+            nlIndent();
+            this.sb.append("pixels[i - 3] = (0, 0, 0)");
+            nlIndent();
+            this.sb.append("pixels[i - 2] = (0, 80, 0)");
+            nlIndent();
+            this.sb.append("pixels[i - 1] = (0, 160, 0)");
+            nlIndent();
+            this.sb.append("pixels[i] = (0, 255, 0)");
+            nlIndent();
+            this.sb.append("time.sleep(0.1)");
+            decrIndentation();
+            decrIndentation();
+            nlIndent();
+            this.sb.append("pixels.fill(0)");
+            decrIndentation();
             nlIndent();
             nlIndent();
         }
@@ -122,7 +152,9 @@ public class VolksbotPythonVisitor extends RaspberryPiPythonVisitor implements I
         nlIndent();
         this.sb.append("setState(keyhandle, 'quick_stop')");
         nlIndent();
-        this.sb.append("run(keyhandle, pErrorCode)");
+        this.sb.append("pixels = neopixel.NeoPixel(board.D18, 12)");
+        nlIndent();
+        this.sb.append("run(keyhandle, pErrorCode, pixels)");
         decrIndentation();
         nlIndent();
         this.sb.append("except Exception as e:");
@@ -146,6 +178,8 @@ public class VolksbotPythonVisitor extends RaspberryPiPythonVisitor implements I
         nlIndent();
         this.sb.append("closeDevice(keyhandle, pErrorCode)");
         decrIndentation();
+        nlIndent();
+        this.sb.append("pixels.deinit()");
         decrIndentation();
         nlIndent();
         decrIndentation();
@@ -161,17 +195,38 @@ public class VolksbotPythonVisitor extends RaspberryPiPythonVisitor implements I
 
     @Override
     public Void visitStepForward(StepForward<Void> stepForward) {
-        this.sb.append("Drive(keyhandle, 45, 45)");
-        nlIndent();
-        this.sb.append("time.sleep(1)");
+        visitOneStep(45);
         return null;
     }
 
     @Override
     public Void visitStepBackward(StepBackward<Void> stepBackward) {
-        this.sb.append("Drive(keyhandle, -45, -45");
+        visitOneStep(-45);
+        return null;
+    }
+
+    private void visitOneStep(int distance) {
+        this.sb.append("Drive(keyhandle, ").append(distance).append(", ").append(distance).append(")");
         nlIndent();
         this.sb.append("time.sleep(1)");
+        nlIndent();
+    }
+
+    @Override
+    public Void visitTStepForward(TStepForward<Void> tStepForward) {
+        int times = Integer.parseInt(tStepForward.number);
+        for (int i = 0; i<times;i++){
+            visitOneStep(45);
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitTStepBackward(TStepBackward<Void> tStepBackward) {
+        int times = Integer.parseInt(tStepBackward.number);
+        for ( int i = 0; i < times; i++ ) {
+            visitOneStep(-45);
+        }
         return null;
     }
 
@@ -192,10 +247,16 @@ public class VolksbotPythonVisitor extends RaspberryPiPythonVisitor implements I
         return null;
     }
 
+    @Override
+    public Void visitTCollectColor(TCollectColor<Void> tCollectColor) {
+        this.sb.append("_light(pixels, 2)");
+        return null;
+    }
+
     public Void visitMainTaskSimple(MainTaskSimple<Void> mainTask) {
         generateUserDefinedMethods();
         nlIndent();
-        this.sb.append("def run(keyhandle, pErrorCode):");
+        this.sb.append("def run(keyhandle, pErrorCode, pixels):");
         incrIndentation();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             nlIndent();

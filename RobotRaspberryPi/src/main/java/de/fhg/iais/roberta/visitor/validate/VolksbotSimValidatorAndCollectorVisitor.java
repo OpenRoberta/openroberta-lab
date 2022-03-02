@@ -9,6 +9,9 @@ import de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateLeft;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateRight;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.StepBackward;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.StepForward;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.TCollectColor;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.TStepBackward;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.TStepForward;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.raspberrypi.MainTaskSimple;
 import de.fhg.iais.roberta.visitor.IVolksbotVisitor;
 
@@ -28,12 +31,27 @@ public class VolksbotSimValidatorAndCollectorVisitor extends RaspberryPiSimValid
     }
 
     @Override
+    public Void visitTStepForward(TStepForward<Void> tStepForward) {
+        return null;
+    }
+
+    @Override
+    public Void visitTStepBackward(TStepBackward<Void> tStepBackward) {
+        return null;
+    }
+
+    @Override
     public Void visitRotateRight(RotateRight<Void> rotateRight) {
         return null;
     }
 
     @Override
     public Void visitRotateLeft(RotateLeft<Void> rotateLeft) {
+        return null;
+    }
+
+    @Override
+    public Void visitTCollectColor(TCollectColor<Void> tCollectColor) {
         return null;
     }
 

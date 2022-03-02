@@ -1,5 +1,6 @@
 import * as SIM from 'simulation.simulation';
 import Ev3 from 'simulation.robot.ev3';
+import * as C from 'interpreter.constants';
 /**
  * Creates a new robot for a simulation.
  *
@@ -61,7 +62,14 @@ function Volksbot(pose, configuration, num, robotBehaviour, img) {
         h: 5,
         color: '#000000',
     };
-    this.led = null;
+    this.led = {
+        x: 0,
+        y: 70,
+        color: 'LIGHTGREY',
+        blinkColor: 'LIGHTGREY',
+        mode: '',
+        timer: 0,
+    };
     for (var s in this.touchSensor) {
         this.touchSensor[s].color = 'LIGHTGREY';
     }
@@ -197,15 +205,44 @@ Volksbot.prototype.update = function () {
     //update led(s)
     var led = this.robotBehaviour.getActionState('led', true);
     if (led) {
-        switch (led.mode) {
-            case 'off':
-                this.ledSensor.color = '';
+        var color = led.color;
+        var mode = led.mode;
+        if (color) {
+            this.led.color = color.toUpperCase();
+            this.led.blinkColor = color.toUpperCase();
+        }
+        switch (mode) {
+            case C.OFF:
+                this.led.timer = 0;
+                this.led.blink = 0;
+                this.led.color = 'LIGHTGRAY';
                 break;
-            case 'on':
-                this.ledSensor.color = led.color.toUpperCase();
+            case C.ON:
+                this.led.timer = 0;
+                this.led.blink = 0;
+                break;
+            case C.FLASH:
+                this.led.blink = 2;
+                break;
+            case C.DOUBLE_FLASH:
+                this.led.blink = 4;
                 break;
         }
     }
+    if (this.led.blink > 0) {
+        if (this.led.timer > 0.5 && this.led.blink == 2) {
+            this.led.color = this.led.blinkColor;
+        } else if (this.led.blink == 4 && ((this.led.timer > 0.5 && this.led.timer < 0.67) || this.led.timer > 0.83)) {
+            this.led.color = this.led.blinkColor;
+        } else {
+            this.led.color = 'LIGHTGRAY';
+        }
+        this.led.timer += SIM.getDt();
+        if (this.led.timer > 1.0) {
+            this.led.timer = 0;
+        }
+    }
+    $('#led' + this.id).attr('fill', "url('#" + this.led.color + this.id + "')");
     // update display
     var display = this.robotBehaviour.getActionState('display', true);
     if (display) {

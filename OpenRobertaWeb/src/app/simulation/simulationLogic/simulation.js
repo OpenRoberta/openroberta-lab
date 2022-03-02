@@ -81,7 +81,7 @@ var imgList = [
 ];
 var imgListIE = [
     '/js/app/simulation/simBackgrounds/baustelle.png',
-    '/js/app/simulation/simBackgrounds/elefant.png',
+    '/js/app/simulation/simBackgrounds/ruler.png',
     '/js/app/simulation/simBackgrounds/wallPattern.png',
     '/js/app/simulation/simBackgrounds/calliopeBackground.png',
     '/js/app/simulation/simBackgrounds/microbitBackground.png',
@@ -822,7 +822,7 @@ function setRuler() {
         ruler.y = 0;
         ruler.w = 0;
         ruler.h = 0;
-        ruler.img = null;
+        ruler.img = imgRuler;
         ruler.color = null;
     }
 }
@@ -1869,12 +1869,11 @@ export function relatives2coordinates(relatives) {
     colorAreaList = relatives.colorAreas.map(function (object) {
         return calculateShape(object);
     });
-    relatives.ruler = {};
-    relatives.ruler.x = ruler.x / width;
-    relatives.ruler.y = ruler.y / height;
-    relatives.ruler.w = ruler.w / width;
-    relatives.ruler.h = ruler.h / height;
-    relatives.ruler.img = imgRuler;
+    ruler.x = relatives.ruler.x * width;
+    ruler.y = relatives.ruler.y * height;
+    ruler.w = relatives.ruler.w * width;
+    ruler.h = relatives.ruler.h * height;
+    ruler.img = imgRuler;
 }
 
 function resetScene(obstacleL, colorAreaL) {

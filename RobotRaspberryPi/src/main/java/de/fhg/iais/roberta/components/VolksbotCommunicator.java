@@ -21,7 +21,7 @@ public class VolksbotCommunicator {
      */
     public void runProgram() throws Exception {
         String copyCommand = "cp " + this.pathToResource + "epos4.py " + this.pathToSource;
-        String exCommand = "python3 " + this.pathToSource + File.separator + this.program;
+        String exCommand = "sudo python3 " + this.pathToSource + File.separator + this.program;
 
         try {
             Process process = Runtime.getRuntime().exec(copyCommand);

@@ -2,7 +2,6 @@ import * as MSG from 'message';
 import * as LOG from 'log';
 import * as GUISTATE_C from 'guiState.controller';
 import * as PROG_C from 'program.controller';
-import * as ROBOT_C from 'robot.controller';
 import * as IMPORT_C from 'import.controller';
 import * as Blockly from 'blockly';
 import * as SIM from 'simulation.simulation';
@@ -18,11 +17,21 @@ var credits = [];
 var maxCredits = [];
 var quiz = false;
 var configData = {};
-var TIMEOUT = 25000;
+const TIMEOUT = 25000;
+const READ_TIMEOUT = 30000;
+const CHANGE_TIMEOUT = 10000;
 var myTimeoutID;
 var tutorialId;
-var initTutorial;
 var noTimeout = true;
+var level = 0;
+
+var Error = {
+    No: 0,
+    Direction: -1,
+    Collect: -2,
+    NoCollect: -3,
+    Steps: -4,
+};
 
 function init() {
     tutorialList = GUISTATE_C.getListOfTutorials();
@@ -30,10 +39,13 @@ function init() {
     initEvents();
 }
 export { init };
+
 function initEvents() {
+    // not used
     $('.menu.tutorial').on('click', function (event) {
         startTutorial(event.target.id);
     });
+    // not used
     $('#tutorialButton').on('click touchend', function () {
         toggleTutorial();
         return false;
@@ -45,18 +57,66 @@ function initEvents() {
             keyboard: false,
             show: true,
         });
-        $('#volksbotStart').hide('slow'); //prop('disabled', true);
-        $('#startVideo').one('ended', videoEnd);
-        $('#startVideo')[0].play();
+        if (level === 0) {
+            $('#volksbotStart').hide('slow'); //prop('disabled', true);
+            $('#startVideo').one('ended', videoEnd);
+            $('#startVideo')[0].play();
+        } else if (level === 1) {
+            $('#startButton').fadeIn('3000');
+            myTimeoutID = setTimeout(chooseTutorial, READ_TIMEOUT);
+            $('#volksbotStart').one('click', function () {
+                $('#tutorialStartView').modal('hide');
+                clearTimeout(myTimeoutID);
+                if (once) {
+                    myTimeoutID = setTimeout(blocklyListener, TIMEOUT);
+                } else {
+                    myTimeoutID = setTimeout(chooseTutorial, TIMEOUT);
+                }
+                return false;
+            });
+        }
     });
 }
 
-function loadFromTutorial(tutId, opt_init) {
-    // initialize this tutorial
-    if (opt_init) {
-        initTutorial = tutId;
-    }
+function chooseTutorial(opt_init) {
     clearTimeout(myTimeoutID);
+    $('#tabProgram').trigger('click');
+    $('#tutorialStartView .modal-dialog').show();
+    $('#tutorialIntro').hide();
+    $('#tutorialRobot').hide();
+    $('#startButton').hide();
+    $('#tutorialChoose').show();
+    $('#tutorialStartView').modal({
+        backdrop: 'static',
+        keyboard: false,
+        show: true,
+    });
+    $('#volksbotStartSimple').one('click', function () {
+        reloadTutorial(0, opt_init);
+        startTutorial();
+        configureLEDs('oooooooooooooooooooo');
+        return false;
+    });
+    $('#volksbotStartAdvanced').one('click', function () {
+        reloadTutorial(1, opt_init);
+        startTutorial();
+        configureLEDs('oooooooooooooooooooo');
+        return false;
+    });
+    if (opt_init) {
+        tutorialId = 'volksbot01';
+        loadFromTutorial(tutorialId);
+        createInstruction();
+        if (tutorial.initXML) {
+            IMPORT_C.loadProgramFromXML('egal', tutorial.initXML);
+        }
+        SIM.loadConfigData(tutorial.step[step].simulationSettings);
+    }
+}
+export { chooseTutorial };
+
+function loadFromTutorial(tutId) {
+    // initialize this tutorial
     tutorialId = tutId;
     tutorial = tutorialList[tutId];
     step = 0;
@@ -66,73 +126,77 @@ function loadFromTutorial(tutId, opt_init) {
     quiz = false;
     configData = {};
     noTimeout = true;
-    myTimeoutID;
     clearTimeout(myTimeoutID);
     blocklyWorkspace.options.maxBlocks = null;
-    if (tutorial) {
-        ROBOT_C.switchRobot(tutorial.robot, undefined, startTutorial);
-    }
-
-    function startTutorial() {
-        $('#tabProgram').trigger('click');
-        if (tutorial.initXML) {
-            IMPORT_C.loadProgramFromXML('egal', tutorial.initXML);
-        }
-        maxSteps = tutorial.step.length;
-        step = 0;
-        credits = [];
-        maxCredits = [];
-        quiz = false;
-        for (var i = 0; i < tutorial.step.length; i++) {
-            if (tutorial.step[i].quiz) {
-                quiz = true;
-                break;
-            }
-        }
-        $('#tutorial-list').empty();
-
-        // create this tutorial navigation
-        for (var i = 0; i < tutorial.step.length; i++) {
-            $('#tutorial-list').append(
-                $('<li>')
-                    .attr('class', 'step')
-                    .append(
-                        $('<a>')
-                            .attr({
-                                href: '#',
-                            })
-                            .append(i + 1)
-                    )
-            );
-        }
-        $('#tutorial-list li:last-child').addClass('last');
-        $('#tutorial-header').html(tutorial.name);
-
-        // prepare the view
-        $('#tutorial-navigation').fadeIn(750);
-        $('#head-navigation').hide();
-
-        $('#tutorial-list :first-child').addClass('active');
-        $('#tutorialButton').show();
-        $('.blocklyToolboxDiv>.levelTabs').addClass('invisible');
-
-        initStepEvents();
-        createInstruction();
-        if (tutorial.instructions) {
-            openTutorialView();
-        }
-        showOverview();
-        //videoEnd();
+    if (!tutorial) {
+        console.error('no tutorial available!');
     }
 }
 export { loadFromTutorial };
 
-function reloadTutorial() {
+function startTutorial() {
+    if (tutorial.initXML) {
+        IMPORT_C.loadProgramFromXML('egal', tutorial.initXML);
+    }
+    maxSteps = tutorial.step.length;
+    step = 0;
+    credits = [];
+    maxCredits = [];
+    quiz = false;
+    for (var i = 0; i < tutorial.step.length; i++) {
+        if (tutorial.step[i].quiz) {
+            quiz = true;
+            break;
+        }
+    }
+    $('#tutorial-list').empty();
+
+    // create this tutorial navigation
+    for (var i = 0; i < tutorial.step.length; i++) {
+        $('#tutorial-list').append(
+            $('<li>')
+                .attr('class', 'step')
+                .append(
+                    $('<a>')
+                        .attr({
+                            href: '#',
+                        })
+                        .append(i + 1)
+                )
+        );
+    }
+    $('#tutorial-list li:last-child').addClass('last');
+    $('#tutorial-header').html(tutorial.name);
+
+    // prepare the view
+    $('#tutorial-navigation').fadeIn(750);
+    $('#head-navigation').hide();
+
+    $('#tutorial-list :first-child').addClass('active');
+    $('#tutorialButton').show();
+    $('.blocklyToolboxDiv>.levelTabs').addClass('invisible');
+
+    initStepEvents();
+    createInstruction();
+    if (tutorial.instructions) {
+        openTutorialView();
+    }
+    showOverview();
+}
+
+function reloadTutorial(newLevel, opt_init) {
     clearTimeout(myTimeoutID);
-    var i = tutorialId.slice(-1);
-    var newTutorialId = tutorialId.slice(0, tutorialId.length - 1) + (parseInt(i) + 1);
-    tutorialId = tutorialList[newTutorialId] ? newTutorialId : initTutorial;
+    var i = parseInt(tutorialId.slice(-1));
+    if (!opt_init) {
+        i++;
+    }
+    level = newLevel;
+    var newTutorialId = tutorialId.slice(0, tutorialId.length - 2) + level + i;
+    tutorialId = tutorialList[newTutorialId] ? newTutorialId : tutorialId.slice(0, tutorialId.length - 2) + level + 1;
     tutorialController.loadFromTutorial(tutorialId);
+    function errorfunction(e) {
+        alert(e);
+    }
 }
 
 function initStepEvents() {
@@ -155,9 +219,19 @@ function initStepEvents() {
     }
 }
 
+var once = false;
+
 function blocklyListener(event) {
-    clearTimeout(myTimeoutID);
-    if (event.blockId !== 'step_dummy' && event.newParentId && blocklyWorkspace.remainingCapacity() == 0) {
+    if (event.blockId !== 'step_dummy' && (event.newParentId || (event.name && event.name === 'NUMBER')) && blocklyWorkspace.remainingCapacity() == 0) {
+        if (checkSolutionCorrect(blocklyWorkspace.getAllBlocks()) === -4 && !once) {
+            once = true;
+            clearTimeout(myTimeoutID);
+            myTimeoutID = setTimeout(function () {
+                blocklyListener(event);
+            }, CHANGE_TIMEOUT);
+            return;
+        }
+        once = false;
         configData = SIM.exportConfigData();
         noTimeout = true;
         var blocks = blocklyWorkspace.getAllBlocks();
@@ -168,7 +242,7 @@ function blocklyListener(event) {
         if (blocks[blocks.length - 2].id !== event.blockId) {
             blocklyWorkspace.getBlockById(event.blockId).dispose(true, true);
             clearTimeout(myTimeoutID);
-            myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
+            myTimeoutID = setTimeout(chooseTutorial, TIMEOUT);
             return;
         }
         setTimeout(function () {
@@ -176,106 +250,163 @@ function blocklyListener(event) {
             Blockly.hideChaff();
             $('.blocklyWorkspace>.blocklyFlyout').fadeOut();
             $('#simControl').trigger('click');
+            configureLEDs('oooooooooooooooooooo');
         }, 500);
     } else if (!noTimeout) {
         clearTimeout(myTimeoutID);
-        myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
+        myTimeoutID = setTimeout(chooseTutorial, TIMEOUT);
     }
 }
 
 function simTerminatedListener() {
     var blocks = blocklyWorkspace.getAllBlocks();
-    if (checkSolutionCorrect(blocks)) {
-        if (step + 1 >= maxSteps) {
-            clearTimeout(myTimeoutID);
-            var blocks = blocklyWorkspace.getAllBlocks();
-            blocks[blocks.length - 1].dispose(false, true);
-            for (var i = 0; i < blocks.length - 1; i++) {
-                blocks[i].setDisabled(false);
-                blocks[i].setMovable(false);
-            }
-
-            function waitClock(t) {
-                var tt = t - 1;
-                if (tt >= 0) {
-                    updateDonutChart('#specificChart', (100 / 120) * (120 - tt));
-                    setTimeout(function () {
-                        waitClock(tt);
-                    }, 1000);
+    let thisSolutionCorrect = checkSolutionCorrect(blocks);
+    clearTimeout(myTimeoutID);
+    switch (thisSolutionCorrect) {
+        case Error.No: {
+            if (step + 1 >= maxSteps) {
+                blocks[blocks.length - 1].dispose(false, true);
+                for (var i = 0; i < blocks.length - 1; i++) {
+                    blocks[i].setDisabled(false);
+                    blocks[i].setMovable(false);
                 }
-            }
-            $('#volksbotStart').one('click', function () {
+
+                function waitClock(t) {
+                    var tt = t - 1;
+                    if (tt >= 0) {
+                        updateDonutChart('#specificChart', (100 / 120) * (120 - tt));
+                        setTimeout(function () {
+                            waitClock(tt);
+                        }, 1000);
+                    } else {
+                        configureLEDs('oooooooooooooooooooo');
+                    }
+                }
+                $('#volksbotStart').one('click', function () {
+                    configureLEDs(tutorial.ledSettings);
+                    setTimeout(function () {
+                        configureLEDs(tutorial.ledSettings);
+                        $('#menuRunProg').trigger('click');
+                        $('#tutorialStartView .modal-dialog').hide();
+                        $('#specificChart').show();
+                        waitClock(1);
+                        return false;
+                    }, 1000);
+                });
+                $('#tutorialIntro').html(tutorial.end).fadeIn('slow');
+                $('#tutorialStartView').one('hidden.bs.modal', function (e) {
+                    setTimeout(function () {
+                        chooseTutorial(true);
+                    }, 1000);
+                    return;
+                });
                 setTimeout(function () {
-                    $('#menuRunProg').trigger('click');
-                    $('#tutorialStartView .modal-dialog').hide();
-                    $('#specificChart').show();
-                    waitClock(120);
-                }, 1000);
-            });
-            $('#tutorialStartViewText').html(tutorial.end);
-            $('#tutorialStartView').one('hidden.bs.modal', function (e) {
-                reloadTutorial();
-                return;
-            });
-            setTimeout(function () {
-                $('#tutorialStartView').modal({
-                    backdrop: 'static',
-                    keyboard: false,
-                    show: true,
+                    $('#tutorialStartView').modal({
+                        backdrop: 'static',
+                        keyboard: false,
+                        show: true,
+                    });
                 });
-            });
-        } else {
-            // delete last dummy block from program
-            for (var i = 1; i < blocks.length; i++) {
-                blocks[i].setDisabled(true);
+            } else {
+                for (var i = 1; i < blocks.length; i++) {
+                    blocks[i].setDisabled(true);
+                }
+                setTimeout(function () {
+                    Blockly.hideChaff();
+                    $('.blocklyWorkspace>.blocklyFlyout').fadeIn(function () {
+                        nextStep();
+                    });
+                    clearTimeout(myTimeoutID);
+                    myTimeoutID = setTimeout(chooseTutorial, TIMEOUT);
+                    noTimeout = false;
+                }, 500);
             }
+            break;
+        }
+        case Error.Collect:
+        case Error.NoCollect:
+        case Error.Direction: {
+            function correct(msg) {
+                setTimeout(function () {
+                    SIM.loadConfigData(configData);
+                    var blocks = blocklyWorkspace.getAllBlocks();
+                    var toDelete = 1;
+                    if (tutorial.step[step - 1]) {
+                        toDelete = blocks.length - tutorial.step[step - 1].maxBlocks;
+                    } else {
+                        toDelete = blocks.length - 1; // start block always stays
+                    }
+                    for (i = 0; i < toDelete; i++) {
+                        blocks[blocks.length - 2].dispose(true, true);
+                        blocks = blocklyWorkspace.getAllBlocks();
+                    }
+                    Blockly.hideChaff();
+                    $('.blocklyWorkspace>.blocklyFlyout').fadeIn();
+                    MSG.displayMessage(msg, 'POPUP', '');
+                    $('#show-message').one('hidden.bs.modal', function () {
+                        clearTimeout(myTimeoutID);
+                        myTimeoutID = setTimeout(chooseTutorial, TIMEOUT);
+                    });
+                    myTimeoutID = setTimeout(function () {
+                        $('#show-message').hide();
+                        chooseTutorial();
+                    }, TIMEOUT);
+                    noTimeout = false;
+                }, 500);
+            }
+            if (thisSolutionCorrect === Error.Direction) {
+                correct('Es gibt einen kürzeren Weg. Überlege noch einmal und wähle den passenden Programmierbefehl!');
+            } else if (thisSolutionCorrect === Error.Collect) {
+                correct('Die Aufgabe des Roboters ist, die grünen Felder einzusammeln. Ergänze diesen Schritt!');
+            } else if (thisSolutionCorrect === Error.NoCollect) {
+                correct('Du hast dieses Feld schon eingesammelt. Fahre weiter!');
+            }
+            break;
+        }
+        case Error.Steps: {
             setTimeout(function () {
-                // $("#state").fadeOut(550, function() {
-                //     $("#state").removeClass("typcn-eye-outline").addClass("typcn-hand").fadeIn(550);
-                // });
+                SIM.loadConfigData(configData);
                 Blockly.hideChaff();
-                $('.blocklyWorkspace>.blocklyFlyout').fadeIn(function () {
-                    nextStep();
+                MSG.displayMessage('Wähle die richtige Anzahl an Feldern, die vorwärts gefahren werden sollen.', 'POPUP', '');
+                $('#show-message').one('hidden.bs.modal', function () {
+                    clearTimeout(myTimeoutID);
+                    myTimeoutID = setTimeout(chooseTutorial, TIMEOUT);
                 });
-                clearTimeout(myTimeoutID);
-                myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
+                myTimeoutID = setTimeout(function () {
+                    $('#show-message').hide();
+                    chooseTutorial();
+                }, TIMEOUT);
                 noTimeout = false;
             }, 500);
+            break;
         }
-    } else {
-        setTimeout(function () {
-            SIM.relatives2coordinates(configData);
-            var blocks = blocklyWorkspace.getAllBlocks();
-            var toDelete = 1;
-            if (tutorial.step[step - 1]) {
-                toDelete = blocks.length - tutorial.step[step - 1].maxBlocks;
-            } else {
-                toDelete = blocks.length - 1; // start block always stays
-            }
-            for (i = 0; i < toDelete; i++) {
-                blocks[blocks.length - 2].dispose(true, true);
-                blocks = blocklyWorkspace.getAllBlocks();
-            }
-            // $("#state").fadeOut(550, function() {
-            //     $("#state").removeClass("typcn-eye-outline").addClass("typcn-hand").fadeIn(550);
-            // });
-            Blockly.hideChaff();
-            $('.blocklyWorkspace>.blocklyFlyout').fadeIn();
-            myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
-            noTimeout = false;
-        }, 500);
+        default:
+            break;
     }
 }
 
 function checkSolutionCorrect(blocks) {
     if (tutorial.step[step].solution) {
-        for (i = 0; i < tutorial.step[step].solution.length; i++) {
-            if (blocks[i + 1].type != tutorial.step[step].solution[i]) {
-                return false;
+        for (let i = 0; i < tutorial.step[step].solution.length; i++) {
+            let solution = tutorial.step[step].solution[i].split(',');
+            if (blocks[i + 1].type != solution[0]) {
+                if (solution[0].indexOf('collect') >= 0) {
+                    return Error.Collect;
+                } else if (blocks[i + 1].type.indexOf('collect') >= 0) {
+                    return Error.NoCollect;
+                } else {
+                    return Error.Direction;
+                }
+            } else {
+                if (solution[1]) {
+                    if (blocks[i + 1].getFieldValue('NUMBER') !== solution[1]) {
+                        return Error.Steps;
+                    }
+                }
             }
         }
     }
-    return true;
+    return Error.No;
 }
 
 function showOverview() {
@@ -302,29 +433,34 @@ function showOverview() {
         });
     } else if (tutorial.startView) {
         GUISTATE_C.setRunEnabled(true);
-        $('#tutorialStartView .modal-dialog').show();
-        $('#tutorialStartViewText').html("<img height='401px' src='css/img/DieMaus_KV_Museum_mit_der_Maus_RGB.png' alt='Die Maus'>");
-        $('#volksbotStart').one('click', function () {
-            clearTimeout(myTimeoutID);
-            $('#startAudio').one('ended', audioEnd);
-            $('#volksbotStart').hide('slow'); //prop('disabled', true);
-            $('#startAudio')[0].play();
-            return;
-        });
         clearTimeout(myTimeoutID);
-        $('#tutorialStartView').modal({
-            backdrop: 'static',
-            keyboard: false,
-            show: true,
-        });
+        $('#tutorialStartView .modal-dialog').show();
+        $('#tutorialChoose').hide();
+        $('#tutorialIntro').hide().html(tutorial.startView).fadeIn('slow');
+        if (level === 0) {
+            $('#tutorialIntro').removeClass('text', 'start');
+            $('#tutorialIntro').addClass('video');
+            $('#startAudio').one('ended', audioEnd);
+            $('#startAudio')[0].play();
+        } else {
+            $('#tutorialIntro').removeClass('video', 'start');
+            $('#tutorialIntro').addClass('text');
+            $('#startButton').fadeIn('3000');
+            myTimeoutID = setTimeout(chooseTutorial, READ_TIMEOUT);
+            $('#volksbotStart').one('click', function () {
+                $('#tutorialStartView').modal('hide');
+                clearTimeout(myTimeoutID);
+                myTimeoutID = setTimeout(chooseTutorial, TIMEOUT);
+                return false;
+            });
+        }
     }
 }
 
 function audioEnd() {
     setTimeout(function () {
-        $('#tutorialStartViewText').hide().html(tutorial.startView).fadeIn('slow');
         $('#startVideo').one('ended', videoEnd);
-        //$('#startVideo')[0].play();
+        $('#startVideo')[0].play();
     }, 500);
 }
 
@@ -332,7 +468,7 @@ function videoEnd() {
     $('#volksbotStart').show('slow'); //prop('disabled', false);
     $('#tutorialStartView').modal('hide');
     clearTimeout(myTimeoutID);
-    myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
+    myTimeoutID = setTimeout(chooseTutorial, TIMEOUT);
 }
 
 function createInstruction() {
@@ -429,7 +565,7 @@ function createInstruction() {
             }
         }
         if (tutorial.step[step].simulationSettings) {
-            SIM.relatives2coordinates(tutorial.step[step].simulationSettings);
+            SIM.loadConfigData(tutorial.step[step].simulationSettings);
         }
     }
 }
@@ -687,6 +823,7 @@ function exitTutorial() {
 }
 
 function updateDonutChart(el, percent) {
+    console.log('a');
     percent = Math.round(percent);
     if (percent > 100) {
         percent = 100;
@@ -706,4 +843,20 @@ function updateDonutChart(el, percent) {
     $(el + ' .left-side').css('border-width', '0.5em');
     $(el + ' .shadow').css('border-width', '0.5em');
     $(el + ' .left-side').css('transform', 'rotate(' + deg + 'deg)');
+}
+
+function configureLEDs(payload) {
+    return $.ajax({
+        url: 'http://192.168.0.136:5555/Home/Message/1?payload=' + payload,
+        type: 'GET',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: '',
+        success: function (result) {
+            console.log(result);
+        },
+        error: function (error) {
+            console.error(error);
+        },
+    });
 }

@@ -14,6 +14,9 @@ import de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateLeft;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateRight;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.StepBackward;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.StepForward;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.TCollectColor;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.TStepBackward;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.TStepForward;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.raspberrypi.MainTaskSimple;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -52,7 +55,10 @@ public class VolksbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<
 
     @Override
     public V visitStepBackward(StepBackward<V> stepBackward) {
-        DriveDirection driveDirection = DriveDirection.BACKWARD;
+        return visitOneStep(DriveDirection.BACKWARD);
+    }
+
+    private V visitOneStep(DriveDirection driveDirection){
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, SPEED));
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, STEP_CM));
         app(
@@ -64,6 +70,24 @@ public class VolksbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<
         app(makeNode(C.STOP_DRIVE).put(C.NAME, "volksbot"));
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, STEP_PAUSE));
         return app(makeNode(C.WAIT_TIME_STMT));
+    }
+
+    @Override
+    public V visitTStepForward(TStepForward<V> tStepForward) {
+        int times = Integer.parseInt(tStepForward.number);
+        for (int i = 0; i<times;i++){
+            visitOneStep(DriveDirection.FOREWARD);
+        }
+        return null;
+    }
+
+    @Override
+    public V visitTStepBackward(TStepBackward<V> tStepBackward) {
+        int times = Integer.parseInt(tStepBackward.number);
+        for ( int i = 0; i < times; i++ ) {
+            visitOneStep(DriveDirection.BACKWARD);
+        }
+        return null;
     }
 
     @Override
@@ -144,6 +168,16 @@ public class VolksbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<
         app(makeNode(C.STOP_DRIVE).put(C.NAME, "volksbot"));
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, STEP_PAUSE));
         return app(makeNode(C.WAIT_TIME_STMT));
+    }
+
+    @Override
+    public V visitTCollectColor(TCollectColor<V> tCollectColor) {
+        String mode = "double_flash";
+        String color = "#00ff00";
+        app(makeNode(C.LIGHT_ACTION).put(C.MODE, mode).put(C.COLOR, color));
+        app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, STEP_PAUSE * 2));
+        app(makeNode(C.WAIT_TIME_STMT));
+        return app(makeNode(C.LIGHT_ACTION).put(C.MODE, "off"));
     }
 
     @Override

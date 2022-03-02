@@ -1256,10 +1256,15 @@ button#simCustomObstacle.typcn:before {
     border-radius: 2px;
 }
 
-.modal-body {
-    padding: 0 16px;
+#tutorialChoose {
+    background: url(../../../../css/img/volksbotBackground.jpg) 0% 0% / 100% repeat;
+    text-align:center;
+    padding: 30px;
 }
-
+#tutorialChoose span {
+    margin: 30px 0;
+    display:inline-block;
+}
 .modal-body.left-inner-addon {
     word-break: break-word;
 }
@@ -1348,7 +1353,8 @@ button#simCustomObstacle.typcn:before {
     margin-left: 0;
     background-color: #BACC1E;
     color: #fff;
-    font-size: 16px;
+    font-family: WDR;
+    font-size: 30px;
     border: none;
     border-radius: 2px;
     -webkit-box-shadow: none;
@@ -1358,15 +1364,36 @@ button#simCustomObstacle.typcn:before {
 }
 
 .btn.volksbot {
-    background-color: #E2001A;
+    background-color: #ce0037;
     color: #fff;
     border: none;
     height: 75px;
-    width: 75px;
+    width: 225px;
+    border-radius: 20px;
+    font-family: WDR;
+    font-size: 36px;
+    font-weight: 600;
+    margin: auto;
+}
+
+.sgn.volksbot {
+    background-color: #ce0037;
+    color: #fff;
+    border: none;
+    height: 100px;
+    width: 100px;
     border-radius: 50%;
     font-family: WDR;
-    font-size: 25px;
+    font-size: 45px;
     font-weight: 600;
+    padding: 20px;
+}
+
+.sgn.volksbot:hover,
+.sgn.volksbot:active:focus,
+.sgn.volksbot:focus,
+.sgn.volksbot:active {
+    background-color: #ce0037;
 }
 
 .btn.volksbot:hover,
@@ -1835,6 +1862,16 @@ td.bs-checkbox {
     font-size: 24px;
     top: 4px;
     left: 40px;
+}
+#tutorialIntro {
+    padding:35px;
+}
+#tutorialIntro.text {
+    text-align:left;
+    font-size: 20px;
+}
+#tutorialIntro.video {
+    text-align:center;
 }
 
 div.imgSol img, div.imgSol svg {
@@ -2705,6 +2742,31 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
     font-size: 18px;
 }
 
+#tutorialStartView, .modal-body.left-inner-addon{
+    font-family: WDR;
+    font-size: 30px;
+}
+#tutorialStartView span{
+    font-size: 30px;
+}
+
+#tutorialIntro img{
+    height: 45px !important;
+    width: auto !important;
+}
+#tutorialIntro video{
+    height: 674px !important;
+    width: auto !important;
+}
+
+#show-message .modal-content {
+    padding: 20px;
+}
+
+.tutorialStart {
+    font-weight: 600;
+}
+
 #tutorial-navigation {
     display: none;
 }
@@ -3290,21 +3352,34 @@ pre code {
     cursor: default !important;
 }
 
-#mausLogo {
+.mausLogo {
     position: absolute;
-    left: 0;
+    right: 0;
     bottom: 0;
-    margin: 12px;
+    margin: 90px 30px;
     pointer-events: none !important;
 }
 
-#mausLogo > img {
-    height: 200px;
+.mausLogo > img {
+    height: 300px;
 }
 
 #helpTutorial {
     position: absolute;
     left: 40%;
+    bottom: 0;
+    margin: 12px;
+    font-size: 36px;
+    z-index: 999;
+    border: solid 2px;
+    border-radius: 2px;
+    background-color: white;
+    width: 50px;
+    height: 50px;
+}
+#exit {
+    position: absolute;
+    left: 45%;
     bottom: 0;
     margin: 12px;
     font-size: 36px;
@@ -3426,7 +3501,7 @@ pre code {
 }
 
 .donut-size {
-    font-size: 12em;
+    font-size: 20em;
 }
 
 .pie-wrapper {

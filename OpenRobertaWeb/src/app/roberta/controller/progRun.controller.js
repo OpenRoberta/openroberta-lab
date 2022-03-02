@@ -57,6 +57,7 @@ function runNative(sourceCode) {
 function runOnBrick() {
     GUISTATE_C.setPing(false);
     GUISTATE_C.setConnectionState('busy');
+    $('#volksbotStart').prop('disabled', true);
     LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick');
 
     var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
@@ -158,6 +159,9 @@ function runForAutoConnection(result) {
         } else if (GUISTATE_C.getConnection() == GUISTATE_C.getConnectionTypeEnum().LOCAL) {
             setTimeout(function () {
                 GUISTATE_C.setConnectionState('wait');
+                $('#volksbotStart').prop('disabled', false);
+                $('#specificChart').hide();
+                tutorialController.chooseTutorial();
             }, 5000);
             MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         } else {
@@ -214,9 +218,9 @@ function runForAutoConnection(result) {
     } else {
         GUISTATE_C.setConnectionState('wait');
         //MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-        $('#specificChart').hide();
-        $('#volksbotStart').prop('disabled', false);
-        $('#tutorialStartView').modal('hide');
+        //$('#specificChart').hide();
+        //$('#volksbotStart').prop('disabled', false);
+        //tutorialController.chooseTutorial();
     }
 }
 

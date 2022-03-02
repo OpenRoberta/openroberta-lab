@@ -120,6 +120,7 @@ define(["require", "exports", "simulation.simulation", "simulation.math", "util"
         this.mCtx.clearRect(this.ruler.xOld - 20, this.ruler.yOld - 20, this.ruler.wOld + 40, this.ruler.hOld + 40);
         this.mCtx.restore();
         this.mCtx.save();
+        console.log(this.ruler.img + ' ' + this.ruler.x + ' ' + this.ruler.y + ' ' + this.ruler.w + ' ' + this.ruler.h);
         if (this.ruler.img) {
             this.ruler.xOld = this.ruler.x;
             this.ruler.yOld = this.ruler.y;
@@ -417,7 +418,7 @@ define(["require", "exports", "simulation.simulation", "simulation.math", "util"
             if (this.robots[r].led && !this.robots[r].leds) {
                 this.rCtx.fillStyle = this.robots[r].led.color;
                 this.rCtx.beginPath();
-                this.rCtx.arc(this.robots[r].led.x, this.robots[r].led.y, 2.5, 0, Math.PI * 2);
+                this.rCtx.arc(this.robots[r].led.x, this.robots[r].led.y, 15, 0, Math.PI * 2);
                 this.rCtx.fill();
             }
             if (this.robots[r].leds) {
