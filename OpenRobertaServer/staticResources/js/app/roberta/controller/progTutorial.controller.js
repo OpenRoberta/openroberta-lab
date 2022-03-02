@@ -69,6 +69,9 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
                 });
             }
         });
+        $('#exit').on('click', function () {
+            chooseTutorial();
+        });
     }
     function chooseTutorial(opt_init) {
         clearTimeout(myTimeoutID);

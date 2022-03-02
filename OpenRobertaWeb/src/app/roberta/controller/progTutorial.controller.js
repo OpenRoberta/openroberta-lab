@@ -76,6 +76,9 @@ function initEvents() {
             });
         }
     });
+    $('#exit').on('click', function () {
+        chooseTutorial();
+    });
 }
 
 function chooseTutorial(opt_init) {
