@@ -119,6 +119,7 @@ int main () {
     startLoggingThread(OUT_BC);
     srand (time(NULL));
     
+
     math();
     lists();
     
