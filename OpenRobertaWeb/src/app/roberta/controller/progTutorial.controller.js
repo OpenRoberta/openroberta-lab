@@ -231,12 +231,12 @@ function blocklyListener(event) {
             }, CHANGE_TIMEOUT);
             return;
         }
-        once = false;
         configData = SIM.exportConfigData();
         noTimeout = true;
         var blocks = blocklyWorkspace.getAllBlocks();
         for (var i = 0; i < blocks.length; i++) {
             blocks[i].setMovable(false);
+            blocks[i]['markNotChangeable'] = true;
         }
         // only allow blocks to be moved at the end of the program
         if (blocks[blocks.length - 2].id !== event.blockId) {
@@ -264,6 +264,7 @@ function simTerminatedListener() {
     clearTimeout(myTimeoutID);
     switch (thisSolutionCorrect) {
         case Error.No: {
+            once = false;
             if (step + 1 >= maxSteps) {
                 blocks[blocks.length - 1].dispose(false, true);
                 for (var i = 0; i < blocks.length - 1; i++) {
@@ -289,24 +290,18 @@ function simTerminatedListener() {
                         $('#menuRunProg').trigger('click');
                         $('#tutorialStartView .modal-dialog').hide();
                         $('#specificChart').show();
-                        waitClock(1);
+                        waitClock(120);
                         return false;
-                    }, 1000);
+                    }, 500);
                 });
                 $('#tutorialIntro').html(tutorial.end).fadeIn('slow');
-                $('#tutorialStartView').one('hidden.bs.modal', function (e) {
-                    setTimeout(function () {
-                        chooseTutorial(true);
-                    }, 1000);
-                    return;
-                });
                 setTimeout(function () {
                     $('#tutorialStartView').modal({
                         backdrop: 'static',
                         keyboard: false,
                         show: true,
                     });
-                });
+                }, 500);
             } else {
                 for (var i = 1; i < blocks.length; i++) {
                     blocks[i].setDisabled(true);
@@ -365,6 +360,7 @@ function simTerminatedListener() {
         }
         case Error.Steps: {
             setTimeout(function () {
+                blocks[blocks.length - 2]['markNotChangeable'] = false;
                 SIM.loadConfigData(configData);
                 Blockly.hideChaff();
                 MSG.displayMessage('Wähle die richtige Anzahl an Feldern, die vorwärts gefahren werden sollen.', 'POPUP', '');
@@ -823,7 +819,6 @@ function exitTutorial() {
 }
 
 function updateDonutChart(el, percent) {
-    console.log('a');
     percent = Math.round(percent);
     if (percent > 100) {
         percent = 100;

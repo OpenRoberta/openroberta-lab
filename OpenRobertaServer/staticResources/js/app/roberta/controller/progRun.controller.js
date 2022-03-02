@@ -189,9 +189,11 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
         else {
             GUISTATE_C.setConnectionState('wait');
             //MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-            //$('#specificChart').hide();
-            //$('#volksbotStart').prop('disabled', false);
-            //tutorialController.chooseTutorial();
+            setTimeout(function () {
+                $('#specificChart').hide();
+                $('#volksbotStart').prop('disabled', false);
+                tutorialController.chooseTutorial();
+            }, 500);
         }
     }
     /**

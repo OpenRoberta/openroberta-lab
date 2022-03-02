@@ -2750,10 +2750,6 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
     font-size: 30px;
 }
 
-#tutorialIntro img{
-    height: 45px !important;
-    width: auto !important;
-}
 #tutorialIntro video{
     height: 674px !important;
     width: auto !important;
@@ -3503,14 +3499,12 @@ pre code {
 .donut-size {
     font-size: 20em;
 }
-
 .pie-wrapper {
     position: relative;
     width: 1em;
     height: 1em;
     margin: 0px auto;
 }
-
 .pie {
     position: absolute;
     top: 0px;
@@ -3519,7 +3513,6 @@ pre code {
     height: 100%;
     clip: rect(0, 1em, 1em, 0.5em);
 }
-
 .half-circle {
     position: absolute;
     top: 0px;
@@ -3530,25 +3523,21 @@ pre code {
     border-radius: 50%;
     clip: rect(0em, 0.5em, 1em, 0em);
 }
-
 .right-side {
     transform: rotate(0deg);
 }
-
 .smaller {
     padding-bottom: 20px;
-    color: $ pie-shadow;
+    color: $pie-shadow;
     font-size: .45em;
     vertical-align: super;
 }
-
 .shadow {
     width: 100%;
     height: 100%;
     border: 0.1em solid #44b59d;
     border-radius: 50%;
 }
-
 path.blocklyPath.dummyBlock {
     stroke: #FA8200;
     stroke-width: 3px;

@@ -74,7 +74,7 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
                             else {
                                 MSG.displayInformation(result, '', result.message, '');
                             }
-                            PROG_C.reloadProgram(result);
+                            //PROG_C.reloadProgram(result);
                         });
                     }
                     else {

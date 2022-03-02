@@ -96,7 +96,7 @@ function initEvents() {
                             } else {
                                 MSG.displayInformation(result, '', result.message, '');
                             }
-                            PROG_C.reloadProgram(result);
+                            //PROG_C.reloadProgram(result);
                         });
                     } else {
                         $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
