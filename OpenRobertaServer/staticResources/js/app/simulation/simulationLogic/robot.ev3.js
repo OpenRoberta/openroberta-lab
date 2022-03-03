@@ -662,8 +662,11 @@ define(["require", "exports", "simulation.simulation", "interpreter.constants", 
                 oscillator.start(cT);
                 oscillator.stop(cT + tone.duration / 1000.0);
             }
-            if (tone.file !== undefined) {
+            else if (tone.file !== undefined) {
                 this.tone.file[tone.file](this.webAudio);
+            }
+            else {
+                oscillatorFinish();
             }
         }
         // update sayText
