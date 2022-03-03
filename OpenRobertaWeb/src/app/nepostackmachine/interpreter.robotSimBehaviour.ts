@@ -150,7 +150,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         this.hardwareState.actions.tone = {};
         this.hardwareState.actions.tone.frequency = frequency;
         this.hardwareState.actions.tone.duration = duration;
-        this.setBlocking(true);
+        this.setBlocking(duration > 0);
         return 0;
     }
 
@@ -354,7 +354,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         U.debug('***** show "' + showText + '" *****');
         this.hardwareState.actions.display = {};
         this.hardwareState.actions.display[mode.toLowerCase()] = showText;
-        this.setBlocking(true);
+        this.setBlocking(text.length > 0);
         return 0;
     }
 
