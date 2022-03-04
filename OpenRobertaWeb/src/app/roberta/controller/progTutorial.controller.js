@@ -847,7 +847,7 @@ function configureLEDs(payload) {
     return $.ajax({
         url: 'http://192.168.0.136:5555/Home/Message/1?payload=' + payload,
         type: 'GET',
-        contentType: 'application/json',
+        crossDomain: true,
         dataType: 'json',
         data: '',
         success: function (result) {

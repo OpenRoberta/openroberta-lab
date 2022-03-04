@@ -162,7 +162,7 @@ function runForAutoConnection(result) {
                 $('#volksbotStart').prop('disabled', false);
                 $('#specificChart').hide();
                 tutorialController.chooseTutorial();
-            }, 5000);
+            }, 500);
             MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         } else {
             createDownloadLink(filename, result.compiledCode);
