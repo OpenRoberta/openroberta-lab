@@ -334,7 +334,7 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
                     }, 500);
                 }
                 if (thisSolutionCorrect === Error.Direction) {
-                    correct('Es gibt einen kürzeren Weg. Überlege noch einmal und wähle den passenden Programmierbefehl!');
+                    correct('Das ist nicht der richtige Weg. Überlege noch einmal und wähle den passenden Programmierbefehl!');
                 }
                 else if (thisSolutionCorrect === Error.Collect) {
                     correct('Die Aufgabe des Roboters ist, die grünen Felder einzusammeln. Ergänze diesen Schritt!');

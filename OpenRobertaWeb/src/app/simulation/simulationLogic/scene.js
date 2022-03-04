@@ -35,6 +35,7 @@ function Scene(backgroundImg, robots, pattern, ruler) {
     };
     this.wave = 0.0;
     this.waves = [];
+    this.ledRadius = 10;
     for (var i = 0; i < this.numprogs; i++) {
         this.waves.push(0.0);
     }
@@ -130,7 +131,6 @@ Scene.prototype.drawRuler = function () {
     this.mCtx.clearRect(this.ruler.xOld - 20, this.ruler.yOld - 20, this.ruler.wOld + 40, this.ruler.hOld + 40);
     this.mCtx.restore();
     this.mCtx.save();
-    console.log(this.ruler.img + ' ' + this.ruler.x + ' ' + this.ruler.y + ' ' + this.ruler.w + ' ' + this.ruler.h);
     if (this.ruler.img) {
         this.ruler.xOld = this.ruler.x;
         this.ruler.yOld = this.ruler.y;
@@ -453,10 +453,26 @@ Scene.prototype.drawRobots = function () {
 
         //LED
         if (this.robots[r].led && !this.robots[r].leds) {
-            this.rCtx.fillStyle = this.robots[r].led.color;
-            this.rCtx.beginPath();
-            this.rCtx.arc(this.robots[r].led.x, this.robots[r].led.y, 15, 0, Math.PI * 2);
-            this.rCtx.fill();
+            if (this.robots[r].led.color == 'LIGHTGREY') {
+                this.ledRadius = this.ledRadius > 20 ? 10 : this.ledRadius;
+                this.rCtx.lineWidth = 5;
+                this.rCtx.fillStyle = this.robots[r].led.color;
+                this.rCtx.beginPath();
+                this.rCtx.arc(this.robots[r].led.x, this.robots[r].led.y, 10, 0, Math.PI * 2);
+                this.rCtx.fill();
+            } else {
+                this.ledRadius += 2;
+                this.rCtx.lineWidth = 10;
+                this.rCtx.strokeStyle = this.robots[r].led.color;
+                this.rCtx.fillStyle = this.robots[r].led.color;
+                this.rCtx.beginPath();
+                this.rCtx.arc(this.robots[r].led.x, this.robots[r].led.y, this.ledRadius, 0, Math.PI * 2);
+                this.rCtx.stroke();
+                this.rCtx.lineWidth = 1;
+                this.rCtx.beginPath();
+                this.rCtx.arc(this.robots[r].led.x, this.robots[r].led.y, 10, 0, Math.PI * 2);
+                this.rCtx.fill();
+            }
         }
         if (this.robots[r].leds) {
             for (var port in this.robots[r].leds) {

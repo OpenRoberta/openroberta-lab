@@ -1,28 +1,20 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.List;
-
-import org.json.JSONObject;
-
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.Dummy;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateLeft;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateRight;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.StepBackward;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.StepForward;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.TCollectColor;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.TStepBackward;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.TStepForward;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.*;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.raspberrypi.MainTaskSimple;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.C;
 import de.fhg.iais.roberta.visitor.IVolksbotVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
+import org.json.JSONObject;
+
+import java.util.List;
 
 public class VolksbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IVolksbotVisitor<V> {
     private final static int SPEED = 100;
@@ -175,7 +167,7 @@ public class VolksbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<
         String mode = "double_flash";
         String color = "#00ff00";
         app(makeNode(C.LIGHT_ACTION).put(C.MODE, mode).put(C.COLOR, color));
-        app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, STEP_PAUSE * 2));
+        app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 3100));
         app(makeNode(C.WAIT_TIME_STMT));
         return app(makeNode(C.LIGHT_ACTION).put(C.MODE, "off"));
     }

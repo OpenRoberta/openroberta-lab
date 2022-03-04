@@ -215,7 +215,7 @@ Volksbot.prototype.update = function () {
             case C.OFF:
                 this.led.timer = 0;
                 this.led.blink = 0;
-                this.led.color = 'LIGHTGRAY';
+                this.led.color = 'LIGHTGREY';
                 break;
             case C.ON:
                 this.led.timer = 0;
@@ -232,13 +232,16 @@ Volksbot.prototype.update = function () {
     if (this.led.blink > 0) {
         if (this.led.timer > 0.5 && this.led.blink == 2) {
             this.led.color = this.led.blinkColor;
-        } else if (this.led.blink == 4 && ((this.led.timer > 0.5 && this.led.timer < 0.67) || this.led.timer > 0.83)) {
+        } else if (
+            this.led.blink == 4 &&
+            ((this.led.timer > 0.5 && this.led.timer < 1) || (this.led.timer > 1.5 && this.led.timer < 2) || this.led.timer > 2.5)
+        ) {
             this.led.color = this.led.blinkColor;
         } else {
-            this.led.color = 'LIGHTGRAY';
+            this.led.color = 'LIGHTGREY';
         }
         this.led.timer += SIM.getDt();
-        if (this.led.timer > 1.0) {
+        if (this.led.timer > 3) {
             this.led.timer = 0;
         }
     }
