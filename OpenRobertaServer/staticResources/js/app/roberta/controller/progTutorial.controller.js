@@ -11,7 +11,7 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
     var maxCredits = [];
     var quiz = false;
     var configData = {};
-    var TIMEOUT = 25000;
+    var TIMEOUT = 35000;
     var READ_TIMEOUT = 30000;
     var CHANGE_TIMEOUT = 10000;
     var myTimeoutID;
@@ -205,7 +205,11 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
     var once = false;
     function blocklyListener(event) {
         if (event.blockId !== 'step_dummy' && (event.newParentId || (event.name && event.name === 'NUMBER')) && blocklyWorkspace.remainingCapacity() == 0) {
+            var blocks = blocklyWorkspace.getAllBlocks();
             if (checkSolutionCorrect(blocklyWorkspace.getAllBlocks()) === -4 && !once) {
+                for (var i = 0; i < blocks.length; i++) {
+                    blocks[i].setMovable(false);
+                }
                 once = true;
                 clearTimeout(myTimeoutID);
                 myTimeoutID = setTimeout(function () {
@@ -215,7 +219,6 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
             }
             configData = SIM.exportConfigData();
             noTimeout = true;
-            var blocks = blocklyWorkspace.getAllBlocks();
             for (var i = 0; i < blocks.length; i++) {
                 blocks[i].setMovable(false);
                 blocks[i]['markNotChangeable'] = true;
@@ -277,6 +280,7 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
                         }, 500);
                     });
                     $('#tutorialIntro').html(tutorial.end).fadeIn('slow');
+                    $('#startButton').fadeIn('1000');
                     setTimeout(function () {
                         $('#tutorialStartView').modal({
                             backdrop: 'static',
@@ -789,7 +793,7 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
     }
     function configureLEDs(payload) {
         return $.ajax({
-            url: 'http://192.168.0.136:5555/Home/Message/1?payload=' + payload,
+            url: 'http://192.168.0.204:5555/Home/Message/1?payload=' + payload,
             type: 'GET',
             crossDomain: true,
             dataType: 'json',

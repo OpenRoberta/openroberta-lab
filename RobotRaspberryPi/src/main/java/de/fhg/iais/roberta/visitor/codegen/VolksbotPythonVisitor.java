@@ -1,24 +1,16 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.List;
-
 import com.google.common.collect.ClassToInstanceMap;
-
 import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.Dummy;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateLeft;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateRight;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.StepBackward;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.StepForward;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.TCollectColor;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.TStepBackward;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.TStepForward;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.*;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.raspberrypi.MainTaskSimple;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.IVolksbotVisitor;
+
+import java.util.List;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
@@ -113,7 +105,7 @@ public class VolksbotPythonVisitor extends RaspberryPiPythonVisitor implements I
         nlIndent();
         this.sb.append("time.sleep(1)");
         nlIndent();
-        this.sb.append("Turn(keyhandle, 60, -60)");
+        this.sb.append("Turn(keyhandle, 65, -65)");
         nlIndent();
         this.sb.append("time.sleep(1)");
         nlIndent();

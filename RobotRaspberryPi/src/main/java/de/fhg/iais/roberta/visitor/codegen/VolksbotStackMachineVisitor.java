@@ -165,7 +165,7 @@ public class VolksbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<
     @Override
     public V visitTCollectColor(TCollectColor<V> tCollectColor) {
         String mode = "double_flash";
-        String color = "#00ff00";
+        String color = "#97d700";
         app(makeNode(C.LIGHT_ACTION).put(C.MODE, mode).put(C.COLOR, color));
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 3100));
         app(makeNode(C.WAIT_TIME_STMT));
