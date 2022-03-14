@@ -38,4 +38,21 @@ public class TTSLanguageMapper {
         }
     }
 
+    public static String getLanguageCountryString(ILanguage language) {
+        switch ( (Language) language ) {
+            case GERMAN:
+                return "de-DE";
+            case ENGLISH:
+                return "en-GB";
+            case FRENCH:
+                return "fr-FR";
+            case SPANISH:
+                return "es-ES";
+            case ITALIAN:
+                return "it-IT";
+            default:
+                return "en-GB";
+        }
+    }
+
 }

@@ -1,15 +1,9 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.ClassToInstanceMap;
-
 import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
-import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
@@ -32,11 +26,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
-import de.fhg.iais.roberta.syntax.lang.stmt.IntentStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.*;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -46,6 +36,10 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
@@ -59,10 +53,9 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
      * initialize the Python code generator visitor.
      *
      * @param brickConfiguration hardware configuration of the brick
-     * @param programPhrases to generate the code from
+     * @param programPhrases     to generate the code from
      */
-    public RaspberryPiPythonVisitor(
-        List<List<Phrase<Void>>> programPhrases, ILanguage language, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
+    public RaspberryPiPythonVisitor(List<List<Phrase<Void>>> programPhrases, ILanguage language, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
         this.language = language;
         this.brickConfiguration = brickConfiguration;
@@ -95,7 +88,7 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( timerSensor.getMode() ) {
+        switch (timerSensor.getMode()) {
             case SCRaspberryPi.INTENT:
             case SCRaspberryPi.DEFAULT:
             case SCRaspberryPi.VALUE:
@@ -122,53 +115,38 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
         variables.accept(this);
         //nlIndent();
         nlIndent();
-        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.SOUND) ) {
+        if (this.getBean(UsedHardwareBean.class).isActorUsed(SC.SOUND)) {
             this.usedGlobalVarInFunctions.add("__volume");
-            this.sb.append("__volume = 100");
+            this.sb.append("__volume = 50");
             nlIndent();
         }
         this.sb.append("board = Board()");
         nlIndent();
         String modelLanguage = "en";
-        if ( TTSLanguageMapper.getLanguageString(this.language).equals("de") ) {
+        if (TTSLanguageMapper.getLanguageString(this.language).equals("de")) {
             modelLanguage = TTSLanguageMapper.getLanguageString(this.language);
         }
         this.sb.append("rSR = RobertaSpeechRecognition(\"").append(modelLanguage).append("\", vocabulary_list)");
 
         generateUserDefinedMethods();
-        if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
+        if (!this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty()) {
             String helperMethodImpls = this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
             this.sb.append(helperMethodImpls);
         }
-        this.programPhrases.stream().filter(phrase -> phrase.getKind().getCategory() == Category.DIALOG).forEach(e -> e.accept(this));
         nlIndent();
         this.sb.append("def run():");
         incrIndentation();
         List<Stmt<Void>> variableList = variables.get();
-        if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
+        if (!this.usedGlobalVarInFunctions.isEmpty()) {
             nlIndent();
             this.sb.append("global ").append(String.join(", ", this.usedGlobalVarInFunctions));
         }
-        if ( !variableList.isEmpty() ) {
+        if (!variableList.isEmpty()) {
             nlIndent();
         }
         nlIndent();
         this.sb.append("signal.signal(signal.SIGTERM, _signal_handler)");
         return null;
-    }
-
-    @Override
-    public void generateCode(boolean withWrapping) {
-        generateProgramPrefix(withWrapping);
-        generateProgramMainBody();
-        generateProgramSuffix(withWrapping);
-    }
-
-    private void generateProgramMainBody() {
-        this.programPhrases.stream().filter(phrase -> (phrase.getKind().getCategory() != Category.METHOD && phrase.getKind().getCategory() != Category.DIALOG) || phrase.getKind().hasName("METHOD_CALL")).forEach(p -> {
-            nlIndent();
-            p.accept(this);
-        });
     }
 
     @Override
@@ -178,7 +156,7 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
 
     @Override
     protected void generateProgramPrefix(boolean withWrapping) {
-        if ( !withWrapping ) {
+        if (!withWrapping) {
             return;
         }
         this.sb.append("#!/usr/bin/python");
@@ -198,6 +176,8 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
         nlIndent();
         this.sb.append("import sys");
         nlIndent();
+        this.sb.append("import string");
+        nlIndent();
         this.sb.append("import signal");
         nlIndent();
         nlIndent();
@@ -205,17 +185,19 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
         nlIndent();
         this.sb.append("class ContinueLoop(Exception): pass");
         nlIndent();
-        if ( !this.getBean(UsedHardwareBean.class).getUsedIntents().isEmpty() ) {
+        if (!this.getBean(UsedHardwareBean.class).getUsedIntents().isEmpty()) {
             nlIndent();
             List<String> vocabularyList = new ArrayList<>();
-            for ( ConfigurationComponent usedConfigurationBlock : this.brickConfiguration.getConfigurationComponentsValues() ) {
-                switch ( usedConfigurationBlock.getComponentType() ) {
+            for (ConfigurationComponent usedConfigurationBlock : this.brickConfiguration.getConfigurationComponentsValues()) {
+                switch (usedConfigurationBlock.getComponentType()) {
                     case SCRaspberryPi.INTENT:
                     case SCRaspberryPi.SLOT:
                         String varName = usedConfigurationBlock.getComponentType() + "_" + usedConfigurationBlock.getUserDefinedPortName().toLowerCase();
-                        this.sb.append(varName).append(" = [\"");
+                        this.sb.append(varName).append(" = [");
+                        this.sb.append("s.translate(str.maketrans('','', string.punctuation)) for s in [\"");
                         this.sb.append(usedConfigurationBlock.getComponentProperties().values().stream().map(String::toLowerCase).collect(Collectors.joining("\", \"")));
                         this.sb.append("\"]");
+                        this.sb.append("]");
                         vocabularyList.add(varName);
                         nlIndent();
                         break;
@@ -229,61 +211,17 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
             }
             this.sb.append("vocabulary_list = ");
             this.sb.append(String.join(" + ", vocabularyList));
-            this.sb.append(" + [\"<UKN>\"]");
+            this.sb.append(" + [\"<UNK>\"]");
             nlIndent();
         }
     }
 
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
-        if ( !withWrapping ) {
+        if (!withWrapping) {
             return;
         }
         nlIndent();
-
-        if ( !this.getBean(UsedHardwareBean.class).getUsedIntents().isEmpty() ) {
-            this.sb.append("while True:");
-            incrIndentation();
-            nlIndent();
-            this.sb.append("myphrase = rSR.getRecognizedSpeech()");
-            nlIndent();
-            this.sb.append("if not myphrase:");
-            incrIndentation();
-            nlIndent();
-            this.sb.append("continue");
-            decrIndentation();
-            nlIndent();
-            this.sb.append("print(myphrase)");
-            nlIndent();
-            this.getBean(UsedHardwareBean.class).getUsedIntents().stream().findFirst().ifPresent(i -> {
-                this.sb.append("if intent_").append(i.toLowerCase()).append("(myphrase):");
-                incrIndentation();
-                nlIndent();
-                this.sb.append("pass");
-                decrIndentation();
-                nlIndent();
-            });
-            this.getBean(UsedHardwareBean.class).getUsedIntents().stream().skip(1).forEach(i -> {
-                this.sb.append("elif intent_").append(i.toLowerCase()).append("(myphrase):");
-                incrIndentation();
-                nlIndent();
-                this.sb.append("pass");
-                decrIndentation();
-                nlIndent();
-            });
-            this.sb.append("else:");
-            incrIndentation();
-            nlIndent();
-            String pleaseRepeat;
-            if ( TTSLanguageMapper.getLanguageString(this.language).equals("de") ) {
-                pleaseRepeat = "Ich habe das nicht verstanden, bitte versuchen Sie es noch einmal";
-            } else {
-                pleaseRepeat = "I did not understand, please try again";
-            }
-            this.sb.append("sP.call([\"espeak\", \"-v\", \"").append(TTSLanguageMapper.getLanguageString(this.language)).append("\", \"").append(pleaseRepeat).append("\"])");
-            decrIndentation();
-            nlIndent();
-        }
         decrIndentation();
         decrIndentation();
         nlIndent();
@@ -402,22 +340,25 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        this.sb.append("sP.call([\"espeak\", \"-a\", str(__volume), \"-v\", \"").append(TTSLanguageMapper.getLanguageString(this.language)).append("\", ");
+        this.sb.append("sP.call([\"amixer\", \"-D\", \"pulse\", \"set\", \"Master\", str(__volume) + \"%\" ])");
+        nlIndent();
+        this.sb.append("sP.call([\"pico2wave\", \"-l=").append(TTSLanguageMapper.getLanguageCountryString(this.language)).append("\", ").append("\"-w\", \"/tmp/a.wav\", ");
         sayTextAction.getMsg().accept(this);
         this.sb.append("])");
+        nlIndent();
+        this.sb.append("sP.call([\"aplay\", \"/tmp/a.wav\"])");
         return null;
     }
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        switch ( volumeAction.getMode() ) {
+        switch (volumeAction.getMode()) {
             case SET:
-                this.sb.append("__volume = (");
+                this.sb.append("__volume = ");
                 volumeAction.getVolume().accept(this);
-                this.sb.append(") * 2");
                 break;
             case GET:
-                this.sb.append("__volume / 2");
+                this.sb.append("__volume");
                 break;
             default:
                 throw new DbcException("Invalid volume action mode!");
@@ -427,51 +368,35 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
 
     @Override
     public Void visitIntentStmt(IntentStmt<Void> intentStmt) {
-        nlIndent();
-        nlIndent();
         String intentName = intentStmt.getIntent().toLowerCase();
-        this.sb.append("def intent_").append(intentName).append("(phrase):");
+        this.sb.append("_contains(myphrase.lower(), INTENT_").append(intentName.toLowerCase()).append("):");
         incrIndentation();
-        nlIndent();
-        if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
-            this.sb.append("global ").append(String.join(", ", this.usedGlobalVarInFunctions));
-            nlIndent();
-        }
-        this.sb.append("if _contains(phrase.lower(), INTENT_").append(intentName.toLowerCase()).append("):");
-        incrIndentation();
-        if ( intentStmt.get_elseIf() > 0 ) {
-            for ( int i = 0; i < intentStmt.getThenList().size(); i++ ) {
-                if ( !intentStmt.getExpr().get(i).getKind().hasName("EMPTY_EXPR") ) {
+        if (intentStmt.get_elseIf() > 0) {
+            for (int i = 0; i < intentStmt.getThenList().size(); i++) {
+                if (!intentStmt.getExpr().get(i).getKind().hasName("EMPTY_EXPR")) {
                     nlIndent();
-                    this.sb.append("if _contains(phrase.lower(), ");
+                    this.sb.append("if _contains(myphrase.lower(), ");
                     intentStmt.getExpr().get(i).accept(this);
                     this.sb.append("):");
                     incrIndentation();
                     intentStmt.getThenList().get(i).accept(this);
                     nlIndent();
-                    this.sb.append("return True");
+                    this.sb.append("break");
                     decrIndentation();
                 }
             }
             intentStmt.getElseList().accept(this);
             nlIndent();
-            this.sb.append("return True");
+            this.sb.append("break");
         } else {
             intentStmt.getElseList().accept(this);
             nlIndent();
-            if ( intentStmt.getIntent().toLowerCase().contentEquals("stop") ) {
+            if (intentStmt.getIntent().toLowerCase().contentEquals("stop")) {
                 this.sb.append("sys.exit()");
             } else {
-                this.sb.append("return True");
+                this.sb.append("break");
             }
         }
-        decrIndentation();
-        nlIndent();
-        this.sb.append("else:");
-        incrIndentation();
-        nlIndent();
-        this.sb.append("return False");
-        decrIndentation();
         decrIndentation();
         nlIndent();
         return null;
@@ -480,6 +405,52 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
     @Override
     public Void visitSlotSensor(SlotSensor<Void> slotSensor) {
         this.sb.append("SLOT_").append(slotSensor.getValue().toLowerCase());
+        return null;
+    }
+
+    @Override
+    public Void visitListenStepStmt(ListenStepStmt<Void> listenStepStmt) {
+        //addBreakLabelToLoop(isWaitStmt)
+        this.sb.append("while True:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("myphrase = rSR.getRecognizedSpeech()");
+        nlIndent();
+        this.sb.append("if not myphrase:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("continue");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("print(myphrase)");
+        nlIndent();
+        List<Stmt<Void>> intents = listenStepStmt.getIntents().get();
+        boolean first = true;
+        for (Stmt<Void> intent : intents) {
+            if (first) {
+                this.sb.append("if ");
+                first = false;
+            } else {
+                this.sb.append("elif ");
+            }
+            intent.accept(this);
+        }
+        nlIndent();
+        String pleaseRepeat;
+        if (TTSLanguageMapper.getLanguageString(this.language).equals("de")) {
+            pleaseRepeat = "Ich habe das nicht verstanden, bitte versuchen Sie es noch einmal";
+        } else {
+            pleaseRepeat = "I did not understand, please try again";
+        }
+        this.sb.append("sP.call([\"amixer\", \"-D\", \"pulse\", \"set\", \"Master\", \"50%\"])");
+        nlIndent();
+        this.sb.append("sP.call([\"pico2wave\", \"-l=").append(TTSLanguageMapper.getLanguageCountryString(this.language)).append("\", ").append("\"-w=/tmp/a.wav\", \"");
+        this.sb.append(pleaseRepeat);
+        this.sb.append("\"])");
+        nlIndent();
+        this.sb.append("sP.call([\"aplay\", \"/tmp/a.wav\"])");
+        decrIndentation();
+        nlIndent();
         return null;
     }
 

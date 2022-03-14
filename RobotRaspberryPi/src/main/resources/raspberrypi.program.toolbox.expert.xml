@@ -1,5 +1,6 @@
 <toolbox_set id="toolbox" style="display: none">
     <category name="TOOLBOX_DIALOG" svg="true">
+        <block type="robDialog_listen_step"></block>
         <block type="robDialog_intent"></block>
         <block type="robDialog_slot"></block>
     </category>
@@ -58,7 +59,7 @@
             <block type="robControls_wait_time">
                 <value name="WAIT">
                     <block type="math_number">
-                        <field name="NUM">2</field>
+                        <field name="NUM">500</field>
                     </block>
                 </value>
             </block>

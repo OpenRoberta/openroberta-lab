@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.syntax.action.raspberrypi.LedGetAction;
 import de.fhg.iais.roberta.syntax.action.raspberrypi.LedSetAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorHexString;
 import de.fhg.iais.roberta.syntax.lang.stmt.IntentStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.ListenStepStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensors.raspberrypi.SlotSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -31,5 +32,7 @@ public interface IRaspberryPiVisitor<V> extends ISpeechVisitor<V>, ISensorVisito
     public V visitIntentStmt(IntentStmt<V> intentStmt);
 
     public V visitSlotSensor(SlotSensor<V> slotSensor);
+
+    public V visitListenStepStmt(ListenStepStmt<V> listenStepStmt);
 
 }

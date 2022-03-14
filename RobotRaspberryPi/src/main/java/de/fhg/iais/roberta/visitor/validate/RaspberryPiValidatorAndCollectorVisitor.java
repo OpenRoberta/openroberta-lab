@@ -1,8 +1,8 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import com.google.common.collect.ClassToInstanceMap;
-
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
@@ -20,12 +20,15 @@ import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorHexString;
 import de.fhg.iais.roberta.syntax.lang.stmt.IntentStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.ListenStepStmt;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensors.raspberrypi.SlotSensor;
 import de.fhg.iais.roberta.visitor.collect.RaspberryPiMethods;
 import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
+
+import java.util.HashMap;
 
 public class RaspberryPiValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IRaspberryPiVisitor<Void> {
 
@@ -76,6 +79,18 @@ public class RaspberryPiValidatorAndCollectorVisitor extends CommonNepoValidator
     }
 
     @Override
+    public Void visitListenStepStmt(ListenStepStmt<Void> listenStepStmt) {
+        if ( this.waitsInLoops.get(this.loopCounter) != null ) {
+            increaseWaitStmsInLoop();
+            requiredComponentVisited(listenStepStmt, listenStepStmt.getIntents());
+            decreaseWaitStmtInLoop();
+        } else {
+            requiredComponentVisited(listenStepStmt, listenStepStmt.getIntents());
+        }
+        return null;
+    }
+
+    @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         usedHardwareBuilder.addDeclaredVariable("board");
         return null;
@@ -122,13 +137,13 @@ public class RaspberryPiValidatorAndCollectorVisitor extends CommonNepoValidator
 
     protected ConfigurationComponent checkSensorExists(ExternalSensor<Void> sensor) {
         ConfigurationComponent usedSensor = robotConfiguration.optConfigurationComponent(sensor.getUserDefinedPort());
-        if ( usedSensor == null ) {
+        if (usedSensor == null) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
         } else {
             String type = usedSensor.getComponentType();
-            switch ( sensor.getKind().getName() ) {
+            switch (sensor.getKind().getName()) {
                 case "ULTRASONIC_SENSING": //example
-                    if ( !(type.equals("ULTRASONIC") || type.equals("CALLIBOT")) ) {
+                    if (!(type.equals("ULTRASONIC") || type.equals("CALLIBOT"))) {
                         addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
                     }
                     break;

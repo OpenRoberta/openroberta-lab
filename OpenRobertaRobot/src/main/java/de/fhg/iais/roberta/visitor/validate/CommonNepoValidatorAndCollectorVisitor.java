@@ -77,9 +77,9 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractValidatorAndCollectorVisitor implements ILanguageVisitor<Void> {
 
-    private final HashMap<Integer, Integer> waitsInLoops = new HashMap<>();
-    private int loopCounter = 0;
-    private int currentLoop = 0;
+    final HashMap<Integer, Integer> waitsInLoops = new HashMap<>();
+    int loopCounter = 0;
+    int currentLoop = 0;
 
     protected CommonNepoValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) //
     {
@@ -500,13 +500,13 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         this.waitsInLoops.put(this.loopCounter, 0);
     }
 
-    private void decreaseWaitStmtInLoop() {
+    public void decreaseWaitStmtInLoop() {
         int count;
         count = this.waitsInLoops.get(this.loopCounter);
         this.waitsInLoops.put(this.loopCounter, --count);
     }
 
-    private void increaseWaitStmsInLoop() {
+    public void increaseWaitStmsInLoop() {
         int count;
         count = this.waitsInLoops.get(this.loopCounter);
         this.waitsInLoops.put(this.loopCounter, ++count);
