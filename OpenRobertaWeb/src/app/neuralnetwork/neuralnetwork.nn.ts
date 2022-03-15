@@ -198,7 +198,6 @@ export class Link {
 export function buildNetwork(
     networkShape: number[],
     activation: ActivationFunction,
-    outputActivation: ActivationFunction,
     regularization: RegularizationFunction,
     inputIds: string[],
     outputIds: string[],
@@ -223,7 +222,7 @@ export function buildNetwork(
             } else {
                 id++;
             }
-            let node = new Node(nodeId, isOutputLayer ? outputActivation : activation, initZero);
+            let node = new Node(nodeId, activation, initZero);
             currentLayer.push(node);
             if (layerIdx >= 1) {
                 // Add links from nodes in the previous layer to this node.
@@ -247,9 +246,8 @@ export function buildNetwork(
  * @param network The neural network.
  * @param inputs The input array. Its length should match the number of input
  *     nodes in the network.
- * @return The final output of the network.
  */
-export function forwardProp(network: Node[][], inputs: number[]): number {
+export function forwardProp(network: Node[][], inputs: number[]): void {
     let inputLayer = network[0];
     if (inputs.length !== inputLayer.length) {
         throw new Error('The number of inputs must match the number of nodes in' + ' the input layer');
@@ -267,7 +265,6 @@ export function forwardProp(network: Node[][], inputs: number[]): number {
             node.updateOutput();
         }
     }
-    return network[network.length - 1][0].output;
 }
 
 /**

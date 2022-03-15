@@ -14,6 +14,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
     (function (HoverType) {
         HoverType[HoverType["BIAS"] = 0] = "BIAS";
         HoverType[HoverType["WEIGHT"] = 1] = "WEIGHT";
+        HoverType[HoverType["NODE"] = 2] = "NODE";
     })(HoverType || (HoverType = {}));
     var NodeType;
     (function (NodeType) {
@@ -418,7 +419,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
     function makeSimpleNetwork() {
         var shape = [state.numInputs].concat(state.networkShape).concat([state.numOutputs]);
         var outputActivation = nn.Activations.LINEAR; // was: TANH;
-        network = nn.buildNetwork(shape, state.activation, outputActivation, state.regularization, state.inputs, state.outputs, state.initZero);
+        network = nn.buildNetwork(shape, state.activation, state.regularization, state.inputs, state.outputs, state.initZero);
         replaceWeights(network, state.weights);
         replaceBiases(network, state.biases);
     }

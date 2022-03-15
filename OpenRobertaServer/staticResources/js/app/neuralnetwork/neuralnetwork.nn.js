@@ -177,7 +177,7 @@ define(["require", "exports"], function (require, exports) {
      *     no regularization.
      * @param inputIds List of ids for the input nodes.
      */
-    function buildNetwork(networkShape, activation, outputActivation, regularization, inputIds, outputIds, initZero) {
+    function buildNetwork(networkShape, activation, regularization, inputIds, outputIds, initZero) {
         var numLayers = networkShape.length;
         var id = 1;
         /** List of layers, with each layer being a list of nodes. */
@@ -199,7 +199,7 @@ define(["require", "exports"], function (require, exports) {
                 else {
                     id++;
                 }
-                var node = new Node(nodeId, isOutputLayer ? outputActivation : activation, initZero);
+                var node = new Node(nodeId, activation, initZero);
                 currentLayer.push(node);
                 if (layerIdx >= 1) {
                     // Add links from nodes in the previous layer to this node.
@@ -223,7 +223,6 @@ define(["require", "exports"], function (require, exports) {
      * @param network The neural network.
      * @param inputs The input array. Its length should match the number of input
      *     nodes in the network.
-     * @return The final output of the network.
      */
     function forwardProp(network, inputs) {
         var inputLayer = network[0];
@@ -243,7 +242,6 @@ define(["require", "exports"], function (require, exports) {
                 node.updateOutput();
             }
         }
-        return network[network.length - 1][0].output;
     }
     exports.forwardProp = forwardProp;
     /**

@@ -5,7 +5,7 @@
  */
 
 import * as nn from './neuralnetwork.nn';
-import { State, activations, regularizations, getKeyFromValue } from './neuralnetwork.state';
+import { activations, getKeyFromValue, State } from './neuralnetwork.state';
 import * as d3 from 'd3';
 
 let mainWidth;
@@ -17,6 +17,7 @@ const BIAS_SIZE = 10;
 enum HoverType {
     BIAS,
     WEIGHT,
+    NODE,
 }
 
 enum NodeType {
@@ -466,7 +467,7 @@ export function reset() {
 export function makeSimpleNetwork() {
     let shape = [state.numInputs].concat(state.networkShape).concat([state.numOutputs]);
     let outputActivation = nn.Activations.LINEAR; // was: TANH;
-    network = nn.buildNetwork(shape, state.activation, outputActivation, state.regularization, state.inputs, state.outputs, state.initZero);
+    network = nn.buildNetwork(shape, state.activation, state.regularization, state.inputs, state.outputs, state.initZero);
     replaceWeights(network, state.weights);
     replaceBiases(network, state.biases);
 }
