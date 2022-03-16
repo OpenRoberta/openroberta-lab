@@ -1,0 +1,132 @@
+<toolbox_set id="toolbox" style="display: none">
+  <category name="TOOLBOX_ACTION" svg="true">
+    <block type="makeblockActions_leds_on">
+      <value name="COLOR">
+        <block type="robColour_picker">
+          <field name="COLOUR">#FF0000</field>
+        </block>
+      </value>
+    </block>
+    <block type="makeblockActions_leds_off"/>
+    <block type="bob3Actions_set_led"/>
+  </category>
+  <category name="TOOLBOX_SENSOR" svg="true">
+    <block type="robSensors_infrared_getSample"/>
+    <block type="robSensors_pintouch_getSample">
+      <mutation mode="PRESSED" port="EAR"/>
+      <field name="MODE">PRESSED</field>
+      <field name="SENSORPORT">EAR</field>
+      <field name="SLOT">2</field>
+    </block>
+    <block type="robSensors_pintouch_getSample">
+      <mutation mode="PRESSED" port="WHEEL"/>
+      <field name="MODE">PRESSED</field>
+      <field name="SENSORPORT">WHEEL</field>
+      <field name="SLOT">A</field>
+    </block>
+    <block type="robSensors_temperature_getSample"/>
+    <block type="robSensors_code_getSample"/>
+    <block type="robSensors_timer_getSample"/>
+    <block type="robSensors_timer_reset"/>
+  </category>
+  <category name="TOOLBOX_CONTROL" svg="true">
+    <block type="robControls_if"/>
+    <block type="robControls_ifElse"/>
+    <block type="robControls_loopForever"/>
+    <block type="controls_repeat_ext">
+      <value name="TIMES">
+        <block type="math_number">
+          <field name="NUM">10</field>
+        </block>
+      </value>
+    </block>
+    <block type="robControls_wait_time">
+      <value name="WAIT">
+        <block type="math_number">
+          <field name="NUM">500</field>
+        </block>
+      </value>
+    </block>
+    <block type="robControls_wait_for">
+      <value name="WAIT0">
+        <block type="logic_compare">
+          <value name="A">
+            <block type="robSensors_getSample"/>
+          </value>
+          <value name="B">
+            <block type="logic_boolean"/>
+          </value>
+        </block>
+      </value>
+    </block>
+  </category>
+  <category name="TOOLBOX_LOGIC" svg="true">
+    <block type="logic_compare"/>
+    <block type="logic_operation"/>
+    <block type="logic_boolean"/>
+  </category>
+  <category name="TOOLBOX_MATH" svg="true">
+    <block type="math_number"/>
+    <block type="math_arithmetic"/>
+  </category>
+  <category name="TOOLBOX_COLOUR" svg="true">
+    <block type="robColour_picker">
+      <field name="COLOUR">#FF0000</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#0000FF</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#00FF00</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#FFFF00</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#FF0000</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#FFFFFF</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#6633AA</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#FF0088</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#00FFFF</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#FF8800</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#FF00FF</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#77FFDD</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#FF7755</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#6699EE</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#4488AA</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#4466EE</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#228822</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#55FF99</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#000000</field>
+    </block>
+  </category>
+  <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true"/>
+</toolbox_set>

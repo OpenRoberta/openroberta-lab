@@ -8,13 +8,13 @@ import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
-import de.fhg.iais.roberta.visitor.hardware.IBob3Visitor;
+import de.fhg.iais.roberta.visitor.hardware.INIBOVisitor;
 
 /**
- * Collector for the Bob3. Adds the blocks missing from the defaults of {@link ICollectorVisitor}. Defines the specific parent implementation to use (the one of
+ * Collector for the NIBO robots (BOB3, ROB3RTA). Adds the blocks missing from the defaults of {@link ICollectorVisitor}. Defines the specific parent implementation to use (the one of
  * the collector) due to unrelated defaults.
  */
-public interface IBob3CollectorVisitor extends ICollectorVisitor, IBob3Visitor<Void> {
+public interface INIBOCollectorVisitor extends ICollectorVisitor, INIBOVisitor<Void> {
     @Override
     default Void visitCodePadSensor(CodePadSensor<Void> codePadSensor) {
         return null;

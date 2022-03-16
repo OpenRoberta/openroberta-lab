@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [- EMPTY_PORT -, LIGHT, AMBIENTLIGHT], UsedSensor [- EMPTY_PORT -, INFRARED, REFLEXION], UsedSensor [- EMPTY_PORT -, TEMPERATURE, TEMPERATURE], UsedSensor [1, TIMER, VALUE], UsedSensor [- EMPTY_PORT -, INFRARED, AMBIENTLIGHT], UsedSensor [- EMPTY_PORT -, TEMPERATURE, VALUE], UsedSensor [1, TIMER, RESET]]
+Actors: 
+[]
+Methods: 
+[]
