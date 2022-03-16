@@ -67,6 +67,10 @@ robots:
     template: nxt
     dir: nxt
     suffix: ".nxc"
+  rob3rta:
+    template: rob3rta
+    dir: rob3rta
+    suffix: ".cpp"
   sensebox:
     template: sensebox
     dir: sensebox
@@ -123,6 +127,7 @@ progs:
       ALL: "crashes crosscompilers - code generation fails!"
       edison: ""
       bob3: "LedColor is used in the program. Doesn't work here"
+      rob3rta: "LedColor is used in the program. Doesn't work here"
     remark: "functions with various return types, with and without parameters"
   listOperations:
     decl: listOperations
@@ -130,6 +135,7 @@ progs:
       edison: "Lists are implemented as an Array in edison robot and thus not expandable"
       nxt: "no extendable lists"
       bob3: "no lists"
+      rob3rta: "no lists"
       wedo: "no lists"
     remark: "test of mutable lists"
   listOperationsAdvanced:
@@ -137,6 +143,7 @@ progs:
     exclude:
       ALL: "crashes code generation or compilation"
       bob3: "no lists"
+      rob3rta: "no lists"
       wedo: "no lists"
     remark: "advanced list operations"
   listOperationsBasic:
@@ -145,6 +152,7 @@ progs:
       calliope2017: "RAM overflow - partition the program!"
       nxt: "no extendable lists"
       bob3: "no lists"
+      rob3rta: "no lists"
       edison: "Edisons lists are not extendable"
     remark: "basic list operations"
   logicBooleanOp:
@@ -164,6 +172,7 @@ progs:
       edison: "no extendable lists"
       nxt: "no extendable lists"
       bob3: "no lists"
+      rob3rta: "no lists"
       wedo: "re-enable after simulation refactoring"
     remark: "list functions and math functions (sum of list items, ...) on lists"
   mathBasics:
@@ -211,6 +220,7 @@ progs:
       nxt: "Comparison of string and char not possible"
       nao: "seems to be not yet implemented"
       bob3: "no strings"
+      rob3rta: "no strings"
       festobionic: "Comparison of string and char not possible"
       edison: "no strings"
       wedo: "Comparison of string and char not possible"
@@ -220,6 +230,7 @@ progs:
     exclude:
       edison: "not supported"
       bob3: "no strings"
+      rob3rta: "no strings"
     remark: "variable assignment for number, string and boolean"
   workflowTest:
     decl: default

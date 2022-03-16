@@ -1,0 +1,5 @@
+
+(repeat [FOREVER_ARDU, BoolConst[value: true]]
+AktionStmt [LedOnAction [ ColorConst[hexValue: #33ffff] ]]
+AktionStmt [LedOnAction [ ColorConst[hexValue: #FF0000] ]]WaitTimeStmt[time: NumConst[value: 1000]]MethodStmt [MethodCall [sensors, , , VOID]]MethodStmt [MethodCall [sensorsWaitUntil, , , VOID]]
+)

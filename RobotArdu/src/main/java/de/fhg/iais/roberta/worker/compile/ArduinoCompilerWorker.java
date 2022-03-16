@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.ZipHelper;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.codegen.NIBOHexPrefix;
 import de.fhg.iais.roberta.worker.IWorker;
 
 public class ArduinoCompilerWorker implements IWorker {
@@ -86,6 +87,10 @@ public class ArduinoCompilerWorker implements IWorker {
                 mmcu = "atmega88";
                 scriptName = compilerResourcesDir + "arduino-resources/build_project_bob3.sh";
                 break;
+            case "rob3rta":
+                mmcu = "atmega328pb";
+                scriptName = compilerResourcesDir + "arduino-resources/build_project_rob3rta.sh";
+                break;
             case "festobionic":
                 boardVariant = "esp32";
                 arduinoVariant = "ARDUINO_ESP32_DEV";
@@ -120,10 +125,15 @@ public class ArduinoCompilerWorker implements IWorker {
         Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource, project.isNativeEditorCode());
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         if ( result.getFirst() ) {
-            String base64EncodedHex = null;
+            String base64EncodedHex = null, optHexPrefix = null;
             switch ( project.getBinaryFileExtension() ) {
                 case "hex":
-                    base64EncodedHex = Util.getBase64EncodedHex(targetDir + programName + "." + project.getBinaryFileExtension());
+                    try {
+                        optHexPrefix = NIBOHexPrefix.getHexPrefixForRobot(project.getRobot());
+                    } catch ( IllegalArgumentException e ) {
+                        LOG.warn(e.getMessage());   // no hex prefix needed for this robot
+                    }
+                    base64EncodedHex = Util.getBase64EncodedHex(targetDir + programName + "." + project.getBinaryFileExtension(), optHexPrefix);
                     break;
                 case "bin":
                     base64EncodedHex = Util.getBase64EncodedBinary(targetDir + programName + "." + project.getBinaryFileExtension());

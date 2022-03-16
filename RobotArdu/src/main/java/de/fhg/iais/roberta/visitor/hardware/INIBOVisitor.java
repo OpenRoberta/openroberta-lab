@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
-public interface IBob3Visitor<V> extends ILightVisitor<V>, ISensorVisitor<V> {
+public interface INIBOVisitor<V> extends ILightVisitor<V>, ISensorVisitor<V> {
 
     default V visitCodePadSensor(CodePadSensor<V> codePadSensor) {
         throw new DbcException("Block is not implemented!");

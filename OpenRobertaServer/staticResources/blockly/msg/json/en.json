@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2022-03-22 15:17:51.134920",
+		"lastupdated": "2022-03-24 09:20:19.757739",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1353,6 +1353,7 @@
 	"SENSOR_UNIT_GAUSS": "Gauss",
 	"SENSOR_UNIT_INDEX": "#",
 	"SENSOR_PINTOUCH_BOB3": "arm",
+	"SENSOR_PINTOUCH_ROB3RTA": "is",
 	"SENSOR_SOUND_CALLIOPE": "microphone",
 	"MODE_VALUE": "value",
 	"MODE_PRESSED": "pressed",
@@ -1483,6 +1484,8 @@
 	"PORT_HIP": "hip",
 	"PORT_KNEE": "knee",
 	"PORT_ANKLE": "ankle",
+	"PORT_EAR": "ear",
+	"PORT_WHEEL": "wheel",
 	"SLOT_LEFT_PITCH": "left pitch",
 	"SLOT_LEFT_ROLL": "left roll",
 	"SLOT_LEFT_YAW": "left yaw",
