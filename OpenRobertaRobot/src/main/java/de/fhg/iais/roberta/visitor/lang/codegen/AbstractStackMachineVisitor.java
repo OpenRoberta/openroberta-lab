@@ -42,6 +42,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetOutputNeuronVal;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
@@ -84,8 +85,11 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeBiasStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeWeightStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronWoVarStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
@@ -160,7 +164,7 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
     protected void endPhrase(Phrase<V> phrase) {
         String blocklyId = phrase.getProperty().getBlocklyId();
-        if ( debugger && isValidBlocklyId(blocklyId)) {
+        if ( debugger && isValidBlocklyId(blocklyId) ) {
             if ( !opArray.isEmpty() ) {
                 JSONObject lastElement = opArray.get(opArray.size() - 1);
                 if ( !lastElement.has(C.HIGHTLIGHT_MINUS) ) {
@@ -528,7 +532,7 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
         for ( Stmt<V> inputNeuron : inputNeurons ) {
             inputNeuron.accept(this);
         }
-        JSONObject o = makeNode(C.NNSTEP_STMT).put(C.ARG1, inputNeurons.size()).put(C.ARG2, outputNeurons.size());
+        JSONObject o = makeNode(C.NN_STEP_STMT).put(C.ARG1, inputNeurons.size()).put(C.ARG2, outputNeurons.size()); // neurons without var are EXCLUDED!
         app(o);
         for ( Stmt<V> outputNeuronAsStmt : outputNeurons ) {
             NNOutputNeuronStmt outputNeuron = (NNOutputNeuronStmt) outputNeuronAsStmt;
@@ -547,6 +551,35 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
     @Override
     public final V visitNNOutputNeuronStmt(NNOutputNeuronStmt<V> nnOutputNeuronStmt) {
         // code is generated in method visitNNStepStmt
+        return null;
+    }
+
+    @Override
+    public final V visitNNOutputNeuronWoVarStmt(NNOutputNeuronWoVarStmt<V> nnOutputNeuronWoVarStmt) {
+        // code is generated in method visitNNGetOutputNeuronVal
+        return null;
+    }
+
+    @Override
+    public final V visitNNChangeWeightStmt(NNChangeWeightStmt<V> chgStmt) {
+        chgStmt.getValue().accept(this);
+        JSONObject o = makeNode(C.NN_CHANGEWEIGHT_STMT).put(C.FROM, chgStmt.getFrom()).put(C.TO, chgStmt.getTo()).put(C.CHANGE, chgStmt.getChange());
+        app(o);
+        return null;
+    }
+
+    @Override
+    public final V visitNNChangeBiasStmt(NNChangeBiasStmt<V> chgStmt) {
+        chgStmt.getValue().accept(this);
+        JSONObject o = makeNode(C.NN_CHANGEBIAS_STMT).put(C.NAME, chgStmt.getName()).put(C.CHANGE, chgStmt.getChange());
+        app(o);
+        return null;
+    }
+
+    @Override
+    public final V visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<V> getVal) {
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.NN_GETOUTPUTNEURON_VAL).put(C.NAME, getVal.getName());
+        app(o);
         return null;
     }
 
@@ -708,7 +741,7 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
                         removeOpenBlocksFromUnhighlight(statement, blocklyId);
                     });
 
-                    if ( !jumpLinker.isEmpty()) {
+                    if ( !jumpLinker.isEmpty() ) {
                         throw new DbcException("Invalid flow control expression");
                     }
 

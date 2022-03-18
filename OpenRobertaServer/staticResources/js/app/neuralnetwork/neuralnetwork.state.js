@@ -11,13 +11,13 @@ define(["require", "exports", "./neuralnetwork.nn"], function (require, exports,
         relu: nn.Activations.RELU,
         tanh: nn.Activations.TANH,
         sigmoid: nn.Activations.SIGMOID,
-        linear: nn.Activations.LINEAR,
+        linear: nn.Activations.LINEAR
     };
     /** A map between names and regularization functions. */
     exports.regularizations = {
         none: null,
         L1: nn.RegularizationFunction.L1,
-        L2: nn.RegularizationFunction.L2,
+        L2: nn.RegularizationFunction.L2
     };
     function getKeyFromValue(obj, value) {
         for (var key in obj) {
@@ -62,7 +62,7 @@ define(["require", "exports", "./neuralnetwork.nn"], function (require, exports,
             this.numInputs = 0;
             this.numOutputs = 0;
         }
-        State.prototype.setFromJson = function (json, inputNeurons, outputNeurons) {
+        State.prototype.setFromJson = function (json, inputNeurons, outputNeurons, outputNeuronsWoVar) {
             this.learningRate = json.learningRate !== undefined ? json.learningRate : 0.03;
             this.regularizationRate = json.regularizationRate !== undefined ? json.regularizationRate : 0;
             this.noise = json.noise !== undefined ? json.noise : 0;
@@ -80,9 +80,10 @@ define(["require", "exports", "./neuralnetwork.nn"], function (require, exports,
             this.biases = json.biases !== undefined ? json.biases : undefined;
             this.seed = json.seed !== undefined ? json.seed : undefined;
             this.numInputs = inputNeurons.length;
-            this.numOutputs = outputNeurons.length;
+            this.numOutputs = outputNeurons.length + outputNeuronsWoVar.length;
             this.inputs = inputNeurons;
             this.outputs = outputNeurons;
+            this.outputsWoVar = outputNeuronsWoVar;
         };
         return State;
     }());

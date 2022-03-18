@@ -45,6 +45,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetOutputNeuronVal;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
@@ -86,8 +87,11 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeBiasStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeWeightStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronWoVarStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
@@ -265,6 +269,30 @@ public class InfoCollector<T> extends BaseVisitor<T> implements ILanguageVisitor
     @Override
     public T visitNNOutputNeuronStmt(NNOutputNeuronStmt<T> nnOutputNeuronStmt) {
         extractInfos(nnOutputNeuronStmt);
+        return null;
+    }
+
+    @Override
+    public T visitNNOutputNeuronWoVarStmt(NNOutputNeuronWoVarStmt<T> nnOutputNeuronWoVarStmt) {
+        extractInfos(nnOutputNeuronWoVarStmt);
+        return null;
+    }
+
+    @Override
+    public T visitNNChangeWeightStmt(NNChangeWeightStmt<T> nnChangeWeightStmt) {
+        extractInfos(nnChangeWeightStmt);
+        return null;
+    }
+
+    @Override
+    public T visitNNChangeBiasStmt(NNChangeBiasStmt<T> nnChangeBiasStmt) {
+        extractInfos(nnChangeBiasStmt);
+        return null;
+    }
+
+    @Override
+    public T visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<T> nnGetOutputNeuronVal) {
+        extractInfos(nnGetOutputNeuronVal);
         return null;
     }
 

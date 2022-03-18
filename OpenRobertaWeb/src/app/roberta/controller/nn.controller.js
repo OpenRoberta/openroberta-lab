@@ -4,7 +4,6 @@ import * as PG from 'neuralnetwork.playground';
 import * as $ from 'jquery';
 import * as Blockly from 'blockly';
 import 'jquery-validate';
-import { State } from 'neuralnetwork.state';
 
 export function init() {
     $('#tabNN').onWrap(
@@ -20,7 +19,6 @@ export function init() {
         function (e) {
             GUISTATE_C.setProgramSaved(false);
             prepareNNfromNNstep();
-            PG.runPlayground();
         },
         'shown tabNN'
     );
@@ -28,10 +26,7 @@ export function init() {
     $('#tabNN').onWrap(
         'hide.bs.tab',
         function (e) {
-            var nnstepBlock = getTheNNstepBlock();
-            if (nnstepBlock !== null) {
-                nnstepBlock.data = PG.getStateAsJSONString();
-            }
+            saveNN2Blockly();
         },
         'hide tabNN'
     );
@@ -39,16 +34,23 @@ export function init() {
     $('#tabNN').onWrap('hidden.bs.tab', function (e) {}, 'hidden tabNN');
 }
 
+export function saveNN2Blockly() {
+    var nnstepBlock = getTheNNstepBlock();
+    if (nnstepBlock !== null) {
+        nnstepBlock.data = PG.getStateAsJSONString();
+    }
+}
+
 export function prepareNNfromNNstep() {
     var inputNeurons = [];
     var outputNeurons = [];
-    var state = new State();
+    var outputNeuronsWoVar = [];
     var nnStepBlock = getTheNNstepBlock();
-    if (nnStepBlock) {
-        state = nnStepBlock.data === undefined || nnStepBlock.data === null ? new State() : JSON.parse(nnStepBlock.data);
-        extractInputOutputNeurons(inputNeurons, outputNeurons, nnStepBlock.getChildren());
+    if (nnStepBlock && !(nnStepBlock.data === undefined || nnStepBlock.data === null)) {
+        let nnStepData = JSON.parse(nnStepBlock.data);
+        extractInputOutputNeurons(inputNeurons, outputNeurons, outputNeuronsWoVar, nnStepBlock.getChildren());
     }
-    PG.setPlayground(state, inputNeurons, outputNeurons);
+    PG.runPlayground(nnStepData, inputNeurons, outputNeurons, outputNeuronsWoVar);
 }
 
 function getTheNNstepBlock() {
@@ -64,16 +66,18 @@ function getTheNNstepBlock() {
     return nnstepBlock;
 }
 
-function extractInputOutputNeurons(inputNeurons, outputNeurons, neurons) {
+function extractInputOutputNeurons(inputNeurons, outputNeurons, outputNeuronsWoVar, neurons) {
     for (const block of neurons) {
         if (block.type === 'robActions_inputneuron') {
             inputNeurons.push(block.getFieldValue('NAME'));
         } else if (block.type === 'robActions_outputneuron') {
             outputNeurons.push(block.getFieldValue('NAME'));
+        } else if (block.type === 'robActions_outputneuron_wo_var') {
+            outputNeuronsWoVar.push(block.getFieldValue('NAME'));
         }
         var next = block.getChildren();
         if (next) {
-            extractInputOutputNeurons(inputNeurons, outputNeurons, next);
+            extractInputOutputNeurons(inputNeurons, outputNeurons, outputNeuronsWoVar, next);
         }
     }
 }

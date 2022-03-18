@@ -1,9 +1,7 @@
 package de.fhg.iais.roberta.visitor.validate;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.ClassToInstanceMap;
@@ -23,6 +21,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetOutputNeuronVal;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
@@ -59,8 +58,11 @@ import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeBiasStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeWeightStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronWoVarStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
@@ -70,7 +72,6 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
@@ -324,15 +325,17 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     public Void visitNNStepStmt(NNStepStmt<Void> nnStepStmt) {
         Set<String> names = new HashSet<>();
         String name;
-        for ( Stmt<Void> neuron: nnStepStmt.getIoNeurons().get() ) {
+        for ( Stmt<Void> neuron : nnStepStmt.getIoNeurons().get() ) {
             if ( neuron instanceof NNInputNeuronStmt ) {
                 name = ((NNInputNeuronStmt) neuron).getName();
             } else if ( neuron instanceof NNOutputNeuronStmt ) {
                 name = ((NNOutputNeuronStmt) neuron).getName();
+            } else if ( neuron instanceof NNOutputNeuronWoVarStmt ) {
+                name = ((NNOutputNeuronWoVarStmt) neuron).getName();
             } else {
-                throw new DbcException("type of neuron not input or output");
+                throw new DbcException("type of neuron is not input, output or outputWoVar");
             }
-            if (!Util.isValidJavaIdentifier(name) || !names.add(name)) {
+            if ( !Util.isValidJavaIdentifier(name) || !names.add(name) ) {
                 addErrorToPhrase(nnStepStmt, "NN_IO_NEURON_NAMES_INVALID");
             }
         }
@@ -349,6 +352,28 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitNNOutputNeuronStmt(NNOutputNeuronStmt<Void> nnOutputNeuronStmt) {
         requiredComponentVisited(nnOutputNeuronStmt, nnOutputNeuronStmt.getValue());
+        return null;
+    }
+
+    @Override
+    public Void visitNNOutputNeuronWoVarStmt(NNOutputNeuronWoVarStmt<Void> nnOutputNeuronWoVarStmt) {
+        return null;
+    }
+
+    @Override
+    public Void visitNNChangeWeightStmt(NNChangeWeightStmt<Void> chgStmt) {
+        requiredComponentVisited(chgStmt, chgStmt.getValue());
+        return null;
+    }
+
+    @Override
+    public Void visitNNChangeBiasStmt(NNChangeBiasStmt<Void> chgStmt) {
+        requiredComponentVisited(chgStmt, chgStmt.getValue());
+        return null;
+    }
+
+    @Override
+    public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<Void> getExpr) {
         return null;
     }
 
@@ -467,7 +492,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         // TODO: dangerous check to detect local decls (fct params e.g.). Better don't reuse the blockly block for global vars
         String blocktype = var.getProperty().getBlockType();
         boolean allowedEmptyExprInHiddenDecls = blocktype.equals("robLocalVariables_declare") || blocktype.equals("robControls_forEach");
-        if (!allowedEmptyExprInHiddenDecls) {
+        if ( !allowedEmptyExprInHiddenDecls ) {
             requiredComponentVisited(var, var.getValue());
         }
         this.getBuilder(UsedHardwareBean.Builder.class).addGlobalVariable(var.getName());

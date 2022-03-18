@@ -51,6 +51,7 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
                         var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
                         var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
                         var language = GUISTATE_C.getLanguage();
+                        NN_CTRL.prepareNNfromNNstep();
                         PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function (result) {
                             if (result.rc == 'ok') {
                                 MSG.displayMessage('MESSAGE_EDIT_START', 'TOAST', GUISTATE_C.getProgramName());
@@ -205,7 +206,6 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
         }, 'sim toggle background clicked');
     }
     function initSimulation(result) {
-        NN_CTRL.prepareNNfromNNstep();
         SIM.init([result], true, GUISTATE_C.getRobotGroup());
         $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
         if (SIM.getNumRobots() === 1 && debug) {
@@ -286,7 +286,6 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
             var language = GUISTATE_C.getLanguage();
             PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function (result) {
                 if (result.rc == 'ok') {
-                    NN_CTRL.prepareNNfromNNstep();
                     setTimeout(function () {
                         SIM.setPause(false);
                         SIM.interpreterAddEvent(event);
@@ -310,9 +309,5 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
             $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
             SIM.stopProgram();
         }
-    }
-    function callbackOnTermination() {
-        GUISTATE_C.setConnectionState('wait');
-        blocklyWorkspace.robControls.switchToStart();
     }
 });

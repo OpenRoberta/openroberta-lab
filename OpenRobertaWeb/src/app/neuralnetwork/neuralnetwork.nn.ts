@@ -183,7 +183,7 @@ export class Link {
 }
 
 /**
- * Builds a neural network.
+ * Builds a neural network from a given network shape
  *
  * @param networkShape The shape of the network. E.g. [1, 2, 3, 1] means
  *   the network will have one input node, 2 nodes in first hidden layer,
@@ -214,15 +214,8 @@ export function buildNetwork(
         network.push(currentLayer);
         let numNodes = networkShape[layerIdx];
         for (let i = 0; i < numNodes; i++) {
-            let nodeId = id.toString();
-            if (isInputLayer) {
-                nodeId = inputIds[i];
-            } else if (isOutputLayer) {
-                nodeId = outputIds[i];
-            } else {
-                id++;
-            }
-            let node = new Node(nodeId, activation, initZero);
+            let nodeName = isInputLayer ? inputIds[i] : isOutputLayer ? outputIds[i] : 'h' + layerIdx + 'n' + (i + 1);
+            let node = new Node(nodeName, activation, initZero);
             currentLayer.push(node);
             if (layerIdx >= 1) {
                 // Add links from nodes in the previous layer to this node.
@@ -268,7 +261,7 @@ export function forwardProp(network: Node[][], inputs: number[]): void {
 }
 
 /**
- * Runs a backward propagation using the provided target and the
+ * LEARNING: Runs a backward propagation using the provided target and the
  * computed output of the previous call to forward propagation.
  * This method modifies the internal state of the network - the error
  * derivatives with respect to each node, and each weight
@@ -323,7 +316,7 @@ export function backProp(network: Node[][], target: number, errorFunc: ErrorFunc
 }
 
 /**
- * Updates the weights of the network using the previously accumulated error
+ * LEARNING: Updates the weights of the network using the previously accumulated error
  * derivatives.
  */
 export function updateWeights(network: Node[][], learningRate: number, regularizationRate: number) {
@@ -373,9 +366,4 @@ export function forEachNode(network: Node[][], ignoreInputs: boolean, accessor: 
             accessor(node);
         }
     }
-}
-
-/** Returns the output nodes in the network. */
-export function getOutputNode(network: Node[][]) {
-    return network[network.length - 1];
 }

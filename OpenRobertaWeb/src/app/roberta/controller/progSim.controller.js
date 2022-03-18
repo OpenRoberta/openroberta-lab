@@ -76,6 +76,7 @@ function initEvents() {
 
                         var language = GUISTATE_C.getLanguage();
 
+                        NN_CTRL.prepareNNfromNNstep();
                         PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function (result) {
                             if (result.rc == 'ok') {
                                 MSG.displayMessage('MESSAGE_EDIT_START', 'TOAST', GUISTATE_C.getProgramName());
@@ -151,7 +152,7 @@ function initEvents() {
             var robot = GUISTATE_C.getRobot();
             var position = $('#simDiv').position();
             position.top += 12;
-            if (robot == 'calliope2016' || robot == 'calliope2017' || robot == 'calliope2017NoBlue' || robot =='microbit') {
+            if (robot == 'calliope2016' || robot == 'calliope2017' || robot == 'calliope2017NoBlue' || robot == 'microbit') {
                 position.left = $('#blocklyDiv').width() + 12;
                 $('#simRobotModal').css({
                     top: position.top,
@@ -315,7 +316,6 @@ function initEvents() {
 }
 
 function initSimulation(result) {
-    NN_CTRL.prepareNNfromNNstep();
     SIM.init([result], true, GUISTATE_C.getRobotGroup());
     $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
     if (SIM.getNumRobots() === 1 && debug) {
@@ -398,7 +398,6 @@ function toggleSimEvent(event) {
 
         PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function (result) {
             if (result.rc == 'ok') {
-                NN_CTRL.prepareNNfromNNstep();
                 setTimeout(function () {
                     SIM.setPause(false);
                     SIM.interpreterAddEvent(event);
@@ -420,9 +419,4 @@ function toggleSimEvent(event) {
         $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
         SIM.stopProgram();
     }
-}
-
-function callbackOnTermination() {
-    GUISTATE_C.setConnectionState('wait');
-    blocklyWorkspace.robControls.switchToStart();
 }

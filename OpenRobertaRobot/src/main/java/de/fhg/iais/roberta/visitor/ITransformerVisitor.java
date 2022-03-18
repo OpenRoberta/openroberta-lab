@@ -53,6 +53,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetOutputNeuronVal;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
@@ -96,8 +97,11 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeBiasStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeWeightStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronWoVarStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
@@ -137,7 +141,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.actor.IAllActorsVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
@@ -448,6 +451,26 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     @Override
     default Phrase<V> visitNNOutputNeuronStmt(NNOutputNeuronStmt<Phrase<V>> outNeuron) {
         return NNOutputNeuronStmt.make(outNeuron.getProperty(), outNeuron.getComment(), outNeuron.getName(), (Expr<V>) outNeuron.modify(this));
+    }
+
+    @Override
+    default Phrase<V> visitNNOutputNeuronWoVarStmt(NNOutputNeuronWoVarStmt<Phrase<V>> outNeuron) {
+        return NNOutputNeuronWoVarStmt.make(outNeuron.getProperty(), outNeuron.getComment(), outNeuron.getName());
+    }
+
+    @Override
+    default Phrase<V> visitNNChangeWeightStmt(NNChangeWeightStmt chgStmt) {
+        return NNChangeWeightStmt.make(chgStmt.getProperty(), chgStmt.getComment(), chgStmt.getFrom(), chgStmt.getTo(), chgStmt.getChange(), (Expr<V>) chgStmt.modify(this));
+    }
+
+    @Override
+    default Phrase<V> visitNNChangeBiasStmt(NNChangeBiasStmt chgStmt) {
+        return NNChangeBiasStmt.make(chgStmt.getProperty(), chgStmt.getComment(), chgStmt.getName(), chgStmt.getChange(), (Expr<V>) chgStmt.modify(this));
+    }
+
+    @Override
+    default Phrase<V> visitNNGetOutputNeuronVal(NNGetOutputNeuronVal getStmt) {
+        return NNGetOutputNeuronVal.make(getStmt.getProperty(), getStmt.getComment(), getStmt.getName());
     }
 
     @Override

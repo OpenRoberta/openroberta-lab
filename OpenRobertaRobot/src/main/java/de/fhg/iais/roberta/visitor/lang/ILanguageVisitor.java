@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetOutputNeuronVal;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
@@ -58,8 +59,11 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeBiasStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeWeightStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronWoVarStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
@@ -193,6 +197,14 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitNNInputNeuronStmt(NNInputNeuronStmt<V> nnInputNeuronStmt);
 
     V visitNNOutputNeuronStmt(NNOutputNeuronStmt<V> nnOutputNeuronStmt);
+
+    V visitNNOutputNeuronWoVarStmt(NNOutputNeuronWoVarStmt<V> nnOutputNeuronWoVarStmt);
+
+    V visitNNChangeWeightStmt(NNChangeWeightStmt<V> nnChangeWeightStmt);
+
+    V visitNNChangeBiasStmt(NNChangeBiasStmt<V> nnChangeBiasStmt);
+
+    V visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<V> nnGetOutputNeuronVal);
 
     V visitNullConst(NullConst<V> nullConst);
 

@@ -11,14 +11,14 @@ export let activations: { [key: string]: nn.ActivationFunction } = {
     relu: nn.Activations.RELU,
     tanh: nn.Activations.TANH,
     sigmoid: nn.Activations.SIGMOID,
-    linear: nn.Activations.LINEAR,
+    linear: nn.Activations.LINEAR
 };
 
 /** A map between names and regularization functions. */
 export let regularizations: { [key: string]: nn.RegularizationFunction } = {
     none: null,
     L1: nn.RegularizationFunction.L1,
-    L2: nn.RegularizationFunction.L2,
+    L2: nn.RegularizationFunction.L2
 };
 
 export function getKeyFromValue(obj: any, value: any): string {
@@ -52,6 +52,7 @@ export interface Property {
 // Add the GUI state.
 export class State {
     [key: string]: any;
+
     learningRate = 0.03;
     regularizationRate = 0;
     noise = 0;
@@ -73,8 +74,9 @@ export class State {
     numOutputs = 0;
     inputs: string[];
     outputs: string[];
+    outputsWoVar: string[];
 
-    setFromJson(json: any, inputNeurons: string[], outputNeurons: string[]): void {
+    setFromJson(json: any, inputNeurons: string[], outputNeurons: string[], outputNeuronsWoVar: string[]): void {
         this.learningRate = json.learningRate !== undefined ? json.learningRate : 0.03;
         this.regularizationRate = json.regularizationRate !== undefined ? json.regularizationRate : 0;
         this.noise = json.noise !== undefined ? json.noise : 0;
@@ -93,8 +95,9 @@ export class State {
         this.seed = json.seed !== undefined ? json.seed : undefined;
 
         this.numInputs = inputNeurons.length;
-        this.numOutputs = outputNeurons.length;
+        this.numOutputs = outputNeurons.length + outputNeuronsWoVar.length;
         this.inputs = inputNeurons;
         this.outputs = outputNeurons;
+        this.outputsWoVar = outputNeuronsWoVar;
     }
 }

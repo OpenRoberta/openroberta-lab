@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetOutputNeuronVal;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
@@ -52,8 +53,11 @@ import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeBiasStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeWeightStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronWoVarStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
@@ -221,6 +225,28 @@ public abstract class AbstractCollectorVisitor extends BaseVisitor<Void> impleme
     @Override
     public Void visitNNOutputNeuronStmt(NNOutputNeuronStmt<Void> nnOutputNeuronStmt) {
         nnOutputNeuronStmt.getValue().accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitNNOutputNeuronWoVarStmt(NNOutputNeuronWoVarStmt<Void> nnOutputNeuronWoVarStmt) {
+        return null;
+    }
+
+    @Override
+    public Void visitNNChangeWeightStmt(NNChangeWeightStmt<Void> nnChangeWeightStmt) {
+        nnChangeWeightStmt.getValue().accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitNNChangeBiasStmt(NNChangeBiasStmt<Void> nnChangeBiasStmtStmt) {
+        nnChangeBiasStmtStmt.getValue().accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<Void> nnGetOutputNeuronVal) {
         return null;
     }
 

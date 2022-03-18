@@ -2,7 +2,7 @@
  * @fileOverview Simulate a robot
  * @author Beate Jost <beate.jost@iais.fraunhofer.de>
  */
-define(["require", "exports", "simulation.scene", "simulation.constants", "util", "interpreter.interpreter", "interpreter.robotSimBehaviour", "volume-meter", "message", "jquery", "huebee", "blockly"], function (require, exports, simulation_scene_1, simulation_constants_1, UTIL, SIM_I, MBED_R, Volume, MSG, $, HUEBEE, Blockly) {
+define(["require", "exports", "simulation.scene", "simulation.constants", "util", "interpreter.interpreter", "interpreter.robotSimBehaviour", "volume-meter", "message", "jquery", "huebee", "blockly", "nn.controller"], function (require, exports, simulation_scene_1, simulation_constants_1, UTIL, SIM_I, MBED_R, Volume, MSG, $, HUEBEE, Blockly, NN_CTRL) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getSimVariables = exports.endDebugging = exports.interpreterAddEvent = exports.updateDebugMode = exports.getDebugMode = exports.getWebAudio = exports.importImage = exports.resetScene = exports.exportConfigData = exports.importConfigData = exports.getInfo = exports.getGround = exports.getScale = exports.cancel = exports.getSelectedRobot = exports.getRobotIndex = exports.run = exports.init = exports.stopProgram = exports.toggleColorPicker = exports.addColorArea = exports.addObstacle = exports.deleteSelectedObject = exports.resetPose = exports.setInfo = exports.setStep = exports.getDt = exports.initMicrophone = exports.getColorAreaList = exports.getObstacleList = exports.getBackground = exports.setBackground = exports.getNumRobots = exports.setPause = void 0;
     var standColorObstacle = '#33B8CA';
@@ -469,6 +469,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
                 }
             }
         }
+        NN_CTRL.saveNN2Blockly();
         console.log('END of Sim');
     }
     function init(programs, refresh, robotType) {

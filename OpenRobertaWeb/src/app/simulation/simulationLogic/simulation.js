@@ -17,6 +17,7 @@ import * as MSG from 'message';
 import * as $ from 'jquery';
 import * as HUEBEE from 'huebee';
 import * as Blockly from 'blockly';
+import * as NN_CTRL from 'nn.controller';
 
 const standColorObstacle = '#33B8CA';
 const standColorArea = '#FBED00';
@@ -169,7 +170,7 @@ function setBackground(num) {
 
     removeMouseEvents();
     resetSelection();
-    require([moduleName], function (ROBOT) {
+    require([moduleName], function(ROBOT) {
         createRobots(ROBOT.default, numRobots);
         for (var i = 0; i < robots.length; i++) {
             robots[i].debug = debug;
@@ -222,12 +223,12 @@ function initMicrophone(robot) {
                 },
             })
             .then(
-                function (stream) {
+                function(stream) {
                     var mediaStreamSource = robot.webAudio.context.createMediaStreamSource(stream);
                     robot.sound = Volume.createAudioMeter(robot.webAudio.context);
                     mediaStreamSource.connect(robot.sound);
                 },
-                function () {
+                function() {
                     console.log('Sorry, but there is no microphone available on your system');
                 }
             );
@@ -249,7 +250,7 @@ var pause = false;
 
 export function setPause(value) {
     if (!value && readyRobots.indexOf(false) > -1) {
-        setTimeout(function () {
+        setTimeout(function() {
             setPause(false);
         }, 100);
     } else {
@@ -426,7 +427,7 @@ function stopProgram() {
             interpreters[i].removeHighlights();
         }
     }
-    setTimeout(function () {
+    setTimeout(function() {
         init(userPrograms, false, simRobotType);
         addMouseEvents();
     }, 205);
@@ -481,7 +482,7 @@ var robotIndex = 0;
 var simRobotType;
 var numRobots = 0;
 
-export const getNumRobots = function () {
+export const getNumRobots = function() {
     return numRobots;
 };
 
@@ -503,7 +504,9 @@ function callbackOnTermination() {
             }
         }
     }
+    NN_CTRL.saveNN2Blockly();
     console.log('END of Sim');
+
 }
 
 function init(programs, refresh, robotType) {
@@ -540,7 +543,7 @@ function init(programs, refresh, robotType) {
     }
     $('#simButtons, #canvasDiv').show();
     $('#webotsButtons, #webotsDiv').hide();
-    interpreters = programs.map(function (x) {
+    interpreters = programs.map(function(x) {
         var src = JSON.parse(x.javaScriptProgram);
         configurations.push(x.configuration.SENSORS);
         return new SIM_I.Interpreter(src, new MBED_R.RobotMbedBehaviour(), callbackOnTermination, breakpoints);
@@ -557,7 +560,7 @@ function init(programs, refresh, robotType) {
         readyRobots = [];
         isDownRobots = [];
         var moduleName = 'simulation.robot.' + simRobotType;
-        require([moduleName], function (reqRobot) {
+        require([moduleName], function(reqRobot) {
             createRobots(reqRobot.default, numRobots);
             for (var i = 0; i < numRobots; i++) {
                 robots[i].reset();
@@ -660,13 +663,13 @@ function render() {
                 scene.drawRobots();
 
                 // some time to cancel all timeouts
-                setTimeout(function () {
+                setTimeout(function() {
                     init(userPrograms, false, simRobotType);
                     addMouseEvents();
                 }, 205);
 
                 if (!(allInterpretersTerminated() && !robots[i].endless)) {
-                    setTimeout(function () {
+                    setTimeout(function() {
                         setPause(false);
                         for (var j = 0; j < robots.length; j++) {
                             robots[j].pause = false;
@@ -1566,54 +1569,54 @@ function updateSelectedObjects() {
 
 function addMouseEvents() {
     removeMouseEvents();
-    $('#robotLayer').on('mousedown touchstart', function (e) {
+    $('#robotLayer').on('mousedown touchstart', function(e) {
         if (robots[robotIndex].handleMouseDown) {
             robots[robotIndex].handleMouseDown(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
         } else {
             handleMouseDown(e);
         }
     });
-    $('#robotLayer').on('mousemove touchmove', function (e) {
+    $('#robotLayer').on('mousemove touchmove', function(e) {
         if (robots[robotIndex].handleMouseMove) {
             robots[robotIndex].handleMouseMove(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
         } else {
             handleMouseMove(e);
         }
     });
-    $('#robotLayer').on('mouseup touchend', function (e) {
+    $('#robotLayer').on('mouseup touchend', function(e) {
         if (robots[robotIndex].handleMouseUp) {
             robots[robotIndex].handleMouseUp(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
         } else {
             handleMouseUp(e);
         }
     });
-    $('#robotLayer').on('mouseout touchcancel', function (e) {
+    $('#robotLayer').on('mouseout touchcancel', function(e) {
         if (robots[robotIndex].handleMouseOut) {
             robots[robotIndex].handleMouseOut(e, offsetX, offsetY, scene.playground.w / 2, scene.playground.h / 2);
         } else {
             handleMouseOut(e);
         }
     });
-    $('#simDiv').on('wheel mousewheel touchmove', function (e) {
+    $('#simDiv').on('wheel mousewheel touchmove', function(e) {
         handleMouseWheel(e);
     });
     $('#canvasDiv').draggable();
     $('#robotLayer').attr('tabindex', 0);
-    $('#robotLayer').on('click touchstart', function (e) {
+    $('#robotLayer').on('click touchstart', function(e) {
         $('#robotLayer').attr('tabindex', 0);
         $('#robotLayer').focus();
         e.preventDefault();
     });
     $('#blocklyDiv').on('click touchstart', setFocusBlocklyDiv);
     $('#robotLayer').on('keydown', handleKeyEvent);
-    $('#robotLayer').on('keyup', function () {
+    $('#robotLayer').on('keyup', function() {
         if (selectedRobot >= 0 && robots[selectedRobot].drawWidth) {
             robots[selectedRobot].pose.xOld = robots[selectedRobot].pose.x;
             robots[selectedRobot].pose.yOld = robots[selectedRobot].pose.y;
             robots[selectedRobot].canDraw = true;
         }
     });
-    $('#robotIndex').on('change', function (e) {
+    $('#robotIndex').on('change', function(e) {
         $('#brick' + robotIndex).hide();
         robotIndex = e.target.selectedIndex;
         selectedRobot = e.target.selectedIndex;
@@ -1648,16 +1651,16 @@ function initScene() {
             customColors: robots[0].colorRange,
             setText: false,
         });
-        colorpicker.on('change', function (color) {
+        colorpicker.on('change', function(color) {
             changeColorWithColorPicker(color);
         });
         let close = HUEBEE.prototype.close;
-        HUEBEE.prototype.close = function () {
+        HUEBEE.prototype.close = function() {
             $('.huebee__container').off('mouseup touchend', resetColorpickerCursor);
             close.apply(this);
         };
         let open = HUEBEE.prototype.open;
-        HUEBEE.prototype.open = function () {
+        HUEBEE.prototype.open = function() {
             open.apply(this);
             $('.huebee__container').on('mouseup touchend', resetColorpickerCursor);
         };
@@ -1704,11 +1707,11 @@ function importConfigData() {
     $('#backgroundFileSelector').val(null);
     $('#backgroundFileSelector').attr('accept', '.json');
     $('#backgroundFileSelector').clickWrap(); // opening dialog
-    $('#backgroundFileSelector').change(function (event) {
+    $('#backgroundFileSelector').change(function(event) {
         var file = event.target.files[0];
         var reader = new FileReader();
-        reader.onload = (function (theFile) {
-            return function (e) {
+        reader.onload = (function(theFile) {
+            return function(e) {
                 try {
                     const configData = JSON.parse(e.target.result);
                     relatives2coordinates(configData);
@@ -1772,7 +1775,7 @@ function coordinates2relatives() {
                 };
         }
     }
-    relatives.robotPoses = robots.map(function (robot) {
+    relatives.robotPoses = robots.map(function(robot) {
         return {
             x: robot.pose.x / width,
             y: robot.pose.y / height,
@@ -1785,10 +1788,10 @@ function coordinates2relatives() {
             thetaDiff: 0,
         };
     });
-    relatives.obstacles = obstacleList.map(function (object) {
+    relatives.obstacles = obstacleList.map(function(object) {
         return calculateShape(object);
     });
-    relatives.colorAreas = colorAreaList.map(function (object) {
+    relatives.colorAreas = colorAreaList.map(function(object) {
         return calculateShape(object);
     });
     relatives.ruler = ruler;
@@ -1846,10 +1849,10 @@ function relatives2coordinates(relatives) {
             robots[i].pose.thetaOld = relatives.robotPoses[i].thetaOld;
         }
     }
-    obstacleList = relatives.obstacles.map(function (object) {
+    obstacleList = relatives.obstacles.map(function(object) {
         return calculateShape(object);
     });
-    colorAreaList = relatives.colorAreas.map(function (object) {
+    colorAreaList = relatives.colorAreas.map(function(object) {
         return calculateShape(object);
     });
     ruler = relatives.ruler;
@@ -1865,12 +1868,12 @@ function importImage() {
     $('#backgroundFileSelector').val(null);
     $('#backgroundFileSelector').attr('accept', '.png, .jpg, .jpeg, .svg');
     $('#backgroundFileSelector').clickWrap(); // opening dialog
-    $('#backgroundFileSelector').change(function (event) {
+    $('#backgroundFileSelector').change(function(event) {
         var file = event.target.files[0];
         var reader = new FileReader();
-        reader.onload = function (event) {
+        reader.onload = function(event) {
             var img = new Image();
-            img.onload = function () {
+            img.onload = function() {
                 var canvas = document.createElement('canvas');
                 var scaleX = 1;
                 var scaleY = 1;
@@ -1890,7 +1893,7 @@ function importImage() {
                 var dataURL = canvas.toDataURL('image/png');
                 var image = new Image(canvas.width, canvas.height);
                 image.src = dataURL;
-                image.onload = function () {
+                image.onload = function() {
                     if (customBackgroundLoaded) {
                         // replace previous image
                         imgObjectList[imgObjectList.length - 1] = image;
@@ -1902,9 +1905,9 @@ function importImage() {
                 };
 
                 if (UTIL.isLocalStorageAvailable()) {
-                    $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
+                    $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
                         $('#confirm').off();
-                        $('#confirm').on('click', function (e) {
+                        $('#confirm').on('click', function(e) {
                             e.preventDefault();
                             localStorage.setItem(
                                 'customBackground',
@@ -1915,7 +1918,7 @@ function importImage() {
                             );
                         });
                         $('#confirmCancel').off();
-                        $('#confirmCancel').on('click', function (e) {
+                        $('#confirmCancel').on('click', function(e) {
                             e.preventDefault();
                         });
                     });
@@ -2119,14 +2122,14 @@ function updateBreakpointEvent() {
     if (debugMode) {
         Blockly.getMainWorkspace()
             .getAllBlocks()
-            .forEach(function (block) {
+            .forEach(function(block) {
                 if (!$(block.svgGroup_).hasClass('blocklyDisabled')) {
                     if (observers.hasOwnProperty(block.id)) {
                         observers[block.id].disconnect();
                     }
 
-                    var observer = new MutationObserver(function (mutations) {
-                        mutations.forEach(function (mutation) {
+                    var observer = new MutationObserver(function(mutations) {
+                        mutations.forEach(function(mutation) {
                             if ($(block.svgGroup_).hasClass('blocklyDisabled')) {
                                 removeBreakPoint(block);
                                 $(block.svgPath_).removeClass('breakpoint').removeClass('selectedBreakpoint');
@@ -2153,7 +2156,7 @@ function updateBreakpointEvent() {
     } else {
         Blockly.getMainWorkspace()
             .getAllBlocks()
-            .forEach(function (block) {
+            .forEach(function(block) {
                 if (observers.hasOwnProperty(block.id)) {
                     observers[block.id].disconnect();
                 }
@@ -2211,7 +2214,7 @@ function endDebugging() {
     }
     Blockly.getMainWorkspace()
         .getAllBlocks()
-        .forEach(function (block) {
+        .forEach(function(block) {
             $(block.svgPath_).stop(true, true).removeAttr('style');
         });
     breakpoints = [];
@@ -2267,7 +2270,7 @@ export {
 //http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 //requestAnimationFrame polyfill by Erik Möller
 //fixes from Paul Irish and Tino Zijdel
-(function () {
+(function() {
     var lastTime = 0;
     var vendors = ['ms', 'moz', 'webkit', 'o'];
     for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
@@ -2276,10 +2279,10 @@ export {
     }
 
     if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = function (callback) {
+        window.requestAnimationFrame = function(callback) {
             var currTime = new Date().getTime();
             var timeToCall = Math.max(0, frameRateMs - (currTime - lastTime));
-            var id = window.setTimeout(function () {
+            var id = window.setTimeout(function() {
                 callback();
             }, timeToCall);
             lastTime = currTime + timeToCall;
@@ -2288,7 +2291,7 @@ export {
     }
 
     if (!window.cancelAnimationFrame) {
-        window.cancelAnimationFrame = function (id) {
+        window.cancelAnimationFrame = function(id) {
             clearTimeout(id);
         };
     }

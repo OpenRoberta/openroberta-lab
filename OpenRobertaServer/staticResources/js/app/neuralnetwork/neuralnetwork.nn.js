@@ -5,7 +5,7 @@
  */
 define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.getOutputNode = exports.forEachNode = exports.updateWeights = exports.backProp = exports.forwardProp = exports.buildNetwork = exports.Link = exports.RegularizationFunction = exports.Activations = exports.Errors = exports.Node = void 0;
+    exports.forEachNode = exports.updateWeights = exports.backProp = exports.forwardProp = exports.buildNetwork = exports.Link = exports.RegularizationFunction = exports.Activations = exports.Errors = exports.Node = void 0;
     /**
      * A node in a neural network. Each node has a state
      * (total input, output, and their respectively derivatives) which changes
@@ -165,7 +165,7 @@ define(["require", "exports"], function (require, exports) {
     }());
     exports.Link = Link;
     /**
-     * Builds a neural network.
+     * Builds a neural network from a given network shape
      *
      * @param networkShape The shape of the network. E.g. [1, 2, 3, 1] means
      *   the network will have one input node, 2 nodes in first hidden layer,
@@ -189,17 +189,8 @@ define(["require", "exports"], function (require, exports) {
             network.push(currentLayer);
             var numNodes = networkShape[layerIdx];
             for (var i = 0; i < numNodes; i++) {
-                var nodeId = id.toString();
-                if (isInputLayer) {
-                    nodeId = inputIds[i];
-                }
-                else if (isOutputLayer) {
-                    nodeId = outputIds[i];
-                }
-                else {
-                    id++;
-                }
-                var node = new Node(nodeId, activation, initZero);
+                var nodeName = isInputLayer ? inputIds[i] : isOutputLayer ? outputIds[i] : 'h' + layerIdx + 'n' + (i + 1);
+                var node = new Node(nodeName, activation, initZero);
                 currentLayer.push(node);
                 if (layerIdx >= 1) {
                     // Add links from nodes in the previous layer to this node.
@@ -245,7 +236,7 @@ define(["require", "exports"], function (require, exports) {
     }
     exports.forwardProp = forwardProp;
     /**
-     * Runs a backward propagation using the provided target and the
+     * LEARNING: Runs a backward propagation using the provided target and the
      * computed output of the previous call to forward propagation.
      * This method modifies the internal state of the network - the error
      * derivatives with respect to each node, and each weight
@@ -298,7 +289,7 @@ define(["require", "exports"], function (require, exports) {
     }
     exports.backProp = backProp;
     /**
-     * Updates the weights of the network using the previously accumulated error
+     * LEARNING: Updates the weights of the network using the previously accumulated error
      * derivatives.
      */
     function updateWeights(network, learningRate, regularizationRate) {
@@ -351,9 +342,4 @@ define(["require", "exports"], function (require, exports) {
         }
     }
     exports.forEachNode = forEachNode;
-    /** Returns the output nodes in the network. */
-    function getOutputNode(network) {
-        return network[network.length - 1];
-    }
-    exports.getOutputNode = getOutputNode;
 });

@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetOutputNeuronVal;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
@@ -34,8 +35,11 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeBiasStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeWeightStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronWoVarStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
@@ -260,6 +264,24 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     }
 
     @Override
+    public Void visitNNChangeWeightStmt(NNChangeWeightStmt<Void> chgStmt) {
+        this.sb.append("// NNChangeWeight not yet available for target code generation");
+        return null;
+    }
+
+    @Override
+    public Void visitNNChangeBiasStmt(NNChangeBiasStmt<Void> chgStmt) {
+        this.sb.append("// NNChangeBias not yet available for target code generation");
+        return null;
+    }
+
+    @Override
+    public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<Void> getVal) {
+        this.sb.append("// NNGetOutputNeuronVal not yet available for target code generation");
+        return null;
+    }
+
+    @Override
     public Void visitNNInputNeuronStmt(NNInputNeuronStmt<Void> nnInputNeuronStmt) {
         return null;
     }
@@ -268,6 +290,12 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     public Void visitNNOutputNeuronStmt(NNOutputNeuronStmt<Void> nnOutputNeuronStmt) {
         return null;
     }
+
+    @Override
+    public Void visitNNOutputNeuronWoVarStmt(NNOutputNeuronWoVarStmt<Void> nnOutputNeuronWoVarStmt) {
+        return null;
+    }
+
     @Override
     public Void visitStmtList(StmtList<Void> stmtList) {
         stmtList.get().stream().forEach(stmt -> {

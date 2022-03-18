@@ -11,6 +11,9 @@ public class C {
     public static final String ANY = "ANY";
     public static final String ARG1 = "arg1";
     public static final String ARG2 = "arg2";
+    public static final String FROM = "FROM";
+    public static final String TO = "TO";
+    public static final String CHANGE = "CHANGE";
     public static final String ASSERT_ACTION = "AssertAction";
     public static final String ASSIGN_METHOD_PARAMETER_STMT = "AssignMethodParameter";
     public static final String ASSIGN_STMT = "AssignStmt";
@@ -187,7 +190,10 @@ public class C {
     public static final String NAMES = "names";
     public static final String NEG = "NEG";
     public static final String NEQ = "NEQ";
-    public static final String NNSTEP_STMT = "nnStepStmt";
+    public static final String NN_STEP_STMT = "nnStepStmt";
+    public static final String NN_CHANGEWEIGHT_STMT = "nnChangeWeightStmt";
+    public static final String NN_CHANGEBIAS_STMT = "nnChangeBiasStmt";
+    public static final String NN_GETOUTPUTNEURON_VAL = "nnGetOutputNeuronVal";
     public static final String NOOP_STMT = "createNoopStmt";
     public static final String NOT = "NOT";
     public static final String NO = "NO";

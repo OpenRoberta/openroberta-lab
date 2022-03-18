@@ -221,8 +221,14 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         this.robotBehaviour.getSample(this.state, stmt[C.NAME], stmt[C.GET_SAMPLE], stmt[C.PORT], stmt[C.MODE]);
                         break;
                     }
-                    case C.NNSTEP_STMT:
+                    case C.NN_STEP_STMT:
                         this.evalNNStep(stmt[C.ARG1], stmt[C.ARG2]);
+                        break;
+                    case C.NN_CHANGEWEIGHT_STMT:
+                        PG.changeWeight(stmt[C.FROM], stmt[C.TO], stmt[C.CHANGE], this.state.pop());
+                        break;
+                    case C.NN_CHANGEBIAS_STMT:
+                        PG.changeBias(stmt[C.NAME], stmt[C.CHANGE], this.state.pop());
                         break;
                     case C.LED_ON_ACTION: {
                         var color_1 = this.state.pop();
@@ -626,6 +632,10 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         default:
                             throw 'Invalid Math Constant Name';
                     }
+                    break;
+                }
+                case C.NN_GETOUTPUTNEURON_VAL: {
+                    this.state.push(PG.getOutputNeuronVal(expr[C.NAME]));
                     break;
                 }
                 case C.SINGLE_FUNCTION: {
