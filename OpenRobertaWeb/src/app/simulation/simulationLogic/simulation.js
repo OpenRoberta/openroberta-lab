@@ -236,7 +236,7 @@ function initMicrophone(robot) {
     }
 }
 
-var time;
+var time = new Date().getTime();
 var renderTime = 5; // approx. time in ms only for the first rendering
 
 var dt = 0;
@@ -632,11 +632,9 @@ function render() {
     for (var i = 0; i < numRobots; i++) {
         actionValues.push({});
     }
-    globalID = requestAnimationFrame(render);
     var now = new Date().getTime();
-    var dtSim = now - (time || now);
-    var dtRobot = Math.min(15, (dtSim - renderTime) / numRobots);
-    var dtRobot = Math.abs(dtRobot);
+    var dtSim = now - time;
+    var dtRobot = Math.min(15, Math.abs(dtSim - renderTime) / numRobots);
     dt = dtSim / 1000;
     time = now;
     stepCounter += 1;
@@ -702,6 +700,7 @@ function render() {
     scene.updateSensorValues(!pause);
     scene.drawRobots();
     renderTime = new Date().getTime() - renderTimeStart;
+    globalID = requestAnimationFrame(render);
 }
 
 function allInterpretersTerminated() {
@@ -1636,6 +1635,7 @@ function removeMouseEvents() {
 }
 
 function initScene() {
+    cancelAnimationFrame(globalID);
     scene = new Scene(imgObjectList[currentBackground], robots, imgPattern, ruler);
     scene.drawRobots();
     resetSelection();
