@@ -43,8 +43,12 @@ public class NEPOprog {
     
     float ___o1 = 0;
     float ___o2 = 0;
+    float ___o3 = 0;
     
     public void run() throws Exception {
-        // NNstep not yet available for target code generation
+        
+        
+        
+        ___o3 = 0;
     }
 }

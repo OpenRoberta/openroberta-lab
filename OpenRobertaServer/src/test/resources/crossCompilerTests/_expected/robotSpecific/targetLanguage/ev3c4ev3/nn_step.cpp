@@ -11,13 +11,17 @@
 
 double ___o1 = 0;
 double ___o2 = 0;
+double ___o3 = 0;
 
 int main () {
     NEPOInitEV3();
     NEPOSetAllSensors(NULL, NULL, NULL, NULL);
     
     
-    // NNstep not yet available for target code generation
+    
+    
+    
+    ___o3 = 0;
     
     NEPOFreeEV3();
     return 0;

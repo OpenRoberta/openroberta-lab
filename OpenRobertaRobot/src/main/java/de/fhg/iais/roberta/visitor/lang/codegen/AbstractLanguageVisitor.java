@@ -259,25 +259,22 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     @Override
     public Void visitNNStepStmt(NNStepStmt<Void> nnStepStmt) {
-        this.sb.append("// NNstep not yet available for target code generation");
         return null;
     }
 
     @Override
     public Void visitNNChangeWeightStmt(NNChangeWeightStmt<Void> chgStmt) {
-        this.sb.append("// NNChangeWeight not yet available for target code generation");
         return null;
     }
 
     @Override
     public Void visitNNChangeBiasStmt(NNChangeBiasStmt<Void> chgStmt) {
-        this.sb.append("// NNChangeBias not yet available for target code generation");
         return null;
     }
 
     @Override
     public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<Void> getVal) {
-        this.sb.append("// NNGetOutputNeuronVal not yet available for target code generation");
+        this.sb.append("0"); // enforces, that the generated programs are syntactically correct :-<
         return null;
     }
 

@@ -22,9 +22,13 @@ hal = Hal(_brickConfiguration)
 
 ___o1 = 0
 ___o2 = 0
+___o3 = 0
 def run():
-    global ___o1, ___o2
-    // NNstep not yet available for target code generation
+    global ___o1, ___o2, ___o3
+    
+    
+    
+    ___o3 = 0
 
 def main():
     try:
