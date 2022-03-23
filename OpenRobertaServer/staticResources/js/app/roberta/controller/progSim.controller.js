@@ -51,7 +51,7 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
                         var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
                         var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
                         var language = GUISTATE_C.getLanguage();
-                        NN_CTRL.prepareNNfromNNstep();
+                        NN_CTRL.mkNNfromNNStepData();
                         PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function (result) {
                             if (result.rc == 'ok') {
                                 MSG.displayMessage('MESSAGE_EDIT_START', 'TOAST', GUISTATE_C.getProgramName());

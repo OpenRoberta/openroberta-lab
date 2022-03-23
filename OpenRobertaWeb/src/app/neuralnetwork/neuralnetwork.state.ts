@@ -5,20 +5,21 @@
  */
 
 import * as nn from './neuralnetwork.nn';
+import * as LOG from 'log';
 
 /** A map between names and activation functions. */
 export let activations: { [key: string]: nn.ActivationFunction } = {
     relu: nn.Activations.RELU,
     tanh: nn.Activations.TANH,
     sigmoid: nn.Activations.SIGMOID,
-    linear: nn.Activations.LINEAR
+    linear: nn.Activations.LINEAR,
 };
 
 /** A map between names and regularization functions. */
 export let regularizations: { [key: string]: nn.RegularizationFunction } = {
     none: null,
     L1: nn.RegularizationFunction.L1,
-    L2: nn.RegularizationFunction.L2
+    L2: nn.RegularizationFunction.L2,
 };
 
 export function getKeyFromValue(obj: any, value: any): string {
@@ -77,27 +78,42 @@ export class State {
     outputsWoVar: string[];
 
     setFromJson(json: any, inputNeurons: string[], outputNeurons: string[], outputNeuronsWoVar: string[]): void {
-        this.learningRate = json.learningRate !== undefined ? json.learningRate : 0.03;
-        this.regularizationRate = json.regularizationRate !== undefined ? json.regularizationRate : 0;
-        this.noise = json.noise !== undefined ? json.noise : 0;
-        this.batchSize = json.batchSize !== undefined ? json.batchSize : 10;
-        this.discretize = json.discretize !== undefined ? json.discretize : false;
-        this.percTrainData = json.percTrainData !== undefined ? json.percTrainData : 50;
-        this.activationKey = json.activationKey !== undefined ? json.activationKey : 'linear';
-        this.activation = activations[this.activationKey];
-        this.regularization = null;
-        this.initZero = json.initZero !== undefined ? json.initZero : false;
-        this.collectStats = json.collectStats !== undefined ? json.collectStats : false;
-        this.numHiddenLayers = json.numHiddenLayers !== undefined ? json.numHiddenLayers : 1;
-        this.networkShape = json.networkShape !== undefined ? json.networkShape : [2];
-        this.weights = json.weights !== undefined ? json.weights : undefined;
-        this.biases = json.biases !== undefined ? json.biases : undefined;
-        this.seed = json.seed !== undefined ? json.seed : undefined;
+        if (json !== undefined && json != null) {
+            this.learningRate = json.learningRate !== undefined ? json.learningRate : 0.03;
+            this.regularizationRate = json.regularizationRate !== undefined ? json.regularizationRate : 0;
+            this.noise = json.noise !== undefined ? json.noise : 0;
+            this.batchSize = json.batchSize !== undefined ? json.batchSize : 10;
+            this.discretize = json.discretize !== undefined ? json.discretize : false;
+            this.percTrainData = json.percTrainData !== undefined ? json.percTrainData : 50;
+            this.activationKey = json.activationKey !== undefined ? json.activationKey : 'linear';
+            this.activation = activations[this.activationKey];
+            this.regularization = null;
+            this.initZero = json.initZero !== undefined ? json.initZero : false;
+            this.collectStats = json.collectStats !== undefined ? json.collectStats : false;
+            this.numHiddenLayers = json.numHiddenLayers !== undefined ? json.numHiddenLayers : 1;
+            this.networkShape = json.networkShape !== undefined ? json.networkShape : [2];
+            this.weights = json.weights !== undefined ? json.weights : undefined;
+            this.biases = json.biases !== undefined ? json.biases : undefined;
+            this.seed = json.seed !== undefined ? json.seed : undefined;
 
-        this.numInputs = inputNeurons.length;
-        this.numOutputs = outputNeurons.length + outputNeuronsWoVar.length;
-        this.inputs = inputNeurons;
-        this.outputs = outputNeurons;
-        this.outputsWoVar = outputNeuronsWoVar;
+            if (inputNeurons !== undefined && inputNeurons != null) {
+                this.numInputs = inputNeurons.length;
+                this.inputs = inputNeurons;
+            } else {
+                this.numInputs = 0;
+                this.inputs = [];
+            }
+            if (outputNeurons !== undefined && outputNeurons != null && outputNeurons !== undefined && outputNeurons != null) {
+                this.numOutputs = outputNeurons.length + outputNeuronsWoVar.length;
+                this.outputs = outputNeurons;
+                this.outputsWoVar = outputNeuronsWoVar;
+            } else {
+                this.numOutputs = 0;
+                this.outputs = [];
+                this.outputsWoVar = [];
+            }
+        } else {
+            LOG.error('failed to create nn state. No JSON from program available');
+        }
     }
 }

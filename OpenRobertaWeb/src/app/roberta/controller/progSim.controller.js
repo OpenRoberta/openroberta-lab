@@ -76,7 +76,7 @@ function initEvents() {
 
                         var language = GUISTATE_C.getLanguage();
 
-                        NN_CTRL.prepareNNfromNNstep();
+                        NN_CTRL.mkNNfromNNStepData();
                         PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function (result) {
                             if (result.rc == 'ok') {
                                 MSG.displayMessage('MESSAGE_EDIT_START', 'TOAST', GUISTATE_C.getProgramName());

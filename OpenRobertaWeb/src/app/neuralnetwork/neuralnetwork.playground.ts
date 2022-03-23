@@ -6,6 +6,7 @@
 
 import * as nn from './neuralnetwork.nn';
 import { activations, getKeyFromValue, State } from './neuralnetwork.state';
+import * as LOG from 'log';
 import * as d3 from 'd3';
 
 let mainWidth;
@@ -32,14 +33,16 @@ let colorScale = d3.scale.linear<string, number>().domain([-1, 0, 1]).range(['#f
 let state = new State();
 let network: nn.Node[][] = null;
 
-export function runPlayground(stateFromNNstep: any, inputNeurons: string[], outputNeurons: string[], outputNeuronsWoVar: string[]) {
+export function setupNN(stateFromNNstep: any, inputNeurons: string[], outputNeurons: string[], outputNeuronsWoVar: string[]) {
     state = new State();
     state.setFromJson(stateFromNNstep, inputNeurons, outputNeurons, outputNeuronsWoVar);
     makeNetworkFromState();
+}
 
+export function runNNEditor() {
     d3.select('#goto-sim').on('click', () => {
         // $('#tabProgram').trigger('click'); $('#simButton').trigger('click');
-        $.when($('#tabProgram').trigger('click')).done(function () {
+        $.when($('#tabProgram').trigger('click')).done(function() {
             $('#simButton').trigger('click');
         });
     });
@@ -62,7 +65,7 @@ export function runPlayground(stateFromNNstep: any, inputNeurons: string[], outp
         reset();
     });
 
-    let activationDropdown = d3.select('#activations').on('change', function () {
+    let activationDropdown = d3.select('#activations').on('change', function() {
         state.activationKey = this.value;
         state.activation = activations[this.value];
         reset();
@@ -143,7 +146,7 @@ function drawNetwork(network: nn.Node[][]): void {
                 calloutThumb.style({
                     display: null,
                     top: `${20 + 3 + cy}px`,
-                    left: `${cxH}px`,
+                    left: `${cxH}px`
                 });
                 idWithCallout = node.id;
             }
@@ -167,7 +170,7 @@ function drawNetwork(network: nn.Node[][]): void {
                     calloutWeights.style({
                         display: null,
                         top: `${midPoint.y + 5}px`,
-                        left: `${midPoint.x + 3}px`,
+                        left: `${midPoint.x + 3}px`
                     });
                     targetIdWithCallout = link.dest.id;
                 }
@@ -209,7 +212,7 @@ function drawNode(node: nn.Node, nodeType: NodeType, cx: number, cy: number, con
     let nodeGroup = container.append('g').attr({
         class: nodeClass,
         id: `${nodeId}`,
-        transform: `translate(${x},${y})`,
+        transform: `translate(${x},${y})`
     });
 
     // Draw the main rectangle.
@@ -219,16 +222,16 @@ function drawNode(node: nn.Node, nodeType: NodeType, cx: number, cy: number, con
             x: 0,
             y: 0,
             width: RECT_SIZE,
-            height: RECT_SIZE,
+            height: RECT_SIZE
         })
-        .on('click', function () {
+        .on('click', function() {
             showBiasAndLinkWeights(nodeGroup);
         });
     let numberLabelNode = nodeGroup.append('text').attr({
         class: 'main-label',
         x: 10,
         y: 20,
-        'text-anchor': 'start',
+        'text-anchor': 'start'
     });
     numberLabelNode.append('tspan').text(nodeId);
     let activeOrNotClass = state[nodeId] ? 'active' : 'inactive';
@@ -247,12 +250,12 @@ function drawNode(node: nn.Node, nodeType: NodeType, cx: number, cy: number, con
                 x: -BIAS_SIZE - 2,
                 y: RECT_SIZE - BIAS_SIZE + 3,
                 width: BIAS_SIZE,
-                height: BIAS_SIZE,
+                height: BIAS_SIZE
             })
-            .on('mouseenter', function () {
+            .on('mouseenter', function() {
                 updateHoverCard(HoverType.BIAS, node, d3.mouse(container.node()));
             })
-            .on('mouseleave', function () {
+            .on('mouseleave', function() {
                 updateHoverCard(null);
             });
     }
@@ -263,12 +266,12 @@ function drawNode(node: nn.Node, nodeType: NodeType, cx: number, cy: number, con
         .insert('div', ':first-child')
         .attr({
             id: `canvas-${nodeId}`,
-            class: 'canvas',
+            class: 'canvas'
         })
         .style({
             position: 'absolute',
             left: `${x + 3}px`,
-            top: `${y + 3}px`,
+            top: `${y + 3}px`
         });
     if (nodeType === NodeType.INPUT) {
         div.classed(activeOrNotClass, true);
@@ -290,19 +293,19 @@ function drawLink(
     let datum = {
         source: {
             y: source.cx + RECT_SIZE / 2 + 2,
-            x: source.cy,
+            x: source.cy
         },
         target: {
             y: dest.cx - RECT_SIZE / 2,
-            x: dest.cy + ((index - (length - 1) / 2) / length) * 12,
-        },
+            x: dest.cy + ((index - (length - 1) / 2) / length) * 12
+        }
     };
     let diagonal = d3.svg.diagonal().projection((d) => [d.y, d.x]);
     line.attr({
         'marker-start': 'url(#markerArrow)',
         class: 'link',
         id: input.source.id + '-' + input.dest.id,
-        d: diagonal(datum, 0),
+        d: diagonal(datum, 0)
     });
 
     // Add an invisible thick link that will be used for
@@ -311,10 +314,10 @@ function drawLink(
         .append('path')
         .attr('d', diagonal(datum, 0))
         .attr('class', 'link-hover')
-        .on('mouseenter', function () {
+        .on('mouseenter', function() {
             updateHoverCard(HoverType.WEIGHT, input, d3.mouse(this));
         })
-        .on('mouseleave', function () {
+        .on('mouseleave', function() {
             updateHoverCard(null);
         });
     return line;
@@ -423,7 +426,7 @@ function updateHoverCard(type: HoverType, nodeOrLink?, coordinates?: [number, nu
     hovercard.style({
         left: `${coordinates[0] + 20}px`,
         top: `${coordinates[1]}px`,
-        display: 'block',
+        display: 'block'
     });
     hovercard.select('.type').text(name);
     hovercard.select('.value').style('display', null).text(value);
@@ -479,7 +482,7 @@ function updateWeightsUI(network: nn.Node[][], container) {
                 .style({
                     'stroke-dashoffset': 0,
                     'stroke-width': linkWidthScale(Math.abs(link.weight)),
-                    stroke: colorScale(link.weight),
+                    stroke: colorScale(link.weight)
                 })
                 .datum(link);
         }
@@ -558,9 +561,14 @@ function makeNetworkBiasFromState(network: nn.Node[][], biasesAllLayers: string[
  * @return the stringified state
  */
 export function getStateAsJSONString(): String {
-    state.weights = extractWeights(network);
-    state.biases = extractBiases(network);
-    return JSON.stringify(state);
+    try {
+        state.weights = extractWeights(network);
+        state.biases = extractBiases(network);
+        return JSON.stringify(state);
+    } catch (e) {
+        LOG.error('failed to create a JSON string from nn state');
+        return '';
+    }
 }
 
 function extractWeights(network: nn.Node[][]): string[][][] {

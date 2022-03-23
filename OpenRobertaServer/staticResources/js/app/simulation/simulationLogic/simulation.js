@@ -400,6 +400,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
             init(userPrograms, false, simRobotType);
             addMouseEvents();
         }, 205);
+        NN_CTRL.saveNN2Blockly();
     }
     exports.stopProgram = stopProgram;
     // obstacles
@@ -571,6 +572,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
     }
     exports.getSelectedRobot = getSelectedRobot;
     function cancel() {
+        NN_CTRL.saveNN2Blockly();
         canceled = true;
         removeMouseEvents();
     }

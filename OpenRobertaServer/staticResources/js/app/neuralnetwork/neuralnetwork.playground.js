@@ -3,9 +3,9 @@
  * Our work is heavily based on the tensorflow playground, see https://github.com/tensorflow/playground.
  * The Open Roberta Lab is open source and uses the Apache 2.0 License, see https://www.apache.org/licenses/LICENSE-2.0
  */
-define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3"], function (require, exports, nn, neuralnetwork_state_1, d3) {
+define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "log", "d3"], function (require, exports, nn, neuralnetwork_state_1, LOG, d3) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.getOutputNeuronVal = exports.changeBias = exports.changeWeight = exports.oneStep = exports.getStateAsJSONString = exports.makeNetworkFromState = exports.reset = exports.runPlayground = void 0;
+    exports.getOutputNeuronVal = exports.changeBias = exports.changeWeight = exports.oneStep = exports.getStateAsJSONString = exports.makeNetworkFromState = exports.reset = exports.runNNEditor = exports.setupNN = void 0;
     var mainWidth;
     var RECT_SIZE = 50;
     var SPACE_BETWEEN_NODES = 60;
@@ -26,10 +26,13 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
     var colorScale = d3.scale.linear().domain([-1, 0, 1]).range(['#f59322', '#e8eaeb', '#0877bd']).clamp(true);
     var state = new neuralnetwork_state_1.State();
     var network = null;
-    function runPlayground(stateFromNNstep, inputNeurons, outputNeurons, outputNeuronsWoVar) {
+    function setupNN(stateFromNNstep, inputNeurons, outputNeurons, outputNeuronsWoVar) {
         state = new neuralnetwork_state_1.State();
         state.setFromJson(stateFromNNstep, inputNeurons, outputNeurons, outputNeuronsWoVar);
         makeNetworkFromState();
+    }
+    exports.setupNN = setupNN;
+    function runNNEditor() {
         d3.select('#goto-sim').on('click', function () {
             // $('#tabProgram').trigger('click'); $('#simButton').trigger('click');
             $.when($('#tabProgram').trigger('click')).done(function () {
@@ -69,7 +72,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
         });
         reset();
     }
-    exports.runPlayground = runPlayground;
+    exports.runNNEditor = runNNEditor;
     function drawNetwork(network) {
         var svg = d3.select('#svg');
         svg.select('g.core').remove();
@@ -126,7 +129,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
                     calloutThumb.style({
                         display: null,
                         top: 20 + 3 + cy + "px",
-                        left: cxH + "px",
+                        left: cxH + "px"
                     });
                     idWithCallout = node.id;
                 }
@@ -147,7 +150,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
                         calloutWeights.style({
                             display: null,
                             top: midPoint.y + 5 + "px",
-                            left: midPoint.x + 3 + "px",
+                            left: midPoint.x + 3 + "px"
                         });
                         targetIdWithCallout = link.dest.id;
                     }
@@ -186,7 +189,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
         var nodeGroup = container.append('g').attr({
             class: nodeClass,
             id: "" + nodeId,
-            transform: "translate(" + x + "," + y + ")",
+            transform: "translate(" + x + "," + y + ")"
         });
         // Draw the main rectangle.
         nodeGroup
@@ -195,7 +198,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
             x: 0,
             y: 0,
             width: RECT_SIZE,
-            height: RECT_SIZE,
+            height: RECT_SIZE
         })
             .on('click', function () {
             showBiasAndLinkWeights(nodeGroup);
@@ -204,7 +207,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
             class: 'main-label',
             x: 10,
             y: 20,
-            'text-anchor': 'start',
+            'text-anchor': 'start'
         });
         numberLabelNode.append('tspan').text(nodeId);
         var activeOrNotClass = state[nodeId] ? 'active' : 'inactive';
@@ -223,7 +226,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
                 x: -BIAS_SIZE - 2,
                 y: RECT_SIZE - BIAS_SIZE + 3,
                 width: BIAS_SIZE,
-                height: BIAS_SIZE,
+                height: BIAS_SIZE
             })
                 .on('mouseenter', function () {
                 updateHoverCard(HoverType.BIAS, node, d3.mouse(container.node()));
@@ -238,12 +241,12 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
             .insert('div', ':first-child')
             .attr({
             id: "canvas-" + nodeId,
-            class: 'canvas',
+            class: 'canvas'
         })
             .style({
             position: 'absolute',
             left: x + 3 + "px",
-            top: y + 3 + "px",
+            top: y + 3 + "px"
         });
         if (nodeType === NodeType.INPUT) {
             div.classed(activeOrNotClass, true);
@@ -256,19 +259,19 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
         var datum = {
             source: {
                 y: source.cx + RECT_SIZE / 2 + 2,
-                x: source.cy,
+                x: source.cy
             },
             target: {
                 y: dest.cx - RECT_SIZE / 2,
-                x: dest.cy + ((index - (length - 1) / 2) / length) * 12,
-            },
+                x: dest.cy + ((index - (length - 1) / 2) / length) * 12
+            }
         };
         var diagonal = d3.svg.diagonal().projection(function (d) { return [d.y, d.x]; });
         line.attr({
             'marker-start': 'url(#markerArrow)',
             class: 'link',
             id: input.source.id + '-' + input.dest.id,
-            d: diagonal(datum, 0),
+            d: diagonal(datum, 0)
         });
         // Add an invisible thick link that will be used for
         // showing the weight value on hover.
@@ -382,7 +385,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
         hovercard.style({
             left: coordinates[0] + 20 + "px",
             top: coordinates[1] + "px",
-            display: 'block',
+            display: 'block'
         });
         hovercard.select('.type').text(name);
         hovercard.select('.value').style('display', null).text(value);
@@ -436,7 +439,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
                     .style({
                     'stroke-dashoffset': 0,
                     'stroke-width': linkWidthScale(Math.abs(link.weight)),
-                    stroke: colorScale(link.weight),
+                    stroke: colorScale(link.weight)
                 })
                     .datum(link);
             }
@@ -511,9 +514,15 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
      * @return the stringified state
      */
     function getStateAsJSONString() {
-        state.weights = extractWeights(network);
-        state.biases = extractBiases(network);
-        return JSON.stringify(state);
+        try {
+            state.weights = extractWeights(network);
+            state.biases = extractBiases(network);
+            return JSON.stringify(state);
+        }
+        catch (e) {
+            LOG.error('failed to create a JSON string from nn state');
+            return '';
+        }
     }
     exports.getStateAsJSONString = getStateAsJSONString;
     function extractWeights(network) {
