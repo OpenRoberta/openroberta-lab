@@ -204,6 +204,7 @@ public class C {
     public static final String OFF = "off";
     public static final String ON = "on";
     public static final String OP = "op";
+    public static final String POP = "pop";
     public static final String OPS = "ops";
     public static final String PROGRAM_COUNTER = "pc";
     public static final String STEP = "step";

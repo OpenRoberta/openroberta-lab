@@ -202,6 +202,7 @@ export const NUM_CONST: string = "NUM_CONST";
 export const OFF: string = "off";
 export const ON: string = "on";
 export const OP: string = "op";
+export const POP: string = "pop";
 export const OPS: string = "ops";
 export const PROGRAM_COUNTER: string = "pc";
 export const STEP: string = "step";

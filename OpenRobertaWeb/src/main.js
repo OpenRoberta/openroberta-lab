@@ -102,8 +102,9 @@ require.config({
         'interpreter.jsHelper': 'app/nepostackmachine/interpreter.jsHelper',
 
         'neuralnetwork.nn': 'app/neuralnetwork/neuralnetwork.nn',
-        'neuralnetwork.state': 'app/neuralnetwork/neuralnetwork.state',
-        'neuralnetwork.playground': 'app/neuralnetwork/neuralnetwork.playground',
+        'neuralnetwork.uistate': 'app/neuralnetwork/neuralnetwork.uistate',
+        'neuralnetwork.ui': 'app/neuralnetwork/neuralnetwork.ui',
+        'neuralnetwork.helper': 'app/neuralnetwork/neuralnetwork.helper',
 
         confVisualization: 'app/configVisualization/confVisualization',
         'const.robots': 'app/configVisualization/const.robots',

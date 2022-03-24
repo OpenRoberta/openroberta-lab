@@ -53,12 +53,12 @@ public class NNStepStmt<V> extends Stmt<V> {
     }
 
     /**
-     * @return the output neuron statements WITHOUT the output neuron statements without vars
+     * @return the output neuron statements
      */
     public List<Stmt<V>> getOutputNeurons() {
         final List<Stmt<V>> outputNeurons = new ArrayList<>();
         for ( Stmt<V> ioNeuron : ioNeurons.get() ) {
-            if ( ioNeuron.getKind().getName().equals("NN_OUTPUT_NEURON_STMT") ) {
+            if ( ioNeuron.getKind().getName().equals("NN_OUTPUT_NEURON_STMT") || ioNeuron.getKind().getName().equals("NN_OUTPUT_NEURON_WO_VAR_STMT") ) {
                 outputNeurons.add(ioNeuron);
             }
         }

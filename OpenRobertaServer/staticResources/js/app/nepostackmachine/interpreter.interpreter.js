@@ -1,4 +1,4 @@
-define(["require", "exports", "./interpreter.state", "./interpreter.constants", "./interpreter.util", "neuralnetwork.playground"], function (require, exports, interpreter_state_1, C, U, PG) {
+define(["require", "exports", "./interpreter.state", "./interpreter.constants", "./interpreter.util", "neuralnetwork.ui"], function (require, exports, interpreter_state_1, C, U, UI) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Interpreter = void 0;
     var Interpreter = /** @class */ (function () {
@@ -206,6 +206,10 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         this.state.setVar(name_1, this.state.pop());
                         break;
                     }
+                    case C.POP: {
+                        this.state.pop();
+                        break;
+                    }
                     case C.CLEAR_DISPLAY_ACTION: {
                         this.robotBehaviour.clearDisplay();
                         return [0, true];
@@ -225,10 +229,10 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         this.evalNNStep(stmt[C.ARG1], stmt[C.ARG2]);
                         break;
                     case C.NN_CHANGEWEIGHT_STMT:
-                        PG.changeWeight(stmt[C.FROM], stmt[C.TO], stmt[C.CHANGE], this.state.pop());
+                        UI.getNetwork().changeWeight(stmt[C.FROM], stmt[C.TO], stmt[C.CHANGE], this.state.pop());
                         break;
                     case C.NN_CHANGEBIAS_STMT:
-                        PG.changeBias(stmt[C.NAME], stmt[C.CHANGE], this.state.pop());
+                        UI.getNetwork().changeBias(stmt[C.NAME], stmt[C.CHANGE], this.state.pop());
                         break;
                     case C.LED_ON_ACTION: {
                         var color_1 = this.state.pop();
@@ -635,7 +639,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     break;
                 }
                 case C.NN_GETOUTPUTNEURON_VAL: {
-                    this.state.push(PG.getOutputNeuronVal(expr[C.NAME]));
+                    this.state.push(UI.getNetwork().getOutputNeuronVal(expr[C.NAME]));
                     break;
                 }
                 case C.SINGLE_FUNCTION: {
@@ -954,7 +958,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                 inputData.push(s.pop());
             }
             inputData = inputData.reverse();
-            var outputData = PG.oneStep(inputData);
+            var outputData = UI.getNetwork().oneStep(inputData);
             if (outputData.length != numberOutputNeurons) {
                 U.dbcException('NN returned wrong number of outputs: ' + outputData.length.toString + ' !=' + numberOutputNeurons.toString);
             }

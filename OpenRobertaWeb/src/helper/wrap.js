@@ -1,4 +1,3 @@
-import * as exports from 'exports';
 import * as COMM from 'comm';
 import * as LOG from 'log';
 import * as $ from 'jquery';
@@ -17,8 +16,17 @@ import * as $ from 'jquery';
  * - when the wrapREST functions is called, it does numberOfActiveActions-- and calls the REST-callback.
  * - the net effect is, that after the completion of the whole chain of actions, numberOfActiveActions is 0.
  */
-numberOfActiveActions = 0;
+let numberOfActiveActions = 0;
 
+/**
+ * get the name of a function. Best guess. ES5 compatible
+ * @param func
+ * @return string
+ */
+function functionName(func) {
+    var result = /^function\s+([\w\$]+)\s*\(/.exec(func.toString());
+    return result ? result[1] : '<anonymous>'; // for an anonymous function there won't be a match
+}
 /**
  * wrap a function to catch and display errors. Calling wrapTotal with an arbitrary function with NEVER terminate with an exception.
  * An not undefined 2nd parameter is a messages that activates logging with time measuring
@@ -40,9 +48,22 @@ function wrapTotal(fnToBeWrapped, message) {
             var err = new Error();
             var elapsed = new Date() - start;
             if (message !== undefined) {
-                LOG.error('[[ERR ]] ' + elapsed + ' msec: ' + message + ', then EXCEPTION: ' + e + ' with stacktrace: ' + err.stack);
+                LOG.error(
+                    '[[ERR ]] ' +
+                        elapsed +
+                        ' msec: ' +
+                        message +
+                        ', then in function ' +
+                        functionName(fnToBeWrapped) +
+                        ' EXCEPTION: ' +
+                        e +
+                        ' in function ' +
+                        functionName(fnToBeWrapped) +
+                        ' with stacktrace: ' +
+                        err.stack
+                );
             } else {
-                LOG.error('[[ERR ]] ' + elapsed + ' msec: wrapTotal caught an EXCEPTION: ' + e + ' with stacktrace: ' + err.stack);
+                LOG.error('[[ERR ]] ' + elapsed + ' msec: in function ' + functionName(fnToBeWrapped) + ' EXCEPTION: ' + e + ' with stacktrace: ' + err.stack);
             }
         }
     };
@@ -74,7 +95,14 @@ function wrapUI(fnToBeWrapped, message) {
         } catch (e) {
             numberOfActiveActions--;
             var err = new Error();
-            LOG.error('wrapUI/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
+            LOG.error(
+                'wrapUI/wrapTotal CRASHED UNEXPECTED AND SEVERELY in function ' +
+                    functionName(fnToBeWrapped) +
+                    ' with EXCEPTION: ' +
+                    e +
+                    ' and stacktrace: ' +
+                    err.stack
+            );
             COMM.ping(); // transfer data to the server
         }
     };
@@ -98,7 +126,14 @@ function wrapREST(fnToBeWrapped, message) {
         } catch (e) {
             numberOfActiveActions--;
             var err = new Error();
-            LOG.error('wrapREST/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
+            LOG.error(
+                'wrapREST/wrapTotal CRASHED UNEXPECTED AND SEVERELY in function ' +
+                    functionName(fnToBeWrapped) +
+                    ' with EXCEPTION: ' +
+                    e +
+                    ' and stacktrace: ' +
+                    err.stack
+            );
             COMM.ping(); // transfer data to the server
         }
     };
@@ -115,7 +150,14 @@ function wrapErrorFn(errorFnToBeWrapped) {
         } catch (e) {
             numberOfActiveActions--;
             var err = new Error();
-            LOG.error('wrapErrorFn/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
+            LOG.error(
+                'wrapErrorFn/wrapTotal CRASHED UNEXPECTED AND SEVERELY in function ' +
+                    functionName(fnToBeWrapped) +
+                    ' with EXCEPTION: ' +
+                    e +
+                    ' and stacktrace: ' +
+                    err.stack
+            );
             COMM.ping(); // transfer data to the server
         }
     };
@@ -151,7 +193,9 @@ $.fn.clickWrap = function (callback) {
     } catch (e) {
         numberOfActiveActions++;
         var err = new Error();
-        LOG.error('clickWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
+        LOG.error(
+            'clickWrap CRASHED UNEXPECTED AND SEVERELY in callback ' + functionName(callback) + ' with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack
+        );
         COMM.ping(); // transfer data to the server
     }
 };
@@ -177,7 +221,7 @@ $.fn.oneWrap = function (event, callback) {
     } catch (e) {
         numberOfActiveActions++;
         var err = new Error();
-        LOG.error('oneWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
+        LOG.error('oneWrap CRASHED UNEXPECTED AND SEVERELY in callback ' + functionName(callback) + ' with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
         COMM.ping(); // transfer data to the server
     }
 };

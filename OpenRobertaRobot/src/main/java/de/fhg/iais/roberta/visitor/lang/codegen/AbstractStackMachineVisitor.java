@@ -532,11 +532,18 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
         for ( Stmt<V> inputNeuron : inputNeurons ) {
             inputNeuron.accept(this);
         }
-        JSONObject o = makeNode(C.NN_STEP_STMT).put(C.ARG1, inputNeurons.size()).put(C.ARG2, outputNeurons.size()); // neurons without var are EXCLUDED!
+        JSONObject o = makeNode(C.NN_STEP_STMT).put(C.ARG1, inputNeurons.size()).put(C.ARG2, outputNeurons.size());
         app(o);
         for ( Stmt<V> outputNeuronAsStmt : outputNeurons ) {
-            NNOutputNeuronStmt outputNeuron = (NNOutputNeuronStmt) outputNeuronAsStmt;
-            JSONObject ov = makeNode(C.ASSIGN_STMT).put(C.NAME, ((Var) outputNeuron.getValue()).getValue());
+            JSONObject ov;
+            if ( outputNeuronAsStmt.getKind().getName().equals("NN_OUTPUT_NEURON_STMT") ) {
+                NNOutputNeuronStmt outputNeuron = (NNOutputNeuronStmt) outputNeuronAsStmt;
+                ov = makeNode(C.ASSIGN_STMT).put(C.NAME, ((Var) outputNeuron.getValue()).getValue());
+            } else if ( outputNeuronAsStmt.getKind().getName().equals("NN_OUTPUT_NEURON_WO_VAR_STMT") ) {
+                ov = makeNode(C.POP);
+            } else {
+                throw new DbcException("invalid output neuron");
+            }
             app(ov);
         }
         return null;

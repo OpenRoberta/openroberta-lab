@@ -1,4 +1,4 @@
-define(["require", "exports", "log", "guiState.controller", "neuralnetwork.playground", "jquery", "blockly", "jquery-validate"], function (require, exports, LOG, GUISTATE_C, PG, $, Blockly) {
+define(["require", "exports", "log", "guiState.controller", "neuralnetwork.ui", "jquery", "blockly", "jquery-validate"], function (require, exports, LOG, GUISTATE_C, NN_UI, $, Blockly) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.mkNNfromNNStepDataAndRunNNEditor = exports.mkNNfromNNStepData = exports.saveNN2Blockly = exports.init = void 0;
     /**
@@ -24,7 +24,7 @@ define(["require", "exports", "log", "guiState.controller", "neuralnetwork.playg
     function saveNN2Blockly() {
         var nnstepBlock = getTheNNstepBlock();
         if (nnstepBlock !== null) {
-            nnstepBlock.data = PG.getStateAsJSONString();
+            nnstepBlock.data = NN_UI.getStateAsJSONString();
         }
     }
     exports.saveNN2Blockly = saveNN2Blockly;
@@ -32,14 +32,24 @@ define(["require", "exports", "log", "guiState.controller", "neuralnetwork.playg
      * create the NN from the program XML. Called, when the simulation starts
      */
     function mkNNfromNNStepData() {
-        var inputNeurons = [];
-        var outputNeurons = [];
-        var outputNeuronsWoVar = [];
         var nnStepBlock = getTheNNstepBlock();
-        if (nnStepBlock && !(nnStepBlock.data === undefined || nnStepBlock.data === null)) {
-            var nnStepData = JSON.parse(nnStepBlock.data);
-            extractInputOutputNeurons(inputNeurons, outputNeurons, outputNeuronsWoVar, nnStepBlock.getChildren());
-            PG.setupNN(nnStepData, inputNeurons, outputNeurons, outputNeuronsWoVar);
+        if (nnStepBlock) {
+            if (nnStepBlock.data !== undefined && nnStepBlock.data !== null) {
+                var nnStateAsJson = void 0;
+                try {
+                    nnStateAsJson = JSON.parse(nnStepBlock.data);
+                }
+                catch (e) {
+                    nnStateAsJson = null;
+                }
+            }
+            var inputNeurons = [];
+            var outputNeurons = [];
+            extractInputOutputNeurons(inputNeurons, outputNeurons, nnStepBlock.getChildren());
+            NN_UI.setupNN(nnStateAsJson, inputNeurons, outputNeurons);
+        }
+        else {
+            NN_UI.setupNN(null, [], []);
         }
     }
     exports.mkNNfromNNStepData = mkNNfromNNStepData;
@@ -48,7 +58,7 @@ define(["require", "exports", "log", "guiState.controller", "neuralnetwork.playg
      */
     function mkNNfromNNStepDataAndRunNNEditor() {
         mkNNfromNNStepData();
-        PG.runNNEditor();
+        NN_UI.runNNEditor();
     }
     exports.mkNNfromNNStepDataAndRunNNEditor = mkNNfromNNStepDataAndRunNNEditor;
     /**
@@ -74,21 +84,18 @@ define(["require", "exports", "log", "guiState.controller", "neuralnetwork.playg
      * @param outputNeuronsWoVar inout parameter: filled with the names of ouput neurons without vars
      * @param neurons the sub-block list found in the NNStep block
      */
-    function extractInputOutputNeurons(inputNeurons, outputNeurons, outputNeuronsWoVar, neurons) {
+    function extractInputOutputNeurons(inputNeurons, outputNeurons, neurons) {
         for (var _i = 0, neurons_1 = neurons; _i < neurons_1.length; _i++) {
             var block = neurons_1[_i];
             if (block.type === 'robActions_inputneuron') {
                 inputNeurons.push(block.getFieldValue('NAME'));
             }
-            else if (block.type === 'robActions_outputneuron') {
+            else if (block.type === 'robActions_outputneuron' || block.type === 'robActions_outputneuron_wo_var') {
                 outputNeurons.push(block.getFieldValue('NAME'));
-            }
-            else if (block.type === 'robActions_outputneuron_wo_var') {
-                outputNeuronsWoVar.push(block.getFieldValue('NAME'));
             }
             var next = block.getChildren();
             if (next) {
-                extractInputOutputNeurons(inputNeurons, outputNeurons, outputNeuronsWoVar, next);
+                extractInputOutputNeurons(inputNeurons, outputNeurons, next);
             }
         }
     }
