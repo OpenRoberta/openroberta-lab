@@ -336,7 +336,7 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
                     switch (_a.label) {
                         case 0:
                             $('#simEditButtons, #canvasDiv, #simRobot, #simValues').hide();
-                            $('#webotsDiv, #simButtons').show();
+                            $('#webotsDiv, #simButtons, #simResetPose').show();
                             if (!!this.webotsSimulation) return [3 /*break*/, 6];
                             this.prepareWebots();
                             return [4 /*yield*/, new Promise(function (resolve_1, reject_1) { require(['webots'], resolve_1, reject_1); })];

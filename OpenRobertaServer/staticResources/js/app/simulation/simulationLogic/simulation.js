@@ -508,7 +508,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
                 $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simEditButtons').show();
             }
         }
-        $('#simButtons, #canvasDiv').show();
+        $('#simButtons, #canvasDiv, #simRobot, #simValues').show();
         $('#webotsButtons, #webotsDiv').hide();
         interpreters = programs.map(function (x) {
             var src = JSON.parse(x.javaScriptProgram);

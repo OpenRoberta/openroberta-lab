@@ -317,7 +317,7 @@ class WebotsSimulationController {
 
     async init(sourceCode) {
         $('#simEditButtons, #canvasDiv, #simRobot, #simValues').hide();
-        $('#webotsDiv, #simButtons').show();
+        $('#webotsDiv, #simButtons, #simResetPose').show();
 
         if (!this.webotsSimulation) {
             this.prepareWebots();

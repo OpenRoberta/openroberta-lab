@@ -541,7 +541,7 @@ function init(programs, refresh, robotType) {
             $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simEditButtons').show();
         }
     }
-    $('#simButtons, #canvasDiv').show();
+    $('#simButtons, #canvasDiv, #simRobot, #simValues').show();
     $('#webotsButtons, #webotsDiv').hide();
     interpreters = programs.map(function (x) {
         var src = JSON.parse(x.javaScriptProgram);
