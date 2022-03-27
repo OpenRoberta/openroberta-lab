@@ -265,7 +265,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
             }
         }
         resetSelection();
-        scene.resetAllCanvas();
+        scene.resetAllCanvas(scene.backgroundImg);
         scene.drawColorAreas(highLightCorners);
         scene.drawObstacles(highLightCorners);
         scene.drawRuler();

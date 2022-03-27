@@ -292,7 +292,7 @@ function resetPose() {
         }
     }
     resetSelection();
-    scene.resetAllCanvas();
+    scene.resetAllCanvas(scene.backgroundImg);
     scene.drawColorAreas(highLightCorners);
     scene.drawObstacles(highLightCorners);
     scene.drawRuler();
