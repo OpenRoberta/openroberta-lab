@@ -616,24 +616,26 @@ limitations under the License.
             </div>
         </div>
 
-        <div id="nn" style="display: none;" class="nn-div tab-pane fade">
+        <div id="nn" style="display: none;" class="tab-pane fade">
             <div id="nn-top-controls">
                 <div class="nn-control">
-                    <button id="goto-sim" class="mdl-button mdl-js-button mdl-button--icon">
-                        <i class="material-icons">SIM</i>
+                    <button id="goto-sim">
+                        <i class="nn-large-size typcn typcn-simulation"></i>
                     </button>
                 </div>
                 <div class="nn-control">
-                    <button id="add-layers" class="mdl-button mdl-js-button mdl-button--icon">
+                    <div class="nn-num-layers-group">
+                        <span id="num-layers"></span> <span id="layers-label"></span>
+                    </div>
+                    <button id="add-layers">
                         <i class="material-icons">add</i>
                     </button>
-                    <button id="remove-layers" class="mdl-button mdl-js-button mdl-button--icon">
+                    <button id="remove-layers">
                         <i class="material-icons">remove</i>
                     </button>
-                    <span id="num-layers"></span> <span id="layers-label"></span>
                 </div>
                 <div class="nn-control">
-                    <label for="activations">Aktivierung</label>
+                    <span id="activation-label"></span>
                     <div class="select">
                         <select id="activations">
                             <option value="linear">Linear</option>
@@ -644,7 +646,7 @@ limitations under the License.
                     </div>
                 </div>
                 <div class="nn-control">
-                    <label for="regularizations">Regularisierung</label>
+                    <span id="regularization-label"></span>
                     <div class="select">
                         <select id="regularizations">
                             <option value="none">None</option>
@@ -654,17 +656,14 @@ limitations under the License.
                     </div>
                 </div>
             </div>
-            <div id="nn-main-part" class="nn-main-part">
-                <div id="nn-features" class="nn-features">
-                    <div id="network">
+            <div id="nn-main-part">
+                <div id="nn-features">
+                    <div id="nn-network">
                         <svg id="nn-svg"></svg>
-                        <div id="nn-hovercard">
-                            <div style="font-size: 10px">Klicken zum Ändern</div>
-                            <div>
-                                <span class="type">Gewicht/Bias</span> ist <span class="value">0</span><span><input/></span>
+                        <div id="nn-editCard">
+                                <span class="nn-type"></span><input/>
                             </div>
                         </div>
-                        <div class="callout weights"></div>
                     </div>
                 </div>
             </div>

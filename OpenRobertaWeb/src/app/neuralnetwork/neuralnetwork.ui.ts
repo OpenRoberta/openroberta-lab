@@ -9,11 +9,11 @@ import { Link, Network, Node } from './neuralnetwork.nn';
 import { State } from './neuralnetwork.uistate';
 import * as LOG from 'log';
 import * as D3 from 'd3';
+import * as MSG from './neuralnetwork.msg';
 
-enum HoverType {
+enum EditType {
     BIAS,
     WEIGHT,
-    NODE,
 }
 
 enum NodeType {
@@ -32,7 +32,6 @@ export function setupNN(stateFromNNstep: any, inputNeurons: string[], outputNeur
 
 export function runNNEditor() {
     D3.select('#goto-sim').on('click', () => {
-        // $('#tabProgram').trigger('click'); $('#simButton').trigger('click');
         $.when($('#tabProgram').trigger('click')).done(function () {
             $('#simButton').trigger('click');
         });
@@ -82,16 +81,18 @@ export function runNNEditor() {
 }
 
 function reconstructNNIncludingUI() {
-    let suffix = state.numHiddenLayers !== 1 ? 's' : '';
-    D3.select('#layers-label').text('Hidden layer' + suffix);
-    D3.select('#num-layers').text(state.numHiddenLayers);
-
     makeNetworkFromState();
     drawNetworkUI(network);
     updateUI();
 }
 
 function drawNetworkUI(network: Network): void {
+    D3.select('#activation-label').attr('class', 'nn-bold').text(MSG.get('ACTIVATION'));
+    D3.select('#regularization-label').attr('class', 'nn-bold').text(MSG.get('REGULARIZATION'));
+    let layerKey = state.numHiddenLayers === 1 ? 'HIDDEN_LAYER' : 'HIDDEN_LAYERS';
+    D3.select('#layers-label').text(MSG.get(layerKey));
+    D3.select('#num-layers').text(state.numHiddenLayers);
+
     const networkImpl = network.getLayerAndNodeArray();
     const svg = D3.select('#nn-svg');
 
@@ -156,7 +157,7 @@ function drawNetworkUI(network: Network): void {
     for (let layerIdx = 1; layerIdx < numLayers - 1; layerIdx++) {
         let numNodes = networkImpl[layerIdx].length;
         let cxH = layerStartX(layerIdx);
-        addPlusMinusControl(cxH, layerIdx);
+        addPlusMinusControl(cxH - nodeSize / 2 - biasSize, layerIdx);
         for (let i = 0; i < numNodes; i++) {
             let node = networkImpl[layerIdx][i];
             let cy = nodeStartY(i);
@@ -221,7 +222,7 @@ function drawNetworkUI(network: Network): void {
     }
 
     // Adjust the height of the features column.
-    let height = Math.max(getRelativeHeight(calloutWeights), getRelativeHeight(D3.select('#network')));
+    let height = getRelativeHeight(D3.select('#nn-network'));
     D3.select('.nn-features').style('height', height + 'px');
     return;
 
@@ -273,16 +274,16 @@ function drawNetworkUI(network: Network): void {
                     width: biasSize,
                     height: biasSize,
                 })
-                .on('mouseenter', function () {
-                    updateHoverCard(HoverType.BIAS, node, D3.mouse(container.node()));
+                .on('click', function () {
+                    updateEditCard(EditType.BIAS, node, D3.mouse(container.node()));
                 })
                 .on('mouseleave', function () {
-                    updateHoverCard(null);
+                    updateEditCard(null);
                 });
         }
 
         // Draw the node's canvas.
-        let div = D3.select('#network')
+        let div = D3.select('#nn-network')
             .insert('div', ':first-child')
             .attr({
                 id: `canvas-${nodeId}`,
@@ -329,16 +330,16 @@ function drawNetworkUI(network: Network): void {
         });
 
         // Add an invisible thick link that will be used for
-        // showing the weight value on hover.
+        // editing the weight value on click.
         container
             .append('path')
             .attr('d', diagonal(datum, 0))
-            .attr('class', 'link-hover')
-            .on('mouseenter', function () {
-                updateHoverCard(HoverType.WEIGHT, input, D3.mouse(this));
+            .attr('class', 'link-editCard')
+            .on('click', function () {
+                updateEditCard(EditType.WEIGHT, input, D3.mouse(this));
             })
             .on('mouseleave', function () {
-                updateHoverCard(null);
+                updateEditCard(null);
             });
         return line;
     }
@@ -349,16 +350,12 @@ function drawNetworkUI(network: Network): void {
     }
 
     function addPlusMinusControl(x: number, layerIdx: number) {
-        let div = D3.select('#network')
-            .append('div')
-            .classed('plus-minus-neurons', true)
-            .style('left', `${x - 10}px`);
-
+        let div = D3.select('#nn-network').append('div').classed('plus-minus-neurons', true).style('left', `${x}px`);
         let i = layerIdx - 1;
-        let firstRow = div.append('div').attr('class', `ui-numNodes${layerIdx}`);
+        let firstRow = div.append('div');
         firstRow
             .append('button')
-            .attr('class', 'mdl-button mdl-js-button mdl-button--icon')
+            .attr('class', 'plus-minus-neuron-button')
             .on('click', () => {
                 let numNeurons = state.networkShape[i];
                 if (numNeurons >= 6) {
@@ -368,12 +365,12 @@ function drawNetworkUI(network: Network): void {
                 reconstructNNIncludingUI();
             })
             .append('i')
-            .attr('class', 'material-icons')
+            .attr('class', 'material-icons nn-middle-size')
             .text('add');
 
         firstRow
             .append('button')
-            .attr('class', 'mdl-button mdl-js-button mdl-button--icon')
+            .attr('class', 'plus-minus-neuron-button')
             .on('click', () => {
                 let numNeurons = state.networkShape[i];
                 if (numNeurons <= 1) {
@@ -383,57 +380,58 @@ function drawNetworkUI(network: Network): void {
                 reconstructNNIncludingUI();
             })
             .append('i')
-            .attr('class', 'material-icons')
+            .attr('class', 'material-icons nn-middle-size')
             .text('remove');
 
         let suffix = state.networkShape[i] > 1 ? 's' : '';
-        div.append('div').text(state.networkShape[i] + ' neuron' + suffix);
+        div.append('div')
+            .attr('class', 'nn-bold')
+            .text(state.networkShape[i] + ' neuron' + suffix);
     }
 }
 
-function updateHoverCard(type: HoverType, nodeOrLink?, coordinates?: [number, number]) {
+function updateEditCard(type: EditType, nodeOrLink?, coordinates?: [number, number]) {
     // nodeOrLink : nn.Node | nn.Link
-    let hovercard = D3.select('#nn-hovercard');
+    let editCard = D3.select('#nn-editCard');
+
     if (type == null) {
-        hovercard.style('display', 'none');
-        D3.select('#nn-svg').on('click', null);
+        editCard.style('display', 'none');
         return;
     }
 
-    D3.select('#nn-svg').on('click', () => {
-        hovercard.select('.value').style('display', 'none');
-        let input = hovercard.select('input');
-        input.style('display', null);
-        input.on('input', () => {
-            let event = D3.event as any;
-            updateValueInHoverCard(type, nodeOrLink, event.target.value);
-        });
-        input.on('keypress', () => {
-            let event = D3.event as any;
-            if (event.keyCode === 13) {
-                updateHoverCard(type, nodeOrLink, coordinates);
-            } else if (event.key === 'h' || event.key === 'r') {
-                event.target.value = incrDecrValue(event.key === 'h' || event.key === 'i', event.target.value);
-                event.preventDefault && event.preventDefault();
-                updateValueInHoverCard(type, nodeOrLink, event.target.value);
-            }
-        });
+    let input = editCard.select('input');
+    input.property('value', getNodeLinkValue(type, nodeOrLink));
+    input.on('input', () => {
+        let event = D3.event as any;
+        fromEditCard2NodeLink(type, nodeOrLink, event.target.value);
+    });
+    input.on('keypress', () => {
+        let event = D3.event as any;
+        if (event.key === 'h' || event.key === 'i') {
+            event.target.value = updValue(event.target.value, 1);
+            event.preventDefault && event.preventDefault();
+            fromEditCard2NodeLink(type, nodeOrLink, event.target.value);
+        } else if (event.key === 'r' || event.key === 'd') {
+            event.target.value = updValue(event.target.value, -1);
+            event.preventDefault && event.preventDefault();
+            fromEditCard2NodeLink(type, nodeOrLink, event.target.value);
+        }
         (input.node() as HTMLInputElement).focus();
     });
-    let value = type === HoverType.WEIGHT ? (nodeOrLink as Link).weightOrig : (nodeOrLink as Node).biasOrig;
-    let name = type === HoverType.WEIGHT ? 'Gewicht' : 'Bias';
-    hovercard.style({
+    let value = type === EditType.WEIGHT ? (nodeOrLink as Link).weightOrig : (nodeOrLink as Node).biasOrig;
+
+    editCard.style({
         left: `${coordinates[0] + 20}px`,
         top: `${coordinates[1]}px`,
         display: 'block',
     });
-    hovercard.select('.type').text(name);
-    hovercard.select('.value').style('display', null).text(value);
-    hovercard.select('input').property('value', value).style('display', 'none');
+    let name = type === EditType.WEIGHT ? 'WEIGHT' : 'BIAS';
+    editCard.select('.nn-type').text(MSG.get(name));
+    (input.node() as HTMLInputElement).focus();
 
-    function updateValueInHoverCard(type: HoverType, nodeOrLink, value: string) {
+    function fromEditCard2NodeLink(type: EditType, nodeOrLink, value: string) {
         if (value != null) {
-            if (type === HoverType.WEIGHT) {
+            if (type === EditType.WEIGHT) {
                 let weights = H.string2weight(value);
                 if (weights !== null) {
                     nodeOrLink.weight = weights[0];
@@ -452,10 +450,18 @@ function updateHoverCard(type: HoverType, nodeOrLink?, coordinates?: [number, nu
         }
     }
 
-    function incrDecrValue(isPlus: boolean, value: string): string {
+    function getNodeLinkValue(type: EditType, nodeOrLink) {
+        if (type === EditType.WEIGHT) {
+            return nodeOrLink.weight;
+        } else {
+            return nodeOrLink.bias;
+        }
+    }
+
+    function updValue(value: string, incr: number): string {
         let valueTrimmed = value.trim();
         if (valueTrimmed === '') {
-            return '1';
+            return String(incr);
         } else {
             let opOpt = valueTrimmed.substr(0, 1);
             let number;
@@ -466,9 +472,9 @@ function updateHoverCard(type: HoverType, nodeOrLink?, coordinates?: [number, nu
                 number = +valueTrimmed;
             }
             if (isNaN(number)) {
-                return '1';
+                return String(incr);
             } else {
-                return opOpt + (isPlus ? number + 1 : number - 1);
+                return opOpt + (number + incr);
             }
         }
     }

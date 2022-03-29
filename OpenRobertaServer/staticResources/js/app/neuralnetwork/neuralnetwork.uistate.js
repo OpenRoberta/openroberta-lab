@@ -1,4 +1,4 @@
-define(["require", "exports", "./neuralnetwork.helper", "log"], function (require, exports, H, LOG) {
+define(["require", "exports", "./neuralnetwork.helper"], function (require, exports, H) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.State = void 0;
     // the GUI state.
@@ -22,6 +22,7 @@ define(["require", "exports", "./neuralnetwork.helper", "log"], function (requir
             this.biases = undefined;
             this.numInputs = 0;
             this.numOutputs = 0;
+            // if no JSON is available from the program, the default from above is taken
             if (json !== undefined && json != null) {
                 this.learningRate = json.learningRate !== undefined ? json.learningRate : 0.03;
                 this.regularizationRate = json.regularizationRate !== undefined ? json.regularizationRate : 0;
@@ -39,9 +40,6 @@ define(["require", "exports", "./neuralnetwork.helper", "log"], function (requir
                 this.weights = json.weights !== undefined ? json.weights : undefined;
                 this.biases = json.biases !== undefined ? json.biases : undefined;
                 this.seed = json.seed !== undefined ? json.seed : undefined;
-            }
-            else {
-                LOG.error('No JSON from program available. Setting up a default state.');
             }
             if (inputNeurons !== undefined && inputNeurons != null) {
                 this.numInputs = inputNeurons.length;
