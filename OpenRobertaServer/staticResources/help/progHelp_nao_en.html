@@ -111,7 +111,9 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-left">Number, x-coordinate for the new position.</li>
                 <li class="typcn typcn-arrow-left">Number, y-coordinate for the new position.</li>
-                <li class="typcn typcn-arrow-left">Number, select the angle by which the robot should turn.</li>
+                <li class="typcn typcn-arrow-left">Number, select the angle by which the robot should turn. <span
+                        style="color: rgb(51,51,51);">This value will be internally clipped to be between -360 and
+                        360.</span></li>
             </ul>
         </div>
         <div id="naoActions_walk_async" class="help expert">
@@ -173,7 +175,8 @@
                 <li class="typcn typcn-arrow-left">Number, die y coordinate of the spot.</li>
                 <li class="typcn typcn-arrow-left">Number,die z coordinate of the spot.</li>
                 <li class="typcn typcn-arrow-left">Number, the speed with which the robot shall move. Number between 1
-                    and 100.</li>
+                    and 100. <span style="color: rgb(51,51,51);">This value will be internally clipped to be between 0
+                        and 100.</span></li>
             </ul>
         </div>
         <div id="robActions_sayText" class="help beginner">
@@ -196,8 +199,12 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-left">String, text your robot shall say.</li>
-                <li class="typcn typcn-arrow-left">Number,the voice speed of your robot, between 1 and 100.</li>
-                <li class="typcn typcn-arrow-left">Number, the voice pitch of your robot, between 1 and 100.</li>
+                <li class="typcn typcn-arrow-left">Number,the voice speed of your robot, between 1 and 100. <span
+                        style="color: rgb(51,51,51);">This value will be internally clipped to be between 1 and
+                        100.</span></li>
+                <li class="typcn typcn-arrow-left">Number, the voice pitch of your robot, between 1 and 100. <span
+                        style="color: rgb(51,51,51);">This value will be internally clipped to be between 1 and
+                        100.</span></li>
             </ul>
         </div>
         <div id="naoActions_getLanguage" class="help expert">
@@ -234,7 +241,9 @@
             <p>Input values:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-left">Number, the desired volume of the robot, between 1 and 100.</li>
+                <li class="typcn typcn-arrow-left">Number, the desired volume of the robot, between 1 and 100. <span
+                        style="color: rgb(51,51,51);">This value will be internally clipped to be between 1 and
+                        100.</span></li>
             </ul>
         </div>
         <div id="naoActions_learnFace" class="help expert">
@@ -308,7 +317,9 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Option, choose the LED you want to control.</li>
-                <li class="typcn typcn-arrow-left">Number, the intensity of the LED, between 0 and 100.</li>
+                <li class="typcn typcn-arrow-left">Number, the intensity of the LED, between 0 and 100. <span
+                        style="color: rgb(51,51,51);">This value will be internally clipped to be between 0 and
+                        100.</span></li>
             </ul>
         </div>
         <div id="naoActions_ledOff" class="help beginner">

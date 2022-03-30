@@ -50,9 +50,11 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-left">String, text you want to display on the display.</li>
                 <li class="typcn typcn-arrow-left">Number, column in which the text should be displayed. Number between
-                    0 and 100.</li>
+                    0 and 127.<span style="color: rgb(51,51,51);"><span> </span>This value will be internally clipped to
+                        be between 0 and 127.</span></li>
                 <li class="typcn typcn-arrow-left">Number, line in which the text is to be displayed. Number between 0
-                    and 50.</li>
+                    and 63.<span style="color: rgb(51,51,51);"><span> </span>This value will be internally clipped to be
+                        between 0 and 63.</span></li>
             </ul>
         </div>
         <div id="robActions_display_clear_i2c" class="help beginner">
@@ -152,7 +154,8 @@
                 <li class="typcn typcn-arrow-sorted-down">Option, choose the actuator to apply the voltage to.</li>
                 <li class="typcn typcn-arrow-left">Number, choose the voltage that you want to apply. If you chose
                     digital choose either 0 or 1 as a value, if you chose analoge, choose between 0 and 1023 as a value.
-                </li>
+                    When using analog mode, <span style="color: rgb(51,51,51);"><span>t</span>his value will be
+                        internally clipped to be between 0 and 1023.</span></li>
             </ul>
         </div>
         <div id="robSensors_out_getSample" class="help expert">

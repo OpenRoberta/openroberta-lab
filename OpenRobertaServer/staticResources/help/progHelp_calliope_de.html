@@ -66,7 +66,8 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-left">Zahl, Wert zwischen 0 und 9 für die Helligkeit der LEDs. Dabei
-                    bedeutet 0, dass die LEDs aus sind und 9, dass die LEDs am hellsten leuchten.</li>
+                    bedeutet 0, dass die LEDs aus sind und 9, dass die LEDs am hellsten leuchten. Dieser Wert wird
+                    intern auf den Bereich zwischen 0 und 9 begrenzt.</li>
             </ul>
         </div>
         <div id="mbedActions_display_getBrightness" class="help expert">
@@ -95,7 +96,8 @@
                 <li class="typcn typcn-arrow-left">Zahl, Wert zwischen 0 und 4 für die y-Position der LED. Dabei steht 0
                     für die erste LED in der Spalte und 4 für die fünfte und die letzte LED in der Spalte.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Wert zwischen 0 und 9 für die Helligkeit der LED. Dabei
-                    bedeutet 0, dass die LED aus ist und 9, dass die LED am hellsten leuchtet.</li>
+                    bedeutet 0, dass die LED aus ist und 9, dass die LED am hellsten leuchtet. Dieser Wert wird intern
+                    auf den Bereich zwischen 0 und 9 begrenzt.</li>
             </ul>
         </div>
         <div id="mbedActions_display_getPixel" class="help expert">
@@ -189,9 +191,11 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-left">Zahl, Wert von 0 bis 9. Die Zahl zeigt die LED, die gesteuert werden
-                    soll. Die Nummerierung der LEDs beginnt unten am Schriftzug »LED Bar v2.0«.</li>
+                    soll. Die Nummerierung der LEDs beginnt unten am Schriftzug »LED Bar v2.0«. Dieser Wert wird intern
+                    auf den Bereich zwischen 0 und 9 begrenzt.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Wert von 0 bis 8. Dabei bedeutet 0, dass die LED aus ist und 8,
-                    dass die LED am hellsten leuchtet.</li>
+                    dass die LED am hellsten leuchtet. Dieser Wert wird intern auf den Bereich zwischen 0 und 8
+                    begrenzt.</li>
             </ul>
         </div>
         <div id="robActions_brickLight_on" class="help expert">
@@ -221,10 +225,10 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Option, wähle die Motoren aus, für die das Tempo
                     (Geschwindigkeit) eingestellt werden soll.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Wert zwischen 0 und 100. Geschwindigkeit des ersten Motors in
-                    Prozent.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Wert zwischen 0 und 100. Geschwindigkeit des zweiten Motors in
-                    Prozent.</li>
+                <li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100. Geschwindigkeit des ersten Motors
+                    in Prozent. Dieser Wert wird intern auf den Bereich zwischen -100 und 100 begrenzt.</li>
+                <li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100. Geschwindigkeit des zweiten Motors
+                    in Prozent. Dieser Wert wird intern auf den Bereich zwischen -100 und 100 begrenzt.</li>
             </ul>
         </div>
         <div id="mbedActions_motors_stop" class="help expert">
@@ -249,8 +253,8 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Motor, wähle den Motor Port aus, für den das Tempo eingestellt
-                    werden soll.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Wert zwischen 0 und 100.</li>
+                    werden soll. Dieser Wert wird intern auf den Bereich zwischen -100 und 100 begrenzt.</li>
+                <li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100.</li>
             </ul>
         </div>
         <div id="mbedActions_motor_stop" class="help expert">
@@ -276,7 +280,8 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100. Geschwindigkeit des Motors. Wenn
-                    die Zahl negativ ist, wird die Drehrichtung umgekehrt.</li>
+                    die Zahl negativ ist, wird die Drehrichtung umgekehrt. Dieser Wert wird intern auf den Bereich
+                    zwischen -100 und 100 begrenzt.</li>
             </ul>
         </div>
         <div id="mbedActions_single_motor_stop" class="help expert">
@@ -378,7 +383,8 @@
                 <li class="typcn typcn-arrow-left">Zahl, zu schreibender Wer. »Analog« sind die Werte zwischen 0 und
                     1023. 0 bedeutet, dass es keine keine Spannung am Pin anliegt, und 1023 bedeutet, dass die vollen
                     3.3V anliegen. »Digital« sind entweder 0 oder 1. 0 bedeutet, dass keine Spannung anliegt und 1
-                    bedeutet, dass volle Spannung anliegt.</li>
+                    bedeutet, dass volle Spannung anliegt. Dieser Wert wird intern auf den Bereich zwischen 0 und 1023
+                    begrenzt.</li>
             </ul>
         </div>
         <div id="mbedActions_switch_led_matrix" class="help expert">

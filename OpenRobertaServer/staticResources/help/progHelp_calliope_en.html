@@ -67,7 +67,8 @@
             <p>Input value:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-left">Number, value between 0 and 9.</li>
+                <li class="typcn typcn-arrow-left">Number, value between 0 and 9. This value will be internally clipped
+                    to be between 0 and 9.</li>
             </ul>
         </div>
         <div id="mbedActions_display_getBrightness" class="help expert">
@@ -95,7 +96,7 @@
                 <li class="typcn typcn-arrow-left">Number, value between 0 and 4 for the y position of the LED. 0 stands
                     for the first LED in the column and 4 for the fifth and last LED in the column.</li>
                 <li class="typcn typcn-arrow-left">Number, value between 0 and 9, where 0 means the LED is off and 9 is
-                    the maximum brightness.</li>
+                    the maximum brightness. This value will be internally clipped to be between 0 and 9.</li>
             </ul>
         </div>
         <div id="mbedActions_display_getPixel" class="help expert">
@@ -180,9 +181,10 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-left">Number, position of the LED that you want to change, value between 0
-                    and 9.</li>
+                    and 9. This value will be internally clipped to be between 0 and 9.</li>
                 <li class="typcn typcn-arrow-left">Number, brightness of the LED, value between 0 and 8, with 0 being
-                    off and 8 being the maximum brightness.</li>
+                    off and 8 being the maximum brightness. This value will be internally clipped to be between 0 and 8.
+                </li>
             </ul>
         </div>
         <div id="robActions_brickLight_on" class="help expert">
@@ -207,10 +209,10 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Motor; pick the motors you want to control.</li>
-                <li class="typcn typcn-arrow-left">number, speed you want the first motor to rotate at, between 0 and
-                    100.</li>
-                <li class="typcn typcn-arrow-left">number, speed you want the second motor to rotate at, between 0 and
-                    100.</li>
+                <li class="typcn typcn-arrow-left">number, speed you want the first motor to rotate at, between -100 and
+                    100. This value will be internally clipped to be between -100 and 100.</li>
+                <li class="typcn typcn-arrow-left">number, speed you want the second motor to rotate at, between -100
+                    and 100. This value will be internally clipped to be between -100 and 100.</li>
             </ul>
         </div>
         <div id="mbedActions_motors_stop" class="help expert">
@@ -230,8 +232,8 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Motor; pick the motor you want to control.</li>
-                <li class="typcn typcn-arrow-left">number, speed you want the motor to rotate at, between 0 and 100.
-                </li>
+                <li class="typcn typcn-arrow-left">number, speed you want the motor to rotate at, between -100 and 100.
+                    This value will be internally clipped to be between -100 and 100.</li>
             </ul>
         </div>
         <div id="mbedActions_motor_stop" class="help expert">
@@ -251,8 +253,8 @@
             <p>Input value:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-left">number, speed you want the motor to rotate at, between 0 and 100.
-                </li>
+                <li class="typcn typcn-arrow-left">number, speed you want the motor to rotate at, between -100 and 100.
+                    This value will be internally clipped to be between -100 and 100.</li>
             </ul>
         </div>
         <div id="mbedActions_single_motor_stop" class="help expert">
@@ -276,7 +278,7 @@
                 <li class="typcn typcn-arrow-sorted-down">option, choose the port or pin the servo motor is connected
                     to.</li>
                 <li class="typcn typcn-arrow-sorted-down">number, angle or position that you want the servo arm to turn
-                    to. Value between 180 and 180.</li>
+                    to. Value between -180 and 180.</li>
             </ul><br>
         </div>
         <div id="mbedActions_motionkit_single_set" class="help expert">
@@ -343,7 +345,9 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">analog or digital.</li>
                 <li class="typcn typcn-arrow-sorted-down">In and output pin 0 to 3.</li>
-                <li class="typcn typcn-arrow-left">Number: value to write</li>
+                <li class="typcn typcn-arrow-left">Number: value to write. Number between 0 and 1023 for analog signals
+                    or either 0 or 1 for digital signals. This value will be internally clipped to be between 0 and
+                    1023.</li>
             </ul>
         </div>
         <div id="mbedActions_switch_led_matrix" class="help expert">

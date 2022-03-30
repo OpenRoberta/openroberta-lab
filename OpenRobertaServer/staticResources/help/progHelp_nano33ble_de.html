@@ -104,8 +104,12 @@
                 <li class="typcn typcn-arrow-sorted-down">Port, wähle ein LCD 1602 aus, das du in der
                     Roboterkonfiguration angelegt hast.</li>
                 <li class="typcn typcn-arrow-left">Text, der im Display erscheinen soll.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Spaltenummer, in der der Text beginnen soll.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Zeilennummer, in der der Text beginnen soll.</li>
+                <li class="typcn typcn-arrow-left">Zahl, Spaltennummer, in der der Text beginnen soll. <span
+                        style="color: rgb(51,51,51);">Dieser Wert wird intern auf den Bereich zwischen 0 und 15
+                        begrenzt.</span></li>
+                <li class="typcn typcn-arrow-left">Zahl, Zeilennummer, in der der Text beginnen soll. <span
+                        style="color: rgb(51,51,51);">Dieser Wert wird intern auf den Bereich zwischen 0 und 1
+                        begrenzt.</span></li>
             </ul>
         </div>
         <div id="robActions_display_clear" class="help expert">
@@ -135,8 +139,12 @@
                 <li class="typcn typcn-arrow-sorted-down">Port, wähle ein LCD 1602 I²C aus, das du in der
                     Roboterkonfiguration angelegt hast.</li>
                 <li class="typcn typcn-arrow-left">Text, der im Display erscheinen soll.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Spaltenummer, in der der Text beginnen soll.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Zeilennummer, in der der Text beginnen soll.</li>
+                <li class="typcn typcn-arrow-left">Zahl, Spaltennummer, in der der Text beginnen soll. <span
+                        style="color: rgb(51,51,51);">Dieser Wert wird intern auf den Bereich zwischen 0 und 15
+                        begrenzt.</span></li>
+                <li class="typcn typcn-arrow-left">Zahl, Zeilennummer, in der der Text beginnen soll. <span
+                        style="color: rgb(51,51,51);">Dieser Wert wird intern auf den Bereich zwischen 0 und 1
+                        begrenzt.</span></li>
             </ul>
         </div>
         <div id="robActions_display_clear_i2c" class="help beginner">
@@ -242,7 +250,9 @@
                 <li class="typcn typcn-arrow-sorted-down">analog/digital, wähle aus ob du einen digitalen oder analogen
                     Wert schreiben willst.</li>
                 <li class="typcn typcn-arrow-sorted-down">Pin, wähle den Pin aus auf den du schreiben möchtest.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Wert der geschrieben werden soll.</li>
+                <li class="typcn typcn-arrow-left">Zahl, Wert der geschrieben werden soll. Entweder 0 oder 1 bei einem
+                    digitalen Signal oder zwischen 0 und 1023 bei einem analogen Signal. Dieser Wert wird intern auf den
+                    Bereich zwischen 0 und 1023 begrenzt.</li>
             </ul><br>
         </div>
         <div id="robSensors_out_getSample" class="help beginner">
