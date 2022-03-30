@@ -214,11 +214,18 @@
 }
 
 /** Invisible thick links used for showing weight values on mouse click. */
-#nn-features .core .link-editCard {
+#nn-features .core .nn-weight-click {
     stroke-width: 8;
     stroke: black;
     fill: none;
     opacity: 0;
+}
+
+#nn-features .core .nn-weight-show-click {
+    stroke-width: 12;
+    stroke: gray;
+    fill: none;
+    opacity: 0.3;
 }
 
 #nn-features .canvas canvas {

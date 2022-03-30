@@ -6,17 +6,20 @@
 define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", "./neuralnetwork.uistate", "log", "d3", "./neuralnetwork.msg"], function (require, exports, H, neuralnetwork_nn_1, neuralnetwork_uistate_1, LOG, D3, MSG) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getNetwork = exports.getStateAsJSONString = exports.runNNEditor = exports.setupNN = void 0;
-    var EditType;
-    (function (EditType) {
-        EditType[EditType["BIAS"] = 0] = "BIAS";
-        EditType[EditType["WEIGHT"] = 1] = "WEIGHT";
-    })(EditType || (EditType = {}));
     var NodeType;
     (function (NodeType) {
         NodeType[NodeType["INPUT"] = 0] = "INPUT";
         NodeType[NodeType["HIDDEN"] = 1] = "HIDDEN";
         NodeType[NodeType["OUTPUT"] = 2] = "OUTPUT";
     })(NodeType || (NodeType = {}));
+    var FocusStyle;
+    (function (FocusStyle) {
+        FocusStyle[FocusStyle["CLICK_WEIGHT_BIAS"] = 0] = "CLICK_WEIGHT_BIAS";
+        FocusStyle[FocusStyle["CLICK_NODE"] = 1] = "CLICK_NODE";
+        FocusStyle[FocusStyle["SHOW_ALL"] = 2] = "SHOW_ALL";
+    })(FocusStyle || (FocusStyle = {}));
+    var focusStyle = FocusStyle.CLICK_WEIGHT_BIAS;
+    var focusNode = null;
     var state = null;
     var network = null;
     function setupNN(stateFromNNstep, inputNeurons, outputNeurons) {
@@ -52,10 +55,16 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             reconstructNNIncludingUI();
         });
         activationDropdown.property('value', getKeyFromValue(H.activations, state.activation));
+        var focusDropdown = D3.select('#nn-focus').on('change', function () {
+            focusStyle = FocusStyle[this.value];
+            if (focusStyle === undefined || focusStyle === null) {
+                focusStyle = FocusStyle.CLICK_WEIGHT_BIAS;
+            }
+            drawNetworkUI(network);
+        });
         // Listen for css-responsive changes and redraw the svg network.
         window.addEventListener('resize', function () {
             drawNetworkUI(network);
-            updateUI();
         });
         reconstructNNIncludingUI();
         return;
@@ -72,11 +81,14 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     function reconstructNNIncludingUI() {
         makeNetworkFromState();
         drawNetworkUI(network);
-        updateUI();
     }
     function drawNetworkUI(network) {
         D3.select('#activation-label').attr('class', 'nn-bold').text(MSG.get('ACTIVATION'));
         D3.select('#regularization-label').attr('class', 'nn-bold').text(MSG.get('REGULARIZATION'));
+        D3.select('#nn-focus-label').attr('class', 'nn-bold').text(MSG.get('FOCUS_OPTION'));
+        $('#nn-focus [value="CLICK_WEIGHT_BIAS"]').text(MSG.get('CLICK_WEIGHT_BIAS'));
+        $('#nn-focus [value="CLICK_NODE"]').text(MSG.get('CLICK_NODE'));
+        $('#nn-focus [value="SHOW_ALL"]').text(MSG.get('SHOW_ALL'));
         var layerKey = state.numHiddenLayers === 1 ? 'HIDDEN_LAYER' : 'HIDDEN_LAYERS';
         D3.select('#layers-label').text(MSG.get(layerKey));
         D3.select('#num-layers').text(state.numHiddenLayers);
@@ -197,6 +209,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         // Adjust the height of the features column.
         var height = getRelativeHeight(D3.select('#nn-network'));
         D3.select('.nn-features').style('height', height + 'px');
+        updateUI();
         return;
         function drawNode(node, nodeType, cx, cy, container) {
             var nodeId = node.id;
@@ -208,23 +221,27 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 id: "" + nodeId,
                 transform: "translate(" + x + "," + y + ")",
             });
-            // Draw the main rectangle.
-            nodeGroup
-                .append('rect')
-                .attr({
+            var mainRectAngle = nodeGroup.append('rect').attr({
                 x: 0,
                 y: 0,
                 width: nodeSize,
                 height: nodeSize,
-            })
-                .on('click', function () {
-                showBiasAndLinkWeights(nodeGroup);
             });
+            if (focusStyle === FocusStyle.CLICK_NODE && focusNode === node) {
+                mainRectAngle.style('fill', 'yellow');
+            }
+            if (focusStyle === FocusStyle.CLICK_NODE) {
+                nodeGroup.on('click', function () {
+                    focusNode = node;
+                    showBiasAndLinkWeights();
+                });
+            }
             var numberLabelNode = nodeGroup.append('text').attr({
                 class: 'main-label',
                 x: 10,
                 y: 0.66 * nodeSize,
                 'text-anchor': 'start',
+                cursor: 'default',
             });
             numberLabelNode.append('tspan').text(nodeId);
             var activeOrNotClass = state[nodeId] ? 'active' : 'inactive';
@@ -235,22 +252,22 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 nodeGroup.classed(activeOrNotClass, true);
             }
             if (nodeType !== NodeType.INPUT) {
-                // Draw the node's bias.
-                nodeGroup
-                    .append('rect')
-                    .attr({
+                var biasRect = nodeGroup.append('rect').attr({
                     id: "bias-" + nodeId,
                     x: -biasSize - 2,
                     y: nodeSize - biasSize + 3,
                     width: biasSize,
                     height: biasSize,
-                })
-                    .on('click', function () {
-                    updateEditCard(EditType.BIAS, node, D3.mouse(container.node()));
-                })
-                    .on('mouseleave', function () {
-                    updateEditCard(null);
                 });
+                if (focusStyle !== FocusStyle.CLICK_NODE || focusNode === node) {
+                    biasRect
+                        .on('click', function () {
+                        updateEditCard(node, D3.mouse(container.node()));
+                    })
+                        .on('mouseleave', function () {
+                        updateEditCard(null);
+                    });
+                }
             }
             // Draw the node's canvas.
             var div = D3.select('#nn-network')
@@ -268,10 +285,10 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 div.classed(activeOrNotClass, true);
             }
         }
-        function drawLink(input, node2coord, network, container, isFirst, index, length) {
+        function drawLink(link, node2coord, network, container, isFirst, index, length) {
             var line = container.insert('path', ':first-child');
-            var source = node2coord[input.source.id];
-            var dest = node2coord[input.dest.id];
+            var source = node2coord[link.source.id];
+            var dest = node2coord[link.dest.id];
             var datum = {
                 source: {
                     y: source.cx + nodeSize / 2 + 2,
@@ -286,21 +303,23 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             line.attr({
                 'marker-start': 'url(#markerArrow)',
                 class: 'link',
-                id: input.source.id + '-' + input.dest.id,
+                id: link.source.id + '-' + link.dest.id,
                 d: diagonal(datum, 0),
             });
-            // Add an invisible thick link that will be used for
-            // editing the weight value on click.
-            container
-                .append('path')
-                .attr('d', diagonal(datum, 0))
-                .attr('class', 'link-editCard')
-                .on('click', function () {
-                updateEditCard(EditType.WEIGHT, input, D3.mouse(this));
-            })
-                .on('mouseleave', function () {
-                updateEditCard(null);
-            });
+            // Add a (almost) invisible thick path that will be used for editing the weight value on click.
+            if (focusStyle !== FocusStyle.CLICK_NODE || link.source === focusNode || link.dest === focusNode) {
+                var cssForPath = focusStyle !== FocusStyle.CLICK_NODE ? 'nn-weight-click' : 'nn-weight-show-click';
+                container
+                    .append('path')
+                    .attr('d', diagonal(datum, 0))
+                    .attr('class', cssForPath)
+                    .on('click', function () {
+                    updateEditCard(link, D3.mouse(this));
+                })
+                    .on('mouseleave', function () {
+                    updateEditCard(null);
+                });
+            }
             return line;
         }
         function getRelativeHeight(selection) {
@@ -345,69 +364,80 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 .text(state.networkShape[i] + ' neuron' + suffix);
         }
     }
-    function updateEditCard(type, nodeOrLink, coordinates) {
+    function updateEditCard(nodeOrLink, coordinates) {
         // nodeOrLink : nn.Node | nn.Link
         var editCard = D3.select('#nn-editCard');
-        if (type == null) {
+        if (nodeOrLink == null) {
             editCard.style('display', 'none');
             return;
         }
         var input = editCard.select('input');
-        input.property('value', getNodeLinkValue(type, nodeOrLink));
+        input.property('value', getNodeLinkValue(nodeOrLink));
         input.on('input', function () {
             var event = D3.event;
-            fromEditCard2NodeLink(type, nodeOrLink, event.target.value);
+            fromEditCard2NodeLink(nodeOrLink, event.target.value);
         });
         input.on('keypress', function () {
             var event = D3.event;
             if (event.key === 'h' || event.key === 'i') {
                 event.target.value = updValue(event.target.value, 1);
                 event.preventDefault && event.preventDefault();
-                fromEditCard2NodeLink(type, nodeOrLink, event.target.value);
+                fromEditCard2NodeLink(nodeOrLink, event.target.value);
             }
             else if (event.key === 'r' || event.key === 'd') {
                 event.target.value = updValue(event.target.value, -1);
                 event.preventDefault && event.preventDefault();
-                fromEditCard2NodeLink(type, nodeOrLink, event.target.value);
+                fromEditCard2NodeLink(nodeOrLink, event.target.value);
+            }
+            else if (event.which === 13) {
+                editCard.style('display', 'none');
+                event.preventDefault && event.preventDefault();
+                return;
             }
             input.node().focus();
         });
-        var value = type === EditType.WEIGHT ? nodeOrLink.weightOrig : nodeOrLink.biasOrig;
+        var value = nodeOrLink instanceof neuralnetwork_nn_1.Link ? nodeOrLink.weightOrig : nodeOrLink.biasOrig;
         editCard.style({
             left: coordinates[0] + 20 + "px",
             top: coordinates[1] + "px",
             display: 'block',
         });
-        var name = type === EditType.WEIGHT ? 'WEIGHT' : 'BIAS';
+        var name = nodeOrLink instanceof neuralnetwork_nn_1.Link ? 'WEIGHT' : 'BIAS';
         editCard.select('.nn-type').text(MSG.get(name));
         input.node().focus();
-        function fromEditCard2NodeLink(type, nodeOrLink, value) {
+        function fromEditCard2NodeLink(nodeOrLink, value) {
             if (value != null) {
-                if (type === EditType.WEIGHT) {
+                if (nodeOrLink instanceof neuralnetwork_nn_1.Link) {
                     var weights = H.string2weight(value);
                     if (weights !== null) {
                         nodeOrLink.weight = weights[0];
                         nodeOrLink.weightOrig = weights[1];
                     }
                 }
-                else {
+                else if (nodeOrLink instanceof neuralnetwork_nn_1.Node) {
                     var biases = H.string2bias(value);
                     if (biases !== null) {
                         nodeOrLink.bias = biases[0];
                         nodeOrLink.biasOrig = biases[1];
                     }
                 }
+                else {
+                    throw 'invalid nodeOrLink';
+                }
                 state.weights = network.getWeightArray();
                 state.biases = network.getBiasArray();
                 updateUI();
             }
         }
-        function getNodeLinkValue(type, nodeOrLink) {
-            if (type === EditType.WEIGHT) {
+        function getNodeLinkValue(nodeOrLink) {
+            if (nodeOrLink instanceof neuralnetwork_nn_1.Link) {
                 return nodeOrLink.weight;
             }
-            else {
+            else if (nodeOrLink instanceof neuralnetwork_nn_1.Node) {
                 return nodeOrLink.bias;
+            }
+            else {
+                throw 'invalid nodeOrLink';
             }
         }
         function updValue(value, incr) {
@@ -434,8 +464,8 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             }
         }
     }
-    function showBiasAndLinkWeights(nodeGroup) {
-        alert('here');
+    function showBiasAndLinkWeights() {
+        drawNetworkUI(network);
     }
     function updateUI() {
         updateWeightsUI(D3.select('g.core'));

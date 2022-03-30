@@ -20,5 +20,9 @@ define(["require", "exports", "blockly"], function (require, exports, Blockly) {
         HIDDEN_LAYERS: 'verborgene Schichten',
         ACTIVATION: 'Aktivierung',
         REGULARIZATION: 'Regulierung',
+        FOCUS_OPTION: 'Anzeige und Ändern von Werten',
+        CLICK_WEIGHT_BIAS: 'durch Klick auf Gewichte und Bias',
+        CLICK_NODE: 'erst Klick auf ein Neuron',
+        SHOW_ALL: 'alle zeigen, durch Klick ändern',
     };
 });

@@ -105,6 +105,7 @@ require.config({
         'neuralnetwork.uistate': 'app/neuralnetwork/neuralnetwork.uistate',
         'neuralnetwork.ui': 'app/neuralnetwork/neuralnetwork.ui',
         'neuralnetwork.helper': 'app/neuralnetwork/neuralnetwork.helper',
+        'neuralnetwork.msg': 'app/neuralnetwork/neuralnetwork.msg',
 
         confVisualization: 'app/configVisualization/confVisualization',
         'const.robots': 'app/configVisualization/const.robots',
