@@ -39,8 +39,9 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Option, Richtung, in die dein mBot fahren soll, entweder
                     vorwärts oder rückwärts.</li>
-                <li class="typcn typcn-arrow-sorted-down">Zahl, Tempo, mit dem sich dein mBot bewegen soll, zwischen 1
-                    und 100, wobei 1 langsam ist und 100 schnell.</li>
+                <li class="typcn typcn-arrow-sorted-down">Zahl, Tempo, mit dem sich dein mBot bewegen soll, zwischen 0
+                    und 100, wobei 1 langsam ist und 100 schnell. Dieser Wert wird intern auf den Bereich zwischen 0 und
+                    100 begrenzt.</li>
                 <li class="typcn typcn-arrow-sorted-down">Zahl, Zeit, für die sich dein mBot bewegen soll, in
                     Millisekunden.</li>
             </ul>
@@ -54,8 +55,9 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Option, Richtung, in die dein Roboter fahren soll.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Tempo, mit dem sich dein Roboter bewegen soll, zwischen 1 und
-                    100, wobei 1 langsam ist und 100 schnell.</li>
+                <li class="typcn typcn-arrow-left">Zahl, Tempo, mit dem sich dein Roboter bewegen soll, zwischen 0 und
+                    100, wobei 1 langsam ist und 100 schnell. Dieser Wert wird intern auf den Bereich zwischen 0 und 100
+                    begrenzt.</li>
             </ul>
         </div>
         <div id="robActions_motorDiff_turn_for" class="help beginner">
@@ -66,8 +68,9 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Option, Richtung, in die sich dein Roboter drehen soll.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Tempo, mit dem sich dein Roboter drehen soll, zwischen 1 und
-                    100, wobei 1 langsam ist und 100 schnell.</li>
+                <li class="typcn typcn-arrow-left">Zahl, Tempo, mit dem sich dein Roboter drehen soll, zwischen 0 und
+                    100, wobei 1 langsam ist und 100 schnell. Dieser Wert wird intern auf den Bereich zwischen 0 und 100
+                    begrenzt.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Zeit, für die sich dein Roboter drehen soll, in Millisekunden.
                 </li>
             </ul><br>
@@ -80,8 +83,9 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Option, Richtung, in die sich dein Roboter drehen soll.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Tempo, mit dem sich dein Roboter drehen soll, zwischen 1 und
-                    100, wobei 1 langsam ist und 100 schnell.</li>
+                <li class="typcn typcn-arrow-left">Zahl, Tempo, mit dem sich dein Roboter drehen soll, zwischen 0 und
+                    100, wobei 1 langsam ist und 100 schnell. Dieser Wert wird intern auf den Bereich zwischen 0 und 100
+                    begrenzt.</li>
             </ul>
         </div>
         <div id="robActions_motorDiff_curve_for" class="help beginner">
@@ -94,9 +98,10 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Option, Richtung, in die dein Roboter fahren soll.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Tempo des linken Motors, zwischen 1 und 100.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Tempo des rechten Motors, zwischen 1 und 100, wobei 1 langsam
-                    ist und 100 schnell.</li>
+                <li class="typcn typcn-arrow-left">Zahl, Tempo des linken Motors, zwischen 0 und 100. Dieser Wert wird
+                    intern auf den Bereich zwischen 0 und 100 begrenzt.</li>
+                <li class="typcn typcn-arrow-left">Zahl, Tempo des rechten Motors, zwischen 0 und 100, wobei 1 langsam
+                    ist und 100 schnell. Dieser Wert wird intern auf den Bereich zwischen 0 und 100 begrenzt.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Zeit, für die dein Roboter die Kurve fahren soll, in
                     Millisekunden.</li>
             </ul>
@@ -111,10 +116,10 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Option, Richtung, in die dein Roboter fahren soll.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Tempo des linken Motors, zwischen 1 und 100, wobei 1 langsam
-                    ist und 100 schnell.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Tempo des rechten Motors, zwischen 1 und 100, wobei 1 langsam
-                    ist und 100 schnell.</li>
+                <li class="typcn typcn-arrow-left">Zahl, Tempo des linken Motors, zwischen 0 und 100, wobei 1 langsam
+                    ist und 100 schnell. Dieser Wert wird intern auf den Bereich zwischen 0 und 100 begrenzt.</li>
+                <li class="typcn typcn-arrow-left">Zahl, Tempo des rechten Motors, zwischen 0 und 100, wobei 1 langsam
+                    ist und 100 schnell. Dieser Wert wird intern auf den Bereich zwischen 0 und 100 begrenzt.</li>
             </ul>
         </div>
         <div id="robActions_motorDiff_stop" class="help beginner">
@@ -131,7 +136,8 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Option, Motor, den du steuern möchtest.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Tempo des Motors, zwischen -100 und 100. Dabei läuft der Motor
-                    rückwärts, wenn das Tempo eine negative Zahl ist.</li>
+                    rückwärts, wenn das Tempo eine negative Zahl ist. Dieser Wert wird intern auf den Bereich zwischen
+                    -100 und 100 begrenzt.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Zeit, für die der Motor laufen soll.</li>
             </ul>
         </div>
@@ -146,7 +152,8 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Option, Motor, den du steuern möchtest.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Tempo des Motors, zwischen -100 und 100. Dabei läuft der Motor
-                    rückwärts, wenn das Tempo eine negative Zahl ist.</li>
+                    rückwärts, wenn das Tempo eine negative Zahl ist. Dieser Wert wird intern auf den Bereich zwischen
+                    -100 und 100 begrenzt.</li>
             </ul>
         </div>
         <div id="robActions_motor_stop" class="help expert">
@@ -215,7 +222,8 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Option, Port an dem die LED Matrix angeschlossen ist.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Helligkeit der LED Matrix, Zahl zwischen 0 und 9, wobei 0 aus
-                    bedeutet und 9 die maximale Helligkeit ist.</li>
+                    bedeutet und 9 die maximale Helligkeit ist. Dieser Wert wird intern auf den Bereich zwischen 0 und 9
+                    begrenzt.</li>
             </ul>
         </div>
         <div id="robActions_play_tone" class="help expert">

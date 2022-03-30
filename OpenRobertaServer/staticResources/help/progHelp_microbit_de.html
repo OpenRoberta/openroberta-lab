@@ -68,7 +68,7 @@
                     Seiten des micro:bits. Hier sind ganze Zahlen zwischen 0 und 4 möglich.</li>
                 <li class="typcn typcn-arrow-left">Zahl, gewünschte Helligkeit der LED. je höher die Zahl, desto heller
                     leuchtet die LED; bei 0 wird die LED ausgeschaltet. Hier sind ganze Zahlen zwischen 0 und 9 möglich.
-                </li>
+                    Dieser Wert intern auf den Bereich zwischen 0 und 9 begrenzt.</li>
             </ul>
         </div>
         <div id="mbedActions_display_getPixel" class="help expert">
@@ -120,11 +120,12 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Option, wähle aus, ob du einen »digitalen« oder »analogen«
                     Wert auf deinem Pin ausgeben möchtest. Dabei bedeutet »digital« entweder 0 oder 1, »analog« heißt
-                    eine Zahl zwischen 0 und 1, also eine Prozentzahl der Gesamtspannung von 3,3,V.</li>
+                    eine Zahl zwischen 0 und 1023, also eine Prozentzahl der Gesamtspannung von 3,3,V.</li>
                 <li class="typcn typcn-arrow-sorted-down">Option, Pin auf dem du diesen Wert ausgeben möchtest. beachte
                     dabei, dass nicht alle Pins einen »analogen« Wert ausgeben können.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Wert den du auf dem Pin ausgeben möchtest. Bei »digital«
-                    entweder 0 oder 1, bei »analog« zwischen 0 und 1.</li>
+                    entweder 0 oder 1, bei »analog« zwischen 0 und 1023. Dieser Wert intern auf den Bereich zwischen 0
+                    und 1023 begrenzt.</li>
             </ul>
         </div>
         <div id="robSensors_key_getSample" class="help beginner">

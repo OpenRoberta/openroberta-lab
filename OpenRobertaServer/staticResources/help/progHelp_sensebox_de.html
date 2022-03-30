@@ -54,9 +54,11 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-left">Zeichenkette, Text, den du auf dem Display darstellen möchtest.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Spalte in der der Text dargestellt werden soll. Zahl zwischen 0
-                    und 100.</li>
+                    und 127.<span style="color: rgb(51,51,51);"><span> </span>Dieser Wert wird intern auf den Bereich
+                        zwischen 0 und 127 begrenzt.</span></li>
                 <li class="typcn typcn-arrow-left">Zahl, Zeile in der der Text dargestellt werden soll. Zahl zwischen 0
-                    und 50.</li>
+                    und 63.<span style="color: rgb(51,51,51);"><span> </span>Dieser Wert wird intern auf den Bereich
+                        zwischen 0 und 63 begrenzt.</span></li>
             </ul>
         </div>
         <div id="robActions_display_clear_i2c" class="help beginner">
@@ -163,7 +165,9 @@
                 <li class="typcn typcn-arrow-sorted-down">Option, wähle den Aktor aus, an dem du die Spannung anlegen
                     möchtest.</li>
                 <li class="typcn typcn-arrow-left">Zahl, wähle die Spannung, die du anlegen möchtest. Wenn du digital
-                    ausgewählt hast entweder 0 oder 1, bei einem analogen Wert eine Zahl zwischen 0 und 1023.</li>
+                    ausgewählt hast entweder 0 oder 1, bei einem analogen Wert eine Zahl zwischen 0 und 1023. Wenn der
+                    analoge Modus verwendet wird, <span style="color: rgb(51,51,51);"><span> </span>wird dieser Wert
+                        intern auf den Bereich zwischen 0 und 1023 begrenzt.</span></li>
             </ul>
         </div>
         <div id="robSensors_out_getSample" class="help expert">

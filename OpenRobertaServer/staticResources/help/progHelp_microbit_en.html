@@ -65,7 +65,7 @@
                 <li class="typcn typcn-arrow-left">Number, y coordinate of the LED you want to control. The y-axis runs
                     parallel to the short side of your micro:bit. Possible inputs are integers between 0 and 4.</li>
                 <li class="typcn typcn-arrow-left">Number, desired brightness of the LED. 0 means off and 9 is the
-                    maximum brightness.</li>
+                    maximum brightness. This value will be internally clipped to be between 0 and 9.</li>
             </ul>
         </div>
         <div id="mbedActions_display_getPixel" class="help expert">
@@ -108,12 +108,13 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Option, select whether you want to output a »digital« or
-                    »analog« value on your pin. »Digital« means either 0 or 1, »analog« means a number between 0 and 1,
-                    i.e. a percentage of the total voltage of 3,3,V.</li>
+                    »analog« value on your pin. »Digital« means either 0 or 1, »analog« means a number between 0 and
+                    1023, i.e. a percentage of the total voltage of 3,3,V.</li>
                 <li class="typcn typcn-arrow-sorted-down">Option, pin on which you want to output this value. Note that
                     not all pins can output an "analog" value.</li>
                 <li class="typcn typcn-arrow-left">Number, the value that you want to write to the pin. With »digital«
-                    this means either 0 or 1 and with »analog« this means a number between 0 and 1.</li>
+                    this means either 0 or 1 and with »analog« this means a number between 0 and 1023. This value will
+                    be internally clipped to be between 0 and 1023.</li>
             </ul>
         </div>
         <div id="robSensors_key_getSample" class="help beginner">
