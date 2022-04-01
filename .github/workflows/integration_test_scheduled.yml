@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     container: openroberta/base-x64:27 # ora-cc-rsc tag number
     steps:
-      - name: branch ${{ github.ref }}, repo ${{ github.repository }}, ora-cc-rsc-tag 27 # ora-cc-rsc tag number
+      - name: branch ${{ github.ref }}, repo ${{ github.repository }}, ora-cc-rsc-tag 29 # ora-cc-rsc tag number
         uses: actions/checkout@v2
       - name: Setup Java JDK
         uses: actions/setup-java@v2.1.0
