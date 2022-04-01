@@ -464,6 +464,11 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                     runForAutoConnection(result);
                 });
             }
+            else if (GUISTATE_C.getConnection() == connectionType.AGENTORTOKEN) {
+                PROGRAM.resetProgram(function (result) {
+                    runForAgentConnection(result);
+                });
+            }
             else {
                 PROGRAM.resetProgram(function (result) {
                     runForToken(result);

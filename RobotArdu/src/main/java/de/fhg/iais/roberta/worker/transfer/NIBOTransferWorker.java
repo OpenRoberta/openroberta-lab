@@ -2,13 +2,15 @@ package de.fhg.iais.roberta.worker.transfer;
 
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.visitor.codegen.NIBOHexPrefix;
 import de.fhg.iais.roberta.worker.IWorker;
 
-public class Bob3TransferWorker implements IWorker {
+public class NIBOTransferWorker implements IWorker {
 
     @Override
     public void execute(Project project) {
-        // Create agent does not require execution of run call and transferring the binary
+        // Check whether the robot is connected with create agent program...
         if ( project.getRobotCommunicator().getState(project.getToken()) == null ) {
             project.setResult(Key.ROBOT_PUSH_RUN);
         } else { // otherwise it uses Connector Program
@@ -16,5 +18,4 @@ public class Bob3TransferWorker implements IWorker {
             project.setResult(run);
         }
     }
-
 }
