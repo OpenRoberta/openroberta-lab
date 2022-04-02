@@ -8,8 +8,9 @@ import * as H from './neuralnetwork.helper';
 import { Link, Network, Node } from './neuralnetwork.nn';
 import { State } from './neuralnetwork.uistate';
 import * as LOG from 'log';
-import * as D3 from 'd3';
 import * as MSG from './neuralnetwork.msg';
+
+import * as _D3 from 'd3';
 
 enum NodeType {
     INPUT,
@@ -23,6 +24,9 @@ enum FocusStyle {
     SHOW_ALL,
 }
 
+let D3: typeof _D3; // used for lazy loading
+type D3Selection = _D3.Selection<any>;
+
 let focusStyle = FocusStyle.CLICK_WEIGHT_BIAS;
 let focusNode = null;
 
@@ -34,7 +38,8 @@ export function setupNN(stateFromNNstep: any, inputNeurons: string[], outputNeur
     makeNetworkFromState();
 }
 
-export function runNNEditor() {
+export async function runNNEditor() {
+    D3 = await import('d3');
     D3.select('#goto-sim').on('click', () => {
         $.when($('#tabProgram').trigger('click')).done(function () {
             $('#simButton').trigger('click');
@@ -109,7 +114,7 @@ function drawNetworkUI(network: Network): void {
     D3.select('#num-layers').text(state.numHiddenLayers);
 
     const networkImpl = network.getLayerAndNodeArray();
-    const svg = D3.select('#nn-svg');
+    const svg: D3Selection = D3.select('#nn-svg');
 
     svg.select('g.core').remove();
     D3.select('#nn-main-part').selectAll('div.canvas').remove();
@@ -150,13 +155,7 @@ function drawNetworkUI(network: Network): void {
 
     // Map of all node and link coordinates.
     let node2coord: { [id: string]: { cx: number; cy: number } } = {};
-    let link2coord: { [id: string]: { cx: number; cy: number } } = {};
-    let container = svg.append('g').classed('core', true).attr('transform', `translate(3,3)`);
-    // Draw the network layer by layer.
-    let calloutThumb = D3.select('.callout.thumbnail').style('display', 'none');
-    let calloutWeights = D3.select('.callout.weights').style('display', 'none');
-    let idWithCallout = null;
-    let targetIdWithCallout = null;
+    let container: D3Selection = svg.append('g').classed('core', true).attr('transform', `translate(3,3)`);
 
     // Draw the input layer separately.
     let numNodes = networkImpl[0].length;
@@ -178,42 +177,10 @@ function drawNetworkUI(network: Network): void {
             let cy = nodeStartY(i);
             node2coord[node.id] = { cx: cxH, cy: cy };
             drawNode(node, NodeType.HIDDEN, cxH, cy, container);
-
-            // Show callout to thumbnails.
-            let numNodes = networkImpl[layerIdx].length;
-            let nextNumNodes = networkImpl[layerIdx + 1].length;
-            if (idWithCallout == null && i === numNodes - 1 && nextNumNodes <= numNodes) {
-                calloutThumb.style({
-                    display: null,
-                    top: `${20 + 3 + cy}px`,
-                    left: `${cxH}px`,
-                });
-                idWithCallout = node.id;
-            }
-
             // Draw links.
             for (let j = 0; j < node.inputLinks.length; j++) {
                 let link = node.inputLinks[j];
                 let path: SVGPathElement = drawLink(link, node2coord, networkImpl, container, j === 0, j, node.inputLinks.length).node() as any;
-                // Show callout to weights.
-                let prevLayer = networkImpl[layerIdx - 1];
-                let lastNodePrevLayer = prevLayer[prevLayer.length - 1];
-                if (
-                    targetIdWithCallout == null &&
-                    i === numNodes - 1 &&
-                    link.source.id === lastNodePrevLayer.id &&
-                    (link.source.id !== idWithCallout || numLayers <= 5) &&
-                    link.dest.id !== idWithCallout &&
-                    prevLayer.length >= numNodes
-                ) {
-                    let midPoint = path.getPointAtLength(path.getTotalLength() * 0.7);
-                    calloutWeights.style({
-                        display: null,
-                        top: `${midPoint.y + 5}px`,
-                        left: `${midPoint.x + 3}px`,
-                    });
-                    targetIdWithCallout = link.dest.id;
-                }
             }
         }
     }
@@ -243,12 +210,12 @@ function drawNetworkUI(network: Network): void {
     updateUI();
     return;
 
-    function drawNode(node: Node, nodeType: NodeType, cx: number, cy: number, container) {
+    function drawNode(node: Node, nodeType: NodeType, cx: number, cy: number, container: D3Selection) {
         let nodeId = node.id;
         let x = cx - nodeSize / 2;
         let y = cy - nodeSize / 2;
         let nodeClass = nodeType === NodeType.INPUT ? 'node_input' : nodeType === NodeType.HIDDEN ? 'node_hidden' : 'node_output';
-        let nodeGroup = container.append('g').attr({
+        let nodeGroup: D3Selection = container.append('g').attr({
             class: nodeClass,
             id: `${nodeId}`,
             transform: `translate(${x},${y})`,
@@ -266,25 +233,18 @@ function drawNetworkUI(network: Network): void {
         if (focusStyle === FocusStyle.CLICK_NODE) {
             nodeGroup.on('click', function () {
                 focusNode = node;
-                showBiasAndLinkWeights();
+                drawNetworkUI(network);
             });
         }
 
-        let numberLabelNode = nodeGroup.append('text').attr({
+        let labelForId = nodeGroup.append('text').attr({
             class: 'main-label',
             x: 10,
             y: 0.66 * nodeSize,
             'text-anchor': 'start',
             cursor: 'default',
         });
-        numberLabelNode.append('tspan').text(nodeId);
-        let activeOrNotClass = state[nodeId] ? 'active' : 'inactive';
-        if (nodeType === NodeType.INPUT) {
-            nodeGroup.classed(activeOrNotClass, true);
-        }
-        if (nodeType === NodeType.OUTPUT) {
-            nodeGroup.classed(activeOrNotClass, true);
-        }
+        labelForId.append('tspan').text(nodeId);
         if (nodeType !== NodeType.INPUT) {
             let biasRect = nodeGroup.append('rect').attr({
                 id: `bias-${nodeId}`,
@@ -302,6 +262,10 @@ function drawNetworkUI(network: Network): void {
                         updateEditCard(null);
                     });
             }
+            // Show the bias value depending on focus-style
+            if (focusStyle === FocusStyle.SHOW_ALL || (focusStyle === FocusStyle.CLICK_NODE && focusNode === node)) {
+                drawValue(nodeGroup, nodeId, -2 * biasSize, nodeSize + 2 * biasSize, node.bias, node.biasOrig);
+            }
         }
 
         // Draw the node's canvas.
@@ -316,16 +280,15 @@ function drawNetworkUI(network: Network): void {
                 left: `${x + 3}px`,
                 top: `${y + 3}px`,
             });
-        if (nodeType === NodeType.INPUT) {
-            div.classed(activeOrNotClass, true);
-        }
     }
+
+    let valShiftToRight = true;
 
     function drawLink(
         link: Link,
         node2coord: { [id: string]: { cx: number; cy: number } },
         network: Node[][],
-        container: D3.Selection<any>,
+        container: D3Selection,
         isFirst: boolean,
         index: number,
         length: number
@@ -351,7 +314,16 @@ function drawNetworkUI(network: Network): void {
             d: diagonal(datum, 0),
         });
 
-        // Add a (almost) invisible thick path that will be used for editing the weight value on click.
+        // Show the value of the link depending on focus-style
+        if (focusStyle === FocusStyle.SHOW_ALL || (focusStyle === FocusStyle.CLICK_NODE && link.source === focusNode) || link.dest === focusNode) {
+            let lineNode = line.node() as any;
+            valShiftToRight = !valShiftToRight;
+            let posVal = focusStyle === FocusStyle.SHOW_ALL ? (valShiftToRight ? 0.6 : 0.4) : link.source === focusNode ? 0.8 : 0.2;
+            let pointForWeight = lineNode.getPointAtLength(lineNode.getTotalLength() * posVal);
+            drawValue(container, link.source.id + '-' + link.dest.id, pointForWeight.x, pointForWeight.y - 10, link.weight, link.weightOrig);
+        }
+
+        // Add an (almost) invisible thick path that will be used for editing the weight value on click.
         if (focusStyle !== FocusStyle.CLICK_NODE || link.source === focusNode || link.dest === focusNode) {
             let cssForPath = focusStyle !== FocusStyle.CLICK_NODE ? 'nn-weight-click' : 'nn-weight-show-click';
             container
@@ -365,7 +337,6 @@ function drawNetworkUI(network: Network): void {
                     updateEditCard(null);
                 });
         }
-
         return line;
     }
 
@@ -412,6 +383,20 @@ function drawNetworkUI(network: Network): void {
         div.append('div')
             .attr('class', 'nn-bold')
             .text(state.networkShape[i] + ' neuron' + suffix);
+    }
+
+    function drawValue(container: D3Selection, id: string, x: number, y: number, valueForColor: number, valueToShow: string) {
+        const rect = container.append('rect').attr('id', 'rect-val-' + id);
+        const text = container
+            .append('text')
+            .attr({
+                class: 'nn-showval',
+                id: 'val-' + id,
+                x: x,
+                y: y,
+            })
+            .text(valueToShow);
+        drawValuesBox(text, valueForColor);
     }
 }
 
@@ -462,32 +447,18 @@ function updateEditCard(nodeOrLink?: Node | Link, coordinates?: [number, number]
         if (value != null) {
             if (nodeOrLink instanceof Link) {
                 let weights = H.string2weight(value);
-                if (weights !== null) {
-                    nodeOrLink.weight = weights[0];
-                    nodeOrLink.weightOrig = weights[1];
-                }
+                nodeOrLink.weight = weights[0];
+                nodeOrLink.weightOrig = weights[1];
             } else if (nodeOrLink instanceof Node) {
                 let biases = H.string2bias(value);
-                if (biases !== null) {
-                    nodeOrLink.bias = biases[0];
-                    nodeOrLink.biasOrig = biases[1];
-                }
+                nodeOrLink.bias = biases[0];
+                nodeOrLink.biasOrig = biases[1];
             } else {
                 throw 'invalid nodeOrLink';
             }
             state.weights = network.getWeightArray();
             state.biases = network.getBiasArray();
             updateUI();
-        }
-    }
-
-    function getNodeLinkValue(nodeOrLink) {
-        if (nodeOrLink instanceof Link) {
-            return nodeOrLink.weight;
-        } else if (nodeOrLink instanceof Node) {
-            return nodeOrLink.bias;
-        } else {
-            throw 'invalid nodeOrLink';
         }
     }
 
@@ -513,38 +484,43 @@ function updateEditCard(nodeOrLink?: Node | Link, coordinates?: [number, number]
     }
 }
 
-function showBiasAndLinkWeights() {
-    drawNetworkUI(network);
-}
-
 function updateUI() {
-    updateWeightsUI(D3.select('g.core'));
-    updateBiasesUI();
+    const container = D3.select('g.core');
+    updateLinksUI(container);
+    updateNodesUI(container);
 
-    function updateWeightsUI(container) {
+    function updateLinksUI(container) {
         let linkWidthScale = mkWidthScale();
         let colorScale = mkColorScale();
         network.forEachLink((link) => {
-            container
-                .select(`#${link.source.id}-${link.dest.id}`)
-                .style({
-                    'stroke-dashoffset': 0,
-                    'stroke-width': linkWidthScale(Math.abs(link.weight)),
-                    stroke: colorScale(link.weight),
-                })
-                .datum(link);
+            const baseName = link.source.id + '-' + link.dest.id;
+            container.select(`#${baseName}`).style({
+                'stroke-dashoffset': 0,
+                'stroke-width': linkWidthScale(Math.abs(link.weight)),
+                stroke: colorScale(link.weight),
+            });
+            const val = container.select(`#val-${baseName}`);
+            if (!val.empty()) {
+                val.text(link.weightOrig);
+                drawValuesBox(val, link.weight);
+            }
         });
     }
 
-    function updateBiasesUI() {
+    function updateNodesUI(container) {
         let colorScale = mkColorScale();
         network.forEachNode(true, (node) => {
-            D3.select(`rect#bias-${node.id}`).style('fill', colorScale(node.bias));
+            D3.select(`#bias-${node.id}`).style('fill', colorScale(node.bias));
+            let val = D3.select(`#val-${node.id}`);
+            if (!val.empty()) {
+                val.text(node.biasOrig);
+                drawValuesBox(val, node.bias);
+            }
         });
     }
 }
 
-function mkWidthScale(): D3.scale.Linear<number, number> {
+function mkWidthScale(): _D3.scale.Linear<number, number> {
     let maxWeight = 0;
     function updMaxWeight(link: Link): void {
         let absLinkWeight = Math.abs(link.weight);
@@ -557,7 +533,7 @@ function mkWidthScale(): D3.scale.Linear<number, number> {
     return D3.scale.linear().domain([0, maxWeight]).range([1, MAX_WIDTH]).clamp(true);
 }
 
-function mkColorScale(): D3.scale.Linear<String, number> {
+function mkColorScale(): _D3.scale.Linear<string, number> {
     let maxWeight = 0;
     function updMaxWeight(link: Link): void {
         let absLinkWeight = Math.abs(link.weight);
@@ -569,8 +545,32 @@ function mkColorScale(): D3.scale.Linear<String, number> {
     return D3.scale.linear<string, number>().domain([-1, 0, 1]).range(['#f59322', '#e8eaeb', '#0877bd']).clamp(true);
 }
 
+function drawValuesBox(text: D3Selection, valueForColor: number): void {
+    const rect = D3.select('#rect-' + text.attr('id'));
+    const bbox = (text.node() as any).getBBox();
+    rect.attr('x', bbox.x - 4);
+    rect.attr('y', bbox.y);
+    rect.attr('width', bbox.width + 8);
+    rect.attr('height', bbox.height);
+    rect.style('fill', val2color(valueForColor));
+
+    function val2color(val: number): string {
+        return val < 0 ? '#f5932260' : val == 0 ? '#e8eaeb60' : '#0877bd60';
+    }
+}
+
 function makeNetworkFromState() {
     network = new Network(state);
+}
+
+function getNodeLinkValue(nodeOrLink: Node | Link) {
+    if (nodeOrLink instanceof Link) {
+        return nodeOrLink.weight;
+    } else if (nodeOrLink instanceof Node) {
+        return nodeOrLink.bias;
+    } else {
+        throw 'invalid nodeOrLink';
+    }
 }
 
 /**
@@ -578,7 +578,7 @@ function makeNetworkFromState() {
  * put them into the state and return the state to be stored in the blockly XML in the NNStep block
  * @return the stringified state
  */
-export function getStateAsJSONString(): String {
+export function getStateAsJSONString(): string {
     try {
         state.weights = network.getWeightArray();
         state.biases = network.getBiasArray();

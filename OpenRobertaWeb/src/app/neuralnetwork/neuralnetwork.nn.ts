@@ -435,8 +435,8 @@ export class Network {
                             break;
                         }
                         let weights = H.string2weight(linkWeight);
-                        link.weight = weights === null ? 0 : weights[0];
-                        link.weightOrig = weights === null ? '0' : weights[1];
+                        link.weight = weights[0];
+                        link.weightOrig = weights[1];
                     }
                 }
             }
@@ -458,8 +458,8 @@ export class Network {
                         break;
                     }
                     let biases = H.string2bias(nodeBias);
-                    node.bias = biases === null ? 0 : biases[0];
-                    node.biasOrig = biases === null ? '0' : biases[1];
+                    node.bias = biases[0];
+                    node.biasOrig = biases[1];
                 }
             }
         }

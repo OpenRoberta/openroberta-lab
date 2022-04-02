@@ -90,7 +90,6 @@
 }
 
 #nn-features .basic-button {
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     margin-top: 25px;
     height: 34px;
     margin-right: 0;
@@ -115,7 +114,6 @@
     top: -58px;
     width: 80px;
     height: 44px;
-    z-index: 100;
 }
 
 #nn-features .plus-minus-neuron-button {
@@ -136,48 +134,17 @@
     margin-right: 5px;
 }
 
-#nn-features .callout {
-    position: absolute;
-    width: 95px;
-    font-style: italic;
-}
-
-#nn-features .callout svg {
-    position: absolute;
-    left: -15px;
-    width: 30px;
-    height: 30px;
-}
-
-#nn-features .callout svg path {
-    fill: none;
-    stroke: black;
-    stroke-opacity: 0.4;
-}
-
-#nn-features .callout svg defs path {
-    fill: black;
-    stroke: none;
-    fill-opacity: 0.4;
-}
-
-#nn-features .nn-features .callout .label {
-    position: absolute;
-    top: 110px;
-    left: 3px;
-    font-size: 11px;
-    left: 0;
-    z-index: 100;
-}
-
 #nn-features svg .main-label {
     font-size: 13px;
     fill: #333;
     font-weight: 300;
 }
 
-#nn-features svg .active .main-label {
-    fill: #333;
+#nn-features .nn-showval {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    text-anchor: end;
 }
 
 #nn-features svg #markerArrow {
@@ -241,7 +208,6 @@
     position: absolute;
     top: 50px;
     left: 0;
-    z-index: 100;
 }
 
 #nn-editCard {
@@ -249,7 +215,7 @@
     position: absolute;
     padding: 5px;
     border: 1px solid #aaa;
-    z-index: 1000;
+    z-index: 10;
     background: #fff;
     cursor: default;
     border-radius: 5px;

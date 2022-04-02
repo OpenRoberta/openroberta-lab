@@ -3,7 +3,43 @@
  * Our work is heavily based on the tensorflow playground, see https://github.com/tensorflow/playground.
  * The Open Roberta Lab is open source and uses the Apache 2.0 License, see https://www.apache.org/licenses/LICENSE-2.0
  */
-define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", "./neuralnetwork.uistate", "log", "d3", "./neuralnetwork.msg"], function (require, exports, H, neuralnetwork_nn_1, neuralnetwork_uistate_1, LOG, D3, MSG) {
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", "./neuralnetwork.uistate", "log", "./neuralnetwork.msg"], function (require, exports, H, neuralnetwork_nn_1, neuralnetwork_uistate_1, LOG, MSG) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getNetwork = exports.getStateAsJSONString = exports.runNNEditor = exports.setupNN = void 0;
     var NodeType;
@@ -18,6 +54,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         FocusStyle[FocusStyle["CLICK_NODE"] = 1] = "CLICK_NODE";
         FocusStyle[FocusStyle["SHOW_ALL"] = 2] = "SHOW_ALL";
     })(FocusStyle || (FocusStyle = {}));
+    var D3; // used for lazy loading
     var focusStyle = FocusStyle.CLICK_WEIGHT_BIAS;
     var focusNode = null;
     var state = null;
@@ -28,54 +65,64 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     }
     exports.setupNN = setupNN;
     function runNNEditor() {
-        D3.select('#goto-sim').on('click', function () {
-            $.when($('#tabProgram').trigger('click')).done(function () {
-                $('#simButton').trigger('click');
+        return __awaiter(this, void 0, void 0, function () {
+            function getKeyFromValue(obj, value) {
+                for (var key in obj) {
+                    if (obj[key] === value) {
+                        return key;
+                    }
+                }
+                return undefined;
+            }
+            var activationDropdown, focusDropdown;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, new Promise(function (resolve_1, reject_1) { require(['d3'], resolve_1, reject_1); })];
+                    case 1:
+                        D3 = _a.sent();
+                        D3.select('#goto-sim').on('click', function () {
+                            $.when($('#tabProgram').trigger('click')).done(function () {
+                                $('#simButton').trigger('click');
+                            });
+                        });
+                        D3.select('#add-layers').on('click', function () {
+                            if (state.numHiddenLayers >= 6) {
+                                return;
+                            }
+                            state.networkShape[state.numHiddenLayers] = 2;
+                            state.numHiddenLayers++;
+                            reconstructNNIncludingUI();
+                        });
+                        D3.select('#remove-layers').on('click', function () {
+                            if (state.numHiddenLayers <= 0) {
+                                return;
+                            }
+                            state.numHiddenLayers--;
+                            state.networkShape.splice(state.numHiddenLayers);
+                            reconstructNNIncludingUI();
+                        });
+                        activationDropdown = D3.select('#activations').on('change', function () {
+                            state.activationKey = this.value;
+                            state.activation = H.activations[this.value];
+                            reconstructNNIncludingUI();
+                        });
+                        activationDropdown.property('value', getKeyFromValue(H.activations, state.activation));
+                        focusDropdown = D3.select('#nn-focus').on('change', function () {
+                            focusStyle = FocusStyle[this.value];
+                            if (focusStyle === undefined || focusStyle === null) {
+                                focusStyle = FocusStyle.CLICK_WEIGHT_BIAS;
+                            }
+                            drawNetworkUI(network);
+                        });
+                        // Listen for css-responsive changes and redraw the svg network.
+                        window.addEventListener('resize', function () {
+                            drawNetworkUI(network);
+                        });
+                        reconstructNNIncludingUI();
+                        return [2 /*return*/];
+                }
             });
         });
-        D3.select('#add-layers').on('click', function () {
-            if (state.numHiddenLayers >= 6) {
-                return;
-            }
-            state.networkShape[state.numHiddenLayers] = 2;
-            state.numHiddenLayers++;
-            reconstructNNIncludingUI();
-        });
-        D3.select('#remove-layers').on('click', function () {
-            if (state.numHiddenLayers <= 0) {
-                return;
-            }
-            state.numHiddenLayers--;
-            state.networkShape.splice(state.numHiddenLayers);
-            reconstructNNIncludingUI();
-        });
-        var activationDropdown = D3.select('#activations').on('change', function () {
-            state.activationKey = this.value;
-            state.activation = H.activations[this.value];
-            reconstructNNIncludingUI();
-        });
-        activationDropdown.property('value', getKeyFromValue(H.activations, state.activation));
-        var focusDropdown = D3.select('#nn-focus').on('change', function () {
-            focusStyle = FocusStyle[this.value];
-            if (focusStyle === undefined || focusStyle === null) {
-                focusStyle = FocusStyle.CLICK_WEIGHT_BIAS;
-            }
-            drawNetworkUI(network);
-        });
-        // Listen for css-responsive changes and redraw the svg network.
-        window.addEventListener('resize', function () {
-            drawNetworkUI(network);
-        });
-        reconstructNNIncludingUI();
-        return;
-        function getKeyFromValue(obj, value) {
-            for (var key in obj) {
-                if (obj[key] === value) {
-                    return key;
-                }
-            }
-            return undefined;
-        }
     }
     exports.runNNEditor = runNNEditor;
     function reconstructNNIncludingUI() {
@@ -127,13 +174,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         }
         // Map of all node and link coordinates.
         var node2coord = {};
-        var link2coord = {};
         var container = svg.append('g').classed('core', true).attr('transform', "translate(3,3)");
-        // Draw the network layer by layer.
-        var calloutThumb = D3.select('.callout.thumbnail').style('display', 'none');
-        var calloutWeights = D3.select('.callout.weights').style('display', 'none');
-        var idWithCallout = null;
-        var targetIdWithCallout = null;
         // Draw the input layer separately.
         var numNodes = networkImpl[0].length;
         var cxI = layerStartX(0);
@@ -154,38 +195,10 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 var cy = nodeStartY(i);
                 node2coord[node.id] = { cx: cxH, cy: cy };
                 drawNode(node, NodeType.HIDDEN, cxH, cy, container);
-                // Show callout to thumbnails.
-                var numNodes_2 = networkImpl[layerIdx].length;
-                var nextNumNodes = networkImpl[layerIdx + 1].length;
-                if (idWithCallout == null && i === numNodes_2 - 1 && nextNumNodes <= numNodes_2) {
-                    calloutThumb.style({
-                        display: null,
-                        top: 20 + 3 + cy + "px",
-                        left: cxH + "px",
-                    });
-                    idWithCallout = node.id;
-                }
                 // Draw links.
                 for (var j = 0; j < node.inputLinks.length; j++) {
                     var link = node.inputLinks[j];
                     var path = drawLink(link, node2coord, networkImpl, container, j === 0, j, node.inputLinks.length).node();
-                    // Show callout to weights.
-                    var prevLayer = networkImpl[layerIdx - 1];
-                    var lastNodePrevLayer = prevLayer[prevLayer.length - 1];
-                    if (targetIdWithCallout == null &&
-                        i === numNodes_2 - 1 &&
-                        link.source.id === lastNodePrevLayer.id &&
-                        (link.source.id !== idWithCallout || numLayers <= 5) &&
-                        link.dest.id !== idWithCallout &&
-                        prevLayer.length >= numNodes_2) {
-                        var midPoint = path.getPointAtLength(path.getTotalLength() * 0.7);
-                        calloutWeights.style({
-                            display: null,
-                            top: midPoint.y + 5 + "px",
-                            left: midPoint.x + 3 + "px",
-                        });
-                        targetIdWithCallout = link.dest.id;
-                    }
                 }
             }
         }
@@ -233,24 +246,17 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             if (focusStyle === FocusStyle.CLICK_NODE) {
                 nodeGroup.on('click', function () {
                     focusNode = node;
-                    showBiasAndLinkWeights();
+                    drawNetworkUI(network);
                 });
             }
-            var numberLabelNode = nodeGroup.append('text').attr({
+            var labelForId = nodeGroup.append('text').attr({
                 class: 'main-label',
                 x: 10,
                 y: 0.66 * nodeSize,
                 'text-anchor': 'start',
                 cursor: 'default',
             });
-            numberLabelNode.append('tspan').text(nodeId);
-            var activeOrNotClass = state[nodeId] ? 'active' : 'inactive';
-            if (nodeType === NodeType.INPUT) {
-                nodeGroup.classed(activeOrNotClass, true);
-            }
-            if (nodeType === NodeType.OUTPUT) {
-                nodeGroup.classed(activeOrNotClass, true);
-            }
+            labelForId.append('tspan').text(nodeId);
             if (nodeType !== NodeType.INPUT) {
                 var biasRect = nodeGroup.append('rect').attr({
                     id: "bias-" + nodeId,
@@ -268,6 +274,10 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                         updateEditCard(null);
                     });
                 }
+                // Show the bias value depending on focus-style
+                if (focusStyle === FocusStyle.SHOW_ALL || (focusStyle === FocusStyle.CLICK_NODE && focusNode === node)) {
+                    drawValue(nodeGroup, nodeId, -2 * biasSize, nodeSize + 2 * biasSize, node.bias, node.biasOrig);
+                }
             }
             // Draw the node's canvas.
             var div = D3.select('#nn-network')
@@ -281,10 +291,8 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 left: x + 3 + "px",
                 top: y + 3 + "px",
             });
-            if (nodeType === NodeType.INPUT) {
-                div.classed(activeOrNotClass, true);
-            }
         }
+        var valShiftToRight = true;
         function drawLink(link, node2coord, network, container, isFirst, index, length) {
             var line = container.insert('path', ':first-child');
             var source = node2coord[link.source.id];
@@ -306,7 +314,15 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 id: link.source.id + '-' + link.dest.id,
                 d: diagonal(datum, 0),
             });
-            // Add a (almost) invisible thick path that will be used for editing the weight value on click.
+            // Show the value of the link depending on focus-style
+            if (focusStyle === FocusStyle.SHOW_ALL || (focusStyle === FocusStyle.CLICK_NODE && link.source === focusNode) || link.dest === focusNode) {
+                var lineNode = line.node();
+                valShiftToRight = !valShiftToRight;
+                var posVal = focusStyle === FocusStyle.SHOW_ALL ? (valShiftToRight ? 0.6 : 0.4) : link.source === focusNode ? 0.8 : 0.2;
+                var pointForWeight = lineNode.getPointAtLength(lineNode.getTotalLength() * posVal);
+                drawValue(container, link.source.id + '-' + link.dest.id, pointForWeight.x, pointForWeight.y - 10, link.weight, link.weightOrig);
+            }
+            // Add an (almost) invisible thick path that will be used for editing the weight value on click.
             if (focusStyle !== FocusStyle.CLICK_NODE || link.source === focusNode || link.dest === focusNode) {
                 var cssForPath = focusStyle !== FocusStyle.CLICK_NODE ? 'nn-weight-click' : 'nn-weight-show-click';
                 container
@@ -363,6 +379,19 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 .attr('class', 'nn-bold')
                 .text(state.networkShape[i] + ' neuron' + suffix);
         }
+        function drawValue(container, id, x, y, valueForColor, valueToShow) {
+            var rect = container.append('rect').attr('id', 'rect-val-' + id);
+            var text = container
+                .append('text')
+                .attr({
+                class: 'nn-showval',
+                id: 'val-' + id,
+                x: x,
+                y: y,
+            })
+                .text(valueToShow);
+            drawValuesBox(text, valueForColor);
+        }
     }
     function updateEditCard(nodeOrLink, coordinates) {
         // nodeOrLink : nn.Node | nn.Link
@@ -409,17 +438,13 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             if (value != null) {
                 if (nodeOrLink instanceof neuralnetwork_nn_1.Link) {
                     var weights = H.string2weight(value);
-                    if (weights !== null) {
-                        nodeOrLink.weight = weights[0];
-                        nodeOrLink.weightOrig = weights[1];
-                    }
+                    nodeOrLink.weight = weights[0];
+                    nodeOrLink.weightOrig = weights[1];
                 }
                 else if (nodeOrLink instanceof neuralnetwork_nn_1.Node) {
                     var biases = H.string2bias(value);
-                    if (biases !== null) {
-                        nodeOrLink.bias = biases[0];
-                        nodeOrLink.biasOrig = biases[1];
-                    }
+                    nodeOrLink.bias = biases[0];
+                    nodeOrLink.biasOrig = biases[1];
                 }
                 else {
                     throw 'invalid nodeOrLink';
@@ -427,17 +452,6 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 state.weights = network.getWeightArray();
                 state.biases = network.getBiasArray();
                 updateUI();
-            }
-        }
-        function getNodeLinkValue(nodeOrLink) {
-            if (nodeOrLink instanceof neuralnetwork_nn_1.Link) {
-                return nodeOrLink.weight;
-            }
-            else if (nodeOrLink instanceof neuralnetwork_nn_1.Node) {
-                return nodeOrLink.bias;
-            }
-            else {
-                throw 'invalid nodeOrLink';
             }
         }
         function updValue(value, incr) {
@@ -464,30 +478,36 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             }
         }
     }
-    function showBiasAndLinkWeights() {
-        drawNetworkUI(network);
-    }
     function updateUI() {
-        updateWeightsUI(D3.select('g.core'));
-        updateBiasesUI();
-        function updateWeightsUI(container) {
+        var container = D3.select('g.core');
+        updateLinksUI(container);
+        updateNodesUI(container);
+        function updateLinksUI(container) {
             var linkWidthScale = mkWidthScale();
             var colorScale = mkColorScale();
             network.forEachLink(function (link) {
-                container
-                    .select("#" + link.source.id + "-" + link.dest.id)
-                    .style({
+                var baseName = link.source.id + '-' + link.dest.id;
+                container.select("#" + baseName).style({
                     'stroke-dashoffset': 0,
                     'stroke-width': linkWidthScale(Math.abs(link.weight)),
                     stroke: colorScale(link.weight),
-                })
-                    .datum(link);
+                });
+                var val = container.select("#val-" + baseName);
+                if (!val.empty()) {
+                    val.text(link.weightOrig);
+                    drawValuesBox(val, link.weight);
+                }
             });
         }
-        function updateBiasesUI() {
+        function updateNodesUI(container) {
             var colorScale = mkColorScale();
             network.forEachNode(true, function (node) {
-                D3.select("rect#bias-" + node.id).style('fill', colorScale(node.bias));
+                D3.select("#bias-" + node.id).style('fill', colorScale(node.bias));
+                var val = D3.select("#val-" + node.id);
+                if (!val.empty()) {
+                    val.text(node.biasOrig);
+                    drawValuesBox(val, node.bias);
+                }
             });
         }
     }
@@ -514,8 +534,31 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         network.forEachLink(updMaxWeight);
         return D3.scale.linear().domain([-1, 0, 1]).range(['#f59322', '#e8eaeb', '#0877bd']).clamp(true);
     }
+    function drawValuesBox(text, valueForColor) {
+        var rect = D3.select('#rect-' + text.attr('id'));
+        var bbox = text.node().getBBox();
+        rect.attr('x', bbox.x - 4);
+        rect.attr('y', bbox.y);
+        rect.attr('width', bbox.width + 8);
+        rect.attr('height', bbox.height);
+        rect.style('fill', val2color(valueForColor));
+        function val2color(val) {
+            return val < 0 ? '#f5932260' : val == 0 ? '#e8eaeb60' : '#0877bd60';
+        }
+    }
     function makeNetworkFromState() {
         network = new neuralnetwork_nn_1.Network(state);
+    }
+    function getNodeLinkValue(nodeOrLink) {
+        if (nodeOrLink instanceof neuralnetwork_nn_1.Link) {
+            return nodeOrLink.weight;
+        }
+        else if (nodeOrLink instanceof neuralnetwork_nn_1.Node) {
+            return nodeOrLink.bias;
+        }
+        else {
+            throw 'invalid nodeOrLink';
+        }
     }
     /**
      * extract weights and biases from the network (only this can be changed either by the program or the user),
