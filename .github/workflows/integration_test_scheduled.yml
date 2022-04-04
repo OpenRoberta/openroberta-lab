@@ -1,6 +1,6 @@
 name: IntegrationTest-Scheduled
 
-# the ora-cc-rsc tag number (currently 27) is used twice in this workflow
+# the ora-cc-rsc tag number (currently 29) is used twice in this workflow
 
 on:
   schedule:
@@ -10,7 +10,7 @@ jobs:
   integration-test:
     if: ${{ github.repository == 'OpenRoberta/openroberta-lab' }}
     runs-on: ubuntu-latest
-    container: openroberta/base-x64:27 # ora-cc-rsc tag number
+    container: openroberta/base-x64:29 # ora-cc-rsc tag number
     steps:
       - name: branch ${{ github.ref }}, repo ${{ github.repository }}, ora-cc-rsc-tag 29 # ora-cc-rsc tag number
         uses: actions/checkout@v2
