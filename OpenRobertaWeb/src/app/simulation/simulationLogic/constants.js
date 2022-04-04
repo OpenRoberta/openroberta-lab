@@ -1,4 +1,4 @@
-var CONST = {
+let CONST = {
     ARG1: 'arg1',
 
     ARG2: 'arg2',
@@ -311,8 +311,6 @@ var CONST = {
 
     RED: 'red',
 
-    ANIMATION: 'animation',
-
     SUM: 'sum',
 
     RGB: 'rgb',
@@ -510,21 +508,17 @@ var CONST = {
 
     MATH_ON_LIST: 'createMathOnList',
 
-    TRACKWIDTH: 40,
+    // TRACKWIDTH: 40,
 
-    TURN_RATIO: 40 / 3 / 2.8,
+    // TURN_RATIO: 40 / 3 / 2.8,
 
-    WHEEL_DIAMETER: 5.6,
+    // WHEEL_DIAMETER: 5.6,
 
-    MAXDIAG: 2500,
+    // MAXDIAG: 2500,
 
-    MAXPOWER: 0.351858377 * 3, // real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix : 1cm
+    // MAXPOWER: 0.351858377 * 3, // real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix : 1cm
 
-    ENC: 360.0 / (3.0 * Math.PI * 5.6),
-
-    MAX_WIDTH: 2000,
-
-    MAX_HEIGHT: 820,
+    // ENC: 360.0 / (3.0 * Math.PI * 5.6),
 
     WAVE_LENGTH: 60,
 
@@ -538,7 +532,7 @@ var CONST = {
 
     CORNER_RADIUS: 5,
 
-    ANIMATION_DURATION: 750
+    SHIFT: 1,
 };
 
 export default CONST;

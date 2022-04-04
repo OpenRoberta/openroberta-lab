@@ -3,9 +3,9 @@
  * @author Beate Jost <beate.jost@smail.inf.h-brs.de>
  * @version 0.1
  */
-define(["require", "exports", "simulation.constants"], function (require, exports, simulation_constants_1) {
+define(["require", "exports", "simulation.constants", "./simulation.objects"], function (require, exports, simulation_constants_1, simulation_objects_1) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.getColor = exports.rgbToHsv = exports.checkObstacle = exports.isPointInsideRectangle = exports.getDistanceToLine = exports.getDistance = exports.sqr = exports.getDistanceToCircle = exports.getLinesFromObj = exports.isLineAlignedToPoint = exports.getIntersectionPointsCircle = exports.getClosestIntersectionPointCircle = exports.getIntersectionPoint = exports.toDegree = exports.toRadians = void 0;
+    exports.epsilonEqual = exports.transform = exports.getColor = exports.rgbToHsv = exports.checkInObstacle = exports.isPointInsideRectangle = exports.getDistanceToLine = exports.getDistance = exports.sqr = exports.getDistanceToCircle = exports.getLinesFromObj = exports.getLinesFromRectangle = exports.isLineAlignedToPoint = exports.getIntersectionPointsCircle = exports.getClosestIntersectionPointCircle = exports.getIntersectionPoint = exports.toDegree = exports.toRadians = void 0;
     /**
      * exports helper for calculations in ORsimulation
      *
@@ -152,16 +152,37 @@ define(["require", "exports", "simulation.constants"], function (require, export
         return true;
     };
     exports.isLineAlignedToPoint = isLineAlignedToPoint;
-    /**
-     * Get four lines from a rectangle.
-     *
-     * @memberOf exports
-     * @param {rect}
-     *            a rectangle
-     * @returns {Array} four lines
-     */
+    var getLinesFromRectangle = function (obj) {
+        return [
+            {
+                x1: obj.x,
+                x2: obj.x,
+                y1: obj.y,
+                y2: obj.y + obj.h,
+            },
+            {
+                x1: obj.x,
+                x2: obj.x + obj.w,
+                y1: obj.y,
+                y2: obj.y,
+            },
+            {
+                x1: obj.x + obj.w,
+                x2: obj.x,
+                y1: obj.y + obj.h,
+                y2: obj.y + obj.h,
+            },
+            {
+                x1: obj.x + obj.w,
+                x2: obj.x + obj.w,
+                y1: obj.y + obj.h,
+                y2: obj.y,
+            },
+        ];
+    };
+    exports.getLinesFromRectangle = getLinesFromRectangle;
     var getLinesFromObj = function (obj) {
-        switch (obj.form) {
+        switch (obj.shape) {
             case 'rectangle':
                 return [
                     {
@@ -340,63 +361,73 @@ define(["require", "exports", "simulation.constants"], function (require, export
         }
     };
     exports.isPointInsideRectangle = isPointInsideRectangle;
-    var checkObstacle = function (robot, p) {
-        var x = robot.frontLeft.rx;
-        var y = robot.frontLeft.ry;
-        robot.frontLeft.bumped = robot.frontLeft.bumped || check(p, x, y);
-        x = robot.frontRight.rx;
-        y = robot.frontRight.ry;
-        robot.frontRight.bumped = robot.frontRight.bumped || check(p, x, y);
-        x = robot.backLeft.rx;
-        y = robot.backLeft.ry;
-        robot.backLeft.bumped = robot.backLeft.bumped || check(p, x, y);
-        x = robot.backRight.rx;
-        y = robot.backRight.ry;
-        robot.backRight.bumped = robot.backRight.bumped || check(p, x, y);
-        return robot.frontLeft.bumped || robot.frontRight.bumped ? 1 : 0;
-    };
-    exports.checkObstacle = checkObstacle;
-    check = function (p, x, y) {
-        switch (p.form) {
-            case 'rectangle':
-                return x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h;
-            case 'triangle':
-                var areaOrig = Math.floor(Math.abs((p.bx - p.ax) * (p.cy - p.ay) - (p.cx - p.ax) * (p.by - p.ay)));
-                var area1 = Math.floor(Math.abs((p.ax - x) * (p.by - y) - (p.bx - x) * (p.ay - y)));
-                var area2 = Math.floor(Math.abs((p.bx - x) * (p.cy - y) - (p.cx - x) * (p.by - y)));
-                var area3 = Math.floor(Math.abs((p.cx - x) * (p.ay - y) - (p.ax - x) * (p.cy - y)));
-                if (area1 + area2 + area3 <= areaOrig) {
-                    return true;
-                }
-                return false;
-            case 'circle':
-                return (x - p.x) * (x - p.x) + (y - p.y) * (y - p.y) <= p.r * p.r;
-            case 'robot':
-                return (0, exports.isPointInsideRectangle)({
-                    x: x,
-                    y: y,
+    var checkInObstacle = function (obstacle, myCheckPoint) {
+        if (obstacle instanceof simulation_objects_1.RectangleSimulationObject) {
+            return (myCheckPoint.rx > obstacle.x &&
+                myCheckPoint.rx < obstacle.x + obstacle.w &&
+                myCheckPoint.ry > obstacle.y &&
+                myCheckPoint.ry < obstacle.y + obstacle.h);
+        }
+        else if (obstacle instanceof simulation_objects_1.TriangleSimulationObject) {
+            var areaOrig = Math.floor(Math.abs((obstacle.bx - obstacle.ax) * (obstacle.cy - obstacle.ay) - (obstacle.cx - obstacle.ax) * (obstacle.by - obstacle.ay)));
+            var area1 = Math.floor(Math.abs((obstacle.ax - myCheckPoint.rx) * (obstacle.by - myCheckPoint.ry) - (obstacle.bx - myCheckPoint.rx) * (obstacle.ay - myCheckPoint.ry)));
+            var area2 = Math.floor(Math.abs((obstacle.bx - myCheckPoint.rx) * (obstacle.cy - myCheckPoint.ry) - (obstacle.cx - myCheckPoint.rx) * (obstacle.by - myCheckPoint.ry)));
+            var area3 = Math.floor(Math.abs((obstacle.cx - myCheckPoint.rx) * (obstacle.ay - myCheckPoint.ry) - (obstacle.ax - myCheckPoint.rx) * (obstacle.cy - myCheckPoint.ry)));
+            if (area1 + area2 + area3 <= areaOrig) {
+                return true;
+            }
+            return false;
+        }
+        else if (obstacle instanceof simulation_objects_1.CircleSimulationObject) {
+            return ((myCheckPoint.rx - obstacle.x) * (myCheckPoint.rx - obstacle.x) + (myCheckPoint.ry - obstacle.y) * (myCheckPoint.ry - obstacle.y) <=
+                obstacle.r * obstacle.r);
+        }
+        else {
+            return ((0, exports.isPointInsideRectangle)({
+                x: myCheckPoint.rx,
+                y: myCheckPoint.ry,
+            }, {
+                p1: {
+                    x: obstacle.backLeft.rx,
+                    y: obstacle.backLeft.ry,
+                },
+                p2: {
+                    x: obstacle.frontLeft.rx,
+                    y: obstacle.frontLeft.ry,
+                },
+                p3: {
+                    x: obstacle.frontRight.rx,
+                    y: obstacle.frontRight.ry,
+                },
+                p4: {
+                    x: obstacle.backRight.rx,
+                    y: obstacle.backRight.ry,
+                },
+            }) ||
+                (0, exports.isPointInsideRectangle)({
+                    x: myCheckPoint.rx,
+                    y: myCheckPoint.ry,
                 }, {
                     p1: {
-                        x: p.backLeft.rx,
-                        y: p.backLeft.ry,
+                        x: obstacle.wheelFrontRight.rx,
+                        y: obstacle.wheelFrontRight.ry,
                     },
                     p2: {
-                        x: p.frontLeft.rx,
-                        y: p.frontLeft.ry,
+                        x: obstacle.wheelBackRight.rx,
+                        y: obstacle.wheelBackRight.ry,
                     },
                     p3: {
-                        x: p.frontRight.rx,
-                        y: p.frontRight.ry,
+                        x: obstacle.wheelBackLeft.rx,
+                        y: obstacle.wheelBackLeft.ry,
                     },
                     p4: {
-                        x: p.backRight.rx,
-                        y: p.backRight.ry,
+                        x: obstacle.wheelFrontLeft.rx,
+                        y: obstacle.wheelFrontLeft.ry,
                     },
-                });
-            default:
-                return false;
+                }));
         }
     };
+    exports.checkInObstacle = checkInObstacle;
     /**
      * Convert a rgb value to hsv value.
      *
@@ -469,4 +500,16 @@ define(["require", "exports", "simulation.constants"], function (require, export
         return simulation_constants_1.default.COLOR_ENUM.NONE;
     };
     exports.getColor = getColor;
+    // TODO type PointRobotWorld
+    function transform(pose, point) {
+        var sin = Math.sin(pose.theta);
+        var cos = Math.cos(pose.theta);
+        point.rx = point.x * cos - point.y * sin + pose.x;
+        point.ry = point.x * sin + point.y * cos + pose.y;
+    }
+    exports.transform = transform;
+    function epsilonEqual(num1, num2, epsilon) {
+        return Math.abs(num1 - num2) <= epsilon;
+    }
+    exports.epsilonEqual = epsilonEqual;
 });

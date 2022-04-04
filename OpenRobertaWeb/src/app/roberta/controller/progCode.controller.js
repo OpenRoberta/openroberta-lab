@@ -1,5 +1,4 @@
 import * as MSG from 'message';
-import * as LOG from 'log';
 import * as UTIL from 'util';
 import * as GUISTATE_C from 'guiState.controller';
 import * as PROG_C from 'program.controller';
@@ -55,7 +54,7 @@ export { init, setCode, setCodeLanguage };
 function initEvents() {
     $('#codeButton').off('click touchend');
     $('#codeButton').onWrap('click touchend', function (event) {
-        toggleCode();
+        toggleCode($(this));
         return false;
     });
     $('#codeDownload').onWrap(
@@ -105,7 +104,7 @@ function initEvents() {
     );
 }
 
-function toggleCode() {
+function toggleCode($button) {
     Blockly.hideChaff();
     if ($('#codeButton').hasClass('rightActive')) {
         $('#blockly').closeRightView();
@@ -132,7 +131,7 @@ function toggleCode() {
                     flask.updateCode(result.sourceCode);
                     // TODO change javaSource to source on server
                     GUISTATE_C.setProgramSource(result.sourceCode);
-                    $('#blockly').openRightView('code', INITIAL_WIDTH);
+                    $button.openRightView($('#codeDiv'), INITIAL_WIDTH);
                 } else {
                     MSG.displayInformation(result, result.message, result.message, result.parameters);
                 }

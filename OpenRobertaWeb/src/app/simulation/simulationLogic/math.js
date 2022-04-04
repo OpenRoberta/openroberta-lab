@@ -5,6 +5,7 @@
  */
 
 import CONSTANTS from 'simulation.constants';
+import { CircleSimulationObject, RectangleSimulationObject, TriangleSimulationObject } from './simulation.objects';
 
 /**
  * exports helper for calculations in ORsimulation
@@ -161,16 +162,36 @@ export const isLineAlignedToPoint = function (xi, yi, line) {
     return true;
 };
 
-/**
- * Get four lines from a rectangle.
- *
- * @memberOf exports
- * @param {rect}
- *            a rectangle
- * @returns {Array} four lines
- */
+export const getLinesFromRectangle = function (obj) {
+    return [
+        {
+            x1: obj.x,
+            x2: obj.x,
+            y1: obj.y,
+            y2: obj.y + obj.h,
+        },
+        {
+            x1: obj.x,
+            x2: obj.x + obj.w,
+            y1: obj.y,
+            y2: obj.y,
+        },
+        {
+            x1: obj.x + obj.w,
+            x2: obj.x,
+            y1: obj.y + obj.h,
+            y2: obj.y + obj.h,
+        },
+        {
+            x1: obj.x + obj.w,
+            x2: obj.x + obj.w,
+            y1: obj.y + obj.h,
+            y2: obj.y,
+        },
+    ];
+};
 export const getLinesFromObj = function (obj) {
-    switch (obj.form) {
+    switch (obj.shape) {
         case 'rectangle':
             return [
                 {
@@ -348,64 +369,87 @@ export const isPointInsideRectangle = function (p, rect) {
     }
 };
 
-export const checkObstacle = function (robot, p) {
-    var x = robot.frontLeft.rx;
-    var y = robot.frontLeft.ry;
-    robot.frontLeft.bumped = robot.frontLeft.bumped || check(p, x, y);
-    x = robot.frontRight.rx;
-    y = robot.frontRight.ry;
-    robot.frontRight.bumped = robot.frontRight.bumped || check(p, x, y);
-    x = robot.backLeft.rx;
-    y = robot.backLeft.ry;
-    robot.backLeft.bumped = robot.backLeft.bumped || check(p, x, y);
-    x = robot.backRight.rx;
-    y = robot.backRight.ry;
-    robot.backRight.bumped = robot.backRight.bumped || check(p, x, y);
-    return robot.frontLeft.bumped || robot.frontRight.bumped ? 1 : 0;
-};
-
-check = function (p, x, y) {
-    switch (p.form) {
-        case 'rectangle':
-            return x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h;
-        case 'triangle':
-            var areaOrig = Math.floor(Math.abs((p.bx - p.ax) * (p.cy - p.ay) - (p.cx - p.ax) * (p.by - p.ay)));
-            var area1 = Math.floor(Math.abs((p.ax - x) * (p.by - y) - (p.bx - x) * (p.ay - y)));
-            var area2 = Math.floor(Math.abs((p.bx - x) * (p.cy - y) - (p.cx - x) * (p.by - y)));
-            var area3 = Math.floor(Math.abs((p.cx - x) * (p.ay - y) - (p.ax - x) * (p.cy - y)));
-            if (area1 + area2 + area3 <= areaOrig) {
-                return true;
-            }
-            return false;
-        case 'circle':
-            return (x - p.x) * (x - p.x) + (y - p.y) * (y - p.y) <= p.r * p.r;
-        case 'robot':
-            return isPointInsideRectangle(
+export const checkInObstacle = function (obstacle, myCheckPoint) {
+    if (obstacle instanceof RectangleSimulationObject) {
+        return (
+            myCheckPoint.rx > obstacle.x &&
+            myCheckPoint.rx < obstacle.x + obstacle.w &&
+            myCheckPoint.ry > obstacle.y &&
+            myCheckPoint.ry < obstacle.y + obstacle.h
+        );
+    } else if (obstacle instanceof TriangleSimulationObject) {
+        var areaOrig = Math.floor(
+            Math.abs((obstacle.bx - obstacle.ax) * (obstacle.cy - obstacle.ay) - (obstacle.cx - obstacle.ax) * (obstacle.by - obstacle.ay))
+        );
+        var area1 = Math.floor(
+            Math.abs((obstacle.ax - myCheckPoint.rx) * (obstacle.by - myCheckPoint.ry) - (obstacle.bx - myCheckPoint.rx) * (obstacle.ay - myCheckPoint.ry))
+        );
+        var area2 = Math.floor(
+            Math.abs((obstacle.bx - myCheckPoint.rx) * (obstacle.cy - myCheckPoint.ry) - (obstacle.cx - myCheckPoint.rx) * (obstacle.by - myCheckPoint.ry))
+        );
+        var area3 = Math.floor(
+            Math.abs((obstacle.cx - myCheckPoint.rx) * (obstacle.ay - myCheckPoint.ry) - (obstacle.ax - myCheckPoint.rx) * (obstacle.cy - myCheckPoint.ry))
+        );
+        if (area1 + area2 + area3 <= areaOrig) {
+            return true;
+        }
+        return false;
+    } else if (obstacle instanceof CircleSimulationObject) {
+        return (
+            (myCheckPoint.rx - obstacle.x) * (myCheckPoint.rx - obstacle.x) + (myCheckPoint.ry - obstacle.y) * (myCheckPoint.ry - obstacle.y) <=
+            obstacle.r * obstacle.r
+        );
+    } else {
+        return (
+            isPointInsideRectangle(
                 {
-                    x: x,
-                    y: y,
+                    x: myCheckPoint.rx,
+                    y: myCheckPoint.ry,
                 },
                 {
                     p1: {
-                        x: p.backLeft.rx,
-                        y: p.backLeft.ry,
+                        x: obstacle.backLeft.rx,
+                        y: obstacle.backLeft.ry,
                     },
                     p2: {
-                        x: p.frontLeft.rx,
-                        y: p.frontLeft.ry,
+                        x: obstacle.frontLeft.rx,
+                        y: obstacle.frontLeft.ry,
                     },
                     p3: {
-                        x: p.frontRight.rx,
-                        y: p.frontRight.ry,
+                        x: obstacle.frontRight.rx,
+                        y: obstacle.frontRight.ry,
                     },
                     p4: {
-                        x: p.backRight.rx,
-                        y: p.backRight.ry,
+                        x: obstacle.backRight.rx,
+                        y: obstacle.backRight.ry,
                     },
                 }
-            );
-        default:
-            return false;
+            ) ||
+            isPointInsideRectangle(
+                {
+                    x: myCheckPoint.rx,
+                    y: myCheckPoint.ry,
+                },
+                {
+                    p1: {
+                        x: obstacle.wheelFrontRight.rx,
+                        y: obstacle.wheelFrontRight.ry,
+                    },
+                    p2: {
+                        x: obstacle.wheelBackRight.rx,
+                        y: obstacle.wheelBackRight.ry,
+                    },
+                    p3: {
+                        x: obstacle.wheelBackLeft.rx,
+                        y: obstacle.wheelBackLeft.ry,
+                    },
+                    p4: {
+                        x: obstacle.wheelFrontLeft.rx,
+                        y: obstacle.wheelFrontLeft.ry,
+                    },
+                }
+            )
+        );
     }
 };
 
@@ -483,3 +527,15 @@ export const getColor = function (hsv) {
     }
     return CONSTANTS.COLOR_ENUM.NONE;
 };
+
+// TODO type PointRobotWorld
+export function transform(pose, point) {
+    const sin = Math.sin(pose.theta);
+    const cos = Math.cos(pose.theta);
+    point.rx = point.x * cos - point.y * sin + pose.x;
+    point.ry = point.x * sin + point.y * cos + pose.y;
+}
+
+export function epsilonEqual(num1, num2, epsilon) {
+    return Math.abs(num1 - num2) <= epsilon;
+}

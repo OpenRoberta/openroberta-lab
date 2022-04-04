@@ -510,7 +510,7 @@ define(["require", "exports", "message", "util", "userGroup.model", "guiState.co
                                         $(document.body).off(e);
                                     }
                                 });
-                                $self.find('input').first().select();
+                                $self.find('input').first().handleNewSelection();
                             }
                             else {
                                 $self.find('.member-name').addClass('active');

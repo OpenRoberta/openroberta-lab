@@ -142,7 +142,7 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
 
     @Override
     public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
-        JSONObject o = makeNode(C.STATUS_LIGHT_ACTION).put(C.NAME, "calliope").put(C.PORT, "internal");
+        JSONObject o = makeNode(C.STATUS_LIGHT_ACTION).put(C.NAME, "calliope");
         return app(o);
     }
 
@@ -352,7 +352,6 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
     public Void visitBothMotorsOnAction(BothMotorsOnAction bothMotorsOnAction) {
         bothMotorsOnAction.speedA.accept(this);
         bothMotorsOnAction.speedB.accept(this);
-        app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
 
         String portA = bothMotorsOnAction.portA;
         ConfigurationComponent ccA = this.configuration.optConfigurationComponent(portA);

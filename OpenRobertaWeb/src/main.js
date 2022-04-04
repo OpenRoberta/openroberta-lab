@@ -38,7 +38,6 @@ require.config({
         'logList.controller': 'app/roberta/controller/logList.controller',
         'logList.model': 'app/roberta/models/logList.model',
         'menu.controller': 'app/roberta/controller/menu.controller',
-        'multSim.controller': 'app/roberta/controller/multSim.controller',
         'notification.controller': 'app/roberta/controller/notification.controller',
         'notification.model': 'app/roberta/models/notification.model',
         'nn.controller': 'app/roberta/controller/nn.controller',
@@ -69,23 +68,25 @@ require.config({
 
         'simulation.constants': 'app/simulation/simulationLogic/constants',
         'simulation.math': 'app/simulation/simulationLogic/math',
-        'simulation.robot': 'app/simulation/simulationLogic/robot',
-        'simulation.robot.draw': 'app/simulation/simulationLogic/robot.draw',
-        'simulation.robot.mbed': 'app/simulation/simulationLogic/robot.mbed',
-        'simulation.robot.calliope': 'app/simulation/simulationLogic/robot.calliope',
-        'simulation.robot.calliope2016': 'app/simulation/simulationLogic/robot.calliope2016',
-        'simulation.robot.calliope2017': 'app/simulation/simulationLogic/robot.calliope2017',
-        'simulation.robot.mbot': 'app/simulation/simulationLogic/robot.mbot',
-        'simulation.robot.microbit': 'app/simulation/simulationLogic/robot.microbit',
-        'simulation.robot.math': 'app/simulation/simulationLogic/robot.math',
-        'simulation.robot.rescue': 'app/simulation/simulationLogic/robot.rescue',
-        'simulation.robot.roberta': 'app/simulation/simulationLogic/robot.roberta',
-        'simulation.robot.simple': 'app/simulation/simulationLogic/robot.simple',
-        'simulation.robot.ev3': 'app/simulation/simulationLogic/robot.ev3',
-        'simulation.robot.xNN': 'app/simulation/simulationLogic/robot.xNN',
-        'simulation.robot.nxt': 'app/simulation/simulationLogic/robot.nxt',
-        'simulation.scene': 'app/simulation/simulationLogic/scene',
-        'simulation.simulation': 'app/simulation/simulationLogic/simulation',
+        'robot.calliope': 'app/simulation/simulationLogic/robot.calliope',
+        'robot.mbot': 'app/simulation/simulationLogic/robot.mbot',
+        'robot.microbit': 'app/simulation/simulationLogic/robot.microbit',
+        'robot.math': 'app/simulation/simulationLogic/robot.math',
+        'robot.rob3rta': 'app/simulation/simulationLogic/robot.rob3rta',
+        'robot.ev3': 'app/simulation/simulationLogic/robot.ev3',
+        'robot.nxt': 'app/simulation/simulationLogic/robot.nxt',
+        'robot.xnn': 'app/simulation/simulationLogic/robot.xnn',
+        'robot.base.mobile': 'app/simulation/simulationLogic/robot.base.mobile',
+        'robot.base.stationary': 'app/simulation/simulationLogic/robot.base.stationary',
+        'robot.base': 'app/simulation/simulationLogic/robot.base',
+        'simulation.objects': 'app/simulation/simulationLogic/simulation.objects',
+        'robot.sensors': 'app/simulation/simulationLogic/robot.sensors',
+        'robot.actuators': 'app/simulation/simulationLogic/robot.actuators',
+        'simulation.types': 'app/simulation/simulationLogic/types',
+        'simulation.scene': 'app/simulation/simulationLogic/simulation.scene',
+        'simulation.roberta': 'app/simulation/simulationLogic/simulation.roberta',
+        'simulation.webots': 'app/simulation/simulationLogic/simulation.webots',
+        maze: 'app/simulation/simulationLogic/maze',
 
         comm: 'helper/comm',
         log: 'helper/log',
@@ -100,7 +101,6 @@ require.config({
         'interpreter.robotSimBehaviour': 'app/nepostackmachine/interpreter.robotSimBehaviour',
         'interpreter.state': 'app/nepostackmachine/interpreter.state',
         'interpreter.util': 'app/nepostackmachine/interpreter.util',
-        'interpreter.jsHelper': 'app/nepostackmachine/interpreter.jsHelper',
 
         'neuralnetwork.nn': 'app/neuralnetwork/neuralnetwork.nn',
         'neuralnetwork.uistate': 'app/neuralnetwork/neuralnetwork.uistate',
@@ -113,8 +113,6 @@ require.config({
         port: 'app/configVisualization/port',
         robotBlock: 'app/configVisualization/robotBlock',
         wires: 'app/configVisualization/wires',
-
-        'webots.simulation': 'app/webotsSimulation/webots.simulation',
     },
     shim: {
         webots: {
@@ -136,7 +134,7 @@ require.config({
             deps: ['blockly'],
         },
         'volume-meter': {
-            exports: 'Volume',
+            exports: 'VolumeMeter',
             init: function () {
                 return {
                     createAudioMeter: createAudioMeter,
@@ -164,7 +162,6 @@ require([
     'confDelete.controller',
     'progShare.controller',
     'menu.controller',
-    'multSim.controller',
     'user.controller',
     'nn.controller',
     'robot.controller',
@@ -188,7 +185,6 @@ require([
     'webview.controller',
     'sourceCodeEditor.controller',
     'codeflask',
-    'interpreter.jsHelper',
     'confVisualization',
     'robotBlock',
 ], function (require) {
@@ -204,7 +200,6 @@ require([
     languageController = require('language.controller');
     logListController = require('logList.controller');
     menuController = require('menu.controller');
-    multSimController = require('multSim.controller');
     progDeleteController = require('progDelete.controller');
     progListController = require('progList.controller');
     galleryListController = require('galleryList.controller');
@@ -229,7 +224,6 @@ require([
     webviewController = require('webview.controller');
     sourceCodeEditorController = require('sourceCodeEditor.controller');
     codeflask = require('codeflask');
-    stackmachineJsHelper = require('interpreter.jsHelper');
     confVisualization = require('confVisualization');
     robotBlock = require('robotBlock');
 
@@ -270,7 +264,9 @@ function init() {
             progHelpController.init();
             progInfoController.init();
             progCodeController.init();
-            progSimController.init();
+            progSimController.createProgSimInstance();
+            progSimController.createProgSimDebugInstance();
+            progSimController.createProgSimMultiInstance();
             progRunController.init();
             tutorialController.init();
             userGroupController.init();
@@ -290,7 +286,7 @@ function init() {
                 }
             });
 
-            $('.pace').fadeOut(500);
+            $('body>.pace').fadeOut(500);
         });
 }
 

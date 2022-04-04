@@ -24,18 +24,19 @@ public class MbotSimValidatorAndCollectorVisitor extends MbotValidatorAndCollect
 
     @Override
     public Void visitLightSensor(LightSensor lightSensor) {
-        lightSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        addErrorToPhrase(lightSensor, "SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
     public Void visitSendIRAction(SendIRAction sendIRAction) {
-        sendIRAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        addErrorToPhrase(sendIRAction, "SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
+        super.visitReceiveIRAction(receiveIRAction);
         receiveIRAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }

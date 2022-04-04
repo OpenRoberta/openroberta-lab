@@ -3,11 +3,11 @@ import { State } from './interpreter.state';
 import * as C from './interpreter.constants';
 import * as U from './interpreter.util';
 import * as UI from 'neuralnetwork.ui';
-
-declare var stackmachineJsHelper;
+import { SimulationRoberta } from 'simulation.roberta';
 
 export class Interpreter {
     public breakpoints: any[];
+    private _name: string;
     private terminated = false;
     private callbackOnTermination = undefined;
     private robotBehaviour: ARobotBehaviour;
@@ -25,11 +25,12 @@ export class Interpreter {
      * . @param robotBehaviour implementation of the ARobotBehaviour class
      * . @param cbOnTermination is called when the program has terminated
      */
-    constructor(generatedCode: any, r: ARobotBehaviour, cbOnTermination: () => void, simBreakpoints: any[]) {
+    constructor(generatedCode: any, r: ARobotBehaviour, cbOnTermination: () => void, simBreakpoints: any[], name: string) {
         this.terminated = false;
         this.callbackOnTermination = cbOnTermination;
         const stmts = generatedCode[C.OPS];
         this.robotBehaviour = r;
+        this.name = name;
 
         this.breakpoints = simBreakpoints;
 
@@ -43,6 +44,14 @@ export class Interpreter {
         this.stepOverBlock = null;
 
         this.state = new State(stmts);
+    }
+
+    get name(): string {
+        return this._name;
+    }
+
+    set name(value: string) {
+        this._name = value;
     }
 
     /**
@@ -89,11 +98,11 @@ export class Interpreter {
     public setDebugMode(mode) {
         this.state.setDebugMode(mode);
         if (mode) {
-            stackmachineJsHelper.getJqueryObject('#blockly').addClass('debug');
+            $('#blockly').addClass('debug');
             this.state.addHighlights(this.breakpoints);
         } else {
             this.state.removeHighlights(this.breakpoints);
-            stackmachineJsHelper.getJqueryObject('#blockly').removeClass('debug');
+            $('#blockly').removeClass('debug');
         }
     }
 
@@ -196,20 +205,20 @@ export class Interpreter {
     }
 
     private stepOver(op) {
-        stackmachineJsHelper.setSimBreak();
+        SimulationRoberta.Instance.setPause(true);
         this.events[C.DEBUG_STEP_OVER] = false;
         this.stepOverBlock = null;
         this.lastStoppedBlock = op;
     }
 
     private stepInto(op) {
-        stackmachineJsHelper.setSimBreak();
+        SimulationRoberta.Instance.setPause(true);
         this.events[C.DEBUG_STEP_INTO] = false;
         this.lastStoppedBlock = op;
     }
 
     private breakPoint(op) {
-        stackmachineJsHelper.setSimBreak();
+        SimulationRoberta.Instance.setPause(true);
         this.events[C.DEBUG_BREAKPOINT] = false;
         this.lastStoppedBlock = op;
     }
@@ -277,6 +286,15 @@ export class Interpreter {
                     this.robotBehaviour.ledOnAction(stmt[C.NAME], stmt[C.PORT], color);
                     break;
                 }
+                case C.REMEMBER: {
+                    const num = this.state.pop();
+                    this.robotBehaviour.remember(num);
+                    break;
+                }
+                case C.RECALL: {
+                    this.robotBehaviour.recall(this.state);
+                    break;
+                }
                 case C.RETURN:
                     let returnValue: any;
                     if (stmt[C.VALUES]) returnValue = this.state.pop();
@@ -288,21 +306,22 @@ export class Interpreter {
                     break;
                 case C.MOTOR_ON_ACTION: {
                     const speedOnly = stmt[C.SPEED_ONLY];
-                    let duration = speedOnly ? undefined : this.state.pop();
+                    const setTime = stmt[C.SET_TIME];
+                    let time;
+                    let duration;
+                    if (setTime) {
+                        duration = undefined;
+                        time = setTime ? this.state.pop() : undefined;
+                    } else {
+                        time = undefined;
+                        duration = speedOnly ? undefined : this.state.pop();
+                    }
                     const speed = this.state.pop();
                     const name = stmt[C.NAME];
                     const port = stmt[C.PORT];
                     const durationType = stmt[C.MOTOR_DURATION];
-                    if (durationType === C.DEGREE || durationType === C.DISTANCE || durationType === C.ROTATIONS) {
-                        // if durationType is defined, then duration must be defined, too. Thus, it is never 'undefined' :-)
-                        let rotationPerSecond = (C.MAX_ROTATION * Math.abs(speed)) / 100.0;
-                        duration = (duration / rotationPerSecond) * 1000;
-                        if (durationType === C.DEGREE) {
-                            duration /= 360.0;
-                        }
-                    }
-                    this.robotBehaviour.motorOnAction(name, port, duration, speed);
-                    return [duration ? duration : 0, true];
+                    const durationA = this.robotBehaviour.motorOnAction(name, port, durationType, duration, speed, time);
+                    return [durationA, true];
                 }
                 case C.DRIVE_ACTION: {
                     const speedOnly = stmt[C.SPEED_ONLY];
@@ -368,14 +387,13 @@ export class Interpreter {
                     this.robotBehaviour.driveStop(name);
                     return [0, true];
                 case C.BOTH_MOTORS_ON_ACTION: {
-                    const duration = this.state.pop();
                     const speedB = this.state.pop();
                     const speedA = this.state.pop();
                     const portA = stmt[C.PORT_A];
                     const portB = stmt[C.PORT_B];
-                    this.robotBehaviour.motorOnAction(portA, portA, duration, speedA);
-                    this.robotBehaviour.motorOnAction(portB, portB, duration, speedB);
-                    return [duration, true];
+                    this.robotBehaviour.motorOnAction(portA, portA, '', 0, speedA, 0);
+                    this.robotBehaviour.motorOnAction(portB, portB, '', 0, speedB, 0);
+                    return [0, true];
                 }
                 case C.MOTOR_STOP: {
                     this.robotBehaviour.motorStopAction(stmt[C.NAME], stmt[C.PORT]);
@@ -470,7 +488,7 @@ export class Interpreter {
                 }
                 case C.TIMER_SENSOR_RESET:
                     this.robotBehaviour.timerReset(stmt[C.PORT]);
-                    break;
+                    return [0, true];
                 case C.ENCODER_SENSOR_RESET:
                     this.robotBehaviour.encoderReset(stmt[C.PORT]);
                     return [0, true];

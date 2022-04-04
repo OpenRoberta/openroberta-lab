@@ -4,7 +4,11 @@ import * as C from './interpreter.constants';
 import * as U from './interpreter.util';
 import * as UTIL from 'util';
 
-export class RobotMbedBehaviour extends ARobotBehaviour {
+declare global {
+    var rob3rtaNumber: number;
+}
+
+export class RobotSimBehaviour extends ARobotBehaviour {
     constructor() {
         super();
         this.hardwareState.motors = {};
@@ -15,45 +19,11 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         var robotText = 'robot: ' + name + ', port: ' + port + ', mode: ' + mode;
         U.debug(robotText + ' getsample from ' + sensor);
         var sensorName = sensor;
-
-        if (sensorName == C.TIMER) {
-            s.push(this.timerGet(port));
-        } else if (sensorName == C.ENCODER_SENSOR_SAMPLE) {
-            s.push(this.getEncoderValue(mode, port));
-        } else {
-            //workaround due to mbots sensor names
-            if (name == 'mbot') {
-                port = 'ORT_' + port;
-            }
-            s.push(this.getSensorValue(sensorName, port, mode));
+        //workaround due to mbots sensor names
+        if (name == 'mbot') {
+            port = 'ORT_' + port;
         }
-    }
-
-    private getEncoderValue(mode: string, port: string) {
-        const sensor = this.hardwareState.sensors.encoder;
-        port = port == C.MOTOR_LEFT ? C.LEFT : C.RIGHT;
-        if (port != undefined) {
-            const v = sensor[port];
-            if (v === undefined) {
-                return 'undefined';
-            } else {
-                return this.rotation2Unit(v, mode);
-            }
-        }
-        return sensor;
-    }
-
-    private rotation2Unit(value: number, unit: string): number {
-        switch (unit) {
-            case C.DEGREE:
-                return value;
-            case C.ROTATIONS:
-                return value / 360.0;
-            case C.DISTANCE:
-                return (value * C.WHEEL_DIAMETER * Math.PI) / 360.0;
-            default:
-                return 0;
-        }
+        s.push(this.getSensorValue(sensorName, port, mode));
     }
 
     private getSensorValue(sensorName: string, port: string, mode: string): any {
@@ -65,20 +35,6 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         if (mode != undefined) {
             if (port != undefined) {
                 v = sensor[port][mode];
-                if (sensorName === 'gyro' && mode === 'angle') {
-                    var reset = this.hardwareState['angleReset'];
-                    if (reset != undefined) {
-                        var resetValue: number = reset[port];
-                        if (resetValue != undefined) {
-                            var value: number = +v;
-                            value = value - resetValue;
-                            if (value < 0) {
-                                value = value + 360;
-                            }
-                            v = '' + value;
-                        }
-                    }
-                }
             } else {
                 v = sensor[mode];
             }
@@ -99,34 +55,31 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
     public encoderReset(port: string) {
         U.debug('encoderReset for ' + port);
         this.hardwareState.actions.encoder = {};
-        if (port == C.MOTOR_LEFT) {
-            this.hardwareState.actions.encoder.leftReset = true;
-        } else {
-            this.hardwareState.actions.encoder.rightReset = true;
-        }
+        this.hardwareState.actions.encoder[port] = 'reset';
     }
 
     public timerReset(port: number) {
-        this.hardwareState.timers[port] = Date.now();
-        U.debug('timerReset for ' + port);
-    }
-
-    public timerGet(port: number) {
-        const now = Date.now();
-        var startTime = this.hardwareState.timers[port];
-        if (startTime === undefined) {
-            startTime = this.hardwareState.timers['start'];
+        if (this.hardwareState.actions.timer == undefined) {
+            this.hardwareState.actions.timer = [];
         }
-        const delta = now - startTime;
-        U.debug('timerGet for ' + port + ' returned ' + delta);
-        return delta;
+        this.hardwareState.actions.timer = {};
+        this.hardwareState.actions.timer[port] = 'reset';
+        U.debug('timerReset for ' + port);
     }
 
     public ledOnAction(name: string, port: number, color: number) {
         const robotText = 'robot: ' + name + ', port: ' + port;
         U.debug(robotText + ' led on color ' + color);
-        this.hardwareState.actions.led = {};
-        this.hardwareState.actions.led.color = color;
+        if (this.hardwareState.actions.led == undefined) {
+            this.hardwareState.actions.led = {};
+        }
+        if (port) {
+            this.hardwareState.actions.led[port] = {};
+            this.hardwareState.actions.led[port][C.COLOR] = color;
+        } else {
+            this.hardwareState.actions.led = {};
+            this.hardwareState.actions.led[C.COLOR] = color;
+        }
     }
 
     public statusLightOffAction(name: string, port: number) {
@@ -138,7 +91,13 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
                 this.hardwareState.actions.leds = {};
             }
             this.hardwareState.actions.leds[port] = {};
-            this.hardwareState.actions.leds[port].mode = C.OFF;
+            this.hardwareState.actions.leds[port][C.MODE] = C.OFF;
+        } else if (port) {
+            if (this.hardwareState.actions.led == undefined) {
+                this.hardwareState.actions.led = {};
+            }
+            this.hardwareState.actions.led[port] = {};
+            this.hardwareState.actions.led[port][C.MODE] = C.OFF;
         } else {
             this.hardwareState.actions.led = {};
             this.hardwareState.actions.led.mode = C.OFF;
@@ -158,18 +117,8 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         U.debug('play file: ' + file);
         this.hardwareState.actions.tone = {};
         this.hardwareState.actions.tone.file = file;
-        switch (file) {
-            case '0':
-                return 1000;
-            case '1':
-                return 350;
-            case '2':
-                return 700;
-            case '3':
-                return 700;
-            case '4':
-                return 500;
-        }
+        this.setBlocking(true);
+        return 0;
     }
 
     public setVolumeAction(volume: number): void {
@@ -199,7 +148,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         return 0;
     }
 
-    public motorOnAction(name: string, port: any, duration: number, speed: number): number {
+    public motorOnAction(name: string, port: any, durationType: string, duration: number, speed: number, time: number): number {
         const robotText = 'robot: ' + name + ', port: ' + port;
         const durText = duration === undefined ? ' w.o. duration' : ' for ' + duration + ' msec';
         U.debug(robotText + ' motor speed ' + speed + durText);
@@ -208,13 +157,26 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         }
         this.hardwareState.actions.motors[port] = speed;
         this.hardwareState.motors[port] = speed;
+        if (time !== undefined) {
+            return time;
+        }
+        if (durationType === C.DEGREE || durationType === C.DISTANCE || durationType === C.ROTATIONS) {
+            // if durationType is defined, then duration must be defined, too. Thus, it is never 'undefined' :-)
+            this.hardwareState.actions.motors[durationType] = duration;
+            this.setBlocking(true);
+        }
         return 0;
     }
 
     public motorStopAction(name: string, port: any) {
         const robotText = 'robot: ' + name + ', port: ' + port;
         U.debug(robotText + ' motor stop');
-        this.motorOnAction(name, port, 0, 0);
+        if (this.hardwareState.actions.motors == undefined) {
+            this.hardwareState.actions.motors = {};
+        }
+        this.hardwareState.actions.motors[port] = 0;
+        this.hardwareState.motors[port] = 0;
+        return 0;
     }
 
     public driveAction(name: string, direction: string, speed: number, distance: number, time: number): number {
@@ -240,13 +202,11 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         if (time !== undefined) {
             return time;
         }
-        const rotationPerSecond = (C.MAX_ROTATION * Math.abs(speed)) / 100.0;
-        if (rotationPerSecond == 0.0 || distance === undefined) {
-            return 0;
-        } else {
-            const rotations = Math.abs(distance) / (C.WHEEL_DIAMETER * Math.PI);
-            return (rotations / rotationPerSecond) * 1000;
+        if (speed != 0.0 && distance !== undefined) {
+            this.hardwareState.actions.motors[C.DISTANCE] = distance;
+            this.setBlocking(true);
         }
+        return 0;
     }
 
     public curveAction(name: string, direction: string, speedL: number, speedR: number, distance: number, time: number): number {
@@ -271,17 +231,14 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         this.hardwareState.motors[C.MOTOR_LEFT] = speedL;
         this.hardwareState.motors[C.MOTOR_RIGHT] = speedR;
         const avgSpeed = 0.5 * (Math.abs(speedL) + Math.abs(speedR));
-
         if (time !== undefined) {
             return time;
         }
-        const rotationPerSecond = (C.MAX_ROTATION * avgSpeed) / 100.0;
-        if (rotationPerSecond == 0.0 || distance === undefined) {
-            return 0;
-        } else {
-            const rotations = Math.abs(distance) / (C.WHEEL_DIAMETER * Math.PI);
-            return (rotations / rotationPerSecond) * 1000;
+        if (avgSpeed != 0.0 && distance !== undefined) {
+            this.hardwareState.actions.motors[C.DISTANCE] = distance;
+            this.setBlocking(true);
         }
+        return 0;
     }
 
     public turnAction(name: string, direction: string, speed: number, angle: number, time: number): number {
@@ -304,13 +261,12 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         if (time !== undefined) {
             return time;
         }
-        const rotationPerSecond = (C.MAX_ROTATION * Math.abs(speed)) / 100.0;
-        if (rotationPerSecond == 0.0 || angle === undefined) {
-            return 0;
-        } else {
-            const rotations = C.TURN_RATIO * (Math.abs(angle) / 720);
-            return (rotations / rotationPerSecond) * 1000;
+
+        if (Math.abs(speed) !== 0.0 && angle !== undefined) {
+            this.hardwareState.actions.motors[C.ANGLE] = angle * (Math.PI / 180);
+            this.setBlocking(true);
         }
+        return 0;
     }
 
     private setTurnSpeed(speed: number, direction: string): void {
@@ -354,7 +310,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         U.debug('***** show "' + showText + '" *****');
         this.hardwareState.actions.display = {};
         this.hardwareState.actions.display[mode.toLowerCase()] = showText;
-        this.setBlocking(text.length > 0);
+        this.setBlocking(true);
         return 0;
     }
 
@@ -436,23 +392,14 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
     }
 
     public gyroReset(_port: number): void {
-        var gyro = this.hardwareState.sensors['gyro'];
-        if (gyro !== undefined) {
-            var port = gyro[_port];
-            if (port !== undefined) {
-                var angle = port['angle'];
-                if (angle !== undefined) {
-                    if (this.hardwareState['angleReset'] == undefined) {
-                        this.hardwareState['angleReset'] = {};
-                    }
-                    this.hardwareState['angleReset'][_port] = angle;
-                }
-            }
+        U.debug('***** reset gyro *****');
+        this.hardwareState.actions.gyroReset = {};
+        if (_port !== undefined) {
+            this.hardwareState.actions.gyroReset[_port] = {};
+            this.hardwareState.actions.gyroReset[_port] = true;
+        } else {
+            this.hardwareState.actions.gyroReset = true;
         }
-    }
-
-    public getState(): any {
-        return this.hardwareState;
     }
 
     public debugAction(value: any): void {
@@ -466,4 +413,17 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
     }
 
     public close() {}
+
+    timerGet(port: number): number {
+        // not used here anymore
+        return 0;
+    }
+
+    recall(s: State): void {
+        s.push(globalThis.rob3rtaNumber);
+    }
+
+    remember(num: number): void {
+        globalThis.rob3rtaNumber = num;
+    }
 }

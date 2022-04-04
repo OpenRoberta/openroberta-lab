@@ -44,12 +44,12 @@ define(["require", "exports", "guiState.controller", "blockly", "jquery", "jquer
         $('#helpButton').off('click touchend');
         $('#helpButton').onWrap('click touchend', function (event) {
             if ($('#helpButton').is(':visible')) {
-                toggleHelp();
+                toggleHelp($(this));
             }
             return false;
         });
     }
-    function toggleHelp() {
+    function toggleHelp($button) {
         Blockly.hideChaff();
         if ($('#helpButton').hasClass('rightActive')) {
             $('#blockly').closeRightView();
@@ -67,7 +67,7 @@ define(["require", "exports", "guiState.controller", "blockly", "jquery", "jquer
             if (currentHelp != GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase()) {
                 init();
             }
-            $('#blockly').openRightView('help', INITIAL_WIDTH, function () {
+            $button.openRightView($('#helpDiv'), INITIAL_WIDTH, function () {
                 if (Blockly.selected) {
                     var block = Blockly.selected.type;
                     $('#' + block).addClass('selectedHelp');

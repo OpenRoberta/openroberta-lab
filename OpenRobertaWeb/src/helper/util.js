@@ -4,11 +4,37 @@ import * as $ from 'jquery';
 import * as Blockly from 'blockly';
 import 'jquery-validate';
 import 'bootstrap';
-import CONST from 'simulation.constants';
-import * as GUISTATE_C from 'guiState.controller';
-import * as WEBOTSIM from 'webots.simulation';
 
-const ANIMATION_DURATION = CONST.ANIMATION_DURATION;
+const ANIMATION_DURATION = 750;
+
+export function getLinesFromRectangle(myObj) {
+    return [
+        {
+            x1: myObj.x,
+            x2: myObj.x,
+            y1: myObj.y,
+            y2: myObj.y + myObj.h,
+        },
+        {
+            x1: myObj.x,
+            x2: myObj.x + myObj.w,
+            y1: myObj.y,
+            y2: myObj.y,
+        },
+        {
+            x1: myObj.x + myObj.w,
+            x2: myObj.x,
+            y1: myObj.y + myObj.h,
+            y2: myObj.y + myObj.h,
+        },
+        {
+            x1: myObj.x + myObj.w,
+            x2: myObj.x + myObj.w,
+            y1: myObj.y + myObj.h,
+            y2: myObj.y,
+        },
+    ];
+}
 
 /**
  * @return the (unique) start block from the program. Must exist.
@@ -235,16 +261,24 @@ function setFocusOnElement($elem) {
 
 function showSingleModal(customize, onSubmit, onHidden, validator) {
     customize();
-    $('#single-modal-form').onWrap('submit', function (e) {
-        e.preventDefault();
-        onSubmit();
-    });
-    $('#single-modal').onWrap('hidden.bs.modal', function () {
-        $('#single-modal-form').off('submit');
-        $('#singleModalInput').val('');
-        $('#single-modal-form').validate().resetForm();
-        onHidden();
-    });
+    $('#single-modal-form').onWrap(
+        'submit',
+        function (e) {
+            e.preventDefault();
+            onSubmit();
+        },
+        'sim start clicked'
+    );
+    $('#single-modal').onWrap(
+        'hidden.bs.modal',
+        function () {
+            $('#single-modal-form').off('submit');
+            $('#singleModalInput').val('');
+            $('#single-modal-form').validate().resetForm();
+            onHidden();
+        },
+        'sim start clicked'
+    );
     $('#single-modal-form').removeData('validator');
     $('#single-modal-form').validate(validator);
     setFocusOnElement($('#singleModalInput'));
@@ -252,14 +286,22 @@ function showSingleModal(customize, onSubmit, onHidden, validator) {
 }
 
 function showSingleListModal(customize, onSubmit, onHidden, validator) {
-    $('#single-modal-list-form').onWrap('submit', function (e) {
-        e.preventDefault();
-        onSubmit();
-    });
-    $('#single-modal-list').onWrap('hidden.bs.modal', function () {
-        $('#single-modal-list-form').unbind('submit');
-        onHidden();
-    });
+    $('#single-modal-list-form').onWrap(
+        'submit',
+        function (e) {
+            e.preventDefault();
+            onSubmit();
+        },
+        'sim start clicked'
+    );
+    $('#single-modal-list').onWrap(
+        'hidden.bs.modal',
+        function () {
+            $('#single-modal-list-form').unbind('submit');
+            onHidden();
+        },
+        'sim start clicked'
+    );
     setFocusOnElement($('#singleModalListInput'));
     $('#single-modal-list').modal('show');
 }
@@ -309,7 +351,7 @@ function response(result) {
  *
  */
 function round(value, decimals) {
-    return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
+    return parseFloat(value.toFixed(decimals));
 }
 
 /**
@@ -569,12 +611,28 @@ $.fn.removeClass = function () {
     return result;
 };
 
+$.fn.toggleSimPopup = function (position) {
+    if ($(this).is(':hidden')) {
+        $(this).css({
+            top: position.top + 12,
+            left: position.left,
+        });
+    }
+    $(this).animate(
+        {
+            opacity: 'toggle',
+            top: 'toggle',
+        },
+        300
+    );
+    $(this).draggable({
+        constraint: 'window',
+    });
+};
+
 $.fn.closeRightView = function (opt_callBack) {
     if ($('.fromRight.rightActive').hasClass('shifting')) {
         return;
-    }
-    if (GUISTATE_C.hasWebotsSim() && WEBOTSIM.isPrepared()) {
-        WEBOTSIM.disconnect();
     }
     $('.fromRight.rightActive').addClass('shifting');
     Blockly.hideChaff();
@@ -594,7 +652,7 @@ $.fn.closeRightView = function (opt_callBack) {
                 that.width($('#main-section').outerWidth() - now);
                 $('.rightMenuButton').css('right', now);
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
-                $(window).resize();
+                $(window).trigger('resize');
             },
             done: function () {
                 that.width($('#main-section').outerWidth());
@@ -604,10 +662,11 @@ $.fn.closeRightView = function (opt_callBack) {
                 that.removeClass('rightActive');
                 $('.fromRight.rightActive').removeClass('rightActive');
                 $('#sliderDiv').hide();
-                $(window).resize();
+                $(window).trigger('resize');
                 if (typeof opt_callBack == 'function') {
                     opt_callBack();
                 }
+                $('.fromRight').trigger('closed');
             },
             always: function () {
                 $('.fromRight.shifting').removeClass('shifting');
@@ -616,46 +675,43 @@ $.fn.closeRightView = function (opt_callBack) {
     );
 };
 
-$.fn.openRightView = function (viewName, initialViewWidth, opt_callBack) {
+$.fn.openRightView = function ($view, initialViewWidth, opt_callBack) {
     if ($('.fromRight.rightActive').hasClass('shifting')) {
         return;
     }
+    let $blockly = $('#blockly');
     Blockly.hideChaff();
     var width;
     var smallScreen;
-    let buttonName = viewName;
-    if (opt_callBack && typeof opt_callBack == 'string') {
-        buttonName = opt_callBack;
-    }
     if ($(window).width() < 768) {
         smallScreen = true;
-        width = this.width() - 52;
+        width = $blockly.width() - 52;
     } else {
         smallScreen = false;
-        width = this.width() * initialViewWidth;
+        width = $blockly.width() * initialViewWidth;
     }
-    if ($('#blockly').hasClass('rightActive')) {
+    if ($blockly.hasClass('rightActive')) {
         $('.fromRight.rightActive').removeClass('rightActive');
         $('.rightMenuButton.rightActive').removeClass('rightActive');
-        $('#' + viewName + 'Div, #' + buttonName + 'Button').addClass('rightActive');
-        $(window).resize();
+        $view.addClass('rightActive');
+        $(this).addClass('rightActive');
+        $(window).trigger('resize');
         if (smallScreen) {
             $('.blocklyToolboxDiv').css('display', 'none');
         }
         if (typeof opt_callBack == 'function') {
             opt_callBack();
         }
-        if (buttonName != 'sim' && buttonName != 'simDebug') {
+        if (!$(this).attr('id').startsWith('sim')) {
             closeSimRobotWindow();
         }
-
+        $('.fromRight').trigger('closed');
         return;
     }
 
-    this.addClass('rightActive');
-    $('#' + viewName + 'Div').addClass('shifting');
-    $('#' + viewName + 'Div, #' + buttonName + 'Button').addClass('rightActive');
-    var that = this;
+    $blockly.addClass('rightActive');
+    $view.addClass('shifting rightActive');
+    $(this).addClass('rightActive');
     $('.fromRight.rightActive').animate(
         {
             width: width,
@@ -663,35 +719,35 @@ $.fn.openRightView = function (viewName, initialViewWidth, opt_callBack) {
         {
             duration: ANIMATION_DURATION,
             step: function (now, tween) {
-                that.width($('#main-section').outerWidth() - now);
+                $blockly.width($('#main-section').outerWidth() - now);
                 $('.rightMenuButton').css('right', now);
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
-                $(window).resize();
+                $(window).trigger('resize');
             },
             done: function () {
                 $('#sliderDiv').show();
-                that.width($('#main-section').outerWidth() - $('.fromRight.rightActive').width());
+                $blockly.width($('#main-section').outerWidth() - $('.fromRight.rightActive').width());
                 $('.rightMenuButton').css('right', $('.fromRight.rightActive').width());
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
-                $(window).resize();
+                $(window).trigger('resize');
                 if (smallScreen) {
                     $('.blocklyToolboxDiv').css('display', 'none');
                 }
                 $('#sliderDiv').css({
-                    left: that.width() - 7,
+                    left: $blockly.width() - 7,
                 });
                 if (typeof opt_callBack == 'function') {
                     opt_callBack();
                 }
             },
             always: function () {
-                $('#' + viewName + 'Div').removeClass('shifting');
+                $view.removeClass('shifting');
             },
         }
     );
 };
 
-$(window).resize(function () {
+$(window).on('resize', function () {
     var parentWidth = $('#main-section').outerWidth();
     var height = Math.max($('#blockly').outerHeight(), $('#brickly').outerHeight());
 
@@ -811,16 +867,17 @@ function removeLinks($elem) {
         });
 }
 
+export function checkInCircle(px, py, cx, cy, r) {
+    return (px - cx) * (px - cx) + (py - cy) * (py - cy) <= r * r;
+}
+
 /**
  * open simRobotWindow if it was previously closed with
  * closeSimRobotWindow() and the robot has not been changed
  * @param duration
  *            {Number} - duration (optional) how long the simRobotWindow should take to show
  */
-function openSimRobotWindow(duration) {
-    if (!duration) {
-        duration = 0;
-    }
+function openSimRobotWindow() {
     for (const robotWindowElement of $('.simWindow-openedButHidden')) {
         var position = $(window).width() * simRobotWindowPositions[robotWindowElement.id];
 
@@ -829,7 +886,7 @@ function openSimRobotWindow(duration) {
                 opacity: 'show',
                 left: '' + position,
             },
-            duration
+            ANIMATION_DURATION
         );
     }
     $('.simWindow').removeClass('simWindow-openedButHidden');
@@ -841,10 +898,7 @@ function openSimRobotWindow(duration) {
  * @param duration
  *            {Number} - duration (optional) how long the simRobotWindow should take to hide
  */
-function closeSimRobotWindow(duration) {
-    if (!duration) {
-        duration = 0;
-    }
+function closeSimRobotWindow() {
     var SimWindows = $('.simWindow:visible');
     for (const robotWindowElement of SimWindows) {
         var relativePosition;
@@ -860,13 +914,125 @@ function closeSimRobotWindow(duration) {
             opacity: 'hide',
             left: '' + $(window).width(),
         },
-        duration
+        ANIMATION_DURATION
     );
+}
+
+export function isIE() {
+    var ua = window.navigator.userAgent;
+    var ie = ua.indexOf('MSIE ');
+    var ie11 = ua.indexOf('Trident/');
+
+    if (ie > -1 || ie11 > -1) {
+        return true;
+    }
+    return false;
+}
+
+export function isEdge() {
+    var ua = window.navigator.userAgent;
+    var edge = ua.indexOf('Edge');
+    return edge > -1;
+}
+export function initMicrophone(robot) {
+    // TODO if (navigator.mediaDevices === undefined) {
+    //navigator.mediaDevices = {};
+    //}
+    navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator['webkitGetUserMedia'] || navigator['mozGetUserMedia'];
+
+    try {
+        // ask for an audio input
+        const mediaDevices = navigator.mediaDevices;
+        mediaDevices
+            .getUserMedia({
+                audio: {
+                    mandatory: {
+                        googEchoCancellation: 'false',
+                        googAutoGainControl: 'false',
+                        googNoiseSuppression: 'false',
+                        googHighpassFilter: 'false',
+                    },
+                    optional: [],
+                },
+            })
+            .then(
+                function (stream) {
+                    var mediaStreamSource = robot.webAudio.context.createMediaStreamSource(stream);
+                    robot.sound = Volume.createAudioMeter(robot.webAudio.context);
+                    mediaStreamSource.connect(robot.sound);
+                },
+                function () {
+                    console.log('Sorry, but there is no microphone available on your system');
+                }
+            );
+    } catch (e) {
+        console.log('Sorry, but there is no microphone available on your system');
+    }
+}
+var thisWebAudio;
+export function getWebAudio() {
+    if (!thisWebAudio) {
+        thisWebAudio = {};
+        var AudioContext = window.AudioContext || window['webkitAudioContext'] || false;
+        if (AudioContext) {
+            thisWebAudio.context = new AudioContext();
+        } else {
+            thisWebAudio.context = null;
+            thisWebAudio.oscillator = null;
+            console.log(
+                'Sorry, but the Web Audio API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox'
+            );
+        }
+    }
+    return thisWebAudio;
+}
+
+export function extendMouseEvent(e, scale, $layer) {
+    let X = e.clientX || e.originalEvent.touches[0].pageX;
+    let Y = e.clientY || e.originalEvent.touches[0].pageY;
+    let top = $layer.offset().top;
+    let left = $layer.offset().left;
+    e.startX = (X - left) / scale;
+    e.startY = (Y - top) / scale;
 }
 
 function toFixedPrecision(value, precision) {
     var power = Math.pow(10, precision || 0);
     return String(Math.round(value * power) / power);
+}
+
+export function addVariableValue($elem, name, value) {
+    switch (typeof value) {
+        case 'number': {
+            $elem.append('<div><label>' + name + ' :  </label><span> ' + round(value, 2) + '</span></div>');
+            break;
+        }
+        case 'string':
+        case 'boolean': {
+            $elem.append('<div><label>' + name + ' :  </label><span> ' + value + '</span></div>');
+            break;
+        }
+        case 'object': {
+            for (var i = 0; i < value.length; i++) {
+                addVariableValue($elem, name + ' [' + String(i) + ']', value[i]);
+            }
+            break;
+        }
+    }
+}
+
+export function RGBAToHexA(rgba) {
+    let r = (+rgba[0]).toString(16),
+        g = (+rgba[1]).toString(16),
+        b = (+rgba[2]).toString(16),
+        a = (+rgba[3]).toString(16);
+
+    if (r.length == 1) r = '0' + r;
+    if (g.length == 1) g = '0' + g;
+    if (b.length == 1) b = '0' + b;
+    if (a.length == 1) a = '0' + a;
+
+    return '#' + r + g + b + a;
 }
 
 export {
@@ -901,5 +1067,5 @@ export {
     removeLinks,
     openSimRobotWindow,
     closeSimRobotWindow,
-    toFixedPrecision
+    toFixedPrecision,
 };

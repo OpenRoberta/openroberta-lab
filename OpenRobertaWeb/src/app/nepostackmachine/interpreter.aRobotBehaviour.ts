@@ -1,13 +1,11 @@
-import { State } from './interpreter.state';
+import { State } from 'interpreter.state';
 
 export abstract class ARobotBehaviour {
-    protected hardwareState;
+    hardwareState;
     private blocking;
 
     constructor() {
         this.hardwareState = {};
-        this.hardwareState.timers = {};
-        this.hardwareState.timers['start'] = Date.now();
         this.hardwareState.actions = {};
         this.hardwareState.sensors = {};
         this.blocking = false;
@@ -59,7 +57,7 @@ export abstract class ARobotBehaviour {
 
     abstract sayTextAction(text: string, speed: number, pitch: number): number;
 
-    abstract motorOnAction(name: string, port: any, duration: number, speed: number): number;
+    abstract motorOnAction(name: string, port: any, durationType: string, duration: number, speed: number, time: number): number;
 
     abstract getMotorSpeed(s: State, name: string, port: any): void;
 
@@ -88,6 +86,10 @@ export abstract class ARobotBehaviour {
     abstract displaySetPixelBrightnessAction(x: number, y: number, brightness: number): number;
 
     abstract displayGetPixelBrightnessAction(s: State, x: number, y: number): void;
+
+    abstract remember(num: number): void;
+
+    abstract recall(s: State): void;
 
     abstract debugAction(value: any): void;
 

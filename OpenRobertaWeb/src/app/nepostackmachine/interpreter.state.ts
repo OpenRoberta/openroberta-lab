@@ -1,7 +1,7 @@
 import * as C from './interpreter.constants';
 import * as U from './interpreter.util';
-
-declare var stackmachineJsHelper;
+// @ts-ignore
+import * as Blockly from 'blockly';
 
 export class State {
     /**
@@ -232,10 +232,10 @@ export class State {
     /** adds block to currentBlocks and applies correct highlight to block**/
     public evalInitiations(initiations: string[]) {
         initiations
-            .map((blockId) => stackmachineJsHelper.getBlockById(blockId))
+            .map((blockId) => Blockly.getMainWorkspace().getBlockById(blockId))
             .forEach((block) => {
-                if (stackmachineJsHelper.getJqueryObject(block?.svgPath_).hasClass('breakpoint')) {
-                    stackmachineJsHelper.getJqueryObject(block?.svgPath_).removeClass('breakpoint').addClass('selectedBreakpoint');
+                if ($(block?.svgPath_).hasClass('breakpoint')) {
+                    $(block?.svgPath_).removeClass('breakpoint').addClass('selectedBreakpoint');
                 }
                 this.highlightBlock(block);
                 this.addToCurrentBlock(block.id);
@@ -245,10 +245,10 @@ export class State {
     /** removes block froms currentBlocks and removes highlighting from block**/
     public evalTerminations(terminations: string[]) {
         terminations
-            ?.map((blockId) => stackmachineJsHelper.getBlockById(blockId))
+            ?.map((blockId) => Blockly.getMainWorkspace().getBlockById(blockId))
             .forEach((block) => {
-                if (stackmachineJsHelper.getJqueryObject(block?.svgPath_).hasClass('selectedBreakpoint')) {
-                    stackmachineJsHelper.getJqueryObject(block?.svgPath_).removeClass('selectedBreakpoint').addClass('breakpoint');
+                if ($(block?.svgPath_).hasClass('selectedBreakpoint')) {
+                    $(block?.svgPath_).removeClass('selectedBreakpoint').addClass('breakpoint');
                 }
                 this.removeBlockHighlight(block);
                 this.removeFromCurrentBlock(block.id);
@@ -262,27 +262,25 @@ export class State {
     }
 
     private highlightBlock(block) {
-        stackmachineJsHelper.getJqueryObject(block.svgPath_).stop(true, true).animate({ 'fill-opacity': '1' }, 0);
+        $(block.svgPath_).stop(true, true).animate({ 'fill-opacity': '1' }, 0);
     }
 
     private removeBlockHighlight(block) {
-        stackmachineJsHelper.getJqueryObject(block.svgPath_).stop(true, true).animate({ 'fill-opacity': '0.3' }, 50);
+        $(block.svgPath_).stop(true, true).animate({ 'fill-opacity': '0.3' }, 50);
     }
 
     /** Will add highlights from all currently blocks being currently executed and all given Breakpoints
      * @param breakPoints the array of breakpoint block id's to have their highlights added*/
     public addHighlights(breakPoints: any[]) {
-        [...this.currentBlocks]
-            .map((blockId) => stackmachineJsHelper.getBlockById(blockId))
-            .forEach((block) => this.highlightBlock(block));
+        [...this.currentBlocks].map((blockId) => Blockly.getMainWorkspace().getBlockById(blockId)).forEach((block) => this.highlightBlock(block));
 
         breakPoints.forEach((id) => {
-            let block = stackmachineJsHelper.getBlockById(id);
+            let block = Blockly.getMainWorkspace().getBlockById(id);
             if (block !== null) {
                 if (this.currentBlocks.hasOwnProperty(id)) {
-                    stackmachineJsHelper.getJqueryObject(block.svgPath_).addClass('selectedBreakpoint');
+                    $(block.svgPath_).addClass('selectedBreakpoint');
                 } else {
-                    stackmachineJsHelper.getJqueryObject(block.svgPath_).addClass('breakpoint');
+                    $(block.svgPath_).addClass('breakpoint');
                 }
             }
         });
@@ -292,9 +290,9 @@ export class State {
      * @param breakPoints the array of breakpoint block id's to have their highlights removed*/
     public removeHighlights(breakPoints: any[]) {
         [...this.currentBlocks]
-            .map((blockId) => stackmachineJsHelper.getBlockById(blockId))
+            .map((blockId) => Blockly.getMainWorkspace().getBlockById(blockId))
             .forEach((block) => {
-                let object = stackmachineJsHelper.getJqueryObject(block);
+                let object = $(block);
                 if (object.hasClass('selectedBreakpoint')) {
                     object.removeClass('selectedBreakpoint').addClass('breakpoint');
                 }
@@ -302,10 +300,10 @@ export class State {
             });
 
         breakPoints
-            .map((blockId) => stackmachineJsHelper.getBlockById(blockId))
+            .map((blockId) => Blockly.getMainWorkspace().getBlockById(blockId))
             .forEach((block) => {
                 if (block !== null) {
-                    stackmachineJsHelper.getJqueryObject(block.svgPath_).removeClass('breakpoint').removeClass('selectedBreakpoint');
+                    $(block.svgPath_).removeClass('breakpoint').removeClass('selectedBreakpoint');
                 }
             });
     }

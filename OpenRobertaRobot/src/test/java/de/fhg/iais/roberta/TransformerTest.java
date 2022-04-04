@@ -35,7 +35,7 @@ public class TransformerTest extends AstTest {
     public void executeTransformer_ShouldReturnTransformedGetSampleAST_WhenGivenGetSampleAST() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=671,y=5],MainTask[],"
-                + "WaitStmt[(repeat[WAIT,SensorExpr[GetSampleSensor[TemperatureSensor[GetSamplePort,TEMPERATURE,GetSampleSlot]]]])]]]]";
+                + "WaitStmt[(repeat[WAIT,SensorExpr[GetSampleSensor[TemperatureSensor[GetSamplePort,VALUE,GetSampleSlot]]]])]]]]";
 
         Project project =
             UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory, Util.readResourceContent("/ast/transform/old_get_sample.xml"))

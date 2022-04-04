@@ -15,60 +15,26 @@ var __extends = (this && this.__extends) || (function () {
 })();
 define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.constants", "./interpreter.util", "util"], function (require, exports, interpreter_aRobotBehaviour_1, C, U, UTIL) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.RobotMbedBehaviour = void 0;
-    var RobotMbedBehaviour = /** @class */ (function (_super) {
-        __extends(RobotMbedBehaviour, _super);
-        function RobotMbedBehaviour() {
+    exports.RobotSimBehaviour = void 0;
+    var RobotSimBehaviour = /** @class */ (function (_super) {
+        __extends(RobotSimBehaviour, _super);
+        function RobotSimBehaviour() {
             var _this = _super.call(this) || this;
             _this.hardwareState.motors = {};
             U.loggingEnabled(false, false);
             return _this;
         }
-        RobotMbedBehaviour.prototype.getSample = function (s, name, sensor, port, mode) {
+        RobotSimBehaviour.prototype.getSample = function (s, name, sensor, port, mode) {
             var robotText = 'robot: ' + name + ', port: ' + port + ', mode: ' + mode;
             U.debug(robotText + ' getsample from ' + sensor);
             var sensorName = sensor;
-            if (sensorName == C.TIMER) {
-                s.push(this.timerGet(port));
+            //workaround due to mbots sensor names
+            if (name == 'mbot') {
+                port = 'ORT_' + port;
             }
-            else if (sensorName == C.ENCODER_SENSOR_SAMPLE) {
-                s.push(this.getEncoderValue(mode, port));
-            }
-            else {
-                //workaround due to mbots sensor names
-                if (name == 'mbot') {
-                    port = 'ORT_' + port;
-                }
-                s.push(this.getSensorValue(sensorName, port, mode));
-            }
+            s.push(this.getSensorValue(sensorName, port, mode));
         };
-        RobotMbedBehaviour.prototype.getEncoderValue = function (mode, port) {
-            var sensor = this.hardwareState.sensors.encoder;
-            port = port == C.MOTOR_LEFT ? C.LEFT : C.RIGHT;
-            if (port != undefined) {
-                var v = sensor[port];
-                if (v === undefined) {
-                    return 'undefined';
-                }
-                else {
-                    return this.rotation2Unit(v, mode);
-                }
-            }
-            return sensor;
-        };
-        RobotMbedBehaviour.prototype.rotation2Unit = function (value, unit) {
-            switch (unit) {
-                case C.DEGREE:
-                    return value;
-                case C.ROTATIONS:
-                    return value / 360.0;
-                case C.DISTANCE:
-                    return (value * C.WHEEL_DIAMETER * Math.PI) / 360.0;
-                default:
-                    return 0;
-            }
-        };
-        RobotMbedBehaviour.prototype.getSensorValue = function (sensorName, port, mode) {
+        RobotSimBehaviour.prototype.getSensorValue = function (sensorName, port, mode) {
             var sensor = this.hardwareState.sensors[sensorName];
             if (sensor === undefined) {
                 return 'undefined';
@@ -77,20 +43,6 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             if (mode != undefined) {
                 if (port != undefined) {
                     v = sensor[port][mode];
-                    if (sensorName === 'gyro' && mode === 'angle') {
-                        var reset = this.hardwareState['angleReset'];
-                        if (reset != undefined) {
-                            var resetValue = reset[port];
-                            if (resetValue != undefined) {
-                                var value = +v;
-                                value = value - resetValue;
-                                if (value < 0) {
-                                    value = value + 360;
-                                }
-                                v = '' + value;
-                            }
-                        }
-                    }
                 }
                 else {
                     v = sensor[mode];
@@ -111,37 +63,35 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 return v;
             }
         };
-        RobotMbedBehaviour.prototype.encoderReset = function (port) {
+        RobotSimBehaviour.prototype.encoderReset = function (port) {
             U.debug('encoderReset for ' + port);
             this.hardwareState.actions.encoder = {};
-            if (port == C.MOTOR_LEFT) {
-                this.hardwareState.actions.encoder.leftReset = true;
-            }
-            else {
-                this.hardwareState.actions.encoder.rightReset = true;
-            }
+            this.hardwareState.actions.encoder[port] = 'reset';
         };
-        RobotMbedBehaviour.prototype.timerReset = function (port) {
-            this.hardwareState.timers[port] = Date.now();
+        RobotSimBehaviour.prototype.timerReset = function (port) {
+            if (this.hardwareState.actions.timer == undefined) {
+                this.hardwareState.actions.timer = [];
+            }
+            this.hardwareState.actions.timer = {};
+            this.hardwareState.actions.timer[port] = 'reset';
             U.debug('timerReset for ' + port);
         };
-        RobotMbedBehaviour.prototype.timerGet = function (port) {
-            var now = Date.now();
-            var startTime = this.hardwareState.timers[port];
-            if (startTime === undefined) {
-                startTime = this.hardwareState.timers['start'];
-            }
-            var delta = now - startTime;
-            U.debug('timerGet for ' + port + ' returned ' + delta);
-            return delta;
-        };
-        RobotMbedBehaviour.prototype.ledOnAction = function (name, port, color) {
+        RobotSimBehaviour.prototype.ledOnAction = function (name, port, color) {
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' led on color ' + color);
-            this.hardwareState.actions.led = {};
-            this.hardwareState.actions.led.color = color;
+            if (this.hardwareState.actions.led == undefined) {
+                this.hardwareState.actions.led = {};
+            }
+            if (port) {
+                this.hardwareState.actions.led[port] = {};
+                this.hardwareState.actions.led[port][C.COLOR] = color;
+            }
+            else {
+                this.hardwareState.actions.led = {};
+                this.hardwareState.actions.led[C.COLOR] = color;
+            }
         };
-        RobotMbedBehaviour.prototype.statusLightOffAction = function (name, port) {
+        RobotSimBehaviour.prototype.statusLightOffAction = function (name, port) {
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' led off');
             if (name === 'mbot') {
@@ -149,14 +99,21 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                     this.hardwareState.actions.leds = {};
                 }
                 this.hardwareState.actions.leds[port] = {};
-                this.hardwareState.actions.leds[port].mode = C.OFF;
+                this.hardwareState.actions.leds[port][C.MODE] = C.OFF;
+            }
+            else if (port) {
+                if (this.hardwareState.actions.led == undefined) {
+                    this.hardwareState.actions.led = {};
+                }
+                this.hardwareState.actions.led[port] = {};
+                this.hardwareState.actions.led[port][C.MODE] = C.OFF;
             }
             else {
                 this.hardwareState.actions.led = {};
                 this.hardwareState.actions.led.mode = C.OFF;
             }
         };
-        RobotMbedBehaviour.prototype.toneAction = function (name, frequency, duration) {
+        RobotSimBehaviour.prototype.toneAction = function (name, frequency, duration) {
             U.debug(name + ' piezo: ' + ', frequency: ' + frequency + ', duration: ' + duration);
             this.hardwareState.actions.tone = {};
             this.hardwareState.actions.tone.frequency = frequency;
@@ -164,37 +121,27 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             this.setBlocking(duration > 0);
             return 0;
         };
-        RobotMbedBehaviour.prototype.playFileAction = function (file) {
+        RobotSimBehaviour.prototype.playFileAction = function (file) {
             U.debug('play file: ' + file);
             this.hardwareState.actions.tone = {};
             this.hardwareState.actions.tone.file = file;
-            switch (file) {
-                case '0':
-                    return 1000;
-                case '1':
-                    return 350;
-                case '2':
-                    return 700;
-                case '3':
-                    return 700;
-                case '4':
-                    return 500;
-            }
+            this.setBlocking(true);
+            return 0;
         };
-        RobotMbedBehaviour.prototype.setVolumeAction = function (volume) {
+        RobotSimBehaviour.prototype.setVolumeAction = function (volume) {
             U.debug('set volume: ' + volume);
             this.hardwareState.actions.volume = Math.max(Math.min(100, volume), 0);
             this.hardwareState.volume = Math.max(Math.min(100, volume), 0);
         };
-        RobotMbedBehaviour.prototype.getVolumeAction = function (s) {
+        RobotSimBehaviour.prototype.getVolumeAction = function (s) {
             U.debug('get volume');
             s.push(this.hardwareState.volume);
         };
-        RobotMbedBehaviour.prototype.setLanguage = function (language) {
+        RobotSimBehaviour.prototype.setLanguage = function (language) {
             U.debug('set language ' + language);
             this.hardwareState.actions.language = language;
         };
-        RobotMbedBehaviour.prototype.sayTextAction = function (text, speed, pitch) {
+        RobotSimBehaviour.prototype.sayTextAction = function (text, speed, pitch) {
             if (this.hardwareState.actions.sayText == undefined) {
                 this.hardwareState.actions.sayText = {};
             }
@@ -204,7 +151,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             this.setBlocking(true);
             return 0;
         };
-        RobotMbedBehaviour.prototype.motorOnAction = function (name, port, duration, speed) {
+        RobotSimBehaviour.prototype.motorOnAction = function (name, port, durationType, duration, speed, time) {
             var robotText = 'robot: ' + name + ', port: ' + port;
             var durText = duration === undefined ? ' w.o. duration' : ' for ' + duration + ' msec';
             U.debug(robotText + ' motor speed ' + speed + durText);
@@ -213,14 +160,27 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             }
             this.hardwareState.actions.motors[port] = speed;
             this.hardwareState.motors[port] = speed;
+            if (time !== undefined) {
+                return time;
+            }
+            if (durationType === C.DEGREE || durationType === C.DISTANCE || durationType === C.ROTATIONS) {
+                // if durationType is defined, then duration must be defined, too. Thus, it is never 'undefined' :-)
+                this.hardwareState.actions.motors[durationType] = duration;
+                this.setBlocking(true);
+            }
             return 0;
         };
-        RobotMbedBehaviour.prototype.motorStopAction = function (name, port) {
+        RobotSimBehaviour.prototype.motorStopAction = function (name, port) {
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' motor stop');
-            this.motorOnAction(name, port, 0, 0);
+            if (this.hardwareState.actions.motors == undefined) {
+                this.hardwareState.actions.motors = {};
+            }
+            this.hardwareState.actions.motors[port] = 0;
+            this.hardwareState.motors[port] = 0;
+            return 0;
         };
-        RobotMbedBehaviour.prototype.driveAction = function (name, direction, speed, distance, time) {
+        RobotSimBehaviour.prototype.driveAction = function (name, direction, speed, distance, time) {
             var robotText = 'robot: ' + name + ', direction: ' + direction;
             var durText = distance === undefined ? ' w.o. duration' : ' for ' + distance + ' msec';
             U.debug(robotText + ' motor speed ' + speed + durText);
@@ -242,16 +202,13 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             if (time !== undefined) {
                 return time;
             }
-            var rotationPerSecond = (C.MAX_ROTATION * Math.abs(speed)) / 100.0;
-            if (rotationPerSecond == 0.0 || distance === undefined) {
-                return 0;
+            if (speed != 0.0 && distance !== undefined) {
+                this.hardwareState.actions.motors[C.DISTANCE] = distance;
+                this.setBlocking(true);
             }
-            else {
-                var rotations = Math.abs(distance) / (C.WHEEL_DIAMETER * Math.PI);
-                return (rotations / rotationPerSecond) * 1000;
-            }
+            return 0;
         };
-        RobotMbedBehaviour.prototype.curveAction = function (name, direction, speedL, speedR, distance, time) {
+        RobotSimBehaviour.prototype.curveAction = function (name, direction, speedL, speedR, distance, time) {
             var robotText = 'robot: ' + name + ', direction: ' + direction;
             var durText = distance === undefined ? ' w.o. duration' : ' for ' + distance + ' msec';
             U.debug(robotText + ' left motor speed ' + speedL + ' right motor speed ' + speedR + durText);
@@ -276,16 +233,13 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             if (time !== undefined) {
                 return time;
             }
-            var rotationPerSecond = (C.MAX_ROTATION * avgSpeed) / 100.0;
-            if (rotationPerSecond == 0.0 || distance === undefined) {
-                return 0;
+            if (avgSpeed != 0.0 && distance !== undefined) {
+                this.hardwareState.actions.motors[C.DISTANCE] = distance;
+                this.setBlocking(true);
             }
-            else {
-                var rotations = Math.abs(distance) / (C.WHEEL_DIAMETER * Math.PI);
-                return (rotations / rotationPerSecond) * 1000;
-            }
+            return 0;
         };
-        RobotMbedBehaviour.prototype.turnAction = function (name, direction, speed, angle, time) {
+        RobotSimBehaviour.prototype.turnAction = function (name, direction, speed, angle, time) {
             var robotText = 'robot: ' + name + ', direction: ' + direction;
             var durText = angle === undefined ? ' w.o. duration' : ' for ' + angle + ' msec';
             U.debug(robotText + ' motor speed ' + speed + durText);
@@ -304,16 +258,13 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             if (time !== undefined) {
                 return time;
             }
-            var rotationPerSecond = (C.MAX_ROTATION * Math.abs(speed)) / 100.0;
-            if (rotationPerSecond == 0.0 || angle === undefined) {
-                return 0;
+            if (Math.abs(speed) !== 0.0 && angle !== undefined) {
+                this.hardwareState.actions.motors[C.ANGLE] = angle * (Math.PI / 180);
+                this.setBlocking(true);
             }
-            else {
-                var rotations = C.TURN_RATIO * (Math.abs(angle) / 720);
-                return (rotations / rotationPerSecond) * 1000;
-            }
+            return 0;
         };
-        RobotMbedBehaviour.prototype.setTurnSpeed = function (speed, direction) {
+        RobotSimBehaviour.prototype.setTurnSpeed = function (speed, direction) {
             if (direction == C.LEFT) {
                 this.hardwareState.actions.motors[C.MOTOR_LEFT] = -speed;
                 this.hardwareState.actions.motors[C.MOTOR_RIGHT] = speed;
@@ -323,7 +274,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 this.hardwareState.actions.motors[C.MOTOR_RIGHT] = -speed;
             }
         };
-        RobotMbedBehaviour.prototype.driveStop = function (name) {
+        RobotSimBehaviour.prototype.driveStop = function (name) {
             U.debug('robot: ' + name + ' stop motors');
             if (this.hardwareState.actions.motors == undefined) {
                 this.hardwareState.actions.motors = {};
@@ -331,13 +282,13 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             this.hardwareState.actions.motors[C.MOTOR_LEFT] = 0;
             this.hardwareState.actions.motors[C.MOTOR_RIGHT] = 0;
         };
-        RobotMbedBehaviour.prototype.getMotorSpeed = function (s, name, port) {
+        RobotSimBehaviour.prototype.getMotorSpeed = function (s, name, port) {
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' motor get speed');
             var speed = this.hardwareState.motors[port];
             s.push(speed);
         };
-        RobotMbedBehaviour.prototype.setMotorSpeed = function (name, port, speed) {
+        RobotSimBehaviour.prototype.setMotorSpeed = function (name, port, speed) {
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' motor speed ' + speed);
             if (this.hardwareState.actions.motors == undefined) {
@@ -346,15 +297,15 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             this.hardwareState.actions.motors[port] = speed;
             this.hardwareState.motors[port] = speed;
         };
-        RobotMbedBehaviour.prototype.showTextAction = function (text, mode) {
+        RobotSimBehaviour.prototype.showTextAction = function (text, mode) {
             var showText = '' + text;
             U.debug('***** show "' + showText + '" *****');
             this.hardwareState.actions.display = {};
             this.hardwareState.actions.display[mode.toLowerCase()] = showText;
-            this.setBlocking(text.length > 0);
+            this.setBlocking(true);
             return 0;
         };
-        RobotMbedBehaviour.prototype.showTextActionPosition = function (text, x, y) {
+        RobotSimBehaviour.prototype.showTextActionPosition = function (text, x, y) {
             var showText = '' + text;
             U.debug('***** show "' + showText + '" *****');
             this.hardwareState.actions.display = {};
@@ -362,7 +313,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             this.hardwareState.actions.display.x = x;
             this.hardwareState.actions.display.y = y;
         };
-        RobotMbedBehaviour.prototype.showImageAction = function (image, mode) {
+        RobotSimBehaviour.prototype.showImageAction = function (image, mode) {
             var showImage = '' + image;
             U.debug('***** show "' + showImage + '" *****');
             var imageLen = image.length;
@@ -377,13 +328,13 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             }
             return duration;
         };
-        RobotMbedBehaviour.prototype.displaySetBrightnessAction = function (value) {
+        RobotSimBehaviour.prototype.displaySetBrightnessAction = function (value) {
             U.debug('***** set brightness "' + value + '" *****');
             this.hardwareState.actions.display = {};
             this.hardwareState.actions.display[C.BRIGHTNESS] = value;
             return 0;
         };
-        RobotMbedBehaviour.prototype.lightAction = function (mode, color, port) {
+        RobotSimBehaviour.prototype.lightAction = function (mode, color, port) {
             U.debug('***** light action mode= "' + mode + ' color=' + color + '" *****');
             if (port !== undefined) {
                 if (!this.hardwareState.actions.leds) {
@@ -399,7 +350,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 this.hardwareState.actions.led[C.COLOR] = color;
             }
         };
-        RobotMbedBehaviour.prototype.displaySetPixelBrightnessAction = function (x, y, brightness) {
+        RobotSimBehaviour.prototype.displaySetPixelBrightnessAction = function (x, y, brightness) {
             U.debug('***** set pixel x="' + x + ', y=' + y + ', brightness=' + brightness + '" *****');
             this.hardwareState.actions.display = {};
             this.hardwareState.actions.display[C.PIXEL] = {};
@@ -408,49 +359,52 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             this.hardwareState.actions.display[C.PIXEL][C.BRIGHTNESS] = brightness;
             return 0;
         };
-        RobotMbedBehaviour.prototype.displayGetPixelBrightnessAction = function (s, x, y) {
+        RobotSimBehaviour.prototype.displayGetPixelBrightnessAction = function (s, x, y) {
             U.debug('***** get pixel x="' + x + ', y=' + y + '" *****');
             var sensor = this.hardwareState.sensors[C.DISPLAY][C.PIXEL];
             s.push(sensor[y][x]);
         };
-        RobotMbedBehaviour.prototype.clearDisplay = function () {
+        RobotSimBehaviour.prototype.clearDisplay = function () {
             U.debug('clear display');
             this.hardwareState.actions.display = {};
             this.hardwareState.actions.display.clear = true;
         };
-        RobotMbedBehaviour.prototype.writePinAction = function (pin, mode, value) {
+        RobotSimBehaviour.prototype.writePinAction = function (pin, mode, value) {
             this.hardwareState.actions['pin' + pin] = {};
             this.hardwareState.actions['pin' + pin][mode] = {};
             this.hardwareState.actions['pin' + pin][mode] = value;
         };
-        RobotMbedBehaviour.prototype.gyroReset = function (_port) {
-            var gyro = this.hardwareState.sensors['gyro'];
-            if (gyro !== undefined) {
-                var port = gyro[_port];
-                if (port !== undefined) {
-                    var angle = port['angle'];
-                    if (angle !== undefined) {
-                        if (this.hardwareState['angleReset'] == undefined) {
-                            this.hardwareState['angleReset'] = {};
-                        }
-                        this.hardwareState['angleReset'][_port] = angle;
-                    }
-                }
+        RobotSimBehaviour.prototype.gyroReset = function (_port) {
+            U.debug('***** reset gyro *****');
+            this.hardwareState.actions.gyroReset = {};
+            if (_port !== undefined) {
+                this.hardwareState.actions.gyroReset[_port] = {};
+                this.hardwareState.actions.gyroReset[_port] = true;
+            }
+            else {
+                this.hardwareState.actions.gyroReset = true;
             }
         };
-        RobotMbedBehaviour.prototype.getState = function () {
-            return this.hardwareState;
-        };
-        RobotMbedBehaviour.prototype.debugAction = function (value) {
+        RobotSimBehaviour.prototype.debugAction = function (value) {
             U.debug('***** debug action "' + value + '" *****');
             console.log(value);
         };
-        RobotMbedBehaviour.prototype.assertAction = function (_msg, _left, _op, _right, value) {
+        RobotSimBehaviour.prototype.assertAction = function (_msg, _left, _op, _right, value) {
             U.debug('***** assert action "' + value + ' ' + _msg + ' ' + _left + ' ' + _op + ' ' + _right + '" *****');
             console.assert(value, _msg + ' ' + _left + ' ' + _op + ' ' + _right);
         };
-        RobotMbedBehaviour.prototype.close = function () { };
-        return RobotMbedBehaviour;
+        RobotSimBehaviour.prototype.close = function () { };
+        RobotSimBehaviour.prototype.timerGet = function (port) {
+            // not used here anymore
+            return 0;
+        };
+        RobotSimBehaviour.prototype.recall = function (s) {
+            s.push(globalThis.rob3rtaNumber);
+        };
+        RobotSimBehaviour.prototype.remember = function (num) {
+            globalThis.rob3rtaNumber = num;
+        };
+        return RobotSimBehaviour;
     }(interpreter_aRobotBehaviour_1.ARobotBehaviour));
-    exports.RobotMbedBehaviour = RobotMbedBehaviour;
+    exports.RobotSimBehaviour = RobotSimBehaviour;
 });

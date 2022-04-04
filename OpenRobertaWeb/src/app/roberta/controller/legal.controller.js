@@ -1,6 +1,4 @@
-import * as MSG from 'message';
 import * as LOG from 'log';
-import * as UTIL from 'util';
 import * as GUISTATE_C from 'guiState.controller';
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
@@ -84,7 +82,7 @@ function initEvents() {
     $legalButton.off('click touchend');
     $legalButton.onWrap('click touchend', function (event) {
         event.preventDefault();
-        toggleLegal();
+        toggleLegal($(this));
     });
 
     for (documentType in links) {
@@ -132,7 +130,7 @@ function loadLegalTexts() {
 }
 export { init, initView, loadLegalTexts };
 
-function toggleLegal() {
+function toggleLegal($button) {
     Blockly.hideChaff();
     if ($('#legalButton').hasClass('rightActive')) {
         $('#blockly').closeRightView();
@@ -144,6 +142,6 @@ function toggleLegal() {
             },
             'fast'
         );
-        $('#blockly').openRightView('legal', INITIAL_WIDTH);
+        $button.openRightView($('#legalDiv'), INITIAL_WIDTH);
     }
 }

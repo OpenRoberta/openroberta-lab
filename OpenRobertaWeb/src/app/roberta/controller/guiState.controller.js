@@ -1078,9 +1078,7 @@ function checkSim() {
     if (hasMultiSim()) {
         $('#menuRunMulipleSim').parent().removeClass('unavailable');
         $('#menuRunMulipleSim').parent().addClass('available');
-        if (isUserLoggedIn()) {
-            $('#menuRunMulipleSim').parent().removeClass('disabled');
-        }
+        $('#menuRunMulipleSim').parent().removeClass('disabled');
     } else {
         $('#menuRunMulipleSim').parent().addClass('unavailable');
         $('#menuRunMulipleSim').parent().removeClass('available');

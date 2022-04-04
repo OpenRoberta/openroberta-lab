@@ -21,7 +21,7 @@ define(["require", "exports", "guiState.controller", "blockly", "jquery", "jquer
     function initEvents() {
         $('#infoButton').off('click touchend');
         $('#infoButton').onWrap('click touchend', function (event) {
-            toggleInfo();
+            toggleInfo($(this));
             return false;
         });
         $(window).on('resize', function (e) {
@@ -65,7 +65,7 @@ define(["require", "exports", "guiState.controller", "blockly", "jquery", "jquer
             $('#infoContent').trigger('change');
         });
     }
-    function toggleInfo() {
+    function toggleInfo($button) {
         Blockly.hideChaff();
         if ($('#infoButton').hasClass('rightActive')) {
             $('#blockly').closeRightView();
@@ -74,7 +74,7 @@ define(["require", "exports", "guiState.controller", "blockly", "jquery", "jquer
             $('#infoContent').html(blocklyWorkspace.description);
             $('.bootstrap-tagsinput input').attr('placeholder', Blockly.Msg.INFO_TAGS || 'Tags');
             $('#infoTags').tagsinput('add', blocklyWorkspace.tags);
-            $('#blockly').openRightView('info', INITIAL_WIDTH);
+            $button.openRightView($('#infoDiv'), INITIAL_WIDTH);
         }
     }
 });

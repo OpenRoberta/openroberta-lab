@@ -67,9 +67,6 @@
       "menu.controller": [
         "app/roberta/controller/menu.controller"
       ],
-      "multSim.controller": [
-        "app/roberta/controller/multSim.controller"
-      ],
       "notification.controller": [
         "app/roberta/controller/notification.controller"
       ],
@@ -151,56 +148,62 @@
       "simulation.constants": [
         "app/simulation/simulationLogic/constants"
       ],
-      "simulation.math": [
-        "app/simulation/simulationLogic/math"
-      ],
-      "simulation.robot": [
-        "app/simulation/simulationLogic/robot"
-      ],
-      "simulation.robot.draw": [
-        "app/simulation/simulationLogic/robot.draw"
-      ],
-      "simulation.robot.mbed": [
+      "robot.mbed": [
         "app/simulation/simulationLogic/robot.mbed"
       ],
-      "simulation.robot.calliope": [
+      "robot.calliope": [
         "app/simulation/simulationLogic/robot.calliope"
       ],
-      "simulation.robot.calliope2016": [
-        "app/simulation/simulationLogic/robot.calliope2016"
-      ],
-      "simulation.robot.calliope2017": [
-        "app/simulation/simulationLogic/robot.calliope2017"
-      ],
-      "simulation.robot.mbot": [
+      "robot.mbot": [
         "app/simulation/simulationLogic/robot.mbot"
       ],
-      "simulation.robot.microbit": [
+      "robot.microbit": [
         "app/simulation/simulationLogic/robot.microbit"
       ],
-      "simulation.robot.math": [
-        "app/simulation/simulationLogic/robot.math"
-      ],
-      "simulation.robot.rescue": [
-        "app/simulation/simulationLogic/robot.rescue"
-      ],
-      "simulation.robot.roberta": [
+      "robot.roberta": [
         "app/simulation/simulationLogic/robot.roberta"
-      ],
-      "simulation.robot.simple": [
-        "app/simulation/simulationLogic/robot.simple"
       ],
       "simulation.robot.ev3": [
         "app/simulation/simulationLogic/robot.ev3"
       ],
-      "simulation.robot.nxt": [
+      "robot.nxt": [
         "app/simulation/simulationLogic/robot.nxt"
       ],
-      "simulation.scene": [
-        "app/simulation/simulationLogic/scene"
+      "robot.rob3rta": [
+        "app/simulation/simulationLogic/robot.rob3rta"
       ],
-      "simulation.simulation": [
-        "app/simulation/simulationLogic/simulation"
+      "robot.xnn": [
+        "app/simulation/simulationLogic/robot.xnn"
+      ],
+      "simulation.scene": [
+        "app/simulation/simulationLogic/simulation.scene"
+      ],
+      "simulation.roberta": [
+        "app/simulation/simulationLogic/simulation.roberta"
+      ],
+      "simulation.webots": [
+        "app/simulation/simulationLogic/simulation.webots"
+      ],
+      "robot.base": [
+        "app/simulation/simulationLogic/robot.base"
+      ],
+      "robot.base.stationary": [
+        "app/simulation/simulationLogic/robot.base.stationary"
+      ],
+      "robot.base.mobile": [
+        "app/simulation/simulationLogic/robot.base.mobile"
+      ],
+      "simulation.math": [
+        "app/simulation/simulationLogic/math"
+      ],
+      "robot.sensors": [
+        "app/simulation/simulationLogic/robot.sensors"
+      ],
+      "simulation.actuators": [
+        "app/simulation/simulationLogic/robot.actuators"
+      ],
+      "simulation.objects": [
+        "app/simulation/simulationLogic/simulation.objects.ts"
       ],
       "comm": [
         "helper/comm"
@@ -238,9 +241,6 @@
       "interpreter.util": [
         "app/nepostackmachine/interpreter.util"
       ],
-      "interpreter.jsHelper": [
-        "app/nepostackmachine/interpreter.jsHelper"
-      ],
       "neuralnetwork.nn": [
         "app/neuralnetwork/neuralnetwork.nn"
       ],
@@ -264,9 +264,6 @@
       ],
       "wires": [
         "app/configVisualization/wires"
-      ],
-      "webots.simulation": [
-        "app/webotsSimulation/webots.simulation.ts"
       ]
     }
   },
@@ -278,5 +275,7 @@
     "**/interpreter.runStackMachineJson.ts"
   ],
   "compileOnSave": false,
-  "buildOnSave": false
+  "buildOnSave": false,
+  "sourceMap": true,
+  "inlineSources": true
 }

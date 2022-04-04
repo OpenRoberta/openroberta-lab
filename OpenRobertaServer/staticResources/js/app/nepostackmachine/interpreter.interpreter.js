@@ -1,4 +1,4 @@
-define(["require", "exports", "./interpreter.state", "./interpreter.constants", "./interpreter.util", "neuralnetwork.ui"], function (require, exports, interpreter_state_1, C, U, UI) {
+define(["require", "exports", "./interpreter.state", "./interpreter.constants", "./interpreter.util", "neuralnetwork.ui", "simulation.roberta"], function (require, exports, interpreter_state_1, C, U, UI, simulation_roberta_1) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Interpreter = void 0;
     var Interpreter = /** @class */ (function () {
@@ -8,7 +8,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
          * . @param robotBehaviour implementation of the ARobotBehaviour class
          * . @param cbOnTermination is called when the program has terminated
          */
-        function Interpreter(generatedCode, r, cbOnTermination, simBreakpoints) {
+        function Interpreter(generatedCode, r, cbOnTermination, simBreakpoints, name) {
             this.terminated = false;
             this.callbackOnTermination = undefined;
             this.debugDelay = 2;
@@ -16,6 +16,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
             this.callbackOnTermination = cbOnTermination;
             var stmts = generatedCode[C.OPS];
             this.robotBehaviour = r;
+            this.name = name;
             this.breakpoints = simBreakpoints;
             this.events = {};
             this.events[C.DEBUG_STEP_INTO] = false;
@@ -26,6 +27,16 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
             this.stepOverBlock = null;
             this.state = new interpreter_state_1.State(stmts);
         }
+        Object.defineProperty(Interpreter.prototype, "name", {
+            get: function () {
+                return this._name;
+            },
+            set: function (value) {
+                this._name = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
         /**
          * run the operations.
          * . @param maxRunTime the time stamp at which the run method must have terminated. If 0 run as long as possible.
@@ -64,12 +75,12 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
         Interpreter.prototype.setDebugMode = function (mode) {
             this.state.setDebugMode(mode);
             if (mode) {
-                stackmachineJsHelper.getJqueryObject('#blockly').addClass('debug');
+                $('#blockly').addClass('debug');
                 this.state.addHighlights(this.breakpoints);
             }
             else {
                 this.state.removeHighlights(this.breakpoints);
-                stackmachineJsHelper.getJqueryObject('#blockly').removeClass('debug');
+                $('#blockly').removeClass('debug');
             }
         };
         /** sets relevant event value to true */
@@ -163,18 +174,18 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
             return true;
         };
         Interpreter.prototype.stepOver = function (op) {
-            stackmachineJsHelper.setSimBreak();
+            simulation_roberta_1.SimulationRoberta.Instance.setPause(true);
             this.events[C.DEBUG_STEP_OVER] = false;
             this.stepOverBlock = null;
             this.lastStoppedBlock = op;
         };
         Interpreter.prototype.stepInto = function (op) {
-            stackmachineJsHelper.setSimBreak();
+            simulation_roberta_1.SimulationRoberta.Instance.setPause(true);
             this.events[C.DEBUG_STEP_INTO] = false;
             this.lastStoppedBlock = op;
         };
         Interpreter.prototype.breakPoint = function (op) {
-            stackmachineJsHelper.setSimBreak();
+            simulation_roberta_1.SimulationRoberta.Instance.setPause(true);
             this.events[C.DEBUG_BREAKPOINT] = false;
             this.lastStoppedBlock = op;
         };
@@ -242,6 +253,15 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         this.robotBehaviour.ledOnAction(stmt[C.NAME], stmt[C.PORT], color_1);
                         break;
                     }
+                    case C.REMEMBER: {
+                        var num = this.state.pop();
+                        this.robotBehaviour.remember(num);
+                        break;
+                    }
+                    case C.RECALL: {
+                        this.robotBehaviour.recall(this.state);
+                        break;
+                    }
                     case C.RETURN:
                         var returnValue = void 0;
                         if (stmt[C.VALUES])
@@ -253,21 +273,23 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         break;
                     case C.MOTOR_ON_ACTION: {
                         var speedOnly = stmt[C.SPEED_ONLY];
-                        var duration = speedOnly ? undefined : this.state.pop();
+                        var setTime = stmt[C.SET_TIME];
+                        var time = void 0;
+                        var duration = void 0;
+                        if (setTime) {
+                            duration = undefined;
+                            time = setTime ? this.state.pop() : undefined;
+                        }
+                        else {
+                            time = undefined;
+                            duration = speedOnly ? undefined : this.state.pop();
+                        }
                         var speed = this.state.pop();
                         var name_2 = stmt[C.NAME];
                         var port = stmt[C.PORT];
                         var durationType = stmt[C.MOTOR_DURATION];
-                        if (durationType === C.DEGREE || durationType === C.DISTANCE || durationType === C.ROTATIONS) {
-                            // if durationType is defined, then duration must be defined, too. Thus, it is never 'undefined' :-)
-                            var rotationPerSecond = (C.MAX_ROTATION * Math.abs(speed)) / 100.0;
-                            duration = (duration / rotationPerSecond) * 1000;
-                            if (durationType === C.DEGREE) {
-                                duration /= 360.0;
-                            }
-                        }
-                        this.robotBehaviour.motorOnAction(name_2, port, duration, speed);
-                        return [duration ? duration : 0, true];
+                        var durationA = this.robotBehaviour.motorOnAction(name_2, port, durationType, duration, speed, time);
+                        return [durationA, true];
                     }
                     case C.DRIVE_ACTION: {
                         var speedOnly = stmt[C.SPEED_ONLY];
@@ -332,14 +354,13 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         this.robotBehaviour.driveStop(name_6);
                         return [0, true];
                     case C.BOTH_MOTORS_ON_ACTION: {
-                        var duration = this.state.pop();
                         var speedB = this.state.pop();
                         var speedA = this.state.pop();
                         var portA = stmt[C.PORT_A];
                         var portB = stmt[C.PORT_B];
-                        this.robotBehaviour.motorOnAction(portA, portA, duration, speedA);
-                        this.robotBehaviour.motorOnAction(portB, portB, duration, speedB);
-                        return [duration, true];
+                        this.robotBehaviour.motorOnAction(portA, portA, '', 0, speedA, 0);
+                        this.robotBehaviour.motorOnAction(portB, portB, '', 0, speedB, 0);
+                        return [0, true];
                     }
                     case C.MOTOR_STOP: {
                         this.robotBehaviour.motorStopAction(stmt[C.NAME], stmt[C.PORT]);
@@ -435,7 +456,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     }
                     case C.TIMER_SENSOR_RESET:
                         this.robotBehaviour.timerReset(stmt[C.PORT]);
-                        break;
+                        return [0, true];
                     case C.ENCODER_SENSOR_RESET:
                         this.robotBehaviour.encoderReset(stmt[C.PORT]);
                         return [0, true];

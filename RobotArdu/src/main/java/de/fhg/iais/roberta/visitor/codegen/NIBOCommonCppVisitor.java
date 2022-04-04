@@ -22,7 +22,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -191,16 +190,6 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         this.sb.append("rob.setLed(2, OFF);");
         this.sb.append("rob.setLed(1, OFF);");
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensor(LightSensor lightSensor) {
-        if ( lightSensor.getMode().equals("REFLEXION") ) {
-            this.sb.append("rob.getIRSensor()");
-        } else {
-            this.sb.append("rob.getIRLight()");
-        }
         return null;
     }
 

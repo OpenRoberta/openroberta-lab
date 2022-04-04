@@ -494,15 +494,17 @@ canvas.border {
     z-index: 9;
 }
 
-#variablesContent,
 #mbedContent,
 #valuesContent {
     background-color: #fff;
-    border: 2px solid #333;
-    padding: 12px;
-    padding-top: 40px;
+    border: 2px solid #33b8ca;
+    padding: 12px 14px 12px 12px;
     border-radius: 2px;
     display: inline-block;
+}
+
+#valuesContent {
+    min-width: 330px;
 }
 
 .customDropdown {
@@ -755,7 +757,7 @@ button#simCustomColorObject.typcn:before {
 }
 
 button#simCustomObstacle.typcn:before {
-    color: 009 EE3;
+    color: #009EE3;
 }
 
 .huebee__container {
@@ -1200,24 +1202,18 @@ button#simCustomObstacle.typcn:before {
 
 #simValuesContent label {
     display: inline-block;
-    float: left;
-    clear: left;
     width: 150px;
-    text-align: right;
     margin-right: 6px;
+    margin-left: 10px;
 }
 
 #simValuesContent div > div {
     white-space: nowrap;
-    overflow: hidden;
-    min-width: 250px;
     max-height: 70vh;
-    overflow-y: auto;
 }
 
 #simValuesContent span {
     display: inline-block;
-    float: left;
     padding: 0 6px;
     width: 60px;
 }
@@ -1360,6 +1356,10 @@ button#simCustomObstacle.typcn:before {
 .simbtn.btn.active,
 .open > .dropdown-toggle.simbtn.btn {
     background-color: #f29400;
+}
+
+#simEditButtons > .typcn-chart-line-outline {
+    fill: #BACC1E;
 }
 
 .simKey:hover {
@@ -2397,15 +2397,15 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 #simStop, #simControl.typcn-media-stop {
-    color: #E2001A;
+    color: #E2001A !important;
 }
 
 #simStop.disabled {
-    color: #F6B3B9;
+    color: #F6B3B9 !important;
     cursor: not-allowed;
 }
 
-#simControl.blue, #simControlStepOver.blue, #simControlStepInto.blue {
+#simButtons > .debug {
     color: #1C5A94;
 }
 
@@ -3239,4 +3239,98 @@ pre code {
 
 .port {
     cursor: default !important;
+}
+
+#valuesContent .panel-heading {
+    background-color: #dddddd;
+}
+
+#valuesContent .panel-group {
+    margin: 20px 0 0 0;
+}
+
+.panel-title > a:before {
+    background-size: 10px;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    content: "";
+    margin: 0 12px 0 -8px;
+    background-image: url('data:image/svg+xml,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><title>minus</title><path d="M24 14.667h-16c-1.472 0-2.667 1.195-2.667 2.667s1.195 2.667 2.667 2.667h16c1.472 0 2.667-1.195 2.667-2.667s-1.195-2.667-2.667-2.667z"></path> </svg>');
+}
+
+.panel-title > a.collapsed:before {
+    background-size: 10px;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    content: "";
+    margin: 0 12px 0 -8px;
+    background-image: url('data:image/svg+xml,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"> <title>plus</title><path d="M24 13.333h-5.333v-5.333c0-1.472-1.195-2.667-2.667-2.667s-2.667 1.195-2.667 2.667l0.095 5.333h-5.428c-1.472 0-2.667 1.195-2.667 2.667s1.195 2.667 2.667 2.667l5.428-0.095-0.095 5.428c0 1.472 1.195 2.667 2.667 2.667s2.667-1.195 2.667-2.667v-5.428l5.333 0.095c1.472 0 2.667-1.195 2.667-2.667s-1.195-2.667-2.667-2.667z"></path></svg>');
+}
+
+.panel-title > a {
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+
+#accordion .panel-body {
+    overflow: auto;
+    max-height: 50vh;
+    border: none;
+}
+
+/****************************/
+input,
+textarea {
+    border: 1px solid #eeeeee;
+    box-sizing: border-box;
+    margin: 0;
+    outline: none;
+    padding: 10px;
+}
+
+input[type="button"] {
+    -webkit-appearance: button;
+    cursor: pointer;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.input-group {
+    clear: both;
+    position: relative;
+}
+
+.input-group input[type='button'] {
+    background-color: #dddddd;
+    transition: all 300ms ease;
+}
+
+.input-group .button-minus,
+.input-group .button-plus {
+    font-weight: bold;
+    height: 32px;
+    width: 32px;
+    padding: 0;
+}
+
+.input-group .quantity-field {
+    position: relative;
+    height: 32px;
+    width: 32px;
+    text-align: center;
+    display: inline-block;
+    font-size: 14px;
+    resize: vertical;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    -webkit-appearance: none;
 }

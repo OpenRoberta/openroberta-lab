@@ -1,8 +1,5 @@
-import * as LOG from 'log';
 import * as MSG from 'message';
-import * as COM from 'comm';
 import * as UTIL from 'util';
-import * as USER from 'user.model';
 import * as USERGROUP from 'userGroup.model';
 import * as GUISTATE_C from 'guiState.controller';
 import * as LANG from 'language.controller';
@@ -645,7 +642,7 @@ function initUserGroupMemberListTable() {
                                     $(document.body).off(e);
                                 }
                             });
-                            $self.find('input').first().select();
+                            $self.find('input').first().handleNewSelection();
                         } else {
                             $self.find('.member-name').addClass('active');
                             $self.find('.edit-member-name').removeClass('active');

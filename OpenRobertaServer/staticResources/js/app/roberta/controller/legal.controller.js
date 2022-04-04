@@ -55,7 +55,7 @@ define(["require", "exports", "log", "guiState.controller", "blockly", "jquery",
         $legalButton.off('click touchend');
         $legalButton.onWrap('click touchend', function (event) {
             event.preventDefault();
-            toggleLegal();
+            toggleLegal($(this));
         });
         for (documentType in links) {
             if (links.hasOwnProperty(documentType)) {
@@ -92,7 +92,7 @@ define(["require", "exports", "log", "guiState.controller", "blockly", "jquery",
         }
     }
     exports.loadLegalTexts = loadLegalTexts;
-    function toggleLegal() {
+    function toggleLegal($button) {
         Blockly.hideChaff();
         if ($('#legalButton').hasClass('rightActive')) {
             $('#blockly').closeRightView();
@@ -102,7 +102,7 @@ define(["require", "exports", "log", "guiState.controller", "blockly", "jquery",
             $legalDiv.animate({
                 scrollTop: 0,
             }, 'fast');
-            $('#blockly').openRightView('legal', INITIAL_WIDTH);
+            $button.openRightView($('#legalDiv'), INITIAL_WIDTH);
         }
     }
 });

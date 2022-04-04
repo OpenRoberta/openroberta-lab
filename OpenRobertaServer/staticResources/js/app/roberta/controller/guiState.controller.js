@@ -1074,9 +1074,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         if (hasMultiSim()) {
             $('#menuRunMulipleSim').parent().removeClass('unavailable');
             $('#menuRunMulipleSim').parent().addClass('available');
-            if (isUserLoggedIn()) {
-                $('#menuRunMulipleSim').parent().removeClass('disabled');
-            }
+            $('#menuRunMulipleSim').parent().removeClass('disabled');
         }
         else {
             $('#menuRunMulipleSim').parent().addClass('unavailable');

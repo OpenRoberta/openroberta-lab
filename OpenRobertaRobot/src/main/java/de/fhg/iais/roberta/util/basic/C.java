@@ -238,7 +238,9 @@ public class C {
     public static final String RANDOM_DOUBLE = "randDouble";
     public static final String RANDOM_INT = "randInt";
     public static final String RATE = "rate";
+    public static final String RECALL = "recall";
     public static final String RED = "red";
+    public static final String REMEMBER = "remember";
     public static final String REMOVE = "remove";
     public static final String REPEAT_STMT = "RepeatStmt";
     public static final String REPEAT_STMT_CONTINUATION = "RepeatStmtCont";

@@ -8,7 +8,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-http://www.apache.org/licenses/LICENSE-2.0
+https://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -83,13 +83,13 @@ limitations under the License.
                         <ul class='dropdown-menu'>
                             <li class='menuRunProg'><a href='#'><span id='menuRunProg' class='typcn typcn-media-play'
                                 lkey='Blockly.Msg.MENU_START_BRICK'>run on brick</span><span class='kbd text-muted'>Ctrl+R</span></a></li>
-                            <li><a href='#' id='menuRunSim' class='typcn typcn-simulation' lkey='Blockly.Msg.MENU_START_SIM'>run in simulation</span></a></li>
+                            <li><a href='#' id='menuRunSim' class='typcn typcn-simulation' lkey='Blockly.Msg.MENU_START_SIM'>run in simulation</a></li>
                             <li id='robotDefaultFirmware' class='hidden menuRunProg'><a href='#' id='menuDefaultFirmware' class='typcn typcn-arrow-sync'
                                 lkey='Blockly.Msg.MENU_RESET_FIRMWARE'>reset to the factory defaults</a></li>
                             <li><a href='#' id='menuNewProg' class='typcn typcn-document-add' lkey='Blockly.Msg.MENU_NEW'>neu ...</a></li>
                             <li class='login'><a href='#'><span id='menuListProg' class='typcn typcn-th-list' lkey='Blockly.Msg.MENU_LIST_PROG'>Liste
                                         ...</span><span class='kbd text-muted'>Ctrl+M</span></a></li>
-                            <li class='login'><a href='#' id='menuRunMulipleSim' class='typcn typcn-open' lkey='Blockly.Msg.MENU_RUN_MULT_SIM'>run
+                            <li><a href='#' id='menuRunMulipleSim' class='typcn typcn-open' lkey='Blockly.Msg.MENU_RUN_MULT_SIM'>run
                                 multiple robot simulation</a></li>
                             <li><a href='#' id='menuListExamples' class='typcn typcn-th-list' lkey='Blockly.Msg.MENU_LIST_PROG_EXAMPLES'>Beispielprogramme
                                 ...</a></li>
@@ -105,7 +105,7 @@ limitations under the License.
                             <li class=''><a href='#'><span id='menuExportProg' class='typcn typcn-download' lkey='Blockly.Msg.MENU_EXPORT_PROG'>export
                                         program</span><span class='kbd text-muted'>Ctrl+E</span></a></li>
                             <li class='login'><a href='#'><span id='menuExportAllProgs' class='typcn typcn-download' lkey='Blockly.Msg.MENU_EXPORT_ALL_PROGS'>
-                                        export all my programs</span></span></a></li>
+                                        export all my programs</span></a></li>
                             <li class=''><a href='#'><span id='menuImportProg' class='typcn typcn-upload' lkey='Blockly.Msg.MENU_IMPORT_PROG'>import
                                         program ...</span><span class='kbd text-muted'>Ctrl+I</span></a></li>
                             <li class='hidden'><a href='#' id='menuAttachProg' class='' lkey='Blockly.Msg.MENU_ATTACH'>anhängen ...</a></li>
@@ -285,49 +285,47 @@ limitations under the License.
                 <div id='rightMenuDiv'>
                     <div href='#' id='tutorialButton' class='rightMenuButton tutorial' style='display: none;' lkey='Blockly.Msg.MENU_RIGHT_TUTORIAL_TOOLTIP'
                         rel='tooltip' data-original-title='' title=''>
-                        <span id='' class='tutorialButton typcn typcn-mortar-board'></span>
+                        <span class='tutorialButton typcn typcn-mortar-board'></span>
                     </div>
                     <div href='#' id='legalButton' class='rightMenuButton legal' lkey='Blockly.Msg.MENU_RIGHT_LEGAL_TOOLTIP' rel='tooltip'
                         data-original-title='' title=''>
-                        <span id='' class='legalButton typcn typcn-section'></span>
+                        <span class='legalButton typcn typcn-section'></span>
                     </div>
                     <div href='#' id='helpButton' class='rightMenuButton help' lkey='Blockly.Msg.MENU_RIGHT_HELP_TOOLTIP' rel='tooltip' data-original-title=''
                         title=''>
-                        <span id='' class='helpButton typcn typcn-questionmark'></span>
+                        <span class='helpButton typcn typcn-questionmark'></span>
                     </div>
                     <div href='#' id='infoButton' class='rightMenuButton info' lkey='Blockly.Msg.MENU_RIGHT_INFO_TOOLTIP' rel='tooltip' data-original-title=''
                         title=''>
-                        <span id='' class='infoButton typcn typcn-message-typing'></span>
+                        <span class='infoButton typcn typcn-message-typing'></span>
                     </div>
                     <div href='#' id='codeButton' class='rightMenuButton code' lkey='Blockly.Msg.MENU_RIGHT_CODE_TOOLTIP' rel='tooltip' data-original-title=''
                         title=''>
-                        <span id='' class='codeButton typcn typcn-code'></span>
+                        <span class='codeButton typcn typcn-code'></span>
                     </div>
                     <div href='#' id='simButton' class='rightMenuButton' lkey='Blockly.Msg.MENU_RIGHT_SIM_TOOLTIP' rel='tooltip' data-original-title='' title=''>
-                        <span id='' class='simButton typcn typcn-simulation'></span>
+                        <span class='simButton typcn typcn-simulation'></span>
                     </div>
                     <div href='#' id='simDebugButton' class='rightMenuButton' lkey='Blockly.Msg.MENU_RIGHT_SIM_DEBUG_TOOLTIP' rel='tooltip'
                         data-original-title='' title=''>
-                        <span id='' class='simDebugButton typcn typcn-debug'></span>
+                        <span class='simDebugButton typcn typcn-debug'></span>
                     </div>
                 </div>
             </div>
             <div id='simDiv' class='fromRight'>
-                <div id='canvasDiv'>
-                    <div id='uniDiv' style='position: absolute; left: 0; top: -2000; z-index: 0;'>
-                        <canvas id='unitBackgroundLayer' class='canvasSim unified' width='1' height='1'></canvas>
-                        <canvas id='unitDrawBackgroundLayer' class='canvasSim unified' style='z-index: 1' width='1' height='1'></canvas>
-                    </div>
+                <div id='canvasDiv' class='simNotWebots'>
                     <canvas id='backgroundLayer' class='canvasSim' style='z-index: 2' width='1' height='1'></canvas>
                     <canvas id='drawLayer' class='canvasSim' style='z-index: 3' width='1' height='1'></canvas>
                     <canvas id='rulerLayer' class='canvasSim' style='z-index: 4' width='1' height='1'></canvas>
                     <canvas id='objectLayer' class='canvasSim' style='z-index: 5' width='1' height='1'></canvas>
                     <canvas id='robotLayer' class='canvasSim' style='z-index: 6' width='1' height='1'></canvas>
                 </div>
-                <div id='simEditButtons'>
+                <div id='simEditButtons' class='simMobile simNotWebots'>
                     <button id='simScene' type='button' class='blbtn simScene typcn typcn-image' lkey='Blockly.Msg.MENU_SIM_SCENE_TOOLTIP' rel='tooltip'
                         data-original-title='' title=''></button>
-                    <button id='simImport' type='button' class='blbtn simRobot typcn typcn-upload' lkey='Blockly.Msg.MENU_SIM_IMPORT_TOOLTIP' rel='tooltip'
+                    <button id='simTrail' type='button' class='blbtn typcn typcn-chart-line-outline' lkey='Blockly.Msg.MENU_SIM_TRAIL_TOOLTIP' rel='tooltip'
+                        data-original-title='' title=''></button>
+                    <button id='simImport' type='button' class='blbtn typcn typcn-upload' lkey='Blockly.Msg.MENU_SIM_IMPORT_TOOLTIP' rel='tooltip'
                         data-original-title='' title=''></button>
                     <button id='simDownloadConfig' class='blbtn typcn typcn-download-outline' lkey='Blockly.Msg.MENU_SIM_CONFIG_EXPORT' rel='tooltip'
                         data-original-title='' title=''></button>
@@ -340,6 +338,8 @@ limitations under the License.
                             <li><a id='simAddObstacleRectangle' class='typcn typcn-media-stop-outline'></a></li>
                             <li><a id='simAddObstacleTriangle' class='typcn typcn-media-play-outline rotated'></a></li>
                             <li><a id='simAddObstacleCircle' class='typcn typcn-media-record-outline'></a></li>
+                            <hr style='margin:0; border-top: 1px solid #333;'>
+                            <li><a id='simObstacleDeleteAll' class='typcn typcn-delete-outline'></a></li>
                         </ul>
                     </div>
                     <div class='btn-group'>
@@ -349,6 +349,8 @@ limitations under the License.
                             <li><a id='simAddAreaRectangle' class='typcn typcn-media-stop'></a></li>
                             <li><a id='simAddAreaTriangle' class='typcn typcn-arrow-sorted-up'></a></li>
                             <li><a id='simAddAreaCircle' class='typcn typcn-media-record'></a></li>
+                            <hr style='margin:0; border-top: 1px solid #333;'>
+                            <li><a id='simAreaDeleteAll' class='typcn typcn-delete'></a></li>
                         </ul>
                     </div>
                     <div class='btn-group'>
@@ -362,20 +364,21 @@ limitations under the License.
                 <div id='simButtons'>
                     <button id='simControl' type='button' class='blbtn typcn typcn-media-play-outline' lkey='Blockly.Msg.MENU_SIM_START_TOOLTIP' rel='tooltip'
                         data-original-title='' title=''></button>
-                    <button id='simControlStepOver' class='blbtn typcn typcn-arrow-forward-outline blue' lkey='Blockly.Msg.MENU_DEBUG_STEP_OVER_TOOLTIP'
+                    <button id='simControlStepOver' class='blbtn typcn typcn-arrow-forward-outline debug' lkey='Blockly.Msg.MENU_DEBUG_STEP_OVER_TOOLTIP'
                         rel='tooltip' data-original-title='' title=''></button>
-                    <button id='simControlStepInto' class='blbtn typcn typcn-arrow-down-outline blue' lkey='Blockly.Msg.MENU_DEBUG_STEP_INTO_TOOLTIP'
+                    <button id='simControlStepInto' class='blbtn typcn typcn-arrow-down-outline debug' lkey='Blockly.Msg.MENU_DEBUG_STEP_INTO_TOOLTIP'
                         rel='tooltip' data-original-title='' title=''></button>
-                    <button id='simRobot' type='button' class='simRobot blbtn typcn' lkey='Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP' rel='tooltip'
+                    <button id='simRobot' type='button' class='simNotWebots blbtn typcn' lkey='Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP' rel='tooltip'
                         data-original-title='' title=''></button>
-                    <button id='simValues' type='button' class='simValues blbtn typcn typcn-sensor' lkey='Blockly.Msg.MENU_SIM_VALUES_TOOLTIP' rel='tooltip'
+                    <button id='simValues' type='button' class='simValues simNotWebots blbtn typcn typcn-sensor' lkey='Blockly.Msg.MENU_SIM_VALUES_TOOLTIP'
+                        rel='tooltip'
                         data-original-title='' title=''></button>
-                    <button id='simResetPose' type='button' class='simLocation blbtn typcn typcn-location-outline' lkey='Blockly.Msg.MENU_SIM_POSE_TOOLTIP'
+                    <button id='simResetPose' type='button' class='simMobile blbtn typcn typcn-location-outline' lkey='Blockly.Msg.MENU_SIM_POSE_TOOLTIP'
                         rel='tooltip' data-original-title='' title=''></button>
-                    <button id='simStop' type='button' class='blbtn typcn typcn-media-stop disabled' lkey='Blockly.Msg.MENU_SIM_STOP_TOOLTIP' rel='tooltip'
+                    <button id='simStop' type='button' class='blbtn typcn typcn-media-stop debug' lkey='Blockly.Msg.MENU_SIM_STOP_TOOLTIP' rel='tooltip'
                         data-original-title='' title=''></button>
                 </div>
-
+                <div id='simProgress' class='pace' style='width: 100px; height: 100px; z-index:10; margin: 25% auto; position: absolute;'></div>
             </div>
             <div id='tutorialDiv' class='fromRight'>
                 <div id='tutorialContent'></div>
@@ -655,7 +658,7 @@ limitations under the License.
                     </div>
                 </div>
                 <div class='nn-control'>
-                    <div class='nn-num-layers-group' class='nn-bold'>
+                    <div class='nn-num-layers-group nn-bold'>
                         <span id='num-layers'></span> <span id='layers-label'></span>
                     </div>
                     <button class='nn-btn' id='nn-add-layers'>
@@ -714,10 +717,10 @@ limitations under the License.
                             <span class='nn-type'></span>
                             <input id='nn-name' />
                             <span class='nn-type-button'>
-                                <button class="nn-btn" id='nn-name-finished'>
+                                <button class='nn-btn' id='nn-name-finished'>
                                     <span class='typcn typcn-tick'></span>
                                 </button>
-                                <div class="nn-name-hint" id="nn-name-message"></div>
+                                <div class='nn-name-hint' id='nn-name-message'></div>
                             </span>
                         </div>
                     </div>
@@ -897,7 +900,7 @@ limitations under the License.
         </div>
     </div>
     <!-- Popup change password -->
-    <div id='change-user-password' class='modal fade' data-backdrop='static' data-keyboard='false' data-backdrop='static' data-keyboard='false'>
+    <div id='change-user-password' class='modal fade' data-backdrop='static' data-keyboard='false'>
         <div class='modal-dialog modal-sm'>
             <div class='modal-content'>
                 <div class='modal-header'>
@@ -1182,10 +1185,10 @@ limitations under the License.
                     <div class='NRWMinLogo imgFloatLeft'></div>
                     <span lkey='Blockly.Msg.POPUP_ABOUT_TEXT_NRW'>Im Rahmen des Projekts »KI-Algorithmen im Informatikunterricht« ...</span>
                     <div style='overflow: auto; width: 100%'></div>
-                    </br> <a href='https://www.roberta-home.de/impressum'
+                    <br /> <a href='https://www.roberta-home.de/impressum'
                     target='_blank' class='DE'>Impressum</a> <a href='https://www.roberta-home.de/impressum/?L=1' target='_blank' class='EN'>Publishing
                     notes</a>
-                    <br /> </br>
+                    <br /><br />
                     <div>
                         <span id='version'>Version beta 1.1.0</span>
                     </div>
@@ -1331,9 +1334,10 @@ limitations under the License.
     <div id='show-startup-message' class='modal fade' data-keyboard='false' data-backdrop='static'>
         <div class='modal-dialog modal-lg'>
             <div class='modal-content' style='padding-top: 10px;'>
-                <a href='https://github.com/OpenRoberta/openroberta-lab/releases' class='modal-body' target='_blank'>Release <span id='startupVersion' font-size: 18px;">
+                <a href='https://github.com/OpenRoberta/openroberta-lab/releases' class='modal-body' target='_blank'>Release <span id='startupVersion'
+                    style='font-size: 18px;'>
                     2.0.0 </span></a> <a href='https://www.roberta-home.de/impressum' target='_blank' class='DE modal-body' style='float: right;'>Impressum</a> <a
-                href='https://www.roberta-home.de/impressum/?L=1' target='_blank' class='EN modal-body' style='float: right;'>Publishing notes</a> </br> <a
+                href='https://www.roberta-home.de/impressum/?L=1' target='_blank' class='EN modal-body' style='float: right;'>Publishing notes</a> <br /> <a
                 href='https://www.roberta-home.de/index.php?id=137' target='_blank' class='modal-body DE' style='float: right;'>Datenschutzerklärung</a> <a
                 href='https://www.roberta-home.de/index.php?id=137&L=1' target='_blank' class='modal-body EN' style='float: right;'>privacy policy</a>
                 <div class='modal-header' style='text-align: center; font-size: 18px;'>
@@ -1487,8 +1491,56 @@ limitations under the License.
         <button type='button' class='close'>&times;</button>
         <div id='simValuesContent'>
             <div id='valuesContent'>
-                <div id='constantValue'></div>
-                <div id='notConstantValue'></div>
+                <div class='panel-group' id='accordion' role='tablist' aria-multiselectable='true'>
+                    <div class='panel'>
+                        <div class='panel-heading' role='tab' id='headingOne'>
+                            <h3 class='panel-title'>
+                                <a class='collapsed' data-toggle='collapse' href='#collapse1st' aria-expanded='false'
+                                    aria-controls='collapse1st'>System Values</a>
+                            </h3>
+                        </div>
+                        <div id='collapse1st' class='panel-collapse collapse' role='tabpanel' aria-labelledby='headingOne'>
+                            <div id='systemValuesView' class='panel-body'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='panel'>
+                        <div class='panel-heading' role='tab' id='headingTwo'>
+                            <h3 class='panel-title'>
+                                <a class='collapsed' data-toggle='collapse' href='#collapse2nd' aria-expanded='false'
+                                    aria-controls='collapse2nd'>Timer Values</a>
+                            </h3>
+                        </div>
+                        <div id='collapse2nd' class='panel-collapse collapse' role='tabpanel' aria-labelledby='headingTwo' aria-expanded='true'>
+                            <div id='timerValuesView' class='panel-body'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='panel'>
+                        <div class='panel-heading' role='tab' id='headingThree'>
+                            <h3 class='panel-title'>
+                                <a class='collapsed' data-toggle='collapse' href='#collapse3rd' aria-expanded='true'
+                                    aria-controls='collapse3rd'>Sensor Values</a>
+                            </h3>
+                        </div>
+                        <div id='collapse3rd' class='panel-collapse collapse in' role='tabpanel' aria-labelledby='headingThree'>
+                            <div id='sensorValuesView' class='panel-body'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='panel'>
+                        <div class='panel-heading' role='tab' id='headingFour'>
+                            <h3 class='panel-title'>
+                                <a class='collapsed' data-toggle='collapse' href='#collapse4th' aria-expanded='false'
+                                    aria-controls='collapse1st'>Variable Values</a>
+                            </h3>
+                        </div>
+                        <div id='collapse4th' class='panel-collapse collapse' role='tabpanel' aria-labelledby='headingFour'>
+                            <div id='variableValuesView' class='panel-body'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1530,7 +1582,7 @@ limitations under the License.
                 </div>
                 <div class='modal-body'>
                     <form id='user-group-form' name='userGroup'>
-                        <div class='modal-body' style="width: 'auto'; height: 'auto'; max-height: '100%">
+                        <div class='modal-body' style='width: auto; height: auto; max-height: 100%'>
                             <div class='form-group'>
                                 <label for='createAccountName' lkey='Blockly.Msg.DATATABLE_USERGROUP_NAME'>Group name</label>
                                 <div class='input-group'>
@@ -1543,7 +1595,8 @@ limitations under the License.
                             <div class='form-group'>
                                 <label for='initialMembersInput' lkey='Blockly.Msg.USERGROUP_GENERATED_MEMBERS'>Automatically generated members</label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-user-add'></span> <input type='number' value='0' class='form-control'
+                                    <span class='input-group-addon typcn input-typcn typcn-user-add'></span> <input type='number' value='0'
+                                    class='form-control'
                                     id='initialMembersInput' name='initialMembers' />
                                 </div>
                                 <div class='hint' lkey='Blockly.Msg.USERGROUP_GENERATED_MEMBERS_TOOLTIP' data-translation-targets='html'></div>
@@ -1568,7 +1621,7 @@ limitations under the License.
                 </div>
                 <div class='modal-body'>
                     <form id='user-group-add-members-form'>
-                        <div class='modal-body' style="width: 'auto'; height: 'auto'; max-height: '100%">
+                        <div class='modal-body' style='width: auto; height: auto; max-height: 100%'>
                             <div class='form-group'>
                                 <label for='additionalMembersInput' lkey='Blockly.Msg.USERGROUP_GENERATED_MEMBERS'>Automatically generated members</label>
                                 <div class='input-group'>

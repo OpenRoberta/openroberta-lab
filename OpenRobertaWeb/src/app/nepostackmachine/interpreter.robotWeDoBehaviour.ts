@@ -216,7 +216,7 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
         return duration;
     }
 
-    public motorOnAction(name: string, port: any, duration: number, speed: number): number {
+    public motorOnAction(name: string, port: any, durationType: string, duration: number, speed: number, time: number): number {
         var brickid = this.getBrickIdByName(name); // TODO: better style
         const robotText = 'robot: ' + name + ', port: ' + port;
         const durText = duration === undefined ? ' w.o. duration' : ' for ' + duration + ' msec';
@@ -350,6 +350,14 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
     }
 
     public getVolumeAction(_s: State): void {
+        throw new Error('Method not implemented.');
+    }
+
+    public remember(num: number): void {
+        throw new Error('Method not implemented.');
+    }
+
+    public recall(s: State): void {
         throw new Error('Method not implemented.');
     }
 

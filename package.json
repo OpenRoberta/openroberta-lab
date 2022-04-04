@@ -15,5 +15,8 @@
   "license": "ISC",
   "devDependencies": {
     "prettier": "^2.4.1"
+  },
+  "dependencies": {
+    "@types/jquery.validation": "^1.16.7"
   }
 }

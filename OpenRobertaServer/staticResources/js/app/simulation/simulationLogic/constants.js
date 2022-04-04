@@ -157,7 +157,6 @@ define(["require", "exports"], function (require, exports) {
         LED_ON_ACTION: 'ledOnAction',
         GREEN: 'GREEN',
         RED: 'red',
-        ANIMATION: 'animation',
         SUM: 'sum',
         RGB: 'rgb',
         ORANGE: 'ORANGE',
@@ -261,21 +260,19 @@ define(["require", "exports"], function (require, exports) {
         },
         TIMER: 'timer',
         MATH_ON_LIST: 'createMathOnList',
-        TRACKWIDTH: 40,
-        TURN_RATIO: 40 / 3 / 2.8,
-        WHEEL_DIAMETER: 5.6,
-        MAXDIAG: 2500,
-        MAXPOWER: 0.351858377 * 3,
-        ENC: 360.0 / (3.0 * Math.PI * 5.6),
-        MAX_WIDTH: 2000,
-        MAX_HEIGHT: 820,
+        // TRACKWIDTH: 40,
+        // TURN_RATIO: 40 / 3 / 2.8,
+        // WHEEL_DIAMETER: 5.6,
+        // MAXDIAG: 2500,
+        // MAXPOWER: 0.351858377 * 3, // real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix : 1cm
+        // ENC: 360.0 / (3.0 * Math.PI * 5.6),
         WAVE_LENGTH: 60,
         DEBUG_BREAKPOINT: 'DebugBreakpoint',
         DEBUG_STEP_INTO: 'DebugStepInto',
         DEBUG_STEP_OVER: 'DebugStepOver',
         MIN_SIZE_OBJECT: 10,
         CORNER_RADIUS: 5,
-        ANIMATION_DURATION: 750
+        SHIFT: 1,
     };
     exports.default = CONST;
 });

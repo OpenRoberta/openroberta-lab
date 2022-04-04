@@ -233,7 +233,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
                 + "DebugAction[value:SensorExpr[TemperatureSensor[_T,VALUE,- EMPTY_SLOT -]]],"
-                + "DebugAction[value:SensorExpr[GetSampleSensor[TemperatureSensor[_T,TEMPERATURE,- EMPTY_SLOT -]]]]]]]";
+                + "DebugAction[value:SensorExpr[GetSampleSensor[TemperatureSensor[_T,VALUE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=TEMPERATURE,isActor=true,userDefinedName=_T,portName=_T,componentProperties={}]"
@@ -374,7 +374,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[CompassSensor[_C,ANGLE,- EMPTY_SLOT -]]]],"
                 + "DebugAction[value:SensorExpr[GetSampleSensor[SoundSensor[_S,SOUND,- EMPTY_SLOT -]]]],"
                 + "DebugAction[value:SensorExpr[GetSampleSensor[TimerSensor[1,VALUE,- EMPTY_SLOT -]]]],"
-                + "DebugAction[value:SensorExpr[GetSampleSensor[TemperatureSensor[_T,TEMPERATURE,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[TemperatureSensor[_T,VALUE,- EMPTY_SLOT -]]]],"
                 + "DebugAction[value:SensorExpr[GetSampleSensor[LightSensor[_L,LIGHT_VALUE,- EMPTY_SLOT -]]]],"
                 + "DebugAction[value:SensorExpr[GetSampleSensor[PinGetValueSensor[S7,ANALOG,- EMPTY_SLOT -]]]],"
                 + "DebugAction[value:SensorExpr[GetSampleSensor[PinGetValueSensor[S6,DIGITAL,- EMPTY_SLOT -]]]],"

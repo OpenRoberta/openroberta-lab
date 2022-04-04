@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
 @NepoExpr(name = "TEMPERATURE_SENSING", category = "SENSOR", blocklyNames = {"mbedsensors_temperature_getsample", "robSensors_temperature_getSample"},
     sampleValues = {@F2M(field = "TEMPERATURE_PRESSURE", mode = "PRESSURE"), @F2M(field = "TEMPERATURE", mode = "TEMPERATURE"),
-        @F2M(field = "TEMPERATURE_TEMPERATURE", mode = "TEMPERATURE"), @F2M(field = "TEMPERATURE_VALUE", mode = "TEMPERATURE")})
+        @F2M(field = "TEMPERATURE_TEMPERATURE", mode = "TEMPERATURE"), @F2M(field = "TEMPERATURE_VALUE", mode = "VALUE")})
 @NepoExternalSensor()
 public final class TemperatureSensor extends ExternalSensor {
 

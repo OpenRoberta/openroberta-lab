@@ -8,7 +8,6 @@ import * as NOTIFICATION_C from 'notification.controller';
 import * as USERGROUP_C from 'userGroup.controller';
 import * as GUISTATE_C from 'guiState.controller';
 import * as PROGRAM_C from 'program.controller';
-import * as MULT_SIM from 'multSim.controller';
 import * as RUN_C from 'progRun.controller';
 import * as CONFIGURATION_C from 'configuration.controller';
 import * as IMPORT_C from 'import.controller';
@@ -449,9 +448,6 @@ function initMenuEvents() {
                     break;
                 case 'menuToolboxExpert':
                     $('.levelTabs a[href="#expert"]').tabWrapShow();
-                    break;
-                case 'menuRunMulipleSim':
-                    MULT_SIM.showListProg();
                     break;
                 case 'menuDefaultFirmware':
                     RUN_C.reset2DefaultFirmware();

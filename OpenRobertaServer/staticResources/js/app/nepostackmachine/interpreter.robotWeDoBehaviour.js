@@ -216,7 +216,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             this.btInterfaceFct(cmd);
             return duration;
         };
-        RobotWeDoBehaviour.prototype.motorOnAction = function (name, port, duration, speed) {
+        RobotWeDoBehaviour.prototype.motorOnAction = function (name, port, durationType, duration, speed, time) {
             var brickid = this.getBrickIdByName(name); // TODO: better style
             var robotText = 'robot: ' + name + ', port: ' + port;
             var durText = duration === undefined ? ' w.o. duration' : ' for ' + duration + ' msec';
@@ -324,6 +324,12 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.getVolumeAction = function (_s) {
+            throw new Error('Method not implemented.');
+        };
+        RobotWeDoBehaviour.prototype.remember = function (num) {
+            throw new Error('Method not implemented.');
+        };
+        RobotWeDoBehaviour.prototype.recall = function (s) {
             throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.debugAction = function (_value) {
