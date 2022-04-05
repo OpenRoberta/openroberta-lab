@@ -81,6 +81,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     private final HashMap<Integer, Integer> waitsInLoops = new HashMap<>();
     private int loopCounter = 0;
     private int currentLoop = 0;
+    private boolean nnStepFound = false;
 
     protected CommonNepoValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) //
     {
@@ -340,6 +341,10 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
             }
         }
         requiredComponentVisited(nnStepStmt, nnStepStmt.getIoNeurons());
+        if ( nnStepFound ) {
+            addErrorToPhrase(nnStepStmt, "NN_STEP_ONLY_ONCE");
+        }
+        nnStepFound = true;
         return null;
     }
 

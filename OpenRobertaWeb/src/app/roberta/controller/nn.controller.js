@@ -86,7 +86,7 @@ function getTheNNstepBlock() {
     for (const block of Blockly.Workspace.getByContainer('blocklyDiv').getAllBlocks()) {
         if (block.type === 'robActions_NNstep') {
             if (nnstepBlock) {
-                LOG.error('more than one NNstep block makes no sense');
+                LOG.error('more than one NNstep block is invalid');
             }
             nnstepBlock = block;
         }

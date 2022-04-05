@@ -79,36 +79,7 @@
     position: relative;
 }
 
-#nn-features p,
-#nn-features .column .label,
-#nn-features .column label {
-    font-weight: 300;
-    line-height: 1.38em;
-    margin: 0;
-    color: #777;
-    font-size: 13px;
-}
-
-#nn-features .basic-button {
-    margin-top: 25px;
-    height: 34px;
-    margin-right: 0;
-    width: 100%;
-    display: block;
-    color: rgba(0, 0, 0, 0.5);
-    border: none;
-    background: rgba(158, 158, 158, 0.1);
-    border-radius: 3px;
-    padding: 5px;
-    font-size: 12px;
-    text-transform: uppercase;
-    font-weight: 500;
-    outline: none;
-    transition: background 0.3s linear;
-    cursor: pointer;
-}
-
-#nn-features .plus-minus-neurons {
+#nn-features .nn-plus-minus-neurons {
     position: absolute;
     line-height: 28px;
     top: -58px;
@@ -116,7 +87,7 @@
     height: 44px;
 }
 
-#nn-features .plus-minus-neuron-button {
+#nn-features .nn-plus-minus-neuron-button {
     background-color: rgb(239, 239, 239);
     width: 35px;
     height: 28px;
@@ -130,7 +101,7 @@
     margin-bottom: 5px;
 }
 
-#nn-features .plus-minus-neurons .plus-minus-neuron-button:first-of-type {
+#nn-features .nn-plus-minus-neurons .nn-plus-minus-neuron-button:first-of-type {
     margin-right: 5px;
 }
 
@@ -177,7 +148,7 @@
 #nn-features .core .link {
     stroke-dasharray: 9 1;
     stroke-dashoffset: 1;
-    /*-webkit-animation: 0.5s linear 0s infinite flowing;*/
+    /* webkit-animation: 0.5s linear 0s infinite flowing; */
 }
 
 /** Invisible thick links used for showing weight values on mouse click. */

@@ -14,8 +14,8 @@ export class State {
     regularization: H.RegularizationFunction = null;
     initZero = false;
     collectStats = false;
-    numHiddenLayers = 1;
-    networkShape: number[] = [2];
+    numHiddenLayers = 0;
+    networkShape: number[] = [];
     weights: string[][][] = undefined;
     biases: string[][] = undefined;
     seed: string;
@@ -39,8 +39,8 @@ export class State {
             this.regularization = null;
             this.initZero = json.initZero !== undefined ? json.initZero : false;
             this.collectStats = json.collectStats !== undefined ? json.collectStats : false;
-            this.numHiddenLayers = json.numHiddenLayers !== undefined ? json.numHiddenLayers : 1;
-            this.networkShape = json.networkShape !== undefined ? json.networkShape : [2];
+            this.numHiddenLayers = json.numHiddenLayers !== undefined ? json.numHiddenLayers : 0;
+            this.networkShape = json.networkShape !== undefined ? json.networkShape : [];
             this.weights = json.weights !== undefined ? json.weights : undefined;
             this.biases = json.biases !== undefined ? json.biases : undefined;
             this.seed = json.seed !== undefined ? json.seed : undefined;

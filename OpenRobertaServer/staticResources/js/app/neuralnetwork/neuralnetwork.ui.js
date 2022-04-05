@@ -85,7 +85,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                                 $('#simButton').trigger('click');
                             });
                         });
-                        D3.select('#add-layers').on('click', function () {
+                        D3.select('#nn-add-layers').on('click', function () {
                             if (state.numHiddenLayers >= 6) {
                                 return;
                             }
@@ -93,7 +93,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                             state.numHiddenLayers++;
                             reconstructNNIncludingUI();
                         });
-                        D3.select('#remove-layers').on('click', function () {
+                        D3.select('#nn-remove-layers').on('click', function () {
                             if (state.numHiddenLayers <= 0) {
                                 return;
                             }
@@ -101,7 +101,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                             state.networkShape.splice(state.numHiddenLayers);
                             reconstructNNIncludingUI();
                         });
-                        activationDropdown = D3.select('#activations').on('change', function () {
+                        activationDropdown = D3.select('#nn-activations').on('change', function () {
                             state.activationKey = this.value;
                             state.activation = H.activations[this.value];
                             reconstructNNIncludingUI();
@@ -130,20 +130,20 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         drawNetworkUI(network);
     }
     function drawNetworkUI(network) {
-        D3.select('#activation-label').attr('class', 'nn-bold').text(MSG.get('ACTIVATION'));
-        D3.select('#regularization-label').attr('class', 'nn-bold').text(MSG.get('REGULARIZATION'));
-        D3.select('#nn-focus-label').attr('class', 'nn-bold').text(MSG.get('FOCUS_OPTION'));
-        $('#nn-focus [value="CLICK_WEIGHT_BIAS"]').text(MSG.get('CLICK_WEIGHT_BIAS'));
-        $('#nn-focus [value="CLICK_NODE"]').text(MSG.get('CLICK_NODE'));
-        $('#nn-focus [value="SHOW_ALL"]').text(MSG.get('SHOW_ALL'));
-        var layerKey = state.numHiddenLayers === 1 ? 'HIDDEN_LAYER' : 'HIDDEN_LAYERS';
+        D3.select('#nn-activation-label').attr('class', 'nn-bold').text(MSG.get('NN_ACTIVATION'));
+        D3.select('#nn-regularization-label').attr('class', 'nn-bold').text(MSG.get('NN_REGULARIZATION'));
+        D3.select('#nn-focus-label').attr('class', 'nn-bold').text(MSG.get('NN_FOCUS_OPTION'));
+        $('#nn-focus [value="CLICK_WEIGHT_BIAS"]').text(MSG.get('NN_CLICK_WEIGHT_BIAS'));
+        $('#nn-focus [value="CLICK_NODE"]').text(MSG.get('NN_CLICK_NODE'));
+        $('#nn-focus [value="SHOW_ALL"]').text(MSG.get('NN_SHOW_ALL'));
+        var layerKey = state.numHiddenLayers === 1 ? 'NN_HIDDEN_LAYER' : 'NN_HIDDEN_LAYERS';
         D3.select('#layers-label').text(MSG.get(layerKey));
         D3.select('#num-layers').text(state.numHiddenLayers);
         var networkImpl = network.getLayerAndNodeArray();
         var svg = D3.select('#nn-svg');
         svg.select('g.core').remove();
         D3.select('#nn-main-part').selectAll('div.canvas').remove();
-        D3.select('#nn-main-part').selectAll('div.plus-minus-neurons').remove();
+        D3.select('#nn-main-part').selectAll('div.nn-plus-minus-neurons').remove();
         var nnD3 = D3.select('#nn')[0][0];
         var topControlD3 = D3.select('#nn-top-controls')[0][0];
         var mainPartHeight = nnD3.clientHeight - topControlD3.clientHeight - 50;
@@ -318,7 +318,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             if (focusStyle === FocusStyle.SHOW_ALL || (focusStyle === FocusStyle.CLICK_NODE && link.source === focusNode) || link.dest === focusNode) {
                 var lineNode = line.node();
                 valShiftToRight = !valShiftToRight;
-                var posVal = focusStyle === FocusStyle.SHOW_ALL ? (valShiftToRight ? 0.6 : 0.4) : link.source === focusNode ? 0.8 : 0.2;
+                var posVal = focusStyle === FocusStyle.SHOW_ALL ? (valShiftToRight ? 0.6 : 0.4) : link.source === focusNode ? 0.6 : 0.4;
                 var pointForWeight = lineNode.getPointAtLength(lineNode.getTotalLength() * posVal);
                 drawValue(container, link.source.id + '-' + link.dest.id, pointForWeight.x, pointForWeight.y - 10, link.weight, link.weightOrig);
             }
@@ -343,12 +343,12 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             return node.offsetHeight + node.offsetTop;
         }
         function addPlusMinusControl(x, layerIdx) {
-            var div = D3.select('#nn-network').append('div').classed('plus-minus-neurons', true).style('left', x + "px");
+            var div = D3.select('#nn-network').append('div').classed('nn-plus-minus-neurons', true).style('left', x + "px");
             var i = layerIdx - 1;
             var firstRow = div.append('div');
             firstRow
                 .append('button')
-                .attr('class', 'plus-minus-neuron-button')
+                .attr('class', 'nn-plus-minus-neuron-button')
                 .on('click', function () {
                 var numNeurons = state.networkShape[i];
                 if (numNeurons >= 6) {
@@ -362,7 +362,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 .text('add');
             firstRow
                 .append('button')
-                .attr('class', 'plus-minus-neuron-button')
+                .attr('class', 'nn-plus-minus-neuron-button')
                 .on('click', function () {
                 var numNeurons = state.networkShape[i];
                 if (numNeurons <= 1) {
@@ -431,7 +431,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             top: coordinates[1] + "px",
             display: 'block',
         });
-        var name = nodeOrLink instanceof neuralnetwork_nn_1.Link ? 'WEIGHT' : 'BIAS';
+        var name = nodeOrLink instanceof neuralnetwork_nn_1.Link ? 'NN_WEIGHT' : 'NN_BIAS';
         editCard.select('.nn-type').text(MSG.get(name));
         input.node().focus();
         function fromEditCard2NodeLink(nodeOrLink, value) {
@@ -520,8 +520,8 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             }
         }
         network.forEachLink(updMaxWeight);
-        var MAX_WIDTH = 6;
-        return D3.scale.linear().domain([0, maxWeight]).range([1, MAX_WIDTH]).clamp(true);
+        var MAX_WIDTH = 8;
+        return D3.scale.linear().domain([0, maxWeight]).range([2, MAX_WIDTH]).clamp(true);
     }
     function mkColorScale() {
         var maxWeight = 0;

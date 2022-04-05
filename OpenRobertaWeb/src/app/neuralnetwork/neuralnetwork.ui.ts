@@ -46,7 +46,7 @@ export async function runNNEditor() {
         });
     });
 
-    D3.select('#add-layers').on('click', () => {
+    D3.select('#nn-add-layers').on('click', () => {
         if (state.numHiddenLayers >= 6) {
             return;
         }
@@ -55,7 +55,7 @@ export async function runNNEditor() {
         reconstructNNIncludingUI();
     });
 
-    D3.select('#remove-layers').on('click', () => {
+    D3.select('#nn-remove-layers').on('click', () => {
         if (state.numHiddenLayers <= 0) {
             return;
         }
@@ -64,7 +64,7 @@ export async function runNNEditor() {
         reconstructNNIncludingUI();
     });
 
-    let activationDropdown = D3.select('#activations').on('change', function () {
+    let activationDropdown = D3.select('#nn-activations').on('change', function () {
         state.activationKey = this.value;
         state.activation = H.activations[this.value];
         reconstructNNIncludingUI();
@@ -102,14 +102,14 @@ function reconstructNNIncludingUI() {
 }
 
 function drawNetworkUI(network: Network): void {
-    D3.select('#activation-label').attr('class', 'nn-bold').text(MSG.get('ACTIVATION'));
-    D3.select('#regularization-label').attr('class', 'nn-bold').text(MSG.get('REGULARIZATION'));
-    D3.select('#nn-focus-label').attr('class', 'nn-bold').text(MSG.get('FOCUS_OPTION'));
-    $('#nn-focus [value="CLICK_WEIGHT_BIAS"]').text(MSG.get('CLICK_WEIGHT_BIAS'));
-    $('#nn-focus [value="CLICK_NODE"]').text(MSG.get('CLICK_NODE'));
-    $('#nn-focus [value="SHOW_ALL"]').text(MSG.get('SHOW_ALL'));
+    D3.select('#nn-activation-label').attr('class', 'nn-bold').text(MSG.get('NN_ACTIVATION'));
+    D3.select('#nn-regularization-label').attr('class', 'nn-bold').text(MSG.get('NN_REGULARIZATION'));
+    D3.select('#nn-focus-label').attr('class', 'nn-bold').text(MSG.get('NN_FOCUS_OPTION'));
+    $('#nn-focus [value="CLICK_WEIGHT_BIAS"]').text(MSG.get('NN_CLICK_WEIGHT_BIAS'));
+    $('#nn-focus [value="CLICK_NODE"]').text(MSG.get('NN_CLICK_NODE'));
+    $('#nn-focus [value="SHOW_ALL"]').text(MSG.get('NN_SHOW_ALL'));
 
-    let layerKey = state.numHiddenLayers === 1 ? 'HIDDEN_LAYER' : 'HIDDEN_LAYERS';
+    let layerKey = state.numHiddenLayers === 1 ? 'NN_HIDDEN_LAYER' : 'NN_HIDDEN_LAYERS';
     D3.select('#layers-label').text(MSG.get(layerKey));
     D3.select('#num-layers').text(state.numHiddenLayers);
 
@@ -118,7 +118,7 @@ function drawNetworkUI(network: Network): void {
 
     svg.select('g.core').remove();
     D3.select('#nn-main-part').selectAll('div.canvas').remove();
-    D3.select('#nn-main-part').selectAll('div.plus-minus-neurons').remove();
+    D3.select('#nn-main-part').selectAll('div.nn-plus-minus-neurons').remove();
 
     const nnD3 = D3.select('#nn')[0][0] as HTMLDivElement;
     const topControlD3 = D3.select('#nn-top-controls')[0][0] as HTMLDivElement;
@@ -318,7 +318,7 @@ function drawNetworkUI(network: Network): void {
         if (focusStyle === FocusStyle.SHOW_ALL || (focusStyle === FocusStyle.CLICK_NODE && link.source === focusNode) || link.dest === focusNode) {
             let lineNode = line.node() as any;
             valShiftToRight = !valShiftToRight;
-            let posVal = focusStyle === FocusStyle.SHOW_ALL ? (valShiftToRight ? 0.6 : 0.4) : link.source === focusNode ? 0.8 : 0.2;
+            let posVal = focusStyle === FocusStyle.SHOW_ALL ? (valShiftToRight ? 0.6 : 0.4) : link.source === focusNode ? 0.6 : 0.4;
             let pointForWeight = lineNode.getPointAtLength(lineNode.getTotalLength() * posVal);
             drawValue(container, link.source.id + '-' + link.dest.id, pointForWeight.x, pointForWeight.y - 10, link.weight, link.weightOrig);
         }
@@ -346,12 +346,12 @@ function drawNetworkUI(network: Network): void {
     }
 
     function addPlusMinusControl(x: number, layerIdx: number) {
-        let div = D3.select('#nn-network').append('div').classed('plus-minus-neurons', true).style('left', `${x}px`);
+        let div = D3.select('#nn-network').append('div').classed('nn-plus-minus-neurons', true).style('left', `${x}px`);
         let i = layerIdx - 1;
         let firstRow = div.append('div');
         firstRow
             .append('button')
-            .attr('class', 'plus-minus-neuron-button')
+            .attr('class', 'nn-plus-minus-neuron-button')
             .on('click', () => {
                 let numNeurons = state.networkShape[i];
                 if (numNeurons >= 6) {
@@ -366,7 +366,7 @@ function drawNetworkUI(network: Network): void {
 
         firstRow
             .append('button')
-            .attr('class', 'plus-minus-neuron-button')
+            .attr('class', 'nn-plus-minus-neuron-button')
             .on('click', () => {
                 let numNeurons = state.networkShape[i];
                 if (numNeurons <= 1) {
@@ -439,7 +439,7 @@ function updateEditCard(nodeOrLink?: Node | Link, coordinates?: [number, number]
         top: `${coordinates[1]}px`,
         display: 'block',
     });
-    let name = nodeOrLink instanceof Link ? 'WEIGHT' : 'BIAS';
+    let name = nodeOrLink instanceof Link ? 'NN_WEIGHT' : 'NN_BIAS';
     editCard.select('.nn-type').text(MSG.get(name));
     (input.node() as HTMLInputElement).focus();
 
@@ -529,8 +529,8 @@ function mkWidthScale(): _D3.scale.Linear<number, number> {
         }
     }
     network.forEachLink(updMaxWeight);
-    const MAX_WIDTH = 6;
-    return D3.scale.linear().domain([0, maxWeight]).range([1, MAX_WIDTH]).clamp(true);
+    const MAX_WIDTH = 8;
+    return D3.scale.linear().domain([0, maxWeight]).range([2, MAX_WIDTH]).clamp(true);
 }
 
 function mkColorScale(): _D3.scale.Linear<string, number> {

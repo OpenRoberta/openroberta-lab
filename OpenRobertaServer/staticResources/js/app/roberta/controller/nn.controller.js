@@ -70,7 +70,7 @@ define(["require", "exports", "log", "guiState.controller", "neuralnetwork.ui", 
             var block = _a[_i];
             if (block.type === 'robActions_NNstep') {
                 if (nnstepBlock) {
-                    LOG.error('more than one NNstep block makes no sense');
+                    LOG.error('more than one NNstep block is invalid');
                 }
                 nnstepBlock = block;
             }
