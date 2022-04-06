@@ -4,6 +4,8 @@ import * as $ from 'jquery';
 import * as Blockly from 'blockly';
 import 'jquery-validate';
 import 'bootstrap';
+import * as GUISTATE_C from 'guiState.controller';
+import * as NAOSIM from 'webots.simulation';
 
 const ANIMATION_DURATION = 750;
 
@@ -535,6 +537,9 @@ $.fn.removeClass = function () {
 $.fn.closeRightView = function (opt_callBack) {
     if ($('.fromRight.rightActive').hasClass('shifting')) {
         return;
+    }
+    if (GUISTATE_C.hasWebotsSim()) {
+        NAOSIM.disconnect();
     }
     $('.fromRight.rightActive').addClass('shifting');
     Blockly.hideChaff();

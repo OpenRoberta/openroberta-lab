@@ -628,7 +628,7 @@ function setView(view) {
         setRunEnabled(false);
         $('#runSourceCodeEditor').addClass('disabled');
     }
-    if ($('.rightMenuButton.rightActive')) {
+    if ($('.rightMenuButton.rightActive').length > 0) {
         $('.rightMenuButton.rightActive').clickWrap();
     }
     if (view === 'tabConfiguration') {

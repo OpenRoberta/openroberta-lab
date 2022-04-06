@@ -354,6 +354,10 @@ class WebotsSimulationController {
         this.webotsSimulation.disconnect();
     }
 
+    getIsPrepared() {
+        return this.isPrepared;
+    }
+
     private async wasmLoaded() {
         await waitFor(() => window['Module']['asm'], 10, 1000);
     }

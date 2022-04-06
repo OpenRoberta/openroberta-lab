@@ -352,9 +352,7 @@ function toggleSim() {
         return;
     }
     if (($('#simButton').hasClass('rightActive') && !debug) || ($('#simDebugButton').hasClass('rightActive') && debug)) {
-        if (GUISTATE_C.hasWebotsSim()) {
-            NAOSIM.disconnect();
-        } else {
+        if (!GUISTATE_C.hasWebotsSim()) {
             SIM.cancel();
         }
         $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play').removeClass('typcn-media-stop');
