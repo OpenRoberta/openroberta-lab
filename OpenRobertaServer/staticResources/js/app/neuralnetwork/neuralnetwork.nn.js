@@ -11,11 +11,9 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
          * Creates a new node with the provided id and activation function.
          */
         function Node(id, activation, initZero) {
-            /** List of input links. */
             this.inputLinks = [];
-            this.bias = 0; // was: 0.1
-            this.biasOrig = '0';
-            /** List of output links. */
+            this.biasAsNumber = 0;
+            this.bias = '0';
             this.outputs = [];
             /** Error derivative with respect to this node's output. */
             this.outputDer = 0;
@@ -35,16 +33,31 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
             this.id = id;
             this.activation = activation;
             if (initZero) {
-                this.bias = 0;
+                this.biasAsNumber = 0;
+                this.bias = '0';
             }
         }
+        Node.prototype.setBias = function (bias) {
+            this.bias = bias;
+            this.biasAsNumber = H.bias2number(bias);
+        };
+        Node.prototype.setBiasAsNumber = function (biasAsNumber) {
+            this.bias = '' + biasAsNumber;
+            this.biasAsNumber = biasAsNumber;
+        };
+        Node.prototype.getBias = function () {
+            return this.bias;
+        };
+        Node.prototype.getBiasAsNumber = function () {
+            return this.biasAsNumber;
+        };
         /** Recomputes the node's output and returns it. */
         Node.prototype.updateOutput = function () {
             // Stores total input into the node.
-            this.totalInput = this.bias;
+            this.totalInput = this.biasAsNumber;
             for (var j = 0; j < this.inputLinks.length; j++) {
                 var link = this.inputLinks[j];
-                this.totalInput += link.weight * link.source.output;
+                this.totalInput += link.getWeightAsNumber() * link.source.output;
             }
             this.output = this.activation.output(this.totalInput);
             return this.output;
@@ -68,8 +81,8 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
          *     penalty for this weight. If null, there will be no regularization.
          */
         function Link(source, dest, regularization, initZero) {
-            this.weight = 0.0;
-            this.weightOrig = '0';
+            this.weightAsNumber = 0.0;
+            this.weight = '0';
             this.isDead = false;
             /** Error derivative with respect to this weight. */
             this.errorDer = 0;
@@ -82,10 +95,24 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
             this.dest = dest;
             this.regularization = regularization;
             if (initZero) {
-                this.weight = 0;
-                this.weightOrig = '0';
+                this.weightAsNumber = 0;
+                this.weight = '0';
             }
         }
+        Link.prototype.setWeight = function (weight) {
+            this.weight = H.weight2weight(weight);
+            this.weightAsNumber = H.weight2number(weight);
+        };
+        Link.prototype.setWeightAsNumber = function (weightAsNumber) {
+            this.weight = '' + weightAsNumber;
+            this.weightAsNumber = weightAsNumber;
+        };
+        Link.prototype.getWeight = function () {
+            return this.weight;
+        };
+        Link.prototype.getWeightAsNumber = function () {
+            return this.weightAsNumber;
+        };
         return Link;
     }());
     exports.Link = Link;
@@ -209,7 +236,7 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
                     node.outputDer = 0;
                     for (var j = 0; j < node.outputs.length; j++) {
                         var output = node.outputs[j];
-                        node.outputDer += output.weight * output.dest.inputDer;
+                        node.outputDer += output.getWeightAsNumber() * output.dest.inputDer;
                     }
                 }
             }
@@ -225,7 +252,7 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
                     var node = currentLayer[i];
                     // Update the node's bias.
                     if (node.numAccumulatedDers > 0) {
-                        node.bias -= (learningRate * node.accInputDer) / node.numAccumulatedDers;
+                        node.setBiasAsNumber((learningRate * node.accInputDer) / node.numAccumulatedDers);
                         node.accInputDer = 0;
                         node.numAccumulatedDers = 0;
                     }
@@ -235,19 +262,20 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
                         if (link.isDead) {
                             continue;
                         }
-                        var regulDer = link.regularization ? link.regularization.der(link.weight) : 0;
+                        var weightAsNumber = link.getWeightAsNumber();
+                        var regulDer = link.regularization ? link.regularization.der(weightAsNumber) : 0;
                         if (link.numAccumulatedDers > 0) {
                             // Update the weight based on dE/dw.
-                            link.weight = link.weight - (learningRate / link.numAccumulatedDers) * link.accErrorDer;
+                            weightAsNumber = weightAsNumber - (learningRate / link.numAccumulatedDers) * link.accErrorDer;
                             // Further update the weight based on regularization.
-                            var newLinkWeight = link.weight - learningRate * regularizationRate * regulDer;
-                            if (link.regularization === H.RegularizationFunction.L1 && link.weight * newLinkWeight < 0) {
+                            var newLinkWeight = weightAsNumber - learningRate * regularizationRate * regulDer;
+                            if (link.regularization === H.RegularizationFunction.L1 && weightAsNumber * newLinkWeight < 0) {
                                 // The weight crossed 0 due to the regularization term. Set it to 0.
-                                link.weight = 0;
+                                link.setWeightAsNumber(0);
                                 link.isDead = true;
                             }
                             else {
-                                link.weight = newLinkWeight;
+                                link.setWeightAsNumber(newLinkWeight);
                             }
                             link.accErrorDer = 0;
                             link.numAccumulatedDers = 0;
@@ -296,7 +324,7 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
                         var weightsOneNode = [];
                         for (var _c = 0, _d = node.outputs; _c < _d.length; _c++) {
                             var link = _d[_c];
-                            weightsOneNode.push(link.weightOrig);
+                            weightsOneNode.push(link.getWeight());
                         }
                         weightsOneLayer.push(weightsOneNode);
                     }
@@ -313,7 +341,7 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
                     var biasesOneLayer = [];
                     for (var _b = 0, layer_2 = layer; _b < layer_2.length; _b++) {
                         var node = layer_2[_b];
-                        biasesOneLayer.push(node.biasOrig);
+                        biasesOneLayer.push(node.getBias());
                     }
                     biasesAllLayers.push(biasesOneLayer);
                 }
@@ -352,9 +380,8 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
                 for (var i = 0; i < fromNode.outputs.length; i++) {
                     var link = fromNode.outputs[i];
                     if (link.dest.id === to) {
-                        var newVal = change === 'SET' ? value : link.weight + value;
-                        link.weight = newVal;
-                        link.weightOrig = '' + newVal;
+                        var newVal = change === 'SET' ? value : link.getWeightAsNumber() + value;
+                        link.setWeightAsNumber(newVal);
                         return;
                     }
                 }
@@ -369,9 +396,8 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
         Network.prototype.changeBias = function (id, change, value) {
             var node = this.getNeuronById(id);
             if (node != null) {
-                var newVal = change === 'SET' ? value : node.bias + value;
-                node.bias = newVal;
-                node.biasOrig = '' + newVal;
+                var newBias = change === 'SET' ? value : node.getBiasAsNumber() + value;
+                node.setBiasAsNumber(newBias);
                 return;
             }
         };
@@ -408,13 +434,11 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
                         }
                         for (var k = 0; k < nodeWeight.length && k < node.outputs.length; k += 1) {
                             var link = node.outputs[k];
-                            var linkWeight = nodeWeight[k];
-                            if (link == null || linkWeight == null) {
+                            var weight = nodeWeight[k];
+                            if (link == null || weight == null) {
                                 break;
                             }
-                            var weights = H.string2weight(linkWeight);
-                            link.weight = weights[0];
-                            link.weightOrig = weights[1];
+                            link.setWeight(weight);
                         }
                     }
                 }
@@ -430,13 +454,11 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
                     }
                     for (var j = 0; j < layerBiases.length && j < layer.length; j += 1) {
                         var node = layer[j];
-                        var nodeBias = layerBiases[j];
-                        if (node == null || nodeBias == null) {
+                        var bias = layerBiases[j];
+                        if (node == null || bias == null) {
                             break;
                         }
-                        var biases = H.string2bias(nodeBias);
-                        node.bias = biases[0];
-                        node.biasOrig = biases[1];
+                        node.setBias(bias);
                     }
                 }
             }

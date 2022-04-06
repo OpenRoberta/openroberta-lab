@@ -1,6 +1,6 @@
 define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.string2bias = exports.string2weight = exports.regularizations = exports.activations = exports.RegularizationFunction = exports.Activations = exports.Errors = void 0;
+    exports.bias2number = exports.weight2weight = exports.weight2number = exports.updValue = exports.regularizations = exports.activations = exports.RegularizationFunction = exports.Activations = exports.Errors = void 0;
     /** Polyfill for TANH */
     Math.tanh =
         Math.tanh ||
@@ -22,7 +22,7 @@ define(["require", "exports"], function (require, exports) {
         }
         Errors.SQUARE = {
             error: function (output, target) { return 0.5 * Math.pow(output - target, 2); },
-            der: function (output, target) { return output - target; }
+            der: function (output, target) { return output - target; },
         };
         return Errors;
     }());
@@ -36,22 +36,22 @@ define(["require", "exports"], function (require, exports) {
             der: function (x) {
                 var output = Activations.TANH.output(x);
                 return 1 - output * output;
-            }
+            },
         };
         Activations.RELU = {
             output: function (x) { return Math.max(0, x); },
-            der: function (x) { return (x <= 0 ? 0 : 1); }
+            der: function (x) { return (x <= 0 ? 0 : 1); },
         };
         Activations.SIGMOID = {
             output: function (x) { return 1 / (1 + Math.exp(-x)); },
             der: function (x) {
                 var output = Activations.SIGMOID.output(x);
                 return output * (1 - output);
-            }
+            },
         };
         Activations.LINEAR = {
             output: function (x) { return x; },
-            der: function (_) { return 1; }
+            der: function (_) { return 1; },
         };
         return Activations;
     }());
@@ -62,11 +62,11 @@ define(["require", "exports"], function (require, exports) {
         }
         RegularizationFunction.L1 = {
             output: function (w) { return Math.abs(w); },
-            der: function (w) { return (w < 0 ? -1 : w > 0 ? 1 : 0); }
+            der: function (w) { return (w < 0 ? -1 : w > 0 ? 1 : 0); },
         };
         RegularizationFunction.L2 = {
             output: function (w) { return 0.5 * w * w; },
-            der: function (w) { return w; }
+            der: function (w) { return w; },
         };
         return RegularizationFunction;
     }());
@@ -76,60 +76,95 @@ define(["require", "exports"], function (require, exports) {
         relu: Activations.RELU,
         tanh: Activations.TANH,
         sigmoid: Activations.SIGMOID,
-        linear: Activations.LINEAR
+        linear: Activations.LINEAR,
     };
     /** A map between names and regularization functions. */
     exports.regularizations = {
         none: null,
         L1: RegularizationFunction.L1,
-        L2: RegularizationFunction.L2
+        L2: RegularizationFunction.L2,
     };
-    function string2weight(value) {
+    function updValue(value, incr) {
         var valueTrimmed = value.trim();
         if (valueTrimmed === '') {
-            return [0, '0'];
+            return String(incr);
         }
         else {
             var opOpt = valueTrimmed.substr(0, 1);
-            var weight = void 0;
-            if (opOpt === '*') {
-                weight = +valueTrimmed.substr(1).trim();
-            }
-            else if (opOpt === ':' || opOpt === '/') {
-                var divident = +valueTrimmed.substr(1).trim();
-                if (divident >= 1.0) {
-                    weight = 1.0 / divident;
-                }
-                else {
-                    weight = divident;
-                }
+            var number = void 0;
+            if (opOpt === '*' || opOpt === ':' || opOpt === '/') {
+                number = +valueTrimmed.substr(1).trim();
             }
             else {
-                weight = +valueTrimmed;
+                opOpt = '';
+                number = +valueTrimmed;
             }
-            if (isNaN(weight)) {
-                return [0, '0'];
+            if (isNaN(number)) {
+                return String(incr);
             }
             else {
-                return [weight, valueTrimmed];
+                return opOpt + (number + incr);
             }
         }
     }
-    exports.string2weight = string2weight;
-    function string2bias(value) {
-        var valueTrimmed = value.trim();
-        var valueNumber = +valueTrimmed;
-        if (valueTrimmed === '') {
-            return [0, '0'];
+    exports.updValue = updValue;
+    function weight2number(weight) {
+        var w = weight.trim();
+        if (w.length == 0) {
+            return 0;
+        }
+        var opOpt = w.substr(0, 1);
+        var number;
+        if (opOpt === '*') {
+            number = +w.substr(1);
+        }
+        else if (opOpt === ':' || opOpt === '/') {
+            number = 1 / +w.substr(1);
+            return 1 / +w.substr(1);
         }
         else {
-            if (isNaN(valueNumber)) {
-                return [0, '0'];
+            number = +w;
+        }
+        if (isNaN(number)) {
+            return 0;
+        }
+        else {
+            return number;
+        }
+    }
+    exports.weight2number = weight2number;
+    /**
+     * normalize the view of a weight. Adds a '*' if no operator is found at the start of a weight.
+     * @param weight
+     */
+    function weight2weight(weight) {
+        var w = weight.trim();
+        if (w.length == 0) {
+            return '*0';
+        }
+        var opOpt = w.substr(0, 1);
+        if (opOpt === '*' || opOpt === ':' || opOpt === '/') {
+            return w;
+        }
+        else {
+            return '*' + w; // here it happens
+        }
+    }
+    exports.weight2weight = weight2weight;
+    function bias2number(bias) {
+        var b = bias.trim();
+        if (b === '') {
+            return 0;
+        }
+        else {
+            var number = +b;
+            if (isNaN(number)) {
+                return 0;
             }
             else {
-                return [valueNumber, valueTrimmed];
+                return number;
             }
         }
     }
-    exports.string2bias = string2bias;
+    exports.bias2number = bias2number;
 });

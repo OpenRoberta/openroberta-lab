@@ -1,7 +1,7 @@
 /** Polyfill for TANH */
 (Math as any).tanh =
     (Math as any).tanh ||
-    function(x) {
+    function (x) {
         if (x === Infinity) {
             return 1;
         } else if (x === -Infinity) {
@@ -36,7 +36,7 @@ export interface RegularizationFunction {
 export class Errors {
     public static SQUARE: ErrorFunction = {
         error: (output: number, target: number) => 0.5 * Math.pow(output - target, 2),
-        der: (output: number, target: number) => output - target
+        der: (output: number, target: number) => output - target,
     };
 }
 
@@ -47,22 +47,22 @@ export class Activations {
         der: (x) => {
             let output = Activations.TANH.output(x);
             return 1 - output * output;
-        }
+        },
     };
     public static RELU: ActivationFunction = {
         output: (x) => Math.max(0, x),
-        der: (x) => (x <= 0 ? 0 : 1)
+        der: (x) => (x <= 0 ? 0 : 1),
     };
     public static SIGMOID: ActivationFunction = {
         output: (x) => 1 / (1 + Math.exp(-x)),
         der: (x) => {
             let output = Activations.SIGMOID.output(x);
             return output * (1 - output);
-        }
+        },
     };
     public static LINEAR: ActivationFunction = {
         output: (x) => x,
-        der: (_) => 1
+        der: (_) => 1,
     };
 }
 
@@ -70,11 +70,11 @@ export class Activations {
 export class RegularizationFunction {
     public static L1: RegularizationFunction = {
         output: (w) => Math.abs(w),
-        der: (w) => (w < 0 ? -1 : w > 0 ? 1 : 0)
+        der: (w) => (w < 0 ? -1 : w > 0 ? 1 : 0),
     };
     public static L2: RegularizationFunction = {
         output: (w) => 0.5 * w * w,
-        der: (w) => w
+        der: (w) => w,
     };
 }
 
@@ -83,53 +83,86 @@ export let activations: { [key: string]: ActivationFunction } = {
     relu: Activations.RELU,
     tanh: Activations.TANH,
     sigmoid: Activations.SIGMOID,
-    linear: Activations.LINEAR
+    linear: Activations.LINEAR,
 };
 
 /** A map between names and regularization functions. */
 export let regularizations: { [key: string]: RegularizationFunction } = {
     none: null,
     L1: RegularizationFunction.L1,
-    L2: RegularizationFunction.L2
+    L2: RegularizationFunction.L2,
 };
 
-export function string2weight(value: string): [number, string] {
+export function updValue(value: string, incr: number): string {
     let valueTrimmed = value.trim();
     if (valueTrimmed === '') {
-        return [0, '0'];
+        return String(incr);
     } else {
         let opOpt = valueTrimmed.substr(0, 1);
-        let weight;
-        if (opOpt === '*') {
-            weight = +valueTrimmed.substr(1).trim();
-        } else if (opOpt === ':' || opOpt === '/') {
-            let divident = +valueTrimmed.substr(1).trim();
-            if (divident >= 1.0) {
-                weight = 1.0 / divident;
-            } else {
-                weight = divident;
-            }
+        let number;
+        if (opOpt === '*' || opOpt === ':' || opOpt === '/') {
+            number = +valueTrimmed.substr(1).trim();
         } else {
-            weight = +valueTrimmed;
+            opOpt = '';
+            number = +valueTrimmed;
         }
-        if (isNaN(weight)) {
-            return [0, '0'];
+        if (isNaN(number)) {
+            return String(incr);
         } else {
-            return [weight, valueTrimmed];
+            return opOpt + (number + incr);
         }
     }
 }
 
-export function string2bias(value: string): [number, string] {
-    let valueTrimmed = value.trim();
-    let valueNumber = +valueTrimmed;
-    if (valueTrimmed === '') {
-        return [0, '0'];
+export function weight2number(weight: string): number {
+    const w = weight.trim();
+    if (w.length == 0) {
+        return 0;
+    }
+    const opOpt = w.substr(0, 1);
+    let number: number;
+    if (opOpt === '*') {
+        number = +w.substr(1);
+    } else if (opOpt === ':' || opOpt === '/') {
+        number = 1 / +w.substr(1);
+        return 1 / +w.substr(1);
     } else {
-        if (isNaN(valueNumber)) {
-            return [0, '0'];
+        number = +w;
+    }
+    if (isNaN(number)) {
+        return 0;
+    } else {
+        return number;
+    }
+}
+
+/**
+ * normalize the view of a weight. Adds a '*' if no operator is found at the start of a weight.
+ * @param weight
+ */
+export function weight2weight(weight: string): string {
+    const w = weight.trim();
+    if (w.length == 0) {
+        return '*0';
+    }
+    const opOpt = w.substr(0, 1);
+    if (opOpt === '*' || opOpt === ':' || opOpt === '/') {
+        return w;
+    } else {
+        return '*' + w; // here it happens
+    }
+}
+
+export function bias2number(bias: string): number {
+    let b = bias.trim();
+    if (b === '') {
+        return 0;
+    } else {
+        let number = +b;
+        if (isNaN(number)) {
+            return 0;
         } else {
-            return [valueNumber, valueTrimmed];
+            return number;
         }
     }
 }

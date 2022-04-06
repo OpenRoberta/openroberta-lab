@@ -7,13 +7,11 @@ import * as H from './neuralnetwork.helper';
  * after every forward and back propagation run.
  */
 export class Node {
-    id: string;
-    /** List of input links. */
-    inputLinks: Link[] = [];
-    bias = 0; // was: 0.1
-    biasOrig = '0';
-    /** List of output links. */
-    outputs: Link[] = [];
+    readonly id: string;
+    readonly inputLinks: Link[] = [];
+    private biasAsNumber = 0;
+    private bias = '0';
+    readonly outputs: Link[] = [];
     totalInput: number;
     output: number;
     /** Error derivative with respect to this node's output. */
@@ -41,17 +39,36 @@ export class Node {
         this.id = id;
         this.activation = activation;
         if (initZero) {
-            this.bias = 0;
+            this.biasAsNumber = 0;
+            this.bias = '0';
         }
+    }
+
+    setBias(bias: string): void {
+        this.bias = bias;
+        this.biasAsNumber = H.bias2number(bias);
+    }
+
+    setBiasAsNumber(biasAsNumber: number): void {
+        this.bias = '' + biasAsNumber;
+        this.biasAsNumber = biasAsNumber;
+    }
+
+    getBias(): string {
+        return this.bias;
+    }
+
+    getBiasAsNumber(): number {
+        return this.biasAsNumber;
     }
 
     /** Recomputes the node's output and returns it. */
     updateOutput(): number {
         // Stores total input into the node.
-        this.totalInput = this.bias;
+        this.totalInput = this.biasAsNumber;
         for (let j = 0; j < this.inputLinks.length; j++) {
             let link = this.inputLinks[j];
-            this.totalInput += link.weight * link.source.output;
+            this.totalInput += link.getWeightAsNumber() * link.source.output;
         }
         this.output = this.activation.output(this.totalInput);
         return this.output;
@@ -65,11 +82,11 @@ export class Node {
  * a run of back propagation.
  */
 export class Link {
-    id: string;
-    source: Node;
-    dest: Node;
-    weight = 0.0;
-    weightOrig = '0';
+    readonly id: string;
+    readonly source: Node;
+    readonly dest: Node;
+    private weightAsNumber = 0.0;
+    private weight = '0';
     isDead = false;
     /** Error derivative with respect to this weight. */
     errorDer = 0;
@@ -93,9 +110,27 @@ export class Link {
         this.dest = dest;
         this.regularization = regularization;
         if (initZero) {
-            this.weight = 0;
-            this.weightOrig = '0';
+            this.weightAsNumber = 0;
+            this.weight = '0';
         }
+    }
+
+    setWeight(weight: string): void {
+        this.weight = H.weight2weight(weight);
+        this.weightAsNumber = H.weight2number(weight);
+    }
+
+    setWeightAsNumber(weightAsNumber: number): void {
+        this.weight = '' + weightAsNumber;
+        this.weightAsNumber = weightAsNumber;
+    }
+
+    getWeight(): string {
+        return this.weight;
+    }
+
+    getWeightAsNumber(): number {
+        return this.weightAsNumber;
     }
 }
 
@@ -225,7 +260,7 @@ export class Network {
                 node.outputDer = 0;
                 for (let j = 0; j < node.outputs.length; j++) {
                     let output = node.outputs[j];
-                    node.outputDer += output.weight * output.dest.inputDer;
+                    node.outputDer += output.getWeightAsNumber() * output.dest.inputDer;
                 }
             }
         }
@@ -242,7 +277,7 @@ export class Network {
                 let node = currentLayer[i];
                 // Update the node's bias.
                 if (node.numAccumulatedDers > 0) {
-                    node.bias -= (learningRate * node.accInputDer) / node.numAccumulatedDers;
+                    node.setBiasAsNumber((learningRate * node.accInputDer) / node.numAccumulatedDers);
                     node.accInputDer = 0;
                     node.numAccumulatedDers = 0;
                 }
@@ -252,18 +287,19 @@ export class Network {
                     if (link.isDead) {
                         continue;
                     }
-                    let regulDer = link.regularization ? link.regularization.der(link.weight) : 0;
+                    let weightAsNumber = link.getWeightAsNumber();
+                    let regulDer = link.regularization ? link.regularization.der(weightAsNumber) : 0;
                     if (link.numAccumulatedDers > 0) {
                         // Update the weight based on dE/dw.
-                        link.weight = link.weight - (learningRate / link.numAccumulatedDers) * link.accErrorDer;
+                        weightAsNumber = weightAsNumber - (learningRate / link.numAccumulatedDers) * link.accErrorDer;
                         // Further update the weight based on regularization.
-                        let newLinkWeight = link.weight - learningRate * regularizationRate * regulDer;
-                        if (link.regularization === H.RegularizationFunction.L1 && link.weight * newLinkWeight < 0) {
+                        let newLinkWeight = weightAsNumber - learningRate * regularizationRate * regulDer;
+                        if (link.regularization === H.RegularizationFunction.L1 && weightAsNumber * newLinkWeight < 0) {
                             // The weight crossed 0 due to the regularization term. Set it to 0.
-                            link.weight = 0;
+                            link.setWeightAsNumber(0);
                             link.isDead = true;
                         } else {
-                            link.weight = newLinkWeight;
+                            link.setWeightAsNumber(newLinkWeight);
                         }
                         link.accErrorDer = 0;
                         link.numAccumulatedDers = 0;
@@ -313,7 +349,7 @@ export class Network {
                 for (let node of layer) {
                     let weightsOneNode: string[] = [];
                     for (let link of node.outputs) {
-                        weightsOneNode.push(link.weightOrig);
+                        weightsOneNode.push(link.getWeight());
                     }
                     weightsOneLayer.push(weightsOneNode);
                 }
@@ -329,7 +365,7 @@ export class Network {
             for (let layer of this.network) {
                 let biasesOneLayer: string[] = [];
                 for (let node of layer) {
-                    biasesOneLayer.push(node.biasOrig);
+                    biasesOneLayer.push(node.getBias());
                 }
                 biasesAllLayers.push(biasesOneLayer);
             }
@@ -371,9 +407,8 @@ export class Network {
             for (let i = 0; i < fromNode.outputs.length; i++) {
                 let link = fromNode.outputs[i];
                 if (link.dest.id === to) {
-                    let newVal = change === 'SET' ? value : link.weight + value;
-                    link.weight = newVal;
-                    link.weightOrig = '' + newVal;
+                    let newVal = change === 'SET' ? value : link.getWeightAsNumber() + value;
+                    link.setWeightAsNumber(newVal);
                     return;
                 }
             }
@@ -389,9 +424,8 @@ export class Network {
     changeBias(id: String, change: String, value: number): void {
         let node = this.getNeuronById(id);
         if (node != null) {
-            let newVal = change === 'SET' ? value : node.bias + value;
-            node.bias = newVal;
-            node.biasOrig = '' + newVal;
+            let newBias = change === 'SET' ? value : node.getBiasAsNumber() + value;
+            node.setBiasAsNumber(newBias);
             return;
         }
     }
@@ -430,13 +464,11 @@ export class Network {
                     }
                     for (let k = 0; k < nodeWeight.length && k < node.outputs.length; k += 1) {
                         let link = node.outputs[k];
-                        let linkWeight = nodeWeight[k];
-                        if (link == null || linkWeight == null) {
+                        let weight = nodeWeight[k];
+                        if (link == null || weight == null) {
                             break;
                         }
-                        let weights = H.string2weight(linkWeight);
-                        link.weight = weights[0];
-                        link.weightOrig = weights[1];
+                        link.setWeight(weight);
                     }
                 }
             }
@@ -453,13 +485,11 @@ export class Network {
                 }
                 for (let j = 0; j < layerBiases.length && j < layer.length; j += 1) {
                     let node = layer[j];
-                    let nodeBias = layerBiases[j];
-                    if (node == null || nodeBias == null) {
+                    let bias = layerBiases[j];
+                    if (node == null || bias == null) {
                         break;
                     }
-                    let biases = H.string2bias(nodeBias);
-                    node.bias = biases[0];
-                    node.biasOrig = biases[1];
+                    node.setBias(bias);
                 }
             }
         }
