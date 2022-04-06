@@ -62,6 +62,66 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
             this.output = this.activation.output(this.totalInput);
             return this.output;
         };
+        Node.prototype.genMath = function (activationKey) {
+            var biasIsZero = this.getBiasAsNumber() === 0;
+            var noInputLinks = this.inputLinks.length === 0;
+            var math = activationKey + '( ';
+            if (noInputLinks) {
+                math += this.getBias() + ' )';
+                return math;
+            }
+            if (!biasIsZero) {
+                math += this.getBias();
+            }
+            var firstLink = biasIsZero;
+            this.inputLinks.forEach(function (link) {
+                var weight = link.getWeight();
+                if (link.getWeightAsNumber() !== 0) {
+                    var op1 = weight.substr(0, 1);
+                    var op2 = weight.length > 1 ? weight.substr(1, 1) : '';
+                    var source = link.source.id;
+                    if (op1 === ':' || op1 === '/') {
+                        if (op2 === '-') {
+                            if (firstLink) {
+                                math += '0';
+                                firstLink = false;
+                            }
+                            math += ' - ' + source + '/' + weight.substr(2);
+                        }
+                        else {
+                            if (firstLink) {
+                                firstLink = false;
+                            }
+                            else {
+                                math += ' + ';
+                            }
+                            math += source + '/' + weight.substr(1);
+                        }
+                    }
+                    else if (op2 === '-') {
+                        if (firstLink) {
+                            math += '0';
+                            firstLink = false;
+                        }
+                        math += ' - ' + weight.substr(2) + '*' + source;
+                    }
+                    else {
+                        if (firstLink) {
+                            firstLink = false;
+                        }
+                        else {
+                            math += ' + ';
+                        }
+                        math += weight.substr(1) + '*' + source;
+                    }
+                }
+            });
+            if (firstLink) {
+                math += '0';
+            }
+            math += ' )';
+            return math;
+        };
         return Node;
     }());
     exports.Node = Node;
@@ -284,7 +344,7 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
                 }
             }
         };
-        /** Iterates over every node in the network/ */
+        /** Iterates over every node in the network */
         Network.prototype.forEachNode = function (ignoreInputs, accessor) {
             for (var layerIdx = ignoreInputs ? 1 : 0; layerIdx < this.network.length; layerIdx++) {
                 var currentLayer = this.network[layerIdx];

@@ -56,6 +56,11 @@
     position: relative;
 }
 
+#nn-show-math {
+    min-width: 300px;
+    alignment: center;
+}
+
 #nn-main-part {
     display: -webkit-box;
     display: -moz-box;

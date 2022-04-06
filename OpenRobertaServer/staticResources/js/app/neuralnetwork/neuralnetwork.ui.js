@@ -130,15 +130,15 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         drawNetworkUI(network);
     }
     function drawNetworkUI(network) {
-        D3.select('#nn-activation-label').attr('class', 'nn-bold').text(MSG.get('NN_ACTIVATION'));
-        D3.select('#nn-regularization-label').attr('class', 'nn-bold').text(MSG.get('NN_REGULARIZATION'));
-        D3.select('#nn-focus-label').attr('class', 'nn-bold').text(MSG.get('NN_FOCUS_OPTION'));
+        $('#nn-activation-label').text(MSG.get('NN_ACTIVATION'));
+        $('#nn-regularization-label').text(MSG.get('NN_REGULARIZATION'));
+        $('#nn-focus-label').text(MSG.get('NN_FOCUS_OPTION'));
         $('#nn-focus [value="CLICK_WEIGHT_BIAS"]').text(MSG.get('NN_CLICK_WEIGHT_BIAS'));
         $('#nn-focus [value="CLICK_NODE"]').text(MSG.get('NN_CLICK_NODE'));
         $('#nn-focus [value="SHOW_ALL"]').text(MSG.get('NN_SHOW_ALL'));
         var layerKey = state.numHiddenLayers === 1 ? 'NN_HIDDEN_LAYER' : 'NN_HIDDEN_LAYERS';
-        D3.select('#layers-label').text(MSG.get(layerKey));
-        D3.select('#num-layers').text(state.numHiddenLayers);
+        $('#layers-label').text(MSG.get(layerKey));
+        $('#num-layers').text(state.numHiddenLayers);
         var networkImpl = network.getLayerAndNodeArray();
         var svg = D3.select('#nn-svg');
         svg.select('g.core').remove();
@@ -463,6 +463,9 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 if (!val.empty()) {
                     val.text(node.getBias());
                     drawValuesBox(val, node.getBiasAsNumber());
+                }
+                if (focusStyle === FocusStyle.CLICK_NODE && focusNode != undefined && focusNode != null) {
+                    D3.select('#nn-show-math').html(focusNode.genMath(state.activationKey));
                 }
             });
         }

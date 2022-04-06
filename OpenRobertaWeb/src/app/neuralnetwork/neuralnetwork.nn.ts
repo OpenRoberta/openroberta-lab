@@ -73,6 +73,62 @@ export class Node {
         this.output = this.activation.output(this.totalInput);
         return this.output;
     }
+
+    genMath(activationKey: string): string {
+        const biasIsZero = this.getBiasAsNumber() === 0;
+        const noInputLinks = this.inputLinks.length === 0;
+        let math = activationKey + '( ';
+        if (noInputLinks) {
+            math += this.getBias() + ' )';
+            return math;
+        }
+        if (!biasIsZero) {
+            math += this.getBias();
+        }
+        let firstLink = biasIsZero;
+        this.inputLinks.forEach((link) => {
+            const weight = link.getWeight();
+            if (link.getWeightAsNumber() !== 0) {
+                const op1 = weight.substr(0, 1);
+                const op2 = weight.length > 1 ? weight.substr(1, 1) : '';
+                const source = link.source.id;
+                if (op1 === ':' || op1 === '/') {
+                    if (op2 === '-') {
+                        if (firstLink) {
+                            math += '0';
+                            firstLink = false;
+                        }
+                        math += ' - ' + source + '/' + weight.substr(2);
+                    } else {
+                        if (firstLink) {
+                            firstLink = false;
+                        } else {
+                            math += ' + ';
+                        }
+                        math += source + '/' + weight.substr(1);
+                    }
+                } else if (op2 === '-') {
+                    if (firstLink) {
+                        math += '0';
+                        firstLink = false;
+                    }
+                    math += ' - ' + weight.substr(2) + '*' + source;
+                } else {
+                    if (firstLink) {
+                        firstLink = false;
+                    } else {
+                        math += ' + ';
+                    }
+                    math += weight.substr(1) + '*' + source;
+                }
+            }
+        });
+        if (firstLink) {
+            math += '0';
+        }
+        math += ' )';
+        return math;
+    }
 }
 
 /**
@@ -309,7 +365,7 @@ export class Network {
         }
     }
 
-    /** Iterates over every node in the network/ */
+    /** Iterates over every node in the network */
     forEachNode(ignoreInputs: boolean, accessor: (node: Node) => void) {
         for (let layerIdx = ignoreInputs ? 1 : 0; layerIdx < this.network.length; layerIdx++) {
             let currentLayer = this.network[layerIdx];
