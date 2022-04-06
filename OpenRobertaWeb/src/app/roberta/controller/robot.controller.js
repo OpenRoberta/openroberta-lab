@@ -379,6 +379,9 @@ function switchRobot(robot, opt_continue, opt_callback) {
         }
         ROBOT.setRobot(robot, function (result) {
             if (result.rc === 'ok') {
+                if ($('.rightMenuButton.rightActive').length > 0) {
+                    $('.rightMenuButton.rightActive').clickWrap();
+                }
                 if (GUISTATE_C.findGroup(robot) != GUISTATE_C.getRobotGroup()) {
                     GUISTATE_C.setRobot(robot, result);
                     CONFIGURATION_C.resetView();
@@ -392,9 +395,6 @@ function switchRobot(robot, opt_continue, opt_callback) {
                 }
                 if (GUISTATE_C.getView() == 'tabProgList') {
                     $('#progList>.bootstrap-table').find('button[name="refresh"]').clickWrap();
-                }
-                if ($('.rightMenuButton.rightActive')) {
-                    $('.rightMenuButton.rightActive').clickWrap();
                 }
                 PROGCODE_C.setCodeLanguage(GUISTATE_C.getSourceCodeFileExtension());
                 CODEEDITOR_C.setCodeLanguage(GUISTATE_C.getSourceCodeFileExtension());

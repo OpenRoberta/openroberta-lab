@@ -12,7 +12,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             GUISTATE.gui.webview = opt_data || false;
             if (GUISTATE.gui.webview) {
                 $('.logo').css({
-                    right: '32px',
+                    right: '32px'
                 });
             }
             GUISTATE.gui.view = 'tabProgram';
@@ -380,7 +380,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
                 WEBVIEW_C.jsToAppInterface({
                     target: 'internal',
                     type: 'setRobot',
-                    robot: robotGroup,
+                    robot: robotGroup
                 });
             }
         }
@@ -617,7 +617,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             setRunEnabled(false);
             $('#runSourceCodeEditor').addClass('disabled');
         }
-        if ($('.rightMenuButton.rightActive')) {
+        if ($('.rightMenuButton.rightActive').length > 0) {
             $('.rightMenuButton.rightActive').clickWrap();
         }
         if (view === 'tabConfiguration') {

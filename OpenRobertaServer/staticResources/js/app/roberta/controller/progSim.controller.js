@@ -123,14 +123,14 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
                 position.left = $('#blocklyDiv').width() + 12;
                 $('#simRobotModal').css({
                     top: position.top,
-                    left: position.left,
+                    left: position.left
                 });
             }
             else {
                 position.left += 48;
                 $('#simRobotModal').css({
                     top: position.top,
-                    left: position.left,
+                    left: position.left
                 });
             }
             $('#simRobotModal').draggable();
@@ -143,7 +143,7 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
                 top: position.top,
                 right: 12,
                 left: 'initial',
-                bottom: 'inherit',
+                bottom: 'inherit'
             });
             $('#simValuesModal').draggable();
         }, 'sim show values clicked');
@@ -239,10 +239,7 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
             return;
         }
         if (($('#simButton').hasClass('rightActive') && !debug) || ($('#simDebugButton').hasClass('rightActive') && debug)) {
-            if (GUISTATE_C.hasWebotsSim()) {
-                NAOSIM.disconnect();
-            }
-            else {
+            if (!GUISTATE_C.hasWebotsSim()) {
                 SIM.cancel();
             }
             $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play').removeClass('typcn-media-stop');
