@@ -1,6 +1,6 @@
 Sensors: 
 []
 Actors: 
-[UsedActor [SERIAL, SERIAL], UsedActor [L, LED], UsedActor [R2, RGBLED], UsedActor [A, ANALOG_PIN], UsedActor [A2, ANALOG_PIN]]
+[UsedActor [SERIAL, SERIAL], UsedActor [L, LED], UsedActor [R2, RGBLED], UsedActor [S, SERVOMOTOR], UsedActor [S2, STEPMOTOR], UsedActor [A, ANALOG_PIN], UsedActor [A2, ANALOG_PIN]]
 Methods: 
 []

@@ -341,7 +341,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends AbstractValidatorA
 
         executeWorkflow();
 
-        assertHasNepoInfo(motorOnAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
+        assertHasNepoInfo(motorOnAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_MOTOR_MISSING");
     }
 
     @Test

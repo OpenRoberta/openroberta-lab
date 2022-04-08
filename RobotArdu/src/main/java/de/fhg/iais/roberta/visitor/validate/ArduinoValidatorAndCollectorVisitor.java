@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.visitor.validate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -14,14 +13,12 @@ import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -68,7 +65,7 @@ import de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Lsm9ds1GyroSens
 import de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Lsm9ds1MagneticFieldSensor;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
-public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IArduinoVisitor<Void> {
+public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollectorVisitor implements IArduinoVisitor<Void> {
     private static final Map<String, String> SENSOR_COMPONENT_TYPE_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
         put("COLOR_SENSING", "COLOR");
         put("TOUCH_SENSING", "TOUCH");
@@ -302,20 +299,6 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
     public Void visitMotionSensor(MotionSensor<Void> motionSensor) {
         checkSensorPort(motionSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(motionSensor.getUserDefinedPort(), SC.MOTION, motionSensor.getMode()));
-        return null;
-    }
-
-    @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        MotionParam<Void> param = motorOnAction.getParam();
-        requiredComponentVisited(param.getSpeed());
-        Optional.ofNullable(motorOnAction.getDurationValue()).ifPresent(this::requiredComponentVisited);
-        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(motorOnAction.getUserDefinedPort());
-        if ( usedConfigurationBlock == null ) {
-            addErrorToPhrase(motorOnAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
-        } else if ( usedConfigurationBlock.getComponentType().equals(SC.OTHER) && param.getDuration() != null ) {
-            addErrorToPhrase(motorOnAction, "CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED");
-        }
         return null;
     }
 
