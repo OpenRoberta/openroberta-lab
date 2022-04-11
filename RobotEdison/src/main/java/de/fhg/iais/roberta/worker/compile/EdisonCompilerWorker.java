@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.worker;
+package de.fhg.iais.roberta.worker.compile;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.worker.IWorker;
 
 /**
  * The workflow for the Edison compiler. Blockly blocks are first converted into EdPy Python2 code and then the code is converted into a WAV audio file. See

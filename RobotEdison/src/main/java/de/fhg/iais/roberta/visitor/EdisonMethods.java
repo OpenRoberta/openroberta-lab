@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.visitor.collect;
+package de.fhg.iais.roberta.visitor;
 
 public enum EdisonMethods {
     OBSTACLEDETECTION, //Obstacle detection

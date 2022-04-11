@@ -50,8 +50,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensors.edison.ResetSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.collect.EdisonMethods;
-import de.fhg.iais.roberta.visitor.hardware.IEdisonVisitor;
+import de.fhg.iais.roberta.visitor.EdisonMethods;
+import de.fhg.iais.roberta.visitor.IEdisonVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
 /**
@@ -273,7 +273,9 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
                 break;
         }
 
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.DIFFDRIVE));
+        this.sb.append(this.getBean(CodeGeneratorSetupBean.class)
+            .getHelperMethodGenerator()
+            .getHelperMethodName(EdisonMethods.DIFFDRIVE));
         this.sb.append("(").append(direction).append(", ");
         driveAction.getParam().getSpeed().accept(this);
         this.sb.append(", ");
