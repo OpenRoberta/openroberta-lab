@@ -10,7 +10,9 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.collect.Lists;
 
+import de.fhg.iais.roberta.bean.ErrorAndWarningBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean.Builder;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
@@ -21,9 +23,10 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
-import de.fhg.iais.roberta.visitor.collect.EdisonUsedHardwareCollectorVisitor;
+import de.fhg.iais.roberta.visitor.validate.EdisonValidatorAndCollectorVisitor;
+import de.fhg.iais.roberta.worker.validate.EdisonValidatorAndCollectorWorker;
 
-public class UsedHardwareCollectorVisitorTest extends AstTest {
+public class EdisonValidatorAndCollectorTest extends AstTest {
     @BeforeClass
     public static void setup() {
         testFactory = new RobotFactory(new PluginProperties("edison", "", "", Util.loadProperties("classpath:/edison.properties")));
@@ -69,9 +72,16 @@ public class UsedHardwareCollectorVisitorTest extends AstTest {
         ConfigurationAst edisonConfig = makeConfig();
         UsedHardwareBean.Builder usedHardwareBeanBuilder = new UsedHardwareBean.Builder();
         UsedMethodBean.Builder usedMethodBeanBuilder = new UsedMethodBean.Builder();
+        ErrorAndWarningBean.Builder errorAndWarningBuilder = new ErrorAndWarningBean.Builder();
+        NNBean.Builder nnBeanBuilder = new NNBean.Builder();
         ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders =
-            ImmutableClassToInstanceMap.<IProjectBean
-                .IBuilder<?>> builder().put(Builder.class, usedHardwareBeanBuilder).put(UsedMethodBean.Builder.class, usedMethodBeanBuilder).build();
-        EdisonUsedHardwareCollectorVisitor checker = new EdisonUsedHardwareCollectorVisitor(edisonConfig, beanBuilders);
+            ImmutableClassToInstanceMap.<IProjectBean.IBuilder<?>> builder()
+                .put(Builder.class, usedHardwareBeanBuilder)
+                .put(UsedMethodBean.Builder.class, usedMethodBeanBuilder)
+                .put(ErrorAndWarningBean.Builder.class, errorAndWarningBuilder)
+                .put(NNBean.Builder.class ,nnBeanBuilder)
+                .build();
+        EdisonValidatorAndCollectorWorker checkWorker = new EdisonValidatorAndCollectorWorker();
+        EdisonValidatorAndCollectorVisitor checkVisitor = new EdisonValidatorAndCollectorVisitor(edisonConfig, beanBuilders);
     }
 }
