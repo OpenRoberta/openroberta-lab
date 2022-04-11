@@ -9,9 +9,11 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.apache.commons.text.StringEscapeUtils;
+import org.json.JSONArray;
 
 import com.google.common.collect.ClassToInstanceMap;
 
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
@@ -41,9 +43,11 @@ import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronWoVarStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.NNStepDecl;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.BaseVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
@@ -133,6 +137,49 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
                 e.accept(this);
                 nlIndent();
             });
+    }
+
+    protected void generateUserDefinedClasses() {
+        NNStepDecl nnStepDecl = this.getBean(CodeGeneratorSetupBean.class).getNNStepDecl();
+        if ( nnStepDecl != null ) {
+            nlIndent();
+            this.sb.append("class NNStep {");
+            incrIndentation();
+            nlIndent();
+            this.sb.append("public final double ").append(nnStepDecl.getOutputNeurons().stream().collect(Collectors.joining(","))).append(";");
+            nlIndent();
+            this.sb.append("public NNStep(");
+            this.sb.append(nnStepDecl.getInputNeurons().stream().collect(Collectors.joining(", double ", "double ", "")));
+            this.sb.append(") {");
+            incrIndentation();
+            JSONArray weights = nnStepDecl.getWeights();
+            JSONArray biases = nnStepDecl.getBiases();
+            for ( int layer = 0; layer < weights.length() - 1; layer++ ) {
+                JSONArray weightsForLayer = weights.getJSONArray(layer);
+                JSONArray biasesForLayer = biases.getJSONArray(layer + 1);
+                int numberOfNeurons = weightsForLayer.getJSONArray(0).length();
+                for ( int targetNum = 0; targetNum < numberOfNeurons; targetNum++ ) {
+                    String targetNeuron = (layer == weights.length() - 2) ? nnStepDecl.getOutputNeurons().get(targetNum) : "double h" + (layer + 1) + "n" + (targetNum + 1);
+                    nlIndent();
+                    this.sb.append(targetNeuron).append(" = ");
+                    this.sb.append(biasesForLayer.getString(targetNum));
+                    for ( int sourceNum = 0; sourceNum < weightsForLayer.length(); sourceNum++ ) {
+                        String sourceNeuron = (layer == 0) ? nnStepDecl.getInputNeurons().get(sourceNum) : ("h" + layer + "n" + (sourceNum + 1));
+                        this.sb.append(" + ").append(sourceNeuron).append(weightsForLayer.getJSONArray(sourceNum).getString(targetNum));
+                    }
+                    this.sb.append(";");
+                }
+            }
+            decrIndentation();
+            nlIndent();
+            this.sb.append("}");
+            decrIndentation();
+            nlIndent();
+            this.sb.append("}");
+            nlIndent();
+            this.sb.append("NNStep nnStep = null;");
+            nlIndent();
+        }
     }
 
     @Override
@@ -259,6 +306,21 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     @Override
     public Void visitNNStepStmt(NNStepStmt<Void> nnStepStmt) {
+        this.sb.append("nnStep = new NNStep(");
+        boolean first = true;
+        for ( Stmt stmt : nnStepStmt.getInputNeurons() ) {
+            if ( first ) {
+                first = false;
+            } else {
+                this.sb.append(",");
+            }
+            stmt.accept(this);
+        }
+        this.sb.append(");");
+        nlIndent();
+        for ( Stmt stmt : nnStepStmt.getOutputNeurons() ) {
+            stmt.accept(this);
+        }
         return null;
     }
 
@@ -274,17 +336,24 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     @Override
     public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<Void> getVal) {
-        this.sb.append("0"); // enforces, that the generated programs are syntactically correct :-<
+        this.sb.append("nnStep.");
+        this.sb.append(getVal.getName());
         return null;
     }
 
     @Override
     public Void visitNNInputNeuronStmt(NNInputNeuronStmt<Void> nnInputNeuronStmt) {
+        nnInputNeuronStmt.getValue().accept(this);
         return null;
     }
 
     @Override
     public Void visitNNOutputNeuronStmt(NNOutputNeuronStmt<Void> nnOutputNeuronStmt) {
+        nnOutputNeuronStmt.getValue().accept(this);
+        this.sb.append(" = nnStep.");
+        this.sb.append(nnOutputNeuronStmt.getName());
+        this.sb.append(";");
+        nlIndent();
         return null;
     }
 

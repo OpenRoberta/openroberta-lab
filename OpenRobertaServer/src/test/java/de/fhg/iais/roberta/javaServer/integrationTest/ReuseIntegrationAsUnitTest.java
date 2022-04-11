@@ -303,8 +303,8 @@ public class ReuseIntegrationAsUnitTest {
     @Ignore
     @Test
     public void testOneRobotSpecificProgramAsUnitTests() throws Exception {
-        String robotName = "calliope2017NoBlue";
-        String programName = "sensors_all_without_pins_and_callibot";
+        String robotName = "ev3lejosv1";
+        String programName = "nn_step";
         LOG.info("========= testing program " + programName + " for robot " + robotName);
         final String resourceDirectory = setupRobotFactoryAndGetResourceDirForRobotSpecificTests(robotName);
         runRegenerateAndCodeGenerationForOneRobotSpecificProgram(resourceDirectory, programName + ".xml", robotName, Collections.emptyList());
@@ -492,7 +492,7 @@ public class ReuseIntegrationAsUnitTest {
             stringBuilder.append(usedMethodsSorted);
 
             try {
-                ValidationFileAssert.assertThat(stringBuilder.toString()).isEqualToValidationFile(directory + COLLECTOR_RESULTS + robotName + "/" +  programName + ".txt");
+                ValidationFileAssert.assertThat(stringBuilder.toString()).isEqualToValidationFile(directory + COLLECTOR_RESULTS + robotName + "/" + programName + ".txt");
                 return true;
             } catch ( AssertionError e ) {
                 LOG.error("collector results doesn't match for " + programName + " with error" + e.getMessage(), e);

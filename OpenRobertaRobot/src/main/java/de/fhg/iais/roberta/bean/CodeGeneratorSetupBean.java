@@ -10,18 +10,20 @@ import org.json.JSONObject;
 
 import de.fhg.iais.roberta.util.HelperMethodGenerator;
 import de.fhg.iais.roberta.util.HelperMethodGenerator.Language;
+import de.fhg.iais.roberta.util.NNStepDecl;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
- * Container for code generation related information and functionality. Creates the HelperMethodGenerator for use in the code generation visitors. TODO should
- * include more general information like global variables etc.
+ * Container for code generation related information and functionality. Creates the HelperMethodGenerator for use in the code generation visitors.
+ * TODO should include more general information like global variables etc.
  */
 public class CodeGeneratorSetupBean implements IProjectBean {
 
     private HelperMethodGenerator helperMethodGenerator;
-    private final Set<Enum<?>> usedMethods = new HashSet<>(); //All needed helper methods as a Set
+    private final Set<Enum<?>> usedMethods = new HashSet<>(); // All needed helper methods as a Set
+    private NNStepDecl nnStepDecl;
 
     public HelperMethodGenerator getHelperMethodGenerator() {
         return this.helperMethodGenerator;
@@ -29,6 +31,10 @@ public class CodeGeneratorSetupBean implements IProjectBean {
 
     public Set<Enum<?>> getUsedMethods() {
         return Collections.unmodifiableSet(this.usedMethods);
+    }
+
+    public NNStepDecl getNNStepDecl() {
+        return this.nnStepDecl;
     }
 
     public static class Builder implements IBuilder<CodeGeneratorSetupBean> {
@@ -55,6 +61,11 @@ public class CodeGeneratorSetupBean implements IProjectBean {
 
         public Builder addAdditionalEnums(Collection<Class<? extends Enum<?>>> additionalEnums) {
             this.additionalEnums.addAll(additionalEnums);
+            return this;
+        }
+
+        public Builder setNNStepDecl(NNStepDecl nnStepDecl) {
+            codeGeneratorBean.nnStepDecl = nnStepDecl;
             return this;
         }
 

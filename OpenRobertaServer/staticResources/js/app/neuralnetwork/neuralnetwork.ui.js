@@ -56,6 +56,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     })(FocusStyle || (FocusStyle = {}));
     var D3; // used for lazy loading
     var focusStyle = FocusStyle.CLICK_WEIGHT_BIAS;
+    hideOrShowMathArea(focusStyle);
     var focusNode = null;
     var state = null;
     var network = null;
@@ -112,6 +113,10 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                             if (focusStyle === undefined || focusStyle === null) {
                                 focusStyle = FocusStyle.CLICK_WEIGHT_BIAS;
                             }
+                            if (focusStyle !== FocusStyle.CLICK_NODE) {
+                                focusNode = null;
+                            }
+                            hideOrShowMathArea(focusStyle);
                             drawNetworkUI(network);
                         });
                         // Listen for css-responsive changes and redraw the svg network.
@@ -126,6 +131,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     }
     exports.runNNEditor = runNNEditor;
     function reconstructNNIncludingUI() {
+        focusNode = null;
         makeNetworkFromState();
         drawNetworkUI(network);
     }
@@ -244,8 +250,10 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             }
             if (focusStyle === FocusStyle.CLICK_NODE) {
                 nodeGroup.on('click', function () {
-                    focusNode = node;
-                    drawNetworkUI(network);
+                    if (node.inputLinks.length > 0) {
+                        focusNode = node;
+                        drawNetworkUI(network);
+                    }
                 });
             }
             var labelForId = nodeGroup.append('text').attr({
@@ -464,10 +472,13 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                     val.text(node.getBias());
                     drawValuesBox(val, node.getBiasAsNumber());
                 }
-                if (focusStyle === FocusStyle.CLICK_NODE && focusNode != undefined && focusNode != null) {
-                    D3.select('#nn-show-math').html(focusNode.genMath(state.activationKey));
-                }
             });
+            if (focusStyle === FocusStyle.CLICK_NODE && focusNode !== undefined && focusNode !== null) {
+                D3.select('#nn-show-math').html(focusNode.genMath(state.activationKey));
+            }
+            else {
+                D3.select('#nn-show-math').html('');
+            }
         }
     }
     function mkWidthScale() {
@@ -548,4 +559,12 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         return network;
     }
     exports.getNetwork = getNetwork;
+    function hideOrShowMathArea(focusStyle) {
+        if (focusStyle === FocusStyle.CLICK_NODE) {
+            $('#nn-show-math-all').show();
+        }
+        else {
+            $('#nn-show-math-all').hide();
+        }
+    }
 });

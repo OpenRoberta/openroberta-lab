@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableClassToInstanceMap.Builder;
 import de.fhg.iais.roberta.bean.ErrorAndWarningBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.IProjectBean.IBuilder;
+import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.Project;
@@ -20,7 +21,7 @@ import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 
 /**
- * Uses the {@link AbstractProgramValidatorVisitor} to visit the current AST and validate the hardware. May also annotate the AST to add information about
+ * Uses the {@link AbstractProgramValidatorVisitor} to visit the current AST and validate it. May also annotate the AST to add information about
  * inconsistencies in it.
  */
 public abstract class AbstractValidatorAndCollectorWorker implements IWorker {
@@ -38,9 +39,12 @@ public abstract class AbstractValidatorAndCollectorWorker implements IWorker {
         ErrorAndWarningBean.Builder errorAndWarningBeanBuilder = new ErrorAndWarningBean.Builder();
         mapBuilder.put(ErrorAndWarningBean.Builder.class, errorAndWarningBeanBuilder);
 
+        NNBean.Builder nnBeanBuilder = new NNBean.Builder();
+        mapBuilder.put(NNBean.Builder.class, nnBeanBuilder);
+
         ImmutableClassToInstanceMap<IBuilder<?>> map = mapBuilder.build();
 
-        CommonNepoValidatorAndCollectorVisitor visitor = this.getVisitor(project, mapBuilder.build());
+        CommonNepoValidatorAndCollectorVisitor visitor = this.getVisitor(project, map);
         List<List<Phrase<Void>>> tree = project.getProgramAst().getTree();
         // workaround: because methods in the tree may use global variables before the main task is
         // reached within the tree, the variables may not exist yet and show up as not declared
@@ -58,6 +62,7 @@ public abstract class AbstractValidatorAndCollectorWorker implements IWorker {
 
         project.addWorkerResult(map.get(UsedMethodBean.Builder.class).build());
         project.addWorkerResult(map.get(UsedHardwareBean.Builder.class).build());
+        project.addWorkerResult(map.get(NNBean.Builder.class).build());
 
         ErrorAndWarningBean errorAndWarningBean = errorAndWarningBeanBuilder.build();
         int errorCounter = errorAndWarningBean.getErrorCount();

@@ -26,15 +26,13 @@
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
-    -webkit-justify-content: space-betweenspace-between;
+    -webkit-justify-content: space-between;
     justify-content: space-between;
 }
 
 #nn-top-controls .nn-control {
     flex-grow: 1;
-    max-width: 240px;
-    min-width: 110px;
-    margin-left: 30px;
+    margin-left: 10px;
     margin-top: 6px;
 }
 
@@ -57,8 +55,8 @@
 }
 
 #nn-show-math {
-    min-width: 300px;
-    alignment: center;
+    alignment: left;
+    background-color: #f0f0f0;
 }
 
 #nn-main-part {

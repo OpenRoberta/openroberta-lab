@@ -20,8 +20,11 @@ int main () {
     
     
     
+    nnStep = new NNStep(1,2,1 + 2);
+    ___o1 = nnStep.out1;
+    ___o2 = nnStep.out2;
     
-    ___o3 = 0;
+    ___o3 = nnStep.o3;
     
     NEPOFreeEV3();
     return 0;

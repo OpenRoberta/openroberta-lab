@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.json.JSONObject;
+
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
@@ -72,6 +74,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.NNStepDecl;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
@@ -81,7 +84,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     private final HashMap<Integer, Integer> waitsInLoops = new HashMap<>();
     private int loopCounter = 0;
     private int currentLoop = 0;
-    private boolean nnStepFound = false;
+    private NNStepDecl nnStepDecl = null;
 
     protected CommonNepoValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) //
     {
@@ -324,15 +327,26 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitNNStepStmt(NNStepStmt<Void> nnStepStmt) {
+        requiredComponentVisited(nnStepStmt, nnStepStmt.getIoNeurons());
+        if ( nnStepDecl != null ) {
+            addErrorToPhrase(nnStepStmt, "NN_STEP_ONLY_ONCE");
+            return null;
+        }
+
+        JSONObject rawNetDefinition = new JSONObject(nnStepStmt.getNetDefinition().getValue());
+        nnStepDecl = new NNStepDecl(rawNetDefinition.getJSONArray("weights"), rawNetDefinition.getJSONArray("biases"));
         Set<String> names = new HashSet<>();
         String name;
         for ( Stmt<Void> neuron : nnStepStmt.getIoNeurons().get() ) {
             if ( neuron instanceof NNInputNeuronStmt ) {
                 name = ((NNInputNeuronStmt) neuron).getName();
+                nnStepDecl.addInputNeuron(name);
             } else if ( neuron instanceof NNOutputNeuronStmt ) {
                 name = ((NNOutputNeuronStmt) neuron).getName();
+                nnStepDecl.addOutputNeuron(name);
             } else if ( neuron instanceof NNOutputNeuronWoVarStmt ) {
                 name = ((NNOutputNeuronWoVarStmt) neuron).getName();
+                nnStepDecl.addOutputNeuron(name);
             } else {
                 throw new DbcException("type of neuron is not input, output or outputWoVar");
             }
@@ -340,11 +354,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
                 addErrorToPhrase(nnStepStmt, "NN_IO_NEURON_NAMES_INVALID");
             }
         }
-        requiredComponentVisited(nnStepStmt, nnStepStmt.getIoNeurons());
-        if ( nnStepFound ) {
-            addErrorToPhrase(nnStepStmt, "NN_STEP_ONLY_ONCE");
-        }
-        nnStepFound = true;
+        nnBeanBuilder.addNNStepDecl(nnStepDecl);
         return null;
     }
 

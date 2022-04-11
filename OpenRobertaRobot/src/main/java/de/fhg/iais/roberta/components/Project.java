@@ -20,6 +20,7 @@ import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.MutableClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -203,7 +204,12 @@ public final class Project {
 
     public <T extends IProjectBean> T getWorkerResult(Class<T> beanClass) {
         IProjectBean bean = this.workerResults.get(beanClass);
-        Assert.notNull(bean, "No worker result bean with " + beanClass.getSimpleName() + " available!");
+        // TODO: remove this hack after visitor rewrite!
+        if ( bean == null && beanClass.isAssignableFrom(NNBean.class) ) {
+            bean = new NNBean.Builder().build();
+        } else {
+            Assert.notNull(bean, "No worker result bean with " + beanClass.getSimpleName() + " available!");
+        }
         return beanClass.cast(bean);
     }
 

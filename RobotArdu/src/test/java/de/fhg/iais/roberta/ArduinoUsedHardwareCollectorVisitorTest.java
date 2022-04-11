@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 
 import de.fhg.iais.roberta.bean.ErrorAndWarningBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
@@ -52,10 +53,12 @@ public class ArduinoUsedHardwareCollectorVisitorTest {
         UsedHardwareBean.Builder usedHardwareBeanBuilder = new UsedHardwareBean.Builder();
         UsedMethodBean.Builder usedMethodBeanBuilder = new UsedMethodBean.Builder();
         ErrorAndWarningBean.Builder errorAndWarningBean = new ErrorAndWarningBean.Builder();
+        NNBean.Builder nnBean = new NNBean.Builder();
         ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders = ImmutableClassToInstanceMap.<IProjectBean.IBuilder<?>> builder()
             .put(UsedHardwareBean.Builder.class, usedHardwareBeanBuilder)
             .put(UsedMethodBean.Builder.class, usedMethodBeanBuilder)
             .put(ErrorAndWarningBean.Builder.class, errorAndWarningBean)
+            .put(NNBean.Builder.class, nnBean)
             .build();
         ArduinoValidatorAndCollectorVisitor visitor = new ArduinoValidatorAndCollectorVisitor(nanoConfig, beanBuilders);
 

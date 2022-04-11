@@ -14,6 +14,7 @@ import com.google.common.collect.ImmutableClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.ErrorAndWarningBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.syntax.NaoAstTest;
@@ -57,11 +58,13 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
         UsedHardwareBean.Builder usedHardwareBuilder = new UsedHardwareBean.Builder();
         UsedMethodBean.Builder usedMethodBuilder = new UsedMethodBean.Builder();
         ErrorAndWarningBean.Builder errorAndWarningBuilder = new ErrorAndWarningBean.Builder();
+        NNBean.Builder nnBuilder = new NNBean.Builder();
 
         ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder<?>> map = new ImmutableClassToInstanceMap.Builder<>();
         map.put(UsedMethodBean.Builder.class, usedMethodBuilder);
         map.put(UsedHardwareBean.Builder.class, usedHardwareBuilder);
         map.put(ErrorAndWarningBean.Builder.class, errorAndWarningBuilder);
+        map.put(NNBean.Builder.class, nnBuilder);
 
         NaoValidatorAndCollectorVisitor checkVisitor =
             new NaoValidatorAndCollectorVisitor(

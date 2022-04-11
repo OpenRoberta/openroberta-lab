@@ -28,6 +28,7 @@ let D3: typeof _D3; // used for lazy loading
 type D3Selection = _D3.Selection<any>;
 
 let focusStyle = FocusStyle.CLICK_WEIGHT_BIAS;
+hideOrShowMathArea(focusStyle);
 let focusNode = null;
 
 let state: State = null;
@@ -76,6 +77,10 @@ export async function runNNEditor() {
         if (focusStyle === undefined || focusStyle === null) {
             focusStyle = FocusStyle.CLICK_WEIGHT_BIAS;
         }
+        if (focusStyle !== FocusStyle.CLICK_NODE) {
+            focusNode = null;
+        }
+        hideOrShowMathArea(focusStyle);
         drawNetworkUI(network);
     });
 
@@ -97,6 +102,7 @@ export async function runNNEditor() {
 }
 
 function reconstructNNIncludingUI() {
+    focusNode = null;
     makeNetworkFromState();
     drawNetworkUI(network);
 }
@@ -231,8 +237,10 @@ function drawNetworkUI(network: Network): void {
         }
         if (focusStyle === FocusStyle.CLICK_NODE) {
             nodeGroup.on('click', function () {
-                focusNode = node;
-                drawNetworkUI(network);
+                if (node.inputLinks.length > 0) {
+                    focusNode = node;
+                    drawNetworkUI(network);
+                }
             });
         }
 
@@ -475,10 +483,12 @@ function updateUI() {
                 val.text(node.getBias());
                 drawValuesBox(val, node.getBiasAsNumber());
             }
-            if (focusStyle === FocusStyle.CLICK_NODE && focusNode != undefined && focusNode != null) {
-                D3.select('#nn-show-math').html(focusNode.genMath(state.activationKey));
-            }
         });
+        if (focusStyle === FocusStyle.CLICK_NODE && focusNode !== undefined && focusNode !== null) {
+            D3.select('#nn-show-math').html(focusNode.genMath(state.activationKey));
+        } else {
+            D3.select('#nn-show-math').html('');
+        }
     }
 }
 
@@ -562,4 +572,12 @@ export function getStateAsJSONString(): string {
 
 export function getNetwork(): Network {
     return network;
+}
+
+function hideOrShowMathArea(focusStyle: FocusStyle): void {
+    if (focusStyle === FocusStyle.CLICK_NODE) {
+        $('#nn-show-math-all').show();
+    } else {
+        $('#nn-show-math-all').hide();
+    }
 }

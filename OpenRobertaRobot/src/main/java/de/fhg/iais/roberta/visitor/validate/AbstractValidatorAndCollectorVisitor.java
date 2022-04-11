@@ -6,12 +6,14 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.ErrorAndWarningBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.BaseVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
@@ -26,10 +28,11 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
     protected final UsedMethodBean.Builder usedMethodBuilder;
     protected final UsedHardwareBean.Builder usedHardwareBuilder;
     protected final ErrorAndWarningBean.Builder errorAndWarningBuilder;
+    protected final NNBean.Builder nnBeanBuilder;
 
     /**
-     * @param robotConfiguration for the program that should be validates and collected
-     * @param beanBuilders must contain {@link UsedHardwareBean.Builder}, {@link UsedMethodBean.Builder} and {@link ErrorAndWarningBean.Builder}
+     * @param robotConfiguration for the program that should be validated and collected
+     * @param beanBuilders must contain the builders as checked in the Assert.notNull below
      */
     public AbstractValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         this.robotConfiguration = robotConfiguration;
@@ -38,28 +41,28 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
         this.usedMethodBuilder = getBuilder(UsedMethodBean.Builder.class);
         this.usedHardwareBuilder = getBuilder(UsedHardwareBean.Builder.class);
         this.errorAndWarningBuilder = getBuilder(ErrorAndWarningBean.Builder.class);
+        this.nnBeanBuilder = getBuilder(NNBean.Builder.class);
 
         this.mainVisitor = this;
 
-        assert robotConfiguration != null : "There must be a robotConfiguration given";
-        assert usedHardwareBuilder != null : "beanBuilders must contain a instance of UsedMethodBean.Builder";
-        assert usedMethodBuilder != null : "beanBuilders must contain a instance of UsedHardwareBean.Builder";
-        assert errorAndWarningBuilder != null : "beanBuilders must contain a instance of ErrorAndWarningBean.Builder";
+        Assert.notNull(robotConfiguration, "There must be a robotConfiguration given");
+        Assert.notNull(usedHardwareBuilder, "beanBuilders must contain a instance of UsedMethodBean.Builder");
+        Assert.notNull(usedMethodBuilder, "beanBuilders must contain a instance of UsedHardwareBean.Builder");
+        Assert.notNull(errorAndWarningBuilder, "beanBuilders must contain a instance of ErrorAndWarningBean.Builder");
+        Assert.notNull(nnBeanBuilder, "beanBuilders must contain a instance of NNBean.Builder");
     }
 
     /**
      * @param mainVisitor visitor which is used when {@link AbstractValidatorAndCollectorVisitor#optionalComponentVisited(Phrase)},
-     *  {@link AbstractValidatorAndCollectorVisitor#requiredComponentVisited(Phrase, List)}, or
-     *  {@link AbstractValidatorAndCollectorVisitor#requiredComponentVisited(Phrase, Phrase[])} get called
+     *     {@link AbstractValidatorAndCollectorVisitor#requiredComponentVisited(Phrase, List)}, or
+     *     {@link AbstractValidatorAndCollectorVisitor#requiredComponentVisited(Phrase, Phrase[])} get called
      * @param robotConfiguration for the program that should be validates and collected
-     * @param beanBuilders must contain {@link UsedHardwareBean.Builder}, {@link UsedMethodBean.Builder} and {@link ErrorAndWarningBean.Builder}
+     * @param beanBuilders must contain {@link UsedHardwareBean.Builder}, {@link UsedMethodBean.Builder} and {@link ErrorAndWarningBean.Builder} and {@link NNBean.Builder}
      */
     public AbstractValidatorAndCollectorVisitor(
         IVisitor<Void> mainVisitor,
         ConfigurationAst robotConfiguration,
         ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
-
-        assert mainVisitor != null;
 
         this.mainVisitor = mainVisitor;
         this.robotConfiguration = robotConfiguration;
@@ -68,12 +71,14 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
         this.usedMethodBuilder = getBuilder(UsedMethodBean.Builder.class);
         this.usedHardwareBuilder = getBuilder(UsedHardwareBean.Builder.class);
         this.errorAndWarningBuilder = getBuilder(ErrorAndWarningBean.Builder.class);
+        this.nnBeanBuilder = getBuilder(NNBean.Builder.class);
 
-        assert robotConfiguration != null : "There must be a robotConfiguration given";
-        assert mainVisitor != null : "mainVisitor cannot be null";
-        assert usedHardwareBuilder != null : "beanBuilders must contain a instance of UsedMethodBean.Builder";
-        assert usedMethodBuilder != null : "beanBuilders must contain a instance of UsedHardwareBean.Builder";
-        assert errorAndWarningBuilder != null : "beanBuilders must contain a instance of ErrorAndWarningBean.Builder";
+        Assert.notNull(robotConfiguration, "There must be a robotConfiguration given");
+        Assert.notNull(mainVisitor, "mainVisitor cannot be null");
+        Assert.notNull(usedHardwareBuilder, "beanBuilders must contain a instance of UsedMethodBean.Builder");
+        Assert.notNull(usedMethodBuilder, "beanBuilders must contain a instance of UsedHardwareBean.Builder");
+        Assert.notNull(errorAndWarningBuilder, "beanBuilders must contain a instance of ErrorAndWarningBean.Builder");
+        Assert.notNull(nnBeanBuilder, "beanBuilders must contain a instance of NNBean.Builder");
     }
 
     protected <T extends IProjectBean.IBuilder<?>> T getBuilder(Class<T> clazz) {

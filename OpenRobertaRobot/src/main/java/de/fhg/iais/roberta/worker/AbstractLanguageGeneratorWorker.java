@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.Project;
@@ -20,6 +21,7 @@ public abstract class AbstractLanguageGeneratorWorker implements IWorker {
     public final void execute(Project project) {
         UsedHardwareBean usedHardwareBean = project.getWorkerResult(UsedHardwareBean.class);
         UsedMethodBean usedMethodBean = project.getWorkerResult(UsedMethodBean.class);
+        NNBean nnBean = project.getWorkerResult(NNBean.class);
 
         AbstractLanguageVisitor visitor;
         // Prepare bean for the code generation visitor
@@ -28,6 +30,7 @@ public abstract class AbstractLanguageGeneratorWorker implements IWorker {
         codeGenSetupBeanBuilder.setHelperMethodFile(project.getRobotFactory().getPluginProperties().getStringProperty("robot.helperMethods"));
         codeGenSetupBeanBuilder.addAdditionalEnums(usedMethodBean.getAdditionalEnums());
         codeGenSetupBeanBuilder.addUsedMethods(usedMethodBean.getUsedMethods());
+        codeGenSetupBeanBuilder.setNNStepDecl(nnBean.getNnStepDecl());
         ClassToInstanceMap<IProjectBean> beans =
             ImmutableClassToInstanceMap
                 .<IProjectBean> builder()

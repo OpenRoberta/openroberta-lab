@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.visitor.validate;
 
 import java.util.Arrays;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,6 +10,7 @@ import com.google.common.collect.ImmutableClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.ErrorAndWarningBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -35,6 +36,7 @@ public class AbstractValidatorAndCollectorVisitorTest {
     private UsedMethodBean.Builder usedMethodBeanBuilder;
     private UsedHardwareBean.Builder usedHardwareBeanBuilder;
     private ErrorAndWarningBean.Builder errorAndWarningBeanBuilder;
+    private NNBean.Builder nnBeanBuilder;
 
     public static class TestValidatorAndCollectorVisitor extends AbstractValidatorAndCollectorVisitor {
         public TestValidatorAndCollectorVisitor(
@@ -72,6 +74,8 @@ public class AbstractValidatorAndCollectorVisitorTest {
         mapBuilder.put(UsedHardwareBean.Builder.class, usedHardwareBeanBuilder);
         errorAndWarningBeanBuilder = new ErrorAndWarningBean.Builder();
         mapBuilder.put(ErrorAndWarningBean.Builder.class, errorAndWarningBeanBuilder);
+        nnBeanBuilder = new NNBean.Builder();
+        mapBuilder.put(NNBean.Builder.class, nnBeanBuilder);
 
         beanBuilder = mapBuilder.build();
 
@@ -217,34 +221,56 @@ public class AbstractValidatorAndCollectorVisitorTest {
     @Test
     public void missingParameterInConstructor() {
         // mainVisitor
-        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(null, robotConfiguration, beanBuilder)).isInstanceOf(AssertionError.class);
+        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(null, robotConfiguration, beanBuilder)).isInstanceOf(DbcException.class);
 
         // ConfigurationAst
-        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(null, beanBuilder)).isInstanceOf(AssertionError.class);
-        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(delegatedValidatorAndCollectorVisitor, null, beanBuilder)).isInstanceOf(AssertionError.class);
+        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(null, beanBuilder)).isInstanceOf(DbcException.class);
+        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(delegatedValidatorAndCollectorVisitor, null, beanBuilder)).isInstanceOf(DbcException.class);
 
         // ErrorAndWarninBean
         ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> withoutErrorAndWarnings = (new ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder<?>>())
             .put(UsedHardwareBean.Builder.class, usedHardwareBeanBuilder)
             .put(UsedMethodBean.Builder.class, usedMethodBeanBuilder)
+            .put(NNBean.Builder.class, nnBeanBuilder)
             .build();
-        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(delegatedValidatorAndCollectorVisitor, robotConfiguration, withoutErrorAndWarnings)).isInstanceOf(AssertionError.class);
-        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(robotConfiguration, withoutErrorAndWarnings)).isInstanceOf(AssertionError.class);
+        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(delegatedValidatorAndCollectorVisitor, robotConfiguration, withoutErrorAndWarnings)).isInstanceOf(DbcException.class);
+        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(robotConfiguration, withoutErrorAndWarnings)).isInstanceOf(DbcException.class);
 
         // HardwareBean
         ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> withoutHardware = (new ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder<?>>())
             .put(UsedMethodBean.Builder.class, usedMethodBeanBuilder)
             .put(ErrorAndWarningBean.Builder.class, errorAndWarningBeanBuilder)
+            .put(NNBean.Builder.class, nnBeanBuilder)
             .build();
-        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(delegatedValidatorAndCollectorVisitor, robotConfiguration, withoutHardware)).isInstanceOf(AssertionError.class);
-        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(robotConfiguration, withoutHardware)).isInstanceOf(AssertionError.class);
+        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(delegatedValidatorAndCollectorVisitor, robotConfiguration, withoutHardware)).isInstanceOf(DbcException.class);
+        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(robotConfiguration, withoutHardware)).isInstanceOf(DbcException.class);
 
         // MethodBean
         ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> withoutMethod = (new ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder<?>>())
             .put(UsedHardwareBean.Builder.class, usedHardwareBeanBuilder)
             .put(ErrorAndWarningBean.Builder.class, errorAndWarningBeanBuilder)
+            .put(NNBean.Builder.class, nnBeanBuilder)
             .build();
-        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(delegatedValidatorAndCollectorVisitor, robotConfiguration, withoutMethod)).isInstanceOf(AssertionError.class);
-        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(robotConfiguration, withoutMethod)).isInstanceOf(AssertionError.class);
+        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(delegatedValidatorAndCollectorVisitor, robotConfiguration, withoutMethod)).isInstanceOf(DbcException.class);
+        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(robotConfiguration, withoutMethod)).isInstanceOf(DbcException.class);
+
+        // NNBean
+        ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> withoutNN = (new ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder<?>>())
+            .put(UsedMethodBean.Builder.class, usedMethodBeanBuilder)
+            .put(UsedHardwareBean.Builder.class, usedHardwareBeanBuilder)
+            .put(ErrorAndWarningBean.Builder.class, errorAndWarningBeanBuilder)
+            .build();
+        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(delegatedValidatorAndCollectorVisitor, robotConfiguration, withoutNN)).isInstanceOf(DbcException.class);
+        assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(robotConfiguration, withoutNN)).isInstanceOf(DbcException.class);
+
+        // EVERYTHING IS FINE
+        ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> everything = (new ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder<?>>())
+            .put(UsedMethodBean.Builder.class, usedMethodBeanBuilder)
+            .put(UsedHardwareBean.Builder.class, usedHardwareBeanBuilder)
+            .put(ErrorAndWarningBean.Builder.class, errorAndWarningBeanBuilder)
+            .put(NNBean.Builder.class, nnBeanBuilder)
+            .build();
+        assertThat(new TestValidatorAndCollectorVisitor(delegatedValidatorAndCollectorVisitor, robotConfiguration, everything)).isInstanceOf(TestValidatorAndCollectorVisitor.class);
+        assertThat(new TestValidatorAndCollectorVisitor(robotConfiguration, everything)).isInstanceOf(TestValidatorAndCollectorVisitor.class);
     }
 }
