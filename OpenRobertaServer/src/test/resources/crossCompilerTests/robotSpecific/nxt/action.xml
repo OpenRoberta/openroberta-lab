@@ -239,38 +239,6 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robActions_motor_on_for" id=".kc+c?j[}]#()TC8t{6-" intask="true">
-                            <field name="MOTORPORT">A</field>
-                            <field name="MOTORROTATION">ROTATIONS</field>
-                            <value name="POWER">
-                                <block type="variables_get" id="Nn.LIfIv;adj1^;zqkD/" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                            <value name="VALUE">
-                                <block type="variables_get" id="dTWuIG7ac*U0=w:ePK3L" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="robActions_motor_on_for" id="s@o{k0aS.4:s9Y3d%~?5" intask="true">
-                            <field name="MOTORPORT">A</field>
-                            <field name="MOTORROTATION">DEGREE</field>
-                            <value name="POWER">
-                                <block type="variables_get" id="4aGQYXUwYNsWq]G.S6M3" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                            <value name="VALUE">
-                                <block type="variables_get" id=".}X0Mt.;W_D.Ix!qlsc`" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
                         <block type="robActions_motor_on_for" id="k`EiKzM]Ka=tqWw.Y31#" intask="true">
                             <field name="MOTORPORT">B</field>
                             <field name="MOTORROTATION">ROTATIONS</field>
@@ -829,18 +797,16 @@
                     <field name="WHEEL_DIAMETER">5.6</field>
                     <field name="TRACK_WIDTH">12</field>
                     <value name="S1">
-                        <block type="robBrick_touch" id="2" intask="true"></block>
+                        <block type="robBrick_colour" id="!^/v=x[DnNw8S~/FU:~H" intask="true"></block>
                     </value>
                     <value name="S2">
-                        <block type="robBrick_sound" id="3" intask="true">
-                            <data>nxt</data>
-                        </block>
+                        <block type="robBrick_colour" id="xcw)J@P9OMsUEg?rZq@y" intask="true"></block>
                     </value>
                     <value name="S3">
-                        <block type="robBrick_light" id="4" intask="true"></block>
+                        <block type="robBrick_colour" id="fcksizV*Ztin2DO7Et/Z" intask="true"></block>
                     </value>
                     <value name="S4">
-                        <block type="robBrick_ultrasonic" id="5" intask="true"></block>
+                        <block type="robBrick_colour" id="bP.!GO0yiuRHWqp^3I{m" intask="true"></block>
                     </value>
                     <value name="MA">
                         <block type="robBrick_actor" id="7%{M[5mrXL,QQAhui%Md" intask="true"></block>
@@ -860,6 +826,20 @@
                         </block>
                     </value>
                 </block>
+            </instance>
+            <instance x="466" y="138">
+                <block type="robBrick_touch" id="2" intask="false"></block>
+            </instance>
+            <instance x="466" y="163">
+                <block type="robBrick_sound" id="3" intask="false">
+                    <data>nxt</data>
+                </block>
+            </instance>
+            <instance x="466" y="188">
+                <block type="robBrick_light" id="4" intask="false"></block>
+            </instance>
+            <instance x="466" y="213">
+                <block type="robBrick_ultrasonic" id="5" intask="false"></block>
             </instance>
         </block_set>
     </config>
