@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.worker;
+package de.fhg.iais.roberta.worker.compile;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.worker.IWorker;
 
 public class NxtCompilerWorker implements IWorker {
 

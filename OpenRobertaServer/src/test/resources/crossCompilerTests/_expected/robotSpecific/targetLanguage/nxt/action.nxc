@@ -45,10 +45,10 @@ task main() {
     ___colourList = _____colourList;
     int _____connectionList[] = {NULL, NULL, NULL};
     ___connectionList = _____connectionList;
-    SetSensor(S1, SENSOR_TOUCH);
-    SetSensor(S2, SENSOR_SOUND);
-    SetSensorLight(S3, false);
-    SetSensor(S4, SENSOR_LOWSPEED);
+    SetSensor(S1, SENSOR_COLORFULL);
+    SetSensor(S2, SENSOR_COLORFULL);
+    SetSensor(S3, SENSOR_COLORFULL);
+    SetSensor(S4, SENSOR_COLORFULL);
     action();
 }
 
@@ -64,8 +64,6 @@ void move() {
     OnFwd(OUT_A, MIN(MAX(___numberVar, -100), 100));
     OnFwdRegEx(OUT_B, MIN(MAX(___numberVar, -100), 100), OUT_REGMODE_SPEED, RESET_NONE);
     OnFwdRegEx(OUT_C, MIN(MAX(___numberVar, -100), 100), OUT_REGMODE_SPEED, RESET_NONE);
-    RotateMotor(OUT_A, MIN(MAX(___numberVar, -100), 100), 360 * ___numberVar);
-    RotateMotor(OUT_A, MIN(MAX(___numberVar, -100), 100), ___numberVar);
     RotateMotor(OUT_B, MIN(MAX(___numberVar, -100), 100), 360 * ___numberVar);
     RotateMotor(OUT_B, MIN(MAX(___numberVar, -100), 100), ___numberVar);
     RotateMotor(OUT_C, MIN(MAX(___numberVar, -100), 100), 360 * ___numberVar);

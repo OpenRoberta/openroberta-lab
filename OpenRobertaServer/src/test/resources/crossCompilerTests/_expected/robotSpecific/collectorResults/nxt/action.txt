@@ -1,5 +1,5 @@
 Sensors: 
-[UsedSensor [1, HT_COLOR, COLOR], UsedSensor [2, HT_COLOR, COLOR], UsedSensor [3, HT_COLOR, COLOR], UsedSensor [4, HT_COLOR, COLOR]]
+[UsedSensor [1, COLOR, COLOR], UsedSensor [2, COLOR, COLOR], UsedSensor [3, COLOR, COLOR], UsedSensor [4, COLOR, COLOR]]
 Actors: 
 [UsedActor [A, OTHER], UsedActor [B, LARGE], UsedActor [C, LARGE], UsedActor [, SOUND]]
 Methods: 

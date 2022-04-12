@@ -84,7 +84,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.dbc.VisitorException;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.INxtVisitor;
+import de.fhg.iais.roberta.visitor.INxtVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
 /**
@@ -1292,6 +1292,13 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     private void generateSensors() {
         Map<String, UsedSensor> usedSensorMap = new HashMap<>();
         for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
+            if ( usedSensor.getType().equals(SC.TIMER) ) {
+                if ( !usedSensor.getMode().equals(SC.RESET) ) {
+                    nlIndent();
+                    this.sb.append("timer1 = CurrentTick();");
+                }
+                continue;
+            }
             ConfigurationComponent configurationComponent = this.brickConfiguration.getConfigurationComponent(usedSensor.getPort());
             String sensorType = configurationComponent.getComponentType();
             nlIndent();
@@ -1328,10 +1335,6 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 default:
                     break;
             }
-        }
-        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER) ) {
-            nlIndent();
-            this.sb.append("timer1 = CurrentTick();");
         }
     }
 
