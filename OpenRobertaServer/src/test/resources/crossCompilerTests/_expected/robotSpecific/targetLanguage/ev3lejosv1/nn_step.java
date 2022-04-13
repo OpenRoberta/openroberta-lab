@@ -28,6 +28,18 @@ public class NEPOprog {
     private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
     private Hal hal = new Hal(brickConfiguration, usedSensors);
     
+    class NNStep {
+        public final double out1,out2,out3;
+        public NNStep( double in1, double in2, double in3) {
+            double h1n1 = 1 + in1*1 + in2*1 + in3*1;
+            double h1n2 = 1 + in1*1 + in2*1 + in3*1;
+            out1 = -1 + h1n1*-1 + h1n2*-1;
+            out2 = -1 + h1n1*-1 + h1n2*-1;
+            out3 = -1 + h1n1*-1 + h1n2*-1;
+        }
+    }
+    NNStep nnStep = null;
+    
     public static void main(String[] args) {
         try {
              brickConfiguration = new EV3Configuration.Builder()

@@ -49,12 +49,10 @@ robots:
     template: ev3
     dir: ev3
     suffix: ".java"
-    exclude: [ nn_step ]
   ev3lejosv0:
     template: ev3
     dir: ev3
     suffix: ".java"
-    exclude: [ nn_step ]
   festobionic:
     template: ardu
     dir: festobionic
