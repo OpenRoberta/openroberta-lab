@@ -33,13 +33,16 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
     var debugMode = false;
     var breakpoints = [];
     var obstacleList = [];
+    var obstacleListCache = [];
     var colorAreaList = [];
+    var colorAreaListCache = [];
     var observers = {};
     var imgObstacle1 = new Image();
     var imgPattern = new Image();
     var imgRuler = new Image();
     var mouseX;
     var mouseY;
+    var firstSimStart = true;
     var colorpicker = new HUEBEE('#colorpicker', {
         shades: 1,
         hues: 8,
@@ -124,6 +127,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
     }
     preloadImages();
     var currentBackground = 2;
+    var lastBackground = 2;
     function setBackground(num) {
         num = num || -1;
         var configData = {};
@@ -485,18 +489,25 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
         for (i = 0; i < programs.length; i++) {
             runRenderUntil[i] = 0;
         }
-        if (robotType.indexOf('calliope') >= 0) {
-            currentBackground = 0;
+        if (robotType.indexOf('calliope') >= 0 || robotType === 'microbit') {
+            if (currentBackground > 1) {
+                obstacleListCache = obstacleList;
+                colorAreaListCache = colorAreaList;
+                lastBackground = currentBackground;
+            }
             resetScene([], []);
             $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simButtonsHead, #simEditButtons').hide();
+            if (robotType === 'microbit') {
+                currentBackground = 1;
+            }
+            else {
+                currentBackground = 0;
+            }
         }
-        else if (robotType === 'microbit') {
-            resetScene([], []);
-            $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simButtonsHead, #simEditButtons').hide();
-            currentBackground = 1;
-        }
-        else if (currentBackground === 0 || currentBackground == 1) {
-            currentBackground = 2;
+        else if (currentBackground < 2) {
+            obstacleList = obstacleListCache;
+            colorAreaList = colorAreaListCache;
+            currentBackground = lastBackground;
         }
         if (currentBackground > 1) {
             if (isIE() || isEdge()) {
@@ -543,7 +554,10 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
                 stepCounter = 0;
                 pause = true;
                 info = false;
-                setObstacle();
+                if (firstSimStart && currentBackground > 1) {
+                    setObstacle();
+                    firstSimStart = false;
+                }
                 setRuler();
                 initScene();
             });
@@ -686,81 +700,77 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
     }
     //set standard obstacle
     function setObstacle() {
-        if (obstacleList.length == 0) {
-            obstacleList.push(defaultObstacle);
+        var standObst = {};
+        switch (currentBackground) {
+            case 0:
+            case 1:
+            case 7:
+                standObst.x = 0;
+                standObst.y = 0;
+                standObst.w = 0;
+                standObst.h = 0;
+                standObst.color = null;
+                standObst.img = null;
+                standObst.form = 'rectangle';
+                break;
+            case 2:
+                standObst.x = 580;
+                standObst.y = 290;
+                standObst.w = 100;
+                standObst.h = 100;
+                standObst.color = standColorObstacle;
+                standObst.form = 'rectangle';
+                break;
+            case 3:
+                standObst.x = 500;
+                standObst.y = 250;
+                standObst.w = 100;
+                standObst.h = 100;
+                standObst.img = null;
+                standObst.color = standColorObstacle;
+                standObst.form = 'rectangle';
+                break;
+            case 4:
+                standObst.x = 500;
+                standObst.y = 260;
+                standObst.w = 100;
+                standObst.h = 100;
+                standObst.img = imgObstacle1;
+                standObst.color = null;
+                standObst.form = 'rectangle';
+                break;
+            case 5:
+                standObst.x = 505;
+                standObst.y = 405;
+                standObst.w = 20;
+                standObst.h = 20;
+                standObst.color = standColorObstacle;
+                standObst.img = null;
+                standObst.form = 'rectangle';
+                break;
+            case 6:
+                standObst.x = 425;
+                standObst.y = 254;
+                standObst.w = 50;
+                standObst.h = 50;
+                standObst.color = '#009EE3';
+                standObst.img = null;
+                standObst.form = 'rectangle';
+                break;
+            default:
+                var x = imgObjectList[currentBackground].width - 50;
+                var y = imgObjectList[currentBackground].height - 50;
+                standObst.x = x;
+                standObst.y = y;
+                standObst.w = 50;
+                standObst.h = 50;
+                standObst.color = standColorObstacle;
+                standObst.img = null;
+                standObst.form = 'rectangle';
         }
-        if (obstacleList.length == 1) {
-            var standObst = {};
-            switch (currentBackground) {
-                case 0:
-                case 1:
-                case 7:
-                    standObst.x = 0;
-                    standObst.y = 0;
-                    standObst.w = 0;
-                    standObst.h = 0;
-                    standObst.color = null;
-                    standObst.img = null;
-                    standObst.form = 'rectangle';
-                    break;
-                case 2:
-                    standObst.x = 580;
-                    standObst.y = 290;
-                    standObst.w = 100;
-                    standObst.h = 100;
-                    standObst.color = standColorObstacle;
-                    standObst.form = 'rectangle';
-                    break;
-                case 3:
-                    standObst.x = 500;
-                    standObst.y = 250;
-                    standObst.w = 100;
-                    standObst.h = 100;
-                    standObst.img = null;
-                    standObst.color = standColorObstacle;
-                    standObst.form = 'rectangle';
-                    break;
-                case 4:
-                    standObst.x = 500;
-                    standObst.y = 260;
-                    standObst.w = 100;
-                    standObst.h = 100;
-                    standObst.img = imgObstacle1;
-                    standObst.color = null;
-                    standObst.form = 'rectangle';
-                    break;
-                case 5:
-                    standObst.x = 505;
-                    standObst.y = 405;
-                    standObst.w = 20;
-                    standObst.h = 20;
-                    standObst.color = standColorObstacle;
-                    standObst.img = null;
-                    standObst.form = 'rectangle';
-                    break;
-                case 6:
-                    standObst.x = 425;
-                    standObst.y = 254;
-                    standObst.w = 50;
-                    standObst.h = 50;
-                    standObst.color = '#009EE3';
-                    standObst.img = null;
-                    standObst.form = 'rectangle';
-                    break;
-                default:
-                    var x = imgObjectList[currentBackground].width - 50;
-                    var y = imgObjectList[currentBackground].height - 50;
-                    standObst.x = x;
-                    standObst.y = y;
-                    standObst.w = 50;
-                    standObst.h = 50;
-                    standObst.color = standColorObstacle;
-                    standObst.img = null;
-                    standObst.form = 'rectangle';
-            }
-            standObst.type = 'obstacle';
-            obstacleList[0] = standObst;
-        }
+        standObst.type = 'obstacle';
+        obstacleList.push(defaultObstacle);
+        obstacleList[0] = standObst;
     }
     function setRuler() {
         if (currentBackground == 4) {
