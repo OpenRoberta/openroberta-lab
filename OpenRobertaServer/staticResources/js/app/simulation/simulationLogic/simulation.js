@@ -615,6 +615,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
         for (var i = 0; i < numRobots; i++) {
             actionValues.push({});
         }
+        globalID = requestAnimationFrame(render);
         var now = new Date().getTime();
         var dtSim = now - time;
         var dtRobot = Math.min(15, Math.abs(dtSim - renderTime) / numRobots);
@@ -678,7 +679,6 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
         scene.updateSensorValues(!pause);
         scene.drawRobots();
         renderTime = new Date().getTime() - renderTimeStart;
-        globalID = requestAnimationFrame(render);
     }
     function allInterpretersTerminated() {
         for (var i = 0; i < interpreters.length; i++) {

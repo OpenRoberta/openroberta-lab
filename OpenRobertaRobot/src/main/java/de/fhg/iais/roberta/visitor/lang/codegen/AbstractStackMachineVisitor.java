@@ -423,7 +423,7 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
                 o = makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0);
                 break;
             case COLOR:
-                o = makeNode(C.EXPR).put(C.EXPR, C.LED_COLOR_CONST).put(C.VALUE, 3);
+                o = makeNode(C.EXPR).put(C.EXPR, C.COLOR_CONST).put(C.VALUE, 3);
                 break;
             case NULL:
             case CONNECTION:
