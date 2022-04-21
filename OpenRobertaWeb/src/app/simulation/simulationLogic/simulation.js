@@ -650,6 +650,7 @@ function render() {
     for (var i = 0; i < numRobots; i++) {
         actionValues.push({});
     }
+    globalID = requestAnimationFrame(render);
     var now = new Date().getTime();
     var dtSim = now - time;
     var dtRobot = Math.min(15, Math.abs(dtSim - renderTime) / numRobots);
@@ -718,7 +719,6 @@ function render() {
     scene.updateSensorValues(!pause);
     scene.drawRobots();
     renderTime = new Date().getTime() - renderTimeStart;
-    globalID = requestAnimationFrame(render);
 }
 
 function allInterpretersTerminated() {
