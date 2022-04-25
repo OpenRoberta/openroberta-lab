@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2022-04-20 13:59:02.733798",
+		"lastupdated": "2022-04-22 08:38:54.983343",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -379,6 +379,7 @@
 	"MOTOR_ON_FOR_TOOLTIP_MS": "Turns motor on and stops motor after execution after time has passed.",
 	"MOTOR_ON_FOR_TOOLTIP_RPM": "Turns motor on at speed in rpms (rotation per minute) and stops motor after execution of rotations/degrees.",
 	"MOTOR_ON_FOR_TOOLTIP_SERVO": "Sets the servo motor to a specific position in degrees.",
+	"MOTOR_ON_FOR_TOOLTIP_STEPPER_FESTOBIONICFLOWER": "Sets the stepper motor to a specific position in rotations.",
 	"STEP_MOTOR_ON_TOOLTIP": "Turns motor on with a provided speed in rpm and stops motor after execution of provided number of rotations.",
 	"MOTOR_GETPOWER_TOOLTIP": "Gets current power of this motor.",
 	"MOTOR_SETPOWER_TOOLTIP": "Sets power of this motor.",
@@ -481,6 +482,8 @@
 	"MOTOR_DEGREE": "degree",
 	"MOTOR_ROTATION": "rotation",
 	"MOTOR_ROTATION_PER_MINUTE": "rpm",
+	"MOTOR_OPEN": "open",
+	"MOTOR_CLOSE": "close",
 	"MOTOR_FOREWARD": "forwards",
 	"MOTOR_BACKWARD": "backwards",
 	"MOTOR_DRIVE": "drive",
@@ -1500,6 +1503,7 @@
 	"FOURDIGITDISPLAY_CLEAR_TOOLTIP": "Clears the 4-Digit Display.",
 	"COLON": "colon",
 	"FROM_POSITION": "from position",
+	"POSITION": "position",
 	"LEDBAR": "LED Bar",
 	"LEDBAR_TOOLTIP": "Represents a Grove LED Bar v2.0 by Seeed.",
 	"LEDBAR_SET_TOOLTIP": "Sets the specified LED [0-9] on the LED Bar to the given brightness [0-8].",

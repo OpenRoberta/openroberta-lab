@@ -108,7 +108,7 @@
     </block>
   </category>
   <category name="TOOLBOX_SENSOR" svg="true">
-    <block type="robSensors_key_getSample">
+    <block type="robSensors_touch_getSample">
       <field name="SENSORPORT">1</field>
     </block>
     <block type="robSensors_sound_getSample">
