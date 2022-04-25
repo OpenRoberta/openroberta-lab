@@ -232,13 +232,6 @@
                     <field name="CONNECTOR">1</field>
                 </block>
             </instance>
-            <instance x="372" y="131">
-                <block type="robConf_gyro" id="f+fi:U5b8C-LJ-96G8r7" intask="true">
-                    <field name="NAME">T2</field>
-                    <field name="VAR">W</field>
-                    <field name="CONNECTOR">1</field>
-                </block>
-            </instance>
             <instance x="219" y="225">
                 <block type="robConf_buzzer" id="3" intask="true">
                     <field name="NAME">S</field>

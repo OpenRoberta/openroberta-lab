@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.visitor;
+package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.List;
 
@@ -29,7 +29,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.hardware.IWeDoVisitor;
+import de.fhg.iais.roberta.visitor.C;
+import de.fhg.iais.roberta.visitor.IWeDoVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IWeDoVisitor<V> {
@@ -130,7 +131,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
         ConfigurationComponent confGyroSensor = getConfigurationComponent(gyroSensor.getUserDefinedPort());
         String brickName = confGyroSensor.getProperty("VAR");
         String port = confGyroSensor.getProperty("CONNECTOR");
-        String slot = gyroSensor.getSlot().toString(); // the mode is in the slot?
+        String slot = gyroSensor.getSlot(); // the mode is in the slot?
         if ( brickName != null && port != null ) {
             JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GYRO).put(C.NAME, brickName).put(C.PORT, port).put(C.MODE, slot);
             return app(o);
