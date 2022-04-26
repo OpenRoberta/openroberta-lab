@@ -128,7 +128,7 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
         WebotsSimulation.prototype.uploadController = function (sourceCode) {
             var message = {
                 name: 'supervisor',
-                message: 'upload:' + sourceCode
+                message: 'upload:' + sourceCode,
             };
             _super.prototype.sendMessage.call(this, 'robot:' + JSON.stringify(message));
         };
@@ -167,7 +167,7 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
                 else if (text.indexOf('getVolume') === 0) {
                     var message = {
                         name: 'NAO',
-                        message: 'volume:' + that.volume * 100
+                        message: 'volume:' + that.volume * 100,
                     };
                     that.sendMessage('robot:' + JSON.stringify(message));
                 }
@@ -247,7 +247,7 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
             var that = this;
             var message = {
                 name: 'NAO',
-                message: 'finish'
+                message: 'finish',
             };
             utterThis.onend = function (event) {
                 that.sendMessage('robot:' + JSON.stringify(message));
@@ -277,7 +277,7 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
                 this.recognition.onend = function () {
                     var message = {
                         name: 'NAO',
-                        message: 'transcript:' + that.final_transcript
+                        message: 'transcript:' + that.final_transcript,
                     };
                     that.sendMessage('robot:' + JSON.stringify(message));
                     this.stop();
@@ -294,7 +294,7 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
                 alert('Sorry, your browser does not support speech recognition. Please use the latest version of Chrome, Edge, Safari or Opera');
                 var message = {
                     name: 'NAO',
-                    message: 'transcript:' + ''
+                    message: 'transcript:' + '',
                 };
                 this.sendMessage('robot:' + JSON.stringify(message));
             }

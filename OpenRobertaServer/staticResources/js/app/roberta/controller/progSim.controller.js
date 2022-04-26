@@ -123,14 +123,14 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
                 position.left = $('#blocklyDiv').width() + 12;
                 $('#simRobotModal').css({
                     top: position.top,
-                    left: position.left
+                    left: position.left,
                 });
             }
             else {
                 position.left += 48;
                 $('#simRobotModal').css({
                     top: position.top,
-                    left: position.left
+                    left: position.left,
                 });
             }
             $('#simRobotModal').draggable();
@@ -143,7 +143,7 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
                 top: position.top,
                 right: 12,
                 left: 'initial',
-                bottom: 'inherit'
+                bottom: 'inherit',
             });
             $('#simValuesModal').draggable();
         }, 'sim show values clicked');

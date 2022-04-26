@@ -12,7 +12,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             GUISTATE.gui.webview = opt_data || false;
             if (GUISTATE.gui.webview) {
                 $('.logo').css({
-                    right: '32px'
+                    right: '32px',
                 });
             }
             GUISTATE.gui.view = 'tabProgram';
@@ -380,7 +380,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
                 WEBVIEW_C.jsToAppInterface({
                     target: 'internal',
                     type: 'setRobot',
-                    robot: robotGroup
+                    robot: robotGroup,
                 });
             }
         }

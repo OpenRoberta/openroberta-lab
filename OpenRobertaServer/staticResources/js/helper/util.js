@@ -342,7 +342,9 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.c
                 downloadLink.onclick = destroyClickedElement;
                 downloadLink.style.display = 'none';
                 document.body.appendChild(downloadLink);
-                downloadLink.click();
+                setTimeout(function () {
+                    downloadLink.click();
+                }, 0);
             }
         }
         else {
@@ -352,7 +354,9 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.c
             downloadLink.style.display = 'none';
             document.body.appendChild(downloadLink);
             downloadLink.onclick = destroyClickedElement;
-            downloadLink.click();
+            setTimeout(function () {
+                downloadLink.click();
+            }, 0);
         }
     }
     exports.download = download;
@@ -511,7 +515,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.c
         if ($('.fromRight.rightActive').hasClass('shifting')) {
             return;
         }
-        if (GUISTATE_C.hasWebotsSim() && NAOSIM.getIsPrepared()) {
+        if (GUISTATE_C.hasWebotsSim()) {
             NAOSIM.disconnect();
         }
         $('.fromRight.rightActive').addClass('shifting');
