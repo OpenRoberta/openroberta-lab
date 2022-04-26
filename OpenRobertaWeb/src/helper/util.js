@@ -56,7 +56,7 @@ function clone(obj) {
         return copy;
     }
 
-    throw new Error('Unable to copy obj! Its type isn\'t supported.');
+    throw new Error("Unable to copy obj! Its type isn't supported.");
 }
 
 function isEmpty(obj) {
@@ -194,7 +194,7 @@ function checkVisibility() {
             hidden: 'visibilitychange',
             webkitHidden: 'webkitvisibilitychange',
             mozHidden: 'mozvisibilitychange',
-            msHidden: 'msvisibilitychange'
+            msHidden: 'msvisibilitychange',
         };
     for (stateKey in keys) {
         if (stateKey in document) {
@@ -202,7 +202,7 @@ function checkVisibility() {
             break;
         }
     }
-    return function(c) {
+    return function (c) {
         if (c) {
             document.addEventListener(eventKey, c);
         }
@@ -211,7 +211,7 @@ function checkVisibility() {
 }
 
 function setFocusOnElement($elem) {
-    setTimeout(function() {
+    setTimeout(function () {
         if ($elem.is(':visible') == true) {
             $elem.focus();
         }
@@ -220,11 +220,11 @@ function setFocusOnElement($elem) {
 
 function showSingleModal(customize, onSubmit, onHidden, validator) {
     customize();
-    $('#single-modal-form').onWrap('submit', function(e) {
+    $('#single-modal-form').onWrap('submit', function (e) {
         e.preventDefault();
         onSubmit();
     });
-    $('#single-modal').onWrap('hidden.bs.modal', function() {
+    $('#single-modal').onWrap('hidden.bs.modal', function () {
         $('#single-modal-form').off('submit');
         $('#singleModalInput').val('');
         $('#single-modal-form').validate().resetForm();
@@ -237,11 +237,11 @@ function showSingleModal(customize, onSubmit, onHidden, validator) {
 }
 
 function showSingleListModal(customize, onSubmit, onHidden, validator) {
-    $('#single-modal-list-form').onWrap('submit', function(e) {
+    $('#single-modal-list-form').onWrap('submit', function (e) {
         e.preventDefault();
         onSubmit();
     });
-    $('#single-modal-list').onWrap('hidden.bs.modal', function() {
+    $('#single-modal-list').onWrap('hidden.bs.modal', function () {
         $('#single-modal-list-form').unbind('submit');
         onHidden();
     });
@@ -257,13 +257,13 @@ function showMsgOnTop(msg) {
     $('#show-message').find('button').removeAttr('data-dismiss');
     $('#show-message')
         .find('button')
-        .oneWrap('click', function(e) {
+        .oneWrap('click', function (e) {
             $('#show-message').modal('hide');
             $('#show-message').find('button').attr('data-dismiss', 'modal');
         });
     MSG.displayInformation(
         {
-            rc: 'not ok'
+            rc: 'not ok',
         },
         '',
         msg
@@ -349,7 +349,7 @@ function destroyClickedElement(event) {
 function download(fileName, content) {
     if ('Blob' in window && navigator.userAgent.toLowerCase().match(/iPad|iPhone|Android/i) == null) {
         var contentAsBlob = new Blob([content], {
-            type: 'application/octet-stream'
+            type: 'application/octet-stream',
         });
         if ('msSaveOrOpenBlob' in navigator) {
             navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
@@ -361,7 +361,7 @@ function download(fileName, content) {
             downloadLink.onclick = destroyClickedElement;
             downloadLink.style.display = 'none';
             document.body.appendChild(downloadLink);
-            setTimeout(function() {
+            setTimeout(function () {
                 downloadLink.click();
             }, 0);
         }
@@ -372,7 +372,7 @@ function download(fileName, content) {
         downloadLink.style.display = 'none';
         document.body.appendChild(downloadLink);
         downloadLink.onclick = destroyClickedElement;
-        setTimeout(function() {
+        setTimeout(function () {
             downloadLink.click();
         }, 0);
     }
@@ -431,23 +431,23 @@ var __entityMap = {
     '<': '&lt;',
     '>': '&gt;',
     '"': '&quot;',
-    '\'': '&#39;',
-    '/': '&#x2F;'
+    "'": '&#39;',
+    '/': '&#x2F;',
 };
 
-String.prototype.escapeHTML = function() {
-    return String(this).replace(/[&<>"'\/]/g, function(s) {
+String.prototype.escapeHTML = function () {
+    return String(this).replace(/[&<>"'\/]/g, function (s) {
         return __entityMap[s];
     });
 };
 
-$.fn.draggable = function(opt) {
+$.fn.draggable = function (opt) {
     opt = $.extend(
         {
             handle: '',
             cursor: 'move',
             draggableClass: 'draggable',
-            activeHandleClass: 'active-handle'
+            activeHandleClass: 'active-handle',
         },
         opt
     );
@@ -457,7 +457,7 @@ $.fn.draggable = function(opt) {
 
     $elements
         .css('cursor', opt.cursor)
-        .on('mousedown touchstart', function(e) {
+        .on('mousedown touchstart', function (e) {
             var pageX = e.pageX || e.originalEvent.touches[0].pageX;
             var pageY = e.pageY || e.originalEvent.touches[0].pageY;
             if (opt.handle === '') {
@@ -472,7 +472,7 @@ $.fn.draggable = function(opt) {
                 pos_y = $selected.offset().top + drg_h - pageY,
                 pos_x = $selected.offset().left + drg_w - pageX;
             $(document)
-                .on('mousemove touchmove', function(e) {
+                .on('mousemove touchmove', function (e) {
                     var pageX = e.pageX || e.originalEvent.touches[0].pageX;
                     var pageY = e.pageY || e.originalEvent.touches[0].pageY;
                     // special case movable slider between workspace and right divs
@@ -482,28 +482,28 @@ $.fn.draggable = function(opt) {
                         var left = Math.max(left, 42);
                         $selected.offset({
                             top: 0,
-                            left: left - 4
+                            left: left - 4,
                         });
                         $('#blockly').width(left + 3);
                         $('.rightMenuButton').css({
-                            right: $(window).width() - left
+                            right: $(window).width() - left,
                         });
                         $('.fromRight').css({
-                            width: $(window).width() - $('#blockly').width()
+                            width: $(window).width() - $('#blockly').width(),
                         });
                         ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                         $(window).resize();
                     } else {
                         $selected.offset({
                             top: pageY + pos_y - drg_h,
-                            left: pageX + pos_x - drg_w
+                            left: pageX + pos_x - drg_w,
                         });
                     }
                     $selected.css({
-                        right: 'auto'
+                        right: 'auto',
                     });
                 })
-                .on('mouseup touchend', function() {
+                .on('mouseup touchend', function () {
                     $(this).off('mousemove touchmove'); // Unbind events from document
                     if ($selected !== null) {
                         $selected.removeClass(opt.draggableClass);
@@ -511,7 +511,7 @@ $.fn.draggable = function(opt) {
                     }
                 });
         })
-        .on('mouseup touchend', function() {
+        .on('mouseup touchend', function () {
             if ($selected) {
                 if (opt.handle === '') {
                     $selected.removeClass(opt.draggableClass);
@@ -525,25 +525,25 @@ $.fn.draggable = function(opt) {
 };
 
 const originalAddClass = $.fn.addClass;
-$.fn.addClass = function() {
+$.fn.addClass = function () {
     let result = originalAddClass.apply(this, arguments);
     $(this).trigger('classChange');
     return result;
 };
 
 const originalRemoveClass = $.fn.removeClass;
-$.fn.removeClass = function() {
+$.fn.removeClass = function () {
     let result = originalRemoveClass.apply(this, arguments);
     $(this).trigger('classChange');
     return result;
 };
 
-$.fn.closeRightView = function(opt_callBack) {
+$.fn.closeRightView = function (opt_callBack) {
     if ($('.fromRight.rightActive').hasClass('shifting')) {
         return;
     }
-    if (GUISTATE_C.hasWebotsSim()) {
-        NAOSIM.disconnect();
+    if (GUISTATE_C.hasWebotsSim() && WEBOTSIM.isPrepared()) {
+        WEBOTSIM.disconnect();
     }
     $('.fromRight.rightActive').addClass('shifting');
     Blockly.hideChaff();
@@ -551,21 +551,21 @@ $.fn.closeRightView = function(opt_callBack) {
     var that = this; //$('#blockly')
     $('.fromRight.rightActive').animate(
         {
-            width: 0
+            width: 0,
         },
         {
             duration: ANIMATION_DURATION,
-            start: function() {
+            start: function () {
                 $('.modal').modal('hide');
                 $('.rightMenuButton.rightActive').removeClass('rightActive');
             },
-            step: function(now) {
+            step: function (now) {
                 that.width($('#main-section').outerWidth() - now);
                 $('.rightMenuButton').css('right', now);
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                 $(window).resize();
             },
-            done: function() {
+            done: function () {
                 that.width($('#main-section').outerWidth());
                 $('.rightMenuButton').css('right', 0);
                 ratioWorkspace = 1;
@@ -578,14 +578,14 @@ $.fn.closeRightView = function(opt_callBack) {
                     opt_callBack();
                 }
             },
-            always: function() {
+            always: function () {
                 $('.fromRight.shifting').removeClass('shifting');
-            }
+            },
         }
     );
 };
 
-$.fn.openRightView = function(viewName, initialViewWidth, opt_callBack) {
+$.fn.openRightView = function (viewName, initialViewWidth, opt_callBack) {
     if ($('.fromRight.rightActive').hasClass('shifting')) {
         return;
     }
@@ -623,17 +623,17 @@ $.fn.openRightView = function(viewName, initialViewWidth, opt_callBack) {
     var that = this;
     $('.fromRight.rightActive').animate(
         {
-            width: width
+            width: width,
         },
         {
             duration: ANIMATION_DURATION,
-            step: function(now, tween) {
+            step: function (now, tween) {
                 that.width($('#main-section').outerWidth() - now);
                 $('.rightMenuButton').css('right', now);
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                 $(window).resize();
             },
-            done: function() {
+            done: function () {
                 $('#sliderDiv').show();
                 that.width($('#main-section').outerWidth() - $('.fromRight.rightActive').width());
                 $('.rightMenuButton').css('right', $('.fromRight.rightActive').width());
@@ -643,20 +643,20 @@ $.fn.openRightView = function(viewName, initialViewWidth, opt_callBack) {
                     $('.blocklyToolboxDiv').css('display', 'none');
                 }
                 $('#sliderDiv').css({
-                    left: that.width() - 7
+                    left: that.width() - 7,
                 });
                 if (typeof opt_callBack == 'function') {
                     opt_callBack();
                 }
             },
-            always: function() {
+            always: function () {
                 $('#' + viewName + 'Div').removeClass('shifting');
-            }
+            },
         }
     );
 };
 
-$(window).resize(function() {
+$(window).resize(function () {
     var parentWidth = $('#main-section').outerWidth();
     var height = Math.max($('#blockly').outerHeight(), $('#brickly').outerHeight());
 
@@ -755,10 +755,10 @@ function annotateBlocks(workspace, annotations) {
 
 function removeLinks($elem) {
     $elem
-        .filter(function() {
+        .filter(function () {
             return $(this).attr('href') && ($(this).attr('href').indexOf('http') === 0 || $(this).attr('href').indexOf('javascript:linkTo') === 0);
         })
-        .each(function() {
+        .each(function () {
             $(this).removeAttr('href');
         });
 }
@@ -791,5 +791,5 @@ export {
     clearTabAlert,
     clearAnnotations,
     annotateBlocks,
-    removeLinks
+    removeLinks,
 };

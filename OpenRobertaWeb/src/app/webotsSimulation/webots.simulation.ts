@@ -312,7 +312,7 @@ async function waitFor(predicate: () => boolean, interval: number, timeout: numb
 }
 
 class WebotsSimulationController {
-    private isPrepared = false;
+    private prepared = false;
     private webotsSimulation: WebotsSimulation;
 
     async init(sourceCode) {
@@ -354,8 +354,8 @@ class WebotsSimulationController {
         this.webotsSimulation.disconnect();
     }
 
-    getIsPrepared() {
-        return this.isPrepared;
+    isPrepared() {
+        return this.prepared;
     }
 
     private async wasmLoaded() {
@@ -366,7 +366,7 @@ class WebotsSimulationController {
         if (!this.isPrepared) {
             WebotsSimulationController.loadCss();
             WebotsSimulationController.prepareModuleForWebots();
-            this.isPrepared = true;
+            this.prepared = true;
         }
     }
 

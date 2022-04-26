@@ -327,7 +327,7 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
     }
     var WebotsSimulationController = /** @class */ (function () {
         function WebotsSimulationController() {
-            this.isPrepared = false;
+            this.prepared = false;
         }
         WebotsSimulationController.prototype.init = function (sourceCode) {
             return __awaiter(this, void 0, void 0, function () {
@@ -375,8 +375,8 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
         WebotsSimulationController.prototype.disconnect = function () {
             this.webotsSimulation.disconnect();
         };
-        WebotsSimulationController.prototype.getIsPrepared = function () {
-            return this.isPrepared;
+        WebotsSimulationController.prototype.isPrepared = function () {
+            return this.prepared;
         };
         WebotsSimulationController.prototype.wasmLoaded = function () {
             return __awaiter(this, void 0, void 0, function () {
@@ -394,7 +394,7 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
             if (!this.isPrepared) {
                 WebotsSimulationController.loadCss();
                 WebotsSimulationController.prepareModuleForWebots();
-                this.isPrepared = true;
+                this.prepared = true;
             }
         };
         WebotsSimulationController.createWebotsDiv = function () {

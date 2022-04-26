@@ -1,4 +1,4 @@
-define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.controller", "webots.simulation", "jquery-validate", "bootstrap"], function (require, exports, MSG, LOG, $, Blockly, GUISTATE_C, NAOSIM) {
+define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.controller", "jquery-validate", "bootstrap"], function (require, exports, MSG, LOG, $, Blockly, GUISTATE_C) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.removeLinks = exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = void 0;
     var ANIMATION_DURATION = 750;
@@ -46,7 +46,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.c
             }
             return copy;
         }
-        throw new Error('Unable to copy obj! Its type isn\'t supported.');
+        throw new Error("Unable to copy obj! Its type isn't supported.");
     }
     exports.clone = clone;
     function isEmpty(obj) {
@@ -180,7 +180,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.c
             hidden: 'visibilitychange',
             webkitHidden: 'webkitvisibilitychange',
             mozHidden: 'mozvisibilitychange',
-            msHidden: 'msvisibilitychange'
+            msHidden: 'msvisibilitychange',
         };
         for (stateKey in keys) {
             if (stateKey in document) {
@@ -248,7 +248,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.c
             $('#show-message').find('button').attr('data-dismiss', 'modal');
         });
         MSG.displayInformation({
-            rc: 'not ok'
+            rc: 'not ok',
         }, '', msg);
     }
     exports.showMsgOnTop = showMsgOnTop;
@@ -329,7 +329,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.c
     function download(fileName, content) {
         if ('Blob' in window && navigator.userAgent.toLowerCase().match(/iPad|iPhone|Android/i) == null) {
             var contentAsBlob = new Blob([content], {
-                type: 'application/octet-stream'
+                type: 'application/octet-stream',
             });
             if ('msSaveOrOpenBlob' in navigator) {
                 navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
@@ -414,8 +414,8 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.c
         '<': '&lt;',
         '>': '&gt;',
         '"': '&quot;',
-        '\'': '&#39;',
-        '/': '&#x2F;'
+        "'": '&#39;',
+        '/': '&#x2F;',
     };
     String.prototype.escapeHTML = function () {
         return String(this).replace(/[&<>"'\/]/g, function (s) {
@@ -427,7 +427,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.c
             handle: '',
             cursor: 'move',
             draggableClass: 'draggable',
-            activeHandleClass: 'active-handle'
+            activeHandleClass: 'active-handle',
         }, opt);
         var $selected = null;
         var $elements = opt.handle === '' ? this : this.find(opt.handle);
@@ -456,14 +456,14 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.c
                     var left = Math.max(left, 42);
                     $selected.offset({
                         top: 0,
-                        left: left - 4
+                        left: left - 4,
                     });
                     $('#blockly').width(left + 3);
                     $('.rightMenuButton').css({
-                        right: $(window).width() - left
+                        right: $(window).width() - left,
                     });
                     $('.fromRight').css({
-                        width: $(window).width() - $('#blockly').width()
+                        width: $(window).width() - $('#blockly').width(),
                     });
                     ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                     $(window).resize();
@@ -471,11 +471,11 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.c
                 else {
                     $selected.offset({
                         top: pageY + pos_y - drg_h,
-                        left: pageX + pos_x - drg_w
+                        left: pageX + pos_x - drg_w,
                     });
                 }
                 $selected.css({
-                    right: 'auto'
+                    right: 'auto',
                 });
             })
                 .on('mouseup touchend', function () {
@@ -515,15 +515,15 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.c
         if ($('.fromRight.rightActive').hasClass('shifting')) {
             return;
         }
-        if (GUISTATE_C.hasWebotsSim()) {
-            NAOSIM.disconnect();
+        if (GUISTATE_C.hasWebotsSim() && WEBOTSIM.isPrepared()) {
+            WEBOTSIM.disconnect();
         }
         $('.fromRight.rightActive').addClass('shifting');
         Blockly.hideChaff();
         $('.blocklyToolboxDiv').css('display', 'inherit');
         var that = this; //$('#blockly')
         $('.fromRight.rightActive').animate({
-            width: 0
+            width: 0,
         }, {
             duration: ANIMATION_DURATION,
             start: function () {
@@ -551,7 +551,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.c
             },
             always: function () {
                 $('.fromRight.shifting').removeClass('shifting');
-            }
+            },
         });
     };
     $.fn.openRightView = function (viewName, initialViewWidth, opt_callBack) {
@@ -591,7 +591,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.c
         $('#' + viewName + 'Div, #' + buttonName + 'Button').addClass('rightActive');
         var that = this;
         $('.fromRight.rightActive').animate({
-            width: width
+            width: width,
         }, {
             duration: ANIMATION_DURATION,
             step: function (now, tween) {
@@ -610,7 +610,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.c
                     $('.blocklyToolboxDiv').css('display', 'none');
                 }
                 $('#sliderDiv').css({
-                    left: that.width() - 7
+                    left: that.width() - 7,
                 });
                 if (typeof opt_callBack == 'function') {
                     opt_callBack();
@@ -618,7 +618,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "guiState.c
             },
             always: function () {
                 $('#' + viewName + 'Div').removeClass('shifting');
-            }
+            },
         });
     };
     $(window).resize(function () {
