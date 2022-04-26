@@ -363,7 +363,7 @@ class WebotsSimulationController {
     }
 
     private prepareWebots() {
-        if (!this.isPrepared) {
+        if (!this.isPrepared()) {
             WebotsSimulationController.loadCss();
             WebotsSimulationController.prepareModuleForWebots();
             this.prepared = true;

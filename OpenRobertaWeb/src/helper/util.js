@@ -5,7 +5,7 @@ import * as Blockly from 'blockly';
 import 'jquery-validate';
 import 'bootstrap';
 import * as GUISTATE_C from 'guiState.controller';
-import * as NAOSIM from 'webots.simulation';
+import * as WEBOTSIM from 'webots.simulation';
 
 const ANIMATION_DURATION = 750;
 

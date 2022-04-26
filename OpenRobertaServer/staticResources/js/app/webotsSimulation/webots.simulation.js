@@ -391,7 +391,7 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
             });
         };
         WebotsSimulationController.prototype.prepareWebots = function () {
-            if (!this.isPrepared) {
+            if (!this.isPrepared()) {
                 WebotsSimulationController.loadCss();
                 WebotsSimulationController.prepareModuleForWebots();
                 this.prepared = true;
