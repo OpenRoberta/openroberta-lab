@@ -1,4 +1,5 @@
-#include "bob3.h" 
+#include "bob3.h"
+#include <stdlib.h>
 #include <math.h>
 Bob3 rob;
 

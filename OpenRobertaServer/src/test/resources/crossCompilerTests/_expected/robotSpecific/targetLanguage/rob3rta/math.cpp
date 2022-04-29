@@ -1,4 +1,5 @@
 #include "robot.h"
+#include <stdlib.h>
 #include <math.h>
 #define _ROB3RTA_
 Robot rob;
