@@ -31,6 +31,7 @@ public final class Bob3CppVisitor extends NIBOCommonCppVisitor {
             return;
         }
         this.sb.append("#include \"bob3.h\" \n");
+        this.sb.append("#include <math.h> \n");
         this.sb.append("Bob3 rob;\n");
 
         super.generateProgramPrefix(withWrapping);

@@ -1,4 +1,5 @@
 #include "bob3.h" 
+#include <math.h>
 Bob3 rob;
 
 void math1();

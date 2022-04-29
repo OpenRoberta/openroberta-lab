@@ -1,4 +1,6 @@
 #include "robot.h"
+#include <math.h>
+#define _ROB3RTA_
 Robot rob;
 
 void math1();
