@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.visitor.validate;
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
@@ -13,7 +12,6 @@ import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
-import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ParticleSensor;
@@ -54,18 +52,9 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
             return null;
         }
         for ( Pair<String, Expr<Void>> value : sendDataAction.getId2Phenomena() ) {
-            if ( value.getSecond() instanceof EmptyExpr ) {
-                // well, here can be an annotation if we encounter an empty input.
-                // this key, ACTION_ERROR_EMPTY_INPUT should be added to blockly, maybe.
-                addErrorToPhrase(sendDataAction, "ACTION_ERROR_EMPTY_INPUT");
-                return null;
-            }
-            value.getSecond().accept(this);
+            requiredComponentVisited(sendDataAction, value.getSecond());
         }
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.NONE, SC.SEND_DATA));
-        for ( Pair<String, Expr<Void>> value : sendDataAction.getId2Phenomena() ) {
-            value.getSecond().accept(this);
-        }
+        usedHardwareBuilder.addUsedActor(new UsedActor(SC.NONE, SC.SEND_DATA));
         return null;
     }
 
@@ -74,9 +63,7 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
         if ( !this.robotConfiguration.isComponentTypePresent(SC.ENVIRONMENTAL) ) {
             addErrorToPhrase(environmentalSensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
         }
-        this
-            .getBuilder(UsedHardwareBean.Builder.class)
-            .addUsedSensor(new UsedSensor(environmentalSensor.getUserDefinedPort(), SC.ENVIRONMENTAL, environmentalSensor.getMode()));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(environmentalSensor.getUserDefinedPort(), SC.ENVIRONMENTAL, environmentalSensor.getMode()));
         return null;
     }
 
@@ -85,7 +72,7 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
         if ( !this.robotConfiguration.isComponentTypePresent(SC.GPS) ) {
             addErrorToPhrase(gpsSensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
         }
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(gpsSensor.getUserDefinedPort(), SC.GPS, gpsSensor.getMode()));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(gpsSensor.getUserDefinedPort(), SC.GPS, gpsSensor.getMode()));
         return null;
     }
 
@@ -94,16 +81,16 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
         if ( !this.robotConfiguration.isComponentTypePresent(SC.PARTICLE) ) {
             addErrorToPhrase(particleSensor, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(particleSensor.getUserDefinedPort(), SC.PARTICLE, particleSensor.getMode()));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(particleSensor.getUserDefinedPort(), SC.PARTICLE, particleSensor.getMode()));
         return null;
     }
-    
+
     @Override
     public Void visitPlotClearAction(PlotClearAction<Void> plotClearAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
             addErrorToPhrase(plotClearAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(plotClearAction.getPort(), SC.SENSEBOX_PLOTTING));
+        usedHardwareBuilder.addUsedActor(new UsedActor(plotClearAction.getPort(), SC.SENSEBOX_PLOTTING));
         return null;
     }
 
@@ -112,9 +99,8 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
             addErrorToPhrase(plotPointAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(plotPointAction.getPort(), SC.SENSEBOX_PLOTTING));
-        plotPointAction.getValue().accept(this);
-        plotPointAction.getTickmark().accept(this);
+        requiredComponentVisited(plotPointAction, plotPointAction.getValue(), plotPointAction.getTickmark());
+        usedHardwareBuilder.addUsedActor(new UsedActor(plotPointAction.getPort(), SC.SENSEBOX_PLOTTING));
         return null;
     }
 
@@ -124,32 +110,31 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
         checkSensorPort(vemlLightSensor);
         switch ( vemlLightSensor.getMode() ) {
             case SC.LIGHT:
-                break;
             case SC.UVLIGHT:
                 break;
             default:
                 addErrorToPhrase(vemlLightSensor, "ILLEGAL_MODE_USED");
         }
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(vemlLightSensor.getUserDefinedPort(), SC.LIGHTVEML, vemlLightSensor.getMode()));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(vemlLightSensor.getUserDefinedPort(), SC.LIGHTVEML, vemlLightSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         checkSensorPort(compassSensor);
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(compassSensor.getUserDefinedPort(), SC.COMPASS, compassSensor.getMode()));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(compassSensor.getUserDefinedPort(), SC.COMPASS, compassSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
         checkSensorPort(soundSensor);
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(soundSensor.getUserDefinedPort(), SC.SOUND, soundSensor.getMode()));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(soundSensor.getUserDefinedPort(), SC.SOUND, soundSensor.getMode()));
         return null;
     }
-    
+
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction){
+    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         super.visitShowTextAction(showTextAction);
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
             addErrorToPhrase(showTextAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
@@ -158,7 +143,7 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction){
+    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
         super.visitClearDisplayAction(clearDisplayAction);
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
             addErrorToPhrase(clearDisplayAction, "CONFIGURATION_ERROR_ACTOR_MISSING");

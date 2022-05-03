@@ -203,14 +203,15 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        optionalComponentVisited(lightAction.getRgbLedColor());
         if ( !lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) ) {
+            optionalComponentVisited(lightAction.getRgbLedColor());
             if ( !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
                 addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
             } else {
                 this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(lightAction.getPort(), SC.LED));
             }
         } else {
+            requiredComponentVisited(lightAction, lightAction.getRgbLedColor());
             if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
                 addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
             } else {

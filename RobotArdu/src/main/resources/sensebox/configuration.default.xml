@@ -1,10 +1,10 @@
 <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="sensebox" xmlversion="3.1" description="" tags="">
     <instance x="250" y="85">
         <block type="robBrick_senseBox-Brick" id="DC@kFZs8?McKYe+9Bl3y" intask="true" deletable="false">
-            <mutation items="1" />
-            <field name="BOX_ID" />
+            <mutation items="1"/>
+            <field name="BOX_ID"/>
             <field name="NAME1">ID1</field>
-            <field name="ID1" />
+            <field name="ID1"/>
         </block>
     </instance>
     <instance x="250" y="191">
@@ -25,6 +25,8 @@
         </block>
     </instance>
     <instance x="500" y="250">
-    	<block type="robConf_robot" id="robot" intask="false" deletable="false">
-    		<field name="ROBOT"></field></block></instance>
+        <block type="robConf_robot" id="robot" intask="false" deletable="false">
+            <field name="ROBOT">undefined</field>
+        </block>
+    </instance>
 </block_set>
