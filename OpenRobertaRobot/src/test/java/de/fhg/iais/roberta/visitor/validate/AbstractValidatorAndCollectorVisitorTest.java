@@ -55,6 +55,10 @@ public class AbstractValidatorAndCollectorVisitorTest {
         public Void visitSimplePhrase(SimplePhrase simplePhrase) {
             return null;
         }
+
+        public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
+            return null;
+        }
     }
 
     private static class SimplePhrase extends Phrase<Void> {
@@ -62,7 +66,6 @@ public class AbstractValidatorAndCollectorVisitorTest {
             super(null, BlocklyBlockProperties.make("1", "1"), null);
         }
     }
-
 
     @Before
     public void setUp() throws Exception {

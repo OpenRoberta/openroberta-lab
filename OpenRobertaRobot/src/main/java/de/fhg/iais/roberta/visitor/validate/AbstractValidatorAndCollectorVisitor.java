@@ -12,6 +12,11 @@ import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
+import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.BaseVisitor;
@@ -106,11 +111,8 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
     @SafeVarargs
     protected final void requiredComponentVisited(Phrase<Void> superPhrase, Phrase<Void>... subPhrases) {
         for ( Phrase<Void> subPhrase : subPhrases ) {
-            if ( subPhrase instanceof EmptyExpr<?> ) {
-                addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
-            } else {
-                subPhrase.accept(mainVisitor);
-            }
+            mkEmptyCheck(superPhrase, subPhrase);
+            subPhrase.accept(mainVisitor);
         }
     }
 
@@ -122,14 +124,30 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      */
     protected final <T extends Phrase<Void>> void requiredComponentVisited(Phrase<Void> superPhrase, List<T> subPhrases) {
         for ( Phrase<Void> subPhrase : subPhrases ) {
-            if ( subPhrase instanceof EmptyExpr<?> ) {
-                addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
-            } else {
-                subPhrase.accept(mainVisitor);
-            }
+            mkEmptyCheck(superPhrase, subPhrase);
+            subPhrase.accept(mainVisitor);
         }
     }
 
+    private void mkEmptyCheck(Phrase<Void> superPhrase, Phrase<Void> subPhrase) {
+        if ( subPhrase instanceof EmptyExpr<?> ) {
+            addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
+        } else if ( subPhrase instanceof ExprList<?> ) {
+            for ( Expr<?> expr : ((ExprList<?>) subPhrase).get() ) {
+                if ( expr instanceof EmptyExpr<?> ) {
+                    addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
+                }
+            }
+        } else if ( subPhrase instanceof StmtList<?> ) {
+            for ( Stmt<?> stmt : ((StmtList<?>) subPhrase).get() ) {
+                if ( stmt instanceof ExprStmt<?> ) {
+                    if ( ((ExprStmt<?>) stmt).getExpr() instanceof EmptyExpr<?> ) {
+                        addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * Appends an error to the phrase and remembers the error by delegating it to a {@link ErrorAndWarningBean}
