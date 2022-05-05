@@ -1,6 +1,6 @@
 define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.bias2number = exports.weight2weight = exports.weight2number = exports.updValue = exports.regularizations = exports.activations = exports.RegularizationFunction = exports.Activations = exports.Errors = void 0;
+    exports.weight2number = exports.updValue = exports.regularizations = exports.activations = exports.RegularizationFunction = exports.Activations = exports.Errors = void 0;
     /** Polyfill for TANH */
     Math.tanh =
         Math.tanh ||
@@ -133,38 +133,4 @@ define(["require", "exports"], function (require, exports) {
         }
     }
     exports.weight2number = weight2number;
-    /**
-     * normalize the view of a weight. Adds a '*' if no operator is found at the start of a weight.
-     * @param weight
-     */
-    function weight2weight(weight) {
-        var w = weight.trim();
-        if (w.length == 0) {
-            return '*0';
-        }
-        var opOpt = w.substr(0, 1);
-        if (opOpt === '*' || opOpt === ':' || opOpt === '/') {
-            return w;
-        }
-        else {
-            return '*' + w; // here it happens
-        }
-    }
-    exports.weight2weight = weight2weight;
-    function bias2number(bias) {
-        var b = bias.trim();
-        if (b === '') {
-            return 0;
-        }
-        else {
-            var number = +b;
-            if (isNaN(number)) {
-                return 0;
-            }
-            else {
-                return number;
-            }
-        }
-    }
-    exports.bias2number = bias2number;
 });

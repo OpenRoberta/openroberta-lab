@@ -14,12 +14,13 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
             this.activationKey = 'relu';
             this.activation = H.Activations.RELU;
             this.regularization = null;
-            this.initZero = false;
+            this.initUntil = null;
             this.collectStats = false;
             this.numHiddenLayers = 0;
             this.networkShape = [];
             this.weights = undefined;
             this.biases = undefined;
+            this.precision = '2';
             this.numInputs = 0;
             this.numOutputs = 0;
             // if no JSON is available from the program, the default from above is taken
@@ -33,13 +34,14 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
                 this.activationKey = json.activationKey !== undefined ? json.activationKey : 'relu';
                 this.activation = H.activations[this.activationKey];
                 this.regularization = null;
-                this.initZero = json.initZero !== undefined ? json.initZero : false;
+                this.initUntil = json.initUntil !== undefined ? json.initUntil : null;
                 this.collectStats = json.collectStats !== undefined ? json.collectStats : false;
                 this.numHiddenLayers = json.numHiddenLayers !== undefined ? json.numHiddenLayers : 0;
                 this.networkShape = json.networkShape !== undefined ? json.networkShape : [];
                 this.weights = json.weights !== undefined ? json.weights : undefined;
                 this.biases = json.biases !== undefined ? json.biases : undefined;
                 this.seed = json.seed !== undefined ? json.seed : undefined;
+                this.precision = json.precision !== undefined ? json.precision : '2';
             }
             if (inputNeurons !== undefined && inputNeurons != null) {
                 this.numInputs = inputNeurons.length;

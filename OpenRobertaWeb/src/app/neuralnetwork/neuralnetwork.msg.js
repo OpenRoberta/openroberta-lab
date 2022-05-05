@@ -24,4 +24,6 @@ var toIntegrateIntoBlocklyMsg = {
     NN_CLICK_NODE: 'erst Klick auf ein Neuron',
     NN_SHOW_ALL: 'alle zeigen, durch Klick ändern',
     NN_STEP_ONLY_ONCE: 'nur ein NNStep-Block erlaubt',
+    NN_SHOW_MATH: 'Berechnung des Neurons',
+    NN_SHOW_PRECISION: 'Nachkomma-Stellen',
 };

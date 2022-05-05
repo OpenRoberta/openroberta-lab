@@ -135,34 +135,3 @@ export function weight2number(weight: string): number {
         return number;
     }
 }
-
-/**
- * normalize the view of a weight. Adds a '*' if no operator is found at the start of a weight.
- * @param weight
- */
-export function weight2weight(weight: string): string {
-    const w = weight.trim();
-    if (w.length == 0) {
-        return '*0';
-    }
-    const opOpt = w.substr(0, 1);
-    if (opOpt === '*' || opOpt === ':' || opOpt === '/') {
-        return w;
-    } else {
-        return '*' + w; // here it happens
-    }
-}
-
-export function bias2number(bias: string): number {
-    let b = bias.trim();
-    if (b === '') {
-        return 0;
-    } else {
-        let number = +b;
-        if (isNaN(number)) {
-            return 0;
-        } else {
-            return number;
-        }
-    }
-}

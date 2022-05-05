@@ -12,13 +12,14 @@ export class State {
     activationKey = 'relu';
     activation = H.Activations.RELU;
     regularization: H.RegularizationFunction = null;
-    initZero = false;
+    initUntil = null;
     collectStats = false;
     numHiddenLayers = 0;
     networkShape: number[] = [];
     weights: string[][][] = undefined;
     biases: string[][] = undefined;
     seed: string;
+    precision: string = '2';
 
     numInputs = 0;
     numOutputs = 0;
@@ -37,13 +38,14 @@ export class State {
             this.activationKey = json.activationKey !== undefined ? json.activationKey : 'relu';
             this.activation = H.activations[this.activationKey];
             this.regularization = null;
-            this.initZero = json.initZero !== undefined ? json.initZero : false;
+            this.initUntil = json.initUntil !== undefined ? json.initUntil : null;
             this.collectStats = json.collectStats !== undefined ? json.collectStats : false;
             this.numHiddenLayers = json.numHiddenLayers !== undefined ? json.numHiddenLayers : 0;
             this.networkShape = json.networkShape !== undefined ? json.networkShape : [];
             this.weights = json.weights !== undefined ? json.weights : undefined;
             this.biases = json.biases !== undefined ? json.biases : undefined;
             this.seed = json.seed !== undefined ? json.seed : undefined;
+            this.precision = json.precision !== undefined ? json.precision : '2';
         }
         if (inputNeurons !== undefined && inputNeurons != null) {
             this.numInputs = inputNeurons.length;

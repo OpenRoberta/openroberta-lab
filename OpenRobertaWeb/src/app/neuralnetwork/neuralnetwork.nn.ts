@@ -1,5 +1,75 @@
 import * as STATE from './neuralnetwork.uistate';
 import * as H from './neuralnetwork.helper';
+import * as U from 'util';
+
+export class NNumber {
+    private weightAsNumber = 0.0;
+    private weightPrefix = '*';
+    private weightSuffix = 0.0;
+
+    setAsNumber(number: number) {
+        this.weightAsNumber = number;
+        this.weightPrefix = '*';
+        this.weightSuffix = number;
+    }
+
+    set(numberAsUntrimmedString: string, withOp: boolean): void {
+        const numberAsString = numberAsUntrimmedString.trim();
+        if (numberAsString.length == 0) {
+            this.weightAsNumber = 0.0;
+            this.weightPrefix = withOp ? '*' : '';
+            this.weightSuffix = 0.0;
+            return;
+        }
+        const opOpt = numberAsString.substr(0, 1);
+        if (opOpt === '*' || opOpt === ':' || opOpt === '/') {
+            let numberPart = +numberAsString.substr(1);
+            if (isNaN(numberPart)) {
+                numberPart = 0.0;
+            }
+            if (!withOp) {
+                this.weightAsNumber = numberPart;
+                this.weightPrefix = '';
+                this.weightSuffix = numberPart;
+            } else {
+                if (opOpt === '*') {
+                    this.weightAsNumber = numberPart;
+                } else if (numberPart === 0.0) {
+                    this.weightAsNumber = 0.0;
+                } else {
+                    this.weightAsNumber = 1.0 / numberPart;
+                }
+                this.weightPrefix = opOpt;
+                this.weightSuffix = numberPart;
+            }
+        } else {
+            let numberPart = +numberAsString;
+            if (isNaN(numberPart)) {
+                numberPart = 0.0;
+            }
+            this.weightAsNumber = numberPart;
+            this.weightPrefix = withOp ? '*' : '';
+            this.weightSuffix = numberPart;
+        }
+    }
+
+    get(): number {
+        return this.weightAsNumber;
+    }
+
+    getWoOp(): number {
+        return this.weightSuffix;
+    }
+
+    getOp(): string {
+        return this.weightPrefix;
+    }
+
+    getWithPrecision(precision: string): string {
+        const suffix = precision === '*' ? this.weightSuffix : U.toFixedPrecision(this.weightSuffix, +precision);
+        return this.weightPrefix + suffix;
+    }
+}
 
 /**
  * A node in a neural network. Each node has a state
@@ -9,8 +79,7 @@ import * as H from './neuralnetwork.helper';
 export class Node {
     readonly id: string;
     readonly inputLinks: Link[] = [];
-    private biasAsNumber = 0;
-    private bias = '0';
+    bias: NNumber = new NNumber();
     readonly outputs: Link[] = [];
     totalInput: number;
     output: number;
@@ -35,98 +104,85 @@ export class Node {
     /**
      * Creates a new node with the provided id and activation function.
      */
-    constructor(id: string, activation: H.ActivationFunction, initZero?: boolean) {
+    constructor(id: string, activation: H.ActivationFunction, initUntil?: number) {
         this.id = id;
         this.activation = activation;
-        if (initZero) {
-            this.biasAsNumber = 0;
-            this.bias = '0';
+        if (initUntil !== undefined && initUntil !== null) {
+            this.bias.setAsNumber(initUntil * Math.random());
         }
-    }
-
-    setBias(bias: string): void {
-        this.bias = bias;
-        this.biasAsNumber = H.bias2number(bias);
-    }
-
-    setBiasAsNumber(biasAsNumber: number): void {
-        this.bias = '' + biasAsNumber;
-        this.biasAsNumber = biasAsNumber;
-    }
-
-    getBias(): string {
-        return this.bias;
-    }
-
-    getBiasAsNumber(): number {
-        return this.biasAsNumber;
     }
 
     /** Recomputes the node's output and returns it. */
     updateOutput(): number {
         // Stores total input into the node.
-        this.totalInput = this.biasAsNumber;
+        this.totalInput = this.bias.get();
         for (let j = 0; j < this.inputLinks.length; j++) {
             let link = this.inputLinks[j];
-            this.totalInput += link.getWeightAsNumber() * link.source.output;
+            this.totalInput += link.weight.get() * link.source.output;
         }
         this.output = this.activation.output(this.totalInput);
         return this.output;
     }
 
     genMath(activationKey: string): string {
-        const biasIsZero = this.getBiasAsNumber() === 0;
+        const biasIsZero = this.bias.get() === 0;
         const noInputLinks = this.inputLinks.length === 0;
-        let math = activationKey + '( ';
+        const isLinearActivation = activationKey === 'linear';
+        let math = isLinearActivation ? '' : activationKey + '( ';
         if (noInputLinks) {
-            math += this.getBias() + ' )';
+            math += this.bias.get();
+            if (!isLinearActivation) {
+                math += ' )';
+            }
             return math;
         }
         if (!biasIsZero) {
-            math += this.getBias();
+            math += this.bias.get();
         }
         let firstLink = biasIsZero;
         this.inputLinks.forEach((link) => {
-            const weight = link.getWeight();
-            if (link.getWeightAsNumber() !== 0) {
-                const op1 = weight.substr(0, 1);
-                const op2 = weight.length > 1 ? weight.substr(1, 1) : '';
+            const weight = link.weight;
+            if (weight.get() !== 0) {
+                const op = weight.getOp();
+                const isPositive = weight.getWoOp() >= 0;
                 const source = link.source.id;
-                if (op1 === ':' || op1 === '/') {
-                    if (op2 === '-') {
-                        if (firstLink) {
-                            math += '0';
-                            firstLink = false;
-                        }
-                        math += ' - ' + source + '/' + weight.substr(2);
-                    } else {
+                if (op === ':' || op === '/') {
+                    if (isPositive) {
                         if (firstLink) {
                             firstLink = false;
                         } else {
                             math += ' + ';
                         }
-                        math += source + '/' + weight.substr(1);
+                        math += source + '/' + weight.getWoOp();
+                    } else {
+                        if (firstLink) {
+                            math += '0';
+                            firstLink = false;
+                        }
+                        math += ' - ' + source + '/' + -weight.getWoOp();
                     }
-                } else if (op2 === '-') {
-                    if (firstLink) {
-                        math += '0';
-                        firstLink = false;
-                    }
-                    math += ' - ' + weight.substr(2) + '*' + source;
-                } else {
+                } else if (isPositive) {
                     if (firstLink) {
                         firstLink = false;
                     } else {
                         math += ' + ';
                     }
-                    math += weight.substr(1) + '*' + source;
+                    math += weight.getWoOp() + '*' + source;
+                } else {
+                    if (firstLink) {
+                        math += '0';
+                        firstLink = false;
+                    }
+                    math += ' - ' + -weight.getWoOp() + '*' + source;
                 }
             }
         });
         if (firstLink) {
             math += '0';
         }
-        math += ' )';
+        if (!isLinearActivation) {
+            math += ' )';
+        }
         return math;
     }
 }
@@ -141,8 +197,8 @@ export class Link {
     readonly id: string;
     readonly source: Node;
     readonly dest: Node;
-    private weightAsNumber = 0.0;
-    private weight = '0';
+
+    weight: NNumber = new NNumber();
     isDead = false;
     /** Error derivative with respect to this weight. */
     errorDer = 0;
@@ -160,33 +216,14 @@ export class Link {
      * @param regularization The regularization function that computes the
      *     penalty for this weight. If null, there will be no regularization.
      */
-    constructor(source: Node, dest: Node, regularization: H.RegularizationFunction, initZero?: boolean) {
+    constructor(source: Node, dest: Node, regularization: H.RegularizationFunction, initUntil?: number) {
         this.id = source.id + '-' + dest.id;
         this.source = source;
         this.dest = dest;
         this.regularization = regularization;
-        if (initZero) {
-            this.weightAsNumber = 0;
-            this.weight = '0';
+        if (initUntil !== undefined && initUntil !== null) {
+            this.weight.setAsNumber(initUntil * Math.random());
         }
-    }
-
-    setWeight(weight: string): void {
-        this.weight = H.weight2weight(weight);
-        this.weightAsNumber = H.weight2number(weight);
-    }
-
-    setWeightAsNumber(weightAsNumber: number): void {
-        this.weight = '' + weightAsNumber;
-        this.weightAsNumber = weightAsNumber;
-    }
-
-    getWeight(): string {
-        return this.weight;
-    }
-
-    getWeightAsNumber(): number {
-        return this.weightAsNumber;
     }
 }
 
@@ -220,13 +257,13 @@ export class Network {
             let numNodes = shape[layerIdx];
             for (let i = 0; i < numNodes; i++) {
                 let nodeName = isInputLayer ? state.inputs[i] : isOutputLayer ? state.outputs[i] : 'h' + layerIdx + 'n' + (i + 1);
-                let node = new Node(nodeName, state.activation, state.initZero);
+                let node = new Node(nodeName, state.activation);
                 currentLayer.push(node);
                 if (layerIdx >= 1) {
                     // Add links from nodes in the previous layer to this node.
                     for (let j = 0; j < network[layerIdx - 1].length; j++) {
                         let prevNode = network[layerIdx - 1][j];
-                        let link = new Link(prevNode, node, state.regularization, state.initZero);
+                        let link = new Link(prevNode, node, state.regularization);
                         prevNode.outputs.push(link);
                         node.inputLinks.push(link);
                     }
@@ -316,7 +353,7 @@ export class Network {
                 node.outputDer = 0;
                 for (let j = 0; j < node.outputs.length; j++) {
                     let output = node.outputs[j];
-                    node.outputDer += output.getWeightAsNumber() * output.dest.inputDer;
+                    node.outputDer += output.weight.get() * output.dest.inputDer;
                 }
             }
         }
@@ -333,7 +370,7 @@ export class Network {
                 let node = currentLayer[i];
                 // Update the node's bias.
                 if (node.numAccumulatedDers > 0) {
-                    node.setBiasAsNumber((learningRate * node.accInputDer) / node.numAccumulatedDers);
+                    node.bias.setAsNumber((learningRate * node.accInputDer) / node.numAccumulatedDers);
                     node.accInputDer = 0;
                     node.numAccumulatedDers = 0;
                 }
@@ -343,7 +380,7 @@ export class Network {
                     if (link.isDead) {
                         continue;
                     }
-                    let weightAsNumber = link.getWeightAsNumber();
+                    let weightAsNumber = link.weight.get();
                     let regulDer = link.regularization ? link.regularization.der(weightAsNumber) : 0;
                     if (link.numAccumulatedDers > 0) {
                         // Update the weight based on dE/dw.
@@ -352,10 +389,10 @@ export class Network {
                         let newLinkWeight = weightAsNumber - learningRate * regularizationRate * regulDer;
                         if (link.regularization === H.RegularizationFunction.L1 && weightAsNumber * newLinkWeight < 0) {
                             // The weight crossed 0 due to the regularization term. Set it to 0.
-                            link.setWeightAsNumber(0);
+                            link.weight.setAsNumber(0);
                             link.isDead = true;
                         } else {
-                            link.setWeightAsNumber(newLinkWeight);
+                            link.weight.setAsNumber(newLinkWeight);
                         }
                         link.accErrorDer = 0;
                         link.numAccumulatedDers = 0;
@@ -405,7 +442,7 @@ export class Network {
                 for (let node of layer) {
                     let weightsOneNode: string[] = [];
                     for (let link of node.outputs) {
-                        weightsOneNode.push(link.getWeight());
+                        weightsOneNode.push('' + link.weight.get());
                     }
                     weightsOneLayer.push(weightsOneNode);
                 }
@@ -421,7 +458,7 @@ export class Network {
             for (let layer of this.network) {
                 let biasesOneLayer: string[] = [];
                 for (let node of layer) {
-                    biasesOneLayer.push(node.getBias());
+                    biasesOneLayer.push('' + node.bias.get());
                 }
                 biasesAllLayers.push(biasesOneLayer);
             }
@@ -463,8 +500,8 @@ export class Network {
             for (let i = 0; i < fromNode.outputs.length; i++) {
                 let link = fromNode.outputs[i];
                 if (link.dest.id === to) {
-                    let newVal = change === 'SET' ? value : link.getWeightAsNumber() + value;
-                    link.setWeightAsNumber(newVal);
+                    let newVal = change === 'SET' ? value : link.weight.get() + value;
+                    link.weight.setAsNumber(newVal);
                     return;
                 }
             }
@@ -480,8 +517,8 @@ export class Network {
     changeBias(id: String, change: String, value: number): void {
         let node = this.getNeuronById(id);
         if (node != null) {
-            let newBias = change === 'SET' ? value : node.getBiasAsNumber() + value;
-            node.setBiasAsNumber(newBias);
+            let newBias = change === 'SET' ? value : node.bias.get() + value;
+            node.bias.setAsNumber(newBias);
             return;
         }
     }
@@ -524,7 +561,7 @@ export class Network {
                         if (link == null || weight == null) {
                             break;
                         }
-                        link.setWeight(weight);
+                        link.weight.set(weight, true);
                     }
                 }
             }
@@ -545,7 +582,7 @@ export class Network {
                     if (node == null || bias == null) {
                         break;
                     }
-                    node.setBias(bias);
+                    node.bias.set(bias, false);
                 }
             }
         }

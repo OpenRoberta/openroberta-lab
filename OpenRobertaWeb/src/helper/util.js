@@ -443,13 +443,13 @@ String.prototype.escapeHTML = function () {
     });
 };
 
-$.fn.draggable = function(opt) {
+$.fn.draggable = function (opt) {
     opt = $.extend(
         {
             handle: '',
             cursor: 'move',
             draggableClass: 'draggable',
-            activeHandleClass: 'active-handle'
+            activeHandleClass: 'active-handle',
         },
         opt
     );
@@ -486,9 +486,9 @@ $.fn.draggable = function(opt) {
                             newXPosition = 18 - $selected.width();
                         }
                         var headerSize = 92;
-                        if (newYPosition >= $(window).height() - 19 ) {
-                            newYPosition = $(window).height() - 20 ;
-                        } else if (newYPosition <= 19 -  $selected.height() + headerSize) {
+                        if (newYPosition >= $(window).height() - 19) {
+                            newYPosition = $(window).height() - 20;
+                        } else if (newYPosition <= 19 - $selected.height() + headerSize) {
                             newYPosition = 18 - $selected.height() + headerSize;
                         }
                     }
@@ -499,7 +499,7 @@ $.fn.draggable = function(opt) {
                         var left = Math.max(left, 42);
                         $selected.offset({
                             top: 0,
-                            left: left - 4
+                            left: left - 4,
                         });
                         $('#blockly').width(left + 3);
                         $('.rightMenuButton').css({
@@ -513,7 +513,7 @@ $.fn.draggable = function(opt) {
                     } else {
                         $selected.offset({
                             top: newYPosition,
-                            left: newXPosition
+                            left: newXPosition,
                         });
                     }
 
@@ -707,12 +707,12 @@ $(window).resize(function () {
     for (const robotWindowElement of $('.simWindow:visible')) {
         if (robotWindowElement.offsetLeft >= $(window).width() - 20) {
             $('#' + robotWindowElement.id).css({
-                'left': '' + $(window).width() - 20
+                left: '' + $(window).width() - 20,
             });
         }
         if (robotWindowElement.offsetTop >= $(window).height() - 20) {
             $('#' + robotWindowElement.id).css({
-                'top': '' + $(window).height() - 20
+                top: '' + $(window).height() - 20,
             });
         }
     }
@@ -790,10 +790,10 @@ function annotateBlocks(workspace, annotations) {
 
 function removeLinks($elem) {
     $elem
-        .filter(function() {
+        .filter(function () {
             return $(this).attr('href') && ($(this).attr('href').indexOf('http') === 0 || $(this).attr('href').indexOf('javascript:linkTo') === 0);
         })
-        .each(function() {
+        .each(function () {
             $(this).removeAttr('href');
         });
 }
@@ -811,13 +811,17 @@ function openSimRobotWindow(duration) {
     for (const robotWindowElement of $('.simWindow-openedButHidden')) {
         var position = $(window).width() * simRobotWindowPositions[robotWindowElement.id];
 
-        $('#' + robotWindowElement.id).animate({
-            'opacity': 'show',
-            'left': '' + position
-        }, duration);
+        $('#' + robotWindowElement.id).animate(
+            {
+                opacity: 'show',
+                left: '' + position,
+            },
+            duration
+        );
     }
     $('.simWindow').removeClass('simWindow-openedButHidden');
 }
+
 /**
  * close SimRobotWindow and remember it
  * closing SimRobotWindow using this method will show it again if opeSimRobotWindow() is called
@@ -838,12 +842,18 @@ function closeSimRobotWindow(duration) {
         }
         simRobotWindowPositions[robotWindowElement.id] = relativePosition;
     }
-    SimWindows.addClass('simWindow-openedButHidden')
-        .animate({
-            'opacity': 'hide',
-            'left': '' + $(window).width()
-        }, duration);
+    SimWindows.addClass('simWindow-openedButHidden').animate(
+        {
+            opacity: 'hide',
+            left: '' + $(window).width(),
+        },
+        duration
+    );
+}
 
+function toFixedPrecision(value, precision) {
+    var power = Math.pow(10, precision || 0);
+    return String(Math.round(value * power) / power);
 }
 
 export {
@@ -876,5 +886,6 @@ export {
     annotateBlocks,
     removeLinks,
     openSimRobotWindow,
-    closeSimRobotWindow
+    closeSimRobotWindow,
+    toFixedPrecision
 };

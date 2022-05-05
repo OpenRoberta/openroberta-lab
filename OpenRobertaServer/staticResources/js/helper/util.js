@@ -1,6 +1,6 @@
 define(["require", "exports", "message", "log", "jquery", "blockly", "simulation.constants", "guiState.controller", "webots.simulation", "jquery-validate", "bootstrap"], function (require, exports, MSG, LOG, $, Blockly, simulation_constants_1, GUISTATE_C, WEBOTSIM) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.closeSimRobotWindow = exports.openSimRobotWindow = exports.removeLinks = exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = void 0;
+    exports.toFixedPrecision = exports.closeSimRobotWindow = exports.openSimRobotWindow = exports.removeLinks = exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = void 0;
     var ANIMATION_DURATION = simulation_constants_1.default.ANIMATION_DURATION;
     var ratioWorkspace = 1;
     var simRobotWindowPositions = [];
@@ -428,7 +428,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "simulation
             handle: '',
             cursor: 'move',
             draggableClass: 'draggable',
-            activeHandleClass: 'active-handle'
+            activeHandleClass: 'active-handle',
         }, opt);
         var $selected = null;
         var $elements = opt.handle === '' ? this : this.find(opt.handle);
@@ -474,7 +474,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "simulation
                     var left = Math.max(left, 42);
                     $selected.offset({
                         top: 0,
-                        left: left - 4
+                        left: left - 4,
                     });
                     $('#blockly').width(left + 3);
                     $('.rightMenuButton').css({
@@ -489,7 +489,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "simulation
                 else {
                     $selected.offset({
                         top: newYPosition,
-                        left: newXPosition
+                        left: newXPosition,
                     });
                 }
                 $selected.css({
@@ -670,12 +670,12 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "simulation
             var robotWindowElement = _a[_i];
             if (robotWindowElement.offsetLeft >= $(window).width() - 20) {
                 $('#' + robotWindowElement.id).css({
-                    'left': '' + $(window).width() - 20
+                    left: '' + $(window).width() - 20,
                 });
             }
             if (robotWindowElement.offsetTop >= $(window).height() - 20) {
                 $('#' + robotWindowElement.id).css({
-                    'top': '' + $(window).height() - 20
+                    top: '' + $(window).height() - 20,
                 });
             }
         }
@@ -774,8 +774,8 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "simulation
             var robotWindowElement = _a[_i];
             var position = $(window).width() * simRobotWindowPositions[robotWindowElement.id];
             $('#' + robotWindowElement.id).animate({
-                'opacity': 'show',
-                'left': '' + position
+                opacity: 'show',
+                left: '' + position,
             }, duration);
         }
         $('.simWindow').removeClass('simWindow-openedButHidden');
@@ -803,11 +803,15 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "simulation
             }
             simRobotWindowPositions[robotWindowElement.id] = relativePosition;
         }
-        SimWindows.addClass('simWindow-openedButHidden')
-            .animate({
-            'opacity': 'hide',
-            'left': '' + $(window).width()
+        SimWindows.addClass('simWindow-openedButHidden').animate({
+            opacity: 'hide',
+            left: '' + $(window).width(),
         }, duration);
     }
     exports.closeSimRobotWindow = closeSimRobotWindow;
+    function toFixedPrecision(value, precision) {
+        var power = Math.pow(10, precision || 0);
+        return String(Math.round(value * power) / power);
+    }
+    exports.toFixedPrecision = toFixedPrecision;
 });
