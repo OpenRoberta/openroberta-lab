@@ -130,7 +130,7 @@ block:
   NUM_CONST:
     category: EXPR
     implementor: de.fhg.iais.roberta.syntax.lang.expr.NumConst
-    type: [ math_number, math_integer ]
+    type: [ math_number, math_integer, rob_math_u999 ]
   MATH_CONST:
     category: EXPR
     implementor: de.fhg.iais.roberta.syntax.lang.expr.MathConst
