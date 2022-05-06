@@ -154,6 +154,10 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
         requiredComponentVisited(getSubFunct, getSubFunct.getParam());
+        if ( getSubFunct.getParam().get(0).toString().contains("ListCreate ") ||
+            getSubFunct.getParam().get(0).toString().contains("ListRepeat ") ) {
+            addErrorToPhrase(getSubFunct, "BLOCK_USED_INCORRECTLY");
+        }
         return null;
     }
 
@@ -168,12 +172,20 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
         requiredComponentVisited(indexOfFunct, indexOfFunct.getParam());
+        if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ||
+            indexOfFunct.getParam().get(0).toString().contains("ListRepeat ") ) {
+            addErrorToPhrase(indexOfFunct, "BLOCK_USED_INCORRECTLY");
+        }
         return null;
     }
 
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
         requiredComponentVisited(lengthOfIsEmptyFunct, lengthOfIsEmptyFunct.getParam());
+        if ( lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListCreate ") ||
+            lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListRepeat ") ) {
+            addErrorToPhrase(lengthOfIsEmptyFunct, "BLOCK_USED_INCORRECTLY");
+        }
         return null;
     }
 
@@ -191,6 +203,10 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
             this.usedMethodBuilder.addUsedMethod(op);
         }
         requiredComponentVisited(listGetIndex, listGetIndex.getParam());
+        if ( listGetIndex.getParam().get(0).toString().contains("ListCreate ") ||
+            listGetIndex.getParam().get(0).toString().contains("ListRepeat ") ) {
+            addErrorToPhrase(listGetIndex, "BLOCK_USED_INCORRECTLY");
+        }
         return null;
     }
 
@@ -209,6 +225,10 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
             this.usedMethodBuilder.addUsedMethod(op);
         }
         requiredComponentVisited(listSetIndex, listSetIndex.getParam());
+        if ( listSetIndex.getParam().get(0).toString().contains("ListCreate ") ||
+            listSetIndex.getParam().get(0).toString().contains("ListRepeat ") ) {
+            addErrorToPhrase(listSetIndex, "BLOCK_USED_INCORRECTLY");
+        }
         return null;
     }
 
@@ -254,6 +274,10 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         usedMethodBuilder.addUsedMethod(mathOnListFunct.getFunctName());
         requiredComponentVisited(mathOnListFunct, mathOnListFunct.getParam());
+        if ( mathOnListFunct.getParam().get(0).toString().contains("ListCreate ") ||
+            mathOnListFunct.getParam().get(0).toString().contains("ListRepeat ") ) {
+            addErrorToPhrase(mathOnListFunct, "BLOCK_USED_INCORRECTLY");
+        }
         return null;
     }
 

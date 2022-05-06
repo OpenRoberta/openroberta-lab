@@ -166,9 +166,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
-        if ( listCreate.getProperty().isErrorAttribute() != null && listCreate.getProperty().isErrorAttribute().booleanValue() ) {
-            throw new VisitorException("Got error on list create block");
-        }
         this.sb.append("{");
         listCreate.getValue().accept(this);
         this.sb.append("}");
