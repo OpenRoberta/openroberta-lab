@@ -23,11 +23,6 @@ import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
-import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkAddRawData;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkAddTrainingsData;
@@ -139,14 +134,6 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     }
 
     @Override
-    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        if ( getSubFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            addErrorToPhrase(getSubFunct, "BLOCK_USED_INCORRECTLY");
-        }
-        return super.visitGetSubFunct(getSubFunct);
-    }
-
-    @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(gyroSensor.getUserDefinedPort(), SC.GYRO, gyroSensor.getMode()));
         return null;
@@ -174,14 +161,6 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     }
 
     @Override
-    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            addErrorToPhrase(indexOfFunct, "BLOCK_USED_INCORRECTLY");
-        }
-        return super.visitIndexOfFunct(indexOfFunct);
-    }
-
-    @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(infraredSensor.getUserDefinedPort(), SC.INFRARED, infraredSensor.getMode()));
         return null;
@@ -191,14 +170,6 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
         checkSensorPort(keysSensor);
         return null;
-    }
-
-    @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        if ( lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            addErrorToPhrase(lengthOfIsEmptyFunct, "BLOCK_USED_INCORRECTLY");
-        }
-        return super.visitLengthOfIsEmptyFunct(lengthOfIsEmptyFunct);
     }
 
     @Override
@@ -235,22 +206,6 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
             }
         }
         return null;
-    }
-
-    @Override
-    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        if ( listGetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
-            addErrorToPhrase(listGetIndex, "BLOCK_USED_INCORRECTLY");
-        }
-        return super.visitListGetIndex(listGetIndex);
-    }
-
-    @Override
-    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        if ( listSetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
-            addErrorToPhrase(listSetIndex, "BLOCK_USED_INCORRECTLY");
-        }
-        return super.visitListSetIndex(listSetIndex);
     }
 
     @Override
