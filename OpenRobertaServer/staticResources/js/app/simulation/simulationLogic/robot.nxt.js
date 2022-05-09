@@ -73,6 +73,12 @@ define(["require", "exports", "simulation.simulation", "interpreter.constants", 
         this.timer = {
             timer1: false,
         };
+        this.soundSensor = [];
+        for (var c in configuration) {
+            if (configuration[c] === 'SOUND') {
+                this.soundSensor[c] = { sound: 0 };
+            }
+        }
         SIM.initMicrophone(this);
     }
     Nxt.prototype = Object.create(simulation_robot_ev3_1.default.prototype);

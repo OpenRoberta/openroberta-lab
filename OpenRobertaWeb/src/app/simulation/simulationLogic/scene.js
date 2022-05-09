@@ -1092,7 +1092,13 @@ Scene.prototype.updateSensorValues = function (running) {
         }
         if (this.robots[r].sound) {
             values.sound = {};
-            values.sound.volume = UTIL.round(this.robots[r].sound.volume * 100, 0);
+            if (this.robots[r].soundSensor) {
+                for (var s in this.robots[r].soundSensor) {
+                    values.sound[s].volume = UTIL.round(this.robots[r].sound.volume * 100, 0);
+                }
+            } else {
+                values.sound.volume = UTIL.round(this.robots[r].sound.volume * 100, 0);
+            }
         }
         if (this.robots[r].display) {
             var robotName = getFnName(this.robots[r].constructor);
