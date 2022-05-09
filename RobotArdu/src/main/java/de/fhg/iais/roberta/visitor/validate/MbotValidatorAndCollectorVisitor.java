@@ -6,9 +6,11 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.components.UsedActor;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
@@ -110,7 +112,7 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
 
     @Override
     public Void visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<Void> ledMatrixImageShiftFunction) {
-        requiredComponentVisited(ledMatrixImageShiftFunction, ledMatrixImageShiftFunction.getImage());
+        requiredComponentVisited(ledMatrixImageShiftFunction, ledMatrixImageShiftFunction.getImage(), ledMatrixImageShiftFunction.getPositions());
         return null;
     }
 
@@ -123,6 +125,18 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
     @Override
     public Void visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction<Void> ledMatrixSetBrightnessAction) {
         requiredComponentVisited(ledMatrixSetBrightnessAction, ledMatrixSetBrightnessAction.getBrightness());
+        return null;
+    }
+
+    @Override
+    public Void visitLightAction(LightAction<Void> lightAction) {
+        requiredComponentVisited(lightAction, lightAction.getRgbLedColor());
+        usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.LED_ON_BOARD));
+        return null;
+    }
+
+    @Override
+    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         return null;
     }
 
