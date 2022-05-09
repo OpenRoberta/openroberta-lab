@@ -6,7 +6,7 @@
 <body>
     <div id="helpContent">
         <div id="robControls_start_ardu" class="help beginner">
-            <h3 id="BlockbeschreibungBOB3-»Start«"><span style="color: rgb(0,0,0);">»Start«</span><span
+            <h3 id="BlockbeschreibungBionicFlower-»Start«"><span style="color: rgb(0,0,0);">»Start«</span><span
                     style="color: rgb(0,0,0);"> </span></h3>
             <p>Jedes Programm beginnt mit dem »Start«-Block, welcher nicht gelöscht werden kann. Den ersten Block, den
                 man verwenden möchte, verbindet man direkt mit der »Sequenzverbindung« am »Wiederhole unendlich
@@ -30,146 +30,98 @@
                 <li class="typcn typcn-arrow-left">Wert, Anfangswert der Variablen.</li>
             </ul>
         </div>
-        <div id="makeblockActions_leds_on" class="help beginner">
-            <h3 id="BlockbeschreibungBOB3-»SchalteLEDAuge...Farbe...«">»Schalte LED Auge ... Farbe ... «</h3>
-            <p>Mit diesem Block kannst eine der LEDs des BOB3 einschalten, die sich in den Augen des BOB3 befinden. Bei
-                diesen LEDs handelt sich um RGB-LEDs, sie können also verschiedene Farben aus Rot, Grün und Blau
-                darstellen.</p>
-            <p>Option und Eingabewerte:
-            </p>
-            <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-sorted-down">LED, wähle die LED aus, die du steuern möchtest. Du kannst
-                    entweder das rechte oder das linke Auge ansteuern.</li>
-                <li class="typcn typcn-arrow-left">Farbe, die Farbe in der das Auge leuchten soll.</li>
-            </ul>
-        </div>
-        <div id="makeblockActions_leds_off" class="help beginner">
-            <h3 id="BlockbeschreibungBOB3-»SchalteLEDAuge...aus«">»Schalte LED Auge ... aus«</h3>
-            <p>Mit diesem Block kannst du eine LED, die die Augen des BOB3 darstellen, ausschalten.</p>
-            <p>Option:
-            </p>
-            <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-sorted-down">LED, wähle die LED aus, die du ausschalten möchtest.</li>
-            </ul><br>
-        </div>
-        <div id="bob3Actions_set_led" class="help beginner">
-            <h3 id="BlockbeschreibungBOB3-»SchalteLEDKörper...an/aus«">»Schalte LED Körper ... an/aus «</h3>
-            <p>Mit diesem Knopf kannst du eine LED am Körper des BOB3 steuern. Diese LEDs leuchten weiß und du kannst
-                sie entweder aus- oder einschalten.</p>
-            <p>Optionen:
-            </p>
-            <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-sorted-down">LED, wähle hier die LED aus, die du steuern möchtest.</li>
-                <li class="typcn typcn-arrow-sorted-down">Status, wähle ob du die LED an- oder ausschalten möchtest.
-                </li>
-            </ul><br>
-        </div>
-        <div id="bob3Actions_remember" class="help expert">
-            <h3 id="BlockbeschreibungBOB3-»SpeichereZahl...«[Experten-Block]">»Speichere Zahl ... « <span
-                    class="typcn typcn-star"></span></h3>
-            <p>Mit diesem Block kannst du eine Zahl im Zwischenspeicher des BOB3 speichern. Der Zwischenspeicher ist
-                allerdings sehr klein und du kannst immer nur eine Zahl speichern, Wenn du eine neue Zahl speicherst,
-                wird die alte gespeicherte Zahl überschrieben.</p>
+        <div id="robActions_serial_print" class="help beginner">
+            <h3 id="BlockbeschreibungBionicFlower-»ZeigeaufSerialMonitor...«">»Zeige auf Serial Monitor ...«</h3>
+            <p>Mit diesem Block kannst du einen Text über die serielle Schnittstelle an deinen Computer übertragen und
+                dort mit einem seriellen Monitor auslesen. Dazu kannst du den eingebauten Seriellen Monitor des Open
+                Roberta Connectors verwenden.</p>
             <p>Eingabewerte:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-sorted-down">Zahl, die Zahl, die du speichern möchtest.</li>
-            </ul><br>
+                <li class="typcn typcn-arrow-left">Text, den text den du auf deinen Computer übertragen möchtest.</li>
+            </ul>
         </div>
-        <div id="bob3Actions_recall" class="help expert">
-            <h3 id="BlockbeschreibungBOB3-»LeseZahlausSpeicher«[Experten-Block]">»Lese Zahl aus Speicher « <span
-                    class="typcn typcn-star"></span></h3>
-            <p>Mit diesem Block kannst du die Zahl im Zwischenspeicher des BOB3 auslesen.</p>
-            <p>Rückgabewerte:
+        <div id="makeblockActions_leds_on" class="help beginner">
+            <h3 id="BlockbeschreibungBionicFlower-»SchalteLEDanmitFarbe...«">»Schalte LED an mit Farbe ... «</h3>
+            <p>Mit diesem Block kannst du die eingebaute LED in der gewählten Farbe leuchten lassen.</p>
+            <p>Eingabewert:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-right">Zahl, die Zahl die momentan im Zwischenspeicher gespeichert ist.
-                </li>
-            </ul><br>
+                <li class="typcn typcn-arrow-left">Farbe, die Farbe mit der die LED leuchten soll.</li>
+            </ul>
         </div>
-        <div id="robSensors_infrared_getSample" class="help beginner">
-            <h3 id="BlockbeschreibungBOB3-»Gib...%Infrarotsensor«">»Gib ... % Infrarotsensor«</h3>
-            <p>Mit diesem Block kannst du den Infrarotsensor deines Roboters abfragen und entweder das »Umgebungslicht«
-                oder das von deinem Roboter reflektierte Licht messen. Die Werte, die dieser Sensor liefert, können
-                dabei sehr unterschiedlich sein, das liegt an den Lichtverhältnissen der Umgebung. Im natürlichen
-                Sonnenlicht gibt es sehr viel mehr Licht im infraroten Bereich als z.B. in dem Licht einer Leuchtdiode.
-                Deswegen muss man bei der Verwendung dieses Sensors immer das Umgebungslicht beachten. Bei natürlichem
-                Sonnenlicht können hier Werte von bis zu 1023 erreicht werden, wohingegen bei einer Beleuchtung durch
-                Leuchtdioden meist nur Werte bis etwa 100 erreicht werden. Aus diesem Grund ist die Messung des
-                reflektierten Lichts bei starker Sonneneinstrahlung meist nicht sinnvoll, da die von der Leuchtdiode des
-                Roboters ausgesendete Strahlung von dem Umgebungslicht überdeckt wird.</p>
+        <div id="makeblockActions_leds_off" class="help beginner">
+            <h3 id="BlockbeschreibungBionicFlower-»SchalteLEDaus«">»Schalte LED aus «</h3>
+            <p>Mit diesem Block kannst du die eingebaute LED abschalten.</p>
+        </div>
+        <div id="festobionicActions_stepmotor" class="help beginner">
+            <h3 id="BlockbeschreibungBionicFlower-»StepmotorPosition0-120...«">»Stepmotor Position 0-120 ... «</h3>
+            <p>Mit diesem Block kannst du den angeschlossenen Schrittmotor auf eine bestimmte Position fahren lassen.
+                Die Position wird in Anzahl der Umdrehungen angegeben.</p>
+            <p>Optionen und Eingabewerte:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Zahl, neue Position für den Stepmotor. Dabei entspricht die Position
+                    0 dem ganz eingefahrenen und 120 dem ganz ausgefahrenen Motor.</li>
+            </ul>
+        </div>
+        <div id="robSensors_touch_getSample" class="help beginner">
+            <h3 id="BlockbeschreibungBionicFlower-»Berührungssensor…gedrückt«">»Berührungssensor … gedrückt«</h3>
+            <p>Mit diesem Block kannst du abfragen, ob eine der beiden Berührungssensoren des Touchmoduls gedrückt sind.
+            </p>
             <p>Optionen:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-sorted-down">Messmethode, wähle die Art des Lichts die du messen möchtest.
+                <li class="typcn typcn-arrow-sorted-down">Option, wähle das Tastenfeld aus, das abgefragt werden soll.
                 </li>
             </ul>
-            <p class="auto-cursor-target">Rückgabewerte:
+            <p class="auto-cursor-target">Rückgabewert:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-right">Zahl, Stärke des Umgebungslichts zwischen 0 und 1023.</li>
-                <li class="typcn typcn-arrow-right">Zahl, Stärke des reflektierten Lichts, meist zwischen 0 und 250.
+                <li class="typcn typcn-arrow-right">Wahrheitswert, »wahr« wenn die Taste gedrückt wird, sonst »falsch«.
                 </li>
             </ul>
         </div>
-        <div id="robSensors_pintouch_getSample" class="help beginner">
-            <h3 id="BlockbeschreibungBOB3-»Arm...gedrückt?«">»Arm ... gedrückt?«</h3>
-            <p>Mit diesem Block kannst du die Berührungssensoren deines Roboters abfragen, ob diese gerade gedrückt
-                werden.</p>
-            <p>Optionen:
+        <div id="robSensors_light_getSample" class="help beginner">
+            <h3 id="BlockbeschreibungBionicFlower-»GibWertlxLichtsensor«">»Gib Wert lx Lichtsensor«</h3>
+            <p>Mit diesem Block kannst du den Wert des Lichtsensors abfragen.</p>
+            <p><span style="letter-spacing: 0.0px;">Rückgabewert:</span>
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-sorted-down">Position, wähle die Seite des Roboters, die du abfragen
-                    möchtest. Entweder links oder rechts.</li>
-                <li class="typcn typcn-arrow-sorted-down">Sensor, wähle den Sensor, den du abfragen möchtest. Entweder
-                    einen einzelnen Sensor auf der ausgewählten Seite oder alle Sensoren der Seite gleichzeitig.</li>
-            </ul>
-            <p class="auto-cursor-target">Rückgabewerte:
-            </p>
-            <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-right">Wahrheitswert, entweder wahr oder falsch, je nachdem ob der Sensor
-                    gedrückt wird oder nicht.</li>
-            </ul>
-        </div>
-        <div id="robSensors_temperature_getSample" class="help beginner">
-            <h3 id="BlockbeschreibungBOB3-»GibWert°Temperatursensor«">»Gib Wert ° Temperatursensor«</h3>
-            <p>Mit diesem Block kannst du den eingebauten Temperatursensor deines Roboters abfragen und die
-                Umgebungstemperatur messen. Aufgrund von Variationen im Produktionsprozess kommt es bei der Temperatur
-                zu einer Verschiebung des Werts von etwa 240 - 280 °C. Dieser Werte ist leider nicht konstant zwischen
-                verschiedenen Sensoren und kann deswegen nicht genau ermittelt werden. Deswegen sollte man hier nur
-                relative Temperaturen verwenden, also den z.B. Temperaturunterschied zwischen zwei Zeitpunkten.</p>
-            <p>Rückgabewerte:
-            </p>
-            <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-right">Zahl, Umgebungstemperatur in ° Celsius.</li>
-            </ul>
-        </div>
-        <div id="robSensors_code_getSample" class="help beginner">
-            <h3 id="BlockbeschreibungBOB3-»GibWertBinär-Code«">»Gib Wert Binär-Code«</h3>
-            <p>Mit diesem Block kannst du den Binär-Code auf der Rückseite deines Roboters abfragen.</p>
-            <p>Rückgabewerte:
-            </p>
-            <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-right">Zahl, Wert des Binär-Codes auf der Rückseite.</li>
-            </ul>
+                <li class="typcn typcn-arrow-right">Zahl, die Helligkeit in Lux. Die Zahl liegt in einem Bereich
+                    zwischen ungefähr 0-100000, dabei steht 0 für völlige Dunkelheit.</li>
+            </ul><br>
         </div>
         <div id="robSensors_timer_getSample" class="help beginner">
-            <h3 id="BlockbeschreibungBOB3-»GibWertZeitgeber1«">»Gib Wert Zeitgeber 1«</h3>
-            <p>Mit diesem Block kannst du den internen Zeitgeber deines Roboters abfragen. Dieser gibt dir die Zeit seit
-                Start des Programms oder dem letzten Zurücksetzen an.</p>
+            <h3 id="BlockbeschreibungBionicFlower-»GibWertZeitgeber...zurück«">»Gib Wert Zeitgeber ... zurück«</h3>
+            <p>Mit diesem Block kannst du den Wert eines Zeitgebers abfragen. Diese geben die Zeit seit dem Start in
+                Millisekunden zurück.</p>
+            <p>Optionen:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">Option, Wähle den Zeitgeber zurück, den du abfragen möchtest.
+                    Zeitgeber 1 wird bei Start des Programms automatisch gestartet, alle anderen müssen zunächst durch
+                    den Block »Setze Zeitgeber ... zurück« gestartet werden,</li>
+            </ul><br>
             <p>Rückgabewerte:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-right">Zahl, vergangene Zeit seit Start des Programm oder dem letzten
-                    Zurücksetzen in Millisekunden.</li>
-            </ul>
+                <li class="typcn typcn-arrow-right">Zahl, Zeit seit des Starts oder dem letzten Zurücksetzen in
+                    Millisekunden.</li>
+            </ul><br>
         </div>
         <div id="robSensors_timer_reset" class="help beginner">
-            <h3 id="BlockbeschreibungBOB3-»SetzeZeitgeber1zurück«">»Setze Zeitgeber 1 zurück«</h3>
-            <p>Mit diesem Block kannst du den Wert des eingebauten Zeitgebers deines Roboters auf 0 zurücksetzen.</p>
+            <h3 id="BlockbeschreibungBionicFlower-»SetzeZeitgeber...zurück«">»Setze Zeitgeber ... zurück«</h3>
+            <p>Mit diesem Block kannst du einen der eingebauten Zeitgeber auf Null zurücksetzen. Zudem kannst du einen
+                neuen Zeitgeber starten.
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">Option, wähle den Zeitgeber den du zurücksetzen oder starten
+                    möchtest. Es stehen 5 Zeitgeber zur Verfügung.</li>
+            </ul>
         </div>
         <div id="robControls_if" class="help beginner">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Wennmache«">»Wenn mache«</h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Wennmache«">»Wenn mache«</h3>
             <p style="text-align: left;">Mit dem Block »Wenn mache« kannst du gezielt Aktionen auslösen, die von einer
                 Bedingung abhängen. Der »Wenn mache«-Block benötigt einen logischen Wert als Eingabewert. Falls die
                 Bedingung in »Wenn« erfüllt (wahr) ist, wird der eingefügte Block (oder die Blöcke) ausgeführt. Bei
@@ -190,7 +142,7 @@
             </ul>
         </div>
         <div id="robControls_ifElse" class="help beginner">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Wennmachesonst«">»Wenn mache sonst«</h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Wennmachesonst«">»Wenn mache sonst«</h3>
             <p style="text-align: left;">Mit dem Block »Wenn mache sonst« kannst du gezielt Aktionen auslösen, die von
                 einer Bedingung abhängen. Der »Wenn mache sonst«-Block benötigt hierfür einen logischen Wert als
                 Eingabewert. Falls die Bedingung erfüllt (wahr) ist, wird der dort eingefügte Block (oder die Blöcke)
@@ -215,8 +167,8 @@
             </ul>
         </div>
         <div id="robControls_loopForever" class="help beginner notWedo">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Wiederholeunendlichoft«">»Wiederhole unendlich oft«
-            </h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Wiederholeunendlichoft«">»Wiederhole
+                unendlich oft«</h3>
             <p style="text-align: left;">Mit dem Block »Wiederhole unendlich oft« kannst du Blöcke endlos von deinem
                 Roboter ausführen lassen. Alle Blöcke, die sich im »Wiederhole unendlich oft«-Block befinden, werden
                 immer wieder ausgeführt. Die Blöcke werden dabei von oben nach unten ausgeführt. Sobald der letzte Block
@@ -229,7 +181,7 @@
             </ul>
         </div>
         <div id="controls_repeat_ext" class="help beginner">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Wiederholenmal«">»Wiederhole n mal«</h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Wiederholenmal«">»Wiederhole n mal«</h3>
             <p style="text-align: left;">Mit dem Block »Wiederhole n mal« kannst du andere Blöcke beliebig oft von
                 deinem Roboter ausführen lassen. Alle Blöcke, die sich im Block »Wiederhole n mal« befinden, werden so
                 oft ausgeführt, wie im Eingabefeld eingestellt ist. Die Blöcke werden dabei von oben nach unten
@@ -249,8 +201,8 @@
             </ul>
         </div>
         <div id="controls_whileUntil" class="help expert">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Wiederholesolange/bis«[Experten-Block]">»Wiederhole
-                solange/bis« <span class="typcn typcn-star"></span></h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Wiederholesolange/bis«[Experten-Block]">
+                »Wiederhole solange/bis« <span class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Mit dem Block »Wiederhole solange/bis« kannst du andere Blöcke beliebig oft von
                 deinem Roboter ausführen lassen. Alle Blöcke, die sich im Block »Wiederhole solange/bis« befinden,
                 werden immer wieder ausgeführt, solange bzw. bis die Bedingung im Eingabefeld erfüllt ist. Die Blöcke
@@ -267,8 +219,8 @@
             </ul>
         </div>
         <div id="robControls_forEach" class="help expert notWedo notBob3">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»FürWertausderListe«[Experten-Block]">»Für Wert aus
-                der Liste« <span class="typcn typcn-star"></span></h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»FürWertausderListe«[Experten-Block]">»Für
+                Wert aus der Liste« <span class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Mit dem Block »Für Wert aus der Liste« werden nacheinander alle Werte einer
                 Liste an eine Variable übergeben und können dann in der so genannten Schleife verarbeitet werden. Mit
                 jedem Schleifendurchlauf wird das nächste Element aus der Liste geholt, bis die Liste vollständig
@@ -288,8 +240,8 @@
             </ul>
         </div>
         <div id="robControls_for" class="help expert">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Zählevonbis«[Experten-Block]">»Zähle von bis« <span
-                    class="typcn typcn-star"></span></h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Zählevonbis«[Experten-Block]">»Zähle von
+                bis« <span class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Mit dem Block »Zähle von bis« kannst du andere Blöcke mehrfach von deinem
                 Roboter ausführen lassen. Alle Blöcke, die sich im Block »Zähle von bis« befinden, werden so oft
                 ausgeführt, bis die Zählung im Eingabefeld abgearbeitet ist. Die Blöcke werden dabei von oben nach unten
@@ -310,7 +262,7 @@
         </div>
         <div id="controls_flow_statements" class="help expert">
             <h3 style="text-align: left;"
-                id="BlockbeschreibungBOB3-»DieSchleifeabbrechen/mitdernächstenIterationderSchleifefortfahren«[Experten-Block]">
+                id="BlockbeschreibungBionicFlower-»DieSchleifeabbrechen/mitdernächstenIterationderSchleifefortfahren«[Experten-Block]">
                 »Die Schleife abbrechen/mit der nächsten Iteration der Schleife fortfahren« <span
                     class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Mit dem Block »Die Schleife abbrechen/mit der nächsten Iteration der Schleife
@@ -325,7 +277,7 @@
             </ul>
         </div>
         <div id="robControls_wait" class="help beginner">
-            <h3 class="auto-cursor-target" id="BlockbeschreibungBOB3-»Wartebis...«">»Warte bis ... «</h3>
+            <h3 class="auto-cursor-target" id="BlockbeschreibungBionicFlower-»Wartebis...«">»Warte bis ... «</h3>
             <p style="text-align: left;">Mit dem Block »Warte bis« kannst du dein Programm an der Stelle »anhalten«, an
                 der du den »Warte bis«-Block eingefügt hast. Dein Programm wartet dann so lange, bis die Bedingung
                 erfüllt (wahr) ist. Den »Warte bis«-Block kannst du mit dem »+«-Zeichen um zusätzliche Bedingungen
@@ -340,7 +292,7 @@
             </ul>
         </div>
         <div id="robControls_wait_time" class="help beginner">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Wartems...«">»Warte ms ... «</h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Wartems...«">»Warte ms ... «</h3>
             <p style="text-align: left;">Mit dem Block »Warte« kannst du dein Programm an der Stelle "anhalten", an der
                 du den Block eingefügt hast. Dein Programm bleibt dann für die angegebene Dauer an dieser Stelle stehen.
                 Nach Ablauf der angegebenen Zeit wird dann der nachfolgende Block ausgeführt. Beispielsweise kannst du
@@ -352,7 +304,7 @@
             </ul>
         </div>
         <div id="robControls_wait_for" class="help beginner">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Wartebis...«.1">»Warte bis ... «</h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Wartebis...«.1">»Warte bis ... «</h3>
             <p style="text-align: left;">Mit dem Block »Warte bis« kannst du dein Programm an der Stelle »anhalten«, an
                 der du den »Warte bis«-Block eingefügt hast. Dein Programm wartet dann so lange, bis die Bedingung
                 erfüllt (wahr) ist. Den »Warte bis«-Block kannst du mit dem »+«-Zeichen um zusätzliche Bedingungen
@@ -367,7 +319,7 @@
             </ul>
         </div>
         <div id="logic_compare" class="help beginner">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Vergleiche«">»Vergleiche«</h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Vergleiche«">»Vergleiche«</h3>
             <p style="text-align: left;">Mit dem Block »Vergleiche« kannst du verschiedene Eingabewerte (Zahl, Farbe,
                 logischer Wert, Text) gleichen Typs miteinander vergleichen. Stimmt der Vergleich, wird der logische
                 Wert »wahr« zurückgegeben, sonst »falsch«.</p>
@@ -385,7 +337,7 @@
             </ul><br>
         </div>
         <div id="logic_operation" class="help beginner">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»und/oder«">»und/oder«</h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»und/oder«">»und/oder«</h3>
             <p style="text-align: left;">Mit dem Block »und/oder« kannst du logische Werte zueinander in Beziehung
                 setzen. Der »und/oder« Block liefert bei der Einstellung »und« nur dann den logischen Wert »wahr«, wenn
                 beide Eingabewerte des Blocks gleichzeitig »wahr« sind. Bei der Einstellung »oder« genügt es, wenn einer
@@ -403,7 +355,7 @@
             </ul><br>
         </div>
         <div id="logic_negate" class="help expert">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»nicht«[Experten-Block]">»nicht« <span
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»nicht«[Experten-Block]">»nicht« <span
                     class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Mit dem Block »nicht« kannst du einen logischen Wert umkehren. Der logische
                 Wert ergibt sich aus der logischen Umkehrung des Eingabewertes, aus »wahr« wird »falsch« und umgekehrt.
@@ -420,7 +372,7 @@
             </ul><br>
         </div>
         <div id="logic_boolean" class="help beginner">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»wahr/falsch«">»wahr/falsch«</h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»wahr/falsch«">»wahr/falsch«</h3>
             <p style="text-align: left;">Mit dem Block »wahr/falsch« kannst du entweder den logischen Wert »wahr« oder
                 »falsch« an einen anderen Block übermitteln.</p>
             <p style="text-align: left;"> Einstellmöglichkeiten:
@@ -436,7 +388,7 @@
             </ul><br>
         </div>
         <div id="logic_null" class="help expert">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»null«[Experten-Block]">»null« <span
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»null«[Experten-Block]">»null« <span
                     class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Der Block »null« ist ein Platzhalter für eine Eingabe, die noch unbestimmt ist.
                 Wenn z.B. eine neue Verbindungsvariable für die Kommunikation erzeugt wird und noch nicht belegt ist,
@@ -448,7 +400,7 @@
             </ul>
         </div>
         <div id="logic_ternary" class="help expert notWedo">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»teste«[Experten-Block]">»teste« <span
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»teste«[Experten-Block]">»teste« <span
                     class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Mit dem Block »teste« kannst du einen Test durchführen und je nach Ergebnis
                 unterschiedliche Ergebnisse zurückgeben.</p>
@@ -467,7 +419,7 @@
             </ul><br>
         </div>
         <div id="math_number" class="help beginner">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Wert«">»Wert«</h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Wert«">»Wert«</h3>
             <p style="text-align: left;">Mit dem Block »Wert« kannst du Zahlen an einen anderen Block übermitteln.</p>
             <p style="text-align: left;"> Eingabewert:
             </p>
@@ -481,7 +433,7 @@
             </ul><br>
         </div>
         <div id="math_arithmetic" class="help beginner">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Rechnen«">»Rechnen«</h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Rechnen«">»Rechnen«</h3>
             <p style="text-align: left;">Mit dem Block »Rechnen« kannst du Zahlen addieren, subtrahieren,
                 multiplizieren, dividieren oder potenzieren. Dieser Block ist nur in Verbindung mit einem anderen Block
                 nutzbar, der eine Zahl als Eingabewert benötigt.</p>
@@ -499,7 +451,7 @@
             </ul><br>
         </div>
         <div id="math_single" class="help expert">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»MathematischeFunktionen«[Experten-Block]">
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»MathematischeFunktionen«[Experten-Block]">
                 »Mathematische Funktionen« <span class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Mit dem Block »Mathematische Funktionen« können einige elementare mathematische
                 Funktionen berechnet werden.</p>
@@ -518,8 +470,9 @@
             </ul><br>
         </div>
         <div id="math_trig" class="help expert">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»TrigonometrischeFunktionen«[Experten-Block]">
-                »Trigonometrische Funktionen« <span class="typcn typcn-star"></span></h3>
+            <h3 style="text-align: left;"
+                id="BlockbeschreibungBionicFlower-»TrigonometrischeFunktionen«[Experten-Block]">»Trigonometrische
+                Funktionen« <span class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Mit dem Block »Trigonometrische Funktionen« können Sinus, Cosinus, Tangens und
                 die zugehörigen Umkehrfunktionen berechnet werden. Die Eingabewerte werden im Bogenmaß erwartet (siehe
                 Hinweis oben).</p>
@@ -536,8 +489,8 @@
             </ul><br>
         </div>
         <div id="math_constant" class="help expert">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Konstanten«[Experten-Block]">»Konstanten« <span
-                    class="typcn typcn-star"></span></h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Konstanten«[Experten-Block]">»Konstanten«
+                <span class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Der Block »Konstanten« stellt einige mathematische Konstanten bereit. »π«
                 (3,1415...), »e« (2,718...), »φ« (1,618...), »sqrt(2)« (1,414...), »sqrt(½)« (0,7071...), »∞«.</p>
             <p style="text-align: left;">Einstellmöglichkeiten:
@@ -553,7 +506,7 @@
             </ul><br>
         </div>
         <div id="math_number_property" class="help expert">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Zahleneigenschaft«[Experten-Block]">
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Zahleneigenschaft«[Experten-Block]">
                 »Zahleneigenschaft« <span class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Mit dem Block »Zahleneigenschaft« wird geprüft, ob eine eingegebene Zahl eine
                 bestimmte Eigenschaft aufweist. »gerade«, »ungerade«, »ist Primzahl«, »ganze Zahl«, »positiv«,
@@ -574,8 +527,8 @@
             </ul><br>
         </div>
         <div id="robMath_change" class="help expert">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Erhöheumx«[Experten-Block]">»Erhöhe um x« <span
-                    class="typcn typcn-star"></span></h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Erhöheumx«[Experten-Block]">»Erhöhe um x«
+                <span class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Mit dem Block »Erhöhe um x« wird der Wert einer numerischen Variable um einen
                 Betrag erhöht.</p>
             <p style="text-align: left;">Eingabewerte:
@@ -586,7 +539,7 @@
             </ul>
         </div>
         <div id="math_round" class="help expert">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»runden«[Experten-Block]">»runden« <span
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»runden«[Experten-Block]">»runden« <span
                     class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Mit dem Block »runden« können Werte gerundet werden. Beim Runden werden die
                 Nachkommastellen auf 0 gesetzt. Es wird je nach Größe der Nachkommastellen automatisch auf- oder
@@ -604,8 +557,8 @@
             </ul><br>
         </div>
         <div id="math_on_list" class="help expert notWedo notBob3">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Listeauswerten«[Experten-Block]">»Liste auswerten«
-                <span class="typcn typcn-star"></span></h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Listeauswerten«[Experten-Block]">»Liste
+                auswerten« <span class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Mit dem Block »Liste auswerten« können verschiedene Analysen einer Liste
                 vorgenommen werden:</p>
             <ul style="text-align: left;">
@@ -630,7 +583,7 @@
             </ul><br>
         </div>
         <div id="math_modulo" class="help expert">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Restvon«[Experten-Block]">»Rest von« <span
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Restvon«[Experten-Block]">»Rest von« <span
                     class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Der Block »Rest von« führt eine Division durch und liefert den Rest der
                 Division, der nicht mehr durch den Divisor geteilt werden konnte.</p>
@@ -647,7 +600,7 @@
             </ul><br>
         </div>
         <div id="math_constrain" class="help expert">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Begrenze«[Experten-Block]">»Begrenze« <span
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Begrenze«[Experten-Block]">»Begrenze« <span
                     class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Der Block »Begrenze« sorgt dafür, dass Grenzwerte nicht überschritten werden.
                 Er erfordert drei Eingabewerte:</p>
@@ -676,7 +629,7 @@
             </ul><br>
         </div>
         <div id="math_random_int" class="help expert">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»GanzzahligeZufallswerte«[Experten-Block]">
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»GanzzahligeZufallswerte«[Experten-Block]">
                 »Ganzzahlige Zufallswerte« <span class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Mit dem Block »Ganzzahlige Zufallswerte« können ganzzahlige Zufallswerte
                 innerhalb selbst gewählter Grenzen erzeugt werden.</p>
@@ -694,7 +647,7 @@
             </ul><br>
         </div>
         <div id="math_random_float" class="help expert">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Zufallszahl«">»Zufallszahl« </h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Zufallszahl«">»Zufallszahl« </h3>
             <p style="text-align: left;">Mit dem Block »Zufallszahl« wird eine Zufallszahl zwischen 0,0 und 1,0
                 bestimmt.</p>
             <p style="text-align: left;">Rückgabewert:
@@ -705,8 +658,8 @@
         </div>
         <div id="math_cast_toString"
             class="help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino">
-            <h3 id="BlockbeschreibungBOB3-»wandle...uminZeichenkette«[Experten-Block]">»wandle ... um in Zeichenkette«
-                <span class="typcn typcn-star"></span></h3>
+            <h3 id="BlockbeschreibungBionicFlower-»wandle...uminZeichenkette«[Experten-Block]">»wandle ... um in
+                Zeichenkette« <span class="typcn typcn-star"></span></h3>
             <p><span style="letter-spacing: -0.006em;">Dieser Block wandelt eine Zahl in eine Zeichenkette um, die diese
                     Zahl enthält. Als </span><span style="letter-spacing: -0.084px;">Beispiel</span><span
                     style="letter-spacing: -0.006em;"> wird die Zahl 123 in die Zeichenkette »123« umgewandelt.</span>
@@ -725,8 +678,8 @@
         </div>
         <div id="math_cast_toChar"
             class="help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino">
-            <h3 id="BlockbeschreibungBOB3-»wandle...uminZeichen«[Experten-Block]">»wandle ... um in Zeichen« <span
-                    class="typcn typcn-star"></span></h3>
+            <h3 id="BlockbeschreibungBionicFlower-»wandle...uminZeichen«[Experten-Block]">»wandle ... um in Zeichen«
+                <span class="typcn typcn-star"></span></h3>
             <p><span style="letter-spacing: -0.006em;">Dieser Block wandelt eine einzelne Zahl den dazugehörigen
                     ASCII-Buchstaben um. Falls es zu dieser Zahl kein dazugehöriges ASCII-Zeichen gibt, wird eine leere
                     Zeichenkette weitergegeben. So wird z.B. die Zahl 97 in den Buchstaben »a« umgewandelt.</span></p>
@@ -743,7 +696,7 @@
             </ul><br>
         </div>
         <div id="text" class="help beginner notBob3">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Text«">»Text«</h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Text«">»Text«</h3>
             <p style="text-align: left;">Mit dem einfachen »Text«-Block wird ein Stück Text bereitgestellt.</p>
             <p style="text-align: left;">Eingabewert:
             </p>
@@ -757,7 +710,7 @@
             </ul><br>
         </div>
         <div id="text_comment" class="help beginner">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Kommentar«">»Kommentar«</h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Kommentar«">»Kommentar«</h3>
             <p style="text-align: left;">Dokumentiere dein Programm mit diesem Block, damit du und andere es später
                 leichter haben, dein Programm zu verstehen. Dieser Kommentar wird auch im generierten Source Code zu
                 sehen sein. </p>
@@ -768,8 +721,8 @@
             </ul>
         </div>
         <div id="robText_join" class="help expert notBob3 notFestobionic">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»ErstelleText«[Experten-Block]">»Erstelle Text«
-                <span class="typcn typcn-star"></span></h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»ErstelleText«[Experten-Block]">»Erstelle
+                Text« <span class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Mit dem »Erstelle Text«-Block wird ein Stück Text aus verschiedenen
                 Eingabewerten zusammengesetzt. Mit dem +-Zeichen können weitere Eingabemöglichkeiten geschaffen werden.
                 Alle Eingaben werden zu einer kontinuierlichen Zeichenkette zusammengefügt. </p>
@@ -788,8 +741,8 @@
             </ul><br>
         </div>
         <div id="robText_append" class="help expert notWedo notBob3">
-            <h3 style="text-align: left;" id="BlockbeschreibungBOB3-»Textanhängen«[Experten-Block]">»Text anhängen«
-                <span class="typcn typcn-star"></span></h3>
+            <h3 style="text-align: left;" id="BlockbeschreibungBionicFlower-»Textanhängen«[Experten-Block]">»Text
+                anhängen« <span class="typcn typcn-star"></span></h3>
             <p style="text-align: left;">Mit dem »Text anhängen«-Block können Zeichenketten erweitert werden, z.B. indem
                 an empfangene Nachrichten eine Signatur angehängt wird.</p>
             <p style="text-align: left;">Eingabemöglichkeiten:
@@ -801,7 +754,7 @@
         </div>
         <div id="text_cast_string_toNumber"
             class="help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino">
-            <h3 id="BlockbeschreibungBOB3-»wandle...uminZahl«[Experten-Block]">»wandle ... um in Zahl« <span
+            <h3 id="BlockbeschreibungBionicFlower-»wandle...uminZahl«[Experten-Block]">»wandle ... um in Zahl« <span
                     class="typcn typcn-star"></span></h3>
             <p><span style="letter-spacing: -0.006em;">Dieser Block wandelt eine Zeichenkette in eine Zahl um, falls
                     dies möglich ist. Wenn eine Zeichenkette also nur Zahlen enthält, kann dieser Block die Zeichenkette
@@ -826,8 +779,8 @@
         </div>
         <div id="text_cast_char_toNumber"
             class="help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino">
-            <h3 id="BlockbeschreibungBOB3-»wandleZeichen...anPosition...inZahl«[Experten-Block]">»wandle Zeichen ... an
-                Position ... in Zahl« <span class="typcn typcn-star"></span></h3>
+            <h3 id="BlockbeschreibungBionicFlower-»wandleZeichen...anPosition...inZahl«[Experten-Block]">»wandle Zeichen
+                ... an Position ... in Zahl« <span class="typcn typcn-star"></span></h3>
             <p><span style="letter-spacing: -0.006em;">Dieser Block wandelt einen Buchstaben oder ein Zeichen aus einer
                     Zeichenkette in die dazugehörige ASCII-Nummer um. Jedes Zeichen hat dabei eine dazugehörige Nummer
                     in der ASCII-Tabelle. So wird z.B. ein kleines »a« in die Zahl 97 umgewandelt.</span></p>
@@ -845,7 +798,7 @@
             </ul><br>
         </div>
         <div id="robLists_create_with" class="help expert notWedo notBob3">
-            <h3 id="BlockbeschreibungBOB3-»ErzeugeListe«[Experten-Block]">»Erzeuge Liste« <span
+            <h3 id="BlockbeschreibungBionicFlower-»ErzeugeListe«[Experten-Block]">»Erzeuge Liste« <span
                     class="typcn typcn-star"></span></h3>
             <p>Der Block »Erzeuge eine leere Liste« erzeugt eine Liste ohne Inhalt. Der Block »Liste« erzeugt eine Liste
                 mit einigen voreingestellten Werten. Mit + und - können weitere Listenelemente am Ende hinzugefügt bzw.
@@ -867,8 +820,8 @@
             </ul><br>
         </div>
         <div id="robLists_repeat" class="help expert notWedo notBob3">
-            <h3 id="BlockbeschreibungBOB3-»WiederholeElementinListe«[Experten-Block]">»Wiederhole Element in Liste«
-                <span class="typcn typcn-star"></span></h3>
+            <h3 id="BlockbeschreibungBionicFlower-»WiederholeElementinListe«[Experten-Block]">»Wiederhole Element in
+                Liste« <span class="typcn typcn-star"></span></h3>
             <p>Der Block »Wiederhole Element in Liste« erzeugt eine Liste mit gleichen Elementen. </p>
             <p>Einstellmöglichkeiten:
             </p>
@@ -888,7 +841,8 @@
             </ul><br>
         </div>
         <div id="robLists_length" class="help expert notWedo notBob3">
-            <h3 id="BlockbeschreibungBOB3-»Länge«[Experten-Block]">»Länge« <span class="typcn typcn-star"></span></h3>
+            <h3 id="BlockbeschreibungBionicFlower-»Länge«[Experten-Block]">»Länge« <span
+                    class="typcn typcn-star"></span></h3>
             <p>Der Block »Länge« gibt als Wert die Länge einer Liste zurück, die als Eingabewert angegeben wird. Eine
                 leere Liste hat die Länge 0.</p>
             <p>Eingabewert
@@ -903,8 +857,8 @@
             </ul><br>
         </div>
         <div id="robLists_isEmpty" class="help expert notWedo notBob3">
-            <h3 id="BlockbeschreibungBOB3-»istleer?«[Experten-Block]">»ist leer?« <span class="typcn typcn-star"></span>
-            </h3>
+            <h3 id="BlockbeschreibungBionicFlower-»istleer?«[Experten-Block]">»ist leer?« <span
+                    class="typcn typcn-star"></span></h3>
             <p>Eine als Eingabewert gegebene Liste wird geprüft, ob sie leer ist.</p>
             <p>Eingabewert
             </p>
@@ -918,7 +872,7 @@
             </ul><br>
         </div>
         <div id="robLists_indexOf" class="help expert notWedo notBob3">
-            <h3 id="BlockbeschreibungBOB3-»SucheinderListe«[Experten-Block]">»Suche in der Liste« <span
+            <h3 id="BlockbeschreibungBionicFlower-»SucheinderListe«[Experten-Block]">»Suche in der Liste« <span
                     class="typcn typcn-star"></span></h3>
             <p>Eine Liste wird durchsucht, ob ein Element darin enthalten ist. Wenn das Element enthalten ist, wird die
                 Listenposition zurückgegeben. Wenn das Element nicht enthalten ist, ist das Ergebnis -1.</p>
@@ -940,7 +894,7 @@
             </ul><br>
         </div>
         <div id="robLists_getIndex" class="help expert notWedo notBob3">
-            <h3 id="BlockbeschreibungBOB3-»NimmListenelement«[Experten-Block]">»Nimm Listenelement« <span
+            <h3 id="BlockbeschreibungBionicFlower-»NimmListenelement«[Experten-Block]">»Nimm Listenelement« <span
                     class="typcn typcn-star"></span></h3>
             <p>Mit diesem Block wird auf ein Element einer Liste zugegriffen. Das Element wird gegebenenfalls verändert.
             </p>
@@ -972,7 +926,7 @@
             </ul><br>
         </div>
         <div id="robLists_setIndex" class="help expert notWedo notBob3">
-            <h3 id="BlockbeschreibungBOB3-»SetzeListenelement«[Experten-Block]">»Setze Listenelement« <span
+            <h3 id="BlockbeschreibungBionicFlower-»SetzeListenelement«[Experten-Block]">»Setze Listenelement« <span
                     class="typcn typcn-star"></span></h3>
             <p>In einer als Eingabewert übergebenen Liste wird ein näher spezifiziertes Element durch einen neuen Wert
                 ersetzt bzw. es wird ein Wert eingefügt.</p>
@@ -992,7 +946,7 @@
             </ul><br>
         </div>
         <div id="robLists_getSublist" class="help expert  notWedo notBob3">
-            <h3 id="BlockbeschreibungBOB3-»ErhalteUnterliste«[Experten-Block]">»Erhalte Unterliste« <span
+            <h3 id="BlockbeschreibungBionicFlower-»ErhalteUnterliste«[Experten-Block]">»Erhalte Unterliste« <span
                     class="typcn typcn-star"></span></h3>
             <p>Aus einer als Eingabewert übergebenen Liste wird eine Unterliste erzeugt. In der Unterliste sind alle
                 Elemente enthalten, die den weiteren Spezifikationen dieses Blocks entsprechen.</p>
@@ -1019,7 +973,7 @@
         </div>
         <div id="mbedColour_picker"
             class="help beginner notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notMbot notFestobionic notEdison">
-            <h3 id="BlockbeschreibungBOB3-»Farbwahl«">»Farbwahl «</h3>
+            <h3 id="BlockbeschreibungBionicFlower-»Farbwahl«">»Farbwahl «</h3>
             <p>Mit diesem Block kannst du eine Farbe aus einer Auswahl von vordefinierten Farben auswählen.</p>
             <p>Option:
             </p>
@@ -1033,7 +987,7 @@
             </ul>
         </div>
         <div id="robColour_picker" class="help beginner notMicrobit notNao notFestobionic notEdison notCalliope">
-            <h3 id="BlockbeschreibungBOB3-»Farbwahl«.1">»Farbwahl «</h3>
+            <h3 id="BlockbeschreibungBionicFlower-»Farbwahl«.1">»Farbwahl «</h3>
             <p>Mit diesem Block kannst du eine Farbe aus einer Auswahl von vordefinierten Farben auswählen.</p>
             <p>Option:
             </p>
@@ -1048,7 +1002,7 @@
         </div>
         <div id="naoColour_picker"
             class="help beginner notWedo notEv3 notNxt notMicrobit notBotnroll notBob3 notArduino notSensebox notMbot notFestobionic notMicrobit notCalliope">
-            <h3 id="BlockbeschreibungBOB3-»Farbwahl«.2">»Farbwahl «</h3>
+            <h3 id="BlockbeschreibungBionicFlower-»Farbwahl«.2">»Farbwahl «</h3>
             <p>Mit diesem Block kannst du eine Farbe aus einer Auswahl von vordefinierten Farben auswählen.</p>
             <p>Option:
             </p>
@@ -1064,8 +1018,8 @@
         <div id="mbedColour_rgb"
             class="help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notMbot notFestobionic notEdison">
             <h3 class="auto-cursor-target"
-                id="BlockbeschreibungBOB3-»FarbemitRot...Grün...Blau...Weiß...«[Experten-Block]">»Farbe mit Rot ... Grün
-                ... Blau ... Weiß ... « <span class="typcn typcn-star"></span></h3>
+                id="BlockbeschreibungBionicFlower-»FarbemitRot...Grün...Blau...Weiß...«[Experten-Block]">»Farbe mit Rot
+                ... Grün ... Blau ... Weiß ... « <span class="typcn typcn-star"></span></h3>
             <p>Mit diesem Block kannst du dir eine eigene Farbe erstellen, indem du deine Farbe aus Rot, Grün und Blau
                 mischst.</p>
             <p>Eingabewerte:
@@ -1084,8 +1038,9 @@
         </div>
         <div id="robColour_rgb"
             class="help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notCalliope notFestobionic notEdison">
-            <h3 class="auto-cursor-target" id="BlockbeschreibungBOB3-»FarbemitRot...Grün...Blau...«[Experten-Block]">
-                »Farbe mit Rot ... Grün ... Blau ... « <span class="typcn typcn-star"></span></h3>
+            <h3 class="auto-cursor-target"
+                id="BlockbeschreibungBionicFlower-»FarbemitRot...Grün...Blau...«[Experten-Block]">»Farbe mit Rot ...
+                Grün ... Blau ... « <span class="typcn typcn-star"></span></h3>
             <p>Mit diesem Block kannst du dir eine eigene Farbe erstellen, indem du deine Farbe aus Rot, Grün und Blau
                 mischst.</p>
             <p>Eingabewerte:
@@ -1103,8 +1058,9 @@
         </div>
         <div id="naoColour_rgb"
             class="help expert notWedo notEv3 notNxt notMicrobit notBob3 notBotnroll notMbot notFestobionic notEdison notCalliope">
-            <h3 class="auto-cursor-target" id="BlockbeschreibungBOB3-»FarbemitRot...Grün...Blau...«[Experten-Block].1">
-                »Farbe mit Rot ... Grün ... Blau ... « <span class="typcn typcn-star"></span></h3>
+            <h3 class="auto-cursor-target"
+                id="BlockbeschreibungBionicFlower-»FarbemitRot...Grün...Blau...«[Experten-Block].1">»Farbe mit Rot ...
+                Grün ... Blau ... « <span class="typcn typcn-star"></span></h3>
             <p>Mit diesem Block kannst du dir eine eigene Farbe erstellen, indem du deine Farbe aus Rot, Grün und Blau
                 mischst.</p>
             <p>Eingabewerte:
@@ -1121,7 +1077,7 @@
             </ul><br>
         </div>
         <div id="variables_set" class="help beginner">
-            <h3 id="BlockbeschreibungBOB3-»SchreibeVariable«">»Schreibe Variable«</h3>
+            <h3 id="BlockbeschreibungBionicFlower-»SchreibeVariable«">»Schreibe Variable«</h3>
             <p>Mit dem Block »Schreibe Variable« kannst du den Wert einer Variablen verändern. Je nach Typ der Variablen
                 (Zahl, Zeichenkette, logischer Wert, Liste, Farbe, Verbindung) kann der Variablen ein passender Wert
                 übergeben werden.</p>
@@ -1133,7 +1089,7 @@
             </ul><br>
         </div>
         <div id="variables_get" class="help beginner">
-            <h3 id="BlockbeschreibungBOB3-»LiesVariable«">»Lies Variable«</h3>
+            <h3 id="BlockbeschreibungBionicFlower-»LiesVariable«">»Lies Variable«</h3>
             <p>Mit dem Block »lies Variable« kannst du den Wert einer Variablen an einen anderen Block übergeben. Der
                 Typ des Ausgabewertes entspricht immer dem Typ, mit dem die Variablen im Block »Start« initialisiert
                 wurde.</p>
@@ -1149,7 +1105,7 @@
             </ul><br>
         </div>
         <div id="robProcedures_defnoreturn" class="help expert">
-            <h3 id="BlockbeschreibungBOB3-Funktionsblockohne/mitEingabe-undohneRückgabewert[Experten-Block]">
+            <h3 id="BlockbeschreibungBionicFlower-Funktionsblockohne/mitEingabe-undohneRückgabewert[Experten-Block]">
                 Funktionsblock ohne/mit Eingabe- und ohne Rückgabewert <span class="typcn typcn-star"></span></h3>
             <p>In einem Funktionsblock ohne/mit Eingabe- und Rückgabewert wird eine Folge von Anweisungen
                 zusammengefasst. Die Eingabewerte werden durch die lokalen Variablen im Funktionsblock festgelegt. Mit
@@ -1179,7 +1135,7 @@
             </div>
         </div>
         <div id="robProcedures_defreturn" class="help expert">
-            <h3 id="BlockbeschreibungBOB3-Funktionsblockohne/mitEingabe-undmitRückgabewerten[Experten-Block]">
+            <h3 id="BlockbeschreibungBionicFlower-Funktionsblockohne/mitEingabe-undmitRückgabewerten[Experten-Block]">
                 Funktionsblock ohne/mit Eingabe- und mit Rückgabewerten <span class="typcn typcn-star"></span></h3>
             <p>In einem Funktionsblock ohne/mit Eingabe- und mit Rückgabewert wird eine Folge von Anweisungen
                 zusammengefasst. Mit dem »+«-Zeichen können lokale Variablen als Eingabewerte für den Funktionsblock
@@ -1219,12 +1175,12 @@
             </div>
         </div>
         <div id="robProcedures_ifreturn" class="help expert">
-            <h3 id="BlockbeschreibungBOB3-Wenn-AbfrageinnerhalbeinerFunktion[Experten-Block]">Wenn-Abfrage innerhalb
-                einer Funktion <span class="typcn typcn-star"></span></h3>
+            <h3 id="BlockbeschreibungBionicFlower-Wenn-AbfrageinnerhalbeinerFunktion[Experten-Block]">Wenn-Abfrage
+                innerhalb einer Funktion <span class="typcn typcn-star"></span></h3>
             <p>Die Wenn-Abfrage innerhalb einer Funktion ist von besonderer Bedeutung. Sobald der Funktionsablauf auf
                 eine Wenn-Abfrage trifft, wird die Gültigkeit der Bedingung geprüft.</p>
-            <h4 id="BlockbeschreibungBOB3-Wenn-AbfrageinnerhalbeinerFunktionmitRückgabewert:">Wenn-Abfrage innerhalb
-                einer Funktion mit Rückgabewert:</h4>
+            <h4 id="BlockbeschreibungBionicFlower-Wenn-AbfrageinnerhalbeinerFunktionmitRückgabewert:">Wenn-Abfrage
+                innerhalb einer Funktion mit Rückgabewert:</h4>
             <ul>
                 <li>Wenn die Bedingung erfüllt ist, wird der weitere Funktionsablauf ignoriert und die Funktion wird
                     beendet. Der zweite übergebene Wert wird als Funktionswert zurückgegeben. Ein eventuell mit der
@@ -1234,8 +1190,8 @@
                     Funktion definierter Rückgabewert wird als Funktionswert zurückgegeben, wenn der Funktionsablauf das
                     Funktionsende erreicht.</li>
             </ul>
-            <h4 id="BlockbeschreibungBOB3-Wenn-AbfrageinnerhalbeinerFunktionohneRückgabewert:">Wenn-Abfrage innerhalb
-                einer Funktion ohne Rückgabewert:</h4>
+            <h4 id="BlockbeschreibungBionicFlower-Wenn-AbfrageinnerhalbeinerFunktionohneRückgabewert:">Wenn-Abfrage
+                innerhalb einer Funktion ohne Rückgabewert:</h4>
             <ul>
                 <li>Eine Wenn-Abfrage innerhalb einer Funktion ohne Rückgabewert hat nur die Bedingung als Eingabewert.
                 </li>
@@ -1257,8 +1213,8 @@
             </ul><br>
         </div>
         <div id="robProcedures_callnoreturn" class="help expert">
-            <h3 id="BlockbeschreibungBOB3-»FunktionsaufrufohneRückgabewert«[Experten-Block]">»Funktionsaufruf ohne
-                Rückgabewert « <span class="typcn typcn-star"></span></h3>
+            <h3 id="BlockbeschreibungBionicFlower-»FunktionsaufrufohneRückgabewert«[Experten-Block]">»Funktionsaufruf
+                ohne Rückgabewert « <span class="typcn typcn-star"></span></h3>
             <p>Mit diesem Block kannst du eine vorher definierte Funktion aufrufen. Diese Funktion gibt dabei keinen
                 Wert zurück.</p>
             <p>Eingabewerte:
@@ -1269,8 +1225,8 @@
             </ul>
         </div>
         <div id="robProcedures_callreturn" class="help expert">
-            <h3 class="auto-cursor-target" id="BlockbeschreibungBOB3-»FunktionsaufrufmitRückgabewert«">»Funktionsaufruf
-                mit Rückgabewert «</h3>
+            <h3 class="auto-cursor-target" id="BlockbeschreibungBionicFlower-»FunktionsaufrufmitRückgabewert«">
+                »Funktionsaufruf mit Rückgabewert «</h3>
             <p>Mit diesem Block kannst du eine vorher definierte Funktion aufrufen und den Rückgabewerte abrufen.</p>
             <p>Eingabewerte:
             </p>
@@ -1282,25 +1238,6 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-right">Wert, abhängig von dem Rückgabewert der definierten Funktion.</li>
-            </ul><br>
-        </div>
-        <div id="bob3Communication_sendBlock" class="help expert">9<h3 id="BlockbeschreibungBOB3-»SendeNachricht...«">
-                »Sende Nachricht ... «</h3>
-            <p>Mit diesem Block kannst du eine Nachricht an alle anderen Robotern in deiner Umgebung senden. Du kannst
-                allerdings nur Zahlen als Nachricht an andere Roboter versenden.</p>
-            <p>Eingabewerte:
-            </p>
-            <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-left">Zahl, Nachricht die du an andere Roboter versenden möchtest.</li>
-            </ul>
-        </div>
-        <div id="bob3Communication_receiveBlock" class="help expert">
-            <h3 id="BlockbeschreibungBOB3-»EmpfangeNachricht«">»Empfange Nachricht «</h3>
-            <p>Mit diesem Block kannst du die Nachrichten von anderen Robotern empfangen.</p>
-            <p>Rückgabewerte:
-            </p>
-            <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-right">Zahl, empfangene Nachricht von anderen Robotern.</li>
             </ul><br>
         </div>
     </div>
