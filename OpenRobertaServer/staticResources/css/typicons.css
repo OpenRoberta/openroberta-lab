@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'typicons';
-  src:  url('fonts/typicons.eot?bn240u');
-  src:  url('fonts/typicons.eot?bn240u#iefix') format('embedded-opentype'),
-  url('fonts/typicons.ttf?bn240u') format('truetype'),
-  url('fonts/typicons.woff?bn240u') format('woff'),
-  url('fonts/typicons.svg?bn240u#typicons') format('svg');
+  src:  url('fonts/typicons.eot?vklb3w');
+  src:  url('fonts/typicons.eot?vklb3w#iefix') format('embedded-opentype'),
+  url('fonts/typicons.ttf?vklb3w') format('truetype'),
+  url('fonts/typicons.woff?vklb3w') format('woff'),
+  url('fonts/typicons.svg?vklb3w#typicons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.typcn-festobionic:before {
+  content: "\e904";
+}
 .typcn-Rob3rta:before {
   content: "\ea75";
 }
@@ -49,8 +52,8 @@
 .typcn-feedback:before {
   content: "\e903";
 }
-.typcn-festobionic:before {
-  content: "\e904";
+.typcn-festobionicflower:before {
+  content: "\ea73";
 }
 .typcn-section:before {
   content: "\e905";
@@ -1117,7 +1120,7 @@
 .typcn-arrow-back-outline:before {
   content: "\ea67";
 }
-.typcn-archive:before {
+.typcn-archive:before {git
   content: "\ea68";
 }
 .typcn-anchor:before {
