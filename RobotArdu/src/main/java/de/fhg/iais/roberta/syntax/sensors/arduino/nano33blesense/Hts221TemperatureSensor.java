@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.BuiltinSensor;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
@@ -17,19 +17,19 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 
 public class Hts221TemperatureSensor<V> extends BuiltinSensor<V> {
 
-    private final Var<V> temperature;
+    private final Expr<V> temperature;
 
-    public Var<V> getTemperature() {
+    public Expr<V> getTemperature() {
         return temperature;
     }
 
-    private Hts221TemperatureSensor(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> temperature) {
+    private Hts221TemperatureSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> temperature) {
         super(null, BlockTypeContainer.getByName("HTS221_TEMPERATURE"), properties, comment);
         this.temperature = temperature;
         setReadOnly();
     }
 
-    public static <V> Hts221TemperatureSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> temperature) {
+    public static <V> Hts221TemperatureSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> temperature) {
         return new Hts221TemperatureSensor<>(properties, comment, temperature);
     }
 
@@ -42,7 +42,7 @@ public class Hts221TemperatureSensor<V> extends BuiltinSensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
-        Var<V> temperature = helper.getVar(values, BlocklyConstants.VARIABLE_VALUE);
+        Expr<V> temperature = helper.getVar(values, BlocklyConstants.VARIABLE_VALUE);
         return Hts221TemperatureSensor.make(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), temperature);
     }
 

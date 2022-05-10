@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.BuiltinSensor;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
@@ -17,21 +17,21 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 
 public class Lsm9ds1MagneticFieldSensor<V> extends BuiltinSensor<V> {
 
-    private final Var<V> x, y, z;
+    private final Expr<V> x, y, z;
 
-    public Var<V> getX() {
+    public Expr<V> getX() {
         return x;
     }
 
-    public Var<V> getY() {
+    public Expr<V> getY() {
         return y;
     }
 
-    public Var<V> getZ() {
+    public Expr<V> getZ() {
         return z;
     }
 
-    private Lsm9ds1MagneticFieldSensor(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> x, Var<V> y, Var<V> z) {
+    private Lsm9ds1MagneticFieldSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> x, Expr<V> y, Expr<V> z) {
         super(null, BlockTypeContainer.getByName("LSM9DS1_MAGNETICFIELD"), properties, comment);
         this.x = x;
         this.y = y;
@@ -39,7 +39,7 @@ public class Lsm9ds1MagneticFieldSensor<V> extends BuiltinSensor<V> {
         setReadOnly();
     }
 
-    public static <V> Lsm9ds1MagneticFieldSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> x, Var<V> y, Var<V> z) {
+    public static <V> Lsm9ds1MagneticFieldSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> x, Expr<V> y, Expr<V> z) {
         return new Lsm9ds1MagneticFieldSensor<>(properties, comment, x, y, z);
     }
 
@@ -52,9 +52,9 @@ public class Lsm9ds1MagneticFieldSensor<V> extends BuiltinSensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 3);
-        Var<V> x = helper.getVar(values, BlocklyConstants.VARIABLE_X);
-        Var<V> y = helper.getVar(values, BlocklyConstants.VARIABLE_Y);
-        Var<V> z = helper.getVar(values, BlocklyConstants.VARIABLE_Z);
+        Expr<V> x = helper.getVar(values, BlocklyConstants.VARIABLE_X);
+        Expr<V> y = helper.getVar(values, BlocklyConstants.VARIABLE_Y);
+        Expr<V> z = helper.getVar(values, BlocklyConstants.VARIABLE_Z);
         return Lsm9ds1MagneticFieldSensor.make(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), x, y, z);
     }
 

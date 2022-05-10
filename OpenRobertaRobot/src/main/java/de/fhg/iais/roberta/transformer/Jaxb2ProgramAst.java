@@ -84,11 +84,11 @@ public class Jaxb2ProgramAst<V> {
      */
     public ProgramAst<V> blocks2Ast(BlockSet set) {
         ProgramAst.Builder<V> builder =
-                new ProgramAst.Builder<V>()
-                        .setRobotType(set.getRobottype())
-                        .setXmlVersion(set.getXmlversion())
-                        .setDescription(set.getDescription())
-                        .setTags(set.getTags());
+            new ProgramAst.Builder<V>()
+                .setRobotType(set.getRobottype())
+                .setXmlVersion(set.getXmlversion())
+                .setDescription(set.getDescription())
+                .setTags(set.getTags());
 
         List<Instance> instances = set.getInstance();
         for ( Instance instance : instances ) {
@@ -136,10 +136,10 @@ public class Jaxb2ProgramAst<V> {
             method = astClass.getMethod("jaxbToAst", Block.class);
         } catch ( NoSuchMethodException | SecurityException e ) {
         }
-        if (method != null) {
+        if ( method != null ) {
             try {
                 return (Phrase<V>) method.invoke(null, block);
-            } catch (IllegalAccessException |InvocationTargetException e) {
+            } catch ( IllegalAccessException | InvocationTargetException e ) {
                 throw new DbcException("Could not invoke the static method jaxbToAst(Block) for AST class " + astClass.getSimpleName(), e);
             }
         }
@@ -147,10 +147,10 @@ public class Jaxb2ProgramAst<V> {
             method = astClass.getMethod("jaxbToAst", Block.class, Jaxb2ProgramAst.class);
         } catch ( NoSuchMethodException | SecurityException e ) {
         }
-        if (method != null) {
+        if ( method != null ) {
             try {
                 return (Phrase<V>) method.invoke(null, block, this);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch ( IllegalAccessException | InvocationTargetException e ) {
                 throw new DbcException("Could not invoke the static method jaxbToAst(Block,Jaxb2ProgramAst) for AST class " + astClass.getSimpleName(), e);
             }
         }
@@ -371,8 +371,8 @@ public class Jaxb2ProgramAst<V> {
         ExprList<V> exprList = ExprList.make();
         for ( Block exb : exprBolcks ) {
             Phrase<V> p = blockToAST(exb);
-            if (p instanceof VarDeclaration) {
-                exprList.addExpr((VarDeclaration<V>)p);
+            if ( p instanceof VarDeclaration ) {
+                exprList.addExpr((VarDeclaration<V>) p);
             } else {
                 throw new DbcException("invalid delaration of parameters of a function");
             }
@@ -382,19 +382,19 @@ public class Jaxb2ProgramAst<V> {
     }
 
     /**
-     * get from a value list (a XML substructure) the phrase matching<br>
-     * - a variable - a given name
+     * get from a value list (a XML substructure) the phrase matching a variable.<br>
+     * Returning null is dangerous. Currently it is needed for the checking of empty fields of nano33ble
      *
      * @param values
-     * @param name
-     * @return the Var<V> phrase; throw exception, if not found
+     * @param name name of the variable
+     * @return the Var<V> phrase; return null, if not found
      */
-    public Var<V> getVar(List<Value> values, String name) {
+    public Expr<V> getVar(List<Value> values, String name) {
         Phrase<V> p = extractValue(values, new ExprParam(name, BlocklyType.NUMBER));
         if ( p instanceof Var ) {
             return (Var<V>) p;
         } else {
-            throw new DbcException("only variables allowed for field " + name);
+            return EmptyExpr.make(BlocklyType.NUMBER);
         }
     }
 
@@ -402,12 +402,12 @@ public class Jaxb2ProgramAst<V> {
         List<Statement> statements = Jaxb2Ast.extractStatements(block, (short) mutation);
         StmtList<V> stmtList = extractStatement(statements, location);
         return RepeatStmt
-                .make(
-                        RepeatStmt.Mode.get(mode),
-                        Jaxb2Ast.convertPhraseToExpr(expr),
-                        stmtList,
-                        Jaxb2Ast.extractBlockProperties(block),
-                        Jaxb2Ast.extractComment(block));
+            .make(
+                RepeatStmt.Mode.get(mode),
+                Jaxb2Ast.convertPhraseToExpr(expr),
+                stmtList,
+                Jaxb2Ast.extractBlockProperties(block),
+                Jaxb2Ast.extractComment(block));
     }
 
     private Phrase<V> extractBlock(Value value) {

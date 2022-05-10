@@ -242,11 +242,12 @@ public class AnnotationHelper {
             Expr<V> expr = Jaxb2Ast.convertPhraseToExpr(sub);
             return new ConstructorParameter(Expr.class, expr);
         } else if ( field.getType().equals(Var.class) ) {
-            Var<V> sub = helper.getVar(values, anno.name());
-            return new ConstructorParameter(Var.class, sub);
-        } else {
-            throw new DbcException("Inconsistency in startup");
+            Expr<V> sub = helper.getVar(values, anno.name());
+            if ( sub instanceof Var ) {
+                return new ConstructorParameter(Var.class, (Var) sub);
+            }
         }
+        throw new DbcException("Inconsistency in startup");
     }
 
     private static ConstructorParameter extractNepoFieldConstructorParameters(Block block, NepoField anno, Field field) {

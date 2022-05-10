@@ -4,7 +4,7 @@ import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.BuiltinSensor;
 import de.fhg.iais.roberta.transformer.NepoPhrase;
 import de.fhg.iais.roberta.transformer.NepoValue;
@@ -14,13 +14,13 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 public class Lsm9ds1GyroSensor<V> extends BuiltinSensor<V> {
 
     @NepoValue(name = BlocklyConstants.VARIABLE_X, type = BlocklyType.NUMBER_INT)
-    public final Var<V> x;
+    public final Expr<V> x;
     @NepoValue(name = BlocklyConstants.VARIABLE_Y, type = BlocklyType.NUMBER_INT)
-    public final Var<V> y;
+    public final Expr<V> y;
     @NepoValue(name = BlocklyConstants.VARIABLE_Z, type = BlocklyType.NUMBER_INT)
-    public final Var<V> z;
+    public final Expr<V> z;
 
-    public Lsm9ds1GyroSensor(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, Var<V> x, Var<V> y, Var<V> z) {
+    public Lsm9ds1GyroSensor(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> x, Expr<V> y, Expr<V> z) {
         super(null, kind, properties, comment);
         this.x = x;
         this.y = y;
