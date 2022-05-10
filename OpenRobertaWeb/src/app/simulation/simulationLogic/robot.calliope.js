@@ -259,6 +259,7 @@ function Calliope(pose, configuration, num, robotBehaviour) {
         touched: false,
         draw: that.pin0.draw,
     };
+    this.sound = { volume: 0 };
     SIM.initMicrophone(this);
 }
 

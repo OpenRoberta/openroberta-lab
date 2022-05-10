@@ -248,6 +248,7 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
             touched: false,
             draw: that.pin0.draw,
         };
+        this.sound = { volume: 0 };
         SIM.initMicrophone(this);
     }
     Calliope.prototype = Object.create(simulation_robot_mbed_1.default.prototype);

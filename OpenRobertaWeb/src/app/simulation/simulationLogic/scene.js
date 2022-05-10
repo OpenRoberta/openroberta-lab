@@ -244,6 +244,9 @@ Scene.prototype.drawMbed = function () {
     $('#notConstantValue').append('<div><label>Time</label><span>' + UTIL.round(this.robots[0].time, 3) + 's</span></div>');
     $('#notConstantValue').append('<div><label>Compass</label><span>' + UTIL.round(this.robots[0].compass.degree, 0) + '°</span></div>');
     $('#notConstantValue').append('<div><label>Light Sensor</label><span>' + UTIL.round(this.robots[0].display.lightLevel, 0) + '%</span></div>');
+    if (this.robots[0].sound) {
+        $('#notConstantValue').append('<div><label>Sound Sensor </label><span>' + UTIL.round(this.robots[0].sound.volume * 100, 0) + '%</span></div>');
+    }
     $('#notConstantValue').append('<div><label>Temperature</label><span>' + UTIL.round(this.robots[0].temperature.degree, 0) + '°</span></div>');
     var gesture;
     for (var i in this.robots[0].gesture) {
@@ -344,8 +347,10 @@ Scene.prototype.drawRobots = function () {
                         'cm</span></div>'
                 );
             }
-            if (this.robots[r].sound) {
-                $('#notConstantValue').append('<div><label>Sound Sensor </label><span>' + UTIL.round(this.robots[r].sound.volume * 100, 0) + '%</span></div>');
+            for (var s in this.robots[r].soundSensor) {
+                $('#notConstantValue').append(
+                    '<div><label>Sound Sensor ' + s.replace('ORT_', '') + '</label><span>' + UTIL.round(this.robots[r].sound.volume * 100, 0) + '%</span></div>'
+                );
             }
             for (var s in this.robots[r].colorSensor) {
                 $('#notConstantValue').append(
@@ -550,7 +555,10 @@ Scene.prototype.drawRobots = function () {
                 { x: Math.round(this.robots[r].frontRight.x), y: Math.round(this.robots[r].frontRight.y) },
                 { x: Math.round(this.robots[r].geom.x) + this.robots[r].geom.w, y: Math.round(this.robots[r].frontLeft.y) },
                 { x: Math.round(this.robots[r].geom.x), y: Math.round(this.robots[r].geom.y) + this.robots[r].geom.h },
-                { x: Math.round(this.robots[r].geom.x) + this.robots[r].geom.w, y: Math.round(this.robots[r].geom.y) + this.robots[r].geom.h },
+                {
+                    x: Math.round(this.robots[r].geom.x) + this.robots[r].geom.w,
+                    y: Math.round(this.robots[r].geom.y) + this.robots[r].geom.h,
+                },
             ];
             for (let c in objectCorners) {
                 this.rCtx.beginPath();
@@ -1094,6 +1102,7 @@ Scene.prototype.updateSensorValues = function (running) {
             values.sound = {};
             if (this.robots[r].soundSensor) {
                 for (var s in this.robots[r].soundSensor) {
+                    values.sound[s] = {};
                     values.sound[s].volume = UTIL.round(this.robots[r].sound.volume * 100, 0);
                 }
             } else {

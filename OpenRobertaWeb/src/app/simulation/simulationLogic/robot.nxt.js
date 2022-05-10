@@ -82,6 +82,7 @@ function Nxt(pose, configuration, num, robotBehaviour) {
             this.soundSensor[c] = { sound: 0 };
         }
     }
+    this.sound = { volume: 0 };
     SIM.initMicrophone(this);
 }
 
