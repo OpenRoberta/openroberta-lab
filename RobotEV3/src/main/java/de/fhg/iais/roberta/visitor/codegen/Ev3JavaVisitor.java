@@ -144,7 +144,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         this.sb.append("private Hal hal = new Hal(brickConfiguration, usedSensors);");
         nlIndent();
         generateUserDefinedMethods();
-        generateUserDefinedClasses();
+        generateNNStuff();
         nlIndent();
         this.sb.append("public static void main(String[] args) {");
         incrIndentation();

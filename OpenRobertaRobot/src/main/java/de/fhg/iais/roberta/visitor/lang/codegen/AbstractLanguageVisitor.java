@@ -116,12 +116,12 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
             });
     }
 
-    protected void generateUserDefinedClasses() {
+    protected void generateNNStuff() {
         NNStepDecl nnStepDecl = this.getBean(CodeGeneratorSetupBean.class).getNNStepDecl();
         if ( nnStepDecl != null ) {
-            src.nlI().add("class NNStep {").INCR().nlI().add("public final double ");
-            src.collect(nnStepDecl.getOutputNeurons(), ",").add(";").nlI();
-            src.add("public NNStep(").collect(nnStepDecl.getInputNeurons(), " double ", ", double ", "").add(") {").INCR();
+            src.add("private float ____");
+            src.collect(nnStepDecl.getOutputNeurons(), ", ____").add(";").nlI();
+            src.add("private void ____nnStep(").collect(nnStepDecl.getInputNeurons(), " float _", ", float _", "").add(") {").INCR();
             JSONArray weights = nnStepDecl.getWeights();
             JSONArray biases = nnStepDecl.getBiases();
             for ( int layer = 0; layer < weights.length() - 1; layer++ ) {
@@ -129,30 +129,30 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
                 JSONArray biasesForLayer = biases.getJSONArray(layer + 1);
                 int numberOfNeurons = weightsForLayer.getJSONArray(0).length();
                 for ( int targetNum = 0; targetNum < numberOfNeurons; targetNum++ ) {
-                    String targetNeuron = (layer == weights.length() - 2) ? nnStepDecl.getOutputNeurons().get(targetNum) : "double h" + (layer + 1) + "n" + (targetNum + 1);
+                    String targetNeuron = (layer == weights.length() - 2) ? ("____" + nnStepDecl.getOutputNeurons().get(targetNum)) : "float h" + (layer + 1) + "n" + (targetNum + 1);
                     src.nlI().add(targetNeuron, " = ", biasesForLayer.getString(targetNum));
                     for ( int sourceNum = 0; sourceNum < weightsForLayer.length(); sourceNum++ ) {
-                        String sourceNeuron = (layer == 0) ? nnStepDecl.getInputNeurons().get(sourceNum) : ("h" + layer + "n" + (sourceNum + 1));
+                        String sourceNeuron = (layer == 0) ? ("_" + nnStepDecl.getInputNeurons().get(sourceNum)) : ("h" + layer + "n" + (sourceNum + 1));
                         src.add(" + ", sourceNeuron);
                         writeWeightTerm(weightsForLayer.getJSONArray(sourceNum).getString(targetNum));
                     }
                     src.add(";");
                 }
             }
-            src.DECR().nlI().add("}").DECR().nlI().add("}").nlI().add("NNStep nnStep = null;").nlI();
+            src.DECR().nlI().add("}").nlI();
         }
     }
 
-   private void writeWeightTerm(String weight) {
+    private void writeWeightTerm(String weight) {
         char firstChar = weight.charAt(0);
-        if (firstChar == '*') {
+        if ( firstChar == '*' ) {
             src.add(weight);
-        } else if (firstChar == '/' || firstChar == ':') {
+        } else if ( firstChar == '/' || firstChar == ':' ) {
             src.add("/").add(weight.substring(1));
         } else {
             src.add("*").add(weight);
         }
-   }
+    }
 
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
@@ -273,7 +273,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     @Override
     public Void visitNNStepStmt(NNStepStmt<Void> nnStepStmt) {
-        this.src.add("nnStep = new NNStep(");
+        this.src.add("____nnStep(");
         boolean first = true;
         for ( Stmt stmt : nnStepStmt.getInputNeurons() ) {
             first = src.addIf(first, ",");
@@ -298,7 +298,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     @Override
     public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<Void> getVal) {
-        src.add("nnStep.", getVal.getName());
+        src.add("____").add(getVal.getName());
         return null;
     }
 
@@ -311,7 +311,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     @Override
     public Void visitNNOutputNeuronStmt(NNOutputNeuronStmt<Void> nnOutputNeuronStmt) {
         nnOutputNeuronStmt.getValue().accept(this);
-        src.add(" = nnStep.", nnOutputNeuronStmt.getName(), ";").nlI();
+        src.add(" = ____", nnOutputNeuronStmt.getName(), ";").nlI();
         return null;
     }
 
