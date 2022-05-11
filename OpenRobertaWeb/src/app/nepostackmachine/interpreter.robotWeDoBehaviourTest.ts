@@ -4,6 +4,10 @@ import * as C from './interpreter.constants';
 import * as U from './interpreter.util';
 
 export class RobotWeDoBehaviourTest extends ARobotBehaviour {
+    odometryReset(slot: string): void {
+        throw new Error('Method not implemented.');
+    }
+
     temperatureLedAction(blue: number, red: number): void {
         throw new Error('Method not implemented.');
     }
@@ -188,7 +192,7 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
         throw new Error('Method not implemented.');
     }
 
-    public getVolumeAction(_s: State): void {
+    getVolumeAction(_s: State): void {
         throw new Error('Method not implemented.');
     }
 
@@ -205,7 +209,7 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
         U.info(' debug action ' + robotText);
     }
 
-    public assertAction(_msg: string, _left: any, _op: string, _right: any, _value: any): void {
+    assertAction(_msg: string, _left: any, _op: string, _right: any, _value: any): void {
         const robotText = '> Assertion failed: ' + _msg + ' ' + _left + ' ' + _op + ' ' + _right;
         U.info(' assert action ' + robotText);
     }
@@ -218,5 +222,25 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
     }
 
     proxHLedAction(ledValues: number[]): void {
+    }
+
+    omniDriveAction(xVel: number, yVel: number, thetaVel: number): number {
+        throw new Error('Method not implemented.');
+    }
+
+    omniDriveDistAction(xVel: number, yVel: number, distance: number): number {
+        throw new Error('Method not implemented.');
+    }
+
+    omniStopDriveAction(): number {
+        throw new Error('Method not implemented.');
+    }
+
+    omniDriveTurnAction(direction: string, thetaVel: number, angle: number): number {
+        throw new Error('Method not implemented.');
+    }
+
+    omniDrivePositionAction(power, x, y): number {
+        return 0;
     }
 }

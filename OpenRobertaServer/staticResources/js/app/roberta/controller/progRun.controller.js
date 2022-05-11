@@ -66,12 +66,19 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
     /**
      * Start the program on the brick
      */
-    function runOnBrick() {
+    function runOnBrick(opt_program) {
         GUISTATE_C.setPing(false);
         GUISTATE_C.setConnectionState('busy');
         LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick');
-        var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-        var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
+        var xmlProgram;
+        var xmlTextProgram;
+        if (opt_program) {
+            xmlTextProgram = opt_program;
+        }
+        else {
+            xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+            xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
+        }
         var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
         var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
         var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
@@ -204,7 +211,7 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                         $(this)
                             .delay(750 * index)
                             .animate({
-                            opacity: 1
+                            opacity: 1,
                         }, 1000);
                     });
                 });
@@ -259,7 +266,7 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                 //All non-IE browsers can play WAV files in the browser, see: https://www.w3schools.com/html/html5_audio.asp
                 $('#OKButtonModalFooter').addClass('hidden');
                 var contentAsBlob = new Blob([wavFileContent], {
-                    type: 'audio/wav'
+                    type: 'audio/wav',
                 });
                 audio = new Audio(window.URL.createObjectURL(contentAsBlob));
                 createPlayButton(audio);
@@ -280,7 +287,7 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                     $(this)
                         .delay(750 * index)
                         .animate({
-                        opacity: 1
+                        opacity: 1,
                     }, 1000);
                 });
             });
@@ -360,13 +367,26 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
         }
     }
     function stopProgram() {
-        THYMIO_C.stopProgram().then(function (ok) {
-            if (ok == 'done') {
-                MSG.displayInformation(result, 'MESSAGE_EDIT_START', result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+        if (GUISTATE_C.getConnection() == GUISTATE_C.getConnectionTypeEnum().TOKEN) {
+            PROGRAM.stopProgram(function () {
+                GUISTATE_C.setState(result);
+                MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+                if (result.rc != 'ok') {
+                    GUISTATE_C.setConnectionState('error');
+                }
+            });
+        }
+        else {
+            if (GUISTATE_C.getRobotGroup() == 'thymio') {
+                THYMIO_C.stopProgram().then(function (ok) {
+                    if (ok == 'done') {
+                        MSG.displayInformation(result, 'MESSAGE_EDIT_START', result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+                    }
+                }, function (err) {
+                    MSG.displayInformation({ rc: 'error' }, null, err, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+                });
             }
-        }, function (err) {
-            MSG.displayInformation({ rc: 'error' }, null, err, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-        });
+        }
     }
     function runForWebviewConnection(result) {
         MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
@@ -445,7 +465,7 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
         var downloadLink;
         if ('Blob' in window) {
             var contentAsBlob = new Blob([content], {
-                type: 'application/octet-stream'
+                type: 'application/octet-stream',
             });
             if ('msSaveOrOpenBlob' in navigator) {
                 navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
@@ -551,7 +571,7 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
         }
         else {
             MSG.displayInformation({
-                rc: 'error'
+                rc: 'error',
             }, '', 'should not happen!');
         }
     }

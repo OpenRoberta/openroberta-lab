@@ -1,0 +1,204 @@
+include: "classpath:/common.methods.yml"
+
+## FunctionNames
+
+OMNIDRIVESPEED:
+  PYTHON: |
+    def setSpeedOmnidrivePercent(x, y, z):
+        global currentSpeed
+        max = MAXSPEED
+        for index, speed in enumerate([x, y, z]):
+            if (index == 2):
+                max = MAXROTATION
+            if (speed > 100):
+                currentSpeed[index] = max
+            elif (speed < -100):
+                currentSpeed[index] = -max
+            else:
+                currentSpeed[index] = speed / 100 * max
+
+POSTVEL:
+  PYTHON: |
+    def postVel():
+        global currentSpeed                 
+        OMNIDRIVE_URL = "http://" + ROBOTINOIP + "/data/omnidrive"
+        r = requests.post(url = OMNIDRIVE_URL, params = PARAMS, json = currentSpeed )
+
+GETDISTANCE:
+  PYTHON: |
+    def getDistance(port):
+        DISTANCES_URL = "http://" + ROBOTINOIP + "/data/distancesensorarray"
+        r = requests.get(url = DISTANCES_URL, params = PARAMS)
+        if r.status_code == requests.codes.ok:
+            data = r.json()
+            return data[port-1] * 100
+        else:
+            return -1
+
+ISBUMPED:
+  PYTHON: |
+    def isBumped():
+        BUMPER_URL = "http://" + ROBOTINOIP + "/data/bumper"
+        r = requests.get(url = BUMPER_URL, params = PARAMS)
+        if r.status_code == requests.codes.ok:
+            data = r.json()
+            return data["value"]
+        else:
+            return -1
+
+SETDIGITALPIN:
+  PYTHON: |
+    def setDigitalPin(pos, value):
+        global _digitalPinValues
+        _digitalPinValues[pos-1] = int(value)
+        DIGITALPIN_URL = "http://" + ROBOTINOIP + "/data/digitaloutputarray"
+        r = requests.post(url = DIGITALPIN_URL, params = PARAMS, json = _digitalPinValues )
+
+GETDIGITALPIN:
+  PYTHON: |
+    def getDigitalPin(pos):
+        DIGITALPIN_URL = "http://" + ROBOTINOIP + "/data/digitalinputarray"
+        r = requests.get(url = DIGITALPIN_URL, params = PARAMS)
+        if r.status_code == requests.codes.ok:
+            data = r.json()
+            return data[pos-1]
+        else:
+            return -1
+
+GETANALOGPIN:
+  PYTHON: |
+    def getAnalogPin(pos):
+        ANALOGPIN_URL = "http://" + ROBOTINOIP + "/data/analoginputarray"
+        r = requests.get(url = ANALOGPIN_URL, params = PARAMS)
+        if r.status_code == requests.codes.ok:
+            data = r.json()
+            return data[pos-1]
+        else:
+            return -1
+
+GETODOMETRY:
+  PYTHON: |
+    def getOdometry(val):
+        ODOMETRY_URL = "http://" + ROBOTINOIP + "/data/odometry"
+        r = requests.get(url = ODOMETRY_URL, params = PARAMS)
+        if r.status_code == requests.codes.ok:
+            data = r.json()
+            #data: [x,y,rot,vx,vy,omega,seq]
+            if val == 'x':
+                return data[0]
+            elif val == 'y':
+                return data[1]
+            elif val == 'rot':
+                return data[2]
+            else:
+                return data
+        else:
+            return -1
+
+RESETODOMETRY:
+  PYTHON: |
+    def resetOdometry(RV, x, y, z):
+        RV.writeFloatVector(1, [x, y, z, 1])
+        time.sleep(0.1)
+        RV.writeFloatVector(1, [])
+
+DRIVETOPOSITION:
+  PYTHON: |
+    def driveToPosition(RV, x, y, speed):
+        global currentSpeed
+        speed = abs(speed)
+        RV.writeFloatVector(2, [x * 10, y * 10, RV.readFloatVector(1)[2], 1])
+        time.sleep(0.5)
+        while RV.readFloatVector(2)[3] != 1 and not isBumped():
+            returnedSpeedX = RV.readFloatVector(2)[0] * 10
+            returnedSpeedY = RV.readFloatVector(2)[1] * 10
+            speedX = (returnedSpeedX * speed / 100)
+            speedY = (returnedSpeedY * speed / 100)
+            if abs(speedX) < 0.005:
+                speedX = toSlowCheck(returnedSpeedX, speedX)
+            if abs(speedY) < 0.005:
+                speedY = toSlowCheck(returnedSpeedY, speedY)
+    
+            currentSpeed = [speedX, speedY, 0]
+            time.sleep(0.05)
+        currentSpeed = [0, 0, 0]
+    
+    def toSlowCheck(rawSpeed, percentSpeed):
+        if abs(rawSpeed) < 0.005:
+            return rawSpeed
+        elif percentSpeed < 0:
+            return -0.005
+        else:
+            return 0.005
+
+
+DRIVEFORDISTANCE:
+  PYTHON: |
+    def driveForDistance(RV, x, y, distance):
+        angle = math.atan2(y, x)
+        angle += RV.readFloatVector(1)[2] * math.pi / 180
+        targetX = RV.readFloatVector(1)[0] / 10 + distance * math.cos(angle)
+        targetY = RV.readFloatVector(1)[1] / 10 + distance * math.sin(angle)
+        resultingSpeed = math.sqrt(math.pow(x, 2) + math.pow(y, 2))
+        driveToPosition(RV, targetX, targetY, resultingSpeed)
+
+TURNFORDEGREES:
+  PYTHON: |
+    def turnForDegrees(RV, speed, degrees):
+        if degrees < 0:
+            speed = speed * -1
+        distance = abs(degrees)
+        lastOrientation = RV.readFloatVector(1)[2]
+        setSpeedOmnidrivePercent(0, 0, speed)
+        while distance > 0:
+            orientation = RV.readFloatVector(1)[2]
+            traveledDegrees = abs(orientation - lastOrientation)
+            if ((speed > 0 and lastOrientation > orientation) or (speed < 0 and lastOrientation < orientation)) and traveledDegrees > 300:
+                traveledDegrees = 360 - traveledDegrees
+            distance -= traveledDegrees
+            lastOrientation = orientation
+            time.sleep(0.05)
+        setSpeedOmnidrivePercent(0, 0, 0)
+
+GETMARKERS:
+  PYTHON: |
+    def getMarkers(RV):
+        markers = RV.readFloatVector(3)
+        if len(markers) == 0:
+            return [-1]
+        return markers
+
+GETMARKERINFO:
+  PYTHON: |
+    def getMarkerInformation(RV, id):
+        RV.writeFloat(3,id)
+        time.sleep(0.001)
+        value = RV.readFloatVector(4) 
+        if not value[0]:
+            value = [False, -1,-1,-1,-1,-1,-1]
+        else:
+            for i in range (1,4):
+                value[i] = value[i] * 100  
+        return value[1:4]
+
+GETCOLOURBLOB:
+  PYTHON: |
+    def getColourBlob(RV, inputs):
+        RV.writeFloatVector(6, inputs)
+        time.sleep(0.001)
+        value = RV.readFloatVector(6)
+        if value[3] <= 0:
+            value = [-1,-1,0,0]
+        else:
+            value[0] = (value[0]/640) -0.5
+            value[1] = (value[1]/480) -0.5
+        return value
+
+GETCAMERALINE:
+  PYTHON: |
+    def getCameraLine(RV):
+        value = RV.readFloatVector(5)
+        if value[0]:
+            return (value[1]/640) -0.5
+        else:
+            return -1

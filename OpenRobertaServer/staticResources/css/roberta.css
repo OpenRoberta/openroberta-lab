@@ -753,6 +753,12 @@ div.rightMenuButton:hover,
     z-index: 99;
 }
 
+.simAddMarker span {
+    font-size: 12px;
+    display: inline-block;
+    min-width: 16px;
+}
+
 button#simCustomColorObject.typcn:before {
     color: #FBED00;
 }

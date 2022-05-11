@@ -243,6 +243,10 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         this.robotBehaviour.getSample(this.state, stmt[C.NAME], stmt[C.GET_SAMPLE], stmt[C.PORT], stmt[C.MODE], stmt[C.SLOT]);
                         break;
                     }
+                    case C.MARKER:
+                        var markerId = this.state.pop();
+                        this.robotBehaviour.getSample(this.state, stmt[C.NAME], stmt[C.GET_SAMPLE], stmt[C.PORT], stmt[C.MODE], markerId);
+                        break;
                     case C.NN_STEP_STMT:
                         UI.getNetwork().forwardProp();
                         break;
@@ -385,6 +389,39 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         this.robotBehaviour.getMotorSpeed(this.state, name_6, port);
                         break;
                     }
+                    case C.OMNI_DRIVE: {
+                        var thetaVel = this.state.pop();
+                        var yVel = this.state.pop();
+                        var xVel = this.state.pop();
+                        this.robotBehaviour.omniDriveAction(xVel, yVel, thetaVel);
+                        return [0, true];
+                        break;
+                    }
+                    case C.OMNI_DRIVE_DIST: {
+                        var distance = this.state.pop();
+                        var yVel = this.state.pop();
+                        var xVel = this.state.pop();
+                        return [this.robotBehaviour.omniDriveDistAction(xVel, yVel, distance), true];
+                        break;
+                    }
+                    case C.OMNI_DRIVE_STOP: {
+                        this.robotBehaviour.omniStopDriveAction();
+                        return [0, true];
+                    }
+                    case C.OMNI_DRIVE_TURN: {
+                        var angle = this.state.pop();
+                        var thetaVel = this.state.pop();
+                        var direction = stmt[C.TURN_DIRECTION];
+                        return [this.robotBehaviour.omniDriveTurnAction(direction, thetaVel, angle), true];
+                        break;
+                    }
+                    case C.OMNI_DRIVE_POSITION: {
+                        var power = this.state.pop();
+                        var y = this.state.pop();
+                        var x = this.state.pop();
+                        return [this.robotBehaviour.omniDrivePositionAction(power, x, y), true];
+                        break;
+                    }
                     case C.SHOW_TEXT_ACTION: {
                         var text = this.state.pop();
                         var name_8 = stmt[C.NAME];
@@ -501,6 +538,9 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     case C.GYRO_SENSOR_RESET:
                         this.robotBehaviour.gyroReset(stmt[C.PORT]);
                         return [0, true];
+                    case C.ODOMETRY_SENSOR_RESET:
+                        this.robotBehaviour.odometryReset(stmt[C.SLOT]);
+                        return [0, true];
                     case C.TONE_ACTION: {
                         var duration = this.state.pop();
                         var frequency = this.state.pop();
@@ -571,6 +611,11 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         var value = this.state.pop();
                         var name_10 = stmt[C.NAME];
                         this.state.bindVar(name_10, this.state.pop() + value);
+                        break;
+                    }
+                    case C.SERIAL_WRITE_ACTION: {
+                        var value = this.state.pop();
+                        this.robotBehaviour.debugAction(value);
                         break;
                     }
                     case C.DEBUG_ACTION: {

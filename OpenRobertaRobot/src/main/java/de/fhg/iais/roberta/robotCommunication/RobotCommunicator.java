@@ -36,7 +36,6 @@ public class RobotCommunicator {
      * check the new registration ticket. only used by brickWantsTokenToBeApproved(), extracted for testing
      *
      * @return true if the ticket has been accepted
-     * @throws assertions for various types of issues
      */
     public boolean addNewRegistration(RobotCommunicationData newRobotCommunicationData) {
         String token = newRobotCommunicationData.getToken();
@@ -139,6 +138,11 @@ public class RobotCommunicator {
     private boolean theRunButtonWasPressed(String token, String programName) {
         RobotCommunicationData state = getState(token);
         return state.runButtonPressed(programName);
+    }
+
+    private boolean theStopButtonWasPressed(String token) {
+        RobotCommunicationData state = getState(token);
+        return state.stopButtonPressed();
     }
 
     public boolean firmwareUpdateRequested(String token) {
@@ -264,5 +268,18 @@ public class RobotCommunicator {
             }
         }
         return Key.ROBOT_NOT_CONNECTED;
+    }
+
+    public boolean stop(String token, String robotName) {
+        if ( this.getState(token) != null ) {
+            this.subtype = robotName;
+            boolean wasRobotWaiting = this.theStopButtonWasPressed(token);
+            if ( wasRobotWaiting ) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 }

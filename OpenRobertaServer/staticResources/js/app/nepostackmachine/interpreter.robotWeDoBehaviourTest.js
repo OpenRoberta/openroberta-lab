@@ -25,6 +25,9 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             U.loggingEnabled(opLog, debug);
             return _this;
         }
+        RobotWeDoBehaviourTest.prototype.odometryReset = function (slot) {
+            throw new Error('Method not implemented.');
+        };
         RobotWeDoBehaviourTest.prototype.temperatureLedAction = function (blue, red) {
             throw new Error('Method not implemented.');
         };
@@ -187,6 +190,21 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
         RobotWeDoBehaviourTest.prototype.buttonLedAction = function (ledValues) {
         };
         RobotWeDoBehaviourTest.prototype.proxHLedAction = function (ledValues) {
+        };
+        RobotWeDoBehaviourTest.prototype.omniDriveAction = function (xVel, yVel, thetaVel) {
+            throw new Error('Method not implemented.');
+        };
+        RobotWeDoBehaviourTest.prototype.omniDriveDistAction = function (xVel, yVel, distance) {
+            throw new Error('Method not implemented.');
+        };
+        RobotWeDoBehaviourTest.prototype.omniStopDriveAction = function () {
+            throw new Error('Method not implemented.');
+        };
+        RobotWeDoBehaviourTest.prototype.omniDriveTurnAction = function (direction, thetaVel, angle) {
+            throw new Error('Method not implemented.');
+        };
+        RobotWeDoBehaviourTest.prototype.omniDrivePositionAction = function (power, x, y) {
+            return 0;
         };
         return RobotWeDoBehaviourTest;
     }(interpreter_aRobotBehaviour_1.ARobotBehaviour));

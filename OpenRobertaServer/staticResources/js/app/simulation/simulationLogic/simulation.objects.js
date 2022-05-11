@@ -22,9 +22,9 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
-define(["require", "exports", "jquery", "util", "simulation.roberta"], function (require, exports, $, UTIL, simulation_roberta_1) {
+define(["require", "exports", "jquery", "util", "simulation.roberta", "simulation.math"], function (require, exports, $, UTIL, simulation_roberta_1, SIMATH) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Ruler = exports.Ground = exports.TriangleSimulationObject = exports.CircleSimulationObject = exports.RectangleSimulationObject = exports.SimObjectShape = exports.SimObjectType = exports.SimObjectFactory = exports.BaseSimulationObject = void 0;
+    exports.Ruler = exports.Ground = exports.TriangleSimulationObject = exports.CircleSimulationObject = exports.MarkerSimulationObject = exports.RectangleSimulationObject = exports.SimObjectShape = exports.SimObjectType = exports.SimObjectFactory = exports.BaseSimulationObject = void 0;
     var BaseSimulationObject = /** @class */ (function () {
         function BaseSimulationObject(myId, myScene, mySelectionListener, type, optColor) {
             this.SHIFT = 1;
@@ -59,8 +59,28 @@ define(["require", "exports", "jquery", "util", "simulation.roberta"], function 
                 this._selected = value;
                 if (value) {
                     this.mySelectionListener.fire(this);
-                    this.myScene.sim.enableChangeObjectButtons();
+                    if (this.type !== SimObjectType.Marker) {
+                        this.myScene.sim.enableChangeObjectButtons();
+                    }
                 }
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(BaseSimulationObject.prototype, "color", {
+            get: function () {
+                return this._color;
+            },
+            set: function (value) {
+                this._color = value;
+                this._hsv = SIMATH.hexToHsv(value);
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(BaseSimulationObject.prototype, "hsv", {
+            get: function () {
+                return this._hsv;
             },
             enumerable: false,
             configurable: true
@@ -102,11 +122,18 @@ define(["require", "exports", "jquery", "util", "simulation.roberta"], function 
             this.myScene.sim.disableChangeObjectButtons();
         };
         BaseSimulationObject.prototype.redraw = function () {
-            if (this.type == SimObjectType.Obstacle) {
-                this.myScene.redrawObstacles = true;
-            }
-            else {
-                this.myScene.redrawColorAreas = true;
+            switch (this.type) {
+                case SimObjectType.ColorArea:
+                    this.myScene.redrawColorAreas = true;
+                    break;
+                case SimObjectType.Obstacle:
+                    this.myScene.redrawObstacles = true;
+                    break;
+                case SimObjectType.Marker:
+                    this.myScene.redrawMarkers = true;
+                    break;
+                default:
+                    break;
             }
         };
         return BaseSimulationObject;
@@ -129,6 +156,9 @@ define(["require", "exports", "jquery", "util", "simulation.roberta"], function 
                 }
                 case SimObjectShape.Circle: {
                     return new (CircleSimulationObject.bind.apply(CircleSimulationObject, __spreadArray([void 0, id, myScene, selectionListener, type, origin, optColor], params, false)))();
+                }
+                case SimObjectShape.Marker: {
+                    return new MarkerSimulationObject(id, myScene, selectionListener, type, origin);
                 }
             }
         };
@@ -179,12 +209,14 @@ define(["require", "exports", "jquery", "util", "simulation.roberta"], function 
         SimObjectType["Obstacle"] = "OBSTACLE";
         SimObjectType["ColorArea"] = "COLORAREA";
         SimObjectType["Passiv"] = "PASSIV";
+        SimObjectType["Marker"] = "MARKER";
     })(SimObjectType = exports.SimObjectType || (exports.SimObjectType = {}));
     var SimObjectShape;
     (function (SimObjectShape) {
         SimObjectShape["Rectangle"] = "RECTANGLE";
         SimObjectShape["Triangle"] = "TRIANGLE";
         SimObjectShape["Circle"] = "CIRCLE";
+        SimObjectShape["Marker"] = "MARKER";
     })(SimObjectShape = exports.SimObjectShape || (exports.SimObjectShape = {}));
     var RectangleSimulationObject = /** @class */ (function (_super) {
         __extends(RectangleSimulationObject, _super);
@@ -476,6 +508,94 @@ define(["require", "exports", "jquery", "util", "simulation.roberta"], function 
         return RectangleSimulationObject;
     }(BaseSimulationObject));
     exports.RectangleSimulationObject = RectangleSimulationObject;
+    var MarkerSimulationObject = /** @class */ (function (_super) {
+        __extends(MarkerSimulationObject, _super);
+        function MarkerSimulationObject(myId, myScene, mySelectionListener, type, p) {
+            var _this = _super.call(this, myId, myScene, mySelectionListener, type, p) || this;
+            _this.MARKER_OFFSET = 33;
+            _this.MARKER_LABEL_OFFSET = 40;
+            _this.w = 36;
+            _this.h = 36;
+            _this.updateCorners();
+            return _this;
+        }
+        MarkerSimulationObject.prototype.draw = function (ctx, uCtx, mCtx) {
+            ctx.save();
+            ctx.fillStyle = '#ffffff';
+            var border = this.w / 12;
+            ctx.fillRect(this.x - border, this.y - border - 1, this.w + 2 * border, this.h + 2 * border);
+            ctx.fillStyle = '#000000';
+            ctx.fillText(String(this.markerId), this.x + this.MARKER_LABEL_OFFSET, this.y + this.h / 2);
+            ctx.font = '' + this.w + 'px typicons';
+            ctx.textAlign = 'left';
+            ctx.fillText(window
+                .getComputedStyle($('.typcn.typcn-' + this.markerId)[0], ':before')
+                .content.replace(/"/, '')
+                .replace(/"/, ''), this.x, this.y + this.MARKER_OFFSET);
+            if (this.selected) {
+                ctx.restore();
+                ctx.save();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = 'gray';
+                ctx.fillStyle = 'black';
+                this.corners.forEach(function (corner) {
+                    if (corner.isDown) {
+                        ctx.fillStyle = 'gray';
+                    }
+                    else {
+                        ctx.fillStyle = 'black';
+                    }
+                    ctx.beginPath();
+                    ctx.arc(corner.x, corner.y, 5, 0, 2 * Math.PI);
+                    ctx.stroke();
+                    ctx.fill();
+                });
+            }
+            ctx.restore();
+        };
+        MarkerSimulationObject.prototype.handleMouseDown = function (e) {
+            if (e && !e.startX) {
+                UTIL.extendMouseEvent(e, simulation_roberta_1.SimulationRoberta.Instance.scale, $('#robotLayer'));
+            }
+            var myEvent = e;
+            this.isDown = this.isMouseOn(myEvent);
+            if (this.isDown) {
+                e.stopImmediatePropagation();
+                this.mouseOldX = myEvent.startX;
+                this.mouseOldY = myEvent.startY;
+            }
+            if (this.isDown && !this.selected) {
+                $('#robotLayer').css('cursor', 'pointer');
+                this.selected = true;
+                //TODO redraw ?
+            }
+        };
+        MarkerSimulationObject.prototype.handleMouseMove = function (e) {
+            if (e && !e.startX) {
+                UTIL.extendMouseEvent(e, simulation_roberta_1.SimulationRoberta.Instance.scale, $('#robotLayer'));
+            }
+            var myEvent = e;
+            var dx = myEvent.startX - this.mouseOldX;
+            var dy = myEvent.startY - this.mouseOldY;
+            this.mouseOldX = myEvent.startX;
+            this.mouseOldY = myEvent.startY;
+            var onMe = this.isMouseOn(myEvent);
+            if (onMe) {
+                $('#robotLayer').css('cursor', 'pointer');
+                $('#robotLayer').data('hovered', true);
+                if (this.selected) {
+                    e.stopImmediatePropagation();
+                }
+            }
+            if (this.selected && this.isDown) {
+                this.x += dx;
+                this.y += dy;
+                this.updateCorners();
+            }
+        };
+        return MarkerSimulationObject;
+    }(RectangleSimulationObject));
+    exports.MarkerSimulationObject = MarkerSimulationObject;
     var CircleSimulationObject = /** @class */ (function (_super) {
         __extends(CircleSimulationObject, _super);
         function CircleSimulationObject(myId, myScene, mySelectionListener, type, p, optColor) {
@@ -983,6 +1103,32 @@ define(["require", "exports", "jquery", "util", "simulation.roberta"], function 
         }
         Ground.prototype.getLines = function () {
             return UTIL.getLinesFromRectangle(this);
+            return [
+                {
+                    x1: this.x,
+                    x2: this.x,
+                    y1: this.y,
+                    y2: this.y + this.h,
+                },
+                {
+                    x1: this.x,
+                    x2: this.x + this.w,
+                    y1: this.y,
+                    y2: this.y,
+                },
+                {
+                    x1: this.x + this.w,
+                    x2: this.x,
+                    y1: this.y + this.h,
+                    y2: this.y + this.h,
+                },
+                {
+                    x1: this.x + this.w,
+                    x2: this.x + this.w,
+                    y1: this.y + this.h,
+                    y2: this.y,
+                },
+            ];
         };
         Ground.prototype.getTolerance = function () {
             return 0;

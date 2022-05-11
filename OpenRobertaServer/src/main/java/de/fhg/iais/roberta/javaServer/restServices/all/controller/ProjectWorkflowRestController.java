@@ -30,9 +30,9 @@ import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.UtilForREST;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 @Path("/projectWorkflow")
@@ -138,6 +138,42 @@ public class ProjectWorkflowRestController {
         } catch ( Exception e ) {
             LOG.info("runProgram failed", e);
             Statistics.info("ProgramRun", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.robotCommunicator);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+    }
+
+    @POST
+    @Path("/stop")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response stopProgram(@OraData DbSession dbSession, FullRestRequest fullRequest) {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
+        try {
+            ProjectNepoResponse response = ProjectNepoResponse.make();
+            response.setCmd("stop");
+
+            String token = httpSessionState.getToken();
+            if ( token != null ) {
+                // everything is fine
+                boolean isPossible = this.robotCommunicator.stop(token, httpSessionState.getRobotName());
+                if ( isPossible ) {
+                    UtilForREST.addSuccessInfo(response, Key.ROBOT_PUSH_STOP_SUCCESS);
+                } else {
+                    return UtilForREST.makeBaseResponseForError(Key.ROBOT_PUSH_STOP_ERROR, httpSessionState, null);
+                }
+            } else {
+                return UtilForREST.makeBaseResponseForError(Key.ROBOT_NOT_CONNECTED, httpSessionState, null);
+            }
+
+            Statistics.info("ProgramStop", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", true);
+            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);
+        } catch ( Exception e ) {
+            LOG.info("stopProgram failed", e);
+            Statistics.info("ProgramStop", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
             return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.robotCommunicator);
         } finally {
             if ( dbSession != null ) {

@@ -70,3 +70,10 @@ type DrawableMotor = {
     theta: number;
     timeout: 0;
 };
+
+type Rectangle = {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+};

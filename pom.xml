@@ -46,6 +46,7 @@
         <module>OpenRobertaServer</module>
         <module>RobotCyberpi</module>
         <module>RobotThymio</module>
+        <module>RobotRobotino</module>
     </modules>
     <repositories>
         <repository>
@@ -133,6 +134,11 @@
             <dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>RobotThymio</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.fhg.iais.openroberta</groupId>
+                <artifactId>RobotRobotino</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

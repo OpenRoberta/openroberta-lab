@@ -1,15 +1,17 @@
-import { RobotBaseMobile } from 'robot.base.mobile';
+import { Pose, RobotBaseMobile } from 'robot.base.mobile';
+import * as C from 'interpreter.constants';
 import * as SIMATH from 'simulation.math';
 import * as UTIL from 'util';
-import { ChassisDiffDrive, WebAudio } from 'robot.actuators';
+import { ChassisMobile, RobotinoChassis, WebAudio } from 'robot.actuators';
 import { IDrawable, ILabel, IReset, IUpdateAction, RobotBase } from 'robot.base';
-import { CircleSimulationObject } from 'simulation.objects';
+import { CircleSimulationObject, MarkerSimulationObject } from 'simulation.objects';
 // @ts-ignore
 import * as Blockly from 'blockly';
 // @ts-ignore
 import * as VolumeMeter from 'volume-meter';
 import * as $ from 'jquery';
 import { SimulationRoberta } from 'simulation.roberta';
+import RobotRobotino from './robot.robotino';
 
 export interface ISensor {
     updateSensor(
@@ -19,7 +21,8 @@ export interface ISensor {
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any[],
+        markerList: MarkerSimulationObject[]
     ): void;
 }
 
@@ -128,7 +131,7 @@ export abstract class DistanceSensor implements IExternalSensor, IDrawable {
     u: Point[] = [];
     wave: number = 0;
 
-    constructor(port: string, x: number, y: number, theta: number, maxDistance: number, color?: string) {
+    constructor(port: string, x: number, y: number, theta: number, maxDistance: number) {
         this.port = port;
         this.labelPriority = Number(this.port.replace('ORT_', ''));
         this.x = x;
@@ -136,7 +139,6 @@ export abstract class DistanceSensor implements IExternalSensor, IDrawable {
         this.theta = theta;
         this.maxDistance = maxDistance;
         this.maxLength = 3 * maxDistance;
-        this.color = color || this.color;
     }
 
     draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBaseMobile): void {
@@ -162,9 +164,13 @@ export abstract class DistanceSensor implements IExternalSensor, IDrawable {
         }
         rCtx.translate(this.rx, this.ry);
         rCtx.rotate(myRobot.pose.theta);
+        rCtx.rotate(this.theta);
+        rCtx.translate(10, 0);
+        rCtx.rotate(-this.theta);
+        rCtx.translate(-5, 0);
         rCtx.beginPath();
         rCtx.fillStyle = '#555555';
-        rCtx.fillText(String(this.port.replace('ORT_', '')), this.x !== myRobot.chassis.geom.x ? 10 : -10, 4);
+        rCtx.fillText(String(this.port.replace('ORT_', '')), 0, 4);
         rCtx.restore();
         rCtx.save();
         rCtx.translate(myRobot.pose.x, myRobot.pose.y);
@@ -199,31 +205,31 @@ export abstract class DistanceSensor implements IExternalSensor, IDrawable {
                 x1: this.rx,
                 y1: this.ry,
                 x2: this.rx + this.maxLength * Math.cos(robot.pose.theta + this.theta),
-                y2: this.ry + this.maxLength * Math.sin(robot.pose.theta + this.theta)
+                y2: this.ry + this.maxLength * Math.sin(robot.pose.theta + this.theta),
             };
             let u1 = {
                 x1: this.rx,
                 y1: this.ry,
                 x2: this.rx + this.maxLength * Math.cos(robot.pose.theta - Math.PI / 8 + this.theta),
-                y2: this.ry + this.maxLength * Math.sin(robot.pose.theta - Math.PI / 8 + this.theta)
+                y2: this.ry + this.maxLength * Math.sin(robot.pose.theta - Math.PI / 8 + this.theta),
             };
             let u2 = {
                 x1: this.rx,
                 y1: this.ry,
                 x2: this.rx + this.maxLength * Math.cos(robot.pose.theta - Math.PI / 16 + this.theta),
-                y2: this.ry + this.maxLength * Math.sin(robot.pose.theta - Math.PI / 16 + this.theta)
+                y2: this.ry + this.maxLength * Math.sin(robot.pose.theta - Math.PI / 16 + this.theta),
             };
             let u5 = {
                 x1: this.rx,
                 y1: this.ry,
                 x2: this.rx + this.maxLength * Math.cos(robot.pose.theta + Math.PI / 8 + this.theta),
-                y2: this.ry + this.maxLength * Math.sin(robot.pose.theta + Math.PI / 8 + this.theta)
+                y2: this.ry + this.maxLength * Math.sin(robot.pose.theta + Math.PI / 8 + this.theta),
             };
             let u4 = {
                 x1: this.rx,
                 y1: this.ry,
                 x2: this.rx + this.maxLength * Math.cos(robot.pose.theta + Math.PI / 16 + this.theta),
-                y2: this.ry + this.maxLength * Math.sin(robot.pose.theta + Math.PI / 16 + this.theta)
+                y2: this.ry + this.maxLength * Math.sin(robot.pose.theta + Math.PI / 16 + this.theta),
             };
 
             let uA = [u1, u2, u3, u4, u5];
@@ -231,7 +237,7 @@ export abstract class DistanceSensor implements IExternalSensor, IDrawable {
             const uDis = [this.maxLength, this.maxLength, this.maxLength, this.maxLength, this.maxLength];
             for (let i = 0; i < personalObstacleList.length; i++) {
                 let myObstacle: any = personalObstacleList[i];
-                if (myObstacle instanceof ChassisDiffDrive && myObstacle.id == robot.id) {
+                if (myObstacle instanceof ChassisMobile && myObstacle.id == robot.id) {
                     continue;
                 }
                 if (!(myObstacle instanceof CircleSimulationObject)) {
@@ -310,6 +316,13 @@ export class UltrasonicSensor extends DistanceSensor {
 }
 
 export class InfraredSensor extends DistanceSensor {
+    private relative = true;
+
+    constructor(port: string, x: number, y: number, theta: number, maxDistance: number, relative?: boolean) {
+        super(port, x, y, theta, maxDistance);
+        this.relative = relative !== undefined ? relative : this.relative;
+    }
+
     getLabel(): string {
         return (
             '<div><label>' +
@@ -335,21 +348,32 @@ export class InfraredSensor extends DistanceSensor {
         const distance = this.distance / 3.0;
         values['infrared'] = values['infrared'] || {};
         values['infrared'][this.port] = {};
-        if (distance < 70) {
-            values['infrared'][this.port].distance = (100.0 / 70.0) * distance;
+        if (this.relative) {
+            if (distance < this.maxDistance) {
+                values['infrared'][this.port].distance = (100.0 / this.maxDistance) * distance;
+            } else {
+                values['infrared'][this.port].distance = 100.0;
+            }
         } else {
-            values['infrared'][this.port].distance = 100.0;
+            if (distance < this.maxDistance) {
+                values['infrared'][this.port].distance = distance;
+            } else {
+                values['infrared'][this.port].distance = this.maxDistance;
+            }
         }
         values['infrared'][this.port].presence = false;
     }
 }
 
-export class ThymioInfraredSensor extends DistanceSensor {
-    constructor(port: string, x: number, y: number, theta: number, maxDistance: number, color?: string) {
-        super(port, x, y, theta, maxDistance, color);
+export class ThymioInfraredSensor extends InfraredSensor {
+    name: string = '';
+
+    constructor(port: string, x: number, y: number, theta: number, maxDistance: number, name?: string) {
+        super(port, x, y, theta, maxDistance, true);
+        this.name = name !== undefined ? name : this.name;
     }
 
-    getLabel(): string {
+    override getLabel(): string {
         let distance = this.distance / 3.0;
         if (distance < this.maxDistance) {
             distance *= 100.0 / this.maxDistance;
@@ -357,7 +381,7 @@ export class ThymioInfraredSensor extends DistanceSensor {
             distance = 100.0;
         }
         distance = UTIL.round(distance, 0);
-        return '<div><label>&nbsp;-&nbsp;' + this.color + '</label><span>' + UTIL.roundUltraSound(distance, 0) + ' %</span></div>';
+        return '<div><label>&nbsp;-&nbsp;' + this.name + '</label><span>' + UTIL.roundUltraSound(distance, 0) + ' %</span></div>';
     }
 
     override updateSensor(
@@ -433,7 +457,7 @@ export class ThymioLineSensor implements ISensor, IDrawable, ILabel {
         rCtx.beginPath();
         rCtx.lineWidth = 0.1;
         rCtx.arc(this.x, this.y - this.dy / 2, this.r, 0, Math.PI * 2);
-        let leftLight = this.left.light / 100 * 255;
+        let leftLight = (this.left.light / 100) * 255;
         rCtx.fillStyle = 'rgb(' + leftLight + ', ' + leftLight + ', ' + leftLight + ')';
         rCtx.fill();
         rCtx.strokeStyle = 'black';
@@ -442,7 +466,7 @@ export class ThymioLineSensor implements ISensor, IDrawable, ILabel {
         rCtx.beginPath();
         rCtx.lineWidth = 0.1;
         rCtx.arc(this.x, this.y + this.dy / 2, this.r, 0, Math.PI * 2);
-        let leftRight = this.right.light / 100 * 255;
+        let leftRight = (this.right.light / 100) * 255;
         rCtx.fillStyle = 'rgb(' + leftRight + ', ' + leftRight + ', ' + leftRight + ')';
         rCtx.fill();
         rCtx.strokeStyle = 'black';
@@ -739,6 +763,74 @@ export class MbotInfraredSensor implements IExternalSensor, IDrawable, ILabel {
     }
 }
 
+export class RobotinoInfraredSensor implements ISensor, IDrawable, ILabel {
+    drawPriority: number;
+    labelPriority: number;
+    infraredSensorArray: DistanceSensor[] = [];
+
+    constructor() {
+        this.infraredSensorArray[0] = new InfraredSensor('1', 68 * Math.cos(0), 68 * Math.sin(0), 0, 30, false);
+        this.infraredSensorArray[1] = new InfraredSensor(
+            '2',
+            68 * Math.cos((-Math.PI * 2) / 9),
+            68 * Math.sin((-Math.PI * 2) / 9),
+            (-Math.PI * 2) / 9,
+            30,
+            false
+        );
+        this.infraredSensorArray[2] = new InfraredSensor(
+            '3',
+            68 * Math.cos((-Math.PI * 4) / 9),
+            68 * Math.sin((-Math.PI * 4) / 9),
+            (-Math.PI * 4) / 9,
+            30,
+            false
+        );
+        this.infraredSensorArray[3] = new InfraredSensor(
+            '4',
+            68 * Math.cos((-Math.PI * 6) / 9),
+            68 * Math.sin((-Math.PI * 6) / 9),
+            (-Math.PI * 6) / 9,
+            30,
+            false
+        );
+        this.infraredSensorArray[4] = new InfraredSensor(
+            '5',
+            68 * Math.cos((-Math.PI * 8) / 9),
+            68 * Math.sin((-Math.PI * 8) / 9),
+            (-Math.PI * 8) / 9,
+            30,
+            false
+        );
+        this.infraredSensorArray[9] = new InfraredSensor('9', 68 * Math.cos((Math.PI * 2) / 9), 68 * Math.sin((Math.PI * 2) / 9), (Math.PI * 2) / 9, 30, false);
+        this.infraredSensorArray[8] = new InfraredSensor('8', 68 * Math.cos((Math.PI * 4) / 9), 68 * Math.sin((Math.PI * 4) / 9), (Math.PI * 4) / 9, 30, false);
+        this.infraredSensorArray[7] = new InfraredSensor('7', 68 * Math.cos((Math.PI * 6) / 9), 68 * Math.sin((Math.PI * 6) / 9), (Math.PI * 6) / 9, 30, false);
+        this.infraredSensorArray[6] = new InfraredSensor('6', 68 * Math.cos((Math.PI * 8) / 9), 68 * Math.sin((Math.PI * 8) / 9), (Math.PI * 8) / 9, 30, false);
+    }
+
+    draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase): void {
+        this.infraredSensorArray.forEach((sensor) => sensor.draw(rCtx, myRobot as RobotBaseMobile));
+    }
+
+    getLabel(): string {
+        let myLabel: string = '';
+        this.infraredSensorArray.forEach((sensor) => (myLabel += sensor.getLabel()));
+        return myLabel;
+    }
+
+    updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBase,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D,
+        personalObstacleList: any[]
+    ): void {
+        this.infraredSensorArray.forEach((sensor) => sensor.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList));
+    }
+}
+
 export class TouchSensor implements IExternalSensor, IDrawable, ILabel {
     readonly color: string = '#FF69B4';
     readonly port: string;
@@ -811,6 +903,31 @@ export class TapSensor implements ISensor {
             (myRobot as RobotBaseMobile).chassis.backLeft.bumped ||
             (myRobot as RobotBaseMobile).chassis.backRight.bumped;
         values['touch'] = touch ? 1 : 0;
+    }
+}
+
+export class RobotinoTouchSensor implements ISensor, ILabel {
+    bumped: boolean = false;
+
+    public readonly drawPriority: number = 4;
+
+    getLabel(): string {
+        return '<div><label>' + Blockly.Msg['SENSOR_TOUCH'] + '</label><span>' + this.bumped + '</span></div>';
+    }
+
+    public readonly labelPriority: number;
+
+    updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBase,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D,
+        personalObstacleList: any[]
+    ): void {
+        values['touch'] = values['touch'] || {};
+        values['touch'] = this.bumped = ((myRobot as RobotRobotino).chassis as RobotinoChassis).bumpedAngle.length > 0;
     }
 }
 
@@ -1004,6 +1121,70 @@ export class LightSensor extends ColorSensor {
     }
 }
 
+export class OpticalSensor extends LightSensor {
+    name: string;
+    light: boolean;
+
+    constructor(name: string, port: string, x: number, y: number, theta: number, r: number, color?: string) {
+        super(port.replace('DI', '').toString(), x, y, theta, r);
+        this.name = name;
+    }
+
+    override getLabel(): string {
+        return (
+            '<div><label>' +
+            this.name +
+            ' ' +
+            Blockly.Msg['SENSOR_OPTICAL'] +
+            '</label></div><div><label>&nbsp;-&nbsp;' +
+            Blockly.Msg['MODE_OPENING'] +
+            '</label><span>' +
+            this.light +
+            '</span></div>' +
+            '<div><label>&nbsp;-&nbsp;' +
+            Blockly.Msg['MODE_CLOSING'] +
+            '</label><span>' +
+            !this.light +
+            '</span></div>'
+        );
+    }
+
+    override draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBaseMobile): void {
+        rCtx.save();
+        rCtx.beginPath();
+        rCtx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        rCtx.fillStyle = this.color;
+        rCtx.fill();
+        rCtx.strokeStyle = 'black';
+        rCtx.stroke();
+        rCtx.translate(this.x, this.y);
+        rCtx.beginPath();
+        rCtx.fillStyle = '#555555';
+        rCtx.fillText(this.name, 8, 4);
+        rCtx.restore();
+    }
+
+    override updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBaseMobile,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D
+    ) {
+        super.updateSensor(running, dt, myRobot, values, uCtx, udCtx);
+
+        this.lightValue = this.lightValue > 50 ? 100 : 0;
+        this.light = this.lightValue == 0 ? false : true;
+        this.color = this.lightValue == 0 ? 'black' : 'white';
+
+        values['optical'] = values['optical'] || {};
+        values['optical'][this.name] = {};
+        values['optical'][this.name][C.OPENING] = this.light;
+        values['optical'][this.name][C.CLOSING] = !this.light;
+    }
+}
+
 export class GyroSensor implements ISensor, IReset, IUpdateAction {
     angleValue: number = 0;
     rateValue: number = 0;
@@ -1163,7 +1344,7 @@ export class TouchKeys extends Keys implements IMouse {
         let myEvent = e as unknown as SimMouseEvent;
         this.lastMousePosition = {
             x: myEvent.startX,
-            y: myEvent.startY
+            y: myEvent.startY,
         };
         if (this.uCtx !== undefined) {
             let myMouseColorData = this.uCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
@@ -1188,7 +1369,7 @@ export class TouchKeys extends Keys implements IMouse {
         let myEvent = e as unknown as SimMouseEvent;
         this.lastMousePosition = {
             x: myEvent.startX,
-            y: myEvent.startY
+            y: myEvent.startY,
         };
         if (this.uCtx !== undefined) {
             let myMouseColorData = this.uCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
@@ -1254,10 +1435,10 @@ export class Pins extends TouchKeys implements IDrawable {
                 }
                 $mySensorGenerator.append(
                     '<input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0" id="rangePin' +
-                    pin.port +
-                    '" name="rangePin' +
-                    pin.port +
-                    '" class="range" />'
+                        pin.port +
+                        '" name="rangePin' +
+                        pin.port +
+                        '" class="range" />'
                 );
                 $mySensorGenerator.append(
                     '<div style="margin:8px 0;"><input id="sliderPin' + pin.port + '" type="range" min="0" max="' + range + '" value="0" step="1" /></div>'
@@ -1422,7 +1603,7 @@ export class MbotButton extends TouchKeys {
         let myEvent = e as unknown as SimMouseEvent;
         this.lastMousePosition = {
             x: myEvent.startX,
-            y: myEvent.startY
+            y: myEvent.startY,
         };
         let myCtx = (this.$touchLayer as any).get(0).getContext('2d');
         let myMouseColorData = myCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
@@ -1446,7 +1627,7 @@ export class MbotButton extends TouchKeys {
         let myEvent = e as unknown as SimMouseEvent;
         this.lastMousePosition = {
             x: myEvent.startX,
-            y: myEvent.startY
+            y: myEvent.startY,
         };
         let myKeys: string[] = this.color2Keys[this.lastMouseColor];
         let myCtx = (this.$touchLayer as any).get(0).getContext('2d');
@@ -1487,29 +1668,29 @@ export class GestureSensor implements ISensor, ILabel {
     constructor() {
         $('#mbedButtons').append(
             '<label style="margin: 12px 8px 8px 0">' +
-            Blockly.Msg.SENSOR_GESTURE +
-            '</label>' + //
-            '<label class="btn simbtn active"><input type="radio" id="up" name="options" autocomplete="off">' +
-            Blockly.Msg.SENSOR_GESTURE_UP +
-            '</label>' + //
-            '<label class="btn simbtn"><input type="radio" id="down" name="options" autocomplete="off" >' +
-            Blockly.Msg.SENSOR_GESTURE_DOWN +
-            '</label>' + //
-            '<label class="btn simbtn"><input type="radio" id="face_down" name="options" autocomplete="off" >' +
-            Blockly.Msg.SENSOR_GESTURE_FACE_DOWN +
-            '</label>' + //
-            '<label class="btn simbtn"><input type="radio" id="face_up" name="options" autocomplete="off" >' +
-            Blockly.Msg.SENSOR_GESTURE_FACE_UP +
-            '</label>' + //
-            '<label class="btn simbtn"><input type="radio" id="shake" name="options" autocomplete="off" >' +
-            Blockly.Msg.SENSOR_GESTURE_SHAKE +
-            '</label>' + //
-            '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' +
-            Blockly.Msg.SENSOR_GESTURE_FREEFALL +
-            '</label>'
+                Blockly.Msg.SENSOR_GESTURE +
+                '</label>' + //
+                '<label class="btn simbtn active"><input type="radio" id="up" name="options" autocomplete="off">' +
+                Blockly.Msg.SENSOR_GESTURE_UP +
+                '</label>' + //
+                '<label class="btn simbtn"><input type="radio" id="down" name="options" autocomplete="off" >' +
+                Blockly.Msg.SENSOR_GESTURE_DOWN +
+                '</label>' + //
+                '<label class="btn simbtn"><input type="radio" id="face_down" name="options" autocomplete="off" >' +
+                Blockly.Msg.SENSOR_GESTURE_FACE_DOWN +
+                '</label>' + //
+                '<label class="btn simbtn"><input type="radio" id="face_up" name="options" autocomplete="off" >' +
+                Blockly.Msg.SENSOR_GESTURE_FACE_UP +
+                '</label>' + //
+                '<label class="btn simbtn"><input type="radio" id="shake" name="options" autocomplete="off" >' +
+                Blockly.Msg.SENSOR_GESTURE_SHAKE +
+                '</label>' + //
+                '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' +
+                Blockly.Msg.SENSOR_GESTURE_FREEFALL +
+                '</label>'
         );
         let gestureSensor = this;
-        $('input[name="options"]').on('change', function(e) {
+        $('input[name="options"]').on('change', function (e) {
             gestureSensor.gesture = {};
             gestureSensor.gesture[e.currentTarget.id] = true;
         });
@@ -1548,9 +1729,9 @@ export class CompassSensor implements ISensor, ILabel {
     constructor() {
         $('#mbedButtons').append(
             '<label for="rangeCompass" style="margin: 12px 8px 8px 0">' +
-            Blockly.Msg.SENSOR_COMPASS +
-            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0" id="rangeCompass" name="rangeCompass" class="range" />' +
-            '<div style="margin:8px 0; "><input id="sliderCompass" type="range" min="0" max="360" value="0" step="5" /></div>'
+                Blockly.Msg.SENSOR_COMPASS +
+                '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0" id="rangeCompass" name="rangeCompass" class="range" />' +
+                '<div style="margin:8px 0; "><input id="sliderCompass" type="range" min="0" max="360" value="0" step="5" /></div>'
         );
         createSlider($('#sliderCompass'), $('#rangeCompass'), this, 'degree', { min: 0, max: 360 });
     }
@@ -1585,9 +1766,9 @@ export class CalliopeLightSensor implements ISensor, ILabel, IDrawable {
     constructor() {
         $('#mbedButtons').append(
             '<label for="rangeLight" style="margin: 12px 8px 8px 0">' +
-            Blockly.Msg.SENSOR_LIGHT +
-            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeLight" name="rangeLight" class="range" />' +
-            '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="100" value="0" /></div>'
+                Blockly.Msg.SENSOR_LIGHT +
+                '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeLight" name="rangeLight" class="range" />' +
+                '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="100" value="0" /></div>'
         );
         createSlider($('#sliderLight'), $('#rangeLight'), this, 'lightLevel', { min: 0, max: 100 });
     }
@@ -1635,9 +1816,9 @@ export class Rob3rtaInfraredSensor implements ISensor, ILabel {
     constructor() {
         $('#mbedButtons').append(
             '<label for="rangeLight" style="margin: 12px 8px 8px 0">' +
-            Blockly.Msg.SENSOR_INFRARED +
-            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeLight" name="rangeLight" class="range" />' +
-            '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="1023" value="0" /></div>'
+                Blockly.Msg.SENSOR_INFRARED +
+                '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeLight" name="rangeLight" class="range" />' +
+                '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="1023" value="0" /></div>'
         );
         createSlider($('#sliderLight'), $('#rangeLight'), this, 'lightLevel', { min: 0, max: 1023 });
     }
@@ -1669,9 +1850,9 @@ export class TemperatureSensor implements ISensor, ILabel {
     constructor() {
         $('#mbedButtons').append(
             '<label for="rangeTemperature" style="margin: 12px 8px 8px 0">' +
-            Blockly.Msg.SENSOR_TEMPERATURE +
-            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeTemperature" name="rangeTemperature" class="range" />' +
-            '<div style="margin:8px 0; "><input id="sliderTemperature" type="range" min="-25" max="75" value="0" step="1" /></div>'
+                Blockly.Msg.SENSOR_TEMPERATURE +
+                '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeTemperature" name="rangeTemperature" class="range" />' +
+                '<div style="margin:8px 0; "><input id="sliderTemperature" type="range" min="-25" max="75" value="0" step="1" /></div>'
         );
         createSlider($('#sliderTemperature'), $('#rangeTemperature'), this, 'degree', { min: -15, max: 75 });
     }
@@ -1718,19 +1899,19 @@ export class VolumeMeterSensor implements ISensor, ILabel {
                             googEchoCancellation: 'false',
                             googAutoGainControl: 'false',
                             googNoiseSuppression: 'false',
-                            googHighpassFilter: 'false'
+                            googHighpassFilter: 'false',
                         },
-                        optional: []
-                    }
+                        optional: [],
+                    },
                 })
                 .then(
-                    function(stream) {
+                    function (stream) {
                         var mediaStreamSource = sensor.webAudio.context.createMediaStreamSource(stream);
                         sensor.sound = VolumeMeter.createAudioMeter(sensor.webAudio.context);
                         // @ts-ignore
                         mediaStreamSource.connect(sensor.sound);
                     },
-                    function() {
+                    function () {
                         console.log('Sorry, but there is no microphone available on your system');
                     }
                 );
@@ -1800,16 +1981,16 @@ export class SoundSensor extends VolumeMeterSensor implements IExternalSensor {
 }
 
 function createSlider($slider: JQuery<HTMLElement>, $range: JQuery<HTMLElement>, sensor: ISensor, value: string, range: { min: number; max: number }) {
-    $slider.on('mousedown touchstart', function(e) {
+    $slider.on('mousedown touchstart', function (e) {
         e.stopPropagation();
     });
-    $slider.on('input change', function(e) {
+    $slider.on('input change', function (e) {
         e.preventDefault();
         $range.val($slider.val());
         sensor[value] = Number($slider.val());
         e.stopPropagation();
     });
-    $range.on('change', function(e) {
+    $range.on('change', function (e) {
         e.preventDefault();
         let myValue = Number($range.val());
         if (!$range.valid()) {
@@ -1832,7 +2013,483 @@ function createSlider($slider: JQuery<HTMLElement>, $range: JQuery<HTMLElement>,
     $range.rules('add', {
         messages: {
             required: false,
-            number: false
-        }
+            number: false,
+        },
     });
+}
+
+export class OdometrySensor implements ISensor, ILabel, IReset, IUpdateAction {
+    x: number = 0;
+    y: number = 0;
+    theta: number = 0;
+
+    labelPriority: number = 7;
+
+    getLabel(): string {
+        let myLabel: string = '<div><label>' + Blockly.Msg['SENSOR_ODOMETRY'] + '</label></div>';
+        myLabel += '<div><label>&nbsp;-&nbsp;x</label><span>' + UTIL.round(this.x, 1) + ' cm</span></div>';
+        myLabel += '<div><label>&nbsp;-&nbsp;y</label><span>' + UTIL.round(this.y, 1) + ' cm</span></div>';
+        myLabel += '<div><label>&nbsp;-&nbsp;θ</label><span>' + UTIL.round(this.theta, 0) + ' °</span></div>';
+        return myLabel;
+    }
+
+    reset(): void {
+        this.x = 0;
+        this.y = 0;
+        this.theta = 0;
+    }
+
+    updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBase,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D,
+        personalObstacleList: any[]
+    ): void {
+        values['odometry'] = values['odometry'] || {};
+        this.theta += SIMATH.toDegree((myRobot as RobotBaseMobile).thetaDiff);
+        values['odometry'][C.THETA] = this.theta;
+        this.x += (myRobot as RobotBaseMobile).chassis['xDiff'] / 3;
+        values['odometry'][C.X] = this.x;
+        this.y += (myRobot as RobotBaseMobile).chassis['yDiff'] / 3;
+        values['odometry'][C.Y] = this.y;
+    }
+
+    updateAction(myRobot: RobotBase, dt: number, interpreterRunning: boolean): void {
+        if (interpreterRunning) {
+            let odometry = myRobot.interpreter.getRobotBehaviour().getActionState('odometry', true);
+            if (odometry && odometry.reset) {
+                switch (odometry.reset) {
+                    case C.X:
+                        this.x = 0;
+                        break;
+                    case C.Y:
+                        this.y = 0;
+                        break;
+                    case C.THETA:
+                        this.theta = 0;
+                        break;
+                    case 'all':
+                        this.reset();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+}
+
+export class CameraSensor implements ISensor, IUpdateAction, IDrawable, ILabel, IReset {
+    readonly MAX_MARKER_DIST_SQR = 150 * 3 * 150 * 3;
+    readonly MAX_CAM_Y = Math.sqrt(this.MAX_MARKER_DIST_SQR);
+    readonly MAX_BLOB_DIST_SQR = this.MAX_MARKER_DIST_SQR;
+    readonly LINE_RADIUS: number = 60;
+    x: number;
+    y: number;
+    h: number;
+    theta: number;
+    rx: number;
+    ry: number;
+    readonly AOV: number = (2 * Math.PI) / 5;
+    listOfMarkersFound: MarkerSimulationObject[] = [];
+    colourBlob: {
+        minHue: number;
+        maxHue: number;
+        minSat: number;
+        maxSat: number;
+        minVal: number;
+        maxVal: number;
+    };
+    bB: Rectangle = { x: 0, y: 0, w: 0, h: 0 };
+
+    labelPriority: number = 8;
+    private THRESHOLD: number = 126;
+    private line: number;
+
+    constructor(pose: Pose, aov: number) {
+        this.x = pose.x;
+        this.y = pose.y;
+        this.theta = pose.theta;
+        this.AOV = aov;
+    }
+
+    updateAction(myRobot: RobotBase, dt: number, interpreterRunning: boolean): void {
+        if (interpreterRunning) {
+            let myBehaviour = myRobot.interpreter.getRobotBehaviour();
+            let colourBlob = myBehaviour.getActionState('colourBlob', true);
+            if (colourBlob) {
+                this.colourBlob = colourBlob;
+            }
+        }
+        this.colourBlob = {
+            minHue: 0,
+            maxHue: 240,
+            minSat: 90,
+            maxSat: 110,
+            minVal: 90,
+            maxVal: 110,
+        };
+    }
+
+    drawPriority: number = 1;
+
+    draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase): void {
+        rCtx.save();
+        rCtx.beginPath();
+        rCtx.strokeStyle = '#0000ff';
+        rCtx.beginPath();
+        rCtx.arc(this.x, this.y, 1000, Math.PI / 5, -Math.PI / 5, true);
+        rCtx.arc(this.x, this.y, this.LINE_RADIUS, -Math.PI / 5, +Math.PI / 5, false);
+        rCtx.closePath();
+        rCtx.stroke();
+        /* rCtx.beginPath();
+         rCtx.moveTo(0, 0);
+         rCtx.lineTo(300, 0);
+         rCtx.stroke();
+         rCtx.rotate(-(myRobot as RobotBaseMobile).pose.theta);
+         rCtx.translate(-(myRobot as RobotBaseMobile).pose.x, -(myRobot as RobotBaseMobile).pose.y);
+         rCtx.beginPath();
+         rCtx.strokeStyle = '#ff0000';
+         if (this.bB) {
+             rCtx.rect(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+             rCtx.stroke();
+         }*/
+        rCtx.restore();
+    }
+
+    getLabel(): string {
+        let myLabel: string = '<div><label>' + 'Line Sensor' + '</label><span>' + UTIL.round(this.line, 2) + '</span></div>';
+
+        myLabel += '<div><label>' + 'Marker Sensor' + '</label></div>';
+        for (let i = 0; i < this.listOfMarkersFound.length; i++) {
+            let marker = this.listOfMarkersFound[i];
+            myLabel += '<div><label>&nbsp;-&nbsp;id ';
+            myLabel += marker.markerId;
+            myLabel += '</label><span>[';
+            myLabel += UTIL.round(marker.xDist, 0);
+            myLabel += ', ';
+            myLabel += UTIL.round(marker.yDist, 0);
+            myLabel += ', ';
+            myLabel += UTIL.round(marker.zDist, 0);
+            myLabel += '] cm</span></div>';
+        }
+
+        return myLabel;
+    }
+
+    reset(): void {}
+
+    updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBase,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D,
+        personalObstacleList: any[],
+        markerList: MarkerSimulationObject[]
+    ): void {
+        this.listOfMarkersFound = [];
+        let robot: RobotRobotino = myRobot as RobotRobotino;
+        SIMATH.transform(robot.pose, this as PointRobotWorld);
+        let myPose: Pose = new Pose(this.rx, this.ry, this.theta);
+
+        let left = ((myRobot as RobotBaseMobile).pose.theta - this.AOV / 2 + 2 * Math.PI) % (2 * Math.PI);
+        let right = ((myRobot as RobotBaseMobile).pose.theta + this.AOV / 2 + 2 * Math.PI) % (2 * Math.PI);
+        markerList
+            .filter((marker) => {
+                let visible: boolean = false;
+                marker.sqrDist = SIMATH.getDistance(myPose, marker);
+                if (marker.sqrDist <= this.MAX_MARKER_DIST_SQR) {
+                    let myMarkerPoints: Point[] = [
+                        { x: marker.x - myPose.x, y: marker.y - myPose.y },
+                        { x: marker.x + marker.w - myPose.x, y: marker.y - myPose.y },
+                        { x: marker.x + marker.w - myPose.x, y: marker.y + marker.h - myPose.y },
+                        { x: marker.x - myPose.x, y: marker.y + marker.h - myPose.y },
+                    ];
+                    let visible: boolean = true;
+                    for (let i = 0; i < myMarkerPoints.length; i++) {
+                        let myAngle = (Math.atan2(myMarkerPoints[i].y, myMarkerPoints[i].x) + 2 * Math.PI) % (2 * Math.PI);
+                        if ((left < right && myAngle > left && myAngle < right) || (left > right && (myAngle > left || myAngle < right))) {
+                            let p: Point = this.checkVisibility(robot.id, marker, personalObstacleList);
+                            if (p) {
+                                visible = false;
+                            }
+                        } else {
+                            visible = false;
+                        }
+                    }
+                    return visible;
+                }
+            })
+            .forEach((marker) => {
+                let myAngle = (Math.atan2(marker.y + marker.h / 2 - myPose.y, marker.x + marker.w / 2 - myPose.x) + 2 * Math.PI) % (2 * Math.PI);
+                let myRight = right;
+                if (left > myRight) {
+                    myRight += 2 * Math.PI;
+                    if (myAngle < left) {
+                        myAngle = myAngle + 2 * Math.PI;
+                    }
+                }
+                let dist: number = Math.sqrt(marker.sqrDist);
+                marker.xDist = (((myAngle - left) / (myRight - left) - 0.5) * this.AOV * dist) / 3;
+                marker.yDist = ((dist / this.MAX_CAM_Y - 0.5) * this.MAX_CAM_Y) / 3;
+                marker.zDist = dist / 3;
+                this.listOfMarkersFound.push(marker);
+            });
+
+        this.line = -1;
+        let leftPoint = { x: this.LINE_RADIUS * Math.cos(left), y: this.LINE_RADIUS * Math.sin(left) };
+        let rightPoint = { x: this.LINE_RADIUS * Math.cos(right), y: this.LINE_RADIUS * Math.sin(right) };
+        let l = Math.atan2(leftPoint.y, leftPoint.x);
+        let r = Math.atan2(rightPoint.y, rightPoint.x);
+        let pixYWidth = Math.abs(rightPoint.y - leftPoint.y);
+        let pixXWidth = Math.abs(rightPoint.x - leftPoint.x);
+        let redPixOld = undefined;
+        this.bB = { h: 0, w: 0, x: 0, y: 0 };
+
+        if (pixYWidth > pixXWidth) {
+            if (leftPoint.x > 0) {
+                this.bB.x = Math.min(leftPoint.x, rightPoint.x) + this.rx;
+                this.bB.y = Math.min(leftPoint.y, rightPoint.y) + this.ry;
+                this.bB.w = Math.max(Math.max(leftPoint.x, rightPoint.x), this.LINE_RADIUS) + this.rx - this.bB.x + 1;
+                this.bB.h = -this.bB.y + Math.max(Math.max(leftPoint.y, rightPoint.y)) + this.ry + 1;
+                this.constrainBB(uCtx);
+                let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                if (data) {
+                    for (let i = 0; i < data.height; i++) {
+                        let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.y - this.ry) * (i + this.bB.y - this.ry);
+                        let xi = Math.round(Math.sqrt(a) - (this.bB.x - this.rx));
+                        let myIndex = (xi + i * data.width) * 4;
+                        const __ret = this.getPixelData(dataD, myIndex, data, redPixOld);
+                        let redPix = __ret.redPix;
+                        redPixOld = __ret.redPixOld;
+                        if (redPix !== redPixOld) {
+                            let me = Math.atan2(i + this.bB.y - this.ry, xi + this.bB.x - this.rx);
+                            this.line = (me - l) / (r - l) + -0.5;
+                            break;
+                        }
+                        redPixOld = redPix;
+                    }
+                }
+            } else {
+                this.bB.y = Math.min(leftPoint.y, rightPoint.y) + this.ry - 1;
+                this.bB.x = Math.min(Math.min(leftPoint.x, rightPoint.x), -this.LINE_RADIUS) + this.rx - 1;
+                this.bB.w = Math.max(leftPoint.x, rightPoint.x) + this.rx - this.bB.x;
+                this.bB.h = -this.bB.y + Math.max(Math.max(leftPoint.y, rightPoint.y)) + this.ry;
+                this.constrainBB(uCtx);
+                let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                if (data) {
+                    for (let i = data.height - 1; i >= 0; i--) {
+                        let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.y - this.ry) * (i + this.bB.y - this.ry);
+                        let xi = Math.round(-Math.sqrt(a) - (this.bB.x - this.rx));
+                        let myIndex = (xi + i * data.width) * 4 - 4;
+                        const __ret = this.getPixelData(dataD, myIndex, data, redPixOld);
+                        let redPix = __ret.redPix;
+                        redPixOld = __ret.redPixOld;
+                        if (redPix !== redPixOld) {
+                            let me = Math.atan2(i + this.bB.y - this.ry, xi + this.bB.x - this.rx);
+                            if (me <= 0) {
+                                me += 2 * Math.PI;
+                            }
+                            if (l <= 0) {
+                                l += 2 * Math.PI;
+                            }
+                            if (r <= 0) {
+                                r += 2 * Math.PI;
+                            }
+                            this.line = (me - l) / (r - l) - 0.5;
+                            break;
+                        }
+                        redPixOld = redPix;
+                    }
+                }
+            }
+        } else {
+            if (leftPoint.y < 0) {
+                this.bB.x = Math.min(Math.min(leftPoint.x, rightPoint.x), this.LINE_RADIUS) + this.rx;
+                this.bB.w = Math.max(leftPoint.x, rightPoint.x) + this.rx - this.bB.x + 1;
+                this.bB.y = Math.min(Math.min(leftPoint.y, rightPoint.y), -this.LINE_RADIUS) + this.ry;
+                this.bB.h = Math.max(leftPoint.y, rightPoint.y) + this.ry - this.bB.y + 1;
+                this.constrainBB(uCtx);
+                let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w + 1, this.bB.h + 1);
+                let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w + 1, this.bB.h + 1);
+                if (data) {
+                    for (let i = 0; i < data.width; i++) {
+                        let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.x - this.rx) * (i + this.bB.x - this.rx);
+                        let yi = Math.round(-Math.sqrt(a) - this.bB.y + this.ry);
+                        let myIndex = (i + yi * data.width) * 4;
+                        const __ret = this.getPixelData(dataD, myIndex, data, redPixOld);
+                        let redPix = __ret.redPix;
+                        redPixOld = __ret.redPixOld;
+                        if (redPix !== redPixOld) {
+                            let me = Math.atan2(yi + this.bB.y - this.ry, i + this.bB.x - this.rx);
+                            this.line = -1 * ((me - r) / (l - r) - 0.5);
+                            break;
+                        }
+                        redPixOld = redPix;
+                    }
+                }
+            } else {
+                this.bB.x = Math.min(Math.min(leftPoint.x, rightPoint.x), this.LINE_RADIUS) + this.rx;
+                this.bB.w = Math.max(leftPoint.x, rightPoint.x) + this.rx - this.bB.x + 1;
+                this.bB.y = Math.min(leftPoint.y, rightPoint.y) + this.ry;
+                this.bB.h = Math.max(Math.max(leftPoint.y, rightPoint.y), this.LINE_RADIUS) + this.ry - this.bB.y + 1;
+                this.constrainBB(uCtx);
+                let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                if (data) {
+                    for (let i = data.width - 1; i >= 0; i--) {
+                        let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.x - this.rx) * (i + this.bB.x - this.rx);
+                        let yi = Math.round(Math.sqrt(a) - this.bB.y + this.ry) - 1;
+                        let myIndex = (i + yi * data.width) * 4 - 4;
+                        const __ret = this.getPixelData(dataD, myIndex, data, redPixOld);
+                        let redPix = __ret.redPix;
+                        redPixOld = __ret.redPixOld;
+                        if (redPix !== redPixOld) {
+                            let me = Math.atan2(yi + this.bB.y - this.ry, i + this.bB.x - this.rx);
+                            this.line = (me - l) / (r - l) - 0.5;
+                            break;
+                        }
+                        redPixOld = redPix;
+                    }
+                }
+            }
+        }
+        values['marker'] = {};
+        values['marker'][C.INFO] = {};
+
+        for (let i = 0; i < 16; i++) {
+            values['marker'][C.INFO][i] = [-1, -1, 0];
+        }
+
+        if (this.listOfMarkersFound.length == 0) {
+            values['marker'][C.ID] = [-1];
+        } else {
+            values['marker'][C.ID] = this.listOfMarkersFound.map((marker) => marker.markerId);
+            this.listOfMarkersFound.forEach((marker) => {
+                values['marker'][C.INFO][marker.markerId] = [marker.xDist, marker.yDist, marker.zDist];
+            });
+        }
+        values['camera'] = {};
+        values['camera'][C.LINE] = this.line;
+
+        //if (this.colourBlob !== null) {
+        personalObstacleList.filter((obstacle) => {
+            let visible: boolean = false;
+            let inHSVRange = this.checkHSVRange(obstacle.hsv);
+            if (inHSVRange) {
+                obstacle.sqrDist = SIMATH.getDistance(myPose, obstacle);
+                if (obstacle.sqrDist <= this.MAX_BLOB_DIST_SQR) {
+                    let myObstaclePoints: Point[] = [{ x: obstacle.x - myPose.x, y: obstacle.y - myPose.y }]; /*,
+                       { x: obstacle.x + obstacle.w - myPose.x, y: obstacle.y - myPose.y },
+                       { x: obstacle.x + obstacle.w - myPose.x, y: obstacle.y + obstacle.h - myPose.y },
+                       { x: obstacle.x - myPose.x, y: obstacle.y + obstacle.h - myPose.y },
+                   ];*/
+
+                    let visible: boolean = true;
+                    for (let i = 0; i < myObstaclePoints.length; i++) {
+                        let myAngle = (Math.atan2(myObstaclePoints[i].y, myObstaclePoints[i].x) + 2 * Math.PI) % (2 * Math.PI);
+                        if ((left < right && myAngle > left && myAngle < right) || (left > right && (myAngle > left || myAngle < right))) {
+                            let p: Point = this.checkVisibility(robot.id, obstacle, personalObstacleList);
+                            if (p) {
+                                visible = false;
+                            }
+                        } else {
+                            visible = false;
+                        }
+                    }
+                    return visible;
+                }
+            }
+        });
+    }
+
+    private getPixelData(dataD: ImageData, myIndex: number, data: ImageData, redPixOld) {
+        if (dataD.data[myIndex + 3] === 255) {
+            for (let j = myIndex; j < myIndex + 3; j++) {
+                data.data[j] = dataD.data[j];
+            }
+        }
+        let redPix = this.calculatePix(data.data.slice(myIndex, myIndex + 3));
+        if (redPixOld == undefined) {
+            redPixOld = redPix;
+        }
+        return { redPix, redPixOld };
+    }
+
+    private calculatePix(rawPix: Uint8ClampedArray): number {
+        let pix = 0.299 * rawPix[0] + 0.587 * rawPix[1] + 0.114 * rawPix[2];
+        return pix > this.THRESHOLD ? 255 : 0;
+    }
+
+    private checkVisibility(id: number, mP: Point, personalObstacleList: any[]): Point {
+        let myIntersectionPoint: Point;
+        let myLine: Line = { x1: this.rx, y1: this.ry, x2: mP.x, y2: mP.y };
+        for (let i = 0; i < personalObstacleList.length - 1; i++) {
+            let obstacle = personalObstacleList[i];
+            if (obstacle instanceof ChassisMobile && obstacle.id == id) {
+                continue;
+            }
+            if (obstacle === mP) {
+                continue;
+            }
+            if (!(obstacle instanceof CircleSimulationObject)) {
+                let obstacleLines = obstacle.getLines();
+                for (let j = 0; j < obstacleLines.length; j++) {
+                    myIntersectionPoint = SIMATH.getIntersectionPoint(myLine, obstacleLines[j]);
+                    if (myIntersectionPoint) {
+                        return myIntersectionPoint;
+                    }
+                }
+            } else {
+                let myCircle = obstacle as CircleSimulationObject;
+                myIntersectionPoint = SIMATH.getClosestIntersectionPointCircle(myLine, myCircle);
+                if (myIntersectionPoint) {
+                    return myIntersectionPoint;
+                }
+            }
+        }
+        return null;
+    }
+
+    private checkHSVRange(hsv: number[]): boolean {
+        if (this.colourBlob && hsv) {
+            if (
+                hsv[0] >= this.colourBlob.minHue &&
+                hsv[0] <= this.colourBlob.maxHue &&
+                hsv[1] >= this.colourBlob.minSat &&
+                hsv[1] <= this.colourBlob.maxSat &&
+                hsv[2] >= this.colourBlob.minVal &&
+                hsv[2] <= this.colourBlob.maxVal
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private constrainBB(uCtx: CanvasRenderingContext2D) {
+        this.bB.x = this.bB.x < 0 ? 0 : this.bB.x;
+        this.bB.y = this.bB.y < 0 ? 0 : this.bB.y;
+        if (this.bB.x + this.bB.w > uCtx.canvas.width) {
+            this.bB.w = uCtx.canvas.width - this.bB.x;
+            if (this.bB.w < 1) {
+                this.bB = null;
+                return;
+            }
+        }
+        if (this.bB.y + this.bB.h > uCtx.canvas.height) {
+            this.bB.h = uCtx.canvas.width - this.bB.y;
+            if (this.bB.h < 1) {
+                this.bB = null;
+                return;
+            }
+        }
+    }
 }

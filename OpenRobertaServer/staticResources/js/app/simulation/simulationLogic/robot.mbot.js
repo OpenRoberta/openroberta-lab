@@ -66,7 +66,7 @@ define(["require", "exports", "robot.ev3", "robot.actuators", "robot.sensors", "
                                     break;
                             }
                         }
-                        this_1[c] = new robot_sensors_1.UltrasonicSensor(c, position.x, position.y, position.theta, 255, 'Ultra Sensor');
+                        this_1[c] = new robot_sensors_1.UltrasonicSensor(c, position.x, position.y, position.theta, 255);
                         break;
                     }
                     case 'INFRARED': {

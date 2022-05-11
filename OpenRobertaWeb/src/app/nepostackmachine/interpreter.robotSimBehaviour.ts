@@ -15,7 +15,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         U.loggingEnabled(false, false);
     }
 
-    public getSample(s: State, name: string, sensor: string, port: any, mode: string, slot: string) {
+    getSample(s: State, name: string, sensor: string, port: any, mode: string, slot: string) {
         var robotText = 'robot: ' + name + ', port: ' + port + ', mode: ' + mode;
         U.debug(robotText + ' getsample from ' + sensor);
         var sensorName = sensor;
@@ -48,13 +48,13 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         }
     }
 
-    public encoderReset(port: string) {
+    encoderReset(port: string) {
         U.debug('encoderReset for ' + port);
         this.hardwareState.actions.encoder = {};
         this.hardwareState.actions.encoder[port] = 'reset';
     }
 
-    public timerReset(port: number) {
+    timerReset(port: number) {
         if (this.hardwareState.actions.timer == undefined) {
             this.hardwareState.actions.timer = [];
         }
@@ -63,7 +63,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         U.debug('timerReset for ' + port);
     }
 
-    public ledOnAction(name: string, port: number, color: number) {
+    ledOnAction(name: string, port: number, color: number) {
         const robotText = 'robot: ' + name + ', port: ' + port;
         U.debug(robotText + ' led on color ' + color);
         if (this.hardwareState.actions.led == undefined) {
@@ -78,7 +78,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         }
     }
 
-    public statusLightOffAction(name: string, port: number) {
+    statusLightOffAction(name: string, port: number) {
         const robotText = 'robot: ' + name + ', port: ' + port;
         U.debug(robotText + ' led off');
 
@@ -100,7 +100,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         }
     }
 
-    public toneAction(name: string, frequency: number, duration: number): number {
+    toneAction(name: string, frequency: number, duration: number): number {
         U.debug(name + ' piezo: ' + ', frequency: ' + frequency + ', duration: ' + duration);
         this.hardwareState.actions.tone = {};
         this.hardwareState.actions.tone.frequency = frequency;
@@ -109,7 +109,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         return 0;
     }
 
-    public playFileAction(file: string): number {
+    playFileAction(file: string): number {
         U.debug('play file: ' + file);
         this.hardwareState.actions.tone = {};
         this.hardwareState.actions.tone.file = file;
@@ -117,23 +117,23 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         return 0;
     }
 
-    public setVolumeAction(volume: number): void {
+    setVolumeAction(volume: number): void {
         U.debug('set volume: ' + volume);
         this.hardwareState.actions.volume = Math.max(Math.min(100, volume), 0);
         this.hardwareState.volume = Math.max(Math.min(100, volume), 0);
     }
 
-    public getVolumeAction(s: State): void {
+    getVolumeAction(s: State): void {
         U.debug('get volume');
         s.push(this.hardwareState.volume);
     }
 
-    public setLanguage(language: string): void {
+    setLanguage(language: string): void {
         U.debug('set language ' + language);
         this.hardwareState.actions.language = language;
     }
 
-    public sayTextAction(text: string, speed: number, pitch: number): number {
+    sayTextAction(text: string, speed: number, pitch: number): number {
         if (this.hardwareState.actions.sayText == undefined) {
             this.hardwareState.actions.sayText = {};
         }
@@ -144,7 +144,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         return 0;
     }
 
-    public motorOnAction(name: string, port: any, durationType: string, duration: number, speed: number, time: number): number {
+    motorOnAction(name: string, port: any, durationType: string, duration: number, speed: number, time: number): number {
         const robotText = 'robot: ' + name + ', port: ' + port;
         const durText = duration === undefined ? ' w.o. duration' : ' for ' + duration + ' msec';
         U.debug(robotText + ' motor speed ' + speed + durText);
@@ -164,7 +164,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         return 0;
     }
 
-    public motorStopAction(name: string, port: any) {
+    motorStopAction(name: string, port: any) {
         const robotText = 'robot: ' + name + ', port: ' + port;
         U.debug(robotText + ' motor stop');
         if (this.hardwareState.actions.motors == undefined) {
@@ -175,7 +175,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         return 0;
     }
 
-    public driveAction(name: string, direction: string, speed: number, distance: number, time: number): number {
+    driveAction(name: string, direction: string, speed: number, distance: number, time: number): number {
         const robotText = 'robot: ' + name + ', direction: ' + direction;
         const durText = distance === undefined ? ' w.o. duration' : ' for ' + distance + ' msec';
         U.debug(robotText + ' motor speed ' + speed + durText);
@@ -205,7 +205,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         return 0;
     }
 
-    public curveAction(name: string, direction: string, speedL: number, speedR: number, distance: number, time: number): number {
+    curveAction(name: string, direction: string, speedL: number, speedR: number, distance: number, time: number): number {
         const robotText = 'robot: ' + name + ', direction: ' + direction;
         const durText = distance === undefined ? ' w.o. duration' : ' for ' + distance + ' msec';
         U.debug(robotText + ' left motor speed ' + speedL + ' right motor speed ' + speedR + durText);
@@ -237,7 +237,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         return 0;
     }
 
-    public turnAction(name: string, direction: string, speed: number, angle: number, time: number): number {
+    turnAction(name: string, direction: string, speed: number, angle: number, time: number): number {
         const robotText = 'robot: ' + name + ', direction: ' + direction;
         const durText = angle === undefined ? ' w.o. duration' : ' for ' + angle + ' msec';
         U.debug(robotText + ' motor speed ' + speed + durText);
@@ -275,7 +275,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         }
     }
 
-    public driveStop(name: string): void {
+    driveStop(name: string): void {
         U.debug('robot: ' + name + ' stop motors');
         if (this.hardwareState.actions.motors == undefined) {
             this.hardwareState.actions.motors = {};
@@ -284,14 +284,14 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         this.hardwareState.actions.motors[C.MOTOR_RIGHT] = 0;
     }
 
-    public getMotorSpeed(s: State, name: string, port: any): void {
+    getMotorSpeed(s: State, name: string, port: any): void {
         const robotText = 'robot: ' + name + ', port: ' + port;
         U.debug(robotText + ' motor get speed');
         const speed = this.hardwareState.motors[port];
         s.push(speed);
     }
 
-    public setMotorSpeed(name: string, port: any, speed: number): void {
+    setMotorSpeed(name: string, port: any, speed: number): void {
         const robotText = 'robot: ' + name + ', port: ' + port;
         U.debug(robotText + ' motor speed ' + speed);
         if (this.hardwareState.actions.motors == undefined) {
@@ -301,7 +301,67 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         this.hardwareState.motors[port] = speed;
     }
 
-    public showTextAction(text: any, mode: string): number {
+    omniDriveAction(xVel: number, yVel: number, thetaVel: number): number {
+        if (this.hardwareState.actions.omniDrive == undefined) {
+            this.hardwareState.actions.omniDrive = {};
+        }
+        this.hardwareState.actions.omniDrive[C.X + C.SPEED] = xVel;
+        this.hardwareState.actions.omniDrive[C.Y + C.SPEED] = yVel;
+        this.hardwareState.actions.omniDrive[C.ANGLE + C.SPEED] = -thetaVel;
+        return 0;
+    }
+
+    omniDriveDistAction(xVel: number, yVel: number, distance: number): number {
+        if (this.hardwareState.actions.omniDrive == undefined) {
+            this.hardwareState.actions.omniDrive = {};
+        }
+        this.hardwareState.actions.omniDrive[C.X + C.SPEED] = xVel;
+        this.hardwareState.actions.omniDrive[C.Y + C.SPEED] = yVel;
+        this.hardwareState.actions.omniDrive[C.DISTANCE] = distance;
+        this.setBlocking(true);
+        return 0;
+    }
+
+    omniStopDriveAction(): void {
+        if (this.hardwareState.actions.omniDrive == undefined) {
+            this.hardwareState.actions.omniDrive = {};
+        }
+        this.hardwareState.actions.omniDrive[C.X + C.SPEED] = 0;
+        this.hardwareState.actions.omniDrive[C.Y + C.SPEED] = 0;
+        this.hardwareState.actions.omniDrive[C.ANGLE + C.SPEED] = 0;
+    }
+
+    omniDriveTurnAction(direction: string, thetaVel: number, angle: number): number {
+        if (this.hardwareState.actions.omniDrive == undefined) {
+            this.hardwareState.actions.omniDrive = {};
+        }
+        if (direction == C.LEFT) {
+            thetaVel *= -1;
+        }
+        if ((direction == C.LEFT && angle < 0) || (direction == C.RIGHT && angle < 0)) {
+            thetaVel *= -1;
+        }
+        if (angle === 0) {
+            thetaVel = 0;
+        }
+        this.hardwareState.actions.omniDrive[C.ANGLE + C.SPEED] = thetaVel;
+        this.hardwareState.actions.omniDrive[C.ANGLE] = angle;
+        this.setBlocking(true);
+        return 0;
+    }
+
+    omniDrivePositionAction(power, x, y): number {
+        if (this.hardwareState.actions.omniDrive == undefined) {
+            this.hardwareState.actions.omniDrive = {};
+        }
+        this.hardwareState.actions.omniDrive[C.POWER] = power;
+        this.hardwareState.actions.omniDrive[C.X] = x;
+        this.hardwareState.actions.omniDrive[C.Y] = y;
+        this.setBlocking(true);
+        return 0;
+    }
+
+    showTextAction(text: any, mode: string): number {
         const showText = '' + text;
         U.debug('***** show "' + showText + '" *****');
         this.hardwareState.actions.display = {};
@@ -310,7 +370,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         return 0;
     }
 
-    public showTextActionPosition(text: any, x: number, y: number): void {
+    showTextActionPosition(text: any, x: number, y: number): void {
         const showText = '' + text;
         U.debug('***** show "' + showText + '" *****');
         this.hardwareState.actions.display = {};
@@ -319,7 +379,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         this.hardwareState.actions.display.y = y;
     }
 
-    public showImageAction(image: any, mode: string): number {
+    showImageAction(image: any, mode: string): number {
         const showImage = '' + image;
         U.debug('***** show "' + showImage + '" *****');
         const imageLen = image.length;
@@ -335,14 +395,14 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         return duration;
     }
 
-    public displaySetBrightnessAction(value: number): number {
+    displaySetBrightnessAction(value: number): number {
         U.debug('***** set brightness "' + value + '" *****');
         this.hardwareState.actions.display = {};
         this.hardwareState.actions.display[C.BRIGHTNESS] = value;
         return 0;
     }
 
-    public lightAction(mode: string, color: string, port: string): void {
+    lightAction(mode: string, color: string, port: string): void {
         U.debug('***** light action mode= "' + mode + ' color=' + color + '" *****');
 
         if (port !== undefined) {
@@ -359,7 +419,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         }
     }
 
-    public displaySetPixelBrightnessAction(x: number, y: number, brightness: number): number {
+    displaySetPixelBrightnessAction(x: number, y: number, brightness: number): number {
         U.debug('***** set pixel x="' + x + ', y=' + y + ', brightness=' + brightness + '" *****');
         this.hardwareState.actions.display = {};
         this.hardwareState.actions.display[C.PIXEL] = {};
@@ -369,25 +429,25 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         return 0;
     }
 
-    public displayGetPixelBrightnessAction(s: State, x: number, y: number): void {
+    displayGetPixelBrightnessAction(s: State, x: number, y: number): void {
         U.debug('***** get pixel x="' + x + ', y=' + y + '" *****');
         const sensor = this.hardwareState.sensors[C.DISPLAY][C.PIXEL];
         s.push(sensor[y][x]);
     }
 
-    public clearDisplay(): void {
+    clearDisplay(): void {
         U.debug('clear display');
         this.hardwareState.actions.display = {};
         this.hardwareState.actions.display.clear = true;
     }
 
-    public writePinAction(pin: any, mode: string, value: number): void {
+    writePinAction(pin: any, mode: string, value: number): void {
         this.hardwareState.actions['pin' + pin] = {};
         this.hardwareState.actions['pin' + pin][mode] = {};
         this.hardwareState.actions['pin' + pin][mode] = value;
     }
 
-    public gyroReset(_port: number): void {
+    gyroReset(_port: number): void {
         U.debug('***** reset gyro *****');
         this.hardwareState.actions.gyroReset = {};
         if (_port !== undefined) {
@@ -398,17 +458,26 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         }
     }
 
-    public debugAction(value: any): void {
+    odometryReset(slot: string): void {
+        this.hardwareState.actions.odometry = {};
+        this.hardwareState.actions.odometry.reset = slot;
+        if (this.hardwareState.actions.omniDrive == undefined) {
+            this.hardwareState.actions.omniDrive = {};
+        }
+        this.hardwareState.actions.omniDrive.reset = slot;
+    }
+
+    debugAction(value: any): void {
         U.debug('***** debug action "' + value + '" *****');
         console.log(value);
     }
 
-    public assertAction(_msg: string, _left: any, _op: string, _right: any, value: boolean): void {
+    assertAction(_msg: string, _left: any, _op: string, _right: any, value: boolean): void {
         U.debug('***** assert action "' + value + ' ' + _msg + ' ' + _left + ' ' + _op + ' ' + _right + '" *****');
         console.assert(value, _msg + ' ' + _left + ' ' + _op + ' ' + _right);
     }
 
-    public close() {}
+    close() {}
 
     timerGet(port: number): number {
         // not used here anymore

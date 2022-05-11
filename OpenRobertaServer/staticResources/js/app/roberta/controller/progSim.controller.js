@@ -153,6 +153,11 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
                 SIM.resetPose();
                 return false;
             }, 'sim reset pose clicked');
+            $('.simAddMarker').onWrap('click.sim', function (e) {
+                var id = e.target.getAttribute('data-marker') || e.currentTarget.text;
+                SIM.addMarker && SIM.addMarker(id);
+                return false;
+            }, 'sim add marker clicked');
             $('#simAddObstacleRectangle').onWrap('click.sim', function () {
                 SIM.addObstacle && SIM.addObstacle(simulation_objects_1.SimObjectShape.Rectangle);
                 return false;

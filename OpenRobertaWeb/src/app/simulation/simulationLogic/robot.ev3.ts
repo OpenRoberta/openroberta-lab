@@ -97,9 +97,9 @@ export default class RobotEv3 extends RobotBaseMobile {
                         }
                     }
                     if (sensors[c] == 'ULTRASONIC') {
-                        this[c] = new UltrasonicSensor(c, position.x, position.y, position.theta, 255, 'Ultra Sensor');
+                        this[c] = new UltrasonicSensor(c, position.x, position.y, position.theta, 255);
                     } else {
-                        this[c] = new InfraredSensor(c, position.x, position.y, position.theta, 70, 'Ultra Sensor');
+                        this[c] = new InfraredSensor(c, position.x, position.y, position.theta, 70);
                     }
                     break;
                 }

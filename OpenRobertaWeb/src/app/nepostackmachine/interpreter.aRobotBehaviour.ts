@@ -37,6 +37,8 @@ export abstract class ARobotBehaviour {
 
     abstract gyroReset(port: number): void;
 
+    abstract odometryReset(slot: string): void;
+
     abstract timerGet(port: number): number;
 
     abstract ledOnAction(name: string, port: number, color: number): void;
@@ -72,6 +74,16 @@ export abstract class ARobotBehaviour {
     abstract curveAction(name: string, direction: string, speedL: number, speedR: number, distance: number, time: number): number;
 
     abstract turnAction(name: string, direction: string, speed: number, angle: number, time: number): number;
+
+    abstract omniDriveAction(xVel: number, yVel: number, thetaVel: number): void;
+
+    abstract omniDriveDistAction(xVel: number, yVel: number, distance: number): number;
+
+    abstract omniStopDriveAction(): void;
+
+    abstract omniDriveTurnAction(direction: string, thetaVel: number, angle: number): number;
+
+    abstract omniDrivePositionAction(power, x, y): number;
 
     abstract writePinAction(pin: any, mode: string, value: number): void;
 

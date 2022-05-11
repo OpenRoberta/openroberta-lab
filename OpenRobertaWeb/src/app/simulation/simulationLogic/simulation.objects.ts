@@ -3,6 +3,7 @@ import * as $ from 'jquery';
 import * as UTIL from 'util';
 import { SimulationRoberta } from 'simulation.roberta';
 import { SimulationScene } from 'simulation.scene';
+import * as SIMATH from 'simulation.math';
 
 export interface ISimulationObstacle {
     getLines(): Line[];
@@ -17,7 +18,8 @@ export abstract class BaseSimulationObject implements ISelectable, ISimulationOb
     myScene: SimulationScene;
     mySelectionListener: SelectionListener;
     type: SimObjectType;
-    color: string;
+    private _color: string;
+    private _hsv: number[];
     abstract corners: Corner[];
     protected isDown = false;
     protected mouseOldX: number = 0;
@@ -58,8 +60,23 @@ export abstract class BaseSimulationObject implements ISelectable, ISimulationOb
         this._selected = value;
         if (value) {
             this.mySelectionListener.fire(this);
-            this.myScene.sim.enableChangeObjectButtons();
+            if (this.type !== SimObjectType.Marker) {
+                this.myScene.sim.enableChangeObjectButtons();
+            }
         }
+    }
+
+    get color(): string {
+        return this._color;
+    }
+
+    set color(value: string) {
+        this._color = value;
+        this._hsv = SIMATH.hexToHsv(value);
+    }
+
+    get hsv(): number[] {
+        return this._hsv;
     }
 
     abstract draw(rCtx: CanvasRenderingContext2D, uCtx: CanvasRenderingContext2D, mCtx: CanvasRenderingContext2D): void;
@@ -120,10 +137,18 @@ export abstract class BaseSimulationObject implements ISelectable, ISimulationOb
     }
 
     protected redraw(): void {
-        if (this.type == SimObjectType.Obstacle) {
-            this.myScene.redrawObstacles = true;
-        } else {
-            this.myScene.redrawColorAreas = true;
+        switch (this.type) {
+            case SimObjectType.ColorArea:
+                this.myScene.redrawColorAreas = true;
+                break;
+            case SimObjectType.Obstacle:
+                this.myScene.redrawObstacles = true;
+                break;
+            case SimObjectType.Marker:
+                this.myScene.redrawMarkers = true;
+                break;
+            default:
+                break;
         }
     }
 }
@@ -148,6 +173,9 @@ export class SimObjectFactory {
             }
             case SimObjectShape.Circle: {
                 return new CircleSimulationObject(id, myScene, selectionListener, type, origin, optColor, ...params);
+            }
+            case SimObjectShape.Marker: {
+                return new MarkerSimulationObject(id, myScene, selectionListener, type, origin);
             }
         }
     }
@@ -204,12 +232,14 @@ export enum SimObjectType {
     Obstacle = 'OBSTACLE',
     ColorArea = 'COLORAREA',
     Passiv = 'PASSIV',
+    Marker = 'MARKER',
 }
 
 export enum SimObjectShape {
     Rectangle = 'RECTANGLE',
     Triangle = 'TRIANGLE',
     Circle = 'CIRCLE',
+    Marker = 'MARKER',
 }
 
 export class RectangleSimulationObject extends BaseSimulationObject {
@@ -492,8 +522,106 @@ export class RectangleSimulationObject extends BaseSimulationObject {
         this.redraw();
     }
 
-    private isMouseOn(myEvent: SimMouseEvent): boolean {
+    protected isMouseOn(myEvent: SimMouseEvent): boolean {
         return myEvent.startX > this.x && myEvent.startX < this.x + this.w && myEvent.startY > this.y && myEvent.startY < this.y + this.h;
+    }
+}
+
+export class MarkerSimulationObject extends RectangleSimulationObject {
+    MARKER_OFFSET: number = 33;
+    MARKER_LABEL_OFFSET: number = 40;
+    markerId: number;
+    xDist: number;
+    yDist: number;
+    zDist: number;
+    sqrDist: number;
+
+    constructor(myId: number, myScene: any, mySelectionListener: SelectionListener, type: SimObjectType, p: Point) {
+        super(myId, myScene, mySelectionListener, type, p);
+        this.w = 36;
+        this.h = 36;
+        this.updateCorners();
+    }
+
+    override draw(ctx: CanvasRenderingContext2D, uCtx: CanvasRenderingContext2D, mCtx: CanvasRenderingContext2D): void {
+        ctx.save();
+        ctx.fillStyle = '#ffffff';
+        let border = this.w / 12;
+        ctx.fillRect(this.x - border, this.y - border - 1, this.w + 2 * border, this.h + 2 * border);
+        ctx.fillStyle = '#000000';
+        ctx.fillText(String(this.markerId), this.x + this.MARKER_LABEL_OFFSET, this.y + this.h / 2);
+        ctx.font = '' + this.w + 'px typicons';
+        ctx.textAlign = 'left';
+        ctx.fillText(
+            window
+                .getComputedStyle($('.typcn.typcn-' + this.markerId)[0], ':before')
+                .content.replace(/"/, '')
+                .replace(/"/, ''),
+            this.x,
+            this.y + this.MARKER_OFFSET
+        );
+
+        if (this.selected) {
+            ctx.restore();
+            ctx.save();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'gray';
+            ctx.fillStyle = 'black';
+            this.corners.forEach((corner) => {
+                if (corner.isDown) {
+                    ctx.fillStyle = 'gray';
+                } else {
+                    ctx.fillStyle = 'black';
+                }
+                ctx.beginPath();
+                ctx.arc(corner.x, corner.y, 5, 0, 2 * Math.PI);
+                ctx.stroke();
+                ctx.fill();
+            });
+        }
+        ctx.restore();
+    }
+
+    override handleMouseDown(e: JQuery.TouchEventBase): void {
+        if (e && !(e as unknown as SimMouseEvent).startX) {
+            UTIL.extendMouseEvent(e, SimulationRoberta.Instance.scale, $('#robotLayer'));
+        }
+        let myEvent = e as unknown as SimMouseEvent;
+        this.isDown = this.isMouseOn(myEvent);
+        if (this.isDown) {
+            e.stopImmediatePropagation();
+            this.mouseOldX = myEvent.startX;
+            this.mouseOldY = myEvent.startY;
+        }
+        if (this.isDown && !this.selected) {
+            $('#robotLayer').css('cursor', 'pointer');
+            this.selected = true;
+            //TODO redraw ?
+        }
+    }
+
+    override handleMouseMove(e: JQuery.TouchEventBase): void {
+        if (e && !(e as unknown as SimMouseEvent).startX) {
+            UTIL.extendMouseEvent(e, SimulationRoberta.Instance.scale, $('#robotLayer'));
+        }
+        let myEvent = e as unknown as SimMouseEvent;
+        let dx = myEvent.startX - this.mouseOldX;
+        let dy = myEvent.startY - this.mouseOldY;
+        this.mouseOldX = myEvent.startX;
+        this.mouseOldY = myEvent.startY;
+        let onMe = this.isMouseOn(myEvent);
+        if (onMe) {
+            $('#robotLayer').css('cursor', 'pointer');
+            $('#robotLayer').data('hovered', true);
+            if (this.selected) {
+                e.stopImmediatePropagation();
+            }
+        }
+        if (this.selected && this.isDown) {
+            this.x += dx;
+            this.y += dy;
+            this.updateCorners();
+        }
     }
 }
 
@@ -1011,6 +1139,32 @@ export class Ground implements ISimulationObstacle {
 
     getLines(): Line[] {
         return UTIL.getLinesFromRectangle(this);
+        return [
+            {
+                x1: this.x,
+                x2: this.x,
+                y1: this.y,
+                y2: this.y + this.h,
+            },
+            {
+                x1: this.x,
+                x2: this.x + this.w,
+                y1: this.y,
+                y2: this.y,
+            },
+            {
+                x1: this.x + this.w,
+                x2: this.x,
+                y1: this.y + this.h,
+                y2: this.y + this.h,
+            },
+            {
+                x1: this.x + this.w,
+                x2: this.x + this.w,
+                y1: this.y + this.h,
+                y2: this.y,
+            },
+        ];
     }
 
     getTolerance(): number {

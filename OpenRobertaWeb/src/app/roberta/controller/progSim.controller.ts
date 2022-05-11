@@ -171,6 +171,16 @@ class ProgSimController {
             'sim reset pose clicked'
         );
 
+        $('.simAddMarker').onWrap(
+            'click.sim',
+            function (e) {
+                let id = e.target.getAttribute('data-marker') || e.currentTarget.text;
+                (SIM as SimulationRoberta).addMarker && (SIM as SimulationRoberta).addMarker(id);
+                return false;
+            },
+            'sim add marker clicked'
+        );
+
         $('#simAddObstacleRectangle').onWrap(
             'click.sim',
             function () {

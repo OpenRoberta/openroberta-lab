@@ -1,7 +1,7 @@
 import { ISelectable, RobotBase, SelectionListener } from 'robot.base';
 import * as $ from 'jquery';
 import * as UTIL from 'util';
-import { ChassisDiffDrive } from 'robot.actuators';
+import { ChassisMobile } from 'robot.actuators';
 import * as SIMATH from 'simulation.math';
 import { SimulationRoberta } from 'simulation.roberta';
 import { Interpreter } from 'interpreter.interpreter';
@@ -56,13 +56,13 @@ export class Pose {
 }
 
 export abstract class RobotBaseMobile extends RobotBase {
-    abstract chassis: ChassisDiffDrive;
+    abstract chassis: ChassisMobile;
     private _initialPose: Pose;
     private _hasTrail: boolean = false;
     private _pose: Pose;
     private _thetaDiff: number = 0;
     private isDown: boolean = false;
-    private mouse = {
+    protected mouse = {
         x: -5,
         y: 0,
         rx: 0,

@@ -1,0 +1,157 @@
+include: "classpath:/common.methods.yml"
+
+## FunctionNames
+
+OMNIDRIVESPEED:
+  PYTHON: |
+    def _setSpeedOmnidrive(x, y, z, safety):
+        global _speed, _safetySetting
+        maxSpeed = 0.2
+        _safetySetting = safety
+        _speed.linear.x = (1 / 100 * x) * maxSpeed
+        _speed.linear.y = (1 / 100 * y) * maxSpeed
+        _speed.angular.z = 1 / 100 * z 
+
+PUBLISHVEL:
+  PYTHON: |
+    def _publishVel(event):
+        global _speed, _safetySetting
+        if _safetySetting and rospy.wait_for_message("bumper", Bool).data:
+            _speed = Twist()
+        _motorPub.publish(_speed)
+
+SETDIGITALPIN:
+  PYTHON: |
+    def _setDigitalPin(pos, value):
+        _digitalPinValues[pos-1] = int(value)
+        int8Array = Int8MultiArray()
+        int8Array.data = _digitalPinValues
+        _digitalPinPub.publish(int8Array)
+
+GETORIENTATION:
+  PYTHON: |
+    def _getOrientation():
+        yaw_z = 2 * math.acos(rospy.wait_for_message("odom", Odometry).pose.pose.orientation.w)
+        if rospy.wait_for_message("odom", Odometry).pose.pose.orientation.z < 0: 
+            yaw_z *= -1 
+        return yaw_z
+
+GETDISTANCE:
+  PYTHON: |
+    def _getDistance(port):
+        point = rospy.wait_for_message("distance_sensors", PointCloud).points[port-1].x
+        distance = ((point) / math.cos(0.698 * (port-1))) - 0.2    
+        return distance * 100
+
+GETDIRECTION:
+  PYTHON: |
+    def _getDirection(xTarget, yTarget, speed):
+        vectorX = xTarget - rospy.wait_for_message("odom", Odometry).pose.pose.position.x * 100
+        vectorY = yTarget - rospy.wait_for_message("odom", Odometry).pose.pose.position.y * 100
+        absV = math.sqrt(math.pow(vectorX, 2) + math.pow(vectorY, 2))
+        maxSpeedX = (vectorX / absV)
+        maxSpeedY = (vectorY / absV)
+        angle = -_getOrientation()
+        rotatedX = (math.cos(angle) * maxSpeedX) - (math.sin(angle) * maxSpeedY)
+        rotatedY = (math.sin(angle) * maxSpeedX + math.cos(angle) * maxSpeedY)
+        return rotatedX * speed, rotatedY * speed
+
+
+DRIVETOPOSITION:
+  PYTHON: |
+    def _driveToPosition(xTarget, yTarget, speed):
+        speed = abs(speed)
+        xStart = rospy.wait_for_message("odom", Odometry).pose.pose.position.x * 100
+        yStart = rospy.wait_for_message("odom", Odometry).pose.pose.position.y * 100
+        tolerance = _weight * speed/100  
+        while True:
+            speedX, speedY = _getDirection(xTarget, yTarget, speed)
+            xPos = rospy.wait_for_message("odom", Odometry).pose.pose.position.x * 100
+            yPos = rospy.wait_for_message("odom", Odometry).pose.pose.position.y * 100
+            distanceX = abs(xPos - xTarget)
+            distanceY = abs(xPos - yTarget)
+            if distanceX <= tolerance and distanceY <= tolerance:
+                speedX = speedX * distanceX/tolerance
+                speedY = speedY * distanceY/tolerance
+            _setSpeedOmnidrive(speedX, speedY, 0, True)
+
+            if xStart >= xTarget >= xPos or xStart < xTarget <= xPos:
+                if yStart >= yTarget >= yPos or yStart < yTarget <= yPos:
+                    _setSpeedOmnidrive(0, 0, 0, True)
+                    break
+            if rospy.wait_for_message("bumper", Bool).data:
+                break
+        rospy.Rate(10).sleep()
+
+DRIVEFORDISTANCE:
+  PYTHON: |
+    def _driveForDistance(xSpeed, ySpeed, distance):
+        xStart = rospy.wait_for_message("odom", Odometry).pose.pose.position.x
+        yStart = rospy.wait_for_message("odom", Odometry).pose.pose.position.y
+        if distance < 0:
+            xSpeed = -xSpeed
+            ySpeed = -ySpeed
+        _setSpeedOmnidrive(xSpeed, ySpeed, 0, True)
+
+        tolerance = abs((_weight * (math.sqrt(math.pow(xSpeed,2) + math.pow(ySpeed,2))/141.42)))
+        minSpeedX = 0
+        minSpeedY = 0
+        slowDownDistance = (abs(distance) - tolerance)
+
+        while not rospy.is_shutdown():
+            xPos = rospy.wait_for_message("odom", Odometry).pose.pose.position.x
+            yPos = rospy.wait_for_message("odom", Odometry).pose.pose.position.y
+            traveledDistance = math.sqrt(math.pow(xPos - xStart, 2) + math.pow(yPos - yStart, 2))
+    
+            if traveledDistance * 100 >= abs(distance) or _speed.linear.x == _speed.linear.y == _speed.angular.z == 0:
+                _setSpeedOmnidrive(0, 0, 0, True)
+                break
+            if traveledDistance * 100 >= (slowDownDistance+1):
+                if xSpeed != 0:                  
+                    minSpeedX = (xSpeed/abs(xSpeed)) * 1
+                if ySpeed != 0:
+                    minSpeedY = (ySpeed/abs(ySpeed)) * 1
+                multiplier = (abs(distance) - traveledDistance * 100) / tolerance
+                newSpeedX = (multiplier * xSpeed) + minSpeedX
+                newSpeedY = (multiplier * ySpeed) + minSpeedX
+                _setSpeedOmnidrive(newSpeedX,newSpeedY,0,True)
+            rospy.Rate(10).sleep()
+
+TURNFORDEGREES:
+  PYTHON: |
+    def _turnForDegrees(speed, degrees):
+         if speed == 0:
+            _setSpeedOmnidrive(0, 0, 0, True)
+            return
+         if degrees < 0:
+            speed = speed * -1
+         _setSpeedOmnidrive(0, 0, speed, True)
+         distance = abs(degrees)
+         orientation = _getOrientation()
+         lastOrientation = orientation
+         speedModifier = 2 * _weight * (abs(speed)/100)
+         minSpeed = (speed/abs(speed)) * 1
+         while not rospy.is_shutdown():
+            orientation = _getOrientation()
+            traveledDegrees = abs(orientation - lastOrientation) * (180 / math.pi)
+            if (speed < 0 and lastOrientation > orientation) or (speed > 0 and lastOrientation < orientation):
+                traveledDegrees = 360 - traveledDegrees
+            distance -= traveledDegrees
+            if distance <= speedModifier:
+                newSpeed = ((distance/speedModifier) * speed) + minSpeed
+                _setSpeedOmnidrive(0, 0, newSpeed, True)
+            if distance <= 0 or _speed.angular.z == 0:
+                _setSpeedOmnidrive(0, 0, 0, True)
+                break
+            lastOrientation = orientation   
+            rospy.Rate(20).sleep()
+
+
+RESETODOMETRY:
+  PYTHON: |
+    def _resetOdometry(x, y, z):
+        floatArray = Float32MultiArray()
+        floatArray.data = [x, y, z]
+        _resetOdomPub.publish(floatArray)
+
+

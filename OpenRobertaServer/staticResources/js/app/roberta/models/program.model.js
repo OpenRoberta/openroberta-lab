@@ -6,7 +6,7 @@
  */
 define(["require", "exports", "comm"], function (require, exports, COMM) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.resetProgram = exports.likeProgram = exports.checkProgramCompatibility = exports.compileP = exports.compileN = exports.runNative = exports.runInSim = exports.runOnBrick = exports.showSourceProgram = exports.refreshList = exports.loadProgramEntity = exports.loadProgramFromListing = exports.deleteProgramFromListing = exports.deleteShare = exports.shareProgramWithGallery = exports.shareProgram = exports.exportAllProgramsXml = exports.loadProgramFromXML = exports.saveProgramToServer = exports.saveAsProgramToServer = void 0;
+    exports.resetProgram = exports.likeProgram = exports.checkProgramCompatibility = exports.compileP = exports.compileN = exports.runNative = exports.runInSim = exports.runOnBrick = exports.showSourceProgram = exports.refreshList = exports.loadProgramEntity = exports.loadProgramFromListing = exports.deleteProgramFromListing = exports.deleteShare = exports.shareProgramWithGallery = exports.shareProgram = exports.exportAllProgramsXml = exports.loadProgramFromXML = exports.saveProgramToServer = exports.saveAsProgramToServer = exports.stopProgram = void 0;
     /**
      * Save as program with new name to the server.
      *
@@ -237,6 +237,13 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
         }, successFn, "run program '" + programName + "' with configuration '" + configName + "'");
     }
     exports.runOnBrick = runOnBrick;
+    /**
+     * Stop program
+     */
+    function stopProgram(successFn) {
+        COMM.json('/projectWorkflow/stop', {}, successFn, 'stop program ');
+    }
+    exports.stopProgram = stopProgram;
     /**
      * Run program
      *

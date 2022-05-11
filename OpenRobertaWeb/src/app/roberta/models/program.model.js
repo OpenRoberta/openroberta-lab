@@ -293,6 +293,13 @@ function runOnBrick(programName, configName, xmlTextProgram, xmlTextConfig, SSID
 }
 
 /**
+ * Stop program
+ */
+export function stopProgram(successFn) {
+    COMM.json('/projectWorkflow/stop', {}, successFn, 'stop program ');
+}
+
+/**
  * Run program
  *
  * @param programName

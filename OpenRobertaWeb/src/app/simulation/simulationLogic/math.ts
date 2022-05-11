@@ -5,7 +5,7 @@
  */
 
 import CONSTANTS from 'simulation.constants';
-import { CircleSimulationObject, RectangleSimulationObject, TriangleSimulationObject } from './simulation.objects';
+import { CircleSimulationObject, RectangleSimulationObject, TriangleSimulationObject } from 'simulation.objects';
 
 /**
  * exports helper for calculations in ORsimulation
@@ -16,38 +16,35 @@ import { CircleSimulationObject, RectangleSimulationObject, TriangleSimulationOb
 /**
  * Convert from degree to radians.
  *
- * @memberOf exports
- * @param {Number}
+ * @param degree {number}
  *            degree to convert
- * @returns {Number} radians
+ * @returns {number} radians
  */
-export const toRadians = function (degree) {
+export function toRadians(degree: number): number {
     return degree * (Math.PI / 180);
-};
+}
 
 /**
  * Convert from radians to degree.
  *
- * @memberOf exports
- * @param {Number}
+ * @param radians {number}
  *            radians to convert
- * @returns {Number} degree
+ * @returns  {number} degree
  */
-export const toDegree = function (radians) {
+export function toDegree(radians: number): number {
     return radians * (180 / Math.PI);
-};
+}
 
 /**
  * Get intersection point from two lines.
  *
- * @memberOf exports
- * @param {line1}
+ * @param Point {line1}
  *            one line
- * @param {line2}
+ * @param Point{line2}
  *            another line
- * @returns {point} or null, if no intersection found
+ * @returns {Point} point or null, if no intersection found
  */
-export const getIntersectionPoint = function (line1, line2) {
+export const getIntersectionPoint = function (line1: Line, line2: Line): Point {
     var d = (line1.x1 - line1.x2) * (line2.y1 - line2.y2) - (line1.y1 - line1.y2) * (line2.x1 - line2.x2);
     if (d === 0) {
         return null;
@@ -55,10 +52,10 @@ export const getIntersectionPoint = function (line1, line2) {
     var xi = ((line2.x1 - line2.x2) * (line1.x1 * line1.y2 - line1.y1 * line1.x2) - (line1.x1 - line1.x2) * (line2.x1 * line2.y2 - line2.y1 * line2.x2)) / d;
     var yi = ((line2.y1 - line2.y2) * (line1.x1 * line1.y2 - line1.y1 * line1.x2) - (line1.y1 - line1.y2) * (line2.x1 * line2.y2 - line2.y1 * line2.x2)) / d;
 
-    if (!this.isLineAlignedToPoint(xi, yi, line1)) {
+    if (!this.isLineAlignedToPoint({ x: xi, y: yi }, line1)) {
         return null;
     }
-    if (!this.isLineAlignedToPoint(xi, yi, line2)) {
+    if (!this.isLineAlignedToPoint({ x: xi, y: yi }, line2)) {
         return null;
     }
     return {
@@ -75,7 +72,7 @@ export const getIntersectionPoint = function (line1, line2) {
  * @return {x, y}
  *              closest intersection point (coordinate)
  */
-export const getClosestIntersectionPointCircle = function (line, circle) {
+export const getClosestIntersectionPointCircle = function (line: Line, circle): Point {
     const intersections = this.getIntersectionPointsCircle(line, circle);
 
     if (intersections.length == 1) {
@@ -92,7 +89,19 @@ export const getClosestIntersectionPointCircle = function (line, circle) {
             return intersections[1];
         }
     }
+    return null; // no intersections at all
+};
 
+export const getMiddleIntersectionPointCircle = function (line: Line, circle): Point {
+    const intersections = this.getIntersectionPointsCircle(line, circle);
+
+    if (intersections.length == 1) {
+        return intersections[0]; // one intersection
+    }
+
+    if (intersections.length == 2) {
+        return { x: 0.5 * (intersections[0].x + intersections[1].x), y: 0.5 * (intersections[0].y + intersections[1].y) };
+    }
     return null; // no intersections at all
 };
 
@@ -105,7 +114,7 @@ export const getClosestIntersectionPointCircle = function (line, circle) {
  * @return {{x, y}[]}
  *              array with point(s) of the intersection
  */
-export const getIntersectionPointsCircle = function (line, circle) {
+export const getIntersectionPointsCircle = function (line, circle): Point[] {
     var dx, dy, A, B, C, det, t;
 
     dx = line.x2 - line.x1;
@@ -123,7 +132,7 @@ export const getIntersectionPointsCircle = function (line, circle) {
         t = -B / (2 * A);
         var intersection1 = { x: line.x1 + t * dx, y: line.y1 + t * dy };
 
-        if (this.isLineAlignedToPoint(intersection1.x, intersection1.y, line)) return [intersection1];
+        if (this.isLineAlignedToPoint(intersection1, line)) return [intersection1];
 
         return [];
     } else {
@@ -133,8 +142,7 @@ export const getIntersectionPointsCircle = function (line, circle) {
         t = (-B - Math.sqrt(det)) / (2 * A);
         var intersection2 = { x: line.x1 + t * dx, y: line.y1 + t * dy };
 
-        if (this.isLineAlignedToPoint(intersection1.x, intersection1.y, line) && this.isLineAlignedToPoint(intersection2.x, intersection2.y, line))
-            return [intersection1, intersection2];
+        if (this.isLineAlignedToPoint(intersection1, line) && this.isLineAlignedToPoint(intersection2, line)) return [intersection1, intersection2];
 
         return [];
     }
@@ -152,44 +160,16 @@ export const getIntersectionPointsCircle = function (line, circle) {
  *            a line
  * @returns {boolean}
  */
-export const isLineAlignedToPoint = function (xi, yi, line) {
-    if (xi < Math.min(line.x1, line.x2) - 0.01 || xi > Math.max(line.x1, line.x2) + 0.01) {
+export function isLineAlignedToPoint(p: Point, line: Line): boolean {
+    if (p.x < Math.min(line.x1, line.x2) - 0.01 || p.x > Math.max(line.x1, line.x2) + 0.01) {
         return false;
     }
-    if (yi < Math.min(line.y1, line.y2) - 0.01 || yi > Math.max(line.y1, line.y2) + 0.01) {
+    if (p.y < Math.min(line.y1, line.y2) - 0.01 || p.y > Math.max(line.y1, line.y2) + 0.01) {
         return false;
     }
     return true;
-};
+}
 
-export const getLinesFromRectangle = function (obj) {
-    return [
-        {
-            x1: obj.x,
-            x2: obj.x,
-            y1: obj.y,
-            y2: obj.y + obj.h,
-        },
-        {
-            x1: obj.x,
-            x2: obj.x + obj.w,
-            y1: obj.y,
-            y2: obj.y,
-        },
-        {
-            x1: obj.x + obj.w,
-            x2: obj.x,
-            y1: obj.y + obj.h,
-            y2: obj.y + obj.h,
-        },
-        {
-            x1: obj.x + obj.w,
-            x2: obj.x + obj.w,
-            y1: obj.y + obj.h,
-            y2: obj.y,
-        },
-    ];
-};
 export const getLinesFromObj = function (obj) {
     switch (obj.shape) {
         case 'rectangle':
@@ -538,4 +518,18 @@ export function transform(pose, point) {
 
 export function epsilonEqual(num1, num2, epsilon) {
     return Math.abs(num1 - num2) <= epsilon;
+}
+
+export function hexToRGB(hex: string): number[] {
+    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+        return r + r + g + g + b + b;
+    });
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : null;
+}
+
+export function hexToHsv(hex: string): number[] {
+    let rgb = hexToRGB(hex);
+    return rgbToHsv(rgb[0], rgb[1], rgb[2]);
 }

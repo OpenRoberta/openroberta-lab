@@ -1,0 +1,105 @@
+<toolbox_set id="toolboxBeginner" style="display: none">
+    <category name="TOOLBOX_ACTION" svg="true">
+        <block type="robActions_motorOmni_curve_for">
+            <value name="X">
+                <block type="math_number">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+            <value name="Y">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="DISTANCE">
+                <block type="math_number">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motorDiff_turn_for">
+            <value name="POWER">
+                <block type="math_number">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+            <value name="DEGREE">
+                <block type="math_number">
+                    <field name="NUM">20</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motorOmni_curve">
+            <value name="X">
+                <block type="math_number">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+            <value name="Y">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="THETA">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motorDiff_stop"></block>
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type="robSensors_touch_getSample"></block>
+        <block type="robSensors_infrared_getSample"></block>
+        <block type="robSensors_odometry_getSample"></block>
+        <block type="robSensors_odometry_reset"></block>
+        <block type="robSensors_timer_getSample"></block>
+        <block type="robSensors_timer_reset"></block>
+    </category>
+    <category name="TOOLBOX_CONTROL" svg="true">
+        <block type="robControls_if"/>
+        <block type="robControls_ifElse"/>
+        <block type="robControls_loopForever"/>
+        <block type="controls_repeat_ext">
+            <value name="TIMES">
+                <block type="math_number">
+                    <field name="NUM">10</field>
+                </block>
+            </value>
+        </block>
+        <block type="robControls_wait_time">
+            <value name="WAIT">
+                <block type="math_number">
+                    <field name="NUM">500</field>
+                </block>
+            </value>
+        </block>
+        <block type="robControls_wait_for">
+            <value name="WAIT0">
+                <block type="logic_compare">
+                    <value name="A">
+                        <block type="robSensors_getSample"/>
+                    </value>
+                    <value name="B">
+                        <block type="logic_boolean"/>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </category>
+    <category name="TOOLBOX_LOGIC" svg="true">
+        <block type="logic_compare"/>
+        <block type="logic_operation"/>
+        <block type="logic_boolean"/>
+    </category>
+    <category name="TOOLBOX_MATH" svg="true">
+        <block type="math_number"/>
+        <block type="math_arithmetic"/>
+    </category>
+    <category name="TOOLBOX_TEXT" svg="true">
+        <block type="text"/>
+        <block type="text_comment"/>
+    </category>
+    <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true">
+    </category>
+</toolbox_set>

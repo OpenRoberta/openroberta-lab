@@ -61,6 +61,7 @@ public class RobotDownloadProgram {
                     fileName = programName + ".jar";
                     filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
+                case "Robotino":
                 case "Nao":
                 case "ev3dev":
                 case "mbot2":

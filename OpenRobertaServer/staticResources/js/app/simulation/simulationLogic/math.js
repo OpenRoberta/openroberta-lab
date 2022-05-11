@@ -3,9 +3,9 @@
  * @author Beate Jost <beate.jost@smail.inf.h-brs.de>
  * @version 0.1
  */
-define(["require", "exports", "simulation.constants", "./simulation.objects"], function (require, exports, simulation_constants_1, simulation_objects_1) {
+define(["require", "exports", "simulation.constants", "simulation.objects"], function (require, exports, simulation_constants_1, simulation_objects_1) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.epsilonEqual = exports.transform = exports.getColor = exports.rgbToHsv = exports.checkInObstacle = exports.isPointInsideRectangle = exports.getDistanceToLine = exports.getDistance = exports.sqr = exports.getDistanceToCircle = exports.getLinesFromObj = exports.getLinesFromRectangle = exports.isLineAlignedToPoint = exports.getIntersectionPointsCircle = exports.getClosestIntersectionPointCircle = exports.getIntersectionPoint = exports.toDegree = exports.toRadians = void 0;
+    exports.hexToHsv = exports.hexToRGB = exports.epsilonEqual = exports.transform = exports.getColor = exports.rgbToHsv = exports.checkInObstacle = exports.isPointInsideRectangle = exports.getDistanceToLine = exports.getDistance = exports.sqr = exports.getDistanceToCircle = exports.getLinesFromObj = exports.isLineAlignedToPoint = exports.getIntersectionPointsCircle = exports.getMiddleIntersectionPointCircle = exports.getClosestIntersectionPointCircle = exports.getIntersectionPoint = exports.toDegree = exports.toRadians = void 0;
     /**
      * exports helper for calculations in ORsimulation
      *
@@ -14,36 +14,33 @@ define(["require", "exports", "simulation.constants", "./simulation.objects"], f
     /**
      * Convert from degree to radians.
      *
-     * @memberOf exports
-     * @param {Number}
+     * @param degree {number}
      *            degree to convert
-     * @returns {Number} radians
+     * @returns {number} radians
      */
-    var toRadians = function (degree) {
+    function toRadians(degree) {
         return degree * (Math.PI / 180);
-    };
+    }
     exports.toRadians = toRadians;
     /**
      * Convert from radians to degree.
      *
-     * @memberOf exports
-     * @param {Number}
+     * @param radians {number}
      *            radians to convert
-     * @returns {Number} degree
+     * @returns  {number} degree
      */
-    var toDegree = function (radians) {
+    function toDegree(radians) {
         return radians * (180 / Math.PI);
-    };
+    }
     exports.toDegree = toDegree;
     /**
      * Get intersection point from two lines.
      *
-     * @memberOf exports
-     * @param {line1}
+     * @param Point {line1}
      *            one line
-     * @param {line2}
+     * @param Point{line2}
      *            another line
-     * @returns {point} or null, if no intersection found
+     * @returns {Point} point or null, if no intersection found
      */
     var getIntersectionPoint = function (line1, line2) {
         var d = (line1.x1 - line1.x2) * (line2.y1 - line2.y2) - (line1.y1 - line1.y2) * (line2.x1 - line2.x2);
@@ -52,10 +49,10 @@ define(["require", "exports", "simulation.constants", "./simulation.objects"], f
         }
         var xi = ((line2.x1 - line2.x2) * (line1.x1 * line1.y2 - line1.y1 * line1.x2) - (line1.x1 - line1.x2) * (line2.x1 * line2.y2 - line2.y1 * line2.x2)) / d;
         var yi = ((line2.y1 - line2.y2) * (line1.x1 * line1.y2 - line1.y1 * line1.x2) - (line1.y1 - line1.y2) * (line2.x1 * line2.y2 - line2.y1 * line2.x2)) / d;
-        if (!this.isLineAlignedToPoint(xi, yi, line1)) {
+        if (!this.isLineAlignedToPoint({ x: xi, y: yi }, line1)) {
             return null;
         }
-        if (!this.isLineAlignedToPoint(xi, yi, line2)) {
+        if (!this.isLineAlignedToPoint({ x: xi, y: yi }, line2)) {
             return null;
         }
         return {
@@ -90,6 +87,17 @@ define(["require", "exports", "simulation.constants", "./simulation.objects"], f
         return null; // no intersections at all
     };
     exports.getClosestIntersectionPointCircle = getClosestIntersectionPointCircle;
+    var getMiddleIntersectionPointCircle = function (line, circle) {
+        var intersections = this.getIntersectionPointsCircle(line, circle);
+        if (intersections.length == 1) {
+            return intersections[0]; // one intersection
+        }
+        if (intersections.length == 2) {
+            return { x: 0.5 * (intersections[0].x + intersections[1].x), y: 0.5 * (intersections[0].y + intersections[1].y) };
+        }
+        return null; // no intersections at all
+    };
+    exports.getMiddleIntersectionPointCircle = getMiddleIntersectionPointCircle;
     /**
      * Finds the intersection between a circles border
      * and a line from the origin to the otherLineEndPoint.
@@ -114,7 +122,7 @@ define(["require", "exports", "simulation.constants", "./simulation.objects"], f
             // One solution.
             t = -B / (2 * A);
             var intersection1 = { x: line.x1 + t * dx, y: line.y1 + t * dy };
-            if (this.isLineAlignedToPoint(intersection1.x, intersection1.y, line))
+            if (this.isLineAlignedToPoint(intersection1, line))
                 return [intersection1];
             return [];
         }
@@ -124,7 +132,7 @@ define(["require", "exports", "simulation.constants", "./simulation.objects"], f
             var intersection1 = { x: line.x1 + t * dx, y: line.y1 + t * dy };
             t = (-B - Math.sqrt(det)) / (2 * A);
             var intersection2 = { x: line.x1 + t * dx, y: line.y1 + t * dy };
-            if (this.isLineAlignedToPoint(intersection1.x, intersection1.y, line) && this.isLineAlignedToPoint(intersection2.x, intersection2.y, line))
+            if (this.isLineAlignedToPoint(intersection1, line) && this.isLineAlignedToPoint(intersection2, line))
                 return [intersection1, intersection2];
             return [];
         }
@@ -142,45 +150,16 @@ define(["require", "exports", "simulation.constants", "./simulation.objects"], f
      *            a line
      * @returns {boolean}
      */
-    var isLineAlignedToPoint = function (xi, yi, line) {
-        if (xi < Math.min(line.x1, line.x2) - 0.01 || xi > Math.max(line.x1, line.x2) + 0.01) {
+    function isLineAlignedToPoint(p, line) {
+        if (p.x < Math.min(line.x1, line.x2) - 0.01 || p.x > Math.max(line.x1, line.x2) + 0.01) {
             return false;
         }
-        if (yi < Math.min(line.y1, line.y2) - 0.01 || yi > Math.max(line.y1, line.y2) + 0.01) {
+        if (p.y < Math.min(line.y1, line.y2) - 0.01 || p.y > Math.max(line.y1, line.y2) + 0.01) {
             return false;
         }
         return true;
-    };
+    }
     exports.isLineAlignedToPoint = isLineAlignedToPoint;
-    var getLinesFromRectangle = function (obj) {
-        return [
-            {
-                x1: obj.x,
-                x2: obj.x,
-                y1: obj.y,
-                y2: obj.y + obj.h,
-            },
-            {
-                x1: obj.x,
-                x2: obj.x + obj.w,
-                y1: obj.y,
-                y2: obj.y,
-            },
-            {
-                x1: obj.x + obj.w,
-                x2: obj.x,
-                y1: obj.y + obj.h,
-                y2: obj.y + obj.h,
-            },
-            {
-                x1: obj.x + obj.w,
-                x2: obj.x + obj.w,
-                y1: obj.y + obj.h,
-                y2: obj.y,
-            },
-        ];
-    };
-    exports.getLinesFromRectangle = getLinesFromRectangle;
     var getLinesFromObj = function (obj) {
         switch (obj.shape) {
             case 'rectangle':
@@ -512,4 +491,18 @@ define(["require", "exports", "simulation.constants", "./simulation.objects"], f
         return Math.abs(num1 - num2) <= epsilon;
     }
     exports.epsilonEqual = epsilonEqual;
+    function hexToRGB(hex) {
+        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+            return r + r + g + g + b + b;
+        });
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : null;
+    }
+    exports.hexToRGB = hexToRGB;
+    function hexToHsv(hex) {
+        var rgb = hexToRGB(hex);
+        return (0, exports.rgbToHsv)(rgb[0], rgb[1], rgb[2]);
+    }
+    exports.hexToHsv = hexToHsv;
 });

@@ -4,7 +4,7 @@
  */
 import * as UTIL from 'util';
 import * as $ from 'jquery';
-import { BaseSimulationObject, Ground, ISimulationObstacle, RectangleSimulationObject, Ruler, SimObjectFactory, SimObjectShape, SimObjectType } from 'simulation.objects';
+import { BaseSimulationObject, Ground, ISimulationObstacle, MarkerSimulationObject, RectangleSimulationObject, Ruler, SimObjectFactory, SimObjectShape, SimObjectType } from 'simulation.objects';
 import { SimulationRoberta } from 'simulation.roberta';
 import { IDestroyable, RobotBase, RobotFactory } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
@@ -36,8 +36,10 @@ export class SimulationScene {
     readonly uCanvas: HTMLCanvasElement;
     private _colorAreaList: BaseSimulationObject[] = [];
     private _obstacleList: BaseSimulationObject[] = [];
+    private _markerList: MarkerSimulationObject[] = [];
     private _redrawColorAreas: boolean = false;
     private _redrawObstacles: boolean = false;
+    private _redrawMarkers: boolean = false;
     private _redrawRuler: boolean = false;
     private _robots: RobotBase[] = [];
     private _uniqueObjectId = 1; // 0 is blocked by the standard obstacle, 1 is blocked by the ruler
@@ -52,16 +54,18 @@ export class SimulationScene {
     private readonly uCtx: CanvasRenderingContext2D;
     private udCanvas: HTMLCanvasElement;
     private readonly udCtx: CanvasRenderingContext2D;
+    private readonly aCtx: CanvasRenderingContext2D;
 
     constructor(sim: SimulationRoberta) {
         this.sim = sim;
         this.uCanvas = document.createElement('canvas');
-        this.uCtx = this.uCanvas.getContext('2d'); // unit context
+        this.uCtx = this.uCanvas.getContext('2d', { willReadFrequently: true }); // unit context
         this.udCanvas = document.createElement('canvas');
-        this.udCtx = this.udCanvas.getContext('2d'); // unit context
+        this.udCtx = this.udCanvas.getContext('2d', { willReadFrequently: true }); // unit context
         this.bCtx = ($('#backgroundLayer')[0] as HTMLCanvasElement).getContext('2d'); // background context
         this.dCtx = ($('#drawLayer')[0] as HTMLCanvasElement).getContext('2d'); // background context
         this.mCtx = ($('#rulerLayer')[0] as HTMLCanvasElement).getContext('2d'); // ruler == *m*easurement context
+        this.aCtx = ($('#arucoMarkerLayer')[0] as HTMLCanvasElement).getContext('2d'); // object context
         this.oCtx = ($('#objectLayer')[0] as HTMLCanvasElement).getContext('2d'); // object context
         this.rCtx = ($('#robotLayer')[0] as HTMLCanvasElement).getContext('2d'); // robot context
     }
@@ -99,6 +103,16 @@ export class SimulationScene {
         this.redrawColorAreas = true;
     }
 
+    get markerList(): MarkerSimulationObject[] {
+        return this._markerList;
+    }
+
+    set markerList(value: MarkerSimulationObject[]) {
+        this.clearList(this._markerList);
+        this._markerList = value;
+        this.redrawMarkers = true;
+    }
+
     get redrawObstacles(): boolean {
         return this._redrawObstacles;
     }
@@ -109,6 +123,14 @@ export class SimulationScene {
 
     get redrawColorAreas(): boolean {
         return this._redrawColorAreas;
+    }
+
+    set redrawMarkers(value: boolean) {
+        this._redrawMarkers = value;
+    }
+
+    get redrawMarkers(): boolean {
+        return this._redrawMarkers;
     }
 
     set redrawColorAreas(value: boolean) {
@@ -164,12 +186,31 @@ export class SimulationScene {
         this.obstacleList = newObstacleList;
     }
 
+    addImportMarkerList(importMarkerList: any[]) {
+        let newMarkerList = [];
+        importMarkerList.forEach((obj) => {
+            let newObject = SimObjectFactory.getSimObject(
+                obj.id,
+                this,
+                this.sim.selectionListener,
+                obj.shape,
+                SimObjectType.Marker,
+                obj.p,
+                obj.color,
+                ...obj.params
+            );
+            (newObject as MarkerSimulationObject).markerId = obj.markerId;
+            newMarkerList.push(newObject);
+        });
+        this.markerList = newMarkerList;
+    }
+
     addObstacle(shape: SimObjectShape) {
         this.addSimulationObject(this.obstacleList, shape, SimObjectType.Obstacle);
         this.redrawObstacles = true;
     }
 
-    addSimulationObject(list: BaseSimulationObject[], shape: SimObjectShape, type: SimObjectType) {
+    addSimulationObject(list: BaseSimulationObject[], shape: SimObjectShape, type: SimObjectType, markerId?: number) {
         let $robotLayer = $('#robotLayer');
         $robotLayer.attr('tabindex', 0);
         $robotLayer.trigger('focus');
@@ -179,6 +220,9 @@ export class SimulationScene {
             x: x,
             y: y,
         });
+        if (shape == SimObjectShape.Marker && markerId) {
+            (newObject as MarkerSimulationObject).markerId = markerId;
+        }
         list.push(newObject);
         newObject.selected = true;
     }
@@ -221,12 +265,12 @@ export class SimulationScene {
             return false;
         }
 
-        if (!findAndDelete(this.obstacleList)) {
-            if (findAndDelete(this.colorAreaList)) {
-                this.redrawColorAreas = true;
-            }
-        } else {
+        if (findAndDelete(this.obstacleList)) {
             this.redrawObstacles = true;
+        } else if (findAndDelete(this.colorAreaList)) {
+            this.redrawColorAreas = true;
+        } else if (findAndDelete(this.markerList)) {
+            this.redrawMarkers = true;
         }
     }
 
@@ -253,6 +297,10 @@ export class SimulationScene {
         if (this.redrawObstacles) {
             this.drawObstacles();
             this.redrawObstacles = false;
+        }
+        if (this.redrawMarkers) {
+            this.drawMarkers();
+            this.redrawMarkers = false;
         }
         if (this.redrawRuler) {
             this.drawRuler();
@@ -282,6 +330,14 @@ export class SimulationScene {
         this.oCtx.scale(this.sim.scale, this.sim.scale);
         this.oCtx.clearRect(this.ground.x - 10, this.ground.y - 10, this.ground.w + 20, this.ground.h + 20);
         this.obstacleList.forEach((obstacle) => obstacle.draw(this.oCtx, this.uCtx, this.mCtx));
+    }
+
+    drawMarkers() {
+        this.aCtx.restore();
+        this.aCtx.save();
+        this.aCtx.scale(this.sim.scale, this.sim.scale);
+        this.aCtx.clearRect(this.ground.x - 10, this.ground.y - 10, this.ground.w + 20, this.ground.h + 20);
+        this.markerList.forEach((marker) => marker.draw(this.aCtx, this.uCtx, this.mCtx));
     }
 
     drawPattern(ctx) {
@@ -544,6 +600,9 @@ export class SimulationScene {
             } else if (this.objectToCopy.type === SimObjectType.ColorArea) {
                 this.colorAreaList.push(newObject);
                 this.redrawColorAreas = true;
+            } else if (this.objectToCopy.type === SimObjectType.Marker) {
+                this.markerList.push(newObject as MarkerSimulationObject);
+                this.redrawMarkers = true;
             }
         }
     }
@@ -576,6 +635,8 @@ export class SimulationScene {
         this.bCtx.canvas.height = h;
         this.mCtx.canvas.width = w;
         this.mCtx.canvas.height = h;
+        this.aCtx.canvas.width = w;
+        this.aCtx.canvas.height = h;
         if (resetUnified) {
             this.uCanvas.width = this.backgroundImg.width + 20;
             this.uCanvas.height = this.backgroundImg.height + 20;
@@ -592,6 +653,7 @@ export class SimulationScene {
         this.dCtx.drawImage(this.udCanvas, 0, 0, this.backgroundImg.width + 20, this.backgroundImg.height + 20, 0, 0, w, h);
         this.drawColorAreas();
         this.drawObstacles();
+        this.drawMarkers();
         if (this.currentBackground == 2) {
             this.redrawRuler = true;
         }
@@ -665,8 +727,11 @@ export class SimulationScene {
         let personalObstacleList: ISimulationObstacle[] = this.obstacleList.slice();
         this.robots.forEach((robot) => personalObstacleList.push((robot as RobotBaseMobile).chassis as unknown as ISimulationObstacle));
         personalObstacleList.push(this.ground as ISimulationObstacle);
+        let myMarkerList: MarkerSimulationObject[] = this.markerList.slice();
         this.robots.forEach((robot) => robot.updateActions(robot, dt, interpreterRunning));
-        this.robots.forEach((robot) => (robot as RobotBaseMobile).updateSensors(interpreterRunning, dt, this.uCtx, this.udCtx, personalObstacleList));
+        this.robots.forEach((robot) =>
+            (robot as RobotBaseMobile).updateSensors(interpreterRunning, dt, this.uCtx, this.udCtx, personalObstacleList, this.markerList)
+        );
         this.draw(dt, interpreterRunning);
     }
 
@@ -682,5 +747,10 @@ export class SimulationScene {
         this.robots.forEach((robot) => (robot as RobotBaseMobile).resetPose());
         this.dCtx.canvas.width = this.dCtx.canvas.width;
         this.udCtx.canvas.width = this.udCtx.canvas.width;
+    }
+
+    addMarker(markerId: number) {
+        this.addSimulationObject(this.markerList, SimObjectShape.Marker, SimObjectType.Marker, markerId);
+        this._redrawMarkers = true;
     }
 }

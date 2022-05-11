@@ -290,6 +290,61 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             this.hardwareState.actions.motors[port] = speed;
             this.hardwareState.motors[port] = speed;
         };
+        RobotSimBehaviour.prototype.omniDriveAction = function (xVel, yVel, thetaVel) {
+            if (this.hardwareState.actions.omniDrive == undefined) {
+                this.hardwareState.actions.omniDrive = {};
+            }
+            this.hardwareState.actions.omniDrive[C.X + C.SPEED] = xVel;
+            this.hardwareState.actions.omniDrive[C.Y + C.SPEED] = yVel;
+            this.hardwareState.actions.omniDrive[C.ANGLE + C.SPEED] = -thetaVel;
+            return 0;
+        };
+        RobotSimBehaviour.prototype.omniDriveDistAction = function (xVel, yVel, distance) {
+            if (this.hardwareState.actions.omniDrive == undefined) {
+                this.hardwareState.actions.omniDrive = {};
+            }
+            this.hardwareState.actions.omniDrive[C.X + C.SPEED] = xVel;
+            this.hardwareState.actions.omniDrive[C.Y + C.SPEED] = yVel;
+            this.hardwareState.actions.omniDrive[C.DISTANCE] = distance;
+            this.setBlocking(true);
+            return 0;
+        };
+        RobotSimBehaviour.prototype.omniStopDriveAction = function () {
+            if (this.hardwareState.actions.omniDrive == undefined) {
+                this.hardwareState.actions.omniDrive = {};
+            }
+            this.hardwareState.actions.omniDrive[C.X + C.SPEED] = 0;
+            this.hardwareState.actions.omniDrive[C.Y + C.SPEED] = 0;
+            this.hardwareState.actions.omniDrive[C.ANGLE + C.SPEED] = 0;
+        };
+        RobotSimBehaviour.prototype.omniDriveTurnAction = function (direction, thetaVel, angle) {
+            if (this.hardwareState.actions.omniDrive == undefined) {
+                this.hardwareState.actions.omniDrive = {};
+            }
+            if (direction == C.LEFT) {
+                thetaVel *= -1;
+            }
+            if ((direction == C.LEFT && angle < 0) || (direction == C.RIGHT && angle < 0)) {
+                thetaVel *= -1;
+            }
+            if (angle === 0) {
+                thetaVel = 0;
+            }
+            this.hardwareState.actions.omniDrive[C.ANGLE + C.SPEED] = thetaVel;
+            this.hardwareState.actions.omniDrive[C.ANGLE] = angle;
+            this.setBlocking(true);
+            return 0;
+        };
+        RobotSimBehaviour.prototype.omniDrivePositionAction = function (power, x, y) {
+            if (this.hardwareState.actions.omniDrive == undefined) {
+                this.hardwareState.actions.omniDrive = {};
+            }
+            this.hardwareState.actions.omniDrive[C.POWER] = power;
+            this.hardwareState.actions.omniDrive[C.X] = x;
+            this.hardwareState.actions.omniDrive[C.Y] = y;
+            this.setBlocking(true);
+            return 0;
+        };
         RobotSimBehaviour.prototype.showTextAction = function (text, mode) {
             var showText = '' + text;
             U.debug('***** show "' + showText + '" *****');
@@ -377,6 +432,14 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             else {
                 this.hardwareState.actions.gyroReset = true;
             }
+        };
+        RobotSimBehaviour.prototype.odometryReset = function (slot) {
+            this.hardwareState.actions.odometry = {};
+            this.hardwareState.actions.odometry.reset = slot;
+            if (this.hardwareState.actions.omniDrive == undefined) {
+                this.hardwareState.actions.omniDrive = {};
+            }
+            this.hardwareState.actions.omniDrive.reset = slot;
         };
         RobotSimBehaviour.prototype.debugAction = function (value) {
             U.debug('***** debug action "' + value + '" *****');

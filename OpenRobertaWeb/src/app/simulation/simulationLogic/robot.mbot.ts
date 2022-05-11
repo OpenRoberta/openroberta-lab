@@ -59,7 +59,7 @@ export default class MBOT extends RobotEv3 {
                                 break;
                         }
                     }
-                    this[c] = new UltrasonicSensor(c, position.x, position.y, position.theta, 255, 'Ultra Sensor');
+                    this[c] = new UltrasonicSensor(c, position.x, position.y, position.theta, 255);
                     break;
                 }
                 case 'INFRARED': {

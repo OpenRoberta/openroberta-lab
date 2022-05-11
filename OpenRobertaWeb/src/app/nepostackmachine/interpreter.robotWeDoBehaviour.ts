@@ -4,6 +4,10 @@ import * as C from './interpreter.constants';
 import * as U from './interpreter.util';
 
 export class RobotWeDoBehaviour extends ARobotBehaviour {
+    odometryReset(slot: string): void {
+        throw new Error('Method not implemented.');
+    }
+
     temperatureLedAction(blue: number, red: number): void {
         throw new Error('Method not implemented.');
     }
@@ -388,5 +392,25 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
     }
 
     proxHLedAction(ledValues: number[]): void {
+    }
+
+    omniDriveAction(xVel: number, yVel: number, thetaVel: number): number {
+        throw new Error('Method not implemented.');
+    }
+
+    omniDriveDistAction(xVel: number, yVel: number, distance: number): number {
+        throw new Error('Method not implemented.');
+    }
+
+    omniStopDriveAction(): number {
+        throw new Error('Method not implemented.');
+    }
+
+    omniDriveTurnAction(direction: string, thetaVel: number, angle: number): number {
+        return 0;
+    }
+
+    omniDrivePositionAction(power, x, y): number {
+        return 0;
     }
 }

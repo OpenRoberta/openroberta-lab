@@ -19,7 +19,14 @@ import * as Blockly from 'blockly';
 import * as NN_CTRL from 'nn.controller';
 import { SimulationScene } from 'simulation.scene';
 import { SelectionListener } from 'robot.base';
-import { BaseSimulationObject, CircleSimulationObject, RectangleSimulationObject, SimObjectShape, TriangleSimulationObject } from './simulation.objects';
+import {
+    BaseSimulationObject,
+    CircleSimulationObject,
+    MarkerSimulationObject,
+    RectangleSimulationObject,
+    SimObjectShape,
+    TriangleSimulationObject,
+} from './simulation.objects';
 import { Pose } from 'robot.base.mobile';
 import { Simulation } from 'progSim.controller';
 
@@ -150,6 +157,10 @@ export class SimulationRoberta implements Simulation {
         this._interpreterRunning = value;
     }
 
+    addMarker(markerId: number) {
+        this.scene.addMarker(markerId);
+    }
+
     addColorArea(shape) {
         this.scene.addColorArea(shape);
         this.enableChangeObjectButtons();
@@ -234,16 +245,31 @@ export class SimulationRoberta implements Simulation {
 
         function calculateShape(object: BaseSimulationObject) {
             if (object instanceof RectangleSimulationObject) {
-                return {
-                    x: object.x / width,
-                    y: object.y / height,
-                    w: object.w / width,
-                    h: object.h / height,
-                    theta: object.theta,
-                    color: object.color,
-                    form: SimObjectShape.Rectangle,
-                    type: object.type,
-                };
+                if (object instanceof MarkerSimulationObject) {
+                    let myId = (object as MarkerSimulationObject).markerId;
+                    return {
+                        x: object.x / width,
+                        y: object.y / height,
+                        w: object.w / width,
+                        h: object.h / height,
+                        theta: object.theta,
+                        color: object.color,
+                        form: SimObjectShape.Rectangle,
+                        type: object.type,
+                        markerId: myId,
+                    };
+                } else {
+                    return {
+                        x: object.x / width,
+                        y: object.y / height,
+                        w: object.w / width,
+                        h: object.h / height,
+                        theta: object.theta,
+                        color: object.color,
+                        form: SimObjectShape.Rectangle,
+                        type: object.type,
+                    };
+                }
             } else if (object instanceof TriangleSimulationObject) {
                 return {
                     ax: object.ax / width,
@@ -287,6 +313,9 @@ export class SimulationRoberta implements Simulation {
             return calculateShape(object);
         });
         config.colorAreas = this.scene.colorAreaList.map(function (object) {
+            return calculateShape(object);
+        });
+        config.marker = this.scene.markerList.map(function (object) {
             return calculateShape(object);
         });
         return config;
@@ -646,7 +675,12 @@ export class SimulationRoberta implements Simulation {
         function calculateShape(object) {
             let newObject: any = {};
             newObject.id = sim.scene.uniqueObjectId;
-            newObject.shape = object.form.toUpperCase() as SimObjectShape;
+            if (object.type === 'MARKER') {
+                newObject.shape = 'MARKER';
+                newObject.markerId = object.markerId;
+            } else {
+                newObject.shape = object.form.toUpperCase() as SimObjectShape;
+            }
             newObject.color = object.color;
             newObject.newObjecttype = object.type;
             switch (object.form.toLowerCase()) {
@@ -701,6 +735,13 @@ export class SimulationRoberta implements Simulation {
             importColorAreas.push(calculateShape(colorArea));
         });
         this.scene.addImportColorAreaList(importColorAreas);
+
+        let importMarker = [];
+        relatives.marker &&
+            relatives.marker.forEach((marker) => {
+                importMarker.push(calculateShape(marker));
+            });
+        this.scene.addImportMarkerList(importMarker);
     }
 
     setPause(value) {

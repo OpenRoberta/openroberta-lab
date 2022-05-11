@@ -164,20 +164,20 @@ define(["require", "exports", "jquery", "util", "blockly", "simulation.types"], 
                 var objectCorners = [
                     {
                         x: Math.round(this.chassis.frontRight.x),
-                        y: Math.round(this.chassis.frontRight.y),
+                        y: Math.round(this.chassis.frontRight.y)
                     },
                     {
                         x: Math.round(this.chassis.backRight.x),
-                        y: Math.round(this.chassis.backRight.y),
+                        y: Math.round(this.chassis.backRight.y)
                     },
                     {
                         x: Math.round(this.chassis.backLeft.x),
-                        y: Math.round(this.chassis.backLeft.y),
+                        y: Math.round(this.chassis.backLeft.y)
                     },
                     {
                         x: Math.round(this.chassis.frontLeft.x),
-                        y: Math.round(this.chassis.frontLeft.y),
-                    },
+                        y: Math.round(this.chassis.frontLeft.y)
+                    }
                 ];
                 for (var c in objectCorners) {
                     rCtx.beginPath();
@@ -215,11 +215,11 @@ define(["require", "exports", "jquery", "util", "blockly", "simulation.types"], 
                 }
             }
         };
-        RobotBase.prototype.updateSensors = function (running, dt, uCtx, udCtx, personalObstacleList) {
+        RobotBase.prototype.updateSensors = function (running, dt, uCtx, udCtx, personalObstacleList, markerList) {
             var values = this.interpreter.getRobotBehaviour().hardwareState.sensors;
             for (var item in this) {
                 if (this[item] && this[item].updateSensor) {
-                    this[item].updateSensor(running, dt, this, values, uCtx, udCtx, personalObstacleList);
+                    this[item].updateSensor(running, dt, this, values, uCtx, udCtx, personalObstacleList, markerList);
                 }
             }
         };
@@ -338,7 +338,7 @@ define(["require", "exports", "jquery", "util", "blockly", "simulation.types"], 
             [235, 106, 10],
             [186, 204, 30],
             [242, 148, 0],
-            [0, 90, 148],
+            [0, 90, 148]
         ];
         return RobotFactory;
     }());

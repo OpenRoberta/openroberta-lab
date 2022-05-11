@@ -216,6 +216,31 @@ public class RobotCommunicationData {
     }
 
     /**
+     * NO WAITING: method called from a server thread. This method terminates immediately (if the robot waits for a push command) or after 1 sec (if we expect a
+     * push command in the very near future. It wakes up the thread, which runs on behalf of a push command request from the robot.
+     *
+     * @return true, if the robot was waiting for a "stopprogram" command, false otherwise
+     */
+    public synchronized boolean stopButtonPressed() {
+        if ( !isRobotWaitingForPushCommandNowOrWithinTheNextSecond() ) {
+            LOG.info("STOP button pressed, but robot is not waiting for that event. Bad luck!");
+            return false;
+        } else {
+            LOG
+                .info(
+                    "STOP button pressed and robot is waiting for that event. Wait state entered "
+                        + this.timerStartedByLastRequest.elapsedSecFormatted()
+                        + " ago");
+            this.command = "stopprogram";
+            this.programName = "";
+            this.timerStartedByLastRequest = Clock.start();
+            this.state = State.ROBOT_IS_BUSY;
+            notifyAll();
+            return true;
+        }
+    }
+
+    /**
      * method called from a server thread. This method terminates immediately (if the robot waits for a push command) or after 1 sec (if we expect a push
      * command in the very near future. It wakes up the thread, which runs on behalf of a push command request from the robot.
      *

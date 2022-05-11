@@ -104,10 +104,10 @@ define(["require", "exports", "robot.base.mobile", "robot.sensors", "./robot.act
                             }
                         }
                         if (sensors[c] == 'ULTRASONIC') {
-                            this_1[c] = new robot_sensors_1.UltrasonicSensor(c, position.x, position.y, position.theta, 255, 'Ultra Sensor');
+                            this_1[c] = new robot_sensors_1.UltrasonicSensor(c, position.x, position.y, position.theta, 255);
                         }
                         else {
-                            this_1[c] = new robot_sensors_1.InfraredSensor(c, position.x, position.y, position.theta, 70, 'Ultra Sensor');
+                            this_1[c] = new robot_sensors_1.InfraredSensor(c, position.x, position.y, position.theta, 70);
                         }
                         break;
                     }
