@@ -38,6 +38,10 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitor extends Moto
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
+        requiredComponentVisited(curveAction, curveAction.getParamLeft().getSpeed(), curveAction.getParamRight().getSpeed());
+        if ( curveAction.getParamLeft().getDuration() != null ) {
+            requiredComponentVisited(curveAction, curveAction.getParamLeft().getDuration().getValue());
+        }
         checkAndAddDifferentialDriveBlock(curveAction);
         checkForZeroSpeedInCurve(curveAction.getParamLeft().getSpeed(), curveAction.getParamRight().getSpeed(), curveAction);
         return null;

@@ -30,6 +30,7 @@ import de.fhg.iais.roberta.syntax.action.mbot2.Ultrasonic2LEDAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -237,6 +238,12 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
         checkActorPort(printlnAction);
         requiredComponentVisited(printlnAction, printlnAction.msg);
         usedHardwareBuilder.addUsedActor(new UsedActor(printlnAction.getUserDefinedPort(), SC.DISPLAY));
+        return null;
+    }
+
+    @Override
+    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+        requiredComponentVisited(serialWriteAction, serialWriteAction.getValue());
         return null;
     }
 

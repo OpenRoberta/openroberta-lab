@@ -69,9 +69,7 @@ public interface IMbot2Visitor<V> extends IActors4AutonomousDriveRobots<V>, ISen
 
     V visitPrintlnAction(PrintlnAction<V> printlnAction);
 
-    default V visitSerialWriteAction(SerialWriteAction<V> serialWriteAction) {
-        return null;
-    }
+    V visitSerialWriteAction(SerialWriteAction<V> serialWriteAction);
 
     V visitLedOnActionWithIndex(LedOnActionWithIndex<V> ledOnActionWithIndex);
 
