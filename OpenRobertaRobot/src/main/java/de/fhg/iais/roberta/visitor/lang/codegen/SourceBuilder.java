@@ -19,6 +19,9 @@ public class SourceBuilder {
 
     public SourceBuilder DECR() {
         this.indentation -= 1;
+        if ( this.indentation < 0 ) {
+            this.indentation = 0;
+        }
         return this;
     }
 

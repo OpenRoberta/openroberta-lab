@@ -9,9 +9,9 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
@@ -23,7 +23,6 @@ import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -101,16 +100,9 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
         generateTimerVariables();
         generateUserDefinedMethods();
         nlIndent();
-        this.sb.append("void setup()");
-        nlIndent();
-        incrIndentation();
-        this.sb.append("{");
-        nlIndent();
+        this.src.add("void setup() {").INCR().nlI();
         generateUsedVars();
-        decrIndentation();
-        nlIndent();
-        this.sb.append("}");
-        nlIndent();
+        this.src.DECR().nlI().add("}").nlI();
         return null;
     }
 

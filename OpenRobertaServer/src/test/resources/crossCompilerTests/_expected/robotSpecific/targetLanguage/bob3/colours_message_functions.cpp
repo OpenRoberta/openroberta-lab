@@ -40,8 +40,7 @@ unsigned int function_return_colourVar() {
     return ___c;
 }
 
-void setup()
-{
+void setup() {
     ___n = 0;
     ___b = true;
     ___c = RGB(0xFF, 0xFF, 0xFF);

@@ -30,10 +30,10 @@ public final class Rob3rtaCppVisitor extends NIBOCommonCppVisitor {
         if ( !withWrapping ) {
             return;
         }
-        this.sb.append("#include \"robot.h\" \n");
-        this.sb.append("#include <stdlib.h> \n");
-        this.sb.append("#include <math.h> \n");
-        this.sb.append("#define _ROB3RTA_ \n");
+        this.sb.append("#include \"robot.h\"\n");
+        this.sb.append("#include <stdlib.h>\n");
+        this.sb.append("#include <math.h>\n");
+        this.sb.append("#define _ROB3RTA_\n");
         this.sb.append("Robot rob;\n");
 
         super.generateProgramPrefix(withWrapping);

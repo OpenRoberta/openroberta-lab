@@ -24,9 +24,8 @@ void ausmachen() {
     delay(100);
 }
 
-void setup()
-{
-
+void setup() {
+    
 }
 
 void loop()

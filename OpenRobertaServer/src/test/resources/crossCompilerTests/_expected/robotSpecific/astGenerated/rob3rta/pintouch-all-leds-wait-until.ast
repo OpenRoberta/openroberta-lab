@@ -1,3 +1,4 @@
+
 (repeat [FOREVER_ARDU, BoolConst[value: true]]WaitStmt [
 (repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [EAR, PRESSED, 2]]], BoolConst[value: true]]]
 )]MethodStmt [MethodCall [beleuchten, Var [farbe], ColorConst[hexValue: #FFFFFF], VOID]]MethodStmt [MethodCall [ausmachen, , , VOID]]WaitStmt [

@@ -1,3 +1,4 @@
+
 (repeat [FOREVER_ARDU, BoolConst[value: true]]
 if SensorExpr [PinTouchSensor [EAR, PRESSED, 2]]
 ,thenMethodStmt [MethodCall [beleuchten, Var [farbe], ColorConst[hexValue: #FFFFFF], VOID]]

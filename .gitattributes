@@ -1,1 +1,4 @@
 *.sh text eol=lf
+OpenRobertaServer/src/test/resources/crossCompilerTests/_expected eof=lf
+OpenRobertaServer/staticResources/js/libs/webots/wrenjs.data eof=lf 
+

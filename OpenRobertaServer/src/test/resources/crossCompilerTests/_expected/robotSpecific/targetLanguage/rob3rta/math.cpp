@@ -59,8 +59,7 @@ void math2() {
     ___n = ((double) rand() / (RAND_MAX));
 }
 
-void setup()
-{
+void setup() {
     ___n = 0;
     ___booleanVar = true;
     ___colourVar = RGB(0xFF, 0xFF, 0xFF);
