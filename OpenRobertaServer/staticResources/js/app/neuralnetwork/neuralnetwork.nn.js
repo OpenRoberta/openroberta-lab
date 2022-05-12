@@ -64,9 +64,10 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
         NNumber.prototype.getOp = function () {
             return this.weightPrefix;
         };
-        NNumber.prototype.getWithPrecision = function (precision) {
+        NNumber.prototype.getWithPrecision = function (precision, suppressMultOp) {
+            var prefix = suppressMultOp && this.weightPrefix === '*' ? '' : this.weightPrefix;
             var suffix = precision === '*' ? this.weightSuffix : U.toFixedPrecision(this.weightSuffix, +precision);
-            return this.weightPrefix + suffix;
+            return prefix + suffix;
         };
         return NNumber;
     }());

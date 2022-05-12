@@ -238,17 +238,15 @@ function drawNetworkUI(network: Network): void {
             width: nodeSize,
             height: nodeSize,
         });
-        if (focusStyle === FocusStyle.CLICK_NODE && focusNode !== undefined && focusNode != null && focusNode.id === node.id) {
+        if (focusNode !== undefined && focusNode != null && focusNode.id === node.id) {
             mainRectAngle.style('fill', 'yellow');
         }
-        if (focusStyle === FocusStyle.CLICK_NODE) {
-            nodeGroup.on('click', function () {
-                if (node.inputLinks.length > 0) {
-                    focusNode = node;
-                    drawNetworkUI(network);
-                }
-            });
-        }
+        nodeGroup.on('click', function () {
+            if (node.inputLinks.length > 0) {
+                focusNode = node;
+                drawNetworkUI(network);
+            }
+        });
 
         let labelForId = nodeGroup.append('text').attr({
             class: 'main-label',
@@ -277,7 +275,14 @@ function drawNetworkUI(network: Network): void {
             }
             // Show the bias value depending on focus-style
             if (focusStyle === FocusStyle.SHOW_ALL || (focusStyle === FocusStyle.CLICK_NODE && focusNode === node)) {
-                drawValue(nodeGroup, nodeId, -2 * biasSize, nodeSize + 2 * biasSize, node.bias.get(), node.bias.getWithPrecision(state.precision));
+                drawValue(
+                    nodeGroup,
+                    nodeId,
+                    -2 * biasSize,
+                    nodeSize + 2 * biasSize,
+                    node.bias.get(),
+                    node.bias.getWithPrecision(state.precision, state.weightSuppressMultOp)
+                );
             }
         }
 
@@ -328,7 +333,7 @@ function drawNetworkUI(network: Network): void {
         });
 
         // Show the value of the link depending on focus-style
-        if (focusStyle === FocusStyle.SHOW_ALL || (focusStyle === FocusStyle.CLICK_NODE && link.source === focusNode) || link.dest === focusNode) {
+        if (focusStyle === FocusStyle.SHOW_ALL || (focusStyle === FocusStyle.CLICK_NODE && (link.source === focusNode || link.dest === focusNode))) {
             let lineNode = line.node() as any;
             valShiftToRight = !valShiftToRight;
             let posVal = focusStyle === FocusStyle.SHOW_ALL ? (valShiftToRight ? 0.6 : 0.4) : link.source === focusNode ? 0.6 : 0.4;
@@ -339,12 +344,14 @@ function drawNetworkUI(network: Network): void {
                 pointForWeight.x,
                 pointForWeight.y - 10,
                 link.weight.get(),
-                link.weight.getWithPrecision(state.precision)
+                link.weight.getWithPrecision(state.precision, state.weightSuppressMultOp)
             );
         }
 
         // Add an (almost) invisible thick path that will be used for editing the weight value on click.
-        if (focusStyle !== FocusStyle.CLICK_NODE || link.source === focusNode || link.dest === focusNode) {
+        const pathIfClickFocus = focusStyle === FocusStyle.CLICK_NODE && (link.source === focusNode || link.dest === focusNode);
+        const pathOtherFoci = focusStyle === FocusStyle.SHOW_ALL || focusStyle === FocusStyle.CLICK_WEIGHT_BIAS;
+        if (pathIfClickFocus || pathOtherFoci) {
             let cssForPath = focusStyle !== FocusStyle.CLICK_NODE ? 'nn-weight-click' : 'nn-weight-show-click';
             container
                 .append('path')
@@ -452,7 +459,6 @@ function updateEditCard(nodeOrLink?: Node | Link, coordinates?: [number, number]
         }
         (input.node() as HTMLInputElement).focus();
     });
-    let value = nodeOrLink instanceof Link ? nodeOrLink.weight : nodeOrLink.bias;
 
     editCard.style({
         left: `${coordinates[0] + 20}px`,
@@ -481,7 +487,7 @@ function updateUI() {
             });
             const val = container.select(`#val-${baseName}`);
             if (!val.empty()) {
-                val.text(link.weight.getWithPrecision(state.precision));
+                val.text(link.weight.getWithPrecision(state.precision, state.weightSuppressMultOp));
                 drawValuesBox(val, link.weight.get());
             }
         });
@@ -493,11 +499,11 @@ function updateUI() {
             D3.select(`#bias-${node.id}`).style('fill', colorScale(node.bias.get()));
             let val = D3.select(`#val-${node.id}`);
             if (!val.empty()) {
-                val.text(node.bias.getWithPrecision(state.precision));
+                val.text(node.bias.getWithPrecision(state.precision, state.weightSuppressMultOp));
                 drawValuesBox(val, node.bias.get());
             }
         });
-        if (focusStyle === FocusStyle.CLICK_NODE && focusNode !== undefined && focusNode !== null) {
+        if (focusNode !== undefined && focusNode !== null) {
             D3.select('#nn-show-math').html(focusNode.genMath(state.activationKey));
         } else {
             D3.select('#nn-show-math').html('');
@@ -514,8 +520,7 @@ function mkWidthScale(): _D3.scale.Linear<number, number> {
         }
     }
     network.forEachLink(updMaxWeight);
-    const MAX_WIDTH = 8;
-    return D3.scale.linear().domain([0, maxWeight]).range([2, MAX_WIDTH]).clamp(true);
+    return D3.scale.linear().domain([0, maxWeight]).range([2, state.weightArcMaxSize]).clamp(true);
 }
 
 function mkColorScale(): _D3.scale.Linear<string, number> {
@@ -549,7 +554,11 @@ function makeNetworkFromState() {
 }
 
 function nodeOrLink2Value(nodeOrLink: Node | Link): string {
-    return nodeOrLink instanceof Link ? nodeOrLink.weight.getWithPrecision('*') : nodeOrLink instanceof Node ? nodeOrLink.bias.getWithPrecision('*') : '';
+    return nodeOrLink instanceof Link
+        ? nodeOrLink.weight.getWithPrecision('*', state.weightSuppressMultOp)
+        : nodeOrLink instanceof Node
+        ? nodeOrLink.bias.getWithPrecision('*', state.weightSuppressMultOp)
+        : '';
 }
 
 function value2NodeOrLink(nodeOrLink: Node | Link, value: string) {
@@ -588,9 +597,5 @@ export function getNetwork(): Network {
 }
 
 function hideOrShowMathArea(focusStyle: FocusStyle): void {
-    if (focusStyle === FocusStyle.CLICK_NODE) {
-        $('#nn-show-math-all').show();
-    } else {
-        $('#nn-show-math-all').hide();
-    }
+    $('#nn-show-math-all').show();
 }

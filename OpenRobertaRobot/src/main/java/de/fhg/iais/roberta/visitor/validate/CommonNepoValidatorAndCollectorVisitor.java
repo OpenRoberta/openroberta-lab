@@ -1,15 +1,17 @@
 package de.fhg.iais.roberta.visitor.validate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
@@ -75,7 +77,6 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.NNStepDecl;
-import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
@@ -85,6 +86,10 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     private int loopCounter = 0;
     private int currentLoop = 0;
     private NNStepDecl nnStepDecl = null;
+    // the following data is needed to enforce, that all NNStep blocks have the same input and output neurons
+    private boolean nnStepFound = false;
+    private List<String> requiredInputNeurons = new ArrayList<>();
+    private List<String> requiredOutputNeurons = new ArrayList<>();
 
     protected CommonNepoValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) //
     {
@@ -352,14 +357,17 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitNNStepStmt(NNStepStmt<Void> nnStepStmt) {
         requiredComponentVisited(nnStepStmt, nnStepStmt.getIoNeurons());
-        if ( nnStepDecl != null ) {
-            addErrorToPhrase(nnStepStmt, "NN_STEP_ONLY_ONCE");
-            return null;
-        }
 
-        JSONObject rawNetDefinition = new JSONObject(nnStepStmt.getNetDefinition().getValue());
-        nnStepDecl = new NNStepDecl(rawNetDefinition.getJSONArray("weights"), rawNetDefinition.getJSONArray("biases"));
-        Set<String> names = new HashSet<>();
+        boolean witNNDecl;
+        Data netDefinition = nnStepStmt.getNetDefinition();
+        if ( nnStepStmt.getNetDefinition() == null || nnStepStmt.getNetDefinition().getValue() == null ) {
+            witNNDecl = false;
+            nnStepDecl = new NNStepDecl(new JSONArray(), new JSONArray());
+        } else {
+            witNNDecl = true;
+            JSONObject rawNetDefinition = new JSONObject(nnStepStmt.getNetDefinition().getValue());
+            nnStepDecl = new NNStepDecl(rawNetDefinition.getJSONArray("weights"), rawNetDefinition.getJSONArray("biases"));
+        }
         String name;
         for ( Stmt<Void> neuron : nnStepStmt.getIoNeurons().get() ) {
             if ( neuron instanceof NNInputNeuronStmt ) {
@@ -374,11 +382,12 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
             } else {
                 throw new DbcException("type of neuron is not input, output or outputWoVar");
             }
-            if ( !Util.isValidJavaIdentifier(name) || !names.add(name) ) {
-                addErrorToPhrase(nnStepStmt, "NN_IO_NEURON_NAMES_INVALID");
-            }
+
         }
-        nnBeanBuilder.addNNStepDecl(nnStepDecl);
+        String optErrorKey = nnBeanBuilder.addNNStepDeclAndCheckConsistency(witNNDecl, nnStepDecl);
+        if ( optErrorKey != null ) {
+            addErrorToPhrase(nnStepStmt, optErrorKey);
+        }
         return null;
     }
 
@@ -412,7 +421,11 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<Void> getExpr) {
+    public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<Void> outputNeuronVal) {
+        String optErrorKey = nnBeanBuilder.checkNameOfOutputNeuron(outputNeuronVal.getName());
+        if ( optErrorKey != null ) {
+            addErrorToPhrase(outputNeuronVal, optErrorKey);
+        }
         return null;
     }
 

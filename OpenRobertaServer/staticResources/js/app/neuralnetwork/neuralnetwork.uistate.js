@@ -21,27 +21,32 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
             this.weights = undefined;
             this.biases = undefined;
             this.precision = '2';
+            this.weightArcMaxSize = 8;
+            this.weightSuppressMultOp = true;
             this.numInputs = 0;
             this.numOutputs = 0;
             // if no JSON is available from the program, the default from above is taken
             if (json !== undefined && json != null) {
-                this.learningRate = json.learningRate !== undefined ? json.learningRate : 0.03;
-                this.regularizationRate = json.regularizationRate !== undefined ? json.regularizationRate : 0;
-                this.noise = json.noise !== undefined ? json.noise : 0;
-                this.batchSize = json.batchSize !== undefined ? json.batchSize : 10;
-                this.discretize = json.discretize !== undefined ? json.discretize : false;
-                this.percTrainData = json.percTrainData !== undefined ? json.percTrainData : 50;
-                this.activationKey = json.activationKey !== undefined ? json.activationKey : 'relu';
+                this.learningRate = json.learningRate !== undefined ? json.learningRate : this.learningRate;
+                this.regularizationRate = json.regularizationRate !== undefined ? json.regularizationRate : this.regularizationRate;
+                this.noise = json.noise !== undefined ? json.noise : this.noise;
+                this.batchSize = json.batchSize !== undefined ? json.batchSize : this.batchSize;
+                this.discretize = json.discretize !== undefined ? json.discretize : this.discretize;
+                this.percTrainData = json.percTrainData !== undefined ? json.percTrainData : this.percTrainData;
+                this.activationKey = json.activationKey !== undefined ? json.activationKey : this.activationKey;
                 this.activation = H.activations[this.activationKey];
-                this.regularization = null;
-                this.initUntil = json.initUntil !== undefined ? json.initUntil : null;
-                this.collectStats = json.collectStats !== undefined ? json.collectStats : false;
-                this.numHiddenLayers = json.numHiddenLayers !== undefined ? json.numHiddenLayers : 0;
-                this.networkShape = json.networkShape !== undefined ? json.networkShape : [];
-                this.weights = json.weights !== undefined ? json.weights : undefined;
-                this.biases = json.biases !== undefined ? json.biases : undefined;
-                this.seed = json.seed !== undefined ? json.seed : undefined;
-                this.precision = json.precision !== undefined ? json.precision : '2';
+                this.regularization = this.regularization;
+                this.initUntil = json.initUntil !== undefined ? json.initUntil : this.initUntil;
+                this.collectStats = json.collectStats !== undefined ? json.collectStats : this.collectStats;
+                this.numHiddenLayers = json.numHiddenLayers !== undefined ? json.numHiddenLayers : this.numHiddenLayers;
+                this.networkShape = json.networkShape !== undefined ? json.networkShape : this.networkShape;
+                this.weights = json.weights !== undefined ? json.weights : this.weights;
+                this.biases = json.biases !== undefined ? json.biases : this.biases;
+                this.seed = json.seed !== undefined ? json.seed : this.seed;
+                this.precision = json.precision !== undefined ? json.precision : this.precision;
+                this.weightArcMaxSize = json.weightArcMaxSize !== undefined ? json.weightArcMaxSize : this.weightArcMaxSize;
+                this.weightSuppressMultOp = json.weightSuppressMultOp !== undefined ? json.weightSuppressMultOp : this.weightSuppressMultOp;
+                // this.x = json.x !== undefined ? json.x : this.x;
             }
             if (inputNeurons !== undefined && inputNeurons != null) {
                 this.numInputs = inputNeurons.length;

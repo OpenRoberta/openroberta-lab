@@ -65,9 +65,10 @@ export class NNumber {
         return this.weightPrefix;
     }
 
-    getWithPrecision(precision: string): string {
+    getWithPrecision(precision: string, suppressMultOp: boolean): string {
+        const prefix = suppressMultOp && this.weightPrefix === '*' ? '' : this.weightPrefix;
         const suffix = precision === '*' ? this.weightSuffix : U.toFixedPrecision(this.weightSuffix, +precision);
-        return this.weightPrefix + suffix;
+        return prefix + suffix;
     }
 }
 

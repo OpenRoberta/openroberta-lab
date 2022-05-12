@@ -250,17 +250,15 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 width: nodeSize,
                 height: nodeSize,
             });
-            if (focusStyle === FocusStyle.CLICK_NODE && focusNode !== undefined && focusNode != null && focusNode.id === node.id) {
+            if (focusNode !== undefined && focusNode != null && focusNode.id === node.id) {
                 mainRectAngle.style('fill', 'yellow');
             }
-            if (focusStyle === FocusStyle.CLICK_NODE) {
-                nodeGroup.on('click', function () {
-                    if (node.inputLinks.length > 0) {
-                        focusNode = node;
-                        drawNetworkUI(network);
-                    }
-                });
-            }
+            nodeGroup.on('click', function () {
+                if (node.inputLinks.length > 0) {
+                    focusNode = node;
+                    drawNetworkUI(network);
+                }
+            });
             var labelForId = nodeGroup.append('text').attr({
                 class: 'main-label',
                 x: 10,
@@ -288,7 +286,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 }
                 // Show the bias value depending on focus-style
                 if (focusStyle === FocusStyle.SHOW_ALL || (focusStyle === FocusStyle.CLICK_NODE && focusNode === node)) {
-                    drawValue(nodeGroup, nodeId, -2 * biasSize, nodeSize + 2 * biasSize, node.bias.get(), node.bias.getWithPrecision(state.precision));
+                    drawValue(nodeGroup, nodeId, -2 * biasSize, nodeSize + 2 * biasSize, node.bias.get(), node.bias.getWithPrecision(state.precision, state.weightSuppressMultOp));
                 }
             }
             // Draw the node's canvas.
@@ -327,15 +325,17 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 d: diagonal(datum, 0),
             });
             // Show the value of the link depending on focus-style
-            if (focusStyle === FocusStyle.SHOW_ALL || (focusStyle === FocusStyle.CLICK_NODE && link.source === focusNode) || link.dest === focusNode) {
+            if (focusStyle === FocusStyle.SHOW_ALL || (focusStyle === FocusStyle.CLICK_NODE && (link.source === focusNode || link.dest === focusNode))) {
                 var lineNode = line.node();
                 valShiftToRight = !valShiftToRight;
                 var posVal = focusStyle === FocusStyle.SHOW_ALL ? (valShiftToRight ? 0.6 : 0.4) : link.source === focusNode ? 0.6 : 0.4;
                 var pointForWeight = lineNode.getPointAtLength(lineNode.getTotalLength() * posVal);
-                drawValue(container, link.source.id + '-' + link.dest.id, pointForWeight.x, pointForWeight.y - 10, link.weight.get(), link.weight.getWithPrecision(state.precision));
+                drawValue(container, link.source.id + '-' + link.dest.id, pointForWeight.x, pointForWeight.y - 10, link.weight.get(), link.weight.getWithPrecision(state.precision, state.weightSuppressMultOp));
             }
             // Add an (almost) invisible thick path that will be used for editing the weight value on click.
-            if (focusStyle !== FocusStyle.CLICK_NODE || link.source === focusNode || link.dest === focusNode) {
+            var pathIfClickFocus = focusStyle === FocusStyle.CLICK_NODE && (link.source === focusNode || link.dest === focusNode);
+            var pathOtherFoci = focusStyle === FocusStyle.SHOW_ALL || focusStyle === FocusStyle.CLICK_WEIGHT_BIAS;
+            if (pathIfClickFocus || pathOtherFoci) {
                 var cssForPath = focusStyle !== FocusStyle.CLICK_NODE ? 'nn-weight-click' : 'nn-weight-show-click';
                 container
                     .append('path')
@@ -437,7 +437,6 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             }
             input.node().focus();
         });
-        var value = nodeOrLink instanceof neuralnetwork_nn_1.Link ? nodeOrLink.weight : nodeOrLink.bias;
         editCard.style({
             left: coordinates[0] + 20 + "px",
             top: coordinates[1] + "px",
@@ -463,7 +462,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 });
                 var val = container.select("#val-" + baseName);
                 if (!val.empty()) {
-                    val.text(link.weight.getWithPrecision(state.precision));
+                    val.text(link.weight.getWithPrecision(state.precision, state.weightSuppressMultOp));
                     drawValuesBox(val, link.weight.get());
                 }
             });
@@ -474,11 +473,11 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 D3.select("#bias-" + node.id).style('fill', colorScale(node.bias.get()));
                 var val = D3.select("#val-" + node.id);
                 if (!val.empty()) {
-                    val.text(node.bias.getWithPrecision(state.precision));
+                    val.text(node.bias.getWithPrecision(state.precision, state.weightSuppressMultOp));
                     drawValuesBox(val, node.bias.get());
                 }
             });
-            if (focusStyle === FocusStyle.CLICK_NODE && focusNode !== undefined && focusNode !== null) {
+            if (focusNode !== undefined && focusNode !== null) {
                 D3.select('#nn-show-math').html(focusNode.genMath(state.activationKey));
             }
             else {
@@ -495,8 +494,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             }
         }
         network.forEachLink(updMaxWeight);
-        var MAX_WIDTH = 8;
-        return D3.scale.linear().domain([0, maxWeight]).range([2, MAX_WIDTH]).clamp(true);
+        return D3.scale.linear().domain([0, maxWeight]).range([2, state.weightArcMaxSize]).clamp(true);
     }
     function mkColorScale() {
         var maxWeight = 0;
@@ -525,7 +523,11 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         network = new neuralnetwork_nn_1.Network(state);
     }
     function nodeOrLink2Value(nodeOrLink) {
-        return nodeOrLink instanceof neuralnetwork_nn_1.Link ? nodeOrLink.weight.getWithPrecision('*') : nodeOrLink instanceof neuralnetwork_nn_1.Node ? nodeOrLink.bias.getWithPrecision('*') : '';
+        return nodeOrLink instanceof neuralnetwork_nn_1.Link
+            ? nodeOrLink.weight.getWithPrecision('*', state.weightSuppressMultOp)
+            : nodeOrLink instanceof neuralnetwork_nn_1.Node
+                ? nodeOrLink.bias.getWithPrecision('*', state.weightSuppressMultOp)
+                : '';
     }
     function value2NodeOrLink(nodeOrLink, value) {
         if (value != null) {
@@ -565,11 +567,6 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     }
     exports.getNetwork = getNetwork;
     function hideOrShowMathArea(focusStyle) {
-        if (focusStyle === FocusStyle.CLICK_NODE) {
-            $('#nn-show-math-all').show();
-        }
-        else {
-            $('#nn-show-math-all').hide();
-        }
+        $('#nn-show-math-all').show();
     }
 });
