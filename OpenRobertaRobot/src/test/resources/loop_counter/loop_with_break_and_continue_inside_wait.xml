@@ -9,117 +9,57 @@
                     <field name="VAR">item2</field>
                     <field name="TYPE">Array_Number</field>
                     <value name="VALUE">
-						<block type="robLists_create_with" id="2/{tFlTXr`LM1l~QdJ+b"
-							intask="true">
-							<mutation items="3" list_type="Number"></mutation>
-							<field name="LIST_TYPE">Number</field>
-							<value name="ADD0">
-								<block type="math_number" id="0tpDb*eGffYl*TG6t8c~"
-									intask="true">
-									<field name="NUM">0</field>
-								</block>
-							</value>
-							<value name="ADD1">
-								<block type="math_number" id=")+Dey}Fv-y%ckS#E%)-G"
-									intask="true">
-									<field name="NUM">0</field>
-								</block>
-							</value>
-							<value name="ADD2">
-								<block type="math_number" id=")ehCLXwiF0~Y|9K+KlD8"
-									intask="true">
-									<field name="NUM">0</field>
-								</block>
-							</value>
-						</block>
-					</value>
-				</block>
-			</statement>
-		</block>
-		<block type="robControls_loopForever" id="k1tN/jf%=#km;HT8/EfB"
-			intask="true">
-			<statement name="DO">
-				<block type="robActions_motorDiff_on_for"
-					id="7S}u;{i.8^!:%MbEo^Su" intask="true">
-					<field name="DIRECTION">FOREWARD</field>
-					<value name="POWER">
-						<block type="math_number" id="9Q?(`jYC#-K0rv,ysc%Z"
-							intask="true">
-							<field name="NUM">30</field>
-						</block>
-					</value>
-					<value name="DISTANCE">
-						<block type="math_number" id="Gzr|hIx5mdXs*Vh@z7j%"
-							intask="true">
-							<field name="NUM">20</field>
-						</block>
-					</value>
-				</block>
-				<block type="robControls_wait_for" id="**h=oPtgE]oGX_{Q)xl!"
-					intask="true">
-					<mutation wait="1"></mutation>
-					<repetitions>
-						<value name="WAIT0">
-							<block type="logic_compare" id="?wYjWso5JOSiGLj1JGx4"
-								intask="true">
-								<field name="OP">EQ</field>
-								<value name="A">
-									<block type="robSensors_getSample"
-										id="Xa5;TByo120N0)B+@S=J" intask="true" deletable="false"
-										movable="false">
-										<mutation input="TOUCH_PRESSED"></mutation>
-										<field name="SENSORTYPE">TOUCH_PRESSED</field>
-										<field name="SENSORPORT">1</field>
-										<field name="SLOT" />
-										<data>ev3</data>
-									</block>
-								</value>
-								<value name="B">
-									<block type="logic_boolean" id="Ee28lnwP=C|gRLhA#OmU"
-										intask="true">
-										<field name="BOOL">TRUE</field>
-									</block>
-								</value>
-							</block>
-						</value>
-						<statement name="DO0">
-							<block type="controls_flow_statements"
-								id="OF{-NBf4c)})k!8,MU3k" intask="true">
-								<field name="FLOW">BREAK</field>
-							</block>
-						</statement>
-						<value name="WAIT1">
-							<block type="logic_compare" id="[Dd+NQPf]=r,9h%+hx-Q"
-								intask="true">
-								<field name="OP">EQ</field>
-								<value name="A">
-									<block type="robSensors_getSample"
-										id="uY*,.HfP0x.?;J)n,`OC" intask="true" deletable="false"
-										movable="false">
-										<mutation input="TOUCH_PRESSED"></mutation>
-										<field name="SENSORTYPE">TOUCH_PRESSED</field>
-										<field name="SENSORPORT">1</field>
-										<field name="SLOT" />
-										<data>ev3</data>
-									</block>
-								</value>
-								<value name="B">
-									<block type="logic_boolean" id="9VCyJlbs{bRyYA3Ffux+"
-										intask="true">
-										<field name="BOOL">TRUE</field>
-									</block>
-								</value>
-							</block>
-						</value>
-						<statement name="DO1">
-							<block type="controls_flow_statements"
-								id="l/HF4BCa/GJ~0!SCQ?cO" intask="true">
-								<field name="FLOW">CONTINUE</field>
-							</block>
-						</statement>
-					</repetitions>
-				</block>
-			</statement>
-		</block>
-	</instance>
+                        <block type="robLists_create_with" id="2/{tFlTXr`LM1l~QdJ+b" intask="true">
+                            <mutation items="3" list_type="Number"></mutation>
+                            <field name="LIST_TYPE">Number</field>
+                            <value name="ADD0">
+                                <block type="math_number" id="0tpDb*eGffYl*TG6t8c~" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                            <value name="ADD1">
+                                <block type="math_number" id=")+Dey}Fv-y%ckS#E%)-G" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                            <value name="ADD2">
+                                <block type="math_number" id=")ehCLXwiF0~Y|9K+KlD8" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="robControls_loopForever" id="k1tN/jf%=#km;HT8/EfB" intask="true">
+            <statement name="DO">
+                <block type="robControls_wait_for" id="**h=oPtgE]oGX_{Q)xl!" intask="true">
+                    <mutation wait="1"></mutation>
+                    <repetitions>
+                        <value name="WAIT0">
+                            <block type="logic_boolean" id="Ee28lnwP=C|gRLhA#OmU" intask="true">
+                                <field name="BOOL">TRUE</field>
+                            </block>
+                        </value>
+                        <statement name="DO0">
+                            <block type="controls_flow_statements" id="OF{-NBf4c)})k!8,MU3k" intask="true">
+                                <field name="FLOW">BREAK</field>
+                            </block>
+                        </statement>
+                        <value name="WAIT1">
+                            <block type="logic_boolean" id="9VCyJlbs{bRyYA3Ffux+" intask="true">
+                                <field name="BOOL">TRUE</field>
+                            </block>
+                        </value>
+                        <statement name="DO1">
+                            <block type="controls_flow_statements" id="l/HF4BCa/GJ~0!SCQ?cO" intask="true">
+                                <field name="FLOW">CONTINUE</field>
+                            </block>
+                        </statement>
+                    </repetitions>
+                </block>
+            </statement>
+        </block>
+    </instance>
 </block_set>

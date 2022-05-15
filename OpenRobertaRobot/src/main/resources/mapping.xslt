@@ -1,16 +1,16 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:b="http://de.fhg.iais.roberta.blockly" version="1.0">
-    <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" />
-    <xsl:strip-space elements="*" />
+    <xsl:output method="xml" omit-xml-declaration="yes" indent="yes"/>
+    <xsl:strip-space elements="*"/>
     <!-- identity -->
     <xsl:template match="@* | node()">
         <xsl:copy>
-            <xsl:apply-templates select="@* | node()" />
+            <xsl:apply-templates select="@* | node()"/>
         </xsl:copy>
     </xsl:template>
     <!-- description should not be escaped -->
     <xsl:template match="b:block_set/@description">
         <xsl:copy>
-            <xsl:value-of select="." disable-output-escaping="yes" />
+            <xsl:value-of select="." disable-output-escaping="yes"/>
         </xsl:copy>
     </xsl:template>
     <!-- simple remappings of the block type -->
@@ -55,12 +55,12 @@
                 <xsl:when test=". = 'robActions_write_to_pin'">robActions_write_pin</xsl:when>
                 <xsl:when test=". = 'robSensors_pin_getSample' and ancestor::b:block_set/@robottype = 'arduino'">robSensors_out_getSample</xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="." />
+                    <xsl:value-of select="."/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:attribute name="type">
-            <xsl:value-of select="$newType" />
+            <xsl:value-of select="$newType"/>
         </xsl:attribute>
     </xsl:template>
     <!-- simple remappings of the mutation input -->
@@ -80,18 +80,18 @@
                 <xsl:when test=". = 'ORIENTATION'">GYRO_ANGLE</xsl:when>
                 <xsl:when test=". = 'ACCELERATION'">ACCELEROMETER_VALUE</xsl:when>
                 <xsl:when test=". = 'GESTURE_ACTIVE'">
-                    <xsl:text>GESTURE_</xsl:text><xsl:value-of select="ancestor::b:block[contains(@type, '_getSample')]/b:field[@name = 'GESTURE']" />
+                    <xsl:text>GESTURE_</xsl:text><xsl:value-of select="ancestor::b:block[contains(@type, '_getSample')]/b:field[@name = 'GESTURE']"/>
                 </xsl:when>
                 <xsl:when test=". = 'PIN_PULSE_HIGH'">PIN_PULSEHIGH</xsl:when>
                 <xsl:when test=". = 'PIN_PULSE_LOW'">PIN_PULSELOW</xsl:when>
                 <xsl:when test=". = 'PIN_TOUCHED'">PINTOUCH_PRESSED</xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="." />
+                    <xsl:value-of select="."/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:attribute name="input">
-            <xsl:value-of select="$newInput" />
+            <xsl:value-of select="$newInput"/>
         </xsl:attribute>
     </xsl:template>
     <!-- simple remappings of the mutation mode -->
@@ -106,24 +106,24 @@
                 <xsl:when test=". = 'PULSE_LOW'">PULSELOW</xsl:when>
                 <xsl:when test=". = 'PIN_TOUCHED'">PINTOUCH_PRESSED</xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="." />
+                    <xsl:value-of select="."/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:attribute name="mode">
-            <xsl:value-of select="$newMode" />
+            <xsl:value-of select="$newMode"/>
         </xsl:attribute>
     </xsl:template>
     <!-- some field require a different content based on the type and previous content -->
     <xsl:template match="b:field/text()">
         <xsl:choose>
             <xsl:when
-                test=". = 'RED' and (ancestor::b:block[1]/@type = 'robSensors_colour_getSample' or ancestor::b:block[1]/@type = 'robSensors_light_getSample')">
+                    test=". = 'RED' and (ancestor::b:block[1]/@type = 'robSensors_colour_getSample' or ancestor::b:block[1]/@type = 'robSensors_light_getSample')">
                 <xsl:text>LIGHT</xsl:text>
             </xsl:when>
             <xsl:when test=". = 'SEEK' and ancestor::b:block[1]/@type = 'robSensors_infrared_getSample'">PRESENCE</xsl:when>
             <xsl:when
-                test="ancestor::b:block[1]/@type = 'robSensors_getSample'
+                    test="ancestor::b:block[1]/@type = 'robSensors_getSample'
                 or ancestor::b:block[1]/@type = 'mbedSensors_getSample'
                 or ancestor::b:block[1]/@type = 'bob3Sensors_getSample_bob3'
                 or ancestor::b:block[1]/@type = 'robSensors_getSample_ardu'
@@ -148,17 +148,17 @@
                     <xsl:when test=". = 'button_a'">A</xsl:when>
                     <xsl:when test=". = 'button_b'">B</xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="." />
+                        <xsl:value-of select="."/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
             <xsl:when test=". = 'PULSE_HIGH'">PULSEHIGH</xsl:when>
             <xsl:when test=". = 'PULSE_LOW'">PULSELOW</xsl:when>
-            <xsl:when test=". = 'TRUE' and ancestor::b:block[1]/@type = 'robControls_start' and (ancestor::b:block_set/@robottype = 'calliope' or ancestor::b:block_set/@robottype = 'microbit')" />
+            <xsl:when test=". = 'TRUE' and ancestor::b:block[1]/@type = 'robControls_start' and (ancestor::b:block_set/@robottype = 'calliope' or ancestor::b:block_set/@robottype = 'microbit')"/>
             <xsl:when test=". = 'button_a' and (ancestor::b:field/@name = 'SENSORPORT' or ancestor::b:field/@name = 'KEY')">A</xsl:when>
             <xsl:when test=". = 'button_b' and (ancestor::b:field/@name = 'SENSORPORT' or ancestor::b:field/@name = 'KEY')">B</xsl:when>
             <xsl:otherwise>
-                <xsl:copy-of select="." />
+                <xsl:copy-of select="."/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -168,41 +168,41 @@
             <xsl:when test="./@name = 'VALUETYPE' and ../@type = 'robActions_write_pin'">
                 <xsl:copy>
                     <xsl:attribute name="name">MODE</xsl:attribute>
-                    <xsl:value-of select="." />
+                    <xsl:value-of select="."/>
                 </xsl:copy>
             </xsl:when>
             <xsl:when test="./@name = 'PIN' and ../@type = 'robActions_write_pin'">
                 <xsl:copy>
                     <xsl:attribute name="name">ACTORPORT</xsl:attribute>
-                    <xsl:value-of select="." />
+                    <xsl:value-of select="."/>
                 </xsl:copy>
             </xsl:when>
             <xsl:when test="./@name = 'GESTURE' and ../@type = 'robSensors_getSample'">
                 <xsl:copy>
-                    <xsl:attribute name="name">GESTURE</xsl:attribute>GESTURE_<xsl:value-of select="." />
+                    <xsl:attribute name="name">GESTURE</xsl:attribute>GESTURE_<xsl:value-of select="."/>
                 </xsl:copy>
             </xsl:when>
             <xsl:when test="./@name = 'SENSORTYPE' and contains(../@type, '_getSample') and ../b:field[@name = 'GESTURE']">
                 <xsl:copy>
-                    <xsl:attribute name="name">SENSORTYPE</xsl:attribute>GESTURE_<xsl:value-of select="../b:field[@name = 'GESTURE']" />
+                    <xsl:attribute name="name">SENSORTYPE</xsl:attribute>GESTURE_<xsl:value-of select="../b:field[@name = 'GESTURE']"/>
                 </xsl:copy>
             </xsl:when>
             <xsl:when test="./@name = 'MODE' and ../b:field[@name = 'GESTURE']">
                 <xsl:copy>
                     <xsl:attribute name="name">MODE</xsl:attribute>
-                    <xsl:value-of select="../b:field[@name = 'GESTURE']" />
+                    <xsl:value-of select="../b:field[@name = 'GESTURE']"/>
                 </xsl:copy>
             </xsl:when>
             <xsl:when test="./@name = 'MODE' and ./text() = 'PITCH'">ANGLE</xsl:when>
             <xsl:when test="./@name = 'SENSORNUM' or (./@name = 'MOTORPORT' and ancestor::b:block/@type = 'robSensors_encoder_reset')">
                 <xsl:copy>
                     <xsl:attribute name="name">SENSORPORT</xsl:attribute>
-                    <xsl:value-of select="." />
+                    <xsl:value-of select="."/>
                 </xsl:copy>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:copy>
-                    <xsl:apply-templates select="@* | node()" />
+                    <xsl:apply-templates select="@* | node()"/>
                 </xsl:copy>
             </xsl:otherwise>
         </xsl:choose>
@@ -215,7 +215,7 @@
                 </xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:copy-of select="." />
+                <xsl:copy-of select="."/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

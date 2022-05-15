@@ -55,6 +55,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
@@ -1346,35 +1347,26 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         this.sb.append("Say(ToString(");
         sayTextAction.getMsg().accept(this);
-        this.sb.append("), ");
-        this.generateSpeedAndPitchArgumentsOrDefault(sayTextAction);
-        this.sb.append(");");
+        this.sb.append("), 30, 50);"); // set defaults
         return null;
     }
 
-    private void generateSpeedAndPitchArgumentsOrDefault(SayTextAction<Void> sayTextAction) {
-        Expr<Void> speed = sayTextAction.getSpeed();
-        Expr<Void> pitch = sayTextAction.getPitch();
-        if ( !isExprEmptyBlock(speed) && !isExprEmptyBlock(pitch) ) {
-            generateSpeedAndPitchArguments(speed, pitch);
-        } else {
-            generateDefaultSpeedAndPitchArguments();
-        }
+    @Override
+    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<Void> sayTextAction) {
+        this.sb.append("Say(ToString(");
+        sayTextAction.getMsg().accept(this);
+        this.sb.append("), ");
+        sayTextAction.getSpeed().accept(this);
+        this.sb.append(", ");
+        sayTextAction.getPitch().accept(this);
+        this.sb.append(");");
+
+        return null;
     }
 
     private boolean isExprEmptyBlock(Expr<Void> expr) {
         BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
         return expr.getKind().equals(emptyBlock);
-    }
-
-    private void generateSpeedAndPitchArguments(Expr<Void> speed, Expr<Void> pitch) {
-        speed.accept(this);
-        this.sb.append(", ");
-        pitch.accept(this);
-    }
-
-    private void generateDefaultSpeedAndPitchArguments() {
-        this.sb.append("30, 50");
     }
 
     private void generateRandomSeed() {

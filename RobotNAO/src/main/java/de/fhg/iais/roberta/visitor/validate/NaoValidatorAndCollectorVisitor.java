@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
@@ -202,8 +203,14 @@ public class NaoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         requiredComponentVisited(sayTextAction, sayTextAction.getMsg());
-        optionalComponentVisited(sayTextAction.getPitch());
-        optionalComponentVisited(sayTextAction.getSpeed());
+        return null;
+    }
+
+    @Override
+    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<Void> sayTextAction) {
+        requiredComponentVisited(sayTextAction, sayTextAction.getMsg());
+        requiredComponentVisited(sayTextAction, sayTextAction.getPitch());
+        requiredComponentVisited(sayTextAction, sayTextAction.getSpeed());
         return null;
     }
 

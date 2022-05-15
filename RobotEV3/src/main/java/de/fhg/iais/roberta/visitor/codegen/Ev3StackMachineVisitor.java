@@ -40,6 +40,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
@@ -174,18 +175,20 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitSayTextAction(SayTextAction<V> sayTextAction) {
         sayTextAction.getMsg().accept(this);
         BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
-        if ( sayTextAction.getSpeed().getKind().equals(emptyBlock) ) {
-            NumConst<V> n = NumConst.make("30");
-            n.accept(this);
-        } else {
-            sayTextAction.getSpeed().accept(this);
-        }
-        if ( sayTextAction.getPitch().getKind().equals(emptyBlock) ) {
-            NumConst<V> n = NumConst.make("50");
-            n.accept(this);
-        } else {
-            sayTextAction.getPitch().accept(this);
-        }
+        NumConst<V> n = NumConst.make("30");
+        n.accept(this);
+        NumConst<V> p = NumConst.make("50");
+        p.accept(this);
+        JSONObject o = makeNode(C.SAY_TEXT_ACTION);
+
+        return app(o);
+    }
+
+    @Override
+    public V visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<V> sayTextAction) {
+        sayTextAction.getMsg().accept(this);
+        sayTextAction.getSpeed().accept(this);
+        sayTextAction.getPitch().accept(this);
         JSONObject o = makeNode(C.SAY_TEXT_ACTION);
 
         return app(o);

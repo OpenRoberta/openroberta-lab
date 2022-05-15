@@ -25,8 +25,6 @@ import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET_REMOVE;
 import static de.fhg.iais.roberta.mode.general.ListElementOperations.INSERT;
 import static de.fhg.iais.roberta.mode.general.ListElementOperations.REMOVE;
 import static de.fhg.iais.roberta.mode.general.ListElementOperations.SET;
-import de.fhg.iais.roberta.syntax.BlockType;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
@@ -53,6 +51,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -259,13 +258,26 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
             } else {
                 sayTextAction.getMsg().accept(this);
             }
-            BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
-            if ( !(sayTextAction.getSpeed().getKind().equals(emptyBlock) && sayTextAction.getPitch().getKind().equals(emptyBlock)) ) {
-                this.sb.append(",");
-                sayTextAction.getSpeed().accept(this);
-                this.sb.append(",");
-                sayTextAction.getPitch().accept(this);
+            this.sb.append(");");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<Void> sayTextAction) {
+        if ( !this.brickConfiguration.getRobotName().equals("ev3lejosv0") ) {
+            this.sb.append("hal.sayText(");
+            if ( !sayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
+                this.sb.append("String.valueOf(");
+                sayTextAction.getMsg().accept(this);
+                this.sb.append(")");
+            } else {
+                sayTextAction.getMsg().accept(this);
             }
+            this.sb.append(",");
+            sayTextAction.getSpeed().accept(this);
+            this.sb.append(",");
+            sayTextAction.getPitch().accept(this);
             this.sb.append(");");
         }
         return null;

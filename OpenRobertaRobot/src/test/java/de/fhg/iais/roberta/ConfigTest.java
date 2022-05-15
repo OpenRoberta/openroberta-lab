@@ -11,22 +11,15 @@ import org.junit.Test;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.collect.AbstractUsedHardwareCollectorVisitor;
 
 public class ConfigTest extends AstTest {
-
-    private static class TestUsedHardwareVisitor extends AbstractUsedHardwareCollectorVisitor {
-        TestUsedHardwareVisitor() {
-            super(null, null);
-        }
-    }
 
     private static final ConfigurationComponent ledComp = new ConfigurationComponent("LED", true, "port1", "userPort1", Collections.emptyMap());
     private static final ConfigurationComponent tempComp = new ConfigurationComponent("TEMPERATURE", false, "port2", "userPort2", Collections.emptyMap());
     private static final ConfigurationComponent humiComp = new ConfigurationComponent("HUMIDITY", false, "port3", "userPort3", Collections.emptyMap());
 
     @Test
-    public void builder_ShouldCreateCorrectConfig_WhenProvidedData() {
+    public void builder_ShouldCreateCorrectConfig() {
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setDescription("test desc");
         builder.setTags("test tag");
@@ -77,11 +70,5 @@ public class ConfigTest extends AstTest {
         ConfigurationAst config = builder.build();
 
         config.getConfigurationComponent("does not exist");
-    }
-
-    @Test(expected = DbcException.class)
-    public void compAccept_ShouldThrowDbcException_WhenTryingToVisit() {
-        TestUsedHardwareVisitor visitor = new TestUsedHardwareVisitor();
-        tempComp.accept(visitor);
     }
 }

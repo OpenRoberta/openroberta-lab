@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
@@ -179,8 +180,18 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        optionalComponentVisited(sayTextAction.getSpeed());
-        optionalComponentVisited(sayTextAction.getPitch());
+        requiredComponentVisited(sayTextAction, sayTextAction.getMsg());
+        if ( this.robotConfiguration.getRobotName().equals("ev3lejosv0") ) {
+            addWarningToPhrase(sayTextAction, "BLOCK_NOT_SUPPORTED");
+        }
+        usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.VOICE));
+        return null;
+    }
+
+    @Override
+    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<Void> sayTextAction) {
+        requiredComponentVisited(sayTextAction, sayTextAction.getSpeed());
+        requiredComponentVisited(sayTextAction, sayTextAction.getPitch());
         requiredComponentVisited(sayTextAction, sayTextAction.getMsg());
         if ( this.robotConfiguration.getRobotName().equals("ev3lejosv0") ) {
             addWarningToPhrase(sayTextAction, "BLOCK_NOT_SUPPORTED");

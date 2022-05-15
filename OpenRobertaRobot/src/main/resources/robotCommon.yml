@@ -286,7 +286,11 @@ block:
   SAY_TEXT:
     category: ACTOR
     implementor: de.fhg.iais.roberta.syntax.action.speech.SayTextAction
-    type: [ robActions_sayText,robActions_sayText_parameters,naoActions_sayText ]
+    type: [ robActions_sayText,naoActions_sayText ]
+  SAY_TEXT_WITH_SPEED_AND_PITCH:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction
+    type: [ robActions_sayText_parameters ]
   LIGHT_STATUS_ACTION:
     category: ACTOR
     implementor: de.fhg.iais.roberta.syntax.action.light.LightStatusAction
@@ -862,7 +866,7 @@ configuration:
   MOISTURE: [ robConf_moisture, robBrick_moisture ]
   MOTION: [ robConf_motion, robBrick_motion ]
   MOTOR: [ robConf_motor ]
-  DIFFERENTIALDRIVE: [robConf_differentialdrive]
+  DIFFERENTIALDRIVE: [ robConf_differentialdrive ]
   OTHER: [ robBrick_actor ]
   PIN_VALUE: [ robSensors_pin_getSample ]
   POTENTIOMETER: [ robConf_potentiometer ]
@@ -875,7 +879,7 @@ configuration:
   STEPMOTOR: [ robConf_stepmotor ]
   TEMPERATURE: [ robConf_temperature, robBrick_temperature ]
   TIMER: [ robBrick_timer ]
-  TOUCH: [ robBrick_touch ,robConf_touch]
+  TOUCH: [ robBrick_touch ,robConf_touch ]
   ULTRASONIC: [ robConf_ultrasonic, robBrick_ultrasonic ]
   WEDO: [ robBrick_WeDo-Brick ]
   WIRELESS: [ robConf_wireless ]

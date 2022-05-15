@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
@@ -294,6 +295,15 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     @Override
     default Phrase<V> visitSayTextAction(SayTextAction<Phrase<V>> sayTextAction) {
         return SayTextAction
+            .make(
+                (Expr<V>) sayTextAction.getMsg().modify(this),
+                sayTextAction.getProperty(),
+                sayTextAction.getComment());
+    }
+
+    @Override
+    default Phrase<V> visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<Phrase<V>> sayTextAction) {
+        return SayTextWithSpeedAndPitchAction
             .make(
                 (Expr<V>) sayTextAction.getMsg().modify(this),
                 (Expr<V>) sayTextAction.getSpeed().modify(this),

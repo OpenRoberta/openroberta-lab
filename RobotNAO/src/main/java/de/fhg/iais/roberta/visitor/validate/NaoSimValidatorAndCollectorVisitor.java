@@ -37,6 +37,7 @@ import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
@@ -269,6 +270,11 @@ public class NaoSimValidatorAndCollectorVisitor extends NaoValidatorAndCollector
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.SAY_TEXT);
         return super.visitSayTextAction(sayTextAction);
+    }
+
+    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<Void> sayTextAction) {
+        usedMethodBuilder.addUsedMethod(NaoSimMethods.SAY_TEXT);
+        return super.visitSayTextWithSpeedAndPitchAction(sayTextAction);
     }
 
     @Override

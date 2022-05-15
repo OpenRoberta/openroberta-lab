@@ -28,6 +28,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
@@ -388,6 +389,12 @@ public class InfoCollector<T> extends BaseVisitor<T> implements ILanguageVisitor
 
     @Override
     public T visitSayTextAction(SayTextAction<T> sayTextAction) {
+        extractInfos(sayTextAction);
+        return null;
+    }
+
+    @Override
+    public T visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<T> sayTextAction) {
         extractInfos(sayTextAction);
         return null;
     }

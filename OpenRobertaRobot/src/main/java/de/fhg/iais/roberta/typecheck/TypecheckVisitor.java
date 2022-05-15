@@ -29,6 +29,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
@@ -421,6 +422,11 @@ public class TypecheckVisitor extends BaseVisitor<BlocklyType> implements ILangu
 
     @Override
     public BlocklyType visitSayTextAction(SayTextAction<BlocklyType> sayTextAction) {
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<BlocklyType> sayTextAction) {
         return null;
     }
 

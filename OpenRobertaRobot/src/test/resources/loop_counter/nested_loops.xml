@@ -6,115 +6,72 @@
         </block>
         <block type="robControls_loopForever" id="k1tN/jf%=#km;HT8/EfB" intask="true">
             <statement name="DO">
-                <block type="robActions_motorDiff_on_for" id="7S}u;{i.8^!:%MbEo^Su" intask="true">
-                    <field name="DIRECTION">FOREWARD</field>
-					<value name="POWER">
-						<block type="math_number" id="9Q?(`jYC#-K0rv,ysc%Z"
-							intask="true">
-							<field name="NUM">30</field>
-						</block>
-					</value>
-					<value name="DISTANCE">
-						<block type="math_number" id="Gzr|hIx5mdXs*Vh@z7j%"
-							intask="true">
-							<field name="NUM">20</field>
-						</block>
-					</value>
-				</block>
-				<block type="robControls_if" id="wm/!h,R1zwuB76@AqBXt"
-					intask="true">
-					<value name="IF0">
-						<block type="logic_compare" id="mKlXt5ct5)D/buX`kdG["
-							intask="true">
-							<field name="OP">EQ</field>
-							<value name="A">
-								<block type="math_number" id="rGh_w@93[wX}Q_2|aq*I"
-									intask="true">
-									<field name="NUM">30</field>
-								</block>
-							</value>
-							<value name="B">
-								<block type="math_number" id="D`TDsLxrKbj,XFKzCgN:"
-									intask="true">
-									<field name="NUM">20</field>
-								</block>
-							</value>
-						</block>
-					</value>
-					<statement name="DO0">
-						<block type="robControls_wait_for" id="%}lH{v|qN@xZ|o1/EXT)"
-							intask="true">
-							<value name="WAIT0">
-								<block type="logic_compare" id="egc^7~@)Nkk7:e+6NHEe"
-									intask="true">
-									<field name="OP">EQ</field>
-									<value name="A">
-										<block type="robSensors_getSample"
-											id="(2lak@[yH*8U1wza,|.+" intask="true" deletable="false"
-											movable="false">
-											<mutation input="TOUCH_PRESSED"></mutation>
-											<field name="SENSORTYPE">TOUCH_PRESSED</field>
-											<field name="SENSORPORT">1</field>
-											<field name="SLOT" />
-											<data>ev3</data>
-										</block>
-									</value>
-									<value name="B">
-										<block type="logic_boolean" id="%1h#M@(il=`4uUN-IR:w"
-											intask="true">
-											<field name="BOOL">TRUE</field>
-										</block>
-									</value>
-								</block>
-							</value>
-						</block>
-					</statement>
-				</block>
-				<block type="robControls_for" id="G`h.q{Z;e-jXO~kGE+za"
-					intask="true">
-					<field name="VAR">i</field>
-					<value name="FROM">
-						<block type="math_number" id="w0zr{`w;k;A66k3cJ^4#"
-							intask="true">
-							<field name="NUM">1</field>
-						</block>
-					</value>
-					<value name="TO">
-						<block type="math_number" id="-K;KK2}_;5WwsjD7O``K"
-							intask="true">
-							<field name="NUM">10</field>
-						</block>
-					</value>
-					<value name="BY">
-						<block type="math_number" id="XGnO+!TT8o2i|]Gm=yXR"
-							intask="true">
-							<field name="NUM">1</field>
-						</block>
-					</value>
-					<statement name="DO">
-						<block type="robActions_display_text"
-							id="0+e*|h[IT;Vr1nwOYqx6" intask="true">
-							<value name="OUT">
-								<block type="text" id="!g5+M4Kt4cJz^CG9@mP8" intask="true">
-									<field name="TEXT">Hallo</field>
-								</block>
-							</value>
-							<value name="COL">
-								<block type="math_number" id="[xdE#=eh!X}v*OHUD%Yv"
-									intask="true">
-									<field name="NUM">0</field>
-								</block>
-							</value>
-							<value name="ROW">
-								<block type="math_number" id=";f:0P%%XZBNz3U@,Q5QL"
-									intask="true">
-									<field name="NUM">0</field>
-								</block>
-							</value>
-						</block>
-					</statement>
-				</block>
-			</statement>
-		</block>
-	</instance>
+                <block type="robControls_if" id="wm/!h,R1zwuB76@AqBXt"
+                       intask="true">
+                    <value name="IF0">
+                        <block type="logic_compare" id="mKlXt5ct5)D/buX`kdG["
+                               intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="math_number" id="rGh_w@93[wX}Q_2|aq*I"
+                                       intask="true">
+                                    <field name="NUM">30</field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="math_number" id="D`TDsLxrKbj,XFKzCgN:"
+                                       intask="true">
+                                    <field name="NUM">20</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                    <statement name="DO0">
+                        <block type="robControls_wait_for" id="%}lH{v|qN@xZ|o1/EXT)"
+                               intask="true">
+                            <value name="WAIT0">
+                                <block type="logic_boolean" id="%1h#M@(il=`4uUN-IR:w"
+                                       intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="robControls_for" id="G`h.q{Z;e-jXO~kGE+za"
+                       intask="true">
+                    <field name="VAR">i</field>
+                    <value name="FROM">
+                        <block type="math_number" id="w0zr{`w;k;A66k3cJ^4#"
+                               intask="true">
+                            <field name="NUM">1</field>
+                        </block>
+                    </value>
+                    <value name="TO">
+                        <block type="math_number" id="-K;KK2}_;5WwsjD7O``K"
+                               intask="true">
+                            <field name="NUM">10</field>
+                        </block>
+                    </value>
+                    <value name="BY">
+                        <block type="math_number" id="XGnO+!TT8o2i|]Gm=yXR"
+                               intask="true">
+                            <field name="NUM">1</field>
+                        </block>
+                    </value>
+                    <statement name="DO">
+                        <block type="robControls_wait_for" id="%}lH{v|qN@xZ|o1/EXT)"
+                               intask="true">
+                            <value name="WAIT0">
+                                <block type="logic_boolean" id="%1h#M@(il=`4uUN-IR:w"
+                                       intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+            </statement>
+        </block>
+    </instance>
 </block_set>
