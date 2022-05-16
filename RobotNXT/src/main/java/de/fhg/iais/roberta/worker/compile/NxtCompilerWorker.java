@@ -49,11 +49,11 @@ public class NxtCompilerWorker implements IWorker {
         Path path = Paths.get(compilerResourcesDir);
         Path base = Paths.get("");
 
-        String nbcCompilerFileName = compilerResourcesDir + "/windows/nbc.exe";
+        String nbcCompilerFileName = Util.getResolvedPath(compilerResourcesDir + "/windows/nbc.exe");
         if ( SystemUtils.IS_OS_LINUX ) {
             nbcCompilerFileName = "nbc";
         } else if ( SystemUtils.IS_OS_MAC ) {
-            nbcCompilerFileName = compilerResourcesDir + "/osx/nbc";
+            nbcCompilerFileName = Util.getResolvedPath(compilerResourcesDir + "/osx/nbc");
         }
 
         String[] executableWithParameters =
@@ -61,8 +61,8 @@ public class NxtCompilerWorker implements IWorker {
                 nbcCompilerFileName,
                 "-q",
                 "-sm-",
-                tempDir + token + "/" + mainFile + "/source/" + mainFile + "." + project.getSourceCodeFileExtension(),
-                "-O=" + tempDir + token + "/" + mainFile + "/target/" + mainFile + "." + project.getBinaryFileExtension(),
+                Util.getResolvedPath(tempDir + token + "/" + mainFile + "/source/" + mainFile + "." + project.getSourceCodeFileExtension()),
+                "-O=" + Util.getResolvedPath(tempDir + token + "/" + mainFile + "/target/" + mainFile + "." + project.getBinaryFileExtension()),
                 "-I=" + base.resolve(path).toAbsolutePath().normalize()
             };
         Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource, project.isNativeEditorCode());

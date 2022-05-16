@@ -30,7 +30,7 @@ public class MicrobitCompilerWorker implements IWorker {
         String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         String sourceCode = project.getSourceCode().toString();
 
-        String scriptName = compilerResourcesDir + "/compile.py";
+        String scriptName = Util.getResolvedPath(compilerResourcesDir + "/compile.py");
 
         String[] executableWithParameters =
             {

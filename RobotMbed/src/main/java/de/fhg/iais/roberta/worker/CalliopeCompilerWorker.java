@@ -48,7 +48,7 @@ public class CalliopeCompilerWorker implements IWorker {
         final String tempDir = compilerWorkflowBean.getTempDir();
         final String crosscompilerSource = project.getSourceCode().toString();
         Util.storeGeneratedProgram(tempDir, crosscompilerSource, project.getToken(), project.getProgramName(), "." + project.getSourceCodeFileExtension());
-        String scriptName = compilerResourcesDir + "../compile." + (SystemUtils.IS_OS_WINDOWS ? "bat" : "sh");
+        String scriptName = Util.getResolvedPath(compilerResourcesDir + "../compile." + (SystemUtils.IS_OS_WINDOWS ? "bat" : "sh"));
         Boolean bluetooth = project.getRobot().equals("calliope2017");
         String bluetoothParam = bluetooth ? "-b" : "";
         Path pathToSrcFile = Paths.get(tempDir + project.getToken() + "/" + project.getProgramName());

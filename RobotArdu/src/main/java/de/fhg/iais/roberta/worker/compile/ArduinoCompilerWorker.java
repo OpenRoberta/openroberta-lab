@@ -37,7 +37,7 @@ public class ArduinoCompilerWorker implements IWorker {
         String token = project.getToken();
         final String crosscompilerSource = project.getSourceCode().toString();
         Util.storeGeneratedProgram(tempDir, crosscompilerSource, token, programName, "." + project.getSourceCodeFileExtension());
-        String scriptName = compilerResourcesDir + "arduino-resources/build_project.sh";
+        String scriptName = Util.getResolvedPath(compilerResourcesDir + "arduino-resources/build_project.sh");
 
         String boardVariant = "";
         String mmcu = "NOTUSED"; // important for Windows
@@ -58,21 +58,21 @@ public class ArduinoCompilerWorker implements IWorker {
                 boardVariant = "standard";
                 mmcu = "atmega328p";
                 arduinoVariant = "ARDUINO_AVR_UNO";
-                scriptName = compilerResourcesDir + "arduino-resources/build_project_mbot.sh";
+                scriptName = Util.getResolvedPath(compilerResourcesDir + "arduino-resources/build_project_mbot.sh");
                 arduinoArch = "avr";
                 break;
             case "botnroll":
                 boardVariant = "standard";
                 mmcu = "atmega328p";
                 arduinoVariant = "ARDUINO_AVR_UNO";
-                scriptName = compilerResourcesDir + "arduino-resources/build_project_botnroll.sh";
+                scriptName = Util.getResolvedPath(compilerResourcesDir + "arduino-resources/build_project_botnroll.sh");
                 arduinoArch = "avr";
                 break;
             case "unowifirev2":
                 boardVariant = "uno2018";
                 mmcu = "atmega4809";
                 arduinoVariant = "ARDUINO_AVR_UNO_WIFI_REV2";
-                scriptName = compilerResourcesDir + "arduino-resources/build_project_unowifirev2.sh";
+                scriptName = Util.getResolvedPath(compilerResourcesDir + "arduino-resources/build_project_unowifirev2.sh");
                 arduinoArch = "megaavr";
                 break;
             case "mega":
@@ -84,28 +84,28 @@ public class ArduinoCompilerWorker implements IWorker {
             case "sensebox":
                 boardVariant = "sensebox_mcu";
                 arduinoVariant = "ARDUINO_SAMD_MKR1000";
-                scriptName = compilerResourcesDir + "arduino-resources/build_project_sensebox.sh";
+                scriptName = Util.getResolvedPath(compilerResourcesDir + "arduino-resources/build_project_sensebox.sh");
                 arduinoArch = "samd";
                 break;
             case "bob3":
                 mmcu = "atmega88";
-                scriptName = compilerResourcesDir + "arduino-resources/build_project_bob3.sh";
+                scriptName = Util.getResolvedPath(compilerResourcesDir + "arduino-resources/build_project_bob3.sh");
                 break;
             case "rob3rta":
                 mmcu = "atmega328pb";
-                scriptName = compilerResourcesDir + "arduino-resources/build_project_rob3rta.sh";
+                scriptName = Util.getResolvedPath(compilerResourcesDir + "arduino-resources/build_project_rob3rta.sh");
                 break;
             case "festobionic":
             case "festobionicflower":
                 boardVariant = "esp32";
                 arduinoVariant = "ARDUINO_ESP32_DEV";
-                scriptName = compilerResourcesDir + "arduino-resources/build_project_" + project.getRobot() + ".sh";
+                scriptName = Util.getResolvedPath(compilerResourcesDir + "arduino-resources/build_project_" + project.getRobot() + ".sh");
                 arduinoArch = "esp32";
                 break;
             case "nano33ble":
                 boardVariant = "nano_33_iot";
                 arduinoVariant = "ARDUINO_ARDUINO_NANO33BLE";
-                scriptName = compilerResourcesDir + "arduino-resources/build_project_nano33ble.sh";
+                scriptName = Util.getResolvedPath(compilerResourcesDir + "arduino-resources/build_project_nano33ble.sh");
                 arduinoArch = "mbed";
                 break;
             default:
@@ -164,8 +164,8 @@ public class ArduinoCompilerWorker implements IWorker {
                                         Files.walk(Paths.get(targetDir)).filter(Files::isRegularFile),
                                         Stream
                                             .of(
-                                                Paths.get(compilerResourcesDir + "arduino-resources/hardware/esp32/esp32/tools/sdk/bin/bootloader_qio_80m.bin"),
-                                                Paths.get(compilerResourcesDir + "arduino-resources/hardware/esp32/esp32/tools/partitions/boot_app0.bin")))
+                                                Paths.get(Util.getResolvedPath(compilerResourcesDir + "arduino-resources/hardware/esp32/esp32/tools/sdk/bin/bootloader_qio_80m.bin")),
+                                                Paths.get(Util.getResolvedPath(compilerResourcesDir + "arduino-resources/hardware/esp32/esp32/tools/partitions/boot_app0.bin"))))
                                     .collect(Collectors.toList()),
                                 Paths.get(targetDir, programName + "." + project.getBinaryFileExtension()));
                         base64EncodedHex =

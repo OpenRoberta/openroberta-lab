@@ -591,4 +591,21 @@ public class Util {
 
         return Integer.signum(vals1.length - vals2.length);
     }
+
+    /**
+     * Helper method to resolve the path for relevant OS being used.
+     * Expects a UNIX style path delimited by "/" as its input.
+     *
+     * @param pathToBeResolved the UNIX path that needs to be resolved.
+     * @return the resolved path.
+     * @throws AssertionError when called with empty path.
+     */
+    public static String getResolvedPath(String pathToBeResolved) {
+        Assert.nonEmptyString(pathToBeResolved, "Path cannot be empty!");
+        Path path = pathToBeResolved.startsWith("/") ? Paths.get("/") : Paths.get("");
+        for ( String dir : pathToBeResolved.split("/") ) {
+            path = path.resolve(dir);
+        }
+        return path.toAbsolutePath().normalize().toString();
+    }
 }
