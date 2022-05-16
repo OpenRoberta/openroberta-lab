@@ -49,13 +49,6 @@ public class Util {
      * YAML parser. NOT thread-safe!
      */
     private static final Yaml YAML;
-
-    static {
-        LoaderOptions lo = new LoaderOptions();
-        lo.setAllowDuplicateKeys(false);
-        YAML = new Yaml(lo);
-    }
-
     private static final String[] reservedWords = new String[] {
         //  @formatter:off
         "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const", "continue", "default", "do", "double", "else", "enum",
@@ -64,8 +57,12 @@ public class Util {
         "throw", "throws", "transient", "true", "try", "void", "volatile", "while"
         //  @formatter:on
     };
-
     private static final AtomicInteger errorTicketNumber = new AtomicInteger(0);
+    static {
+        LoaderOptions lo = new LoaderOptions();
+        lo.setAllowDuplicateKeys(false);
+        YAML = new Yaml(lo);
+    }
 
     private Util() {
         // no objects
@@ -590,5 +587,22 @@ public class Util {
         }
 
         return Integer.signum(vals1.length - vals2.length);
+    }
+
+    /**
+     * Helper method to get the absolute path for relevant OS being used.
+     * Expects a UNIX style path delimited by "/" as its input.
+     *
+     * @param pathToBeResolved the UNIX path that needs to be resolved.
+     * @return the OS specific absolute path.
+     * @throws AssertionError when called with empty path.
+     */
+    public static String getOsSpecificAbsolutePath(String pathToBeResolved) {
+        Assert.nonEmptyString(pathToBeResolved, "Path cannot be empty!");
+        Path path = pathToBeResolved.startsWith("/") ? Paths.get("/") : Paths.get("");
+        for ( String dir : pathToBeResolved.split("/") ) {
+            path = path.resolve(dir);
+        }
+        return path.toAbsolutePath().normalize().toString();
     }
 }

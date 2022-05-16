@@ -1,4 +1,3 @@
-
 Open Roberta Lab
 ================
 
@@ -25,29 +24,29 @@ see [Wiki - Community](https://github.com/OpenRoberta/openroberta-lab/wiki/Commu
 After a fresh git clone you get the **openroberta-lab** project folder. It includes almost everything you need to setup and extend your own 
 openrobertalab server. License information is available in the **docs** folder.
 
-Things you need on your computer:
+#### Prerequisites
 
 * Java JDK >= 1.8 (e.g. `openjdk-11-jdk` on Ubuntu) and JAVA JDK <= 13.0.2
-* Maven >= 3.2
+> For Windows, we recommend the Java installation [found here](https://docs.microsoft.com/en-us/java/openjdk/download#openjdk-11015-lts).
+* Maven
 * NPM
 * Git
 * Web browser
 
-If you would like your local server to compile code for the different systems, you need to install additional software (crosscompilers, libraries, ...):
+If you would like your local server to compile code for the different systems, you need to install additional software (crosscompilers, libraries, ...).
 
-To "install" directly downloaded compilers on Linux systems, extract them to a folder of your choice (e.g. `/opt/compilers/`) and add the `bin` folder to 
-your `PATH`, e.g. with `echo export PATH="$PATH:<path-to-the-compiler-folder>/bin" >> ~/.profile`.
+> It is recommended to download additional software to a user-defined directory, such as `/opt/compilers/`, as this will save us the trouble of finding the correct path to the binaries later on!
 
-on Ubuntu:
+**on Ubuntu**:
 * Arduino based robots
   * `sudo apt-get install libusb-0.1-4`
   * `sudo apt-get install binutils-avr gdb-avr avrdude`
-  * install [avr-gcc](http://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-x86_64-pc-linux-gnu.tar.bz2)
+  * download and unpack [avr-gcc](https://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-x86_64-pc-linux-gnu.tar.bz2) to a directory of your choice.
 * NXT
   * `sudo apt-get install nbc`
 * Calliope
   * `sudo apt-get install srecord libssl-dev`
-  * install the latest [gcc-arm-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
+  * download and unpack the latest [gcc-arm-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) to a directory of your choice.
 * micro:bit
   * `pip install uflash` (to install pip run `sudo apt install` with `python-pip` on Ubuntu 18.04 and `python3-pip` on 20.04)
 * EV3 c4ev3
@@ -56,30 +55,45 @@ on Ubuntu:
   * `sudo apt-get install python` (Python 2 is needed, it is called `python` for Ubuntu 18.04 and `python2` for 20.04)
 * Bionics4Education
   * `sudo apt-get install python-serial` (`python3-serial` for Ubuntu 20.04, in this case you should have `python` default to `python3`, test it by running `python --version` and if it is `2.x` you can change it by running `sudo apt-get install python-is-python3`)
-  * install [xtensa-esp32-elf](https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz)
- 
-on Windows:
+  * download and unpack [xtensa-esp32-elf](https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz) to a directory of your choice.
+
+Next, add the downloaded binaries to the `PATH`. The `<path-to-the-compiler-folder>` should be replaced with the download directory (created earlier) + the compiler folder:
+```shell
+echo export PATH="$PATH:<path-to-the-compiler-folder>/bin" >> ~/.profile`
+```
+
+**on Windows**:
 * Arduino based robots
-  * install [avr-gcc](http://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-i686-w64-mingw32.zip)
-* NXT
-  * currently, the installation description is missing and will be supplied soon
+  * download and unpack [avr-gcc](https://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-i686-w64-mingw32.zip) to a directory of your choice.
+  > Arduino Nano 33 BLE and Arduino Uno Wifi Rev 2 do not compile on Windows at the moment :(
 * Calliope
-  * install [gcc-arm-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
-  * install [srecord](http://srecord.sourceforge.net/)
+  * download and unpack the latest [gcc-arm-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) to a directory of your choice.
+  * download and unpack [srecord](https://sourceforge.net/projects/srecord/files/) to a directory of your choice.
 * micro:bit
   * install Python 3
   * `pip install uflash`
+* EV3 c4ev3
+  > No compiler is made available for Windows :(
 * Edison
   * install Python 2
 * Bionics4Education
-  * install [xtensa-esp32-elf with ESP-IDF Tools](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/windows-setup.html)
-  
-The cross-compiler needs resources to work properly (header files, libraries, ...). These resources change little over time and are stored in the '[ora-cc-rsc](https://github.com/OpenRoberta/ora-cc-rsc)' repository.
+  * install [xtensa-esp32-elf with ESP-IDF Tools](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/windows-setup.html) as per the guide.
 
-Please clone that directory and build it using `mvn clean install`. When the openroberta-lab server is started, you have to supply the path to these resources (see below). If the resources are not available,
-everything works fine (writing programs, import, export, creating accounts, etc.), but running programs on real robots doesn't work, because the cross-compiler will fail.
+Next, add the downloaded and installed binaries to the `PATH`:
+  * most libraries provide an option of adding the binaries to the system `PATH` during installation.
+  * for others, navigate to _Edit the system environment variables_ and add the path manually. The path here is the download directory (created earlier) + the compiler folder.
+  * for Python 2, rename the executable file from `python.exe` to `python2.exe`.
 
-Please also check our wiki for detailed installation instructions, development procedure, coding conventions and further reading. We also use the Github issue tracking system.
+The cross-compiler needs resources to work properly (header files, libraries, ...). These resources change little over time and are stored in
+the '[ora-cc-rsc](https://github.com/OpenRoberta/ora-cc-rsc)' repository.
+
+Please clone that directory and build it using `mvn clean install`. When the openroberta-lab server is started, you have to supply the path to these resources (
+see below). If the resources are not available,
+everything works fine (writing programs, import, export, creating accounts, etc.), but running programs on real robots doesn't work, because the cross-compiler
+will fail.
+
+Please also check our wiki for detailed installation instructions, development procedure, coding conventions and further reading. We also use the Github issue
+tracking system.
 Please file issues in the main project **openroberta-lab**.
 
 ### Fast installation with maven
@@ -204,10 +218,13 @@ To work with the frontend (e.g. compiling the sources) we defined the following 
 
 **Attention:** Only check in those generated files build with `npm run build` or `npm run watch`!
 
+#### Testing
 To run backend tests, use `mvn test`. Running `mvn clean install` will make a stable, reproducible build with all unit tests executed.
 
 To run the integration tests you have to supply an additional flag: `mvn clean install -PrunIT`.
 For these you need an environment variable `robot_crosscompiler_resourcebase` pointing to your `ora-cc-rsc` directory.
+
+> The integration tests don't run successfully on Windows at the moment, as compilers for some robots (Arduino Nano 33 BLE, Arduino Uno Wifi Rev 2 and C4EV3) are not available.
 
 #### Some Frameworks used
 
