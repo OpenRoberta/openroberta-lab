@@ -56,7 +56,6 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     })(FocusStyle || (FocusStyle = {}));
     var D3; // used for lazy loading
     var focusStyle = FocusStyle.CLICK_WEIGHT_BIAS;
-    hideOrShowMathArea(focusStyle);
     var focusNode = null;
     var state = null;
     var network = null;
@@ -120,7 +119,6 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                             if (focusStyle !== FocusStyle.CLICK_NODE) {
                                 focusNode = null;
                             }
-                            hideOrShowMathArea(focusStyle);
                             drawNetworkUI(network);
                         });
                         // Listen for css-responsive changes and redraw the svg network.
@@ -532,10 +530,10 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     function value2NodeOrLink(nodeOrLink, value) {
         if (value != null) {
             if (nodeOrLink instanceof neuralnetwork_nn_1.Link) {
-                nodeOrLink.weight.set(value, true);
+                nodeOrLink.weight.set(value);
             }
             else if (nodeOrLink instanceof neuralnetwork_nn_1.Node) {
-                nodeOrLink.bias.set(value, false);
+                nodeOrLink.bias.set(value);
             }
             else {
                 throw 'invalid nodeOrLink';
@@ -566,7 +564,4 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         return network;
     }
     exports.getNetwork = getNetwork;
-    function hideOrShowMathArea(focusStyle) {
-        $('#nn-show-math-all').show();
-    }
 });

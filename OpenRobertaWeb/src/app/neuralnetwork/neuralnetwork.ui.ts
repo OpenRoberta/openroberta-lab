@@ -28,7 +28,6 @@ let D3: typeof _D3; // used for lazy loading
 type D3Selection = _D3.Selection<any>;
 
 let focusStyle = FocusStyle.CLICK_WEIGHT_BIAS;
-hideOrShowMathArea(focusStyle);
 let focusNode = null;
 
 let state: State = null;
@@ -85,7 +84,6 @@ export async function runNNEditor() {
         if (focusStyle !== FocusStyle.CLICK_NODE) {
             focusNode = null;
         }
-        hideOrShowMathArea(focusStyle);
         drawNetworkUI(network);
     });
 
@@ -564,9 +562,9 @@ function nodeOrLink2Value(nodeOrLink: Node | Link): string {
 function value2NodeOrLink(nodeOrLink: Node | Link, value: string) {
     if (value != null) {
         if (nodeOrLink instanceof Link) {
-            nodeOrLink.weight.set(value, true);
+            nodeOrLink.weight.set(value);
         } else if (nodeOrLink instanceof Node) {
-            nodeOrLink.bias.set(value, false);
+            nodeOrLink.bias.set(value);
         } else {
             throw 'invalid nodeOrLink';
         }
@@ -594,8 +592,4 @@ export function getStateAsJSONString(): string {
 
 export function getNetwork(): Network {
     return network;
-}
-
-function hideOrShowMathArea(focusStyle: FocusStyle): void {
-    $('#nn-show-math-all').show();
 }

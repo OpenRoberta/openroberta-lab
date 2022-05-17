@@ -3,72 +3,106 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
     exports.Network = exports.Link = exports.Node = exports.NNumber = void 0;
     var NNumber = /** @class */ (function () {
         function NNumber() {
-            this.weightAsNumber = 0.0;
-            this.weightPrefix = '*';
-            this.weightSuffix = 0.0;
+            this.operator = '*';
+            this.asNumber = 0.0; // to be used in nn step evaluations
+            this.normalizedUserInput = '0'; // to be used in the UI, export/import, ...
+            this.separator = '.'; // either ',' or '.'
+            this.isFraction = false;
         }
         NNumber.prototype.setAsNumber = function (number) {
-            this.weightAsNumber = number;
-            this.weightPrefix = '*';
-            this.weightSuffix = number;
+            this.operator = '';
+            this.asNumber = number;
+            this.normalizedUserInput = String(number);
+            this.separator = '.';
+            this.isFraction = false;
         };
-        NNumber.prototype.set = function (numberAsUntrimmedString, withOp) {
-            var numberAsString = numberAsUntrimmedString.trim();
-            if (numberAsString.length == 0) {
-                this.weightAsNumber = 0.0;
-                this.weightPrefix = withOp ? '*' : '';
-                this.weightSuffix = 0.0;
+        NNumber.prototype.set = function (userInput) {
+            userInput = userInput.trim();
+            if (userInput.length == 0) {
+                this.operator = '';
+                this.asNumber = 0.0;
+                this.normalizedUserInput = '0';
+                this.separator = '.';
+                this.isFraction = false;
                 return;
             }
-            var opOpt = numberAsString.substr(0, 1);
-            if (opOpt === '*' || opOpt === ':' || opOpt === '/') {
-                var numberPart = +numberAsString.substr(1);
-                if (isNaN(numberPart)) {
-                    numberPart = 0.0;
-                }
-                if (!withOp) {
-                    this.weightAsNumber = numberPart;
-                    this.weightPrefix = '';
-                    this.weightSuffix = numberPart;
-                }
-                else {
-                    if (opOpt === '*') {
-                        this.weightAsNumber = numberPart;
-                    }
-                    else if (numberPart === 0.0) {
-                        this.weightAsNumber = 0.0;
-                    }
-                    else {
-                        this.weightAsNumber = 1.0 / numberPart;
-                    }
-                    this.weightPrefix = opOpt;
-                    this.weightSuffix = numberPart;
+            this.operator = userInput.substr(0, 1);
+            if (this.operator === '*' || this.operator === ':' || this.operator === '/') {
+                userInput = userInput.substr(1);
+                if (this.operator === '*') {
+                    this.operator = '';
                 }
             }
             else {
-                var numberPart = +numberAsString;
-                if (isNaN(numberPart)) {
-                    numberPart = 0.0;
+                this.operator = '';
+            }
+            this.asNumber = 0.0;
+            if (userInput.indexOf('/') >= 0) {
+                // with fraction --> no operators as '*', '/', ':'
+                this.isFraction = true;
+                this.operator = '';
+                this.separator = '.';
+                userInput = userInput.replace(NNumber.commaGlobal, '');
+                userInput = userInput.replace(NNumber.pointGlobal, '');
+                if (userInput.indexOf('-') >= 0) {
+                    userInput = '-' + userInput.replace(NNumber.minusGlobal, '');
                 }
-                this.weightAsNumber = numberPart;
-                this.weightPrefix = withOp ? '*' : '';
-                this.weightSuffix = numberPart;
+                var parts = userInput.split('/');
+                this.separator = '.';
+                if (this.operator !== '' || parts.length !== 2) {
+                    this.asNumber = 0.0;
+                }
+                else {
+                    this.asNumber = +parts[0] / +parts[1];
+                }
+            }
+            else {
+                // no fraction --> separator can be '.' (e.g. english style) or ',' (e.g. german style)
+                this.isFraction = false;
+                this.separator = '.';
+                if (userInput.indexOf('.') >= 0) {
+                    userInput = userInput.replace(NNumber.commaGlobal, '');
+                }
+                else if (userInput.indexOf(',') >= 0) {
+                    this.separator = ',';
+                    userInput = userInput.replace(NNumber.pointGlobal, '');
+                    userInput = userInput.replace(NNumber.commaGlobal, '.');
+                }
+                this.asNumber = +userInput;
+            }
+            if (isNaN(this.asNumber)) {
+                this.asNumber = 0.0;
+                this.normalizedUserInput = userInput;
+                return;
+            }
+            this.normalizedUserInput = userInput;
+            if (this.operator !== '') {
+                this.asNumber = 1.0 / this.asNumber;
             }
         };
         NNumber.prototype.get = function () {
-            return this.weightAsNumber;
+            return this.asNumber;
         };
         NNumber.prototype.getWoOp = function () {
-            return this.weightSuffix;
+            return this.normalizedUserInput;
+        };
+        NNumber.prototype.hasFraction = function () {
+            return this.isFraction;
         };
         NNumber.prototype.getOp = function () {
-            return this.weightPrefix;
+            return this.operator;
         };
         NNumber.prototype.getWithPrecision = function (precision, suppressMultOp) {
-            var prefix = suppressMultOp && this.weightPrefix === '*' ? '' : this.weightPrefix;
-            var suffix = precision === '*' ? this.weightSuffix : U.toFixedPrecision(this.weightSuffix, +precision);
+            var prefix = suppressMultOp && this.operator === '*' ? '' : this.operator;
+            var suffix = precision === '*' || this.isFraction ? String(this.normalizedUserInput) : U.toFixedPrecision(this.normalizedUserInput, +precision);
+            if (this.separator === ',') {
+                suffix = suffix.replace(NNumber.pointGlobal, ',');
+            }
             return prefix + suffix;
         };
+        NNumber.commaGlobal = /,/g;
+        NNumber.pointGlobal = /\./g;
+        NNumber.minusGlobal = /-/g;
         return NNumber;
     }());
     exports.NNumber = NNumber;
@@ -137,7 +171,7 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
                 var weight = link.weight;
                 if (weight.get() !== 0) {
                     var op = weight.getOp();
-                    var isPositive = weight.getWoOp() >= 0;
+                    var isPositive = weight.get() >= 0;
                     var source = link.source.id;
                     if (op === ':' || op === '/') {
                         if (isPositive) {
@@ -171,7 +205,12 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
                             math += '0';
                             firstLink = false;
                         }
-                        math += ' - ' + -weight.getWoOp() + '*' + source;
+                        if (weight.hasFraction()) {
+                            math += ' - ' + weight.getWoOp().substr(1) + '*' + source;
+                        }
+                        else {
+                            math += ' - ' + -weight.getWoOp() + '*' + source;
+                        }
                     }
                 }
             });
@@ -429,7 +468,7 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
                         var weightsOneNode = [];
                         for (var _c = 0, _d = node.outputs; _c < _d.length; _c++) {
                             var link = _d[_c];
-                            weightsOneNode.push('' + link.weight.get());
+                            weightsOneNode.push(link.weight.getOp() + link.weight.getWoOp());
                         }
                         weightsOneLayer.push(weightsOneNode);
                     }
@@ -446,7 +485,7 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
                     var biasesOneLayer = [];
                     for (var _b = 0, layer_2 = layer; _b < layer_2.length; _b++) {
                         var node = layer_2[_b];
-                        biasesOneLayer.push('' + node.bias.get());
+                        biasesOneLayer.push(node.bias.getOp() + node.bias.getWoOp());
                     }
                     biasesAllLayers.push(biasesOneLayer);
                 }
@@ -543,7 +582,7 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
                             if (link == null || weight == null) {
                                 break;
                             }
-                            link.weight.set(weight, true);
+                            link.weight.set(weight);
                         }
                     }
                 }
@@ -563,7 +602,7 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
                         if (node == null || bias == null) {
                             break;
                         }
-                        node.bias.set(bias, false);
+                        node.bias.set(bias);
                     }
                 }
             }

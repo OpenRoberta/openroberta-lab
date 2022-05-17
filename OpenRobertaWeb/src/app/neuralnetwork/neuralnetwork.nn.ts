@@ -3,71 +3,111 @@ import * as H from './neuralnetwork.helper';
 import * as U from 'util';
 
 export class NNumber {
-    private weightAsNumber = 0.0;
-    private weightPrefix = '*';
-    private weightSuffix = 0.0;
+    private static commaGlobal = /,/g;
+    private static pointGlobal = /\./g;
+    private static minusGlobal = /-/g;
+
+    private operator = '*';
+    private asNumber = 0.0; // to be used in nn step evaluations
+    private normalizedUserInput = '0'; // to be used in the UI, export/import, ...
+    private separator = '.'; // either ',' or '.'
+    private isFraction = false;
 
     setAsNumber(number: number) {
-        this.weightAsNumber = number;
-        this.weightPrefix = '*';
-        this.weightSuffix = number;
+        this.operator = '';
+        this.asNumber = number;
+        this.normalizedUserInput = String(number);
+        this.separator = '.';
+        this.isFraction = false;
     }
 
-    set(numberAsUntrimmedString: string, withOp: boolean): void {
-        const numberAsString = numberAsUntrimmedString.trim();
-        if (numberAsString.length == 0) {
-            this.weightAsNumber = 0.0;
-            this.weightPrefix = withOp ? '*' : '';
-            this.weightSuffix = 0.0;
+    set(userInput: string): void {
+        userInput = userInput.trim();
+        if (userInput.length == 0) {
+            this.operator = '';
+            this.asNumber = 0.0;
+            this.normalizedUserInput = '0';
+            this.separator = '.';
+            this.isFraction = false;
             return;
         }
-        const opOpt = numberAsString.substr(0, 1);
-        if (opOpt === '*' || opOpt === ':' || opOpt === '/') {
-            let numberPart = +numberAsString.substr(1);
-            if (isNaN(numberPart)) {
-                numberPart = 0.0;
-            }
-            if (!withOp) {
-                this.weightAsNumber = numberPart;
-                this.weightPrefix = '';
-                this.weightSuffix = numberPart;
-            } else {
-                if (opOpt === '*') {
-                    this.weightAsNumber = numberPart;
-                } else if (numberPart === 0.0) {
-                    this.weightAsNumber = 0.0;
-                } else {
-                    this.weightAsNumber = 1.0 / numberPart;
-                }
-                this.weightPrefix = opOpt;
-                this.weightSuffix = numberPart;
+        this.operator = userInput.substr(0, 1);
+        if (this.operator === '*' || this.operator === ':' || this.operator === '/') {
+            userInput = userInput.substr(1);
+            if (this.operator === '*') {
+                this.operator = '';
             }
         } else {
-            let numberPart = +numberAsString;
-            if (isNaN(numberPart)) {
-                numberPart = 0.0;
+            this.operator = '';
+        }
+        this.asNumber = 0.0;
+        if (userInput.indexOf('/') >= 0) {
+            // with fraction --> no operators as '*', '/', ':'
+            this.isFraction = true;
+            this.operator = '';
+            this.separator = '.';
+            userInput = userInput.replace(NNumber.commaGlobal, '');
+            userInput = userInput.replace(NNumber.pointGlobal, '');
+            if (userInput.indexOf('-') >= 0) {
+                userInput = '-' + userInput.replace(NNumber.minusGlobal, '');
             }
-            this.weightAsNumber = numberPart;
-            this.weightPrefix = withOp ? '*' : '';
-            this.weightSuffix = numberPart;
+            const parts = userInput.split('/');
+            this.separator = '.';
+            if (this.operator !== '' || parts.length !== 2) {
+                this.asNumber = 0.0;
+            } else {
+                this.asNumber = +parts[0] / +parts[1];
+            }
+        } else {
+            // no fraction --> separator can be '.' (e.g. english style) or ',' (e.g. german style)
+            this.isFraction = false;
+            this.separator = '.';
+            if (userInput.indexOf('.') >= 0) {
+                userInput = userInput.replace(NNumber.commaGlobal, '');
+            } else if (userInput.indexOf(',') >= 0) {
+                this.separator = ',';
+                userInput = userInput.replace(NNumber.pointGlobal, '');
+                userInput = userInput.replace(NNumber.commaGlobal, '.');
+            }
+            this.asNumber = +userInput;
+        }
+        if (isNaN(this.asNumber)) {
+            this.asNumber = 0.0;
+            this.normalizedUserInput = userInput;
+            return;
+        }
+        this.normalizedUserInput = userInput;
+        if (this.operator !== '') {
+            this.asNumber = 1.0 / this.asNumber;
         }
     }
 
     get(): number {
-        return this.weightAsNumber;
+        return this.asNumber;
     }
 
-    getWoOp(): number {
-        return this.weightSuffix;
+    getWoOp(): string {
+        if (this.separator === ',') {
+            return this.normalizedUserInput.replace(NNumber.pointGlobal, ',');
+        } else {
+            return this.normalizedUserInput;
+        }
+    }
+
+    hasFraction(): boolean {
+        return this.isFraction;
     }
 
     getOp(): string {
-        return this.weightPrefix;
+        return this.operator;
     }
 
     getWithPrecision(precision: string, suppressMultOp: boolean): string {
-        const prefix = suppressMultOp && this.weightPrefix === '*' ? '' : this.weightPrefix;
-        const suffix = precision === '*' ? this.weightSuffix : U.toFixedPrecision(this.weightSuffix, +precision);
+        const prefix = suppressMultOp && this.operator === '*' ? '' : this.operator;
+        let suffix = precision === '*' || this.isFraction ? String(this.normalizedUserInput) : U.toFixedPrecision(this.normalizedUserInput, +precision);
+        if (this.separator === ',') {
+            suffix = suffix.replace(NNumber.pointGlobal, ',');
+        }
         return prefix + suffix;
     }
 }
@@ -145,7 +185,7 @@ export class Node {
             const weight = link.weight;
             if (weight.get() !== 0) {
                 const op = weight.getOp();
-                const isPositive = weight.getWoOp() >= 0;
+                const isPositive = weight.get() >= 0;
                 const source = link.source.id;
                 if (op === ':' || op === '/') {
                     if (isPositive) {
@@ -174,7 +214,11 @@ export class Node {
                         math += '0';
                         firstLink = false;
                     }
-                    math += ' - ' + -weight.getWoOp() + '*' + source;
+                    if (weight.hasFraction()) {
+                        math += ' - ' + weight.getWoOp().substr(1) + '*' + source;
+                    } else {
+                        math += ' - ' + -weight.getWoOp() + '*' + source;
+                    }
                 }
             }
         });
@@ -443,7 +487,7 @@ export class Network {
                 for (let node of layer) {
                     let weightsOneNode: string[] = [];
                     for (let link of node.outputs) {
-                        weightsOneNode.push('' + link.weight.get());
+                        weightsOneNode.push(link.weight.getOp() + link.weight.getWoOp());
                     }
                     weightsOneLayer.push(weightsOneNode);
                 }
@@ -459,7 +503,7 @@ export class Network {
             for (let layer of this.network) {
                 let biasesOneLayer: string[] = [];
                 for (let node of layer) {
-                    biasesOneLayer.push('' + node.bias.get());
+                    biasesOneLayer.push(node.bias.getOp() + node.bias.getWoOp());
                 }
                 biasesAllLayers.push(biasesOneLayer);
             }
@@ -562,7 +606,7 @@ export class Network {
                         if (link == null || weight == null) {
                             break;
                         }
-                        link.weight.set(weight, true);
+                        link.weight.set(weight);
                     }
                 }
             }
@@ -583,7 +627,7 @@ export class Network {
                     if (node == null || bias == null) {
                         break;
                     }
-                    node.bias.set(bias, false);
+                    node.bias.set(bias);
                 }
             }
         }
