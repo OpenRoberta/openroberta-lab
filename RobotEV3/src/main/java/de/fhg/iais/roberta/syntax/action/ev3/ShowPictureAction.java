@@ -5,8 +5,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.factory.EV3Factory;
-import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -28,11 +26,11 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * The client must provide the name of the picture and x and y coordinates.
  */
 public class ShowPictureAction<V> extends Action<V> {
-    private final IShowPicture pic;
+    private final String pic;
     private final Expr<V> x;
     private final Expr<V> y;
 
-    private ShowPictureAction(IShowPicture pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ShowPictureAction(String pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("SHOW_PICTURE_ACTION"), properties, comment);
         Assert.isTrue(pic != null && x != null && y != null);
         this.pic = pic;
@@ -51,14 +49,14 @@ public class ShowPictureAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ShowPictureAction}
      */
-    private static <V> ShowPictureAction<V> make(IShowPicture pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> ShowPictureAction<V> make(String pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ShowPictureAction<>(pic, x, y, properties, comment);
     }
 
     /**
      * @return name of the picture that
      */
-    public IShowPicture getPicture() {
+    public String getPicture() {
         return this.pic;
     }
 
@@ -96,7 +94,7 @@ public class ShowPictureAction<V> extends Action<V> {
         Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
         return ShowPictureAction
             .make(
-                ((EV3Factory) helper.getRobotFactory()).getShowPicture(pic),
+                pic,
                 Jaxb2Ast.convertPhraseToExpr(x),
                 Jaxb2Ast.convertPhraseToExpr(y),
                 Jaxb2Ast.extractBlockProperties(block),

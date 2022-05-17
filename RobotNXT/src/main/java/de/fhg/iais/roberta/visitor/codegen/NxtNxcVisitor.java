@@ -1,9 +1,7 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -83,8 +81,8 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.dbc.VisitorException;
-import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.INxtVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
 /**
@@ -162,7 +160,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         return null;
     }
 
-    protected Void generateUsedVars() {
+    private Void generateUsedVars() {
         for ( VarDeclaration<Void> var : this.getBean(UsedHardwareBean.class).getVisitedVars() ) {
             nlIndent();
             if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
@@ -177,13 +175,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 this.sb.append(";");
                 if ( var.getTypeVar().isArray() ) {
                     nlIndent();
-                    //this.sb.append("for(int i = 0; i < ArrayLen(" + var.getName() + "); i++) {");
-                    //incrIndentation();
-                    //nlIndent();
                     this.sb.append("___" + var.getName()).append(" = _____" + var.getName() + ";");
-                    //decrIndentation();
-                    //nlIndent();
-                    //this.sb.append("}");
                 }
             }
         }
@@ -880,7 +872,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
         ListElementOperations operation = (ListElementOperations) listGetIndex.getElementOperation();
         if ( !operation.equals(ListElementOperations.GET) ) {
-            throw new VisitorException("Unsupported get method: " + operation.toString());
+            throw new VisitorException("Unsupported get method: " + operation);
         }
         IndexLocation location = (IndexLocation) listGetIndex.getLocation();
         listGetIndex.getParam().get(0).accept(this);
@@ -928,7 +920,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
         ListElementOperations operation = (ListElementOperations) listSetIndex.getElementOperation();
         if ( !operation.equals(ListElementOperations.SET) ) {
-            throw new VisitorException("Unsupported set method: " + operation.toString());
+            throw new VisitorException("Unsupported set method: " + operation);
         }
         IndexLocation location = (IndexLocation) listSetIndex.getLocation();
         listSetIndex.getParam().get(0).accept(this);
@@ -1290,7 +1282,6 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     private void generateSensors() {
-        Map<String, UsedSensor> usedSensorMap = new HashMap<>();
         for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
             if ( usedSensor.getType().equals(SC.TIMER) ) {
                 if ( !usedSensor.getMode().equals(SC.RESET) ) {

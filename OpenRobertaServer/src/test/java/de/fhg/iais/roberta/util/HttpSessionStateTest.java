@@ -8,7 +8,6 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.factory.EV3Factory;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -27,8 +26,8 @@ public class HttpSessionStateTest {
         List<String> serverDefines = serverDefineOpt.options();
 
         Map<String, IRobotFactory> robotPluginMap = new HashMap<>();
-        robotPluginMap.put("ev3lejosv1", new EV3Factory(new PluginProperties("ev3lejosv1", "", "", Util.loadProperties("classpath:/ev3lejosv1.properties"))));
-        robotPluginMap.put("ev3lejosv0", new EV3Factory(new PluginProperties("ev3lejosv0", "", "", Util.loadProperties("classpath:/ev3lejosv0.properties"))));
+        robotPluginMap.put("ev3lejosv1", new RobotFactory(new PluginProperties("ev3lejosv1", "", "", Util.loadProperties("classpath:/ev3lejosv1.properties"))));
+        robotPluginMap.put("ev3lejosv0", new RobotFactory(new PluginProperties("ev3lejosv0", "", "", Util.loadProperties("classpath:/ev3lejosv0.properties"))));
         robotPluginMap
             .put("calliope2017", new RobotFactory(new PluginProperties("calliope2017", "", "", Util.loadProperties("classpath:/calliope2017.properties"))));
         robotPluginMap
