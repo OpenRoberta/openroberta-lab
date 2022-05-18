@@ -279,17 +279,16 @@ public class CompilerWorkflowRobotCommonIT {
     @Ignore
     @Test
     public void testSingleWorkflow() throws Exception {
-        String workflowName = "reset";
-        final String robotName = "festobionic";
-        String pathToProgramFile = "robotSpecific/festobionic/sensors_all_but_pins.xml"; // relative to OpenRobertaServer/src/test/resources/crossCompilerTests
-        String programFileName = "sensors";
-        String fullResource = "/crossCompilerTests/" + pathToProgramFile + "/" + programFileName + ".xml";
+        String workflowName = "transform";
+        final String robotName = "mbot2";
+        String pathToProgramFile = "robotSpecific/mbot2/action.xml"; // relative to OpenRobertaServer/src/test/resources/crossCompilerTests
+        String fullResource = "/crossCompilerTests/" + pathToProgramFile;
         String xmlText = Util.readResourceContent(fullResource);
-        Pair<Result, String> showSourceResult = executeWorkflowShowSource(programFileName, xmlText, robotName);
+        Pair<Result, String> showSourceResult = executeWorkflowShowSource(xmlText, robotName);
         if ( showSourceResult.getFirst() == Result.FAILURE ) {
             Assert.fail();
         }
-        Result result = executeWorkflow(workflowName, robotName, programFileName, xmlText, showSourceResult.getSecond());
+        Result result = executeWorkflow(workflowName, robotName, xmlText, showSourceResult.getSecond());
         if ( result == Result.FAILURE ) {
             Assert.fail();
         }
@@ -371,7 +370,7 @@ public class CompilerWorkflowRobotCommonIT {
      * @return
      */
     private boolean executeAllWorkflows(String robotName, String programXml) {
-        Pair<Result, String> showSourceResult = executeWorkflowShowSource(WORKFLOWTESTPROG_NAME, programXml, robotName);
+        Pair<Result, String> showSourceResult = executeWorkflowShowSource(programXml, robotName);
         if ( showSourceResult.getFirst() == Result.FAILURE ) {
             LOG.error("Could not generate source code for robot {}", robotName);
             return false;
@@ -381,7 +380,7 @@ public class CompilerWorkflowRobotCommonIT {
         List<String> workflowsWithoutShowSource = allWorkflowsOfRobot.stream().filter(s -> !s.equals("showsource")).collect(Collectors.toList());
         boolean resultAcc = true;
         for ( String workflow : workflowsWithoutShowSource ) {
-            resultAcc = (executeWorkflow(workflow, robotName, WORKFLOWTESTPROG_NAME, programXml, showSourceResult.getSecond()) != Result.FAILURE) && resultAcc;
+            resultAcc = (executeWorkflow(workflow, robotName, programXml, showSourceResult.getSecond()) != Result.FAILURE) && resultAcc;
         }
         return resultAcc;
     }
@@ -396,7 +395,7 @@ public class CompilerWorkflowRobotCommonIT {
      * @param sourceCode the sourcecode of the program as geneated by the "showsource" workflow
      * @return
      */
-    private Result executeWorkflow(String workflow, String robotName, String programName, String programXml, String sourceCode) {
+    private Result executeWorkflow(String workflow, String robotName, String programXml, String sourceCode) {
         String reason = "?";
         Result result;
         logStart(robotName, "workflow", workflow);
@@ -438,7 +437,7 @@ public class CompilerWorkflowRobotCommonIT {
      * @param robotName name of the robot, not null
      * @return a pair of (Result enumeration, the generated source)
      */
-    private Pair<Result, String> executeWorkflowShowSource(String programName, String programXml, String robotName) {
+    private Pair<Result, String> executeWorkflowShowSource(String programXml, String robotName) {
         String reason = "?";
         Result result = Result.FAILURE;
         String sourceCode = "";
