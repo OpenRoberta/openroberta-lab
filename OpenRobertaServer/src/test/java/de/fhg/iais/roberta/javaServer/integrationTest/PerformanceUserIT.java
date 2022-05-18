@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.javaServer.basics.TestConfiguration;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
@@ -81,7 +81,7 @@ public class PerformanceUserIT {
 
     private String theProgramOfAllUserLol;
     private ExecutorService executorService;
-    private Map<String, IRobotFactory> robotPlugins = new HashMap<>();
+    private Map<String, RobotFactory> robotPlugins = new HashMap<>();
 
     @Before
     public void setupTest() throws Exception {

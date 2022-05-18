@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.RandomUrlPostfix;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
@@ -40,7 +40,7 @@ public class HttpSessionState implements Serializable {
      */
     private final String initToken;
     private final long sessionNumber;
-    private final Map<String, IRobotFactory> robotPluginMap;
+    private final Map<String, RobotFactory> robotPluginMap;
     private final String defaultRobotName;
     private final String countryCode;
 
@@ -60,7 +60,7 @@ public class HttpSessionState implements Serializable {
     private HttpSessionState(
         String initToken,
         long sessionNumber,
-        Map<String, IRobotFactory> robotPluginMap,
+        Map<String, RobotFactory> robotPluginMap,
         ServerProperties serverProperties,
         String countryCode) //
     {
@@ -98,7 +98,7 @@ public class HttpSessionState implements Serializable {
      * @param countryCode
      * @return
      */
-    public static HttpSessionState init(Map<String, IRobotFactory> robotPluginMap, ServerProperties serverProperties, String countryCode) //
+    public static HttpSessionState init(Map<String, RobotFactory> robotPluginMap, ServerProperties serverProperties, String countryCode) //
     {
         String initTokenString = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
         long sessionNumber = SESSION_COUNTER.incrementAndGet();
@@ -119,7 +119,7 @@ public class HttpSessionState implements Serializable {
      */
     public static HttpSessionState initOnlyLegalForDebugging(
         String initTokenString,
-        Map<String, IRobotFactory> robotPluginMap,
+        Map<String, RobotFactory> robotPluginMap,
         ServerProperties serverProperties,
         long sessionNumber) //
     {
@@ -211,11 +211,11 @@ public class HttpSessionState implements Serializable {
         this.toolbox = toolbox;
     }
 
-    public IRobotFactory getRobotFactory() {
+    public RobotFactory getRobotFactory() {
         return this.robotPluginMap.get(this.robotName);
     }
 
-    public IRobotFactory getRobotFactory(String robotName) {
+    public RobotFactory getRobotFactory(String robotName) {
         return this.robotPluginMap.get(robotName);
     }
 
@@ -226,8 +226,8 @@ public class HttpSessionState implements Serializable {
      * @param group the robot group
      * @return the list of group member factories
      */
-    public List<IRobotFactory> getRobotFactoriesOfGroup(String group) {
-        List<IRobotFactory> groupMembers = this.robotPluginMap.values().stream().filter(factory -> {
+    public List<RobotFactory> getRobotFactoriesOfGroup(String group) {
+        List<RobotFactory> groupMembers = this.robotPluginMap.values().stream().filter(factory -> {
             String propertyGroup = factory.getPluginProperties().getStringProperty("robot.plugin.group");
             return (propertyGroup != null) && propertyGroup.equals(group);
         }).collect(Collectors.toList());

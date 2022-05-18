@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectWorkflowRestController;
@@ -82,7 +82,7 @@ public class CompilerWorkflowRobotCommonIT {
 
     private static ServerProperties serverProperties;
     private static RobotCommunicator robotCommunicator;
-    private static Map<String, IRobotFactory> pluginMap;
+    private static Map<String, RobotFactory> pluginMap;
     private static HttpSessionState httpSessionState;
 
     private static JSONObject robotsFromTestSpec;
@@ -151,7 +151,7 @@ public class CompilerWorkflowRobotCommonIT {
         }
         logSummary();
         LOG.info("XXXXXXXXXX END of COMMON-IT XXXXXXXXXX");
-        if (!resultAcc) {
+        if ( !resultAcc ) {
             Assert.fail();
         }
     }
@@ -187,7 +187,8 @@ public class CompilerWorkflowRobotCommonIT {
                 String templateWithConfig = getTemplateWithConfigReplaced(robotDir, robotName);
                 final String[] programNameArray = progDeclsFromTestSpec.keySet().toArray(new String[0]);
                 Arrays.sort(programNameArray);
-                nextProg: for ( String progName : programNameArray ) {
+                nextProg:
+                for ( String progName : programNameArray ) {
                     JSONObject progDeclFromTestSpec = progDeclsFromTestSpec.getJSONObject(progName);
                     JSONObject exclude = progDeclFromTestSpec.optJSONObject("exclude");
                     if ( exclude != null ) {
@@ -200,13 +201,13 @@ public class CompilerWorkflowRobotCommonIT {
                     }
                     String generatedXml = generateFinalProgram(templateWithConfig, progName, progDeclFromTestSpec);
                     resultAcc = (compileProgramViaRestService(robotName, progName, generatedXml) != Result.FAILURE) && resultAcc;
-                    IRobotFactory factory = pluginMap.get(robotName);
+                    RobotFactory factory = pluginMap.get(robotName);
                     if ( factory.hasSim() ) {
                         resultAcc = (genSimulationCodeViaRestService(robotName, progName, generatedXml) != Result.FAILURE) && resultAcc;
                     }
                 }
                 JSONObject workflowDeclFromTestSpec = progDeclsFromTestSpec.getJSONObject(WORKFLOWTESTPROG_NAME);
-                if (CROSSCOMPILER_CALL) {
+                if ( CROSSCOMPILER_CALL ) {
                     String generatedWorkflowXml = generateFinalProgram(templateWithConfig, WORKFLOWTESTPROG_NAME, workflowDeclFromTestSpec);
                     resultAcc = (executeAllWorkflows(robotName, generatedWorkflowXml)) && resultAcc;
                 }
@@ -309,7 +310,7 @@ public class CompilerWorkflowRobotCommonIT {
         try {
             String token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
             httpSessionState.setToken(token);
-            if (CROSSCOMPILER_CALL) {
+            if ( CROSSCOMPILER_CALL ) {
                 setRobotTo(robotName);
                 JSONObject cmd = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
                 cmd.getJSONObject("data").put("progXML", programAndConfigXml);
@@ -401,7 +402,7 @@ public class CompilerWorkflowRobotCommonIT {
         logStart(robotName, "workflow", workflow);
         try {
             String token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
-            IRobotFactory factory = pluginMap.get(robotName);
+            RobotFactory factory = pluginMap.get(robotName);
             Project.Builder builder;
             if ( workflow.contains("native") ) {
                 builder = UnitTestHelper.setupWithNativeSource(factory, sourceCode);
@@ -513,7 +514,7 @@ public class CompilerWorkflowRobotCommonIT {
         LOG.info(String.format(format, robotName, progName));
         LOG.info("]]]]]]]]]]");
         if ( result == Result.SUCCESS ) {
-            if (SHOW_SUCCESS) {
+            if ( SHOW_SUCCESS ) {
                 resultList.add(String.format("succ; %-15s; %-60s;", robotName, progName));
             }
         } else {

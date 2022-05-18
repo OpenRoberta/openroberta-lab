@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util;
@@ -19,7 +19,7 @@ public class NIBOResetFirmwareWorker implements IWorker {
 
     @Override
     public void execute(Project project) {
-        IRobotFactory factory = project.getRobotFactory();
+        RobotFactory factory = project.getRobotFactory();
         PluginProperties properties = factory.getPluginProperties();
 
         Key resultKey;

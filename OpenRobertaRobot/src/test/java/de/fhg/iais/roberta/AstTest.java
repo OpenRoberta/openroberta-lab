@@ -5,14 +5,14 @@ import java.util.List;
 
 import org.junit.BeforeClass;
 
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.Util;
 
 public abstract class AstTest {
     private static final List<String> pluginDefines = new ArrayList<>();
     private static final List<String> pluginDefinesNewConf = new ArrayList<>();
-    protected static IRobotFactory testFactory;
-    protected static IRobotFactory testFactoryNewConf;
+    protected static RobotFactory testFactory;
+    protected static RobotFactory testFactoryNewConf;
 
     @BeforeClass
     public static void setup() {

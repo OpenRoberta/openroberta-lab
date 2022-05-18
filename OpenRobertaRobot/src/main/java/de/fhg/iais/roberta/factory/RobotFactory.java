@@ -18,18 +18,18 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.worker.IWorker;
 
-public class RobotFactory implements IRobotFactory {
+public class RobotFactory {
     private static final Logger LOG = LoggerFactory.getLogger(RobotFactory.class);
 
-    protected final PluginProperties pluginProperties;
-    protected final BlocklyDropdownFactory blocklyDropdown2EnumFactory;
-    protected final String beginnerToolbox;
-    protected final String expertToolbox;
-    protected final String programDefault;
-    protected final String configurationToolbox;
-    protected final String configurationDefault;
-    protected Map<String, IWorker> workers = new HashMap<>(); //worker type to implementing class(es) collect->de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorWorker
-    protected Map<String, List<String>> workflows = new HashMap<>(); //workflow name to a list of types of applicable workers: showsource->collect,generate
+    private final PluginProperties pluginProperties;
+    private final BlocklyDropdownFactory blocklyDropdown2EnumFactory;
+    private final String beginnerToolbox;
+    private final String expertToolbox;
+    private final String programDefault;
+    private final String configurationToolbox;
+    private final String configurationDefault;
+    private Map<String, IWorker> workers = new HashMap<>(); //worker type to implementing class(es) collect->de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorWorker
+    private Map<String, List<String>> workflows = new HashMap<>(); //workflow name to a list of types of applicable workers: showsource->collect,generate
 
     public RobotFactory(PluginProperties pluginProperties) {
         this.pluginProperties = pluginProperties;
@@ -42,88 +42,71 @@ public class RobotFactory implements IRobotFactory {
         loadWorkers();
     }
 
-    @Override
     public PluginProperties getPluginProperties() {
         return this.pluginProperties;
     }
 
-    @Override
     public BlocklyDropdownFactory getBlocklyDropdownFactory() {
         return this.blocklyDropdown2EnumFactory;
     }
 
-    @Override
     public final String getSourceCodeFileExtension() {
         return this.pluginProperties.getStringProperty("robot.plugin.fileExtension.source");
     }
 
-    @Override
     public final String getBinaryFileExtension() {
         return this.pluginProperties.getStringProperty("robot.plugin.fileExtension.binary");
     }
 
-    @Override
     public final String getGroup() {
         String group = this.pluginProperties.getStringProperty("robot.plugin.group");
         return group != null && !group.equals("") ? group : this.pluginProperties.getRobotName();
     }
 
-    @Override
     public final String getProgramToolboxBeginner() {
         return this.beginnerToolbox;
     }
 
-    @Override
     public final String getProgramToolboxExpert() {
         return this.expertToolbox;
     }
 
-    @Override
     public final String getProgramDefault() {
         return this.programDefault;
     }
 
-    @Override
     public final String getConfigurationToolbox() {
         return this.configurationToolbox;
     }
 
-    @Override
     public final String getConfigurationDefault() {
         return this.configurationDefault;
     }
 
-    @Override
     public final String getRealName() {
         return this.pluginProperties.getStringProperty("robot.real.name");
     }
 
-    @Override
     public final Boolean hasSim() {
         return this.pluginProperties.getStringProperty("robot.sim").equals("true");
     }
 
-    @Override
     public final Boolean hasMultipleSim() {
         return this.pluginProperties.getStringProperty("robot.multisim") != null && this.pluginProperties.getStringProperty("robot.multisim").equals("true");
     }
 
-    @Override
     public final Boolean hasNN() {
         return this.pluginProperties.getStringProperty("robot.nn") != null && this.pluginProperties.getStringProperty("robot.nn").equals("true");
     }
 
-    @Override
     public Boolean hasWebotsSim() {
         return this.pluginProperties.getStringProperty("robot.webots.sim") != null && this.pluginProperties.getStringProperty("robot.webots.sim").equals("true");
     }
 
-    @Override
     public String getWebotsUrl() {
         return this.pluginProperties.getStringProperty("robot.webots.url");
     }
 
-    @Override
     public final String getInfoDE() {
         String robotInfoDE = this.pluginProperties.getStringProperty("robot.info.de");
         if ( robotInfoDE == null ) {
@@ -133,7 +116,6 @@ public class RobotFactory implements IRobotFactory {
         }
     }
 
-    @Override
     public final String getInfoEN() {
         String robotInfoEN = this.pluginProperties.getStringProperty("robot.info.en");
         if ( robotInfoEN == null ) {
@@ -143,12 +125,10 @@ public class RobotFactory implements IRobotFactory {
         }
     }
 
-    @Override
     public final Boolean isBeta() {
         return this.pluginProperties.getStringProperty("robot.beta") != null;
     }
 
-    @Override
     public final String getConnectionType() {
         return this.pluginProperties.getStringProperty("robot.connection");
     }
@@ -157,17 +137,14 @@ public class RobotFactory implements IRobotFactory {
         this.pluginProperties.setStringProperty("robot.connection", type);
     }
 
-    @Override
     public final String getVendorId() {
         return this.pluginProperties.getStringProperty("robot.vendor");
     }
 
-    @Override
     public final Boolean hasConfiguration() {
         return Boolean.parseBoolean(this.pluginProperties.getStringProperty("robot.configuration"));
     }
 
-    @Override
     public final String getConfigurationType() {
         String configurationType = this.pluginProperties.getStringProperty("robot.configuration.type");
         if ( configurationType == null ) {
@@ -182,38 +159,31 @@ public class RobotFactory implements IRobotFactory {
         }
     }
 
-    @Override
     public final String optSensorPrefix() {
         String configurationType = this.pluginProperties.getStringProperty("robot.configuration.type");
         return configurationType.substring(4);
     }
 
-    @Override
     public final String optTopBlockOfOldConfiguration() {
         return this.pluginProperties.getStringProperty("robot.configuration.old.toplevelblock");
     }
 
-    @Override
     public final String getCommandline() {
         return this.pluginProperties.getStringProperty("robot.connection.commandLine");
     }
 
-    @Override
     public final String getSignature() {
         return this.pluginProperties.getStringProperty("robot.connection.signature");
     }
 
-    @Override
     public final String getMenuVersion() {
         return this.pluginProperties.getStringProperty("robot.menu.version");
     }
 
-    @Override
     public final Boolean hasWlanCredentials() {
         return this.pluginProperties.getStringProperty("robot.haswlan") != null;
     }
 
-    @Override
     public final String getFirmwareDefaultProgramName() {
         return this.pluginProperties.getStringProperty("robot.factory.default");
     }
@@ -245,11 +215,14 @@ public class RobotFactory implements IRobotFactory {
 
     }
 
-    @Override
     public List<IWorker> getWorkerPipe(String workflow) {
         List<String> workerTypes = this.workflows.get(workflow);
-        List<IWorker> workerPipe = new ArrayList<>();
         Assert.notNull(workerTypes, "Workflow %s is null for robot %s, check the properties", workflow, getRealName());
+        if ( workerTypes.size() == 1 && "do.nothing".equals(workerTypes.get(0)) ) {
+            // handle the special case, that the workflow is empty for this robot plugin
+            return Collections.emptyList();
+        }
+        List<IWorker> workerPipe = new ArrayList<>();
         for ( String type : workerTypes ) {
             IWorker worker = this.workers.get(type);
             Assert.notNull(worker, "Worker for type %s is null, check the properties, worker names may not match", type);
@@ -258,12 +231,10 @@ public class RobotFactory implements IRobotFactory {
         return workerPipe;
     }
 
-    @Override
     public Set<String> getWorkflows() {
         return Collections.unmodifiableSet(this.workflows.keySet());
     }
 
-    @Override
     public boolean hasWorkflow(String workflow) {
         return this.workflows.get(workflow) != null;
     }

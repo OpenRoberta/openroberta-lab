@@ -36,7 +36,7 @@ import com.sun.jersey.spi.container.servlet.ServletContainer;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.guice.RobertaGuiceServletConfig;
 import de.fhg.iais.roberta.javaServer.websocket.Ev3SensorLoggingWS;
 import de.fhg.iais.roberta.persistence.bo.Robot;
@@ -161,7 +161,7 @@ public class ServerStarter {
 
         // configure robot plugins
         RobotCommunicator robotCommunicator = new RobotCommunicator();
-        Map<String, IRobotFactory> robotPluginMap = configureRobotPlugins(robotCommunicator, this.serverProperties, pluginDefines);
+        Map<String, RobotFactory> robotPluginMap = configureRobotPlugins(robotCommunicator, this.serverProperties, pluginDefines);
 
         // setup services and threads to run the services
         IIpToCountry ipToCountry = configureIpToCountryDb();
@@ -286,7 +286,7 @@ public class ServerStarter {
      * @param pluginDefines modifications of plugin properties as a list of "<pluginName>:<key>=<value>"
      * @return the mapping from robot names to the factory, that supplies all robot-specific data
      */
-    public static Map<String, IRobotFactory> configureRobotPlugins(
+    public static Map<String, RobotFactory> configureRobotPlugins(
         RobotCommunicator robotCommunicator,
         ServerProperties serverProperties,
         List<String> pluginDefines) {
@@ -294,7 +294,7 @@ public class ServerStarter {
             throw new DbcException("the robot communicator object is missing - Server does NOT start");
         }
         List<String> robotWhitelist = serverProperties.getRobotWhitelist();
-        Map<String, IRobotFactory> robotPlugins = new HashMap<>();
+        Map<String, RobotFactory> robotPlugins = new HashMap<>();
         String resourceDir = serverProperties.getCrosscompilerResourceDir();
         String tempDir = serverProperties.getTempDir();
         for ( String robotName : robotWhitelist ) {
@@ -305,7 +305,7 @@ public class ServerStarter {
             if ( robotName.equals("sim") ) {
                 continue;
             }
-            IRobotFactory factory = Util.configureRobotPlugin(robotName, resourceDir, tempDir, pluginDefines);
+            RobotFactory factory = Util.configureRobotPlugin(robotName, resourceDir, tempDir, pluginDefines);
             robotPlugins.put(robotName, factory);
         }
         StringBuilder sb = new StringBuilder();
@@ -434,10 +434,10 @@ public class ServerStarter {
      *
      * @param robotFactories collection of all configured robot factories
      */
-    public static void checkRobotPluginsDB(DbSession dbSession, Collection<IRobotFactory> robotFactories) {
+    public static void checkRobotPluginsDB(DbSession dbSession, Collection<RobotFactory> robotFactories) {
         try {
             RobotDao robotDao = new RobotDao(dbSession);
-            for ( IRobotFactory robotFactory : robotFactories ) {
+            for ( RobotFactory robotFactory : robotFactories ) {
                 String robotForDb = robotFactory.getGroup();
                 Robot pluginRobot = robotDao.loadRobot(robotForDb);
                 if ( pluginRobot == null ) {

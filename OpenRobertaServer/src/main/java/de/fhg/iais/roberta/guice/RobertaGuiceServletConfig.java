@@ -9,7 +9,7 @@ import com.google.inject.servlet.GuiceServletContextListener;
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.main.IIpToCountry;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.ServerProperties;
@@ -17,13 +17,13 @@ import de.fhg.iais.roberta.util.ServerProperties;
 public class RobertaGuiceServletConfig extends GuiceServletContextListener {
     private Injector injector;
     private final ServerProperties serverProperties;
-    private final Map<String, IRobotFactory> robotPluginMap;
+    private final Map<String, RobotFactory> robotPluginMap;
     private final RobotCommunicator robotCommunicator;
     private final IIpToCountry ipToCountry;
 
     public RobertaGuiceServletConfig(
         ServerProperties serverProperties,
-        Map<String, IRobotFactory> robotPluginMap,
+        Map<String, RobotFactory> robotPluginMap,
         RobotCommunicator robotCommunicator,
         IIpToCountry ipToCountry) {
         this.serverProperties = serverProperties;
@@ -46,7 +46,7 @@ public class RobertaGuiceServletConfig extends GuiceServletContextListener {
                         RobertaGuiceServletConfig.this.ipToCountry));
                 //TODO: we have doubled the properties
                 // look for guice modules from robot plugins
-                //                for ( IRobotFactory robotFactory : RobertaGuiceServletConfig.this.robotPluginMap.values() ) {
+                //                for ( RobotFactory robotFactory : RobertaGuiceServletConfig.this.robotPluginMap.values() ) {
                 //                    AbstractModule guiceModule = robotFactory.getGuiceModule();
                 //                    if ( guiceModule != null ) {
                 //                        install(guiceModule);

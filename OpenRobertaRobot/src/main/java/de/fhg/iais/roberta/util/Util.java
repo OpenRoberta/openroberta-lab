@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -107,7 +107,7 @@ public class Util {
      * @param pluginDefines modifications of the plugin's properties as a list of "<pluginName>:<key>=<value>"
      * @return the factory for this plugin
      */
-    public static IRobotFactory configureRobotPlugin(String robotName, String resourceDir, String tempDir, List<String> pluginDefines) {
+    public static RobotFactory configureRobotPlugin(String robotName, String resourceDir, String tempDir, List<String> pluginDefines) {
         Properties basicPluginProperties = Util.loadProperties("classpath:/" + robotName + ".properties");
         if ( basicPluginProperties == null ) {
             throw new DbcException("robot plugin " + robotName + " has no property file " + robotName + ".properties -  Server does NOT start");
@@ -127,24 +127,15 @@ public class Util {
                 }
             }
         }
-        String pluginFactory = basicPluginProperties.getProperty("robot.plugin.factory");
-        if ( pluginFactory == null ) {
-            throw new DbcException("robot plugin " + robotName + " has no factory. Check the properties - Server does NOT start");
-        } else {
-            try {
-                PluginProperties pluginProperties = new PluginProperties(robotName, resourceDir, tempDir, basicPluginProperties);
-                @SuppressWarnings("unchecked")
-                Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) Util.class.getClassLoader().loadClass(pluginFactory);
-                Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(PluginProperties.class);
-                IRobotFactory factory = factoryConstructor.newInstance(pluginProperties);
-                return factory;
-            } catch ( Exception e ) {
-                throw new DbcException(
-                    " factory for robot plugin "
-                        + robotName
-                        + " could not be build. Plugin-jar not on the classpath? Invalid properties? Problems with validators? Server does NOT start",
-                    e);
-            }
+        try {
+            PluginProperties pluginProperties = new PluginProperties(robotName, resourceDir, tempDir, basicPluginProperties);
+            return new RobotFactory(pluginProperties);
+        } catch ( Exception e ) {
+            throw new DbcException(
+                " factory for robot plugin "
+                    + robotName
+                    + " could not be build. Plugin-jar not on the classpath? Invalid properties? Problems with validators? Server does NOT start",
+                e);
         }
     }
 

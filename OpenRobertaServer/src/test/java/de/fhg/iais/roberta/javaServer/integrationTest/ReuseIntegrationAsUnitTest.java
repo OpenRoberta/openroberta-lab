@@ -50,7 +50,7 @@ import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectWorkflowRestController;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -100,7 +100,7 @@ public class ReuseIntegrationAsUnitTest {
     private static JSONObject progDeclsFromTestSpec;
     private static JSONObject robotsFromTestSpec;
 
-    IRobotFactory testFactory;
+    RobotFactory testFactory;
 
     private int errorCountRegeneration = 0;
     private int successCountRegeneration = 0;

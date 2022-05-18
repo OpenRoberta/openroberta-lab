@@ -7,14 +7,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.MbedTwo2ThreeTransformerWorker;
 
 public class CalliopeTwo2ThreeTransformerTest {
 
-    private static IRobotFactory testFactory;
+    private static RobotFactory testFactory;
 
     private static final String OLD_CONFIGURATION_XML =
         "<block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" robottype=\"calliope\" xmlversion=\"2.0\">"

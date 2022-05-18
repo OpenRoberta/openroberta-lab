@@ -27,7 +27,7 @@ import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
 import de.fhg.iais.roberta.generated.restEntities.EntityResponse;
 import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
@@ -428,8 +428,8 @@ public class ClientProgramController {
                     Statistics.info("ProgramImport", "success", true);
                     return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
                 } else {
-                    List<IRobotFactory> members = httpSessionState.getRobotFactoriesOfGroup(robotType1);
-                    List<String> realNames = members.stream().map(IRobotFactory::getRealName).collect(Collectors.toList());
+                    List<RobotFactory> members = httpSessionState.getRobotFactoriesOfGroup(robotType1);
+                    List<String> realNames = members.stream().map(RobotFactory::getRealName).collect(Collectors.toList());
                     Statistics.info("ProgramImport", "success", false);
                     ImportErrorResponse error = ImportErrorResponse.make();
                     error.setRobotTypes(String.join(", ", realNames));
@@ -761,7 +761,7 @@ public class ClientProgramController {
     }
 
     // Transform programs with old xml versions to new xml versions
-    private static Pair<String, String> transformBetweenVersions(IRobotFactory robotFactory, String programText, String configText) {
+    private static Pair<String, String> transformBetweenVersions(RobotFactory robotFactory, String programText, String configText) {
         if ( robotFactory.hasWorkflow("transform") ) {
             if ( configText == null ) {
                 // programs that do not have any configuration modifications are saved into the database without an associated configuration

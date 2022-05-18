@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -48,10 +48,10 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class Jaxb2ProgramAst<V> {
-    private final IRobotFactory robotFactory;
+    private final RobotFactory robotFactory;
     private int variableCounter = 0;
 
-    public Jaxb2ProgramAst(IRobotFactory factory) {
+    public Jaxb2ProgramAst(RobotFactory factory) {
         this.robotFactory = factory;
     }
 
@@ -59,7 +59,7 @@ public class Jaxb2ProgramAst<V> {
         return this.robotFactory.getBlocklyDropdownFactory();
     }
 
-    public IRobotFactory getRobotFactory() {
+    public RobotFactory getRobotFactory() {
         return this.robotFactory;
     }
 

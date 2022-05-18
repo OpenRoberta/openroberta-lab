@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.javaServer.basics.TestConfiguration;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
@@ -111,7 +111,7 @@ public abstract class AbstractRestInterfaceTest {
     protected UserGroupController restGroup;
     protected ClientConfiguration restConfiguration;
 
-    protected Map<String, IRobotFactory> robotPlugins;
+    protected Map<String, RobotFactory> robotPlugins;
 
     //this is the setup class and should be called before testing
     protected void setup() throws Exception {

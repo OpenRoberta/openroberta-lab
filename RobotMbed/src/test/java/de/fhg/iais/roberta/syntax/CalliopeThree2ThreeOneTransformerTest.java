@@ -6,7 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.MbedThree2ThreeOneTransformerWorker;
@@ -113,7 +113,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
             + "        </block>"
             + "    </instance>"
             + "</block_set>";
-    private static IRobotFactory testFactory;
+    private static RobotFactory testFactory;
 
     @BeforeClass
     public static void setupBefore() throws Exception {

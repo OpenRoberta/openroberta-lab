@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.worker.IWorker;
 
 public class WorkflowTest {
 
-    private IRobotFactory robotFactory;
+    private RobotFactory robotFactory;
     protected List<IWorker> workerChain;
     protected List<Phrase<Void>> phrases;
     protected List<ConfigurationComponent> configurationComponents;

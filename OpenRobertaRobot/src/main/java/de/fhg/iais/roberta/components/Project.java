@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -55,7 +55,7 @@ public final class Project {
     private String password;
     private ILanguage language;
     private RobotCommunicator robotCommunicator;
-    private IRobotFactory robotFactory;
+    private RobotFactory robotFactory;
     private boolean withWrapping = true;
     private boolean isNativeEditorCode = false;
     private ProgramAst<Void> program = null;
@@ -160,7 +160,7 @@ public final class Project {
         return this.robotCommunicator;
     }
 
-    public IRobotFactory getRobotFactory() {
+    public RobotFactory getRobotFactory() {
         return this.robotFactory;
     }
 
@@ -359,7 +359,7 @@ public final class Project {
             return this;
         }
 
-        public Builder setFactory(IRobotFactory factory) {
+        public Builder setFactory(RobotFactory factory) {
             this.project.robotFactory = factory;
             return this;
         }
