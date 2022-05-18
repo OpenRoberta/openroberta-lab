@@ -4,6 +4,14 @@ import * as C from './interpreter.constants';
 import * as U from './interpreter.util';
 
 export class RobotWeDoBehaviourTest extends ARobotBehaviour {
+    temperatureLedAction(blue: number, red: number): void {
+        throw new Error('Method not implemented.');
+    }
+
+    soundLedAction(val: number): void {
+        throw new Error('Method not implemented.');
+    }
+
     private timers;
 
     constructor(opLog, debug) {
@@ -200,5 +208,15 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
     public assertAction(_msg: string, _left: any, _op: string, _right: any, _value: any): void {
         const robotText = '> Assertion failed: ' + _msg + ' ' + _left + ' ' + _op + ' ' + _right;
         U.info(' assert action ' + robotText);
+    }
+
+    circleLedAction(ledValues: number[]): void {
+        throw new Error('Method not implemented.');
+    }
+
+    buttonLedAction(ledValues: number[]): void {
+    }
+
+    proxHLedAction(ledValues: number[]): void {
     }
 }

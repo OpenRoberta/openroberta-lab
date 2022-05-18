@@ -26,7 +26,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 DOWN: '9.0',
                 BACK: '5.0',
                 FRONT: '7.0',
-                NO: '0.0',
+                NO: '0.0'
             };
             _this.btInterfaceFct = btInterfaceFct;
             _this.toDisplayFct = toDisplayFct;
@@ -35,6 +35,12 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             U.loggingEnabled(true, true);
             return _this;
         }
+        RobotWeDoBehaviour.prototype.temperatureLedAction = function (blue, red) {
+            throw new Error('Method not implemented.');
+        };
+        RobotWeDoBehaviour.prototype.soundLedAction = function (val) {
+            throw new Error('Method not implemented.');
+        };
         RobotWeDoBehaviour.prototype.update = function (data) {
             U.info('update type:' + data.type + ' state:' + data.state + ' sensor:' + data.sensor + ' actor:' + data.actuator);
             if (data.target !== 'wedo') {
@@ -229,7 +235,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 action: 'on',
                 id: port,
                 direction: speed < 0 ? 1 : 0,
-                power: Math.abs(speed),
+                power: Math.abs(speed)
             };
             this.btInterfaceFct(cmd);
             return 0;
@@ -339,6 +345,14 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             if (!_value) {
                 this.showTextAction('> Assertion failed: ' + _msg + ' ' + _left + ' ' + _op + ' ' + _right, undefined);
             }
+        };
+        RobotWeDoBehaviour.prototype.circleLedAction = function (ledValues) {
+            throw new Error('Method not implemented.');
+        };
+        RobotWeDoBehaviour.prototype.buttonLedAction = function (ledValues) {
+            throw new Error('Method not implemented.');
+        };
+        RobotWeDoBehaviour.prototype.proxHLedAction = function (ledValues) {
         };
         return RobotWeDoBehaviour;
     }(interpreter_aRobotBehaviour_1.ARobotBehaviour));

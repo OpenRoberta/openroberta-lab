@@ -1,0 +1,591 @@
+<toolbox_set id="toolboxBeginner" style="display: none">
+    <category name="TOOLBOX_ACTION" svg="true">
+        <category name="TOOLBOX_MOVE" svg="true">
+            <block type="robActions_motor_on_for">
+                <value name="POWER">
+                    <block type="math_integer">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+                <value name="VALUE">
+                    <block type="math_integer">
+                        <field name="NUM">1000</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_motor_on">
+                <value name="POWER">
+                    <block type="math_integer">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_motor_stop"/>
+        </category>
+        <category name="TOOLBOX_DRIVE" svg="true">
+            <block type="robActions_motorDiff_on_for">
+                <value name="POWER">
+                    <block type="math_integer">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+                <value name="DISTANCE">
+                    <block type="math_integer">
+                        <field name="NUM">1000</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_motorDiff_on">
+                <value name="POWER">
+                    <block type="math_integer">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_motorDiff_stop"/>
+            <block type="robActions_motorDiff_turn_for">
+                <value name="POWER">
+                    <block type="math_integer">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+                <value name="DEGREE">
+                    <block type="math_integer">
+                        <field name="NUM">1000</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_motorDiff_turn">
+                <value name="POWER">
+                    <block type="math_integer">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_motorDiff_curve_for">
+                <value name="POWER_LEFT">
+                    <block type="math_integer">
+                        <field name="NUM">10</field>
+                    </block>
+                </value>
+                <value name="POWER_RIGHT">
+                    <block type="math_integer">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+                <value name="DISTANCE">
+                    <block type="math_integer">
+                        <field name="NUM">1000</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_motorDiff_curve">
+                <value name="POWER_LEFT">
+                    <block type="math_integer">
+                        <field name="NUM">10</field>
+                    </block>
+                </value>
+                <value name="POWER_RIGHT">
+                    <block type="math_integer">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+            </block>
+        </category>
+        <category name='TOOLBOX_SOUND' svg='true'>
+            <block type='mbedActions_play_note'/>
+            <block type='mbedActions_play_tone'>
+                <value name='FREQUENCE'>
+                    <block type='math_integer'>
+                        <field name='NUM'>300</field>
+                    </block>
+                </value>
+                <value name='DURATION'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_play_file'/>
+            <block type='robActions_play_recording_file'>
+                <value name='FILENAME'>
+                    <block type='math_integer'>
+                        <field name='NUM'>1</field>
+                    </block>
+                </value>
+            </block>
+        </category>
+        <category name="TOOLBOX_LIGHT" svg="true">
+            <block type='robActions_led_on'>
+                <value name='COLOR'>
+                    <block type='robColour_picker'>
+                        <field name='COLOUR'>#cc0000</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_leds_off'/>
+            <block type='robActions_led_button'>
+                <value name='LED1'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED2'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED3'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED4'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_led_button'>
+                <value name='LED1'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED2'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED3'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED4'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_led_circle'>
+                <value name='LED1'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED2'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED3'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED4'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED5'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED6'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED7'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED8'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_led_circle'>
+                <value name='LED1'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED2'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED3'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED4'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED5'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED6'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED7'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED8'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_led_proxh'>
+                <value name='LED1'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED2'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED3'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED4'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED5'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED6'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED7'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED8'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_led_proxh'>
+                <value name='LED1'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED2'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED3'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED4'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED5'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED6'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED7'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED8'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_led_proxv'>
+                <value name='LED1'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED2'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_led_proxv'>
+                <value name='LED1'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED2'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_led_temperature'>
+                <value name='LED1'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+                <value name='LED2'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_led_temperature'>
+                <value name='LED1'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='LED2'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_led_sound'>
+                <value name='LED1'>
+                    <block type='math_integer'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_led_sound'>
+                <value name='LED1'>
+                    <block type='math_integer'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+            </block>
+        </category>
+    </category>
+    <category name='TOOLBOX_SENSOR' svg='true'>
+        <block type='robSensors_key_getSample'/>
+        <block type='robSensors_infrared_getSample'/>
+        <block type='robSensors_irhorizontal_getSample'/>
+        <block type='robSensors_sound_getSample'/>
+        <block type='robSensors_tap_getSample'/>
+        <block type="robSensors_timer_getSample"/>
+        <block type="robSensors_timer_reset"/>
+        <block type='robSensors_record_begin'>
+            <value name='FILENAME'>
+                <block type='math_integer'>
+                    <field name='NUM'>1</field>
+                </block>
+            </value>
+        </block>
+        <block type='robSensors_record_stop'/>
+        <block type='robSensors_accelerometer_getSample'/>
+        <block type='robSensors_temperature_getSample'/>
+    </category>
+    <category name="TOOLBOX_CONTROL" svg="true">
+        <category name="TOOLBOX_DECISION" svg="true">
+            <block type="robControls_if"/>
+            <block type="robControls_ifElse"/>
+        </category>
+        <category name="TOOLBOX_LOOP" svg="true">
+            <block type="robControls_loopForever"/>
+            <block type="controls_repeat_ext">
+                <value name="TIMES">
+                    <block type="math_integer">
+                        <field name="NUM">10</field>
+                    </block>
+                </value>
+            </block>
+            <block type="controls_whileUntil"/>
+            <block type="robControls_for">
+                <value name="FROM">
+                    <block type="math_integer">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+                <value name="TO">
+                    <block type="math_integer">
+                        <field name="NUM">10</field>
+                    </block>
+                </value>
+                <value name="BY">
+                    <block type="math_integer">
+                        <field name="NUM">1</field>
+                    </block>
+                </value>
+            </block>
+            <block type="controls_flow_statements"/>
+        </category>
+        <category name="TOOLBOX_WAIT" svg="true">
+            <block type="robControls_wait"/>
+            <block type="robControls_wait_time">
+                <value name="WAIT">
+                    <block type="math_integer">
+                        <field name="NUM">500</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robControls_wait_for">
+                <value name="WAIT0">
+                    <block type="logic_compare">
+                        <value name="A">
+                            <block type="robSensors_getSample"/>
+                        </value>
+                        <value name="B">
+                            <block type="math_integer">
+                                <field name="NUM">1</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+            </block>
+        </category>
+    </category>
+    <category name="TOOLBOX_LOGIC" svg="true">
+        <block type="logic_compare"/>
+        <block type="logic_operation"/>
+        <block type="logic_negate"/>
+        <block type="logic_boolean"/>
+    </category>
+    <category name="TOOLBOX_MATH" svg="true">
+        <block type='math_integer'/>
+        <block type='math_arithmetic'/>
+        <block type='math_single'/>
+        <block type='math_trig'/>
+        <block type='math_number_property'/>
+        <block type='robMath_change'>
+            <value name='DELTA'>
+                <block type='math_integer'>
+                    <field name='NUM'>1</field>
+                </block>
+            </value>
+        </block>
+        <block type="math_on_list"/>
+        <block type='math_modulo'/>
+        <block type="math_random_int">
+            <value name="FROM">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+            <value name="TO">
+                <block type="math_number">
+                    <field name="NUM">100</field>
+                </block>
+            </value>
+        </block>
+    </category>
+    <category name="TOOLBOX_LIST" svg="true">
+        <block type="robLists_create_with">
+            <mutation items="3" list_type="Number"/>
+            <value name="ADD0">
+                <block type="math_integer"/>
+            </value>
+            <value name="ADD1">
+                <block type="math_integer"/>
+            </value>
+            <value name="ADD2">
+                <block type="math_integer"/>
+            </value>
+        </block>
+        <block type="robLists_repeat">
+            <value name="NUM">
+                <block type="math_integer">
+                    <field name="NUM">5</field>
+                </block>
+            </value>
+        </block>
+        <block type="robLists_getIndex"/>
+        <block type="robLists_setIndex"/>
+        <!-- <block type="robLists_getSublist"/>-->
+    </category>
+    <category name="TOOLBOX_COLOUR" svg="true">
+        <block type="robColour_picker">
+            <field name="COLOUR">#cc0000</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#ff6600</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#ffff00</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#33cc00</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#33ffff</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#3366ff</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#cc33cc</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#FFFFFF</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#000000</field>
+        </block>
+        <block type="naoColour_rgb">
+            <value name="RED">
+                <block type="math_integer">
+                    <field name="NUM">255</field>
+                </block>
+            </value>
+            <value name="GREEN">
+                <block type="math_integer">
+                    <field name="NUM">20</field>
+                </block>
+            </value>
+            <value name="BLUE">
+                <block type="math_integer">
+                    <field name="NUM">150</field>
+                </block>
+            </value>
+        </block>
+    </category>
+    <category name="TOOLBOX_TEXT" svg="true">
+        <block type="text_comment"/>
+    </category>
+    <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true">
+    </category>
+    <category name="TOOLBOX_PROCEDURE" custom="PROCEDURE" svg="true"/>
+</toolbox_set>

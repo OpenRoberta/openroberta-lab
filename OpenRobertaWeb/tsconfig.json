@@ -17,7 +17,7 @@
     "noImplicitUseStrict": true,
     "noImplicitOverride": true,
     "lib": [
-      "ES6",
+      "es2017",
       "DOM"
     ],
     "baseUrl": "src",
@@ -115,6 +115,9 @@
       "robot.controller": [
         "app/roberta/controller/robot.controller"
       ],
+      "thymioSocket.controller": [
+        "app/roberta/controller/thymioSocket.controller"
+      ],
       "robot.model": [
         "app/roberta/models/robot.model"
       ],
@@ -174,6 +177,9 @@
       ],
       "robot.xnn": [
         "app/simulation/simulationLogic/robot.xnn"
+      ],
+      "robot.thymio": [
+        "app/simulation/simulationLogic/robot.thymio"
       ],
       "simulation.scene": [
         "app/simulation/simulationLogic/simulation.scene"
@@ -264,9 +270,22 @@
       ],
       "wires": [
         "app/configVisualization/wires"
+      ],
+      "thymio_generated": [
+        "app/roberta/models/thymio_generated"
+      ],
+      "thymio": [
+        "app/roberta/models/thymio"
+      ],
+      "@cor3ntin/flexbuffers-wasm": [
+        "../node_modules/@cor3ntin/flexbuffers-wasm/flexbuffers"
       ]
-    }
+    },
+    "allowSyntheticDefaultImports": true
   },
+  "types": [
+    "@cor3ntin/flexbuffers-wasm"
+  ],
   "include": [
     "src/**/*"
   ],

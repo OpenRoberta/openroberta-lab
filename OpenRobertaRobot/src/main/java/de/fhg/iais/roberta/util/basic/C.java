@@ -33,12 +33,14 @@ public class C {
     public static final String BUTTONS = "buttons";
     public static final String BUTTON_A = "A";
     public static final String BUTTON_B = "B";
+    public static final String BUTTON_LED_ACTION = "buttonLedAction";
     public static final String CALL = "call";
     public static final String CAST_CHAR = "mathCastCharFunct";
     public static final String CAST_STRING = "mathCastStringFunct";
     public static final String CAST_STRING_NUMBER = "textStringCastNumberFunct";
     public static final String CAST_CHAR_NUMBER = "textCharCastNumberFunct";
     public static final String CHARACTER = "character";
+    public static final String CIRCLE_LED_ACTION = "cirleLedAction";
     public static final String CLEAR_DISPLAY_ACTION = "ClearDisplay";
     public static final String COLOR = "color";
     public static final String COLOR_CONST = "COLOR_CONST";
@@ -136,6 +138,7 @@ public class C {
     public static final String LEFT = "left";
     public static final String LIGHT = "light";
     public static final String LIGHT_ACTION = "lightAction";
+    public static final String LINE = "line";
     public static final String LIST = "list";
     public static final String LIST_OPERATION = "list_operation";
     public static final String LIST_GET_INDEX = "list_get_index";
@@ -236,6 +239,7 @@ public class C {
     public static final String POSITION = "position";
     public static final String POWER = "POWER";
     public static final String PRESENCE = "presence";
+    public static final String PROXH_LED_ACTION = "proxHLedAction";
     public static final String RANDOM = "random";
     public static final String RANDOM_DOUBLE = "randDouble";
     public static final String RANDOM_INT = "randInt";
@@ -272,6 +276,7 @@ public class C {
     public static final String SIZE = "size";
     public static final String SLOT = "slot";
     public static final String SOUND = "sound";
+    public static final String SOUND_LED_ACTION = "soundLedAction";
     public static final String SPEED = "speed";
     public static final String SPEED_L = "speedL";
     public static final String SPEED_ONLY = "speedOnly";
@@ -289,6 +294,7 @@ public class C {
     public static final String TARGET = "target";
     public static final String TERMINATE_BLOCK = "TERMINATE_BLOCK";
     public static final String TEMPERATURE = "temperature";
+    public static final String TEMPERATURE_LED_ACTION = "temperatureLedAction";
     public static final String TERNARY = "ternary";
     public static final String TERNARY_EXPR = "createTernaryExpr";
     public static final String TEXT = "text";

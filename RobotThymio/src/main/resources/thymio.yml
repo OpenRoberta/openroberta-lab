@@ -1,0 +1,13 @@
+include: "classpath:/robotCommon.yml"
+block:
+
+configuration:
+  MBUILD_PORT: [ robConf_mbuild_port ]
+  MBUILD_ULTRASONIC2: [ robBrick_mbuild_ultrasonic2 ]
+  MBUILD_QUADRGB: [ robBrick_mbuild_quadrgb ]
+
+mode:
+
+
+wait:
+

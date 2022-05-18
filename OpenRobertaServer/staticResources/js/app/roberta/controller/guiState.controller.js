@@ -1,4 +1,4 @@
-define(["require", "exports", "util", "message", "guiState.model", "progHelp.controller", "legal.controller", "webview.controller", "confVisualization", "socket.controller", "jquery", "blockly"], function (require, exports, UTIL, MSG, GUISTATE, HELP_C, LEGAL_C, WEBVIEW_C, CV, SOCKET_C, $, Blockly) {
+define(["require", "exports", "util", "message", "guiState.model", "progHelp.controller", "legal.controller", "webview.controller", "confVisualization", "socket.controller", "jquery", "blockly", "thymioSocket.controller"], function (require, exports, UTIL, MSG, GUISTATE, HELP_C, LEGAL_C, WEBVIEW_C, CV, SOCKET_C, $, Blockly, THYMIO_C) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getLegalTextsMap = exports.updateTutorialMenu = exports.updateMenuStatus = exports.setWebview = exports.inWebview = exports.getTheme = exports.getAvailableHelp = exports.getSocket = exports.setSocket = exports.getPingTime = exports.setPingTime = exports.doPing = exports.setPing = exports.isProgramToDownload = exports.setProgramToDownload = exports.getCommandLine = exports.getSignature = exports.getVendor = exports.getConnection = exports.getConnectionTypeEnum = exports.getListOfTutorials = exports.getWebotsUrl = exports.hasWebotsSim = exports.hasNN = exports.hasMultiSim = exports.hasSim = exports.checkSim = exports.setConfiguration = exports.setProgram = exports.setLogout = exports.setLogin = exports.getUserUserGroupOwner = exports.getUserUserGroup = exports.isUserMemberOfUserGroup = exports.isUserAccountActivated = exports.getUserAccountName = exports.getUserName = exports.isPublicServerVersion = exports.getServerVersion = exports.setStartWithoutPopup = exports.getStartWithoutPopup = exports.getConfigurationConf = exports.getProgramProg = exports.getConfigurationToolbox = exports.getProgramToolbox = exports.getRobots = exports.getProgramXML = exports.setProgramXML = exports.getConfigurationXML = exports.setConfigurationXML = exports.setRobotToken = exports.getRobotFWName = exports.setDefaultRobot = exports.getDefaultRobot = exports.getConfToolbox = exports.getToolbox = exports.getProgramToolboxLevel = exports.setProgramToolboxLevel = exports.setConfigurationNameDefault = exports.setConfigurationName = exports.getConfigurationName = exports.setProgramShareRelation = exports.getProgramShareRelation = exports.setProgramAuthorName = exports.getProgramAuthorName = exports.setProgramOwnerName = exports.getProgramOwnerName = exports.setProgramName = exports.getProgramName = exports.setProgramTimestamp = exports.getProgramTimestamp = exports.isUserLoggedIn = exports.getBinaryFileExtension = exports.getSourceCodeFileExtension = exports.getProgramSource = exports.setProgramSource = exports.getProgramShared = exports.setConfigurationSaved = exports.isConfigurationSaved = exports.setProgramSaved = exports.isProgramSaved = exports.getLanguage = exports.setLanguage = exports.getPrevView = exports.getView = exports.setView = exports.hasRobotDefaultFirmware = exports.getRobotVersion = exports.getRobotState = exports.getRobotBattery = exports.getRobotName = exports.getRobotTime = exports.isRobotDisconnected = exports.isConfigurationUsed = exports.isRobotConnected = exports.getRobotInfoEN = exports.getRobotInfoDE = exports.getIsRobotBeta = exports.getMenuRobotRealName = exports.getRobotRealName = exports.getRobotPort = exports.setRobotPort = exports.getRobotGroup = exports.getRobot = exports.setRunEnabled = exports.isRunEnabled = exports.setConnectionState = exports.findRobot = exports.findGroup = exports.setKioskMode = exports.setRobot = exports.setBricklyWorkspace = exports.getBricklyWorkspace = exports.setBlocklyWorkspace = exports.getBlocklyWorkspace = exports.setIsAgent = exports.getIsAgent = exports.setState = exports.isKioskMode = exports.isConfigurationAnonymous = exports.getConfigurationStandardName = exports.isConfigurationStandard = exports.isProgramWritable = exports.isProgramStandard = exports.setInitialState = exports.init = void 0;
     var LONG = 300000; // Ping time 5min
@@ -12,7 +12,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             GUISTATE.gui.webview = opt_data || false;
             if (GUISTATE.gui.webview) {
                 $('.logo').css({
-                    right: '32px',
+                    right: '32px'
                 });
             }
             GUISTATE.gui.view = 'tabProgram';
@@ -118,35 +118,37 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         if (result['robot.version']) {
             GUISTATE.robot.version = result['robot.version'];
         }
-        if (result['robot.firmwareName'] != undefined) {
-            GUISTATE.robot.fWName = result['robot.firmwareName'];
-        }
-        else {
-            GUISTATE.robot.fWName = '';
-        }
-        if (result['robot.wait'] != undefined) {
-            GUISTATE.robot.time = result['robot.wait'];
-        }
-        else {
-            GUISTATE.robot.time = -1;
-        }
-        if (result['robot.battery'] != undefined) {
-            GUISTATE.robot.battery = result['robot.battery'];
-        }
-        else {
-            GUISTATE.robot.battery = '';
-        }
-        if (result['robot.name'] != undefined) {
-            GUISTATE.robot.name = result['robot.name'];
-        }
-        else {
-            GUISTATE.robot.name = '';
-        }
-        if (result['robot.state'] != undefined) {
-            GUISTATE.robot.state = result['robot.state'];
-        }
-        else {
-            GUISTATE.robot.state = '';
+        if (getConnection() !== getConnectionTypeEnum().TDM) {
+            if (result['robot.firmwareName'] != undefined) {
+                GUISTATE.robot.fWName = result['robot.firmwareName'];
+            }
+            else {
+                GUISTATE.robot.fWName = '';
+            }
+            if (result['robot.wait'] != undefined) {
+                GUISTATE.robot.time = result['robot.wait'];
+            }
+            else {
+                GUISTATE.robot.time = -1;
+            }
+            if (result['robot.battery'] != undefined) {
+                GUISTATE.robot.battery = result['robot.battery'];
+            }
+            else {
+                GUISTATE.robot.battery = '';
+            }
+            if (result['robot.name'] != undefined) {
+                GUISTATE.robot.name = result['robot.name'];
+            }
+            else {
+                GUISTATE.robot.name = '';
+            }
+            if (result['robot.state'] != undefined) {
+                GUISTATE.robot.state = result['robot.state'];
+            }
+            else {
+                GUISTATE.robot.state = '';
+            }
         }
         if (result['robot.sensorvalues'] != undefined) {
             GUISTATE.robot.sensorValues = result['robot.sensorvalues'];
@@ -174,6 +176,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         var connectionType = getConnection();
         switch (getConnection()) {
             case GUISTATE.gui.connectionType.AGENTORTOKEN:
+            case GUISTATE.gui.connectionType.TDM:
                 if (GUISTATE.gui.isAgent === true) {
                     break;
                 }
@@ -333,6 +336,10 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
                 $('#runSourceCodeEditor').addClass('disabled');
                 setPingTime(SHORT);
                 break;
+            case GUISTATE.gui.connectionType.TDM:
+                THYMIO_C.init();
+                setPingTime(SHORT);
+                break;
             case GUISTATE.gui.connectionType.WEBVIEW:
                 SOCKET_C.listRobotStop();
                 $('#head-navi-icon-robot').removeClass('error');
@@ -381,7 +388,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
                 WEBVIEW_C.jsToAppInterface({
                     target: 'internal',
                     type: 'setRobot',
-                    robot: robotGroup,
+                    robot: robotGroup
                 });
             }
         }
@@ -1175,9 +1182,9 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         GUISTATE.gui.webview = webview;
     }
     exports.setWebview = setWebview;
-    function updateMenuStatus() {
+    function updateMenuStatus(numOfConnections) {
         // TODO revice this function, because isAgent is the exception
-        switch (SOCKET_C.getPortList().length) {
+        switch (numOfConnections) {
             case 0:
                 if (getConnection() !== GUISTATE.gui.connectionType.AGENTORTOKEN) {
                     $('#head-navi-icon-robot').removeClass('error');

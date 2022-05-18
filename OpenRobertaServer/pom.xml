@@ -110,6 +110,10 @@
         </dependency>
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
+            <artifactId>RobotThymio</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>OpenRobertaRobot</artifactId>
         </dependency>
         <dependency>
@@ -214,6 +218,13 @@
                                 <artifactItem>
                                     <groupId>de.fhg.iais.openroberta</groupId>
                                     <artifactId>RobotEdison</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>de.fhg.iais.openroberta</groupId>
+                                    <artifactId>RobotThymio</artifactId>
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>

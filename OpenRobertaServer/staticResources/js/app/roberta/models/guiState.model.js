@@ -46,7 +46,8 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
             AGENTORTOKEN: 'arduinoAgentOrToken',
             LOCAL: 'local',
             WEBVIEW: 'webview',
-            JSPLAY: 'jsPlay', //Play file in the browser with JavaScript
+            JSPLAY: 'jsPlay',
+            TDM: 'tdm' // Thymio Device Manager, only for Thymio
         };
         exports.gui.runEnabled = false;
         exports.user.id = -1;
@@ -84,7 +85,7 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
             COMM.setInitToken(undefined);
             return COMM.json('/init', {
                 cmd: 'init',
-                screenSize: [window.screen.availWidth, window.screen.availHeight],
+                screenSize: [window.screen.availWidth, window.screen.availHeight]
             }, function (result) {
                 if (result.rc === 'ok') {
                     COMM.setInitToken(result.initToken);

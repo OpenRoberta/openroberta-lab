@@ -23,13 +23,13 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "LIGHT_ACTION", category = "ACTOR", blocklyNames = {"robActions_led_on", "sim_LED_on", "robActions_brickLight_on", "robActions_sensorLight_on"})
 public final class LightAction extends Action {
+    private static List<Field> fields;
+    private static boolean isActor;
+    private static boolean isBlink;
     public final Expr rgbLedColor;
     public final IBrickLedColor color;
     public final ILightMode mode;
-    private static List<Field> fields;
     public final String port;
-    private static boolean isActor;
-    private static boolean isBlink;
 
     public LightAction(String port, IBrickLedColor color, ILightMode mode, Expr rgbLedColor, BlocklyProperties properties) {
         super(properties);
@@ -41,12 +41,7 @@ public final class LightAction extends Action {
         setReadOnly();
     }
 
-    @Override
-    public String toString() {
-        return "LightAction [" + this.port + ", " + this.mode + ", " + this.color + ", " + this.rgbLedColor + "]";
-    }
-
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         Phrase ledColor = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
@@ -84,5 +79,10 @@ public final class LightAction extends Action {
         }
         return jaxbDestination;
 
+    }
+
+    @Override
+    public String toString() {
+        return "LightAction [" + this.port + ", " + this.mode + ", " + this.color + ", " + this.rgbLedColor + "]";
     }
 }

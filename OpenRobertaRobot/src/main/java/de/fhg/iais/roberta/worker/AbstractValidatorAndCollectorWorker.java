@@ -81,7 +81,7 @@ public abstract class AbstractValidatorAndCollectorWorker implements IWorker {
      */
     protected abstract CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders);
 
-    private void collectGlobalVariables(Iterable<List<Phrase>> phrasesSet, IVisitor<Void> visitor) {
+    protected void collectGlobalVariables(Iterable<List<Phrase>> phrasesSet, IVisitor<Void> visitor) {
         for ( List<Phrase> phrases : phrasesSet ) {
             Phrase phrase = phrases.get(1);
             if ( phrase.hasName("MAIN_TASK") ) {

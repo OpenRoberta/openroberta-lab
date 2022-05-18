@@ -26,7 +26,7 @@ public class HelperMethodGenerator {
      * Programming languages we support.
      */
     public enum Language {
-        PYTHON, C, JAVA, JSON
+        PYTHON, C, JAVA, JSON, ASEBA
     }
 
     private final JSONObject jsonHelperMethods;

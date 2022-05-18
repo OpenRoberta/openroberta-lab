@@ -4,6 +4,14 @@ import * as C from './interpreter.constants';
 import * as U from './interpreter.util';
 
 export class RobotWeDoBehaviour extends ARobotBehaviour {
+    temperatureLedAction(blue: number, red: number): void {
+        throw new Error('Method not implemented.');
+    }
+
+    soundLedAction(val: number): void {
+        throw new Error('Method not implemented.');
+    }
+
     /*
      * represents the state of connected wedo devices with the following
      * structure: {<name of the device> { 1 : { tiltsensor : "0.0" }, 2 : {
@@ -18,7 +26,7 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
         DOWN: '9.0',
         BACK: '5.0',
         FRONT: '7.0',
-        NO: '0.0',
+        NO: '0.0'
     };
 
     constructor(btInterfaceFct: any, toDisplayFct: any) {
@@ -229,7 +237,7 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
             action: 'on',
             id: port,
             direction: speed < 0 ? 1 : 0,
-            power: Math.abs(speed),
+            power: Math.abs(speed)
         };
         this.btInterfaceFct(cmd);
         return 0;
@@ -369,5 +377,16 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
         if (!_value) {
             this.showTextAction('> Assertion failed: ' + _msg + ' ' + _left + ' ' + _op + ' ' + _right, undefined);
         }
+    }
+
+    circleLedAction(ledValues: number[]): void {
+        throw new Error('Method not implemented.');
+    }
+
+    buttonLedAction(ledValues: number[]): void {
+        throw new Error('Method not implemented.');
+    }
+
+    proxHLedAction(ledValues: number[]): void {
     }
 }

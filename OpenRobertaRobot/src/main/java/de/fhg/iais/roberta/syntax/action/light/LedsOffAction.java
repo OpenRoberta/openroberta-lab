@@ -1,12 +1,12 @@
-package de.fhg.iais.roberta.syntax.action.mbot2;
+package de.fhg.iais.roberta.syntax.action.light;
 
 import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoHide;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 

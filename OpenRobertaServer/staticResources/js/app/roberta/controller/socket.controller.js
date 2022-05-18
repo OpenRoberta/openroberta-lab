@@ -40,7 +40,7 @@ define(["require", "exports", "log", "jquery", "robot.controller", "guiState.con
         if (portList.length == 1) {
             ROBOT_C.setPort(portList[0]);
         }
-        GUISTATE_C.updateMenuStatus();
+        GUISTATE_C.updateMenuStatus(getPortList().length);
     }
     function listRobotStart() {
         //console.log("list robots started");
@@ -107,7 +107,7 @@ define(["require", "exports", "log", "jquery", "robot.controller", "guiState.con
                     if (portList.length == 1) {
                         ROBOT_C.setPort(portList[0]);
                     }
-                    GUISTATE_C.updateMenuStatus();
+                    GUISTATE_C.updateMenuStatus(getPortList().length);
                 }
                 else if (data.includes('OS')) {
                     jsonObject = JSON.parse(data);

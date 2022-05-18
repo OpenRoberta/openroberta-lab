@@ -1,5 +1,3 @@
-import * as exports from 'exports';
-import * as MSG from 'message';
 import * as COMM from 'comm';
 
 export const server = {};
@@ -51,6 +49,7 @@ function init() {
         LOCAL: 'local',
         WEBVIEW: 'webview',
         JSPLAY: 'jsPlay', //Play file in the browser with JavaScript
+        TDM: 'tdm' // Thymio Device Manager, only for Thymio
     };
     gui.runEnabled = false;
 
@@ -90,15 +89,15 @@ function init() {
     robot.socket = null;
     robot.hasWlan = false;
 
-    var getInitFromServer = function () {
+    var getInitFromServer = function() {
         COMM.setInitToken(undefined);
         return COMM.json(
             '/init',
             {
                 cmd: 'init',
-                screenSize: [window.screen.availWidth, window.screen.availHeight],
+                screenSize: [window.screen.availWidth, window.screen.availHeight]
             },
-            function (result) {
+            function(result) {
                 if (result.rc === 'ok') {
                     COMM.setInitToken(result.initToken);
                     $.extend(server, result.server);

@@ -8,6 +8,8 @@ import * as CV from 'confVisualization';
 import * as SOCKET_C from 'socket.controller';
 import * as $ from 'jquery';
 import * as Blockly from 'blockly';
+import * as THYMIO_C from 'thymioSocket.controller';
+
 
 var LONG = 300000; // Ping time 5min
 var SHORT = 3000; // Ping time 3sec
@@ -16,11 +18,11 @@ var SHORT = 3000; // Ping time 3sec
  */
 function init(language, opt_data) {
     var ready = $.Deferred();
-    $.when(GUISTATE.init()).then(function () {
+    $.when(GUISTATE.init()).then(function() {
         GUISTATE.gui.webview = opt_data || false;
         if (GUISTATE.gui.webview) {
             $('.logo').css({
-                right: '32px',
+                right: '32px'
             });
         }
 
@@ -53,11 +55,11 @@ function init(language, opt_data) {
         if (GUISTATE.server.theme !== 'default') {
             var themePath = '../theme/' + GUISTATE.server.theme + '.json';
             $.getJSON(themePath)
-                .done(function (data) {
+                .done(function(data) {
                     // store new theme properties (only colors so far)
                     GUISTATE.server.theme = data;
                 })
-                .fail(function (e, r) {
+                .fail(function(e, r) {
                     // this should not happen
                     console.error('"' + themePath + '" is not a valid json file! The reason is probably a', r);
                     GUISTATE.server.theme = 'default';
@@ -131,30 +133,32 @@ function setState(result) {
     if (result['robot.version']) {
         GUISTATE.robot.version = result['robot.version'];
     }
-    if (result['robot.firmwareName'] != undefined) {
-        GUISTATE.robot.fWName = result['robot.firmwareName'];
-    } else {
-        GUISTATE.robot.fWName = '';
-    }
-    if (result['robot.wait'] != undefined) {
-        GUISTATE.robot.time = result['robot.wait'];
-    } else {
-        GUISTATE.robot.time = -1;
-    }
-    if (result['robot.battery'] != undefined) {
-        GUISTATE.robot.battery = result['robot.battery'];
-    } else {
-        GUISTATE.robot.battery = '';
-    }
-    if (result['robot.name'] != undefined) {
-        GUISTATE.robot.name = result['robot.name'];
-    } else {
-        GUISTATE.robot.name = '';
-    }
-    if (result['robot.state'] != undefined) {
-        GUISTATE.robot.state = result['robot.state'];
-    } else {
-        GUISTATE.robot.state = '';
+    if (getConnection() !== getConnectionTypeEnum().TDM) {
+        if (result['robot.firmwareName'] != undefined) {
+            GUISTATE.robot.fWName = result['robot.firmwareName'];
+        } else {
+            GUISTATE.robot.fWName = '';
+        }
+        if (result['robot.wait'] != undefined) {
+            GUISTATE.robot.time = result['robot.wait'];
+        } else {
+            GUISTATE.robot.time = -1;
+        }
+        if (result['robot.battery'] != undefined) {
+            GUISTATE.robot.battery = result['robot.battery'];
+        } else {
+            GUISTATE.robot.battery = '';
+        }
+        if (result['robot.name'] != undefined) {
+            GUISTATE.robot.name = result['robot.name'];
+        } else {
+            GUISTATE.robot.name = '';
+        }
+        if (result['robot.state'] != undefined) {
+            GUISTATE.robot.state = result['robot.state'];
+        } else {
+            GUISTATE.robot.state = '';
+        }
     }
     if (result['robot.sensorvalues'] != undefined) {
         GUISTATE.robot.sensorValues = result['robot.sensorvalues'];
@@ -181,6 +185,7 @@ function setState(result) {
     let connectionType = getConnection();
     switch (getConnection()) {
         case GUISTATE.gui.connectionType.AGENTORTOKEN:
+        case GUISTATE.gui.connectionType.TDM:
             if (GUISTATE.gui.isAgent === true) {
                 break;
             }
@@ -340,6 +345,10 @@ function setRobot(robot, result, opt_init) {
             $('#runSourceCodeEditor').addClass('disabled');
             setPingTime(SHORT);
             break;
+        case GUISTATE.gui.connectionType.TDM:
+            THYMIO_C.init();
+            setPingTime(SHORT);
+            break;
         case GUISTATE.gui.connectionType.WEBVIEW:
             SOCKET_C.listRobotStop();
             $('#head-navi-icon-robot').removeClass('error');
@@ -390,7 +399,7 @@ function setRobot(robot, result, opt_init) {
             WEBVIEW_C.jsToAppInterface({
                 target: 'internal',
                 type: 'setRobot',
-                robot: robotGroup,
+                robot: robotGroup
             });
         }
     }
@@ -1178,9 +1187,9 @@ function setWebview(webview) {
     GUISTATE.gui.webview = webview;
 }
 
-function updateMenuStatus() {
+function updateMenuStatus(numOfConnections) {
     // TODO revice this function, because isAgent is the exception
-    switch (SOCKET_C.getPortList().length) {
+    switch (numOfConnections) {
         case 0:
             if (getConnection() !== GUISTATE.gui.connectionType.AGENTORTOKEN) {
                 $('#head-navi-icon-robot').removeClass('error');
@@ -1365,5 +1374,5 @@ export {
     setWebview,
     updateMenuStatus,
     updateTutorialMenu,
-    getLegalTextsMap,
+    getLegalTextsMap
 };

@@ -1,10 +1,7 @@
-import * as UTIL from 'util';
 import * as LOG from 'log';
-import * as MSG from 'message';
 import * as $ from 'jquery';
 import * as ROBOT_C from 'robot.controller';
 import * as GUISTATE_C from 'guiState.controller';
-import * as GUISTATE from 'guiState.model';
 import * as IO from 'socket.io';
 import * as COMM from 'comm';
 
@@ -24,17 +21,17 @@ function makeRequest() {
     productList = [];
     robotList = [];
     COMM.listRobotsFromAgent(
-        function (text) {
+        function(text) {
             //console.log("listing robots");
         },
-        function (response) {
+        function(response) {
             agentPortList = response.responseText;
         },
-        function () {}
+        function() {}
     );
     try {
         jsonObject = JSON.parse(agentPortList);
-        jsonObject.forEach(function (port) {
+        jsonObject.forEach(function(port) {
             if (GUISTATE_C.getVendor() === port['IdVendor'].toLowerCase()) {
                 portList.push(port['Name']);
                 vendorList.push(port['IdVendor']);
@@ -51,7 +48,7 @@ function makeRequest() {
     if (portList.length == 1) {
         ROBOT_C.setPort(portList[0]);
     }
-    GUISTATE_C.updateMenuStatus();
+    GUISTATE_C.updateMenuStatus(getPortList().length);
 }
 
 function listRobotStart() {
@@ -74,14 +71,14 @@ function init() {
         GUISTATE_C.setSocket(robotSocket);
         GUISTATE_C.setIsAgent(true);
         $('#menuConnect').parent().addClass('disabled');
-        robotSocket.on('connect_error', function (err) {
+        robotSocket.on('connect_error', function(err) {
             GUISTATE_C.setIsAgent(false);
         });
 
-        robotSocket.on('connect', function () {
+        robotSocket.on('connect', function() {
             robotSocket.emit('command', 'log on');
             GUISTATE_C.setIsAgent(true);
-            window.setInterval(function () {
+            window.setInterval(function() {
                 portList = [];
                 vendorList = [];
                 productList = [];
@@ -95,11 +92,11 @@ function init() {
          * VID: 0x10c4, PID: 0xea60 Mbot: /dev/ttyUSB0, VID: 0x1a86, PID:
          * 0x7523 ArduinoUno: /dev/ttyACM0, VID: 0x2a03, PID: 0x0043
          */
-        robotSocket.on('message', function (data) {
+        robotSocket.on('message', function(data) {
             if (data.includes('"Network": false')) {
                 var robot;
                 jsonObject = JSON.parse(data);
-                jsonObject['Ports'].forEach(function (port) {
+                jsonObject['Ports'].forEach(function(port) {
                     if (GUISTATE_C.getVendor() === port['VendorID'].toLowerCase()) {
                         portList.push(port['Name']);
                         vendorList.push(port['VendorID']);
@@ -109,7 +106,7 @@ function init() {
                 });
                 GUISTATE_C.setIsAgent(true);
 
-                robotSocket.on('connect_error', function (err) {
+                robotSocket.on('connect_error', function(err) {
                     GUISTATE_C.setIsAgent(false);
                     $('#menuConnect').parent().removeClass('disabled');
                 });
@@ -122,16 +119,16 @@ function init() {
                 if (portList.length == 1) {
                     ROBOT_C.setPort(portList[0]);
                 }
-                GUISTATE_C.updateMenuStatus();
+                GUISTATE_C.updateMenuStatus(getPortList().length);
             } else if (data.includes('OS')) {
                 jsonObject = JSON.parse(data);
                 system = jsonObject['OS'];
             }
         });
 
-        robotSocket.on('disconnect', function () {});
+        robotSocket.on('disconnect', function() {});
 
-        robotSocket.on('error', function (err) {});
+        robotSocket.on('error', function(err) {});
     }
 }
 
@@ -153,7 +150,7 @@ function getRobotList() {
 }
 
 function uploadProgram(programHex, robotPort) {
-    COMM.sendProgramHexToAgent(programHex, robotPort, GUISTATE_C.getProgramName(), GUISTATE_C.getSignature(), GUISTATE_C.getCommandLine(), function () {
+    COMM.sendProgramHexToAgent(programHex, robotPort, GUISTATE_C.getProgramName(), GUISTATE_C.getSignature(), GUISTATE_C.getCommandLine(), function() {
         LOG.text('Create agent upload success');
         $('#menuRunProg').parent().removeClass('disabled');
         $('#runOnBrick').parent().removeClass('disabled');

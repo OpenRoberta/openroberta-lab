@@ -15,7 +15,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         U.loggingEnabled(false, false);
     }
 
-    public getSample(s: State, name: string, sensor: string, port: any, mode: string) {
+    public getSample(s: State, name: string, sensor: string, port: any, mode: string, slot: string) {
         var robotText = 'robot: ' + name + ', port: ' + port + ', mode: ' + mode;
         U.debug(robotText + ' getsample from ' + sensor);
         var sensorName = sensor;
@@ -23,32 +23,28 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         if (name == 'mbot') {
             port = 'ORT_' + port;
         }
-        s.push(this.getSensorValue(sensorName, port, mode));
+        s.push(this.getSensorValue(sensorName, port, mode, slot));
     }
 
-    private getSensorValue(sensorName: string, port: string, mode: string): any {
+    private getSensorValue(sensorName: string, port: string, mode: string, slot: string): any {
         const sensor = this.hardwareState.sensors[sensorName];
         if (sensor === undefined) {
             return 'undefined';
         }
-        var v: string;
-        if (mode != undefined) {
-            if (port != undefined) {
-                v = sensor[port][mode];
-            } else {
-                v = sensor[mode];
-            }
-        } else if (port != undefined) {
-            if (mode === undefined) {
-                v = sensor[port];
-            }
-        } else {
-            return sensor;
+        let value: string = sensor;
+        if (port !== undefined) {
+            value = value[port];
         }
-        if (v === undefined) {
+        if (mode !== undefined) {
+            value = value[mode];
+        }
+        if (slot !== undefined) {
+            value = value[slot];
+        }
+        if (value === undefined) {
             return false;
         } else {
-            return v;
+            return value;
         }
     }
 
@@ -425,5 +421,25 @@ export class RobotSimBehaviour extends ARobotBehaviour {
 
     remember(num: number): void {
         globalThis.rob3rtaNumber = num;
+    }
+
+    circleLedAction(ledValues: number[]): void {
+        this.hardwareState.actions.cirleLeds = ledValues;
+    }
+
+    buttonLedAction(ledValues: number[]): void {
+        this.hardwareState.actions.buttonLeds = ledValues;
+    }
+
+    proxHLedAction(ledValues: number[]): void {
+        this.hardwareState.actions.proxHLeds = ledValues;
+    }
+
+    soundLedAction(val: number): void {
+        this.hardwareState.actions.soundLed = val;
+    }
+
+    temperatureLedAction(blue: number, red: number): void {
+        this.hardwareState.actions.temperatureLeds = [red, blue];
     }
 }

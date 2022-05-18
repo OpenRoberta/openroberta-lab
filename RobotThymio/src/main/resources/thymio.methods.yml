@@ -1,0 +1,5 @@
+STOP:
+  ASEBA: |
+    sub diffdrive_stop
+        motor.left.target = 0
+        motor.right.target = 0

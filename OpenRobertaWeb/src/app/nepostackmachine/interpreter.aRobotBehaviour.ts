@@ -29,7 +29,7 @@ export abstract class ARobotBehaviour {
 
     abstract clearDisplay(): void;
 
-    abstract getSample(s: State, name: string, sensor: string, port: number, mode: string): void;
+    abstract getSample(s: State, name: string, sensor: string, port: number, mode: string, slot: string): void;
 
     abstract timerReset(port: number): void;
 
@@ -96,4 +96,14 @@ export abstract class ARobotBehaviour {
     abstract assertAction(msg: string, left: any, op: string, right: any, value: boolean): void;
 
     abstract close(): void;
+
+    abstract circleLedAction(ledValues: number[]): void;
+
+    abstract buttonLedAction(ledValues: number[]): void;
+
+    abstract proxHLedAction(ledValues: number[]): void;
+
+    abstract temperatureLedAction(blue: number, red: number): void;
+
+    abstract soundLedAction(val: number): void;
 }

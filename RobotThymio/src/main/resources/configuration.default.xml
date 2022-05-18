@@ -1,0 +1,5 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="thymio" xmlversion="3.1" description="" tags="">
+    <instance x="213" y="213">
+        <block type="robControls_start" id="1"/>
+    </instance>
+</block_set>

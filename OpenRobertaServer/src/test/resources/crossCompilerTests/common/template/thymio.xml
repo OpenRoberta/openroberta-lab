@@ -1,0 +1,19 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="thymio" xmlversion="3.1" description="" tags="">
+            <instance x="273" y="50">
+                <block type="robControls_start" id="R-JE+]-|o60|r9uV:XTK" intask="true" deletable="false">
+                    <mutation declare="true"></mutation>
+                    <field name="DEBUG">TRUE</field>
+                    <statement name="ST">
+                        [[decl]]
+                    </statement>
+                </block>
+                [[prog]]
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        [[conf]]
+    </config>
+</export>

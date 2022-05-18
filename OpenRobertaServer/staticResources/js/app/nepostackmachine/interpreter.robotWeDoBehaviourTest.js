@@ -25,6 +25,12 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             U.loggingEnabled(opLog, debug);
             return _this;
         }
+        RobotWeDoBehaviourTest.prototype.temperatureLedAction = function (blue, red) {
+            throw new Error('Method not implemented.');
+        };
+        RobotWeDoBehaviourTest.prototype.soundLedAction = function (val) {
+            throw new Error('Method not implemented.');
+        };
         RobotWeDoBehaviourTest.prototype.clearDisplay = function () {
             U.debug('clear display');
         };
@@ -174,6 +180,13 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
         RobotWeDoBehaviourTest.prototype.assertAction = function (_msg, _left, _op, _right, _value) {
             var robotText = '> Assertion failed: ' + _msg + ' ' + _left + ' ' + _op + ' ' + _right;
             U.info(' assert action ' + robotText);
+        };
+        RobotWeDoBehaviourTest.prototype.circleLedAction = function (ledValues) {
+            throw new Error('Method not implemented.');
+        };
+        RobotWeDoBehaviourTest.prototype.buttonLedAction = function (ledValues) {
+        };
+        RobotWeDoBehaviourTest.prototype.proxHLedAction = function (ledValues) {
         };
         return RobotWeDoBehaviourTest;
     }(interpreter_aRobotBehaviour_1.ARobotBehaviour));

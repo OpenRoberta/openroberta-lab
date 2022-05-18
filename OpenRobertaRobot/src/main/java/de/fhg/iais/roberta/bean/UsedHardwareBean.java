@@ -43,6 +43,10 @@ public class UsedHardwareBean implements IProjectBean {
         return this.userDefinedMethods;
     }
 
+    public List<String> getDeclaredVariables() {
+        return this.declaredVariables;
+    }
+
     public Set<String> getMarkedVariablesAsGlobal() {
         return this.markedVariablesAsGlobal;
     }
