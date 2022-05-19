@@ -103,11 +103,5 @@ if Binary [OR, Unary [NOT, Binary [AND, BoolConst[value: true], BoolConst[value:
 ,then
 exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1]]
 
-DebugAction[value: StmtExpr [
-if Binary [EQ, NumConst[value: 10], Var [x]]
-,then
-exprStmt StringConst[value: Logic Boolean operators Test: success]
-,else
-exprStmt StringConst[value: Logic Boolean operators Test: FAIL]
-]]
+DebugAction[value: TernaryExpr[condition: Binary [EQ, NumConst[value: 10], Var [x]], thenPart: StringConst[value: Logic Boolean operators Test: success], elsePart: StringConst[value: Logic Boolean operators Test: FAIL]]]
 StmtTextComment[textComment: Logic Boolean Operators -- End]

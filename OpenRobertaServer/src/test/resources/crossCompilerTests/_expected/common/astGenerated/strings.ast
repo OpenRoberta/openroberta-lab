@@ -18,13 +18,7 @@ AssertStmt[asserts: Binary [EQ, StringConst[value: start: one two three456 seven
 
 Var [text] := FunctionExpr [TextJoinFunct [FunctionExpr [TextJoinFunct [Var [text], StringConst[value: ten]]], FunctionExpr [TextJoinFunct [StringConst[value:  eleven], StringConst[value:  twelve]]]]]
 
-DebugAction[value: StmtExpr [
-if Binary [EQ, StringConst[value: start: one two three456 seven eight nine ten eleven twelve], Var [text]]
-,then
-exprStmt StringConst[value: String Concat SUCCESS]
-,else
-exprStmt StringConst[value: String Concat FAIL]
-]]
+DebugAction[value: TernaryExpr[condition: Binary [EQ, StringConst[value: start: one two three456 seven eight nine ten eleven twelve], Var [text]], thenPart: StringConst[value: String Concat SUCCESS], elsePart: StringConst[value: String Concat FAIL]]]
 
 Var [number] := FunctionExpr [TextStringCastNumberFunct [[Var [text]]]]
 

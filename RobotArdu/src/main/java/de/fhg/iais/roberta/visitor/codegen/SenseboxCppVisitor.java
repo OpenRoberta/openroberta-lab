@@ -306,14 +306,6 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        this.sb.append("Serial.println(");
-        serialWriteAction.getValue().accept(this);
-        this.sb.append(");");
-        return null;
-    }
-
-    @Override
     public Void visitRelayAction(RelayAction<Void> relayAction) {
         return null;
     }

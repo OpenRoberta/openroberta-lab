@@ -72,11 +72,5 @@ Var [x] := Binary [ADD, Var [x], NumConst[value: 1000]]
 
 )
 AssertStmt[asserts: Binary [EQ, NumConst[value: 30], Var [x]], msg: pos-10]
-DebugAction[value: StmtExpr [
-if Binary [EQ, Var [x], NumConst[value: 30]]
-,then
-exprStmt StringConst[value: Control Flow Loops: success]
-,else
-exprStmt StringConst[value: Control Flow Loops: FAIL]
-]]
+DebugAction[value: TernaryExpr[condition: Binary [EQ, Var [x], NumConst[value: 30]], thenPart: StringConst[value: Control Flow Loops: success], elsePart: StringConst[value: Control Flow Loops: FAIL]]]
 StmtTextComment[textComment: Control Flow Loop -- End]

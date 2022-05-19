@@ -99,6 +99,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
+import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -252,6 +253,12 @@ public class InfoCollector<T> extends BaseVisitor<T> implements ILanguageVisitor
     @Override
     public T visitIfStmt(IfStmt<T> ifStmt) {
         extractInfos(ifStmt);
+        return null;
+    }
+
+    @Override
+    public T visitTernaryExpr(TernaryExpr<T> ternaryExpr) {
+        extractInfos(ternaryExpr);
         return null;
     }
 

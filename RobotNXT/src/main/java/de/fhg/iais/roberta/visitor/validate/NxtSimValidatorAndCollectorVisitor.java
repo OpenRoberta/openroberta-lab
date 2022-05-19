@@ -42,7 +42,7 @@ public final class NxtSimValidatorAndCollectorVisitor extends NxtValidatorAndCol
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
         super.visitColorSensor(colorSensor);
-        if ( colorSensor.getMode().toString().equals("AMBIENTLIGHT") ) {
+        if ( colorSensor.getMode().equals("AMBIENTLIGHT") ) {
             addWarningToPhrase(colorSensor, "SIM_BLOCK_NOT_SUPPORTED");
         }
         return null;
@@ -58,7 +58,7 @@ public final class NxtSimValidatorAndCollectorVisitor extends NxtValidatorAndCol
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         super.visitLightSensor(lightSensor);
-        if ( lightSensor.getMode().toString().equals("AMBIENTLIGHT") ) {
+        if ( lightSensor.getMode().equals("AMBIENTLIGHT") ) {
             addWarningToPhrase(lightSensor, "SIM_BLOCK_NOT_SUPPORTED");
         }
         return null;

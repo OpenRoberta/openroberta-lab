@@ -58,6 +58,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 
 public class ExprlyUnParser<T> {
     private String se;
@@ -503,6 +504,17 @@ public class ExprlyUnParser<T> {
      * @param operation
      * @return Return textual representation of the operation
      */
+    private String visitTernaryExpr(TernaryExpr<T> ternary) {
+        return "(("
+            + visitAST(ternary.getCondition())
+            + ")?("
+            + visitAST(ternary.getThenPart())
+            + "):("
+            + visitAST(ternary.getElsePart())
+            + "))";
+
+    }
+
     private String visitIfStmt(IfStmt<T> ifStmt) {
         return "(("
             + visitAST(ifStmt.getExpr().get(0))
@@ -626,6 +638,9 @@ public class ExprlyUnParser<T> {
         }
         if ( ast instanceof IfStmt<?> ) {
             return visitIfStmt((IfStmt<T>) ast);
+        }
+        if ( ast instanceof TernaryExpr<?> ) {
+            return visitTernaryExpr((TernaryExpr<T>) ast);
         }
         throw new UnsupportedOperationException("Expression " + ast.toString() + "cannot be checked");
     }

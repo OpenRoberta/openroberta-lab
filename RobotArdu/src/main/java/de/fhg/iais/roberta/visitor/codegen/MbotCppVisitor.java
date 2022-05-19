@@ -642,6 +642,8 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
                     nlIndent();
                     this.sb.append("MeIR _meIr;");
                     break;
+                case SC.SERIAL:
+                    break;
                 default:
                     throw new DbcException("Actor is not supported! " + usedActor.getType());
             }
@@ -653,14 +655,6 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         //RatedVoltage: 5V
         //Signal type: Analog (range from 0 to 970)
         this.sb.append("_mePotentiometer" + voltageSensor.getUserDefinedPort() + ".read()*5/970");
-        return null;
-    }
-
-    @Override
-    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        this.sb.append("Serial.println(");
-        serialWriteAction.getValue().accept(this);
-        this.sb.append(");");
         return null;
     }
 

@@ -39,7 +39,7 @@ public class EdisonCompilerWorker implements IWorker {
 
     /**
      * Builds the WAV file from the .py source file using the EdPy Python2 compiler (https://github.com/OpenRoberta/EdPy) by starting an external Python2
-     * process. The file will be stored as {@link PluginProperties#getTempDir()}/token/source/XXXX.wav and also in {@link #compiledWav} as a Base64 String.
+     * process. The file will be stored as {@link PluginProperties#getTempDir()}/token/source/XXXX.wav as a Base64 String.
      *
      * @return a Key that gives information about the building process (success, failure, interrupted,...)
      */

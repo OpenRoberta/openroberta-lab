@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.worker;
 
 import java.lang.ProcessBuilder.Redirect;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -53,7 +54,7 @@ public class MicrobitCompilerWorker implements IWorker {
             procBuilder.redirectInput(Redirect.INHERIT);
             procBuilder.redirectOutput(Redirect.PIPE);
             Process p = procBuilder.start();
-            String compiledHex = IOUtils.toString(p.getInputStream(), "US-ASCII");
+            String compiledHex = IOUtils.toString(p.getInputStream(), StandardCharsets.US_ASCII);
             p.waitFor();
             p.destroy();
             return compiledHex;

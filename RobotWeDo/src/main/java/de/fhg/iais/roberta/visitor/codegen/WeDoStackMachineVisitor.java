@@ -1,14 +1,10 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.List;
-
 import org.json.JSONObject;
 
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.MotorDuration;
-import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
@@ -35,7 +31,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IWeDoVisitor<V> {
 
-    public WeDoStackMachineVisitor(UsedHardwareBean usedHardwareBean, ConfigurationAst configuration, List<List<Phrase<Void>>> phrases) {
+    public WeDoStackMachineVisitor(ConfigurationAst configuration) {
         super(configuration);
         debugger = false;
     }

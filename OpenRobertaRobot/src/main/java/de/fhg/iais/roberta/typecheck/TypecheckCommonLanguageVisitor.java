@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -75,6 +76,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
+import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
@@ -282,6 +284,11 @@ public class TypecheckCommonLanguageVisitor extends BaseVisitor<BlocklyType> imp
 
     @Override
     public BlocklyType visitIfStmt(IfStmt<BlocklyType> ifStmt) {
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitTernaryExpr(TernaryExpr<BlocklyType> ternaryExpr) {
         return null;
     }
 
@@ -594,6 +601,11 @@ public class TypecheckCommonLanguageVisitor extends BaseVisitor<BlocklyType> imp
     @Override
     public BlocklyType visitWaitTimeStmt(WaitTimeStmt<BlocklyType> waitTimeStmt) {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitSerialWriteAction(SerialWriteAction<BlocklyType> serialWriteAction) {
         return null;
     }
 }

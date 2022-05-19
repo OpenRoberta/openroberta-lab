@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.visitor.lang;
 
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -70,6 +71,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
+import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
@@ -138,6 +140,8 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitGetSubFunct(GetSubFunct<V> getSubFunct);
 
     V visitIfStmt(IfStmt<V> ifStmt);
+
+    V visitTernaryExpr(TernaryExpr<V> ternaryExpr);
 
     V visitIndexOfFunct(IndexOfFunct<V> indexOfFunct);
 
@@ -269,5 +273,7 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitWaitStmt(WaitStmt<V> waitStmt);
 
     V visitWaitTimeStmt(WaitTimeStmt<V> waitTimeStmt);
+
+    V visitSerialWriteAction(SerialWriteAction<V> serialWriteAction);
 
 }

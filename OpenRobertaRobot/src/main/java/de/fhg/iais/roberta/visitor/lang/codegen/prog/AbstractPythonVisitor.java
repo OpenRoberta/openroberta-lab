@@ -22,6 +22,7 @@ import static de.fhg.iais.roberta.mode.general.ListElementOperations.INSERT;
 import static de.fhg.iais.roberta.mode.general.ListElementOperations.REMOVE;
 import static de.fhg.iais.roberta.mode.general.ListElementOperations.SET;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
@@ -59,13 +60,13 @@ import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
-import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
+import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -755,12 +756,20 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    protected void generateCodeFromTernary(IfStmt<Void> ifStmt) {
-        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().accept(this);
+    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+        this.sb.append("print(");
+        serialWriteAction.getValue().accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    protected void generateCodeFromTernary(TernaryExpr<Void> ternaryExpr) {
+        ternaryExpr.getThenPart().accept(this);
         this.sb.append(whitespace() + "if" + whitespace() + "(" + whitespace());
-        ifStmt.getExpr().get(0).accept(this);
+        ternaryExpr.getCondition().accept(this);
         this.sb.append(whitespace() + ")" + whitespace() + "else" + whitespace());
-        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().accept(this);
+        ternaryExpr.getElsePart().accept(this);
     }
 
     @Override

@@ -9,12 +9,7 @@ import de.fhg.iais.roberta.visitor.hardware.actor.IBluetoothVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 public interface INxtVisitor<V> extends ISensorVisitor<V>, IActors4AutonomousDriveRobots<V>, IBluetoothVisitor<V> {
-
-    @Override
-    default V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
-        throw new DbcException("Not supported!");
-    }
-
+    
     @Override
     default V visitBluetoothConnectAction(BluetoothConnectAction<V> bluetoothConnectAction) {
         throw new DbcException("Not supported!");

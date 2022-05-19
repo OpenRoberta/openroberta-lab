@@ -101,6 +101,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
+import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -307,6 +308,10 @@ public class TypecheckVisitor extends BaseVisitor<BlocklyType> implements ILangu
 
     @Override
     public BlocklyType visitIfStmt(IfStmt<BlocklyType> ifStmt) {
+        return null;
+    }
+
+    public BlocklyType visitTernaryExpr(TernaryExpr<BlocklyType> ternaryExpr) {
         return null;
     }
 

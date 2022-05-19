@@ -54,7 +54,6 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
         super(brickConfiguration, beanBuilders);
     }
 
-
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
         checkActorPort(clearDisplayAction, clearDisplayAction.getPort());

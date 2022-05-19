@@ -9,7 +9,7 @@ public enum DisplayTextMode {
 
     private final String[] values;
 
-    private DisplayTextMode(String... values) {
+    DisplayTextMode(String... values) {
         this.values = values;
     }
 

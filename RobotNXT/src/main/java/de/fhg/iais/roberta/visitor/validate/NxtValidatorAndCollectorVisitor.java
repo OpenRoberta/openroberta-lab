@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.visitor.validate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -12,25 +11,17 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
-import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
-import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
-import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
@@ -44,12 +35,11 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.visitor.NxtMethods;
 import de.fhg.iais.roberta.visitor.INxtVisitor;
+import de.fhg.iais.roberta.visitor.NxtMethods;
 
-public class NxtValidatorAndCollectorVisitor extends MotorValidatorAndCollectorVisitor implements INxtVisitor<Void> {
+public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfValidatorAndCollectorVisitor implements INxtVisitor<Void> {
 
-    private static final double DOUBLE_EPS = 1E-7;
     private static final Map<String, String> SENSOR_COMPONENT_TYPE_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
         put("COLOR_SENSING", SC.COLOR);
         put("HTCOLOR_SENSING", SC.HT_COLOR);
@@ -90,27 +80,6 @@ public class NxtValidatorAndCollectorVisitor extends MotorValidatorAndCollectorV
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
-        requiredComponentVisited(curveAction, curveAction.getParamLeft().getSpeed(), curveAction.getParamRight().getSpeed());
-        Optional.ofNullable(curveAction.getParamLeft().getDuration())
-            .ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
-        Optional.ofNullable(curveAction.getParamRight().getDuration())
-            .ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
-        checkForZeroSpeedInCurve(curveAction.getParamLeft().getSpeed(), curveAction.getParamRight().getSpeed(), curveAction);
-        checkLeftRightMotorPort(curveAction);
-        addLeftAndRightMotorToUsedActors();
-        return null;
-    }
-
-    @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
-        checkAndVisitMotionParam(driveAction, driveAction.getParam());
-        checkLeftRightMotorPort(driveAction);
-        addLeftAndRightMotorToUsedActors();
         return null;
     }
 
@@ -160,13 +129,9 @@ public class NxtValidatorAndCollectorVisitor extends MotorValidatorAndCollectorV
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         super.visitMathOnListFunct(mathOnListFunct);
-        switch ( mathOnListFunct.getFunctName() ) {
-            case STD_DEV:
-                usedMethodBuilder.addUsedMethod(FunctionNames.POWER);
-                usedMethodBuilder.addUsedMethod(FunctionNames.STD_DEV);
-                break;
-            default:
-                break; // no action necessary
+        if ( mathOnListFunct.getFunctName() == FunctionNames.STD_DEV ) {
+            usedMethodBuilder.addUsedMethod(FunctionNames.POWER);
+            usedMethodBuilder.addUsedMethod(FunctionNames.STD_DEV);
         }
         return null;
     }
@@ -208,13 +173,6 @@ public class NxtValidatorAndCollectorVisitor extends MotorValidatorAndCollectorV
             default:
                 break; // no action necessary
         }
-        return null;
-    }
-
-    @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        checkLeftRightMotorPort(stopAction);
-        addLeftAndRightMotorToUsedActors();
         return null;
     }
 
@@ -262,14 +220,6 @@ public class NxtValidatorAndCollectorVisitor extends MotorValidatorAndCollectorV
     }
 
     @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
-        checkAndVisitMotionParam(turnAction, turnAction.getParam());
-        checkLeftRightMotorPort(turnAction);
-        addLeftAndRightMotorToUsedActors();
-        return null;
-    }
-
-    @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         checkSensorPort(ultrasonicSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(ultrasonicSensor.getUserDefinedPort(), SC.ULTRASONIC, ultrasonicSensor.getMode()));
@@ -285,76 +235,6 @@ public class NxtValidatorAndCollectorVisitor extends MotorValidatorAndCollectorV
         return null;
     }
 
-    private void addLeftAndRightMotorToUsedActors() {
-        Optional<String> optionalLeftPort = Optional.ofNullable(robotConfiguration.getFirstMotor(SC.LEFT))
-            .map(ConfigurationComponent::getUserDefinedPortName);
-
-        Optional<String> optionalRightPort = Optional.ofNullable(robotConfiguration.getFirstMotor(SC.RIGHT))
-            .map(ConfigurationComponent::getUserDefinedPortName);
-
-        if ( optionalLeftPort.isPresent() && optionalRightPort.isPresent() ) {
-            usedHardwareBuilder.addUsedActor(new UsedActor(optionalLeftPort.get(), SC.LARGE));
-            usedHardwareBuilder.addUsedActor(new UsedActor(optionalRightPort.get(), SC.LARGE));
-        }
-    }
-
-    private void checkForZeroSpeedInCurve(Expr<Void> speedLeft, Expr<Void> speedRight, Action<Void> action) {
-        if ( speedLeft.getKind().hasName("NUM_CONST") && speedRight.getKind().hasName("NUM_CONST") ) {
-            double speedLeftNumConst = Double.parseDouble(((NumConst<Void>) speedLeft).getValue());
-            double speedRightNumConst = Double.parseDouble(((NumConst<Void>) speedRight).getValue());
-
-            boolean bothMotorsHaveZeroSpeed = (Math.abs(speedLeftNumConst) < DOUBLE_EPS) && (Math.abs(speedRightNumConst) < DOUBLE_EPS);
-            if ( bothMotorsHaveZeroSpeed ) {
-                addWarningToPhrase(action, "MOTOR_SPEED_0");
-            }
-        }
-    }
-
-    private void checkIfMotorRegulated(Phrase<Void> driveAction, ConfigurationComponent motor, String errorMsg) {
-        if ( !motor.getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE) ) {
-            addErrorToPhrase(driveAction, errorMsg);
-        }
-    }
-
-    private void checkLeftMotorPresenceAndRegulation(Phrase<Void> driveAction, ConfigurationComponent leftMotor) {
-        if ( leftMotor == null ) {
-            addErrorToPhrase(driveAction, "CONFIGURATION_ERROR_MOTOR_LEFT_MISSING");
-        } else {
-            checkIfMotorRegulated(driveAction, leftMotor, "CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED");
-        }
-    }
-
-    private void checkLeftRightMotorPort(Phrase<Void> driveAction) {
-        if ( hasTooManyMotors(driveAction) ) {
-            return;
-        }
-
-        ConfigurationComponent leftMotor = robotConfiguration.getFirstMotor(SC.LEFT);
-        ConfigurationComponent rightMotor = robotConfiguration.getFirstMotor(SC.RIGHT);
-        checkLeftMotorPresenceAndRegulation(driveAction, leftMotor);
-        checkRightMotorPresenceAndRegulation(driveAction, rightMotor);
-        checkMotorRotationDirection(driveAction, leftMotor, rightMotor);
-    }
-
-    private void checkMotorRotationDirection(Phrase<Void> driveAction, ConfigurationComponent leftMotor, ConfigurationComponent rightMotor) {
-        if ( (leftMotor == null) || (rightMotor == null) ) {
-            return;
-        }
-
-        boolean rotationDirectionsEqual = leftMotor.getProperty(SC.MOTOR_REVERSE).equals(rightMotor.getProperty(SC.MOTOR_REVERSE));
-        if ( !rotationDirectionsEqual ) {
-            addErrorToPhrase(driveAction, "CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION");
-        }
-    }
-
-    private void checkRightMotorPresenceAndRegulation(Phrase<Void> driveAction, ConfigurationComponent rightMotor) {
-        if ( rightMotor == null ) {
-            addErrorToPhrase(driveAction, "CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING");
-        } else {
-            checkIfMotorRegulated(driveAction, rightMotor, "CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED");
-        }
-    }
-
     private void checkSensorPort(ExternalSensor<Void> sensor) {
         ConfigurationComponent configurationComponent = robotConfiguration.optConfigurationComponent(sensor.getUserDefinedPort());
         if ( configurationComponent == null ) {
@@ -365,17 +245,5 @@ public class NxtValidatorAndCollectorVisitor extends MotorValidatorAndCollectorV
         if ( expectedComponentType != null && !expectedComponentType.equalsIgnoreCase(configurationComponent.getComponentType()) ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
         }
-    }
-
-    private boolean hasTooManyMotors(Phrase<Void> driveAction) {
-        if ( robotConfiguration.getMotors(SC.RIGHT).size() > 1 ) {
-            addErrorToPhrase(driveAction, "CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS");
-            return true;
-        }
-        if ( robotConfiguration.getMotors(SC.LEFT).size() > 1 ) {
-            addErrorToPhrase(driveAction, "CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS");
-            return true;
-        }
-        return false;
     }
 }

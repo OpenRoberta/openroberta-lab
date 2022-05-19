@@ -1,7 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import static de.fhg.iais.roberta.syntax.lang.functions.FunctionNames.SUM;
-
 import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
@@ -11,7 +9,9 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
+import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.actors.edison.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.edison.SendIRAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -30,6 +31,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
+import static de.fhg.iais.roberta.syntax.lang.functions.FunctionNames.SUM;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
@@ -56,8 +58,8 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
 /**
  * This class visits the Blockly blocks for the Edison robot and translates them into EdPy Python2 code (https://github.com/Bdanilko/EdPy) Many methods are not
- * supported (N O P) because the Edison robot does not allow the import of any Python module (f.e. math). Also the edison robot only supports integers and has
- * no suport for nested statements. (f.e. "if (a and b):" with a,b being booleans)
+ * supported (N O P) because the Edison robot does not allow the import of any Python module (f.e. math), also the edison robot only supports integers and has
+ * no support for nested statements. (e.g. "if (a and b):" with a,b being booleans)
  */
 public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdisonVisitor<Void> {
 
@@ -137,10 +139,10 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     protected void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType).append(whitespace());
+        this.sb.append(stmtType).append(" ");
         ExprList<Void> expressions = (ExprList<Void>) expr;
         expressions.get().get(0).accept(this);
-        this.sb.append(whitespace() + "in range(");
+        this.sb.append(" in range(");
         expressions.get().get(2).accept(this);
         this.sb.append("):");
     }
@@ -171,11 +173,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         return null;
     }
 
-    /**
-     * Function to receive IR data Needs a helper method visit a {@link InfraredSensor} for the block "robSensors_irseeker_getSample"
-     *
-     * @param irSeekerSensor
-     */
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.IRSEEK));
@@ -195,7 +192,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * in percent. That's why it is divided by 10. The line tracker can also report if the robot is on a line, but for this to work the robot has to be placed
      * on a white surface when the program starts. visit a {@link LightSensor} for the block "robSensors_light_getSample"
      *
-     * @param lightSensor
+     * @param lightSensor the sensor
      */
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
@@ -220,7 +217,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     /**
      * Function to detect claps from the sound sensor visit a {@link SoundSensor} for the block "robSensors_sound_getSample"
      *
-     * @param soundSensor
+     * @param soundSensor the sensor
      */
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
@@ -228,12 +225,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         return null;
     }
 
-    /**
-     * Function to send data via infrared visit a {@link SendIRAction} for the block "edisonCommunication_ir_sendBlock"
-     *
-     * @param sendIRAction
-     * @return
-     */
     @Override
     public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.IRSEND));
@@ -243,12 +234,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         return null;
     }
 
-    /**
-     * Function to receive data via infrared visit a {@link SendIRAction} for the block "edisonCommunication_ir_receiveBlock"
-     *
-     * @param receiveIRAction
-     * @return
-     */
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.IRSEEK));
@@ -256,12 +241,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         return null;
     }
 
-    /**
-     * Function to drive straight forward/backward with given power % and time/distance visit a {@link DriveAction} for the block "robActions_motorDiff_on" and
-     * "robActions_motorDiff_on_for"
-     *
-     * @param driveAction to be visited
-     */
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         String direction = "Ed.FORWARD";
@@ -297,29 +276,19 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        switch ( mathOnListFunct.getFunctName() ) {
-            case AVERAGE: // general implementation casts to float, which is not allowed on edison
-                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(SUM));
-                this.sb.append("(");
-                mathOnListFunct.getParam().get(0).accept(this);
-                this.sb.append(") / len(");
-                mathOnListFunct.getParam().get(0).accept(this);
-                this.sb.append(")");
-                break;
-            default:
-                super.visitMathOnListFunct(mathOnListFunct);
-                break;
+        if ( mathOnListFunct.getFunctName() == FunctionNames.AVERAGE ) {
+            this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(SUM));
+            this.sb.append("(");
+            mathOnListFunct.getParam().get(0).accept(this);
+            this.sb.append(") / len(");
+            mathOnListFunct.getParam().get(0).accept(this);
+            this.sb.append(")");
+        } else {
+            super.visitMathOnListFunct(mathOnListFunct);
         }
         return null;
     }
 
-    /**
-     * All Math blocks (Integers and Fractions) are checked here. If the number constant is not an integer an exception will be thrown Only blocks of type
-     * "math_integer" should be used with the Edison robot
-     *
-     * @param numConst
-     * @return
-     */
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
         if ( isInteger(numConst.getValue()) ) {
@@ -348,11 +317,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         return null;
     }
 
-    /**
-     * Function to create a list visit a {@link ListCreate} for the block "robLists_create_with"
-     *
-     * @param listCreate to be visited
-     */
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
         int listSize = listCreate.getValue().get().size();
@@ -454,11 +418,11 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         return null;
     }
 
-    /**
-     * Function to set the motors to a specific power-% visit a {@link MotorOnAction} for the block "robActions_motor_on" and "robActions_motor_on_for"
-     *
-     * @param motorOnAction
-     */
+    @Override
+    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+        throw new DbcException("block is not implemented");
+    }
+
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.MOTORON));
@@ -486,11 +450,11 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         return null;
     }
 
-    /**
-     * Function to stop individual motors visit a {@link MotorStopAction} for the block "robActions_motor_stop"
-     *
-     * @param motorStopAction
-     */
+    @Override
+    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+        throw new DbcException("block is not implemented");
+    }
+
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         switch ( motorStopAction.getUserDefinedPort() ) {
@@ -520,11 +484,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         return null;
     }
 
-    /**
-     * Function to stop driving (stop both motors) visit a {@link MotorDriveStopAction} for the block "robActions_motorDiff_stop"
-     *
-     * @param stopAction
-     */
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
         this.sb.append("Ed.Drive(Ed.STOP, Ed.SPEED_1, 1)");
@@ -542,12 +501,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         return null;
     }
 
-    /**
-     * Function to change a single number, for the blocks "math_single" and "math_round"
-     *
-     * @param mathSingleFunct
-     * @return
-     */
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         switch ( mathSingleFunct.getFunctName() ) {
@@ -599,12 +552,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         return null;
     }
 
-    /**
-     * Visits the Blockly wait-block (with user-defined waiting time): "robControls_wait_time"
-     *
-     * @param waitTimeStmt
-     * @return null
-     */
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
         this.sb.append("Ed.TimeWait(");
@@ -678,27 +625,21 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         return null;
     }
 
-    /**
-     * Function to play a note visit a {@link PlayNoteAction} for the block "mbedActions_play_note"
-     *
-     * @param playNoteAction
-     */
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         this.sb.append("Ed.PlayTone(4000000/"); //eigentlich 8mio aber die zahlen bei tiefen noten werden zu groß für edison
         this.sb.append(Integer.parseInt(playNoteAction.getFrequency().split("\\.")[0]));
-        this.sb.append(", " + playNoteAction.getDuration() + ")");
+        this.sb.append(", ").append(playNoteAction.getDuration()).append(")");
         nlIndent();
-        this.sb.append("Ed.TimeWait(" + playNoteAction.getDuration() + ", Ed.TIME_MILLISECONDS)");
-
+        this.sb.append("Ed.TimeWait(").append(playNoteAction.getDuration()).append(", Ed.TIME_MILLISECONDS)");
         return null;
     }
 
-    /**
-     * Function to play a sound file/note file visit a {@link PlayFileAction} for the block "robActions_play_file"
-     *
-     * @param playFileAction
-     */
+    @Override
+    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+        throw new DbcException("block is not implemented");
+    }
+
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
         switch ( playFileAction.getFileName().toLowerCase() ) {
@@ -708,10 +649,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
                 this.sb.append("Ed.PlayTune(___soundfile1)");
                 break;
             case "1":
-                //                this.sb.append("___soundfile2 = Ed.TuneString(35, \"c4d8e4d4f4e4d8c8d4a4g4f4e4d4e8c8g2z\")"); //dt. Nationalhymne
-                //                nlIndent();
-                //                this.sb.append("Ed.PlayTune(___soundfile2)");
-                //                break;
                 this.sb.append("___soundfile2 = Ed.TuneString(7,\"g8e8c8z\")"); //negativ
                 nlIndent();
                 this.sb.append("Ed.PlayTune(___soundfile2)");
@@ -743,12 +680,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         return null;
     }
 
-    /**
-     * Function to reset the sensors visit a {@link ResetSensor} for the block "edisonSensors_sensor_reset"
-     *
-     * @param resetSensor
-     * @return
-     */
     @Override
     public Void visitResetSensor(ResetSensor<Void> resetSensor) {
         switch ( resetSensor.getSensor() ) {

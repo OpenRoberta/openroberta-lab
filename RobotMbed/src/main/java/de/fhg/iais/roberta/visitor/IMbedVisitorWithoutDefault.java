@@ -47,14 +47,13 @@ import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IPinVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.ISerialVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISimpleSoundVisitor;
 
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
 public interface IMbedVisitorWithoutDefault<V>
-    extends IDisplayVisitor<V>, ILightVisitor<V>, ISimpleSoundVisitor<V>, IMotorVisitor<V>, ISerialVisitor<V>, IPinVisitor<V> {
+        extends IDisplayVisitor<V>, ILightVisitor<V>, ISimpleSoundVisitor<V>, IMotorVisitor<V>, IPinVisitor<V> {
 
     V visitDisplayTextAction(DisplayTextAction<V> displayTextAction);
 

@@ -48,8 +48,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
-import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 public class ExprlyTypechecker<T> {
@@ -137,9 +136,9 @@ public class ExprlyTypechecker<T> {
         // Check if the expression is an empty list and it's valid
         if ( this.resultType.equals(BlocklyType.ARRAY)
             && (this.expectedResultType.equals(BlocklyType.ARRAY_NUMBER)
-                || this.expectedResultType.equals(BlocklyType.ARRAY_BOOLEAN)
-                || this.expectedResultType.equals(BlocklyType.ARRAY_STRING)
-                || this.expectedResultType.equals(BlocklyType.ARRAY_CONNECTION)) ) {
+            || this.expectedResultType.equals(BlocklyType.ARRAY_BOOLEAN)
+            || this.expectedResultType.equals(BlocklyType.ARRAY_STRING)
+            || this.expectedResultType.equals(BlocklyType.ARRAY_CONNECTION)) ) {
             if ( this.ast instanceof ListCreate<?> ) {
                 if ( ((ListCreate<T>) this.ast).getValue().get().size() == 0 ) {
                     return;
@@ -971,30 +970,25 @@ public class ExprlyTypechecker<T> {
      * @param operation
      * @return Return Type of the possible results of the operation or Void if there's an error
      */
-    private BlocklyType visitIfStmt(IfStmt<T> ifStmt) {
+    private BlocklyType visitTernaryExpr(TernaryExpr<T> ternaryExpr) {
         if ( this.robotName != null ) {
             if ( okMap.get(this.robotName).contains("noTernary") ) {
                 addError(TcErrorMsg.NO_FUNCT, "FUNCT", "ternary operation");
             }
         }
         BlocklyType t;
-        List<Expr<T>> p = ifStmt.getExpr();
-        for ( Expr<T> e : p ) {
-            t = checkAST(e);
-            if ( !t.equals(BlocklyType.VOID) && !t.equals(BlocklyType.BOOLEAN) ) {
-                if ( t.equals(BlocklyType.NOTHING) ) {
-                    addError(TcErrorMsg.UNEXPECTED_METHOD);
-                } else {
-                    ExprlyUnParser<T> up = new ExprlyUnParser<>(e);
-                    addError(TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
-                }
+        t = checkAST(ternaryExpr.getCondition());
+        if ( !t.equals(BlocklyType.BOOLEAN) ) {
+            if ( t.equals(BlocklyType.NOTHING) ) {
+                addError(TcErrorMsg.UNEXPECTED_METHOD);
+            } else {
+                ExprlyUnParser<T> up = new ExprlyUnParser<>(ternaryExpr.getCondition());
+                addError(TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
             }
         }
 
-        ExprStmt<T> thenStmt = (ExprStmt<T>) ifStmt.getThenList().get(0).get().get(0);
-        ExprStmt<T> elseStmt = (ExprStmt<T>) ifStmt.getElseList().get().get(0);
-        t = checkAST(thenStmt.getExpr());
-        if ( !t.equals(checkAST(elseStmt.getExpr())) ) {
+        t = checkAST(ternaryExpr.getThenPart());
+        if ( !t.equals(checkAST(ternaryExpr.getElsePart())) ) {
             addError(TcErrorMsg.INVALID_OPERAND_TYPE);
             return BlocklyType.VOID;
         } else {
@@ -1113,14 +1107,15 @@ public class ExprlyTypechecker<T> {
         if ( ast instanceof StmtExpr<?> ) {
             return visitStmtExpr((StmtExpr<T>) ast);
         }
-        if ( ast instanceof IfStmt<?> ) {
-            return visitIfStmt((IfStmt<T>) ast);
+        if ( ast instanceof TernaryExpr<?> ) {
+            return visitTernaryExpr((TernaryExpr<T>) ast);
         }
 
         throw new UnsupportedOperationException("Expression " + ast.toString() + "cannot be checked");
     }
 
     // Helper functions
+
     /**
      * Function that typechecks the arguments of a function
      *

@@ -195,7 +195,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         return null;
     }
 
-    protected Void generateUsedVars() {
+    private Void generateUsedVars() {
         for ( final VarDeclaration<Void> var : this.getBean(UsedHardwareBean.class).getVisitedVars() ) {
             nlIndent();
             if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {

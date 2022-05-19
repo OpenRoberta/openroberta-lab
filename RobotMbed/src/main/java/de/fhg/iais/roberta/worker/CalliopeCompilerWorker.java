@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.worker;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -72,7 +72,7 @@ public class CalliopeCompilerWorker implements IWorker {
                         FileUtils
                             .readFileToString(
                                 new File(pathToSrcFile + "/target/" + project.getProgramName() + "." + project.getBinaryFileExtension()),
-                                Charset.forName("utf-8")));
+                                StandardCharsets.UTF_8));
                 resultKey = Key.COMPILERWORKFLOW_SUCCESS;
             } catch ( IOException e ) {
                 LOG.error("compilation of Calliope program successful, but reading the binary failed", e);

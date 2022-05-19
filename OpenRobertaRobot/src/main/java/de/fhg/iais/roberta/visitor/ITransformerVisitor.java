@@ -110,6 +110,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
+import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
@@ -442,6 +443,14 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
         StmtList<V> newElseList = (StmtList<V>) ifStmt.getElseList().modify(this);
 
         return IfStmt.make(newExpr, newThenList, newElseList, ifStmt.getProperty(), ifStmt.getComment(), ifStmt.get_else(), ifStmt.get_elseIf());
+    }
+
+    default Phrase<V> visitTernaryExpr(TernaryExpr<Phrase<V>> ternaryExpr) {
+        Expr<V> condition = (Expr<V>) ternaryExpr.getCondition().modify(this);
+        Expr<V> thenPart = (Expr<V>) ternaryExpr.getThenPart().modify(this);
+        Expr<V> elsePart = (Expr<V>) ternaryExpr.getElsePart().modify(this);
+
+        return TernaryExpr.make(condition, thenPart, elsePart, ternaryExpr.getProperty(), ternaryExpr.getComment());
     }
 
     @Override

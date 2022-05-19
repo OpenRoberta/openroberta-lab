@@ -28,7 +28,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.MathConst.Const;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
@@ -49,8 +48,8 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
+import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
@@ -573,8 +572,8 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
         elseList.addStmt(ExprStmt.make(r));
         thenList.setReadOnly();
         elseList.setReadOnly();
-        IfStmt<V> ifElse = IfStmt.make(visit(ctx.expr(0)), thenList, elseList, BCMAKE, null, 0, 0);
-        return StmtExpr.make(ifElse);
+        TernaryExpr<V> ternaryExpr = TernaryExpr.make(visit(ctx.expr(0)), visit(ctx.expr(1)), visit(ctx.expr(2)), BCMAKE, null);
+        return ternaryExpr;
     }
 
     @Override

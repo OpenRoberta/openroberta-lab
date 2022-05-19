@@ -23,12 +23,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.functions.Function;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
-import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -159,7 +156,7 @@ public class Jaxb2Ast {
 
     /**
      * Extract field from list of {@link Field}. If the field with the given name is not found or it is empty, it returns the default Value.<br>
-      *
+     *
      * @param fields list as a source
      * @param name of the field to be extracted
      * @param defaultValue if the field does not existent
@@ -332,8 +329,6 @@ public class Jaxb2Ast {
             expr = FunctionExpr.make((Function<V>) p);
         } else if ( p.getKind().getCategory() == Category.METHOD ) {
             expr = MethodExpr.make((Method<V>) p);
-        } else if ( p.getKind().hasName("IF_STMT") && ((IfStmt<V>) p).isTernary() ) {
-            expr = StmtExpr.make((Stmt<V>) p);
         } else {
             expr = (Expr<V>) p;
         }

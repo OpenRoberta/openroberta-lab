@@ -26,12 +26,13 @@ import de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Lsm9ds1GyroSens
 import de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Lsm9ds1MagneticFieldSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.INano33BleSensorVisitor;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a StringBuilder.
  * <b>This class generates C++ code for the Arduino Nano 33 BLE.</b> <br>
  */
-public class Nano33bleCppVisitor extends ArduinoCppVisitor {
+public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33BleSensorVisitor<Void> {
     /**
      * Initialize the C++ code generator visitor.
      *

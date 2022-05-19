@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
@@ -61,6 +62,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
+import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractLanguageVisitor;
@@ -585,6 +587,14 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
+    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+        this.sb.append("System.out.println(");
+        serialWriteAction.getValue().accept(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
     protected String getLanguageVarTypeFromBlocklyType(BlocklyType type) {
         switch ( type ) {
             case ANY:
@@ -652,13 +662,13 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    protected void generateCodeFromTernary(IfStmt<Void> ifStmt) {
+    protected void generateCodeFromTernary(TernaryExpr<Void> ternaryExpr) {
         this.sb.append("(" + whitespace() + "(" + whitespace());
-        ifStmt.getExpr().get(0).accept(this);
+        ternaryExpr.getCondition().accept(this);
         this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
-        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().accept(this);
+        ternaryExpr.getThenPart().accept(this);
         this.sb.append(whitespace() + ":" + whitespace());
-        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().accept(this);
+        ternaryExpr.getElsePart().accept(this);
         this.sb.append(whitespace() + ")");
     }
 

@@ -25,10 +25,9 @@ import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IPinVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.ISerialVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISimpleSoundVisitor;
 
-public interface ISenseboxVisitor<V> extends IDisplayVisitor<V>, ISimpleSoundVisitor<V>, ILightVisitor<V>, ISerialVisitor<V>, IPinVisitor<V>, INeuralNetworkVisitor<V>, INano33BleSensorVisitor<V>, IHardwareVisitor<V> {
+public interface ISenseboxVisitor<V> extends IDisplayVisitor<V>, ISimpleSoundVisitor<V>, ILightVisitor<V>, IPinVisitor<V>, INeuralNetworkVisitor<V>, IHardwareVisitor<V> {
 
     default V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
         return sensorGetSample.getSensor().accept(this);

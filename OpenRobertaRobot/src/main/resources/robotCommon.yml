@@ -170,7 +170,11 @@ block:
   IF_STMT:
     category: STMT
     implementor: de.fhg.iais.roberta.syntax.lang.stmt.IfStmt
-    type: [ logic_ternary,controls_if,robControls_if,robControls_ifElse ]
+    type: [ controls_if,robControls_if,robControls_ifElse ]
+  IF_TERNARY:
+    category: EXPR
+    implementor: de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr
+    type: [ logic_ternary ]
   NN_STEP_STMT:
     category: STMT
     implementor: de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt

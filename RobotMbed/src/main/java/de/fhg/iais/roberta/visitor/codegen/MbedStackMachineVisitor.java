@@ -199,13 +199,6 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitSerialWriteAction(SerialWriteAction<V> serialWriteAction) {
-        serialWriteAction.getValue().accept(this);
-        JSONObject o = makeNode(C.SERIAL_WRITE_ACTION);
-        return app(o);
-    }
-
-    @Override
     public V visitPinWriteValueAction(PinWriteValueAction<V> pinWriteValueAction) {
         pinWriteValueAction.getValue().accept(this);
         String port = pinWriteValueAction.getPort();

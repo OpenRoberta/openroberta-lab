@@ -19,35 +19,25 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-/**
- * This class represents the <b>math_constant</b> block from Blockly
- */
 public class PredefinedImage<V> extends Expr<V> {
-    private final PredefinedImageNames imageName;
+    private final String imageName;
 
-    private PredefinedImage(PredefinedImageNames imageName, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private PredefinedImage(String imageName, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("PREDEFINED_IMAGE"), properties, comment);
         Assert.notNull(imageName);
         this.imageName = imageName;
         setReadOnly();
     }
 
-    /**
-     * creates instance of {@link PredefinedImage}. This instance is read only and can not be modified.
-     *
-     * @param imageName, see enum {@link PredefinedImage} for all defined images; must be <b>not</b> null,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link PredefinedImage}
-     */
-    public static <V> PredefinedImage<V> make(PredefinedImageNames predefinedImage, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PredefinedImage<>(predefinedImage, properties, comment);
+    public static <V> PredefinedImage<V> make(String predefinedImage, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new PredefinedImage<V>(predefinedImage, properties, comment);
     }
 
-    /**
-     * @return name of the image.
-     */
     public PredefinedImageNames getImageName() {
+        return PredefinedImageNames.get(this.imageName);
+    }
+
+    public String getImageNameString() {
         return this.imageName;
     }
 
@@ -66,267 +56,285 @@ public class PredefinedImage<V> extends Expr<V> {
         return BlocklyType.STRING;
     }
 
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
+        String field = Jaxb2Ast.extractField(fields, BlocklyConstants.IMAGE);
+        return PredefinedImage.make(field, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+    }
+
     @Override
     public String toString() {
         return "PredefinedImage [" + this.imageName + "]";
     }
 
-    /**
-     * This enum defines all possible predefined images.
-     */
-    public static enum PredefinedImageNames {
-        HEART(
-            "0,255,0,255,0\\n" //
-                + "255,255,255,255,255\\n"
-                + "255,255,255,255,255\\n"
-                + "0,255,255,255,0\\n"
-                + "0,0,255,0,0\\n" ),
-        HEART_SMALL(
-            "0,0,0,0,0\\n" //
-                + "0,255,0,255,0\\n"
-                + "0,255,255,255,0\\n"
-                + "0,0,255,0,0\\n"
-                + "0,0,0,0,0\\n" ),
-        HAPPY(
-            "0,0,0,0,0\\n" //
-                + "0,255,0,255,0\\n"
-                + "0,0,0,0,0\\n"
-                + "255,0,0,0,255\\n"
-                + "0,255,255,255,0\\n" ),
-        SMILE(
-            "0,0,0,0,0\\n" //
-                + "0,0,0,0,0\\n"
-                + "0,0,0,0,0\\n"
-                + "255,0,0,0,255\\n"
-                + "0,255,255,255,0\\n" ),
-        SAD(
-            "0,0,0,0,0\\n" //
-                + "0,255,0,255,0\\n"
-                + "0,0,0,0,0\\n"
-                + "0,255,255,255,0\\n"
-                + "255,0,0,0,255\\n" ),
-        CONFUSED(
-            "0,0,0,0,0\\n" //
-                + "0,255,0,255,0\\n"
-                + "0,0,0,0,0\\n"
-                + "0,255,0,255,0\\n"
-                + "255,0,255,0,255\\n" ),
-        ANGRY(
-            "255,0,0,0,255\\n" //
-                + "0,255,0,255,0\\n"
-                + "0,0,0,0,0\\n"
-                + "255,255,255,255,255\\n"
-                + "255,0,255,0,255\\n" ),
-        ASLEEP(
-            "0,0,0,0,0\\n" //
-                + "255,255,0,255,255\\n"
-                + "0,0,0,0,0\\n"
-                + "0,255,255,255,0\\n"
-                + "0,0,0,0,0\\n" ),
-        SURPRISED(
-            "0,255,0,255,0\\n" //
-                + "0,0,0,0,0\\n"
-                + "0,0,255,0,0\\n"
-                + "0,255,0,255,0\\n"
-                + "0,0,255,0,0\\n" ),
-        SILLY(
-            "255,0,0,0,255\\n" //
-                + "0,0,0,0,0\\n"
-                + "255,255,255,255,255\\n"
-                + "0,0,255,0,255\\n"
-                + "0,0,255,255,255\\n" ),
-        FABULOUS(
-            "255,255,255,255,255\\n" //
-                + "255,255,0,255,255\\n"
-                + "0,0,0,0,0\\n"
-                + "0,255,0,255,0\\n"
-                + "0,255,255,255,0\\n" ),
-        MEH(
-            "0,255,0,255,0\\n" //
-                + "0,0,0,0,0\\n"
-                + "0,0,0,255,0\\n"
-                + "0,0,255,0,0\\n"
-                + "0,255,0,0,0\\n" ),
-        YES(
-            "0,0,0,0,0\\n" //
-                + "0,0,0,0,255\\n"
-                + "0,0,0,255,0\\n"
-                + "255,0,255,0,0\\n"
-                + "0,255,0,0,0\\n" ),
-        NO(
-            "255,0,0,0,255\\n" //
-                + "0,255,0,255,0\\n"
-                + "0,0,255,0,0\\n"
-                + "0,255,0,255,0\\n"
-                + "255,0,0,0,255\\n" ),
-        TRIANGLE(
-            "0,0,0,0,0\\n" //
-                + "0,0,255,0,0\\n"
-                + "0,255,0,255,0\\n"
-                + "255,255,255,255,255\\n"
-                + "0,0,0,0,0\\n" ),
-        TRIANGLE_LEFT(
-            "255,0,0,0,0\\n" //
-                + "255,255,0,0,0\\n"
-                + "255,0,255,0,0\\n"
-                + "255,0,0,255,0\\n"
-                + "255,255,255,255,255\\n" ),
-        CHESSBOARD(
-            "0,255,0,255,0\\n" //
-                + "255,0,255,0,255\\n"
-                + "0,255,0,255,0\\n"
-                + "255,0,255,0,255\\n"
-                + "0,255,0,255,0\\n" ),
-        DIAMOND(
-            "0,0,255,0,0\\n" //
-                + "0,255,0,255,0\\n"
-                + "255,0,0,0,255\\n"
-                + "0,255,0,255,0\\n"
-                + "0,0,255,0,0\\n" ),
-        DIAMOND_SMALL(
-            "0,0,0,0,0\\n" //
-                + "0,0,255,0,0\\n"
-                + "0,255,0,255,0\\n"
-                + "0,0,255,0,0\\n"
-                + "0,0,0,0,0\\n" ),
-        SQUARE(
-            "255,255,255,255,255\\n" //
-                + "255,0,0,0,255\\n"
-                + "255,0,0,0,255\\n"
-                + "255,0,0,0,255\\n"
-                + "255,255,255,255,255\\n" ),
-        SQUARE_SMALL(
-            "0,0,0,0,0\\n" //
-                + "0,255,255,255,0\\n"
-                + "0,255,0,255,0\\n"
-                + "0,255,255,255,0\\n"
-                + "0,0,0,0,0\\n" ),
-        RABBIT(
-            "255,0,255,0,0\\n" //
-                + "255,0,255,0,0\\n"
-                + "255,255,255,255,0\\n"
-                + "255,255,0,255,0\\n"
-                + "255,255,255,255,0\\n" ),
-        COW(
-            "255,0,0,0,255\\n" //
-                + "255,0,0,0,255\\n"
-                + "255,255,255,255,255\\n"
-                + "0,255,255,255,0\\n"
-                + "0,0,255,0,0\\n" ),
-        MUSIC_CROTCHET(
-            "0,0,255,0,0\\n" //
-                + "0,0,255,0,0\\n"
-                + "0,0,255,0,0\\n"
-                + "255,255,255,0,0\\n"
-                + "255,255,255,0,0\\n" ),
-        MUSIC_QUAVER(
-            "0,0,255,0,0\\n" //
-                + "0,0,255,255,0\\n"
-                + "0,0,255,0,255\\n"
-                + "255,255,255,0,0\\n"
-                + "255,255,255,0,0\\n" ),
-        MUSIC_QUAVERS(
-            "0,255,255,255,255\\n" //
-                + "0,255,0,0,255\\n"
-                + "0,255,0,0,255\\n"
-                + "255,255,0,255,255\\n"
-                + "255,255,0,255,255\\n" ),
-        PITCHFORK(
-            "255,0,255,0,255\\n" //
-                + "255,0,255,0,255\\n"
-                + "255,255,255,255,255\\n"
-                + "0,0,255,0,0\\n"
-                + "0,0,255,0,0\\n" ),
-        XMAS(
-            "0,0,255,0,0\\n" //
-                + "0,255,255,255,0\\n"
-                + "0,0,255,0,0\\n"
-                + "0,255,255,255,0\\n"
-                + "255,255,255,255,255\\n" ),
-        PACMAN(
-            "0,255,255,255,255\\n" //
-                + "255,255,0,255,0\\n"
-                + "255,255,255,0,0\\n"
-                + "255,255,255,255,0\\n"
-                + "0,255,255,255,255\\n" ),
-        TARGET(
-            "0,0,255,0,0\\n" //
-                + "0,255,255,255,0\\n"
-                + "255,255,0,255,255\\n"
-                + "0,255,255,255,0\\n"
-                + "0,0,255,0,0\\n" ),
-        TSHIRT(
-            "255,255,0,255,255\\n" //
-                + "255,255,255,255,255\\n"
-                + "0,255,255,255,0\\n"
-                + "0,255,255,255,0\\n"
-                + "0,255,255,255,0\\n" ),
-        ROLLERSKATE(
-            "0,0,0,255,255\\n" //
-                + "0,0,0,255,255\\n"
-                + "255,255,255,255,255\\n"
-                + "255,255,255,255,255\\n"
-                + "0,255,0,255,0\\n" ),
-        DUCK(
-            "0,255,255,0,0\\n" //
-                + "255,255,255,0,0\\n"
-                + "0,255,255,255,255\\n"
-                + "0,255,255,255,0\\n"
-                + "0,0,0,0,0\\n" ),
-        HOUSE(
-            "0,0,255,0,0\\n" //
-                + "0,255,255,255,0\\n"
-                + "255,255,255,255,255\\n"
-                + "0,255,255,255,0\\n"
-                + "0,255,0,255,0\\n" ),
-        TORTOISE(
-            "0,0,0,0,0\\n" //
-                + "0,255,255,255,0\\n"
-                + "255,255,255,255,255\\n"
-                + "0,255,0,255,0\\n"
-                + "0,0,0,0,0\\n" ),
-        BUTTERFLY(
-            "255,255,0,255,255\\n" //
-                + "255,255,255,255,255\\n"
-                + "0,0,255,0,0\\n"
-                + "255,255,255,255,255\\n"
-                + "255,255,0,255,255\\n" ),
-        STICKFIGURE(
-            "0,0,255,0,0\\n" //
-                + "255,255,255,255,255\\n"
-                + "0,0,255,0,0\\n"
-                + "0,255,0,255,0\\n"
-                + "255,0,0,0,255\\n" ),
-        GHOST(
-            "255,255,255,255,255\\n" //
-                + "255,0,255,0,255\\n"
-                + "255,255,255,255,255\\n"
-                + "255,255,255,255,255\\n"
-                + "255,0,255,0,255\\n" ),
-        SWORD(
-            "0,0,255,0,0\\n" //
-                + "0,0,255,0,0\\n"
-                + "0,0,255,0,0\\n"
-                + "0,255,255,255,0\\n"
-                + "0,0,255,0,0\\n" ),
-        GIRAFFE(
-            "255,255,0,0,0\\n" //
-                + "0,255,0,0,0\\n"
-                + "0,255,0,0,0\\n"
-                + "0,255,255,255,0\\n"
-                + "0,255,0,255,0\\n" ),
-        SKULL(
-            "0,255,255,255,0\\n" //
-                + "255,0,255,0,255\\n"
-                + "255,255,255,255,255\\n"
-                + "0,255,255,255,0\\n"
-                + "0,255,255,255,0\\n" ),
-        UMBRELLA(
-            "0,255,255,255,0\\n" //
-                + "255,255,255,255,255\\n"
-                + "0,0,255,0,0\\n"
-                + "255,0,255,0,0\\n"
-                + "0,255,255,0,0\\n" ),
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.IMAGE, this.imageName.toString());
+        return jaxbDestination;
+    }
+
+    public enum PredefinedImageNames {
+          HEART(
+              "0,255,0,255,0\\n" //
+                  + "255,255,255,255,255\\n"
+                  + "255,255,255,255,255\\n"
+                  + "0,255,255,255,0\\n"
+                  + "0,0,255,0,0\\n" ),
+          HEART_SMALL(
+              "0,0,0,0,0\\n" //
+                  + "0,255,0,255,0\\n"
+                  + "0,255,255,255,0\\n"
+                  + "0,0,255,0,0\\n"
+                  + "0,0,0,0,0\\n" ),
+          HAPPY(
+              "0,0,0,0,0\\n" //
+                  + "0,255,0,255,0\\n"
+                  + "0,0,0,0,0\\n"
+                  + "255,0,0,0,255\\n"
+                  + "0,255,255,255,0\\n" ),
+          SMILE(
+              "0,0,0,0,0\\n" //
+                  + "0,0,0,0,0\\n"
+                  + "0,0,0,0,0\\n"
+                  + "255,0,0,0,255\\n"
+                  + "0,255,255,255,0\\n" ),
+          SAD(
+              "0,0,0,0,0\\n" //
+                  + "0,255,0,255,0\\n"
+                  + "0,0,0,0,0\\n"
+                  + "0,255,255,255,0\\n"
+                  + "255,0,0,0,255\\n" ),
+          CONFUSED(
+              "0,0,0,0,0\\n" //
+                  + "0,255,0,255,0\\n"
+                  + "0,0,0,0,0\\n"
+                  + "0,255,0,255,0\\n"
+                  + "255,0,255,0,255\\n" ),
+          ANGRY(
+              "255,0,0,0,255\\n" //
+                  + "0,255,0,255,0\\n"
+                  + "0,0,0,0,0\\n"
+                  + "255,255,255,255,255\\n"
+                  + "255,0,255,0,255\\n" ),
+          ASLEEP(
+              "0,0,0,0,0\\n" //
+                  + "255,255,0,255,255\\n"
+                  + "0,0,0,0,0\\n"
+                  + "0,255,255,255,0\\n"
+                  + "0,0,0,0,0\\n" ),
+          SURPRISED(
+              "0,255,0,255,0\\n" //
+                  + "0,0,0,0,0\\n"
+                  + "0,0,255,0,0\\n"
+                  + "0,255,0,255,0\\n"
+                  + "0,0,255,0,0\\n" ),
+          SILLY(
+              "255,0,0,0,255\\n" //
+                  + "0,0,0,0,0\\n"
+                  + "255,255,255,255,255\\n"
+                  + "0,0,255,0,255\\n"
+                  + "0,0,255,255,255\\n" ),
+          FABULOUS(
+              "255,255,255,255,255\\n" //
+                  + "255,255,0,255,255\\n"
+                  + "0,0,0,0,0\\n"
+                  + "0,255,0,255,0\\n"
+                  + "0,255,255,255,0\\n" ),
+          MEH(
+              "0,255,0,255,0\\n" //
+                  + "0,0,0,0,0\\n"
+                  + "0,0,0,255,0\\n"
+                  + "0,0,255,0,0\\n"
+                  + "0,255,0,0,0\\n" ),
+          YES(
+              "0,0,0,0,0\\n" //
+                  + "0,0,0,0,255\\n"
+                  + "0,0,0,255,0\\n"
+                  + "255,0,255,0,0\\n"
+                  + "0,255,0,0,0\\n" ),
+          NO(
+              "255,0,0,0,255\\n" //
+                  + "0,255,0,255,0\\n"
+                  + "0,0,255,0,0\\n"
+                  + "0,255,0,255,0\\n"
+                  + "255,0,0,0,255\\n" ),
+          TRIANGLE(
+              "0,0,0,0,0\\n" //
+                  + "0,0,255,0,0\\n"
+                  + "0,255,0,255,0\\n"
+                  + "255,255,255,255,255\\n"
+                  + "0,0,0,0,0\\n" ),
+          TRIANGLE_LEFT(
+              "255,0,0,0,0\\n" //
+                  + "255,255,0,0,0\\n"
+                  + "255,0,255,0,0\\n"
+                  + "255,0,0,255,0\\n"
+                  + "255,255,255,255,255\\n" ),
+          CHESSBOARD(
+              "0,255,0,255,0\\n" //
+                  + "255,0,255,0,255\\n"
+                  + "0,255,0,255,0\\n"
+                  + "255,0,255,0,255\\n"
+                  + "0,255,0,255,0\\n" ),
+          DIAMOND(
+              "0,0,255,0,0\\n" //
+                  + "0,255,0,255,0\\n"
+                  + "255,0,0,0,255\\n"
+                  + "0,255,0,255,0\\n"
+                  + "0,0,255,0,0\\n" ),
+          DIAMOND_SMALL(
+              "0,0,0,0,0\\n" //
+                  + "0,0,255,0,0\\n"
+                  + "0,255,0,255,0\\n"
+                  + "0,0,255,0,0\\n"
+                  + "0,0,0,0,0\\n" ),
+          SQUARE(
+              "255,255,255,255,255\\n" //
+                  + "255,0,0,0,255\\n"
+                  + "255,0,0,0,255\\n"
+                  + "255,0,0,0,255\\n"
+                  + "255,255,255,255,255\\n" ),
+          SQUARE_SMALL(
+              "0,0,0,0,0\\n" //
+                  + "0,255,255,255,0\\n"
+                  + "0,255,0,255,0\\n"
+                  + "0,255,255,255,0\\n"
+                  + "0,0,0,0,0\\n" ),
+          RABBIT(
+              "255,0,255,0,0\\n" //
+                  + "255,0,255,0,0\\n"
+                  + "255,255,255,255,0\\n"
+                  + "255,255,0,255,0\\n"
+                  + "255,255,255,255,0\\n" ),
+          COW(
+              "255,0,0,0,255\\n" //
+                  + "255,0,0,0,255\\n"
+                  + "255,255,255,255,255\\n"
+                  + "0,255,255,255,0\\n"
+                  + "0,0,255,0,0\\n" ),
+          MUSIC_CROTCHET(
+              "0,0,255,0,0\\n" //
+                  + "0,0,255,0,0\\n"
+                  + "0,0,255,0,0\\n"
+                  + "255,255,255,0,0\\n"
+                  + "255,255,255,0,0\\n" ),
+          MUSIC_QUAVER(
+              "0,0,255,0,0\\n" //
+                  + "0,0,255,255,0\\n"
+                  + "0,0,255,0,255\\n"
+                  + "255,255,255,0,0\\n"
+                  + "255,255,255,0,0\\n" ),
+          MUSIC_QUAVERS(
+              "0,255,255,255,255\\n" //
+                  + "0,255,0,0,255\\n"
+                  + "0,255,0,0,255\\n"
+                  + "255,255,0,255,255\\n"
+                  + "255,255,0,255,255\\n" ),
+          PITCHFORK(
+              "255,0,255,0,255\\n" //
+                  + "255,0,255,0,255\\n"
+                  + "255,255,255,255,255\\n"
+                  + "0,0,255,0,0\\n"
+                  + "0,0,255,0,0\\n" ),
+          XMAS(
+              "0,0,255,0,0\\n" //
+                  + "0,255,255,255,0\\n"
+                  + "0,0,255,0,0\\n"
+                  + "0,255,255,255,0\\n"
+                  + "255,255,255,255,255\\n" ),
+          PACMAN(
+              "0,255,255,255,255\\n" //
+                  + "255,255,0,255,0\\n"
+                  + "255,255,255,0,0\\n"
+                  + "255,255,255,255,0\\n"
+                  + "0,255,255,255,255\\n" ),
+          TARGET(
+              "0,0,255,0,0\\n" //
+                  + "0,255,255,255,0\\n"
+                  + "255,255,0,255,255\\n"
+                  + "0,255,255,255,0\\n"
+                  + "0,0,255,0,0\\n" ),
+          TSHIRT(
+              "255,255,0,255,255\\n" //
+                  + "255,255,255,255,255\\n"
+                  + "0,255,255,255,0\\n"
+                  + "0,255,255,255,0\\n"
+                  + "0,255,255,255,0\\n" ),
+          ROLLERSKATE(
+              "0,0,0,255,255\\n" //
+                  + "0,0,0,255,255\\n"
+                  + "255,255,255,255,255\\n"
+                  + "255,255,255,255,255\\n"
+                  + "0,255,0,255,0\\n" ),
+          DUCK(
+              "0,255,255,0,0\\n" //
+                  + "255,255,255,0,0\\n"
+                  + "0,255,255,255,255\\n"
+                  + "0,255,255,255,0\\n"
+                  + "0,0,0,0,0\\n" ),
+          HOUSE(
+              "0,0,255,0,0\\n" //
+                  + "0,255,255,255,0\\n"
+                  + "255,255,255,255,255\\n"
+                  + "0,255,255,255,0\\n"
+                  + "0,255,0,255,0\\n" ),
+          TORTOISE(
+              "0,0,0,0,0\\n" //
+                  + "0,255,255,255,0\\n"
+                  + "255,255,255,255,255\\n"
+                  + "0,255,0,255,0\\n"
+                  + "0,0,0,0,0\\n" ),
+          BUTTERFLY(
+              "255,255,0,255,255\\n" //
+                  + "255,255,255,255,255\\n"
+                  + "0,0,255,0,0\\n"
+                  + "255,255,255,255,255\\n"
+                  + "255,255,0,255,255\\n" ),
+          STICKFIGURE(
+              "0,0,255,0,0\\n" //
+                  + "255,255,255,255,255\\n"
+                  + "0,0,255,0,0\\n"
+                  + "0,255,0,255,0\\n"
+                  + "255,0,0,0,255\\n" ),
+          GHOST(
+              "255,255,255,255,255\\n" //
+                  + "255,0,255,0,255\\n"
+                  + "255,255,255,255,255\\n"
+                  + "255,255,255,255,255\\n"
+                  + "255,0,255,0,255\\n" ),
+          SWORD(
+              "0,0,255,0,0\\n" //
+                  + "0,0,255,0,0\\n"
+                  + "0,0,255,0,0\\n"
+                  + "0,255,255,255,0\\n"
+                  + "0,0,255,0,0\\n" ),
+          GIRAFFE(
+              "255,255,0,0,0\\n" //
+                  + "0,255,0,0,0\\n"
+                  + "0,255,0,0,0\\n"
+                  + "0,255,255,255,0\\n"
+                  + "0,255,0,255,0\\n" ),
+          SKULL(
+              "0,255,255,255,0\\n" //
+                  + "255,0,255,0,255\\n"
+                  + "255,255,255,255,255\\n"
+                  + "0,255,255,255,0\\n"
+                  + "0,255,255,255,0\\n" ),
+          UMBRELLA(
+              "0,255,255,255,0\\n" //
+                  + "255,255,255,255,255\\n"
+                  + "0,0,255,0,0\\n"
+                  + "255,0,255,0,0\\n"
+                  + "0,255,255,0,0\\n" ),
         SNAKE(
             "255,255,0,0,0\\n" //
                 + "255,255,0,255,255\\n"
@@ -335,9 +343,9 @@ public class PredefinedImage<V> extends Expr<V> {
                 + "0,0,0,0,0\\n" );
 
         private final String[] values;
-        private String imageString;
+        private final String imageString;
 
-        private PredefinedImageNames(String imageString, String... values) {
+        PredefinedImageNames(String imageString, String... values) {
             this.values = values;
             this.imageString = imageString;
         }
@@ -370,27 +378,5 @@ public class PredefinedImage<V> extends Expr<V> {
             }
             throw new DbcException("Invalid predifined image: " + s);
         }
-
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
-        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
-        String field = Jaxb2Ast.extractField(fields, BlocklyConstants.IMAGE);
-        return PredefinedImage.make(PredefinedImageNames.get(field), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
-    }
-
-    @Override
-    public Block astToBlock() {
-        Block jaxbDestination = new Block();
-        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
-        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.IMAGE, this.imageName.toString());
-        return jaxbDestination;
     }
 }

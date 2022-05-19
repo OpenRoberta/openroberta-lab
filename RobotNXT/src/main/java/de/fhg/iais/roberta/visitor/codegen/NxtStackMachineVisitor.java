@@ -65,7 +65,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitColorConst(ColorConst<V> colorConst) {
-        String color = "";
+        String color;
         switch ( colorConst.getHexValueAsString().toUpperCase() ) {
             case "#000000":
                 color = "BLACK";
@@ -119,13 +119,6 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction) {
         JSONObject o = makeNode(C.CLEAR_DISPLAY_ACTION);
-
-        return app(o);
-    }
-
-    @Override
-    public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
-        JSONObject o = makeNode(C.STATUS_LIGHT_ACTION).put(C.NAME, "ev3").put(C.PORT, "internal");
         return app(o);
     }
 
@@ -149,7 +142,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitPlayFileAction(PlayFileAction<V> playFileAction) {
-        String image = playFileAction.getFileName().toString();
+        String image = playFileAction.getFileName();
         JSONObject o = makeNode(C.PLAY_FILE_ACTION).put(C.FILE, image).put(C.NAME, "ev3");
         return app(o);
     }

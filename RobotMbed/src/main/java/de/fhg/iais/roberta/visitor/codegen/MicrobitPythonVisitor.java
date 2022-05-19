@@ -446,14 +446,6 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        this.sb.append("print(");
-        serialWriteAction.getValue().accept(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         this.sb.append("music.pitch(");
         toneAction.getFrequency().accept(this);
@@ -476,16 +468,6 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitConnectConst(ConnectConst<Void> connectConst) {
-        throw new DbcException("Not supported!");
-    }
-
-    @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
-        throw new DbcException("Not supported!");
-    }
-
-    @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         throw new DbcException("Not supported!");
     }
 

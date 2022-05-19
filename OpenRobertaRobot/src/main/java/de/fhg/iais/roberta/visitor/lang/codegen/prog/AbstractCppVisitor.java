@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
@@ -60,9 +61,9 @@ import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
+import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.VisitorException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractLanguageVisitor;
 
@@ -736,6 +737,14 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         throw new UnsupportedOperationException("should be overriden in a robot-specific class");
     }
 
+    @Override
+    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+        this.sb.append("Serial.println(");
+        serialWriteAction.getValue().accept(this);
+        this.sb.append(");");
+        return null;
+    }
+
     protected void addContinueLabelToLoop() {
         Integer lastLoop = this.currentLoop.getLast();
         if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(lastLoop) ) {
@@ -800,13 +809,13 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    protected void generateCodeFromTernary(IfStmt<Void> ifStmt) {
+    protected void generateCodeFromTernary(TernaryExpr<Void> ternaryExpr) {
         this.sb.append("(" + whitespace() + "(" + whitespace());
-        ifStmt.getExpr().get(0).accept(this);
+        ternaryExpr.getCondition().accept(this);
         this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace() + "(" + whitespace());
-        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().accept(this);
+        ternaryExpr.getThenPart().accept(this);
         this.sb.append(whitespace() + ")" + whitespace() + ":" + whitespace() + "(" + whitespace());
-        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().accept(this);
+        ternaryExpr.getElsePart().accept(this);
         this.sb.append(")" + whitespace() + ")");
     }
 

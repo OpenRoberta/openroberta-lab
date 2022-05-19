@@ -67,7 +67,7 @@ public class EdisonValidatorAndCollectorTest extends AstTest {
 
     @Test
     // TODO this test does nothing
-    public void TestAllHelperMethods() throws Exception {
+    public void TestAllHelperMethods() {
         List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/collector/all_helper_methods.xml");
         ConfigurationAst edisonConfig = makeConfig();
         UsedHardwareBean.Builder usedHardwareBeanBuilder = new UsedHardwareBean.Builder();
@@ -79,7 +79,7 @@ public class EdisonValidatorAndCollectorTest extends AstTest {
                 .put(Builder.class, usedHardwareBeanBuilder)
                 .put(UsedMethodBean.Builder.class, usedMethodBeanBuilder)
                 .put(ErrorAndWarningBean.Builder.class, errorAndWarningBuilder)
-                .put(NNBean.Builder.class ,nnBeanBuilder)
+                .put(NNBean.Builder.class, nnBeanBuilder)
                 .build();
         EdisonValidatorAndCollectorWorker checkWorker = new EdisonValidatorAndCollectorWorker();
         EdisonValidatorAndCollectorVisitor checkVisitor = new EdisonValidatorAndCollectorVisitor(edisonConfig, beanBuilders);

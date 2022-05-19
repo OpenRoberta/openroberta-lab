@@ -411,12 +411,6 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     }
 
     @Override
-    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        requiredComponentVisited(serialWriteAction, serialWriteAction.getValue());
-        return null;
-    }
-
-    @Override
     public Void visitServoSetAction(ServoSetAction<Void> servoSetAction) {
         requiredComponentVisited(servoSetAction, servoSetAction.getValue());
         return addActorMaybeCallibot(servoSetAction, SC.SERVOMOTOR);

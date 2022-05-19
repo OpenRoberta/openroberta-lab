@@ -30,11 +30,5 @@ AssertStmt[asserts: Binary [EQ, NumConst[value: 932.4], Var [ergebnis]], msg: PO
 
 Var [ergebnis] := Binary [ADD, Var [ergebnis], Binary [MULTIPLY, NumConst[value: 2], Binary [MULTIPLY, Binary [ADD, Binary [ADD, NumConst[value: 3], NumConst[value: 4]], Binary [MULTIPLY, NumConst[value: 5], NumConst[value: 6]]], Binary [ADD, Binary [MULTIPLY, NumConst[value: 7], NumConst[value: 8]], Binary [MINUS, NumConst[value: 9], NumConst[value: 10]]]]]]
 
-DebugAction[value: StmtExpr [
-if Binary [EQ, Var [ergebnis], NumConst[value: 5002.4]]
-,then
-exprStmt StringConst[value: SUCCESS]
-,else
-exprStmt StringConst[value: FAIL]
-]]
+DebugAction[value: TernaryExpr[condition: Binary [EQ, Var [ergebnis], NumConst[value: 5002.4]], thenPart: StringConst[value: SUCCESS], elsePart: StringConst[value: FAIL]]]
 StmtTextComment[textComment: Grundrechenarten Basics  --END--]

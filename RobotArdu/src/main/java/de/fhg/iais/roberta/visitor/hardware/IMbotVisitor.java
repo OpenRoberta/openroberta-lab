@@ -1,9 +1,6 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixImageAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixSetBrightnessAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixTextAction;
@@ -16,14 +13,11 @@ import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.Joystick;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDifferentialMotorVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.ISerialVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISimpleSoundVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.ISoundVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
-public interface IMbotVisitor<V> extends ISensorVisitor<V>, ISerialVisitor<V>, IDifferentialMotorVisitor<V>, ILightVisitor<V>, ISimpleSoundVisitor<V> {
+public interface IMbotVisitor<V> extends ISensorVisitor<V>, IDifferentialMotorVisitor<V>, ILightVisitor<V>, ISimpleSoundVisitor<V> {
 
     default V visitJoystick(Joystick<V> joystick) {
         throw new DbcException("Block not supported");

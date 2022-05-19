@@ -45,7 +45,7 @@ public interface IMbedTransformerVisitor<V> extends ITransformerVisitor<V>, IMbe
 
     @Override
     default Phrase<V> visitPredefinedImage(PredefinedImage<Phrase<V>> predefinedImage) {
-        return PredefinedImage.make(predefinedImage.getImageName(), predefinedImage.getProperty(), predefinedImage.getComment());
+        return PredefinedImage.make(predefinedImage.getImageNameString(), predefinedImage.getProperty(), predefinedImage.getComment());
     }
 
     @Override

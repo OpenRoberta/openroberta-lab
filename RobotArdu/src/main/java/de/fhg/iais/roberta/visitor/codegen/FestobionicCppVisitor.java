@@ -54,11 +54,6 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        throw new DbcException("Not supported!");
-    }
-
-    @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         this.sb.append("_servo_").append(motorOnAction.getUserDefinedPort()).append(".write(");
         motorOnAction.getParam().getSpeed().accept(this);

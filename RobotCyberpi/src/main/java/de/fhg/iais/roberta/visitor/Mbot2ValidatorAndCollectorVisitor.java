@@ -30,6 +30,7 @@ import de.fhg.iais.roberta.syntax.action.mbot2.Ultrasonic2LEDAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -239,11 +240,10 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
         usedHardwareBuilder.addUsedActor(new UsedActor(printlnAction.getUserDefinedPort(), SC.DISPLAY));
         return null;
     }
-
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(showTextAction.port);
-        if ( usedConfigurationBlock == null ) {
+        if (usedConfigurationBlock == null) {
             addErrorToPhrase(showTextAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
         requiredComponentVisited(showTextAction, showTextAction.msg);
@@ -376,11 +376,10 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
                         }
                     }
                 }
-            } catch ( UnsupportedOperationException e ) {
+            } catch (UnsupportedOperationException e) {
                 continue;
             }
         }
         return null;
     }
-
 }

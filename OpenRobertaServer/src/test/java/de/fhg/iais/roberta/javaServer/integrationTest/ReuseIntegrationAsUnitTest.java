@@ -159,10 +159,10 @@ public class ReuseIntegrationAsUnitTest {
         checkAndShowTestResult();
     }
 
-    @Ignore
+    //@Ignore
     @Test
     public void testOneCommonProgrammAsUnitTest() throws Exception {
-        String programName = "functionWithWithoutParameter";
+        String programName = "controlFlowLoops";
         {
             List<String> pluginDefines = new ArrayList<>(); // maybe used later to add properties
             testFactory = Util.configureRobotPlugin(ROBOT_NAME_FOR_COMMON_TESTS, "", "", pluginDefines);

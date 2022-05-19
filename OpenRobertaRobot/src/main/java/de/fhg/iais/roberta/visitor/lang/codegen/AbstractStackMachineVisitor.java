@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -99,12 +100,12 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
+import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.BaseVisitor;
 import de.fhg.iais.roberta.visitor.C;
@@ -491,14 +492,29 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
     }
 
     @Override
+    public final V visitTernaryExpr(TernaryExpr<V> ternaryExpr) {
+        appComment(C.IF_STMT, true);
+        ternaryExpr.getCondition().accept(this);
+        // JUMP when condition is not fullfilled
+        JSONObject jumpOverThen = makeNode(C.JUMP).put(C.CONDITIONAL, false);
+        app(jumpOverThen);
+        ternaryExpr.getThenPart().accept(this);
+        // JUMP because if is finished
+        JSONObject jumpToEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
+        app(jumpToEnd);
+        jumpLinker.register(jumpToEnd, STATEMENT_END);
+        jumpOverThen.put(C.TARGET, opArray.size());
+        ternaryExpr.getElsePart().accept(this);
+        jumpLinker.handle(STATEMENT_END).forEach(jump -> jump.put(C.TARGET, opArray.size()));
+        appComment(C.IF_STMT, false);
+        return null;
+    }
+
+    @Override
     public final V visitIfStmt(IfStmt<V> ifStmt) {
         appComment(C.IF_STMT, true);
 
         int numberOfThens = ifStmt.getExpr().size();
-        if ( ifStmt.isTernary() ) {
-            Assert.isTrue(numberOfThens == 1);
-            Assert.isFalse(ifStmt.getElseList().get().isEmpty());
-        }
         // TODO: better a list of pairs. pair of lists needs this kind of for
         for ( int i = 0; i < numberOfThens; i++ ) {
             ifStmt.getExpr().get(i).accept(this);
@@ -1214,6 +1230,13 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
     public V visitDebugAction(DebugAction<V> debugAction) {
         debugAction.getValue().accept(this);
         JSONObject o = makeNode(C.DEBUG_ACTION);
+        return app(o);
+    }
+
+    @Override
+    public V visitSerialWriteAction(SerialWriteAction<V> serialWriteAction) {
+        serialWriteAction.getValue().accept(this);
+        JSONObject o = makeNode(C.SERIAL_WRITE_ACTION);
         return app(o);
     }
 

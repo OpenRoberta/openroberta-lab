@@ -35,7 +35,6 @@ import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IPinVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.ISerialVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISoundVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
@@ -43,7 +42,7 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
 public interface IMbedVisitor<V>
-    extends IDisplayVisitor<V>, ILightVisitor<V>, ISoundVisitor<V>, IMotorVisitor<V>, ISensorVisitor<V>, ISerialVisitor<V>, IPinVisitor<V> {
+        extends IDisplayVisitor<V>, ILightVisitor<V>, ISoundVisitor<V>, IMotorVisitor<V>, ISensorVisitor<V>, IPinVisitor<V> {
 
     /**
      * visit a {@link DisplayTextAction}.
@@ -187,8 +186,9 @@ public interface IMbedVisitor<V>
      * @param singleMotorOnAction phrase to be visited
      */
     @Deprecated
+    // needed for transformator
     default V visitSingleMotorOnAction(SingleMotorOnAction<V> singleMotorOnAction) {
-        throw new DbcException("Block is no longer supported and should not be used!");
+        throw new DbcException("Block is no longer supported and should not be used! Consider using 'Motor On'");
     }
 
     /**
@@ -198,8 +198,9 @@ public interface IMbedVisitor<V>
      * @param singleMotorStopAction phrase to be visited
      */
     @Deprecated
+    // needed for transformator
     default V visitSingleMotorStopAction(SingleMotorStopAction<V> singleMotorStopAction) {
-        throw new DbcException("Block is no longer supported and should not be used!");
+        throw new DbcException("Block is no longer supported and should not be used! Consider using 'Motor Stop'");
     }
 
     /**

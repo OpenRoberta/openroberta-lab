@@ -46,6 +46,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
+import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.NNStepDecl;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -262,12 +263,14 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     @Override
     public Void visitIfStmt(IfStmt<Void> ifStmt) {
-        if ( ifStmt.isTernary() ) {
-            generateCodeFromTernary(ifStmt);
-        } else {
-            generateCodeFromIfElse(ifStmt);
-            generateCodeFromElse(ifStmt);
-        }
+        generateCodeFromIfElse(ifStmt);
+        generateCodeFromElse(ifStmt);
+        return null;
+    }
+
+    @Override
+    public Void visitTernaryExpr(TernaryExpr<Void> ternaryExpr) {
+        generateCodeFromTernary(ternaryExpr);
         return null;
     }
 
@@ -425,7 +428,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     abstract protected String getLanguageVarTypeFromBlocklyType(BlocklyType type);
 
-    abstract protected void generateCodeFromTernary(IfStmt<Void> ifStmt);
+    abstract protected void generateCodeFromTernary(TernaryExpr<Void> ternaryExpr);
 
     abstract protected void generateCodeFromIfElse(IfStmt<Void> ifStmt);
 
