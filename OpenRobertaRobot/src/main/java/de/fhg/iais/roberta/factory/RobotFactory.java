@@ -88,7 +88,7 @@ public class RobotFactory {
     }
 
     public final Boolean hasSim() {
-        return this.pluginProperties.getStringProperty("robot.sim").equals("true");
+        return !this.pluginProperties.getStringProperty("robot.plugin.workflow.getsimulationcode").equals("do.nothing");
     }
 
     public final Boolean hasMultipleSim() {

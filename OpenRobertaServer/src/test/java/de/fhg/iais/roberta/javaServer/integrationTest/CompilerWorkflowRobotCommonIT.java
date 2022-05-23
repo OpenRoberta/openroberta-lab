@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -375,9 +376,12 @@ public class CompilerWorkflowRobotCommonIT {
             LOG.error("Could not generate source code for robot {}", robotName);
             return false;
         }
-
+        List<String> requiredWorkflowsList = Arrays.asList("showsource", "compile", "run", "runnative", "compilenative", "transform", "getsimulationcode");
+        Set<String> requiredWorkflows = new HashSet<>(requiredWorkflowsList);
         Set<String> allWorkflowsOfRobot = pluginMap.get(robotName).getWorkflows();
-        List<String> workflowsWithoutShowSource = allWorkflowsOfRobot.stream().filter(s -> !s.equals("showsource")).collect(Collectors.toList());
+        requiredWorkflows.addAll(allWorkflowsOfRobot);
+        List<String> workflowsWithoutShowSource = requiredWorkflows.stream().filter(s -> !s.equals("showsource")).collect(Collectors.toList());
+
         boolean resultAcc = true;
         for ( String workflow : workflowsWithoutShowSource ) {
             resultAcc = (executeWorkflow(workflow, robotName, programXml, showSourceResult.getSecond()) != Result.FAILURE) && resultAcc;
