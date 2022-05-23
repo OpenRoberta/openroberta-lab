@@ -1,8 +1,8 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import com.google.common.collect.ClassToInstanceMap;
+
 import de.fhg.iais.roberta.bean.IProjectBean;
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
@@ -27,8 +27,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensors.raspberrypi.SlotSensor;
 import de.fhg.iais.roberta.visitor.collect.RaspberryPiMethods;
 import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
-
-import java.util.HashMap;
 
 public class RaspberryPiValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IRaspberryPiVisitor<Void> {
 
@@ -65,6 +63,7 @@ public class RaspberryPiValidatorAndCollectorVisitor extends CommonNepoValidator
     @Override
     public Void visitIntentStmt(IntentStmt<Void> intentStmt) {
         usedMethodBuilder.addUsedMethod(RaspberryPiMethods.CONTAINS);
+        usedMethodBuilder.addUsedMethod(RaspberryPiMethods.SAY);
         usedHardwareBuilder.addUsedIntents(intentStmt.getIntent());
         intentStmt.getExpr().forEach(expr -> requiredComponentVisited(intentStmt, expr));
         intentStmt.getThenList().forEach(expr -> optionalComponentVisited(expr));
@@ -87,6 +86,7 @@ public class RaspberryPiValidatorAndCollectorVisitor extends CommonNepoValidator
         } else {
             requiredComponentVisited(listenStepStmt, listenStepStmt.getIntents());
         }
+        usedMethodBuilder.addUsedMethod(RaspberryPiMethods.SAY);
         return null;
     }
 
@@ -119,6 +119,7 @@ public class RaspberryPiValidatorAndCollectorVisitor extends CommonNepoValidator
         requiredComponentVisited(sayTextAction, sayTextAction.getMsg());
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.VOICE));
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.SOUND));
+        usedMethodBuilder.addUsedMethod(RaspberryPiMethods.SAY);
         return null;
     }
 
@@ -137,13 +138,13 @@ public class RaspberryPiValidatorAndCollectorVisitor extends CommonNepoValidator
 
     protected ConfigurationComponent checkSensorExists(ExternalSensor<Void> sensor) {
         ConfigurationComponent usedSensor = robotConfiguration.optConfigurationComponent(sensor.getUserDefinedPort());
-        if (usedSensor == null) {
+        if ( usedSensor == null ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
         } else {
             String type = usedSensor.getComponentType();
-            switch (sensor.getKind().getName()) {
+            switch ( sensor.getKind().getName() ) {
                 case "ULTRASONIC_SENSING": //example
-                    if (!(type.equals("ULTRASONIC") || type.equals("CALLIBOT"))) {
+                    if ( !(type.equals("ULTRASONIC") || type.equals("CALLIBOT")) ) {
                         addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
                     }
                     break;

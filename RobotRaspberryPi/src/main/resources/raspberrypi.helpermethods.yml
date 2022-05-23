@@ -1,6 +1,6 @@
 include: "classpath:/common.methods.yml"
-  # method names are based on FunctionNames and EdisonUsedHardwareCollectorVisitor.Method
-  # languages are based on HelperMethodGenerator.Language
+# method names are based on FunctionNames and EdisonUsedHardwareCollectorVisitor.Method
+# languages are based on HelperMethodGenerator.Language
 
 ## FunctionNames
 
@@ -28,3 +28,14 @@ SIGNAL:
         global board
         board.close()
         sys.exit()
+
+SAY:
+  PYTHON: |
+    def _say(text, lang):
+        global __volume
+        data = "<volume level='60'><pitch level='110'><speed level='100'>%s</speed></pitch></volume>" % \
+            (text)
+        with tempfile.NamedTemporaryFile(suffix='.wav') as f:
+            cmd = 'amixer sset "Master" {}% && pico2wave --wave {} --lang {} "{}" && aplay -q -D default {}'.format \
+                (__volume, f.name, lang, data, f.name)
+            sP.check_call(cmd, shell=True)

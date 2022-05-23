@@ -190,6 +190,8 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
         nlIndent();
         this.sb.append("import string");
         nlIndent();
+        this.sb.append("import tempfile");
+        nlIndent();
         this.sb.append("import signal");
         nlIndent();
         nlIndent();
@@ -352,13 +354,10 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        this.sb.append("sP.call([\"amixer\", \"-D\", \"pulse\", \"set\", \"Master\", str(__volume) + \"%\" ])");
-        nlIndent();
-        this.sb.append("sP.call([\"pico2wave\", \"-l=").append(TTSLanguageMapper.getLanguageCountryString(this.language)).append("\", ").append("\"-w\", \"/tmp/a.wav\", ");
+        this.sb.append("_say(");
         sayTextAction.getMsg().accept(this);
-        this.sb.append("])");
+        this.sb.append(", \"").append(TTSLanguageMapper.getLanguageCountryString(this.language)).append("\")");
         nlIndent();
-        this.sb.append("sP.call([\"aplay\", \"/tmp/a.wav\"])");
         return null;
     }
 
@@ -454,13 +453,7 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
         } else {
             pleaseRepeat = "I did not understand, please try again";
         }
-        this.sb.append("sP.call([\"amixer\", \"-D\", \"pulse\", \"set\", \"Master\", \"50%\"])");
-        nlIndent();
-        this.sb.append("sP.call([\"pico2wave\", \"-l=").append(TTSLanguageMapper.getLanguageCountryString(this.language)).append("\", ").append("\"-w=/tmp/a.wav\", \"");
-        this.sb.append(pleaseRepeat);
-        this.sb.append("\"])");
-        nlIndent();
-        this.sb.append("sP.call([\"aplay\", \"/tmp/a.wav\"])");
+        this.sb.append("_say(\"").append(pleaseRepeat).append("\", \"").append(TTSLanguageMapper.getLanguageCountryString(this.language)).append("\")");
         decrIndentation();
         nlIndent();
         return null;
