@@ -14,7 +14,7 @@
     <parent>
         <groupId>de.fhg.iais.openroberta</groupId>
         <artifactId>OpenRobertaParent</artifactId>
-        <version>4.2.11</version>
+        <version>4.2.12-SNAPSHOT</version>
     </parent>
     <artifactId>RobotWeDo</artifactId>
     <name>RobotWeDo</name>
