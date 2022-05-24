@@ -32,4 +32,8 @@ public final class ClearDisplayAction<V> extends Action<V> {
     public static <V> ClearDisplayAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment, String port) {
         return new ClearDisplayAction(BlockTypeContainer.getByName("CLEAR_DISPLAY_ACTION"), properties, comment, port, null);
     }
+
+    public String getPort() {
+        return this.port;
+    }
 }

@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [1, LED_MATRIX], UsedActor [- EMPTY_PORT -, LED_ON_BOARD], UsedActor [- EMPTY_PORT -, IR_TRANSMITTER]]
+Methods: 
+[]

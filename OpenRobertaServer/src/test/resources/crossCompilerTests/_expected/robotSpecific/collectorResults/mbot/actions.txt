@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [- EMPTY_PORT -, DIFFERENTIAL_DRIVE], UsedActor [1, GEARED_MOTOR], UsedActor [2, GEARED_MOTOR], UsedActor [1, LED_MATRIX], UsedActor [- EMPTY_PORT -, BUZZER], UsedActor [- EMPTY_PORT -, LED_ON_BOARD]]
+Methods: 
+[]

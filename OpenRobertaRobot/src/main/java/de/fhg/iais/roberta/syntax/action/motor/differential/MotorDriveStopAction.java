@@ -43,4 +43,8 @@ public class MotorDriveStopAction<V> extends Action<V> {
     public static <V> MotorDriveStopAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment, String port, Hide hide) {
         return new MotorDriveStopAction<>(BlockTypeContainer.getByName("STOP_ACTION"), properties, comment, port, hide);
     }
+
+    public String getPort() {
+        return this.port;
+    }
 }

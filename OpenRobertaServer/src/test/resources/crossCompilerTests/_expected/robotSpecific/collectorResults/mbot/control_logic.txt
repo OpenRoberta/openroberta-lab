@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [3, ULTRASONIC, DISTANCE], UsedSensor [2, INFRARED, LINE], UsedSensor [4, LIGHT, LIGHT], UsedSensor [1, TIMER, VALUE]]
+Actors: 
+[UsedActor [1, LED_MATRIX]]
+Methods: 
+[]
