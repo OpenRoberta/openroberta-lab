@@ -61,6 +61,10 @@ robots:
     template: microbit
     dir: microbit
     suffix: ".py"
+  mbot:
+    template: mbot
+    dir: mbot
+    suffix: ".cpp"
   mbot2:
     template: mbot2
     dir: mbot2
@@ -224,6 +228,7 @@ progs:
       unowifirev2: "Comparison of string and char not possible"
       sensebox: "Comparison of string and char not possible"
       nxt: "Comparison of string and char not possible"
+      mbot: "Comparison of string and char not possible"
       nao: "seems to be not yet implemented"
       bob3: "no strings"
       rob3rta: "no strings"

@@ -30,12 +30,14 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public class LEDMatrixTextAction<V> extends Action<V> {
     private final String port;
     private final Expr<V> msg;
+    private final String displayMode;
 
-    private LEDMatrixTextAction(String port, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private LEDMatrixTextAction(String port, String displayMode, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("LED_MATRIX_TEXT_ACTION"), properties, comment);
         Assert.isTrue(msg != null && port != null);
         this.port = port;
         this.msg = msg;
+        this.displayMode = displayMode;
         setReadOnly();
     }
 
@@ -47,8 +49,8 @@ public class LEDMatrixTextAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LEDMatrixTextAction}
      */
-    private static <V> LEDMatrixTextAction<V> make(String port, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LEDMatrixTextAction<>(port, msg, properties, comment);
+    private static <V> LEDMatrixTextAction<V> make(String port, String displayMode, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new LEDMatrixTextAction<>(port, displayMode, msg, properties, comment);
     }
 
     public String getPort() {
@@ -85,13 +87,14 @@ public class LEDMatrixTextAction<V> extends Action<V> {
         } catch ( DbcException e ) {
             displayMode = "TEXT";
         }
-        return LEDMatrixTextAction.make(port, Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return LEDMatrixTextAction.make(port, displayMode, Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TYPE, this.displayMode);
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.ACTORPORT, this.port);
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.OUT, this.msg);
 
