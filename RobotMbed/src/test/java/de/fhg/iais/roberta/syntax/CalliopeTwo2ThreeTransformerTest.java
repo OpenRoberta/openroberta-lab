@@ -578,7 +578,7 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedFourdigitdisplay_WhenGivenOldFourdigitdisplay() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "FourDigitDisplayShowAction[NumConst[value:1234],NumConst[value:0],BoolConst[value:true]],"
+                + "FourDigitDisplayShowAction[value:NumConst[value:1234],position:NumConst[value:0],colon:BoolConst[value:true]],"
                 + "FourDigitDisplayClearAction[]]]]";
         String[] expectedToBeInConfigAst =
             {
@@ -624,8 +624,8 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedMotors_WhenGivenOldMotors() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "BothMotorsOnAction[Port_A,NumConst[value:30],Port_B,NumConst[value:10]],"
-                + "BothMotorsOnAction[CalliBot_links,NumConst[value:30],CalliBot_rechts,NumConst[value:10]],"
+                + "BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:10],portA:Port_A,portB:Port_B],"
+                + "BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:10],portA:CalliBot_links,portB:CalliBot_rechts],"
                 + "SingleMotorStopAction[]]]]";
         String[] expectedToBeInConfigAst =
             {
@@ -687,8 +687,8 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedMotors_WhenGivenOldMotorDouble() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "BothMotorsOnAction[Port_A,NumConst[value:30],Port_B,NumConst[value:30]],"
-                + "BothMotorsOnAction[CalliBot_links,NumConst[value:30],CalliBot_rechts,NumConst[value:30]],"
+                + "BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:30],portA:Port_A,portB:Port_B],"
+                + "BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:30],portA:CalliBot_links,portB:CalliBot_rechts],"
                 + "SingleMotorStopAction[],"
                 + "SingleMotorStopAction[]]]]";
         String[] expectedToBeInConfigAst =

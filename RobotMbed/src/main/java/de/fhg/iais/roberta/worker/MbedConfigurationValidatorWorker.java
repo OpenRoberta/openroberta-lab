@@ -61,10 +61,7 @@ public class MbedConfigurationValidatorWorker {
             throw new DbcException("Invalid pin for configuration block " + configurationComponent.getComponentType());
         }
         if ( blockPins.stream().distinct().count() != blockPins.size() ) {
-            project.addToErrorCounter(1, null);
-            project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-            String blockId = configurationComponent.getProperty().getBlocklyId();
-            project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
+            throwOverlappingPortsError(configurationComponent);
         }
     }
 
@@ -74,6 +71,10 @@ public class MbedConfigurationValidatorWorker {
             currentFreePins.removeIf(s -> s.equals(pin));
             return;
         }
+        throwOverlappingPortsError(configurationComponent);
+    }
+
+    private void throwOverlappingPortsError(ConfigurationComponent configurationComponent) {
         project.addToErrorCounter(1, null);
         project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
         String blockId = configurationComponent.getProperty().getBlocklyId();
