@@ -1,36 +1,34 @@
 package de.fhg.iais.roberta.syntax.expr.mbed;
 
-import java.util.List;
 import java.util.Locale;
 
-import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.Ast2Jaxb;
-import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.NepoField;
+import de.fhg.iais.roberta.transformer.NepoPhrase;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
+@NepoPhrase(containerType = "PREDEFINED_IMAGE")
 public class PredefinedImage<V> extends Expr<V> {
-    private final String imageName;
+    @NepoField(name = BlocklyConstants.IMAGE)
+    public final String imageName;
 
-    private PredefinedImage(String imageName, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("PREDEFINED_IMAGE"), properties, comment);
+    public PredefinedImage(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, String imageName) {
+        super(kind, properties, comment);
         Assert.notNull(imageName);
         this.imageName = imageName;
         setReadOnly();
     }
 
     public static <V> PredefinedImage<V> make(String predefinedImage, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PredefinedImage<V>(predefinedImage, properties, comment);
+        return new PredefinedImage<V>(BlockTypeContainer.getByName("PREDEFINED_IMAGE"), properties, comment, predefinedImage);
     }
 
     public PredefinedImageNames getImageName() {
@@ -54,32 +52,6 @@ public class PredefinedImage<V> extends Expr<V> {
     @Override
     public BlocklyType getVarType() {
         return BlocklyType.STRING;
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
-        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
-        String field = Jaxb2Ast.extractField(fields, BlocklyConstants.IMAGE);
-        return PredefinedImage.make(field, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
-    }
-
-    @Override
-    public String toString() {
-        return "PredefinedImage [" + this.imageName + "]";
-    }
-
-    @Override
-    public Block astToBlock() {
-        Block jaxbDestination = new Block();
-        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
-        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.IMAGE, this.imageName.toString());
-        return jaxbDestination;
     }
 
     public enum PredefinedImageNames {

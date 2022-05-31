@@ -7,7 +7,7 @@ Option Parameter preceding the command are:
                                to values suitable for operating in the context of an openroberta-lab git repository.
                                If used, other options than this make little sense
 
-  -db-mode {server|embedded}   mode in which the data base shouls be accessed; default: embedded
+  -db-mode {server|embedded}   mode in which the database should be accessed; default: embedded
   -db-name <db-name>           database name; default: openroberta-db; with a database server use openroberta-db-<server-name>
   -db-parentdir <db-parentdir> database parent directory; default: db-embedded. Needed for creating an empty db.
   -java-lib-dir <dir>          directory with the installation dir (containing the jars); default: ./lib
