@@ -1,9 +1,13 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
-import de.fhg.iais.roberta.syntax.*;
 import de.fhg.iais.roberta.transformer.NepoField;
 import de.fhg.iais.roberta.transformer.NepoOp;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>text</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for string

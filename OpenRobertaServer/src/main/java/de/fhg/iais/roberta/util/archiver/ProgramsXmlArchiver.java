@@ -9,7 +9,7 @@ import java.util.zip.ZipOutputStream;
 
 import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.bo.User;
-import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.util.basic.Pair;
 
 public class ProgramsXmlArchiver {
     private boolean hasGroups;

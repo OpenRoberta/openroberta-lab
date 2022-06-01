@@ -1,10 +1,14 @@
 package de.fhg.iais.roberta.syntax.action.sound;
 
-import de.fhg.iais.roberta.syntax.*;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.NepoField;
 import de.fhg.iais.roberta.transformer.NepoPhrase;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>robActions_play_file</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for

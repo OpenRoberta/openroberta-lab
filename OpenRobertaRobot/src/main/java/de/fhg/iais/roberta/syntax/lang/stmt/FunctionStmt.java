@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.lang.functions.Function;
 import de.fhg.iais.roberta.util.dbc.Assert;
 

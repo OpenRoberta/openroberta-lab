@@ -1,11 +1,12 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
-import de.fhg.iais.roberta.syntax.BlockType;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 
 /**
  * the top class of all expressions. To find out which kind an {@link #Expr}-object is use {@link #getKind()}

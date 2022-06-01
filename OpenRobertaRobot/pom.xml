@@ -9,7 +9,7 @@
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>de.fhg.iais.openroberta</groupId>
@@ -114,7 +114,7 @@
                 <configuration>
                     <constantsSource>./constantsSource.txt</constantsSource>
                     <javaSrcDir>./src/main/java</javaSrcDir>
-                    <javaPackageName>de.fhg.iais.roberta.visitor</javaPackageName>
+                    <javaPackageName>de.fhg.iais.roberta.util.basic</javaPackageName>
                     <javaClassName>C</javaClassName>
                     <typescriptOutFile>../OpenRobertaWeb/src/app/nepostackmachine/interpreter.constants.ts</typescriptOutFile>
                 </configuration>
@@ -137,19 +137,19 @@
                 <inherited>false</inherited>
                 <configuration>
                     <jsDir>${basedir}/staticResources/roberta</jsDir>
-					<!-- this is actually the default -->
+                    <!-- this is actually the default -->
                     <includes>**/*.js</includes>
-					<!-- maybe you need to exclude compressed JS files -->
+                    <!-- maybe you need to exclude compressed JS files -->
                     <excludes>**/*_compressed.js</excludes>
-					<!-- this is actually the default -->
+                    <!-- this is actually the default -->
                     <caseSensitive>true</caseSensitive>
                     <outputBaseDirectory>${project.build.directory}/site/</outputBaseDirectory>
                 </configuration>
                 <reportSets>
                     <reportSet>
                         <reports>
-							<!-- include the desired reports -->
-							<!--<report>jslint</report> -->
+                            <!-- include the desired reports -->
+                            <!--<report>jslint</report> -->
                             <report>jsdoc</report>
                         </reports>
                     </reportSet>

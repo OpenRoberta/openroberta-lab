@@ -1,10 +1,11 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 
 public class ShadowExpr<V> extends Expr<V> {
     private final Expr<V> shadow;

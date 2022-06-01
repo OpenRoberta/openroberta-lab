@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.AstTest;
-import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 

@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 import org.json.JSONObject;
 
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
-import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
+import de.fhg.iais.roberta.util.syntax.FunctionNames;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**

@@ -1,11 +1,15 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
-import de.fhg.iais.roberta.syntax.*;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.NepoPhrase;
 import de.fhg.iais.roberta.transformer.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(containerType = "DEBUG_STMT")
 public class DebugAction<V> extends Stmt<V> {

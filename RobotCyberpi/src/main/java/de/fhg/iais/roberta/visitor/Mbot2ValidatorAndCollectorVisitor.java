@@ -8,14 +8,14 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.constants.CyberpiConstants;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.SC;
-import de.fhg.iais.roberta.syntax.WithUserDefinedPort;
+import de.fhg.iais.roberta.util.syntax.SC;
+import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.LedBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.LedOnActionWithIndex;
@@ -30,7 +30,6 @@ import de.fhg.iais.roberta.syntax.action.mbot2.Ultrasonic2LEDAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
-import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -55,8 +54,8 @@ import de.fhg.iais.roberta.visitor.validate.DifferentialMotorValidatorAndCollect
 
 
 public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidatorAndCollectorVisitor implements IMbot2Visitor<Void> {
-    
-    
+
+
     private static final Map<String, String> SENSOR_COMPONENT_TYPE_MAP = new HashMap<String, String>() {{
         put("SOUND_RECORD", SC.SOUND);
         put("QUAD_COLOR_SENSING", CyberpiConstants.MBUILD_QUADRGB);
@@ -72,7 +71,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
         requiredComponentVisited(mainTask, mainTask.getVariables());
         return null;
     }
-    
+
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
         ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(clearDisplayAction.port);
@@ -240,10 +239,11 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
         usedHardwareBuilder.addUsedActor(new UsedActor(printlnAction.getUserDefinedPort(), SC.DISPLAY));
         return null;
     }
+
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(showTextAction.port);
-        if (usedConfigurationBlock == null) {
+        if ( usedConfigurationBlock == null ) {
             addErrorToPhrase(showTextAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
         requiredComponentVisited(showTextAction, showTextAction.msg);
@@ -376,7 +376,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
                         }
                     }
                 }
-            } catch (UnsupportedOperationException e) {
+            } catch ( UnsupportedOperationException e ) {
                 continue;
             }
         }

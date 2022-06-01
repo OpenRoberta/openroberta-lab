@@ -3,11 +3,10 @@ package de.fhg.iais.roberta.expr;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 
 public class ActionExprTest {
 

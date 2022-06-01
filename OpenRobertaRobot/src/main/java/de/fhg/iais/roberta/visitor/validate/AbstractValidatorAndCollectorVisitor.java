@@ -110,7 +110,7 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      * @param subPhrases the component of superPhrase to be checked and visited
      */
     @SafeVarargs
-    protected final void requiredComponentVisited(Phrase<Void> superPhrase, Phrase<Void>... subPhrases) {
+    public final void requiredComponentVisited(Phrase<Void> superPhrase, Phrase<Void>... subPhrases) {
         if ( subPhrases.length <= 0 ) {
             throw new DbcException("at least one sub phrase is required");
         }
@@ -126,7 +126,7 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      * @param superPhrase phrase, whose components should be checked and visited
      * @param subPhrases the component of superPhrase to be checked and visited
      */
-    protected final <T extends Phrase<Void>> void requiredComponentVisited(Phrase<Void> superPhrase, List<T> subPhrases) {
+    public final <T extends Phrase<Void>> void requiredComponentVisited(Phrase<Void> superPhrase, List<T> subPhrases) {
         for ( Phrase<Void> subPhrase : subPhrases ) {
             mkEmptyCheck(superPhrase, subPhrase);
             subPhrase.accept(mainVisitor);
@@ -159,7 +159,7 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      * @param phrase
      * @param message
      */
-    protected void addErrorToPhrase(final Phrase<Void> phrase, final String message) {
+    public void addErrorToPhrase(final Phrase<Void> phrase, final String message) {
         phrase.addInfo(NepoInfo.error(message));
         errorAndWarningBuilder.addError(message);
     }
@@ -170,7 +170,7 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      * @param phrase
      * @param message
      */
-    protected void addWarningToPhrase(final Phrase<Void> phrase, final String message) {
+    public void addWarningToPhrase(final Phrase<Void> phrase, final String message) {
         phrase.addInfo(NepoInfo.warning(message));
         errorAndWarningBuilder.addWarning(message);
     }

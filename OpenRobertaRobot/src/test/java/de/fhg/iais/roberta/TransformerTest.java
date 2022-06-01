@@ -3,21 +3,11 @@ package de.fhg.iais.roberta;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.bean.NewUsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
-import de.fhg.iais.roberta.visitor.BaseVisitor;
-import de.fhg.iais.roberta.visitor.ITransformerVisitor;
-import de.fhg.iais.roberta.worker.AbstractTransformerWorker;
+import de.fhg.iais.roberta.worker.TestTransformerWorker;
 
 /**
  * These tests do not cover all the possibilities of block usage and combination, just some more complex generic programs that may provide a challenge to
@@ -33,7 +23,7 @@ public class TransformerTest extends AstTest {
                 + "MotorOnAction[MotorPort,MotionParam[speed=SensorExpr[TemperatureSensor[TempPort,TempMode,TempSlot]],duration=null]]]]]"; // simple actor + sensor in motionparam usage
 
         Project project =
-            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_sensor_actor.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory, Util.readResourceContent("/ast/transform/old_sensor_actor.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion("2.0").build())
                 .build();
 
@@ -48,7 +38,7 @@ public class TransformerTest extends AstTest {
                 + "WaitStmt[(repeat[WAIT,SensorExpr[GetSampleSensor[TemperatureSensor[GetSamplePort,TEMPERATURE,GetSampleSlot]]]])]]]]";
 
         Project project =
-            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_get_sample.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory, Util.readResourceContent("/ast/transform/old_get_sample.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion("2.0").build())
                 .build();
 
@@ -64,7 +54,7 @@ public class TransformerTest extends AstTest {
                 + "[Location[x=739,y=83],KeysSensor[KeysPort,KeysMode,KeysSlot]]]]"; // unused block
 
         Project project =
-            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_disabled.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory, Util.readResourceContent("/ast/transform/old_disabled.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion("2.0").build())
                 .build();
 
@@ -89,7 +79,7 @@ public class TransformerTest extends AstTest {
                 + "WaitStmt[(repeat[WAIT,SensorExpr[KeysSensor[KeysPort,KeysMode,KeysSlot]]])]]]]";
 
         Project project =
-            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_control.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory, Util.readResourceContent("/ast/transform/old_control.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion("2.0").build())
                 .build();
 
@@ -107,7 +97,7 @@ public class TransformerTest extends AstTest {
                 + "[Location[x=166,y=355],MethodVoid[unused,,DebugAction[value:SensorExpr[KeysSensor[KeysPort,KeysMode,KeysSlot]]]]]]]"; // unused function
 
         Project project =
-            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_functions.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory, Util.readResourceContent("/ast/transform/old_functions.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion("2.0").build())
                 .build();
 
@@ -119,7 +109,7 @@ public class TransformerTest extends AstTest {
     public void executeTransformer_ShouldReturnSameAST_WhenGivenNewerVersionAST() {
         String expectedProgramAst = "BlockAST[project=[[Location[x=671,y=5],MainTask[]," + "DebugAction[value:SensorExpr[KeysSensor[A,PRESSED,- EMPTY_SLOT -]]]]]]"; // simple sensor usage
         Project project =
-            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_newer_version.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory, Util.readResourceContent("/ast/transform/old_newer_version.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion("3.0").build())
                 .build();
 
@@ -133,7 +123,7 @@ public class TransformerTest extends AstTest {
     public void executeTransformer_ShouldReturnTransformedAST_WhenGivenOlderVersionAST() {
         String expectedProgramAst = "BlockAST[project=[[Location[x=671,y=5],MainTask[]," + "DebugAction[value:SensorExpr[KeysSensor[KeysPort,KeysMode,KeysSlot]]]]]]"; // simple sensor usage
         Project project =
-            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_older_version.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory, Util.readResourceContent("/ast/transform/old_older_version.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion("1.0").build())
                 .build();
 
@@ -147,7 +137,7 @@ public class TransformerTest extends AstTest {
     public void executeTransformer_ShouldReturnTransformedAST_WhenGivenEmptyVersionAST() {
         String expectedProgramAst = "BlockAST[project=[[Location[x=671,y=5],MainTask[]," + "DebugAction[value:SensorExpr[KeysSensor[KeysPort,KeysMode,KeysSlot]]]]]]"; // simple sensor usage
         Project project =
-            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_empty_version.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory, Util.readResourceContent("/ast/transform/old_empty_version.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion("").build())
                 .build();
 
@@ -161,7 +151,7 @@ public class TransformerTest extends AstTest {
     public void executeTransformer_ShouldReturnTransformedAST_WhenGivenNoVersionAST() {
         String expectedProgramAst = "BlockAST[project=[[Location[x=671,y=5],MainTask[]," + "DebugAction[value:SensorExpr[KeysSensor[KeysPort,KeysMode,KeysSlot]]]]]]"; // simple sensor usage
         Project project =
-            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_no_version.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory, Util.readResourceContent("/ast/transform/old_no_version.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion(null).build())
                 .build();
 
@@ -189,66 +179,4 @@ public class TransformerTest extends AstTest {
         Assert.assertEquals("3.0", project.getConfigurationAst().getXmlVersion());
     }
 
-    public static class TestTransformerVisitor extends BaseVisitor<Phrase<Void>> implements ITransformerVisitor<Void> {
-
-        private final BlocklyDropdownFactory blocklyDropdownFactory;
-
-        private TestTransformerVisitor(BlocklyDropdownFactory blocklyDropdownFactory) {
-            this.blocklyDropdownFactory = blocklyDropdownFactory;
-        }
-
-        @Override
-        public BlocklyDropdownFactory getBlocklyDropdownFactory() {
-            return this.blocklyDropdownFactory;
-        }
-
-        @Override
-        public Phrase<Void> visitKeysSensor(KeysSensor<Phrase<Void>> keysSensor) {
-            return KeysSensor
-                .make(
-                    new SensorMetaDataBean("KeysPort", "KeysMode", "KeysSlot", keysSensor.getMutation()),
-                    keysSensor.getProperty(),
-                    keysSensor.getComment());
-        }
-
-        @Override
-        public Phrase<Void> visitTemperatureSensor(TemperatureSensor<Phrase<Void>> temperatureSensor) {
-            return TemperatureSensor
-                .make(
-                    new SensorMetaDataBean("TempPort", "TempMode", "TempSlot", temperatureSensor.getMutation()),
-                    temperatureSensor.getProperty(),
-                    temperatureSensor.getComment());
-        }
-
-        @Override
-        public Phrase<Void> visitMotorOnAction(MotorOnAction<Phrase<Void>> motorOnAction) {
-            return MotorOnAction.make("MotorPort", modifyMotionParam(motorOnAction.getParam()), motorOnAction.getProperty(), motorOnAction.getComment());
-        }
-
-        @Override
-        public Phrase<Void> visitGetSampleSensor(GetSampleSensor<Phrase<Void>> sensorGetSample) {
-            return GetSampleSensor
-                .make(
-                    "TEMPERATURE_VALUE",
-                    "GetSamplePort",
-                    "GetSampleSlot",
-                    sensorGetSample.getMutation(),
-                    sensorGetSample.getHide(),
-                    sensorGetSample.getProperty(),
-                    sensorGetSample.getComment(),
-                    this.blocklyDropdownFactory);
-        }
-    }
-
-    private static class TestTransformerWorker extends AbstractTransformerWorker {
-
-        TestTransformerWorker() {
-            super("0.0", "2.0", "4.0");
-        }
-
-        @Override
-        protected ITransformerVisitor<Void> getVisitor(Project project, NewUsedHardwareBean.Builder builder, ConfigurationAst configuration) {
-            return new TestTransformerVisitor(project.getRobotFactory().getBlocklyDropdownFactory());
-        }
-    }
 }

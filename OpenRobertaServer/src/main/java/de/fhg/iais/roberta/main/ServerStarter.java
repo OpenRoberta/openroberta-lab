@@ -45,7 +45,7 @@ import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.transformer.NepoAnnotationException;
 import de.fhg.iais.roberta.util.ServerProperties;

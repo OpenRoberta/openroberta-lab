@@ -10,11 +10,11 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.bean.CompilerSetupBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.worker.IWorker;
+import de.fhg.iais.roberta.util.basic.Pair;
+import de.fhg.iais.roberta.worker.ICompilerWorker;
 
-public class NxtCompilerWorker implements IWorker {
+public class NxtCompilerWorker implements ICompilerWorker {
 
     private static final Logger LOG = LoggerFactory.getLogger(NxtCompilerWorker.class);
 

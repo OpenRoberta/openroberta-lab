@@ -32,15 +32,15 @@ public class XsltTest {
 
     @Test
     public void transform_ShouldReturnTransformedXML_WhenGivenOldXML() throws Exception {
-        String input = Resources.toString(Resources.getResource("de/fhg/iais/roberta/util/Xslt_in.xml"), Charsets.UTF_8);
-        String expected = Resources.toString(Resources.getResource("de/fhg/iais/roberta/util/Xslt_out.xml"), Charsets.UTF_8);
+        String input = Resources.toString(Resources.getResource("util/Xslt_in.xml"), Charsets.UTF_8);
+        String expected = Resources.toString(Resources.getResource("util/Xslt_out.xml"), Charsets.UTF_8);
         Assert.assertNull(UnitTestHelper.runXmlUnit(expected, xsltTransformer.transform(input)));
     }
 
     @Test
     public void transform_ShouldReturnTransformedCalliopeXML_WhenGivenOldCalliopeXML() throws Exception {
-        String input = Resources.toString(Resources.getResource("de/fhg/iais/roberta/util/Xslt_calliope_in.xml"), Charsets.UTF_8);
-        String expected = Resources.toString(Resources.getResource("de/fhg/iais/roberta/util/Xslt_calliope_out.xml"), Charsets.UTF_8);
+        String input = Resources.toString(Resources.getResource("util/Xslt_calliope_in.xml"), Charsets.UTF_8);
+        String expected = Resources.toString(Resources.getResource("util/Xslt_calliope_out.xml"), Charsets.UTF_8);
         Assert.assertNull(UnitTestHelper.runXmlUnit(expected, xsltTransformer.transform(input)));
     }
 

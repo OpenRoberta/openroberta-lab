@@ -19,13 +19,12 @@ import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.components.ConfigurationComponentLeaf;
-import de.fhg.iais.roberta.components.ConfigurationComponentNode;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponentLeaf;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponentNode;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.Callback;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public final class Jaxb2ConfigurationAst {
@@ -66,6 +65,11 @@ public final class Jaxb2ConfigurationAst {
         List<ConfigurationComponent> allComponents = Jaxb2ConfigurationAst.extractOldConfigurationComponent(topBlock, factory, sensorsPrefix);
 
         return builder.addComponents(allComponents).build();
+    }
+
+    @FunctionalInterface
+    public interface Callback<V> {
+        void call(V value);
     }
 
     private static void setWithOptField(List<Field> fields, String name, Callback<? super String> callback) {

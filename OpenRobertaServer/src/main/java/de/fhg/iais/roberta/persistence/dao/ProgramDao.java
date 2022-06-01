@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.persistence.bo.UserGroupProgramShare;
 import de.fhg.iais.roberta.persistence.bo.UserProgramShare;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**

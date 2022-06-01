@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class LikeDao extends AbstractDao<Like> {

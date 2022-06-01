@@ -30,7 +30,7 @@ import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.dbc.DbcException;

@@ -55,7 +55,7 @@ import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectWorkflo
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
-import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;

@@ -19,17 +19,18 @@ import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.exprly.generated.ExprlyLexer;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser.ExpressionContext;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.lang.expr.eval.EvalExprErrorListener;
-import de.fhg.iais.roberta.syntax.lang.expr.eval.ExprlyVisitor;
+import de.fhg.iais.roberta.exprEvaluator.EvalExprErrorListener;
+import de.fhg.iais.roberta.exprEvaluator.ExprlyVisitor;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 
 /**
  * This class represents blockly eval_expr block in the AST<br>

@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
 
-public class MicrobitCompilerWorker implements IWorker {
+public class MicrobitCompilerWorker implements ICompilerWorker {
 
     private static final Logger LOG = LoggerFactory.getLogger(MicrobitCompilerWorker.class);
 

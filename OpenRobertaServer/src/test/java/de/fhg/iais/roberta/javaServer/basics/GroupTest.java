@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.persistence.util.DbExecutor;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.util.basic.Pair;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 

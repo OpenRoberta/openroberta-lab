@@ -13,9 +13,9 @@ import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.blockly.generated.Warning;
-import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.BlockType;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
+import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
@@ -64,7 +64,7 @@ public final class Ast2Jaxb {
      * @param block to which the statement will be added; must be <b>not</b> null,
      * @param name of the statement; must be <b>non-empty</b> string
      * @param value is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
-     *        {@link BlockType#STMT_LIST}
+     *     {@link BlockType#STMT_LIST}
      */
     public static void addStatement(Block block, String name, Phrase<?> value) {
         Assert.isTrue(!name.equals(""));
@@ -88,13 +88,13 @@ public final class Ast2Jaxb {
      * @param name of the statement; must be <b>non-empty</b> string
      * @param value is the List of ConfigurationComponents of the statement
      */
-    public static void addConfigurationComponents(Block block, String name, List<ConfigurationComponent>  values){
+    public static void addConfigurationComponents(Block block, String name, List<ConfigurationComponent> values) {
         Assert.isTrue(!name.equals(""));
         Assert.notNull(block);
         Assert.notNull(values);
         Statement statement = new Statement();
         statement.setName(name);
-        for(ConfigurationComponent component : values){
+        for ( ConfigurationComponent component : values ) {
             statement.getBlock().add(component.astToBlock());
         }
         block.getStatement().add(statement);
@@ -108,7 +108,7 @@ public final class Ast2Jaxb {
      * @param block to which the statement will be added; must be <b>not</b> null,
      * @param name of the statement; must be <b>non-empty</b> string
      * @param value is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
-     *        {@link BlockType#EXPR_LIST}
+     *     {@link BlockType#EXPR_LIST}
      */
     public static void addStatement(Block block, String name, ExprList<?> exprList) {
         Assert.isTrue(!name.equals(""));
@@ -129,7 +129,7 @@ public final class Ast2Jaxb {
      * @param repetitions object to which the statement will be added; must be <b>not</b> null
      * @param name of the statement; must be <b>non-empty</b> string
      * @param value is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
-     *        {@link BlockType#STMT_LIST}
+     *     {@link BlockType#STMT_LIST}
      */
     public static void addStatement(Repetitions repetitions, String name, Phrase<?> value) {
         Assert.isTrue(!name.equals(""));
@@ -152,7 +152,7 @@ public final class Ast2Jaxb {
      * @param repetitions object to which the statement will be added; must be <b>not</b> null,
      * @param name of the statement; must be <b>non-empty</b> string
      * @param value is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
-     *        {@link BlockType#EXPR_LIST}
+     *     {@link BlockType#EXPR_LIST}
      */
     public static void addStatement(Repetitions repetitions, String name, ExprList<?> exprList) {
         Assert.isTrue(!name.equals(""));
@@ -209,7 +209,7 @@ public final class Ast2Jaxb {
         Assert.isTrue(!name.equals(""));
         Assert.notNull(repetitions);
         Assert.notNull(value);
-        if (value.equals(BlocklyConstants.EMPTY_PORT)) {
+        if ( value.equals(BlocklyConstants.EMPTY_PORT) ) {
             return;
         }
         if ( !value.getKind().hasName("EMPTY_EXPR") ) {
@@ -234,9 +234,9 @@ public final class Ast2Jaxb {
     public static void addField(Block block, String name, String value) {
         Assert.isTrue(!name.equals(""));
         Assert.notNull(block);
-        if (value.equals(BlocklyConstants.EMPTY_PORT)) {
+        if ( value.equals(BlocklyConstants.EMPTY_PORT) ) {
             // ignore
-        } else if (value.equals(BlocklyConstants.EMPTY_SLOT)) {
+        } else if ( value.equals(BlocklyConstants.EMPTY_SLOT) ) {
             Field field = new Field();
             field.setName(name);
             field.setValue("");
@@ -251,6 +251,7 @@ public final class Ast2Jaxb {
 
     /**
      * Add's a {@link Data} object to JAXB block representation
+     *
      * @param block to which the field will be added; must be <b>not</b> null,
      * @param value is the AST representation of the Blockly block where the value is stored
      */
@@ -261,7 +262,7 @@ public final class Ast2Jaxb {
         block.setData(data);
     }
 
-   /**
+    /**
      * Add's a {@link Mutation} object to JAXB block representation {@link Block}.
      *
      * @param block to which the mutation will be added; must be <b>not</b> null,

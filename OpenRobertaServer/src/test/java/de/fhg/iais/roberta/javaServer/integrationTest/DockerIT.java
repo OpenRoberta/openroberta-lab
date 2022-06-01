@@ -19,7 +19,7 @@ import com.google.common.io.Resources;
 
 import de.fhg.iais.roberta.testutil.HttpClientWrapper;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
-import de.fhg.iais.roberta.util.Clock;
+import de.fhg.iais.roberta.util.basic.Clock;
 import de.fhg.iais.roberta.util.Key;
 
 /**
@@ -68,7 +68,8 @@ public class DockerIT {
         boolean success = true;
         int terminatedWorkflows = 0;
         int nextFreeUserNumber = baseNumber + DockerIT.MAX_CONCURRENT_USERS + 1;
-        start: while ( terminatedWorkflows < DockerIT.MAX_TOTAL_USERS ) {
+        start:
+        while ( terminatedWorkflows < DockerIT.MAX_TOTAL_USERS ) {
             for ( int i = 0; i < DockerIT.MAX_CONCURRENT_USERS; i++ ) {
                 if ( futures[i].isDone() ) {
                     success = success && futures[i].get();

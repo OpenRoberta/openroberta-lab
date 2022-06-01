@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.CalliopeMethods;
 
 public abstract class CalliopeValidatorAndCollectorWorker extends MbedValidatorAndCollectorWorker {

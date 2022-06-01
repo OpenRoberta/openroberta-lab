@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.components.ev3c4ev3;
 
 import org.apache.commons.lang3.SystemUtils;
 
-import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 

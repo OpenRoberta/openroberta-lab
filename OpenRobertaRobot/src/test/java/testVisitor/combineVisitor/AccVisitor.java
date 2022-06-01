@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import testVisitor.IVisitor;
+import testVisitor.ITestVisitor;
 import testVisitor.ast.A;
 import testVisitor.ast.B;
 import testVisitor.ast.C;
 import testVisitor.ast.Phrase;
 
-public class AccVisitor implements IVisitor<String>, IStructureRunner<String> {
+public class AccVisitor implements ITestVisitor<String>, IStructureRunner<String> {
     @Override
     public String visitA(A<String> a) {
         return IStructureRunner.super.visitA(a, new ListTraverser(), new ICollector<String>() {
@@ -43,6 +43,7 @@ public class AccVisitor implements IVisitor<String>, IStructureRunner<String> {
 
     class ListTraverser implements ITraverser<String> {
         List<String> collected = new ArrayList<>();
+
         @Override
         public ITraverser<String> step(Phrase<String> p) {
             String subcollected = p.accept(AccVisitor.this);

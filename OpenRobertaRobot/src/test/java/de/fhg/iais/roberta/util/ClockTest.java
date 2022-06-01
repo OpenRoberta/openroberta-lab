@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.util;
 
+import de.fhg.iais.roberta.util.basic.Clock;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Ignore;

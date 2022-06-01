@@ -14,10 +14,10 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.bean.CompilerSetupBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.basic.Pair;
 
-public class CalliopeCompilerWorker implements IWorker {
+public class CalliopeCompilerWorker implements ICompilerWorker {
     private static final Logger LOG = LoggerFactory.getLogger(CalliopeCompilerWorker.class);
 
     @Override

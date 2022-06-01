@@ -11,16 +11,16 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.bean.CompilerSetupBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.worker.IWorker;
+import de.fhg.iais.roberta.util.basic.Pair;
+import de.fhg.iais.roberta.worker.ICompilerWorker;
 
 /**
  * The workflow for the Edison compiler. Blockly blocks are first converted into EdPy Python2 code and then the code is converted into a WAV audio file. See
  * also: https://github.com/Bdanilko/EdPy
  */
-public class EdisonCompilerWorker implements IWorker {
+public class EdisonCompilerWorker implements ICompilerWorker {
     private static final Logger LOG = LoggerFactory.getLogger(EdisonCompilerWorker.class);
 
     @Override

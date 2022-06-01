@@ -6,7 +6,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.bean.NewUsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.Phrase;

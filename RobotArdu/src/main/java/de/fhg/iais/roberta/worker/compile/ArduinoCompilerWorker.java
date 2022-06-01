@@ -17,14 +17,14 @@ import com.google.common.base.Charsets;
 import de.fhg.iais.roberta.bean.CompilerSetupBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.ZipHelper;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.codegen.NIBOHexPrefix;
-import de.fhg.iais.roberta.worker.IWorker;
+import de.fhg.iais.roberta.worker.ICompilerWorker;
 
-public class ArduinoCompilerWorker implements IWorker {
+public class ArduinoCompilerWorker implements ICompilerWorker {
 
     private static final Logger LOG = LoggerFactory.getLogger(ArduinoCompilerWorker.class);
 
