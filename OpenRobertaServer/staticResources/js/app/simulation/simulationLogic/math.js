@@ -19,9 +19,10 @@ define(["require", "exports", "simulation.constants"], function (require, export
      *            degree to convert
      * @returns {Number} radians
      */
-    exports.toRadians = function (degree) {
+    var toRadians = function (degree) {
         return degree * (Math.PI / 180);
     };
+    exports.toRadians = toRadians;
     /**
      * Convert from radians to degree.
      *
@@ -30,9 +31,10 @@ define(["require", "exports", "simulation.constants"], function (require, export
      *            radians to convert
      * @returns {Number} degree
      */
-    exports.toDegree = function (radians) {
+    var toDegree = function (radians) {
         return radians * (180 / Math.PI);
     };
+    exports.toDegree = toDegree;
     /**
      * Get intersection point from two lines.
      *
@@ -43,7 +45,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
      *            another line
      * @returns {point} or null, if no intersection found
      */
-    exports.getIntersectionPoint = function (line1, line2) {
+    var getIntersectionPoint = function (line1, line2) {
         var d = (line1.x1 - line1.x2) * (line2.y1 - line2.y2) - (line1.y1 - line1.y2) * (line2.x1 - line2.x2);
         if (d === 0) {
             return null;
@@ -61,6 +63,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
             y: yi,
         };
     };
+    exports.getIntersectionPoint = getIntersectionPoint;
     /**
      * Finds the closest intersection from the intersections of a line
      * @memberOf exports
@@ -69,7 +72,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
      * @return {x, y}
      *              closest intersection point (coordinate)
      */
-    exports.getClosestIntersectionPointCircle = function (line, circle) {
+    var getClosestIntersectionPointCircle = function (line, circle) {
         var intersections = this.getIntersectionPointsCircle(line, circle);
         if (intersections.length == 1) {
             return intersections[0]; // one intersection
@@ -86,6 +89,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
         }
         return null; // no intersections at all
     };
+    exports.getClosestIntersectionPointCircle = getClosestIntersectionPointCircle;
     /**
      * Finds the intersection between a circles border
      * and a line from the origin to the otherLineEndPoint.
@@ -95,7 +99,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
      * @return {{x, y}[]}
      *              array with point(s) of the intersection
      */
-    exports.getIntersectionPointsCircle = function (line, circle) {
+    var getIntersectionPointsCircle = function (line, circle) {
         var dx, dy, A, B, C, det, t;
         dx = line.x2 - line.x1;
         dy = line.y2 - line.y1;
@@ -125,6 +129,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
             return [];
         }
     };
+    exports.getIntersectionPointsCircle = getIntersectionPointsCircle;
     /**
      * Checks if Alignment of lines is correct to sensor
      *
@@ -137,7 +142,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
      *            a line
      * @returns {boolean}
      */
-    exports.isLineAlignedToPoint = function (xi, yi, line) {
+    var isLineAlignedToPoint = function (xi, yi, line) {
         if (xi < Math.min(line.x1, line.x2) - 0.01 || xi > Math.max(line.x1, line.x2) + 0.01) {
             return false;
         }
@@ -146,6 +151,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
         }
         return true;
     };
+    exports.isLineAlignedToPoint = isLineAlignedToPoint;
     /**
      * Get four lines from a rectangle.
      *
@@ -154,7 +160,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
      *            a rectangle
      * @returns {Array} four lines
      */
-    exports.getLinesFromObj = function (obj) {
+    var getLinesFromObj = function (obj) {
         switch (obj.form) {
             case 'rectangle':
                 return [
@@ -235,6 +241,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
                 return false;
         }
     };
+    exports.getLinesFromObj = getLinesFromObj;
     /**
      * Get distance from a point to a circle's border.
      *
@@ -246,7 +253,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
      * @returns {distance}
      *           distance
      */
-    exports.getDistanceToCircle = function (point, circle) {
+    var getDistanceToCircle = function (point, circle) {
         var vX = point.x - circle.x;
         var vY = point.y - circle.y;
         var magV = Math.sqrt(vX * vX + vY * vY);
@@ -257,6 +264,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
             y: aY,
         };
     };
+    exports.getDistanceToCircle = getDistanceToCircle;
     /**
      * Calculate the square of a number.
      *
@@ -265,9 +273,10 @@ define(["require", "exports", "simulation.constants"], function (require, export
      * x value to square
      * @returns { Number } square of x
      */
-    exports.sqr = function (x) {
+    var sqr = function (x) {
         return x * x;
     };
+    exports.sqr = sqr;
     /**
      * Get the distance of two points.
      *
@@ -279,7 +288,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
      * @returns {distance}
      */
     function getDistance(p1, p2) {
-        return exports.sqr(p1.x - p2.x) + exports.sqr(p1.y - p2.y);
+        return (0, exports.sqr)(p1.x - p2.x) + (0, exports.sqr)(p1.y - p2.y);
     }
     exports.getDistance = getDistance;
     /**
@@ -312,7 +321,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
         };
     }
     exports.getDistanceToLine = getDistanceToLine;
-    exports.isPointInsideRectangle = function (p, rect) {
+    var isPointInsideRectangle = function (p, rect) {
         var p1 = rect.p1;
         var p2 = rect.p2;
         var p3 = rect.p3;
@@ -330,7 +339,8 @@ define(["require", "exports", "simulation.constants"], function (require, export
             return false;
         }
     };
-    exports.checkObstacle = function (robot, p) {
+    exports.isPointInsideRectangle = isPointInsideRectangle;
+    var checkObstacle = function (robot, p) {
         var x = robot.frontLeft.rx;
         var y = robot.frontLeft.ry;
         robot.frontLeft.bumped = robot.frontLeft.bumped || check(p, x, y);
@@ -345,6 +355,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
         robot.backRight.bumped = robot.backRight.bumped || check(p, x, y);
         return robot.frontLeft.bumped || robot.frontRight.bumped ? 1 : 0;
     };
+    exports.checkObstacle = checkObstacle;
     check = function (p, x, y) {
         switch (p.form) {
             case 'rectangle':
@@ -361,7 +372,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
             case 'circle':
                 return (x - p.x) * (x - p.x) + (y - p.y) * (y - p.y) <= p.r * p.r;
             case 'robot':
-                return exports.isPointInsideRectangle({
+                return (0, exports.isPointInsideRectangle)({
                     x: x,
                     y: y,
                 }, {
@@ -399,7 +410,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
      * @returns {Array} hsv value
      */
     //copy from http://stackoverflow.com/questions/2348597/why-doesnt-this-javascript-rgb-to-hsl-code-work
-    exports.rgbToHsv = function (r, g, b) {
+    var rgbToHsv = function (r, g, b) {
         var min = Math.min(r, g, b), max = Math.max(r, g, b), delta = max - min, h, s, v = max;
         v = Math.floor((max / 255) * 100);
         if (max !== 0) {
@@ -424,6 +435,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
         }
         return [h, s, v];
     };
+    exports.rgbToHsv = rgbToHsv;
     /**
      * Map a hsv value to a color name.
      *
@@ -432,7 +444,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
      *            hsv value
      * @returns {Enum} color
      */
-    exports.getColor = function (hsv) {
+    var getColor = function (hsv) {
         if (hsv[2] <= 10) {
             return simulation_constants_1.default.COLOR_ENUM.BLACK;
         }
@@ -456,4 +468,5 @@ define(["require", "exports", "simulation.constants"], function (require, export
         }
         return simulation_constants_1.default.COLOR_ENUM.NONE;
     };
+    exports.getColor = getColor;
 });

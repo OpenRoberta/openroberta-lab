@@ -20,12 +20,14 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./port", "jquery"], function (require, exports, wires_1, const_robots_1, robotBlock_1, port_1, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -149,7 +151,7 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
                             : block.getFieldValue(name) || others.connectedTo }));
                 });
                 _this.connections = _this.connections.filter(function (connection) { return connection.blockId !== block.id; });
-                _this.connections = __spreadArrays(_this.connections, connections);
+                _this.connections = __spreadArray(__spreadArray([], _this.connections, true), connections, true);
             };
             this.deleteConnections = function (blockId) {
                 _this.connections = _this.connections.filter(function (connection) {
@@ -210,7 +212,7 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
             return window.Blockly.Xml.workspaceToDom(this.workspace);
         };
         CircuitVisualization.prototype.injectRobotBoard = function () {
-            window.Blockly.Blocks['robConf_robot'] = robotBlock_1.createRobotBlock(this.currentRobot);
+            window.Blockly.Blocks['robConf_robot'] = (0, robotBlock_1.createRobotBlock)(this.currentRobot);
             if (!this.dom.querySelector('block[type=robConf_robot]')) {
                 var robotXml = "<instance x='250' y='250'><block type='robConf_robot' id='robot'></block></instance>";
                 var oParser = new DOMParser();

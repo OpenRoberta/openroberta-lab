@@ -46,7 +46,7 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
             AGENTORTOKEN: 'arduinoAgentOrToken',
             LOCAL: 'local',
             WEBVIEW: 'webview',
-            JSPLAY: 'jsPlay',
+            JSPLAY: 'jsPlay', //Play file in the browser with JavaScript
         };
         exports.gui.runEnabled = false;
         exports.user.id = -1;

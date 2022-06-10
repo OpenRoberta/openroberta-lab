@@ -239,8 +239,8 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             var nodeClass = nodeType === NodeType.INPUT ? 'node_input' : nodeType === NodeType.HIDDEN ? 'node_hidden' : 'node_output';
             var nodeGroup = container.append('g').attr({
                 class: nodeClass,
-                id: "" + nodeId,
-                transform: "translate(" + x + "," + y + ")",
+                id: "".concat(nodeId),
+                transform: "translate(".concat(x, ",").concat(y, ")"),
             });
             var mainRectAngle = nodeGroup.append('rect').attr({
                 x: 0,
@@ -267,7 +267,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             labelForId.append('tspan').text(nodeId);
             if (nodeType !== NodeType.INPUT) {
                 var biasRect = nodeGroup.append('rect').attr({
-                    id: "bias-" + nodeId,
+                    id: "bias-".concat(nodeId),
                     x: -biasSize - 2,
                     y: nodeSize - biasSize + 3,
                     width: biasSize,
@@ -291,13 +291,13 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             D3.select('#nn-network')
                 .insert('div', ':first-child')
                 .attr({
-                id: "canvas-" + nodeId,
+                id: "canvas-".concat(nodeId),
                 class: 'canvas',
             })
                 .style({
                 position: 'absolute',
-                left: x + 3 + "px",
-                top: y + 3 + "px",
+                left: "".concat(x + 3, "px"),
+                top: "".concat(y + 3, "px"),
             });
         }
         var valShiftToRight = true;
@@ -353,7 +353,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             return node.offsetHeight + node.offsetTop;
         }
         function addPlusMinusControl(x, layerIdx) {
-            var div = D3.select('#nn-network').append('div').classed('nn-plus-minus-neurons', true).style('left', x + "px");
+            var div = D3.select('#nn-network').append('div').classed('nn-plus-minus-neurons', true).style('left', "".concat(x, "px"));
             var i = layerIdx - 1;
             var firstRow = div.append('div');
             firstRow
@@ -436,8 +436,8 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             input.node().focus();
         });
         editCard.style({
-            left: coordinates[0] + 20 + "px",
-            top: coordinates[1] + "px",
+            left: "".concat(coordinates[0] + 20, "px"),
+            top: "".concat(coordinates[1], "px"),
             display: 'block',
         });
         var name = nodeOrLink instanceof neuralnetwork_nn_1.Link ? 'NN_WEIGHT' : 'NN_BIAS';
@@ -453,12 +453,12 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             var colorScale = mkColorScale();
             network.forEachLink(function (link) {
                 var baseName = link.source.id + '-' + link.dest.id;
-                container.select("#" + baseName).style({
+                container.select("#".concat(baseName)).style({
                     'stroke-dashoffset': 0,
                     'stroke-width': linkWidthScale(Math.abs(link.weight.get())),
                     stroke: colorScale(link.weight.get()),
                 });
-                var val = container.select("#val-" + baseName);
+                var val = container.select("#val-".concat(baseName));
                 if (!val.empty()) {
                     val.text(link.weight.getWithPrecision(state.precision, state.weightSuppressMultOp));
                     drawValuesBox(val, link.weight.get());
@@ -468,8 +468,8 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         function updateNodesUI(container) {
             var colorScale = mkColorScale();
             network.forEachNode(true, function (node) {
-                D3.select("#bias-" + node.id).style('fill', colorScale(node.bias.get()));
-                var val = D3.select("#val-" + node.id);
+                D3.select("#bias-".concat(node.id)).style('fill', colorScale(node.bias.get()));
+                var val = D3.select("#val-".concat(node.id));
                 if (!val.empty()) {
                     val.text(node.bias.getWithPrecision(state.precision, state.weightSuppressMultOp));
                     drawValuesBox(val, node.bias.get());

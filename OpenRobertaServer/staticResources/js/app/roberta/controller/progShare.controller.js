@@ -344,7 +344,7 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
     }
     var rowStyle = function (row, index) {
         return {
-            classes: 'typcn typcn-' + row[2],
+            classes: 'typcn typcn-' + row[2], // the robot typicon as background image
         };
     };
     var eventAddShare = {

@@ -84,7 +84,12 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
             return this.asNumber;
         };
         NNumber.prototype.getWoOp = function () {
-            return this.normalizedUserInput;
+            if (this.separator === ',') {
+                return this.normalizedUserInput.replace(NNumber.pointGlobal, ',');
+            }
+            else {
+                return this.normalizedUserInput;
+            }
         };
         NNumber.prototype.hasFraction = function () {
             return this.isFraction;

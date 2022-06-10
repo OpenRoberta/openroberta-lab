@@ -451,9 +451,10 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
     var robotIndex = 0;
     var simRobotType;
     var numRobots = 0;
-    exports.getNumRobots = function () {
+    var getNumRobots = function () {
         return numRobots;
     };
+    exports.getNumRobots = getNumRobots;
     function callbackOnTermination() {
         if (allInterpretersTerminated()) {
             if (!robots[0].endless) {
