@@ -30,6 +30,9 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public final class Jaxb2ConfigurationAst {
 
     private static final Pattern BRICK_BLOCK_PATTERN = Pattern.compile("robBrick_[A-z]*-Brick");
+    private static final Pattern NAME_PATTERN = Pattern.compile("^$|^[\\w]*$");
+    private static final Pattern NUMBER_PATTERN = Pattern.compile("^[0-9]*.[0-9]*$");
+    private static final Pattern FILENAME_PATTERN = Pattern.compile("^[\\w-]+.[A-Za-z]{1,6}$");
 
     private Jaxb2ConfigurationAst() {
     }
@@ -88,9 +91,11 @@ public final class Jaxb2ConfigurationAst {
             String blocklyName = value.getBlock().getType();
             List<Field> fields = Jaxb2Ast.extractFields(value.getBlock(), (short) 255);
             Map<String, String> properties = new HashMap<>();
+            nameValidator(userDefinedName, portName);
             for ( Field field : fields ) {
                 String fKey = field.getName();
                 String fValue = field.getValue();
+                nameValidator(fValue, fKey);
                 properties.put(fKey, fValue);
             }
             ConfigurationComponent configComp =
@@ -108,11 +113,17 @@ public final class Jaxb2ConfigurationAst {
         }
         return allComponents;
     }
-
     public static ConfigurationAst blocks2NewConfig(BlockSet set, BlocklyDropdownFactory factory) {
         List<Instance> instances = set.getInstance();
         List<ConfigurationComponent> allComponents = new ArrayList<>();
         for ( Instance instance : instances ) {
+            for ( Block block : instance.getBlock() ) {
+                for ( Field field : block.getField() ) {
+                    String value = field.getValue();
+                    String name = field.getName();
+                    nameValidator(value, name);
+                }
+            }
             if ( instance.getBlock().size() != 0 && instance.getBlock().get(0).getStatement().size() != 0 ) {
                 allComponents.add(Jaxb2ConfigurationAst.block2NewConfigComp(instance.getBlock().get(0), factory, instance.getX(), instance.getY()));
             } else {
@@ -229,6 +240,13 @@ public final class Jaxb2ConfigurationAst {
                 Jaxb2Ast.extractComment(firstBlock),
                 Integer.parseInt(instance.getX()),
                 Integer.parseInt(instance.getY()));
+        }
+    }
+
+    private static void nameValidator(String value, String name) {
+        boolean matches = name.equals("NAO_FILENAME") ? FILENAME_PATTERN.matcher(value).matches() : (NAME_PATTERN.matcher(value).matches() || NUMBER_PATTERN.matcher(value).matches());
+        if ( !matches ) {
+            throw new DbcException("Invalid Name in Configuration detected");
         }
     }
 }

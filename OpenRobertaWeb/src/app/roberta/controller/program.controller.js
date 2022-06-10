@@ -162,6 +162,7 @@ function initEvents() {
  * Save program to server
  */
 function saveToServer() {
+    Blockly.hideChaff();
     $('.modal').modal('hide'); // close all opened popups
     var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
     var xmlProgramText = Blockly.Xml.domToText(xmlProgram);
@@ -194,6 +195,7 @@ function saveToServer() {
 function saveAsProgramToServer() {
     $formSingleModal.validate();
     if ($formSingleModal.valid()) {
+        Blockly.hideChaff();
         $('.modal').modal('hide'); // close all opened popups
         var progName = $('#singleModalInput').val().trim();
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
@@ -430,6 +432,7 @@ function confirmLoadProgram() {
 }
 
 function linkProgram() {
+    Blockly.hideChaff();
     var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
     var xml = Blockly.Xml.domToText(dom);
     //TODO this should be removed after the next release
@@ -453,6 +456,7 @@ function linkProgram() {
  * Create a file from the blocks and download it.
  */
 function exportXml() {
+    Blockly.hideChaff();
     var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
     var xml =
         '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' +

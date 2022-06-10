@@ -40,8 +40,7 @@
                                                 <value name="A">
                                                     <block type="variables_get" id="Q2V0onC1-*%7|aHQ#mLz" intask="true">
                                                         <mutation datatype="Number"></mutation>
-                                                        <field name="VAR">j
-                                                        </field>
+                                                        <field name="VAR">j</field>
                                                     </block>
                                                 </value>
                                                 <value name="B">

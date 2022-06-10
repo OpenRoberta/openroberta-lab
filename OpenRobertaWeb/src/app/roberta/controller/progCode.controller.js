@@ -61,6 +61,7 @@ function initEvents() {
     $('#codeDownload').onWrap(
         'click',
         function (event) {
+            Blockly.hideChaff();
             var filename = GUISTATE_C.getProgramName() + '.' + GUISTATE_C.getSourceCodeFileExtension();
             UTIL.download(filename, GUISTATE_C.getProgramSource());
             MSG.displayMessage('MENU_MESSAGE_DOWNLOAD', 'TOAST', filename);
@@ -70,6 +71,7 @@ function initEvents() {
     $('#codeRefresh').onWrap(
         'click',
         function (event) {
+            Blockly.hideChaff();
             event.stopPropagation();
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xmlProgram = Blockly.Xml.domToText(dom);

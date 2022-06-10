@@ -139,6 +139,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
      * Save program to server
      */
     function saveToServer() {
+        Blockly.hideChaff();
         $('.modal').modal('hide'); // close all opened popups
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xmlProgramText = Blockly.Xml.domToText(xmlProgram);
@@ -162,6 +163,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
     function saveAsProgramToServer() {
         $formSingleModal.validate();
         if ($formSingleModal.valid()) {
+            Blockly.hideChaff();
             $('.modal').modal('hide'); // close all opened popups
             var progName = $('#singleModalInput').val().trim();
             var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
@@ -363,6 +365,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
         }
     }
     function linkProgram() {
+        Blockly.hideChaff();
         var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xml = Blockly.Xml.domToText(dom);
         //TODO this should be removed after the next release
@@ -386,6 +389,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
      * Create a file from the blocks and download it.
      */
     function exportXml() {
+        Blockly.hideChaff();
         var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' +
             Blockly.Xml.domToText(dom) +

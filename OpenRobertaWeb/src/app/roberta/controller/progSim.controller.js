@@ -363,6 +363,7 @@ function toggleSim() {
 
         SIM.endDebugging();
     } else {
+        Blockly.hideChaff();
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
         var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
@@ -388,6 +389,7 @@ function toggleSim() {
 
 function toggleSimEvent(event) {
     if ($('#simControl').hasClass('typcn-media-play-outline')) {
+        Blockly.hideChaff();
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
         var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();

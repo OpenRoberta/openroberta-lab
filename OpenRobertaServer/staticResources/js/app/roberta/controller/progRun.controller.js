@@ -44,6 +44,7 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
      * Start the program on the brick
      */
     function runOnBrick() {
+        Blockly.hideChaff();
         GUISTATE_C.setPing(false);
         GUISTATE_C.setConnectionState('busy');
         LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick');

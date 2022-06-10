@@ -189,6 +189,7 @@ function initEvents() {
 }
 
 function getSourceCode(reload) {
+    Blockly.hideChaff();
     var blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
     var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
     var xmlProgram = Blockly.Xml.domToText(dom);

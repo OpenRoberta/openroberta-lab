@@ -4,10 +4,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import de.fhg.iais.roberta.blockly.generated.Arg;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
@@ -16,10 +18,6 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.factory.RobotFactory;
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
@@ -46,9 +44,15 @@ import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 public class Jaxb2ProgramAst<V> {
     private final RobotFactory robotFactory;
+    private final Pattern namePattern = Pattern.compile("^$|^[a-zA-Z_#][\\w-]*$");
+    private final Pattern numberPattern = Pattern.compile("^-?[0-9]*(.|e-|e\\+)?[0-9]*$");
     private int variableCounter = 0;
 
     public Jaxb2ProgramAst(RobotFactory factory) {
@@ -114,6 +118,7 @@ public class Jaxb2ProgramAst<V> {
         if ( block == null ) {
             throw new DbcException("Invalid null block");
         }
+        nameValidator(block);
         String type = block.getType().trim().toLowerCase();
         BlockType matchingBlockType = BlockTypeContainer.getByBlocklyName(type);
         Assert.notNull(matchingBlockType, "Invalid Block: " + block.getType());
@@ -424,9 +429,9 @@ public class Jaxb2ProgramAst<V> {
         }
     }
 
-    private StmtList<V> blocksToStmtList(List<Block> statementBolcks) {
+    private StmtList<V> blocksToStmtList(List<Block> statementBlocks) {
         StmtList<V> stmtList = StmtList.make();
-        for ( Block sb : statementBolcks ) {
+        for ( Block sb : statementBlocks ) {
             convertPhraseToStmt(stmtList, sb);
         }
         stmtList.setReadOnly();
@@ -455,4 +460,18 @@ public class Jaxb2ProgramAst<V> {
         stmtList.addStmt(stmt);
     }
 
+    private void nameValidator(Block block) {
+        String value;
+        boolean matches;
+        for ( Field field : block.getField() ) {
+            value = field.getValue();
+            if ( value.equals("NO PORT") || field.getName().equals("TEXT") ) {
+                return;
+            }
+            matches = namePattern.matcher(value).matches() || numberPattern.matcher(value).matches();
+            if ( !matches ) {
+                throw new DbcException("Invalid variable name in program detected");
+            }
+        }
+    }
 }
