@@ -1,16 +1,15 @@
 package de.fhg.iais.roberta.syntax.sensor.mbot2;
 
 import de.fhg.iais.roberta.blockly.generated.Hide;
-import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forField.NepoHide;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
-import de.fhg.iais.roberta.syntax.sensor.Sensor;
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoHide;
-import de.fhg.iais.roberta.transformer.NepoPhrase;
-import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
  * This class represents the <b>robSensors_gyro_axis_reset</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -18,7 +17,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br/>
  */
 
-@NepoPhrase(containerType = "GYRO_RESET_AXIS")
+@NepoPhrase(category = "SENSOR", blocklyNames = {"robSensors_gyro_reset_axis"}, containerType = "GYRO_RESET_AXIS")
 public class GyroResetAxis<V> extends Sensor<V> implements WithUserDefinedPort<V> {
     @NepoField(name = BlocklyConstants.SENSORPORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;
@@ -27,14 +26,15 @@ public class GyroResetAxis<V> extends Sensor<V> implements WithUserDefinedPort<V
     @NepoHide
     public final Hide hide;
 
-    public GyroResetAxis(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, String port, String slot, Hide hide) {
-        super(kind, properties, comment);
+    public GyroResetAxis(BlocklyBlockProperties properties, BlocklyComment comment, String port, String slot, Hide hide) {
+        super(properties, comment);
         Assert.nonEmptyString(port);
         this.port = port;
         this.slot = slot;
         this.hide = hide;
         setReadOnly();
     }
+
     @Override
     public String getUserDefinedPort() {
         return this.port;

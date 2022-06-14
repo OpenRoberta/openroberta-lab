@@ -1,8 +1,8 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
@@ -10,11 +10,12 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 /**
  * Wraps subclasses of the class {@link Action} so they can be used as {@link Expr} in expressions.
  */
+@NepoBasic(category = "EXPR", containerType = "ACTION_EXPR", blocklyNames = {})
 public final class ActionExpr<V> extends Expr<V> {
-    private final Action<V> action;
+    public final Action<V> action;
 
     private ActionExpr(Action<V> action) {
-        super(BlockTypeContainer.getByName("ACTION_EXPR"), action.getProperty(), action.getComment());
+        super(action.getProperty(), action.getComment());
         Assert.isTrue(action.isReadOnly());
         this.action = action;
         setReadOnly();

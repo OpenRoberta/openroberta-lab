@@ -16,34 +16,36 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.exprEvaluator.EvalExprErrorListener;
+import de.fhg.iais.roberta.exprEvaluator.ExprlyVisitor;
 import de.fhg.iais.roberta.exprly.generated.ExprlyLexer;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser.ExpressionContext;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.exprEvaluator.EvalExprErrorListener;
-import de.fhg.iais.roberta.exprEvaluator.ExprlyVisitor;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.syntax.Assoc;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents blockly eval_expr block in the AST<br>
  * The user must provide the string representing the expression, This class will wrap the wanted AST instance of the expression
  */
+@NepoBasic(containerType = "EVAL", category = "EXPR", blocklyNames = {"robActions_eval_expr"})
 public class EvalExpr<V> extends Expr<V> {
-    private final String expr;
-    private final String type;
+    public final String expr;
+    public final String type;
     private static final Logger LOG = LoggerFactory.getLogger(EvalExpr.class);
-    private final Expr<V> exprBlock;
+    public final Expr<V> exprBlock;
 
     private EvalExpr(String expr, Expr<V> exprBlock, String type, BlocklyBlockProperties properties, BlocklyComment comment) throws Exception {
-        super(exprBlock.getKind(), properties, comment);
+        super(properties, comment);
         this.expr = expr;
         this.type = type;
         if ( exprBlock instanceof ExprList<?> ) {
@@ -180,7 +182,7 @@ public class EvalExpr<V> extends Expr<V> {
             for ( String s : err.getError() ) {
                 LOG.error(s);
             }
-            NullConst<V> errorExpr = NullConst.make(BlocklyBlockProperties.make("1", "1"), null);
+            NullConst<V> errorExpr = NullConst.make(BlocklyBlockProperties.make("EVAL", "1"), null);
             annotations.add(NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_PARSE"));
             return errorExpr;
         } else {

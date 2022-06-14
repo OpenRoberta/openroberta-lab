@@ -1,19 +1,17 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
+import de.fhg.iais.roberta.transformer.forField.NepoValue;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.transformer.NepoOp;
-import de.fhg.iais.roberta.transformer.NepoValue;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.syntax.Assoc;
 
 /**
  * This class represents the <b>robColour_rgb</b> block from Blockly
  */
-@NepoOp(containerType = "RGB_COLOR", blocklyType = BlocklyType.COLOR, precedence = 999, assoc = Assoc.NONE)
+@NepoExpr(category = "EXPR", blocklyNames = {"naoColour_rgb", "robColour_rgb", "mbedColour_rgb"}, containerType = "RGB_COLOR", blocklyType = BlocklyType.COLOR, precedence = 999, assoc = Assoc.NONE)
 public class RgbColor<V> extends Expr<V> {
     @NepoValue(name = BlocklyConstants.RED, type = BlocklyType.NUMBER_INT)
     public final Expr<V> R;
@@ -24,8 +22,8 @@ public class RgbColor<V> extends Expr<V> {
     @NepoValue(name = BlocklyConstants.ALPHA, type = BlocklyType.NUMBER_INT)
     public final Expr<V> A;
 
-    public RgbColor(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> r, Expr<V> g, Expr<V> b, Expr<V> a) {
-        super(kind, properties, comment);
+    public RgbColor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> r, Expr<V> g, Expr<V> b, Expr<V> a) {
+        super(properties, comment);
         R = r;
         G = g;
         B = b;
@@ -55,7 +53,7 @@ public class RgbColor<V> extends Expr<V> {
 
     // TODO: remove, if Transformer is better engineered
     public static <V> RgbColor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> r, Expr<V> g, Expr<V> b, Expr<V> a) {
-        return new RgbColor(BlockTypeContainer.getByName("RGB_COLOR"), properties, comment, r, g, b, a);
+        return new RgbColor(properties, comment, r, g, b, a);
     }
 
 }

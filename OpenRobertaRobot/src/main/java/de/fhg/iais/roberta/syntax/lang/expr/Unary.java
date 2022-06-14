@@ -3,18 +3,18 @@ package de.fhg.iais.roberta.syntax.lang.expr;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.Assoc;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents all unary operations from Blockly into the AST (abstract syntax tree).<br>
@@ -25,12 +25,13 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
  * <br>
  * The enumeration {@link Op} contains all allowed unary operations.
  */
+@NepoBasic(containerType = "UNARY", category = "EXPR", blocklyNames = {"logic_negate"})
 public class Unary<V> extends Expr<V> {
-    private final Op op;
-    private final Expr<V> expr;
+    public final Op op;
+    public final Expr<V> expr;
 
     private Unary(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("UNARY"), properties, comment);
+        super(properties, comment);
         Assert.isTrue(op != null && expr != null && expr.isReadOnly());
         this.op = op;
         this.expr = expr;
@@ -88,15 +89,15 @@ public class Unary<V> extends Expr<V> {
      * Operators for the unary expression.
      */
     public static enum Op {
-        PLUS( 10, Assoc.LEFT, "+" ),
-        NEG( 10, Assoc.LEFT, "-" ),
-        NOT( 300, Assoc.RIGHT, "!", "not" ),
-        POSTFIX_INCREMENTS( 1, Assoc.LEFT, "++" ),
-        PREFIX_INCREMENTS( 1, Assoc.RIGHT, "++" );
+        PLUS(10, Assoc.LEFT, "+"),
+        NEG(10, Assoc.LEFT, "-"),
+        NOT(300, Assoc.RIGHT, "!", "not"),
+        POSTFIX_INCREMENTS(1, Assoc.LEFT, "++"),
+        PREFIX_INCREMENTS(1, Assoc.RIGHT, "++");
 
-        private final String[] values;
-        private final int precedence;
-        private final Assoc assoc;
+        public final String[] values;
+        public final int precedence;
+        public final Assoc assoc;
 
         private Op(int precedence, Assoc assoc, String... values) {
             this.precedence = precedence;

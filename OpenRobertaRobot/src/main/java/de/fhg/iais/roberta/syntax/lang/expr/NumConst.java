@@ -1,25 +1,23 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoOp;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
  * This class represents the blockly block for constant numbers in the AST . Object from this class represent one read-only numerical value.
  */
-@NepoOp(containerType = "NUM_CONST", blocklyType = BlocklyType.NUMBER)
+@NepoExpr(category = "EXPR", blocklyNames = {"math_integer", "math_number", "rob_math_u999"}, containerType = "NUM_CONST", blocklyType = BlocklyType.NUMBER)
 public class NumConst<V> extends Expr<V> {
     @NepoField(name = BlocklyConstants.NUM)
     public final String value;
 
-    public NumConst(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, String value) {
-        super(kind, properties, comment);
+    public NumConst(BlocklyBlockProperties properties, BlocklyComment comment, String value) {
+        super(properties, comment);
         Assert.isTrue(!value.equals(""));
         this.value = value;
         setReadOnly();
@@ -34,7 +32,7 @@ public class NumConst<V> extends Expr<V> {
      * @return read only object representing the number constant in the AST
      */
     public static <V> NumConst<V> make(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new NumConst<>(BlockTypeContainer.getByName("NUM_CONST"), properties, comment, value);
+        return new NumConst<>(properties, comment, value);
     }
 
     /**
@@ -45,7 +43,7 @@ public class NumConst<V> extends Expr<V> {
      * @return read only object representing the number constant in the AST
      */
     public static <V> NumConst<V> make(String value) {
-        return new NumConst<>(BlockTypeContainer.getByName("NUM_CONST"), BlocklyBlockProperties.make("1", "1"), null, value);
+        return new NumConst<>(BlocklyBlockProperties.make("NUM_CONST", "1"), null, value);
     }
 
     /**

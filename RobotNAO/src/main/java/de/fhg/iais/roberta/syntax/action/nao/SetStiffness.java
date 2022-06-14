@@ -6,16 +6,16 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.mode.action.nao.BodyPart;
 import de.fhg.iais.roberta.mode.general.WorkingState;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>naoActions_PartialStiffnessOn</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate
@@ -23,13 +23,14 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br/>
  * The client must provide the {@link BodyPart} (body part in which the motors are released).
  */
+@NepoBasic(containerType = "SET_STIFFNESS", category = "ACTOR", blocklyNames = {"naoActions_stiffness"})
 public final class SetStiffness<V> extends Action<V> {
 
-    private final BodyPart bodyPart;
-    private final WorkingState onOff;
+    public final BodyPart bodyPart;
+    public final WorkingState onOff;
 
     private SetStiffness(BodyPart bodyPart, WorkingState onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("SET_STIFFNESS"), properties, comment);
+        super(properties, comment);
         Assert.notNull(bodyPart, "Missing body part in SetStiffness block!");
         Assert.notNull(onOff, "Missing onOff in SetStiffness block!");
         this.bodyPart = bodyPart;

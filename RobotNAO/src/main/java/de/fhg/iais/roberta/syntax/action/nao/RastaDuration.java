@@ -4,10 +4,6 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -15,7 +11,11 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>robActions_motor_on_for</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -23,6 +23,7 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
  * <br/>
  * The client must provide the {@link duration} (time the eyes will be colored).
  */
+@NepoBasic(containerType = "RASTA_DURATION", category = "ACTOR", blocklyNames = {"naoActions_rasta"})
 public final class RastaDuration<V> extends Action<V> {
 
     @Override
@@ -30,10 +31,10 @@ public final class RastaDuration<V> extends Action<V> {
         return "RastaDuration [" + this.duration + "]";
     }
 
-    private final Expr<V> duration;
+    public final Expr<V> duration;
 
     private RastaDuration(Expr<V> duration, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("RASTA_DURATION"), properties, comment);
+        super(properties, comment);
         this.duration = duration;
         setReadOnly();
     }

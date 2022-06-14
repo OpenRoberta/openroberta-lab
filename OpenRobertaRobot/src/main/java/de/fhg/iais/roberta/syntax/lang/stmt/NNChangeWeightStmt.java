@@ -1,18 +1,16 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forField.NepoValue;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoPhrase;
-import de.fhg.iais.roberta.transformer.NepoValue;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 
-@NepoPhrase(containerType = "NN_CHANGE_WEIGHT_STMT")
+@NepoPhrase(category = "STMT", blocklyNames = {"robActions_change_weight"}, containerType = "NN_CHANGE_WEIGHT_STMT")
 public class NNChangeWeightStmt<V> extends Stmt<V> {
     @NepoField(name = BlocklyConstants.FROM)
     public final String from;
@@ -23,8 +21,8 @@ public class NNChangeWeightStmt<V> extends Stmt<V> {
     @NepoValue(name = BlocklyConstants.VALUE, type = BlocklyType.NUMBER)
     public final Expr<V> value;
 
-    public NNChangeWeightStmt(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, String from, String to, String change, Expr<V> value) {
-        super(kind, properties, comment);
+    public NNChangeWeightStmt(BlocklyBlockProperties properties, BlocklyComment comment, String from, String to, String change, Expr<V> value) {
+        super(properties, comment);
         Assert.isTrue(value.isReadOnly() && value != null);
         this.from = from;
         this.to = to;
@@ -34,7 +32,7 @@ public class NNChangeWeightStmt<V> extends Stmt<V> {
     }
 
     public static <V> NNChangeWeightStmt<V> make(BlocklyBlockProperties properties, BlocklyComment comment, String from, String to, String change, Expr<V> value) {
-        return new NNChangeWeightStmt<V>(BlockTypeContainer.getByName("NN_INPUT_NEURON_STMT"), properties, comment, from, to, change, value);
+        return new NNChangeWeightStmt<V>(properties, comment, from, to, change, value);
     }
 
     public String getFrom() {

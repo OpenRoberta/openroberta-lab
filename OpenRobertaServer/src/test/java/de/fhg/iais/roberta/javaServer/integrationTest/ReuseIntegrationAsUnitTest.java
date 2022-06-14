@@ -55,9 +55,10 @@ import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectWorkflo
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
-import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
+import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 public class ReuseIntegrationAsUnitTest {
@@ -111,6 +112,7 @@ public class ReuseIntegrationAsUnitTest {
 
     @BeforeClass
     public static void setupClass() throws IOException {
+        BlockTypeContainer.loadBlocks();
         Path path = Paths.get(TARGET_DIR);
         Files.createDirectories(path);
         JSONObject testSpecification = Util.loadYAML(TEST_SPEC_YML);
@@ -162,7 +164,8 @@ public class ReuseIntegrationAsUnitTest {
     //@Ignore
     @Test
     public void testOneCommonProgrammAsUnitTest() throws Exception {
-        String programName = "controlFlowLoops";
+        String programName = "mathAndLists";
+        String[] robotNames = {"ev3lejosv1"}; // set to null, if all robots should be tested; otherwise put the robots under test into the array
         {
             List<String> pluginDefines = new ArrayList<>(); // maybe used later to add properties
             testFactory = Util.configureRobotPlugin(ROBOT_NAME_FOR_COMMON_TESTS, "", "", pluginDefines);
@@ -171,7 +174,8 @@ public class ReuseIntegrationAsUnitTest {
             runGenerateAndRegenerateForOneCommonProgram(defaultConfigXml, template, programName);
         }
         {
-            for ( String robotName : ROBOTS_FOR_TARGET_LANGUAGE_GENERATION ) {
+            String[] robotsToTest = robotNames == null ? ROBOTS_FOR_TARGET_LANGUAGE_GENERATION : robotNames;
+            for ( String robotName : robotsToTest ) {
                 setupRobotFactoryForRobot(robotName);
                 JSONObject robotDeclFromTestSpec = robotsFromTestSpec.getJSONObject(robotName);
                 String robotDir = robotDeclFromTestSpec.getString("template");

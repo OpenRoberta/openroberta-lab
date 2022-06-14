@@ -5,17 +5,17 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 /**
  * This class represents the <b>robActions_brickLight_off</b> and <b>robActions_brickLight_reset</b> blocks from Blockly into the AST (abstract syntax tree).
@@ -23,12 +23,13 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br/>
  * The client must provide the {@link Status}.
  */
+@NepoBasic(containerType = "LIGHT_STATUS_ACTION", category = "ACTOR", blocklyNames = {"robActions", "robActions_brickLight_reset", "robActions_brickLight_off", "mbedActions_leds_off", "robActions_led_off"})
 public class LightStatusAction<V> extends Action<V> implements WithUserDefinedPort<V> {
-    private final Status status;
-    private final String userDefinedPort;
+    public final Status status;
+    public final String userDefinedPort;
 
     private LightStatusAction(String userDefinedPort, Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LIGHT_STATUS_ACTION"), properties, comment);
+        super(properties, comment);
         Assert.isTrue(status != null);
         this.status = status;
         this.userDefinedPort = userDefinedPort;

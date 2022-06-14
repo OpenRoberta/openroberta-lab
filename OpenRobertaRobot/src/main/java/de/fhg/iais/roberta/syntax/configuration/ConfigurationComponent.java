@@ -9,14 +9,14 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAst;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.SC;
 
 /**
  * Representation of old/new configuration blocks in the AST. May have subclasses which override {@link ConfigurationComponent#astToBlock()} in order to
@@ -49,7 +49,7 @@ public class ConfigurationComponent extends Phrase<Void> {
             internalPortName,
             userDefinedName,
             componentProperties,
-            BlocklyBlockProperties.make(componentType, "this-will-be-regenerated-anyway"),
+            BlocklyBlockProperties.make(componentType, "1"),
             BlocklyComment.make("empty-comment", false, "10", "10"),
             0,
             0);

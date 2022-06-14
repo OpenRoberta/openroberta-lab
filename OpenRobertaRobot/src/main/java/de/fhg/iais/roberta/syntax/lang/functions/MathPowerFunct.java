@@ -3,48 +3,32 @@ package de.fhg.iais.roberta.syntax.lang.functions;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.syntax.lang.expr.Binary;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.Ast2Jaxb;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
-/**
- * This class represents <b>power</b> function from Blockly into the AST (abstract syntax tree).<br>
- * <br>
- * The user must provide name of the function and list of parameters. <br>
- * To create an instance from this class use the method {@link #make(FunctionNames, List, BlocklyBlockProperties, BlocklyComment)}.<br>
- * The enumeration {@link FunctionNames} contains all allowed functions.
- */
-public class MathPowerFunct<V> extends Expr<V> {
-    private final FunctionNames functName;
-    private final List<Expr<V>> param;
+@NepoBasic(containerType = "MATH_POWER_FUNCT", category = "EXPR", blocklyNames = {})
+public final class MathPowerFunct<V> extends Expr<V> {
+    public final FunctionNames functName;
+    public final List<Expr<V>> param;
 
-    private MathPowerFunct(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("FUNCTIONS"), properties, comment);
+    public MathPowerFunct(BlocklyBlockProperties properties, BlocklyComment comment, FunctionNames name, List<Expr<V>> param) {
+        super(properties, comment);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
         this.param = param;
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link Binary}. This instance is read only and can not be modified.
-     *
-     * @param name of the function; must be <b>not</b> null,
-     * @param param list of parameters for the function; must be <b>not</b> null,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment that user has added to the block,
-     * @return read only object of class {@link MathPowerFunct}
-     */
     public static <V> MathPowerFunct<V> make(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MathPowerFunct<V>(name, param, properties, comment);
+        return new MathPowerFunct<V>(properties, comment, name, param);
     }
 
     /**

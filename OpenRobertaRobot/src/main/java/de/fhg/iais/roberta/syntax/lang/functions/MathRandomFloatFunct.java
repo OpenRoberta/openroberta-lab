@@ -1,11 +1,9 @@
 package de.fhg.iais.roberta.syntax.lang.functions;
 
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.transformer.NepoOp;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
 /**
@@ -15,11 +13,11 @@ import de.fhg.iais.roberta.util.syntax.FunctionNames;
  * To create an instance from this class use the method {@link #make(BlocklyBlockProperties, BlocklyComment)}.<br>
  * The enumeration {@link FunctionNames} contains all allowed functions.
  */
-@NepoOp(containerType = "MATH_RANDOM_FLOAT_FUNCT", blocklyType = BlocklyType.NUMBER, precedence = 10)
+@NepoExpr(category = "FUNCTION", blocklyNames = {"math_random_float"}, containerType = "MATH_RANDOM_FLOAT_FUNCT", blocklyType = BlocklyType.NUMBER, precedence = 10)
 public class MathRandomFloatFunct<V> extends Function<V> {
 
-    public MathRandomFloatFunct(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(kind, properties, comment);
+    public MathRandomFloatFunct(BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(properties, comment);
         setReadOnly();
     }
 
@@ -31,7 +29,7 @@ public class MathRandomFloatFunct<V> extends Function<V> {
      * @return read only object of class {@link MathRandomFloatFunct}
      */
     public static <V> MathRandomFloatFunct<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MathRandomFloatFunct<V>(BlockTypeContainer.getByName("MATH_RANDOM_FLOAT_FUNCT"), properties, comment);
+        return new MathRandomFloatFunct<V>(properties, comment);
     }
 
 }

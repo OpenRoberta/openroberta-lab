@@ -5,17 +5,17 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>robConnection</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate color
@@ -25,12 +25,13 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
  * <br>
  * To create an instance from this class use the method {@link #make(String, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
+@NepoBasic(containerType = "CONNECTION_CONST", category = "EXPR", blocklyNames = {"robCommunication_connection"})
 public class ConnectConst<V> extends Expr<V> {
-    private final String value;
-    private final String dataValue;
+    public final String value;
+    public final String dataValue;
 
     private ConnectConst(String dataValue, String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("CONNECTION_CONST"), properties, comment);
+        super(properties, comment);
         Assert.isTrue(!value.equals(""));
         this.value = value;
         this.dataValue = dataValue;

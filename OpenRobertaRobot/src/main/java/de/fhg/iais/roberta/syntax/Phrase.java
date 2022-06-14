@@ -10,14 +10,15 @@ import de.fhg.iais.roberta.typecheck.NepoInfos;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.visitor.ITransformerVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
 /**
- * the top class of all class used to represent the AST (abstract syntax tree) of a program. After construction an AST should be immutable. The logic to achieve
- * that is in this class. An object of a subclass of {@link Phrase} is initially writable, after the construction of the object has finished,
+ * the top class of all class used to represent the AST (abstract syntax tree) of a program. After construction an AST should be immutable.
+ * An object of a subclass of {@link Phrase} is initially writable, after the construction of the object has finished,
  * {@link #setReadOnly()} is called. This cannot be undone later. It is expected that all subclasses of {@link #Phrase} do the following:<br>
  * - if in construction phase, they should use {@link #mayChange()} to assert that.<br>
  * - if the construction has finished and {@link #setReadOnly()} has been called, they should use {@link #isReadOnly()} to assert their immutability.<br>
@@ -36,12 +37,25 @@ abstract public class Phrase<V> {
     /**
      * This constructor set the kind of the object used in the AST (abstract syntax tree). All possible kinds can be found in {@link BlockType}.
      *
-     * @param kind of the the object used in AST,
      * @param comment that the user added to the block
      */
-    public Phrase(BlockType kind, BlocklyBlockProperties property, BlocklyComment comment) {
+    public Phrase(BlocklyBlockProperties property, BlocklyComment comment) {
         Assert.isTrue(property != null, "block property is null!");
-        this.kind = kind;
+        this.kind = BlockTypeContainer.getBlockType(this.getClass());
+        this.property = property;
+        this.comment = comment;
+    }
+
+    /**
+     * only for ConfigurationsComponent and TODO: remove as fast as possible
+     *
+     * @param blockType
+     * @param property
+     * @param comment
+     */
+    public Phrase(BlockType blockType, BlocklyBlockProperties property, BlocklyComment comment) {
+        Assert.isTrue(property != null, "block property is null!");
+        this.kind = blockType;
         this.property = property;
         this.comment = comment;
     }

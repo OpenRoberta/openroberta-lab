@@ -1,18 +1,17 @@
 package de.fhg.iais.roberta.syntax;
 
-import de.fhg.iais.roberta.transformer.NepoHide;
-import de.fhg.iais.roberta.transformer.NepoPhrase;
-import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forField.NepoHide;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 
-@NepoPhrase
+@NepoPhrase(containerType = "TEST_PHRASE_WRONG_HIDE_TYPE", blocklyNames = {"test_phrase_wrong_hide_type"}, category = "EXPR")
 public class TestPhraseWrongHideType<V> extends Phrase<V> {
     @NepoHide
     public final String hide;
 
-    public TestPhraseWrongHideType(BlockType kind, BlocklyBlockProperties property, BlocklyComment comment, String hide) {
-        super(kind, property, comment);
+    public TestPhraseWrongHideType(BlocklyBlockProperties property, BlocklyComment comment, String hide) {
+        super(property, comment);
         this.hide = hide;
     }
 }

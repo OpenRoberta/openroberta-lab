@@ -8,9 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import de.fhg.iais.roberta.bean.WaitUntilSensorBean;
-import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -81,29 +79,5 @@ public class BlocklyDropdownFactoryHelper {
             }
         }
         return r;
-    }
-
-    public static void loadBlocks(JSONObject robotDescription) {
-        JSONObject blocks = robotDescription.getJSONObject("block");
-        for ( String block : blocks.keySet() ) {
-            JSONObject value = blocks.getJSONObject(block);
-            try {
-                Class<?> implementor = Class.forName(value.getString("implementor"));
-                JSONArray blocklyBlocks = value.getJSONArray("type");
-                String[] blocklyNames = jsonArray2stringArray(blocklyBlocks);
-                BlockTypeContainer.add(block, Category.valueOf(value.getString("category")), implementor, blocklyNames);
-            } catch ( Exception e ) {
-                throw new DbcException("Invalid definition for block type " + block);
-            }
-        }
-    }
-
-    private static String[] jsonArray2stringArray(JSONArray value) {
-        int length = value.length();
-        String[] resultValues = new String[length];
-        for ( int i = 0; i < length; i++ ) {
-            resultValues[i] = value.getString(i);
-        }
-        return resultValues;
     }
 }

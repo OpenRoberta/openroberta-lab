@@ -7,11 +7,6 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
 import de.fhg.iais.roberta.mode.action.nao.Resolution;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.util.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -19,8 +14,13 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.util.syntax.MotionParam;
 
 /**
  * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree). Object from
@@ -28,6 +28,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br/>
  * The client must provide the {@link MotionParam} (number of rotations or degrees and speed).
  */
+@NepoBasic(containerType = "RECORD_VIDEO", category = "ACTOR", blocklyNames = {"naoActions_recordVideo"})
 public final class RecordVideo<V> extends Action<V> {
 
     @Override
@@ -35,13 +36,13 @@ public final class RecordVideo<V> extends Action<V> {
         return "RecordVideo [" + this.resolution + ", " + this.camera + ", " + this.duration + ", " + this.videoName + "]";
     }
 
-    private final Resolution resolution;
-    private final Camera camera;
-    private final Expr<V> duration;
-    private final Expr<V> videoName;
+    public final Resolution resolution;
+    public final Camera camera;
+    public final Expr<V> duration;
+    public final Expr<V> videoName;
 
     private RecordVideo(Resolution resolution, Camera camera, Expr<V> duration, Expr<V> videoName, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("RECORD_VIDEO"), properties, comment);
+        super(properties, comment);
         Assert.notNull(resolution, "Missing resolution in RecordVideo block!");
         Assert.notNull(camera, "Missing camera in RecordVideo block!");
         this.resolution = resolution;

@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.syntax.functions.arduino;
 
-import java.awt.Image;
+import java.awt.*;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -9,20 +9,20 @@ import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.general.IDirection;
 import de.fhg.iais.roberta.mode.general.Direction;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.functions.Function;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.Assoc;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents <b>mbedImage_shift</b> blocks from Blockly into the AST (abstract syntax tree).<br>
@@ -30,10 +30,11 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * The user must provide name of the function and list of parameters. <br>
  * To create an instance from this class use the method {@link #make(Image, Direction, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
+@NepoBasic(containerType = "LED_MATRIX_IMAGE_SHIFT", category = "FUNCTION", blocklyNames = {"mBotImage_shift"})
 public class LEDMatrixImageShiftFunction<V> extends Function<V> {
-    private final Expr<V> image;
-    private final Expr<V> positions;
-    private final IDirection shiftDirection;
+    public final Expr<V> image;
+    public final Expr<V> positions;
+    public final IDirection shiftDirection;
 
     private LEDMatrixImageShiftFunction(
         Expr<V> image,
@@ -41,7 +42,7 @@ public class LEDMatrixImageShiftFunction<V> extends Function<V> {
         IDirection shiftDirection,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LED_MATRIX_IMAGE_SHIFT"), properties, comment);
+        super(properties, comment);
         Assert.notNull(image);
         Assert.notNull(positions);
         Assert.notNull(shiftDirection);

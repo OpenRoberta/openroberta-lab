@@ -6,23 +6,24 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Repetitions;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
+@NepoBasic(containerType = "IF_STMT", category = "STMT", blocklyNames = {"robControls_ifElse", "controls_if", "robControls_if"})
 public class IfStmt<V> extends Stmt<V> {
-    private final List<Expr<V>> expr;
-    private final List<StmtList<V>> thenList;
-    private final StmtList<V> elseList;
-    private final int _else;
-    private final int _elseIf;
+    public final List<Expr<V>> expr;
+    public final List<StmtList<V>> thenList;
+    public final StmtList<V> elseList;
+    public final int _else;
+    public final int _elseIf;
 
     private IfStmt(
         List<Expr<V>> expr,
@@ -32,7 +33,7 @@ public class IfStmt<V> extends Stmt<V> {
         BlocklyComment comment,
         int _else,
         int _elseIf) {
-        super(BlockTypeContainer.getByName("IF_STMT"), properties, comment);
+        super(properties, comment);
         Assert.isTrue(expr.size() == thenList.size() && elseList.isReadOnly());
         this.expr = expr;
         this.thenList = thenList;

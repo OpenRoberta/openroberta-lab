@@ -7,10 +7,6 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.mode.action.nao.Frame;
 import de.fhg.iais.roberta.mode.action.nao.PointLook;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -18,7 +14,11 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>naoActions_pointAt</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -26,14 +26,15 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
  * <br/>
  * The client must provide the {@link Frame}, {@link pointX}, {@link pointY}, {@link pointZ} and {@link speed} (frame, coordinates and fraction of speed).
  */
+@NepoBasic(containerType = "POINT_LOOK_AT", category = "ACTOR", blocklyNames = {"naoActions_pointLookAt"})
 public final class PointLookAt<V> extends Action<V> {
 
-    private final Frame frame;
-    private final PointLook pointLook;
-    private final Expr<V> pointX;
-    private final Expr<V> pointY;
-    private final Expr<V> pointZ;
-    private final Expr<V> speed;
+    public final Frame frame;
+    public final PointLook pointLook;
+    public final Expr<V> pointX;
+    public final Expr<V> pointY;
+    public final Expr<V> pointZ;
+    public final Expr<V> speed;
 
     private PointLookAt(
         Frame frame,
@@ -44,7 +45,7 @@ public final class PointLookAt<V> extends Action<V> {
         Expr<V> speed,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("POINT_LOOK_AT"), properties, comment);
+        super(properties, comment);
         //Assert.notNull(frame, "Missing frame in PointLookAt block!");
         //Assert.notNull(pointLook, "Missing point look in PointLookAt block!");
         this.frame = frame;

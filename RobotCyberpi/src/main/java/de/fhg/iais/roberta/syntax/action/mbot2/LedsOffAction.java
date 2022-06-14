@@ -1,18 +1,17 @@
 package de.fhg.iais.roberta.syntax.action.mbot2;
 
 import de.fhg.iais.roberta.blockly.generated.Hide;
-import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forField.NepoHide;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
-import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoHide;
-import de.fhg.iais.roberta.transformer.NepoPhrase;
-import de.fhg.iais.roberta.util.dbc.Assert;
 
-@NepoPhrase(containerType = "LEDS_OFF_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_leds_off"}, containerType = "LEDS_OFF_ACTION")
 public class LedsOffAction<V> extends Action<V> implements WithUserDefinedPort<V> {
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;
@@ -21,8 +20,8 @@ public class LedsOffAction<V> extends Action<V> implements WithUserDefinedPort<V
     @NepoHide
     public final Hide hide;
 
-    public LedsOffAction(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, String port, String led, Hide hide) {
-        super(kind, properties, comment);
+    public LedsOffAction(BlocklyBlockProperties properties, BlocklyComment comment, String port, String led, Hide hide) {
+        super(properties, comment);
         Assert.nonEmptyString(port);
         Assert.notNull(led);
         this.hide = hide;
@@ -30,7 +29,7 @@ public class LedsOffAction<V> extends Action<V> implements WithUserDefinedPort<V
         this.led = led;
         setReadOnly();
     }
-    
+
     @Override
     public String getUserDefinedPort() {
         return this.port;

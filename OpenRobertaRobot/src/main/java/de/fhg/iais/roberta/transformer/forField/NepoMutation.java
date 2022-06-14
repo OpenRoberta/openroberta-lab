@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.transformer;
+package de.fhg.iais.roberta.transformer.forField;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -10,9 +10,11 @@ import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 
 /**
- * This annotation can be used to parse xml mutatation objects from blocks.<br>
+ * <b>This Nepo field annotation can be used to parse the 'mutation' XML substructure from the XML representation of blockly blocks.</b>
  * Example XML
  * <pre>{@code
  *  <block>
@@ -22,7 +24,7 @@ import de.fhg.iais.roberta.blockly.generated.Mutation;
  * }</pre>
  *
  * <b>The field annotated with {@link NepoMutation} must be of type {@link Mutation} and public!</b><br>
- * The class using this Annotation should also be annoted with either {@link NepoPhrase} or {@link NepoOp}
+ * The class using this Annotation should also be annotated with either {@link NepoPhrase} or {@link NepoExpr}
  */
 @Documented
 @Target(ElementType.FIELD)

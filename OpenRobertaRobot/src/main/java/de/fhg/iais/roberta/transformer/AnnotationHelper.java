@@ -15,32 +15,57 @@ import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
+import de.fhg.iais.roberta.transformer.forClass.NepoExternalSensor;
+import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forField.NepoData;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forField.NepoHide;
+import de.fhg.iais.roberta.transformer.forField.NepoMutation;
+import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.Assoc;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
 
 public class AnnotationHelper {
 
-    public static List<Class<? extends Annotation>> NEPO_FIELD_ANNOTATIONS = Arrays.asList(NepoValue.class, NepoField.class, NepoData.class, NepoHide.class, NepoMutation.class);
+    public static List<Class<? extends Annotation>> NEPO_FIELD_ANNOTATIONS =
+        Arrays.asList(NepoValue.class, NepoField.class, NepoData.class, NepoHide.class, NepoMutation.class, NepoExternalSensor.class);
 
     /**
-     * check whether the class is annotated with at least one of the @Nepo... annotation
+     * check whether the class is annotated with a @NepoPhrase or @NepoOp annotation
      *
      * @param clazz
-     * @return true, if @Nepo... annotated
+     * @return true, if annotated
      */
     public static boolean isNepoAnnotatedClass(Class<?> clazz) {
         for ( Annotation anno : clazz.getAnnotations() ) {
             if ( anno instanceof NepoPhrase ) {
                 return true;
-            } else if ( anno instanceof NepoOp ) {
+            } else if ( anno instanceof NepoExpr ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * check whether the class is annotated with a @NepoExternalSensor annotation
+     *
+     * @param clazz
+     * @return true, if annotated
+     */
+    public static boolean isNepoExternalSensorAnnotatedClass(Class<?> clazz) {
+        for ( Annotation anno : clazz.getAnnotations() ) {
+            if ( anno instanceof NepoExternalSensor ) {
                 return true;
             }
         }
@@ -57,40 +82,30 @@ public class AnnotationHelper {
      */
     public static <V> Phrase<V> block2astByAnnotation(Block block, Class<?> astClass, Jaxb2ProgramAst<V> helper) {
         List<ConstructorParameter> constructorParameters = new ArrayList<>();
-        constructorParameters.add(new ConstructorParameter(parseBlockType(astClass)));
         constructorParameters.add(new ConstructorParameter(Jaxb2Ast.extractBlockProperties(block)));
         constructorParameters.add(new ConstructorParameter(BlocklyComment.class, Jaxb2Ast.extractComment(block)));
 
-
-        /*
-        TODO
-         Refactoring-Idea: (especially when adding new annotations and behavior)
-         Each annotation could have a NepoAnnotationProcessor (abstract) with methods
-         extractConstructorParameters()
-         addToJaxb()
-         isValid()
-         Then each AnnotationHelper can have a map (Map<? extends Annotation, AnnotationProcessor>) which can be used to refactor block2ast and astToBlock
-
-        This would allow a more generic annotation system
-         */
-
-        for ( Field field : astClass.getDeclaredFields() ) {
-            for ( Annotation anno : field.getAnnotations() ) {
-                if ( anno instanceof NepoValue ) {
-                    constructorParameters.add(extractNepoValueConstructorParameters(block, (NepoValue) anno, field, helper, astClass));
-                    break;
-                } else if ( anno instanceof NepoField ) {
-                    constructorParameters.add(extractNepoFieldConstructorParameters(block, (NepoField) anno, field));
-                    break;
-                } else if ( anno instanceof NepoData ) {
-                    constructorParameters.add(extractNepoDataConstructorParameters(block, astClass));
-                    break;
-                } else if ( anno instanceof NepoMutation ) {
-                    constructorParameters.add(new ConstructorParameter(Mutation.class, block.getMutation()));
-                    break;
-                } else if ( anno instanceof NepoHide ) {
-                    constructorParameters.add(extractNepoHideConstructorParameters(block));
-                    break;
+        if ( isNepoExternalSensorAnnotatedClass(astClass) ) {
+            constructorParameters.add(extractNepoExternalSensorParameters(block, helper));
+        } else {
+            for ( Field field : astClass.getDeclaredFields() ) {
+                for ( Annotation anno : field.getAnnotations() ) {
+                    if ( anno instanceof NepoValue ) {
+                        constructorParameters.add(extractNepoValueConstructorParameters(block, (NepoValue) anno, field, helper, astClass));
+                        break;
+                    } else if ( anno instanceof NepoField ) {
+                        constructorParameters.add(extractNepoFieldConstructorParameters(block, (NepoField) anno, field));
+                        break;
+                    } else if ( anno instanceof NepoData ) {
+                        constructorParameters.add(extractNepoDataConstructorParameters(block, astClass));
+                        break;
+                    } else if ( anno instanceof NepoMutation ) {
+                        constructorParameters.add(new ConstructorParameter(Mutation.class, block.getMutation()));
+                        break;
+                    } else if ( anno instanceof NepoHide ) {
+                        constructorParameters.add(extractNepoHideConstructorParameters(block));
+                        break;
+                    }
                 }
             }
         }
@@ -114,7 +129,7 @@ public class AnnotationHelper {
      * @return the precedence
      */
     public static int getPrecedence(Class<?> clazz) {
-        NepoOp classAnno = clazz.getAnnotation(NepoOp.class);
+        NepoExpr classAnno = clazz.getAnnotation(NepoExpr.class);
         if ( classAnno == null ) {
             throw new DbcException("the default implementation of getPrecedence() fails with the NOT annotated class " + clazz.getSimpleName());
         }
@@ -128,7 +143,7 @@ public class AnnotationHelper {
      * @return the association
      */
     public static Assoc getAssoc(Class<?> clazz) {
-        NepoOp classAnno = clazz.getAnnotation(NepoOp.class);
+        NepoExpr classAnno = clazz.getAnnotation(NepoExpr.class);
         if ( classAnno == null ) {
             throw new DbcException("the default implementation of getAssoc() fails with the NOT annotated class " + clazz.getSimpleName());
         }
@@ -141,12 +156,17 @@ public class AnnotationHelper {
      *
      * @return the BlocklyType
      */
-    public static BlocklyType getVarType(Class<?> clazz) {
-        NepoOp classAnno = clazz.getAnnotation(NepoOp.class);
-        if ( classAnno == null ) {
-            throw new DbcException("the default implementation of getVarType() fails with the NOT annotated class " + clazz.getSimpleName());
+    public static BlocklyType getReturnType(Class<?> clazz) {
+        for ( Annotation anno : clazz.getAnnotations() ) {
+            if ( anno instanceof NepoPhrase ) {
+                return ((NepoPhrase) anno).blocklyType();
+            } else if ( anno instanceof NepoExpr ) {
+                return ((NepoExpr) anno).blocklyType();
+            } else if ( anno instanceof NepoBasic ) {
+                return ((NepoBasic) anno).blocklyType();
+            }
         }
-        return classAnno.blocklyType();
+        throw new DbcException("the default implementation of getVarType() fails with the NOT annotated class " + clazz.getSimpleName());
     }
 
     /**
@@ -160,31 +180,36 @@ public class AnnotationHelper {
         if ( !isNepoAnnotatedClass(clazz) ) {
             throw new DbcException("the default implementation of astToBlock() fails with the NOT annotated class " + clazz.getSimpleName());
         }
-        Block jaxbDestination = new Block();
-        Ast2Jaxb.setBasicProperties(phrase, jaxbDestination);
-        for ( Field field : clazz.getDeclaredFields() ) {
-            for ( Annotation anno : field.getAnnotations() ) {
-                try {
-                    if ( anno instanceof NepoField ) {
-                        Ast2Jaxb.addField(jaxbDestination, ((NepoField) anno).name(), fieldToString(field.get(phrase)));
-                    } else if ( anno instanceof NepoValue ) {
-                        Ast2Jaxb.addValue(jaxbDestination, ((NepoValue) anno).name(), (Phrase<?>) field.get(phrase));
-                    } else if ( anno instanceof NepoData ) {
-                        Ast2Jaxb.addData(jaxbDestination, (String) field.get(phrase));
-                    } else if ( anno instanceof NepoMutation ) {
-                        Ast2Jaxb.addMutation(jaxbDestination, (Mutation) field.get(phrase));
-                    } else if ( anno instanceof NepoHide ) {
-                        Hide hide = (Hide) field.get(phrase);
-                        if ( hide != null ) {
-                            jaxbDestination.getHide().add(hide);
+
+        if ( isNepoExternalSensorAnnotatedClass(clazz) ) {
+            return phrase.astToBlock();
+        } else {
+            Block jaxbDestination = new Block();
+            Ast2Jaxb.setBasicProperties(phrase, jaxbDestination);
+            for ( Field field : clazz.getDeclaredFields() ) {
+                for ( Annotation anno : field.getAnnotations() ) {
+                    try {
+                        if ( anno instanceof NepoField ) {
+                            Ast2Jaxb.addField(jaxbDestination, ((NepoField) anno).name(), fieldToString(field.get(phrase)));
+                        } else if ( anno instanceof NepoValue ) {
+                            Ast2Jaxb.addValue(jaxbDestination, ((NepoValue) anno).name(), (Phrase<?>) field.get(phrase));
+                        } else if ( anno instanceof NepoData ) {
+                            Ast2Jaxb.addData(jaxbDestination, (String) field.get(phrase));
+                        } else if ( anno instanceof NepoMutation ) {
+                            Ast2Jaxb.addMutation(jaxbDestination, (Mutation) field.get(phrase));
+                        } else if ( anno instanceof NepoHide ) {
+                            Hide hide = (Hide) field.get(phrase);
+                            if ( hide != null ) {
+                                jaxbDestination.getHide().add(hide);
+                            }
                         }
+                    } catch ( IllegalArgumentException | IllegalAccessException e ) {
+                        throw new DbcException("the field " + field.getName() + " of phrase " + clazz.getSimpleName() + " cannot be accessed", e);
                     }
-                } catch ( IllegalArgumentException | IllegalAccessException e ) {
-                    throw new DbcException("the field " + field.getName() + " of phrase " + clazz.getSimpleName() + " cannot be accessed", e);
                 }
             }
+            return jaxbDestination;
         }
-        return jaxbDestination;
     }
 
     private static String fieldToString(Object fieldValue) throws IllegalAccessException {
@@ -279,6 +304,11 @@ public class AnnotationHelper {
         return new ConstructorParameter(Hide.class, hide);
     }
 
+    private static <V> ConstructorParameter extractNepoExternalSensorParameters(Block block, Jaxb2ProgramAst<V> helper) {
+        SensorMetaDataBean sensorData = ExternalSensor.extractPortAndModeAndSlot(block, helper);
+        return new ConstructorParameter(SensorMetaDataBean.class, sensorData);
+    }
+
     private static ConstructorParameter extractNepoDataConstructorParameters(Block block, Class<?> astClass) {
         String dataValue = Optional.ofNullable(block.getData())
             .map(Data::getValue)
@@ -286,53 +316,20 @@ public class AnnotationHelper {
         return new ConstructorParameter(dataValue);
     }
 
-    private static BlockType parseBlockType(Class<?> astClass) {
-        String blockTypeName = null;
-        for ( Annotation anno : astClass.getAnnotations() ) {
-            if ( anno instanceof NepoPhrase ) {
-                blockTypeName = ((NepoPhrase) anno).containerType();
-                break;
-            } else if ( anno instanceof NepoOp ) {
-                blockTypeName = ((NepoOp) anno).containerType();
-                break;
-            }
-        }
-        return BlockTypeContainer.getByName(blockTypeName);
-    }
-
-
-    /**
-     * this extremely dangerous methods allows to modify values of provate, final fields.
-     * It was used with the first version of @Nepo-annotations, but should now NOT be used.
-     * It stays some time for documentation
-     */
-    private static <V> void assignToPublicFinalField(Class<?> astClass, Phrase<V> tk, Field field, Object sub) {
-        try {
-            field.setAccessible(true);
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-            field.set(tk, sub);
-            modifiersField.setInt(field, field.getModifiers() & Modifier.FINAL);
-            modifiersField.setAccessible(false);
-            field.setAccessible(false);
-        } catch ( IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e ) {
-            throw new DbcException("field " + field.getName() + " in AST class " + astClass.getSimpleName() + " could not be assigned to", e);
-        }
-    }
-
     public static void checkNepoAnnotatedClass(Class<?> nepoAnnotatedClass) {
         List<Class<?>> constructorParameterTypes = new ArrayList<>();
-        constructorParameterTypes.add(BlockType.class);
         constructorParameterTypes.add(BlocklyBlockProperties.class);
         constructorParameterTypes.add(BlocklyComment.class);
 
-        for ( Field field : nepoAnnotatedClass.getDeclaredFields() ) {
-            checkFieldModifier(nepoAnnotatedClass, field);
-            Optional.ofNullable(checkAndCollectFieldTypes(nepoAnnotatedClass, field))
-                .ifPresent(constructorParameterTypes::add);
+        if ( isNepoExternalSensorAnnotatedClass(nepoAnnotatedClass) ) {
+            constructorParameterTypes.add(SensorMetaDataBean.class);
+        } else {
+            for ( Field field : nepoAnnotatedClass.getDeclaredFields() ) {
+                checkFieldModifier(nepoAnnotatedClass, field);
+                Optional.ofNullable(checkAndCollectFieldTypes(nepoAnnotatedClass, field))
+                    .ifPresent(constructorParameterTypes::add);
+            }
         }
-
         checkConstructor(nepoAnnotatedClass, constructorParameterTypes);
     }
 

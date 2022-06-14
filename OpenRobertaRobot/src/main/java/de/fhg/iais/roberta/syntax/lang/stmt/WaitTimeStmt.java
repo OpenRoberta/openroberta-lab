@@ -1,12 +1,10 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.NepoPhrase;
-import de.fhg.iais.roberta.transformer.NepoValue;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
@@ -15,13 +13,13 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * This class represents the <b>robControls_wait_time</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate wait
  * statement.<br/>
  */
-@NepoPhrase(containerType = "WAIT_TIME")
+@NepoPhrase(category = "STMT", blocklyNames = {"robControls_wait_time"}, containerType = "WAIT_TIME")
 public class WaitTimeStmt<V> extends Stmt<V> {
     @NepoValue(name = BlocklyConstants.WAIT, type = BlocklyType.NUMBER_INT)
     public final Expr<V> time;
 
-    public WaitTimeStmt(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> time) {
-        super(kind, properties, comment);
+    public WaitTimeStmt(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> time) {
+        super(properties, comment);
         Assert.isTrue(time != null && time.isReadOnly());
         this.time = time;
         setReadOnly();
@@ -36,7 +34,7 @@ public class WaitTimeStmt<V> extends Stmt<V> {
      * @return
      */
     public static <V> WaitTimeStmt<V> make(Expr<V> time, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new WaitTimeStmt<>(BlockTypeContainer.getByName("WAIT_TIME"), properties, comment, time);
+        return new WaitTimeStmt<>(properties, comment, time);
     }
 
     /**

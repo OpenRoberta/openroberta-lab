@@ -6,16 +6,16 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>naoActions_setLanguage</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -23,12 +23,13 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br/>
  * The client must provide the {@link ILanguage} (the language NAOs speech engine is set to).
  */
+@NepoBasic(containerType = "SET_LANGUAGE", category = "ACTOR", blocklyNames = {"naoActions_setLanguage","robActions_setLanguage"})
 public final class SetLanguageAction<V> extends Action<V> {
 
-    private final ILanguage language;
+    public final ILanguage language;
 
     private SetLanguageAction(ILanguage language, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("SET_LANGUAGE"), properties, comment);
+        super(properties, comment);
         Assert.notNull(language, "Missing language in SetLanguage block!");
         this.language = language;
         setReadOnly();

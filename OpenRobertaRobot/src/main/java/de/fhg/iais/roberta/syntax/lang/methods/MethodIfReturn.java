@@ -6,28 +6,29 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>robProcedures_ifreturn</b> block from Blockly into the AST (abstract syntax tree). Object from this class is used to create a
  * <i>if-return</i> statement inside method<br/>
  */
+@NepoBasic(containerType = "METHOD_IF_RETURN", category = "METHOD", blocklyNames = {"robProcedures_ifreturn"})
 public class MethodIfReturn<V> extends Method<V> {
-    private final Expr<V> oraCondition;
-    private final BlocklyType oraReturnType;
-    private final Expr<V> oraReturnValue;
-    private final BigInteger value;
+    public final Expr<V> oraCondition;
+    public final BlocklyType oraReturnType;
+    public final Expr<V> oraReturnValue;
+    public final BigInteger value;
 
     private MethodIfReturn(
         Expr<V> oraCondition,
@@ -36,7 +37,7 @@ public class MethodIfReturn<V> extends Method<V> {
         BigInteger value,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("METHOD_IF_RETURN"), properties, comment);
+        super(properties, comment);
         Assert.isTrue(oraCondition != null && oraCondition.isReadOnly() && oraReturnType != null && oraReturnValue != null && oraReturnValue.isReadOnly());
         this.oraCondition = oraCondition;
         this.oraReturnType = oraReturnType;
@@ -117,7 +118,7 @@ public class MethodIfReturn<V> extends Method<V> {
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
         mutation.setValue(this.getValue());
-        if (!this.oraReturnType.equals(BlocklyType.VOID)) {
+        if ( !this.oraReturnType.equals(BlocklyType.VOID) ) {
             mutation.setReturnType(this.oraReturnType.getBlocklyName());
         }
         jaxbDestination.setMutation(mutation);

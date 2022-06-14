@@ -1,9 +1,11 @@
 package de.fhg.iais.roberta.syntax;
 
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 
+@NepoBasic(containerType = "SIMPLE_PHRASE", category = "STMT", blocklyNames = {"simple_phrase"})
 public class SimplePhrase extends Phrase<Void> {
     public SimplePhrase() {
-        super(null, BlocklyBlockProperties.make("1", "1"), null);
+        super(BlocklyBlockProperties.make("SIMPLE_PHRASE", "1"), null);
     }
 }

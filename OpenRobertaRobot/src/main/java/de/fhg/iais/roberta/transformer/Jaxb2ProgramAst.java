@@ -16,10 +16,6 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.factory.RobotFactory;
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
@@ -46,6 +42,10 @@ import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 public class Jaxb2ProgramAst<V> {
     private final RobotFactory robotFactory;
@@ -293,7 +293,7 @@ public class Jaxb2ProgramAst<V> {
     public static <V> ExprList<V> argumentsToExprList(List<Arg> arguments) {
         ExprList<V> parameters = ExprList.make();
         for ( Arg arg : arguments ) {
-            Var<V> parametar = Var.make(BlocklyType.get(arg.getType()), arg.getName(), BlocklyBlockProperties.make("1", "1"), null);
+            Var<V> parametar = Var.make(BlocklyType.get(arg.getType()), arg.getName(), BlocklyBlockProperties.make("PARAMETER", "1"), null);
             parameters.addExpr(parametar);
         }
         parameters.setReadOnly();

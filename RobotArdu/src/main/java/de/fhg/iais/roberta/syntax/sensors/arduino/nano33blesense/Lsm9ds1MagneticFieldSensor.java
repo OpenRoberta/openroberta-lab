@@ -4,20 +4,21 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.BuiltinSensor;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
+@NepoBasic(containerType = "LSM9DS1_MAGNETICFIELD", category = "SENSOR", blocklyNames = {"robsensors_lsm9ds1_magneticfield_getDataAvailableSample"})
 public class Lsm9ds1MagneticFieldSensor<V> extends BuiltinSensor<V> {
 
-    private final Expr<V> x, y, z;
+    public final Expr<V> x, y, z;
 
     public Expr<V> getX() {
         return x;
@@ -32,7 +33,7 @@ public class Lsm9ds1MagneticFieldSensor<V> extends BuiltinSensor<V> {
     }
 
     private Lsm9ds1MagneticFieldSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> x, Expr<V> y, Expr<V> z) {
-        super(null, BlockTypeContainer.getByName("LSM9DS1_MAGNETICFIELD"), properties, comment);
+        super(properties, comment, null);
         this.x = x;
         this.y = y;
         this.z = z;

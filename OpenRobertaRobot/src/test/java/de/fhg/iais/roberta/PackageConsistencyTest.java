@@ -19,13 +19,10 @@ import de.fhg.iais.roberta.worker.IWorker;
  * Used to guarantee for instance, that all classes from package "de.fhg.iais.roberta.syntax" are
  * subtypes of class Phrase.class
  * <p>
- * What is missing: check,
+ * this tests checks, too,
  * - that all classes
  * - which are subclasses of a class specified,
  * - are found in a package specified.
- * <p>
- * This can be checked in Intellij in the type hierarchy of the super class by exporting the whole hierarchy
- * into a text file and inspecting the package names
  */
 public class PackageConsistencyTest {
     @Test
@@ -43,7 +40,22 @@ public class PackageConsistencyTest {
         Assert.assertTrue(checkAllClassesInPackage("de.fhg.iais.roberta.visitor.", IVisitor.class));
     }
 
-    private boolean checkAllClassesInPackage(String packageName, Class superClazz) throws IOException {
+    @Test
+    public void testSubClassesOfPhraseAreInAstPackage() throws IOException {
+        Assert.assertTrue(checkAllSubClassesBelongToPackage(Phrase.class, "de.fhg.iais.roberta.syntax."));
+    }
+
+    @Test
+    public void testSubClassesOfIWorkerAreInWorkerPackage() throws IOException {
+        Assert.assertTrue(checkAllSubClassesBelongToPackage(IWorker.class, "de.fhg.iais.roberta.worker."));
+    }
+
+    @Test
+    public void testSubClassesOfIVisitorAreInVisitorPackage() throws IOException {
+        Assert.assertTrue(checkAllSubClassesBelongToPackage(IVisitor.class, "de.fhg.iais.roberta.visitor."));
+    }
+
+    private boolean checkAllClassesInPackage(String packageName, Class<?> superClazz) throws IOException {
         boolean hasErrors = ClassPath.from(ClassLoader.getSystemClassLoader())
             .getAllClasses()
             .stream()
@@ -54,12 +66,10 @@ public class PackageConsistencyTest {
         return hasErrors;
     }
 
-    private boolean classIsValidInThePackage(Class clazz, Class superClazz, String packageName) {
+    private boolean classIsValidInThePackage(Class<?> clazz, Class<?> superClazz, String packageName) {
         if ( clazz.isMemberClass() ) {
-            // System.out.println("member " + clazz);
             return true;
         } else if ( clazz.isAnonymousClass() ) {
-            // System.out.println("anonymous " + clazz);
             return true;
         } else if ( superClazz.isAssignableFrom(clazz) ) {
             return true;
@@ -68,4 +78,30 @@ public class PackageConsistencyTest {
             return false;
         }
     }
+
+    private boolean checkAllSubClassesBelongToPackage(Class<?> superClazz, String packageName) throws IOException {
+        boolean hasErrors = ClassPath.from(ClassLoader.getSystemClassLoader())
+            .getAllClasses()
+            .stream()
+            .filter(clazz -> clazz.getName().startsWith("de.fhg.iais.roberta."))
+            .map(clazzInfo -> clazzInfo.load())
+            .map(clazz -> ifSubClassIsValidInThePackage(clazz, superClazz, packageName))
+            .reduce(Boolean.TRUE, Boolean::logicalAnd);
+        return hasErrors;
+    }
+
+    private boolean ifSubClassIsValidInThePackage(Class<?> clazz, Class<?> superClazz, String packageName) {
+        if ( superClazz.isAssignableFrom(clazz) ) {
+            if ( clazz.getName().startsWith(packageName) ) {
+                return true;
+            } else {
+                System.out.println("should be in package " + packageName + ": " + clazz);
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+
+
 }

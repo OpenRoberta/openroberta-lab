@@ -1,24 +1,25 @@
 package de.fhg.iais.roberta.syntax.action.nao;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 
 /**
  * This class represents the <b>naoActions_getLanguage</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
  * getting the languages that are installed on NAO<br/>
  * <br/>
  */
+@NepoBasic(containerType = "GET_LANGUAGE", category = "ACTOR", blocklyNames = {"naoActions_getLanguage"})
 public final class GetLanguage<V> extends Action<V> {
 
     private GetLanguage(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("GET_LANGUAGE"), properties, comment);
+        super(properties, comment);
         setReadOnly();
     }
 

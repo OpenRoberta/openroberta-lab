@@ -5,16 +5,16 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.syntax.Assoc;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 
 /**
  * This class represents the <b>makeblockColours</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate color.<br/>
@@ -23,13 +23,14 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
  * <br>
  * To create an instance from this class use the method {@link #make(Expr, Expr, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
+@NepoBasic(containerType = "LED_MATRIX_IMAGE", category = "EXPR", blocklyNames = {"mBotImage_image"})
 public class LEDMatrixImage<V> extends Expr<V> {
-    private final static int X = 16;
-    private final static int Y = 8;
-    private final String[][] image;
+    public final static int X = 16;
+    public final static int Y = 8;
+    public final String[][] image;
 
     private LEDMatrixImage(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LED_MATRIX_IMAGE"), properties, comment);
+        super(properties, comment);
         this.image = image;
         setReadOnly();
     }

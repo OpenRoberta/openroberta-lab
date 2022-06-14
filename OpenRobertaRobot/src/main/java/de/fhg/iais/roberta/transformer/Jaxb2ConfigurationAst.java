@@ -19,13 +19,13 @@ import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponentLeaf;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponentNode;
-import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public final class Jaxb2ConfigurationAst {
 

@@ -5,10 +5,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
@@ -16,8 +12,12 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>variables_set</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -27,12 +27,13 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(Var, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
+@NepoBasic(containerType = "ASSIGN_STMT", category = "STMT", blocklyNames = {"variables_set"})
 public class AssignStmt<V> extends Stmt<V> {
-    private final Var<V> name;
-    private final Expr<V> expr;
+    public final Var<V> name;
+    public final Expr<V> expr;
 
     private AssignStmt(Var<V> name, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("ASSIGN_STMT"), properties, comment);
+        super(properties, comment);
         Assert.isTrue(name != null && expr != null && name.isReadOnly() && expr.isReadOnly());
         this.name = name;
         this.expr = expr;

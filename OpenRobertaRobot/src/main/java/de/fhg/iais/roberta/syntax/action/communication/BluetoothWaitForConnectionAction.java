@@ -1,18 +1,16 @@
 package de.fhg.iais.roberta.syntax.action.communication;
 
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
-import de.fhg.iais.roberta.transformer.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 
-@NepoPhrase(containerType = "BLUETOOTH_WAIT_FOR_CONNECTION_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robCommunication_waitForConnection"}, containerType = "BLUETOOTH_WAIT_FOR_CONNECTION_ACTION")
 public class BluetoothWaitForConnectionAction<V> extends Action<V> {
 
-    public BluetoothWaitForConnectionAction(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(kind, properties, comment);
+    public BluetoothWaitForConnectionAction(BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(properties, comment);
         setReadOnly();
     }
 
@@ -24,7 +22,7 @@ public class BluetoothWaitForConnectionAction<V> extends Action<V> {
      * @return read only object of class {@link MotorDriveStopAction}
      */
     public static <V> BluetoothWaitForConnectionAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BluetoothWaitForConnectionAction<V>(BlockTypeContainer.getByName("BLUETOOTH_WAIT_FOR_CONNECTION_ACTION"), properties, comment);
+        return new BluetoothWaitForConnectionAction<V>(properties, comment);
     }
 
 }

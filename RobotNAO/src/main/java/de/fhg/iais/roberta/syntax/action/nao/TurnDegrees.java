@@ -6,10 +6,6 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -17,8 +13,12 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>naoActions_turn</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -26,13 +26,14 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br/>
  * The client must provide the {@link turnDirection} and {@link degreesToTurn} (direction and number of degrees to turn).
  */
+@NepoBasic(containerType = "TURN_DEGREES", category = "ACTOR", blocklyNames = {"naoActions_turn"})
 public final class TurnDegrees<V> extends Action<V> {
 
-    private final TurnDirection turnDirection;
-    private final Expr<V> degreesToTurn;
+    public final TurnDirection turnDirection;
+    public final Expr<V> degreesToTurn;
 
     private TurnDegrees(TurnDirection turnDirection, Expr<V> degreesToTurn, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("TURN_DEGREES"), properties, comment);
+        super(properties, comment);
         Assert.notNull(turnDirection, "Missing degrees in TurnDegrees block!");
         this.turnDirection = turnDirection;
         this.degreesToTurn = degreesToTurn;

@@ -7,10 +7,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -18,16 +14,21 @@ import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.basic.Pair;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
+@NepoBasic(containerType = "DATA_SEND_ACTION", category = "ACTOR", blocklyNames = {"robActions_sendData"})
 public class SendDataAction<V> extends Action<V> {
 
-    private final List<Pair<String, Expr<V>>> id2Phenomena;
-    private final String destination;
+    public final List<Pair<String, Expr<V>>> id2Phenomena;
+    public final String destination;
 
     private SendDataAction(String destination, List<Pair<String, Expr<V>>> id2Phenomena, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("DATA_SEND_ACTION"), properties, comment);
+        super(properties, comment);
         this.id2Phenomena = id2Phenomena;
         this.destination = destination;
         this.setReadOnly();

@@ -7,16 +7,16 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>robSensors_getSample</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -26,13 +26,14 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make}.<br>
  */
+@NepoBasic(containerType = "SENSOR_GET_SAMPLE", category = "SENSOR", blocklyNames = {"sim_getSample", "robSensors_getSample_ardu", "mbedsensors_getsample", "robSensors_getSample"})
 public class GetSampleSensor<V> extends Sensor<V> {
-    private final Sensor<V> sensor;
-    private final String sensorPort;
-    private final String slot;
-    private final String sensorTypeAndMode;
-    private final Mutation mutation;
-    private final List<Hide> hide;
+    public final Sensor<V> sensor;
+    public final String sensorPort;
+    public final String slot;
+    public final String sensorTypeAndMode;
+    public final Mutation mutation;
+    public final List<Hide> hide;
 
     @SuppressWarnings("unchecked")
     private GetSampleSensor(
@@ -45,7 +46,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         BlocklyComment comment,
         BlocklyDropdownFactory factory) //
     {
-        super(BlockTypeContainer.getByName("SENSOR_GET_SAMPLE"), properties, comment);
+        super(properties, comment);
         Assert.notNull(sensorTypeAndMode);
         Assert.notNull(port);
         this.sensorPort = port;

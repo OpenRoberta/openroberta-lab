@@ -3,14 +3,14 @@ package de.fhg.iais.roberta.syntax.sensor.nao;
 import org.checkerframework.checker.units.qual.degrees;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
 
 /**
  * This class represents the <b>naoActions_walk</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for making
@@ -18,10 +18,11 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
  * <br/>
  * The client must provide the {@link joint} and {@link degrees} (direction and distance to walk).
  */
+@NepoBasic(containerType = "ELECTRIC_CURRENT", category = "SENSOR", blocklyNames = {"robSensors_electriccurrent_getSample"})
 public final class ElectricCurrentSensor<V> extends ExternalSensor<V> {
 
     private ElectricCurrentSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(sensorMetaDataBean, BlockTypeContainer.getByName("ELECTRIC_CURRENT"), properties, comment);
+        super(properties, comment, sensorMetaDataBean);
         setReadOnly();
     }
 

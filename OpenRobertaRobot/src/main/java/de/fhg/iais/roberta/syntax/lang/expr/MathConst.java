@@ -2,16 +2,14 @@ package de.fhg.iais.roberta.syntax.lang.expr;
 
 import java.util.Locale;
 
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoOp;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>math_constant</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate mathematical
@@ -19,13 +17,13 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * <br>
  * To create an instance from this class use the method {@link #make(Const, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoOp(containerType = "MATH_CONST", blocklyType = BlocklyType.NUMBER)
+@NepoExpr(category = "EXPR", blocklyNames = {"math_constant"}, containerType = "MATH_CONST", blocklyType = BlocklyType.NUMBER)
 public class MathConst<V> extends Expr<V> {
     @NepoField(name = BlocklyConstants.CONSTANT)
     public final Const mathConst;
 
-    public MathConst(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, Const mathConst) {
-        super(kind, properties, comment);
+    public MathConst(BlocklyBlockProperties properties, BlocklyComment comment, Const mathConst) {
+        super(properties, comment);
         Assert.isTrue(mathConst != null);
         this.mathConst = mathConst;
         setReadOnly();
@@ -40,7 +38,7 @@ public class MathConst<V> extends Expr<V> {
      * @return read only object of class {@link MathConst}
      */
     public static <V> MathConst<V> make(Const mathConst, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MathConst<V>(BlockTypeContainer.getByName("MATH_CONST"), properties, comment, mathConst);
+        return new MathConst<V>(properties, comment, mathConst);
     }
 
     /**
@@ -56,7 +54,7 @@ public class MathConst<V> extends Expr<V> {
     public enum Const {
         GOLDEN_RATIO(), PI(), E(), SQRT2(), SQRT1_2(), INFINITY();
 
-        private final String[] values;
+        public final String[] values;
 
         Const(String... values) {
             this.values = values;

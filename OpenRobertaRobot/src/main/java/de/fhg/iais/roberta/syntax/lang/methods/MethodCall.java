@@ -6,10 +6,6 @@ import de.fhg.iais.roberta.blockly.generated.Arg;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
@@ -17,18 +13,23 @@ import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>robProcedures_defreturn</b> block from Blockly into the AST (abstract syntax tree). Object from this class is used to create a
  * method with return value<br/>
  */
+@NepoBasic(containerType = "METHOD_CALL", category = "METHOD", blocklyNames = {"robProcedures_callreturn", "robProcedures_callnoreturn"})
 public class MethodCall<V> extends Method<V> {
-    private final String oraMethodName;
-    private final ExprList<V> oraParameters;
-    private final ExprList<V> oraParametersValues;
-    private final BlocklyType oraReturnType;
+    public final String oraMethodName;
+    public final ExprList<V> oraParameters;
+    public final ExprList<V> oraParametersValues;
+    public final BlocklyType oraReturnType;
 
     private MethodCall(
         String oraMethodName,
@@ -37,7 +38,7 @@ public class MethodCall<V> extends Method<V> {
         BlocklyType oraReturnType,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("METHOD_CALL"), properties, comment);
+        super(properties, comment);
         Assert.isTrue(!oraMethodName.equals("") && oraParameters.isReadOnly() && oraParametersValues.isReadOnly());
         this.oraMethodName = oraMethodName;
         this.oraParameters = oraParameters;

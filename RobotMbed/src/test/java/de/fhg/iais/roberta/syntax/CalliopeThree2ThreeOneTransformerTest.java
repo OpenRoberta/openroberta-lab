@@ -8,6 +8,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.MbedThree2ThreeOneTransformerWorker;
 
@@ -117,6 +118,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
     @BeforeClass
     public static void setupBefore() throws Exception {
+        BlockTypeContainer.loadBlocks();
         testFactory = Util.configureRobotPlugin("calliope2017NoBlue", "", "", Collections.emptyList());
     }
 

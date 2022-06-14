@@ -1,11 +1,10 @@
 package de.fhg.iais.roberta.syntax.lang.blocksequence;
 
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.*;
+import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
+import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
@@ -15,13 +14,13 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * new thread.<br/>
  * <br/>
  */
-@NepoOp(containerType = "ACTIVITY_TASK")
+@NepoExpr(category = "TASK", blocklyNames = {"robControls_activity"}, containerType = "ACTIVITY_TASK")
 public class ActivityTask<V> extends Task<V> {
     @NepoValue(name = BlocklyConstants.ACTIVITY, type = BlocklyType.STRING)
     public Expr<V> activityName;
 
-    public ActivityTask(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> activityName) {
-        super(kind, properties, comment);
+    public ActivityTask(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> activityName) {
+        super(properties, comment);
         Assert.isTrue(activityName.isReadOnly() && activityName != null);
         this.activityName = activityName;
         setReadOnly();
@@ -36,7 +35,7 @@ public class ActivityTask<V> extends Task<V> {
      * @return read only object of class {@link ActivityTask}
      */
     public static <V> ActivityTask<V> make(Expr<V> activityName, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ActivityTask<>(BlockTypeContainer.getByName("ACTIVITY_TASK"), properties, comment, activityName);
+        return new ActivityTask<>(properties, comment, activityName);
     }
 
     /**

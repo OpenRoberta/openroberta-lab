@@ -7,10 +7,6 @@ import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -18,14 +14,19 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
+@NepoBasic(containerType = "BLUETOOTH_SEND_ACTION", category = "ACTOR", blocklyNames = {"robCommunication_sendBlock"})
 public class BluetoothSendAction<V> extends Action<V> {
-    private final Expr<V> _connection;
-    private final Expr<V> _msg;
+    public final Expr<V> _connection;
+    public final Expr<V> _msg;
     String _channel;
     String dataType;
-    private final String dataValue;
+    public final String dataValue;
 
     private BluetoothSendAction(
         String dataValue,
@@ -35,7 +36,7 @@ public class BluetoothSendAction<V> extends Action<V> {
         String dataType,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("BLUETOOTH_SEND_ACTION"), properties, comment);
+        super(properties, comment);
         this._connection = connection;
         this._msg = msg;
         this._channel = channel;
@@ -45,7 +46,7 @@ public class BluetoothSendAction<V> extends Action<V> {
     }
 
     private BluetoothSendAction(String dataValue, Expr<V> connection, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("BLUETOOTH_SEND_ACTION"), properties, comment);
+        super(properties, comment);
         this._connection = connection;
         this._msg = msg;
         this.dataValue = dataValue;

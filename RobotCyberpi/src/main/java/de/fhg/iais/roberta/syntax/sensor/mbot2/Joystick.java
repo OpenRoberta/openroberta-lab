@@ -2,20 +2,18 @@ package de.fhg.iais.roberta.syntax.sensor.mbot2;
 
 import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.syntax.action.mbot2.DisplaySetColourAction;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forField.NepoHide;
+import de.fhg.iais.roberta.transformer.forField.NepoMutation;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
-import de.fhg.iais.roberta.syntax.action.mbot2.DisplaySetColourAction;
-import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoHide;
-import de.fhg.iais.roberta.transformer.NepoMutation;
-import de.fhg.iais.roberta.transformer.NepoPhrase;
-import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 /**
  * This class represents the <b>robSensors_joystick_getSample</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -23,7 +21,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br/>
  */
 
-@NepoPhrase(containerType = "JOYSTICK_SENSING")
+@NepoPhrase(category = "SENSOR", blocklyNames = {"robSensors_joystickKeys_getSample"}, containerType = "JOYSTICK_SENSING")
 public class Joystick<V> extends Sensor<V> implements WithUserDefinedPort<V> {
     @NepoMutation
     public final Mutation mutation;
@@ -36,8 +34,8 @@ public class Joystick<V> extends Sensor<V> implements WithUserDefinedPort<V> {
     @NepoHide
     public final Hide hide;
 
-    public Joystick(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, Mutation mutation, String mode, String port, String slot, Hide hide) {
-        super(kind, properties, comment);
+    public Joystick(BlocklyBlockProperties properties, BlocklyComment comment, Mutation mutation, String mode, String port, String slot, Hide hide) {
+        super(properties, comment);
         Assert.nonEmptyString(port);
         this.mutation = mutation;
         this.mode = mode;
@@ -55,7 +53,7 @@ public class Joystick<V> extends Sensor<V> implements WithUserDefinedPort<V> {
      * @return read only object of class {@link DisplaySetColourAction}
      */
     public static <V> Joystick<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Joystick<>(BlockTypeContainer.getByName("JOYSTICK_SENSING"), properties, comment, sensorMetaDataBean.getMutation(), sensorMetaDataBean.getMode(), sensorMetaDataBean.getPort(), sensorMetaDataBean.getSlot(), null);
+        return new Joystick<>(properties, comment, sensorMetaDataBean.getMutation(), sensorMetaDataBean.getMode(), sensorMetaDataBean.getPort(), sensorMetaDataBean.getSlot(), null);
     }
 
     @Override

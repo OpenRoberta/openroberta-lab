@@ -1,9 +1,9 @@
 package de.fhg.iais.roberta.syntax.action;
 
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.syntax.BlockType;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.Phrase;
 
 /**
  * the top class of all action class used to represent the AST (abstract syntax tree) of a program. After construction an AST should be immutable. The logic to
@@ -20,8 +20,8 @@ public abstract class Action<V> extends Phrase<V> {
      * @param properties of the block,
      * @param comment of the user for the specific block
      */
-    public Action(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(kind, properties, comment);
+    public Action(BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(properties, comment);
     }
 
 }

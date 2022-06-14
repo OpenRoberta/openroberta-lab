@@ -1,18 +1,19 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
  * Wraps subclasses of the class {@link Action} so they can be used as {@link Stmt} in statements.
  */
-public class ActionStmt<V> extends Stmt<V> {
-    private final Action<V> action;
+@NepoBasic(containerType = "AKTION_STMT", category = "STMT", blocklyNames = {})
+public final class ActionStmt<V> extends Stmt<V> {
+    public final Action<V> action;
 
     private ActionStmt(Action<V> action) {
-        super(BlockTypeContainer.getByName("AKTION_STMT"), action.getProperty(), action.getComment());
+        super(action.getProperty(), action.getComment());
         Assert.isTrue(action.isReadOnly());
         this.action = action;
         setReadOnly();

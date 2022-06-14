@@ -1,13 +1,11 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoOp;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 /**
  * This class represents the <b>logic_boolean</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate boolean
@@ -17,13 +15,13 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
  * <br>
  * To create an instance from this class use the method {@link #make(boolean, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoOp(containerType = "BOOL_CONST", blocklyType = BlocklyType.BOOLEAN)
+@NepoExpr(category = "EXPR", blocklyNames = {"logic_boolean"}, containerType = "BOOL_CONST", blocklyType = BlocklyType.BOOLEAN)
 public class BoolConst<V> extends Expr<V> {
     @NepoField(name = BlocklyConstants.BOOL)
     public final boolean value;
 
-    public BoolConst(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, boolean value) {
-        super(kind, properties, comment);
+    public BoolConst(BlocklyBlockProperties properties, BlocklyComment comment, boolean value) {
+        super(properties, comment);
         this.value = value;
         setReadOnly();
     }
@@ -37,7 +35,7 @@ public class BoolConst<V> extends Expr<V> {
      * @return read only object of class {@link BoolConst}
      */
     public static <V> BoolConst<V> make(boolean value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BoolConst<>(BlockTypeContainer.getByName("BOOL_CONST"), properties, comment, value);
+        return new BoolConst<>(properties, comment, value);
     }
 
     /**

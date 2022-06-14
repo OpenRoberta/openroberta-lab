@@ -6,20 +6,21 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.blockly.generated.Statement;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 
+@NepoBasic(containerType = "NN_STEP_STMT", category = "STMT", blocklyNames = {"robactions_nnstep"})
 public class NNStepStmt<V> extends Stmt<V> {
-    private final Data netDefinition;
-    private final StmtList<V> ioNeurons;
+    public final Data netDefinition;
+    public final StmtList<V> ioNeurons;
 
     private NNStepStmt(Data netDefinition, StmtList<V> ioNeurons, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("NN_STEP_STMT"), properties, comment);
+        super(properties, comment);
         this.netDefinition = netDefinition;
         this.ioNeurons = ioNeurons;
         setReadOnly();

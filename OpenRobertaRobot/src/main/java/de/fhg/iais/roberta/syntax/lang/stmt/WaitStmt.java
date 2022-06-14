@@ -9,19 +9,19 @@ import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Repetitions;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>robControls_wait_for</b> and <b>robControls_wait</b> blocks from Blockly into the AST (abstract syntax tree). Object from this
@@ -29,11 +29,12 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br>
  * See {@link #getMode()} for the kind of the repeat statements.
  */
+@NepoBasic(containerType = "WAIT_STMT", category = "STMT", blocklyNames = {"robControls_wait", "mbedControls_wait_for", "robControls_wait_for", "naocontrols_wait_for"})
 public class WaitStmt<V> extends Stmt<V> {
-    private final StmtList<V> statements;
+    public final StmtList<V> statements;
 
     private WaitStmt(StmtList<V> statements, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("WAIT_STMT"), properties, comment);
+        super(properties, comment);
         Assert.isTrue(statements != null && statements.isReadOnly());
         this.statements = statements;
         setReadOnly();
@@ -108,7 +109,7 @@ public class WaitStmt<V> extends Stmt<V> {
         if ( numOfWait == 1 ) {
             RepeatStmt<?> generatedRepeatStmt = (RepeatStmt<?>) waitStmtList.get().get(0);
             NepoInfos infos = generatedRepeatStmt.getInfos();
-            if (infos.getErrorCount() > 0) {
+            if ( infos.getErrorCount() > 0 ) {
                 Ast2Jaxb.addError(generatedRepeatStmt, jaxbDestination);
             }
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.WAIT + "0", generatedRepeatStmt.getExpr());
@@ -122,7 +123,7 @@ public class WaitStmt<V> extends Stmt<V> {
         for ( int i = 0; i < numOfWait; i++ ) {
             RepeatStmt<?> generatedRepeatStmt = (RepeatStmt<?>) waitStmtList.get().get(i);
             NepoInfos infos = generatedRepeatStmt.getInfos();
-            if (infos.getErrorCount() > 0) {
+            if ( infos.getErrorCount() > 0 ) {
                 Ast2Jaxb.addError(generatedRepeatStmt, jaxbDestination);
             }
             Ast2Jaxb.addValue(repetitions, BlocklyConstants.WAIT + i, generatedRepeatStmt.getExpr());

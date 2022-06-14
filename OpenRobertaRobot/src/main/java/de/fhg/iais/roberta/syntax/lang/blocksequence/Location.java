@@ -1,22 +1,23 @@
 package de.fhg.iais.roberta.syntax.lang.blocksequence;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.Assoc;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.Assoc;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 
 /**
  * This class stores the information of the location of the top block in a blockly program.
  *
  * @author kcvejoski
  */
-public class Location<V> extends Task<V> {
-    private final String x;
-    private final String y;
+@NepoBasic(containerType = "LOCATION", category = "HELPER", blocklyNames = {})
+public final class Location<V> extends Task<V> {
+    public final String x;
+    public final String y;
 
     public Location(String x, String y) {
-        super(BlockTypeContainer.getByName("LOCATION"), BlocklyBlockProperties.make("t", "t", true, false, false, false, false, true, false, false), null);
+        super(BlocklyBlockProperties.make("t", "t", true, false, false, false, false, true, false, false), null);
         Assert.isTrue(!x.equals("") && !y.equals(""));
         this.x = x;
         this.y = y;

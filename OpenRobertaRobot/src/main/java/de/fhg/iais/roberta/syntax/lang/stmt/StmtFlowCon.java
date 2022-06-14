@@ -1,26 +1,24 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoPhrase;
-import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
  * This class represents the <b>controls_flow_statements</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code
  * for flow control of a statement. <br>
  * See enum {@link Flow} for all possible flows.
  */
-@NepoPhrase(containerType = "STMT_FLOW_CONTROL")
+@NepoPhrase(category = "STMT", blocklyNames = {"controls_flow_statements"}, containerType = "STMT_FLOW_CONTROL")
 public class StmtFlowCon<V> extends Stmt<V> {
     @NepoField(name = BlocklyConstants.FLOW)
     public final Flow flow;
 
-    public StmtFlowCon(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, Flow flow) {
-        super(kind, properties, comment);
+    public StmtFlowCon(BlocklyBlockProperties properties, BlocklyComment comment, Flow flow) {
+        super(properties, comment);
         Assert.isTrue(flow != null);
         this.flow = flow;
         setReadOnly();
@@ -35,7 +33,7 @@ public class StmtFlowCon<V> extends Stmt<V> {
      * @return read only object of class {@link StmtFlowCon}
      */
     public static <V> StmtFlowCon<V> make(Flow flow, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new StmtFlowCon<V>(BlockTypeContainer.getByName("STMT_FLOW_CONTROL"), properties, comment, flow);
+        return new StmtFlowCon<V>(properties, comment, flow);
     }
 
     /**
@@ -51,7 +49,7 @@ public class StmtFlowCon<V> extends Stmt<V> {
     public enum Flow {
         CONTINUE(), BREAK();
 
-        private final String[] values;
+        public final String[] values;
 
         Flow(String... values) {
             this.values = values;

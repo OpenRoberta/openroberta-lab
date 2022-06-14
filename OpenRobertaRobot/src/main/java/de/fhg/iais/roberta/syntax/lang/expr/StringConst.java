@@ -1,10 +1,8 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoOp;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
@@ -15,13 +13,13 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * To create an instance from this class use the method {@link #make(String, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoOp(containerType = "STRING_CONST", blocklyType = BlocklyType.STRING)
+@NepoExpr(category = "EXPR", blocklyNames = {"text"}, containerType = "STRING_CONST", blocklyType = BlocklyType.STRING)
 public class StringConst<V> extends Expr<V> {
     @NepoField(name = BlocklyConstants.TEXT)
     public final String value;
 
-    public StringConst(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, String value) {
-        super(kind, properties, comment);
+    public StringConst(BlocklyBlockProperties properties, BlocklyComment comment, String value) {
+        super(properties, comment);
         this.value = value;
         setReadOnly();
     }
@@ -35,7 +33,7 @@ public class StringConst<V> extends Expr<V> {
      * @return read only object of class {@link StringConst}
      */
     public static <V> StringConst<V> make(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new StringConst<V>(BlockTypeContainer.getByName("STRING_CONST"), properties, comment, value);
+        return new StringConst<V>(properties, comment, value);
     }
 
     /**

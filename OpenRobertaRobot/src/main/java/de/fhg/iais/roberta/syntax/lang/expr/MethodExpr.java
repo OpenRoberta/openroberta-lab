@@ -1,9 +1,9 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
@@ -11,11 +11,12 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 /**
  * Wraps subclasses of the class {@link Method} so they can be used as {@link Expr} in expressions.
  */
-public class MethodExpr<V> extends Expr<V> {
-    private final Method<V> method;
+@NepoBasic(containerType = "METHOD_EXPR", category = "EXPR", blocklyNames = {})
+public final class MethodExpr<V> extends Expr<V> {
+    public final Method<V> method;
 
     private MethodExpr(Method<V> method) {
-        super(BlockTypeContainer.getByName("METHOD_EXPR"), method.getProperty(), method.getComment());
+        super(method.getProperty(), method.getComment());
         Assert.isTrue(method.isReadOnly());
         this.method = method;
         setReadOnly();

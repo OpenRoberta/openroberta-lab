@@ -5,22 +5,19 @@ import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.Assoc;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 
-/**
- * This class allows to create list of {@link Expr} elements. Initially object from this class is writable. After adding all the elements to the list call
- * {@link #setReadOnly()}.
- */
+@NepoBasic(containerType = "EXPR_LIST", category = "EXPR", blocklyNames = {})
 public class ExprList<V> extends Expr<V> {
-    private final List<Expr<V>> el = new ArrayList<Expr<V>>();
+    public final List<Expr<V>> el = new ArrayList<Expr<V>>();
 
     private ExprList() {
-        super(BlockTypeContainer.getByName("EXPR_LIST"), BlocklyBlockProperties.make("1", "1", false, false, false, false, false, null, false, false), null);
+        super(BlocklyBlockProperties.make("1", "1", false, false, false, false, false, null, false, false), null);
     }
 
     /**

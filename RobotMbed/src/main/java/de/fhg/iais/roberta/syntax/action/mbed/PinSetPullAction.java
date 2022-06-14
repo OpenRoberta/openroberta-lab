@@ -1,24 +1,22 @@
 package de.fhg.iais.roberta.syntax.action.mbed;
 
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoPhrase;
-import de.fhg.iais.roberta.util.dbc.Assert;
 
-@NepoPhrase(containerType = "PIN_SET_PULL")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"mbedActions_pin_set_pull"}, containerType = "PIN_SET_PULL")
 public class PinSetPullAction<V> extends Action<V> {
     @NepoField(name = BlocklyConstants.PIN_PULL)
     public final String pinPull;
     @NepoField(name = BlocklyConstants.PIN_PORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;
 
-    public PinSetPullAction(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, String pinPull, String port) {
-        super(kind, properties, comment);
+    public PinSetPullAction(BlocklyBlockProperties properties, BlocklyComment comment, String pinPull, String port) {
+        super(properties, comment);
         Assert.notNull(pinPull);
         Assert.notNull(port);
         this.pinPull = pinPull;
@@ -27,7 +25,7 @@ public class PinSetPullAction<V> extends Action<V> {
     }
 
     public static <V> PinSetPullAction<V> make(String pinPull, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PinSetPullAction<>(BlockTypeContainer.getByName("PIN_SET_PULL"), properties, comment, pinPull, port);
+        return new PinSetPullAction<>(properties, comment, pinPull, port);
     }
 
     public String getMode() {

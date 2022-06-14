@@ -5,9 +5,9 @@ import java.util.Map;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 
 /**
  * Just to override the name of the "usedDefinedPortName" field and add the mutation to the generic {@link ConfigurationComponent}. TODO should be removed if

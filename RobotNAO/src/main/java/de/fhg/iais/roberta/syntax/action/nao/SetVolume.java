@@ -4,10 +4,6 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -15,7 +11,11 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>naoActions_setVolume</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -23,12 +23,13 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
  * <br/>
  * The client must provide the {@link Volume} (fraction the speech engine is set to).
  */
+@NepoBasic(containerType = "SET_VOLUME", category = "ACTOR", blocklyNames = {"naoActions_setVolume"})
 public final class SetVolume<V> extends Action<V> {
 
-    private final Expr<V> volume;
+    public final Expr<V> volume;
 
     private SetVolume(Expr<V> volume, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("SET_VOLUME"), properties, comment);
+        super(properties, comment);
         this.volume = volume;
         setReadOnly();
     }

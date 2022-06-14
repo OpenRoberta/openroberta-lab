@@ -1,18 +1,19 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
  * Wraps subclasses of the class {@link Expr} so they can be used as {@link Stmt}.
  */
-public class ExprStmt<V> extends Stmt<V> {
-    private final Expr<V> expr;
+@NepoBasic(containerType = "EXPR_STMT", category = "STMT", blocklyNames = {})
+public final class ExprStmt<V> extends Stmt<V> {
+    public final Expr<V> expr;
 
     private ExprStmt(Expr<V> expr) {
-        super(BlockTypeContainer.getByName("EXPR_STMT"), expr.getProperty(), expr.getComment());
+        super(expr.getProperty(), expr.getComment());
         Assert.isTrue(expr.isReadOnly());
         this.expr = expr;
         setReadOnly();

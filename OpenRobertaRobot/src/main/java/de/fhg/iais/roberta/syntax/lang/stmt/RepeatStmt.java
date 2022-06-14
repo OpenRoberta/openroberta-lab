@@ -7,10 +7,6 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
@@ -26,10 +22,14 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>repeat statement</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate repeat
@@ -37,13 +37,14 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * <br>
  * See {@link #getMode()} for the kind of the repeat statements.
  */
+@NepoBasic(containerType = "REPEAT_STMT", category = "STMT", blocklyNames = {"controls_whileUntil", "robControls_for", "robControls_loopForever", "controls_for", "controls_forEach", "controls_repeat", "robControls_forEach", "controls_repeat_ext", "robControls_loopForever_ardu"})
 public class RepeatStmt<V> extends Stmt<V> {
-    private final Mode mode;
-    private final Expr<V> expr;
-    private final StmtList<V> list;
+    public final Mode mode;
+    public final Expr<V> expr;
+    public final StmtList<V> list;
 
     private RepeatStmt(Mode mode, Expr<V> expr, StmtList<V> list, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("REPEAT_STMT"), properties, comment);
+        super(properties, comment);
         Assert.isTrue(mode != null && expr != null && list != null && expr.isReadOnly() && list.isReadOnly());
         this.expr = expr;
         this.list = list;
@@ -219,7 +220,7 @@ public class RepeatStmt<V> extends Stmt<V> {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         NepoInfos infos = getExpr().getInfos();
-        if (infos.getErrorCount() > 0) {
+        if ( infos.getErrorCount() > 0 ) {
             Ast2Jaxb.addError(getExpr(), jaxbDestination);
         }
         switch ( getMode() ) {
@@ -279,7 +280,7 @@ public class RepeatStmt<V> extends Stmt<V> {
     public static enum Mode {
         WHILE(), UNTIL(), TIMES(), FOR(), FOR_EACH(), WAIT(), FOREVER(), FOREVER_ARDU();
 
-        private final String[] values;
+        public final String[] values;
 
         private Mode(String... values) {
             this.values = values;

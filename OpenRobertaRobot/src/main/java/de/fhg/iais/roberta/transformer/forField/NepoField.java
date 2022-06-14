@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.transformer;
+package de.fhg.iais.roberta.transformer.forField;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -9,13 +9,14 @@ import java.lang.annotation.Target;
 import java.util.Arrays;
 import java.util.List;
 
-import de.fhg.iais.roberta.blockly.generated.BlockSet;
+import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 
 /**
- * <p>This annotation can be used to parse xml field objects from blocks.</p>
+ * <b>This Nepo field annotation can be used to parse a field from the XML representation of blockly blocks.</b><br>
  * <p>
  * The attribute {@link NepoField#name()} must match the name attribute of the corresponding XML field object.<br>
- * The attribute {@link NepoField#value()} is the default value if there is no field object with the given name in the block.
+ * The attribute {@link NepoField#value()} is the default value if there is no field object with the name in the block.
  * </p>
  * <br>
  * Example XML
@@ -24,10 +25,9 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
  *      <field name="MOTORPORT">B</field>
  *  </block>
  * }</pre>
- *
- * <b>The field annotated with {@link NepoField} must be of type {@link String} and public!</b><br>
- * <b>The field annotated with {@link NepoField} must be of type {@link String}, {@link Boolean}, boolean, {@link Double}, double or an instance of {@link Enum} and public!</b><br>
- * The class using this Annotation should also be annoted with either {@link NepoPhrase} or {@link NepoOp}
+ * <p>
+ * The field annotated with {@link NepoField} must be of type {@link String}, {@link Boolean}, boolean, {@link Double}, double or an instance of {@link Enum} and public<br>
+ * The class using this Annotation should also be annotated with either {@link NepoPhrase} or {@link NepoExpr}
  */
 @Documented
 @Target(ElementType.FIELD)

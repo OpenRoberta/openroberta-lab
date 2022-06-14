@@ -3,12 +3,14 @@ package de.fhg.iais.roberta;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.Actor;
 import de.fhg.iais.roberta.syntax.OtherSensor;
 import de.fhg.iais.roberta.syntax.Sensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.visitor.VisitorForBaseVisitorTest;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
@@ -16,6 +18,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class BaseVisitorTest {
+
+    @BeforeClass
+    public static void setupPhrases() {
+        BlockTypeContainer.add(Sensor.class);
+        BlockTypeContainer.add(OtherSensor.class);
+        BlockTypeContainer.add(Actor.class);
+    }
 
     private VisitorForBaseVisitorTest visitor;
 

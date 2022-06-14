@@ -1,12 +1,12 @@
 package de.fhg.iais.roberta.syntax.lang.functions;
 
+import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.transformer.AnnotationHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlockType;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.transformer.AnnotationHelper;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 /**
  * the top class of all functions. There are two ways for a client to find out which kind of function {@link #Function}-object is:<br>
@@ -22,8 +22,8 @@ public abstract class Function<V> extends Phrase<V> {
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment of the user for the specific block
      */
-    public Function(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(kind, properties, comment);
+    public Function(BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(properties, comment);
 
     }
 
@@ -54,7 +54,7 @@ public abstract class Function<V> extends Phrase<V> {
      * @return the BlocklyType
      */
     public BlocklyType getReturnType() {
-        return AnnotationHelper.getVarType(this.getClass());
+        return AnnotationHelper.getReturnType(this.getClass());
     }
 
 }

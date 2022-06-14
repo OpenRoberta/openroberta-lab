@@ -4,27 +4,28 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.BuiltinSensor;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
+@NepoBasic(containerType = "LPS22HB_PRESSURE", category = "SENSOR", blocklyNames = {"robsensors_lps22hb_pressure_getDataAvailableSample"})
 public class Lps22hbPressureSensor<V> extends BuiltinSensor<V> {
 
-    private final Expr<V> pressure;
+    public final Expr<V> pressure;
 
     public Expr<V> getPressure() {
         return pressure;
     }
 
     private Lps22hbPressureSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> pressure) {
-        super(null, BlockTypeContainer.getByName("LPS22HB_PRESSURE"), properties, comment);
+        super(properties, comment, null);
         this.pressure = pressure;
         setReadOnly();
     }

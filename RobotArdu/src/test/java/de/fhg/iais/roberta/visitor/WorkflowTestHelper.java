@@ -13,7 +13,6 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.RobotFactory;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
@@ -21,6 +20,7 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.IWorker;
 
@@ -36,7 +36,7 @@ public class WorkflowTestHelper {
         StmtList<Void> variables = StmtList.make();
         variables.setReadOnly();
 
-        MainTask<Void> mainTask = MainTask.make(variables, "false", BlocklyBlockProperties.make("1", "1"), null);
+        MainTask<Void> mainTask = MainTask.make(variables, "false", BlocklyBlockProperties.make("MAIN_FOR_TEST", "1"), null);
         phrases = new ArrayList<>(Arrays.asList(new Location<>("0", "0"), mainTask));
         configurationComponents = new ArrayList<>();
     }
@@ -96,7 +96,7 @@ public class WorkflowTestHelper {
         return project;
     }
 
-    protected final static BlocklyBlockProperties bp = BlocklyBlockProperties.make("1", "1");
+    protected final static BlocklyBlockProperties bp = BlocklyBlockProperties.make("BLOCK_FOR_TEST", "1");
 
     protected void assertHasUsedSensor(Project project, String userDefinedPort, String type, String mode) {
         UsedHardwareBean usedHardwareBean = getUsedHardwareBean(project);

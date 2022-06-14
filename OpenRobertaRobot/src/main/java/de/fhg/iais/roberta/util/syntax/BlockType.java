@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.util.syntax;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,6 +20,7 @@ public class BlockType {
         Assert.notNull(name);
         Assert.notNull(category);
         Assert.notNull(blocklyNames);
+        Assert.notNull(astClass);
         this.name = name;
         this.category = category;
         this.astClass = astClass;
@@ -70,6 +72,10 @@ public class BlockType {
             }
         }
         return false;
+    }
+
+    public Set<String> getBlocklyNames() {
+        return Collections.unmodifiableSet(this.blocklyNames);
     }
 
     @Override

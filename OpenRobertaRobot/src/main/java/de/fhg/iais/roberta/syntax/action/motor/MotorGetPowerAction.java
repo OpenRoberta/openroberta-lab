@@ -1,14 +1,12 @@
 package de.fhg.iais.roberta.syntax.action.motor;
 
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.syntax.action.MoveAction;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.action.MoveAction;
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoPhrase;
-import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
  * This class represents the <b>robActions_motor_getPower</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -16,13 +14,13 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br/>
  * The client must provide the {@link ActorPort} on which the motor is connected.
  */
-@NepoPhrase(containerType = "MOTOR_GET_POWER_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_motor_getPower"}, containerType = "MOTOR_GET_POWER_ACTION")
 public class MotorGetPowerAction<V> extends MoveAction<V> {
     @NepoField(name = BlocklyConstants.MOTORPORT)
     public final String port;
 
-    public MotorGetPowerAction(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, String port) {
-        super(port, kind, properties, comment);
+    public MotorGetPowerAction(BlocklyBlockProperties properties, BlocklyComment comment, String port) {
+        super(properties, comment, port);
         Assert.isTrue(port != null);
         this.port = port;
         setReadOnly();
@@ -37,7 +35,7 @@ public class MotorGetPowerAction<V> extends MoveAction<V> {
      * @return read only object of class {@link MotorGetPowerAction}
      */
     public static <V> MotorGetPowerAction<V> make(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MotorGetPowerAction<V>(BlockTypeContainer.getByName("MOTOR_GET_POWER_ACTION"), properties, comment, port);
+        return new MotorGetPowerAction<V>(properties, comment, port);
     }
 
 }

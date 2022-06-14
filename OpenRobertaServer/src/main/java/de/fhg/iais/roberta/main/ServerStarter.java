@@ -45,7 +45,6 @@ import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.transformer.NepoAnnotationException;
 import de.fhg.iais.roberta.util.ServerProperties;
@@ -53,6 +52,7 @@ import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
@@ -293,6 +293,7 @@ public class ServerStarter {
         if ( robotCommunicator == null ) {
             throw new DbcException("the robot communicator object is missing - Server does NOT start");
         }
+        BlockTypeContainer.loadBlocks();
         List<String> robotWhitelist = serverProperties.getRobotWhitelist();
         Map<String, RobotFactory> robotPlugins = new HashMap<>();
         String resourceDir = serverProperties.getCrosscompilerResourceDir();

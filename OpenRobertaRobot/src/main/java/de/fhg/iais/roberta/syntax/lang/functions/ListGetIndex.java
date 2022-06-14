@@ -11,19 +11,19 @@ import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
 import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.Assoc;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>lists_getIndex</b> block from Blockly into the AST (abstract syntax tree).<br>
@@ -32,12 +32,13 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * To create an instance from this class use the method {@link #make(ListElementOperations, IndexLocation, List, BlocklyBlockProperties, BlocklyComment)}.<br>
  * The enumeration {@link IndexLocation} contains all allowed functions.
  */
+@NepoBasic(containerType = "LIST_INDEX_OF", category = "FUNCTION", blocklyNames = {"robLists_getIndex", "lists_getIndex"})
 public class ListGetIndex<V> extends Function<V> {
-    private final IListElementOperations mode;
-    private final IIndexLocation location;
-    private final String dataType;
+    public final IListElementOperations mode;
+    public final IIndexLocation location;
+    public final String dataType;
 
-    private final List<Expr<V>> param;
+    public final List<Expr<V>> param;
 
     private ListGetIndex(
         IListElementOperations mode,
@@ -46,7 +47,7 @@ public class ListGetIndex<V> extends Function<V> {
         String dataType,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LIST_INDEX_OF"), properties, comment);
+        super(properties, comment);
         Assert.isTrue(mode != null && name != null && param != null);
         this.mode = mode;
         this.location = name;

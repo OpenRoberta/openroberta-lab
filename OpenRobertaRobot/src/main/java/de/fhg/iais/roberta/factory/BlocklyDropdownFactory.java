@@ -36,15 +36,15 @@ import de.fhg.iais.roberta.mode.general.Direction;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.WorkingState;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
 
 public class BlocklyDropdownFactory {
     private static final Logger LOG = LoggerFactory.getLogger(BlocklyDropdownFactory.class);
@@ -58,7 +58,6 @@ public class BlocklyDropdownFactory {
         String robotDescriptor = pluginProperties.getStringProperty("robot.descriptor");
         this.robotDescription = new JSONObject();
         Util.loadYAMLRecursive("", this.robotDescription, robotDescriptor, false);
-        BlocklyDropdownFactoryHelper.loadBlocks(this.robotDescription);
         this.waMap = BlocklyDropdownFactoryHelper.getWaitUntils(this.robotDescription);
         this.modes = BlocklyDropdownFactoryHelper.getModes(this.robotDescription);
         this.configurationComponentTypes = BlocklyDropdownFactoryHelper.getConfigurationComponents(this.robotDescription);

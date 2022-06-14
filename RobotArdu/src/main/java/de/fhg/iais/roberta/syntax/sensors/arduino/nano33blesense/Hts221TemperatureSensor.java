@@ -4,27 +4,28 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.BuiltinSensor;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
+@NepoBasic(containerType = "HTS221_TEMPERATURE", category = "SENSOR", blocklyNames = {"robsensors_hts221_temperature_getDataAvailableSample"})
 public class Hts221TemperatureSensor<V> extends BuiltinSensor<V> {
 
-    private final Expr<V> temperature;
+    public final Expr<V> temperature;
 
     public Expr<V> getTemperature() {
         return temperature;
     }
 
     private Hts221TemperatureSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> temperature) {
-        super(null, BlockTypeContainer.getByName("HTS221_TEMPERATURE"), properties, comment);
+        super(properties, comment, null);
         this.temperature = temperature;
         setReadOnly();
     }

@@ -5,16 +5,16 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.mode.action.nao.Posture;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>naoActions_applyPosture</b> block from Blockly into the AST (abstract syntax tree). Objects from this class will generate code
@@ -22,12 +22,13 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br/>
  * The client must provide the {@link Posture} (name of posture).
  */
+@NepoBasic(containerType = "APPLY_POSTURE", category = "ACTOR", blocklyNames = {"naoActions_applyPosture"})
 public final class ApplyPosture<V> extends Action<V> {
 
-    private final Posture posture;
+    public final Posture posture;
 
     private ApplyPosture(Posture posture, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("APPLY_POSTURE"), properties, comment);
+        super(properties, comment);
         Assert.notNull(posture, "Missing posture in ApplyPosture block!");
         this.posture = posture;
         setReadOnly();

@@ -1,11 +1,9 @@
 package de.fhg.iais.roberta.syntax.action.sound;
 
 import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
@@ -16,13 +14,13 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the name of the file.
  */
-@NepoPhrase(containerType = "PLAY_FILE_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_play_file"}, containerType = "PLAY_FILE_ACTION")
 public class PlayFileAction<V> extends Action<V> {
     @NepoField(name = BlocklyConstants.FILE)
     public final String fileName;
 
-    public PlayFileAction(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, String fileName) {
-        super(kind, properties, comment);
+    public PlayFileAction(BlocklyBlockProperties properties, BlocklyComment comment, String fileName) {
+        super(properties, comment);
         Assert.isTrue(!fileName.equals(""));
         this.fileName = fileName;
         setReadOnly();
@@ -37,7 +35,7 @@ public class PlayFileAction<V> extends Action<V> {
      * @return read only object of class {@link PlayFileAction}
      */
     public static <V> PlayFileAction<V> make(String filename, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PlayFileAction<V>(BlockTypeContainer.getByName("PLAY_FILE_ACTION"), properties, comment, filename);
+        return new PlayFileAction<V>(properties, comment, filename);
     }
 
     /**

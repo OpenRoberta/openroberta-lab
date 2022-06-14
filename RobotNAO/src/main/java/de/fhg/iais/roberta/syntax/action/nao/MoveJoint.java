@@ -9,10 +9,6 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.mode.action.nao.Joint;
 import de.fhg.iais.roberta.mode.action.nao.RelativeAbsolute;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -20,8 +16,12 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>naoActions_walk</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for making
@@ -29,14 +29,15 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br/>
  * The client must provide the {@link joint} and {@link degrees} (direction and distance to walk).
  */
+@NepoBasic(containerType = "MOVE_JOINT", category = "ACTOR", blocklyNames = {"naoActions_moveJoint"})
 public final class MoveJoint<V> extends Action<V> {
 
-    private final Joint joint;
-    private final RelativeAbsolute relativeAbsolute;
-    private final Expr<V> degrees;
+    public final Joint joint;
+    public final RelativeAbsolute relativeAbsolute;
+    public final Expr<V> degrees;
 
     private MoveJoint(Joint joint, RelativeAbsolute relativeAbsolute, Expr<V> degrees, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("MOVE_JOINT"), properties, comment);
+        super(properties, comment);
         Assert.notNull(joint, "Missing joint in MoveJoint block!");
         Assert.notNull(relativeAbsolute, "Missing relativeAbsolute in MoveJoint block!");
         this.joint = joint;

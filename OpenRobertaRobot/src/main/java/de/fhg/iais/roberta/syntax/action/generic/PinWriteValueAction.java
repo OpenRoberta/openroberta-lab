@@ -7,10 +7,6 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -18,8 +14,12 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>mbedActions_write_to_pin</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -28,11 +28,12 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(BlocklyBlockProperties, BlocklyComment)}.<br>
  */
+@NepoBasic(containerType = "PIN_WRITE_VALUE", category = "ACTOR", blocklyNames = {"robActions_write_pin", "mbedActions_write_to_pin"})
 public class PinWriteValueAction<V> extends Action<V> {
-    private final String pinValue;
-    private final String port;
-    private final Expr<V> value;
-    private final boolean actorPortAndMode; // true: arduino (uses actor port and mode); if false: calliope (uses pin and valueType :-)
+    public final String pinValue;
+    public final String port;
+    public final Expr<V> value;
+    public final boolean actorPortAndMode; // true: arduino (uses actor port and mode); if false: calliope (uses pin and valueType :-)
 
     private PinWriteValueAction(
         String pinValue,
@@ -41,7 +42,7 @@ public class PinWriteValueAction<V> extends Action<V> {
         boolean actorPortAndMode,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("PIN_WRITE_VALUE"), properties, comment);
+        super(properties, comment);
         Assert.notNull(pinValue);
         Assert.notNull(port);
         Assert.notNull(value);

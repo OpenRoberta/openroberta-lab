@@ -1,21 +1,19 @@
 package de.fhg.iais.roberta.syntax.action.display;
 
 import de.fhg.iais.roberta.blockly.generated.Hide;
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forField.NepoHide;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forField.NepoValue;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoHide;
-import de.fhg.iais.roberta.transformer.NepoPhrase;
-import de.fhg.iais.roberta.transformer.NepoValue;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 
-@NepoPhrase(containerType = "SHOW_TEXT_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_display_text", "robActions_display_text_i2c", "robActions_display_text_oledssd1306i2c"}, containerType = "SHOW_TEXT_ACTION")
 public class ShowTextAction<V> extends Action<V> {
     @NepoValue(name = BlocklyConstants.OUT, type = BlocklyType.STRING)
     public final Expr<V> msg;
@@ -29,7 +27,6 @@ public class ShowTextAction<V> extends Action<V> {
     public final Hide hide;
 
     public ShowTextAction(
-        BlockType kind,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         Expr<V> msg,
@@ -37,7 +34,7 @@ public class ShowTextAction<V> extends Action<V> {
         Expr<V> row,
         String port,
         Hide hide) {
-        super(kind, properties, comment);
+        super(properties, comment);
         Assert.isTrue((msg != null) && (column != null) && (row != null));
         this.msg = msg;
         this.x = column;
@@ -48,6 +45,6 @@ public class ShowTextAction<V> extends Action<V> {
     }
 
     public static <V> ShowTextAction<V> make(Expr<V> msg, Expr<V> column, Expr<V> row, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ShowTextAction<>(BlockTypeContainer.getByName("SHOW_TEXT_ACTION"), properties, comment, msg, column, row, port, null);
+        return new ShowTextAction<V>(properties, comment, msg, column, row, port, null);
     }
 }

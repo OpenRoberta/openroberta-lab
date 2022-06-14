@@ -1,18 +1,16 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
-/**
- * Wraps subclasses of the class {@link Method} so they can be used as {@link Stmt} in statements.
- */
-public class MethodStmt<V> extends Stmt<V> {
-    private final Method<V> method;
+@NepoBasic(containerType = "METHOD_STMT", category = "STMT", blocklyNames = {})
+public final class MethodStmt<V> extends Stmt<V> {
+    public final Method<V> method;
 
     private MethodStmt(Method<V> method) {
-        super(BlockTypeContainer.getByName("METHOD_STMT"), method.getProperty(), method.getComment());
+        super(method.getProperty(), method.getComment());
         Assert.isTrue(method != null && method.isReadOnly());
         this.method = method;
         setReadOnly();

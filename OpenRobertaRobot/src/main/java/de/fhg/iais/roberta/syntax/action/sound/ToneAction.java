@@ -1,25 +1,23 @@
 package de.fhg.iais.roberta.syntax.action.sound;
 
 import de.fhg.iais.roberta.blockly.generated.Hide;
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forField.NepoHide;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forField.NepoValue;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoHide;
-import de.fhg.iais.roberta.transformer.NepoPhrase;
-import de.fhg.iais.roberta.transformer.NepoValue;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
  * This class represents the <b>robActions_play_tone</b> block<br/>
  * The client must provide the frequency and the duration of the sound.
  */
-@NepoPhrase(containerType = "TONE_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_play_tone", "mbedActions_play_tone"}, containerType = "TONE_ACTION")
 public class ToneAction<V> extends Action<V> {
     @NepoValue(name = BlocklyConstants.FREQUENCE, type = BlocklyType.NUMBER_INT)
     public final Expr<V> frequency;
@@ -30,8 +28,8 @@ public class ToneAction<V> extends Action<V> {
     @NepoHide
     public final Hide hide;
 
-    public ToneAction(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> frequency, Expr<V> duration, String port, Hide hide) {
-        super(kind, properties, comment);
+    public ToneAction(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> frequency, Expr<V> duration, String port, Hide hide) {
+        super(properties, comment);
         Assert.isTrue(frequency.isReadOnly() && duration.isReadOnly() && (frequency != null) && (duration != null));
         this.frequency = frequency;
         this.duration = duration;
@@ -41,7 +39,7 @@ public class ToneAction<V> extends Action<V> {
     }
 
     public static <V> ToneAction<V> make(Expr<V> frequency, Expr<V> duration, String port, BlocklyBlockProperties properties, BlocklyComment comment, Hide hide) {
-        return new ToneAction<>(BlockTypeContainer.getByName("TONE_ACTION"), properties, comment, frequency, duration, port, hide);
+        return new ToneAction<>(properties, comment, frequency, duration, port, hide);
     }
 
     public Expr<V> getDuration() {

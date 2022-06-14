@@ -3,16 +3,15 @@ package de.fhg.iais.roberta.syntax;
 import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.NepoData;
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoHide;
-import de.fhg.iais.roberta.transformer.NepoMutation;
-import de.fhg.iais.roberta.transformer.NepoPhrase;
-import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forField.NepoData;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forField.NepoHide;
+import de.fhg.iais.roberta.transformer.forField.NepoMutation;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 
-@NepoPhrase(containerType = "TEST_PHRASE_ALL")
+@NepoPhrase(containerType = "TEST_PHRASE_ALL", blocklyNames = {"test_phrase_all"}, category = "EXPR")
 public class TestPhraseWithAll<V> extends Expr<V> {
 
     @NepoMutation
@@ -28,14 +27,13 @@ public class TestPhraseWithAll<V> extends Expr<V> {
     public final Hide hide;
 
     public TestPhraseWithAll(
-        BlockType kind,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         Mutation mutation,
         String data,
         String type,
         Hide hide) {
-        super(kind, properties, comment);
+        super(properties, comment);
         this.mutation = mutation;
         this.data = data;
         this.type = type;

@@ -6,30 +6,31 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>robGlobalvariables_declare</b> blocks from Blockly in the AST (abstract syntax tree). Object from this class will generate
  * code for creating a variable.
  */
+@NepoBasic(containerType = "VAR_DECLARATION", category = "EXPR", blocklyNames = {"robLocalVariables_declare", "robGlobalvariables_declare"})
 public class VarDeclaration<V> extends Expr<V> {
-    private final BlocklyType typeVar;
-    private final String name;
-    private final Phrase<V> value;
-    private final boolean next;
-    private final boolean global;
-    private final static String CODE_SAFE_PREFIX = "___";
+    public final BlocklyType typeVar;
+    public final String name;
+    public final Phrase<V> value;
+    public final boolean next;
+    public final boolean global;
+    public final static String CODE_SAFE_PREFIX = "___";
 
     private VarDeclaration(
         BlocklyType typeVar,
@@ -39,7 +40,7 @@ public class VarDeclaration<V> extends Expr<V> {
         boolean global,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("VAR_DECLARATION"), properties, comment);
+        super(properties, comment);
         Assert.isTrue(!name.equals("") && typeVar != null && value.isReadOnly());
         this.name = name;
         this.typeVar = typeVar;

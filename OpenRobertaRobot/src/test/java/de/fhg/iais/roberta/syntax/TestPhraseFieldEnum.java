@@ -1,13 +1,12 @@
 package de.fhg.iais.roberta.syntax;
 
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoPhrase;
-import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 
-@NepoPhrase(containerType = "TEST_PHRASE_FIELD_ENUM")
+@NepoPhrase(containerType = "TEST_PHRASE_FIELD_ENUM", blocklyNames = {"test_phrase_field_enum"}, category = "EXPR")
 public class TestPhraseFieldEnum<V> extends Expr<V> {
     @NepoField(name = "TYPE")
     public final Type type;
@@ -16,11 +15,10 @@ public class TestPhraseFieldEnum<V> extends Expr<V> {
     public final Type type1;
 
     public TestPhraseFieldEnum(
-        BlockType kind,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         Type type, Type type1) {
-        super(kind, properties, comment);
+        super(properties, comment);
         this.type = type;
         this.type1 = type1;
     }

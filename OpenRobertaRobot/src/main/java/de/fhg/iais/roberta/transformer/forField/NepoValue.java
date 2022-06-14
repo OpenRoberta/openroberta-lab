@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.transformer;
+package de.fhg.iais.roberta.transformer.forField;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -12,14 +12,13 @@ import java.util.List;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 
 /**
- * <p>
- * This annotation can be used to parse xml value objects from blocks.<br>
- * A value object always contains another nested bock!
- * </p>
+ * <b>This Nepo field annotation can be used to parse a value XML substructure, containing an inner block from the XML representation of blockly blocks.</b><br>
  *
  * <p>
  * The attribute {@link NepoValue#name()} is used to determine the correct value object in the block and must match the XML name attribute of the value object.
@@ -31,15 +30,15 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
  * <pre>{@code
  *  <block>
  *      <value name="VALUE">
- *          <block type="math_number" id="!k:I/O]~:8SW7#]/D()O" intask="true">
+ *          <block type="math_number" id="abc" intask="true">
  *              <field name="NUM">0</field>
  *          </block>
  *      </value>
  *  </block>
  * }</pre>
- *
- * <b>The field annotated with {@link NepoValue} must be of type {@link Expr} or {@link Var} and public!</b><br>
- * The class using this Annotation should also be annoted with either {@link NepoPhrase} or {@link NepoOp}.
+ * <p>
+ * The field annotated with {@link NepoValue} must be a valid type (see {@link #VALID_TYPES}) and public<br>
+ * The class using this Annotation should also be annotated with either {@link NepoPhrase} or {@link NepoExpr}.
  */
 @Documented
 @Target(ElementType.FIELD)

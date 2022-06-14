@@ -6,10 +6,6 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -17,8 +13,12 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>robActions_display_image</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -28,14 +28,15 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(DisplayImageMode, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
+@NepoBasic(containerType = "LED_MATRIX_IMAGE_ACTION", category = "ACTOR", blocklyNames = {"mBotActions_display_image"})
 public class LEDMatrixImageAction<V> extends Action<V> {
 
-    private final String port;
-    private final Expr<V> valuesToDisplay;
-    private final String displayImageMode;
+    public final String port;
+    public final Expr<V> valuesToDisplay;
+    public final String displayImageMode;
 
     private LEDMatrixImageAction(String port, String displayImageMode, Expr<V> valuesToDisplay, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LED_MATRIX_IMAGE_ACTION"), properties, comment);
+        super(properties, comment);
         Assert.isTrue(port != null && displayImageMode != null && valuesToDisplay != null);
         this.port = port;
         this.displayImageMode = displayImageMode;

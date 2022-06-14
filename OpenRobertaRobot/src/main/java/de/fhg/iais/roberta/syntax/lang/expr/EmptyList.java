@@ -1,14 +1,12 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoOp;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
  * This class represents the <b>lists_create_empty</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -16,13 +14,13 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(BlocklyType, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoOp(containerType = "EMPTY_LIST", blocklyType = BlocklyType.ARRAY)
+@NepoExpr(category = "EXPR", blocklyNames = {"lists_create_empty"}, containerType = "EMPTY_LIST", blocklyType = BlocklyType.ARRAY)
 public class EmptyList<V> extends Expr<V> {
     @NepoField(name = BlocklyConstants.LIST_TYPE)
     public final BlocklyType typeVar;
 
-    public EmptyList(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyType typeVar) {
-        super(kind, properties, comment);
+    public EmptyList(BlocklyBlockProperties properties, BlocklyComment comment, BlocklyType typeVar) {
+        super(properties, comment);
         Assert.isTrue(typeVar != null);
         this.typeVar = typeVar;
         setReadOnly();
@@ -36,7 +34,7 @@ public class EmptyList<V> extends Expr<V> {
      * @return read only object of class {@link NullConst}
      */
     public static <V> EmptyList<V> make(BlocklyType typeVar, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new EmptyList<V>(BlockTypeContainer.getByName("EMPTY_LIST"), properties, comment, typeVar);
+        return new EmptyList<V>(properties, comment, typeVar);
     }
 
     /**

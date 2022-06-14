@@ -5,28 +5,29 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.mode.general.WorkingState;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>naoActions_Autonomous</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
  * toggling the state of autonomous life.<br/>
  * <br/>
  */
+@NepoBasic(containerType = "AUTONOMOUS", category = "ACTOR", blocklyNames = {"naoActions_autonomous"})
 public final class Autonomous<V> extends Action<V> {
 
-    private final WorkingState onOff;
+    public final WorkingState onOff;
 
     private Autonomous(WorkingState onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("AUTONOMOUS"), properties, comment);
+        super(properties, comment);
         Assert.notNull(onOff, "Missing onOff in Autonomous block!");
         this.onOff = onOff;
         setReadOnly();

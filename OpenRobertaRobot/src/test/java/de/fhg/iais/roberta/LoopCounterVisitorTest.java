@@ -10,8 +10,7 @@ import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.TestLoopCounterWorker;
 
 public class LoopCounterVisitorTest extends AstTest {
-
-
+    
     @Test
     public void check_noLoops_returnsEmptyMap() throws Exception {
         Project.Builder builder = UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory, Util.readResourceContent("/loop_counter/no_loops.xml"));

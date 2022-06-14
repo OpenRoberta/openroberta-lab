@@ -1,18 +1,17 @@
 package de.fhg.iais.roberta.syntax;
 
-import de.fhg.iais.roberta.transformer.NepoMutation;
-import de.fhg.iais.roberta.transformer.NepoPhrase;
-import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forField.NepoMutation;
 import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 
-@NepoPhrase
+@NepoPhrase(containerType = "TEST_PHRASE_WRONG_MUTATION_TYPE", blocklyNames = {"test_phrase_wrong_mutation_type"}, category = "EXPR")
 public class TestPhraseWrongMutationType<V> extends Phrase<V> {
     @NepoMutation
     public final String mutation;
 
-    public TestPhraseWrongMutationType(BlockType kind, BlocklyBlockProperties property, BlocklyComment comment, String mutation) {
-        super(kind, property, comment);
+    public TestPhraseWrongMutationType(BlocklyBlockProperties property, BlocklyComment comment, String mutation) {
+        super(property, comment);
         this.mutation = mutation;
     }
 }

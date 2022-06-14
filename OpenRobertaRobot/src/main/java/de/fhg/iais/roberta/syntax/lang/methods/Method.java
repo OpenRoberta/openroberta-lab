@@ -1,11 +1,11 @@
 package de.fhg.iais.roberta.syntax.lang.methods;
 
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 
 /**
  * the top class of all method classes used to represent the AST (abstract syntax tree) of a program. After construction an AST should be immutable. The logic
@@ -25,8 +25,8 @@ public abstract class Method<V> extends Phrase<V> {
      * @param properties of the block,
      * @param comment of the user for the specific block
      */
-    public Method(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(kind, properties, comment);
+    public Method(BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(properties, comment);
     }
 
     public String getMethodName() {

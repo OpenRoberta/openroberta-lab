@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -24,8 +25,6 @@ import org.xmlunit.builder.Input;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
-import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.TestOperation;
 import de.fhg.iais.roberta.syntax.TestPhrase;
@@ -43,13 +42,15 @@ import de.fhg.iais.roberta.syntax.TestPhraseWrongFieldType;
 import de.fhg.iais.roberta.syntax.TestPhraseWrongHideType;
 import de.fhg.iais.roberta.syntax.TestPhraseWrongMutationType;
 import de.fhg.iais.roberta.syntax.TestPhraseWrongValueType;
-import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.NepoAnnotationException;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
+import de.fhg.iais.roberta.util.syntax.Assoc;
+import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -61,13 +62,13 @@ public class AnnotationHelperTest {
 
     @BeforeClass
     public static void setupPhrases() {
-        BlockTypeContainer.add("TEST_PHRASE", Category.ACTOR, TestPhrase.class, "TEST_PHRASE");
-        BlockTypeContainer.add("TEST_PHRASE_FIELD", Category.EXPR, TestPhraseField.class, "TEST_PHRASE_FIELD");
-        BlockTypeContainer.add("TEST_PHRASE_FIELD_BOOLEAN", Category.EXPR, TestPhraseFieldBoolean.class, "TEST_PHRASE_FIELD_BOOLEAN");
-        BlockTypeContainer.add("TEST_PHRASE_FIELD_DOUBLE", Category.EXPR, TestPhraseFieldDouble.class, "TEST_PHRASE_FIELD_DOUBLE");
-        BlockTypeContainer.add("TEST_PHRASE_FIELD_ENUM", Category.EXPR, TestPhraseFieldEnum.class, "TEST_PHRASE_FIELD_ENUM");
-        BlockTypeContainer.add("TEST_PHRASE_ALL", Category.EXPR, TestPhraseWithAll.class, "TEST_PHRASE_ALL");
-        BlockTypeContainer.add("TEST_PHRASE_WRONG_VALUE_TYPE", Category.EXPR, TestPhraseWrongValueType.class);
+        BlockTypeContainer.add(TestPhrase.class);
+        BlockTypeContainer.add(TestPhraseField.class);
+        BlockTypeContainer.add(TestPhraseFieldBoolean.class);
+        BlockTypeContainer.add(TestPhraseFieldDouble.class);
+        BlockTypeContainer.add(TestPhraseFieldEnum.class);
+        BlockTypeContainer.add(TestPhraseWithAll.class);
+        BlockTypeContainer.add(TestPhraseWrongValueType.class);
     }
 
     @Before
@@ -106,13 +107,12 @@ public class AnnotationHelperTest {
 
     @Test
     public void getVarType() {
-        assertThat(AnnotationHelper.getVarType(TestOperation.class)).isEqualTo(BlocklyType.ARRAY);
+        assertThat(AnnotationHelper.getReturnType(TestOperation.class)).isEqualTo(BlocklyType.ARRAY);
     }
 
     @Test
     public void getVarType_annotationNotPresence() {
-        assertThatThrownBy(() -> AnnotationHelper.getVarType(TestPhrase.class)).isInstanceOf(DbcException.class);
-        assertThatThrownBy(() -> AnnotationHelper.getVarType(TestPhraseNotAnnotated.class)).isInstanceOf(DbcException.class);
+        assertThatThrownBy(() -> AnnotationHelper.getReturnType(TestPhraseNotAnnotated.class)).isInstanceOf(DbcException.class);
     }
 
     @Test
@@ -217,7 +217,6 @@ public class AnnotationHelperTest {
         assertThat(resultPhrase).isInstanceOf(TestPhraseField.class);
         TestPhraseField<?> testPhrase = (TestPhraseField<?>) resultPhrase;
         assertThat(testPhrase.type).isEqualTo("WHATEVER");
-        assertThat(testPhrase.getKind()).isEqualTo(BlockTypeContainer.getByName("TEST_PHRASE_FIELD"));
         assertThat(testPhrase.getComment().getComment()).isEqualTo("Test");
         assertThat(testPhrase.getComment().getHeight()).isEqualTo("80");
         assertThat(testPhrase.getComment().getWidth()).isEqualTo("160");
@@ -225,6 +224,11 @@ public class AnnotationHelperTest {
         assertThat(testPhrase.getProperty().isInTask()).isEqualTo(true);
         assertThat(testPhrase.getProperty().getBlocklyId()).isEqualTo("b2Ieob%0r|errWxr`reW");
         assertThat(testPhrase.getProperty().getBlockType()).isEqualTo("TEST_PHRASE_FIELD");
+
+        BlockType kind = testPhrase.getKind();
+        assertThat(kind.getName()).isEqualTo("TEST_PHRASE_FIELD");
+        assertThat(kind.getCategory().name()).isEqualTo("EXPR");
+        assertThat(kind.getBlocklyNames()).isEqualTo(new HashSet(Arrays.asList("test_phrase_field")));
     }
 
     @Test
@@ -421,14 +425,14 @@ public class AnnotationHelperTest {
     public void checkNepoAnnotatedClass_wrongConstructor() {
         Assertions.assertThatThrownBy(() -> AnnotationHelper.checkNepoAnnotatedClass(TestPhraseWrongConstructor.class))
             .isInstanceOf(NepoAnnotationException.class)
-            .hasMessageContaining("Excepted a constructor with the following parameter types [class de.fhg.iais.roberta.util.syntax.BlockType, class de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties, class de.fhg.iais.roberta.util.syntax.BlocklyComment, class java.lang.String, class de.fhg.iais.roberta.syntax.lang.expr.Expr] on TestPhraseWrongConstructor");
+            .hasMessageContaining("Excepted a constructor with the following parameter types [class de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties, class de.fhg.iais.roberta.util.syntax.BlocklyComment, class java.lang.String, class de.fhg.iais.roberta.syntax.lang.expr.Expr] on TestPhraseWrongConstructor");
     }
 
     @Test
     public void checkNepoAnnotatedClass_constructorNotPublic() {
         Assertions.assertThatThrownBy(() -> AnnotationHelper.checkNepoAnnotatedClass(TestPhraseConstructorNotPublic.class))
             .isInstanceOf(NepoAnnotationException.class)
-            .hasMessageContaining("Constructor de.fhg.iais.roberta.syntax.TestPhraseConstructorNotPublic(de.fhg.iais.roberta.util.syntax.BlockType,de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties,de.fhg.iais.roberta.util.syntax.BlocklyComment,java.lang.String,de.fhg.iais.roberta.syntax.lang.expr.Expr) on TestPhraseConstructorNotPublic must be public");
+            .hasMessageContaining("Constructor de.fhg.iais.roberta.syntax.TestPhraseConstructorNotPublic(de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties,de.fhg.iais.roberta.util.syntax.BlocklyComment,java.lang.String,de.fhg.iais.roberta.syntax.lang.expr.Expr) on TestPhraseConstructorNotPublic must be public");
     }
 
     private String blockToXml(Block resultBlock) throws Exception {
