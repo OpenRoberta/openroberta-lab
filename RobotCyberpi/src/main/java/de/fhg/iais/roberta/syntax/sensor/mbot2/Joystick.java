@@ -4,15 +4,16 @@ import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.syntax.action.mbot2.DisplaySetColourAction;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoHide;
 import de.fhg.iais.roberta.transformer.forField.NepoMutation;
-import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 /**
@@ -21,8 +22,8 @@ import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
  * <br/>
  */
 
-@NepoPhrase(category = "SENSOR", blocklyNames = {"robSensors_joystickKeys_getSample"}, containerType = "JOYSTICK_SENSING")
-public class Joystick<V> extends Sensor<V> implements WithUserDefinedPort<V> {
+@NepoPhrase(sampleValues = {@NepoSampleValue(blocklyFieldName="JOYSTICK_PRESSED",sensor="JOYSTICK_PRESSED",mode="PRESSED")}, category = "SENSOR", blocklyNames = {"robSensors_joystickKeys_getSample"}, containerType = "JOYSTICK_SENSING")
+public final class Joystick<V> extends Sensor<V> implements WithUserDefinedPort<V> {
     @NepoMutation
     public final Mutation mutation;
     @NepoField(name = BlocklyConstants.MODE)

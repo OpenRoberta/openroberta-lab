@@ -6,12 +6,13 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
-@NepoBasic(containerType = "HTCOLOR_SENSING", category = "SENSOR", blocklyNames = {"robSensors_htcolour_getSample"})
-public class HTColorSensor<V> extends ExternalSensor<V> {
+@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "HTCOLOUR_AMBIENTLIGHT", sensor = "COLOUR", mode = "AMBIENTLIGHT"), @NepoSampleValue(blocklyFieldName = "HTCOLOUR_COLOUR", sensor = "COLOUR", mode = "COLOUR"), @NepoSampleValue(blocklyFieldName = "HTCOLOUR_LIGHT", sensor = "COLOUR", mode = "LIGHT")}, containerType = "HTCOLOR_SENSING", category = "SENSOR", blocklyNames = {"robSensors_htcolour_getSample"})
+public final class HTColorSensor<V> extends ExternalSensor<V> {
 
     private HTColorSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment, sensorMetaDataBean);

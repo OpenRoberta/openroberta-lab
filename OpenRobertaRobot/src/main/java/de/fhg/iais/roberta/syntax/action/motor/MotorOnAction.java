@@ -17,8 +17,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.util.syntax.MotorDuration;
  * <br/>
  * The client must provide the {@link ActorPort} and {@link MotionParam} (number of rotations or degrees and speed).
  */
-@NepoBasic(containerType = "MOTOR_ON_ACTION", category = "ACTOR", blocklyNames = {"sim_motor_on_for","robActions_motor_on_for_ardu","robActions_motor_on","sim_motor_on","robActions_motor_on_for","mbedActions_motor_on"})
+@NepoBasic(containerType = "MOTOR_ON_ACTION", category = "ACTOR", blocklyNames = {"sim_motor_on_for", "robActions_motor_on_for_ardu", "robActions_motor_on", "sim_motor_on", "robActions_motor_on_for", "mbedActions_motor_on"})
 public final class MotorOnAction<V> extends MoveAction<V> {
 
     public final MotionParam<V> param;

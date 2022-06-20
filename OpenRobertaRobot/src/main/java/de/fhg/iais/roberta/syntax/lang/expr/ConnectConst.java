@@ -13,8 +13,8 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * To create an instance from this class use the method {@link #make(String, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 @NepoBasic(containerType = "CONNECTION_CONST", category = "EXPR", blocklyNames = {"robCommunication_connection"})
-public class ConnectConst<V> extends Expr<V> {
+public final class ConnectConst<V> extends Expr<V> {
     public final String value;
     public final String dataValue;
 

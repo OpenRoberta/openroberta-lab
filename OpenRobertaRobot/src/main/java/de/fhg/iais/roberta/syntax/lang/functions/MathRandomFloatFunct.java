@@ -2,8 +2,8 @@ package de.fhg.iais.roberta.syntax.lang.functions;
 
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
 /**
@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.util.syntax.FunctionNames;
  * The enumeration {@link FunctionNames} contains all allowed functions.
  */
 @NepoExpr(category = "FUNCTION", blocklyNames = {"math_random_float"}, containerType = "MATH_RANDOM_FLOAT_FUNCT", blocklyType = BlocklyType.NUMBER, precedence = 10)
-public class MathRandomFloatFunct<V> extends Function<V> {
+public final class MathRandomFloatFunct<V> extends Function<V> {
 
     public MathRandomFloatFunct(BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);

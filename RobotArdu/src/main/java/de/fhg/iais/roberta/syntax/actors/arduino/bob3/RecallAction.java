@@ -8,8 +8,8 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
 /**
  * This class represents the <b>mbedActions_leds_on</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyComment;
  * To create an instance from this class use the method {@link #make(ColorConst, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 @NepoBasic(containerType = "BOB3_RECALL", category = "ACTOR", blocklyNames = {"bob3Actions_recall"})
-public class RecallAction<V> extends Action<V> {
+public final class RecallAction<V> extends Action<V> {
 
     private RecallAction(BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);

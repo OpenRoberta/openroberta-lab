@@ -14,8 +14,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -25,7 +25,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * The client must provide the {@link ActorPort} and {@link MotorStopMode} (is the motor breaking or not).
  */
 @NepoBasic(containerType = "SINGLE_MOTOR_STOP_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_single_motor_stop"})
-public class SingleMotorStopAction<V> extends Action<V> {
+public final class SingleMotorStopAction<V> extends Action<V> {
     public final IMotorStopMode mode;
 
     private SingleMotorStopAction(IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {

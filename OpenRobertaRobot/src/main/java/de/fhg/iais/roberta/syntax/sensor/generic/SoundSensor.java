@@ -6,9 +6,10 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
 /**
  * This class represents the <b>robSensors_colour_getMode</b>, <b>robSensors_colour_getSample</b> and <b>robSensors_colour_setMode</b> blocks from Blockly into
@@ -18,8 +19,8 @@ import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
  * <br>
  * To create an instance from this class use the method {@link #make(LightSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "SOUND_SENSING", category = "SENSOR", blocklyNames = {"robSensors_sound_getSample"})
-public class SoundSensor<V> extends ExternalSensor<V> {
+@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "SOUND_SOUND", sensor = "SOUND", mode = "SOUND"), @NepoSampleValue(blocklyFieldName = "SOUND", sensor = "SOUND", mode = "VALUE")}, containerType = "SOUND_SENSING", category = "SENSOR", blocklyNames = {"robSensors_sound_getSample"})
+public final class SoundSensor<V> extends ExternalSensor<V> {
 
     private SoundSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment, sensorMetaDataBean);

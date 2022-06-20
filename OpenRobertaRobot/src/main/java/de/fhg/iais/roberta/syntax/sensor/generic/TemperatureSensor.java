@@ -6,9 +6,10 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
 /**
  * This class represents the <b>mbedSensors_temperature_getSample</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will
@@ -17,8 +18,8 @@ import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
  * <br>
  * To create an instance from this class use the method {@link #make(BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "TEMPERATURE_SENSING", category = "SENSOR", blocklyNames = {"mbedsensors_temperature_getsample", "robSensors_temperature_getSample"})
-public class TemperatureSensor<V> extends ExternalSensor<V> {
+@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "TEMPERATURE_PRESSURE", sensor = "TEMPERATURE", mode = "PRESSURE"), @NepoSampleValue(blocklyFieldName = "TEMPERATURE", sensor = "TEMPERATURE", mode = "TEMPERATURE"), @NepoSampleValue(blocklyFieldName = "TEMPERATURE_TEMPERATURE", sensor = "TEMPERATURE", mode = "TEMPERATURE"), @NepoSampleValue(blocklyFieldName = "TEMPERATURE_VALUE", sensor = "TEMPERATURE", mode = "TEMPERATURE")}, containerType = "TEMPERATURE_SENSING", category = "SENSOR", blocklyNames = {"mbedsensors_temperature_getsample", "robSensors_temperature_getSample"})
+public final class TemperatureSensor<V> extends ExternalSensor<V> {
 
     private TemperatureSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment, sensorMetaDataBean);

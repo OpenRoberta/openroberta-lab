@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfo.Severity;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlockType;
+import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -64,7 +64,7 @@ public final class Ast2Jaxb {
      * @param block to which the statement will be added; must be <b>not</b> null,
      * @param name of the statement; must be <b>non-empty</b> string
      * @param value is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
-     *     {@link BlockType#STMT_LIST}
+     *     {@link BlockDescriptor#STMT_LIST}
      */
     public static void addStatement(Block block, String name, Phrase<?> value) {
         Assert.isTrue(!name.equals(""));
@@ -108,7 +108,7 @@ public final class Ast2Jaxb {
      * @param block to which the statement will be added; must be <b>not</b> null,
      * @param name of the statement; must be <b>non-empty</b> string
      * @param value is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
-     *     {@link BlockType#EXPR_LIST}
+     *     {@link BlockDescriptor#EXPR_LIST}
      */
     public static void addStatement(Block block, String name, ExprList<?> exprList) {
         Assert.isTrue(!name.equals(""));
@@ -129,7 +129,7 @@ public final class Ast2Jaxb {
      * @param repetitions object to which the statement will be added; must be <b>not</b> null
      * @param name of the statement; must be <b>non-empty</b> string
      * @param value is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
-     *     {@link BlockType#STMT_LIST}
+     *     {@link BlockDescriptor#STMT_LIST}
      */
     public static void addStatement(Repetitions repetitions, String name, Phrase<?> value) {
         Assert.isTrue(!name.equals(""));
@@ -152,7 +152,7 @@ public final class Ast2Jaxb {
      * @param repetitions object to which the statement will be added; must be <b>not</b> null,
      * @param name of the statement; must be <b>non-empty</b> string
      * @param value is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
-     *     {@link BlockType#EXPR_LIST}
+     *     {@link BlockDescriptor#EXPR_LIST}
      */
     public static void addStatement(Repetitions repetitions, String name, ExprList<?> exprList) {
         Assert.isTrue(!name.equals(""));

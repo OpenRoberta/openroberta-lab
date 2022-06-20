@@ -8,8 +8,8 @@ import de.fhg.iais.roberta.transformer.forField.NepoData;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoHide;
 import de.fhg.iais.roberta.transformer.forField.NepoMutation;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
 @NepoPhrase(containerType = "TEST_PHRASE_ALL", blocklyNames = {"test_phrase_all"}, category = "EXPR")
 public class TestPhraseWithAll<V> extends Expr<V> {

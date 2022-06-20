@@ -6,9 +6,10 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
 /**
  * This class represents the <b>robSensors_colour_getMode</b>, <b>robSensors_colour_getSample</b> and <b>robSensors_colour_setMode</b> blocks from Blockly into
@@ -18,8 +19,8 @@ import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
  * <br>
  * To create an instance from this class use the method {@link #make(LightSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "LIGHT_SENSING", category = "SENSOR", blocklyNames = {"robSensors_light_getSample", "sim_light_getSample"})
-public class LightSensor<V> extends ExternalSensor<V> {
+@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "INFRARED_AMBIENTLIGHT", sensor = "LIGHT", mode = "AMBIENTLIGHT"), @NepoSampleValue(blocklyFieldName = "LIGHT_LEVEL", sensor = "LIGHT_LEVEL", mode = "LIGHT_LEVEL"), @NepoSampleValue(blocklyFieldName = "LIGHT_LIGHT", sensor = "LIGHT", mode = "LIGHT"), @NepoSampleValue(blocklyFieldName = "LIGHT_AMBIENTLIGHT", sensor = "LIGHT", mode = "AMBIENTLIGHT"), @NepoSampleValue(blocklyFieldName = "LIGHT_VALUE", sensor = "LIGHT_VALUE", mode = "LIGHT_VALUE"), @NepoSampleValue(blocklyFieldName = "LIGHT_LINE", sensor = "LINETRACKER", mode = "LINE")}, containerType = "LIGHT_SENSING", category = "SENSOR", blocklyNames = {"robSensors_light_getSample", "sim_light_getSample"})
+public final class LightSensor<V> extends ExternalSensor<V> {
 
     private LightSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment, sensorMetaDataBean);

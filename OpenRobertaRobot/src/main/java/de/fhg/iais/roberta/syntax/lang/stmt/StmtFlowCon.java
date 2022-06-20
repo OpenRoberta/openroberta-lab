@@ -1,10 +1,10 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
-import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * See enum {@link Flow} for all possible flows.
  */
 @NepoPhrase(category = "STMT", blocklyNames = {"controls_flow_statements"}, containerType = "STMT_FLOW_CONTROL")
-public class StmtFlowCon<V> extends Stmt<V> {
+public final class StmtFlowCon<V> extends Stmt<V> {
     @NepoField(name = BlocklyConstants.FLOW)
     public final Flow flow;
 

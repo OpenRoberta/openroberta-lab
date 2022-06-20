@@ -11,12 +11,12 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(containerType = "PLOT_CLEAR_ACTION", category = "ACTOR", blocklyNames = {"robactions_plot_clear"})
-public class PlotClearAction<V> extends Action<V> {
+public final class PlotClearAction<V> extends Action<V> {
     public final String port;
 
     private PlotClearAction(String port, BlocklyBlockProperties properties, BlocklyComment comment) {

@@ -8,8 +8,8 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
 /**
  * This class represents the <b>mbedActions_single_motor_stop</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate
@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyComment;
  * The client must provide the {@link ActorPort} and {@link MotorStopMode} (is the motor breaking or not).
  */
 @NepoBasic(containerType = "BOTH_MOTORS_STOP_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_motors_stop"})
-public class BothMotorsStopAction<V> extends Action<V> {
+public final class BothMotorsStopAction<V> extends Action<V> {
 
     private BothMotorsStopAction(BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);

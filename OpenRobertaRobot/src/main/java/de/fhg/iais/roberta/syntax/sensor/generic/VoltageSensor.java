@@ -6,12 +6,13 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
-@NepoBasic(containerType = "VOLTAGE_SENSING", category = "SENSOR", blocklyNames = {"robSensors_battery_getSample", "robSensors_potentiometer_getSample"})
-public class VoltageSensor<V> extends ExternalSensor<V> {
+@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "POTENTIOMETER_VALUE", sensor = "POTENTIOMETER", mode = "VALUE")}, containerType = "VOLTAGE_SENSING", category = "SENSOR", blocklyNames = {"robSensors_battery_getSample", "robSensors_potentiometer_getSample"})
+public final class VoltageSensor<V> extends ExternalSensor<V> {
 
     public VoltageSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment, sensorMetaDataBean);

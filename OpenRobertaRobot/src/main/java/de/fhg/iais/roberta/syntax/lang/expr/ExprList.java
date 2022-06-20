@@ -10,10 +10,10 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 
 @NepoBasic(containerType = "EXPR_LIST", category = "EXPR", blocklyNames = {})
-public class ExprList<V> extends Expr<V> {
+public final class ExprList<V> extends Expr<V> {
     public final List<Expr<V>> el = new ArrayList<Expr<V>>();
 
     private ExprList() {

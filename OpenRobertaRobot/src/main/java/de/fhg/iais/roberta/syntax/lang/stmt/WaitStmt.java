@@ -19,8 +19,8 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -30,7 +30,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * See {@link #getMode()} for the kind of the repeat statements.
  */
 @NepoBasic(containerType = "WAIT_STMT", category = "STMT", blocklyNames = {"robControls_wait", "mbedControls_wait_for", "robControls_wait_for", "naocontrols_wait_for"})
-public class WaitStmt<V> extends Stmt<V> {
+public final class WaitStmt<V> extends Stmt<V> {
     public final StmtList<V> statements;
 
     private WaitStmt(StmtList<V> statements, BlocklyBlockProperties properties, BlocklyComment comment) {

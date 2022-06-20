@@ -6,10 +6,11 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
 /**
  * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree). Object from
@@ -17,7 +18,7 @@ import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
  * <br/>
  * The client must provide the {@link ActorPort} and {@link MotionParam} (number of rotations or degrees and speed).
  */
-@NepoBasic(containerType = "FSR_SENSOR", category = "SENSOR", blocklyNames = {"robSensors_fsr_getSample"})
+@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName="FSR_VALUE",sensor="FSR",mode="VALUE")}, containerType = "FSR_SENSOR", category = "SENSOR", blocklyNames = {"robSensors_fsr_getSample"})
 public final class FsrSensor<V> extends ExternalSensor<V> {
     private FsrSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment, sensorMetaDataBean);

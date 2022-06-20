@@ -11,17 +11,17 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.AstFactory;
+import de.fhg.iais.roberta.util.ast.BlockDescriptor;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
 /**
  * <b>This Nepo class annotation can be used to parse complete xml blocks as exported from blockly to AST classes.</b><br>
  * It is used for expression blocks
  * <br><br>
  * Each class annotated by {@link NepoExpr} must have a constructor accepting the following types in this specific order:<br>
- * ({@link BlockType}, {@link BlocklyBlockProperties}, {@link BlocklyComment}, fieldsValues... )<br>
+ * ({@link BlockDescriptor}, {@link BlocklyBlockProperties}, {@link BlocklyComment}, fieldsValues... )<br>
  * * where fieldsValues... is a placeholder for the list of fields annotated with a Nepo field Annotation. They must be <b>in the order there are defined!</b>
  */
 @Documented
@@ -31,7 +31,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyComment;
 public @interface NepoExpr {
     /**
      * Container type used to determine the type of the block.
-     * Must be accessible via {@link BlockTypeContainer#getByName(String)}! (see {@link BlockTypeContainer#add(String, Category, Class, String...)})
+     * Must be accessible via {@link AstFactory#getByName(String)}! (see {@link AstFactory#add(String, Category, Class, String...)})
      */
     String containerType();
 
@@ -62,4 +62,10 @@ public @interface NepoExpr {
      * the blockly names, as used in the XML exported from blockly, that have to be transforrmed to an object of this AST class.
      */
     String[] blocklyNames();
+
+    /**
+     * Define the return type of the expression.
+     * Used by {@link Expr#getReturnType()}
+     */
+    NepoSampleValue[] sampleValues() default {};
 }

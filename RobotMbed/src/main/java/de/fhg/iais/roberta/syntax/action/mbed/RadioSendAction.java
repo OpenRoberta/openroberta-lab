@@ -15,12 +15,12 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(containerType = "RADIO_SEND_ACTION", category = "ACTOR", blocklyNames = {"mbedCommunication_sendBlock"})
-public class RadioSendAction<V> extends Action<V> {
+public final class RadioSendAction<V> extends Action<V> {
     public final Expr<V> message;
     public final BlocklyType type;
     public final String power;

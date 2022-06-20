@@ -11,10 +11,11 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
 /**
  * This class represents the <b>robSensors_timer_reset</b> and <b>robSensors_timer_getSample</b> blocks from Blockly into the AST (abstract syntax tree). Object
@@ -24,8 +25,8 @@ import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
  * <br>
  * To create an instance from this class use the method {@link #make(TimerSensorMode, int, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "TIMER_SENSING", category = "SENSOR", blocklyNames = {"mbedSensors_timer_reset", "robSensors_timer_getSample", "robSensors_timer_reset"})
-public class TimerSensor<V> extends ExternalSensor<V> {
+@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "TIMER_VALUE", sensor = "TIME", mode = "VALUE"), @NepoSampleValue(blocklyFieldName = "TIME", sensor = "TIME", mode = "VALUE")}, containerType = "TIMER_SENSING", category = "SENSOR", blocklyNames = {"mbedSensors_timer_reset", "robSensors_timer_getSample", "robSensors_timer_reset"})
+public final class TimerSensor<V> extends ExternalSensor<V> {
 
     private TimerSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment, sensorMetaDataBean);

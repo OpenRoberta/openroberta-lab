@@ -52,7 +52,7 @@ import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.util.ast.AstFactory;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
@@ -293,7 +293,7 @@ public class ServerStarter {
         if ( robotCommunicator == null ) {
             throw new DbcException("the robot communicator object is missing - Server does NOT start");
         }
-        BlockTypeContainer.loadBlocks();
+        AstFactory.loadBlocks();
         List<String> robotWhitelist = serverProperties.getRobotWhitelist();
         Map<String, RobotFactory> robotPlugins = new HashMap<>();
         String resourceDir = serverProperties.getCrosscompilerResourceDir();
@@ -422,7 +422,7 @@ public class ServerStarter {
      * Throws a {@link NepoAnnotationException} if an AST class is invalid.
      */
     private void checkAstClassAnnotations() {
-        BlockTypeContainer.getAstClasses().stream()
+        AstFactory.getAstClasses().stream()
             .filter(AnnotationHelper::isNepoAnnotatedClass)
             .forEach(AnnotationHelper::checkNepoAnnotatedClass);
     }

@@ -6,8 +6,8 @@ import java.util.Map;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
 public class ConfigurationComponentNode extends ConfigurationComponent {
     private final LinkedHashMap<String, List<ConfigurationComponent>> subComponents;

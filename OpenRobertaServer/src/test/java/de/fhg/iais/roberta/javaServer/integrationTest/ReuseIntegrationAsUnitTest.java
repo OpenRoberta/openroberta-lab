@@ -58,7 +58,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 public class ReuseIntegrationAsUnitTest {
@@ -112,7 +112,7 @@ public class ReuseIntegrationAsUnitTest {
 
     @BeforeClass
     public static void setupClass() throws IOException {
-        BlockTypeContainer.loadBlocks();
+        AstFactory.loadBlocks();
         Path path = Paths.get(TARGET_DIR);
         Files.createDirectories(path);
         JSONObject testSpecification = Util.loadYAML(TEST_SPEC_YML);

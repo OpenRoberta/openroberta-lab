@@ -42,9 +42,9 @@ import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.AstFactory;
+import de.fhg.iais.roberta.util.ast.BlockDescriptor;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 public class Jaxb2ProgramAst<V> {
@@ -115,9 +115,9 @@ public class Jaxb2ProgramAst<V> {
             throw new DbcException("Invalid null block");
         }
         String type = block.getType().trim().toLowerCase();
-        BlockType matchingBlockType = BlockTypeContainer.getByBlocklyName(type);
-        Assert.notNull(matchingBlockType, "Invalid Block: " + block.getType());
-        String className = matchingBlockType.getAstClass().getName();
+        BlockDescriptor matchingBlockDescriptor = AstFactory.getByBlocklyName(type);
+        Assert.notNull(matchingBlockDescriptor, "Invalid Block: " + block.getType());
+        String className = matchingBlockDescriptor.getAstClass().getName();
         try {
             Class<?> astClass = Class.forName(className);
             if ( AnnotationHelper.isNepoAnnotatedClass(astClass) ) {

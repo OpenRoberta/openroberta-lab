@@ -16,8 +16,8 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.util.syntax.FunctionNames;
  * The enumeration {@link FunctionNames} contains all allowed functions.
  */
 @NepoBasic(containerType = "TEXT_INDEX_OF_FUNCT", category = "FUNCTION", blocklyNames = {"lists_indexOf", "robLists_indexOf"})
-public class IndexOfFunct<V> extends Function<V> {
+public final class IndexOfFunct<V> extends Function<V> {
     public final IIndexLocation location;
     public final List<Expr<V>> param;
 

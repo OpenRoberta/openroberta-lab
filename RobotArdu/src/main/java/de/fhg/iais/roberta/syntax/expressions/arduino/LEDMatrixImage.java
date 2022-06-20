@@ -13,8 +13,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
 /**
  * This class represents the <b>makeblockColours</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate color.<br/>
@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyComment;
  * To create an instance from this class use the method {@link #make(Expr, Expr, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 @NepoBasic(containerType = "LED_MATRIX_IMAGE", category = "EXPR", blocklyNames = {"mBotImage_image"})
-public class LEDMatrixImage<V> extends Expr<V> {
+public final class LEDMatrixImage<V> extends Expr<V> {
     public final static int X = 16;
     public final static int Y = 8;
     public final String[][] image;

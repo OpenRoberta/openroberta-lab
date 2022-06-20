@@ -1,17 +1,17 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
-import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the blockly block for constant numbers in the AST . Object from this class represent one read-only numerical value.
  */
 @NepoExpr(category = "EXPR", blocklyNames = {"robSensors_get_outputneuron_val"}, containerType = "NN_GET_OUTPUT_NEURON_VAL", blocklyType = BlocklyType.NUMBER)
-public class NNGetOutputNeuronVal<V> extends Expr<V> {
+public final class NNGetOutputNeuronVal<V> extends Expr<V> {
     @NepoField(name = BlocklyConstants.NAME)
     public final String name;
 

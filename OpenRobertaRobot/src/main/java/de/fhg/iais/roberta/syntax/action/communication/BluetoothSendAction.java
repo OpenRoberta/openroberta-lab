@@ -16,12 +16,12 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(containerType = "BLUETOOTH_SEND_ACTION", category = "ACTOR", blocklyNames = {"robCommunication_sendBlock"})
-public class BluetoothSendAction<V> extends Action<V> {
+public final class BluetoothSendAction<V> extends Action<V> {
     public final Expr<V> _connection;
     public final Expr<V> _msg;
     String _channel;

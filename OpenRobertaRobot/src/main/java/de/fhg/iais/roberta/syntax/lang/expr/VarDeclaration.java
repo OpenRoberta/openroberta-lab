@@ -15,8 +15,8 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * code for creating a variable.
  */
 @NepoBasic(containerType = "VAR_DECLARATION", category = "EXPR", blocklyNames = {"robLocalVariables_declare", "robGlobalvariables_declare"})
-public class VarDeclaration<V> extends Expr<V> {
+public final class VarDeclaration<V> extends Expr<V> {
     public final BlocklyType typeVar;
     public final String name;
     public final Phrase<V> value;

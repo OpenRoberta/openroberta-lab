@@ -13,11 +13,11 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
 @NepoBasic(containerType = "NEURAL_NETWORK_SETUP", category = "STMT", blocklyNames = {"robActions_aifes_setupneuralnet"})
-public class NeuralNetworkSetup<V> extends Stmt<V> {
+public final class NeuralNetworkSetup<V> extends Stmt<V> {
     private Expr<V> numberOfClasses;
     private Expr<V> numberInputNeurons;
     private Expr<V> maxNumberOfNeurons;

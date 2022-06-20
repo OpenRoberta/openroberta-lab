@@ -29,8 +29,8 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -38,7 +38,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * The user must provide the string representing the expression, This class will wrap the wanted AST instance of the expression
  */
 @NepoBasic(containerType = "EVAL", category = "EXPR", blocklyNames = {"robActions_eval_expr"})
-public class EvalExpr<V> extends Expr<V> {
+public final class EvalExpr<V> extends Expr<V> {
     public final String expr;
     public final String type;
     private static final Logger LOG = LoggerFactory.getLogger(EvalExpr.class);

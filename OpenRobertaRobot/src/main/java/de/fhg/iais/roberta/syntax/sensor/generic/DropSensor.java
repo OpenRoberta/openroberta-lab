@@ -6,12 +6,13 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
-@NepoBasic(containerType = "DROP_SENSING", category = "SENSOR", blocklyNames = {"robSensors_drop_getSample"})
-public class DropSensor<V> extends ExternalSensor<V> {
+@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "DROP_OFF_DISTANCE", sensor = "DROP_OFF", mode = "DISTANCE"), @NepoSampleValue(blocklyFieldName = "DROP_VALUE", sensor = "DROP", mode = "VALUE")}, containerType = "DROP_SENSING", category = "SENSOR", blocklyNames = {"robSensors_drop_getSample"})
+public final class DropSensor<V> extends ExternalSensor<V> {
 
     public DropSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment, sensorMetaDataBean);

@@ -8,8 +8,8 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
 /**
  * This class represents the <b>mbedActions_fourdigitdisplay_show</b> block from Blockly into the AST (abstract syntax tree). Object from this class will
@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyComment;
  * <br>
  */
 @NepoBasic(containerType = "FOURDIGITDISPLAY_CLEAR_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_fourDigitDisplay_clear"})
-public class FourDigitDisplayClearAction<V> extends Action<V> {
+public final class FourDigitDisplayClearAction<V> extends Action<V> {
 
     private FourDigitDisplayClearAction(BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);

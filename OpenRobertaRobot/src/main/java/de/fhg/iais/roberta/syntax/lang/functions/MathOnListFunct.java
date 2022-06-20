@@ -15,8 +15,8 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.util.syntax.FunctionNames;
  * The enumeration {@link FunctionNames} contains all allowed functions.
  */
 @NepoBasic(containerType = "MATH_ON_LIST_FUNCT", category = "FUNCTION", blocklyNames = {"math_on_list"})
-public class MathOnListFunct<V> extends Function<V> {
+public final class MathOnListFunct<V> extends Function<V> {
     public final FunctionNames functName;
     public final List<Expr<V>> param;
 

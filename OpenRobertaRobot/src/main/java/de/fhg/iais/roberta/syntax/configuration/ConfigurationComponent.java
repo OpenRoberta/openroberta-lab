@@ -13,9 +13,9 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAst;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlockDescriptor;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.SC;
 
 /**
@@ -78,7 +78,7 @@ public class ConfigurationComponent extends Phrase<Void> {
         BlocklyComment comment,
         int x,
         int y) {
-        super(new BlockType(userDefinedName, Category.CONFIGURATION_BLOCK, ConfigurationComponent.class), properties, comment);
+        super(new BlockDescriptor(userDefinedName, Category.CONFIGURATION_BLOCK, ConfigurationComponent.class), properties, comment);
         this.componentType = componentType;
         this.isActor = isActor;
         this.internalPortName = internalPortName;

@@ -15,12 +15,12 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(containerType = "PLOT_POINT_ACTION", category = "ACTOR", blocklyNames = {"robactions_plot_point"})
-public class PlotPointAction<V> extends Action<V> {
+public final class PlotPointAction<V> extends Action<V> {
     public final String port;
     public final Expr<V> value;
     public final Expr<V> tickmark;

@@ -3,17 +3,18 @@ package de.fhg.iais.roberta.syntax.sensor.mbot2;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.syntax.action.mbot2.DisplaySetColourAction;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoMutation;
-import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
-@NepoPhrase(category = "SENSOR", blocklyNames = {"robSensors_line_getSample", "robSensors_quadrgb_getSample"}, containerType = "QUAD_COLOR_SENSING")
-public class QuadRGBSensor<V> extends Sensor<V> implements WithUserDefinedPort<V> {
+@NepoPhrase(sampleValues = {@NepoSampleValue(blocklyFieldName="QUADRGB_COLOUR",sensor="QUADRGB",mode="COLOUR"),@NepoSampleValue(blocklyFieldName="QUADRGB_AMBIENTLIGHT",sensor="QUADRGB",mode="AMBIENTLIGHT"),@NepoSampleValue(blocklyFieldName="QUADRGB_LINE",sensor="QUADRGB",mode="LINE")}, category = "SENSOR", blocklyNames = {"robSensors_line_getSample", "robSensors_quadrgb_getSample"}, containerType = "QUAD_COLOR_SENSING")
+public final class QuadRGBSensor<V> extends Sensor<V> implements WithUserDefinedPort<V> {
     @NepoMutation(fieldName = BlocklyConstants.MODE)
     public final Mutation mutation;
     @NepoField(name = BlocklyConstants.MODE)

@@ -19,12 +19,12 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(containerType = "LIGHT_ACTION", category = "ACTOR", blocklyNames = {"robActions_led_on", "sim_LED_on", "robActions_brickLight_on", "robActions_sensorLight_on"})
-public class LightAction<V> extends Action<V> {
+public final class LightAction<V> extends Action<V> {
     public final Expr<V> rgbLedColor;
     public final IBrickLedColor color;
     public final ILightMode mode;

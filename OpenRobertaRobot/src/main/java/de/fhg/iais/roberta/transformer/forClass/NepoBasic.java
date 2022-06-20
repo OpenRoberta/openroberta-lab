@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.util.ast.AstFactory;
 
 /**
  * <b>This Nepo class annotation can be used to parse complete xml blocks as exported from blockly to AST classes.</b><br>
@@ -36,7 +36,7 @@ public @interface NepoBasic {
 
     /**
      * Container type used to determine the type of the block.
-     * Must be accessible via {@link BlockTypeContainer#getByName(String)}! (see {@link BlockTypeContainer#add(String, Category, Class, String...)})
+     * Must be accessible via {@link AstFactory#getByName(String)}! (see {@link AstFactory#add(String, Category, Class, String...)})
      */
     String containerType();
 
@@ -50,4 +50,10 @@ public @interface NepoBasic {
      * Used by {@link Expr#getReturnType()}
      */
     BlocklyType blocklyType() default BlocklyType.NOTHING;
+
+    /**
+     * Define the return type of the expression.
+     * Used by {@link Expr#getReturnType()}
+     */
+    NepoSampleValue[] sampleValues() default {};
 }

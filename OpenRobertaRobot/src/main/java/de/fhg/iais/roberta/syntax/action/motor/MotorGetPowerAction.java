@@ -1,11 +1,11 @@
 package de.fhg.iais.roberta.syntax.action.motor;
 
 import de.fhg.iais.roberta.syntax.action.MoveAction;
-import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * The client must provide the {@link ActorPort} on which the motor is connected.
  */
 @NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_motor_getPower"}, containerType = "MOTOR_GET_POWER_ACTION")
-public class MotorGetPowerAction<V> extends MoveAction<V> {
+public final class MotorGetPowerAction<V> extends MoveAction<V> {
     @NepoField(name = BlocklyConstants.MOTORPORT)
     public final String port;
 

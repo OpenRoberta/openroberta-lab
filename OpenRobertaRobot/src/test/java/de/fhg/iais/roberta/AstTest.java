@@ -7,7 +7,7 @@ import org.junit.BeforeClass;
 
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.util.ast.AstFactory;
 
 public abstract class AstTest {
     private static final List<String> pluginDefines = new ArrayList<>();
@@ -17,7 +17,7 @@ public abstract class AstTest {
 
     @BeforeClass
     public static void setupForAllSubclasses() {
-        BlockTypeContainer.loadBlocks();
+        AstFactory.loadBlocks();
         String robotName = "test";
         String pwd = System.getProperty("user.dir");
         if ( pwd == null || pwd.isEmpty() || pwd.contains("OpenRobertaRobot") ) {

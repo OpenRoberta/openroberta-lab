@@ -5,8 +5,8 @@ import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  */
 @NepoExpr(category = "TASK", blocklyNames = {"robControls_activity"}, containerType = "ACTIVITY_TASK")
-public class ActivityTask<V> extends Task<V> {
+public final class ActivityTask<V> extends Task<V> {
     @NepoValue(name = BlocklyConstants.ACTIVITY, type = BlocklyType.STRING)
     public Expr<V> activityName;
 

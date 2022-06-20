@@ -17,8 +17,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * The client must provide the {@link Mode} and value of the volume.
  */
 @NepoBasic(containerType = "VOLUME_ACTION", category = "ACTOR", blocklyNames = {"robActions_play_getVolume", "robActions_play_setVolume"})
-public class VolumeAction<V> extends Action<V> {
+public final class VolumeAction<V> extends Action<V> {
     public final Mode mode;
     public final Expr<V> volume;
     public final String port;

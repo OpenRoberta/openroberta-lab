@@ -18,8 +18,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
@@ -31,7 +31,7 @@ import de.fhg.iais.roberta.util.syntax.MotorDuration;
  * The client must provide the {@link TurnDirection} and {@link MotionParam} (distance the robot should cover and speed).
  */
 @NepoBasic(containerType = "TURN_ACTION", category = "ACTOR", blocklyNames = {"robActions_motorDiff_turn", "robActions_motorDiff_turn_for"})
-public class TurnAction<V> extends Action<V> {
+public final class TurnAction<V> extends Action<V> {
     public final ITurnDirection direction;
     public final MotionParam<V> param;
     public final String port;

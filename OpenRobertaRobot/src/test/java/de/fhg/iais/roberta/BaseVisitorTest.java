@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.syntax.Actor;
 import de.fhg.iais.roberta.syntax.OtherSensor;
 import de.fhg.iais.roberta.syntax.Sensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.visitor.VisitorForBaseVisitorTest;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
@@ -21,9 +21,9 @@ public class BaseVisitorTest {
 
     @BeforeClass
     public static void setupPhrases() {
-        BlockTypeContainer.add(Sensor.class);
-        BlockTypeContainer.add(OtherSensor.class);
-        BlockTypeContainer.add(Actor.class);
+        AstFactory.add(Sensor.class);
+        AstFactory.add(OtherSensor.class);
+        AstFactory.add(Actor.class);
     }
 
     private VisitorForBaseVisitorTest visitor;

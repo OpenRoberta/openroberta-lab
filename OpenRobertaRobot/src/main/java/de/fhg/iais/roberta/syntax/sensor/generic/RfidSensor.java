@@ -6,12 +6,13 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
-@NepoBasic(containerType = "RFID_SENSING", category = "SENSOR", blocklyNames = {"robSensors_rfid_getSample"})
-public class RfidSensor<V> extends ExternalSensor<V> {
+@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "RFID_IDONE", sensor = "RFID", mode = "IDONE"), @NepoSampleValue(blocklyFieldName = "RFID_PRESENCE", sensor = "RFID", mode = "PRESENCE")}, containerType = "RFID_SENSING", category = "SENSOR", blocklyNames = {"robSensors_rfid_getSample"})
+public final class RfidSensor<V> extends ExternalSensor<V> {
 
     public RfidSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment, sensorMetaDataBean);

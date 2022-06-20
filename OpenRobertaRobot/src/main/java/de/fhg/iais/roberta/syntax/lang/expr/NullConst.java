@@ -2,8 +2,8 @@ package de.fhg.iais.roberta.syntax.lang.expr;
 
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
 /**
  * This class represents the <b>logic_null</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for creating
@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyComment;
  * To create an instance from this class use the method {@link #make(BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 @NepoExpr(category = "EXPR", blocklyNames = {"logic_null"}, containerType = "NULL_CONST", blocklyType = BlocklyType.NULL)
-public class NullConst<V> extends Expr<V> {
+public final class NullConst<V> extends Expr<V> {
 
     public NullConst(BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);

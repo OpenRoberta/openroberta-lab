@@ -6,16 +6,17 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
 /**
  * This class represents the <b>naoSensors_detectFace</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
  * detecting a face previously saved in NAOs database.<br/>
  * <br/>
  */
-@NepoBasic(containerType = "DETECT_FACE", category = "SENSOR", blocklyNames = {"robSensors_detectface_getSample"})
+@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName="DETECTFACE_NAMEONE",sensor="DETECT_FACE",mode="NAMEONE")}, containerType = "DETECT_FACE", category = "SENSOR", blocklyNames = {"robSensors_detectface_getSample"})
 public final class DetectFaceSensor<V> extends ExternalSensor<V> {
 
     private DetectFaceSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {

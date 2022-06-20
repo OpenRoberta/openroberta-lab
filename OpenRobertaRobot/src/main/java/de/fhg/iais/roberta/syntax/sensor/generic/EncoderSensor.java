@@ -11,10 +11,11 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
 /**
  * This class represents the <b>robSensors_encoder_getMode</b>, <b>robSensors_encoder_getSample</b> and <b>robSensors_encoder_setMode</b> blocks from Blockly
@@ -24,8 +25,8 @@ import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
  * <br>
  * To create an instance from this class use the method {@link #make(EncoderSensorMode, ActorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "ENCODER_SENSING", category = "SENSOR", blocklyNames = {"robSensors_encoder_reset", "robSensors_encoder_getSample"})
-public class EncoderSensor<V> extends ExternalSensor<V> {
+@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "ENCODER_DISTANCE", sensor = "ENCODER", mode = "DISTANCE"), @NepoSampleValue(blocklyFieldName = "ENCODER_DEGREE", sensor = "ENCODER", mode = "DEGREE"), @NepoSampleValue(blocklyFieldName = "ENCODER_ROTATION", sensor = "ENCODER", mode = "ROTATION")}, containerType = "ENCODER_SENSING", category = "SENSOR", blocklyNames = {"robSensors_encoder_reset", "robSensors_encoder_getSample"})
+public final class EncoderSensor<V> extends ExternalSensor<V> {
     private EncoderSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment, sensorMetaDataBean);
         setReadOnly();

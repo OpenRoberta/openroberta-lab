@@ -3,9 +3,9 @@ package de.fhg.iais.roberta.syntax.lang.methods;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlockDescriptor;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
 /**
  * the top class of all method classes used to represent the AST (abstract syntax tree) of a program. After construction an AST should be immutable. The logic
@@ -19,7 +19,7 @@ public abstract class Method<V> extends Phrase<V> {
     protected BlocklyType returnType;
 
     /**
-     * This constructor set the kind of the method declaration used in the AST (abstract syntax tree). All possible kinds can be found in {@link BlockType}.
+     * This constructor set the kind of the method declaration used in the AST (abstract syntax tree). All possible kinds can be found in {@link BlockDescriptor}.
      *
      * @param kind of the the method declaration used in AST,
      * @param properties of the block,

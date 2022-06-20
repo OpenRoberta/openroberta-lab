@@ -20,8 +20,8 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -31,7 +31,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * To create an instance from this class use the method {@link #make(Image, Direction, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 @NepoBasic(containerType = "LED_MATRIX_IMAGE_SHIFT", category = "FUNCTION", blocklyNames = {"mBotImage_shift"})
-public class LEDMatrixImageShiftFunction<V> extends Function<V> {
+public final class LEDMatrixImageShiftFunction<V> extends Function<V> {
     public final Expr<V> image;
     public final Expr<V> positions;
     public final IDirection shiftDirection;

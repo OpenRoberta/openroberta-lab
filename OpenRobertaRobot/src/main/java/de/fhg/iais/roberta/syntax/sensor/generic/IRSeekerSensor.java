@@ -6,9 +6,10 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
 /**
  * This class represents <b>robSensors_irseeker_getSample</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -18,8 +19,8 @@ import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
  * <br>
  * To create an instance from this class use the method {@link #make(IRSeekerSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "IRSEEKER_SENSING", category = "SENSOR", blocklyNames = {"robSensors_irseeker_getSample"})
-public class IRSeekerSensor<V> extends ExternalSensor<V> {
+@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "IRSEEKER_RCCODE", sensor = "IRLED", mode = "RCCODE"), @NepoSampleValue(blocklyFieldName = "IRSEEKER_MODULATED", sensor = "IRSEEKER", mode = "MODULATED"), @NepoSampleValue(blocklyFieldName = "IRSEEKER_UNMODULATED", sensor = "IRSEEKER", mode = "UNMODULATED")}, containerType = "IRSEEKER_SENSING", category = "SENSOR", blocklyNames = {"robSensors_irseeker_getSample"})
+public final class IRSeekerSensor<V> extends ExternalSensor<V> {
 
     private IRSeekerSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment, sensorMetaDataBean);

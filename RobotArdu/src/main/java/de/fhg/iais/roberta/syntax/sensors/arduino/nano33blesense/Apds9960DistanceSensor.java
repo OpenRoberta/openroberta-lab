@@ -11,12 +11,12 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(containerType = "APDS9960_DISTANCE", category = "SENSOR", blocklyNames = {"robsensors_apds9960_distance_getDataAvailableSample"})
-public class Apds9960DistanceSensor<V> extends BuiltinSensor<V> {
+public final class Apds9960DistanceSensor<V> extends BuiltinSensor<V> {
 
     public final Expr<V> distance;
 

@@ -2,16 +2,16 @@ package de.fhg.iais.roberta.syntax.sensor.mbot2;
 
 import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoHide;
-import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 @NepoPhrase(category = "SENSOR", blocklyNames = {"robSensors_sound_record"}, containerType = "SOUND_RECORD")
-public class SoundRecord<V> extends Sensor<V> implements WithUserDefinedPort<V> {
+public final class SoundRecord<V> extends Sensor<V> implements WithUserDefinedPort<V> {
     @NepoField(name = BlocklyConstants.MODE)
     public final String mode;
     @NepoField(name = BlocklyConstants.SENSORPORT)

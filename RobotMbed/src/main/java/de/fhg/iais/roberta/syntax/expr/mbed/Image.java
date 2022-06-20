@@ -13,8 +13,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
 /**
  * This class represents the <b>mbedImage_image</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate image.<br/>
@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyComment;
  * To create an instance from this class use the method {@link #make(String..., BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 @NepoBasic(containerType = "IMAGE", category = "EXPR", blocklyNames = {"mbedImage_image"})
-public class Image<V> extends Expr<V> {
+public final class Image<V> extends Expr<V> {
     public final String[][] image;
 
     private Image(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {

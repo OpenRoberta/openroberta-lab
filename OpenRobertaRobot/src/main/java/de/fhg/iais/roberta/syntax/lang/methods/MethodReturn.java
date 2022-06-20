@@ -20,8 +20,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * method with return value<br/>
  */
 @NepoBasic(blocklyNames = {"robProcedures_defreturn"}, robots = {}, category = "METHOD", containerType = "METHOD_RETURN")
-public class MethodReturn<V> extends Method<V> {
+public final class MethodReturn<V> extends Method<V> {
     public final StmtList<V> body;
     public final Expr<V> returnValue;
 

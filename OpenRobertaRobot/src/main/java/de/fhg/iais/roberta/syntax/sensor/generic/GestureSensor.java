@@ -6,11 +6,12 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
-@NepoBasic(containerType = "GESTURE_SENSING", category = "SENSOR", blocklyNames = {"robSensors_gesture_getSample"})
+@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "GESTURE_UP", sensor = "GESTURE", mode = "UP"), @NepoSampleValue(blocklyFieldName = "GESTURE_DOWN", sensor = "GESTURE", mode = "DOWN"), @NepoSampleValue(blocklyFieldName = "GESTURE_FACE_DOWN", sensor = "GESTURE", mode = "FACE_DOWN"), @NepoSampleValue(blocklyFieldName = "GESTURE_FREEFALL", sensor = "GESTURE", mode = "FREEFALL"), @NepoSampleValue(blocklyFieldName = "GESTURE_ACTIVE", sensor = "GESTURE", mode = "GESTURE_ACTIVE"), @NepoSampleValue(blocklyFieldName = "GESTURE_SHAKE", sensor = "GESTURE", mode = "SHAKE"), @NepoSampleValue(blocklyFieldName = "GESTURE_FACE_UP", sensor = "GESTURE", mode = "FACE_UP")}, containerType = "GESTURE_SENSING", category = "SENSOR", blocklyNames = {"robSensors_gesture_getSample"})
 public final class GestureSensor<V> extends ExternalSensor<V> {
 
     private GestureSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {

@@ -4,12 +4,12 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoHide;
-import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * The client must provide the note value and note of the sound. <br>
  */
 @NepoPhrase(category = "ACTOR", blocklyNames = {"mbedActions_play_note"}, containerType = "PLAY_NOTE_ACTION")
-public class PlayNoteAction<V> extends Action<V> {
+public final class PlayNoteAction<V> extends Action<V> {
     @NepoField(name = BlocklyConstants.DURATION, value = "2000")
     public final String duration;
     @NepoField(name = BlocklyConstants.FREQUENCE, value = "261.626")

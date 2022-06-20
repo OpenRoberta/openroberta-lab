@@ -14,8 +14,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * To create an instance from this class use the method {@link #make}.<br>
  */
 @NepoBasic(containerType = "SENSOR_GET_SAMPLE", category = "SENSOR", blocklyNames = {"sim_getSample", "robSensors_getSample_ardu", "mbedsensors_getsample", "robSensors_getSample"})
-public class GetSampleSensor<V> extends Sensor<V> {
+public final class GetSampleSensor<V> extends Sensor<V> {
     public final Sensor<V> sensor;
     public final String sensorPort;
     public final String slot;

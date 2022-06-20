@@ -9,10 +9,10 @@ import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.syntax.BlockType;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.AstFactory;
+import de.fhg.iais.roberta.util.ast.BlockDescriptor;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.visitor.ITransformerVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
@@ -30,18 +30,18 @@ abstract public class Phrase<V> {
     private boolean readOnly = false;
     private final BlocklyBlockProperties property;
     private final BlocklyComment comment;
-    private final BlockType kind;
+    private final BlockDescriptor kind;
 
     private final NepoInfos infos = new NepoInfos(); // the content of the info object is MUTABLE !!!
 
     /**
-     * This constructor set the kind of the object used in the AST (abstract syntax tree). All possible kinds can be found in {@link BlockType}.
+     * This constructor set the kind of the object used in the AST (abstract syntax tree). All possible kinds can be found in {@link BlockDescriptor}.
      *
      * @param comment that the user added to the block
      */
     public Phrase(BlocklyBlockProperties property, BlocklyComment comment) {
         Assert.isTrue(property != null, "block property is null!");
-        this.kind = BlockTypeContainer.getBlockType(this.getClass());
+        this.kind = AstFactory.getBlockType(this.getClass());
         this.property = property;
         this.comment = comment;
     }
@@ -49,13 +49,13 @@ abstract public class Phrase<V> {
     /**
      * only for ConfigurationsComponent and TODO: remove as fast as possible
      *
-     * @param blockType
+     * @param blockDescriptor
      * @param property
      * @param comment
      */
-    public Phrase(BlockType blockType, BlocklyBlockProperties property, BlocklyComment comment) {
+    public Phrase(BlockDescriptor blockDescriptor, BlocklyBlockProperties property, BlocklyComment comment) {
         Assert.isTrue(property != null, "block property is null!");
-        this.kind = blockType;
+        this.kind = blockDescriptor;
         this.property = property;
         this.comment = comment;
     }
@@ -82,9 +82,9 @@ abstract public class Phrase<V> {
     }
 
     /**
-     * @return the kind of the expression. See enum {@link BlockType} for all kinds possible<br>
+     * @return the kind of the expression. See enum {@link BlockDescriptor} for all kinds possible<br>
      */
-    public final BlockType getKind() {
+    public final BlockDescriptor getKind() {
         return this.kind;
     }
 

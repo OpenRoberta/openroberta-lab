@@ -6,12 +6,13 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
-@NepoBasic(containerType = "ENVIRONMENTAL", category = "SENSOR", blocklyNames = {"robSensors_environmental_getSample"})
-public class EnvironmentalSensor<V> extends ExternalSensor<V> {
+@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName="ENVIRONMENTAL_TEMPERATURE",sensor="ENVIRONMENTAL",mode="TEMPERATURE"),@NepoSampleValue(blocklyFieldName="ENVIRONMENTAL_VOCEQUIVALENT",sensor="ENVIRONMENTAL",mode="VOCEQUIVALENT"),@NepoSampleValue(blocklyFieldName="ENVIRONMENTAL_CALIBRATION",sensor="ENVIRONMENTAL",mode="CALIBRATION"),@NepoSampleValue(blocklyFieldName="ENVIRONMENTAL_IAQ",sensor="ENVIRONMENTAL",mode="IAQ"),@NepoSampleValue(blocklyFieldName="ENVIRONMENTAL_PRESSURE",sensor="ENVIRONMENTAL",mode="PRESSURE"),@NepoSampleValue(blocklyFieldName="ENVIRONMENTAL_HUMIDITY",sensor="ENVIRONMENTAL",mode="HUMIDITY"),@NepoSampleValue(blocklyFieldName="ENVIRONMENTAL_CO2EQUIVALENT",sensor="ENVIRONMENTAL",mode="CO2EQUIVALENT")}, containerType = "ENVIRONMENTAL", category = "SENSOR", blocklyNames = {"robSensors_environmental_getSample"})
+public final class EnvironmentalSensor<V> extends ExternalSensor<V> {
 
     private EnvironmentalSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment, sensorMetaDataBean);

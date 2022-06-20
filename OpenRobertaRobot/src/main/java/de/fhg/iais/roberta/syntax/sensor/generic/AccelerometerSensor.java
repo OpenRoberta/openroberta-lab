@@ -6,12 +6,13 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
-@NepoBasic(containerType = "ACCELEROMETER_SENSING", category = "SENSOR", blocklyNames = {"mbedSensors_acceleration_getSample","robsensors_accelerometer_getsample"})
+@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "ACCELEROMETER_VALUE", sensor = "ACCELEROMETER", mode = "DEFAULT"), @NepoSampleValue(blocklyFieldName = "ACCELEROMETER_Z", sensor = "ACCELEROMETER", mode = "Z"), @NepoSampleValue(blocklyFieldName = "ACCELEROMETER_X", sensor = "ACCELEROMETER", mode = "X"), @NepoSampleValue(blocklyFieldName = "ACCELEROMETER_Y", sensor = "ACCELEROMETER", mode = "Y")}, containerType = "ACCELEROMETER_SENSING", category = "SENSOR", blocklyNames = {"mbedSensors_acceleration_getSample", "robsensors_accelerometer_getsample"})
 public final class AccelerometerSensor<V> extends ExternalSensor<V> {
 
     private AccelerometerSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {

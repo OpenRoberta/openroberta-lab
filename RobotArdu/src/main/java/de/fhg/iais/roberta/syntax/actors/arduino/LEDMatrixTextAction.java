@@ -16,8 +16,8 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  */
 @NepoBasic(containerType = "LED_MATRIX_TEXT_ACTION", category = "ACTOR", blocklyNames = {"mBotActions_display_text"})
-public class LEDMatrixTextAction<V> extends Action<V> {
+public final class LEDMatrixTextAction<V> extends Action<V> {
     public final String port;
     public final Expr<V> msg;
     public final String displayMode;

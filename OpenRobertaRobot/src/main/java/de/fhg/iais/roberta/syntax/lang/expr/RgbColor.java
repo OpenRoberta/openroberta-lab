@@ -4,15 +4,15 @@ import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>robColour_rgb</b> block from Blockly
  */
 @NepoExpr(category = "EXPR", blocklyNames = {"naoColour_rgb", "robColour_rgb", "mbedColour_rgb"}, containerType = "RGB_COLOR", blocklyType = BlocklyType.COLOR, precedence = 999, assoc = Assoc.NONE)
-public class RgbColor<V> extends Expr<V> {
+public final class RgbColor<V> extends Expr<V> {
     @NepoValue(name = BlocklyConstants.RED, type = BlocklyType.NUMBER_INT)
     public final Expr<V> R;
     @NepoValue(name = BlocklyConstants.GREEN, type = BlocklyType.NUMBER_INT)

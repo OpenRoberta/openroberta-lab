@@ -15,8 +15,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <i>if-return</i> statement inside method<br/>
  */
 @NepoBasic(containerType = "METHOD_IF_RETURN", category = "METHOD", blocklyNames = {"robProcedures_ifreturn"})
-public class MethodIfReturn<V> extends Method<V> {
+public final class MethodIfReturn<V> extends Method<V> {
     public final Expr<V> oraCondition;
     public final BlocklyType oraReturnType;
     public final Expr<V> oraReturnValue;

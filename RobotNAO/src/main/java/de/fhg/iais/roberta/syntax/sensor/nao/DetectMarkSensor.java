@@ -6,17 +6,18 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
-import de.fhg.iais.roberta.util.syntax.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
 /**
  * This class represents the <b>naoSensors_naoMark</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
  * detecting a NaoMark.<br/>
  * <br/>
  */
-@NepoBasic(containerType = "DETECT_MARK", category = "SENSOR", blocklyNames = {"robSensors_detectmark_getSample"})
+@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName="DETECTMARK_IDONE",sensor="DETECT_MARK",mode="IDONE")}, containerType = "DETECT_MARK", category = "SENSOR", blocklyNames = {"robSensors_detectmark_getSample"})
 public final class DetectMarkSensor<V> extends ExternalSensor<V> {
 
     private DetectMarkSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {

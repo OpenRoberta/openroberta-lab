@@ -1,11 +1,11 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
-import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * To create an instance from this class use the method {@link #make(BlocklyType, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 @NepoExpr(category = "EXPR", blocklyNames = {"lists_create_empty"}, containerType = "EMPTY_LIST", blocklyType = BlocklyType.ARRAY)
-public class EmptyList<V> extends Expr<V> {
+public final class EmptyList<V> extends Expr<V> {
     @NepoField(name = BlocklyConstants.LIST_TYPE)
     public final BlocklyType typeVar;
 

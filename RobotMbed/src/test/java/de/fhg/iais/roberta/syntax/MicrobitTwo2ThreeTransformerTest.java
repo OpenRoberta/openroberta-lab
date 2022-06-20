@@ -10,7 +10,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.MbedTwo2ThreeTransformerWorker;
 
@@ -26,7 +26,7 @@ public class MicrobitTwo2ThreeTransformerTest {
 
     @BeforeClass
     public static void setupBefore() throws Exception {
-        BlockTypeContainer.loadBlocks();
+        AstFactory.loadBlocks();
         List<String> pluginDefines = new ArrayList<>();
         testFactory = Util.configureRobotPlugin("microbit", "", "", pluginDefines);
     }
