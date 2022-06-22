@@ -5,12 +5,12 @@ import com.google.common.collect.ClassToInstanceMap;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
-import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.hardware.IFestobionicflowerVisitor;
 
 public final class FestobionicflowerValidatorAndCollectorVisitor extends ArduinoValidatorAndCollectorVisitor implements IFestobionicflowerVisitor<Void> {
@@ -29,7 +29,7 @@ public final class FestobionicflowerValidatorAndCollectorVisitor extends Arduino
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        if ( ledOnAction.getLedColor().getKind().getName().equals("EMPTY_EXPR") ) {
+        if ( ledOnAction.getLedColor().hasName("EMPTY_EXPR") ) {
             addErrorToPhrase(ledOnAction, "CONFIGURATION_ERROR_SENSOR_MISSING");
         } else if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
             addErrorToPhrase(ledOnAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
@@ -41,7 +41,7 @@ public final class FestobionicflowerValidatorAndCollectorVisitor extends Arduino
 
     @Override
     public Void visitStepMotorAction(StepMotorAction<Void> stepMotorAction) {
-        if ( stepMotorAction.getStepMotorPos().getKind().getName().equals("EMPTY_EXPR") ) {
+        if ( stepMotorAction.getStepMotorPos().hasName("EMPTY_EXPR") ) {
             addErrorToPhrase(stepMotorAction, "CONFIGURATION_ERROR_SENSOR_MISSING");
         } else if ( !this.robotConfiguration.isComponentTypePresent(SC.STEPMOTOR) ) {
             addErrorToPhrase(stepMotorAction, "CONFIGURATION_ERROR_ACTOR_MISSING");

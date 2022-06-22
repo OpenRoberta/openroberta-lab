@@ -46,11 +46,11 @@ import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.NepoAnnotationException;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.AstFactory;
+import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.ast.AstFactory;
-import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -225,10 +225,10 @@ public class AnnotationHelperTest {
         assertThat(testPhrase.getProperty().getBlocklyId()).isEqualTo("b2Ieob%0r|errWxr`reW");
         assertThat(testPhrase.getProperty().getBlockType()).isEqualTo("TEST_PHRASE_FIELD");
 
-        BlockDescriptor kind = testPhrase.getKind();
-        assertThat(kind.getName()).isEqualTo("TEST_PHRASE_FIELD");
-        assertThat(kind.getCategory().name()).isEqualTo("EXPR");
-        assertThat(kind.getBlocklyNames()).isEqualTo(new HashSet(Arrays.asList("test_phrase_field")));
+        BlockDescriptor blockDescriptor = testPhrase.getKind();
+        assertThat(blockDescriptor.hasName("TEST_PHRASE_FIELD"));
+        assertThat(blockDescriptor.getCategory().name()).isEqualTo("EXPR");
+        assertThat(blockDescriptor.getBlocklyNames()).isEqualTo(new HashSet(Arrays.asList("test_phrase_field")));
     }
 
     @Test

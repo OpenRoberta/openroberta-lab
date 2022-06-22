@@ -22,9 +22,9 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
-import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
 public class MbedThree2ThreeOneTransformerVisitor extends BaseVisitor<Phrase<Void>> implements IMbedTransformerVisitor<Void> {
 
@@ -128,32 +128,32 @@ public class MbedThree2ThreeOneTransformerVisitor extends BaseVisitor<Phrase<Voi
 
     @Override
     public Phrase<Void> visitCompassSensor(CompassSensor<Phrase<Void>> compassSensor) {
-        return CompassSensor.make(getNewBean(compassSensor), compassSensor.getProperty(), compassSensor.getComment());
+        return new CompassSensor<>(compassSensor.getProperty(), compassSensor.getComment(), getNewBean(compassSensor));
     }
 
     @Override
     public Phrase<Void> visitTemperatureSensor(TemperatureSensor<Phrase<Void>> temperatureSensor) {
-        return TemperatureSensor.make(getNewBean(temperatureSensor), temperatureSensor.getProperty(), temperatureSensor.getComment());
+        return new TemperatureSensor<Void>(temperatureSensor.getProperty(), temperatureSensor.getComment(), getNewBean(temperatureSensor));
     }
 
     @Override
     public Phrase<Void> visitSoundSensor(SoundSensor<Phrase<Void>> soundSensor) {
-        return SoundSensor.make(getNewBean(soundSensor), soundSensor.getProperty(), soundSensor.getComment());
+        return new SoundSensor<Void>(soundSensor.getProperty(), soundSensor.getComment(), getNewBean(soundSensor));
     }
 
     @Override
     public Phrase<Void> visitLightSensor(LightSensor<Phrase<Void>> lightSensor) {
-        return LightSensor.make(getNewBean(lightSensor), lightSensor.getProperty(), lightSensor.getComment());
+        return new LightSensor<Void>(lightSensor.getProperty(), lightSensor.getComment(), getNewBean(lightSensor));
     }
 
     @Override
     public Phrase<Void> visitAccelerometerSensor(AccelerometerSensor<Phrase<Void>> accelerometerSensor) {
-        return AccelerometerSensor.make(getNewBean(accelerometerSensor), accelerometerSensor.getProperty(), accelerometerSensor.getComment());
+        return new AccelerometerSensor<Void>(accelerometerSensor.getProperty(), accelerometerSensor.getComment(), getNewBean(accelerometerSensor));
     }
 
     @Override
     public Phrase<Void> visitGyroSensor(GyroSensor<Phrase<Void>> gyroSensor) {
-        return GyroSensor.make(getNewBean(gyroSensor), gyroSensor.getProperty(), gyroSensor.getComment());
+        return new GyroSensor<>(gyroSensor.getProperty(), gyroSensor.getComment(), getNewBean(gyroSensor));
     }
 
     @Override
@@ -164,16 +164,7 @@ public class MbedThree2ThreeOneTransformerVisitor extends BaseVisitor<Phrase<Voi
         } else {
             throw new DbcException("Could not get sensor info, because " + sensorGetSample.getSensor().getKind() + " is not of type ExternalSensor!");
         }
-        return GetSampleSensor
-            .make(
-                sensorGetSample.getSensorTypeAndMode(),
-                getNewBean(sensor).getPort(),
-                sensorGetSample.getSlot(),
-                sensorGetSample.getMutation(),
-                sensorGetSample.getHide(),
-                sensorGetSample.getProperty(),
-                sensorGetSample.getComment(),
-                getBlocklyDropdownFactory());
+        return new GetSampleSensor(sensorGetSample.getSensorTypeAndMode(), getNewBean(sensor).getPort(), sensorGetSample.getSlot(), sensorGetSample.getMutation(), sensorGetSample.getHide(), sensorGetSample.getProperty(), sensorGetSample.getComment(), getBlocklyDropdownFactory());
     }
 
     private String getNewName(String port) {

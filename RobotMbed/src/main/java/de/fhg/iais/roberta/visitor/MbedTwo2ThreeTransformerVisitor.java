@@ -37,11 +37,11 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
-import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 import de.fhg.iais.roberta.worker.MbedTwo2ThreeTransformerHelper;
 
 /**
@@ -349,37 +349,37 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
 
     @Override
     public Phrase<Void> visitKeysSensor(KeysSensor<Phrase<Void>> keysSensor) {
-        return KeysSensor.make(collectSensorAndGetNewBean(keysSensor), keysSensor.getProperty(), keysSensor.getComment());
+        return new KeysSensor<Void>(keysSensor.getProperty(), keysSensor.getComment(), collectSensorAndGetNewBean(keysSensor));
     }
 
     @Override
     public Phrase<Void> visitUltrasonicSensor(UltrasonicSensor<Phrase<Void>> ultrasonicSensor) {
-        return UltrasonicSensor.make(collectSensorAndGetNewBean(ultrasonicSensor), ultrasonicSensor.getProperty(), ultrasonicSensor.getComment());
+        return new UltrasonicSensor<Void>(ultrasonicSensor.getProperty(), ultrasonicSensor.getComment(), collectSensorAndGetNewBean(ultrasonicSensor));
     }
 
     @Override
     public Phrase<Void> visitCompassSensor(CompassSensor<Phrase<Void>> compassSensor) {
-        return CompassSensor.make(collectSensorAndGetNewBean(compassSensor), compassSensor.getProperty(), compassSensor.getComment());
+        return new CompassSensor<>(compassSensor.getProperty(), compassSensor.getComment(), collectSensorAndGetNewBean(compassSensor));
     }
 
     @Override
     public Phrase<Void> visitTemperatureSensor(TemperatureSensor<Phrase<Void>> temperatureSensor) {
-        return TemperatureSensor.make(collectSensorAndGetNewBean(temperatureSensor), temperatureSensor.getProperty(), temperatureSensor.getComment());
+        return new TemperatureSensor<Void>(temperatureSensor.getProperty(), temperatureSensor.getComment(), collectSensorAndGetNewBean(temperatureSensor));
     }
 
     @Override
     public Phrase<Void> visitSoundSensor(SoundSensor<Phrase<Void>> soundSensor) {
-        return SoundSensor.make(collectSensorAndGetNewBean(soundSensor), soundSensor.getProperty(), soundSensor.getComment());
+        return new SoundSensor<Void>(soundSensor.getProperty(), soundSensor.getComment(), collectSensorAndGetNewBean(soundSensor));
     }
 
     @Override
     public Phrase<Void> visitLightSensor(LightSensor<Phrase<Void>> lightSensor) {
-        return LightSensor.make(collectSensorAndGetNewBean(lightSensor), lightSensor.getProperty(), lightSensor.getComment());
+        return new LightSensor<Void>(lightSensor.getProperty(), lightSensor.getComment(), collectSensorAndGetNewBean(lightSensor));
     }
 
     @Override
     public Phrase<Void> visitHumiditySensor(HumiditySensor<Phrase<Void>> humiditySensor) {
-        return HumiditySensor.make(collectSensorAndGetNewBean(humiditySensor), humiditySensor.getProperty(), humiditySensor.getComment());
+        return new HumiditySensor<Void>(humiditySensor.getProperty(), humiditySensor.getComment(), collectSensorAndGetNewBean(humiditySensor));
     }
 
     @Override
@@ -396,7 +396,7 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
                 accelerometerSensor.getUserDefinedPort(),
                 accelerometerSensor.getMutation());
 
-        return AccelerometerSensor.make(bean, accelerometerSensor.getProperty(), accelerometerSensor.getComment());
+        return new AccelerometerSensor<Void>(accelerometerSensor.getProperty(), accelerometerSensor.getComment(), bean);
     }
 
     @Override
@@ -408,17 +408,17 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
         // Previously X, Y were saved in the port, now the should be in the slot
         SensorMetaDataBean bean = new SensorMetaDataBean(compAndName.getSecond(), gyroSensor.getMode(), gyroSensor.getUserDefinedPort(), gyroSensor.getMutation());
 
-        return GyroSensor.make(bean, gyroSensor.getProperty(), gyroSensor.getComment());
+        return new GyroSensor<>(gyroSensor.getProperty(), gyroSensor.getComment(), bean);
     }
 
     @Override
     public Phrase<Void> visitInfraredSensor(InfraredSensor<Phrase<Void>> infraredSensor) {
-        return InfraredSensor.make(collectSensorAndGetNewBean(infraredSensor), infraredSensor.getProperty(), infraredSensor.getComment());
+        return new InfraredSensor<Void>(infraredSensor.getProperty(), infraredSensor.getComment(), collectSensorAndGetNewBean(infraredSensor));
     }
 
     @Override
     public Phrase<Void> visitPinGetValueSensor(PinGetValueSensor<Phrase<Void>> pinGetValueSensor) {
-        return PinGetValueSensor.make(collectSensorAndGetNewBean(pinGetValueSensor), pinGetValueSensor.getProperty(), pinGetValueSensor.getComment());
+        return new PinGetValueSensor<Void>(pinGetValueSensor.getProperty(), pinGetValueSensor.getComment(), collectSensorAndGetNewBean(pinGetValueSensor));
     }
 
     @Override
@@ -431,45 +431,18 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
         }
 
         // gyro and accelerometer are handled differently, their ports are written into the slot instead
-        if ( sensor.getKind().getName().equals("ACCELEROMETER_SENSING") || sensor.getKind().getName().equals("GYRO_SENSING") ) {
+        if ( sensor.hasName("ACCELEROMETER_SENSING") || sensor.hasName("GYRO_SENSING") ) {
             Pair<ConfigurationComponent, String> compAndName = this.helper.getComponentAndName(sensor.getKind().getName(), sensor.getMode(), sensor.getUserDefinedPort());
 
             this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-            return GetSampleSensor
-                .make(
-                    sensorGetSample.getSensorTypeAndMode(),
-                    compAndName.getSecond(),
-                    sensorGetSample.getSensorPort(),
-                    sensorGetSample.getMutation(),
-                    sensorGetSample.getHide(),
-                    sensorGetSample.getProperty(),
-                    sensorGetSample.getComment(),
-                    getBlocklyDropdownFactory());
-        } else if ( sensor.getKind().getName().equals("TIMER_SENSING")
-            || sensor.getKind().getName().equals("PIN_TOUCH_SENSING")
+            return new GetSampleSensor(sensorGetSample.getSensorTypeAndMode(), compAndName.getSecond(), sensorGetSample.getSensorPort(), sensorGetSample.getMutation(), sensorGetSample.getHide(), sensorGetSample.getProperty(), sensorGetSample.getComment(), getBlocklyDropdownFactory());
+        } else if ( sensor.hasName("TIMER_SENSING")
+            || sensor.hasName("PIN_TOUCH_SENSING")
             || sensor.getKind().getName().contains("GESTURE") ) {
-            return GetSampleSensor
-                .make(
-                    sensorGetSample.getSensorTypeAndMode(),
-                    sensorGetSample.getSensorPort(),
-                    sensorGetSample.getSensorPort(),
-                    sensorGetSample.getMutation(),
-                    sensorGetSample.getHide(),
-                    sensorGetSample.getProperty(),
-                    sensorGetSample.getComment(),
-                    getBlocklyDropdownFactory());
+            return new GetSampleSensor(sensorGetSample.getSensorTypeAndMode(), sensorGetSample.getSensorPort(), sensorGetSample.getSensorPort(), sensorGetSample.getMutation(), sensorGetSample.getHide(), sensorGetSample.getProperty(), sensorGetSample.getComment(), getBlocklyDropdownFactory());
         } else {
-            return GetSampleSensor
-                .make(
-                    sensorGetSample.getSensorTypeAndMode(),
-                    collectSensorAndGetNewBean(sensor).getPort(),
-                    sensorGetSample.getSlot(),
-                    sensorGetSample.getMutation(),
-                    sensorGetSample.getHide(),
-                    sensorGetSample.getProperty(),
-                    sensorGetSample.getComment(),
-                    getBlocklyDropdownFactory());
+            return new GetSampleSensor(sensorGetSample.getSensorTypeAndMode(), collectSensorAndGetNewBean(sensor).getPort(), sensorGetSample.getSlot(), sensorGetSample.getMutation(), sensorGetSample.getHide(), sensorGetSample.getProperty(), sensorGetSample.getComment(), getBlocklyDropdownFactory());
         }
     }
 

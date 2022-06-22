@@ -14,8 +14,8 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>robSensors_timer_reset</b> and <b>robSensors_timer_getSample</b> blocks from Blockly into the AST (abstract syntax tree). Object
@@ -28,31 +28,11 @@ import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 @NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "TIMER_VALUE", sensor = "TIME", mode = "VALUE"), @NepoSampleValue(blocklyFieldName = "TIME", sensor = "TIME", mode = "VALUE")}, containerType = "TIMER_SENSING", category = "SENSOR", blocklyNames = {"mbedSensors_timer_reset", "robSensors_timer_getSample", "robSensors_timer_reset"})
 public final class TimerSensor<V> extends ExternalSensor<V> {
 
-    private TimerSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public TimerSensor(BlocklyBlockProperties properties, BlocklyComment comment, SensorMetaDataBean sensorMetaDataBean) {
         super(properties, comment, sensorMetaDataBean);
         setReadOnly();
     }
 
-    /**
-     * Create object of the class {@link TimerSensor}.
-     *
-     * @param mode in which the sensor is operating; must be <b>not</b> null; see enum {@link TimerSensorMode} for all possible modes that the sensor have,
-     * @param timer integer value,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of {@link TimerSensor}
-     */
-    static public <V> TimerSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new TimerSensor<>(sensorMetaDataBean, properties, comment);
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         SensorMetaDataBean sensorMetaDataBean;
@@ -62,10 +42,10 @@ public final class TimerSensor<V> extends ExternalSensor<V> {
             String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorMetaDataBean =
                 new SensorMetaDataBean(Jaxb2Ast.sanitizePort(portName), factory.getMode("RESET"), Jaxb2Ast.sanitizeSlot(BlocklyConstants.NO_SLOT), null);
-            return TimerSensor.make(sensorMetaDataBean, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+            return new TimerSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), sensorMetaDataBean);
         }
         sensorMetaDataBean = extractPortAndModeAndSlot(block, helper);
-        return TimerSensor.make(sensorMetaDataBean, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new TimerSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), sensorMetaDataBean);
     }
 
     @Override

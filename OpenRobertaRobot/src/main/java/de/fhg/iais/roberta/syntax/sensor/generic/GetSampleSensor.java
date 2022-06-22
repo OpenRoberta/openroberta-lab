@@ -13,9 +13,9 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -23,8 +23,6 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * setting the mode of the sensor or getting a sample from the sensor.<br/>
  * <br>
  * The client must provide the {@link SensorType} and port. See enum {@link SensorType} for all possible type of sensors.<br>
- * <br>
- * To create an instance from this class use the method {@link #make}.<br>
  */
 @NepoBasic(containerType = "SENSOR_GET_SAMPLE", category = "SENSOR", blocklyNames = {"sim_getSample", "robSensors_getSample_ardu", "mbedsensors_getsample", "robSensors_getSample"})
 public final class GetSampleSensor<V> extends Sensor<V> {
@@ -36,7 +34,7 @@ public final class GetSampleSensor<V> extends Sensor<V> {
     public final List<Hide> hide;
 
     @SuppressWarnings("unchecked")
-    private GetSampleSensor(
+    public GetSampleSensor(
         String sensorTypeAndMode,
         String port,
         String slot,
@@ -56,27 +54,6 @@ public final class GetSampleSensor<V> extends Sensor<V> {
         this.hide = hide;
         this.sensor = (Sensor<V>) factory.createSensor(sensorTypeAndMode, port, slot, mutation, properties, comment);
         setReadOnly();
-    }
-
-    /**
-     * Create object of the class {@link GetSampleSensor}.
-     *
-     * @param sensorType; must be <b>not</b> null,
-     * @param port on which the sensor is connected; must be <b>non-empty</b> string,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link GetSampleSensor}
-     */
-    public static <V> GetSampleSensor<V> make(
-        String sensorTypeAndMode,
-        String port,
-        String slot,
-        Mutation mutation,
-        List<Hide> hide,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment,
-        BlocklyDropdownFactory factory) {
-        return new GetSampleSensor(sensorTypeAndMode, port, slot, mutation, hide, properties, comment, factory);
     }
 
     public Sensor<V> getSensor() {
@@ -132,16 +109,7 @@ public final class GetSampleSensor<V> extends Sensor<V> {
         } else {
             slotName = Jaxb2Ast.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
         }
-        return GetSampleSensor
-            .make(
-                modeName,
-                portName,
-                slotName,
-                block.getMutation(),
-                block.getHide(),
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block),
-                helper.getDropdownFactory());
+        return new GetSampleSensor(modeName, portName, slotName, block.getMutation(), block.getHide(), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), helper.getDropdownFactory());
     }
 
     @Override

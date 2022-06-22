@@ -20,8 +20,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.transformer.forClass.NepoExternalSensor;
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
+import de.fhg.iais.roberta.transformer.forClass.NepoExternalSensor;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoData;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
@@ -29,11 +29,11 @@ import de.fhg.iais.roberta.transformer.forField.NepoHide;
 import de.fhg.iais.roberta.transformer.forField.NepoMutation;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 
 public class AnnotationHelper {
 
@@ -41,7 +41,7 @@ public class AnnotationHelper {
         Arrays.asList(NepoValue.class, NepoField.class, NepoData.class, NepoHide.class, NepoMutation.class, NepoExternalSensor.class);
 
     /**
-     * check whether the class is annotated with a @NepoPhrase or @NepoOp annotation
+     * check whether the class is annotated with a @NepoPhrase or @NepoOp or @NepoExternalSensor annotation
      *
      * @param clazz
      * @return true, if annotated

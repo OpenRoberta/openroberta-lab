@@ -50,7 +50,7 @@ public abstract class AbstractValidatorAndCollectorWorker implements IWorker {
         collectGlobalVariables(tree, visitor);
         for ( List<Phrase<Void>> phrases : tree ) {
             for ( Phrase<Void> phrase : phrases ) {
-                if ( phrase.getKind().getName().equals("MAIN_TASK") ) {
+                if ( phrase.hasName("MAIN_TASK") ) {
                     usedHardwareBeanBuilder.setProgramEmpty(phrases.size() == 2);
                 } else {
                     phrase.accept(visitor);
@@ -84,7 +84,7 @@ public abstract class AbstractValidatorAndCollectorWorker implements IWorker {
     private void collectGlobalVariables(Iterable<List<Phrase<Void>>> phrasesSet, IVisitor<Void> visitor) {
         for ( List<Phrase<Void>> phrases : phrasesSet ) {
             Phrase<Void> phrase = phrases.get(1);
-            if ( phrase.getKind().getName().equals("MAIN_TASK") ) {
+            if ( phrase.hasName("MAIN_TASK") ) {
                 phrase.accept(visitor);
             }
         }

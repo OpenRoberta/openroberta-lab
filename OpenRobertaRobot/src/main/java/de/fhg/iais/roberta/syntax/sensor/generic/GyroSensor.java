@@ -16,8 +16,8 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>robSensors_gyro_getMode</b>, <b>robSensors_gyro_getSample</b> and <b>robSensors_gyro_setMode</b> blocks from Blockly into the
@@ -30,31 +30,11 @@ import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 @NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "GYRO_TILTED", sensor = "GYRO", mode = "TILTED"), @NepoSampleValue(blocklyFieldName = "GYRO_Y", sensor = "GYRO", mode = "Y"), @NepoSampleValue(blocklyFieldName = "GYRO_RATE", sensor = "GYRO", mode = "RATE"), @NepoSampleValue(blocklyFieldName = "GYRO_Z", sensor = "GYRO", mode = "Z"), @NepoSampleValue(blocklyFieldName = "GYRO_X", sensor = "GYRO", mode = "X"), @NepoSampleValue(blocklyFieldName = "GYRO_ANGLE", sensor = "GYRO", mode = "ANGLE")}, containerType = "GYRO_SENSING", category = "SENSOR", blocklyNames = {"robSensors_gyro_getSample", "robSensors_gyro_reset", "mbedsensors_rotation_getsample"})
 public final class GyroSensor<V> extends ExternalSensor<V> {
 
-    private GyroSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public GyroSensor(BlocklyBlockProperties properties, BlocklyComment comment, SensorMetaDataBean sensorMetaDataBean) {
         super(properties, comment, sensorMetaDataBean);
         setReadOnly();
     }
 
-    /**
-     * Create object of the class {@link GyroSensor}.
-     *
-     * @param mode in which the sensor is operating; must be <b>not</b> null; see enum {@link GyroSensorMode} for all possible modes that the sensor have,
-     * @param port on where the sensor is connected; must be <b>not</b> null; see enum {@link SensorPort} for all possible sensor ports,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of {@link GyroSensor}
-     */
-    public static <V> GyroSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new GyroSensor<>(sensorMetaDataBean, properties, comment);
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         SensorMetaDataBean sensorMetaDataBean;
@@ -63,10 +43,10 @@ public final class GyroSensor<V> extends ExternalSensor<V> {
             String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorMetaDataBean =
                 new SensorMetaDataBean(Jaxb2Ast.sanitizePort(portName), factory.getMode("RESET"), Jaxb2Ast.sanitizeSlot(BlocklyConstants.NO_SLOT), null);
-            return GyroSensor.make(sensorMetaDataBean, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+            return new GyroSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), sensorMetaDataBean);
         } else {
             sensorMetaDataBean = extractPortAndModeAndSlot(block, helper);
-            return GyroSensor.make(sensorMetaDataBean, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+            return new GyroSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), sensorMetaDataBean);
         }
     }
 

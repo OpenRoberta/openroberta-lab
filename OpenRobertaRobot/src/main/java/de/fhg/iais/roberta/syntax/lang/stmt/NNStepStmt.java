@@ -46,7 +46,7 @@ public final class NNStepStmt<V> extends Stmt<V> {
     public List<Stmt<V>> getInputNeurons() {
         final List<Stmt<V>> inputNeurons = new ArrayList<>();
         for ( Stmt<V> ioNeuron : ioNeurons.get() ) {
-            if ( ioNeuron.getKind().getName().equals("NN_INPUT_NEURON_STMT") ) {
+            if ( ioNeuron.hasName("NN_INPUT_NEURON_STMT") ) {
                 inputNeurons.add(ioNeuron);
             }
         }
@@ -59,7 +59,7 @@ public final class NNStepStmt<V> extends Stmt<V> {
     public List<Stmt<V>> getOutputNeurons() {
         final List<Stmt<V>> outputNeurons = new ArrayList<>();
         for ( Stmt<V> ioNeuron : ioNeurons.get() ) {
-            if ( ioNeuron.getKind().getName().equals("NN_OUTPUT_NEURON_STMT") || ioNeuron.getKind().getName().equals("NN_OUTPUT_NEURON_WO_VAR_STMT") ) {
+            if ( ioNeuron.hasName("NN_OUTPUT_NEURON_STMT") || ioNeuron.hasName("NN_OUTPUT_NEURON_WO_VAR_STMT") ) {
                 outputNeurons.add(ioNeuron);
             }
         }

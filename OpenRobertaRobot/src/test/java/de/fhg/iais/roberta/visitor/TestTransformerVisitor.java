@@ -23,20 +23,12 @@ public class TestTransformerVisitor extends BaseVisitor<Phrase<Void>> implements
 
     @Override
     public Phrase<Void> visitKeysSensor(KeysSensor<Phrase<Void>> keysSensor) {
-        return KeysSensor
-            .make(
-                new SensorMetaDataBean("KeysPort", "KeysMode", "KeysSlot", keysSensor.getMutation()),
-                keysSensor.getProperty(),
-                keysSensor.getComment());
+        return new KeysSensor<Void>(keysSensor.getProperty(), keysSensor.getComment(), new SensorMetaDataBean("KeysPort", "KeysMode", "KeysSlot", keysSensor.getMutation()));
     }
 
     @Override
     public Phrase<Void> visitTemperatureSensor(TemperatureSensor<Phrase<Void>> temperatureSensor) {
-        return TemperatureSensor
-            .make(
-                new SensorMetaDataBean("TempPort", "TempMode", "TempSlot", temperatureSensor.getMutation()),
-                temperatureSensor.getProperty(),
-                temperatureSensor.getComment());
+        return new TemperatureSensor<Void>(temperatureSensor.getProperty(), temperatureSensor.getComment(), new SensorMetaDataBean("TempPort", "TempMode", "TempSlot", temperatureSensor.getMutation()));
     }
 
     @Override
@@ -46,15 +38,6 @@ public class TestTransformerVisitor extends BaseVisitor<Phrase<Void>> implements
 
     @Override
     public Phrase<Void> visitGetSampleSensor(GetSampleSensor<Phrase<Void>> sensorGetSample) {
-        return GetSampleSensor
-            .make(
-                "TEMPERATURE_VALUE",
-                "GetSamplePort",
-                "GetSampleSlot",
-                sensorGetSample.getMutation(),
-                sensorGetSample.getHide(),
-                sensorGetSample.getProperty(),
-                sensorGetSample.getComment(),
-                this.blocklyDropdownFactory);
+        return new GetSampleSensor("TEMPERATURE_VALUE", "GetSamplePort", "GetSampleSlot", sensorGetSample.getMutation(), sensorGetSample.getHide(), sensorGetSample.getProperty(), sensorGetSample.getComment(), this.blocklyDropdownFactory);
     }
 }

@@ -1,19 +1,37 @@
 package de.fhg.iais.roberta.util.ast;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Category;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
+/**
+ * contains the properties, that are relevant for AST classes. AST classes are always subclasses of {@link Phrase}.
+ * AST classes are 1:n related to blockly blocks, i.e. each blockly block has exactly one AST class.
+ * The properties are extracted ONLY from the annotations @Nepo... found in AST classes and stored redundantly in each object of a
+ * AST class in its superclass in field {@link Phrase#blockDescriptor}.
+ */
 public class BlockDescriptor {
+    /**
+     * the name of the block. This is NOT a blockly name! Should not be used. But is used a lot, e.g. in {@link #hasName(String...)} hasName}
+     * Todo: remove the name of the block descriptor and its usages. Hard work.
+     */
     private final String name;
+    /**
+     * the category of the AST class. To distinguish sensors, actor, configuration for instance
+     */
     private final Category category;
+    /**
+     * the class that represents a blockly block server side. It stores the fields and values found in the blockly xml for checks and code generation
+     */
     private final Class<?> astClass;
+    /**
+     * the REAL names used by blockly in the blockly xml which are mapped to the AST class described here
+     */
     private final Set<String> blocklyNames;
 
     public BlockDescriptor(String name, Category category, Class<?> astClass, String... blocklyNames) {
@@ -27,39 +45,29 @@ public class BlockDescriptor {
         this.blocklyNames = new HashSet<>(Arrays.asList(blocklyNames));
     }
 
-    public List<String> addBlocklyNames(String[] blocklyNames) {
-        List<String> newNames = new ArrayList<>();
-        for ( String blocklyName : blocklyNames ) {
-            if ( this.blocklyNames.add(blocklyName) ) {
-                newNames.add(blocklyName);
-            }
-        }
-        return newNames;
-    }
-
     /**
-     * @return the unique name in which {@link BlockDescriptor} belongs.
+     * @return the name of the block. This is NOT a blockly name!
      */
     public String getName() {
         return this.name;
     }
 
     /**
-     * @return category in which {@link BlockDescriptor} belongs.
+     * @return the category of the {@link BlockDescriptor}
      */
     public Category getCategory() {
         return this.category;
     }
 
     /**
-     * @return the astClass
+     * @return the astClass which represents blockly blocks
      */
     public Class<?> getAstClass() {
         return this.astClass;
     }
 
     /**
-     * check whether this block type has the name as expected
+     * check whether this block descriptor is equals to one of the names given as parameter
      *
      * @param nameToCheck
      * @return true, if the block type has the name expected; false otherwise
@@ -74,6 +82,11 @@ public class BlockDescriptor {
         return false;
     }
 
+    /**
+     * only used in one test!
+     *
+     * @return the set of blockly names, which are connected to the AST class described in this descriptor
+     */
     public Set<String> getBlocklyNames() {
         return Collections.unmodifiableSet(this.blocklyNames);
     }

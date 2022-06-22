@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.factory;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.Constructor;
 import java.util.Locale;
 
 import org.slf4j.Logger;
@@ -38,11 +38,11 @@ import de.fhg.iais.roberta.mode.general.WorkingState;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class BlocklyDropdownFactory {
     private static final Logger LOG = LoggerFactory.getLogger(BlocklyDropdownFactory.class);
@@ -208,8 +208,8 @@ public class BlocklyDropdownFactory {
             Class<Sensor<?>> sensorClass = (Class<Sensor<?>>) BlocklyDropdownFactory.class.getClassLoader().loadClass(implementingClass);
             String mode = waBean.getMode();
             SensorMetaDataBean sensorMetaDataBean = new SensorMetaDataBean(Jaxb2Ast.sanitizePort(port), getMode(mode), Jaxb2Ast.sanitizeSlot(slot), mutation);
-            Method makeMethod = sensorClass.getDeclaredMethod("make", SensorMetaDataBean.class, BlocklyBlockProperties.class, BlocklyComment.class);
-            return (Sensor<?>) makeMethod.invoke(null, sensorMetaDataBean, properties, comment);
+            Constructor<Sensor<?>> constructor = sensorClass.getDeclaredConstructor(BlocklyBlockProperties.class, BlocklyComment.class, SensorMetaDataBean.class);
+            return (Sensor<?>) constructor.newInstance(properties, comment, sensorMetaDataBean);
         } catch ( Exception e ) {
             LOG.error("Sensor " + sensorKey + " could not be created", e);
             throw new DbcException("Sensor " + sensorKey + " could not be created", e);

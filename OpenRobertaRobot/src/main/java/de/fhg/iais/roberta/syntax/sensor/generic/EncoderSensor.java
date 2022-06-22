@@ -14,44 +14,17 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>robSensors_encoder_getMode</b>, <b>robSensors_encoder_getSample</b> and <b>robSensors_encoder_setMode</b> blocks from Blockly
- * into the AST (abstract syntax tree). Object from this class will generate code for setting the mode of the sensor or getting a sample from the sensor.<br/>
- * <br>
- * The client must provide the {@link ActorPort} and {@link EncoderSensorMode}. See enum {@link EncoderSensorMode} for all possible modes of the sensor.<br>
- * <br>
- * To create an instance from this class use the method {@link #make(EncoderSensorMode, ActorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
- */
 @NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "ENCODER_DISTANCE", sensor = "ENCODER", mode = "DISTANCE"), @NepoSampleValue(blocklyFieldName = "ENCODER_DEGREE", sensor = "ENCODER", mode = "DEGREE"), @NepoSampleValue(blocklyFieldName = "ENCODER_ROTATION", sensor = "ENCODER", mode = "ROTATION")}, containerType = "ENCODER_SENSING", category = "SENSOR", blocklyNames = {"robSensors_encoder_reset", "robSensors_encoder_getSample"})
 public final class EncoderSensor<V> extends ExternalSensor<V> {
-    private EncoderSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+
+    public EncoderSensor(BlocklyBlockProperties properties, BlocklyComment comment, SensorMetaDataBean sensorMetaDataBean) {
         super(properties, comment, sensorMetaDataBean);
         setReadOnly();
     }
 
-    /**
-     * Create object of the class {@link EncoderSensor}.
-     *
-     * @param mode in which the sensor is operating; must be <b>not</b> null; see enum {@link EncoderSensorMode} for all possible modes that the sensor have,
-     * @param port on where the sensor is connected; must be <b>not</b> null; see enum {@link SensorPort} for all possible sensor ports,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of {@link EncoderSensor}
-     */
-    public static <V> EncoderSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new EncoderSensor<V>(sensorMetaDataBean, properties, comment);
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         SensorMetaDataBean sensorData;
@@ -60,10 +33,10 @@ public final class EncoderSensor<V> extends ExternalSensor<V> {
             String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorData =
                 new SensorMetaDataBean(Jaxb2Ast.sanitizePort(portName), factory.getMode("RESET"), Jaxb2Ast.sanitizeSlot(BlocklyConstants.NO_SLOT), null);
-            return EncoderSensor.make(sensorData, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+            return new EncoderSensor<V>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), sensorData);
         }
         sensorData = extractPortAndModeAndSlot(block, helper);
-        return EncoderSensor.make(sensorData, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new EncoderSensor<V>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), sensorData);
     }
 
     @Override

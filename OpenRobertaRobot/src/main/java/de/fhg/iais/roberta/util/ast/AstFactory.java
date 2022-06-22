@@ -131,7 +131,7 @@ public class AstFactory {
         }
     }
 
-    public static BlockDescriptor getBlockType(Class<?> astClass) {
+    public static BlockDescriptor getBlockDescriptor(Class<?> astClass) {
         String name;
         for ( Annotation general : astClass.getAnnotations() ) {
             if ( general instanceof NepoPhrase ) {

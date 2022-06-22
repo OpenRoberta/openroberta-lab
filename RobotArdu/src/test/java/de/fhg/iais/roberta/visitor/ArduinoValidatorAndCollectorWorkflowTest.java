@@ -13,9 +13,6 @@ import de.fhg.iais.roberta.mode.action.LightMode;
 import de.fhg.iais.roberta.mode.action.RelayMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
-import de.fhg.iais.roberta.util.syntax.MotionParam;
-import de.fhg.iais.roberta.util.syntax.MotorDuration;
-import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
@@ -27,12 +24,10 @@ import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.util.syntax.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
-import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -43,6 +38,11 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.syntax.FunctionNames;
+import de.fhg.iais.roberta.util.syntax.MotionParam;
+import de.fhg.iais.roberta.util.syntax.MotorDuration;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.worker.validate.UnoValidatorAndCollectorWorker;
 
 public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper {
@@ -54,7 +54,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitKeysSensor_withoutPort() {
-        KeysSensor<Void> keysSensor = KeysSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        KeysSensor<Void> keysSensor = new KeysSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(keysSensor);
 
         executeWorkflow();
@@ -66,7 +66,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitKeysSensor_withPort() {
         configurationComponents.add(new ConfigurationComponent(SC.KEY, false, "P1", "P1", new HashMap<>()));
 
-        KeysSensor<Void> keysSensor = KeysSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        KeysSensor<Void> keysSensor = new KeysSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(keysSensor);
 
         executeWorkflow();
@@ -76,7 +76,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitMoistureSensor_withoutPort() {
-        MoistureSensor<Void> moistureSensor = MoistureSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        MoistureSensor<Void> moistureSensor = new MoistureSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(moistureSensor);
 
         executeWorkflow();
@@ -88,7 +88,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitMoistureSensor_withPort() {
         configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
 
-        MoistureSensor<Void> moistureSensor = MoistureSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        MoistureSensor<Void> moistureSensor = new MoistureSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(moistureSensor);
 
         Project project = executeWorkflow();
@@ -101,7 +101,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitMoistureSensor_withPortWrongSensor() {
         configurationComponents.add(new ConfigurationComponent(SC.MOTION, false, "P1", "P1", new HashMap<>()));
 
-        MoistureSensor<Void> moistureSensor = MoistureSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        MoistureSensor<Void> moistureSensor = new MoistureSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(moistureSensor);
 
         executeWorkflow();
@@ -111,7 +111,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitMotionSensor_withoutPort() {
-        MotionSensor<Void> motionSensor = MotionSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        MotionSensor<Void> motionSensor = new MotionSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(motionSensor);
 
         executeWorkflow();
@@ -123,7 +123,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitMotion_withPort() {
         configurationComponents.add(new ConfigurationComponent(SC.MOTION, false, "P1", "P1", new HashMap<>()));
 
-        MotionSensor<Void> motionSensor = MotionSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        MotionSensor<Void> motionSensor = new MotionSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(motionSensor);
 
         Project project = executeWorkflow();
@@ -136,7 +136,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitMotion_withPortWrongSensorType() {
         configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
 
-        MotionSensor<Void> motionSensor = MotionSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        MotionSensor<Void> motionSensor = new MotionSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(motionSensor);
 
         executeWorkflow();
@@ -146,7 +146,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitPulseSensor_withoutPort() {
-        PulseSensor<Void> pulseSensor = PulseSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        PulseSensor<Void> pulseSensor = new PulseSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(pulseSensor);
 
         executeWorkflow();
@@ -158,7 +158,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitDropSensor_withPort() {
         configurationComponents.add(new ConfigurationComponent(SC.DROP, false, "P1", "P1", new HashMap<>()));
 
-        DropSensor<Void> dropSensor = DropSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        DropSensor<Void> dropSensor = new DropSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(dropSensor);
 
         Project project = executeWorkflow();
@@ -169,7 +169,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitDropSensor_withoutPort() {
-        DropSensor<Void> dropSensor = DropSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        DropSensor<Void> dropSensor = new DropSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(dropSensor);
 
         executeWorkflow();
@@ -181,7 +181,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitDropSensor_withWrongSensorType() {
         configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
 
-        DropSensor<Void> dropSensor = DropSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        DropSensor<Void> dropSensor = new DropSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(dropSensor);
 
         executeWorkflow();
@@ -193,7 +193,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitRfidSensor_withPort() {
         configurationComponents.add(new ConfigurationComponent(SC.RFID, false, "P1", "P1", new HashMap<>()));
 
-        RfidSensor<Void> rfidSensor = RfidSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        RfidSensor<Void> rfidSensor = new RfidSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(rfidSensor);
 
         Project project = executeWorkflow();
@@ -208,7 +208,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
         configurationComponents.add(new ConfigurationComponent(SC.RFID, false, "P1", "P1", new HashMap<>()));
 
-        RfidSensor<Void> rfidSensor = RfidSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        RfidSensor<Void> rfidSensor = new RfidSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(rfidSensor);
 
         executeWorkflow();
@@ -218,7 +218,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitRfidSensor_withoutPort() {
-        RfidSensor<Void> rfidSensor = RfidSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        RfidSensor<Void> rfidSensor = new RfidSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(rfidSensor);
 
         executeWorkflow();
@@ -230,7 +230,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitRfidSensor_withWrongSensorType() {
         configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
 
-        RfidSensor<Void> rfidSensor = RfidSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        RfidSensor<Void> rfidSensor = new RfidSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(rfidSensor);
 
         executeWorkflow();
@@ -242,7 +242,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitHumiditySensor_withPort() {
         configurationComponents.add(new ConfigurationComponent(SC.HUMIDITY, false, "P1", "P1", new HashMap<>()));
 
-        HumiditySensor<Void> humiditySensor = HumiditySensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        HumiditySensor<Void> humiditySensor = new HumiditySensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(humiditySensor);
 
         Project project = executeWorkflow();
@@ -253,7 +253,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitHumiditySensor_withoutPort() {
-        HumiditySensor<Void> humiditySensor = HumiditySensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        HumiditySensor<Void> humiditySensor = new HumiditySensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(humiditySensor);
 
         executeWorkflow();
@@ -265,7 +265,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitHumiditySensor_withWrongSensorType() {
         configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
 
-        HumiditySensor<Void> humiditySensor = HumiditySensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        HumiditySensor<Void> humiditySensor = new HumiditySensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(humiditySensor);
 
         executeWorkflow();
@@ -277,7 +277,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitVoltageSensor_withPort() {
         configurationComponents.add(new ConfigurationComponent(SC.POTENTIOMETER, false, "P1", "P1", new HashMap<>()));
 
-        VoltageSensor<Void> voltageSensor = VoltageSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        VoltageSensor<Void> voltageSensor = new VoltageSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(voltageSensor);
 
         Project project = executeWorkflow();
@@ -288,7 +288,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitVoltageSensor_withoutPort() {
-        VoltageSensor<Void> voltageSensor = VoltageSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        VoltageSensor<Void> voltageSensor = new VoltageSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(voltageSensor);
 
         executeWorkflow();
@@ -300,7 +300,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitVoltageSensor_withWrongSensorType() {
         configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
 
-        VoltageSensor<Void> voltageSensor = VoltageSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        VoltageSensor<Void> voltageSensor = new VoltageSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(voltageSensor);
 
         executeWorkflow();
@@ -496,7 +496,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitPinGetValueSensor() {
         configurationComponents.add(new ConfigurationComponent(SC.OTHER, false, "P1", "P1", new HashMap<>()));
 
-        PinGetValueSensor<Void> pinGetValueSensor = PinGetValueSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
+        PinGetValueSensor<Void> pinGetValueSensor = new PinGetValueSensor<Void>(bp, null, new SensorMetaDataBean("P1", "", "", null));
         phrases.add(pinGetValueSensor);
 
         executeWorkflow();

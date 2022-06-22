@@ -16,9 +16,4 @@ public final class ColorSensor<V> extends ExternalSensor<V> {
         super(properties, comment, sensorMetaDataBean);
         setReadOnly();
     }
-
-    public static <V> ColorSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ColorSensor<V>(properties, comment, sensorMetaDataBean);
-    }
-
 }

@@ -7,12 +7,12 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
-import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.ITransformerVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
@@ -23,14 +23,14 @@ import de.fhg.iais.roberta.visitor.IVisitor;
  * - if in construction phase, they should use {@link #mayChange()} to assert that.<br>
  * - if the construction has finished and {@link #setReadOnly()} has been called, they should use {@link #isReadOnly()} to assert their immutability.<br>
  * <br>
- * To find out which kind a {@link #Phrase}-object is use {@link #getKind()}
+ * To find out which kind a {@link #Phrase}-object is use {@link #getBlockDescriptor()}
  */
 abstract public class Phrase<V> {
     private static final Logger LOG = LoggerFactory.getLogger(Phrase.class);
     private boolean readOnly = false;
     private final BlocklyBlockProperties property;
     private final BlocklyComment comment;
-    private final BlockDescriptor kind;
+    private final BlockDescriptor blockDescriptor;
 
     private final NepoInfos infos = new NepoInfos(); // the content of the info object is MUTABLE !!!
 
@@ -41,7 +41,7 @@ abstract public class Phrase<V> {
      */
     public Phrase(BlocklyBlockProperties property, BlocklyComment comment) {
         Assert.isTrue(property != null, "block property is null!");
-        this.kind = AstFactory.getBlockType(this.getClass());
+        this.blockDescriptor = AstFactory.getBlockDescriptor(this.getClass());
         this.property = property;
         this.comment = comment;
     }
@@ -55,7 +55,7 @@ abstract public class Phrase<V> {
      */
     public Phrase(BlockDescriptor blockDescriptor, BlocklyBlockProperties property, BlocklyComment comment) {
         Assert.isTrue(property != null, "block property is null!");
-        this.kind = blockDescriptor;
+        this.blockDescriptor = blockDescriptor;
         this.property = property;
         this.comment = comment;
     }
@@ -82,10 +82,17 @@ abstract public class Phrase<V> {
     }
 
     /**
-     * @return the kind of the expression. See enum {@link BlockDescriptor} for all kinds possible<br>
+     * @return the block description of this phrase
      */
     public final BlockDescriptor getKind() {
-        return this.kind;
+        return this.blockDescriptor;
+    }
+
+    /**
+     * @return true if name of this phrase (as found in its block descriptor) is equals to one of the names given as parameter
+     */
+    public final boolean hasName(String... namesToCheck) {
+        return blockDescriptor.hasName(namesToCheck);
     }
 
     public BlocklyBlockProperties getProperty() {
@@ -106,9 +113,6 @@ abstract public class Phrase<V> {
      */
     public final void addInfo(NepoInfo info) {
         this.infos.addInfo(info);
-        if ( infos.getErrorCount() > 1 ) {
-            LOG.error(infos.getErrorCount() + " errors for " + this.kind.getName() + ". Last error message: " + info.getMessage());
-        }
     }
 
     public final NepoInfos getInfos() {

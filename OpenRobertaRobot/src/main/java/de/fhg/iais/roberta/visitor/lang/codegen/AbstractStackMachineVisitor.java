@@ -553,10 +553,10 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
         app(o);
         for ( Stmt<V> outputNeuronAsStmt : outputNeurons ) {
             JSONObject ov;
-            if ( outputNeuronAsStmt.getKind().getName().equals("NN_OUTPUT_NEURON_STMT") ) {
+            if ( outputNeuronAsStmt.hasName("NN_OUTPUT_NEURON_STMT") ) {
                 NNOutputNeuronStmt outputNeuron = (NNOutputNeuronStmt) outputNeuronAsStmt;
                 ov = makeNode(C.ASSIGN_STMT).put(C.NAME, ((Var) outputNeuron.getValue()).getValue());
-            } else if ( outputNeuronAsStmt.getKind().getName().equals("NN_OUTPUT_NEURON_WO_VAR_STMT") ) {
+            } else if ( outputNeuronAsStmt.hasName("NN_OUTPUT_NEURON_WO_VAR_STMT") ) {
                 ov = makeNode(C.POP);
             } else {
                 throw new DbcException("invalid output neuron");

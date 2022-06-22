@@ -2,18 +2,17 @@ package de.fhg.iais.roberta.syntax.sensor.mbot2;
 
 import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.syntax.action.mbot2.DisplaySetColourAction;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoHide;
 import de.fhg.iais.roberta.transformer.forField.NepoMutation;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 /**
@@ -22,7 +21,7 @@ import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
  * <br/>
  */
 
-@NepoPhrase(sampleValues = {@NepoSampleValue(blocklyFieldName="JOYSTICK_PRESSED",sensor="JOYSTICK_PRESSED",mode="PRESSED")}, category = "SENSOR", blocklyNames = {"robSensors_joystickKeys_getSample"}, containerType = "JOYSTICK_SENSING")
+@NepoPhrase(sampleValues = {@NepoSampleValue(blocklyFieldName = "JOYSTICK_PRESSED", sensor = "JOYSTICK_PRESSED", mode = "PRESSED")}, category = "SENSOR", blocklyNames = {"robSensors_joystickKeys_getSample"}, containerType = "JOYSTICK_SENSING")
 public final class Joystick<V> extends Sensor<V> implements WithUserDefinedPort<V> {
     @NepoMutation
     public final Mutation mutation;
@@ -46,15 +45,8 @@ public final class Joystick<V> extends Sensor<V> implements WithUserDefinedPort<
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link Joystick}. This instance is read only and can not be modified.
-     *
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link DisplaySetColourAction}
-     */
-    public static <V> Joystick<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Joystick<>(properties, comment, sensorMetaDataBean.getMutation(), sensorMetaDataBean.getMode(), sensorMetaDataBean.getPort(), sensorMetaDataBean.getSlot(), null);
+    public Joystick(BlocklyBlockProperties properties, BlocklyComment comment, SensorMetaDataBean sensorMetaDataBean) {
+        this(properties, comment, sensorMetaDataBean.getMutation(), sensorMetaDataBean.getMode(), sensorMetaDataBean.getPort(), sensorMetaDataBean.getSlot(), null);
     }
 
     @Override

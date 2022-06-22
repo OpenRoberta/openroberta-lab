@@ -138,12 +138,12 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
-import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 import de.fhg.iais.roberta.visitor.hardware.actor.IAllActorsVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
@@ -851,271 +851,157 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
 
     @Override
     default Phrase<V> visitKeysSensor(KeysSensor<Phrase<V>> keysSensor) {
-        return KeysSensor
-            .make(
-                new SensorMetaDataBean(keysSensor.getUserDefinedPort(), keysSensor.getMode(), keysSensor.getSlot(), keysSensor.getMutation()),
-                keysSensor.getProperty(),
-                keysSensor.getComment());
+        return new KeysSensor<V>(keysSensor.getProperty(), keysSensor.getComment(), new SensorMetaDataBean(keysSensor.getUserDefinedPort(), keysSensor.getMode(), keysSensor.getSlot(), keysSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitColorSensor(ColorSensor<Phrase<V>> colorSensor) {
-        return ColorSensor
-            .make(
-                new SensorMetaDataBean(colorSensor.getUserDefinedPort(), colorSensor.getMode(), colorSensor.getSlot(), colorSensor.getMutation()),
-                colorSensor.getProperty(),
-                colorSensor.getComment());
+        return new ColorSensor<V>(colorSensor.getProperty(), colorSensor.getComment(), new SensorMetaDataBean(colorSensor.getUserDefinedPort(), colorSensor.getMode(), colorSensor.getSlot(), colorSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitLightSensor(LightSensor<Phrase<V>> lightSensor) {
-        return LightSensor
-            .make(
-                new SensorMetaDataBean(lightSensor.getUserDefinedPort(), lightSensor.getMode(), lightSensor.getSlot(), lightSensor.getMutation()),
-                lightSensor.getProperty(),
-                lightSensor.getComment());
+        return new LightSensor<V>(lightSensor.getProperty(), lightSensor.getComment(), new SensorMetaDataBean(lightSensor.getUserDefinedPort(), lightSensor.getMode(), lightSensor.getSlot(), lightSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitSoundSensor(SoundSensor<Phrase<V>> soundSensor) {
-        return SoundSensor
-            .make(
-                new SensorMetaDataBean(soundSensor.getUserDefinedPort(), soundSensor.getMode(), soundSensor.getSlot(), soundSensor.getMutation()),
-                soundSensor.getProperty(),
-                soundSensor.getComment());
+        return new SoundSensor<V>(soundSensor.getProperty(), soundSensor.getComment(), new SensorMetaDataBean(soundSensor.getUserDefinedPort(), soundSensor.getMode(), soundSensor.getSlot(), soundSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitEncoderSensor(EncoderSensor<Phrase<V>> encoderSensor) {
-        return EncoderSensor
-            .make(
-                new SensorMetaDataBean(encoderSensor.getUserDefinedPort(), encoderSensor.getMode(), encoderSensor.getSlot(), encoderSensor.getMutation()),
-                encoderSensor.getProperty(),
-                encoderSensor.getComment());
+        return new EncoderSensor<V>(encoderSensor.getProperty(), encoderSensor.getComment(), new SensorMetaDataBean(encoderSensor.getUserDefinedPort(), encoderSensor.getMode(), encoderSensor.getSlot(), encoderSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitGyroSensor(GyroSensor<Phrase<V>> gyroSensor) {
-        return GyroSensor
-            .make(
-                new SensorMetaDataBean(gyroSensor.getUserDefinedPort(), gyroSensor.getMode(), gyroSensor.getSlot(), gyroSensor.getMutation()),
-                gyroSensor.getProperty(),
-                gyroSensor.getComment());
+        return new GyroSensor<>(gyroSensor.getProperty(), gyroSensor.getComment(), new SensorMetaDataBean(gyroSensor.getUserDefinedPort(), gyroSensor.getMode(), gyroSensor.getSlot(), gyroSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitInfraredSensor(InfraredSensor<Phrase<V>> infraredSensor) {
-        return InfraredSensor
-            .make(
-                new SensorMetaDataBean(infraredSensor.getUserDefinedPort(), infraredSensor.getMode(), infraredSensor.getSlot(), infraredSensor.getMutation()),
-                infraredSensor.getProperty(),
-                infraredSensor.getComment());
+        return new InfraredSensor<V>(infraredSensor.getProperty(), infraredSensor.getComment(), new SensorMetaDataBean(infraredSensor.getUserDefinedPort(), infraredSensor.getMode(), infraredSensor.getSlot(), infraredSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitTimerSensor(TimerSensor<Phrase<V>> timerSensor) {
-        return TimerSensor
-            .make(
-                new SensorMetaDataBean(timerSensor.getUserDefinedPort(), timerSensor.getMode(), timerSensor.getSlot(), timerSensor.getMutation()),
-                timerSensor.getProperty(),
-                timerSensor.getComment());
+        return new TimerSensor<>(timerSensor.getProperty(), timerSensor.getComment(), new SensorMetaDataBean(timerSensor.getUserDefinedPort(), timerSensor.getMode(), timerSensor.getSlot(), timerSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitTouchSensor(TouchSensor<Phrase<V>> touchSensor) {
-        return TouchSensor
-            .make(
-                new SensorMetaDataBean(touchSensor.getUserDefinedPort(), touchSensor.getMode(), touchSensor.getSlot(), touchSensor.getMutation()),
-                touchSensor.getProperty(),
-                touchSensor.getComment());
+        return new TouchSensor<V>(touchSensor.getProperty(), touchSensor.getComment(), new SensorMetaDataBean(touchSensor.getUserDefinedPort(), touchSensor.getMode(), touchSensor.getSlot(), touchSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitUltrasonicSensor(UltrasonicSensor<Phrase<V>> ultrasonicSensor) {
-        return UltrasonicSensor
-            .make(
-                new SensorMetaDataBean(ultrasonicSensor.getUserDefinedPort(), ultrasonicSensor.getMode(), ultrasonicSensor.getSlot(), ultrasonicSensor.getMutation()),
-                ultrasonicSensor.getProperty(),
-                ultrasonicSensor.getComment());
+        return new UltrasonicSensor<V>(ultrasonicSensor.getProperty(), ultrasonicSensor.getComment(), new SensorMetaDataBean(ultrasonicSensor.getUserDefinedPort(), ultrasonicSensor.getMode(), ultrasonicSensor.getSlot(), ultrasonicSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitCompassSensor(CompassSensor<Phrase<V>> compassSensor) {
-        return CompassSensor
-            .make(
-                new SensorMetaDataBean(compassSensor.getUserDefinedPort(), compassSensor.getMode(), compassSensor.getSlot(), compassSensor.getMutation()),
-                compassSensor.getProperty(),
-                compassSensor.getComment());
+        return new CompassSensor<>(compassSensor.getProperty(), compassSensor.getComment(), new SensorMetaDataBean(compassSensor.getUserDefinedPort(), compassSensor.getMode(), compassSensor.getSlot(), compassSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitTemperatureSensor(TemperatureSensor<Phrase<V>> temperatureSensor) {
-        return TemperatureSensor
-            .make(
-                new SensorMetaDataBean(
-                    temperatureSensor.getUserDefinedPort(),
-                    temperatureSensor.getMode(),
-                    temperatureSensor.getSlot(),
-                    temperatureSensor.getMutation()),
-                temperatureSensor.getProperty(),
-                temperatureSensor.getComment());
+        return new TemperatureSensor<V>(temperatureSensor.getProperty(), temperatureSensor.getComment(),
+            new SensorMetaDataBean(
+                temperatureSensor.getUserDefinedPort(),
+                temperatureSensor.getMode(),
+                temperatureSensor.getSlot(),
+                temperatureSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitVoltageSensor(VoltageSensor<Phrase<V>> voltageSensor) {
-        return VoltageSensor
-            .make(
-                new SensorMetaDataBean(voltageSensor.getUserDefinedPort(), voltageSensor.getMode(), voltageSensor.getSlot(), voltageSensor.getMutation()),
-                voltageSensor.getProperty(),
-                voltageSensor.getComment());
+        return new VoltageSensor<V>(voltageSensor.getProperty(), voltageSensor.getComment(), new SensorMetaDataBean(voltageSensor.getUserDefinedPort(), voltageSensor.getMode(), voltageSensor.getSlot(), voltageSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitAccelerometerSensor(AccelerometerSensor<Phrase<V>> accelerometerSensor) {
-        return AccelerometerSensor
-            .make(
-                new SensorMetaDataBean(
-                    accelerometerSensor.getUserDefinedPort(),
-                    accelerometerSensor.getMode(),
-                    accelerometerSensor.getSlot(),
-                    accelerometerSensor.getMutation()),
-                accelerometerSensor.getProperty(),
-                accelerometerSensor.getComment());
+        return new AccelerometerSensor<V>(accelerometerSensor.getProperty(), accelerometerSensor.getComment(),
+            new SensorMetaDataBean(
+                accelerometerSensor.getUserDefinedPort(),
+                accelerometerSensor.getMode(),
+                accelerometerSensor.getSlot(),
+                accelerometerSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitPinTouchSensor(PinTouchSensor<Phrase<V>> pinTouchSensor) {
-        return PinTouchSensor
-            .make(
-                new SensorMetaDataBean(pinTouchSensor.getUserDefinedPort(), pinTouchSensor.getMode(), pinTouchSensor.getSlot(), pinTouchSensor.getMutation()),
-                pinTouchSensor.getProperty(),
-                pinTouchSensor.getComment());
+        return new PinTouchSensor<V>(pinTouchSensor.getProperty(), pinTouchSensor.getComment(), new SensorMetaDataBean(pinTouchSensor.getUserDefinedPort(), pinTouchSensor.getMode(), pinTouchSensor.getSlot(), pinTouchSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitGestureSensor(GestureSensor<Phrase<V>> gestureSensor) {
-        return GestureSensor
-            .make(
-                new SensorMetaDataBean(gestureSensor.getUserDefinedPort(), gestureSensor.getMode(), gestureSensor.getSlot(), gestureSensor.getMutation()),
-                gestureSensor.getProperty(),
-                gestureSensor.getComment());
+        return new GestureSensor<V>(gestureSensor.getProperty(), gestureSensor.getComment(), new SensorMetaDataBean(gestureSensor.getUserDefinedPort(), gestureSensor.getMode(), gestureSensor.getSlot(), gestureSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitPinGetValueSensor(PinGetValueSensor<Phrase<V>> pinGetValueSensor) {
-        return PinGetValueSensor
-            .make(
-                new SensorMetaDataBean(
-                    pinGetValueSensor.getUserDefinedPort(),
-                    pinGetValueSensor.getMode(),
-                    pinGetValueSensor.getSlot(),
-                    pinGetValueSensor.getMutation()),
-                pinGetValueSensor.getProperty(),
-                pinGetValueSensor.getComment());
+        return new PinGetValueSensor<V>(pinGetValueSensor.getProperty(), pinGetValueSensor.getComment(),
+            new SensorMetaDataBean(
+                pinGetValueSensor.getUserDefinedPort(),
+                pinGetValueSensor.getMode(),
+                pinGetValueSensor.getSlot(),
+                pinGetValueSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitGetSampleSensor(GetSampleSensor<Phrase<V>> sensorGetSample) {
-        return GetSampleSensor
-            .make(
-                sensorGetSample.getSensorTypeAndMode(),
-                sensorGetSample.getSensorPort(),
-                sensorGetSample.getSlot(),
-                sensorGetSample.getMutation(),
-                sensorGetSample.getHide(),
-                sensorGetSample.getProperty(),
-                sensorGetSample.getComment(),
-                getBlocklyDropdownFactory());
+        return new GetSampleSensor(sensorGetSample.getSensorTypeAndMode(), sensorGetSample.getSensorPort(), sensorGetSample.getSlot(), sensorGetSample.getMutation(), sensorGetSample.getHide(), sensorGetSample.getProperty(), sensorGetSample.getComment(), getBlocklyDropdownFactory());
     }
 
     @Override
     default Phrase<V> visitIRSeekerSensor(IRSeekerSensor<Phrase<V>> irSeekerSensor) {
-        return IRSeekerSensor
-            .make(
-                new SensorMetaDataBean(irSeekerSensor.getUserDefinedPort(), irSeekerSensor.getMode(), irSeekerSensor.getSlot(), irSeekerSensor.getMutation()),
-                irSeekerSensor.getProperty(),
-                irSeekerSensor.getComment());
+        return new IRSeekerSensor<V>(irSeekerSensor.getProperty(), irSeekerSensor.getComment(), new SensorMetaDataBean(irSeekerSensor.getUserDefinedPort(), irSeekerSensor.getMode(), irSeekerSensor.getSlot(), irSeekerSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitMoistureSensor(MoistureSensor<Phrase<V>> moistureSensor) {
-        return MoistureSensor
-            .make(
-                new SensorMetaDataBean(moistureSensor.getUserDefinedPort(), moistureSensor.getMode(), moistureSensor.getSlot(), moistureSensor.getMutation()),
-                moistureSensor.getProperty(),
-                moistureSensor.getComment());
+        return new MoistureSensor<V>(moistureSensor.getProperty(), moistureSensor.getComment(), new SensorMetaDataBean(moistureSensor.getUserDefinedPort(), moistureSensor.getMode(), moistureSensor.getSlot(), moistureSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitHumiditySensor(HumiditySensor<Phrase<V>> humiditySensor) {
-        return HumiditySensor
-            .make(
-                new SensorMetaDataBean(humiditySensor.getUserDefinedPort(), humiditySensor.getMode(), humiditySensor.getSlot(), humiditySensor.getMutation()),
-                humiditySensor.getProperty(),
-                humiditySensor.getComment());
+        return new HumiditySensor<V>(humiditySensor.getProperty(), humiditySensor.getComment(), new SensorMetaDataBean(humiditySensor.getUserDefinedPort(), humiditySensor.getMode(), humiditySensor.getSlot(), humiditySensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitMotionSensor(MotionSensor<Phrase<V>> motionSensor) {
-        return MotionSensor
-            .make(
-                new SensorMetaDataBean(motionSensor.getUserDefinedPort(), motionSensor.getMode(), motionSensor.getSlot(), motionSensor.getMutation()),
-                motionSensor.getProperty(),
-                motionSensor.getComment());
+        return new MotionSensor<V>(motionSensor.getProperty(), motionSensor.getComment(), new SensorMetaDataBean(motionSensor.getUserDefinedPort(), motionSensor.getMode(), motionSensor.getSlot(), motionSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitDropSensor(DropSensor<Phrase<V>> dropSensor) {
-        return DropSensor
-            .make(
-                new SensorMetaDataBean(dropSensor.getUserDefinedPort(), dropSensor.getMode(), dropSensor.getSlot(), dropSensor.getMutation()),
-                dropSensor.getProperty(),
-                dropSensor.getComment());
+        return new DropSensor<V>(dropSensor.getProperty(), dropSensor.getComment(), new SensorMetaDataBean(dropSensor.getUserDefinedPort(), dropSensor.getMode(), dropSensor.getSlot(), dropSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitPulseSensor(PulseSensor<Phrase<V>> pulseSensor) {
-        return PulseSensor
-            .make(
-                new SensorMetaDataBean(pulseSensor.getUserDefinedPort(), pulseSensor.getMode(), pulseSensor.getSlot(), pulseSensor.getMutation()),
-                pulseSensor.getProperty(),
-                pulseSensor.getComment());
+        return new PulseSensor<V>(pulseSensor.getProperty(), pulseSensor.getComment(), new SensorMetaDataBean(pulseSensor.getUserDefinedPort(), pulseSensor.getMode(), pulseSensor.getSlot(), pulseSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitRfidSensor(RfidSensor<Phrase<V>> rfidSensor) {
-        return RfidSensor
-            .make(
-                new SensorMetaDataBean(rfidSensor.getUserDefinedPort(), rfidSensor.getMode(), rfidSensor.getSlot(), rfidSensor.getMutation()),
-                rfidSensor.getProperty(),
-                rfidSensor.getComment());
+        return new RfidSensor<V>(rfidSensor.getProperty(), rfidSensor.getComment(), new SensorMetaDataBean(rfidSensor.getUserDefinedPort(), rfidSensor.getMode(), rfidSensor.getSlot(), rfidSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitVemlLightSensor(VemlLightSensor<Phrase<V>> vemlLightSensor) {
-        return VemlLightSensor
-            .make(
-                new SensorMetaDataBean(vemlLightSensor.getUserDefinedPort(), vemlLightSensor.getMode(), vemlLightSensor.getSlot(), vemlLightSensor.getMutation()),
-                vemlLightSensor.getProperty(),
-                vemlLightSensor.getComment());
+        return new VemlLightSensor<V>(vemlLightSensor.getProperty(), vemlLightSensor.getComment(), new SensorMetaDataBean(vemlLightSensor.getUserDefinedPort(), vemlLightSensor.getMode(), vemlLightSensor.getSlot(), vemlLightSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitParticleSensor(ParticleSensor<Phrase<V>> particleSensor) {
-        return ParticleSensor
-            .make(
-                new SensorMetaDataBean(particleSensor.getUserDefinedPort(), particleSensor.getMode(), particleSensor.getSlot(), particleSensor.getMutation()),
-                particleSensor.getProperty(),
-                particleSensor.getComment());
+        return new ParticleSensor<V>(particleSensor.getProperty(), particleSensor.getComment(), new SensorMetaDataBean(particleSensor.getUserDefinedPort(), particleSensor.getMode(), particleSensor.getSlot(), particleSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitHTColorSensor(HTColorSensor<Phrase<V>> htColorSensor) {
-        return HTColorSensor
-            .make(
-                new SensorMetaDataBean(htColorSensor.getUserDefinedPort(), htColorSensor.getMode(), htColorSensor.getSlot(), htColorSensor.getMutation()),
-                htColorSensor.getProperty(),
-                htColorSensor.getComment());
+        return new HTColorSensor<V>(htColorSensor.getProperty(), htColorSensor.getComment(), new SensorMetaDataBean(htColorSensor.getUserDefinedPort(), htColorSensor.getMode(), htColorSensor.getSlot(), htColorSensor.getMutation()));
     }
 
     // Helper methods

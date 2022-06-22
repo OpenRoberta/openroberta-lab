@@ -409,7 +409,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     }
 
     protected boolean isMainBlock(Phrase<Void> phrase) {
-        return phrase.getKind().getName().equals("MAIN_TASK");
+        return phrase.hasName("MAIN_TASK");
     }
 
     protected boolean parenthesesCheck(Binary<Void> binary) {
