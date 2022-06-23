@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
  * <br>
  * To create an instance from this class use the method {@link #make(Expr, Expr, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "LED_MATRIX_IMAGE", category = "EXPR", blocklyNames = {"mBotImage_image"})
+@NepoBasic(name = "LED_MATRIX_IMAGE", category = "EXPR", blocklyNames = {"mBotImage_image"})
 public final class LEDMatrixImage<V> extends Expr<V> {
     public final static int X = 16;
     public final static int Y = 8;

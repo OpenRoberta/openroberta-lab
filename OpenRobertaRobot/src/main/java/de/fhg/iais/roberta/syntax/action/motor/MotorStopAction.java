@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the {@link ActorPort} and {@link MotorStopMode} (is the motor breaking or not).
  */
-@NepoBasic(containerType = "MOTOR_STOP_ACTION", category = "ACTOR", blocklyNames = {"makeblockActions_motor_stop", "sim_motor_stop", "mbedActions_motor_stop", "robActions_motor_stop"})
+@NepoBasic(name = "MOTOR_STOP_ACTION", category = "ACTOR", blocklyNames = {"makeblockActions_motor_stop", "sim_motor_stop", "mbedActions_motor_stop", "robActions_motor_stop"})
 public final class MotorStopAction<V> extends MoveAction<V> {
     public final IMotorStopMode mode;
 

@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "STMT", blocklyNames = {"robActions_debug"}, containerType = "DEBUG_STMT")
+@NepoPhrase(category = "STMT", blocklyNames = {"robActions_debug"}, name = "DEBUG_STMT")
 public final class DebugAction<V> extends Stmt<V> {
     @NepoValue(name = BlocklyConstants.OUT, type = BlocklyType.ANY)
     public final Expr<V> value;

@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * To create an instance from this class use the method {@link #make(ColorConst, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "BOB3_SENDIR", category = "ACTOR", blocklyNames = {"bob3Communication_sendBlock"})
+@NepoBasic(name = "BOB3_SENDIR", category = "ACTOR", blocklyNames = {"bob3Communication_sendBlock"})
 public final class SendIRAction<V> extends Action<V> {
     public final Expr<V> code;
 

@@ -5,7 +5,7 @@ import org.checkerframework.checker.units.qual.degrees;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forClass.NepoExternalSensor;
-import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.transformer.forClass.F2M;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
  * <br/>
  * The client must provide the {@link joint} and {@link degrees} (direction and distance to walk).
  */
-@NepoExpr(sampleValues = {@NepoSampleValue(blocklyFieldName="ELECTRICCURRENT_VALUE",sensor="ELECTRIC_CURRENT",mode="VALUE")}, containerType = "ELECTRIC_CURRENT", category = "SENSOR", blocklyNames = {"robSensors_electriccurrent_getSample"})
+@NepoExpr(sampleValues = {@F2M(field = "ELECTRICCURRENT_VALUE", mode = "VALUE")}, name = "ELECTRIC_CURRENT", category = "SENSOR", blocklyNames = {"robSensors_electriccurrent_getSample"})
 @NepoExternalSensor
 public final class ElectricCurrentSensor<V> extends ExternalSensor<V> {
 

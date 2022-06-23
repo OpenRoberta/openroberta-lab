@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.util.syntax.MotionParam;
  * <br/>
  * The client must provide the {@link MotionParam} (number of rotations or degrees and speed).
  */
-@NepoBasic(containerType = "RECORD_VIDEO", category = "ACTOR", blocklyNames = {"naoActions_recordVideo"})
+@NepoBasic(name = "RECORD_VIDEO", category = "ACTOR", blocklyNames = {"naoActions_recordVideo"})
 public final class RecordVideo<V> extends Action<V> {
 
     @Override

@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoBasic(containerType = "LPS22HB_PRESSURE", category = "SENSOR", blocklyNames = {"robsensors_lps22hb_pressure_getDataAvailableSample"})
+@NepoBasic(name = "LPS22HB_PRESSURE", category = "SENSOR", blocklyNames = {"robsensors_lps22hb_pressure_getDataAvailableSample"})
 public final class Lps22hbPressureSensor<V> extends BuiltinSensor<V> {
 
     public final Expr<V> pressure;

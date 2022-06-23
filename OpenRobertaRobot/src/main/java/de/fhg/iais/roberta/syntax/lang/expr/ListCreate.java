@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * To create an instance from this class use the method {@link #make(String, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "LIST_CREATE", category = "EXPR", blocklyNames = {"robLists_create_with", "lists_create_with"})
+@NepoBasic(name = "LIST_CREATE", category = "EXPR", blocklyNames = {"robLists_create_with", "lists_create_with"})
 public final class ListCreate<V> extends Expr<V> {
     public final BlocklyType typeVar;
     public final ExprList<V> exprList;

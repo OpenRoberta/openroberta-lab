@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.configuration;
 import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-@NepoConfiguration(containerType = "GPS", category = "CONFIGURATION_BLOCK",
+@NepoConfiguration(name = "GPS", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robConf_gps"})
 public class Gps extends ConfigurationComponent {
     private Gps() {

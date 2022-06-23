@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoBasic(containerType = "HTS221_TEMPERATURE", category = "SENSOR", blocklyNames = {"robsensors_hts221_temperature_getDataAvailableSample"})
+@NepoBasic(name = "HTS221_TEMPERATURE", category = "SENSOR", blocklyNames = {"robsensors_hts221_temperature_getDataAvailableSample"})
 public final class Hts221TemperatureSensor<V> extends BuiltinSensor<V> {
 
     public final Expr<V> temperature;

@@ -11,13 +11,13 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.transformer.forClass.F2M;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "COMPASS_COMPASS", sensor = "COMPASS", mode = "COMPASS"), @NepoSampleValue(blocklyFieldName = "COMPASS_X", sensor = "COMPASS", mode = "X"), @NepoSampleValue(blocklyFieldName = "COMPASS_Y", sensor = "COMPASS", mode = "Y"), @NepoSampleValue(blocklyFieldName = "COMPASS_ANGLE", sensor = "COMPASS", mode = "ANGLE"), @NepoSampleValue(blocklyFieldName = "COMPASS_Z", sensor = "COMPASS", mode = "Z")}, containerType = "COMPASS_SENSING", category = "SENSOR", blocklyNames = {"robSensors_compass_getSample", "mbedsensors_compass_getsample", "robSensors_compass_calibrate"})
+@NepoBasic(sampleValues = {@F2M(field = "COMPASS_COMPASS", mode = "COMPASS"), @F2M(field = "COMPASS_X", mode = "X"), @F2M(field = "COMPASS_Y", mode = "Y"), @F2M(field = "COMPASS_ANGLE", mode = "ANGLE"), @F2M(field = "COMPASS_Z", mode = "Z")}, name = "COMPASS_SENSING", category = "SENSOR", blocklyNames = {"robSensors_compass_getSample", "mbedsensors_compass_getsample", "robSensors_compass_calibrate"})
 public final class CompassSensor<V> extends ExternalSensor<V> {
 
     public CompassSensor(BlocklyBlockProperties properties, BlocklyComment comment, SensorMetaDataBean sensorMetaDataBean) {

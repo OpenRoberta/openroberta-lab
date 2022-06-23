@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * This class represents the <b>robControls_wait_time</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate wait
  * statement.<br/>
  */
-@NepoPhrase(category = "STMT", blocklyNames = {"robActions_assert"}, containerType = "ASSERT_STMT")
+@NepoPhrase(category = "STMT", blocklyNames = {"robActions_assert"}, name = "ASSERT_STMT")
 public final class AssertStmt<V> extends Stmt<V> {
     @NepoValue(name = BlocklyConstants.OUT, type = BlocklyType.BOOLEAN)
     public final Expr<V> asserts;

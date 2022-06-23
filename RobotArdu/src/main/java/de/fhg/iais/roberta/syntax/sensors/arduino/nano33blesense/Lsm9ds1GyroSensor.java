@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "SENSOR", blocklyNames = {"robsensors_lsm9ds1_gyro_getDataAvailableSample"}, containerType = "LSM9DS1_GYRO")
+@NepoPhrase(category = "SENSOR", blocklyNames = {"robsensors_lsm9ds1_gyro_getDataAvailableSample"}, name = "LSM9DS1_GYRO")
 public final class Lsm9ds1GyroSensor<V> extends BuiltinSensor<V> {
 
     @NepoValue(name = BlocklyConstants.VARIABLE_X, type = BlocklyType.NUMBER_INT)

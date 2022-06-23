@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "EXPR", blocklyNames = {"mbedImage_get_image"}, containerType = "PREDEFINED_IMAGE")
+@NepoPhrase(category = "EXPR", blocklyNames = {"mbedImage_get_image"}, name = "PREDEFINED_IMAGE")
 public final class PredefinedImage<V> extends Expr<V> {
     @NepoField(name = BlocklyConstants.IMAGE)
     public final String imageName;

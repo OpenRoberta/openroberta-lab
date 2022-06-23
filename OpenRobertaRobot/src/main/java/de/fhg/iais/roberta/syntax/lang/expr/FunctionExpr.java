@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 /**
  * Wraps subclasses of the class {@link Function} so they can be used as {@link Expr} in expressions.
  */
-@NepoBasic(containerType = "FUNCTION_EXPR", category = "EXPR", blocklyNames = {})
+@NepoBasic(name = "FUNCTION_EXPR", category = "EXPR", blocklyNames = {})
 public final class FunctionExpr<V> extends Expr<V> {
     public final Function<V> function;
 

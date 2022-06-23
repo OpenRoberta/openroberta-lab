@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the {@link BodyPart} (body part in which the motors are released).
  */
-@NepoBasic(containerType = "SET_STIFFNESS", category = "ACTOR", blocklyNames = {"naoActions_stiffness"})
+@NepoBasic(name = "SET_STIFFNESS", category = "ACTOR", blocklyNames = {"naoActions_stiffness"})
 public final class SetStiffness<V> extends Action<V> {
 
     public final BodyPart bodyPart;

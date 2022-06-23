@@ -37,7 +37,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * See {@link #getMode()} for the kind of the repeat statements.
  */
-@NepoBasic(containerType = "REPEAT_STMT", category = "STMT", blocklyNames = {"controls_whileUntil", "robControls_for", "robControls_loopForever", "controls_for", "controls_forEach", "controls_repeat", "robControls_forEach", "controls_repeat_ext", "robControls_loopForever_ardu"})
+@NepoBasic(name = "REPEAT_STMT", category = "STMT", blocklyNames = {"controls_whileUntil", "robControls_for", "robControls_loopForever", "controls_for", "controls_forEach", "controls_repeat", "robControls_forEach", "controls_repeat_ext", "robControls_loopForever_ardu"})
 public final class RepeatStmt<V> extends Stmt<V> {
     public final Mode mode;
     public final Expr<V> expr;

@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
  * getting the languages that are installed on NAO<br/>
  * <br/>
  */
-@NepoBasic(containerType = "GET_LANGUAGE", category = "ACTOR", blocklyNames = {"naoActions_getLanguage"})
+@NepoBasic(name = "GET_LANGUAGE", category = "ACTOR", blocklyNames = {"naoActions_getLanguage"})
 public final class GetLanguage<V> extends Action<V> {
 
     private GetLanguage(BlocklyBlockProperties properties, BlocklyComment comment) {

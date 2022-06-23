@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_ultrasonic2_led"}, containerType = "ULTRASONIC2_LIGHT_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_ultrasonic2_led"}, name = "ULTRASONIC2_LIGHT_ACTION")
 public final class Ultrasonic2LEDAction<V> extends Action<V> implements WithUserDefinedPort<V> {
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;

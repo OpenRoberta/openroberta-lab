@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoBasic(containerType = "BLUETOOTH_RECEIVED_ACTION", category = "ACTOR", blocklyNames = {"robCommunication_receiveBlock"})
+@NepoBasic(name = "BLUETOOTH_RECEIVED_ACTION", category = "ACTOR", blocklyNames = {"robCommunication_receiveBlock"})
 public final class BluetoothReceiveAction<V> extends Action<V> {
     public final Expr<V> connection;
     public final String dataValue;

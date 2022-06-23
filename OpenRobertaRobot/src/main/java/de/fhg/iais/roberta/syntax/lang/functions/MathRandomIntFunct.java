@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.util.syntax.FunctionNames;
  * To create an instance from this class use the method {@link #make(List, BlocklyBlockProperties, BlocklyComment)}.<br>
  * The enumeration {@link FunctionNames} contains all allowed functions.
  */
-@NepoBasic(containerType = "MATH_RANDOM_INT_FUNCT", category = "FUNCTION", blocklyNames = {"math_random_int"})
+@NepoBasic(name = "MATH_RANDOM_INT_FUNCT", category = "FUNCTION", blocklyNames = {"math_random_int"})
 public final class MathRandomIntFunct<V> extends Function<V> {
     public final List<Expr<V>> param;
 

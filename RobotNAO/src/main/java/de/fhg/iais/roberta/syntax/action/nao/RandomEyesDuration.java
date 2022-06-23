@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the {@link duration} (time the eyes will be colored).
  */
-@NepoBasic(containerType = "RANDOM_EYES_DURATION", category = "ACTOR", blocklyNames = {"naoActions_randomEyes"})
+@NepoBasic(name = "RANDOM_EYES_DURATION", category = "ACTOR", blocklyNames = {"naoActions_randomEyes"})
 public final class RandomEyesDuration<V> extends Action<V> {
 
     @Override

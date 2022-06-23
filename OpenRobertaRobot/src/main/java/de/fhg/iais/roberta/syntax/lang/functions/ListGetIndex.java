@@ -32,7 +32,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * To create an instance from this class use the method {@link #make(ListElementOperations, IndexLocation, List, BlocklyBlockProperties, BlocklyComment)}.<br>
  * The enumeration {@link IndexLocation} contains all allowed functions.
  */
-@NepoBasic(containerType = "LIST_INDEX_OF", category = "FUNCTION", blocklyNames = {"robLists_getIndex", "lists_getIndex"})
+@NepoBasic(name = "LIST_INDEX_OF", category = "FUNCTION", blocklyNames = {"robLists_getIndex", "lists_getIndex"})
 public final class ListGetIndex<V> extends Function<V> {
     public final IListElementOperations mode;
     public final IIndexLocation location;

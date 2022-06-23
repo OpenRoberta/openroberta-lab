@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_sayText_parameters"}, containerType = "SAY_TEXT_WITH_SPEED_AND_PITCH")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_sayText_parameters"}, name = "SAY_TEXT_WITH_SPEED_AND_PITCH")
 public final class SayTextWithSpeedAndPitchAction<V> extends Action<V> {
     @NepoValue(name = BlocklyConstants.OUT, type = BlocklyType.STRING)
     public final Expr<V> msg;

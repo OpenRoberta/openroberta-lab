@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
  * <br/>
  * The client must provide the {@link ActorPort} and {@link MotorStopMode} (is the motor breaking or not).
  */
-@NepoBasic(containerType = "BOTH_MOTORS_STOP_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_motors_stop"})
+@NepoBasic(name = "BOTH_MOTORS_STOP_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_motors_stop"})
 public final class BothMotorsStopAction<V> extends Action<V> {
 
     private BothMotorsStopAction(BlocklyBlockProperties properties, BlocklyComment comment) {

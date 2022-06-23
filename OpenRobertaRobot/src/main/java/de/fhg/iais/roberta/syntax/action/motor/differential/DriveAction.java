@@ -32,7 +32,7 @@ import de.fhg.iais.roberta.util.syntax.MotorDuration;
  * <br>
  * To create an instance from this class use the method {@link #make(DriveDirection, MotionParam)}.<br>
  */
-@NepoBasic(containerType = "DRIVE_ACTION", category = "ACTOR", blocklyNames = {"robActions_motorDiff_on_for", "robActions_motorDiff_on"})
+@NepoBasic(name = "DRIVE_ACTION", category = "ACTOR", blocklyNames = {"robActions_motorDiff_on_for", "robActions_motorDiff_on"})
 public final class DriveAction<V> extends Action<V> {
 
     public final IDriveDirection direction;

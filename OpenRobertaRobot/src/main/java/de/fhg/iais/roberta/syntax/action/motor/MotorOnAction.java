@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.util.syntax.MotorDuration;
  * <br/>
  * The client must provide the {@link ActorPort} and {@link MotionParam} (number of rotations or degrees and speed).
  */
-@NepoBasic(containerType = "MOTOR_ON_ACTION", category = "ACTOR", blocklyNames = {"sim_motor_on_for", "robActions_motor_on_for_ardu", "robActions_motor_on", "sim_motor_on", "robActions_motor_on_for", "mbedActions_motor_on"})
+@NepoBasic(name = "MOTOR_ON_ACTION", category = "ACTOR", blocklyNames = {"sim_motor_on_for", "robActions_motor_on_for_ardu", "robActions_motor_on", "sim_motor_on", "robActions_motor_on_for", "mbedActions_motor_on"})
 public final class MotorOnAction<V> extends MoveAction<V> {
 
     public final MotionParam<V> param;

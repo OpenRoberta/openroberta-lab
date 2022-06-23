@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_quadRGB_led_off"}, containerType = "QUADRGB_LIGHT_OFF_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_quadRGB_led_off"}, name = "QUADRGB_LIGHT_OFF_ACTION")
 public final class QuadRGBLightOffAction<V> extends Action<V> implements WithUserDefinedPort<V> {
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;

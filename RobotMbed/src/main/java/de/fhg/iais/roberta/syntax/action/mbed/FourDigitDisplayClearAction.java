@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
  * To create an instance from this class use the method {@link #make(Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  * <br>
  */
-@NepoBasic(containerType = "FOURDIGITDISPLAY_CLEAR_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_fourDigitDisplay_clear"})
+@NepoBasic(name = "FOURDIGITDISPLAY_CLEAR_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_fourDigitDisplay_clear"})
 public final class FourDigitDisplayClearAction<V> extends Action<V> {
 
     private FourDigitDisplayClearAction(BlocklyBlockProperties properties, BlocklyComment comment) {

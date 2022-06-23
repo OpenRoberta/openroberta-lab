@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * User must provide name of the variable and type of the variable, if the variable is created before in the code TypeVar should be <b>NONE</b>. To create an
  * instance from this class use the method {@link #make(BlocklyType, String, boolean, String)}.<br>
  */
-@NepoBasic(containerType = "VAR", category = "EXPR", blocklyNames = {"variables_get"})
+@NepoBasic(name = "VAR", category = "EXPR", blocklyNames = {"variables_get"})
 public final class Var<V> extends Expr<V> {
     public final BlocklyType typeVar;
     public final String name;

@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoBasic(containerType = "RADIO_SET_CHANNEL_ACTION", category = "ACTOR", blocklyNames = {"mbedCommunication_setChannel"})
+@NepoBasic(name = "RADIO_SET_CHANNEL_ACTION", category = "ACTOR", blocklyNames = {"mbedCommunication_setChannel"})
 public final class RadioSetChannelAction<V> extends Action<V> {
     public final Expr<V> channel;
 

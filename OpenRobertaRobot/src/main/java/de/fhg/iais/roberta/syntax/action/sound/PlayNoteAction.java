@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * This class represents the <b>mbedActions_play_note</b> block<br/>
  * The client must provide the note value and note of the sound. <br>
  */
-@NepoPhrase(category = "ACTOR", blocklyNames = {"mbedActions_play_note"}, containerType = "PLAY_NOTE_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"mbedActions_play_note"}, name = "PLAY_NOTE_ACTION")
 public final class PlayNoteAction<V> extends Action<V> {
     @NepoField(name = BlocklyConstants.DURATION, value = "2000")
     public final String duration;

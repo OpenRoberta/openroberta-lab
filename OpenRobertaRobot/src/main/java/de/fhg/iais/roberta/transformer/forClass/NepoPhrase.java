@@ -7,10 +7,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
@@ -29,15 +26,9 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NepoPhrase {
     /**
-     * Container type used to determine the type of the block.
-     * Must be accessible via {@link AstFactory#getByName(String)}! (see {@link AstFactory#add(String, Category, Class, String...)})
+     * name of the block. This is different from the blockly names, that are used in the blockly XML (see {@link #blocklyNames()}
      */
-    String containerType();
-
-    /**
-     * the blockly names, as used in the XML exported from blockly, that have to be transforrmed to an object of this AST class.
-     */
-    String[] blocklyNames();
+    String name();
 
     /**
      * the category this block belongs to (e.g. Sensor, Actor, Stmt, ... . Deprecated, should be removed soon)
@@ -45,14 +36,21 @@ public @interface NepoPhrase {
     String category();
 
     /**
-     * Define the return type of the expression.
-     * Used by {@link Expr#getReturnType()}
+     * the blockly names, as used in the XML exported from blockly, that have to be transforrmed to an object of this AST class.
+     */
+    String[] blocklyNames();
+
+    /**
+     * Define the return type of the phrase. Defaults to NOTHING. Currently not used.
      */
     BlocklyType blocklyType() default BlocklyType.VOID;
 
     /**
-     * Define the return type of the expression.
-     * Used by {@link Expr#getReturnType()}
+     * the huge get sample sensor allows to integrate many sensors together with a mode of this sensor (to avoid a dropdown).
+     * This list defines the association between the field name as used in blockly
+     * - implicitly to the sensor (as this sample value is defined in this AST class, which relates to a sensor)
+     * - explicitly from the blockly field value to the sensor's mode (you'll see, that the sensor's mode usually
+     * is a suffix of the blockly field value)
      */
-    NepoSampleValue[] sampleValues() default {};
+    F2M[] sampleValues() default {};
 }

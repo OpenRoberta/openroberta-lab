@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * <br>
  */
-@NepoBasic(containerType = "LEARN_FACE", category = "ACTOR", blocklyNames = {"naoActions_learnFace"})
+@NepoBasic(name = "LEARN_FACE", category = "ACTOR", blocklyNames = {"naoActions_learnFace"})
 public final class LearnFace<V> extends Action<V> {
     public final Expr<V> faceName;
 

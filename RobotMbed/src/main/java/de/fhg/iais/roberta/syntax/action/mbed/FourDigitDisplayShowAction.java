@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"mbedActions_fourDigitDisplay_show"}, containerType = "FOURDIGITDISPLAY_SHOW_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"mbedActions_fourDigitDisplay_show"}, name = "FOURDIGITDISPLAY_SHOW_ACTION")
 public final class FourDigitDisplayShowAction<V> extends Action<V> {
     @NepoValue(name = BlocklyConstants.VALUE, type = BlocklyType.NUMBER_INT)
     public final Expr<V> value;

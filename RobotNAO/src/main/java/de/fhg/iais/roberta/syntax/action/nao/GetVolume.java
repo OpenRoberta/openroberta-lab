@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
  * getting the volume of the robot.<br/>
  * <br/>
  */
-@NepoBasic(containerType = "GET_VOLUME", category = "ACTOR", blocklyNames = {"naoActions_getVolume"})
+@NepoBasic(name = "GET_VOLUME", category = "ACTOR", blocklyNames = {"naoActions_getVolume"})
 public final class GetVolume<V> extends Action<V> {
 
     private GetVolume(BlocklyBlockProperties properties, BlocklyComment comment) {

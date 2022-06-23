@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * To create an instance from this class use the method {@link #make(ColorConst, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "BOB3_RGB_LED_OFF", category = "ACTOR", blocklyNames = {"makeblockActions_leds_off"})
+@NepoBasic(name = "BOB3_RGB_LED_OFF", category = "ACTOR", blocklyNames = {"makeblockActions_leds_off"})
 public final class LedOffAction<V> extends Action<V> {
     public final String side;
 

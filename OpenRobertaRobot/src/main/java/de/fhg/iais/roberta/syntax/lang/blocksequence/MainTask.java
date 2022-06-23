@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * <b>In this block are defined all global variables that are used in the program.</b>
  */
-@NepoBasic(containerType = "MAIN_TASK", category = "TASK", blocklyNames = {"robControls_start_ardu", "robControls_start", "mbedcontrols_start"})
+@NepoBasic(name = "MAIN_TASK", category = "TASK", blocklyNames = {"robControls_start_ardu", "robControls_start", "mbedcontrols_start"})
 public final class MainTask<V> extends Task<V> {
     public final StmtList<V> variables;
     public final String debug;

@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
-@NepoBasic(containerType = "NN_STEP_STMT", category = "STMT", blocklyNames = {"robactions_nnstep"})
+@NepoBasic(name = "NN_STEP_STMT", category = "STMT", blocklyNames = {"robactions_nnstep"})
 public final class NNStepStmt<V> extends Stmt<V> {
     public final Data netDefinition;
     public final StmtList<V> ioNeurons;

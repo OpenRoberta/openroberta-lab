@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.configuration;
 import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-@NepoConfiguration(containerType = "ANALOG_INPUT", category = "CONFIGURATION_BLOCK",
+@NepoConfiguration(name = "ANALOG_INPUT", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robConf_analogin"})
 public class AnalogInput extends ConfigurationComponent {
     private AnalogInput() {

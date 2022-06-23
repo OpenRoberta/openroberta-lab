@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoBasic(containerType = "DATA_SEND_ACTION", category = "ACTOR", blocklyNames = {"robActions_sendData"})
+@NepoBasic(name = "DATA_SEND_ACTION", category = "ACTOR", blocklyNames = {"robActions_sendData"})
 public final class SendDataAction<V> extends Action<V> {
 
     public final List<Pair<String, Expr<V>>> id2Phenomena;

@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the name of the file.
  */
-@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_play_file"}, containerType = "PLAY_FILE_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_play_file"}, name = "PLAY_FILE_ACTION")
 public final class PlayFileAction<V> extends Action<V> {
     @NepoField(name = BlocklyConstants.FILE)
     public final String fileName;

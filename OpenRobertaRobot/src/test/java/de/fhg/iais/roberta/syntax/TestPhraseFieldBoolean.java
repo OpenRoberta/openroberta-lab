@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
-@NepoPhrase(containerType = "TEST_PHRASE_FIELD_BOOLEAN", blocklyNames = {"test_phrase_field_boolean"}, category = "EXPR")
+@NepoPhrase(name = "TEST_PHRASE_FIELD_BOOLEAN", blocklyNames = {"test_phrase_field_boolean"}, category = "EXPR")
 public class TestPhraseFieldBoolean<V> extends Expr<V> {
     @NepoField(name = "FLAG")
     public final boolean flag;

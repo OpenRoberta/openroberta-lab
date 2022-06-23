@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
-@NepoBasic(containerType = "METHOD_STMT", category = "STMT", blocklyNames = {})
+@NepoBasic(name = "METHOD_STMT", category = "STMT", blocklyNames = {})
 public final class MethodStmt<V> extends Stmt<V> {
     public final Method<V> method;
 

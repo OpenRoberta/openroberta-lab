@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * toggling the state of autonomous life.<br/>
  * <br/>
  */
-@NepoBasic(containerType = "AUTONOMOUS", category = "ACTOR", blocklyNames = {"naoActions_autonomous"})
+@NepoBasic(name = "AUTONOMOUS", category = "ACTOR", blocklyNames = {"naoActions_autonomous"})
 public final class Autonomous<V> extends Action<V> {
 
     public final WorkingState onOff;

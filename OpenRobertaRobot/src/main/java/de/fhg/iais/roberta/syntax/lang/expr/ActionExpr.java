@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 /**
  * Wraps subclasses of the class {@link Action} so they can be used as {@link Expr} in expressions.
  */
-@NepoBasic(category = "EXPR", containerType = "ACTION_EXPR", blocklyNames = {})
+@NepoBasic(category = "EXPR", name = "ACTION_EXPR", blocklyNames = {})
 public final class ActionExpr<V> extends Expr<V> {
     public final Action<V> action;
 

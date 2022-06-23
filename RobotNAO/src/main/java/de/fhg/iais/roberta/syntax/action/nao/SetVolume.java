@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the {@link Volume} (fraction the speech engine is set to).
  */
-@NepoBasic(containerType = "SET_VOLUME", category = "ACTOR", blocklyNames = {"naoActions_setVolume"})
+@NepoBasic(name = "SET_VOLUME", category = "ACTOR", blocklyNames = {"naoActions_setVolume"})
 public final class SetVolume<V> extends Action<V> {
 
     public final Expr<V> volume;

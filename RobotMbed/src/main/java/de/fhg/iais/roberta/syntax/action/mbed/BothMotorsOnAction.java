@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"mbedActions_motors_on"}, containerType = "BOTH_MOTORS_ON_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"mbedActions_motors_on"}, name = "BOTH_MOTORS_ON_ACTION")
 public final class BothMotorsOnAction<V> extends Action<V> {
     @NepoValue(name = BlocklyConstants.POWER_A, type = BlocklyType.NUMBER_INT)
     public final Expr<V> speedA;

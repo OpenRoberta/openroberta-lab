@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * This class represents the <b>robGlobalvariables_declare</b> blocks from Blockly in the AST (abstract syntax tree). Object from this class will generate
  * code for creating a variable.
  */
-@NepoBasic(containerType = "VAR_DECLARATION", category = "EXPR", blocklyNames = {"robLocalVariables_declare", "robGlobalvariables_declare"})
+@NepoBasic(name = "VAR_DECLARATION", category = "EXPR", blocklyNames = {"robLocalVariables_declare", "robGlobalvariables_declare"})
 public final class VarDeclaration<V> extends Expr<V> {
     public final BlocklyType typeVar;
     public final String name;

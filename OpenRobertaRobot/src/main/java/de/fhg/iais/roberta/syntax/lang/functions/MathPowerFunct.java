@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
-@NepoBasic(containerType = "MATH_POWER_FUNCT", category = "EXPR", blocklyNames = {})
+@NepoBasic(name = "MATH_POWER_FUNCT", category = "EXPR", blocklyNames = {})
 public final class MathPowerFunct<V> extends Expr<V> {
     public final FunctionNames functName;
     public final List<Expr<V>> param;

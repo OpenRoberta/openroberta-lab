@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 /**
  * This class represents the blockly block for constant numbers in the AST . Object from this class represent one read-only numerical value.
  */
-@NepoExpr(category = "EXPR", blocklyNames = {"math_integer", "math_number", "rob_math_u999"}, containerType = "NUM_CONST", blocklyType = BlocklyType.NUMBER)
+@NepoExpr(category = "EXPR", blocklyNames = {"math_integer", "math_number", "rob_math_u999"}, name = "NUM_CONST", blocklyType = BlocklyType.NUMBER)
 public final class NumConst<V> extends Expr<V> {
     @NepoField(name = BlocklyConstants.NUM)
     public final String value;

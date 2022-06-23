@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"edisonCommunication_ir_sendBlock"}, containerType = "IR_SEND")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"edisonCommunication_ir_sendBlock"}, name = "IR_SEND")
 public final class SendIRAction<V> extends Action<V> {
 
     @NepoValue(name = BlocklyConstants.MESSAGE, type = BlocklyType.NUMBER)

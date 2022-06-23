@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the {@link ActorPort} on which the motor is connected.
  */
-@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_motor_getPower"}, containerType = "MOTOR_GET_POWER_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_motor_getPower"}, name = "MOTOR_GET_POWER_ACTION")
 public final class MotorGetPowerAction<V> extends MoveAction<V> {
     @NepoField(name = BlocklyConstants.MOTORPORT)
     public final String port;

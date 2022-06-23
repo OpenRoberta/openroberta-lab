@@ -22,7 +22,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the {@link walkToX}, {@link walkToY} and {@link walkToTheta} (coordinates the robot will walk to).
  */
-@NepoBasic(containerType = "WALK_TO", category = "ACTOR", blocklyNames = {"naoActions_walkTo"})
+@NepoBasic(name = "WALK_TO", category = "ACTOR", blocklyNames = {"naoActions_walkTo"})
 public final class WalkTo<V> extends Action<V> {
 
     public final Expr<V> walkToX;

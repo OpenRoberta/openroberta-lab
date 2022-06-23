@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * The client must provide the {@link SensorType} and port. See enum {@link SensorType} for all possible type of sensors.<br>
  */
-@NepoBasic(containerType = "SENSOR_GET_SAMPLE", category = "SENSOR", blocklyNames = {"sim_getSample", "robSensors_getSample_ardu", "mbedsensors_getsample", "robSensors_getSample"})
+@NepoBasic(name = "SENSOR_GET_SAMPLE", category = "SENSOR", blocklyNames = {"sim_getSample", "robSensors_getSample_ardu", "mbedsensors_getsample", "robSensors_getSample"})
 public final class GetSampleSensor<V> extends Sensor<V> {
     public final Sensor<V> sensor;
     public final String sensorPort;

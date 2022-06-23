@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.util.syntax.FunctionNames;
  * To create an instance from this class use the method {@link #make(List, BlocklyBlockProperties, BlocklyComment)}.<br>
  * The enumeration {@link FunctionNames} contains all allowed functions.
  */
-@NepoBasic(containerType = "LIST_REPEAT_FUNCT", category = "FUNCTION", blocklyNames = {"lists_repeat", "robLists_repeat"})
+@NepoBasic(name = "LIST_REPEAT_FUNCT", category = "FUNCTION", blocklyNames = {"lists_repeat", "robLists_repeat"})
 public final class ListRepeat<V> extends Function<V> {
     public final BlocklyType typeVar;
     public final List<Expr<V>> param;

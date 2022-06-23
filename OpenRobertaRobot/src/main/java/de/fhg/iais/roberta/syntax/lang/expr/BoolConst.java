@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * To create an instance from this class use the method {@link #make(boolean, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoExpr(category = "EXPR", blocklyNames = {"logic_boolean"}, containerType = "BOOL_CONST", blocklyType = BlocklyType.BOOLEAN)
+@NepoExpr(category = "EXPR", blocklyNames = {"logic_boolean"}, name = "BOOL_CONST", blocklyType = BlocklyType.BOOLEAN)
 public final class BoolConst<V> extends Expr<V> {
     @NepoField(name = BlocklyConstants.BOOL)
     public final boolean value;

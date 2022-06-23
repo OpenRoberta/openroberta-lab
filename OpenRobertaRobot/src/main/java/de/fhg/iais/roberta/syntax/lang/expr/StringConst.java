@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * To create an instance from this class use the method {@link #make(String, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoExpr(category = "EXPR", blocklyNames = {"text"}, containerType = "STRING_CONST", blocklyType = BlocklyType.STRING)
+@NepoExpr(category = "EXPR", blocklyNames = {"text"}, name = "STRING_CONST", blocklyType = BlocklyType.STRING)
 public final class StringConst<V> extends Expr<V> {
     @NepoField(name = BlocklyConstants.TEXT)
     public final String value;

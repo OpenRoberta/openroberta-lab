@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * turning all LEDs off.<br/>
  * <br/>
  */
-@NepoBasic(containerType = "LED_OFF", category = "ACTOR", blocklyNames = {"naoActions_ledOff"})
+@NepoBasic(name = "LED_OFF", category = "ACTOR", blocklyNames = {"naoActions_ledOff"})
 public final class LedOff<V> extends Action<V> {
 
     public final Led led;

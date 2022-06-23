@@ -11,13 +11,13 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.transformer.forClass.F2M;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "ENCODER_DISTANCE", sensor = "ENCODER", mode = "DISTANCE"), @NepoSampleValue(blocklyFieldName = "ENCODER_DEGREE", sensor = "ENCODER", mode = "DEGREE"), @NepoSampleValue(blocklyFieldName = "ENCODER_ROTATION", sensor = "ENCODER", mode = "ROTATION")}, containerType = "ENCODER_SENSING", category = "SENSOR", blocklyNames = {"robSensors_encoder_reset", "robSensors_encoder_getSample"})
+@NepoBasic(sampleValues = {@F2M(field = "ENCODER_DISTANCE", mode = "DISTANCE"), @F2M(field = "ENCODER_DEGREE", mode = "DEGREE"), @F2M(field = "ENCODER_ROTATION", mode = "ROTATION")}, name = "ENCODER_SENSING", category = "SENSOR", blocklyNames = {"robSensors_encoder_reset", "robSensors_encoder_getSample"})
 public final class EncoderSensor<V> extends ExternalSensor<V> {
 
     public EncoderSensor(BlocklyBlockProperties properties, BlocklyComment comment, SensorMetaDataBean sensorMetaDataBean) {

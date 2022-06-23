@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * This class represents the <b>robActions_play_tone</b> block<br/>
  * The client must provide the frequency and the duration of the sound.
  */
-@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_play_tone", "mbedActions_play_tone"}, containerType = "TONE_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_play_tone", "mbedActions_play_tone"}, name = "TONE_ACTION")
 public final class ToneAction<V> extends Action<V> {
     @NepoValue(name = BlocklyConstants.FREQUENCE, type = BlocklyType.NUMBER_INT)
     public final Expr<V> frequency;

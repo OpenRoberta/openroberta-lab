@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
  * <br>
  * To create an instance from this class use the method {@link #make(String..., BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "IMAGE", category = "EXPR", blocklyNames = {"mbedImage_image"})
+@NepoBasic(name = "IMAGE", category = "EXPR", blocklyNames = {"mbedImage_image"})
 public final class Image<V> extends Expr<V> {
     public final String[][] image;
 

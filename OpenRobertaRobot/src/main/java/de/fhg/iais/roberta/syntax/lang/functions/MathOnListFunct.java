@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.util.syntax.FunctionNames;
  * To create an instance from this class use the method {@link #make(FunctionNames, List, BlocklyBlockProperties, BlocklyComment)}.<br>
  * The enumeration {@link FunctionNames} contains all allowed functions.
  */
-@NepoBasic(containerType = "MATH_ON_LIST_FUNCT", category = "FUNCTION", blocklyNames = {"math_on_list"})
+@NepoBasic(name = "MATH_ON_LIST_FUNCT", category = "FUNCTION", blocklyNames = {"math_on_list"})
 public final class MathOnListFunct<V> extends Function<V> {
     public final FunctionNames functName;
     public final List<Expr<V>> param;

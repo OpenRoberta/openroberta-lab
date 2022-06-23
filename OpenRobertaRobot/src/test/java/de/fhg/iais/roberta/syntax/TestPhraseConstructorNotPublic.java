@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
-@NepoPhrase(containerType = "TEST_PHRASE_CONSTRUCTOR_NOT_PUBLIC", blocklyNames = {"test_phrase_constructor_not_public"}, category = "EXPR")
+@NepoPhrase(name = "TEST_PHRASE_CONSTRUCTOR_NOT_PUBLIC", blocklyNames = {"test_phrase_constructor_not_public"}, category = "EXPR")
 public class TestPhraseConstructorNotPublic<V> extends Phrase<V> {
 
     @NepoField(name = "TYPE")

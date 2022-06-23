@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
-@NepoBasic(containerType = "NEURAL_NETWORK_ADD_TRAININGSDATA", category = "STMT", blocklyNames = {"robActions_aifes_addtrainingsdata"})
+@NepoBasic(name = "NEURAL_NETWORK_ADD_TRAININGSDATA", category = "STMT", blocklyNames = {"robActions_aifes_addtrainingsdata"})
 public final class NeuralNetworkAddTrainingsData<V> extends Stmt<V> {
     private Expr<V> classNumber;
 

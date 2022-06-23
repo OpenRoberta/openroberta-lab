@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
  * {@link EmptyExpr} is used when in binary or unary expressions, expression is missing. When create instance from this class we pass as parameter the type of
  * the value should have the missing expression.
  */
-@NepoBasic(containerType = "EMPTY_EXPR", category = "EXPR", blocklyNames = {})
+@NepoBasic(name = "EMPTY_EXPR", category = "EXPR", blocklyNames = {})
 public final class EmptyExpr<V> extends Expr<V> {
 
     public final BlocklyType defVal;

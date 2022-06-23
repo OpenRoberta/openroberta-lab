@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoBasic(containerType = "RADIO_RECEIVE_ACTION", category = "ACTOR", blocklyNames = {"mbedCommunication_receiveBlock"})
+@NepoBasic(name = "RADIO_RECEIVE_ACTION", category = "ACTOR", blocklyNames = {"mbedCommunication_receiveBlock"})
 public final class RadioReceiveAction<V> extends Action<V> {
     public final BlocklyType type;
 

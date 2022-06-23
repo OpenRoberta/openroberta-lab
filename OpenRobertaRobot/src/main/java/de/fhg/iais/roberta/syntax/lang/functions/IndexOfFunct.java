@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.util.syntax.FunctionNames;
  * To create an instance from this class use the method {@link #make(Type, FunctionNames, List, BlocklyBlockProperties, BlocklyComment)}.<br>
  * The enumeration {@link FunctionNames} contains all allowed functions.
  */
-@NepoBasic(containerType = "TEXT_INDEX_OF_FUNCT", category = "FUNCTION", blocklyNames = {"lists_indexOf", "robLists_indexOf"})
+@NepoBasic(name = "TEXT_INDEX_OF_FUNCT", category = "FUNCTION", blocklyNames = {"lists_indexOf", "robLists_indexOf"})
 public final class IndexOfFunct<V> extends Function<V> {
     public final IIndexLocation location;
     public final List<Expr<V>> param;

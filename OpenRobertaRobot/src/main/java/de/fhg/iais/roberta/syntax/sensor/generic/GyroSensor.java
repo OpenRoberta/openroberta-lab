@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.transformer.forClass.F2M;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * To create an instance from this class use the method {@link #make(GyroSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(sampleValues = {@NepoSampleValue(blocklyFieldName = "GYRO_TILTED", sensor = "GYRO", mode = "TILTED"), @NepoSampleValue(blocklyFieldName = "GYRO_Y", sensor = "GYRO", mode = "Y"), @NepoSampleValue(blocklyFieldName = "GYRO_RATE", sensor = "GYRO", mode = "RATE"), @NepoSampleValue(blocklyFieldName = "GYRO_Z", sensor = "GYRO", mode = "Z"), @NepoSampleValue(blocklyFieldName = "GYRO_X", sensor = "GYRO", mode = "X"), @NepoSampleValue(blocklyFieldName = "GYRO_ANGLE", sensor = "GYRO", mode = "ANGLE")}, containerType = "GYRO_SENSING", category = "SENSOR", blocklyNames = {"robSensors_gyro_getSample", "robSensors_gyro_reset", "mbedsensors_rotation_getsample"})
+@NepoBasic(sampleValues = {@F2M(field = "GYRO_TILTED", mode = "TILTED"), @F2M(field = "GYRO_Y", mode = "Y"), @F2M(field = "GYRO_RATE", mode = "RATE"), @F2M(field = "GYRO_Z", mode = "Z"), @F2M(field = "GYRO_X", mode = "X"), @F2M(field = "GYRO_ANGLE", mode = "ANGLE")}, name = "GYRO_SENSING", category = "SENSOR", blocklyNames = {"robSensors_gyro_getSample", "robSensors_gyro_reset", "mbedsensors_rotation_getsample"})
 public final class GyroSensor<V> extends ExternalSensor<V> {
 
     public GyroSensor(BlocklyBlockProperties properties, BlocklyComment comment, SensorMetaDataBean sensorMetaDataBean) {

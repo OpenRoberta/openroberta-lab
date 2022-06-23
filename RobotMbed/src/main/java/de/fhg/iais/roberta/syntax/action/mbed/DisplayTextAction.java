@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * To create an instance from this class use the method {@link #make(Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  * <br>
  */
-@NepoBasic(containerType = "DISPLAY_TEXT_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_display_text"})
+@NepoBasic(name = "DISPLAY_TEXT_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_display_text"})
 public final class DisplayTextAction<V> extends Action<V> {
     public final DisplayTextMode mode;
     public final Expr<V> msg;

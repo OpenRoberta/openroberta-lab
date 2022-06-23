@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.util.syntax.FunctionNames;
  * To create an instance from this class use the method {@link #make(List, BlocklyBlockProperties, BlocklyComment)}.<br>
  * The enumeration {@link FunctionNames} contains all allowed functions.
  */
-@NepoBasic(containerType = "TEXT_JOIN_FUNCT", category = "FUNCTION", blocklyNames = {"robText_join", "text_join"})
+@NepoBasic(name = "TEXT_JOIN_FUNCT", category = "FUNCTION", blocklyNames = {"robText_join", "text_join"})
 public final class TextJoinFunct<V> extends Function<V> {
     public final ExprList<V> param;
 

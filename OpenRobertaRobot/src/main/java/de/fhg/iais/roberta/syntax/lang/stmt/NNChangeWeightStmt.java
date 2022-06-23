@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "STMT", blocklyNames = {"robActions_change_weight"}, containerType = "NN_CHANGE_WEIGHT_STMT")
+@NepoPhrase(category = "STMT", blocklyNames = {"robActions_change_weight"}, name = "NN_CHANGE_WEIGHT_STMT")
 public final class NNChangeWeightStmt<V> extends Stmt<V> {
     @NepoField(name = BlocklyConstants.FROM)
     public final String from;

@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the {@link duration} (time the eyes will be colored).
  */
-@NepoBasic(containerType = "RASTA_DURATION", category = "ACTOR", blocklyNames = {"naoActions_rasta"})
+@NepoBasic(name = "RASTA_DURATION", category = "ACTOR", blocklyNames = {"naoActions_rasta"})
 public final class RastaDuration<V> extends Action<V> {
 
     @Override

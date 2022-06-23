@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * The user must provide name of the function and list of parameters. <br>
  * To create an instance from this class use the method {@link #make(Image, Direction, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "IMAGE_SHIFT", category = "FUNCTION", blocklyNames = {"mbedImage_shift"})
+@NepoBasic(name = "IMAGE_SHIFT", category = "FUNCTION", blocklyNames = {"mbedImage_shift"})
 public final class ImageShiftFunction<V> extends Function<V> {
     public final Expr<V> image;
     public final Expr<V> positions;

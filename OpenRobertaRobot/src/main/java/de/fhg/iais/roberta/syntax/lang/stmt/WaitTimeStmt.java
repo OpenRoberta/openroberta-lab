@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * This class represents the <b>robControls_wait_time</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate wait
  * statement.<br/>
  */
-@NepoPhrase(category = "STMT", blocklyNames = {"robControls_wait_time"}, containerType = "WAIT_TIME")
+@NepoPhrase(category = "STMT", blocklyNames = {"robControls_wait_time"}, name = "WAIT_TIME")
 public final class WaitTimeStmt<V> extends Stmt<V> {
     @NepoValue(name = BlocklyConstants.WAIT, type = BlocklyType.NUMBER_INT)
     public final Expr<V> time;

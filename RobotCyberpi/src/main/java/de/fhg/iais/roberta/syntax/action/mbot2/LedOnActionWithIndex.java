@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_led_on_new_config"}, containerType = "CYBERPI_LED_ON_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_led_on_new_config"}, name = "CYBERPI_LED_ON_ACTION")
 public final class LedOnActionWithIndex<V> extends Action<V> implements WithUserDefinedPort<V> {
     @NepoValue(name = BlocklyConstants.COLOR, type = BlocklyType.COLOR)
     public final Expr<V> color;

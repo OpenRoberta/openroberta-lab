@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
  * stopping every movement of the robot.<br/>
  * <br/>
  */
-@NepoPhrase(category = "ACTOR", blocklyNames = {"robactions_display_set_colour"}, containerType = "DISPLAY_SET_COLOUR_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robactions_display_set_colour"}, name = "DISPLAY_SET_COLOUR_ACTION")
 public final class DisplaySetColourAction<V> extends Action<V> implements WithUserDefinedPort<V> {
     @NepoValue(name = BlocklyConstants.COLOR, type = BlocklyType.COLOR)
     public final Expr<V> color;

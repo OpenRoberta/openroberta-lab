@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 /**
  * This class represents the <b>robColour_rgb</b> block from Blockly
  */
-@NepoExpr(category = "EXPR", blocklyNames = {"naoColour_rgb", "robColour_rgb", "mbedColour_rgb"}, containerType = "RGB_COLOR", blocklyType = BlocklyType.COLOR, precedence = 999, assoc = Assoc.NONE)
+@NepoExpr(category = "EXPR", blocklyNames = {"naoColour_rgb", "robColour_rgb", "mbedColour_rgb"}, name = "RGB_COLOR", blocklyType = BlocklyType.COLOR, precedence = 999, assoc = Assoc.NONE)
 public final class RgbColor<V> extends Expr<V> {
     @NepoValue(name = BlocklyConstants.RED, type = BlocklyType.NUMBER_INT)
     public final Expr<V> R;

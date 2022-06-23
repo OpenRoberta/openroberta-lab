@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoBasic(containerType = "LSM9DS1_MAGNETICFIELD", category = "SENSOR", blocklyNames = {"robsensors_lsm9ds1_magneticfield_getDataAvailableSample"})
+@NepoBasic(name = "LSM9DS1_MAGNETICFIELD", category = "SENSOR", blocklyNames = {"robsensors_lsm9ds1_magneticfield_getDataAvailableSample"})
 public final class Lsm9ds1MagneticFieldSensor<V> extends BuiltinSensor<V> {
 
     public final Expr<V> x, y, z;

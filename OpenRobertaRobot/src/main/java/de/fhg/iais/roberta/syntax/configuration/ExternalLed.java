@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.configuration;
 import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-@NepoConfiguration(containerType = "EXTERNAL_LED", category = "CONFIGURATION_BLOCK",
+@NepoConfiguration(name = "EXTERNAL_LED", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robBrick_led"})
 public class ExternalLed extends ConfigurationComponent {
     private ExternalLed() {

@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 /**
  * Wraps subclasses of the class {@link Action} so they can be used as {@link Stmt} in statements.
  */
-@NepoBasic(containerType = "AKTION_STMT", category = "STMT", blocklyNames = {})
+@NepoBasic(name = "AKTION_STMT", category = "STMT", blocklyNames = {})
 public final class ActionStmt<V> extends Stmt<V> {
     public final Action<V> action;
 

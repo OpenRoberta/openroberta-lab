@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.configuration;
 import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-@NepoConfiguration(containerType = "ANALOG_PIN", category = "CONFIGURATION_BLOCK",
+@NepoConfiguration(name = "ANALOG_PIN", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robActions_write_to_pin", "robConf_analogout"})
 public class AnalogPin extends ConfigurationComponent {
     private AnalogPin() {

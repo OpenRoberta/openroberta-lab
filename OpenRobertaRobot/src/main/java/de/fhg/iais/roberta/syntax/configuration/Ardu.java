@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.configuration;
 import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-@NepoConfiguration(containerType = "ARDU", category = "CONFIGURATION_BLOCK",
+@NepoConfiguration(name = "ARDU", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robBrick_motor_ardu"})
 public class Ardu extends ConfigurationComponent {
     private Ardu() {

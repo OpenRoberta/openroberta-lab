@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
  * setting the motor speed and type of movement connected on given port and turn the motor on.<br/>
  * <br/>
  */
-@NepoBasic(containerType = "SERVO_SET_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_servo_set"})
+@NepoBasic(name = "SERVO_SET_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_servo_set"})
 public final class ServoSetAction<V> extends Action<V> implements WithUserDefinedPort<V> {
     public final String port;
     public final Expr<V> value;

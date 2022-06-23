@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"robCommunication_checkConnection"}, containerType = "BLUETOOTH_CHECK_CONNECT_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robCommunication_checkConnection"}, name = "BLUETOOTH_CHECK_CONNECT_ACTION")
 public final class BluetoothCheckConnectAction<V> extends Action<V> {
     @NepoValue(name = BlocklyConstants.CONNECTION, type = BlocklyType.STRING)
     public final Expr<V> connection;

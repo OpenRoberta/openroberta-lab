@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"mbedActions_pin_set_pull"}, containerType = "PIN_SET_PULL")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"mbedActions_pin_set_pull"}, name = "PIN_SET_PULL")
 public final class PinSetPullAction<V> extends Action<V> {
     @NepoField(name = BlocklyConstants.PIN_PULL)
     public final String pinPull;

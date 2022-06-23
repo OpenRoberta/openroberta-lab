@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.configuration;
 import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-@NepoConfiguration(containerType = "COLOR", category = "CONFIGURATION_BLOCK",
+@NepoConfiguration(name = "COLOR", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robBrick_colour"})
 public class Color extends ConfigurationComponent {
     private Color() {

@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.util.syntax.FunctionNames;
  * This class represents blockly blocks defining binary operations in the AST<br>
  * The enumeration {@link Op} specifies the allowed binary operations.
  */
-@NepoBasic(containerType = "BINARY", category = "EXPR", blocklyNames = {"math_arithmetic", "math_change", "math_modulo", "robMath_change", "logic_compare", "logic_operation", "robText_append"})
+@NepoBasic(name = "BINARY", category = "EXPR", blocklyNames = {"math_arithmetic", "math_change", "math_modulo", "robMath_change", "logic_compare", "logic_operation", "robText_append"})
 public final class Binary<V> extends Expr<V> {
     public final Op op;
     public final Expr<V> left;

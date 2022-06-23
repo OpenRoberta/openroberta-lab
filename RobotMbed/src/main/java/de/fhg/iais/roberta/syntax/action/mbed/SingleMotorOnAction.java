@@ -25,7 +25,7 @@ import de.fhg.iais.roberta.util.syntax.MotionParam;
  * <br/>
  * The client must provide the {@link ActorPort} and {@link MotionParam} (number of rotations or degrees and speed).
  */
-@NepoBasic(containerType = "SINGLE_MOTOR_ON_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_single_motor_on"})
+@NepoBasic(name = "SINGLE_MOTOR_ON_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_single_motor_on"})
 public final class SingleMotorOnAction<V> extends Action<V> {
     public final Expr<V> speed;
 

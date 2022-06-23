@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * resetting all LEDs to their standard state.<br/>
  * <br/>
  */
-@NepoBasic(containerType = "LED_RESET", category = "ACTOR", blocklyNames = {"naoActions_ledReset"})
+@NepoBasic(name = "LED_RESET", category = "ACTOR", blocklyNames = {"naoActions_ledReset"})
 public final class LedReset<V> extends Action<V> {
 
     public final Led led;

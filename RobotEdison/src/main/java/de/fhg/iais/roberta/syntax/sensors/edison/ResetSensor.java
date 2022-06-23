@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "SENSOR", blocklyNames = {"edisonSensors_sensor_reset"}, containerType = "SENSOR_RESET")
+@NepoPhrase(category = "SENSOR", blocklyNames = {"edisonSensors_sensor_reset"}, name = "SENSOR_RESET")
 public final class ResetSensor<V> extends Sensor<V> {
 
     @NepoField(name = BlocklyConstants.SENSOR)

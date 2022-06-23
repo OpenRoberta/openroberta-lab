@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.util.syntax.FunctionNames;
  * To create an instance from this class use the method {@link #make(FunctionNames, List, BlocklyBlockProperties, BlocklyComment)}.<br>
  * The enumeration {@link FunctionNames} contains all allowed functions.
  */
-@NepoBasic(containerType = "LENGTH_OF_IS_EMPTY_FUNCT", category = "FUNCTION", blocklyNames = {"lists_length", "lists_isEmpty", "robLists_isEmpty", "robLists_length"})
+@NepoBasic(name = "LENGTH_OF_IS_EMPTY_FUNCT", category = "FUNCTION", blocklyNames = {"lists_length", "lists_isEmpty", "robLists_isEmpty", "robLists_length"})
 public final class LengthOfIsEmptyFunct<V> extends Function<V> {
     public final FunctionNames functName;
     public final List<Expr<V>> param;

@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.syntax.MotionParam;
  * code for detecting a NaoMark.<br/>
  * <br/>
  */
-@NepoBasic(containerType = "NAO_FACE_INFORMATION", category = "SENSOR", blocklyNames = {"naoSensors_getFaceInformation"})
+@NepoBasic(name = "NAO_FACE_INFORMATION", category = "SENSOR", blocklyNames = {"naoSensors_getFaceInformation"})
 public final class DetectedFaceInformation<V> extends Sensor<V> {
 
     public final Expr<V> faceName;

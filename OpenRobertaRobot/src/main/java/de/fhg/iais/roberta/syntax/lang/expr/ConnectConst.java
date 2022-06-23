@@ -25,7 +25,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * To create an instance from this class use the method {@link #make(String, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "CONNECTION_CONST", category = "EXPR", blocklyNames = {"robCommunication_connection"})
+@NepoBasic(name = "CONNECTION_CONST", category = "EXPR", blocklyNames = {"robCommunication_connection"})
 public final class ConnectConst<V> extends Expr<V> {
     public final String value;
     public final String dataValue;

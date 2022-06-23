@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * <br>
  */
-@NepoBasic(containerType = "PLAY_FILE", category = "ACTOR", blocklyNames = {"naoActions_playFile"})
+@NepoBasic(name = "PLAY_FILE", category = "ACTOR", blocklyNames = {"naoActions_playFile"})
 public final class PlayFile<V> extends Action<V> {
     public final Expr<V> msg;
 

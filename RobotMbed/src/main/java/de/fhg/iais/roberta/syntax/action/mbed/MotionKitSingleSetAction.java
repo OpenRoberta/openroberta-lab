@@ -22,7 +22,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * generate code for setting the motor speed and type of movement connected on given port and turn the motor on.<br/>
  * <br/>
  */
-@NepoBasic(containerType = "MOTIONKIT_SINGLE_SET_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_motionkit_single_set"})
+@NepoBasic(name = "MOTIONKIT_SINGLE_SET_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_motionkit_single_set"})
 public final class MotionKitSingleSetAction<V> extends Action<V> {
     public final String port;
     public final String direction;

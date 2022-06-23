@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the {@link ILanguage} (the language NAOs speech engine is set to).
  */
-@NepoBasic(containerType = "SET_LANGUAGE", category = "ACTOR", blocklyNames = {"naoActions_setLanguage", "robActions_setLanguage"})
+@NepoBasic(name = "SET_LANGUAGE", category = "ACTOR", blocklyNames = {"naoActions_setLanguage", "robActions_setLanguage"})
 public final class SetLanguageAction<V> extends Action<V> {
 
     public final ILanguage language;

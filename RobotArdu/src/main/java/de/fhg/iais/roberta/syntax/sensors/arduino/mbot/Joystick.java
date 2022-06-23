@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 
-@NepoBasic(containerType = "ARDU_JOYSTICK_GETSAMPLE", category = "SENSOR", blocklyNames = {"robSensors_joystick_getSample"})
+@NepoBasic(name = "ARDU_JOYSTICK_GETSAMPLE", category = "SENSOR", blocklyNames = {"robSensors_joystick_getSample"})
 public final class Joystick<V> extends ExternalSensor<V> {
     public final String joystickAxis;
 

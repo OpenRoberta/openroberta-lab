@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 /**
  * Wraps subclasses of the class {@link Sensor} so they can be used as {@link Stmt} in statements.
  */
-@NepoBasic(containerType = "SENSOR_STMT", category = "STMT", blocklyNames = {})
+@NepoBasic(name = "SENSOR_STMT", category = "STMT", blocklyNames = {})
 public final class SensorStmt<V> extends Stmt<V> {
     public final Sensor<V> sensor;
 

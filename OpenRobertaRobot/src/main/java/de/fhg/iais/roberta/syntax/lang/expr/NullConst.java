@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
  * <br>
  * To create an instance from this class use the method {@link #make(BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoExpr(category = "EXPR", blocklyNames = {"logic_null"}, containerType = "NULL_CONST", blocklyType = BlocklyType.NULL)
+@NepoExpr(category = "EXPR", blocklyNames = {"logic_null"}, name = "NULL_CONST", blocklyType = BlocklyType.NULL)
 public final class NullConst<V> extends Expr<V> {
 
     public NullConst(BlocklyBlockProperties properties, BlocklyComment comment) {

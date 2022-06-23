@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * This class represents the <b>robProcedures_defreturn</b> block from Blockly into the AST (abstract syntax tree). Object from this class is used to create a
  * method with return value<br/>
  */
-@NepoBasic(containerType = "METHOD_CALL", category = "METHOD", blocklyNames = {"robProcedures_callreturn", "robProcedures_callnoreturn"})
+@NepoBasic(name = "METHOD_CALL", category = "METHOD", blocklyNames = {"robProcedures_callreturn", "robProcedures_callnoreturn"})
 public final class MethodCall<V> extends Method<V> {
     public final String oraMethodName;
     public final ExprList<V> oraParameters;

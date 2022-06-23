@@ -25,7 +25,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * The user must provide image to be inverted. <br>
  * To create an instance from this class use the method {@link #make(Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "LED_MATRIX_IMAGE_INVERT", category = "FUNCTION", blocklyNames = {"mBotImage_invert"})
+@NepoBasic(name = "LED_MATRIX_IMAGE_INVERT", category = "FUNCTION", blocklyNames = {"mBotImage_invert"})
 public final class LEDMatrixImageInvertFunction<V> extends Function<V> {
     public final Expr<V> image;
 

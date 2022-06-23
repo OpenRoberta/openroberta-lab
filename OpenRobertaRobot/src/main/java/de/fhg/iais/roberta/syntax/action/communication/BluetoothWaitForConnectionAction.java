@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"robCommunication_waitForConnection"}, containerType = "BLUETOOTH_WAIT_FOR_CONNECTION_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robCommunication_waitForConnection"}, name = "BLUETOOTH_WAIT_FOR_CONNECTION_ACTION")
 public final class BluetoothWaitForConnectionAction<V> extends Action<V> {
 
     public BluetoothWaitForConnectionAction(BlocklyBlockProperties properties, BlocklyComment comment) {

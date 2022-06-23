@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * To create an instance from this class use the method {@link #make(ColorConst, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "FESTOBIONIC_STEPMOTOR", category = "ACTOR", blocklyNames = {"festobionicActions_stepmotor"})
+@NepoBasic(name = "FESTOBIONIC_STEPMOTOR", category = "ACTOR", blocklyNames = {"festobionicActions_stepmotor"})
 public final class StepMotorAction<V> extends Action<V> {
     public final Expr<V> stepMotorPos;
 

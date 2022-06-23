@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.configuration;
 import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-@NepoConfiguration(containerType = "JOYSTICK", category = "CONFIGURATION_BLOCK",
+@NepoConfiguration(name = "JOYSTICK", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"arduSensors_joystick_getSample", "robConf_joystick"})
 public class Joystick extends ConfigurationComponent {
     private Joystick() {

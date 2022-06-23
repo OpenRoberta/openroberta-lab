@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_display_text", "robActions_display_text_i2c", "robActions_display_text_oledssd1306i2c"}, containerType = "SHOW_TEXT_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_display_text", "robActions_display_text_i2c", "robActions_display_text_oledssd1306i2c"}, name = "SHOW_TEXT_ACTION")
 public final class ShowTextAction<V> extends Action<V> {
     @NepoValue(name = BlocklyConstants.OUT, type = BlocklyType.STRING)
     public final Expr<V> msg;

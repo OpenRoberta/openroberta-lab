@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.util.syntax.MotionParam;
  * <br/>
  * The client must provide the {@link MotionParam} (number of rotations or degrees and speed).
  */
-@NepoBasic(containerType = "TAKE_PICTURE", category = "ACTOR", blocklyNames = {"naoActions_takePicture"})
+@NepoBasic(name = "TAKE_PICTURE", category = "ACTOR", blocklyNames = {"naoActions_takePicture"})
 public final class TakePicture<V> extends Action<V> {
 
     public final Camera camera;

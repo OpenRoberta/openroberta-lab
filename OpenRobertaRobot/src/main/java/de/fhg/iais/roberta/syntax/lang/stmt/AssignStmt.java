@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * To create an instance from this class use the method {@link #make(Var, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "ASSIGN_STMT", category = "STMT", blocklyNames = {"variables_set"})
+@NepoBasic(name = "ASSIGN_STMT", category = "STMT", blocklyNames = {"variables_set"})
 public final class AssignStmt<V> extends Stmt<V> {
     public final Var<V> name;
     public final Expr<V> expr;

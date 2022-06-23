@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the {@link led}.
  */
-@NepoBasic(containerType = "SET_INTENSITY", category = "ACTOR", blocklyNames = {"naoActions_setIntensity"})
+@NepoBasic(name = "SET_INTENSITY", category = "ACTOR", blocklyNames = {"naoActions_setIntensity"})
 public final class SetIntensity<V> extends Action<V> {
 
     public final Led led;

@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * To create an instance from this class use the method {@link #make(Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  * <br>
  */
-@NepoBasic(containerType = "LED_MATRIX_TEXT_ACTION", category = "ACTOR", blocklyNames = {"mBotActions_display_text"})
+@NepoBasic(name = "LED_MATRIX_TEXT_ACTION", category = "ACTOR", blocklyNames = {"mBotActions_display_text"})
 public final class LEDMatrixTextAction<V> extends Action<V> {
     public final String port;
     public final Expr<V> msg;

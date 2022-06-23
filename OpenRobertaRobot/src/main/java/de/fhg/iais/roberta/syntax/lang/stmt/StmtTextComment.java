@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * This class represents the <b>text_comment</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code for an
  * inline comment.
  */
-@NepoPhrase(category = "STMT", blocklyNames = {"text_comment"}, containerType = "TEXT_COMMENT")
+@NepoPhrase(category = "STMT", blocklyNames = {"text_comment"}, name = "TEXT_COMMENT")
 public final class StmtTextComment<V> extends Stmt<V> {
     @NepoField(name = BlocklyConstants.TEXT)
     public final String textComment;

@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoBasic(containerType = "LSM9DS1_ACCELERATION", category = "SENSOR", blocklyNames = {"robsensors_lsm9ds1_acceleration_getDataAvailableSample"})
+@NepoBasic(name = "LSM9DS1_ACCELERATION", category = "SENSOR", blocklyNames = {"robsensors_lsm9ds1_acceleration_getDataAvailableSample"})
 public final class Lsm9ds1AccSensor<V> extends BuiltinSensor<V> {
 
     public final Expr<V> x, y, z;

@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * This class represents the <b>robProcedures_ifreturn</b> block from Blockly into the AST (abstract syntax tree). Object from this class is used to create a
  * <i>if-return</i> statement inside method<br/>
  */
-@NepoBasic(containerType = "METHOD_IF_RETURN", category = "METHOD", blocklyNames = {"robProcedures_ifreturn"})
+@NepoBasic(name = "METHOD_IF_RETURN", category = "METHOD", blocklyNames = {"robProcedures_ifreturn"})
 public final class MethodIfReturn<V> extends Method<V> {
     public final Expr<V> oraCondition;
     public final BlocklyType oraReturnType;

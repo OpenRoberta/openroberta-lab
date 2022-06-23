@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.configuration;
 import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-@NepoConfiguration(containerType = "SERVOMOTOR", category = "CONFIGURATION_BLOCK",
+@NepoConfiguration(name = "SERVOMOTOR", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robConf_servo"})
 public class Servomotor extends ConfigurationComponent {
     private Servomotor() {

@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoBasic(containerType = "IF_STMT", category = "STMT", blocklyNames = {"robControls_ifElse", "controls_if", "robControls_if"})
+@NepoBasic(name = "IF_STMT", category = "STMT", blocklyNames = {"robControls_ifElse", "controls_if", "robControls_if"})
 public final class IfStmt<V> extends Stmt<V> {
     public final List<Expr<V>> expr;
     public final List<StmtList<V>> thenList;

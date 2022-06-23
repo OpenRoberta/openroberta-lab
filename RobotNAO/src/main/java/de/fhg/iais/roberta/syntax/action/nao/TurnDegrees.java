@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the {@link turnDirection} and {@link degreesToTurn} (direction and number of degrees to turn).
  */
-@NepoBasic(containerType = "TURN_DEGREES", category = "ACTOR", blocklyNames = {"naoActions_turn"})
+@NepoBasic(name = "TURN_DEGREES", category = "ACTOR", blocklyNames = {"naoActions_turn"})
 public final class TurnDegrees<V> extends Action<V> {
 
     public final TurnDirection turnDirection;

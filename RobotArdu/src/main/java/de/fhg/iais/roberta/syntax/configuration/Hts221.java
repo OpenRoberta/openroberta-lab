@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.configuration;
 import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-@NepoConfiguration(containerType = "HTS221", category = "CONFIGURATION_BLOCK",
+@NepoConfiguration(name = "HTS221", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robConf_hts221"})
 public class Hts221 extends ConfigurationComponent {
     private Hts221() {

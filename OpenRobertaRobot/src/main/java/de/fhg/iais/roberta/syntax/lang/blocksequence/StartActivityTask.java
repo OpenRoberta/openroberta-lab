@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * for starting a thread.<br/>
  * <br/>
  */
-@NepoExpr(category = "EXPR", blocklyNames = {"robControls_start_activity"}, containerType = "START_ACTIVITY_TASK", blocklyType = BlocklyType.NULL)
+@NepoExpr(category = "EXPR", blocklyNames = {"robControls_start_activity"}, name = "START_ACTIVITY_TASK", blocklyType = BlocklyType.NULL)
 public final class StartActivityTask<V> extends Expr<V> {
     @NepoValue(name = BlocklyConstants.ACTIVITY, type = BlocklyType.STRING)
     public Expr<V> activityName;

@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.configuration;
 import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-@NepoConfiguration(containerType = "CALLIBOT", category = "CONFIGURATION_BLOCK",
+@NepoConfiguration(name = "CALLIBOT", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robConf_callibot"})
 public class Callibot extends ConfigurationComponent {
     private Callibot() {

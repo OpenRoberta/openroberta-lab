@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the {@link Frame}, {@link pointX}, {@link pointY}, {@link pointZ} and {@link speed} (frame, coordinates and fraction of speed).
  */
-@NepoBasic(containerType = "POINT_LOOK_AT", category = "ACTOR", blocklyNames = {"naoActions_pointLookAt"})
+@NepoBasic(name = "POINT_LOOK_AT", category = "ACTOR", blocklyNames = {"naoActions_pointLookAt"})
 public final class PointLookAt<V> extends Action<V> {
 
     public final Frame frame;

@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * To create an instance from this class use the method {@link #make(String, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoExpr(category = "EXPR", blocklyNames = {"naoColour_picker", "robColour_picker", "mbedColour_picker"}, containerType = "COLOR_CONST", blocklyType = BlocklyType.COLOR)
+@NepoExpr(category = "EXPR", blocklyNames = {"naoColour_picker", "robColour_picker", "mbedColour_picker"}, name = "COLOR_CONST", blocklyType = BlocklyType.COLOR)
 public final class ColorConst<V> extends Expr<V> {
     @NepoField(name = BlocklyConstants.COLOUR)
     public final String hexValue;

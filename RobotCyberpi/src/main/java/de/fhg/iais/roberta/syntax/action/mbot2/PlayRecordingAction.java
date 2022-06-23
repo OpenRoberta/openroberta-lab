@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
  * stopping every movement of the robot.<br/>
  * <br/>
  */
-@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_play_recording"}, containerType = "PLAY_RECORDING_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_play_recording"}, name = "PLAY_RECORDING_ACTION")
 public final class PlayRecordingAction<V> extends Action<V> implements WithUserDefinedPort<V> {
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;

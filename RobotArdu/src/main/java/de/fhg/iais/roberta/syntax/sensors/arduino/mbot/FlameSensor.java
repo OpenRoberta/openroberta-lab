@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoBasic(containerType = "FLAMESENSOR_GET_SAMPLE", category = "SENSOR", blocklyNames = {"robSensors_flame_getSample"})
+@NepoBasic(name = "FLAMESENSOR_GET_SAMPLE", category = "SENSOR", blocklyNames = {"robSensors_flame_getSample"})
 public final class FlameSensor<V> extends Sensor<V> {
 
     public final String port;

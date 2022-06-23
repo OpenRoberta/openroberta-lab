@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "STMT", blocklyNames = {"robActions_change_bias"}, containerType = "NN_CHANGE_BIAS_STMT")
+@NepoPhrase(category = "STMT", blocklyNames = {"robActions_change_bias"}, name = "NN_CHANGE_BIAS_STMT")
 public final class NNChangeBiasStmt<V> extends Stmt<V> {
     @NepoField(name = BlocklyConstants.NAME)
     public final String name;

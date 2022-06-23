@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the {@link TurnDirection} (body part in which the motors are released).
  */
-@NepoBasic(containerType = "HAND", category = "ACTOR", blocklyNames = {"naoActions_hand"})
+@NepoBasic(name = "HAND", category = "ACTOR", blocklyNames = {"naoActions_hand"})
 public final class Hand<V> extends Action<V> {
 
     public final TurnDirection turnDirection;

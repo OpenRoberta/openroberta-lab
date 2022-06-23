@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * To create an instance from this class use the method {@link #make(BlocklyType, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoExpr(category = "EXPR", blocklyNames = {"lists_create_empty"}, containerType = "EMPTY_LIST", blocklyType = BlocklyType.ARRAY)
+@NepoExpr(category = "EXPR", blocklyNames = {"lists_create_empty"}, name = "EMPTY_LIST", blocklyType = BlocklyType.ARRAY)
 public final class EmptyList<V> extends Expr<V> {
     @NepoField(name = BlocklyConstants.LIST_TYPE)
     public final BlocklyType typeVar;

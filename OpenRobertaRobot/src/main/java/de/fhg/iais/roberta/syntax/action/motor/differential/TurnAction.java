@@ -30,7 +30,7 @@ import de.fhg.iais.roberta.util.syntax.MotorDuration;
  * <br/>
  * The client must provide the {@link TurnDirection} and {@link MotionParam} (distance the robot should cover and speed).
  */
-@NepoBasic(containerType = "TURN_ACTION", category = "ACTOR", blocklyNames = {"robActions_motorDiff_turn", "robActions_motorDiff_turn_for"})
+@NepoBasic(name = "TURN_ACTION", category = "ACTOR", blocklyNames = {"robActions_motorDiff_turn", "robActions_motorDiff_turn_for"})
 public final class TurnAction<V> extends Action<V> {
     public final ITurnDirection direction;
     public final MotionParam<V> param;

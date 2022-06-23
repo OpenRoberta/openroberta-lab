@@ -25,7 +25,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the name of the picture and x and y coordinates.
  */
-@NepoBasic(containerType = "SHOW_PICTURE_ACTION", category = "ACTOR", blocklyNames = {"robActions_display_picture", "robActions_display_picture_new"})
+@NepoBasic(name = "SHOW_PICTURE_ACTION", category = "ACTOR", blocklyNames = {"robActions_display_picture", "robActions_display_picture_new"})
 public final class ShowPictureAction<V> extends Action<V> {
     public final String pic;
     public final Expr<V> x;

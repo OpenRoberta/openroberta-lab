@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * new thread.<br/>
  * <br/>
  */
-@NepoExpr(category = "TASK", blocklyNames = {"robControls_activity"}, containerType = "ACTIVITY_TASK")
+@NepoExpr(category = "TASK", blocklyNames = {"robControls_activity"}, name = "ACTIVITY_TASK")
 public final class ActivityTask<V> extends Task<V> {
     @NepoValue(name = BlocklyConstants.ACTIVITY, type = BlocklyType.STRING)
     public Expr<V> activityName;

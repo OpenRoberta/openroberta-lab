@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
-@NepoPhrase(containerType = "TEST_PHRASE_WRONG_VALUE_TYPE", blocklyNames = {"test_phrase_wrong_value_type"}, category = "EXPR")
+@NepoPhrase(name = "TEST_PHRASE_WRONG_VALUE_TYPE", blocklyNames = {"test_phrase_wrong_value_type"}, category = "EXPR")
 public class TestPhraseWrongValueType<V> extends Phrase<V> {
 
     @NepoField(name = "TYPE")

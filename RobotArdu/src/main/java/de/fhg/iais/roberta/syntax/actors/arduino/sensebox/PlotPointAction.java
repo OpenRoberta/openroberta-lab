@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoBasic(containerType = "PLOT_POINT_ACTION", category = "ACTOR", blocklyNames = {"robactions_plot_point"})
+@NepoBasic(name = "PLOT_POINT_ACTION", category = "ACTOR", blocklyNames = {"robactions_plot_point"})
 public final class PlotPointAction<V> extends Action<V> {
     public final String port;
     public final Expr<V> value;

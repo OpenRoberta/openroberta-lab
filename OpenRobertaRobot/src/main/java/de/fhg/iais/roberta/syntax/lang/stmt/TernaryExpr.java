@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoExpr(category = "EXPR", blocklyNames = {"logic_ternary"}, containerType = "IF_TERNARY")
+@NepoExpr(category = "EXPR", blocklyNames = {"logic_ternary"}, name = "IF_TERNARY")
 public final class TernaryExpr<V> extends Expr<V> {
     @NepoValue(name = BlocklyConstants.IF, type = BlocklyType.BOOLEAN)
     public final Expr<V> condition;

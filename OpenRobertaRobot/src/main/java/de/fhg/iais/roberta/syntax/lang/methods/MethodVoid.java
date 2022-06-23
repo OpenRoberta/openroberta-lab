@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * This class represents the <b>robProcedures_defnoreturn</b> block from Blockly into the AST (abstract syntax tree). Object from this class is used to create a
  * method with no return<br/>
  */
-@NepoBasic(containerType = "METHOD_VOID", category = "METHOD", blocklyNames = {"robProcedures_defnoreturn"})
+@NepoBasic(name = "METHOD_VOID", category = "METHOD", blocklyNames = {"robProcedures_defnoreturn"})
 public final class MethodVoid<V> extends Method<V> {
     public final StmtList<V> body;
 

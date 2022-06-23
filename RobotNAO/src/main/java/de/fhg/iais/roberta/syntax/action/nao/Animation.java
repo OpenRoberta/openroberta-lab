@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the {@link Posture} (name of posture).
  */
-@NepoBasic(containerType = "ANIMATION", category = "ACTOR", blocklyNames = {"naoActions_animation"})
+@NepoBasic(name = "ANIMATION", category = "ACTOR", blocklyNames = {"naoActions_animation"})
 public final class Animation<V> extends Action<V> {
 
     public final Move move;

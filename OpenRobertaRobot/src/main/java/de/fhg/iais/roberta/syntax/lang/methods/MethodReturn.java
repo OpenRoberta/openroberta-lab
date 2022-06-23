@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * This class represents the <b>robProcedures_defreturn</b> block from Blockly into the AST (abstract syntax tree). Object from this class is used to create a
  * method with return value<br/>
  */
-@NepoBasic(blocklyNames = {"robProcedures_defreturn"}, robots = {}, category = "METHOD", containerType = "METHOD_RETURN")
+@NepoBasic(blocklyNames = {"robProcedures_defreturn"}, category = "METHOD", name = "METHOD_RETURN")
 public final class MethodReturn<V> extends Method<V> {
     public final StmtList<V> body;
     public final Expr<V> returnValue;

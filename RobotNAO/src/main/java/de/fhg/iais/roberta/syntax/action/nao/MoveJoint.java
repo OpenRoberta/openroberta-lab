@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the {@link joint} and {@link degrees} (direction and distance to walk).
  */
-@NepoBasic(containerType = "MOVE_JOINT", category = "ACTOR", blocklyNames = {"naoActions_moveJoint"})
+@NepoBasic(name = "MOVE_JOINT", category = "ACTOR", blocklyNames = {"naoActions_moveJoint"})
 public final class MoveJoint<V> extends Action<V> {
 
     public final Joint joint;

@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * To create an instance from this class use the method {@link #make(BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "PIN_WRITE_VALUE", category = "ACTOR", blocklyNames = {"robActions_write_pin", "mbedActions_write_to_pin"})
+@NepoBasic(name = "PIN_WRITE_VALUE", category = "ACTOR", blocklyNames = {"robActions_write_pin", "mbedActions_write_to_pin"})
 public final class PinWriteValueAction<V> extends Action<V> {
     public final String pinValue;
     public final String port;

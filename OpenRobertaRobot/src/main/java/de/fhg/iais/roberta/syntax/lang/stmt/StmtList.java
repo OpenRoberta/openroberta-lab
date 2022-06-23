@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
  * This class allows to create list of {@link Stmt} elements. Initially object from this class is writable. After adding all the elements to the list call
  * {@link #setReadOnly()}.
  */
-@NepoBasic(containerType = "STMT_LIST", category = "STMT", blocklyNames = {})
+@NepoBasic(name = "STMT_LIST", category = "STMT", blocklyNames = {})
 public final class StmtList<V> extends Stmt<V> {
     public final List<Stmt<V>> sl = new ArrayList<Stmt<V>>();
 

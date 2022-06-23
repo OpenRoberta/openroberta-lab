@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.configuration;
 import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-@NepoConfiguration(containerType = "PARTICLE", category = "CONFIGURATION_BLOCK",
+@NepoConfiguration(name = "PARTICLE", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robConf_particle"})
 public class Particle extends ConfigurationComponent {
     private Particle() {

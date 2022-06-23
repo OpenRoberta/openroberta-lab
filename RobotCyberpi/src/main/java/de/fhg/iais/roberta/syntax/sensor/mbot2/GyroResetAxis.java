@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
  * <br/>
  */
 
-@NepoPhrase(category = "SENSOR", blocklyNames = {"robSensors_gyro_reset_axis"}, containerType = "GYRO_RESET_AXIS")
+@NepoPhrase(category = "SENSOR", blocklyNames = {"robSensors_gyro_reset_axis"}, name = "GYRO_RESET_AXIS")
 public final class GyroResetAxis<V> extends Sensor<V> implements WithUserDefinedPort<V> {
     @NepoField(name = BlocklyConstants.SENSORPORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;

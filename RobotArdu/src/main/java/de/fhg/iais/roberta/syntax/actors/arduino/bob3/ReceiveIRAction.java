@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
  * <br>
  * To create an instance from this class use the method {@link #make(ColorConst, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "BOB3_RECVIR", category = "ACTOR", blocklyNames = {"bob3Communication_receiveBlock"})
+@NepoBasic(name = "BOB3_RECVIR", category = "ACTOR", blocklyNames = {"bob3Communication_receiveBlock"})
 public final class ReceiveIRAction<V> extends Action<V> {
 
     private ReceiveIRAction(BlocklyBlockProperties properties, BlocklyComment comment) {

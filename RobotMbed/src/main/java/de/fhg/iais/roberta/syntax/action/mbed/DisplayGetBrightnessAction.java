@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
  * <br>
  * To create an instance from this class use the method {@link #make(ColorConst, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "DISPLAY_GET_BRIGHTNESS", category = "ACTOR", blocklyNames = {"mbedActions_display_getBrightness"})
+@NepoBasic(name = "DISPLAY_GET_BRIGHTNESS", category = "ACTOR", blocklyNames = {"mbedActions_display_getBrightness"})
 public final class DisplayGetBrightnessAction<V> extends Action<V> {
 
     private DisplayGetBrightnessAction(BlocklyBlockProperties properties, BlocklyComment comment) {

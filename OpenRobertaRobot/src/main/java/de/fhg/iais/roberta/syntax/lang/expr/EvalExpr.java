@@ -37,7 +37,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * This class represents blockly eval_expr block in the AST<br>
  * The user must provide the string representing the expression, This class will wrap the wanted AST instance of the expression
  */
-@NepoBasic(containerType = "EVAL", category = "EXPR", blocklyNames = {"robActions_eval_expr"})
+@NepoBasic(name = "EVAL", category = "EXPR", blocklyNames = {"robActions_eval_expr"})
 public final class EvalExpr<V> extends Expr<V> {
     public final String expr;
     public final String type;

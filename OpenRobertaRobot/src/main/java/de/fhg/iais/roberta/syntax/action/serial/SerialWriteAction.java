@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_serial_print"}, containerType = "WRITE_TO_SERIAL")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_serial_print"}, name = "WRITE_TO_SERIAL")
 public final class SerialWriteAction<V> extends Action<V> {
     @NepoValue(name = BlocklyConstants.OUT, type = BlocklyType.ANY)
     public final Expr<V> value;

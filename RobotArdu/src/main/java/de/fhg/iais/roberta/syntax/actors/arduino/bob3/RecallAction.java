@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
  * <br>
  * To create an instance from this class use the method {@link #make(ColorConst, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "BOB3_RECALL", category = "ACTOR", blocklyNames = {"bob3Actions_recall"})
+@NepoBasic(name = "BOB3_RECALL", category = "ACTOR", blocklyNames = {"bob3Actions_recall"})
 public final class RecallAction<V> extends Action<V> {
 
     private RecallAction(BlocklyBlockProperties properties, BlocklyComment comment) {

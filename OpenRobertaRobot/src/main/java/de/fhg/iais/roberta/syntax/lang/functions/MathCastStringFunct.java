@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.util.syntax.FunctionNames;
  * To create an instance from this class use the method {@link #make(List, BlocklyBlockProperties, BlocklyComment)}.<br>
  * The enumeration {@link FunctionNames} contains all allowed functions.
  */
-@NepoBasic(containerType = "MATH_CAST_STRING_FUNCT", category = "FUNCTION", blocklyNames = {"math_cast_toString"})
+@NepoBasic(name = "MATH_CAST_STRING_FUNCT", category = "FUNCTION", blocklyNames = {"math_cast_toString"})
 public final class MathCastStringFunct<V> extends Function<V> {
     public final List<Expr<V>> param;
 

@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "STMT", blocklyNames = {"robActions_outputneuron"}, containerType = "NN_OUTPUT_NEURON_STMT")
+@NepoPhrase(category = "STMT", blocklyNames = {"robActions_outputneuron"}, name = "NN_OUTPUT_NEURON_STMT")
 public final class NNOutputNeuronStmt<V> extends Stmt<V> {
     @NepoField(name = BlocklyConstants.NAME)
     public final String name;

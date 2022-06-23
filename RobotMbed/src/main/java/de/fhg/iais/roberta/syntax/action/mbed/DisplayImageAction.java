@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * To create an instance from this class use the method {@link #make(DisplayImageMode, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-@NepoBasic(containerType = "DISPLAY_IMAGE_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_display_image"})
+@NepoBasic(name = "DISPLAY_IMAGE_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_display_image"})
 public final class DisplayImageAction<V> extends Action<V> {
 
     public final DisplayImageMode displayImageMode;

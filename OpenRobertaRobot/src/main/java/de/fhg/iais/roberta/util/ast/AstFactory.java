@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
-import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
+import de.fhg.iais.roberta.transformer.forClass.F2M;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -91,38 +91,38 @@ public class AstFactory {
         String className = astClass.getName();
         String name, category;
         String[] blocklyNames;
-        NepoSampleValue[] nepoSampleValues;
+        F2M[] f2MS;
         for ( Annotation general : astClass.getAnnotations() ) {
             if ( general instanceof NepoPhrase ) {
                 NepoPhrase specific = (NepoPhrase) general;
-                name = specific.containerType();
+                name = specific.name();
                 category = specific.category();
                 blocklyNames = specific.blocklyNames();
-                nepoSampleValues = specific.sampleValues();
-                addToSampleValues(className, nepoSampleValues);
+                f2MS = specific.sampleValues();
+                addToSampleValues(className, f2MS);
                 addToBlockTypeByBlocklyName(name, category, blocklyNames, astClass);
                 return;
             } else if ( general instanceof NepoExpr ) {
                 NepoExpr specific = (NepoExpr) general;
-                name = specific.containerType();
+                name = specific.name();
                 category = specific.category();
                 blocklyNames = specific.blocklyNames();
-                nepoSampleValues = specific.sampleValues();
-                addToSampleValues(className, nepoSampleValues);
+                f2MS = specific.sampleValues();
+                addToSampleValues(className, f2MS);
                 addToBlockTypeByBlocklyName(name, category, blocklyNames, astClass);
                 return;
             } else if ( general instanceof NepoBasic ) {
                 NepoBasic specific = (NepoBasic) general;
-                name = specific.containerType();
+                name = specific.name();
                 category = specific.category();
                 blocklyNames = specific.blocklyNames();
-                nepoSampleValues = specific.sampleValues();
-                addToSampleValues(className, nepoSampleValues);
+                f2MS = specific.sampleValues();
+                addToSampleValues(className, f2MS);
                 addToBlockTypeByBlocklyName(name, category, blocklyNames, astClass);
                 return;
             } else if ( general instanceof NepoConfiguration ) {
                 NepoConfiguration specific = (NepoConfiguration) general;
-                String blockDescription = specific.containerType();
+                String blockDescription = specific.name();
                 for ( String blocklyName : specific.blocklyNames() ) {
                     configurationComponentTypes.put(blocklyName, blockDescription);
                 }
@@ -136,15 +136,15 @@ public class AstFactory {
         for ( Annotation general : astClass.getAnnotations() ) {
             if ( general instanceof NepoPhrase ) {
                 NepoPhrase specific = (NepoPhrase) general;
-                name = specific.containerType();
+                name = specific.name();
                 return blockTypesByClassName.get(astClass.getName());
             } else if ( general instanceof NepoExpr ) {
                 NepoExpr specific = (NepoExpr) general;
-                name = specific.containerType();
+                name = specific.name();
                 return blockTypesByClassName.get(astClass.getName());
             } else if ( general instanceof NepoBasic ) {
                 NepoBasic specific = (NepoBasic) general;
-                name = specific.containerType();
+                name = specific.name();
                 return blockTypesByClassName.get(astClass.getName());
             }
         }
@@ -218,9 +218,9 @@ public class AstFactory {
         }
     }
 
-    private static void addToSampleValues(String className, NepoSampleValue[] nepoSampleValues) {
-        for ( NepoSampleValue nepoSampleValue : nepoSampleValues ) {
-            waitUntilMap.put(nepoSampleValue.blocklyFieldName(), new WaitUntilSensorBean(className, nepoSampleValue.sensor(), nepoSampleValue.mode()));
+    private static void addToSampleValues(String className, F2M[] f2MS) {
+        for ( F2M f2M : f2MS ) {
+            waitUntilMap.put(f2M.field(), new WaitUntilSensorBean(className, f2M.mode()));
         }
     }
 }

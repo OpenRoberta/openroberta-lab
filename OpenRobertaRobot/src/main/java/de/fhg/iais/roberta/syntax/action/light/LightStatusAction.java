@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
  * <br/>
  * The client must provide the {@link Status}.
  */
-@NepoBasic(containerType = "LIGHT_STATUS_ACTION", category = "ACTOR", blocklyNames = {"robActions", "robActions_brickLight_reset", "robActions_brickLight_off", "mbedActions_leds_off", "robActions_led_off"})
+@NepoBasic(name = "LIGHT_STATUS_ACTION", category = "ACTOR", blocklyNames = {"robActions", "robActions_brickLight_reset", "robActions_brickLight_off", "mbedActions_leds_off", "robActions_led_off"})
 public final class LightStatusAction<V> extends Action<V> implements WithUserDefinedPort<V> {
     public final Status status;
     public final String userDefinedPort;

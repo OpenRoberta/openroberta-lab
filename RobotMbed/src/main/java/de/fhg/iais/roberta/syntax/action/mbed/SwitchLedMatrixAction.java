@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.SC;
 
-@NepoBasic(containerType = "SWITCH_LED_MATRIX", category = "ACTOR", blocklyNames = {"mbedActions_switch_led_matrix"})
+@NepoBasic(name = "SWITCH_LED_MATRIX", category = "ACTOR", blocklyNames = {"mbedActions_switch_led_matrix"})
 public final class SwitchLedMatrixAction<V> extends Action<V> {
     public final boolean activated;
 

@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.configuration;
 import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-@NepoConfiguration(containerType = "SENSEBOX_PLOTTING", category = "CONFIGURATION_BLOCK",
+@NepoConfiguration(name = "SENSEBOX_PLOTTING", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robConf_plotting"})
 public class SenseboxPlotting extends ConfigurationComponent {
     private SenseboxPlotting() {

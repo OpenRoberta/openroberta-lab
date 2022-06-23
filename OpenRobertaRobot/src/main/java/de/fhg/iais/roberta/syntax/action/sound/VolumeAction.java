@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the {@link Mode} and value of the volume.
  */
-@NepoBasic(containerType = "VOLUME_ACTION", category = "ACTOR", blocklyNames = {"robActions_play_getVolume", "robActions_play_setVolume"})
+@NepoBasic(name = "VOLUME_ACTION", category = "ACTOR", blocklyNames = {"robActions_play_getVolume", "robActions_play_setVolume"})
 public final class VolumeAction<V> extends Action<V> {
     public final Mode mode;
     public final Expr<V> volume;

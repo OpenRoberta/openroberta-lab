@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
  *
  * @author kcvejoski
  */
-@NepoBasic(containerType = "LOCATION", category = "HELPER", blocklyNames = {})
+@NepoBasic(name = "LOCATION", category = "HELPER", blocklyNames = {})
 public final class Location<V> extends Task<V> {
     public final String x;
     public final String y;

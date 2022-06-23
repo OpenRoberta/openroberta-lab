@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * for flow control of a statement. <br>
  * See enum {@link Flow} for all possible flows.
  */
-@NepoPhrase(category = "STMT", blocklyNames = {"controls_flow_statements"}, containerType = "STMT_FLOW_CONTROL")
+@NepoPhrase(category = "STMT", blocklyNames = {"controls_flow_statements"}, name = "STMT_FLOW_CONTROL")
 public final class StmtFlowCon<V> extends Stmt<V> {
     @NepoField(name = BlocklyConstants.FLOW)
     public final Flow flow;

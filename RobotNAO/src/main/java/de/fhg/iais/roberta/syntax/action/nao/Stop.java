@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
  * stopping every movement of the robot.<br/>
  * <br/>
  */
-@NepoBasic(containerType = "STOP", category = "ACTOR", blocklyNames = {"naoActions_stop"})
+@NepoBasic(name = "STOP", category = "ACTOR", blocklyNames = {"naoActions_stop"})
 public final class Stop<V> extends Action<V> {
 
     private Stop(BlocklyBlockProperties properties, BlocklyComment comment) {

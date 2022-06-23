@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.syntax.sensor.mbot2;
 import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.transformer.forClass.F2M;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
-import de.fhg.iais.roberta.transformer.forClass.NepoSampleValue;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoHide;
 import de.fhg.iais.roberta.transformer.forField.NepoMutation;
@@ -21,7 +21,8 @@ import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
  * <br/>
  */
 
-@NepoPhrase(sampleValues = {@NepoSampleValue(blocklyFieldName = "JOYSTICK_PRESSED", sensor = "JOYSTICK_PRESSED", mode = "PRESSED")}, category = "SENSOR", blocklyNames = {"robSensors_joystickKeys_getSample"}, containerType = "JOYSTICK_SENSING")
+@NepoPhrase(name = "JOYSTICK_SENSING", category = "SENSOR", blocklyNames = {"robSensors_joystickKeys_getSample"},
+    sampleValues = {@F2M(field = "JOYSTICK_PRESSED", mode = "PRESSED")})
 public final class Joystick<V> extends Sensor<V> implements WithUserDefinedPort<V> {
     @NepoMutation
     public final Mutation mutation;

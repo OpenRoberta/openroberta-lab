@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  * The client must provide the {@link walkDirection} and {@link distanceToWalk} (direction and distance to walk).
  */
-@NepoBasic(containerType = "WALK_DISTANCE", category = "ACTOR", blocklyNames = {"naoActions_walk"})
+@NepoBasic(name = "WALK_DISTANCE", category = "ACTOR", blocklyNames = {"naoActions_walk"})
 public final class WalkDistance<V> extends Action<V> {
 
     public final DriveDirection walkDirection;

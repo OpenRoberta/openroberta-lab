@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoBasic(containerType = "PLOT_CLEAR_ACTION", category = "ACTOR", blocklyNames = {"robactions_plot_clear"})
+@NepoBasic(name = "PLOT_CLEAR_ACTION", category = "ACTOR", blocklyNames = {"robactions_plot_clear"})
 public final class PlotClearAction<V> extends Action<V> {
     public final String port;
 

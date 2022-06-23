@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * This class represents the <b>robActions_motorDiff_stop</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
  * to stop the work of the motors.<br/>
  */
-@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_motorDiff_stop"}, containerType = "STOP_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_motorDiff_stop"}, name = "STOP_ACTION")
 public final class MotorDriveStopAction<V> extends Action<V> {
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;

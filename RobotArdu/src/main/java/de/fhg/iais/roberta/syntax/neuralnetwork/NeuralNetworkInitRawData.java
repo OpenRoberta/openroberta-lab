@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
-@NepoBasic(containerType = "NEURAL_NETWORK_INIT_RAWDATA", category = "STMT", blocklyNames = {"robActions_aifes_initrawdata"})
+@NepoBasic(name = "NEURAL_NETWORK_INIT_RAWDATA", category = "STMT", blocklyNames = {"robActions_aifes_initrawdata"})
 public final class NeuralNetworkInitRawData<V> extends Stmt<V> {
     private NeuralNetworkInitRawData(BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);

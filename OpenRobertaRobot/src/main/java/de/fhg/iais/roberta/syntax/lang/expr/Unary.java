@@ -25,7 +25,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * The enumeration {@link Op} contains all allowed unary operations.
  */
-@NepoBasic(containerType = "UNARY", category = "EXPR", blocklyNames = {"logic_negate"})
+@NepoBasic(name = "UNARY", category = "EXPR", blocklyNames = {"logic_negate"})
 public final class Unary<V> extends Expr<V> {
     public final Op op;
     public final Expr<V> expr;

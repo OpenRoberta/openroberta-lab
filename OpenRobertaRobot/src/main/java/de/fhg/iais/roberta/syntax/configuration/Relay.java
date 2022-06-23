@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.configuration;
 import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-@NepoConfiguration(containerType = "RELAY", category = "CONFIGURATION_BLOCK",
+@NepoConfiguration(name = "RELAY", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robConf_relay"})
 public class Relay extends ConfigurationComponent {
     private Relay() {
