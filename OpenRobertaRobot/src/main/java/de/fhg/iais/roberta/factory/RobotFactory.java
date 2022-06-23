@@ -33,7 +33,7 @@ public class RobotFactory {
 
     public RobotFactory(PluginProperties pluginProperties) {
         this.pluginProperties = pluginProperties;
-        this.blocklyDropdown2EnumFactory = new BlocklyDropdownFactory(this.pluginProperties);
+        this.blocklyDropdown2EnumFactory = new BlocklyDropdownFactory();
         this.beginnerToolbox = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.program.toolbox.beginner"));
         this.expertToolbox = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.program.toolbox.expert"));
         this.programDefault = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.program.default"));

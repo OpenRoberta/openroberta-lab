@@ -36,7 +36,6 @@ import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.WorkingState;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
@@ -46,10 +45,6 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class BlocklyDropdownFactory {
     private static final Logger LOG = LoggerFactory.getLogger(BlocklyDropdownFactory.class);
-
-    public BlocklyDropdownFactory(PluginProperties pluginProperties) {
-        String robotDescriptor = pluginProperties.getStringProperty("robot.descriptor");
-    }
 
     public String getConfigurationComponentTypeByBlocklyName(String blocklyName) {
         return AstFactory.getConfigurationComponentTypeByBlocklyName(blocklyName);
