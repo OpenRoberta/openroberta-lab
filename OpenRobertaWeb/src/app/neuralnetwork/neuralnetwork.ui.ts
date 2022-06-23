@@ -263,13 +263,9 @@ function drawNetworkUI(network: Network): void {
                 height: biasSize,
             });
             if (focusStyle !== FocusStyle.CLICK_NODE || focusNode === node) {
-                biasRect
-                    .on('click', function () {
-                        updateEditCard(node, D3.mouse(container.node()));
-                    })
-                    .on('mouseleave', function () {
-                        updateEditCard(null);
-                    });
+                biasRect.on('click', function () {
+                    updateEditCard(node, D3.mouse(container.node()));
+                });
             }
             // Show the bias value depending on focus-style
             if (focusStyle === FocusStyle.SHOW_ALL || (focusStyle === FocusStyle.CLICK_NODE && focusNode === node)) {
@@ -346,7 +342,7 @@ function drawNetworkUI(network: Network): void {
             );
         }
 
-        // Add an (almost) invisible thick path that will be used for editing the weight value on click.
+        // Add an invisible thick path that will be used for editing the weight value on click.
         const pathIfClickFocus = focusStyle === FocusStyle.CLICK_NODE && (link.source === focusNode || link.dest === focusNode);
         const pathOtherFoci = focusStyle === FocusStyle.SHOW_ALL || focusStyle === FocusStyle.CLICK_WEIGHT_BIAS;
         if (pathIfClickFocus || pathOtherFoci) {
@@ -357,9 +353,6 @@ function drawNetworkUI(network: Network): void {
                 .attr('class', cssForPath)
                 .on('click', function () {
                     updateEditCard(link, D3.mouse(this));
-                })
-                .on('mouseleave', function () {
-                    updateEditCard(null);
                 });
         }
         return line;
@@ -426,36 +419,37 @@ function drawNetworkUI(network: Network): void {
 }
 
 function updateEditCard(nodeOrLink?: Node | Link, coordinates?: [number, number]) {
-    // nodeOrLink : nn.Node | nn.Link
     let editCard = D3.select('#nn-editCard');
-
-    if (nodeOrLink == null) {
-        editCard.style('display', 'none');
-        return;
-    }
+    let finishedButton = D3.select('#nn-type-finished');
 
     let input = editCard.select('input');
     input.property('value', nodeOrLink2Value(nodeOrLink));
-    input.on('input', () => {
-        let event = D3.event as any;
-        value2NodeOrLink(nodeOrLink, event.target.value);
-    });
-    input.on('keypress', () => {
-        let event = D3.event as any;
-        if (event.key === 'h' || event.key === 'i') {
-            event.target.value = H.updValue(event.target.value, 1);
-            event.preventDefault && event.preventDefault();
+
+    input
+        .on('keypress', () => {
+            let event = D3.event as any;
+            if (event.key === 'h' || event.key === 'i') {
+                event.target.value = H.updValue(event.target.value, 1);
+                event.preventDefault && event.preventDefault();
+                value2NodeOrLink(nodeOrLink, event.target.value);
+            } else if (event.key === 'r' || event.key === 'd') {
+                event.target.value = H.updValue(event.target.value, -1);
+                event.preventDefault && event.preventDefault();
+                value2NodeOrLink(nodeOrLink, event.target.value);
+            } else if (event.which === 13) {
+                editCard.style('display', 'none');
+                event.preventDefault && event.preventDefault();
+                return;
+            }
+            (input.node() as HTMLInputElement).focus();
+        })
+        .on('input', () => {
+            let event = D3.event as any;
             value2NodeOrLink(nodeOrLink, event.target.value);
-        } else if (event.key === 'r' || event.key === 'd') {
-            event.target.value = H.updValue(event.target.value, -1);
-            event.preventDefault && event.preventDefault();
-            value2NodeOrLink(nodeOrLink, event.target.value);
-        } else if (event.which === 13) {
-            editCard.style('display', 'none');
-            event.preventDefault && event.preventDefault();
-            return;
-        }
-        (input.node() as HTMLInputElement).focus();
+        });
+    finishedButton.on('click', () => {
+        editCard.style('display', 'none');
+        return;
     });
 
     editCard.style({
@@ -475,7 +469,7 @@ function updateUI() {
 
     function updateLinksUI(container) {
         let linkWidthScale = mkWidthScale();
-        let colorScale = mkColorScale();
+        let colorScale = mkColorScaleWeight();
         network.forEachLink((link) => {
             const baseName = link.source.id + '-' + link.dest.id;
             container.select(`#${baseName}`).style({
@@ -492,7 +486,7 @@ function updateUI() {
     }
 
     function updateNodesUI(container) {
-        let colorScale = mkColorScale();
+        let colorScale = mkColorScaleBias();
         network.forEachNode(true, (node) => {
             D3.select(`#bias-${node.id}`).style('fill', colorScale(node.bias.get()));
             let val = D3.select(`#val-${node.id}`);
@@ -521,7 +515,7 @@ function mkWidthScale(): _D3.scale.Linear<number, number> {
     return D3.scale.linear().domain([0, maxWeight]).range([2, state.weightArcMaxSize]).clamp(true);
 }
 
-function mkColorScale(): _D3.scale.Linear<string, number> {
+function mkColorScaleWeight(): _D3.scale.Linear<string, number> {
     let maxWeight = 0;
     function updMaxWeight(link: Link): void {
         let absLinkWeight = Math.abs(link.weight.get());
@@ -530,7 +524,11 @@ function mkColorScale(): _D3.scale.Linear<string, number> {
         }
     }
     network.forEachLink(updMaxWeight);
-    return D3.scale.linear<string, number>().domain([-1, 0, 1]).range(['#f59322', '#e8eaeb', '#0877bd']).clamp(true);
+    return D3.scale.linear<string, number>().domain([-1, 0, 1]).range(['#f59322', '#222222', '#0877bd']).clamp(true);
+}
+
+function mkColorScaleBias(): _D3.scale.Linear<string, number> {
+    return D3.scale.linear<string, number>().domain([-1, 0, 1]).range(['#f59322', '#eeeeee', '#0877bd']).clamp(true);
 }
 
 function drawValuesBox(text: D3Selection, valueForColor: number): void {

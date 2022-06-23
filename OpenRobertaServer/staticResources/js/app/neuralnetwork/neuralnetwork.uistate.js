@@ -12,7 +12,7 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
             this.discretize = false;
             this.percTrainData = 50;
             this.activationKey = 'relu';
-            this.activation = H.Activations.RELU;
+            this.activation = H.Activations.LINEAR;
             this.regularization = null;
             this.initUntil = null;
             this.collectStats = false;

@@ -156,17 +156,19 @@
 
 /** Invisible thick links used for showing weight values on mouse click. */
 #nn-features .core .nn-weight-click {
-    stroke-width: 8;
+    stroke-width: 14;
     stroke: black;
     fill: none;
     opacity: 0;
+    cursor: pointer;
 }
 
 #nn-features .core .nn-weight-show-click {
-    stroke-width: 12;
+    stroke-width: 14;
     stroke: gray;
     fill: none;
     opacity: 0.3;
+    cursor: pointer;
 }
 
 #nn-features .canvas canvas {
@@ -194,16 +196,16 @@
     cursor: default;
     border-radius: 5px;
     left: 240px;
-    width: 200px;
-    top: -20px;
 }
 
-#nn-network .nn-type {
+#nn-editCard .nn-type-button {
+    position: relative;
+    top: 5px;
+}
+
+#nn-editCard .nn-type {
+    height: 40px;
     style: "font-size: 14px"
-}
-
-#nn-hovercard input {
-    width: 60px;
 }
 
 canvas {

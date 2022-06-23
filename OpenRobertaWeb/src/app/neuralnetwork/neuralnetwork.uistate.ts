@@ -10,7 +10,7 @@ export class State {
     discretize = false;
     percTrainData = 50;
     activationKey = 'relu';
-    activation = H.Activations.RELU;
+    activation = H.Activations.LINEAR;
     regularization: H.RegularizationFunction = null;
     initUntil = null;
     collectStats = false;
