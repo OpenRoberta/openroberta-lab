@@ -12,10 +12,10 @@ import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAst;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.SC;
 
 /**
@@ -38,18 +38,18 @@ public class ConfigurationComponent extends Phrase<Void> {
      * Should only be used by tests! TODO remove this if possible
      */
     public ConfigurationComponent(
-        String componentType,
+        String name,
         boolean isActor,
         String internalPortName,
-        String userDefinedName,
+        String userDefinedPortName,
         Map<String, String> componentProperties) {
         this(
-            componentType,
+            name,
             isActor,
             internalPortName,
-            userDefinedName,
+            userDefinedPortName,
             componentProperties,
-            BlocklyBlockProperties.make(componentType, "1"),
+            BlocklyBlockProperties.make(name, "1"),
             BlocklyComment.make("empty-comment", false, "10", "10"),
             0,
             0);
@@ -58,10 +58,10 @@ public class ConfigurationComponent extends Phrase<Void> {
     /**
      * Creates a configuration component. Should only be used by {@link Jaxb2ConfigurationAst}.
      *
-     * @param componentType the type of configuration component
+     * @param name the name of the configuration component
      * @param isActor whether the component is an actor or not
      * @param internalPortName the internal port name, may represent the name used for generating code
-     * @param userDefinedName the user defined port name
+     * @param userDefinedPortName the user defined port name
      * @param componentProperties the map of component properties
      * @param properties the blockly block properties
      * @param comment the blockly comment
@@ -69,20 +69,20 @@ public class ConfigurationComponent extends Phrase<Void> {
      * @param y the y location
      */
     public ConfigurationComponent(
-        String componentType,
+        String name,
         boolean isActor,
         String internalPortName,
-        String userDefinedName,
+        String userDefinedPortName,
         Map<String, String> componentProperties,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         int x,
         int y) {
-        super(new BlockDescriptor(userDefinedName, Category.CONFIGURATION_BLOCK, ConfigurationComponent.class), properties, comment);
-        this.componentType = componentType;
+        super(new BlockDescriptor(name, Category.CONFIGURATION_BLOCK, ConfigurationComponent.class, new String[0], Collections.emptyMap()), properties, comment);
+        this.componentType = name;
         this.isActor = isActor;
         this.internalPortName = internalPortName;
-        this.userDefinedPortName = userDefinedName;
+        this.userDefinedPortName = userDefinedPortName;
         this.componentProperties = new LinkedHashMap<>(componentProperties);
         this.x = x;
         this.y = y;

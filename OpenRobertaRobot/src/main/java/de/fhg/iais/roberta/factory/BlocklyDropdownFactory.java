@@ -6,7 +6,6 @@ import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.bean.WaitUntilSensorBean;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
@@ -39,6 +38,7 @@ import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.ast.AstFactory;
+import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
@@ -201,12 +201,10 @@ public class BlocklyDropdownFactory {
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
 
-        WaitUntilSensorBean waBean = AstFactory.getWaitUntilSensorBeanByBlocklyFieldName(sensorKey);
-        String implementingClass = waBean.getImplementingClass();
-
+        BlockDescriptor blockDescriptor = AstFactory.getBlockDescriptorByBlocklyFieldName(sensorKey);
         try {
-            Class<Sensor<?>> sensorClass = (Class<Sensor<?>>) BlocklyDropdownFactory.class.getClassLoader().loadClass(implementingClass);
-            String mode = waBean.getMode();
+            Class<Sensor<?>> sensorClass = (Class<Sensor<?>>) blockDescriptor.getAstClass();
+            String mode = blockDescriptor.getSensorModeFromBlocklyField(sensorKey);
             SensorMetaDataBean sensorMetaDataBean = new SensorMetaDataBean(Jaxb2Ast.sanitizePort(port), getMode(mode), Jaxb2Ast.sanitizeSlot(slot), mutation);
             Constructor<Sensor<?>> constructor = sensorClass.getDeclaredConstructor(BlocklyBlockProperties.class, BlocklyComment.class, SensorMetaDataBean.class);
             return (Sensor<?>) constructor.newInstance(properties, comment, sensorMetaDataBean);

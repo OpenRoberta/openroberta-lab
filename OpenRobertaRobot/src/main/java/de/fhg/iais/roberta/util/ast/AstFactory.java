@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.util.ast;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,14 +17,13 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.reflect.ClassPath;
 
-import de.fhg.iais.roberta.bean.WaitUntilSensorBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
+import de.fhg.iais.roberta.transformer.forClass.F2M;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
-import de.fhg.iais.roberta.transformer.forClass.F2M;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -44,9 +44,9 @@ public class AstFactory {
      */
     private static final Map<String, BlockDescriptor> blockTypeByBlocklyName = new HashMap<>();
     /**
-     * maps a field name used by blockly to describe a sensor usable in a getSensor block to the sensor and the sensor's mode, that is responsible fpr processing this block
+     * maps a field name used by blockly to describe a sensor (mode) usable in a get sensor sample block to the sensors block description
      */
-    private static final Map<String, WaitUntilSensorBean> waitUntilMap = new HashMap<>();
+    private static final Map<String, BlockDescriptor> getSensorSampleMap = new HashMap<>();
     /**
      * the list of all legal modes used in the blockly frontend
      */
@@ -91,34 +91,34 @@ public class AstFactory {
         String className = astClass.getName();
         String name, category;
         String[] blocklyNames;
-        F2M[] f2MS;
+        F2M[] f2ms;
         for ( Annotation general : astClass.getAnnotations() ) {
             if ( general instanceof NepoPhrase ) {
                 NepoPhrase specific = (NepoPhrase) general;
                 name = specific.name();
                 category = specific.category();
                 blocklyNames = specific.blocklyNames();
-                f2MS = specific.sampleValues();
-                addToSampleValues(className, f2MS);
-                addToBlockTypeByBlocklyName(name, category, blocklyNames, astClass);
+                f2ms = specific.sampleValues();
+                BlockDescriptor added = addToBlockTypeByBlocklyName(name, category, blocklyNames, astClass, f2ms);
+                addToSampleValues(f2ms, added);
                 return;
             } else if ( general instanceof NepoExpr ) {
                 NepoExpr specific = (NepoExpr) general;
                 name = specific.name();
                 category = specific.category();
                 blocklyNames = specific.blocklyNames();
-                f2MS = specific.sampleValues();
-                addToSampleValues(className, f2MS);
-                addToBlockTypeByBlocklyName(name, category, blocklyNames, astClass);
+                f2ms = specific.sampleValues();
+                BlockDescriptor added = addToBlockTypeByBlocklyName(name, category, blocklyNames, astClass, f2ms);
+                addToSampleValues(f2ms, added);
                 return;
             } else if ( general instanceof NepoBasic ) {
                 NepoBasic specific = (NepoBasic) general;
                 name = specific.name();
                 category = specific.category();
                 blocklyNames = specific.blocklyNames();
-                f2MS = specific.sampleValues();
-                addToSampleValues(className, f2MS);
-                addToBlockTypeByBlocklyName(name, category, blocklyNames, astClass);
+                f2ms = specific.sampleValues();
+                BlockDescriptor added = addToBlockTypeByBlocklyName(name, category, blocklyNames, astClass, f2ms);
+                addToSampleValues(f2ms, added);
                 return;
             } else if ( general instanceof NepoConfiguration ) {
                 NepoConfiguration specific = (NepoConfiguration) general;
@@ -173,10 +173,10 @@ public class AstFactory {
         }
     }
 
-    public static WaitUntilSensorBean getWaitUntilSensorBeanByBlocklyFieldName(String blocklyFieldName) {
-        WaitUntilSensorBean waitUntilSensorBean = waitUntilMap.get(blocklyFieldName);
-        Assert.notNull(waitUntilSensorBean, "WaitUntilSensorBean not found for: %s", blocklyFieldName);
-        return waitUntilSensorBean;
+    public static BlockDescriptor getBlockDescriptorByBlocklyFieldName(String blocklyFieldName) {
+        BlockDescriptor blockDescriptor = getSensorSampleMap.get(blocklyFieldName);
+        Assert.notNull(blockDescriptor, "block descriptor not found for get sample sensor blockly field: %s", blocklyFieldName);
+        return blockDescriptor;
     }
 
     public static String getConfigurationComponentTypeByBlocklyName(String blocklyName) {
@@ -196,13 +196,24 @@ public class AstFactory {
         return blockTypesByClassName.keySet();
     }
 
-    private static void addToBlockTypeByBlocklyName(String name, String category, String[] blocklyNames, Class<?> astClass) {
+    private static BlockDescriptor addToBlockTypeByBlocklyName(
+        String name,
+        String category,
+        String[] blocklyNames,
+        Class<?> astClass,
+        F2M[] f2ms) {
         Assert.notNull(name);
         Assert.notNull(category);
         Assert.notNull(blocklyNames);
         Assert.notNull(astClass);
+        Assert.notNull(f2ms);
 
-        BlockDescriptor blockDescriptor = new BlockDescriptor(name, Category.valueOf(category), astClass, blocklyNames);
+        Map<String, String> blocklyFieldToSensorMode = new HashMap<>();
+        for ( F2M f2m : f2ms ) {
+            blocklyFieldToSensorMode.put(f2m.field(), f2m.mode());
+        }
+
+        BlockDescriptor blockDescriptor = new BlockDescriptor(name, Category.valueOf(category), astClass, blocklyNames, Collections.unmodifiableMap(blocklyFieldToSensorMode));
         BlockDescriptor firstClass = blockTypesByClassName.put(astClass.getName(), blockDescriptor);
         boolean legaTwice = firstClass == null || blockDescriptor.equals(firstClass);
         if ( !legaTwice ) {
@@ -216,11 +227,12 @@ public class AstFactory {
                     astClass.getName(), firstMapper.getAstClass().getName(), blocklyName));
             }
         }
+        return blockDescriptor;
     }
 
-    private static void addToSampleValues(String className, F2M[] f2MS) {
-        for ( F2M f2M : f2MS ) {
-            waitUntilMap.put(f2M.field(), new WaitUntilSensorBean(className, f2M.mode()));
+    private static void addToSampleValues(F2M[] fieldToModeArray, BlockDescriptor blockDescriptor) {
+        for ( F2M f2M : fieldToModeArray ) {
+            getSensorSampleMap.put(f2M.field(), blockDescriptor);
         }
     }
 }

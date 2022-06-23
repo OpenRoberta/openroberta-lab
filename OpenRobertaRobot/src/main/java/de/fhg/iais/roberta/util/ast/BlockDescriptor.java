@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.util.ast;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Category;
@@ -33,8 +34,13 @@ public class BlockDescriptor {
      * the REAL names used by blockly in the blockly xml which are mapped to the AST class described here
      */
     private final Set<String> blocklyNames;
+    /**
+     * the huge get sample sensor allows to integrate many sensors together with a mode into one block. This map maps the blockly field name to the sensor mode
+     * to be used. Only used by block descriptors for AST classes, which are external sensors.
+     */
+    private final Map<String, String> blocklyFieldToSensorMode;
 
-    public BlockDescriptor(String name, Category category, Class<?> astClass, String... blocklyNames) {
+    public BlockDescriptor(String name, Category category, Class<?> astClass, String[] blocklyNames, Map<String, String> blocklyFieldToSensorMode) {
         Assert.notNull(name);
         Assert.notNull(category);
         Assert.notNull(blocklyNames);
@@ -43,6 +49,7 @@ public class BlockDescriptor {
         this.category = category;
         this.astClass = astClass;
         this.blocklyNames = new HashSet<>(Arrays.asList(blocklyNames));
+        this.blocklyFieldToSensorMode = blocklyFieldToSensorMode;
     }
 
     /**
@@ -64,6 +71,15 @@ public class BlockDescriptor {
      */
     public Class<?> getAstClass() {
         return this.astClass;
+    }
+
+    /**
+     * @return the mode, that is declared responsible for the get sample sensor blockly field
+     */
+    public String getSensorModeFromBlocklyField(String blocklyField) {
+        String mode = this.blocklyFieldToSensorMode.get(blocklyField);
+        Assert.notNull(mode, "no mode found for: %s in block descriptor: %s", blocklyField, this.name);
+        return mode;
     }
 
     /**
