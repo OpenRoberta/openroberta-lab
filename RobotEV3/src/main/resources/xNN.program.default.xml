@@ -1,46 +1,48 @@
 <block_set xmlns='http://www.w3.org/1999/xhtml' xmlversion="3.1">
-	<instance>
-		<block type="robControls_start" intask="true" deletable="false">
-			<mutation declare="true"/>
-			<field name="DEBUG">FALSE</field>
-			<statement name="ST">
-				<block type="robGlobalVariables_declare" intask="true" deletable="false" movable="false">
-					<mutation next="false" declaration_type="Number"/>
-					<field name="VAR">o</field>
-					<field name="TYPE">Number</field>
-					<value name="VALUE">
-						<block type="math_number" intask="true">
-							<field name="NUM">0</field>
-						</block>
-					</value>
-				</block>
-			</statement>
-		</block>
-		<block type="robControls_loopForever" id="C;[zW,(!H~qy{BcP]g~l" intask="true">
-			<statement name="DO">
-				<block type="robActions_NNstep" id="ypW*PR)eOy_~{Z9f~QHP" intask="true">
-					<data>{"learningRate":0.03,"regularizationRate":0,"noise":0,"batchSize":10,"discretize":false,"percTrainData":50,"activationKey":"relu","activation":{},"regularization":null,"initUntil":null,"collectStats":false,"numHiddenLayers":0,"networkShape":[],"weights":[[["1"]],[[]]],"biases":[["0"],["0"]],"precision":"2","weightArcMaxSize":8,"weightSuppressMultOp":true,"numInputs":1,"numOutputs":1,"inputs":["in"],"outputs":["out"]}</data>
-					<statement name="IONEURON">
-						<block type="robActions_inputneuron" intask="true">
-							<field name="NAME">in</field>
-							<value name="VALUE">
-								<block type="math_number" intask="true">
-									<field name="NUM">0</field>
-								</block>
-							</value>
-						</block>
-						<block type="robActions_outputneuron" intask="true">
-							<field name="NAME">out</field>
-							<value name="VALUE">
-								<block type="variables_get" intask="true">
-									<mutation datatype="Number"/>
-									<field name="VAR">o</field>
-								</block>
-							</value>
-						</block>
-					</statement>
-				</block>
-			</statement>
-		</block>
-	</instance>
+    <instance>
+        <block type="robControls_start" intask="true" deletable="false">
+            <mutation declare="true"/>
+            <field name="DEBUG">FALSE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Number"/>
+                    <field name="VAR">o</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="math_number" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="robControls_loopForever" id="C;[zW,(!H~qy{BcP]g~l" intask="true">
+            <statement name="DO">
+                <block type="robActions_NNstep" id="ypW*PR)eOy_~{Z9f~QHP" intask="true">
+                    <data>{"learningRate":0.03,"regularizationRate":0,"noise":0,"batchSize":10,"discretize":false,"percTrainData":50,"activationKey":"linear",
+                        "activation":null,"regularization":null,"initUntil":null,"collectStats":false,"numHiddenLayers":0,"networkShape":[],"weights":[[["1"]],[[]]],"biases":[["0"],["0"]],"precision":"2","weightArcMaxSize":8,"weightSuppressMultOp":true,"numInputs":1,"numOutputs":1,"inputs":["in"],"outputs":["out"]}
+                    </data>
+                    <statement name="IONEURON">
+                        <block type="robActions_inputneuron" intask="true">
+                            <field name="NAME">in</field>
+                            <value name="VALUE">
+                                <block type="math_number" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_outputneuron" intask="true">
+                            <field name="NAME">out</field>
+                            <value name="VALUE">
+                                <block type="variables_get" intask="true">
+                                    <mutation datatype="Number"/>
+                                    <field name="VAR">o</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+            </statement>
+        </block>
+    </instance>
 </block_set>

@@ -240,20 +240,25 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             var nodeGroup = container.append('g').attr({
                 class: nodeClass,
                 id: "".concat(nodeId),
-                transform: "translate(".concat(x, ",").concat(y, ")"),
+                transform: "translate(".concat(x, ",").concat(y, ")")
             });
             var mainRectAngle = nodeGroup.append('rect').attr({
                 x: 0,
                 y: 0,
                 width: nodeSize,
-                height: nodeSize,
+                height: nodeSize
             });
             if (focusNode !== undefined && focusNode != null && focusNode.id === node.id) {
                 mainRectAngle.style('fill', 'yellow');
             }
             nodeGroup.on('click', function () {
                 if (node.inputLinks.length > 0) {
-                    focusNode = node;
+                    if (focusNode == node) {
+                        focusNode = null;
+                    }
+                    else {
+                        focusNode = node;
+                    }
                     drawNetworkUI(network);
                 }
             });
@@ -262,7 +267,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 x: 10,
                 y: 0.66 * nodeSize,
                 'text-anchor': 'start',
-                cursor: 'default',
+                cursor: 'default'
             });
             labelForId.append('tspan').text(nodeId);
             if (nodeType !== NodeType.INPUT) {
@@ -271,7 +276,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                     x: -biasSize - 2,
                     y: nodeSize - biasSize + 3,
                     width: biasSize,
-                    height: biasSize,
+                    height: biasSize
                 });
                 if (focusStyle !== FocusStyle.CLICK_NODE || focusNode === node) {
                     biasRect.on('click', function () {
@@ -288,12 +293,12 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 .insert('div', ':first-child')
                 .attr({
                 id: "canvas-".concat(nodeId),
-                class: 'canvas',
+                class: 'canvas'
             })
                 .style({
                 position: 'absolute',
                 left: "".concat(x + 3, "px"),
-                top: "".concat(y + 3, "px"),
+                top: "".concat(y + 3, "px")
             });
         }
         var valShiftToRight = true;
@@ -304,19 +309,19 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             var datum = {
                 source: {
                     y: source.cx + nodeSize / 2 + 2,
-                    x: source.cy,
+                    x: source.cy
                 },
                 target: {
                     y: dest.cx - nodeSize / 2,
-                    x: dest.cy + ((index - (length - 1) / 2) / length) * 12,
-                },
+                    x: dest.cy + ((index - (length - 1) / 2) / length) * 12
+                }
             };
             var diagonal = D3.svg.diagonal().projection(function (d) { return [d.y, d.x]; });
             line.attr({
                 'marker-start': 'url(#markerArrow)',
                 class: 'link',
                 id: link.source.id + '-' + link.dest.id,
-                d: diagonal(datum, 0),
+                d: diagonal(datum, 0)
             });
             // Show the value of the link depending on focus-style
             if (focusStyle === FocusStyle.SHOW_ALL || (focusStyle === FocusStyle.CLICK_NODE && (link.source === focusNode || link.dest === focusNode))) {
@@ -390,7 +395,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 class: 'nn-showval',
                 id: 'val-' + id,
                 x: x,
-                y: y,
+                y: y
             })
                 .text(valueToShow);
             drawValuesBox(text, valueForColor);
@@ -432,7 +437,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         editCard.style({
             left: "".concat(coordinates[0] + 20, "px"),
             top: "".concat(coordinates[1], "px"),
-            display: 'block',
+            display: 'block'
         });
         var name = nodeOrLink instanceof neuralnetwork_nn_1.Link ? 'NN_WEIGHT' : 'NN_BIAS';
         editCard.select('.nn-type').text(MSG.get(name));
@@ -450,7 +455,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 container.select("#".concat(baseName)).style({
                     'stroke-dashoffset': 0,
                     'stroke-width': linkWidthScale(Math.abs(link.weight.get())),
-                    stroke: colorScale(link.weight.get()),
+                    stroke: colorScale(link.weight.get())
                 });
                 var val = container.select("#val-".concat(baseName));
                 if (!val.empty()) {

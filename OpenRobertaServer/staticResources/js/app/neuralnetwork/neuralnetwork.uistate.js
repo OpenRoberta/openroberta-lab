@@ -11,7 +11,7 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
             this.batchSize = 10;
             this.discretize = false;
             this.percTrainData = 50;
-            this.activationKey = 'relu';
+            this.activationKey = 'linear';
             this.activation = H.Activations.LINEAR;
             this.regularization = null;
             this.initUntil = null;

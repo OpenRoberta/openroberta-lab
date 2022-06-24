@@ -9,7 +9,7 @@ export class State {
     batchSize = 10;
     discretize = false;
     percTrainData = 50;
-    activationKey = 'relu';
+    activationKey = 'linear';
     activation = H.Activations.LINEAR;
     regularization: H.RegularizationFunction = null;
     initUntil = null;
