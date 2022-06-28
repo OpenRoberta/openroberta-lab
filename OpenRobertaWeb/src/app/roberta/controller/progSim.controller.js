@@ -74,7 +74,7 @@ function initEvents() {
 
                         var language = GUISTATE_C.getLanguage();
 
-                        NN_CTRL.mkNNfromNNStepData();
+                        NN_CTRL.mkNNfromProgramStartBlock();
                         PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function (result) {
                             if (result.rc == 'ok') {
                                 MSG.displayMessage('MESSAGE_EDIT_START', 'TOAST', GUISTATE_C.getProgramName());
@@ -141,52 +141,68 @@ function initEvents() {
         'sim info clicked'
     );
 
-    $('#simRobot').onWrap('click', function (event) {
-        var robot = GUISTATE_C.getRobot();
-        var position = $('#simDiv').position();
+    $('#simRobot').onWrap(
+        'click',
+        function (event) {
+            var robot = GUISTATE_C.getRobot();
+            var position = $('#simDiv').position();
 
-        if (robot == 'calliope2016' || robot == 'calliope2017' || robot == 'calliope2017NoBlue' || robot == 'microbit') {
-            position.left = $('#blocklyDiv').width() + 12;
-        } else {
-            position.left += 48;
-        }
-        toggleRobotWindow('#simRobotWindow', position);
-    }, 'sim show robot clicked');
+            if (robot == 'calliope2016' || robot == 'calliope2017' || robot == 'calliope2017NoBlue' || robot == 'microbit') {
+                position.left = $('#blocklyDiv').width() + 12;
+            } else {
+                position.left += 48;
+            }
+            toggleRobotWindow('#simRobotWindow', position);
+        },
+        'sim show robot clicked'
+    );
 
-    $('#simValues').onWrap('click', function(event) {
-        var position = $('#simDiv').position();
-        position.left = $(window).width() - ($('#simValuesWindow').width() + 12);
-        toggleRobotWindow('#simValuesWindow', position);
-    }, 'sim show values clicked');
+    $('#simValues').onWrap(
+        'click',
+        function (event) {
+            var position = $('#simDiv').position();
+            position.left = $(window).width() - ($('#simValuesWindow').width() + 12);
+            toggleRobotWindow('#simValuesWindow', position);
+        },
+        'sim show values clicked'
+    );
 
     function toggleRobotWindow(id, position) {
         if ($(id).is(':hidden')) {
             $(id).css({
                 top: position.top + 12,
-                left: position.left
+                left: position.left,
             });
         }
-        $(id).animate({
-            'opacity': 'toggle',
-            'top': 'toggle'
-        }, 300);
-        $(id).draggable(
+        $(id).animate(
             {
-                constraint: 'window'
-            }
+                opacity: 'toggle',
+                top: 'toggle',
+            },
+            300
         );
+        $(id).draggable({
+            constraint: 'window',
+        });
     }
 
-    $('.simWindow .close').onWrap('click', function(event) {
-        $($(this).parents('.simWindow:first')).animate({
-            'opacity': 'hide',
-            'top': 'hide'
-        }, 300);
-    }, 'sim close robotWindow clicked');
+    $('.simWindow .close').onWrap(
+        'click',
+        function (event) {
+            $($(this).parents('.simWindow:first')).animate(
+                {
+                    opacity: 'hide',
+                    top: 'hide',
+                },
+                300
+            );
+        },
+        'sim close robotWindow clicked'
+    );
 
     $('#simResetPose').onWrap(
         'click',
-        function(event) {
+        function (event) {
             if (GUISTATE_C.hasWebotsSim()) {
                 NAOSIM.resetPose();
                 return;
@@ -354,7 +370,7 @@ function toggleSim() {
             SIM.cancel();
         }
         $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play').removeClass('typcn-media-stop');
-        $('#blockly').closeRightView(function() {
+        $('#blockly').closeRightView(function () {
             $('.nav > li > ul > .robotType').removeClass('disabled');
             $('.' + GUISTATE_C.getRobot()).addClass('disabled');
         });

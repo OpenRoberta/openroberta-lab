@@ -42,7 +42,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetBias;
 import de.fhg.iais.roberta.syntax.lang.expr.NNGetOutputNeuronVal;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetWeight;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
@@ -603,6 +605,20 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
     @Override
     public final V visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<V> getVal) {
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.NN_GETOUTPUTNEURON_VAL).put(C.NAME, getVal.name);
+        app(o);
+        return null;
+    }
+
+    @Override
+    public final V visitNNGetWeight(NNGetWeight<V> getVal) {
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.NN_GETWEIGHT).put(C.FROM, getVal.from).put(C.TO, getVal.to);
+        app(o);
+        return null;
+    }
+
+    @Override
+    public final V visitNNGetBias(NNGetBias<V> getVal) {
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.NN_GETBIAS).put(C.NAME, getVal.name);
         app(o);
         return null;
     }

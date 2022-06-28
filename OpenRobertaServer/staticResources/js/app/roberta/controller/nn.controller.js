@@ -1,6 +1,6 @@
-define(["require", "exports", "log", "guiState.controller", "neuralnetwork.ui", "jquery", "blockly", "jquery-validate"], function (require, exports, LOG, GUISTATE_C, NN_UI, $, Blockly) {
+define(["require", "exports", "guiState.controller", "neuralnetwork.ui", "jquery", "blockly", "jquery-validate"], function (require, exports, GUISTATE_C, NN_UI, $, Blockly) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.mkNNfromNNStepDataAndRunNNEditor = exports.mkNNfromNNStepData = exports.saveNN2Blockly = exports.init = void 0;
+    exports.mkNNfromNNStepDataAndRunNNEditor = exports.mkNNfromProgramStartBlock = exports.saveNN2Blockly = exports.init = void 0;
     /**
      * initialize the callbacks needed by the NN tab. Called once at front end init time
      */
@@ -19,63 +19,79 @@ define(["require", "exports", "log", "guiState.controller", "neuralnetwork.ui", 
     }
     exports.init = init;
     /**
-     * save the NN to the program XML. Called, when the NN editor or the program terminates.
+     * terminate the nn editor.  Called, when the NN editor or the program terminates. Cleanup:
+     * - save the NN to the program XML as data in the start block.
+     * - close the edit card
+     * - reset node selection (yellow node)
      */
     function saveNN2Blockly() {
-        var nnstepBlock = getTheNNstepBlock();
-        if (nnstepBlock !== null) {
-            nnstepBlock.data = NN_UI.getStateAsJSONString();
-        }
+        var startBlock = getTheStartBlock();
+        startBlock.data = NN_UI.getStateAsJSONString();
+        NN_UI.resetUiOnTerminate();
     }
     exports.saveNN2Blockly = saveNN2Blockly;
     /**
      * create the NN from the program XML. Called, when the simulation starts
      */
-    function mkNNfromNNStepData() {
+    function mkNNfromProgramStartBlock() {
+        var startBlock = getTheStartBlock();
         var nnStepBlock = getTheNNstepBlock();
-        if (nnStepBlock) {
+        if (startBlock.data === undefined || startBlock.data === null) {
             if (nnStepBlock.data !== undefined && nnStepBlock.data !== null) {
-                var nnStateAsJson = void 0;
-                try {
-                    nnStateAsJson = JSON.parse(nnStepBlock.data);
-                }
-                catch (e) {
-                    nnStateAsJson = null;
-                }
+                startBlock.data = nnStepBlock.data;
+                delete nnStepBlock.data;
             }
-            var inputNeurons = [];
-            var outputNeurons = [];
-            extractInputOutputNeurons(inputNeurons, outputNeurons, nnStepBlock.getChildren());
-            NN_UI.setupNN(nnStateAsJson, inputNeurons, outputNeurons);
         }
-        else {
-            NN_UI.setupNN(null, [], []);
+        var nnStateAsJson;
+        try {
+            nnStateAsJson = JSON.parse(startBlock.data);
         }
+        catch (e) {
+            // nnStateAsJson remains null
+        }
+        var inputNeurons = [];
+        var outputNeurons = [];
+        extractInputOutputNeurons(inputNeurons, outputNeurons, nnStepBlock === null ? null : nnStepBlock.getChildren());
+        NN_UI.setupNN(nnStateAsJson, inputNeurons, outputNeurons);
     }
-    exports.mkNNfromNNStepData = mkNNfromNNStepData;
+    exports.mkNNfromProgramStartBlock = mkNNfromProgramStartBlock;
     /**
      * create the NN from the program XML and start the NN editor. Called, when the NN tab is opened
      */
     function mkNNfromNNStepDataAndRunNNEditor() {
-        mkNNfromNNStepData();
+        mkNNfromProgramStartBlock();
         NN_UI.runNNEditor();
     }
     exports.mkNNfromNNStepDataAndRunNNEditor = mkNNfromNNStepDataAndRunNNEditor;
     /**
-     * @return the NNStep block from the program (blocks). Return null, if no block found.
+     * @return the (unique) start block from the program. Must exist.
+     */
+    function getTheStartBlock() {
+        var startBlock = null;
+        for (var _i = 0, _a = Blockly.Workspace.getByContainer('blocklyDiv').getTopBlocks(); _i < _a.length; _i++) {
+            var block = _a[_i];
+            if (!block.isDeletable()) {
+                return block;
+            }
+        }
+        throw 'start block not found. That is impossible.';
+    }
+    /**
+     * @return the NNStep blocks from the program (blocks), prefer a block, that carries the deprecated nn in data.
+     * Return null, if no block found.
      */
     function getTheNNstepBlock() {
-        var nnstepBlock = null;
+        var nnStepBlock = null;
         for (var _i = 0, _a = Blockly.Workspace.getByContainer('blocklyDiv').getAllBlocks(); _i < _a.length; _i++) {
             var block = _a[_i];
             if (block.type === 'robActions_NNstep') {
-                if (nnstepBlock) {
-                    LOG.error('more than one NNstep block is invalid');
+                nnStepBlock = block;
+                if (nnStepBlock.data !== undefined && nnStepBlock.data !== null) {
+                    return nnStepBlock;
                 }
-                nnstepBlock = block;
             }
         }
-        return nnstepBlock;
+        return nnStepBlock;
     }
     /**
      * distribute the input/output neuron declaration of the NNStep stmt to three lists

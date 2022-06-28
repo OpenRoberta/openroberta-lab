@@ -1141,6 +1141,9 @@
 .typcn-ev3:before {
   content: "\ea6e";
 }
+.typcn-xNN:before {
+  content: "\ea6e";
+}
 .typcn-microbit:before {
   content: "\ea6f";
 }

@@ -1,9 +1,9 @@
-import * as LOG from 'log';
 import * as GUISTATE_C from 'guiState.controller';
 import * as NN_UI from 'neuralnetwork.ui';
 import * as $ from 'jquery';
 import * as Blockly from 'blockly';
 import 'jquery-validate';
+import { each } from 'jquery';
 
 /**
  * initialize the callbacks needed by the NN tab. Called once at front end init time
@@ -38,60 +38,79 @@ export function init() {
 }
 
 /**
- * save the NN to the program XML. Called, when the NN editor or the program terminates.
+ * terminate the nn editor.  Called, when the NN editor or the program terminates. Cleanup:
+ * - save the NN to the program XML as data in the start block.
+ * - close the edit card
+ * - reset node selection (yellow node)
  */
 export function saveNN2Blockly() {
-    var nnstepBlock = getTheNNstepBlock();
-    if (nnstepBlock !== null) {
-        nnstepBlock.data = NN_UI.getStateAsJSONString();
-    }
+    var startBlock = getTheStartBlock();
+    startBlock.data = NN_UI.getStateAsJSONString();
+    NN_UI.resetUiOnTerminate();
 }
 
 /**
  * create the NN from the program XML. Called, when the simulation starts
  */
-export function mkNNfromNNStepData() {
+export function mkNNfromProgramStartBlock() {
+    var startBlock = getTheStartBlock();
     var nnStepBlock = getTheNNstepBlock();
-    if (nnStepBlock) {
+
+    if (startBlock.data === undefined || startBlock.data === null) {
         if (nnStepBlock.data !== undefined && nnStepBlock.data !== null) {
-            let nnStateAsJson;
-            try {
-                nnStateAsJson = JSON.parse(nnStepBlock.data);
-            } catch (e) {
-                nnStateAsJson = null;
-            }
+            startBlock.data = nnStepBlock.data;
+            delete nnStepBlock.data;
         }
-        var inputNeurons = [];
-        var outputNeurons = [];
-        extractInputOutputNeurons(inputNeurons, outputNeurons, nnStepBlock.getChildren());
-        NN_UI.setupNN(nnStateAsJson, inputNeurons, outputNeurons);
-    } else {
-        NN_UI.setupNN(null, [], []);
     }
+    let nnStateAsJson;
+    try {
+        nnStateAsJson = JSON.parse(startBlock.data);
+    } catch (e) {
+        // nnStateAsJson remains null
+    }
+
+    var inputNeurons = [];
+    var outputNeurons = [];
+    extractInputOutputNeurons(inputNeurons, outputNeurons, nnStepBlock === null ? null : nnStepBlock.getChildren());
+    NN_UI.setupNN(nnStateAsJson, inputNeurons, outputNeurons);
 }
 
 /**
  * create the NN from the program XML and start the NN editor. Called, when the NN tab is opened
  */
 export function mkNNfromNNStepDataAndRunNNEditor() {
-    mkNNfromNNStepData();
+    mkNNfromProgramStartBlock();
     NN_UI.runNNEditor();
 }
 
 /**
- * @return the NNStep block from the program (blocks). Return null, if no block found.
+ * @return the (unique) start block from the program. Must exist.
  */
-function getTheNNstepBlock() {
-    var nnstepBlock = null;
-    for (const block of Blockly.Workspace.getByContainer('blocklyDiv').getAllBlocks()) {
-        if (block.type === 'robActions_NNstep') {
-            if (nnstepBlock) {
-                LOG.error('more than one NNstep block is invalid');
-            }
-            nnstepBlock = block;
+function getTheStartBlock() {
+    var startBlock = null;
+    for (const block of Blockly.Workspace.getByContainer('blocklyDiv').getTopBlocks()) {
+        if (!block.isDeletable()) {
+            return block;
         }
     }
-    return nnstepBlock;
+    throw 'start block not found. That is impossible.';
+}
+
+/**
+ * @return the NNStep blocks from the program (blocks), prefer a block, that carries the deprecated nn in data.
+ * Return null, if no block found.
+ */
+function getTheNNstepBlock() {
+    let nnStepBlock = null;
+    for (const block of Blockly.Workspace.getByContainer('blocklyDiv').getAllBlocks()) {
+        if (block.type === 'robActions_NNstep') {
+            nnStepBlock = block;
+            if (nnStepBlock.data !== undefined && nnStepBlock.data !== null) {
+                return nnStepBlock;
+            }
+        }
+    }
+    return nnStepBlock;
 }
 
 /**

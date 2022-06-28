@@ -1114,7 +1114,7 @@ Scene.prototype.updateSensorValues = function (running) {
             values.light = {};
             values.display = {};
             values.light.ambientlight = this.robots[r].display.lightLevel;
-            if (robotName === 'Ev3' || robotName === 'Nxt' || robotName === 'Mbot') {
+            if (robotName === 'Ev3' || robotName === 'xNN' || robotName === 'Nxt' || robotName === 'Mbot') {
                 values.display.brightness = this.robots[r].display.brightness;
                 values.display.pixel = this.robots[r].display.leds;
             } else {

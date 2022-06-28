@@ -50,7 +50,7 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
                         var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
                         var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
                         var language = GUISTATE_C.getLanguage();
-                        NN_CTRL.mkNNfromNNStepData();
+                        NN_CTRL.mkNNfromProgramStartBlock();
                         PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function (result) {
                             if (result.rc == 'ok') {
                                 MSG.displayMessage('MESSAGE_EDIT_START', 'TOAST', GUISTATE_C.getProgramName());
@@ -132,21 +132,21 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
             if ($(id).is(':hidden')) {
                 $(id).css({
                     top: position.top + 12,
-                    left: position.left
+                    left: position.left,
                 });
             }
             $(id).animate({
-                'opacity': 'toggle',
-                'top': 'toggle'
+                opacity: 'toggle',
+                top: 'toggle',
             }, 300);
             $(id).draggable({
-                constraint: 'window'
+                constraint: 'window',
             });
         }
         $('.simWindow .close').onWrap('click', function (event) {
             $($(this).parents('.simWindow:first')).animate({
-                'opacity': 'hide',
-                'top': 'hide'
+                opacity: 'hide',
+                top: 'hide',
             }, 300);
         }, 'sim close robotWindow clicked');
         $('#simResetPose').onWrap('click', function (event) {

@@ -501,6 +501,27 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
             var node = this.getNeuronById(id);
             return node != null ? node.output : 0;
         };
+        Network.prototype.getWeight = function (from, to) {
+            var fromNode = this.getNeuronById(from);
+            if (fromNode != null) {
+                for (var i = 0; i < fromNode.outputs.length; i++) {
+                    var link = fromNode.outputs[i];
+                    if (link.dest.id === to) {
+                        return link.weight.get();
+                    }
+                }
+            }
+            return 0;
+        };
+        Network.prototype.getBias = function (name) {
+            var node = this.getNeuronById(name);
+            if (node != null) {
+                return node.bias.get();
+            }
+            else {
+                return 0;
+            }
+        };
         /**
          * one step of the neural network. Called from the simulation
          * @param inputData array of values for the input neurons

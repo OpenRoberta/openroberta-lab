@@ -27,13 +27,34 @@ public class NEPOprog {
     
     private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
     private Hal hal = new Hal(brickConfiguration, usedSensors);
-    private float ____out1, ____out2, ____out3;
+    
+    private float ____out1;
+    private float ____out2;
+    private float ____out3;
+    private float ____b_h1n1 = 1;
+    private float ____w_in1_h1n1 = 1;
+    private float ____w_in2_h1n1 = 1;
+    private float ____w_in3_h1n1 = 1;
+    private float ____b_h1n2 = 1;
+    private float ____w_in1_h1n2 = 1;
+    private float ____w_in2_h1n2 = 1;
+    private float ____w_in3_h1n2 = 1;
+    private float ____b_out1 = -1;
+    private float ____w_h1n1_out1 = -1;
+    private float ____w_h1n2_out1 = -1;
+    private float ____b_out2 = -1;
+    private float ____w_h1n1_out2 = -1;
+    private float ____w_h1n2_out2 = -1;
+    private float ____b_out3 = -1;
+    private float ____w_h1n1_out3 = -1;
+    private float ____w_h1n2_out3 = -1;
+    
     private void ____nnStep( float _in1, float _in2, float _in3) {
-        float h1n1 = 1 + _in1*1 + _in2*1 + _in3*1;
-        float h1n2 = 1 + _in1*1 + _in2*1 + _in3*1;
-        ____out1 = -1 + h1n1*-1 + h1n2*-1;
-        ____out2 = -1 + h1n1*-1 + h1n2*-1;
-        ____out3 = -1 + h1n1*-1 + h1n2*-1;
+        float ____h1n1 = ____b_h1n1 + _in1 * ____w_in1_h1n1 + _in2 * ____w_in2_h1n1 + _in3 * ____w_in3_h1n1;
+        float ____h1n2 = ____b_h1n2 + _in1 * ____w_in1_h1n2 + _in2 * ____w_in2_h1n2 + _in3 * ____w_in3_h1n2;
+        ____out1 = ____b_out1 + ____h1n1 * ____w_h1n1_out1 + ____h1n2 * ____w_h1n2_out1;
+        ____out2 = ____b_out2 + ____h1n1 * ____w_h1n1_out2 + ____h1n2 * ____w_h1n2_out2;
+        ____out3 = ____b_out3 + ____h1n1 * ____w_h1n1_out3 + ____h1n2 * ____w_h1n2_out3;
     }
     
     public static void main(String[] args) {
@@ -54,8 +75,10 @@ public class NEPOprog {
     float ___o3 = 0;
     
     public void run() throws Exception {
-        
-        
+        ____w_in1_h1n1 += 1;
+        ____b_h1n2 = 2;
+        ___o3 = ____w_in1_h1n1;
+        ___o3 = ____b_h1n2;
         ____nnStep(1,2,1 + 2);
         ___o1 = ____out1;
         ___o2 = ____out2;

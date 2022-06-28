@@ -36,7 +36,7 @@ public class WorkflowTestHelper {
         StmtList<Void> variables = new StmtList<Void>();
         variables.setReadOnly();
 
-        MainTask<Void> mainTask = new MainTask<Void>(variables, "false", BlocklyBlockProperties.make("MAIN_FOR_TEST", "1"), null);
+        MainTask<Void> mainTask = new MainTask<Void>(BlocklyBlockProperties.make("MAIN_FOR_TEST", "1"), null, variables, "false", null);
         phrases = new ArrayList<>(Arrays.asList(new Location<>("0", "0"), mainTask));
         configurationComponents = new ArrayList<>();
     }

@@ -33,8 +33,8 @@ let focusNode = null;
 let state: State = null;
 let network: Network = null;
 
-export function setupNN(stateFromNNstep: any, inputNeurons: string[], outputNeurons: string[]) {
-    state = new State(stateFromNNstep, inputNeurons, outputNeurons);
+export function setupNN(stateFromStartBlock: any, inputNeurons: string[], outputNeurons: string[]) {
+    state = new State(stateFromStartBlock, inputNeurons, outputNeurons);
     makeNetworkFromState();
 }
 
@@ -102,6 +102,11 @@ export async function runNNEditor() {
         }
         return undefined;
     }
+}
+
+export function resetUiOnTerminate() {
+    $('#nn-editCard').css("display", "none");
+    focusNode = null;
 }
 
 function reconstructNNIncludingUI() {

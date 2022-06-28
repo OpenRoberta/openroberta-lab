@@ -30,7 +30,7 @@ public abstract class AbstractLanguageGeneratorWorker implements IWorker {
         codeGenSetupBeanBuilder.setHelperMethodFile(project.getRobotFactory().getPluginProperties().getStringProperty("robot.helperMethods"));
         codeGenSetupBeanBuilder.addAdditionalEnums(usedMethodBean.getAdditionalEnums());
         codeGenSetupBeanBuilder.addUsedMethods(usedMethodBean.getUsedMethods());
-        codeGenSetupBeanBuilder.setNNStepDecl(nnBean.getNnStepDecl());
+        codeGenSetupBeanBuilder.setNNBean(nnBean);
         ClassToInstanceMap<IProjectBean> beans =
             ImmutableClassToInstanceMap
                 .<IProjectBean> builder()

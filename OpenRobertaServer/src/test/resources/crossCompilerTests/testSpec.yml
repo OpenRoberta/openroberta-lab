@@ -39,15 +39,17 @@ robots:
     template: ev3
     dir: ev3
     suffix: ".cpp"
-    exclude: [ nn_step ]
   ev3dev:
     template: ev3
     dir: ev3
     suffix: ".py"
-    exclude: [ nn_step ]
   ev3lejosv1:
     template: ev3
     dir: ev3
+    suffix: ".java"
+  xNN:
+    template: xNN
+    dir: xNN
     suffix: ".java"
   ev3lejosv0:
     template: ev3

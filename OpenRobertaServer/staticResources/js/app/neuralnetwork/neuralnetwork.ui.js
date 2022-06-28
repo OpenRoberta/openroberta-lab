@@ -41,7 +41,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", "./neuralnetwork.uistate", "log", "./neuralnetwork.msg"], function (require, exports, H, neuralnetwork_nn_1, neuralnetwork_uistate_1, LOG, MSG) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.getNetwork = exports.getStateAsJSONString = exports.runNNEditor = exports.setupNN = void 0;
+    exports.getNetwork = exports.getStateAsJSONString = exports.resetUiOnTerminate = exports.runNNEditor = exports.setupNN = void 0;
     var NodeType;
     (function (NodeType) {
         NodeType[NodeType["INPUT"] = 0] = "INPUT";
@@ -59,8 +59,8 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     var focusNode = null;
     var state = null;
     var network = null;
-    function setupNN(stateFromNNstep, inputNeurons, outputNeurons) {
-        state = new neuralnetwork_uistate_1.State(stateFromNNstep, inputNeurons, outputNeurons);
+    function setupNN(stateFromStartBlock, inputNeurons, outputNeurons) {
+        state = new neuralnetwork_uistate_1.State(stateFromStartBlock, inputNeurons, outputNeurons);
         makeNetworkFromState();
     }
     exports.setupNN = setupNN;
@@ -132,6 +132,11 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         });
     }
     exports.runNNEditor = runNNEditor;
+    function resetUiOnTerminate() {
+        $('#nn-editCard').css("display", "none");
+        focusNode = null;
+    }
+    exports.resetUiOnTerminate = resetUiOnTerminate;
     function reconstructNNIncludingUI() {
         makeNetworkFromState();
         drawNetworkUI(network);

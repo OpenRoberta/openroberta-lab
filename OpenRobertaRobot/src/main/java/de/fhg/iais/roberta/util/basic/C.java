@@ -194,6 +194,8 @@ public class C {
     public static final String NN_CHANGEWEIGHT_STMT = "nnChangeWeightStmt";
     public static final String NN_CHANGEBIAS_STMT = "nnChangeBiasStmt";
     public static final String NN_GETOUTPUTNEURON_VAL = "nnGetOutputNeuronVal";
+    public static final String NN_GETWEIGHT = "nnGetWeight";
+    public static final String NN_GETBIAS = "nnGetBias";
     public static final String NOOP_STMT = "createNoopStmt";
     public static final String NOT = "NOT";
     public static final String NO = "NO";

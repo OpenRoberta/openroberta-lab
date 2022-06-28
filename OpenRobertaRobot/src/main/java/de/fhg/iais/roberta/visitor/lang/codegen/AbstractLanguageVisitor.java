@@ -15,6 +15,7 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -24,7 +25,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetBias;
 import de.fhg.iais.roberta.syntax.lang.expr.NNGetOutputNeuronVal;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetWeight;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
@@ -48,7 +51,6 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.NNStepDecl;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.visitor.SourceBuilder;
 import de.fhg.iais.roberta.visitor.BaseVisitor;
@@ -119,24 +121,61 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     }
 
     protected void generateNNStuff() {
-        NNStepDecl nnStepDecl = this.getBean(CodeGeneratorSetupBean.class).getNNStepDecl();
-        if ( nnStepDecl != null ) {
-            src.add("private float ____");
-            src.collect(nnStepDecl.getOutputNeurons(), ", ____").add(";").nlI();
-            src.add("private void ____nnStep(").collect(nnStepDecl.getInputNeurons(), " float _", ", float _", "").add(") {").INCR();
-            JSONArray weights = nnStepDecl.getWeights();
-            JSONArray biases = nnStepDecl.getBiases();
+        NNBean nnBean = this.getBean(CodeGeneratorSetupBean.class).getNNBean();
+        if ( nnBean != null && nnBean.isWellDefined() ) {
+            for ( String neuron:nnBean.getOutputNeurons() ) {
+                src.nlI().add("private float ____", neuron, ";");
+            }
+            final JSONArray weights = nnBean.getWeights();
+            final JSONArray biases = nnBean.getBiases();
             for ( int layer = 0; layer < weights.length() - 1; layer++ ) {
                 JSONArray weightsForLayer = weights.getJSONArray(layer);
                 JSONArray biasesForLayer = biases.getJSONArray(layer + 1);
                 int numberOfNeurons = weightsForLayer.getJSONArray(0).length();
                 for ( int targetNum = 0; targetNum < numberOfNeurons; targetNum++ ) {
-                    String targetNeuron = (layer == weights.length() - 2) ? ("____" + nnStepDecl.getOutputNeurons().get(targetNum)) : "float h" + (layer + 1) + "n" + (targetNum + 1);
-                    src.nlI().add(targetNeuron, " = ", biasesForLayer.getString(targetNum));
+                    String targetName =  (layer == weights.length() - 2) ? nnBean.getOutputNeurons().get(targetNum) : ("h" + (layer + 1) + "n" + (targetNum + 1));
+                    src.nlI().add("private float ____b_", targetName, " = ");
+                    writeWeightTerm(biasesForLayer.getString(targetNum));
+                    src.add(";");
                     for ( int sourceNum = 0; sourceNum < weightsForLayer.length(); sourceNum++ ) {
-                        String sourceNeuron = (layer == 0) ? ("_" + nnStepDecl.getInputNeurons().get(sourceNum)) : ("h" + layer + "n" + (sourceNum + 1));
-                        src.add(" + ", sourceNeuron);
+                        String sourceName = (layer == 0) ? nnBean.getInputNeurons().get(sourceNum) : ("h" + layer + "n" + (sourceNum + 1));
+                        src.nlI().add("private float ____w_", sourceName, "_", targetName, " = ");
                         writeWeightTerm(weightsForLayer.getJSONArray(sourceNum).getString(targetNum));
+                        src.add(";");
+                    }
+                }
+            }
+            src.nlI().nlI().add("private void ____nnStep(").collect(nnBean.getInputNeurons(), " float _", ", float _", "").add(") {").INCR();
+            for ( int layer = 0; layer < weights.length() - 1; layer++ ) {
+                final JSONArray weightsForLayer = weights.getJSONArray(layer);
+                final JSONArray biasesForLayer = biases.getJSONArray(layer + 1);
+                int numberOfNeurons = weightsForLayer.getJSONArray(0).length();
+                for ( int targetNum = 0; targetNum < numberOfNeurons; targetNum++ ) {
+                    String targetName;
+                    String targetPrefix;
+                    if (layer == weights.length() - 2) {
+                        // output
+                        targetName = nnBean.getOutputNeurons().get(targetNum);
+                        targetPrefix = "";
+                    } else {
+                        // hidden
+                        targetName = "h" + (layer + 1) + "n" + (targetNum + 1);
+                        targetPrefix = "float ";
+                    }
+                    src.nlI().add(targetPrefix, "____", targetName, " = ____b_", targetName);
+                    for ( int sourceNum = 0; sourceNum < weightsForLayer.length(); sourceNum++ ) {
+                        String sourceName;
+                        String sourcePrefix;
+                        if (layer == 0) {
+                            // input
+                            sourceName = nnBean.getInputNeurons().get(sourceNum);
+                            sourcePrefix = "_";
+                        } else {
+                            // hidden
+                            sourceName = "h" + layer + "n" + (sourceNum + 1);
+                            sourcePrefix = "____";
+                        }
+                        src.add(" + ", sourcePrefix, sourceName, " * ____w_", sourceName, "_", targetName);
                     }
                     src.add(";");
                 }
@@ -148,11 +187,11 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     private void writeWeightTerm(String weight) {
         char firstChar = weight.charAt(0);
         if ( firstChar == '*' ) {
-            src.add(weight);
+            src.add(weight.substring(1));
         } else if ( firstChar == '/' || firstChar == ':' ) {
-            src.add("/").add(weight.substring(1));
+            src.add("1.0/").add(weight.substring(1));
         } else {
-            src.add("*").add(weight);
+            src.add(weight);
         }
     }
 
@@ -292,17 +331,35 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     @Override
     public Void visitNNChangeWeightStmt(NNChangeWeightStmt<Void> chgStmt) {
+        this.src.add("____w_", chgStmt.from, "_", chgStmt.to, (chgStmt.change.equals("SET") ? " = " : " += "));
+        chgStmt.value.accept(this);
+        this.src.add(";");
         return null;
     }
 
     @Override
     public Void visitNNChangeBiasStmt(NNChangeBiasStmt<Void> chgStmt) {
+        this.src.add("____b_", chgStmt.name, (chgStmt.change.equals("SET") ? " = " : " += "));
+        chgStmt.value.accept(this);
+        this.src.add(";");
         return null;
     }
 
     @Override
     public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<Void> getVal) {
         src.add("____").add(getVal.name);
+        return null;
+    }
+
+    @Override
+    public Void visitNNGetWeight(NNGetWeight<Void> getVal) {
+        src.add("____w_", getVal.from, "_", getVal.to);
+        return null;
+    }
+
+    @Override
+    public Void visitNNGetBias(NNGetBias<Void> getVal) {
+        src.add("____b_", getVal.name);
         return null;
     }
 

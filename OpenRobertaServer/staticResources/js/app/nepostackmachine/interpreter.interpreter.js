@@ -638,6 +638,14 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     }
                     break;
                 }
+                case C.NN_GETWEIGHT: {
+                    this.state.push(UI.getNetwork().getWeight(expr[C.FROM], expr[C.TO]));
+                    break;
+                }
+                case C.NN_GETBIAS: {
+                    this.state.push(UI.getNetwork().getBias(expr[C.NAME]));
+                    break;
+                }
                 case C.NN_GETOUTPUTNEURON_VAL: {
                     this.state.push(UI.getNetwork().getOutputNeuronVal(expr[C.NAME]));
                     break;

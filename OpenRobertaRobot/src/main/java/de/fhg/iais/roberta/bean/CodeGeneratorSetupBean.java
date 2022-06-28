@@ -10,7 +10,6 @@ import org.json.JSONObject;
 
 import de.fhg.iais.roberta.util.HelperMethodGenerator;
 import de.fhg.iais.roberta.util.HelperMethodGenerator.Language;
-import de.fhg.iais.roberta.util.NNStepDecl;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -23,7 +22,7 @@ public class CodeGeneratorSetupBean implements IProjectBean {
 
     private HelperMethodGenerator helperMethodGenerator;
     private final Set<Enum<?>> usedMethods = new HashSet<>(); // All needed helper methods as a Set
-    private NNStepDecl nnStepDecl;
+    private NNBean nnBean;
 
     public HelperMethodGenerator getHelperMethodGenerator() {
         return this.helperMethodGenerator;
@@ -33,8 +32,8 @@ public class CodeGeneratorSetupBean implements IProjectBean {
         return Collections.unmodifiableSet(this.usedMethods);
     }
 
-    public NNStepDecl getNNStepDecl() {
-        return this.nnStepDecl;
+    public NNBean getNNBean() {
+        return this.nnBean;
     }
 
     public static class Builder implements IBuilder<CodeGeneratorSetupBean> {
@@ -64,8 +63,8 @@ public class CodeGeneratorSetupBean implements IProjectBean {
             return this;
         }
 
-        public Builder setNNStepDecl(NNStepDecl nnStepDecl) {
-            codeGeneratorBean.nnStepDecl = nnStepDecl;
+        public Builder setNNBean(NNBean nnBean) {
+            codeGeneratorBean.nnBean = nnBean;
             return this;
         }
 

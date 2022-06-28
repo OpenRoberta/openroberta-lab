@@ -5,84 +5,91 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.fhg.iais.roberta.util.NNStepDecl;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class NNBean implements IProjectBean {
 
-    private NNStepDecl nnStepDecl;
+    private final List<String> inputNeurons;
+    private final List<String> outputNeurons;
+    private final JSONArray weights;
+    private final JSONArray biases;
 
+    public NNBean(List<String> inputNeurons, List<String> outputNeurons, JSONArray weights, JSONArray biases) {
+        this.inputNeurons = inputNeurons;
+        this.outputNeurons = outputNeurons;
+        this.weights = weights;
+        this.biases = biases;
+    }
+
+    public List<String> getInputNeurons() {
+        return inputNeurons;
+    }
+
+    public List<String> getOutputNeurons() {
+        return outputNeurons;
+    }
+
+    public JSONArray getWeights() {
+        return weights;
+    }
+
+    public JSONArray getBiases() {
+        return biases;
+    }
+
+    public boolean isWellDefined() {
+        return inputNeurons.size() > 0 && outputNeurons.size() > 0;
+    }
 
     public static class Builder implements IBuilder<NNBean> {
-        private final NNBean nnBean = new NNBean();
-
-        // temporary to check NNStep consistency
-        private boolean nnStepWithoutNetWasUsed = false;
+        private JSONArray weights = null;
+        private JSONArray bias = null;
+        private boolean nnStepWasFound = false;
         private List<String> inputNeurons = new ArrayList<>();
         private List<String> outputNeurons = new ArrayList<>();
-        private Set<String> theseOutputNeuronNamesMustExist = new HashSet<>();
 
         /**
-         * save the data of a NNStep block and check consistency of input and output neurons
-         *
-         * @param withNNDecl was a net declaration part of the block?
-         * @param nnStepDecl the declaration including the neurons
-         * @return null, if everything is ok, a string was an error message key otherwise
+         * data contains the NN definition. Store it for later usage. Not yet used.
+         * @param data
          */
-        public String addNNStepDeclAndCheckConsistency(boolean withNNDecl, NNStepDecl nnStepDecl) {
-            if ( this.nnBean.nnStepDecl != null && withNNDecl ) {
-                throw new DbcException("multiple NN definitions found. Frontend inconsistency.");
+        public void setNN(Data data) {
+            if (data == null) {
+                this.weights = new JSONArray();
+                this.bias = new JSONArray();
+            } else {
+                JSONObject netStateDefinition = new JSONObject(data.getValue());
+                this.weights = netStateDefinition.getJSONArray("weights");
+                this.bias = netStateDefinition.getJSONArray("biases");
             }
-            if ( !neuronNamesConsistent(nnStepDecl.getInputNeurons()) || !neuronNamesConsistent(nnStepDecl.getOutputNeurons()) ) {
+        }
+
+        public String processInputOutputNeurons(List<String> inputNeurons, List<String> outputNeurons) {
+            if ( !neuronNamesConsistent(inputNeurons) || !neuronNamesConsistent(outputNeurons) ) {
                 return "NN_STEP_INCONSISTENT";
             }
-            if ( withNNDecl ) {
-                // a net declaration is encountered
-                this.nnBean.nnStepDecl = nnStepDecl;
-
-                if ( nnStepWithoutNetWasUsed ) {
-                    // check, that previous NNStep blocks without net declaration match
-                    if ( !neuronsMatch(inputNeurons, nnStepDecl.getInputNeurons()) || !neuronsMatch(outputNeurons, nnStepDecl.getOutputNeurons()) ) {
-                        return "NN_STEPS_INCONSISTENT";
-                    }
+            if ( nnStepWasFound ) {
+                // check, that input/output of previous NNStep blocks match
+                if ( !neuronsMatch(this.inputNeurons, inputNeurons) || !neuronsMatch(this.outputNeurons, outputNeurons) ) {
+                    return "NN_STEPS_INCONSISTENT";
                 }
-                return checkNameOfOutputNeuron(this.nnBean.nnStepDecl.getOutputNeurons(), theseOutputNeuronNamesMustExist);
             } else {
-                // no net declaration encountered
-                if ( nnStepWithoutNetWasUsed ) {
-                    // a second NNStep block without net declaration is encountered
-                    if ( !neuronsMatch(inputNeurons, nnStepDecl.getInputNeurons()) || !neuronsMatch(outputNeurons, nnStepDecl.getOutputNeurons()) ) {
-                        return "NN_STEPS_INCONSISTENT";
-                    } else {
-                        return null;
-                    }
-                } else {
-                    // the first NNStep block without net declaration is encountered
-                    nnStepWithoutNetWasUsed = true;
-                    inputNeurons = nnStepDecl.getInputNeurons();
-                    outputNeurons = nnStepDecl.getOutputNeurons();
-                    return null;
-                }
+                nnStepWasFound = true;
+                this.inputNeurons = inputNeurons;
+                this.outputNeurons = outputNeurons;
             }
+            return null;
         }
 
         public String checkNameOfOutputNeuron(String name) {
-            theseOutputNeuronNamesMustExist.add(name);
-            if ( nnBean.nnStepDecl != null ) {
-                return checkNameOfOutputNeuron(nnBean.nnStepDecl.getOutputNeurons(), theseOutputNeuronNamesMustExist);
-            } else {
+            if ( outputNeurons.contains(name) ) {
                 return null;
+            } else {
+                return "NN_STEPS_INCONSISTENT";
             }
-        }
-
-        private String checkNameOfOutputNeuron(List<String> existing, Set<String> shouldExist) {
-            for ( String e : shouldExist ) {
-                if ( !existing.contains(e) ) {
-                    return "NN_OUTPUT_NEURON_MISSING";
-                }
-            }
-            return null;
         }
 
         private boolean neuronNamesConsistent(List<String> list) {
@@ -101,11 +108,7 @@ public class NNBean implements IProjectBean {
 
         @Override
         public NNBean build() {
-            return nnBean;
+            return new NNBean(inputNeurons, outputNeurons, weights, bias);
         }
-    }
-
-    public NNStepDecl getNnStepDecl() {
-        return nnStepDecl;
     }
 }

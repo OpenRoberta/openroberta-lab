@@ -18,7 +18,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetBias;
 import de.fhg.iais.roberta.syntax.lang.expr.NNGetOutputNeuronVal;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetWeight;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
@@ -209,6 +211,10 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitNNChangeBiasStmt(NNChangeBiasStmt<V> nnChangeBiasStmt);
 
     V visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<V> nnGetOutputNeuronVal);
+
+    V visitNNGetWeight(NNGetWeight<V> nnGetWeight);
+
+    V visitNNGetBias(NNGetBias<V> nnGetBias);
 
     V visitNullConst(NullConst<V> nullConst);
 

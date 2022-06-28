@@ -50,7 +50,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetBias;
 import de.fhg.iais.roberta.syntax.lang.expr.NNGetOutputNeuronVal;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetWeight;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
@@ -391,7 +393,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
         for ( Stmt<Phrase<V>> e : nnStepStmt.getIoNeurons().get() ) {
             newIoNeurons.get().add((Stmt<V>) e.modify(this));
         }
-        return new NNStepStmt<>(nnStepStmt.netDefinition, newIoNeurons, nnStepStmt.getProperty(), nnStepStmt.getComment());
+        return new NNStepStmt<>(nnStepStmt.getProperty(), nnStepStmt.getComment(), newIoNeurons);
     }
 
     @Override
@@ -425,6 +427,16 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     }
 
     @Override
+    default Phrase<V> visitNNGetWeight(NNGetWeight nnGetWeight) {
+        return new NNGetWeight<>(nnGetWeight.getProperty(), nnGetWeight.getComment(), nnGetWeight.from, nnGetWeight.to);
+    }
+
+    @Override
+    default Phrase<V> visitNNGetBias(NNGetBias nnGetBias) {
+        return new NNGetBias<>(nnGetBias.getProperty(), nnGetBias.getComment(), nnGetBias.name);
+    }
+
+    @Override
     default Phrase<V> visitRepeatStmt(RepeatStmt<Phrase<V>> repeatStmt) {
         return new RepeatStmt<>(repeatStmt.mode, (Expr<V>) repeatStmt.expr.modify(this), (StmtList<V>) repeatStmt.list.modify(this), repeatStmt.getProperty(), repeatStmt.getComment());
     }
@@ -444,7 +456,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
 
     @Override
     default Phrase<V> visitMainTask(MainTask<Phrase<V>> mainTask) {
-        return new MainTask<V>((StmtList<V>) mainTask.variables.modify(this), mainTask.debug, mainTask.getProperty(), mainTask.getComment());
+        return new MainTask<V>(mainTask.getProperty(), mainTask.getComment(), (StmtList<V>) mainTask.variables.modify(this), mainTask.debug, mainTask.data);
     }
 
     @Override

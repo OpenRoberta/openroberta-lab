@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.lang.blocksequence;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Statement;
@@ -18,22 +19,18 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>robControls_start</b> block from Blockly into the AST (abstract syntax tree). Object from this class points to the main thread
- * of the program.<br/>
- * <br/>
- * <b>In this block all global variables that are used in the program are defined.</b>
- */
 @NepoBasic(name = "MAIN_TASK", category = "TASK", blocklyNames = {"robControls_start_ardu", "robControls_start", "mbedcontrols_start"})
 public final class MainTask<V> extends Task<V> {
     public final StmtList<V> variables;
     public final String debug;
+    public final Data data;
 
-    public MainTask(StmtList<V> variables, String debug, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public MainTask(BlocklyBlockProperties properties, BlocklyComment comment, StmtList<V> variables, String debug, Data data) {
         super(properties, comment);
         Assert.isTrue(variables.isReadOnly() && variables != null);
         this.variables = variables;
         this.debug = debug;
+        this.data = data;
         setReadOnly();
     }
 
@@ -61,11 +58,11 @@ public final class MainTask<V> extends Task<V> {
         if ( block.getMutation().isDeclare() == true ) {
             List<Statement> statements = Jaxb2Ast.extractStatements(block, (short) 1);
             StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.ST);
-            return new MainTask<V>(statement, debug, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+            return new MainTask<V>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), statement, debug, block.getData());
         }
         StmtList<V> listOfVariables = new StmtList<V>();
         listOfVariables.setReadOnly();
-        return new MainTask<V>(listOfVariables, debug, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new MainTask<V>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), listOfVariables, debug, block.getData());
     }
 
     @Override
@@ -77,6 +74,7 @@ public final class MainTask<V> extends Task<V> {
         Mutation mutation = new Mutation();
         mutation.setDeclare(declare);
         jaxbDestination.setMutation(mutation);
+        jaxbDestination.setData(data);
         if ( this.debug != null ) {
             Ast2Jaxb.addField(jaxbDestination, "DEBUG", this.debug);
         }

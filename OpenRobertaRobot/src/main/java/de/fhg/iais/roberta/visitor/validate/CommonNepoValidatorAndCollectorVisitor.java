@@ -26,7 +26,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetBias;
 import de.fhg.iais.roberta.syntax.lang.expr.NNGetOutputNeuronVal;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetWeight;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
@@ -77,7 +79,6 @@ import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.NNStepDecl;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
@@ -87,7 +88,6 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     private final HashMap<Integer, Integer> waitsInLoops = new HashMap<>();
     private int loopCounter = 0;
     private int currentLoop = 0;
-    private NNStepDecl nnStepDecl = null;
     // the following data is needed to enforce, that all NNStep blocks have the same input and output neurons
     private boolean nnStepFound = false;
     private List<String> requiredInputNeurons = new ArrayList<>();
@@ -249,6 +249,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
+        this.nnBeanBuilder.setNN(mainTask.data);
         requiredComponentVisited(mainTask, mainTask.variables);
         return null;
     }
@@ -368,33 +369,20 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     public Void visitNNStepStmt(NNStepStmt<Void> nnStepStmt) {
         requiredComponentVisited(nnStepStmt, nnStepStmt.getIoNeurons());
 
-        boolean witNNDecl;
-        Data netDefinition = nnStepStmt.netDefinition;
-        if ( nnStepStmt.netDefinition == null || nnStepStmt.netDefinition.getValue() == null ) {
-            witNNDecl = false;
-            nnStepDecl = new NNStepDecl(new JSONArray(), new JSONArray());
-        } else {
-            witNNDecl = true;
-            JSONObject rawNetDefinition = new JSONObject(nnStepStmt.netDefinition.getValue());
-            nnStepDecl = new NNStepDecl(rawNetDefinition.getJSONArray("weights"), rawNetDefinition.getJSONArray("biases"));
-        }
-        String name;
+        List<String> inputNeurons = new ArrayList<>();
+        List<String> outputNeurons = new ArrayList<>();
         for ( Stmt<Void> neuron : nnStepStmt.getIoNeurons().get() ) {
             if ( neuron instanceof NNInputNeuronStmt ) {
-                name = ((NNInputNeuronStmt) neuron).name;
-                nnStepDecl.addInputNeuron(name);
+                inputNeurons.add(((NNInputNeuronStmt) neuron).name);
             } else if ( neuron instanceof NNOutputNeuronStmt ) {
-                name = ((NNOutputNeuronStmt) neuron).name;
-                nnStepDecl.addOutputNeuron(name);
+                outputNeurons.add(((NNOutputNeuronStmt) neuron).name);
             } else if ( neuron instanceof NNOutputNeuronWoVarStmt ) {
-                name = ((NNOutputNeuronWoVarStmt) neuron).name;
-                nnStepDecl.addOutputNeuron(name);
+                outputNeurons.add(((NNOutputNeuronWoVarStmt) neuron).name);
             } else {
                 throw new DbcException("type of neuron is not input, output or outputWoVar");
             }
-
         }
-        String optErrorKey = nnBeanBuilder.addNNStepDeclAndCheckConsistency(witNNDecl, nnStepDecl);
+        String optErrorKey = nnBeanBuilder.processInputOutputNeurons(inputNeurons, outputNeurons);
         if ( optErrorKey != null ) {
             addErrorToPhrase(nnStepStmt, optErrorKey);
         }
@@ -436,6 +424,16 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         if ( optErrorKey != null ) {
             addErrorToPhrase(outputNeuronVal, optErrorKey);
         }
+        return null;
+    }
+
+    @Override
+    public Void visitNNGetWeight(NNGetWeight<Void> getVal) {
+        return null;
+    }
+
+    @Override
+    public Void visitNNGetBias(NNGetBias<Void> getVal) {
         return null;
     }
 
