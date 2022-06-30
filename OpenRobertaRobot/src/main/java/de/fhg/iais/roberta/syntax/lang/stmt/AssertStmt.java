@@ -10,10 +10,6 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>robControls_wait_time</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate wait
- * statement.<br/>
- */
 @NepoPhrase(category = "STMT", blocklyNames = {"robActions_assert"}, name = "ASSERT_STMT")
 public final class AssertStmt<V> extends Stmt<V> {
     @NepoValue(name = BlocklyConstants.OUT, type = BlocklyType.BOOLEAN)
@@ -29,28 +25,14 @@ public final class AssertStmt<V> extends Stmt<V> {
         setReadOnly();
     }
 
-    /**
-     * Create read only object of type {@link AssertStmt}
-     *
-     * @param time; must be <b>not</b> null and <b>read only</b>,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment for the block,
-     * @return
-     */
     public static <V> AssertStmt<V> make(Expr<V> asserts, String msg, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new AssertStmt<>(properties, comment, asserts, msg);
     }
 
-    /**
-     * @return what
-     */
     public Expr<V> getAssert() {
         return this.asserts;
     }
 
-    /**
-     * @return message
-     */
     public String getMsg() {
         return this.msg;
     }

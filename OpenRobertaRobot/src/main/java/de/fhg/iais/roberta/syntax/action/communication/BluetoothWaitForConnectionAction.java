@@ -13,14 +13,7 @@ public final class BluetoothWaitForConnectionAction<V> extends Action<V> {
         super(properties, comment);
         setReadOnly();
     }
-
-    /**
-     * Creates instance of {@link MotorDriveStopAction}. This instance is read only and can not be modified.
-     *
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link MotorDriveStopAction}
-     */
+    
     public static <V> BluetoothWaitForConnectionAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
         return new BluetoothWaitForConnectionAction<V>(properties, comment);
     }

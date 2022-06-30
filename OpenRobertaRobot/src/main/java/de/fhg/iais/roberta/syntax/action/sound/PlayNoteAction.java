@@ -12,10 +12,6 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>mbedActions_play_note</b> block<br/>
- * The client must provide the note value and note of the sound. <br>
- */
 @NepoPhrase(category = "ACTOR", blocklyNames = {"mbedActions_play_note"}, name = "PLAY_NOTE_ACTION")
 public final class PlayNoteAction<V> extends Action<V> {
     @NepoField(name = BlocklyConstants.DURATION, value = "2000")
@@ -36,16 +32,7 @@ public final class PlayNoteAction<V> extends Action<V> {
         this.hide = hide;
         setReadOnly();
     }
-
-    /**
-     * Creates instance of {@link PlayNoteAction}. This instance is read only and can not be modified.
-     *
-     * @param duration of the sound, the note value,
-     * @param frequency of the sound, the note,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link PlayNoteAction}
-     */
+    
     public static <V> PlayNoteAction<V> make(String port, String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment, Hide hide) {
         return new PlayNoteAction<>(properties, comment, duration, frequency, port, hide);
     }

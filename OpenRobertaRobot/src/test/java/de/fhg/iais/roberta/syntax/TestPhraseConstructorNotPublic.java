@@ -10,9 +10,9 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
 @NepoPhrase(name = "TEST_PHRASE_CONSTRUCTOR_NOT_PUBLIC", blocklyNames = {"test_phrase_constructor_not_public"}, category = "EXPR")
 public class TestPhraseConstructorNotPublic<V> extends Phrase<V> {
-
     @NepoField(name = "TYPE")
     public final String type;
+
     @NepoValue(name = "VALUE", type = BlocklyType.ANY)
     public final Expr<V> value;
 

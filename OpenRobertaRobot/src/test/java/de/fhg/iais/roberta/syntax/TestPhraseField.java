@@ -8,7 +8,6 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
 @NepoPhrase(name = "TEST_PHRASE_FIELD", blocklyNames = {"test_phrase_field"}, category = "EXPR")
 public class TestPhraseField<V> extends Expr<V> {
-
     @NepoField(name = "TYPE", value = "DEFAULT")
     public final String type;
 

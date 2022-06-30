@@ -14,8 +14,8 @@ BothMotorsOnAction[speedA: NumConst[value: 30], speedB: NumConst[value: 10], por
 MotorOnAction [M, MotionParam [speed=NumConst[value: 30], duration=null]]
 MotorStop [port=M, mode=FLOAT]
 MotorStop [port=M3, mode=FLOAT]
-ServoSetAction [S, NumConst[value: 90]]
-ServoSetAction [S5, NumConst[value: 45]]
+ServoSetAction[port: S, value: NumConst[value: 90]]
+ServoSetAction[port: S5, value: NumConst[value: 45]]
 SingleMotorStopAction []
 
 Var [line] := SensorExpr [InfraredSensor [I, LINE, - EMPTY_SLOT -]]

@@ -21,14 +21,7 @@ public final class BluetoothCheckConnectAction<V> extends Action<V> {
         this.connection = connection;
         setReadOnly();
     }
-
-    /**
-     * Creates instance of {@link BluetoothCheckConnectAction}. This instance is read only and can not be modified.
-     *
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link BluetoothCheckConnectAction}
-     */
+    
     public static <V> BluetoothCheckConnectAction<V> make(Expr<V> connection, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new BluetoothCheckConnectAction<V>(properties, comment, connection);
     }

@@ -391,15 +391,15 @@ public class CalliopeTwo2ThreeTransformerTest {
     @Test
     public void executeTransformer_ShouldReturnTransformedServo_WhenGivenOldServo() {
         String expectedProgramAst =
-            "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "ServoSetAction[P1,NumConst[value:90]],"
-                + "ServoSetAction[P2,NumConst[value:90]],"
-                + "ServoSetAction[A1,NumConst[value:90]],"
-                + "ServoSetAction[C04,NumConst[value:90]],"
-                + "ServoSetAction[C05,NumConst[value:90]],"
-                + "ServoSetAction[C06,NumConst[value:90]],"
-                + "ServoSetAction[C16,NumConst[value:90]],"
-                + "ServoSetAction[C17,NumConst[value:90]]]]]";
+            "BlockAST[project=[[Location[x=512,y=50],MainTask[]," +
+                "ServoSetAction[port:P1,value:NumConst[value:90]]," +
+                "ServoSetAction[port:P2,value:NumConst[value:90]]," +
+                "ServoSetAction[port:A1,value:NumConst[value:90]]," +
+                "ServoSetAction[port:C04,value:NumConst[value:90]]," +
+                "ServoSetAction[port:C05,value:NumConst[value:90]]," +
+                "ServoSetAction[port:C06,value:NumConst[value:90]]," +
+                "ServoSetAction[port:C16,value:NumConst[value:90]]," +
+                "ServoSetAction[port:C17,value:NumConst[value:90]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=C06,portName=C06,componentProperties={PIN1=C06}]",

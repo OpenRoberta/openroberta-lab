@@ -3,14 +3,14 @@ package de.fhg.iais.roberta.syntax.expr.mbed;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "EXPR", blocklyNames = {"mbedImage_get_image"}, name = "PREDEFINED_IMAGE")
@@ -29,6 +29,11 @@ public final class PredefinedImage<V> extends Expr<V> {
         return new PredefinedImage<V>(properties, comment, predefinedImage);
     }
 
+    @Override
+    public Assoc getAssoc() {
+        return Assoc.NONE;
+    }
+
     public PredefinedImageNames getImageName() {
         return PredefinedImageNames.get(this.imageName);
     }
@@ -40,11 +45,6 @@ public final class PredefinedImage<V> extends Expr<V> {
     @Override
     public int getPrecedence() {
         return 999;
-    }
-
-    @Override
-    public Assoc getAssoc() {
-        return Assoc.NONE;
     }
 
     @Override
@@ -320,17 +320,6 @@ public final class PredefinedImage<V> extends Expr<V> {
             this.imageString = imageString;
         }
 
-        public String getImageString() {
-            return this.imageString;
-        }
-
-        /**
-         * get predifined image from {@link PredefinedImageNames} from string parameter. It is possible for one image to have multiple string mappings. Throws
-         * exception if the constant does not exists.
-         *
-         * @param name of the image
-         * @return image from the enum {@link PredefinedImageNames}
-         */
         public static PredefinedImageNames get(String s) {
             if ( s == null || s.isEmpty() ) {
                 throw new DbcException("Invalid predifined image: " + s);
@@ -347,6 +336,10 @@ public final class PredefinedImage<V> extends Expr<V> {
                 }
             }
             throw new DbcException("Invalid predifined image: " + s);
+        }
+
+        public String getImageString() {
+            return this.imageString;
         }
     }
 }

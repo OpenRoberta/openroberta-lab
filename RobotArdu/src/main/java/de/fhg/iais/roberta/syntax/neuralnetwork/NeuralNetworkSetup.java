@@ -1,33 +1,28 @@
 package de.fhg.iais.roberta.syntax.neuralnetwork;
 
-import java.util.List;
-
-import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
-import de.fhg.iais.roberta.transformer.Ast2Jaxb;
-import de.fhg.iais.roberta.transformer.ExprParam;
-import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
-import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
-@NepoBasic(name = "NEURAL_NETWORK_SETUP", category = "STMT", blocklyNames = {"robActions_aifes_setupneuralnet"})
+@NepoPhrase(name = "NEURAL_NETWORK_SETUP", category = "STMT", blocklyNames = {"robActions_aifes_setupneuralnet"})
 public final class NeuralNetworkSetup<V> extends Stmt<V> {
-    private Expr<V> numberOfClasses;
-    private Expr<V> numberInputNeurons;
-    private Expr<V> maxNumberOfNeurons;
+    @NepoValue(name = "NN_NUMBER_OF_CLASSES", type = BlocklyType.NUMBER)
+    public Expr<V> numberOfClasses;
+    @NepoValue(name = "NN_NUMBER_INPUT_NEURONS", type = BlocklyType.NUMBER)
+    public Expr<V> numberInputNeurons;
+    @NepoValue(name = "NN_MAX_NUMBER_OF_NEURONS", type = BlocklyType.NUMBER)
+    public Expr<V> maxNumberOfNeurons;
 
-    private NeuralNetworkSetup(
+    public NeuralNetworkSetup(
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
         Expr<V> numberOfClasses,
         Expr<V> numberInputNeurons,
-        Expr<V> maxNumberOfNeurons,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
+        Expr<V> maxNumberOfNeurons) {
         super(properties, comment);
         this.numberOfClasses = numberOfClasses;
         this.numberInputNeurons = numberInputNeurons;
@@ -42,12 +37,9 @@ public final class NeuralNetworkSetup<V> extends Stmt<V> {
         BlocklyBlockProperties properties,
         BlocklyComment comment) //
     {
-        return new NeuralNetworkSetup<>(numberOfClasses, numberInputNeurons, maxNumberOfNeurons, properties, comment);
+        return new NeuralNetworkSetup<>(properties, comment, numberOfClasses, numberInputNeurons, maxNumberOfNeurons);
     }
 
-    /**
-     * @return the number of classes of this neural network (it's an classifier network)
-     */
     public Expr<V> getNumberOfClasses() {
         return this.numberOfClasses;
     }
@@ -58,42 +50,5 @@ public final class NeuralNetworkSetup<V> extends Stmt<V> {
 
     public Expr<V> getMaxNumberOfNeurons() {
         return maxNumberOfNeurons;
-    }
-
-    @Override
-    public String toString() {
-        return new StringBuilder()
-            .append("NeuralNetworkNew [ ")
-            .append(this.numberOfClasses)
-            .append(this.numberInputNeurons)
-            .append(this.maxNumberOfNeurons)
-            .append("]")
-            .toString();
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
-        List<Value> values = Jaxb2Ast.extractValues(block, (short) 4);
-        Expr<V> numberOfClasses = Jaxb2Ast.convertPhraseToExpr(helper.extractValue(values, new ExprParam("NN_NUMBER_OF_CLASSES", BlocklyType.NUMBER)));
-        Expr<V> numberInputNeurons = Jaxb2Ast.convertPhraseToExpr(helper.extractValue(values, new ExprParam("NN_NUMBER_INPUT_NEURONS", BlocklyType.NUMBER)));
-        Expr<V> maxNumberOfNeurons = Jaxb2Ast.convertPhraseToExpr(helper.extractValue(values, new ExprParam("NN_MAX_NUMBER_OF_NEURONS", BlocklyType.NUMBER)));
-        return NeuralNetworkSetup
-            .make(numberOfClasses, numberInputNeurons, maxNumberOfNeurons, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
-    }
-
-    @Override
-    public Block astToBlock() {
-        Block jaxbDestination = new Block();
-        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
-        Ast2Jaxb.addValue(jaxbDestination, "NN_NUMBER_OF_CLASSES", getNumberOfClasses());
-        Ast2Jaxb.addValue(jaxbDestination, "NN_NUMBER_INPUT_NEURONS", getNumberInputNeurons());
-        Ast2Jaxb.addValue(jaxbDestination, "NN_MAX_NUMBER_OF_NEURONS", getMaxNumberOfNeurons());
-        return jaxbDestination;
     }
 }

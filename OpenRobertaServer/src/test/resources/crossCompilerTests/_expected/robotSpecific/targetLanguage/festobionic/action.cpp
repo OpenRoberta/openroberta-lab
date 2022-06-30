@@ -26,7 +26,7 @@ void action() {
 
 void setup()
 {
-    Serial.begin(9600); 
+    Serial.begin(9600);
     pinMode(_led_L, OUTPUT);
     _servo_S.attach(25);
     ___numberVar = 0;
