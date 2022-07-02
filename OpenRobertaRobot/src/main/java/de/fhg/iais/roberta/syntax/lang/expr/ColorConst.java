@@ -19,10 +19,6 @@ public final class ColorConst<V> extends Expr<V> {
         setReadOnly();
     }
 
-    public static <V> ColorConst<V> make(String hexValue, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ColorConst<>(properties, comment, hexValue);
-    }
-
     public String getBlueChannelHex() {
         return "0x" + this.hexValue.substring(5, 7);
     }

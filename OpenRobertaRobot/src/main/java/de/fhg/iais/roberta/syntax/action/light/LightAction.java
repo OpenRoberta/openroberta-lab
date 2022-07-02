@@ -8,7 +8,6 @@ import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.ILightMode;
-import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -18,9 +17,9 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "LIGHT_ACTION", category = "ACTOR", blocklyNames = {"robActions_led_on", "sim_LED_on", "robActions_brickLight_on", "robActions_sensorLight_on"})
@@ -33,7 +32,7 @@ public final class LightAction<V> extends Action<V> {
     private static boolean isActor;
     private static boolean isBlink;
 
-    private LightAction(String port, IBrickLedColor color, ILightMode mode, Expr<V> rgbLedColor, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public LightAction(String port, IBrickLedColor color, ILightMode mode, Expr<V> rgbLedColor, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.isTrue(mode != null);
         this.rgbLedColor = rgbLedColor;
@@ -43,65 +42,11 @@ public final class LightAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link LightAction}. This instance is read only and can not be modified.
-     *
-     * @param color of the lights on the brick. All possible colors are defined in {@link BrickLedColor}; must be <b>not</b> null,
-     * @param blinkMode type of the blinking; must be <b>not</b> null,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link LightAction}
-     */
-    public static <V> LightAction<V> make(
-        String port,
-        IBrickLedColor color,
-        ILightMode mode,
-        Expr<V> ledColor,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new LightAction<>(port, color, mode, ledColor, properties, comment);
-    }
-
-    /**
-     * @return {@link BrickLedColor} of the lights.
-     */
-    public IBrickLedColor getColor() {
-        return this.color;
-    }
-
-    /**
-     * @return ledColor from expression.
-     */
-    public Expr<V> getRgbLedColor() {
-        return this.rgbLedColor;
-    }
-
-    /**
-     * @return type of blinking.
-     */
-    public ILightMode getMode() {
-        return this.mode;
-    }
-
-    /**
-     * @return port.
-     */
-    public String getPort() {
-        return this.port;
-    }
-
     @Override
     public String toString() {
         return "LightAction [" + this.port + ", " + this.mode + ", " + this.color + ", " + this.rgbLedColor + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
@@ -119,14 +64,7 @@ public final class LightAction<V> extends Action<V> {
                 ? Jaxb2Ast.extractField(fields, BlocklyConstants.SWITCH_BLINK, BlocklyConstants.DEFAULT)
                 : Jaxb2Ast.extractField(fields, BlocklyConstants.SWITCH_STATE, BlocklyConstants.DEFAULT);
         String color = Jaxb2Ast.extractField(fields, BlocklyConstants.SWITCH_COLOR, BlocklyConstants.DEFAULT);
-        return LightAction
-            .make(
-                Jaxb2Ast.sanitizePort(port),
-                factory.getBrickLedColor(color),
-                factory.getBlinkMode(mode),
-                Jaxb2Ast.convertPhraseToExpr(ledColor),
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block));
+        return new LightAction<>(Jaxb2Ast.sanitizePort(port), factory.getBrickLedColor(color), factory.getBlinkMode(mode), Jaxb2Ast.convertPhraseToExpr(ledColor), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
@@ -134,13 +72,13 @@ public final class LightAction<V> extends Action<V> {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         if ( !this.color.toString().equals(BlocklyConstants.DEFAULT) ) {
-            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SWITCH_COLOR, getColor().toString());
+            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SWITCH_COLOR, this.color.toString());
         }
         if ( !this.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
-            Ast2Jaxb.addField(jaxbDestination, isBlink ? BlocklyConstants.SWITCH_BLINK : BlocklyConstants.SWITCH_STATE, getMode().toString());
+            Ast2Jaxb.addField(jaxbDestination, isBlink ? BlocklyConstants.SWITCH_BLINK : BlocklyConstants.SWITCH_STATE, this.mode.toString());
         }
         if ( !this.port.toString().equals(BlocklyConstants.EMPTY_PORT) ) {
-            Ast2Jaxb.addField(jaxbDestination, isActor ? BlocklyConstants.ACTORPORT : BlocklyConstants.SENSORPORT, getPort().toString());
+            Ast2Jaxb.addField(jaxbDestination, isActor ? BlocklyConstants.ACTORPORT : BlocklyConstants.SENSORPORT, this.port.toString());
         }
         if ( !this.rgbLedColor.toString().contains("EmptyExpr [defVal=COLOR]") ) {
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.COLOR, this.rgbLedColor);

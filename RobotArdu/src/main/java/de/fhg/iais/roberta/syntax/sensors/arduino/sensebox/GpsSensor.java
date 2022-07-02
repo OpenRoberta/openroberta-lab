@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forClass.NepoExternalSensor;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
-import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
 @NepoExpr(name = "GPS", category = "SENSOR", blocklyNames = {"robSensors_gps_getSample"},
     sampleValues = {@F2M(field = "GPS_LATITUDE", mode = "LATITUDE"), @F2M(field = "GPS_SPEED", mode = "SPEED"), @F2M(field = "GPS_DATE", mode = "DATE"),
@@ -14,8 +14,8 @@ import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 @NepoExternalSensor
 public final class GpsSensor<V> extends ExternalSensor<V> {
 
-    public GpsSensor(BlocklyBlockProperties properties, BlocklyComment comment, SensorMetaDataBean sensorMetaDataBean) {
-        super(properties, comment, sensorMetaDataBean);
+    public GpsSensor(BlocklyBlockProperties properties, BlocklyComment comment, ExternalSensorBean externalSensorBean) {
+        super(properties, comment, externalSensorBean);
         setReadOnly();
     }
 }

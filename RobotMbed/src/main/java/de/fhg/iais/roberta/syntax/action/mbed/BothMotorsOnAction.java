@@ -33,29 +33,4 @@ public final class BothMotorsOnAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> BothMotorsOnAction<V> make(
-        String portA,
-        String portB,
-        Expr<V> speedA,
-        Expr<V> speedB,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new BothMotorsOnAction<V>(properties, comment, speedA, speedB, portA, portB);
-    }
-
-    public Expr<V> getSpeedA() {
-        return this.speedA;
-    }
-
-    public Expr<V> getSpeedB() {
-        return this.speedB;
-    }
-
-    public String getPortA() {
-        return this.portA;
-    }
-
-    public String getPortB() {
-        return this.portB;
-    }
 }

@@ -19,21 +19,14 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.util.syntax.MotionParam;
 
-/**
- * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree). Object from
- * this class will generate code for setting the motor speed and type of movement connected on given port and turn the motor on.<br/>
- * <br/>
- * The client must provide the {@link MotionParam} (number of rotations or degrees and speed).
- */
 @NepoBasic(name = "TAKE_PICTURE", category = "ACTOR", blocklyNames = {"naoActions_takePicture"})
 public final class TakePicture<V> extends Action<V> {
 
     public final Camera camera;
     public final Expr<V> pictureName;
 
-    private TakePicture(Camera camera, Expr<V> pictureName, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public TakePicture(Camera camera, Expr<V> pictureName, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.notNull(camera, "Missing camera in TakePicture block!");
         Assert.isTrue(pictureName != null);
@@ -47,33 +40,6 @@ public final class TakePicture<V> extends Action<V> {
         return "TakePicture [" + this.camera + ", " + this.pictureName + "]";
     }
 
-    /**
-     * Creates instance of {@link TakePicture}. This instance is read only and can not be modified.
-     *
-     * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link TakePicture}
-     */
-    private static <V> TakePicture<V> make(Camera camera, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new TakePicture<>(camera, msg, properties, comment);
-    }
-
-    public Camera getCamera() {
-        return this.camera;
-    }
-
-    public Expr<V> getPictureName() {
-        return this.pictureName;
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
@@ -81,7 +47,7 @@ public final class TakePicture<V> extends Action<V> {
         String camera = Jaxb2Ast.extractField(fields, BlocklyConstants.CAMERA);
         Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.FILENAME, BlocklyType.NUMBER_INT));
 
-        return TakePicture.make(Camera.get(camera), Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new TakePicture<>(Camera.get(camera), Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

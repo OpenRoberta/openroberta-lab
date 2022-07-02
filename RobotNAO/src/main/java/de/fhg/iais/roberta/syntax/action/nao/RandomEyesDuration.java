@@ -17,57 +17,23 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>naoActions_randomEyes</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
- * coloring the eyes randomly.<br/>
- * <br/>
- * The client must provide the {@link duration} (time the eyes will be colored).
- */
 @NepoBasic(name = "RANDOM_EYES_DURATION", category = "ACTOR", blocklyNames = {"naoActions_randomEyes"})
 public final class RandomEyesDuration<V> extends Action<V> {
 
-    @Override
-    public String toString() {
-        return "RandomEyesDuration [" + this.duration + "]";
-    }
-
     public final Expr<V> duration;
 
-    private RandomEyesDuration(Expr<V> duration, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public RandomEyesDuration(Expr<V> duration, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         this.duration = duration;
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link RandomEyesDuration}. This instance is read only and can not be modified.
-     *
-     * @param duration {@link duration} the eyes will be colored for,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link RandomEyesDuration}
-     */
-    private static <V> RandomEyesDuration<V> make(Expr<V> duration, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new RandomEyesDuration<V>(duration, properties, comment);
-    }
-
-    public Expr<V> getDuration() {
-        return this.duration;
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
 
         Phrase<V> duration = helper.extractValue(values, new ExprParam(BlocklyConstants.DURATION, BlocklyType.NUMBER_INT));
 
-        return RandomEyesDuration.make(Jaxb2Ast.convertPhraseToExpr(duration), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new RandomEyesDuration<V>(Jaxb2Ast.convertPhraseToExpr(duration), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
@@ -79,4 +45,10 @@ public final class RandomEyesDuration<V> extends Action<V> {
 
         return jaxbDestination;
     }
+
+    @Override
+    public String toString() {
+        return "RandomEyesDuration [" + this.duration + "]";
+    }
+
 }

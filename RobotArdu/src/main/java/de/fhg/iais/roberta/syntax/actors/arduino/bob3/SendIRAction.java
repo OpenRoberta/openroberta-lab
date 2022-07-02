@@ -10,21 +10,12 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
 @NepoPhrase(name = "BOB3_SENDIR", category = "ACTOR", blocklyNames = {"bob3Communication_sendBlock"})
 public final class SendIRAction<V> extends Action<V> {
-    @NepoValue(name = "sendData",type = BlocklyType.NUMBER)
+    @NepoValue(name = "sendData", type = BlocklyType.NUMBER)
     public final Expr<V> code;
 
-    public SendIRAction( BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> code) {
+    public SendIRAction(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> code) {
         super(properties, comment);
         this.code = code;
         setReadOnly();
     }
-    public static <V> SendIRAction<V> make(Expr<V> code, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SendIRAction<>(properties, comment, code);
-    }
-
-
-    public Expr<V> getCode() {
-        return this.code;
-    }
-
 }

@@ -21,19 +21,12 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>mbedActions_display_text</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
- * showing a text message on the screen of the brick.<br>
- * <br>
- * To create an instance from this class use the method {@link #make(Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
- * <br>
- */
 @NepoBasic(name = "DISPLAY_TEXT_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_display_text"})
 public final class DisplayTextAction<V> extends Action<V> {
     public final DisplayTextMode mode;
     public final Expr<V> msg;
 
-    private DisplayTextAction(DisplayTextMode mode, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public DisplayTextAction(DisplayTextMode mode, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.isTrue(msg != null && mode != null);
         this.msg = msg;
@@ -41,41 +34,11 @@ public final class DisplayTextAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link DisplayTextAction}. This instance is read only and can not be modified.
-     *
-     * @param msg that will be printed on the display of the brick; must be <b>not</b> null,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link DisplayTextAction}
-     */
-    public static <V> DisplayTextAction<V> make(DisplayTextMode mode, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new DisplayTextAction<>(mode, msg, properties, comment);
-    }
-
-    public DisplayTextMode getMode() {
-        return this.mode;
-    }
-
-    /**
-     * @return the message.
-     */
-    public Expr<V> getMsg() {
-        return this.msg;
-    }
-
     @Override
     public String toString() {
         return "DisplayTextAction [" + this.mode + ", " + this.msg + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
@@ -86,8 +49,7 @@ public final class DisplayTextAction<V> extends Action<V> {
         } catch ( DbcException e ) {
             displaMode = "TEXT";
         }
-        return DisplayTextAction
-            .make(DisplayTextMode.get(displaMode), Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new DisplayTextAction<>(DisplayTextMode.get(displaMode), Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

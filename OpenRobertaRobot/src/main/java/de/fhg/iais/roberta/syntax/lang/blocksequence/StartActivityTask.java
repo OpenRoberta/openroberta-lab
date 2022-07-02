@@ -19,12 +19,4 @@ public final class StartActivityTask<V> extends Expr<V> {
         setReadOnly();
     }
 
-    public static <V> StartActivityTask<V> make(Expr<V> activityName, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new StartActivityTask<V>(properties, comment, activityName);
-    }
-
-    public Expr<V> getActivityName() {
-        return this.activityName;
-    }
-
 }

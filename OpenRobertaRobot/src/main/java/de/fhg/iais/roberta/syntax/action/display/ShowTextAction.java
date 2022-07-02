@@ -8,9 +8,9 @@ import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoHide;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_display_text", "robActions_display_text_i2c", "robActions_display_text_oledssd1306i2c"}, name = "SHOW_TEXT_ACTION")
@@ -44,7 +44,4 @@ public final class ShowTextAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> ShowTextAction<V> make(Expr<V> msg, Expr<V> column, Expr<V> row, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ShowTextAction<V>(properties, comment, msg, column, row, port, null);
-    }
 }

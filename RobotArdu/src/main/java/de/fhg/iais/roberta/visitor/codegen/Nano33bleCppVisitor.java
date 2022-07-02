@@ -46,11 +46,11 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
     public Void visitLsm9ds1AccSensor(Lsm9ds1AccSensor<Void> sensor) {
         this.sb
             .append("(IMU.accelerationAvailable()?(IMU.readAcceleration(xAsFloat,yAsFloat,zAsFloat),")
-            .append("___" + phrase2varValue(sensor.getX()))
+            .append("___" + phrase2varValue(sensor.x))
             .append(" = (double) xAsFloat,")
-            .append("___" + phrase2varValue(sensor.getY()))
+            .append("___" + phrase2varValue(sensor.y))
             .append(" = (double) yAsFloat,")
-            .append("___" + phrase2varValue(sensor.getZ()))
+            .append("___" + phrase2varValue(sensor.z))
             .append(" = (double) zAsFloat,1) : 0)");
         return null;
     }
@@ -72,11 +72,11 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
     public Void visitLsm9ds1MagneticFieldSensor(Lsm9ds1MagneticFieldSensor<Void> sensor) {
         this.sb
             .append("(IMU.magneticFieldAvailable()?(IMU.readMagneticField(xAsFloat,yAsFloat,zAsFloat),")
-            .append("___" + phrase2varValue(sensor.getX()))
+            .append("___" + phrase2varValue(sensor.x))
             .append(" = (double) xAsFloat,")
-            .append("___" + phrase2varValue(sensor.getY()))
+            .append("___" + phrase2varValue(sensor.y))
             .append(" = (double) yAsFloat,")
-            .append("___" + phrase2varValue(sensor.getZ()))
+            .append("___" + phrase2varValue(sensor.z))
             .append(" = (double) zAsFloat,1) : 0)");
         return null;
     }
@@ -85,7 +85,7 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
     public Void visitApds9960DistanceSensor(Apds9960DistanceSensor<Void> sensor) {
         this.sb
             .append("(APDS.proximityAvailable()?(___") //
-            .append(phrase2varValue(sensor.getDistance()))
+            .append(phrase2varValue(sensor.distance))
             .append(" = (double) APDS.readProximity(),1) : 0)");
         return null;
     }
@@ -94,7 +94,7 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
     public Void visitApds9960GestureSensor(Apds9960GestureSensor<Void> sensor) {
         this.sb
             .append("(APDS.gestureAvailable()?(___") //
-            .append(phrase2varValue(sensor.getGesture()))
+            .append(phrase2varValue(sensor.gesture))
             .append(" = (double) APDS.readGesture(),1) : 0)");
         return null;
     }
@@ -103,11 +103,11 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
     public Void visitApds9960ColorSensor(Apds9960ColorSensor<Void> sensor) {
         this.sb
             .append("(APDS.colorAvailable()?(APDS.readColor(rAsInt,gAsInt,bAsInt),")
-            .append("___" + phrase2varValue(sensor.getR()))
+            .append("___" + phrase2varValue(sensor.r))
             .append(" = (double) rAsInt,")
-            .append("___" + phrase2varValue(sensor.getG()))
+            .append("___" + phrase2varValue(sensor.g))
             .append(" = (double) gAsInt,")
-            .append("___" + phrase2varValue(sensor.getB()))
+            .append("___" + phrase2varValue(sensor.b))
             .append(" = (double) bAsInt,1) : 0)");
         return null;
     }
@@ -116,7 +116,7 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
     public Void visitLps22hbPressureSensor(Lps22hbPressureSensor<Void> sensor) {
         this.sb
             .append("(___") //
-            .append(phrase2varValue(sensor.getPressure()))
+            .append(phrase2varValue(sensor.pressure))
             .append(" = (double) BARO.readPressure(),1)");
         return null;
     }
@@ -125,7 +125,7 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
     public Void visitHts221TemperatureSensor(Hts221TemperatureSensor<Void> sensor) {
         this.sb
             .append("(___") //
-            .append(phrase2varValue(sensor.getTemperature()))
+            .append(phrase2varValue(sensor.temperature))
             .append(" = (double) HTS.readTemperature(),1)");
         return null;
     }
@@ -134,7 +134,7 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
     public Void visitHts221HumiditySensor(Hts221HumiditySensor<Void> sensor) {
         this.sb
             .append("(___") //
-            .append(phrase2varValue(sensor.getHumidity()))
+            .append(phrase2varValue(sensor.humidity))
             .append(" = (double) HTS.readHumidity(),1)");
         return null;
     }
@@ -177,7 +177,7 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
 
     private String phrase2varValue(Expr<?> phrase) {
         if ( phrase instanceof Var<?> ) {
-            return ((Var<?>) phrase).getValue();
+            return ((Var<?>) phrase).name;
         } else {
             throw new DbcException("Phrase MUST be a Var: " + phrase);
         }

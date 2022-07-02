@@ -37,7 +37,7 @@ public class MbedConfigurationValidatorWorker {
             add("A0");
         }};
         project.getConfigurationAst().getConfigurationComponents().forEach((k, configurationComponent) -> {
-            if ( !defaultProperties.contains(configurationComponent.getComponentType()) ) {
+            if ( !defaultProperties.contains(configurationComponent.componentType) ) {
                 checkPinOverlap(configurationComponent, currentFreePins, existingPins, mapCorrectConfigPins);
             }
         });
@@ -51,14 +51,14 @@ public class MbedConfigurationValidatorWorker {
 
         Map<String, String> componentProperties = configurationComponent.getComponentProperties();
         List<String> blockPins = new ArrayList<>();
-        String componentType = configurationComponent.getComponentType();
+        String componentType = configurationComponent.componentType;
         if ( componentType.equals(SC.CALLIBOT) ) {
             CALLIBOT_PINS.forEach((v) -> checkIfContainsPin(configurationComponent, currentFreePins, blockPins, v));
-        } else if ( configurationComponent.getComponentType().equals(SC.BUZZER) || existingPins.contains(componentProperties.get(PORT)) ) {
+        } else if ( configurationComponent.componentType.equals(SC.BUZZER) || existingPins.contains(componentProperties.get(PORT)) ) {
             String pin = correctConfigPins.containsKey(componentType) ? correctConfigPins.get(componentType) : componentProperties.get(PORT);
             checkIfContainsPin(configurationComponent, currentFreePins, blockPins, pin);
         } else {
-            throw new DbcException("Invalid pin for configuration block " + configurationComponent.getComponentType());
+            throw new DbcException("Invalid pin for configuration block " + configurationComponent.componentType);
         }
         if ( blockPins.stream().distinct().count() != blockPins.size() ) {
             throwOverlappingPortsError(configurationComponent);

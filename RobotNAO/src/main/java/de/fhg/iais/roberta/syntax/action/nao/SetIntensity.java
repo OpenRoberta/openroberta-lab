@@ -5,7 +5,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.mode.action.nao.Frame;
 import de.fhg.iais.roberta.mode.action.nao.Led;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
@@ -21,19 +20,13 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>naoActions_setIntensity</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
- * for setting the intensity of the NON-RGB-LEDs of NAO.<br/>
- * <br/>
- * The client must provide the {@link led}.
- */
 @NepoBasic(name = "SET_INTENSITY", category = "ACTOR", blocklyNames = {"naoActions_setIntensity"})
 public final class SetIntensity<V> extends Action<V> {
 
     public final Led led;
     public final Expr<V> Intensity;
 
-    private SetIntensity(Led led, Expr<V> Intensity, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public SetIntensity(Led led, Expr<V> Intensity, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         this.led = led;
         Assert.notNull(Intensity);
@@ -41,34 +34,6 @@ public final class SetIntensity<V> extends Action<V> {
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link SetIntensity}. This instance is read only and can not be modified.
-     *
-     * @param frame {@link Frame} the coordinates relate to,
-     * @param speed {@link speed} the movement will be executed at,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link SetIntensity}
-     */
-    private static <V> SetIntensity<V> make(Led led, Expr<V> Intensity, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SetIntensity<V>(led, Intensity, properties, comment);
-    }
-
-    public Led getLed() {
-        return this.led;
-    }
-
-    public Expr<V> getIntensity() {
-        return this.Intensity;
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
@@ -77,7 +42,7 @@ public final class SetIntensity<V> extends Action<V> {
 
         String leds = Jaxb2Ast.extractField(fields, BlocklyConstants.LED);
 
-        return SetIntensity.make(Led.get(leds), Jaxb2Ast.convertPhraseToExpr(Intensity), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new SetIntensity<V>(Led.get(leds), Jaxb2Ast.convertPhraseToExpr(Intensity), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

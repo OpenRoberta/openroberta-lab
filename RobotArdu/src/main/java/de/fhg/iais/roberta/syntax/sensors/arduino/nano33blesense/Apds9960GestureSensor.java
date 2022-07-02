@@ -20,31 +20,16 @@ public final class Apds9960GestureSensor<V> extends BuiltinSensor<V> {
 
     public final Expr<V> gesture;
 
-    public Expr<V> getGesture() {
-        return gesture;
-    }
-
-    private Apds9960GestureSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> gesture) {
+    public Apds9960GestureSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> gesture) {
         super(properties, comment, null);
         this.gesture = gesture;
         setReadOnly();
     }
 
-    public static <V> Apds9960GestureSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> gesture) {
-        return new Apds9960GestureSensor<>(properties, comment, gesture);
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         Expr<V> gesture = helper.getVar(values, BlocklyConstants.VARIABLE_VALUE);
-        return Apds9960GestureSensor.make(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), gesture);
+        return new Apds9960GestureSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), gesture);
     }
 
     @Override

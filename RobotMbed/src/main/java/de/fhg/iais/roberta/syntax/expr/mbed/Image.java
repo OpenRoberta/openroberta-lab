@@ -17,39 +17,17 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
 /**
- * This class represents the <b>mbedImage_image</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate image.<br/>
- * <br>
+ * This class represents the <b>mbedImage_image</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate an image.<br/>
  * The client must provide the value for every pixel of the display (5x5). <br>
- * <br>
- * To create an instance from this class use the method {@link #make(String..., BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 @NepoBasic(name = "IMAGE", category = "EXPR", blocklyNames = {"mbedImage_image"})
 public final class Image<V> extends Expr<V> {
     public final String[][] image;
 
-    private Image(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public Image(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         this.image = image;
         setReadOnly();
-    }
-
-    /**
-     * creates instance of {@link Image}. This instance is read only and can not be modified.
-     *
-     * @param image ,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link Image}
-     */
-    public static <V> Image<V> make(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Image<>(image, properties, comment);
-    }
-
-    /**
-     * @return get the string representation of the image.
-     */
-    public String[][] getImage() {
-        return this.image;
     }
 
     @Override
@@ -82,13 +60,6 @@ public final class Image<V> extends Expr<V> {
             + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 25);
         String[][] image = new String[5][5];
@@ -97,7 +68,7 @@ public final class Image<V> extends Expr<V> {
                 image[i][j] = Jaxb2Ast.extractField(fields, "P" + j + i);
             }
         }
-        return Image.make(image, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new Image<>(image, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

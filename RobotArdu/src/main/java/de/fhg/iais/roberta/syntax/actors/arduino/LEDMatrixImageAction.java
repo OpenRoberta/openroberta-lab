@@ -20,14 +20,6 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>robActions_display_image</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code
- * for showing a image on display.<br/>
- * <br>
- * The client must provide the {@link DisplayImageMode} and {@link Expr} (image(s) to be displayed). <br>
- * <br>
- * To create an instance from this class use the method {@link #make(DisplayImageMode, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
- */
 @NepoBasic(name = "LED_MATRIX_IMAGE_ACTION", category = "ACTOR", blocklyNames = {"mBotActions_display_image"})
 public final class LEDMatrixImageAction<V> extends Action<V> {
 
@@ -35,7 +27,7 @@ public final class LEDMatrixImageAction<V> extends Action<V> {
     public final Expr<V> valuesToDisplay;
     public final String displayImageMode;
 
-    private LEDMatrixImageAction(String port, String displayImageMode, Expr<V> valuesToDisplay, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public LEDMatrixImageAction(String port, String displayImageMode, Expr<V> valuesToDisplay, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.isTrue(port != null && displayImageMode != null && valuesToDisplay != null);
         this.port = port;
@@ -44,61 +36,18 @@ public final class LEDMatrixImageAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link LEDMatrixImageAction}. This instance is read only and can not be modified.
-     *
-     * @param mode {@link DisplayImageMode} how an image to be displayed; must <b>not</b> be null,
-     * @param param {@link Expr} image(s) to be displayed; must <b>not</b> be null,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link LEDMatrixImageAction}
-     */
-    private static <V> LEDMatrixImageAction<V> make(
-        String port,
-        String displayImageMode,
-        Expr<V> valuesToDisplay,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new LEDMatrixImageAction<>(port, displayImageMode, valuesToDisplay, properties, comment);
-    }
-
-    public String getPort() {
-        return this.port;
-    }
-
-    /**
-     * @return {@link DisplayImageMode} mode in which images will be displayed
-     */
-    public String getDisplayImageMode() {
-        return this.displayImageMode;
-    }
-
-    /**
-     * @return {@link Expr} image(s) to be displayed.
-     */
-    public Expr<V> getValuesToDisplay() {
-        return this.valuesToDisplay;
-    }
-
     @Override
     public String toString() {
         return "DisplayImageAction [" + this.port + ", " + this.displayImageMode + ", " + this.valuesToDisplay + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         final String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT);
         String mode = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
         Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
-        return LEDMatrixImageAction.make(port, mode, Jaxb2Ast.convertPhraseToExpr(image), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new LEDMatrixImageAction<>(port, mode, Jaxb2Ast.convertPhraseToExpr(image), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

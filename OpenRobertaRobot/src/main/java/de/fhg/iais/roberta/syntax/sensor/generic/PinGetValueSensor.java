@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forClass.NepoExternalSensor;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
-import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
 @NepoExpr(name = "PIN_READ_VALUE", category = "SENSOR", blocklyNames = {"robsensors_pin_getsample", "mbedSensors_pin_getSample", "robsensors_out_getsample"},
     sampleValues = {@F2M(field = "OUT_DIGITAL", mode = "DIGITAL"), @F2M(field = "PIN_PULSEHIGH", mode = "PULSEHIGH"),
@@ -15,8 +15,8 @@ import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 @NepoExternalSensor()
 public final class PinGetValueSensor<V> extends ExternalSensor<V> {
 
-    public PinGetValueSensor(BlocklyBlockProperties properties, BlocklyComment comment, SensorMetaDataBean sensorMetaDataBean) {
-        super(properties, comment, sensorMetaDataBean);
+    public PinGetValueSensor(BlocklyBlockProperties properties, BlocklyComment comment, ExternalSensorBean externalSensorBean) {
+        super(properties, comment, externalSensorBean);
         setReadOnly();
     }
 

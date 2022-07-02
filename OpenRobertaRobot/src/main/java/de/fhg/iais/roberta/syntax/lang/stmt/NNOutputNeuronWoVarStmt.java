@@ -16,11 +16,4 @@ public final class NNOutputNeuronWoVarStmt<V> extends Stmt<V> {
         setReadOnly();
     }
 
-    public static <V> NNOutputNeuronWoVarStmt<V> make(BlocklyBlockProperties properties, BlocklyComment comment, String name) {
-        return new NNOutputNeuronWoVarStmt<V>(properties, comment, name);
-    }
-
-    public String getName() {
-        return this.name;
-    }
 }

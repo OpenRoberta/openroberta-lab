@@ -12,24 +12,13 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 @NepoExpr(category = "TASK", blocklyNames = {"robControls_activity"}, name = "ACTIVITY_TASK")
 public final class ActivityTask<V> extends Task<V> {
     @NepoValue(name = BlocklyConstants.ACTIVITY, type = BlocklyType.STRING)
-    public Expr<V> activityName;
+    public final Expr<V> activityName;
 
     public ActivityTask(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> activityName) {
         super(properties, comment);
         Assert.isTrue(activityName.isReadOnly() && activityName != null);
         this.activityName = activityName;
         setReadOnly();
-    }
-
-    public static <V> ActivityTask<V> make(Expr<V> activityName, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ActivityTask<>(properties, comment, activityName);
-    }
-
-    /**
-     * @return name of the thread
-     */
-    public Expr<V> getActivityName() {
-        return this.activityName;
     }
 
 }

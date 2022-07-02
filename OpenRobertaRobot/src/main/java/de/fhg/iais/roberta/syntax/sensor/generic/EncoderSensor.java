@@ -10,29 +10,29 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
-import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.transformer.forClass.F2M;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
-import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(sampleValues = {@F2M(field = "ENCODER_DISTANCE", mode = "DISTANCE"), @F2M(field = "ENCODER_DEGREE", mode = "DEGREE"), @F2M(field = "ENCODER_ROTATION", mode = "ROTATION")}, name = "ENCODER_SENSING", category = "SENSOR", blocklyNames = {"robSensors_encoder_reset", "robSensors_encoder_getSample"})
 public final class EncoderSensor<V> extends ExternalSensor<V> {
 
-    public EncoderSensor(BlocklyBlockProperties properties, BlocklyComment comment, SensorMetaDataBean sensorMetaDataBean) {
-        super(properties, comment, sensorMetaDataBean);
+    public EncoderSensor(BlocklyBlockProperties properties, BlocklyComment comment, ExternalSensorBean externalSensorBean) {
+        super(properties, comment, externalSensorBean);
         setReadOnly();
     }
 
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
-        SensorMetaDataBean sensorData;
+        ExternalSensorBean sensorData;
         if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_ENCODER_RESET) ) {
             List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
             String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorData =
-                new SensorMetaDataBean(Jaxb2Ast.sanitizePort(portName), factory.getMode("RESET"), Jaxb2Ast.sanitizeSlot(BlocklyConstants.NO_SLOT), null);
+                new ExternalSensorBean(Jaxb2Ast.sanitizePort(portName), factory.getMode("RESET"), Jaxb2Ast.sanitizeSlot(BlocklyConstants.NO_SLOT), null);
             return new EncoderSensor<V>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), sensorData);
         }
         sensorData = extractPortAndModeAndSlot(block, helper);

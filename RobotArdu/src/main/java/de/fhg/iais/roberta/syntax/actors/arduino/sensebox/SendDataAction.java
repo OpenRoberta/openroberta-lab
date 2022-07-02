@@ -27,26 +27,11 @@ public final class SendDataAction<V> extends Action<V> {
     public final List<Pair<String, Expr<V>>> id2Phenomena;
     public final String destination;
 
-    private SendDataAction(String destination, List<Pair<String, Expr<V>>> id2Phenomena, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public SendDataAction(String destination, List<Pair<String, Expr<V>>> id2Phenomena, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         this.id2Phenomena = id2Phenomena;
         this.destination = destination;
         this.setReadOnly();
-    }
-
-    /**
-     * Creates instance of {@link SendDataAction}. This instance is read only and can not be modified.
-     *
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link SendDataAction}
-     */
-    public static <V> SendDataAction<V> make(
-        String destination,
-        List<Pair<String, Expr<V>>> id2Phenomena,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new SendDataAction<>(destination, id2Phenomena, properties, comment);
     }
 
     @Override
@@ -54,21 +39,6 @@ public final class SendDataAction<V> extends Action<V> {
         return "DataSendAction []";
     }
 
-    public List<Pair<String, Expr<V>>> getId2Phenomena() {
-        return this.id2Phenomena;
-    }
-
-    public String getDestination() {
-        return this.destination;
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         ExprList<V> exprList = helper.blockToExprList(block, BlocklyType.NUMBER);
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 999);
@@ -77,21 +47,20 @@ public final class SendDataAction<V> extends Action<V> {
         for ( int i = 0; i < exprList.get().size(); i++ ) {
             id2Phenomena.add(Pair.of(fields.get(i + 1).getValue(), exprList.get().get(i)));
         }
-        return SendDataAction.make(destination, id2Phenomena, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
-
+        return new SendDataAction<>(destination, id2Phenomena, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
-        int numOfStrings = getId2Phenomena().size();
+        int numOfStrings = this.id2Phenomena.size();
         Mutation mutation = new Mutation();
         mutation.setItems(BigInteger.valueOf(numOfStrings));
         jaxbDestination.setMutation(mutation);
         Ast2Jaxb.addField(jaxbDestination, "DESTINATION", this.destination);
         int i = 0;
-        for ( Pair<String, Expr<V>> kv : getId2Phenomena() ) {
+        for ( Pair<String, Expr<V>> kv : this.id2Phenomena ) {
             Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.PHEN + i, kv.getFirst());
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ADD + i, kv.getSecond());
             i++;

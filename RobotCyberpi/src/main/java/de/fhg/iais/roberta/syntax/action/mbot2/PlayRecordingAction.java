@@ -11,11 +11,6 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
-/**
- * This class represents the <b>robActions_play_recording</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
- * stopping every movement of the robot.<br/>
- * <br/>
- */
 @NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_play_recording"}, name = "PLAY_RECORDING_ACTION")
 public final class PlayRecordingAction<V> extends Action<V> implements WithUserDefinedPort<V> {
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)

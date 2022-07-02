@@ -23,14 +23,6 @@ public final class LEDMatrixImageInvertFunction<V> extends Function<V> {
         setReadOnly();
     }
 
-    public static <V> LEDMatrixImageInvertFunction<V> make(Expr<V> image, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LEDMatrixImageInvertFunction<>(properties, comment, image);
-    }
-
-    public Expr<V> getImage() {
-        return this.image;
-    }
-
     @Override
     public int getPrecedence() {
         return 10;

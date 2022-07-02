@@ -18,11 +18,4 @@ public final class BoolConst<V> extends Expr<V> {
         setReadOnly();
     }
 
-    public static <V> BoolConst<V> make(boolean value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BoolConst<>(properties, comment, value);
-    }
-
-    public boolean getValue() {
-        return this.value;
-    }
 }

@@ -20,19 +20,13 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>naoActions_turn</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
- * setting .<br/>
- * <br/>
- * The client must provide the {@link turnDirection} and {@link degreesToTurn} (direction and number of degrees to turn).
- */
 @NepoBasic(name = "TURN_DEGREES", category = "ACTOR", blocklyNames = {"naoActions_turn"})
 public final class TurnDegrees<V> extends Action<V> {
 
     public final TurnDirection turnDirection;
     public final Expr<V> degreesToTurn;
 
-    private TurnDegrees(TurnDirection turnDirection, Expr<V> degreesToTurn, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public TurnDegrees(TurnDirection turnDirection, Expr<V> degreesToTurn, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.notNull(turnDirection, "Missing degrees in TurnDegrees block!");
         this.turnDirection = turnDirection;
@@ -40,39 +34,11 @@ public final class TurnDegrees<V> extends Action<V> {
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link TurnDegrees}. This instance is read only and can not be modified.
-     *
-     * @param direction {@link turnDirection} the robot will turn to,
-     * @param degrees {@link degreesToTurn} the robot will turn (radians),
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link TurnDegrees}
-     */
-    private static <V> TurnDegrees<V> make(TurnDirection turnDirection, Expr<V> degreesToTurn, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new TurnDegrees<V>(turnDirection, degreesToTurn, properties, comment);
-    }
-
-    public TurnDirection getTurnDirection() {
-        return this.turnDirection;
-    }
-
-    public Expr<V> getDegreesToTurn() {
-        return this.degreesToTurn;
-    }
-
     @Override
     public String toString() {
         return "TurnDegrees [" + this.turnDirection + ", " + this.degreesToTurn + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
@@ -80,12 +46,7 @@ public final class TurnDegrees<V> extends Action<V> {
         String turnDirection = Jaxb2Ast.extractField(fields, BlocklyConstants.DIRECTION);
         Phrase<V> walkDistance = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
 
-        return TurnDegrees
-            .make(
-                TurnDirection.get(turnDirection),
-                Jaxb2Ast.convertPhraseToExpr(walkDistance),
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block));
+        return new TurnDegrees<V>(TurnDirection.get(turnDirection), Jaxb2Ast.convertPhraseToExpr(walkDistance), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

@@ -33,23 +33,4 @@ public final class NNChangeWeightStmt<V> extends Stmt<V> {
         setReadOnly();
     }
 
-    public static <V> NNChangeWeightStmt<V> make(BlocklyBlockProperties properties, BlocklyComment comment, String from, String to, String change, Expr<V> value) {
-        return new NNChangeWeightStmt<V>(properties, comment, from, to, change, value);
-    }
-
-    public String getChange() {
-        return this.change;
-    }
-
-    public String getFrom() {
-        return this.from;
-    }
-
-    public String getTo() {
-        return this.to;
-    }
-
-    public Expr<V> getValue() {
-        return this.value;
-    }
 }

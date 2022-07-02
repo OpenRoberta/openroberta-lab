@@ -21,11 +21,4 @@ public final class ResetSensor<V> extends Sensor<V> {
         setReadOnly();
     }
 
-    private static <V> ResetSensor<V> make(String sensor, BlocklyBlockProperties props, BlocklyComment comment) {
-        return new ResetSensor<>(props, comment, sensor);
-    }
-
-    public String getSensor() {
-        return this.sensor;
-    }
 }

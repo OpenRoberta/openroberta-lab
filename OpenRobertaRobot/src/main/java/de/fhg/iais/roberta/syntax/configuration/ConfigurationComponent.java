@@ -21,21 +21,22 @@ import de.fhg.iais.roberta.util.syntax.SC;
 /**
  * Representation of old/new configuration blocks in the AST. May have subclasses which override {@link ConfigurationComponent#astToBlock()} in order to
  * implement changed behaviour, these must follow the naming structure defined in {@link Jaxb2ConfigurationAst#BRICK_BLOCK_PATTERN} as implemented over in
- * {@link Jaxb2ConfigurationAst#instance2NewConfigComp(Instance, BlocklyDropdownFactory)} TODO this subclassing should be removed and the class declared final
+ * {@link Jaxb2ConfigurationAst#instance2NewConfigComp(Instance, BlocklyDropdownFactory)}
+ * TODO: this subclassing should be removed and the class declared final
  * if possible
- * TODO this class should be made abstract with astToBlock as the abstract method and ConfigurationComponentLeaf as the new normal configurationComponent
+ * TODO: this class should be made abstract with astToBlock as the abstract method and ConfigurationComponentLeaf as the new normal configurationComponent
  */
 public class ConfigurationComponent extends Phrase<Void> {
-    private final String componentType;
-    private final boolean isActor; // TODO for the new configuration there is currently no distinction between actors and sensors, should there be one?
-    private final String userDefinedPortName;
-    private final String internalPortName;
-    private final LinkedHashMap<String, String> componentProperties;
-    private final int x;
-    private final int y;
+    public final String componentType;
+    public final boolean isActor; // TODO: for the new configuration there is currently no distinction between actors and sensors, should there be one?
+    public final String userDefinedPortName;
+    public final String internalPortName;
+    public final LinkedHashMap<String, String> componentProperties;
+    public final int x;
+    public final int y;
 
     /**
-     * Should only be used by tests! TODO remove this if possible
+     * Should only be used by tests! TODO: remove this if possible
      */
     public ConfigurationComponent(
         String name,
@@ -88,10 +89,6 @@ public class ConfigurationComponent extends Phrase<Void> {
         this.y = y;
     }
 
-    public String getComponentType() {
-        return this.componentType;
-    }
-
     public boolean isActor() {
         return this.isActor;
     }
@@ -119,14 +116,6 @@ public class ConfigurationComponent extends Phrase<Void> {
         }
     }
 
-    public String getInternalPortName() {
-        return this.internalPortName;
-    }
-
-    public String getUserDefinedPortName() {
-        return this.userDefinedPortName;
-    }
-
     public LinkedHashMap<String, List<ConfigurationComponent>> getSubComponents() {
         throw new UnsupportedOperationException("ConfigurationComponent does not have subcomponents");
     }
@@ -148,14 +137,6 @@ public class ConfigurationComponent extends Phrase<Void> {
         return this.componentProperties.get(propertyName);
     }
 
-    public int getX() {
-        return this.x;
-    }
-
-    public int getY() {
-        return this.y;
-    }
-
     @Override
     public String toString() {
         return "ConfigurationComponent ["
@@ -172,13 +153,6 @@ public class ConfigurationComponent extends Phrase<Void> {
             + "]";
     }
 
-    /**
-     * Creates a block from the AST representation. Can be overridden by creating a subclass named according to
-     * {@link Jaxb2ConfigurationAst#BRICK_BLOCK_PATTERN} this method is then called via reflection in
-     * {@link Jaxb2ConfigurationAst#instance2NewConfigComp(Instance, BlocklyDropdownFactory)} TODO this subclassing should be removed if possible
-     *
-     * @return the generated block
-     */
     @Override
     public Block astToBlock() {
         Block destination = new Block();

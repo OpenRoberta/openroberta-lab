@@ -140,8 +140,9 @@ import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
-import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
 import de.fhg.iais.roberta.visitor.hardware.actor.IAllActorsVisitor;
@@ -167,268 +168,199 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
 
     @Override
     default Phrase<V> visitDriveAction(DriveAction<Phrase<V>> driveAction) {
-        return DriveAction.make(driveAction.getDirection(), modifyMotionParam(driveAction.getParam()), driveAction.getProperty(), driveAction.getComment());
+        return new DriveAction<>(driveAction.direction, modifyMotionParam(driveAction.param), BlocklyConstants.EMPTY_PORT, null, driveAction.getProperty(), driveAction.getComment());
     }
 
     @Override
     default Phrase<V> visitCurveAction(CurveAction<Phrase<V>> curveAction) {
-        return CurveAction
-            .make(
-                curveAction.getDirection(),
-                modifyMotionParam(curveAction.getParamLeft()),
-                modifyMotionParam(curveAction.getParamRight()),
-                curveAction.getProperty(),
-                curveAction.getComment());
+        return new CurveAction<>(curveAction.direction, modifyMotionParam(curveAction.paramLeft), modifyMotionParam(curveAction.paramRight), BlocklyConstants.EMPTY_PORT, null, curveAction.getProperty(), curveAction.getComment());
     }
 
     @Override
     default Phrase<V> visitTurnAction(TurnAction<Phrase<V>> turnAction) {
-        return TurnAction.make(turnAction.getDirection(), modifyMotionParam(turnAction.getParam()), turnAction.getProperty(), turnAction.getComment());
+        return new TurnAction<>(turnAction.direction, modifyMotionParam(turnAction.param), BlocklyConstants.EMPTY_PORT, null, turnAction.getProperty(), turnAction.getComment());
     }
 
     @Override
     default Phrase<V> visitMotorDriveStopAction(MotorDriveStopAction<Phrase<V>> stopAction) {
-        return MotorDriveStopAction.make(stopAction.getProperty(), stopAction.getComment());
+        return new MotorDriveStopAction<>(stopAction.getProperty(), stopAction.getComment(), BlocklyConstants.EMPTY_PORT, null);
     }
 
     @Override
     default Phrase<V> visitMotorGetPowerAction(MotorGetPowerAction<Phrase<V>> motorGetPowerAction) {
-        return MotorGetPowerAction.make(motorGetPowerAction.getUserDefinedPort(), motorGetPowerAction.getProperty(), motorGetPowerAction.getComment());
+        return new MotorGetPowerAction<V>(motorGetPowerAction.getProperty(), motorGetPowerAction.getComment(), motorGetPowerAction.getUserDefinedPort());
     }
 
     @Override
     default Phrase<V> visitMotorOnAction(MotorOnAction<Phrase<V>> motorOnAction) {
-        return MotorOnAction
-            .make(motorOnAction.getUserDefinedPort(), modifyMotionParam(motorOnAction.getParam()), motorOnAction.getProperty(), motorOnAction.getComment());
+        return new MotorOnAction<>(motorOnAction.getUserDefinedPort(), modifyMotionParam(motorOnAction.param), motorOnAction.getProperty(), motorOnAction.getComment());
     }
 
     @Override
     default Phrase<V> visitMotorSetPowerAction(MotorSetPowerAction<Phrase<V>> motorSetPowerAction) {
-        return MotorSetPowerAction
-            .make(
-                motorSetPowerAction.getUserDefinedPort(),
-                (Expr<V>) motorSetPowerAction.getPower().modify(this),
-                motorSetPowerAction.getProperty(),
-                motorSetPowerAction.getComment());
+        return new MotorSetPowerAction<V>(motorSetPowerAction.getProperty(), motorSetPowerAction.getComment(), (Expr<V>) motorSetPowerAction.power.modify(this), motorSetPowerAction.getUserDefinedPort());
     }
 
     @Override
     default Phrase<V> visitMotorStopAction(MotorStopAction<Phrase<V>> motorStopAction) {
-        return MotorStopAction
-            .make(motorStopAction.getUserDefinedPort(), motorStopAction.getMode(), motorStopAction.getProperty(), motorStopAction.getComment());
+        return new MotorStopAction<V>(motorStopAction.getUserDefinedPort(), motorStopAction.mode, motorStopAction.getProperty(), motorStopAction.getComment());
     }
 
     @Override
     default Phrase<V> visitClearDisplayAction(ClearDisplayAction<Phrase<V>> clearDisplayAction) {
-        return ClearDisplayAction.make(clearDisplayAction.getProperty(), clearDisplayAction.getComment(), clearDisplayAction.port);
+        return new ClearDisplayAction(clearDisplayAction.getProperty(), clearDisplayAction.getComment(), clearDisplayAction.port, null);
     }
 
     @Override
     default Phrase<V> visitShowTextAction(ShowTextAction<Phrase<V>> showTextAction) {
-        return ShowTextAction
-            .make(
-                (Expr<V>) showTextAction.msg.modify(this),
-                (Expr<V>) showTextAction.x.modify(this),
-                (Expr<V>) showTextAction.y.modify(this),
-                showTextAction.port,
-                showTextAction.getProperty(),
-                showTextAction.getComment());
+        return new ShowTextAction<V>(showTextAction.getProperty(), showTextAction.getComment(), (Expr<V>) showTextAction.msg.modify(this), (Expr<V>) showTextAction.x.modify(this), (Expr<V>) showTextAction.y.modify(this), showTextAction.port, null);
     }
 
     @Override
     default Phrase<V> visitLightAction(LightAction<Phrase<V>> lightAction) {
-        return LightAction
-            .make(
-                lightAction.getPort(),
-                lightAction.getColor(),
-                lightAction.getMode(),
-                (Expr<V>) lightAction.getRgbLedColor().modify(this),
-                lightAction.getProperty(),
-                lightAction.getComment());
+        return new LightAction<>(lightAction.port, lightAction.color, lightAction.mode, (Expr<V>) lightAction.rgbLedColor.modify(this), lightAction.getProperty(), lightAction.getComment());
     }
 
     @Override
     default Phrase<V> visitLightStatusAction(LightStatusAction<Phrase<V>> lightStatusAction) {
-        return LightStatusAction
-            .make(lightStatusAction.getUserDefinedPort(), lightStatusAction.getStatus(), lightStatusAction.getProperty(), lightStatusAction.getComment());
+        return new LightStatusAction<>(lightStatusAction.getUserDefinedPort(), lightStatusAction.status, lightStatusAction.getProperty(), lightStatusAction.getComment());
     }
 
     @Override
     default Phrase<V> visitToneAction(ToneAction<Phrase<V>> toneAction) {
-        return ToneAction
-            .make(
-                (Expr<V>) toneAction.getFrequency().modify(this),
-                (Expr<V>) toneAction.getDuration().modify(this),
-                toneAction.getPort(),
-                toneAction.getProperty(),
-                toneAction.getComment(),
-                toneAction.getHide());
+        return new ToneAction<>(toneAction.getProperty(), toneAction.getComment(), (Expr<V>) toneAction.frequency.modify(this), (Expr<V>) toneAction.duration.modify(this), toneAction.port, toneAction.hide);
     }
 
     @Override
     default Phrase<V> visitPlayNoteAction(PlayNoteAction<Phrase<V>> playNoteAction) {
-        return PlayNoteAction
-            .make(
-                playNoteAction.getPort(),
-                playNoteAction.getDuration(),
-                playNoteAction.getFrequency(),
-                playNoteAction.getProperty(),
-                playNoteAction.getComment(),
-                playNoteAction.getHide());
+        return new PlayNoteAction<>(playNoteAction.getProperty(), playNoteAction.getComment(), playNoteAction.duration, playNoteAction.frequency, playNoteAction.port, playNoteAction.hide);
     }
 
     @Override
     default Phrase<V> visitVolumeAction(VolumeAction<Phrase<V>> volumeAction) {
-        return VolumeAction
-            .make(volumeAction.getMode(), (Expr<V>) volumeAction.getVolume().modify(this), volumeAction.getProperty(), volumeAction.getComment());
+        return new VolumeAction<>(volumeAction.mode, (Expr<V>) volumeAction.volume.modify(this), BlocklyConstants.EMPTY_PORT, null, volumeAction.getProperty(), volumeAction.getComment());
     }
 
     @Override
     default Phrase<V> visitPlayFileAction(PlayFileAction<Phrase<V>> playFileAction) {
-        return PlayFileAction.make(playFileAction.getFileName(), playFileAction.getProperty(), playFileAction.getComment());
+        return new PlayFileAction<V>(playFileAction.getProperty(), playFileAction.getComment(), playFileAction.fileName);
     }
 
     @Override
     default Phrase<V> visitSetLanguageAction(SetLanguageAction<Phrase<V>> setLanguageAction) {
-        return SetLanguageAction.make(setLanguageAction.getLanguage(), setLanguageAction.getProperty(), setLanguageAction.getComment());
+        return new SetLanguageAction<V>(setLanguageAction.language, setLanguageAction.getProperty(), setLanguageAction.getComment());
     }
 
     @Override
     default Phrase<V> visitSayTextAction(SayTextAction<Phrase<V>> sayTextAction) {
-        return SayTextAction
-            .make(
-                (Expr<V>) sayTextAction.getMsg().modify(this),
-                sayTextAction.getProperty(),
-                sayTextAction.getComment());
+        return new SayTextAction<>(sayTextAction.getProperty(), sayTextAction.getComment(), (Expr<V>) sayTextAction.msg.modify(this));
     }
 
     @Override
     default Phrase<V> visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<Phrase<V>> sayTextAction) {
-        return SayTextWithSpeedAndPitchAction
-            .make(
-                (Expr<V>) sayTextAction.getMsg().modify(this),
-                (Expr<V>) sayTextAction.getSpeed().modify(this),
-                (Expr<V>) sayTextAction.getPitch().modify(this),
-                sayTextAction.getProperty(),
-                sayTextAction.getComment());
+        return new SayTextWithSpeedAndPitchAction<>(sayTextAction.getProperty(), sayTextAction.getComment(), (Expr<V>) sayTextAction.msg.modify(this), (Expr<V>) sayTextAction.speed.modify(this), (Expr<V>) sayTextAction.pitch.modify(this));
     }
 
     @Override
     default Phrase<V> visitSerialWriteAction(SerialWriteAction<Phrase<V>> serialWriteAction) {
-        return SerialWriteAction.make((Expr<V>) serialWriteAction.getValue().modify(this), serialWriteAction.getProperty(), serialWriteAction.getComment());
+        return new SerialWriteAction<>(serialWriteAction.getProperty(), serialWriteAction.getComment(), (Expr<V>) serialWriteAction.value.modify(this));
     }
 
     @Override
     default Phrase<V> visitPinWriteValueAction(PinWriteValueAction<Phrase<V>> pinWriteValueAction) {
-        return PinWriteValueAction
-            .make(
-                pinWriteValueAction.getMode(),
-                pinWriteValueAction.getPort(),
-                (Expr<V>) pinWriteValueAction.getValue().modify(this),
-                true,
-                pinWriteValueAction.getProperty(),
-                pinWriteValueAction.getComment());
+        return new PinWriteValueAction<>(pinWriteValueAction.pinValue, pinWriteValueAction.port, (Expr<V>) pinWriteValueAction.value.modify(this), true, pinWriteValueAction.getProperty(), pinWriteValueAction.getComment());
     }
 
     @Override
     default Phrase<V> visitNumConst(NumConst<Phrase<V>> numConst) {
-        return NumConst.make(numConst.getValue(), numConst.getProperty(), numConst.getComment());
+        return new NumConst<>(numConst.getProperty(), numConst.getComment(), numConst.value);
     }
 
     @Override
     default Phrase<V> visitMathConst(MathConst<Phrase<V>> mathConst) {
-        return MathConst.make(mathConst.getMathConst(), mathConst.getProperty(), mathConst.getComment());
+        return new MathConst<V>(mathConst.getProperty(), mathConst.getComment(), mathConst.mathConst);
     }
 
     @Override
     default Phrase<V> visitBoolConst(BoolConst<Phrase<V>> boolConst) {
-        return BoolConst.make(boolConst.getValue(), boolConst.getProperty(), boolConst.getComment());
+        return new BoolConst<>(boolConst.getProperty(), boolConst.getComment(), boolConst.value);
     }
 
     @Override
     default Phrase<V> visitStringConst(StringConst<Phrase<V>> stringConst) {
-        return StringConst.make(stringConst.getValue(), stringConst.getProperty(), stringConst.getComment());
+        return new StringConst<V>(stringConst.getProperty(), stringConst.getComment(), stringConst.value);
     }
 
     @Override
     default Phrase<V> visitNullConst(NullConst<Phrase<V>> nullConst) {
-        return NullConst.make(nullConst.getProperty(), nullConst.getComment());
+        return new NullConst<V>(nullConst.getProperty(), nullConst.getComment());
     }
 
     @Override
     default Phrase<V> visitColorConst(ColorConst<Phrase<V>> colorConst) {
-        return ColorConst.make(colorConst.getHexValueAsString(), colorConst.getProperty(), colorConst.getComment());
+        return new ColorConst<>(colorConst.getProperty(), colorConst.getComment(), colorConst.getHexValueAsString());
     }
 
     @Override
     default Phrase<V> visitRgbColor(RgbColor<Phrase<V>> rgbColor) {
-        return RgbColor.make(rgbColor.getProperty(), rgbColor.getComment(), (Expr<V>) rgbColor.getR().modify(this), (Expr<V>) rgbColor.getG().modify(this), (Expr<V>) rgbColor.getB().modify(this), (Expr<V>) rgbColor.getA().modify(this));
+        return new RgbColor(rgbColor.getProperty(), rgbColor.getComment(), (Expr<V>) rgbColor.R.modify(this), (Expr<V>) rgbColor.G.modify(this), (Expr<V>) rgbColor.B.modify(this), (Expr<V>) rgbColor.A.modify(this));
     }
 
     @Override
     default Phrase<V> visitStmtTextComment(StmtTextComment<Phrase<V>> stmtTextComment) {
-        return StmtTextComment.make(stmtTextComment.getTextComment(), stmtTextComment.getProperty(), stmtTextComment.getComment());
+        return new StmtTextComment<V>(stmtTextComment.getProperty(), stmtTextComment.getComment(), stmtTextComment.textComment);
     }
 
     @Override
     default Phrase<V> visitConnectConst(ConnectConst<Phrase<V>> connectConst) {
-        return ConnectConst.make(connectConst.getValue(), connectConst.getValue(), connectConst.getProperty(), connectConst.getComment());
+        return new ConnectConst<V>(connectConst.getProperty(), connectConst.getComment(), connectConst.value, connectConst.value);
     }
 
     @Override
     default Phrase<V> visitVar(Var<Phrase<V>> var) {
-        return Var.make(var.getVarType(), var.getValue(), var.getProperty(), var.getComment());
+        return new Var<>(var.getVarType(), var.name, var.getProperty(), var.getComment());
     }
 
     @Override
     default Phrase<V> visitVarDeclaration(VarDeclaration<Phrase<V>> var) {
-        return VarDeclaration
-            .make(var.getTypeVar(), var.getName(), (Expr<V>) var.getValue().modify(this), var.isNext(), var.isGlobal(), var.getProperty(), var.getComment());
+        return new VarDeclaration<>(var.typeVar, var.name, (Expr<V>) var.value.modify(this), var.next, var.global, var.getProperty(), var.getComment());
     }
 
     @Override
     default Phrase<V> visitUnary(Unary<Phrase<V>> unary) {
-        return Unary.make(unary.getOp(), (Expr<V>) unary.getExpr().modify(this), unary.getProperty(), unary.getComment());
+        return new Unary<V>(unary.op, (Expr<V>) unary.expr.modify(this), unary.getProperty(), unary.getComment());
     }
 
     @Override
     default Phrase<V> visitBinary(Binary<Phrase<V>> binary) {
-        return Binary
-            .make(
-                binary.getOp(),
-                (Expr<V>) binary.getLeft().modify(this),
-                (Expr<V>) binary.getRight().modify(this),
-                binary.getOperationRange(),
-                binary.getProperty(),
-                binary.getComment());
+        return new Binary<>(binary.op, (Expr<V>) binary.left.modify(this), (Expr<V>) binary.getRight().modify(this), binary.operationRange, binary.getProperty(), binary.getComment());
     }
 
     @Override
     default Phrase<V> visitMathPowerFunct(MathPowerFunct<Phrase<V>> mathPowerFunct) {
         List<Expr<V>> newParam = new ArrayList<>();
-        mathPowerFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
-        return MathPowerFunct.make(mathPowerFunct.getFunctName(), newParam, mathPowerFunct.getProperty(), mathPowerFunct.getComment());
+        mathPowerFunct.param.forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return new MathPowerFunct<V>(mathPowerFunct.getProperty(), mathPowerFunct.getComment(), mathPowerFunct.functName, newParam);
     }
 
     @Override
     default Phrase<V> visitEmptyList(EmptyList<Phrase<V>> emptyList) {
-        return EmptyList.make(emptyList.getTypeVar(), emptyList.getProperty(), emptyList.getComment());
+        return new EmptyList<V>(emptyList.getProperty(), emptyList.getComment(), emptyList.typeVar);
     }
 
     @Override
     default Phrase<V> visitAssignStmt(AssignStmt<Phrase<V>> assignStmt) {
-        return AssignStmt
-            .make((Var<V>) assignStmt.getName().modify(this), (Expr<V>) assignStmt.getExpr().modify(this), assignStmt.getProperty(), assignStmt.getComment());
+        return new AssignStmt<V>((Var<V>) assignStmt.name.modify(this), (Expr<V>) assignStmt.expr.modify(this), assignStmt.getProperty(), assignStmt.getComment());
     }
 
     @Override
     default Phrase<V> visitEmptyExpr(EmptyExpr<Phrase<V>> emptyExpr) {
-        return EmptyExpr.make(emptyExpr.getDefVal());
+        return new EmptyExpr<V>(emptyExpr.getDefVal());
     }
 
     @Override
     default Phrase<V> visitExprList(ExprList<Phrase<V>> exprList) {
-        ExprList<V> newExprList = ExprList.make();
+        ExprList<V> newExprList = new ExprList<V>();
         exprList.get().forEach(phraseExpr -> newExprList.addExpr((Expr<V>) phraseExpr.modify(this)));
         newExprList.setReadOnly();
         return newExprList;
@@ -437,80 +369,74 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     @Override
     default Phrase<V> visitIfStmt(IfStmt<Phrase<V>> ifStmt) {
         List<Expr<V>> newExpr = new ArrayList<>();
-        ifStmt.getExpr().forEach(phraseExpr -> newExpr.add((Expr<V>) phraseExpr.modify(this)));
+        ifStmt.expr.forEach(phraseExpr -> newExpr.add((Expr<V>) phraseExpr.modify(this)));
         List<StmtList<V>> newThenList = new ArrayList<>();
-        ifStmt.getThenList().forEach(phraseStmtList -> newThenList.add((StmtList<V>) phraseStmtList.modify(this)));
-        StmtList<V> newElseList = (StmtList<V>) ifStmt.getElseList().modify(this);
+        ifStmt.thenList.forEach(phraseStmtList -> newThenList.add((StmtList<V>) phraseStmtList.modify(this)));
+        StmtList<V> newElseList = (StmtList<V>) ifStmt.elseList.modify(this);
 
-        return IfStmt.make(newExpr, newThenList, newElseList, ifStmt.getProperty(), ifStmt.getComment(), ifStmt.get_else(), ifStmt.get_elseIf());
+        return new IfStmt<V>(newExpr, newThenList, newElseList, ifStmt.getProperty(), ifStmt.getComment(), ifStmt._else, ifStmt._elseIf);
     }
 
     default Phrase<V> visitTernaryExpr(TernaryExpr<Phrase<V>> ternaryExpr) {
-        Expr<V> condition = (Expr<V>) ternaryExpr.getCondition().modify(this);
-        Expr<V> thenPart = (Expr<V>) ternaryExpr.getThenPart().modify(this);
-        Expr<V> elsePart = (Expr<V>) ternaryExpr.getElsePart().modify(this);
+        Expr<V> condition = (Expr<V>) ternaryExpr.condition.modify(this);
+        Expr<V> thenPart = (Expr<V>) ternaryExpr.thenPart.modify(this);
+        Expr<V> elsePart = (Expr<V>) ternaryExpr.elsePart.modify(this);
 
-        return TernaryExpr.make(condition, thenPart, elsePart, ternaryExpr.getProperty(), ternaryExpr.getComment());
+        return new TernaryExpr<V>(ternaryExpr.getProperty(), ternaryExpr.getComment(), condition, thenPart, elsePart);
     }
 
     @Override
     default Phrase<V> visitNNStepStmt(NNStepStmt<Phrase<V>> nnStepStmt) {
-        StmtList<V> newIoNeurons = StmtList.make();
+        StmtList<V> newIoNeurons = new StmtList<V>();
         for ( Stmt<Phrase<V>> e : nnStepStmt.getIoNeurons().get() ) {
             newIoNeurons.get().add((Stmt<V>) e.modify(this));
         }
-        return NNStepStmt.make(nnStepStmt.getNetDefinition(), newIoNeurons, nnStepStmt.getProperty(), nnStepStmt.getComment());
+        return new NNStepStmt<>(nnStepStmt.netDefinition, newIoNeurons, nnStepStmt.getProperty(), nnStepStmt.getComment());
     }
 
     @Override
     default Phrase<V> visitNNInputNeuronStmt(NNInputNeuronStmt<Phrase<V>> inNeuron) {
-        return NNInputNeuronStmt.make(inNeuron.getProperty(), inNeuron.getComment(), inNeuron.getName(), (Expr<V>) inNeuron.modify(this));
+        return new NNInputNeuronStmt<V>(inNeuron.getProperty(), inNeuron.getComment(), inNeuron.name, (Expr<V>) inNeuron.modify(this));
     }
 
     @Override
     default Phrase<V> visitNNOutputNeuronStmt(NNOutputNeuronStmt<Phrase<V>> outNeuron) {
-        return NNOutputNeuronStmt.make(outNeuron.getProperty(), outNeuron.getComment(), outNeuron.getName(), (Expr<V>) outNeuron.modify(this));
+        return new NNOutputNeuronStmt<V>(outNeuron.getProperty(), outNeuron.getComment(), outNeuron.name, (Expr<V>) outNeuron.modify(this));
     }
 
     @Override
     default Phrase<V> visitNNOutputNeuronWoVarStmt(NNOutputNeuronWoVarStmt<Phrase<V>> outNeuron) {
-        return NNOutputNeuronWoVarStmt.make(outNeuron.getProperty(), outNeuron.getComment(), outNeuron.getName());
+        return new NNOutputNeuronWoVarStmt<V>(outNeuron.getProperty(), outNeuron.getComment(), outNeuron.name);
     }
 
     @Override
     default Phrase<V> visitNNChangeWeightStmt(NNChangeWeightStmt chgStmt) {
-        return NNChangeWeightStmt.make(chgStmt.getProperty(), chgStmt.getComment(), chgStmt.getFrom(), chgStmt.getTo(), chgStmt.getChange(), (Expr<V>) chgStmt.modify(this));
+        return new NNChangeWeightStmt<V>(chgStmt.getProperty(), chgStmt.getComment(), chgStmt.from, chgStmt.to, chgStmt.change, (Expr<V>) chgStmt.modify(this));
     }
 
     @Override
     default Phrase<V> visitNNChangeBiasStmt(NNChangeBiasStmt chgStmt) {
-        return NNChangeBiasStmt.make(chgStmt.getProperty(), chgStmt.getComment(), chgStmt.getName(), chgStmt.getChange(), (Expr<V>) chgStmt.modify(this));
+        return new NNChangeBiasStmt<V>(chgStmt.getProperty(), chgStmt.getComment(), chgStmt.name, chgStmt.change, (Expr<V>) chgStmt.modify(this));
     }
 
     @Override
     default Phrase<V> visitNNGetOutputNeuronVal(NNGetOutputNeuronVal getStmt) {
-        return NNGetOutputNeuronVal.make(getStmt.getProperty(), getStmt.getComment(), getStmt.getName());
+        return new NNGetOutputNeuronVal<>(getStmt.getProperty(), getStmt.getComment(), getStmt.name);
     }
 
     @Override
     default Phrase<V> visitRepeatStmt(RepeatStmt<Phrase<V>> repeatStmt) {
-        return RepeatStmt
-            .make(
-                repeatStmt.getMode(),
-                (Expr<V>) repeatStmt.getExpr().modify(this),
-                (StmtList<V>) repeatStmt.getList().modify(this),
-                repeatStmt.getProperty(),
-                repeatStmt.getComment());
+        return new RepeatStmt<>(repeatStmt.mode, (Expr<V>) repeatStmt.expr.modify(this), (StmtList<V>) repeatStmt.list.modify(this), repeatStmt.getProperty(), repeatStmt.getComment());
     }
 
     @Override
     default Phrase<V> visitStmtFlowCon(StmtFlowCon<Phrase<V>> stmtFlowCon) {
-        return StmtFlowCon.make(stmtFlowCon.getFlow(), stmtFlowCon.getProperty(), stmtFlowCon.getComment());
+        return new StmtFlowCon<V>(stmtFlowCon.getProperty(), stmtFlowCon.getComment(), stmtFlowCon.flow);
     }
 
     @Override
     default Phrase<V> visitStmtList(StmtList<Phrase<V>> stmtList) {
-        StmtList<V> newPhrase = StmtList.make();
+        StmtList<V> newPhrase = new StmtList<V>();
         stmtList.get().forEach(stmt -> newPhrase.addStmt((Stmt<V>) stmt.modify(this)));
         newPhrase.setReadOnly();
         return newPhrase;
@@ -518,277 +444,240 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
 
     @Override
     default Phrase<V> visitMainTask(MainTask<Phrase<V>> mainTask) {
-        return MainTask.make((StmtList<V>) mainTask.getVariables().modify(this), mainTask.getDebug(), mainTask.getProperty(), mainTask.getComment());
+        return new MainTask<V>((StmtList<V>) mainTask.variables.modify(this), mainTask.debug, mainTask.getProperty(), mainTask.getComment());
     }
 
     @Override
     default Phrase<V> visitWaitStmt(WaitStmt<Phrase<V>> waitStmt) {
-        return WaitStmt.make((StmtList<V>) waitStmt.getStatements().modify(this), waitStmt.getProperty(), waitStmt.getComment());
+        return new WaitStmt<>((StmtList<V>) waitStmt.statements.modify(this), waitStmt.getProperty(), waitStmt.getComment());
     }
 
     @Override
     default Phrase<V> visitWaitTimeStmt(WaitTimeStmt<Phrase<V>> waitTimeStmt) {
-        return WaitTimeStmt.make((Expr<V>) waitTimeStmt.getTime().modify(this), waitTimeStmt.getProperty(), waitTimeStmt.getComment());
+        return new WaitTimeStmt<>(waitTimeStmt.getProperty(), waitTimeStmt.getComment(), (Expr<V>) waitTimeStmt.time.modify(this));
     }
 
     @Override
     default Phrase<V> visitTextPrintFunct(TextPrintFunct<Phrase<V>> textPrintFunct) {
         List<Expr<V>> newParam = new ArrayList<>();
-        textPrintFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
-        return TextPrintFunct.make(newParam, textPrintFunct.getProperty(), textPrintFunct.getComment());
+        textPrintFunct.param.forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return new TextPrintFunct<V>(newParam, textPrintFunct.getProperty(), textPrintFunct.getComment());
     }
 
     @Override
     default Phrase<V> visitGetSubFunct(GetSubFunct<Phrase<V>> getSubFunct) {
         List<Expr<V>> newParam = new ArrayList<>();
-        getSubFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
-        return GetSubFunct.make(getSubFunct.getFunctName(), getSubFunct.getStrParam(), newParam, getSubFunct.getProperty(), getSubFunct.getComment());
+        getSubFunct.param.forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return new GetSubFunct<V>(getSubFunct.functName, getSubFunct.strParam, newParam, getSubFunct.getProperty(), getSubFunct.getComment());
     }
 
     @Override
     default Phrase<V> visitIndexOfFunct(IndexOfFunct<Phrase<V>> indexOfFunct) {
         List<Expr<V>> newParam = new ArrayList<>();
-        indexOfFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
-        return IndexOfFunct.make(indexOfFunct.getLocation(), newParam, indexOfFunct.getProperty(), indexOfFunct.getComment());
+        indexOfFunct.param.forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return new IndexOfFunct<V>(indexOfFunct.location, newParam, indexOfFunct.getProperty(), indexOfFunct.getComment());
     }
 
     @Override
     default Phrase<V> visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Phrase<V>> lengthOfIsEmptyFunct) {
         List<Expr<V>> newParam = new ArrayList<>();
-        lengthOfIsEmptyFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
-        return LengthOfIsEmptyFunct.make(lengthOfIsEmptyFunct.getFunctName(), newParam, lengthOfIsEmptyFunct.getProperty(), lengthOfIsEmptyFunct.getComment());
+        lengthOfIsEmptyFunct.param.forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return new LengthOfIsEmptyFunct<V>(lengthOfIsEmptyFunct.functName, newParam, lengthOfIsEmptyFunct.getProperty(), lengthOfIsEmptyFunct.getComment());
     }
 
     @Override
     default Phrase<V> visitListCreate(ListCreate<Phrase<V>> listCreate) {
-        return ListCreate.make(listCreate.getTypeVar(), (ExprList<V>) listCreate.getValue().modify(this), listCreate.getProperty(), listCreate.getComment());
+        return new ListCreate<V>(listCreate.typeVar, (ExprList<V>) listCreate.exprList.modify(this), listCreate.getProperty(), listCreate.getComment());
     }
 
     @Override
     default Phrase<V> visitListGetIndex(ListGetIndex<Phrase<V>> listGetIndex) {
         List<Expr<V>> newParam = new ArrayList<>();
-        listGetIndex.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
-        return ListGetIndex
-            .make(
-                listGetIndex.getElementOperation(),
-                listGetIndex.getLocation(),
-                newParam,
-                listGetIndex.getDataType(),
-                listGetIndex.getProperty(),
-                listGetIndex.getComment());
+        listGetIndex.param.forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return new ListGetIndex<>(listGetIndex.getElementOperation(), listGetIndex.location, newParam, listGetIndex.dataType, listGetIndex.getProperty(), listGetIndex.getComment());
     }
 
     @Override
     default Phrase<V> visitListRepeat(ListRepeat<Phrase<V>> listRepeat) {
         List<Expr<V>> newParam = new ArrayList<>();
-        listRepeat.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
-        return ListRepeat.make(listRepeat.getTypeVar(), newParam, listRepeat.getProperty(), listRepeat.getComment());
+        listRepeat.param.forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return new ListRepeat<V>(listRepeat.typeVar, newParam, listRepeat.getProperty(), listRepeat.getComment());
     }
 
     @Override
     default Phrase<V> visitListSetIndex(ListSetIndex<Phrase<V>> listSetIndex) {
         List<Expr<V>> newParam = new ArrayList<>();
-        listSetIndex.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
-        return ListSetIndex
-            .make(listSetIndex.getElementOperation(), listSetIndex.getLocation(), newParam, listSetIndex.getProperty(), listSetIndex.getComment());
+        listSetIndex.param.forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return new ListSetIndex<V>(listSetIndex.mode, listSetIndex.location, newParam, listSetIndex.getProperty(), listSetIndex.getComment());
     }
 
     @Override
     default Phrase<V> visitMathConstrainFunct(MathConstrainFunct<Phrase<V>> mathConstrainFunct) {
         List<Expr<V>> newParam = new ArrayList<>();
-        mathConstrainFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
-        return MathConstrainFunct.make(newParam, mathConstrainFunct.getProperty(), mathConstrainFunct.getComment());
+        mathConstrainFunct.param.forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return new MathConstrainFunct<V>(newParam, mathConstrainFunct.getProperty(), mathConstrainFunct.getComment());
     }
 
     @Override
     default Phrase<V> visitMathNumPropFunct(MathNumPropFunct<Phrase<V>> mathNumPropFunct) {
         List<Expr<V>> newParam = new ArrayList<>();
-        mathNumPropFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
-        return MathNumPropFunct.make(mathNumPropFunct.getFunctName(), newParam, mathNumPropFunct.getProperty(), mathNumPropFunct.getComment());
+        mathNumPropFunct.param.forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return new MathNumPropFunct<V>(mathNumPropFunct.functName, newParam, mathNumPropFunct.getProperty(), mathNumPropFunct.getComment());
     }
 
     @Override
     default Phrase<V> visitMathOnListFunct(MathOnListFunct<Phrase<V>> mathOnListFunct) {
         List<Expr<V>> newParam = new ArrayList<>();
-        mathOnListFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
-        return MathOnListFunct.make(mathOnListFunct.getFunctName(), newParam, mathOnListFunct.getProperty(), mathOnListFunct.getComment());
+        mathOnListFunct.param.forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return new MathOnListFunct<V>(mathOnListFunct.functName, newParam, mathOnListFunct.getProperty(), mathOnListFunct.getComment());
     }
 
     @Override
     default Phrase<V> visitMathRandomFloatFunct(MathRandomFloatFunct<Phrase<V>> mathRandomFloatFunct) {
-        return MathRandomFloatFunct.make(mathRandomFloatFunct.getProperty(), mathRandomFloatFunct.getComment());
+        return new MathRandomFloatFunct<V>(mathRandomFloatFunct.getProperty(), mathRandomFloatFunct.getComment());
     }
 
     @Override
     default Phrase<V> visitMathRandomIntFunct(MathRandomIntFunct<Phrase<V>> mathRandomIntFunct) {
         List<Expr<V>> newParam = new ArrayList<>();
-        mathRandomIntFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
-        return MathRandomIntFunct.make(newParam, mathRandomIntFunct.getProperty(), mathRandomIntFunct.getComment());
+        mathRandomIntFunct.param.forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return new MathRandomIntFunct<V>(newParam, mathRandomIntFunct.getProperty(), mathRandomIntFunct.getComment());
     }
 
     @Override
     default Phrase<V> visitMathSingleFunct(MathSingleFunct<Phrase<V>> mathSingleFunct) {
         List<Expr<V>> newParam = new ArrayList<>();
-        mathSingleFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
-        return MathSingleFunct.make(mathSingleFunct.getFunctName(), newParam, mathSingleFunct.getProperty(), mathSingleFunct.getComment());
+        mathSingleFunct.param.forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return new MathSingleFunct<V>(mathSingleFunct.functName, newParam, mathSingleFunct.getProperty(), mathSingleFunct.getComment());
     }
 
     @Override
     default Phrase<V> visitMathCastStringFunct(MathCastStringFunct<Phrase<V>> mathCastStringFunct) {
         List<Expr<V>> newParam = new ArrayList<>();
-        mathCastStringFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
-        return MathCastStringFunct.make(newParam, mathCastStringFunct.getProperty(), mathCastStringFunct.getComment());
+        mathCastStringFunct.param.forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return new MathCastStringFunct<V>(newParam, mathCastStringFunct.getProperty(), mathCastStringFunct.getComment());
     }
 
     @Override
     default Phrase<V> visitMathCastCharFunct(MathCastCharFunct<Phrase<V>> mathCastCharFunct) {
         List<Expr<V>> newParam = new ArrayList<>();
-        mathCastCharFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
-        return MathCastStringFunct.make(newParam, mathCastCharFunct.getProperty(), mathCastCharFunct.getComment());
+        mathCastCharFunct.param.forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return new MathCastStringFunct<V>(newParam, mathCastCharFunct.getProperty(), mathCastCharFunct.getComment());
     }
 
     @Override
     default Phrase<V> visitTextStringCastNumberFunct(TextStringCastNumberFunct<Phrase<V>> textStringCastNumberFunct) {
         List<Expr<V>> newParam = new ArrayList<>();
-        textStringCastNumberFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
-        return MathCastStringFunct.make(newParam, textStringCastNumberFunct.getProperty(), textStringCastNumberFunct.getComment());
+        textStringCastNumberFunct.param.forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return new MathCastStringFunct<V>(newParam, textStringCastNumberFunct.getProperty(), textStringCastNumberFunct.getComment());
     }
 
     @Override
     default Phrase<V> visitTextCharCastNumberFunct(TextCharCastNumberFunct<Phrase<V>> textCharCastNumberFunct) {
         List<Expr<V>> newParam = new ArrayList<>();
-        textCharCastNumberFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
-        return MathCastStringFunct.make(newParam, textCharCastNumberFunct.getProperty(), textCharCastNumberFunct.getComment());
+        textCharCastNumberFunct.param.forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return new MathCastStringFunct<V>(newParam, textCharCastNumberFunct.getProperty(), textCharCastNumberFunct.getComment());
     }
 
     @Override
     default Phrase<V> visitTextJoinFunct(TextJoinFunct<Phrase<V>> textJoinFunct) {
-        return TextJoinFunct.make((ExprList<V>) textJoinFunct.getParam().modify(this), textJoinFunct.getProperty(), textJoinFunct.getComment());
+        return new TextJoinFunct<V>((ExprList<V>) textJoinFunct.param.modify(this), textJoinFunct.getProperty(), textJoinFunct.getComment());
     }
 
     @Override
     default Phrase<V> visitMethodVoid(MethodVoid<Phrase<V>> methodVoid) {
-        return MethodVoid
-            .make(
-                methodVoid.getMethodName(),
-                (ExprList<V>) methodVoid.getParameters().modify(this),
-                (StmtList<V>) methodVoid.getBody().modify(this),
-                methodVoid.getProperty(),
-                methodVoid.getComment());
+        return new MethodVoid<V>(methodVoid.getMethodName(), (ExprList<V>) methodVoid.getParameters().modify(this), (StmtList<V>) methodVoid.body.modify(this), methodVoid.getProperty(), methodVoid.getComment());
     }
 
     @Override
     default Phrase<V> visitMethodReturn(MethodReturn<Phrase<V>> methodReturn) {
-        return MethodReturn
-            .make(
-                methodReturn.getMethodName(),
-                (ExprList<V>) methodReturn.getParameters().modify(this),
-                (StmtList<V>) methodReturn.getBody().modify(this),
-                methodReturn.getReturnType(),
-                (Expr<V>) methodReturn.getReturnValue().modify(this),
-                methodReturn.getProperty(),
-                methodReturn.getComment());
+        return new MethodReturn<V>(methodReturn.getMethodName(), (ExprList<V>) methodReturn.getParameters().modify(this), (StmtList<V>) methodReturn.body.modify(this), methodReturn.getReturnType(), (Expr<V>) methodReturn.returnValue.modify(this), methodReturn.getProperty(), methodReturn.getComment());
     }
 
     @Override
     default Phrase<V> visitMethodIfReturn(MethodIfReturn<Phrase<V>> methodIfReturn) {
-        return MethodIfReturn
-            .make(
-                (Expr<V>) methodIfReturn.getCondition().modify(this),
-                methodIfReturn.getReturnType(),
-                (Expr<V>) methodIfReturn.getReturnValue().modify(this),
-                methodIfReturn.getValue(),
-                methodIfReturn.getProperty(),
-                methodIfReturn.getComment());
+        return new MethodIfReturn<>((Expr<V>) methodIfReturn.oraCondition.modify(this), methodIfReturn.getReturnType(), (Expr<V>) methodIfReturn.oraReturnValue.modify(this), methodIfReturn.getValue(), methodIfReturn.getProperty(), methodIfReturn.getComment());
     }
 
     @Override
     default Phrase<V> visitMethodStmt(MethodStmt<Phrase<V>> methodStmt) {
-        return MethodStmt.make((Method<V>) methodStmt.getMethod().modify(this));
+        return new MethodStmt<V>((Method<V>) methodStmt.method.modify(this));
     }
 
     @Override
     default Phrase<V> visitMethodCall(MethodCall<Phrase<V>> methodCall) {
-        return MethodCall
-            .make(
-                methodCall.getMethodName(),
-                (ExprList<V>) methodCall.getParameters().modify(this),
-                (ExprList<V>) methodCall.getParametersValues().modify(this),
-                methodCall.getReturnType(),
-                methodCall.getProperty(),
-                methodCall.getComment());
+        return new MethodCall<>(methodCall.getMethodName(), (ExprList<V>) methodCall.getParameters().modify(this), (ExprList<V>) methodCall.getParametersValues().modify(this), methodCall.getReturnType(), methodCall.getProperty(), methodCall.getComment());
     }
 
     @Override
     default Phrase<V> visitSensorExpr(SensorExpr<Phrase<V>> sensorExpr) {
-        return SensorExpr.make((Sensor<V>) sensorExpr.getSens().modify(this));
+        return new SensorExpr<V>((Sensor<V>) sensorExpr.sensor.modify(this));
     }
 
     @Override
     default Phrase<V> visitMethodExpr(MethodExpr<Phrase<V>> methodExpr) {
-        return MethodExpr.make((Method<V>) methodExpr.getMethod().modify(this));
+        return new MethodExpr<>((Method<V>) methodExpr.getMethod().modify(this));
     }
 
     @Override
     default Phrase<V> visitActionStmt(ActionStmt<Phrase<V>> actionStmt) {
-        return ActionStmt.make((Action<V>) actionStmt.getAction().modify(this));
+        return new ActionStmt<V>((Action<V>) actionStmt.action.modify(this));
     }
 
     @Override
     default Phrase<V> visitActionExpr(ActionExpr<Phrase<V>> actionExpr) {
-        return ActionExpr.make((Action<V>) actionExpr.getAction().modify(this));
+        return new ActionExpr<V>((Action<V>) actionExpr.action.modify(this));
     }
 
     @Override
     default Phrase<V> visitExprStmt(ExprStmt<Phrase<V>> exprStmt) {
-        return ExprStmt.make((Expr<V>) exprStmt.getExpr().modify(this));
+        return new ExprStmt<V>((Expr<V>) exprStmt.expr.modify(this));
     }
 
     @Override
     default Phrase<V> visitStmtExpr(StmtExpr<Phrase<V>> stmtExpr) {
-        return StmtExpr.make((Stmt<V>) stmtExpr.getStmt().modify(this));
+        return new StmtExpr<>((Stmt<V>) stmtExpr.stmt.modify(this));
     }
 
     @Override
     default Phrase<V> visitShadowExpr(ShadowExpr<Phrase<V>> shadowExpr) {
-        return ShadowExpr.make((Expr<V>) shadowExpr.getShadow().modify(this), (Expr<V>) shadowExpr.getBlock().modify(this));
+        return new ShadowExpr<V>((Expr<V>) shadowExpr.shadow.modify(this), (Expr<V>) shadowExpr.block.modify(this));
     }
 
     @Override
     default Phrase<V> visitSensorStmt(SensorStmt<Phrase<V>> sensorStmt) {
-        return SensorStmt.make((Sensor<V>) sensorStmt.getSensor().modify(this));
+        return new SensorStmt<V>((Sensor<V>) sensorStmt.sensor.modify(this));
     }
 
     @Override
     default Phrase<V> visitActivityTask(ActivityTask<Phrase<V>> activityTask) {
-        return ActivityTask.make((Expr<V>) activityTask.getActivityName().modify(this), activityTask.getProperty(), activityTask.getComment());
+        return new ActivityTask<>(activityTask.getProperty(), activityTask.getComment(), (Expr<V>) activityTask.activityName.modify(this));
     }
 
     @Override
     default Phrase<V> visitStartActivityTask(StartActivityTask<Phrase<V>> startActivityTask) {
-        return StartActivityTask
-            .make((Expr<V>) startActivityTask.getActivityName().modify(this), startActivityTask.getProperty(), startActivityTask.getComment());
+        return new StartActivityTask<V>(startActivityTask.getProperty(), startActivityTask.getComment(), (Expr<V>) startActivityTask.activityName.modify(this));
     }
 
     @Override
     default Phrase<V> visitLocation(Location<Phrase<V>> location) {
-        return Location.make(location.getX(), location.getY());
+        return new Location<V>(location.x, location.y);
     }
 
     @Override
     default Phrase<V> visitFunctionStmt(FunctionStmt<Phrase<V>> functionStmt) {
-        return FunctionStmt.make((Function<V>) functionStmt.getFunction().modify(this));
+        return new FunctionStmt<V>((Function<V>) functionStmt.function.modify(this));
     }
 
     @Override
     default Phrase<V> visitFunctionExpr(FunctionExpr<Phrase<V>> functionExpr) {
-        return FunctionExpr.make((Function<V>) functionExpr.getFunction().modify(this));
+        return new FunctionExpr<V>((Function<V>) functionExpr.getFunction().modify(this));
     }
 
     @Override
     default Phrase<V> visitEvalExpr(EvalExpr<Phrase<V>> evalExpr) {
         try {
-            return EvalExpr.make(evalExpr.getExprStr(), evalExpr.getType(), evalExpr.getProperty(), evalExpr.getComment());
+            return EvalExpr.make(evalExpr.expr, evalExpr.type, evalExpr.getProperty(), evalExpr.getComment());
         } catch ( Exception e ) {
             throw new DbcException("Could not modify EvalExpr!", e);
         }
@@ -796,118 +685,98 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
 
     @Override
     default Phrase<V> visitAssertStmt(AssertStmt<Phrase<V>> assertStmt) {
-        return AssertStmt.make((Expr<V>) assertStmt.getAssert().modify(this), assertStmt.getMsg(), assertStmt.getProperty(), assertStmt.getComment());
+        return new AssertStmt<>(assertStmt.getProperty(), assertStmt.getComment(), (Expr<V>) assertStmt.asserts.modify(this), assertStmt.msg);
     }
 
     @Override
     default Phrase<V> visitDebugAction(DebugAction<Phrase<V>> debugAction) {
-        return DebugAction.make((Expr<V>) debugAction.getValue().modify(this), debugAction.getProperty(), debugAction.getComment());
+        return new DebugAction<>(debugAction.getProperty(), debugAction.getComment(), (Expr<V>) debugAction.value.modify(this));
     }
 
     @Override
     default Phrase<V> visitBluetoothReceiveAction(BluetoothReceiveAction<Phrase<V>> bluetoothReceiveAction) {
-        return BluetoothReceiveAction
-            .make(
-                bluetoothReceiveAction.getDataValue(),
-                (Expr<V>) bluetoothReceiveAction.getConnection().modify(this),
-                bluetoothReceiveAction.getChannel(),
-                bluetoothReceiveAction.getDataType(),
-                bluetoothReceiveAction.getProperty(),
-                bluetoothReceiveAction.getComment());
+        return new BluetoothReceiveAction<V>(bluetoothReceiveAction.dataValue, (Expr<V>) bluetoothReceiveAction.connection.modify(this), bluetoothReceiveAction.channel, bluetoothReceiveAction.dataType, bluetoothReceiveAction.getProperty(), bluetoothReceiveAction.getComment());
     }
 
     @Override
     default Phrase<V> visitBluetoothConnectAction(BluetoothConnectAction<Phrase<V>> bluetoothConnectAction) {
-        return BluetoothConnectAction
-            .make((Expr<V>) bluetoothConnectAction.getAddress().modify(this), bluetoothConnectAction.getProperty(), bluetoothConnectAction.getComment());
+        return new BluetoothConnectAction<V>(bluetoothConnectAction.getProperty(), bluetoothConnectAction.getComment(), (Expr<V>) bluetoothConnectAction.address.modify(this));
     }
 
     @Override
     default Phrase<V> visitBluetoothSendAction(BluetoothSendAction<Phrase<V>> bluetoothSendAction) {
-        return BluetoothSendAction
-            .make(
-                bluetoothSendAction.getDataValue(),
-                (Expr<V>) bluetoothSendAction.getConnection().modify(this),
-                (Expr<V>) bluetoothSendAction.getMsg().modify(this),
-                bluetoothSendAction.getChannel(),
-                bluetoothSendAction.getDataType(),
-                bluetoothSendAction.getProperty(),
-                bluetoothSendAction.getComment());
+        return new BluetoothSendAction<>(bluetoothSendAction.dataValue, (Expr<V>) bluetoothSendAction.connection.modify(this), (Expr<V>) bluetoothSendAction.msg.modify(this), bluetoothSendAction.channel, bluetoothSendAction.dataType, bluetoothSendAction.getProperty(), bluetoothSendAction.getComment());
     }
 
     @Override
     default Phrase<V> visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Phrase<V>> bluetoothWaitForConnection) {
-        return BluetoothWaitForConnectionAction.make(bluetoothWaitForConnection.getProperty(), bluetoothWaitForConnection.getComment());
+        return new BluetoothWaitForConnectionAction<V>(bluetoothWaitForConnection.getProperty(), bluetoothWaitForConnection.getComment());
     }
 
     @Override
     default Phrase<V> visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Phrase<V>> bluetoothCheckConnectAction) {
-        return BluetoothCheckConnectAction
-            .make(
-                (Expr<V>) bluetoothCheckConnectAction.getConnection().modify(this),
-                bluetoothCheckConnectAction.getProperty(),
-                bluetoothCheckConnectAction.getComment());
+        return new BluetoothCheckConnectAction<V>(bluetoothCheckConnectAction.getProperty(), bluetoothCheckConnectAction.getComment(), (Expr<V>) bluetoothCheckConnectAction.connection.modify(this));
     }
 
     @Override
     default Phrase<V> visitKeysSensor(KeysSensor<Phrase<V>> keysSensor) {
-        return new KeysSensor<V>(keysSensor.getProperty(), keysSensor.getComment(), new SensorMetaDataBean(keysSensor.getUserDefinedPort(), keysSensor.getMode(), keysSensor.getSlot(), keysSensor.getMutation()));
+        return new KeysSensor<V>(keysSensor.getProperty(), keysSensor.getComment(), new ExternalSensorBean(keysSensor.getUserDefinedPort(), keysSensor.getMode(), keysSensor.getSlot(), keysSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitColorSensor(ColorSensor<Phrase<V>> colorSensor) {
-        return new ColorSensor<V>(colorSensor.getProperty(), colorSensor.getComment(), new SensorMetaDataBean(colorSensor.getUserDefinedPort(), colorSensor.getMode(), colorSensor.getSlot(), colorSensor.getMutation()));
+        return new ColorSensor<V>(colorSensor.getProperty(), colorSensor.getComment(), new ExternalSensorBean(colorSensor.getUserDefinedPort(), colorSensor.getMode(), colorSensor.getSlot(), colorSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitLightSensor(LightSensor<Phrase<V>> lightSensor) {
-        return new LightSensor<V>(lightSensor.getProperty(), lightSensor.getComment(), new SensorMetaDataBean(lightSensor.getUserDefinedPort(), lightSensor.getMode(), lightSensor.getSlot(), lightSensor.getMutation()));
+        return new LightSensor<V>(lightSensor.getProperty(), lightSensor.getComment(), new ExternalSensorBean(lightSensor.getUserDefinedPort(), lightSensor.getMode(), lightSensor.getSlot(), lightSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitSoundSensor(SoundSensor<Phrase<V>> soundSensor) {
-        return new SoundSensor<V>(soundSensor.getProperty(), soundSensor.getComment(), new SensorMetaDataBean(soundSensor.getUserDefinedPort(), soundSensor.getMode(), soundSensor.getSlot(), soundSensor.getMutation()));
+        return new SoundSensor<V>(soundSensor.getProperty(), soundSensor.getComment(), new ExternalSensorBean(soundSensor.getUserDefinedPort(), soundSensor.getMode(), soundSensor.getSlot(), soundSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitEncoderSensor(EncoderSensor<Phrase<V>> encoderSensor) {
-        return new EncoderSensor<V>(encoderSensor.getProperty(), encoderSensor.getComment(), new SensorMetaDataBean(encoderSensor.getUserDefinedPort(), encoderSensor.getMode(), encoderSensor.getSlot(), encoderSensor.getMutation()));
+        return new EncoderSensor<V>(encoderSensor.getProperty(), encoderSensor.getComment(), new ExternalSensorBean(encoderSensor.getUserDefinedPort(), encoderSensor.getMode(), encoderSensor.getSlot(), encoderSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitGyroSensor(GyroSensor<Phrase<V>> gyroSensor) {
-        return new GyroSensor<>(gyroSensor.getProperty(), gyroSensor.getComment(), new SensorMetaDataBean(gyroSensor.getUserDefinedPort(), gyroSensor.getMode(), gyroSensor.getSlot(), gyroSensor.getMutation()));
+        return new GyroSensor<>(gyroSensor.getProperty(), gyroSensor.getComment(), new ExternalSensorBean(gyroSensor.getUserDefinedPort(), gyroSensor.getMode(), gyroSensor.getSlot(), gyroSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitInfraredSensor(InfraredSensor<Phrase<V>> infraredSensor) {
-        return new InfraredSensor<V>(infraredSensor.getProperty(), infraredSensor.getComment(), new SensorMetaDataBean(infraredSensor.getUserDefinedPort(), infraredSensor.getMode(), infraredSensor.getSlot(), infraredSensor.getMutation()));
+        return new InfraredSensor<V>(infraredSensor.getProperty(), infraredSensor.getComment(), new ExternalSensorBean(infraredSensor.getUserDefinedPort(), infraredSensor.getMode(), infraredSensor.getSlot(), infraredSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitTimerSensor(TimerSensor<Phrase<V>> timerSensor) {
-        return new TimerSensor<>(timerSensor.getProperty(), timerSensor.getComment(), new SensorMetaDataBean(timerSensor.getUserDefinedPort(), timerSensor.getMode(), timerSensor.getSlot(), timerSensor.getMutation()));
+        return new TimerSensor<>(timerSensor.getProperty(), timerSensor.getComment(), new ExternalSensorBean(timerSensor.getUserDefinedPort(), timerSensor.getMode(), timerSensor.getSlot(), timerSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitTouchSensor(TouchSensor<Phrase<V>> touchSensor) {
-        return new TouchSensor<V>(touchSensor.getProperty(), touchSensor.getComment(), new SensorMetaDataBean(touchSensor.getUserDefinedPort(), touchSensor.getMode(), touchSensor.getSlot(), touchSensor.getMutation()));
+        return new TouchSensor<V>(touchSensor.getProperty(), touchSensor.getComment(), new ExternalSensorBean(touchSensor.getUserDefinedPort(), touchSensor.getMode(), touchSensor.getSlot(), touchSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitUltrasonicSensor(UltrasonicSensor<Phrase<V>> ultrasonicSensor) {
-        return new UltrasonicSensor<V>(ultrasonicSensor.getProperty(), ultrasonicSensor.getComment(), new SensorMetaDataBean(ultrasonicSensor.getUserDefinedPort(), ultrasonicSensor.getMode(), ultrasonicSensor.getSlot(), ultrasonicSensor.getMutation()));
+        return new UltrasonicSensor<V>(ultrasonicSensor.getProperty(), ultrasonicSensor.getComment(), new ExternalSensorBean(ultrasonicSensor.getUserDefinedPort(), ultrasonicSensor.getMode(), ultrasonicSensor.getSlot(), ultrasonicSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitCompassSensor(CompassSensor<Phrase<V>> compassSensor) {
-        return new CompassSensor<>(compassSensor.getProperty(), compassSensor.getComment(), new SensorMetaDataBean(compassSensor.getUserDefinedPort(), compassSensor.getMode(), compassSensor.getSlot(), compassSensor.getMutation()));
+        return new CompassSensor<>(compassSensor.getProperty(), compassSensor.getComment(), new ExternalSensorBean(compassSensor.getUserDefinedPort(), compassSensor.getMode(), compassSensor.getSlot(), compassSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitTemperatureSensor(TemperatureSensor<Phrase<V>> temperatureSensor) {
         return new TemperatureSensor<V>(temperatureSensor.getProperty(), temperatureSensor.getComment(),
-            new SensorMetaDataBean(
+            new ExternalSensorBean(
                 temperatureSensor.getUserDefinedPort(),
                 temperatureSensor.getMode(),
                 temperatureSensor.getSlot(),
@@ -916,13 +785,13 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
 
     @Override
     default Phrase<V> visitVoltageSensor(VoltageSensor<Phrase<V>> voltageSensor) {
-        return new VoltageSensor<V>(voltageSensor.getProperty(), voltageSensor.getComment(), new SensorMetaDataBean(voltageSensor.getUserDefinedPort(), voltageSensor.getMode(), voltageSensor.getSlot(), voltageSensor.getMutation()));
+        return new VoltageSensor<V>(voltageSensor.getProperty(), voltageSensor.getComment(), new ExternalSensorBean(voltageSensor.getUserDefinedPort(), voltageSensor.getMode(), voltageSensor.getSlot(), voltageSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitAccelerometerSensor(AccelerometerSensor<Phrase<V>> accelerometerSensor) {
         return new AccelerometerSensor<V>(accelerometerSensor.getProperty(), accelerometerSensor.getComment(),
-            new SensorMetaDataBean(
+            new ExternalSensorBean(
                 accelerometerSensor.getUserDefinedPort(),
                 accelerometerSensor.getMode(),
                 accelerometerSensor.getSlot(),
@@ -931,18 +800,18 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
 
     @Override
     default Phrase<V> visitPinTouchSensor(PinTouchSensor<Phrase<V>> pinTouchSensor) {
-        return new PinTouchSensor<V>(pinTouchSensor.getProperty(), pinTouchSensor.getComment(), new SensorMetaDataBean(pinTouchSensor.getUserDefinedPort(), pinTouchSensor.getMode(), pinTouchSensor.getSlot(), pinTouchSensor.getMutation()));
+        return new PinTouchSensor<V>(pinTouchSensor.getProperty(), pinTouchSensor.getComment(), new ExternalSensorBean(pinTouchSensor.getUserDefinedPort(), pinTouchSensor.getMode(), pinTouchSensor.getSlot(), pinTouchSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitGestureSensor(GestureSensor<Phrase<V>> gestureSensor) {
-        return new GestureSensor<V>(gestureSensor.getProperty(), gestureSensor.getComment(), new SensorMetaDataBean(gestureSensor.getUserDefinedPort(), gestureSensor.getMode(), gestureSensor.getSlot(), gestureSensor.getMutation()));
+        return new GestureSensor<V>(gestureSensor.getProperty(), gestureSensor.getComment(), new ExternalSensorBean(gestureSensor.getUserDefinedPort(), gestureSensor.getMode(), gestureSensor.getSlot(), gestureSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitPinGetValueSensor(PinGetValueSensor<Phrase<V>> pinGetValueSensor) {
         return new PinGetValueSensor<V>(pinGetValueSensor.getProperty(), pinGetValueSensor.getComment(),
-            new SensorMetaDataBean(
+            new ExternalSensorBean(
                 pinGetValueSensor.getUserDefinedPort(),
                 pinGetValueSensor.getMode(),
                 pinGetValueSensor.getSlot(),
@@ -951,57 +820,57 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
 
     @Override
     default Phrase<V> visitGetSampleSensor(GetSampleSensor<Phrase<V>> sensorGetSample) {
-        return new GetSampleSensor(sensorGetSample.getSensorTypeAndMode(), sensorGetSample.getSensorPort(), sensorGetSample.getSlot(), sensorGetSample.getMutation(), sensorGetSample.getHide(), sensorGetSample.getProperty(), sensorGetSample.getComment(), getBlocklyDropdownFactory());
+        return new GetSampleSensor(sensorGetSample.sensorTypeAndMode, sensorGetSample.sensorPort, sensorGetSample.slot, sensorGetSample.mutation, sensorGetSample.hide, sensorGetSample.getProperty(), sensorGetSample.getComment(), getBlocklyDropdownFactory());
     }
 
     @Override
     default Phrase<V> visitIRSeekerSensor(IRSeekerSensor<Phrase<V>> irSeekerSensor) {
-        return new IRSeekerSensor<V>(irSeekerSensor.getProperty(), irSeekerSensor.getComment(), new SensorMetaDataBean(irSeekerSensor.getUserDefinedPort(), irSeekerSensor.getMode(), irSeekerSensor.getSlot(), irSeekerSensor.getMutation()));
+        return new IRSeekerSensor<V>(irSeekerSensor.getProperty(), irSeekerSensor.getComment(), new ExternalSensorBean(irSeekerSensor.getUserDefinedPort(), irSeekerSensor.getMode(), irSeekerSensor.getSlot(), irSeekerSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitMoistureSensor(MoistureSensor<Phrase<V>> moistureSensor) {
-        return new MoistureSensor<V>(moistureSensor.getProperty(), moistureSensor.getComment(), new SensorMetaDataBean(moistureSensor.getUserDefinedPort(), moistureSensor.getMode(), moistureSensor.getSlot(), moistureSensor.getMutation()));
+        return new MoistureSensor<V>(moistureSensor.getProperty(), moistureSensor.getComment(), new ExternalSensorBean(moistureSensor.getUserDefinedPort(), moistureSensor.getMode(), moistureSensor.getSlot(), moistureSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitHumiditySensor(HumiditySensor<Phrase<V>> humiditySensor) {
-        return new HumiditySensor<V>(humiditySensor.getProperty(), humiditySensor.getComment(), new SensorMetaDataBean(humiditySensor.getUserDefinedPort(), humiditySensor.getMode(), humiditySensor.getSlot(), humiditySensor.getMutation()));
+        return new HumiditySensor<V>(humiditySensor.getProperty(), humiditySensor.getComment(), new ExternalSensorBean(humiditySensor.getUserDefinedPort(), humiditySensor.getMode(), humiditySensor.getSlot(), humiditySensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitMotionSensor(MotionSensor<Phrase<V>> motionSensor) {
-        return new MotionSensor<V>(motionSensor.getProperty(), motionSensor.getComment(), new SensorMetaDataBean(motionSensor.getUserDefinedPort(), motionSensor.getMode(), motionSensor.getSlot(), motionSensor.getMutation()));
+        return new MotionSensor<V>(motionSensor.getProperty(), motionSensor.getComment(), new ExternalSensorBean(motionSensor.getUserDefinedPort(), motionSensor.getMode(), motionSensor.getSlot(), motionSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitDropSensor(DropSensor<Phrase<V>> dropSensor) {
-        return new DropSensor<V>(dropSensor.getProperty(), dropSensor.getComment(), new SensorMetaDataBean(dropSensor.getUserDefinedPort(), dropSensor.getMode(), dropSensor.getSlot(), dropSensor.getMutation()));
+        return new DropSensor<V>(dropSensor.getProperty(), dropSensor.getComment(), new ExternalSensorBean(dropSensor.getUserDefinedPort(), dropSensor.getMode(), dropSensor.getSlot(), dropSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitPulseSensor(PulseSensor<Phrase<V>> pulseSensor) {
-        return new PulseSensor<V>(pulseSensor.getProperty(), pulseSensor.getComment(), new SensorMetaDataBean(pulseSensor.getUserDefinedPort(), pulseSensor.getMode(), pulseSensor.getSlot(), pulseSensor.getMutation()));
+        return new PulseSensor<V>(pulseSensor.getProperty(), pulseSensor.getComment(), new ExternalSensorBean(pulseSensor.getUserDefinedPort(), pulseSensor.getMode(), pulseSensor.getSlot(), pulseSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitRfidSensor(RfidSensor<Phrase<V>> rfidSensor) {
-        return new RfidSensor<V>(rfidSensor.getProperty(), rfidSensor.getComment(), new SensorMetaDataBean(rfidSensor.getUserDefinedPort(), rfidSensor.getMode(), rfidSensor.getSlot(), rfidSensor.getMutation()));
+        return new RfidSensor<V>(rfidSensor.getProperty(), rfidSensor.getComment(), new ExternalSensorBean(rfidSensor.getUserDefinedPort(), rfidSensor.getMode(), rfidSensor.getSlot(), rfidSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitVemlLightSensor(VemlLightSensor<Phrase<V>> vemlLightSensor) {
-        return new VemlLightSensor<V>(vemlLightSensor.getProperty(), vemlLightSensor.getComment(), new SensorMetaDataBean(vemlLightSensor.getUserDefinedPort(), vemlLightSensor.getMode(), vemlLightSensor.getSlot(), vemlLightSensor.getMutation()));
+        return new VemlLightSensor<V>(vemlLightSensor.getProperty(), vemlLightSensor.getComment(), new ExternalSensorBean(vemlLightSensor.getUserDefinedPort(), vemlLightSensor.getMode(), vemlLightSensor.getSlot(), vemlLightSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitParticleSensor(ParticleSensor<Phrase<V>> particleSensor) {
-        return new ParticleSensor<V>(particleSensor.getProperty(), particleSensor.getComment(), new SensorMetaDataBean(particleSensor.getUserDefinedPort(), particleSensor.getMode(), particleSensor.getSlot(), particleSensor.getMutation()));
+        return new ParticleSensor<V>(particleSensor.getProperty(), particleSensor.getComment(), new ExternalSensorBean(particleSensor.getUserDefinedPort(), particleSensor.getMode(), particleSensor.getSlot(), particleSensor.getMutation()));
     }
 
     @Override
     default Phrase<V> visitHTColorSensor(HTColorSensor<Phrase<V>> htColorSensor) {
-        return new HTColorSensor<V>(htColorSensor.getProperty(), htColorSensor.getComment(), new SensorMetaDataBean(htColorSensor.getUserDefinedPort(), htColorSensor.getMode(), htColorSensor.getSlot(), htColorSensor.getMutation()));
+        return new HTColorSensor<V>(htColorSensor.getProperty(), htColorSensor.getComment(), new ExternalSensorBean(htColorSensor.getUserDefinedPort(), htColorSensor.getMode(), htColorSensor.getSlot(), htColorSensor.getMutation()));
     }
 
     // Helper methods

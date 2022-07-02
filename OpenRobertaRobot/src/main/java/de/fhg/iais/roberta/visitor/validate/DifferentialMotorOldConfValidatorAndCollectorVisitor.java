@@ -29,12 +29,12 @@ public abstract class DifferentialMotorOldConfValidatorAndCollectorVisitor exten
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        requiredComponentVisited(curveAction, curveAction.getParamLeft().getSpeed(), curveAction.getParamRight().getSpeed());
-        Optional.ofNullable(curveAction.getParamLeft().getDuration())
+        requiredComponentVisited(curveAction, curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed());
+        Optional.ofNullable(curveAction.paramLeft.getDuration())
             .ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
-        Optional.ofNullable(curveAction.getParamRight().getDuration())
+        Optional.ofNullable(curveAction.paramRight.getDuration())
             .ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
-        checkForZeroSpeedInCurve(curveAction.getParamLeft().getSpeed(), curveAction.getParamRight().getSpeed(), curveAction);
+        checkForZeroSpeedInCurve(curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed(), curveAction);
         checkLeftRightMotorPort(curveAction);
         addLeftAndRightMotorToUsedActors();
         return null;
@@ -42,7 +42,7 @@ public abstract class DifferentialMotorOldConfValidatorAndCollectorVisitor exten
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        checkAndVisitMotionParam(turnAction, turnAction.getParam());
+        checkAndVisitMotionParam(turnAction, turnAction.param);
         checkLeftRightMotorPort(turnAction);
         addLeftAndRightMotorToUsedActors();
         return null;
@@ -50,7 +50,7 @@ public abstract class DifferentialMotorOldConfValidatorAndCollectorVisitor exten
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        checkAndVisitMotionParam(driveAction, driveAction.getParam());
+        checkAndVisitMotionParam(driveAction, driveAction.param);
         checkLeftRightMotorPort(driveAction);
         addLeftAndRightMotorToUsedActors();
         return null;
@@ -122,8 +122,8 @@ public abstract class DifferentialMotorOldConfValidatorAndCollectorVisitor exten
 
     private void checkForZeroSpeedInCurve(Expr<Void> speedLeft, Expr<Void> speedRight, Action<Void> action) {
         if ( speedLeft.getKind().hasName("NUM_CONST") && speedRight.getKind().hasName("NUM_CONST") ) {
-            double speedLeftNumConst = Double.parseDouble(((NumConst<Void>) speedLeft).getValue());
-            double speedRightNumConst = Double.parseDouble(((NumConst<Void>) speedRight).getValue());
+            double speedLeftNumConst = Double.parseDouble(((NumConst<Void>) speedLeft).value);
+            double speedRightNumConst = Double.parseDouble(((NumConst<Void>) speedRight).value);
 
             boolean bothMotorsHaveZeroSpeed = (Math.abs(speedLeftNumConst) < DOUBLE_EPS) && (Math.abs(speedRightNumConst) < DOUBLE_EPS);
             if ( bothMotorsHaveZeroSpeed ) {
@@ -134,10 +134,10 @@ public abstract class DifferentialMotorOldConfValidatorAndCollectorVisitor exten
 
     private void addLeftAndRightMotorToUsedActors() {
         Optional<String> optionalLeftPort = Optional.ofNullable(robotConfiguration.getFirstMotor(SC.LEFT))
-            .map(ConfigurationComponent::getUserDefinedPortName);
+            .map(configurationComponent1 -> configurationComponent1.userDefinedPortName);
 
         Optional<String> optionalRightPort = Optional.ofNullable(robotConfiguration.getFirstMotor(SC.RIGHT))
-            .map(ConfigurationComponent::getUserDefinedPortName);
+            .map(configurationComponent -> configurationComponent.userDefinedPortName);
 
         if ( optionalLeftPort.isPresent() && optionalRightPort.isPresent() ) {
             usedHardwareBuilder.addUsedActor(new UsedActor(optionalLeftPort.get(), SC.LARGE));

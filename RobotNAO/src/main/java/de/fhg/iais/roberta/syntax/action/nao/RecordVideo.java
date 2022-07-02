@@ -16,18 +16,11 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.util.syntax.MotionParam;
 
-/**
- * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree). Object from
- * this class will generate code for setting the motor speed and type of movement connected on given port and turn the motor on.<br/>
- * <br/>
- * The client must provide the {@link MotionParam} (number of rotations or degrees and speed).
- */
 @NepoBasic(name = "RECORD_VIDEO", category = "ACTOR", blocklyNames = {"naoActions_recordVideo"})
 public final class RecordVideo<V> extends Action<V> {
 
@@ -41,7 +34,7 @@ public final class RecordVideo<V> extends Action<V> {
     public final Expr<V> duration;
     public final Expr<V> videoName;
 
-    private RecordVideo(Resolution resolution, Camera camera, Expr<V> duration, Expr<V> videoName, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public RecordVideo(Resolution resolution, Camera camera, Expr<V> duration, Expr<V> videoName, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.notNull(resolution, "Missing resolution in RecordVideo block!");
         Assert.notNull(camera, "Missing camera in RecordVideo block!");
@@ -52,47 +45,6 @@ public final class RecordVideo<V> extends Action<V> {
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link RecordVideo}. This instance is read only and can not be modified.
-     *
-     * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link RecordVideo}
-     */
-    private static <V> RecordVideo<V> make(
-        Resolution resolution,
-        Camera camera,
-        Expr<V> duration,
-        Expr<V> videoName,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new RecordVideo<>(resolution, camera, duration, videoName, properties, comment);
-    }
-
-    public Resolution getResolution() {
-        return this.resolution;
-    }
-
-    public Camera getCamera() {
-        return this.camera;
-    }
-
-    public Expr<V> getDuration() {
-        return this.duration;
-    }
-
-    public Expr<V> getVideoName() {
-        return this.videoName;
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
@@ -102,14 +54,7 @@ public final class RecordVideo<V> extends Action<V> {
         Phrase<V> duration = helper.extractValue(values, new ExprParam(BlocklyConstants.DURATION, BlocklyType.NUMBER_INT));
         Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.FILENAME, BlocklyType.NUMBER_INT));
 
-        return RecordVideo
-            .make(
-                Resolution.get(resolution),
-                Camera.get(camera),
-                Jaxb2Ast.convertPhraseToExpr(duration),
-                Jaxb2Ast.convertPhraseToExpr(msg),
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block));
+        return new RecordVideo<>(Resolution.get(resolution), Camera.get(camera), Jaxb2Ast.convertPhraseToExpr(duration), Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

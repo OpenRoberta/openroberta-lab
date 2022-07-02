@@ -25,10 +25,6 @@ public final class PredefinedImage<V> extends Expr<V> {
         setReadOnly();
     }
 
-    public static <V> PredefinedImage<V> make(String predefinedImage, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PredefinedImage<V>(properties, comment, predefinedImage);
-    }
-
     @Override
     public Assoc getAssoc() {
         return Assoc.NONE;

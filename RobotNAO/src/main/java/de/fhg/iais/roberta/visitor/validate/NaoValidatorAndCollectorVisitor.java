@@ -83,7 +83,7 @@ public class NaoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
 
     @Override
     public Void visitSetIntensity(SetIntensity<Void> setIntensity) {
-        requiredComponentVisited(setIntensity, setIntensity.getIntensity());
+        requiredComponentVisited(setIntensity, setIntensity.Intensity);
         return null;
     }
 
@@ -99,25 +99,25 @@ public class NaoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
 
     @Override
     public Void visitMoveJoint(MoveJoint<Void> moveJoint) {
-        requiredComponentVisited(moveJoint, moveJoint.getDegrees());
+        requiredComponentVisited(moveJoint, moveJoint.degrees);
         return null;
     }
 
     @Override
     public Void visitWalkDistance(WalkDistance<Void> walkDistance) {
-        requiredComponentVisited(walkDistance, walkDistance.getDistanceToWalk());
+        requiredComponentVisited(walkDistance, walkDistance.distanceToWalk);
         return null;
     }
 
     @Override
     public Void visitTurnDegrees(TurnDegrees<Void> turnDegrees) {
-        requiredComponentVisited(turnDegrees, turnDegrees.getDegreesToTurn());
+        requiredComponentVisited(turnDegrees, turnDegrees.degreesToTurn);
         return null;
     }
 
     @Override
     public Void visitSetLeds(SetLeds<Void> setLeds) {
-        requiredComponentVisited(setLeds, setLeds.getColor());
+        requiredComponentVisited(setLeds, setLeds.Color);
         return null;
     }
 
@@ -133,7 +133,7 @@ public class NaoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
 
     @Override
     public Void visitWalkAsync(WalkAsync<Void> walkAsync) {
-        requiredComponentVisited(walkAsync, walkAsync.getXSpeed(), walkAsync.getYSpeed(), walkAsync.getZSpeed());
+        requiredComponentVisited(walkAsync, walkAsync.XSpeed, walkAsync.YSpeed, walkAsync.ZSpeed);
         return null;
     }
 
@@ -159,7 +159,7 @@ public class NaoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
 
     @Override
     public Void visitWalkTo(WalkTo<Void> walkTo) {
-        requiredComponentVisited(walkTo, walkTo.getWalkToX(), walkTo.getWalkToY(), walkTo.getWalkToTheta());
+        requiredComponentVisited(walkTo, walkTo.walkToX, walkTo.walkToY, walkTo.walkToTheta);
         return null;
     }
 
@@ -175,13 +175,13 @@ public class NaoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
 
     @Override
     public Void visitPointLookAt(PointLookAt<Void> pointLookAt) {
-        requiredComponentVisited(pointLookAt, pointLookAt.getPointX(), pointLookAt.getPointY(), pointLookAt.getPointZ(), pointLookAt.getSpeed());
+        requiredComponentVisited(pointLookAt, pointLookAt.pointX, pointLookAt.pointY, pointLookAt.pointZ, pointLookAt.speed);
         return null;
     }
 
     @Override
     public Void visitSetVolume(SetVolume<Void> setVolume) {
-        requiredComponentVisited(setVolume, setVolume.getVolume());
+        requiredComponentVisited(setVolume, setVolume.volume);
         return null;
     }
 
@@ -202,33 +202,33 @@ public class NaoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        requiredComponentVisited(sayTextAction, sayTextAction.getMsg());
+        requiredComponentVisited(sayTextAction, sayTextAction.msg);
         return null;
     }
 
     @Override
     public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<Void> sayTextAction) {
-        requiredComponentVisited(sayTextAction, sayTextAction.getMsg());
-        requiredComponentVisited(sayTextAction, sayTextAction.getPitch());
-        requiredComponentVisited(sayTextAction, sayTextAction.getSpeed());
+        requiredComponentVisited(sayTextAction, sayTextAction.msg);
+        requiredComponentVisited(sayTextAction, sayTextAction.pitch);
+        requiredComponentVisited(sayTextAction, sayTextAction.speed);
         return null;
     }
 
     @Override
     public Void visitPlayFile(PlayFile<Void> playFile) {
-        requiredComponentVisited(playFile, playFile.getMsg());
+        requiredComponentVisited(playFile, playFile.msg);
         return null;
     }
 
     @Override
     public Void visitRandomEyesDuration(RandomEyesDuration<Void> randomEyesDuration) {
-        requiredComponentVisited(randomEyesDuration, randomEyesDuration.getDuration());
+        requiredComponentVisited(randomEyesDuration, randomEyesDuration.duration);
         return null;
     }
 
     @Override
     public Void visitRastaDuration(RastaDuration<Void> rastaDuration) {
-        requiredComponentVisited(rastaDuration, rastaDuration.getDuration());
+        requiredComponentVisited(rastaDuration, rastaDuration.duration);
         return null;
     }
 
@@ -240,26 +240,26 @@ public class NaoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
 
     @Override
     public Void visitTakePicture(TakePicture<Void> takePicture) {
-        requiredComponentVisited(takePicture, takePicture.getPictureName());
+        requiredComponentVisited(takePicture, takePicture.pictureName);
         return null;
     }
 
     @Override
     public Void visitRecordVideo(RecordVideo<Void> recordVideo) {
-        requiredComponentVisited(recordVideo, recordVideo.getVideoName(), recordVideo.getDuration());
+        requiredComponentVisited(recordVideo, recordVideo.videoName, recordVideo.duration);
         return null;
     }
 
     @Override
     public Void visitLearnFace(LearnFace<Void> learnFace) {
-        requiredComponentVisited(learnFace, learnFace.getFaceName());
+        requiredComponentVisited(learnFace, learnFace.faceName);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(null, SC.NAO_FACE, null));
         return null;
     }
 
     @Override
     public Void visitForgetFace(ForgetFace<Void> forgetFace) {
-        requiredComponentVisited(forgetFace, forgetFace.getFaceName());
+        requiredComponentVisited(forgetFace, forgetFace.faceName);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(null, SC.NAO_FACE, null));
         return null;
     }
@@ -284,14 +284,14 @@ public class NaoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
 
     @Override
     public Void visitNaoMarkInformation(NaoMarkInformation<Void> naoMarkInformation) {
-        requiredComponentVisited(naoMarkInformation, naoMarkInformation.getNaoMarkId());
+        requiredComponentVisited(naoMarkInformation, naoMarkInformation.naoMarkId);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(null, SC.DETECT_MARK, null));
         return null;
     }
 
     @Override
     public Void visitDetectedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
-        requiredComponentVisited(detectedFaceInformation, detectedFaceInformation.getFaceName());
+        requiredComponentVisited(detectedFaceInformation, detectedFaceInformation.faceName);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(null, SC.NAO_FACE, null));
         return null;
     }

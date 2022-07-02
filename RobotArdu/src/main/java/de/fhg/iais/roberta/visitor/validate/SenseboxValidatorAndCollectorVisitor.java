@@ -43,15 +43,15 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
             addErrorToPhrase(sendDataAction, "CONFIGURATION_ERROR_WLAN_CREDENTIALS_MISSING");
             return null;
         }
-        if ( (sendDataAction.getDestination().equals("SENSEMAP") && !this.robotConfiguration.isComponentTypePresent(SC.WIRELESS)) ) {
+        if ( (sendDataAction.destination.equals("SENSEMAP") && !this.robotConfiguration.isComponentTypePresent(SC.WIRELESS)) ) {
             addErrorToPhrase(sendDataAction, "CONFIGURATION_ERROR_WLAN_MISSING");
             return null;
         }
-        if ( (sendDataAction.getDestination().equals("SDCARD") && !this.robotConfiguration.isComponentTypePresent(SC.SENSEBOX_SDCARD)) ) {
+        if ( (sendDataAction.destination.equals("SDCARD") && !this.robotConfiguration.isComponentTypePresent(SC.SENSEBOX_SDCARD)) ) {
             addErrorToPhrase(sendDataAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
             return null;
         }
-        for ( Pair<String, Expr<Void>> value : sendDataAction.getId2Phenomena() ) {
+        for ( Pair<String, Expr<Void>> value : sendDataAction.id2Phenomena ) {
             requiredComponentVisited(sendDataAction, value.getSecond());
         }
         usedHardwareBuilder.addUsedActor(new UsedActor(SC.NONE, SC.SEND_DATA));
@@ -90,7 +90,7 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
             addErrorToPhrase(plotClearAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
-        usedHardwareBuilder.addUsedActor(new UsedActor(plotClearAction.getPort(), SC.SENSEBOX_PLOTTING));
+        usedHardwareBuilder.addUsedActor(new UsedActor(plotClearAction.port, SC.SENSEBOX_PLOTTING));
         return null;
     }
 
@@ -99,8 +99,8 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
             addErrorToPhrase(plotPointAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
-        requiredComponentVisited(plotPointAction, plotPointAction.getValue(), plotPointAction.getTickmark());
-        usedHardwareBuilder.addUsedActor(new UsedActor(plotPointAction.getPort(), SC.SENSEBOX_PLOTTING));
+        requiredComponentVisited(plotPointAction, plotPointAction.value, plotPointAction.tickmark);
+        usedHardwareBuilder.addUsedActor(new UsedActor(plotPointAction.port, SC.SENSEBOX_PLOTTING));
         return null;
     }
 

@@ -33,15 +33,9 @@ public final class LedOnAction<V> extends Action<V> implements WithUserDefinedPo
         setReadOnly();
     }
 
-    public static <V> LedOnAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> ledColor, String port, Hide hide) {
-        return new LedOnAction<>(properties, comment, ledColor, port, hide);
-    }
-
+    @Override
     public String getUserDefinedPort() {
         return this.port;
     }
 
-    public Expr<V> getLedColor() {
-        return this.ledColor;
-    }
 }

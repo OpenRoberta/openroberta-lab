@@ -96,7 +96,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
         this.sb.append("while True:");
         incrIndentation();
-        visitStmtList(waitStmt.getStatements());
+        visitStmtList(waitStmt.statements);
         decrIndentation();
         //        nlIndent();
         return null;
@@ -105,7 +105,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
         this.sb.append("microbit.sleep(");
-        waitTimeStmt.getTime().accept(this);
+        waitTimeStmt.time.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -121,7 +121,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         this.sb.append("microbit.Image('");
         for ( int i = 0; i < 5; i++ ) {
             for ( int j = 0; j < 5; j++ ) {
-                String pixel = image.getImage()[i][j].trim();
+                String pixel = image.image[i][j].trim();
                 if ( pixel.equals("#") ) {
                     pixel = "9";
                 } else if ( pixel.equals("") ) {
@@ -141,19 +141,19 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
         this.sb.append("microbit.display.");
         appendTextDisplayType(displayTextAction);
-        if ( !displayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
+        if ( !displayTextAction.msg.getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
-            displayTextAction.getMsg().accept(this);
+            displayTextAction.msg.accept(this);
             this.sb.append(")");
         } else {
-            displayTextAction.getMsg().accept(this);
+            displayTextAction.msg.accept(this);
         }
         this.sb.append(")");
         return null;
     }
 
     private void appendTextDisplayType(DisplayTextAction<Void> displayTextAction) {
-        if ( displayTextAction.getMode() == DisplayTextMode.TEXT ) {
+        if ( displayTextAction.mode == DisplayTextMode.TEXT ) {
             this.sb.append("scroll(");
         } else {
             this.sb.append("show(");
@@ -170,7 +170,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
-        imageInvertFunction.getImage().accept(this);
+        imageInvertFunction.image.accept(this);
         this.sb.append(".invert()");
         return null;
     }
@@ -242,7 +242,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     public Void visitMainTask(MainTask<Void> mainTask) {
         this.usedGlobalVarInFunctions.clear();
         this.usedGlobalVarInFunctions.add("timer1");
-        StmtList<Void> variables = mainTask.getVariables();
+        StmtList<Void> variables = mainTask.variables;
         variables.accept(this);
         generateUserDefinedMethods();
         nlIndent();
@@ -309,9 +309,9 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitImageShiftFunction(ImageShiftFunction<Void> imageShiftFunction) {
-        imageShiftFunction.getImage().accept(this);
-        this.sb.append(".shift_" + imageShiftFunction.getShiftDirection().toString().toLowerCase() + "(");
-        imageShiftFunction.getPositions().accept(this);
+        imageShiftFunction.image.accept(this);
+        this.sb.append(".shift_" + imageShiftFunction.shiftDirection.toString().toLowerCase() + "(");
+        imageShiftFunction.positions.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -330,17 +330,17 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
-        this.sb.append("radio.config(power=" + radioSendAction.getPower() + ")");
+        this.sb.append("radio.config(power=" + radioSendAction.power + ")");
         nlIndent();
         this.sb.append("radio.send(str(");
-        radioSendAction.getMsg().accept(this);
+        radioSendAction.message.accept(this);
         this.sb.append("))");
         return null;
     }
 
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
-        switch ( radioReceiveAction.getType() ) {
+        switch ( radioReceiveAction.type ) {
             case NUMBER:
                 this.sb.append("((lambda x: 0 if x is None else float(x))(radio.receive()))");
                 break;
@@ -359,20 +359,20 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     @Override
     public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
         this.sb.append("radio.config(group=");
-        radioSetChannelAction.getChannel().accept(this);
+        radioSetChannelAction.channel.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
-        String port = pinWriteValueAction.getPort();
+        String port = pinWriteValueAction.port;
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
         this.sb.append("microbit.pin" + pin1);
-        String valueType = pinWriteValueAction.getMode().equals(SC.DIGITAL) ? "digital(" : "analog(";
+        String valueType = pinWriteValueAction.pinValue.equals(SC.DIGITAL) ? "digital(" : "analog(";
         this.sb.append(".write_").append(valueType);
-        pinWriteValueAction.getValue().accept(this);
+        pinWriteValueAction.value.accept(this);
         this.sb.append(");");
         return null;
     }
@@ -380,11 +380,11 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     @Override
     public Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
         this.sb.append("microbit.display.set_pixel(");
-        displaySetPixelAction.getX().accept(this);
+        displaySetPixelAction.x.accept(this);
         this.sb.append(", ");
-        displaySetPixelAction.getY().accept(this);
+        displaySetPixelAction.y.accept(this);
         this.sb.append(", ");
-        displaySetPixelAction.getBrightness().accept(this);
+        displaySetPixelAction.brightness.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -392,9 +392,9 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     @Override
     public Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
         this.sb.append("microbit.display.get_pixel(");
-        displayGetPixelAction.getX().accept(this);
+        displayGetPixelAction.x.accept(this);
         this.sb.append(", ");
-        displayGetPixelAction.getY().accept(this);
+        displayGetPixelAction.y.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -438,16 +438,16 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
-        this.sb.append("# " + stmtTextComment.getTextComment());
+        this.sb.append("# " + stmtTextComment.textComment);
         return null;
     }
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         this.sb.append("music.pitch(");
-        toneAction.getFrequency().accept(this);
+        toneAction.frequency.accept(this);
         this.sb.append(", ");
-        toneAction.getDuration().accept(this);
+        toneAction.duration.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -456,9 +456,9 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         this.sb
             .append("music.pitch(")
-            .append(Integer.parseInt(playNoteAction.getFrequency().split("\\.")[0]))
+            .append(Integer.parseInt(playNoteAction.frequency.split("\\.")[0]))
             .append(", ")
-            .append(playNoteAction.getDuration())
+            .append(playNoteAction.duration)
             .append(")");
         return null;
     }

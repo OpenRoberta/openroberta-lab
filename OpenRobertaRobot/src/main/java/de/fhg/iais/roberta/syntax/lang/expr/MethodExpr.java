@@ -15,21 +15,11 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 public final class MethodExpr<V> extends Expr<V> {
     public final Method<V> method;
 
-    private MethodExpr(Method<V> method) {
+    public MethodExpr(Method<V> method) {
         super(method.getProperty(), method.getComment());
         Assert.isTrue(method.isReadOnly());
         this.method = method;
         setReadOnly();
-    }
-
-    /**
-     * Create object of the class {@link MethodExpr}.
-     *
-     * @param method that we want to wrap,
-     * @return expression with wrapped function inside
-     */
-    public static <V> MethodExpr<V> make(Method<V> method) {
-        return new MethodExpr<>(method);
     }
 
     /**

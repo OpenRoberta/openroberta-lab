@@ -14,20 +14,16 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>robProcedures_defnoreturn</b> block from Blockly into the AST (abstract syntax tree). Object from this class is used to create a
- * method with no return<br/>
- */
 @NepoBasic(name = "METHOD_VOID", category = "METHOD", blocklyNames = {"robProcedures_defnoreturn"})
 public final class MethodVoid<V> extends Method<V> {
     public final StmtList<V> body;
 
-    private MethodVoid(String methodName, ExprList<V> parameters, StmtList<V> body, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public MethodVoid(String methodName, ExprList<V> parameters, StmtList<V> body, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.isTrue(!methodName.equals("") && parameters.isReadOnly() && body.isReadOnly());
         this.methodName = methodName;
@@ -37,44 +33,11 @@ public final class MethodVoid<V> extends Method<V> {
         setReadOnly();
     }
 
-    /**
-     * creates instance of {@link MethodVoid}. This instance is read only and cannot be modified.
-     *
-     * @param methodName
-     * @param parameters
-     * @param body of the method
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment that user has added to the block,
-     * @return read only object of class {@link MethodVoid}
-     */
-    public static <V> MethodVoid<V> make(
-        String methodName,
-        ExprList<V> parameters,
-        StmtList<V> body,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new MethodVoid<V>(methodName, parameters, body, properties, comment);
-    }
-
-    /**
-     * @return the body
-     */
-    public StmtList<V> getBody() {
-        return this.body;
-    }
-
     @Override
     public String toString() {
         return "MethodVoid [" + this.methodName + ", " + this.parameters + ", " + this.body + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         String name = Jaxb2Ast.extractField(fields, BlocklyConstants.NAME);
@@ -83,7 +46,7 @@ public final class MethodVoid<V> extends Method<V> {
         ExprList<V> exprList = helper.statementsToMethodParameterDeclaration(statements, BlocklyConstants.ST);
         StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.STACK);
 
-        return MethodVoid.make(name, exprList, statement, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new MethodVoid<V>(name, exprList, statement, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

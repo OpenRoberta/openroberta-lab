@@ -12,10 +12,10 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -29,38 +29,12 @@ public final class ListCreate<V> extends Expr<V> {
     public final BlocklyType typeVar;
     public final ExprList<V> exprList;
 
-    private ListCreate(BlocklyType typeVar, ExprList<V> exprList, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public ListCreate(BlocklyType typeVar, ExprList<V> exprList, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.isTrue(exprList != null && exprList.isReadOnly() && typeVar != null);
         this.exprList = exprList;
         this.typeVar = typeVar;
         setReadOnly();
-    }
-
-    /**
-     * creates instance of {@link ListCreate}. This instance is read only and can not be modified.
-     *
-     * @param exprList; must be <b>not</b> null and <b>read only</b>,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link ListCreate}
-     */
-    public static <V> ListCreate<V> make(BlocklyType typeVar, ExprList<V> exprList, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ListCreate<V>(typeVar, exprList, properties, comment);
-    }
-
-    /**
-     * @return value of the numerical constant
-     */
-    public ExprList<V> getValue() {
-        return this.exprList;
-    }
-
-    /**
-     * @return the typeVar
-     */
-    public BlocklyType getTypeVar() {
-        return this.typeVar;
     }
 
     @Override
@@ -83,22 +57,10 @@ public final class ListCreate<V> extends Expr<V> {
         return "ListCreate [" + this.typeVar + ", " + this.exprList + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         String filename = Jaxb2Ast.extractField(fields, BlocklyConstants.LIST_TYPE);
-        return ListCreate
-            .make(
-                BlocklyType.get(filename),
-                helper.blockToExprList(block, BlocklyType.ARRAY),
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block));
+        return new ListCreate<V>(BlocklyType.get(filename), helper.blockToExprList(block, BlocklyType.ARRAY), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
@@ -107,13 +69,13 @@ public final class ListCreate<V> extends Expr<V> {
 
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
-        ExprList<?> exprList = getValue();
+        ExprList<?> exprList = this.exprList;
         int numOfItems = exprList.get().size();
         Mutation mutation = new Mutation();
         mutation.setItems(BigInteger.valueOf(numOfItems));
-        mutation.setListType(getTypeVar().getBlocklyName());
+        mutation.setListType(this.typeVar.getBlocklyName());
         jaxbDestination.setMutation(mutation);
-        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.LIST_TYPE, getTypeVar().getBlocklyName());
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.LIST_TYPE, this.typeVar.getBlocklyName());
         for ( int i = 0; i < numOfItems; i++ ) {
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ADD + i, exprList.get().get(i));
         }

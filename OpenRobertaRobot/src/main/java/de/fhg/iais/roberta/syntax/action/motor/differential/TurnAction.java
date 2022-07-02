@@ -17,9 +17,9 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
@@ -37,7 +37,7 @@ public final class TurnAction<V> extends Action<V> {
     public final String port;
     public final List<Hide> hide;
 
-    private TurnAction(ITurnDirection direction, MotionParam<V> param, String port, List<Hide> hide, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public TurnAction(ITurnDirection direction, MotionParam<V> param, String port, List<Hide> hide, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
@@ -47,70 +47,11 @@ public final class TurnAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link TurnAction}. This instance is read only and can not be modified.
-     *
-     * @param direction {@link TurnDirection} in which the robot will drive; must be <b>not</b> null,
-     * @param param {@link MotionParam} that set up the parameters for the movement of the robot (distance the robot should cover and speed); must be <b>not</b>
-     *     null,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link TurnAction}.
-     */
-    public static <V> TurnAction<V> make(ITurnDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new TurnAction<>(direction, param, BlocklyConstants.EMPTY_PORT, null, properties, comment);
-    }
-
-    public static <V> TurnAction<V> make(
-        ITurnDirection direction,
-        MotionParam<V> param,
-        String port,
-        List<Hide> hide,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new TurnAction<>(direction, param, port, hide, properties, comment);
-    }
-
-    /**
-     * @return {@link TurnDirection} in which the robot will drive
-     */
-    public ITurnDirection getDirection() {
-        return this.direction;
-    }
-
-    /**
-     * @return {@link MotionParam} for the motor (speed and distance in which the motors are set).
-     */
-    public MotionParam<V> getParam() {
-        return this.param;
-    }
-
-    /**
-     * @return {@link String} port the used actor is connected to
-     */
-    public String getPort() {
-        return this.port;
-    }
-
-    /**
-     * @return {@link List<Hide>} List of hidden ports
-     */
-    public List<Hide> getHide() {
-        return this.hide;
-    }
-
     @Override
     public String toString() {
         return "TurnAction [direction=" + this.direction + ", param=" + this.param + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields;
         String mode;
@@ -134,10 +75,10 @@ public final class TurnAction<V> extends Action<V> {
 
         if ( fields.stream().anyMatch(field -> field.getName().equals(BlocklyConstants.ACTORPORT)) ) {
             String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT);
-            return TurnAction.make(factory.getTurnDirection(mode), mp, port, block.getHide(), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+            return new TurnAction<>(factory.getTurnDirection(mode), mp, port, block.getHide(), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
         }
 
-        return TurnAction.make(factory.getTurnDirection(mode), mp, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new TurnAction<>(factory.getTurnDirection(mode), mp, BlocklyConstants.EMPTY_PORT, null, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
@@ -145,11 +86,11 @@ public final class TurnAction<V> extends Action<V> {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
-        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection().toString());
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.POWER, getParam().getSpeed());
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.DIRECTION, this.direction.toString());
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.POWER, this.param.getSpeed());
 
-        if ( getParam().getDuration() != null ) {
-            Ast2Jaxb.addValue(jaxbDestination, getParam().getDuration().getType().toString(), getParam().getDuration().getValue());
+        if ( this.param.getDuration() != null ) {
+            Ast2Jaxb.addValue(jaxbDestination, this.param.getDuration().getType().toString(), this.param.getDuration().getValue());
         }
 
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.ACTORPORT, port);

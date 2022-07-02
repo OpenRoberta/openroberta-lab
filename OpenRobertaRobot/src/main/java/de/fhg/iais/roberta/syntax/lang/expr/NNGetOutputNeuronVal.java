@@ -17,15 +17,4 @@ public final class NNGetOutputNeuronVal<V> extends Expr<V> {
         setReadOnly();
     }
 
-    public static <V> NNGetOutputNeuronVal<V> make(BlocklyBlockProperties properties, BlocklyComment comment, String name) {
-        return new NNGetOutputNeuronVal<>(properties, comment, name);
-    }
-
-    public static <V> NNGetOutputNeuronVal<V> make(String name) {
-        return new NNGetOutputNeuronVal<>(BlocklyBlockProperties.make("NN_GET_OUTPUT_NEURON_VAL", "1"), null, name);
-    }
-
-    public String getName() {
-        return this.name;
-    }
 }

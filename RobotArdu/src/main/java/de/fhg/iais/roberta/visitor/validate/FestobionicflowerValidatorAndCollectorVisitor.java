@@ -29,24 +29,24 @@ public final class FestobionicflowerValidatorAndCollectorVisitor extends Arduino
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        if ( ledOnAction.getLedColor().hasName("EMPTY_EXPR") ) {
+        if ( ledOnAction.ledColor.hasName("EMPTY_EXPR") ) {
             addErrorToPhrase(ledOnAction, "CONFIGURATION_ERROR_SENSOR_MISSING");
         } else if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
             addErrorToPhrase(ledOnAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
-        requiredComponentVisited(ledOnAction, ledOnAction.getLedColor());
+        requiredComponentVisited(ledOnAction, ledOnAction.ledColor);
         usedHardwareBuilder.addUsedActor(new UsedActor("internal", SC.RGBLED));
         return null;
     }
 
     @Override
     public Void visitStepMotorAction(StepMotorAction<Void> stepMotorAction) {
-        if ( stepMotorAction.getStepMotorPos().hasName("EMPTY_EXPR") ) {
+        if ( stepMotorAction.stepMotorPos.hasName("EMPTY_EXPR") ) {
             addErrorToPhrase(stepMotorAction, "CONFIGURATION_ERROR_SENSOR_MISSING");
         } else if ( !this.robotConfiguration.isComponentTypePresent(SC.STEPMOTOR) ) {
             addErrorToPhrase(stepMotorAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
-        requiredComponentVisited(stepMotorAction, stepMotorAction.getStepMotorPos());
+        requiredComponentVisited(stepMotorAction, stepMotorAction.stepMotorPos);
         usedHardwareBuilder.addUsedActor(new UsedActor("internal", SC.STEPMOTOR));
         return null;
     }

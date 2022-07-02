@@ -18,40 +18,15 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>naoActions_sayText</b> block from Blockly into the AST (abstract syntax tree). Objects from this class will generate code for
- * making the robot say the text.<br>
- * <br>
- * <br>
- */
 @NepoBasic(name = "FORGET_FACE", category = "ACTOR", blocklyNames = {"naoActions_forgetFace"})
 public final class ForgetFace<V> extends Action<V> {
     public final Expr<V> faceName;
 
-    private ForgetFace(Expr<V> faceName, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public ForgetFace(Expr<V> faceName, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.isTrue(faceName != null);
         this.faceName = faceName;
         setReadOnly();
-    }
-
-    /**
-     * Creates instance of {@link DisplayTextAction}. This instance is read only and can not be modified.
-     *
-     * @param faceName {@link msg} that will be printed on the display of the brick; must be <b>not</b> null,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link DisplayTextAction}
-     */
-    private static <V> ForgetFace<V> make(Expr<V> faceName, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ForgetFace<>(faceName, properties, comment);
-    }
-
-    /**
-     * @return the message.
-     */
-    public Expr<V> getFaceName() {
-        return this.faceName;
     }
 
     @Override
@@ -59,17 +34,10 @@ public final class ForgetFace<V> extends Action<V> {
         return "ForgetFace [" + this.faceName + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.NAME, BlocklyType.STRING));
-        return ForgetFace.make(Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new ForgetFace<>(Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

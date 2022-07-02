@@ -17,10 +17,6 @@ public final class NeuralNetworkInitRawData<V> extends Stmt<V> {
         setReadOnly();
     }
 
-    public static <V> NeuralNetworkInitRawData<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new NeuralNetworkInitRawData<>(properties, comment);
-    }
-
     @Override
     public String toString() {
         return new StringBuilder().append("NeuralNetworkInitRawData []").toString();
@@ -34,7 +30,7 @@ public final class NeuralNetworkInitRawData<V> extends Stmt<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
-        return NeuralNetworkInitRawData.make(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new NeuralNetworkInitRawData<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

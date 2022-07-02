@@ -32,20 +32,20 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitor extends Moto
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         checkAndAddDifferentialDriveBlock(driveAction);
-        checkAndVisitMotionParam(driveAction, driveAction.getParam());
+        checkAndVisitMotionParam(driveAction, driveAction.param);
         return null;
     }
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
         checkAndAddDifferentialDriveBlock(curveAction);
-        checkForZeroSpeedInCurve(curveAction.getParamLeft().getSpeed(), curveAction.getParamRight().getSpeed(), curveAction);
+        checkForZeroSpeedInCurve(curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed(), curveAction);
         return null;
     }
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        checkAndVisitMotionParam(turnAction, turnAction.getParam());
+        checkAndVisitMotionParam(turnAction, turnAction.param);
         checkAndAddDifferentialDriveBlock(turnAction);
         return null;
     }
@@ -78,7 +78,7 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitor extends Moto
     private ConfigurationComponent getDifferentialDrive() {
         Map<String, ConfigurationComponent> configComponents = this.robotConfiguration.getConfigurationComponents();
         for ( ConfigurationComponent component : configComponents.values() ) {
-            if ( component.getComponentType().equals(SC.DIFFERENTIALDRIVE) ) {
+            if ( component.componentType.equals(SC.DIFFERENTIALDRIVE) ) {
                 return component;
             }
         }
@@ -106,14 +106,14 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitor extends Moto
         ConfigurationComponent diffDrive = getDifferentialDrive();
         Assert.notNull(diffDrive, "differential missing in Configuration");
 
-        usedHardwareBuilder.addUsedActor(new UsedActor(diffDrive.getUserDefinedPortName(), SC.DIFFERENTIALDRIVE));
+        usedHardwareBuilder.addUsedActor(new UsedActor(diffDrive.userDefinedPortName, SC.DIFFERENTIALDRIVE));
         List<ConfigurationComponent> motorsR = getEncodersOnPort(diffDrive.getOptProperty("MOTOR_R"));
         List<ConfigurationComponent> motorsL = getEncodersOnPort(diffDrive.getOptProperty("MOTOR_L"));
         if ( !motorsL.isEmpty() ) {
-            usedHardwareBuilder.addUsedActor(new UsedActor(motorsL.get(0).getUserDefinedPortName(), motorsL.get(0).getComponentType()));
+            usedHardwareBuilder.addUsedActor(new UsedActor(motorsL.get(0).userDefinedPortName, motorsL.get(0).componentType));
         }
         if ( !motorsR.isEmpty() ) {
-            usedHardwareBuilder.addUsedActor(new UsedActor(motorsR.get(0).getUserDefinedPortName(), motorsR.get(0).getComponentType()));
+            usedHardwareBuilder.addUsedActor(new UsedActor(motorsR.get(0).userDefinedPortName, motorsR.get(0).componentType));
         }
     }
 
@@ -121,7 +121,7 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitor extends Moto
         Map<String, ConfigurationComponent> configComponents = this.robotConfiguration.getConfigurationComponents();
         List<ConfigurationComponent> encoders = new ArrayList<>();
         for ( ConfigurationComponent component : configComponents.values() ) {
-            if ( component.getComponentType().equals(SC.ENCODER) || component.getComponentType().equals(SC.MOTOR) || component.getComponentType().equals(SC.STEPMOTOR) ) {
+            if ( component.componentType.equals(SC.ENCODER) || component.componentType.equals(SC.MOTOR) || component.componentType.equals(SC.STEPMOTOR) ) {
                 if ( component.getComponentProperties().containsValue(port) ) {
                     encoders.add(component);
                 }
@@ -132,8 +132,8 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitor extends Moto
 
     private void checkForZeroSpeedInCurve(Expr<Void> speedLeft, Expr<Void> speedRight, Action<Void> action) {
         if ( speedLeft.getKind().hasName("NUM_CONST") && speedRight.getKind().hasName("NUM_CONST") ) {
-            double speedLeftNumConst = Double.parseDouble(((NumConst<Void>) speedLeft).getValue());
-            double speedRightNumConst = Double.parseDouble(((NumConst<Void>) speedRight).getValue());
+            double speedLeftNumConst = Double.parseDouble(((NumConst<Void>) speedLeft).value);
+            double speedRightNumConst = Double.parseDouble(((NumConst<Void>) speedRight).value);
 
             boolean bothMotorsHaveZeroSpeed = (Math.abs(speedLeftNumConst) < DOUBLE_EPS) && (Math.abs(speedRightNumConst) < DOUBLE_EPS);
             if ( bothMotorsHaveZeroSpeed ) {

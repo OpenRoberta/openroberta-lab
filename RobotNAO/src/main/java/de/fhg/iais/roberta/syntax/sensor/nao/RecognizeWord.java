@@ -11,9 +11,6 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>naoActions_recognizeWord</b> block
- */
 @NepoPhrase(category = "SENSOR", blocklyNames = {"naoSensors_recognizeWord"}, name = "RECOGNIZE_WORD")
 public final class RecognizeWord<V> extends Sensor<V> {
     @NepoValue(name = BlocklyConstants.WORD, type = BlocklyType.STRING)

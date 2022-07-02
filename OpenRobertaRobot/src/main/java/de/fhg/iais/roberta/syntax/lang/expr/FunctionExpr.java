@@ -15,21 +15,11 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 public final class FunctionExpr<V> extends Expr<V> {
     public final Function<V> function;
 
-    private FunctionExpr(Function<V> function) {
+    public FunctionExpr(Function<V> function) {
         super(function.getProperty(), function.getComment());
         Assert.isTrue(function.isReadOnly());
         this.function = function;
         setReadOnly();
-    }
-
-    /**
-     * Create object of the class {@link FunctionExpr}.
-     *
-     * @param function that we want to wrap,
-     * @return expression with wrapped function inside
-     */
-    public static <V> FunctionExpr<V> make(Function<V> function) {
-        return new FunctionExpr<V>(function);
     }
 
     /**

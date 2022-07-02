@@ -19,11 +19,4 @@ public final class NeuralNetworkAddTrainingsData<V> extends Stmt<V> {
         setReadOnly();
     }
 
-    public static <V> NeuralNetworkAddTrainingsData<V> make(Expr<V> classNumber, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new NeuralNetworkAddTrainingsData<>(properties, comment, classNumber);
-    }
-
-    public Expr<V> getClassNumber() {
-        return this.classNumber;
-    }
 }

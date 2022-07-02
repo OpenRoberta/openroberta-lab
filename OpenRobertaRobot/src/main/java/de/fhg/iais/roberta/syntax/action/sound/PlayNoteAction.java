@@ -7,9 +7,9 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoHide;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"mbedActions_play_note"}, name = "PLAY_NOTE_ACTION")
@@ -32,24 +32,5 @@ public final class PlayNoteAction<V> extends Action<V> {
         this.hide = hide;
         setReadOnly();
     }
-    
-    public static <V> PlayNoteAction<V> make(String port, String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment, Hide hide) {
-        return new PlayNoteAction<>(properties, comment, duration, frequency, port, hide);
-    }
 
-    public String getDuration() {
-        return this.duration;
-    }
-
-    public String getFrequency() {
-        return this.frequency;
-    }
-
-    public Hide getHide() {
-        return this.hide;
-    }
-
-    public String getPort() {
-        return this.port;
-    }
 }

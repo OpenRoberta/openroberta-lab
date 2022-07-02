@@ -44,13 +44,13 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        requiredComponentVisited(driveAction, driveAction.getParam().getSpeed());
+        requiredComponentVisited(driveAction, driveAction.param.getSpeed());
         usedMethodBuilder.addUsedMethod(EdisonMethods.DIFFDRIVE);
         addUsedMethodsForDriveActions();
-        driveAction.getParam().getSpeed().accept(this);
-        if ( driveAction.getParam().getDuration() != null ) {
-            requiredComponentVisited(driveAction, driveAction.getParam().getDuration().getValue());
-            driveAction.getParam().getDuration().getValue().accept(this);
+        driveAction.param.getSpeed().accept(this);
+        if ( driveAction.param.getDuration() != null ) {
+            requiredComponentVisited(driveAction, driveAction.param.getDuration().getValue());
+            driveAction.param.getDuration().getValue().accept(this);
         }
         return null;
     }
@@ -58,26 +58,26 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
         // the block has the description "steer"
-        requiredComponentVisited(curveAction, curveAction.getParamLeft().getSpeed(), curveAction.getParamRight().getSpeed());
+        requiredComponentVisited(curveAction, curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed());
         addUsedMethodsForDriveActions();
-        curveAction.getParamLeft().getSpeed().accept(this);
-        curveAction.getParamRight().getSpeed().accept(this);
-        if ( curveAction.getParamLeft().getDuration() != null ) {
-            requiredComponentVisited(curveAction, curveAction.getParamLeft().getDuration().getValue(), curveAction.getParamRight().getDuration().getValue());
-            curveAction.getParamLeft().getDuration().getValue().accept(this);
+        curveAction.paramLeft.getSpeed().accept(this);
+        curveAction.paramRight.getSpeed().accept(this);
+        if ( curveAction.paramLeft.getDuration() != null ) {
+            requiredComponentVisited(curveAction, curveAction.paramLeft.getDuration().getValue(), curveAction.paramRight.getDuration().getValue());
+            curveAction.paramLeft.getDuration().getValue().accept(this);
         }
         return null;
     }
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        requiredComponentVisited(turnAction, turnAction.getParam().getSpeed());
+        requiredComponentVisited(turnAction, turnAction.param.getSpeed());
         usedMethodBuilder.addUsedMethod(EdisonMethods.DIFFTURN);
         addUsedMethodsForDriveActions();
-        turnAction.getParam().getSpeed().accept(this);
-        if ( turnAction.getParam().getDuration() != null ) {
-            requiredComponentVisited(turnAction, turnAction.getParam().getDuration().getValue());
-            turnAction.getParam().getDuration().getValue().accept(this);
+        turnAction.param.getSpeed().accept(this);
+        if ( turnAction.param.getDuration() != null ) {
+            requiredComponentVisited(turnAction, turnAction.param.getDuration().getValue());
+            turnAction.param.getDuration().getValue().accept(this);
         }
         return null;
     }
@@ -99,13 +99,13 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        requiredComponentVisited(motorOnAction, motorOnAction.getParam().getSpeed());
+        requiredComponentVisited(motorOnAction, motorOnAction.param.getSpeed());
         usedMethodBuilder.addUsedMethod(EdisonMethods.MOTORON);
         usedMethodBuilder.addUsedMethod(EdisonMethods.SHORTEN); //used inside helper method
         usedMethodBuilder.addUsedMethod(EdisonMethods.GETDIR);
-        motorOnAction.getParam().getSpeed().accept(this);
-        if ( motorOnAction.getParam().getDuration() != null ) {
-            requiredComponentVisited(motorOnAction, motorOnAction.getParam().getDuration().getValue());
+        motorOnAction.param.getSpeed().accept(this);
+        if ( motorOnAction.param.getDuration() != null ) {
+            requiredComponentVisited(motorOnAction, motorOnAction.param.getDuration().getValue());
         }
         if ( motorOnAction.getDurationValue() != null ) {
             motorOnAction.getDurationValue().accept(this);
@@ -125,7 +125,7 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        requiredComponentVisited(toneAction, toneAction.getFrequency(), toneAction.getDuration());
+        requiredComponentVisited(toneAction, toneAction.frequency, toneAction.duration);
         return null;
     }
 
@@ -176,9 +176,9 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
 
     @Override
     public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
-        requiredComponentVisited(sendIRAction, sendIRAction.getCode()); //?
+        requiredComponentVisited(sendIRAction, sendIRAction.code); //?
         usedMethodBuilder.addUsedMethod(EdisonMethods.IRSEND);
-        sendIRAction.getCode().accept(this);
+        sendIRAction.code.accept(this);
         return null;
     }
 
@@ -196,7 +196,7 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     @Override
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
         //visit all statements to add their helper methods
-        for ( Stmt<Void> s : waitStmt.getStatements().get() ) {
+        for ( Stmt<Void> s : waitStmt.statements.get() ) {
             s.accept(this);
         }
         return super.visitWaitStmt(waitStmt);
@@ -209,7 +209,7 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
      */
     @Override
     public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
-        switch ( sensorGetSample.getSensorTypeAndMode() ) {
+        switch ( sensorGetSample.sensorTypeAndMode ) {
             case "INFRARED_OBSTACLE":
                 usedMethodBuilder.addUsedMethod(EdisonMethods.OBSTACLEDETECTION);
                 break;

@@ -29,29 +29,10 @@ public final class LEDMatrixImage<V> extends Expr<V> {
     public final static int Y = 8;
     public final String[][] image;
 
-    private LEDMatrixImage(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public LEDMatrixImage(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         this.image = image;
         setReadOnly();
-    }
-
-    /**
-     * creates instance of {@link LEDMatrixImage}. This instance is read only and can not be modified.
-     *
-     * @param image ,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link LEDMatrixImage}
-     */
-    public static <V> LEDMatrixImage<V> make(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LEDMatrixImage<>(image, properties, comment);
-    }
-
-    /**
-     * @return get the string representation of the image.
-     */
-    public String[][] getImage() {
-        return this.image;
     }
 
     @Override
@@ -96,7 +77,7 @@ public final class LEDMatrixImage<V> extends Expr<V> {
                 image[i][j] = Jaxb2Ast.extractField(fields, "P" + i + (Y - 1 - j));
             }
         }
-        return LEDMatrixImage.make(image, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new LEDMatrixImage<>(image, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

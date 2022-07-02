@@ -12,28 +12,11 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 public final class SensorStmt<V> extends Stmt<V> {
     public final Sensor<V> sensor;
 
-    private SensorStmt(Sensor<V> sensor) {
+    public SensorStmt(Sensor<V> sensor) {
         super(sensor.getProperty(), sensor.getComment());
         Assert.isTrue(sensor != null && sensor.isReadOnly());
         this.sensor = sensor;
         setReadOnly();
-    }
-
-    /**
-     * Create object of the class {@link SensorStmt}.
-     *
-     * @param sensor that we want to wrap
-     * @return statement with wrapped sensor inside
-     */
-    public static <V> SensorStmt<V> make(Sensor<V> sensor) {
-        return new SensorStmt<V>(sensor);
-    }
-
-    /**
-     * @return sensor that is wrapped in the statement
-     */
-    public Sensor<V> getSensor() {
-        return this.sensor;
     }
 
     @Override
@@ -43,7 +26,7 @@ public final class SensorStmt<V> extends Stmt<V> {
 
     @Override
     public Block astToBlock() {
-        return getSensor().astToBlock();
+        return this.sensor.astToBlock();
     }
 
 }

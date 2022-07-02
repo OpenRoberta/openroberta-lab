@@ -14,28 +14,11 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 public final class ActionExpr<V> extends Expr<V> {
     public final Action<V> action;
 
-    private ActionExpr(Action<V> action) {
+    public ActionExpr(Action<V> action) {
         super(action.getProperty(), action.getComment());
         Assert.isTrue(action.isReadOnly());
         this.action = action;
         setReadOnly();
-    }
-
-    /**
-     * Create object of the class {@link ActionExpr}.
-     *
-     * @param action that we want to wrap
-     * @return expression with wrapped action inside
-     */
-    public static <V> ActionExpr<V> make(Action<V> action) {
-        return new ActionExpr<V>(action);
-    }
-
-    /**
-     * @return action that is wrapped in the expression
-     */
-    public Action<V> getAction() {
-        return this.action;
     }
 
     @Override
@@ -55,7 +38,7 @@ public final class ActionExpr<V> extends Expr<V> {
 
     @Override
     public Block astToBlock() {
-        return getAction().astToBlock();
+        return this.action.astToBlock();
     }
 
     @Override

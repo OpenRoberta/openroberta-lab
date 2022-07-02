@@ -21,11 +21,4 @@ public final class SendIRAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> SendIRAction<V> make(Expr<V> code, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SendIRAction<V>(properties, comment, code);
-    }
-
-    public Expr<V> getCode() {
-        return this.code;
-    }
 }

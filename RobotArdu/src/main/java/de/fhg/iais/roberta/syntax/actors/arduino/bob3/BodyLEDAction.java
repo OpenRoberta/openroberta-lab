@@ -20,17 +20,4 @@ public final class BodyLEDAction<V> extends Action<V> {
         this.side = side;
         setReadOnly();
     }
-
-    public static <V> BodyLEDAction<V> make(String side, String ledState, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BodyLEDAction<>(properties, comment, side, ledState);
-    }
-    public String getledState() {
-        return this.ledState;
-    }
-
-
-    public String getSide() {
-        return this.side;
-    }
-
 }

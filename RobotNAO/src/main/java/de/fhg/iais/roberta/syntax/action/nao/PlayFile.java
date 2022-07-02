@@ -20,7 +20,4 @@ public final class PlayFile<V> extends Action<V> {
         setReadOnly();
     }
 
-    public Expr<V> getMsg() {
-        return this.msg;
-    }
 }

@@ -60,7 +60,7 @@ public final class ConfigurationAst {
                     this.componentTypes.add(entry.getKey().split("_")[0]);
                 }
             } else {
-                this.componentTypes.add(confComp.getComponentType());
+                this.componentTypes.add(confComp.componentType);
             }
         }
     }
@@ -68,14 +68,14 @@ public final class ConfigurationAst {
     private static LinkedHashMap<String, ConfigurationComponent> buildConfigurationComponentMap(Iterable<ConfigurationComponent> configurationComponents) {
         LinkedHashMap<String, ConfigurationComponent> map = new LinkedHashMap<>();
         for ( ConfigurationComponent confComp : configurationComponents ) {
-            map.put(confComp.getUserDefinedPortName(), confComp);
+            map.put(confComp.userDefinedPortName, confComp);
         }
         return map;
     }
 
     // TODO add better differentiation
     private static boolean isSuperBlock(ConfigurationComponent confComp) {
-        return confComp.getComponentType().equals("CALLIBOT");
+        return confComp.componentType.equals("CALLIBOT");
     }
 
     public String getRobotName() {
@@ -154,7 +154,7 @@ public final class ConfigurationAst {
 
     public ConfigurationComponent optConfigurationComponentByType(String type) {
         for ( ConfigurationComponent configComp : this.configurationComponents.values() ) {
-            if ( configComp.getComponentType().equals(type) ) {
+            if ( configComp.componentType.equals(type) ) {
                 return configComp;
             }
         }
@@ -217,7 +217,7 @@ public final class ConfigurationAst {
         if ( firstMotor == null ) {
             return null;
         } else {
-            return firstMotor.getUserDefinedPortName();
+            return firstMotor.userDefinedPortName;
         }
     }
 

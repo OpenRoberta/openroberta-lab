@@ -12,49 +12,29 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>robControls_start</b> block from Blockly into the AST (abstract syntax tree). Object from this class points to the main thread
  * of the program.<br/>
  * <br/>
- * <b>In this block are defined all global variables that are used in the program.</b>
+ * <b>In this block all global variables that are used in the program are defined.</b>
  */
 @NepoBasic(name = "MAIN_TASK", category = "TASK", blocklyNames = {"robControls_start_ardu", "robControls_start", "mbedcontrols_start"})
 public final class MainTask<V> extends Task<V> {
     public final StmtList<V> variables;
     public final String debug;
 
-    private MainTask(StmtList<V> variables, String debug, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public MainTask(StmtList<V> variables, String debug, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.isTrue(variables.isReadOnly() && variables != null);
         this.variables = variables;
         this.debug = debug;
         setReadOnly();
-    }
-
-    /**
-     * creates instance of {@link MainTask}. This instance is read only and cannot be modified.
-     *
-     * @param variables read only list of declared variables
-     */
-    public static <V> MainTask<V> make(StmtList<V> variables, String debug, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MainTask<V>(variables, debug, properties, comment);
-    }
-
-    /**
-     * @return the variables
-     */
-    public StmtList<V> getVariables() {
-        return this.variables;
-    }
-
-    public String getDebug() {
-        return this.debug;
     }
 
     @Override
@@ -72,13 +52,6 @@ public final class MainTask<V> extends Task<V> {
         return "MainTask [" + this.variables + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         String debug = null;
         List<Field> fields = block.getField();
@@ -88,11 +61,11 @@ public final class MainTask<V> extends Task<V> {
         if ( block.getMutation().isDeclare() == true ) {
             List<Statement> statements = Jaxb2Ast.extractStatements(block, (short) 1);
             StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.ST);
-            return MainTask.make(statement, debug, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+            return new MainTask<V>(statement, debug, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
         }
-        StmtList<V> listOfVariables = StmtList.make();
+        StmtList<V> listOfVariables = new StmtList<V>();
         listOfVariables.setReadOnly();
-        return MainTask.make(listOfVariables, debug, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new MainTask<V>(listOfVariables, debug, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
@@ -104,8 +77,8 @@ public final class MainTask<V> extends Task<V> {
         Mutation mutation = new Mutation();
         mutation.setDeclare(declare);
         jaxbDestination.setMutation(mutation);
-        if ( getDebug() != null ) {
-            Ast2Jaxb.addField(jaxbDestination, "DEBUG", getDebug());
+        if ( this.debug != null ) {
+            Ast2Jaxb.addField(jaxbDestination, "DEBUG", this.debug);
         }
         Ast2Jaxb.addStatement(jaxbDestination, BlocklyConstants.ST, this.variables);
         return jaxbDestination;

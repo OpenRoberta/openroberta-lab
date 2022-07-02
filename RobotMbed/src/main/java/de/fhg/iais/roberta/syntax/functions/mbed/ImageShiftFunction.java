@@ -7,7 +7,6 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.general.IDirection;
-import de.fhg.iais.roberta.mode.general.Direction;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.functions.Function;
@@ -23,19 +22,13 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents <b>mbedImage_shift</b> blocks from Blockly into the AST (abstract syntax tree).<br>
- * <br>
- * The user must provide name of the function and list of parameters. <br>
- * To create an instance from this class use the method {@link #make(Image, Direction, BlocklyBlockProperties, BlocklyComment)}.<br>
- */
 @NepoBasic(name = "IMAGE_SHIFT", category = "FUNCTION", blocklyNames = {"mbedImage_shift"})
 public final class ImageShiftFunction<V> extends Function<V> {
     public final Expr<V> image;
     public final Expr<V> positions;
     public final IDirection shiftDirection;
 
-    private ImageShiftFunction(Expr<V> image, Expr<V> positions, IDirection shiftDirection, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public ImageShiftFunction(Expr<V> image, Expr<V> positions, IDirection shiftDirection, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.notNull(image);
         Assert.notNull(positions);
@@ -44,43 +37,6 @@ public final class ImageShiftFunction<V> extends Function<V> {
         this.shiftDirection = shiftDirection;
         this.positions = positions;
         setReadOnly();
-    }
-
-    /**
-     * Creates instance of {@link ImageShiftFunction}. This instance is read only and can not be modified.
-     *
-     * @param image to be shifted; must be <b>not</b> null,
-     * @param positions to be shifted; must be <b>not</b> null,
-     * @param shiftDirection direction of shifting {@link Direction}; must be <b>not</b> null,,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment that user has added to the block,
-     * @return read only object of class {@link ImageShiftFunction}
-     */
-    public static <V> ImageShiftFunction<V> make(
-        Expr<V> image,
-        Expr<V> positions,
-        IDirection shiftDirection,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new ImageShiftFunction<>(image, positions, shiftDirection, properties, comment);
-    }
-
-    /**
-     * @return image to be shifted
-     */
-    public Expr<V> getImage() {
-        return this.image;
-    }
-
-    /**
-     * @return direction of shifting {@link IDirection}
-     */
-    public IDirection getShiftDirection() {
-        return this.shiftDirection;
-    }
-
-    public Expr<V> getPositions() {
-        return this.positions;
     }
 
     @Override
@@ -103,13 +59,6 @@ public final class ImageShiftFunction<V> extends Function<V> {
         return "ImageShiftFunction [" + this.image + ", " + this.positions + ", " + this.shiftDirection + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
@@ -117,13 +66,7 @@ public final class ImageShiftFunction<V> extends Function<V> {
         IDirection shiftingDirection = factory.getDirection(Jaxb2Ast.extractField(fields, BlocklyConstants.OP));
         Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.A, BlocklyType.PREDEFINED_IMAGE));
         Phrase<V> numberOfPositions = helper.extractValue(values, new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT));
-        return ImageShiftFunction
-            .make(
-                Jaxb2Ast.convertPhraseToExpr(image),
-                Jaxb2Ast.convertPhraseToExpr(numberOfPositions),
-                shiftingDirection,
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block));
+        return new ImageShiftFunction<>(Jaxb2Ast.convertPhraseToExpr(image), Jaxb2Ast.convertPhraseToExpr(numberOfPositions), shiftingDirection, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

@@ -191,7 +191,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      * @param sensorGetSample to be visited
      */
     default V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
-        sensorGetSample.getSensor().accept(this);
+        sensorGetSample.sensor.accept(this);
         return null;
     }
 

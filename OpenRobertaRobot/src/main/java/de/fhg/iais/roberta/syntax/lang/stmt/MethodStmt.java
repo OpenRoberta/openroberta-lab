@@ -9,28 +9,11 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 public final class MethodStmt<V> extends Stmt<V> {
     public final Method<V> method;
 
-    private MethodStmt(Method<V> method) {
+    public MethodStmt(Method<V> method) {
         super(method.getProperty(), method.getComment());
         Assert.isTrue(method != null && method.isReadOnly());
         this.method = method;
         setReadOnly();
-    }
-
-    /**
-     * Create object of the class {@link MethodStmt}.
-     *
-     * @param method that we want to wrap
-     * @return statement with wrapped method inside
-     */
-    public static <V> MethodStmt<V> make(Method<V> method) {
-        return new MethodStmt<V>(method);
-    }
-
-    /**
-     * @return the method
-     */
-    public Method<V> getMethod() {
-        return this.method;
     }
 
     @Override
@@ -40,6 +23,6 @@ public final class MethodStmt<V> extends Stmt<V> {
 
     @Override
     public Block astToBlock() {
-        return getMethod().astToBlock();
+        return this.method.astToBlock();
     }
 }

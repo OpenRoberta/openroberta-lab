@@ -19,10 +19,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
- * This class represents the <b>robSensors_getSample</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
- * setting the mode of the sensor or getting a sample from the sensor.<br/>
- * <br>
- * The client must provide the {@link SensorType} and port. See enum {@link SensorType} for all possible type of sensors.<br>
+ * This class represents the <b>robSensors_getSample</b> block from Blockly. Both a sensor and a mode are needed (see sensorTypeAndMode)
  */
 @NepoBasic(name = "SENSOR_GET_SAMPLE", category = "SENSOR", blocklyNames = {"sim_getSample", "robSensors_getSample_ardu", "mbedsensors_getsample", "robSensors_getSample"})
 public final class GetSampleSensor<V> extends Sensor<V> {
@@ -56,45 +53,11 @@ public final class GetSampleSensor<V> extends Sensor<V> {
         setReadOnly();
     }
 
-    public Sensor<V> getSensor() {
-        return this.sensor;
-    }
-
-    public String getSensorPort() {
-        return this.sensorPort;
-    }
-
-    public String getSlot() {
-        return this.slot;
-    }
-
-    public List<Hide> getHide() {
-        return this.hide;
-    }
-
-    /**
-     * @return type of the sensor who will get the sample
-     */
-    public String getSensorTypeAndMode() {
-        return this.sensorTypeAndMode;
-    }
-
-    public Mutation getMutation() {
-        return this.mutation;
-    }
-
     @Override
     public String toString() {
         return "GetSampleSensor [" + this.sensor + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         String mutationInput = block.getMutation().getInput();

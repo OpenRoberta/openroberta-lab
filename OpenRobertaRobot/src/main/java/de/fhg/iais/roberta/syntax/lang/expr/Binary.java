@@ -17,11 +17,11 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.Sig;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
@@ -36,7 +36,7 @@ public final class Binary<V> extends Expr<V> {
     public final Expr<V> right;
     public final String operationRange;
 
-    private Binary(Op op, Expr<V> left, Expr<V> right, String operationRange, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public Binary(Op op, Expr<V> left, Expr<V> right, String operationRange, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.isTrue(op != null && left != null && right != null && left.isReadOnly() && right.isReadOnly());
         this.op = op;
@@ -46,59 +46,12 @@ public final class Binary<V> extends Expr<V> {
         this.setReadOnly();
     }
 
-    /**
-     * factory method: create an AST instance of {@link Binary}.
-     *
-     * @param op operator; must be <b>not</b> null,
-     * @param left expression on the left hand side; must be <b>not</b> null and <b>read only</b>,
-     * @param right expression on the right hand side; must be <b>not</b> null and <b>read only</b>,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object representing the binary expression
-     */
-    public static <V> Binary<V> make(Op op, Expr<V> left, Expr<V> right, String operationRange, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Binary<>(op, left, right, operationRange, properties, comment);
-    }
-
-    /**
-     * factory method: create an AST instance of {@link Binary}.<br>
-     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
-     *
-     * @param op operator; must be <b>not</b> null,
-     * @param left expression on the left hand side; must be <b>not</b> null and <b>read only</b>,
-     * @param right expression on the right hand side; must be <b>not</b> null and <b>read only</b>,
-     * @return read only object representing the binary expression
-     */
-    public static <V> Binary<V> make(Op op, Expr<V> left, Expr<V> right, String operationRange) {
-        return new Binary<>(op, left, right, operationRange, BlocklyBlockProperties.make("BINARY", "1"), null);
-    }
-
-    /**
-     * @return the operation in the binary expression. See enum {@link Op} for all possible operations
-     */
-    public Op getOp() {
-        return this.op;
-    }
-
-    /**
-     * @return the expression on the left hand side. Returns subclass of {@link Expr}
-     */
-    public Expr<V> getLeft() {
-        return this.left;
-    }
 
     /**
      * @return the expression on the right hand side. Returns subclass of {@link Expr}
      */
     public Expr<V> getRight() {
         return this.right;
-    }
-
-    /**
-     * @return the operationRange
-     */
-    public String getOperationRange() {
-        return this.operationRange;
     }
 
     @Override
@@ -153,7 +106,7 @@ public final class Binary<V> extends Expr<V> {
         public final Assoc assoc;
         public final Sig sig;
 
-        private Op(int precedence, Assoc assoc, Sig sig, String... values) {
+        Op(int precedence, Assoc assoc, Sig sig, String... values) {
             this.precedence = precedence;
             this.assoc = assoc;
             this.values = values;
@@ -209,13 +162,6 @@ public final class Binary<V> extends Expr<V> {
         }
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
 
         List<Value> values;
@@ -226,31 +172,13 @@ public final class Binary<V> extends Expr<V> {
                 values = Jaxb2Ast.extractValues(block, (short) 2);
                 leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, BlocklyType.STRING));
                 rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.TEXT, BlocklyType.STRING));
-                return ExprStmt
-                    .make(
-                        Binary
-                            .make(
-                                Binary.Op.TEXT_APPEND,
-                                Jaxb2Ast.convertPhraseToExpr(leftt),
-                                Jaxb2Ast.convertPhraseToExpr(rightt),
-                                "",
-                                Jaxb2Ast.extractBlockProperties(block),
-                                Jaxb2Ast.extractComment(block)));
+                return new ExprStmt<V>(new Binary<V>(Op.TEXT_APPEND, Jaxb2Ast.convertPhraseToExpr(leftt), Jaxb2Ast.convertPhraseToExpr(rightt), "", Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block)));
             case BlocklyConstants.ROB_MATH_CHANGE:
             case BlocklyConstants.MATH_CHANGE:
                 values = Jaxb2Ast.extractValues(block, (short) 2);
                 leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, BlocklyType.STRING));
                 rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.DELTA, BlocklyType.NUMBER_INT));
-                return ExprStmt
-                    .make(
-                        Binary
-                            .make(
-                                Binary.Op.MATH_CHANGE,
-                                Jaxb2Ast.convertPhraseToExpr(leftt),
-                                Jaxb2Ast.convertPhraseToExpr(rightt),
-                                "",
-                                Jaxb2Ast.extractBlockProperties(block),
-                                Jaxb2Ast.extractComment(block)));
+                return new ExprStmt<V>(new Binary<V>(Op.MATH_CHANGE, Jaxb2Ast.convertPhraseToExpr(leftt), Jaxb2Ast.convertPhraseToExpr(rightt), "", Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block)));
 
             case BlocklyConstants.MATH_MODULO:
                 return helper
@@ -267,7 +195,7 @@ public final class Binary<V> extends Expr<V> {
                     exprParams.add(new ExprParam(BlocklyConstants.A, BlocklyType.NUMBER_INT));
                     exprParams.add(new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT));
                     List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-                    return MathPowerFunct.make(FunctionNames.POWER, params, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+                    return new MathPowerFunct<V>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), FunctionNames.POWER, params);
                 }
             default:
                 return helper
@@ -289,25 +217,25 @@ public final class Binary<V> extends Expr<V> {
             mutation.setOperatorRange(this.operationRange);
             jaxbDestination.setMutation(mutation);
         }
-        switch ( getOp() ) {
+        switch ( this.op ) {
 
             case MATH_CHANGE:
-                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VAR, getLeft());
+                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VAR, this.left);
                 Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DELTA, getRight());
                 return jaxbDestination;
             case TEXT_APPEND:
-                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VAR, getLeft());
+                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VAR, this.left);
                 Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.TEXT, getRight());
                 return jaxbDestination;
 
             case MOD:
-                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DIVIDEND, getLeft());
+                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DIVIDEND, this.left);
                 Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DIVISOR, getRight());
                 return jaxbDestination;
 
             default:
-                Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, getOp().name());
-                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.A, getLeft());
+                Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, this.op.name());
+                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.A, this.left);
                 Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.B, getRight());
                 return jaxbDestination;
         }

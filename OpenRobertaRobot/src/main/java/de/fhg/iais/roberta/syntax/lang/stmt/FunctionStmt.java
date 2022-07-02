@@ -12,28 +12,11 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 public final class FunctionStmt<V> extends Stmt<V> {
     public final Function<V> function;
 
-    private FunctionStmt(Function<V> function) {
+    public FunctionStmt(Function<V> function) {
         super(function.getProperty(), function.getComment());
         Assert.isTrue(function != null && function.isReadOnly());
         this.function = function;
         setReadOnly();
-    }
-
-    /**
-     * Create object of the class {@link SensorStmt}.
-     *
-     * @param function that we want to wrap
-     * @return statement with wrapped function inside
-     */
-    public static <V> FunctionStmt<V> make(Function<V> function) {
-        return new FunctionStmt<V>(function);
-    }
-
-    /**
-     * @return function that is wrapped in the statement
-     */
-    public Function<V> getFunction() {
-        return this.function;
     }
 
     @Override
@@ -43,6 +26,6 @@ public final class FunctionStmt<V> extends Stmt<V> {
 
     @Override
     public Block astToBlock() {
-        return getFunction().astToBlock();
+        return this.function.astToBlock();
     }
 }

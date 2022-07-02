@@ -18,11 +18,4 @@ public final class StringConst<V> extends Expr<V> {
         setReadOnly();
     }
 
-    public static <V> StringConst<V> make(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new StringConst<V>(properties, comment, value);
-    }
-
-    public String getValue() {
-        return this.value;
-    }
 }

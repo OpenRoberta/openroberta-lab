@@ -20,11 +20,4 @@ public final class Animation<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> Animation<V> make(Move move, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Animation<V>(properties, comment, move);
-    }
-
-    public Move getMove() {
-        return this.move;
-    }
 }

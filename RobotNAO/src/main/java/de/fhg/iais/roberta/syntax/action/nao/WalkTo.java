@@ -27,19 +27,4 @@ public final class WalkTo<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> WalkTo<V> make(Expr<V> walkToX, Expr<V> walkToY, Expr<V> walkToTheta, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new WalkTo<V>(properties, comment, walkToX, walkToY, walkToTheta);
-    }
-
-    public Expr<V> getWalkToX() {
-        return this.walkToX;
-    }
-
-    public Expr<V> getWalkToY() {
-        return this.walkToY;
-    }
-
-    public Expr<V> getWalkToTheta() {
-        return this.walkToTheta;
-    }
 }

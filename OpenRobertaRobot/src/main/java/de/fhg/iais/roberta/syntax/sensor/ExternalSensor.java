@@ -12,57 +12,46 @@ import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
-import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
-import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 public abstract class ExternalSensor<V> extends Sensor<V> implements WithUserDefinedPort<V> {
-    public final SensorMetaDataBean metaDataBean;
+    private final ExternalSensorBean externalSensorBean;
 
-    /**
-     * This constructor set the kind of the sensor object used in the AST (abstract syntax tree). All possible kinds can be found in {@link BlockDescriptor}.
-     *
-     * @param kind of the the sensor object used in AST,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment of the user for the specific block
-     */
-    public ExternalSensor(BlocklyBlockProperties properties, BlocklyComment comment, SensorMetaDataBean metaDataBean) {
+    public ExternalSensor(BlocklyBlockProperties properties, BlocklyComment comment, ExternalSensorBean externalSensorBean) {
         super(properties, comment);
-        Assert.notNull(metaDataBean.getMode());
-        Assert.notNull(metaDataBean.getPort());
-        Assert.notNull(metaDataBean.getSlot());
-        this.metaDataBean = metaDataBean;
+        Assert.notNull(externalSensorBean.getMode());
+        Assert.notNull(externalSensorBean.getPort());
+        Assert.notNull(externalSensorBean.getSlot());
+        this.externalSensorBean = externalSensorBean;
     }
 
-    /**
-     * @return get the port on which the sensor is connected. See enum {@link SensorPort} for all possible sensor ports
-     */
     public String getUserDefinedPort() {
-        return metaDataBean.getPort();
+        return externalSensorBean.getPort();
     }
 
     public String getMode() {
-        return metaDataBean.getMode();
+        return externalSensorBean.getMode();
     }
 
     public String getSlot() {
-        return metaDataBean.getSlot();
+        return externalSensorBean.getSlot();
     }
 
     public Mutation getMutation() {
-        return metaDataBean.getMutation();
+        return externalSensorBean.getMutation();
     }
 
     public List<Hide> getHide() {
-        return metaDataBean.getHide();
+        return externalSensorBean.getHide();
     }
 
-    public SensorMetaDataBean getSensorMetaDataBean() {
-        return metaDataBean;
+    public ExternalSensorBean getSensorMetaDataBean() {
+        return externalSensorBean;
     }
 
     @Override
@@ -70,31 +59,17 @@ public abstract class ExternalSensor<V> extends Sensor<V> implements WithUserDef
         return this.getClass().getSimpleName() + " [" + this.getUserDefinedPort() + ", " + this.getMode() + ", " + this.getSlot() + "]";
     }
 
-    /**
-     * extract info about external sensor and put all relevant data into a bean: port, mode, slot, mutation; but no hide
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return an {@link SensorMetaDataBean}
-     */
-    public static <V> SensorMetaDataBean extractPortAndModeAndSlot(Block block, Jaxb2ProgramAst<V> helper) {
+    public static <V> ExternalSensorBean extractPortAndModeAndSlot(Block block, Jaxb2ProgramAst<V> helper) {
         return extractPortModeSlotMutationHide(block, helper);
     }
 
-    /**
-     * extract info about external sensor and put all relevant data into a bean
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return an {@link SensorMetaDataBean}
-     */
-    public static <V> SensorMetaDataBean extractPortModeSlotMutationHide(Block block, Jaxb2ProgramAst<V> helper) {
+    public static <V> ExternalSensorBean extractPortModeSlotMutationHide(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.EMPTY_PORT);
         String modeName = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
         String slotName = Jaxb2Ast.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.EMPTY_SLOT);
-        return new SensorMetaDataBean(Jaxb2Ast.sanitizePort(portName), factory.getMode(modeName), Jaxb2Ast.sanitizeSlot(slotName), block.getMutation(), block.getHide());
+        return new ExternalSensorBean(Jaxb2Ast.sanitizePort(portName), factory.getMode(modeName), Jaxb2Ast.sanitizeSlot(slotName), block.getMutation(), block.getHide());
     }
 
     @Override
@@ -125,10 +100,10 @@ public abstract class ExternalSensor<V> extends Sensor<V> implements WithUserDef
     }
 
     /**
-     * this is an incredible bad design and must be refactored
+     * TODO: this is an incredible bad design and must be refactored (InfraredSensor as default ... ... )
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
-        SensorMetaDataBean sensorData = extractPortAndModeAndSlot(block, helper);
+        ExternalSensorBean sensorData = extractPortAndModeAndSlot(block, helper);
         return new InfraredSensor<V>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), sensorData);
     }
 

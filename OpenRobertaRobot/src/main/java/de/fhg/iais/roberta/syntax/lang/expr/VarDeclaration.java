@@ -13,10 +13,10 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -32,7 +32,7 @@ public final class VarDeclaration<V> extends Expr<V> {
     public final boolean global;
     public final static String CODE_SAFE_PREFIX = "___";
 
-    private VarDeclaration(
+    public VarDeclaration(
         BlocklyType typeVar,
         String name,
         Phrase<V> value,
@@ -50,64 +50,8 @@ public final class VarDeclaration<V> extends Expr<V> {
         setReadOnly();
     }
 
-    /**
-     * creates instance of {@link VarDeclaration}. This instance is read only and can not be modified.
-     *
-     * @param typeVar type of the variable; must be <b>not</b> null,
-     * @param name of the variable; must be <b>non-empty</b> string,
-     * @param value initialization value of the variable; must be <b>not</b> null,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link VarDeclaration}
-     */
-    public static <V> VarDeclaration<V> make(
-        BlocklyType typeVar,
-        String name,
-        Expr<V> value,
-        boolean next,
-        boolean global,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new VarDeclaration<>(typeVar, name, value, next, global, properties, comment);
-    }
-
-    /**
-     * @return type of the variable
-     */
-    public BlocklyType getTypeVar() {
-        return this.typeVar;
-    }
-
-    /**
-     * @return name of the variable
-     */
-    public String getName() {
-        return this.name;
-    }
-
     public String getCodeSafeName() {
         return CODE_SAFE_PREFIX + this.name;
-    }
-
-    /**
-     * @return the value
-     */
-    public Phrase<V> getValue() {
-        return this.value;
-    }
-
-    /**
-     * @return the next
-     */
-    public boolean isNext() {
-        return this.next;
-    }
-
-    /**
-     * @return the global
-     */
-    public boolean isGlobal() {
-        return this.global;
     }
 
     @Override
@@ -130,13 +74,6 @@ public final class VarDeclaration<V> extends Expr<V> {
         return "VarDeclaration [" + this.typeVar + ", " + this.name + ", " + this.value + ", " + this.next + ", " + this.global + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         boolean isGlobalVariable = block.getType().equals(BlocklyConstants.ROB_LOCAL_VARIABLES_DECLARE) ? false : true;
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
@@ -146,15 +83,7 @@ public final class VarDeclaration<V> extends Expr<V> {
         Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, typeVar));
         boolean next = block.getMutation().isNext();
 
-        return VarDeclaration
-            .make(
-                typeVar,
-                name,
-                Jaxb2Ast.convertPhraseToExpr(expr),
-                next,
-                isGlobalVariable,
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block));
+        return new VarDeclaration<>(typeVar, name, Jaxb2Ast.convertPhraseToExpr(expr), next, isGlobalVariable, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
@@ -164,10 +93,10 @@ public final class VarDeclaration<V> extends Expr<V> {
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
         mutation.setNext(this.next);
-        mutation.setDeclarationType(getTypeVar().getBlocklyName());
+        mutation.setDeclarationType(this.typeVar.getBlocklyName());
         jaxbDestination.setMutation(mutation);
-        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.VAR, getName());
-        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TYPE, getTypeVar().getBlocklyName());
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.VAR, this.name);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TYPE, this.typeVar.getBlocklyName());
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, this.value);
 
         return jaxbDestination;

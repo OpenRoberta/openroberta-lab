@@ -45,9 +45,9 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     protected void generateUsedVars() {
         for ( VarDeclaration<Void> var : this.getBean(UsedHardwareBean.class).getVisitedVars() ) {
-            this.sb.append("___" + var.getName());
+            this.sb.append("___" + var.name);
             this.sb.append(" = ");
-            var.getValue().accept(this);
+            var.value.accept(this);
             this.sb.append(";");
             nlIndent();
         }
@@ -55,19 +55,19 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
+        this.sb.append(getLanguageVarTypeFromBlocklyType(var.typeVar));
         this.sb.append(whitespace() + var.getCodeSafeName());
         return null;
     }
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
-        Op op = binary.getOp();
+        Op op = binary.op;
         if ( op == Op.MOD ) {
             appendFloatModulo(binary);
             return null;
         }
-        generateSubExpr(this.sb, false, binary.getLeft(), binary);
+        generateSubExpr(this.sb, false, binary.left, binary);
         String sym = getBinaryOperatorSymbol(op);
         this.sb.append(whitespace() + sym + whitespace());
         if ( op == Op.TEXT_APPEND ) {
@@ -84,7 +84,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     private void appendFloatModulo(Binary<Void> binary) {
         this.sb.append("fmod(");
-        generateSubExpr(this.sb, false, binary.getLeft(), binary);
+        generateSubExpr(this.sb, false, binary.left, binary);
         this.sb.append(", ");
         generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         this.sb.append(")");
@@ -114,26 +114,26 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
-        boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
-        boolean isArduinoLoop = repeatStmt.getMode() == RepeatStmt.Mode.FOREVER_ARDU;
-        switch ( repeatStmt.getMode() ) {
+        boolean isWaitStmt = repeatStmt.mode == RepeatStmt.Mode.WAIT;
+        boolean isArduinoLoop = repeatStmt.mode == RepeatStmt.Mode.FOREVER_ARDU;
+        switch ( repeatStmt.mode ) {
             case UNTIL:
             case WHILE:
             case FOREVER:
                 increaseLoopCounter();
-                generateCodeFromStmtCondition("while", repeatStmt.getExpr());
+                generateCodeFromStmtCondition("while", repeatStmt.expr);
                 break;
             case TIMES:
             case FOR:
                 increaseLoopCounter();
-                generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
+                generateCodeFromStmtConditionFor("for", repeatStmt.expr);
                 break;
             case WAIT:
-                generateCodeFromStmtCondition("if", repeatStmt.getExpr());
+                generateCodeFromStmtCondition("if", repeatStmt.expr);
                 break;
             case FOR_EACH:
                 increaseLoopCounter();
-                generateCodeFromStmtCondition("for", repeatStmt.getExpr());
+                generateCodeFromStmtCondition("for", repeatStmt.expr);
                 break;
             case FOREVER_ARDU:
                 increaseLoopCounter();
@@ -145,7 +145,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
                 break;
         }
         incrIndentation();
-        repeatStmt.getList().accept(this);
+        repeatStmt.list.accept(this);
         if ( !isWaitStmt ) {
             addContinueLabelToLoop();
             if ( !isArduinoLoop ) {
@@ -167,7 +167,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
         this.sb.append("while (true) {");
         incrIndentation();
-        visitStmtList(waitStmt.getStatements());
+        visitStmtList(waitStmt.statements);
         nlIndent();
         this.sb.append("delay(1);");
         decrIndentation();
@@ -178,16 +178,16 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        String methodName = indexOfFunct.getLocation() == IndexLocation.LAST ? "_getLastOccuranceOfElement(" : "_getFirstOccuranceOfElement(";
+        String methodName = indexOfFunct.location == IndexLocation.LAST ? "_getLastOccuranceOfElement(" : "_getFirstOccuranceOfElement(";
         this.sb.append(methodName);
-        indexOfFunct.getParam().get(0).accept(this);
+        indexOfFunct.param.get(0).accept(this);
         this.sb.append(", ");
-        if ( indexOfFunct.getParam().get(1).getClass().equals(StringConst.class) ) {
+        if ( indexOfFunct.param.get(1).getClass().equals(StringConst.class) ) {
             this.sb.append("String(");
-            indexOfFunct.getParam().get(1).accept(this);
+            indexOfFunct.param.get(1).accept(this);
             this.sb.append(")");
         } else {
-            indexOfFunct.getParam().get(1).accept(this);
+            indexOfFunct.param.get(1).accept(this);
         }
         this.sb.append(")");
         return null;
@@ -206,7 +206,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
         this.sb.append("delay(");
-        waitTimeStmt.getTime().accept(this);
+        waitTimeStmt.time.accept(this);
         this.sb.append(");");
         return null;
     }
@@ -214,9 +214,9 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
         this.sb.append("_randomIntegerInRange(");
-        mathRandomIntFunct.getParam().get(0).accept(this);
+        mathRandomIntFunct.param.get(0).accept(this);
         this.sb.append(", ");
-        mathRandomIntFunct.getParam().get(1).accept(this);
+        mathRandomIntFunct.param.get(1).accept(this);
         this.sb.append(")");
         return null;
     }
@@ -252,7 +252,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     @Override
     public Void visitDebugAction(DebugAction<Void> debugAction) {
-        writeToSerial(debugAction.getValue());
+        writeToSerial(debugAction.value);
         return null;
     }
 

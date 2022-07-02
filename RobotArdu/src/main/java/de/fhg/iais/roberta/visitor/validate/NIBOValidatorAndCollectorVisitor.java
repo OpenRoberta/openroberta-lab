@@ -43,7 +43,7 @@ public class NIBOValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
-        requiredComponentVisited(sendIRAction, sendIRAction.getCode());
+        requiredComponentVisited(sendIRAction, sendIRAction.code);
         return null;
     }
 
@@ -54,7 +54,7 @@ public class NIBOValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitRememberAction(RememberAction<Void> rememberAction) {
-        requiredComponentVisited(rememberAction, rememberAction.getCode());
+        requiredComponentVisited(rememberAction, rememberAction.code);
         return null;
     }
 
@@ -70,7 +70,7 @@ public class NIBOValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        requiredComponentVisited(ledOnAction, ledOnAction.getLedColor());
+        requiredComponentVisited(ledOnAction, ledOnAction.ledColor);
         return null;
     }
 

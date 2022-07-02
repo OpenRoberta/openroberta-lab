@@ -11,30 +11,13 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
  * Wraps subclasses of the class {@link Stmt} so they can be used as {@link Expr} in expressions.
  */
 public class StmtExpr<V> extends Expr<V> {
-    private final Stmt<V> stmt;
+    public final Stmt<V> stmt;
 
-    private StmtExpr(Stmt<V> stmt) {
+    public StmtExpr(Stmt<V> stmt) {
         super(stmt.getProperty(), stmt.getComment());
         Assert.isTrue(stmt.isReadOnly());
         this.stmt = stmt;
         setReadOnly();
-    }
-
-    /**
-     * Create object of the class {@link StmtExpr}.
-     *
-     * @param stmt that we want to wrap,
-     * @return expression with wrapped sensor inside
-     */
-    public static <V> StmtExpr<V> make(Stmt<V> stmt) {
-        return new StmtExpr<>(stmt);
-    }
-
-    /**
-     * @return stmt that is wrapped in the expression
-     */
-    public Stmt<V> getStmt() {
-        return this.stmt;
     }
 
     @Override
@@ -59,7 +42,7 @@ public class StmtExpr<V> extends Expr<V> {
 
     @Override
     public Block astToBlock() {
-        Phrase<V> p = getStmt();
+        Phrase<V> p = this.stmt;
         return p.astToBlock();
     }
 }

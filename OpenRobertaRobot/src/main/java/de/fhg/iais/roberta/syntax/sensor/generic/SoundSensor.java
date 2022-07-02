@@ -6,15 +6,15 @@ import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forClass.NepoExternalSensor;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
-import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
 @NepoExpr(name = "SOUND_SENSING", category = "SENSOR", blocklyNames = {"robSensors_sound_getSample"},
     sampleValues = {@F2M(field = "SOUND_SOUND", mode = "SOUND"), @F2M(field = "SOUND", mode = "VALUE")})
 @NepoExternalSensor()
 public final class SoundSensor<V> extends ExternalSensor<V> {
 
-    public SoundSensor(BlocklyBlockProperties properties, BlocklyComment comment, SensorMetaDataBean sensorMetaDataBean) {
-        super(properties, comment, sensorMetaDataBean);
+    public SoundSensor(BlocklyBlockProperties properties, BlocklyComment comment, ExternalSensorBean externalSensorBean) {
+        super(properties, comment, externalSensorBean);
         setReadOnly();
     }
 

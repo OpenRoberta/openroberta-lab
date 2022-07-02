@@ -95,7 +95,7 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
 
     @Override
     public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
-        Sensor<Void> sensor = sensorGetSample.getSensor();
+        Sensor<Void> sensor = sensorGetSample.sensor;
         requiredComponentVisited(sensorGetSample, sensor);
         // TODO remove once rfid library is supported for unowifirev2
         if ( sensor.getKind().hasName("RFID_SENSING") ) {
@@ -131,19 +131,19 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        if ( !lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) ) {
-            optionalComponentVisited(lightAction.getRgbLedColor());
+        if ( !lightAction.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
+            optionalComponentVisited(lightAction.rgbLedColor);
             if ( !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
                 addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
             } else {
-                this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(lightAction.getPort(), SC.LED));
+                this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(lightAction.port, SC.LED));
             }
         } else {
-            requiredComponentVisited(lightAction, lightAction.getRgbLedColor());
+            requiredComponentVisited(lightAction, lightAction.rgbLedColor);
             if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
                 addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
             } else {
-                this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(lightAction.getPort(), SC.RGBLED));
+                this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(lightAction.port, SC.RGBLED));
             }
         }
         return null;
@@ -167,7 +167,7 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
 
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        if ( mathOnListFunct.getParam().get(0).toString().contains("ListCreate ") ) {
+        if ( mathOnListFunct.param.get(0).toString().contains("ListCreate ") ) {
             addErrorToPhrase(mathOnListFunct, "BLOCK_USED_INCORRECTLY");
         }
         return super.visitMathOnListFunct(mathOnListFunct);
@@ -189,13 +189,13 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
 
     @Override
     public Void visitNeuralNetworkAddRawData(NeuralNetworkAddRawData<Void> nn) {
-        requiredComponentVisited(nn, nn.getRawData());
+        requiredComponentVisited(nn, nn.rawData);
         return null;
     }
 
     @Override
     public Void visitNeuralNetworkAddTrainingsData(NeuralNetworkAddTrainingsData<Void> nn) {
-        requiredComponentVisited(nn, nn.getClassNumber());
+        requiredComponentVisited(nn, nn.classNumber);
         return null;
     }
 
@@ -212,7 +212,7 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
 
     @Override
     public Void visitNeuralNetworkSetup(NeuralNetworkSetup<Void> nn) {
-        requiredComponentVisited(nn, nn.getNumberOfClasses(), nn.getNumberInputNeurons(), nn.getMaxNumberOfNeurons());
+        requiredComponentVisited(nn, nn.numberOfClasses, nn.numberInputNeurons, nn.maxNumberOfNeurons);
         return null;
     }
 
@@ -230,12 +230,12 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
-        requiredComponentVisited(pinWriteValueAction, pinWriteValueAction.getValue());
-        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(pinWriteValueAction.getPort());
+        requiredComponentVisited(pinWriteValueAction, pinWriteValueAction.value);
+        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(pinWriteValueAction.port);
         if ( usedConfigurationBlock == null ) {
             addErrorToPhrase(pinWriteValueAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
-        usedHardwareBuilder.addUsedActor(new UsedActor(pinWriteValueAction.getPort(), SC.ANALOG_PIN));
+        usedHardwareBuilder.addUsedActor(new UsedActor(pinWriteValueAction.port, SC.ANALOG_PIN));
         return null;
     }
 
@@ -305,7 +305,7 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        requiredComponentVisited(toneAction, toneAction.getDuration(), toneAction.getFrequency());
+        requiredComponentVisited(toneAction, toneAction.duration, toneAction.frequency);
         if ( !this.robotConfiguration.isComponentTypePresent(SC.BUZZER) ) {
             addErrorToPhrase(toneAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
@@ -332,7 +332,7 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
             return;
         }
         String expectedComponentType = SENSOR_COMPONENT_TYPE_MAP.get(sensor.getKind().getName());
-        if ( expectedComponentType != null && !expectedComponentType.equalsIgnoreCase(configurationComponent.getComponentType()) ) {
+        if ( expectedComponentType != null && !expectedComponentType.equalsIgnoreCase(configurationComponent.componentType) ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
         }
     }

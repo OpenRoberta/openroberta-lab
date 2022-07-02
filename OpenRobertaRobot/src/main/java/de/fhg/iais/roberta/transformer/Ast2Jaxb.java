@@ -185,9 +185,9 @@ public final class Ast2Jaxb {
             blockValue.setName(name);
             if ( value.getKind().hasName("SHADOW_EXPR") ) {
                 ShadowExpr<?> shadowExpr = (ShadowExpr<?>) value;
-                blockValue.setShadow(block2shadow(shadowExpr.getShadow().astToBlock()));
-                if ( shadowExpr.getBlock() != null ) {
-                    blockValue.setBlock(shadowExpr.getBlock().astToBlock());
+                blockValue.setShadow(block2shadow(shadowExpr.shadow.astToBlock()));
+                if ( shadowExpr.block != null ) {
+                    blockValue.setBlock(shadowExpr.block.astToBlock());
                 }
             } else {
                 blockValue.setBlock(value.astToBlock());

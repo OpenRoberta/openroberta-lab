@@ -5,9 +5,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"naoActions_sayText", "robActions_sayText"}, name = "SAY_TEXT")
@@ -22,14 +22,4 @@ public final class SayTextAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> SayTextAction<V> make(Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SayTextAction<>(properties, comment, msg);
-    }
-
-    /**
-     * @return the message.
-     */
-    public Expr<V> getMsg() {
-        return this.msg;
-    }
 }

@@ -188,7 +188,7 @@ public class NaoSimValidatorAndCollectorVisitor extends NaoValidatorAndCollector
 
     @Override
     public Void visitApplyPosture(ApplyPosture<Void> applyPosture) {
-        switch ( applyPosture.getPosture() ) {
+        switch ( applyPosture.posture ) {
             case SITRELAX:
             case SIT:
             case LYINGBELLY:
@@ -230,7 +230,7 @@ public class NaoSimValidatorAndCollectorVisitor extends NaoValidatorAndCollector
     @Override
     public Void visitAnimation(Animation<Void> animation) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.ANIMATION);
-        if ( animation.getMove() == Move.BLINK ) {
+        if ( animation.move == Move.BLINK ) {
             usedMethodBuilder.addUsedMethod(NaoSimMethods.SET_LED);
         }
         return super.visitAnimation(animation);

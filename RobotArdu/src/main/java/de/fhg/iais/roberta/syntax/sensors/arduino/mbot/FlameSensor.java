@@ -20,39 +20,17 @@ public final class FlameSensor<V> extends Sensor<V> {
 
     public final String port;
 
-    private FlameSensor(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public FlameSensor(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         this.port = port;
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link FlameSensor}. This instance is read only and can not be modified.
-     *
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link FlameSensor}
-     */
-    static <V> FlameSensor<V> make(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new FlameSensor<>(port, properties, comment);
-    }
-
-    public String getPort() {
-        return this.port;
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         final BlocklyDropdownFactory factory = helper.getDropdownFactory();
         final List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         final String port = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
-        return FlameSensor.make(Jaxb2Ast.sanitizePort(port), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new FlameSensor<>(Jaxb2Ast.sanitizePort(port), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

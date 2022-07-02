@@ -59,7 +59,7 @@ public class ArduinoConfigurationValidator {
 
     // TODO restructure validator worker for more generic usage patterns
     public void checkRgbInternalUse(ConfigurationComponent configurationComponent) {
-        if ( configurationComponent.getComponentType().equals(SC.RGBLED) ) {
+        if ( configurationComponent.componentType.equals(SC.RGBLED) ) {
             Map<String, String> componentProperties = configurationComponent.getComponentProperties();
             componentProperties.forEach((k, v) -> {
                 if ( v.equals(SC.LED_BUILTIN) && !project.getRobot().equals("unowifirev2") ) {

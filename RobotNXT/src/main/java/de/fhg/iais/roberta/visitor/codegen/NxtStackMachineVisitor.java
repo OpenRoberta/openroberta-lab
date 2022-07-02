@@ -123,16 +123,16 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitToneAction(ToneAction<V> toneAction) {
-        toneAction.getFrequency().accept(this);
-        toneAction.getDuration().accept(this);
+        toneAction.frequency.accept(this);
+        toneAction.duration.accept(this);
         JSONObject o = makeNode(C.TONE_ACTION);
         return app(o);
     }
 
     @Override
     public V visitPlayNoteAction(PlayNoteAction<V> playNoteAction) {
-        String freq = playNoteAction.getFrequency();
-        String duration = playNoteAction.getDuration();
+        String freq = playNoteAction.frequency;
+        String duration = playNoteAction.duration;
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, freq));
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, duration));
         JSONObject o = makeNode(C.TONE_ACTION);
@@ -141,7 +141,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitPlayFileAction(PlayFileAction<V> playFileAction) {
-        String image = playFileAction.getFileName();
+        String image = playFileAction.fileName;
         JSONObject o = makeNode(C.PLAY_FILE_ACTION).put(C.FILE, image).put(C.NAME, "ev3");
         return app(o);
     }
@@ -149,10 +149,10 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitVolumeAction(VolumeAction<V> volumeAction) {
         JSONObject o;
-        if ( volumeAction.getMode() == VolumeAction.Mode.GET ) {
+        if ( volumeAction.mode == VolumeAction.Mode.GET ) {
             o = makeNode(C.GET_VOLUME);
         } else {
-            volumeAction.getVolume().accept(this);
+            volumeAction.volume.accept(this);
             o = makeNode(C.SET_VOLUME_ACTION);
         }
         return app(o);
@@ -167,13 +167,13 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitDriveAction(DriveAction<V> driveAction) {
-        driveAction.getParam().getSpeed().accept(this);
-        boolean speedOnly = !processOptionalDuration(driveAction.getParam().getDuration());
+        driveAction.param.getSpeed().accept(this);
+        boolean speedOnly = !processOptionalDuration(driveAction.param.getDuration());
         ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
         IDriveDirection leftMotorRotationDirection = DriveDirection.get(leftMotor.getProperty(SC.MOTOR_REVERSE));
-        DriveDirection driveDirection = (DriveDirection) driveAction.getDirection();
+        DriveDirection driveDirection = (DriveDirection) driveAction.direction;
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
-            driveDirection = getDriveDirection(driveAction.getDirection() == DriveDirection.FOREWARD);
+            driveDirection = getDriveDirection(driveAction.direction == DriveDirection.FOREWARD);
         }
         JSONObject o =
             makeNode(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
@@ -187,13 +187,13 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitTurnAction(TurnAction<V> turnAction) {
-        turnAction.getParam().getSpeed().accept(this);
-        boolean speedOnly = !processOptionalDuration(turnAction.getParam().getDuration());
+        turnAction.param.getSpeed().accept(this);
+        boolean speedOnly = !processOptionalDuration(turnAction.param.getDuration());
         ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
         IDriveDirection leftMotorRotationDirection = DriveDirection.get(leftMotor.getProperty(SC.MOTOR_REVERSE));
-        ITurnDirection turnDirection = turnAction.getDirection();
+        ITurnDirection turnDirection = turnAction.direction;
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
-            turnDirection = getTurnDirection(turnAction.getDirection() == TurnDirection.LEFT);
+            turnDirection = getTurnDirection(turnAction.direction == TurnDirection.LEFT);
         }
         JSONObject o =
             makeNode(C.TURN_ACTION)
@@ -211,14 +211,14 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitCurveAction(CurveAction<V> curveAction) {
-        curveAction.getParamLeft().getSpeed().accept(this);
-        curveAction.getParamRight().getSpeed().accept(this);
-        boolean speedOnly = !processOptionalDuration(curveAction.getParamLeft().getDuration());
+        curveAction.paramLeft.getSpeed().accept(this);
+        curveAction.paramRight.getSpeed().accept(this);
+        boolean speedOnly = !processOptionalDuration(curveAction.paramLeft.getDuration());
         ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
         IDriveDirection leftMotorRotationDirection = DriveDirection.get(leftMotor.getProperty(SC.MOTOR_REVERSE));
-        DriveDirection driveDirection = (DriveDirection) curveAction.getDirection();
+        DriveDirection driveDirection = (DriveDirection) curveAction.direction;
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
-            driveDirection = getDriveDirection(curveAction.getDirection() == DriveDirection.FOREWARD);
+            driveDirection = getDriveDirection(curveAction.direction == DriveDirection.FOREWARD);
         }
         JSONObject o =
             makeNode(C.CURVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
@@ -238,8 +238,8 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitMotorOnAction(MotorOnAction<V> motorOnAction) {
-        motorOnAction.getParam().getSpeed().accept(this);
-        MotorDuration<V> duration = motorOnAction.getParam().getDuration();
+        motorOnAction.param.getSpeed().accept(this);
+        MotorDuration<V> duration = motorOnAction.param.getDuration();
         boolean speedOnly = !processOptionalDuration(duration);
         String port = motorOnAction.getUserDefinedPort();
         JSONObject o = makeNode(C.MOTOR_ON_ACTION).put(C.PORT, port.toLowerCase()).put(C.NAME, port.toLowerCase()).put(C.SPEED_ONLY, speedOnly);
@@ -256,7 +256,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitMotorSetPowerAction(MotorSetPowerAction<V> motorSetPowerAction) {
         String port = motorSetPowerAction.getUserDefinedPort();
-        motorSetPowerAction.getPower().accept(this);
+        motorSetPowerAction.power.accept(this);
         JSONObject o = makeNode(C.MOTOR_SET_POWER).put(C.PORT, port.toLowerCase());
         return app(o);
     }
@@ -279,9 +279,9 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitLightAction(LightAction<V> lightAction) {
-        String mode = lightAction.getMode().toString().toLowerCase();
-        String color = lightAction.getColor().toString().toLowerCase();
-        String port = lightAction.getPort();
+        String mode = lightAction.mode.toString().toLowerCase();
+        String color = lightAction.color.toString().toLowerCase();
+        String port = lightAction.port;
         JSONObject o = makeNode(C.LIGHT_ACTION).put(C.MODE, mode).put(C.PORT, port).put(C.COLOR, color);
         return app(o);
     }

@@ -19,8 +19,4 @@ public final class RastaDuration<V> extends Action<V> {
         setReadOnly();
     }
 
-    public Expr<V> getDuration() {
-        return this.duration;
-    }
-
 }

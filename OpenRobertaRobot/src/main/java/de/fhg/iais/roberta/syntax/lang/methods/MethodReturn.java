@@ -19,21 +19,17 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>robProcedures_defreturn</b> block from Blockly into the AST (abstract syntax tree). Object from this class is used to create a
- * method with return value<br/>
- */
 @NepoBasic(blocklyNames = {"robProcedures_defreturn"}, category = "METHOD", name = "METHOD_RETURN")
 public final class MethodReturn<V> extends Method<V> {
     public final StmtList<V> body;
     public final Expr<V> returnValue;
 
-    private MethodReturn(
+    public MethodReturn(
         String methodName,
         ExprList<V> parameters,
         StmtList<V> body,
@@ -49,42 +45,6 @@ public final class MethodReturn<V> extends Method<V> {
         this.returnType = returnType;
         this.returnValue = returnValue;
         setReadOnly();
-    }
-
-    /**
-     * creates instance of {@link MethodReturn}. This instance is read only and cannot be modified.
-     *
-     * @param methodName
-     * @param parameters
-     * @param body of the method
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment that user has added to the block,
-     * @param return_ type of the method
-     * @return read only object of class {@link MethodReturn}
-     */
-    public static <V> MethodReturn<V> make(
-        String methodName,
-        ExprList<V> parameters,
-        StmtList<V> body,
-        BlocklyType returnType,
-        Expr<V> returnValue,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new MethodReturn<V>(methodName, parameters, body, returnType, returnValue, properties, comment);
-    }
-
-    /**
-     * @return the body
-     */
-    public StmtList<V> getBody() {
-        return this.body;
-    }
-
-    /**
-     * @return the returnValue
-     */
-    public Expr<V> getReturnValue() {
-        return this.returnValue;
     }
 
     @Override
@@ -121,15 +81,7 @@ public final class MethodReturn<V> extends Method<V> {
         StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.STACK);
         Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.RETURN, BlocklyType.NULL));
 
-        return MethodReturn
-            .make(
-                name,
-                exprList,
-                statement,
-                BlocklyType.get(Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE)),
-                Jaxb2Ast.convertPhraseToExpr(expr),
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block));
+        return new MethodReturn<V>(name, exprList, statement, BlocklyType.get(Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE)), Jaxb2Ast.convertPhraseToExpr(expr), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
@@ -146,7 +98,7 @@ public final class MethodReturn<V> extends Method<V> {
         Repetitions repetition = new Repetitions();
         Ast2Jaxb.addStatement(repetition, BlocklyConstants.ST, this.getParameters());
         Ast2Jaxb.addStatement(repetition, BlocklyConstants.STACK, this.body);
-        Ast2Jaxb.addValue(repetition, BlocklyConstants.RETURN, getReturnValue());
+        Ast2Jaxb.addValue(repetition, BlocklyConstants.RETURN, this.returnValue);
         jaxbDestination.setRepetitions(repetition);
         return jaxbDestination;
     }

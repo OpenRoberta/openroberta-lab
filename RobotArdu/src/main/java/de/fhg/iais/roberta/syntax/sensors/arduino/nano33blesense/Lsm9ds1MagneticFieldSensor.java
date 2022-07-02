@@ -20,19 +20,7 @@ public final class Lsm9ds1MagneticFieldSensor<V> extends BuiltinSensor<V> {
 
     public final Expr<V> x, y, z;
 
-    public Expr<V> getX() {
-        return x;
-    }
-
-    public Expr<V> getY() {
-        return y;
-    }
-
-    public Expr<V> getZ() {
-        return z;
-    }
-
-    private Lsm9ds1MagneticFieldSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> x, Expr<V> y, Expr<V> z) {
+    public Lsm9ds1MagneticFieldSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> x, Expr<V> y, Expr<V> z) {
         super(properties, comment, null);
         this.x = x;
         this.y = y;
@@ -40,23 +28,12 @@ public final class Lsm9ds1MagneticFieldSensor<V> extends BuiltinSensor<V> {
         setReadOnly();
     }
 
-    public static <V> Lsm9ds1MagneticFieldSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> x, Expr<V> y, Expr<V> z) {
-        return new Lsm9ds1MagneticFieldSensor<>(properties, comment, x, y, z);
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 3);
         Expr<V> x = helper.getVar(values, BlocklyConstants.VARIABLE_X);
         Expr<V> y = helper.getVar(values, BlocklyConstants.VARIABLE_Y);
         Expr<V> z = helper.getVar(values, BlocklyConstants.VARIABLE_Z);
-        return Lsm9ds1MagneticFieldSensor.make(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), x, y, z);
+        return new Lsm9ds1MagneticFieldSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), x, y, z);
     }
 
     @Override

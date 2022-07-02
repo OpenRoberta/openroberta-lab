@@ -24,15 +24,4 @@ public final class PinSetPullAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> PinSetPullAction<V> make(String pinPull, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PinSetPullAction<>(properties, comment, pinPull, port);
-    }
-
-    public String getMode() {
-        return this.pinPull;
-    }
-
-    public String getPort() {
-        return this.port;
-    }
 }

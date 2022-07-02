@@ -9,10 +9,7 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
@@ -33,6 +30,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixSetBrightnessAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixTextAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.SendIRAction;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.expressions.arduino.LEDMatrixImage;
 import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageShiftFunction;
@@ -41,6 +39,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorValidatorAndCollectorVisitor implements IMbotVisitor<Void> {
@@ -56,41 +56,41 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        checkActorPort(clearDisplayAction, clearDisplayAction.getPort());
-        usedHardwareBuilder.addUsedActor(new UsedActor(clearDisplayAction.getPort(), SC.LED_MATRIX));
+        checkActorPort(clearDisplayAction, clearDisplayAction.port);
+        usedHardwareBuilder.addUsedActor(new UsedActor(clearDisplayAction.port, SC.LED_MATRIX));
         return null;
     }
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        checkAndVisitMotionParam(driveAction, driveAction.getParam());
+        checkAndVisitMotionParam(driveAction, driveAction.param);
         checkLeftRightMotorPort(driveAction);
-        usedHardwareBuilder.addUsedActor(new UsedActor(driveAction.getPort(), SC.DIFFERENTIAL_DRIVE));
+        usedHardwareBuilder.addUsedActor(new UsedActor(driveAction.port, SC.DIFFERENTIAL_DRIVE));
         return null;
     }
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        checkAndVisitMotionParam(turnAction, turnAction.getParam());
+        checkAndVisitMotionParam(turnAction, turnAction.param);
         checkLeftRightMotorPort(turnAction);
-        usedHardwareBuilder.addUsedActor(new UsedActor(turnAction.getPort(), SC.DIFFERENTIAL_DRIVE));
+        usedHardwareBuilder.addUsedActor(new UsedActor(turnAction.port, SC.DIFFERENTIAL_DRIVE));
         return null;
     }
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        requiredComponentVisited(curveAction, curveAction.getParamLeft().getSpeed(), curveAction.getParamRight().getSpeed());
-        Optional.ofNullable(curveAction.getParamLeft().getDuration()).ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
-        Optional.ofNullable(curveAction.getParamRight().getDuration()).ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
-        checkForZeroSpeedInCurve(curveAction.getParamLeft().getSpeed(), curveAction.getParamRight().getSpeed(), curveAction);
+        requiredComponentVisited(curveAction, curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed());
+        Optional.ofNullable(curveAction.paramLeft.getDuration()).ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
+        Optional.ofNullable(curveAction.paramRight.getDuration()).ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
+        checkForZeroSpeedInCurve(curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed(), curveAction);
         checkLeftRightMotorPort(curveAction);
-        usedHardwareBuilder.addUsedActor(new UsedActor(curveAction.getPort(), SC.DIFFERENTIAL_DRIVE));
+        usedHardwareBuilder.addUsedActor(new UsedActor(curveAction.port, SC.DIFFERENTIAL_DRIVE));
         return null;
     }
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        usedHardwareBuilder.addUsedActor(new UsedActor(stopAction.getPort(), SC.DIFFERENTIAL_DRIVE));
+        usedHardwareBuilder.addUsedActor(new UsedActor(stopAction.port, SC.DIFFERENTIAL_DRIVE));
         return null;
     }
 
@@ -120,7 +120,7 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
 
     @Override
     public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
-        requiredComponentVisited(sendIRAction, sendIRAction.getMessage());
+        requiredComponentVisited(sendIRAction, sendIRAction.message);
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.IR_TRANSMITTER));
         return null;
     }
@@ -138,54 +138,54 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
 
     @Override
     public Void visitLEDMatrixImageAction(LEDMatrixImageAction<Void> ledMatrixImageAction) {
-        if ( ledMatrixImageAction.getValuesToDisplay().toString().contains("ListCreate ") ||
-            ledMatrixImageAction.getValuesToDisplay().toString().contains("ListRepeat ") ) {
+        if ( ledMatrixImageAction.valuesToDisplay.toString().contains("ListCreate ") ||
+            ledMatrixImageAction.valuesToDisplay.toString().contains("ListRepeat ") ) {
             addErrorToPhrase(ledMatrixImageAction, "BLOCK_USED_INCORRECTLY");
             return null;
         }
-        requiredComponentVisited(ledMatrixImageAction, ledMatrixImageAction.getValuesToDisplay());
-        checkActorPort(ledMatrixImageAction, ledMatrixImageAction.getPort());
-        usedHardwareBuilder.addUsedActor(new UsedActor(ledMatrixImageAction.getPort(), SC.LED_MATRIX));
+        requiredComponentVisited(ledMatrixImageAction, ledMatrixImageAction.valuesToDisplay);
+        checkActorPort(ledMatrixImageAction, ledMatrixImageAction.port);
+        usedHardwareBuilder.addUsedActor(new UsedActor(ledMatrixImageAction.port, SC.LED_MATRIX));
         return null;
     }
 
     @Override
     public Void visitLEDMatrixTextAction(LEDMatrixTextAction<Void> ledMatrixTextAction) {
-        requiredComponentVisited(ledMatrixTextAction, ledMatrixTextAction.getMsg());
-        checkActorPort(ledMatrixTextAction, ledMatrixTextAction.getPort());
-        usedHardwareBuilder.addUsedActor(new UsedActor(ledMatrixTextAction.getPort(), SC.LED_MATRIX));
+        requiredComponentVisited(ledMatrixTextAction, ledMatrixTextAction.msg);
+        checkActorPort(ledMatrixTextAction, ledMatrixTextAction.port);
+        usedHardwareBuilder.addUsedActor(new UsedActor(ledMatrixTextAction.port, SC.LED_MATRIX));
         return null;
     }
 
     @Override
     public Void visitLEDMatrixImage(LEDMatrixImage<Void> ledMatrixImage) {
-        usedHardwareBuilder.addUsedIDImage(ledMatrixImage.getProperty().getBlocklyId(), ledMatrixImage.getImage());
+        usedHardwareBuilder.addUsedIDImage(ledMatrixImage.getProperty().getBlocklyId(), ledMatrixImage.image);
         return null;
     }
 
     @Override
     public Void visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<Void> ledMatrixImageShiftFunction) {
-        requiredComponentVisited(ledMatrixImageShiftFunction, ledMatrixImageShiftFunction.getImage(), ledMatrixImageShiftFunction.getPositions());
+        requiredComponentVisited(ledMatrixImageShiftFunction, ledMatrixImageShiftFunction.image, ledMatrixImageShiftFunction.positions);
         return null;
     }
 
     @Override
     public Void visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<Void> ledMatrixImageInverFunction) {
-        requiredComponentVisited(ledMatrixImageInverFunction, ledMatrixImageInverFunction.getImage());
+        requiredComponentVisited(ledMatrixImageInverFunction, ledMatrixImageInverFunction.image);
         return null;
     }
 
     @Override
     public Void visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction<Void> ledMatrixSetBrightnessAction) {
-        requiredComponentVisited(ledMatrixSetBrightnessAction, ledMatrixSetBrightnessAction.getBrightness());
-        checkActorPort(ledMatrixSetBrightnessAction, ledMatrixSetBrightnessAction.getPort());
-        usedHardwareBuilder.addUsedActor(new UsedActor(ledMatrixSetBrightnessAction.getPort(), SC.LED_MATRIX));
+        requiredComponentVisited(ledMatrixSetBrightnessAction, ledMatrixSetBrightnessAction.brightness);
+        checkActorPort(ledMatrixSetBrightnessAction, ledMatrixSetBrightnessAction.port);
+        usedHardwareBuilder.addUsedActor(new UsedActor(ledMatrixSetBrightnessAction.port, SC.LED_MATRIX));
         return null;
     }
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        requiredComponentVisited(lightAction, lightAction.getRgbLedColor());
+        requiredComponentVisited(lightAction, lightAction.rgbLedColor);
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.LED_ON_BOARD));
         return null;
     }
@@ -198,20 +198,20 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        usedHardwareBuilder.addUsedActor(new UsedActor(playNoteAction.getPort(), SC.BUZZER));
+        usedHardwareBuilder.addUsedActor(new UsedActor(playNoteAction.port, SC.BUZZER));
         return null;
     }
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        requiredComponentVisited(toneAction, toneAction.getDuration(), toneAction.getFrequency());
-        usedHardwareBuilder.addUsedActor(new UsedActor(toneAction.getPort(), SC.BUZZER));
+        requiredComponentVisited(toneAction, toneAction.duration, toneAction.frequency);
+        usedHardwareBuilder.addUsedActor(new UsedActor(toneAction.port, SC.BUZZER));
         return null;
     }
 
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        requiredComponentVisited(serialWriteAction, serialWriteAction.getValue());
+        requiredComponentVisited(serialWriteAction, serialWriteAction.value);
         return null;
     }
 
@@ -238,7 +238,7 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
         if ( usedConfigurationBlock == null ) {
             addErrorToPhrase(action, "CONFIGURATION_ERROR_ACTOR_MISSING");
         } else {
-            if ( !SC.LED_MATRIX.equals(usedConfigurationBlock.getComponentType()) ) {
+            if ( !SC.LED_MATRIX.equals(usedConfigurationBlock.componentType) ) {
                 addErrorToPhrase(action, "CONFIGURATION_ERROR_ACTOR_MISSING");
             }
         }
@@ -252,7 +252,7 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
             return;
         }
         String expectedComponentType = SENSOR_COMPONENT_TYPE_MAP.get(sensor.getKind().getName());
-        if ( expectedComponentType != null && !expectedComponentType.equalsIgnoreCase(usedSensor.getComponentType()) ) {
+        if ( expectedComponentType != null && !expectedComponentType.equalsIgnoreCase(usedSensor.componentType) ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
         }
     }

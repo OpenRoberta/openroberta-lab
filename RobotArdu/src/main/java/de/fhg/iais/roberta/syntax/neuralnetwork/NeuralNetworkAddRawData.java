@@ -19,11 +19,4 @@ public final class NeuralNetworkAddRawData<V> extends Stmt<V> {
         setReadOnly();
     }
 
-    public static <V> NeuralNetworkAddRawData<V> make(Expr<V> rawData, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new NeuralNetworkAddRawData<>(properties, comment, rawData);
-    }
-
-    public Expr<V> getRawData() {
-        return this.rawData;
-    }
 }

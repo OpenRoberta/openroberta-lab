@@ -158,19 +158,19 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
-        this.sb.append(numConst.getValue());
+        this.sb.append(numConst.value);
         return null;
     }
 
     @Override
     public Void visitBoolConst(BoolConst<Void> boolConst) {
-        this.sb.append(boolConst.getValue());
+        this.sb.append(boolConst.value);
         return null;
     }
 
     @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
-        src.add("\"", StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", "")), "\"");
+        src.add("\"", StringEscapeUtils.escapeEcmaScript(stringConst.value.replaceAll("[<>\\$]", "")), "\"");
         return null;
     }
 
@@ -181,13 +181,13 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        rgbColor.getR().accept(this);
+        rgbColor.R.accept(this);
         this.sb.append(", ");
-        rgbColor.getG().accept(this);
+        rgbColor.G.accept(this);
         this.sb.append(", ");
-        rgbColor.getB().accept(this);
+        rgbColor.B.accept(this);
         this.sb.append(", ");
-        rgbColor.getA().accept(this);
+        rgbColor.A.accept(this);
         return null;
     }
 
@@ -199,18 +199,18 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        src.add(getLanguageVarTypeFromBlocklyType(var.getTypeVar()), " ", var.getCodeSafeName());
-        if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
+        src.add(getLanguageVarTypeFromBlocklyType(var.typeVar), " ", var.getCodeSafeName());
+        if ( !var.value.getKind().hasName("EMPTY_EXPR") ) {
             src.add(" = ");
-            if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
-                ExprList<Void> list = (ExprList<Void>) var.getValue();
+            if ( var.value.getKind().hasName("EXPR_LIST") ) {
+                ExprList<Void> list = (ExprList<Void>) var.value;
                 if ( list.get().size() == 2 ) {
                     list.get().get(1).accept(this);
                 } else {
                     list.get().get(0).accept(this);
                 }
             } else {
-                var.getValue().accept(this);
+                var.value.accept(this);
             }
         }
         return null;
@@ -218,13 +218,13 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     @Override
     public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
-        src.add("// ", stmtTextComment.getTextComment().replace("\n", " "));
+        src.add("// ", stmtTextComment.textComment.replace("\n", " "));
         return null;
     }
 
     @Override
     public Void visitUnary(Unary<Void> unary) {
-        Unary.Op op = unary.getOp();
+        Unary.Op op = unary.op;
         String sym = getUnaryOperatorSymbol(op);
         if ( op == Unary.Op.POSTFIX_INCREMENTS ) {
             generateExprCode(unary, this.sb);
@@ -250,15 +250,15 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     @Override
     public Void visitActionStmt(ActionStmt<Void> actionStmt) {
-        actionStmt.getAction().accept(this);
+        actionStmt.action.accept(this);
         return null;
     }
 
     @Override
     public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
-        assignStmt.getName().accept(this);
+        assignStmt.name.accept(this);
         src.add(" = ");
-        assignStmt.getExpr().accept(this);
+        assignStmt.expr.accept(this);
         return null;
     }
 
@@ -302,20 +302,20 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     @Override
     public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<Void> getVal) {
-        src.add("____").add(getVal.getName());
+        src.add("____").add(getVal.name);
         return null;
     }
 
     @Override
     public Void visitNNInputNeuronStmt(NNInputNeuronStmt<Void> nnInputNeuronStmt) {
-        nnInputNeuronStmt.getValue().accept(this);
+        nnInputNeuronStmt.value.accept(this);
         return null;
     }
 
     @Override
     public Void visitNNOutputNeuronStmt(NNOutputNeuronStmt<Void> nnOutputNeuronStmt) {
-        nnOutputNeuronStmt.getValue().accept(this);
-        src.add(" = ____", nnOutputNeuronStmt.getName(), ";").nlI();
+        nnOutputNeuronStmt.value.accept(this);
+        src.add(" = ____", nnOutputNeuronStmt.name, ";").nlI();
         return null;
     }
 
@@ -343,26 +343,26 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
-        methodStmt.getMethod().accept(this);
+        methodStmt.method.accept(this);
         return null;
     }
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        mathPowerFunct.getParam().get(0).accept(this);
+        mathPowerFunct.param.get(0).accept(this);
         this.sb.append(", ");
-        mathPowerFunct.getParam().get(1).accept(this);
+        mathPowerFunct.param.get(1).accept(this);
         this.sb.append(")");
         return null;
     }
 
     protected void generateExprCode(Unary<Void> unary, StringBuilder sb) {
-        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() || unary.getOp() == Unary.Op.NEG ) {
+        if ( unary.expr.getPrecedence() < unary.getPrecedence() || unary.op == Unary.Op.NEG ) {
             sb.append("(");
-            unary.getExpr().accept(this);
+            unary.expr.accept(this);
             sb.append(")");
         } else {
-            unary.getExpr().accept(this);
+            unary.expr.accept(this);
         }
     }
 
@@ -413,7 +413,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     }
 
     protected boolean parenthesesCheck(Binary<Void> binary) {
-        return binary.getOp() == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
+        return binary.op == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
     }
 
     protected void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {

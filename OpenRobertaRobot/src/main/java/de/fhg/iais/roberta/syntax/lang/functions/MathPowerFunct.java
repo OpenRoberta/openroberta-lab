@@ -7,10 +7,10 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
@@ -25,24 +25,6 @@ public final class MathPowerFunct<V> extends Expr<V> {
         this.functName = name;
         this.param = param;
         setReadOnly();
-    }
-
-    public static <V> MathPowerFunct<V> make(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MathPowerFunct<V>(properties, comment, name, param);
-    }
-
-    /**
-     * @return name of the function
-     */
-    public FunctionNames getFunctName() {
-        return this.functName;
-    }
-
-    /**
-     * @return list of parameters for the function
-     */
-    public List<Expr<V>> getParam() {
-        return this.param;
     }
 
     @Override
@@ -70,9 +52,9 @@ public final class MathPowerFunct<V> extends Expr<V> {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
-        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, getFunctName().name());
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.A, getParam().get(0));
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.B, getParam().get(1));
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, this.functName.name());
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.A, this.param.get(0));
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.B, this.param.get(1));
         return jaxbDestination;
     }
 }

@@ -55,19 +55,19 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
 
     @Override
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        requiredComponentVisited(bluetoothCheckConnectAction, bluetoothCheckConnectAction.getConnection());
+        requiredComponentVisited(bluetoothCheckConnectAction, bluetoothCheckConnectAction.connection);
         return null;
     }
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
-        requiredComponentVisited(bluetoothReceiveAction, bluetoothReceiveAction.getConnection());
+        requiredComponentVisited(bluetoothReceiveAction, bluetoothReceiveAction.connection);
         return null;
     }
 
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        requiredComponentVisited(bluetoothSendAction, bluetoothSendAction.getConnection(), bluetoothSendAction.getMsg());
+        requiredComponentVisited(bluetoothSendAction, bluetoothSendAction.connection, bluetoothSendAction.msg);
         return null;
     }
 
@@ -89,7 +89,7 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
         if ( configurationComponent == null ) {
             addErrorToPhrase(encoderSensor, "CONFIGURATION_ERROR_MOTOR_MISSING");
         } else {
-            usedHardwareBuilder.addUsedActor(new UsedActor(encoderSensor.getUserDefinedPort(), configurationComponent.getComponentType()));
+            usedHardwareBuilder.addUsedActor(new UsedActor(encoderSensor.getUserDefinedPort(), configurationComponent.componentType));
         }
         return null;
     }
@@ -108,13 +108,13 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        ConfigurationComponent configurationComponent = robotConfiguration.optConfigurationComponent(lightAction.getPort());
+        ConfigurationComponent configurationComponent = robotConfiguration.optConfigurationComponent(lightAction.port);
         if ( configurationComponent == null ) {
             addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_SENSOR_MISSING");
-        } else if ( !configurationComponent.getComponentType().equals(SC.COLOR) ) {
+        } else if ( !configurationComponent.componentType.equals(SC.COLOR) ) {
             addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_SENSOR_WRONG");
         } else {
-            usedHardwareBuilder.addUsedSensor(new UsedSensor(lightAction.getPort(), configurationComponent.getComponentType(), SC.COLOR));
+            usedHardwareBuilder.addUsedSensor(new UsedSensor(lightAction.port, configurationComponent.componentType, SC.COLOR));
         }
         return null;
     }
@@ -129,7 +129,7 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         super.visitMathOnListFunct(mathOnListFunct);
-        if ( mathOnListFunct.getFunctName() == FunctionNames.STD_DEV ) {
+        if ( mathOnListFunct.functName == FunctionNames.STD_DEV ) {
             usedMethodBuilder.addUsedMethod(FunctionNames.POWER);
             usedMethodBuilder.addUsedMethod(FunctionNames.STD_DEV);
         }
@@ -139,7 +139,7 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         super.visitMathSingleFunct(mathSingleFunct);
-        switch ( mathSingleFunct.getFunctName() ) {
+        switch ( mathSingleFunct.functName ) {
             case ACOS:
                 usedMethodBuilder.addUsedMethod(FunctionNames.ASIN);
                 usedMethodBuilder.addUsedMethod(FunctionNames.POWER);
@@ -208,7 +208,7 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        requiredComponentVisited(toneAction, toneAction.getDuration(), toneAction.getFrequency());
+        requiredComponentVisited(toneAction, toneAction.duration, toneAction.frequency);
         return null;
     }
 
@@ -228,8 +228,8 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        if ( volumeAction.getMode() == VolumeAction.Mode.SET ) {
-            requiredComponentVisited(volumeAction, volumeAction.getVolume());
+        if ( volumeAction.mode == VolumeAction.Mode.SET ) {
+            requiredComponentVisited(volumeAction, volumeAction.volume);
         }
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.SOUND));
         return null;
@@ -242,7 +242,7 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
             return;
         }
         String expectedComponentType = SENSOR_COMPONENT_TYPE_MAP.get(sensor.getKind().getName());
-        if ( expectedComponentType != null && !expectedComponentType.equalsIgnoreCase(configurationComponent.getComponentType()) ) {
+        if ( expectedComponentType != null && !expectedComponentType.equalsIgnoreCase(configurationComponent.componentType) ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
         }
     }

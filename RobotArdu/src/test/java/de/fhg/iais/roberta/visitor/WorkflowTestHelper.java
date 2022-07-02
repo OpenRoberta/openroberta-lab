@@ -33,10 +33,10 @@ public class WorkflowTestHelper {
 
     @Before
     public void setUp() throws Exception {
-        StmtList<Void> variables = StmtList.make();
+        StmtList<Void> variables = new StmtList<Void>();
         variables.setReadOnly();
 
-        MainTask<Void> mainTask = MainTask.make(variables, "false", BlocklyBlockProperties.make("MAIN_FOR_TEST", "1"), null);
+        MainTask<Void> mainTask = new MainTask<Void>(variables, "false", BlocklyBlockProperties.make("MAIN_FOR_TEST", "1"), null);
         phrases = new ArrayList<>(Arrays.asList(new Location<>("0", "0"), mainTask));
         configurationComponents = new ArrayList<>();
     }

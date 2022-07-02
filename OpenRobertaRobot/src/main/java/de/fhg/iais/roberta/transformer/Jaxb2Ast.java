@@ -322,13 +322,13 @@ public class Jaxb2Ast {
     public static <V> Expr<V> convertPhraseToExpr(Phrase<V> p) {
         Expr<V> expr;
         if ( p.getKind().getCategory() == Category.SENSOR ) {
-            expr = SensorExpr.make((Sensor<V>) p);
+            expr = new SensorExpr<V>((Sensor<V>) p);
         } else if ( p.getKind().getCategory() == Category.ACTOR ) {
-            expr = ActionExpr.make((Action<V>) p);
+            expr = new ActionExpr<V>((Action<V>) p);
         } else if ( p.getKind().getCategory() == Category.FUNCTION ) {
-            expr = FunctionExpr.make((Function<V>) p);
+            expr = new FunctionExpr<V>((Function<V>) p);
         } else if ( p.getKind().getCategory() == Category.METHOD ) {
-            expr = MethodExpr.make((Method<V>) p);
+            expr = new MethodExpr<>((Method<V>) p);
         } else {
             expr = (Expr<V>) p;
         }
@@ -345,7 +345,7 @@ public class Jaxb2Ast {
         String typeVar = block.getMutation() != null ? block.getMutation().getDatatype() : BlocklyConstants.NUMBER;
         List<Field> fields = extractFields(block, (short) 1);
         String field = extractField(fields, BlocklyConstants.VAR);
-        return Var.make(BlocklyType.get(typeVar), field, extractBlockProperties(block), extractComment(block));
+        return new Var<>(BlocklyType.get(typeVar), field, extractBlockProperties(block), extractComment(block));
     }
 
     public static Block shadow2block(Shadow shadow) {

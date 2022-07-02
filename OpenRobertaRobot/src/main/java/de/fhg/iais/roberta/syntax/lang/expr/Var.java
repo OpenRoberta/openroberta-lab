@@ -8,10 +8,10 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -27,32 +27,12 @@ public final class Var<V> extends Expr<V> {
     public final String name;
     public final static String CODE_SAFE_PREFIX = "___";
 
-    private Var(BlocklyType typeVar, String value, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public Var(BlocklyType typeVar, String value, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.isTrue(!value.equals("") && typeVar != null);
         this.name = value;
         this.typeVar = typeVar;
         setReadOnly();
-    }
-
-    /**
-     * creates instance of {@link Var}. This instance is read only and can not be modified.
-     *
-     * @param typeVar type of the variable; must be <b>not</b> null,
-     * @param value name of the variable; must be <b>non-empty</b> string,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link Var}
-     */
-    public static <V> Var<V> make(BlocklyType typeVar, String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Var<>(typeVar, value, properties, comment);
-    }
-
-    /**
-     * @return name of the variable
-     */
-    public String getValue() {
-        return this.name;
     }
 
     public String getCodeSafeName() {
@@ -79,13 +59,6 @@ public final class Var<V> extends Expr<V> {
         return "Var [" + this.name + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         return Jaxb2Ast.extractVar(block);
     }
@@ -100,7 +73,7 @@ public final class Var<V> extends Expr<V> {
         mutation.setDatatype(getVarType().getBlocklyName());
         jaxbDestination.setMutation(mutation);
 
-        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.VAR, getValue());
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.VAR, this.name);
         return jaxbDestination;
     }
 }

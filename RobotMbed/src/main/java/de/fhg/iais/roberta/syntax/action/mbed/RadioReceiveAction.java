@@ -20,36 +20,21 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 public final class RadioReceiveAction<V> extends Action<V> {
     public final BlocklyType type;
 
-    private RadioReceiveAction(BlocklyType type, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public RadioReceiveAction(BlocklyType type, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         this.type = type;
         setReadOnly();
     }
 
-    public static <V> RadioReceiveAction<V> make(BlocklyType type, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new RadioReceiveAction<>(type, properties, comment);
-    }
-
     @Override
     public String toString() {
-        return "BluetoothReceiveAction [" + getType().toString() + "]";
+        return "BluetoothReceiveAction [" + this.type.toString() + "]";
     }
 
-    public BlocklyType getType() {
-        return this.type;
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         String type = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
-        return RadioReceiveAction.make(BlocklyType.get(type), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new RadioReceiveAction<>(BlocklyType.get(type), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
 
     }
 

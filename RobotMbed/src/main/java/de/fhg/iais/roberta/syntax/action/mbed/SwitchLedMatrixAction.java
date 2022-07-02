@@ -19,26 +19,10 @@ import de.fhg.iais.roberta.util.syntax.SC;
 public final class SwitchLedMatrixAction<V> extends Action<V> {
     public final boolean activated;
 
-    private SwitchLedMatrixAction(boolean activated, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public SwitchLedMatrixAction(boolean activated, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         this.activated = activated;
         setReadOnly();
-    }
-
-    /**
-     * Create object of the class {@link SwitchLedMatrixAction}.
-     *
-     * @param state state of the leds
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of {@link SwitchLedMatrixAction}
-     */
-    public static <V> SwitchLedMatrixAction<V> make(boolean activated, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SwitchLedMatrixAction<>(activated, properties, comment);
-    }
-
-    public boolean isActivated() {
-        return this.activated;
     }
 
     @Override
@@ -46,18 +30,11 @@ public final class SwitchLedMatrixAction<V> extends Action<V> {
         return "SwitchLedMatrixAction [" + this.activated + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
 
         boolean activated = Jaxb2Ast.extractField(fields, BlocklyConstants.STATE).equals("ON");
-        return SwitchLedMatrixAction.make(activated, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new SwitchLedMatrixAction<>(activated, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

@@ -157,7 +157,7 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of the NumberConst
      */
     public String visitNumConst(NumConst<T> numConst) {
-        return numConst.getValue();
+        return numConst.value;
     }
 
     /**
@@ -165,7 +165,7 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of the MathConst
      */
     public String visitMathConst(MathConst<T> mathConst) {
-        return ExprlyUnParser.cnames.get(mathConst.getMathConst());
+        return ExprlyUnParser.cnames.get(mathConst.mathConst);
     }
 
     /**
@@ -173,7 +173,7 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of the BoolConst
      */
     public String visitBoolConst(BoolConst<T> boolConst) {
-        return Boolean.toString(boolConst.getValue());
+        return Boolean.toString(boolConst.value);
     }
 
     /**
@@ -181,7 +181,7 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of the StringConst
      */
     public String visitStringConst(StringConst<T> stringConst) {
-        return "\"" + stringConst.getValue() + "\"";
+        return "\"" + stringConst.value + "\"";
     }
 
     /**
@@ -197,17 +197,17 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of the RGB Color
      */
     public String visitRgbColor(RgbColor<T> rgbColor) {
-        if ( rgbColor.getA() instanceof EmptyExpr<?> ) {
-            return "getRGB(" + visitAST(rgbColor.getR()) + "," + visitAST(rgbColor.getG()) + "," + visitAST(rgbColor.getB()) + ")";
+        if ( rgbColor.A instanceof EmptyExpr<?> ) {
+            return "getRGB(" + visitAST(rgbColor.R) + "," + visitAST(rgbColor.G) + "," + visitAST(rgbColor.B) + ")";
         } else {
             return "getRGB("
-                + visitAST(rgbColor.getR())
+                + visitAST(rgbColor.R)
                 + ","
-                + visitAST(rgbColor.getG())
+                + visitAST(rgbColor.G)
                 + ","
-                + visitAST(rgbColor.getB())
+                + visitAST(rgbColor.B)
                 + ","
-                + visitAST(rgbColor.getA())
+                + visitAST(rgbColor.A)
                 + ")";
         }
     }
@@ -217,7 +217,7 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of the ConnectConst
      */
     public String visitConnectConst(ConnectConst<T> connectConst) {
-        return "connect " + connectConst.getValue() + "," + connectConst.getValue(); // TODO: inspect generation. Was: connectConst.getDataValue()
+        return "connect " + connectConst.value + "," + connectConst.value; // TODO: inspect generation. Was: connectConst.getDataValue()
     }
 
     /**
@@ -226,7 +226,7 @@ public class ExprlyUnParser<T> {
      */
     public String visitVar(Var<T> var) {
 
-        return var.getValue();
+        return var.name;
     }
 
     /**
@@ -252,7 +252,7 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of the operation
      */
     public String visitUnary(Unary<T> unary) throws UnsupportedOperationException {
-        return ExprlyUnParser.unames.get(unary.getOp()) + "(" + visitAST(unary.getExpr()) + ")";
+        return ExprlyUnParser.unames.get(unary.op) + "(" + visitAST(unary.expr) + ")";
     }
 
     /**
@@ -262,7 +262,7 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of the operation
      */
     public String visitBinary(Binary<T> binary) throws UnsupportedOperationException {
-        return "(" + visitAST(binary.getLeft()) + ")" + ExprlyUnParser.bnames.get(binary.getOp()) + "(" + visitAST(binary.getRight()) + ")";
+        return "(" + visitAST(binary.left) + ")" + ExprlyUnParser.bnames.get(binary.op) + "(" + visitAST(binary.getRight()) + ")";
     }
 
     /**
@@ -299,7 +299,7 @@ public class ExprlyUnParser<T> {
      * @return Return Type of function
      */
     public String visitMathNumPropFunct(MathNumPropFunct<T> mathNumPropFunct) {
-        return ExprlyUnParser.fnames.get(mathNumPropFunct.getFunctName()) + "(" + paramList(mathNumPropFunct.getParam()) + ")";
+        return ExprlyUnParser.fnames.get(mathNumPropFunct.functName) + "(" + paramList(mathNumPropFunct.param) + ")";
 
     }
 
@@ -310,7 +310,7 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of function
      */
     public String visitMathOnListFunct(MathOnListFunct<T> mathOnListFunct) {
-        return ExprlyUnParser.fnames.get(mathOnListFunct.getFunctName()) + "(" + paramList(mathOnListFunct.getParam()) + ")";
+        return ExprlyUnParser.fnames.get(mathOnListFunct.functName) + "(" + paramList(mathOnListFunct.param) + ")";
     }
 
     /**
@@ -328,7 +328,7 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of function
      */
     public String visitMathRandomIntFunct(MathRandomIntFunct<T> mathRandomIntFunct) {
-        return "randInt" + "(" + paramList(mathRandomIntFunct.getParam()) + ")";
+        return "randInt" + "(" + paramList(mathRandomIntFunct.param) + ")";
     }
 
     /**
@@ -339,8 +339,8 @@ public class ExprlyUnParser<T> {
      */
     public String visitMathSingleFunct(MathSingleFunct<T> mathSingleFunct) {
         // Get parameters
-        List<Expr<T>> args = mathSingleFunct.getParam();
-        String fname = ExprlyUnParser.fnames.get(mathSingleFunct.getFunctName());
+        List<Expr<T>> args = mathSingleFunct.param;
+        String fname = ExprlyUnParser.fnames.get(mathSingleFunct.functName);
         if ( fname.equals("pow") ) {
             return "(" + visitAST(args.get(0)) + ")" + "^" + "(" + visitAST(args.get(1)) + ")";
         } else {
@@ -363,10 +363,10 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of function
      */
     private String visitIndexOfFunct(IndexOfFunct<T> indexOfFunct) {
-        List<Expr<T>> args = indexOfFunct.getParam();
-        if ( indexOfFunct.getLocation().equals(IndexLocation.FIRST) ) {
+        List<Expr<T>> args = indexOfFunct.param;
+        if ( indexOfFunct.location.equals(IndexLocation.FIRST) ) {
             return "indexOfFirst(" + paramList(args) + ")";
-        } else if ( indexOfFunct.getLocation().equals(IndexLocation.LAST) ) {
+        } else if ( indexOfFunct.location.equals(IndexLocation.LAST) ) {
             return "indexOfLast(" + paramList(args) + ")";
         }
         throw new UnsupportedOperationException("Not supported Index mode for IndexOfFunct");
@@ -379,7 +379,7 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of the function
      */
     private String visitMathPowerFunct(MathPowerFunct<T> mathPowerFunct) {
-        List<Expr<T>> args = mathPowerFunct.getParam();
+        List<Expr<T>> args = mathPowerFunct.param;
         return "(" + visitAST(args.get(0)) + ")^(" + visitAST(args.get(1)) + ")";
     }
 
@@ -390,7 +390,7 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of the function
      */
     private String visitMathConstrainFunct(MathConstrainFunct<T> mathConstrainFunct) {
-        return "constrain(" + paramList(mathConstrainFunct.getParam()) + ")";
+        return "constrain(" + paramList(mathConstrainFunct.param) + ")";
     }
 
     /**
@@ -400,7 +400,7 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of the function
      */
     private String visitTextJoinFunct(TextJoinFunct<T> textJoinFunct) {
-        return "createTextWith(" + paramList(textJoinFunct.getParam().get()) + ")";
+        return "createTextWith(" + paramList(textJoinFunct.param.get()) + ")";
     }
 
     /**
@@ -410,7 +410,7 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of the method
      */
     private String visitTextPrintFunct(TextPrintFunct<T> textPrintFunct) {
-        return "print(" + paramList(textPrintFunct.getParam()) + ")";
+        return "print(" + paramList(textPrintFunct.param) + ")";
     }
 
     /**
@@ -420,7 +420,7 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of the function
      */
     private String visitListRepeat(ListRepeat<T> listRepeat) {
-        return "repeatList(" + paramList(listRepeat.getParam()) + ")";
+        return "repeatList(" + paramList(listRepeat.param) + ")";
     }
 
     /**
@@ -432,9 +432,9 @@ public class ExprlyUnParser<T> {
     private String visitListGetIndex(ListGetIndex<T> listGetIndex) {
         return listOperations.get(listGetIndex.getElementOperation())
             + "Index"
-            + imodes.get(listGetIndex.getLocation())
+            + imodes.get(listGetIndex.location)
             + "("
-            + paramList(listGetIndex.getParam())
+            + paramList(listGetIndex.param)
             + ")";
     }
 
@@ -445,11 +445,11 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of the function
      */
     private String visitListSetIndex(ListSetIndex<T> listSetIndex) {
-        return listOperations.get(listSetIndex.getElementOperation())
+        return listOperations.get(listSetIndex.mode)
             + "Index"
-            + imodes.get(listSetIndex.getLocation())
+            + imodes.get(listSetIndex.location)
             + "("
-            + paramList(listSetIndex.getParam())
+            + paramList(listSetIndex.param)
             + ")";
     }
 
@@ -460,11 +460,11 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of the function
      */
     private String visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<T> lengthOfIsEmptyFunct) {
-        FunctionNames fname = lengthOfIsEmptyFunct.getFunctName();
+        FunctionNames fname = lengthOfIsEmptyFunct.functName;
         if ( fname.equals(FunctionNames.LIST_LENGTH) ) {
-            return "lengthOf(" + paramList(lengthOfIsEmptyFunct.getParam()) + ")";
+            return "lengthOf(" + paramList(lengthOfIsEmptyFunct.param) + ")";
         } else if ( fname.equals(FunctionNames.LIST_IS_EMPTY) ) {
-            return "isEmpty(" + paramList(lengthOfIsEmptyFunct.getParam()) + ")";
+            return "isEmpty(" + paramList(lengthOfIsEmptyFunct.param) + ")";
         }
         return null;
     }
@@ -476,7 +476,7 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of the function
      */
     private String visitGetSubFunct(GetSubFunct<T> getSubFunct) {
-        List<IMode> mode = getSubFunct.getStrParam();
+        List<IMode> mode = getSubFunct.strParam;
         String s = "subList";
         if ( !(mode.get(0).equals(IndexLocation.FROM_START) && mode.get(1).equals(IndexLocation.FROM_START)) ) {
             if ( mode.get(0).equals(IndexLocation.FROM_START) ) {
@@ -495,7 +495,7 @@ public class ExprlyUnParser<T> {
                 s += "ToEnd";
             }
         }
-        return s += "(" + paramList(getSubFunct.getParam()) + ")";
+        return s += "(" + paramList(getSubFunct.param) + ")";
     }
 
     /**
@@ -506,22 +506,22 @@ public class ExprlyUnParser<T> {
      */
     private String visitTernaryExpr(TernaryExpr<T> ternary) {
         return "(("
-            + visitAST(ternary.getCondition())
+            + visitAST(ternary.condition)
             + ")?("
-            + visitAST(ternary.getThenPart())
+            + visitAST(ternary.thenPart)
             + "):("
-            + visitAST(ternary.getElsePart())
+            + visitAST(ternary.elsePart)
             + "))";
 
     }
 
     private String visitIfStmt(IfStmt<T> ifStmt) {
         return "(("
-            + visitAST(ifStmt.getExpr().get(0))
+            + visitAST(ifStmt.expr.get(0))
             + ")?("
-            + visitAST(((ExprStmt<T>) ifStmt.getThenList().get(0).get().get(0)).getExpr())
+            + visitAST(((ExprStmt<T>) ifStmt.thenList.get(0).get().get(0)).expr)
             + "):("
-            + visitAST(((ExprStmt<T>) ifStmt.getElseList().get().get(0)).getExpr())
+            + visitAST(((ExprStmt<T>) ifStmt.elseList.get().get(0)).expr)
             + "))";
     }
 
@@ -533,7 +533,7 @@ public class ExprlyUnParser<T> {
      */
     @SuppressWarnings("unchecked")
     private String visitStmtExpr(StmtExpr<?> stmtExpr) {
-        return visitAST((Phrase<T>) stmtExpr.getStmt());
+        return visitAST((Phrase<T>) stmtExpr.stmt);
     }
 
     /**
@@ -595,7 +595,7 @@ public class ExprlyUnParser<T> {
             return visitMathSingleFunct((MathSingleFunct<T>) ast);
         }
         if ( ast instanceof ListCreate<?> ) {
-            return visitExprList(((ListCreate<T>) ast).getValue());
+            return visitExprList(((ListCreate<T>) ast).exprList);
         }
         if ( ast instanceof LengthOfIsEmptyFunct<?> ) {
             return visitLengthOfIsEmptyFunct((LengthOfIsEmptyFunct<T>) ast);

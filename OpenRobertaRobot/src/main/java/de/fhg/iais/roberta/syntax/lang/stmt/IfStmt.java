@@ -12,9 +12,9 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "IF_STMT", category = "STMT", blocklyNames = {"robControls_ifElse", "controls_if", "robControls_if"})
@@ -25,7 +25,7 @@ public final class IfStmt<V> extends Stmt<V> {
     public final int _else;
     public final int _elseIf;
 
-    private IfStmt(
+    public IfStmt(
         List<Expr<V>> expr,
         List<StmtList<V>> thenList,
         StmtList<V> elseList,
@@ -44,20 +44,6 @@ public final class IfStmt<V> extends Stmt<V> {
     }
 
     /**
-     * if with else
-     */
-    public static <V> IfStmt<V> make(
-        List<Expr<V>> expr,
-        List<StmtList<V>> thenList,
-        StmtList<V> elseList,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment,
-        int _else,
-        int _elseIf) {
-        return new IfStmt<V>(expr, thenList, elseList, properties, comment, _else, _elseIf);
-    }
-
-    /**
      * if without else
      */
     public static <V> IfStmt<V> make(
@@ -67,44 +53,9 @@ public final class IfStmt<V> extends Stmt<V> {
         BlocklyComment comment,
         int _else,
         int _elseIf) {
-        StmtList<V> elseList = StmtList.make();
+        StmtList<V> elseList = new StmtList<V>();
         elseList.setReadOnly();
         return new IfStmt<V>(expr, thenList, elseList, properties, comment, _else, _elseIf);
-    }
-
-    /**
-     * @return list with all expressions that should be evaluated in the <b>if</b> part.
-     */
-    public final List<Expr<V>> getExpr() {
-        return this.expr;
-    }
-
-    /**
-     * @return list with all statements that are in <b>then</b> part.
-     */
-    public final List<StmtList<V>> getThenList() {
-        return this.thenList;
-    }
-
-    /**
-     * @return list with all statements that are in <b>else</b> part.
-     */
-    public final StmtList<V> getElseList() {
-        return this.elseList;
-    }
-
-    /**
-     * @return 1 if there is else statement
-     */
-    public int get_else() {
-        return this._else;
-    }
-
-    /**
-     * @return number of if statements
-     */
-    public int get_elseIf() {
-        return this._elseIf;
     }
 
     @Override
@@ -128,13 +79,6 @@ public final class IfStmt<V> extends Stmt<V> {
         return sb.toString();
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         Mutation mutation = block.getMutation();
         int _else = Jaxb2Ast.getElse(mutation);
@@ -149,17 +93,17 @@ public final class IfStmt<V> extends Stmt<V> {
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
         if ( getProperty().getBlockType().equals(BlocklyConstants.LOGIC_TERNARY) ) {
-            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.IF, getExpr().get(0));
-            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.THEN, getThenList().get(0).get().get(0));
-            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ELSE, getElseList().get().get(0));
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.IF, this.expr.get(0));
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.THEN, this.thenList.get(0).get().get(0));
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ELSE, this.elseList.get().get(0));
             return jaxbDestination;
         }
-        int _else = get_else();
-        int _elseIf = get_elseIf();
+        int _else = this._else;
+        int _elseIf = this._elseIf;
 
-        StmtList<?> elseList = getElseList();
+        StmtList<?> elseList = this.elseList;
         int expr = 0;
-        expr = getExpr().size();
+        expr = this.expr.size();
 
         if ( _else != 0 || _elseIf != 0 ) {
             mutation = new Mutation();
@@ -172,20 +116,20 @@ public final class IfStmt<V> extends Stmt<V> {
             jaxbDestination.setMutation(mutation);
             Repetitions repetitions = new Repetitions();
             for ( int i = 0; i < expr; i++ ) {
-                Ast2Jaxb.addValue(repetitions, BlocklyConstants.IF + i, getExpr().get(i));
-                Ast2Jaxb.addStatement(repetitions, BlocklyConstants.DO + i, getThenList().get(i));
+                Ast2Jaxb.addValue(repetitions, BlocklyConstants.IF + i, this.expr.get(i));
+                Ast2Jaxb.addStatement(repetitions, BlocklyConstants.DO + i, this.thenList.get(i));
             }
             if ( !elseList.get().isEmpty() ) {
-                Ast2Jaxb.addStatement(repetitions, BlocklyConstants.ELSE, getElseList());
+                Ast2Jaxb.addStatement(repetitions, BlocklyConstants.ELSE, this.elseList);
             }
             jaxbDestination.setRepetitions(repetitions);
             return jaxbDestination;
         }
 
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.IF + "0", getExpr().get(0));
-        Ast2Jaxb.addStatement(jaxbDestination, BlocklyConstants.DO + "0", getThenList().get(0));
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.IF + "0", this.expr.get(0));
+        Ast2Jaxb.addStatement(jaxbDestination, BlocklyConstants.DO + "0", this.thenList.get(0));
         if ( !elseList.get().isEmpty() ) {
-            Ast2Jaxb.addStatement(jaxbDestination, BlocklyConstants.ELSE, getElseList());
+            Ast2Jaxb.addStatement(jaxbDestination, BlocklyConstants.ELSE, this.elseList);
         }
 
         return jaxbDestination;

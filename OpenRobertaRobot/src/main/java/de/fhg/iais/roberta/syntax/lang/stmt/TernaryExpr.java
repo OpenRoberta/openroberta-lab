@@ -4,9 +4,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoExpr(category = "EXPR", blocklyNames = {"logic_ternary"}, name = "IF_TERNARY")
@@ -32,24 +32,4 @@ public final class TernaryExpr<V> extends Expr<V> {
         setReadOnly();
     }
 
-    public static <V> TernaryExpr<V> make(
-        Expr<V> condition,
-        Expr<V> thenPart,
-        Expr<V> elsePart,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new TernaryExpr<V>(properties, comment, condition, thenPart, elsePart);
-    }
-
-    public Expr<V> getCondition() {
-        return condition;
-    }
-
-    public Expr<V> getThenPart() {
-        return thenPart;
-    }
-
-    public Expr<V> getElsePart() {
-        return elsePart;
-    }
 }

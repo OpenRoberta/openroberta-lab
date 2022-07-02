@@ -16,51 +16,24 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>naoActions_Autonomous</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
- * toggling the state of autonomous life.<br/>
- * <br/>
- */
 @NepoBasic(name = "AUTONOMOUS", category = "ACTOR", blocklyNames = {"naoActions_autonomous"})
 public final class Autonomous<V> extends Action<V> {
 
     public final WorkingState onOff;
 
-    private Autonomous(WorkingState onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public Autonomous(WorkingState onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.notNull(onOff, "Missing onOff in Autonomous block!");
         this.onOff = onOff;
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link Autonomous}. This instance is read only and can not be modified.
-     *
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link Autonomous}
-     */
-    private static <V> Autonomous<V> make(WorkingState onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Autonomous<>(onOff, properties, comment);
-    }
-
-    public WorkingState getOnOff() {
-        return this.onOff;
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
 
         String onOff = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
 
-        return Autonomous.make(WorkingState.get(onOff), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new Autonomous<>(WorkingState.get(onOff), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

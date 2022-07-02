@@ -17,19 +17,13 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>naoActions_PartialStiffnessOn</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate
- * code for removing the stiffness from one part of the robots body.<br/>
- * <br/>
- * The client must provide the {@link TurnDirection} (body part in which the motors are released).
- */
 @NepoBasic(name = "HAND", category = "ACTOR", blocklyNames = {"naoActions_hand"})
 public final class Hand<V> extends Action<V> {
 
     public final TurnDirection turnDirection;
     public final Modus modus;
 
-    private Hand(TurnDirection turnDirection, Modus modus, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public Hand(TurnDirection turnDirection, Modus modus, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.notNull(turnDirection, "Missing turn direction in Hand block!");
         Assert.notNull(modus, "Missing modus in Hand block!");
@@ -38,40 +32,13 @@ public final class Hand<V> extends Action<V> {
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link Hand}. This instance is read only and can not be modified.
-     *
-     * @param part {@link TurnDirection} on which the stiffness is turned off,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link Hand}
-     */
-    private static <V> Hand<V> make(TurnDirection turnDirection, Modus modus, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Hand<V>(turnDirection, modus, properties, comment);
-    }
-
-    public TurnDirection getTurnDirection() {
-        return this.turnDirection;
-    }
-
-    public Modus getModus() {
-        return this.modus;
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
 
         String turnDirection = Jaxb2Ast.extractField(fields, BlocklyConstants.SIDE);
         String modus = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
 
-        return Hand.make(TurnDirection.get(turnDirection), Modus.get(modus), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new Hand<V>(TurnDirection.get(turnDirection), Modus.get(modus), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

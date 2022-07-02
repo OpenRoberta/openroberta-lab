@@ -93,7 +93,7 @@ public class Jaxb2ProgramAst<V> {
         List<Instance> instances = set.getInstance();
         for ( Instance instance : instances ) {
             List<Block> blocks = instance.getBlock();
-            Location<V> location = Location.make(instance.getX(), instance.getY());
+            Location<V> location = new Location<V>(instance.getX(), instance.getY());
             List<Phrase<V>> range = new ArrayList<>();
             range.add(location);
             for ( Block block : blocks ) {
@@ -170,7 +170,7 @@ public class Jaxb2ProgramAst<V> {
         String op = Jaxb2Ast.getOperation(block, operationType);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         Phrase<V> expr = extractValue(values, exprParam);
-        return Unary.make(Unary.Op.get(op), Jaxb2Ast.convertPhraseToExpr(expr), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new Unary<V>(Unary.Op.get(op), Jaxb2Ast.convertPhraseToExpr(expr), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     /**
@@ -193,14 +193,7 @@ public class Jaxb2ProgramAst<V> {
         if ( block.getMutation() != null && block.getMutation().getOperatorRange() != null ) {
             operationRange = block.getMutation().getOperatorRange();
         }
-        return Binary
-            .make(
-                Binary.Op.get(op),
-                Jaxb2Ast.convertPhraseToExpr(left),
-                Jaxb2Ast.convertPhraseToExpr(right),
-                operationRange,
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block));
+        return new Binary<>(Binary.Op.get(op), Jaxb2Ast.convertPhraseToExpr(left), Jaxb2Ast.convertPhraseToExpr(right), operationRange, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     /**
@@ -260,7 +253,7 @@ public class Jaxb2ProgramAst<V> {
         }
 
         if ( _else != 0 ) {
-            return IfStmt.make(exprsList, thenList, elseList, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), _else, _elseIf);
+            return new IfStmt<V>(exprsList, thenList, elseList, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), _else, _elseIf);
         }
         return IfStmt.make(exprsList, thenList, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), _else, _elseIf);
     }
@@ -291,9 +284,9 @@ public class Jaxb2ProgramAst<V> {
      * @return list of AST expressions
      */
     public static <V> ExprList<V> argumentsToExprList(List<Arg> arguments) {
-        ExprList<V> parameters = ExprList.make();
+        ExprList<V> parameters = new ExprList<V>();
         for ( Arg arg : arguments ) {
-            Var<V> parametar = Var.make(BlocklyType.get(arg.getType()), arg.getName(), BlocklyBlockProperties.make("PARAMETER", "1"), null);
+            Var<V> parametar = new Var<>(BlocklyType.get(arg.getType()), arg.getName(), BlocklyBlockProperties.make("PARAMETER", "1"), null);
             parameters.addExpr(parametar);
         }
         parameters.setReadOnly();
@@ -308,7 +301,7 @@ public class Jaxb2ProgramAst<V> {
      * @param name of the values
      */
     public ExprList<V> valuesToExprList(List<Value> values, BlocklyType[] parametersTypes, int nItems, String name) {
-        ExprList<V> exprList = ExprList.make();
+        ExprList<V> exprList = new ExprList<V>();
         for ( int i = 0; i < nItems; i++ ) {
             exprList.addExpr(Jaxb2Ast.convertPhraseToExpr(extractValue(values, new ExprParam(name + i, parametersTypes[i]))));
         }
@@ -329,7 +322,7 @@ public class Jaxb2ProgramAst<V> {
                 return extractBlock(value);
             }
         }
-        return EmptyExpr.make(param.getDefaultValue());
+        return new EmptyExpr<V>(param.getDefaultValue());
     }
 
     /**
@@ -339,7 +332,7 @@ public class Jaxb2ProgramAst<V> {
      * @param stmtName to be extracted
      */
     public StmtList<V> extractStatement(List<Statement> statements, String stmtName) {
-        StmtList<V> stmtList = StmtList.make();
+        StmtList<V> stmtList = new StmtList<V>();
         for ( Statement statement : statements ) {
             if ( statement.getName().equals(stmtName) ) {
                 return blocksToStmtList(statement.getBlock());
@@ -362,13 +355,13 @@ public class Jaxb2ProgramAst<V> {
             }
         }
         // Parameter list is empty
-        ExprList<V> exprList = ExprList.make();
+        ExprList<V> exprList = new ExprList<V>();
         exprList.setReadOnly();
         return exprList;
     }
 
     private ExprList<V> blocksToMethodParameterDeclaration(List<Block> exprBolcks) {
-        ExprList<V> exprList = ExprList.make();
+        ExprList<V> exprList = new ExprList<V>();
         for ( Block exb : exprBolcks ) {
             Phrase<V> p = blockToAST(exb);
             if ( p instanceof VarDeclaration ) {
@@ -394,20 +387,14 @@ public class Jaxb2ProgramAst<V> {
         if ( p instanceof Var ) {
             return (Var<V>) p;
         } else {
-            return EmptyExpr.make(BlocklyType.NUMBER);
+            return new EmptyExpr<V>(BlocklyType.NUMBER);
         }
     }
 
     public Phrase<V> extractRepeatStatement(Block block, Phrase<V> expr, String mode, String location, int mutation) {
         List<Statement> statements = Jaxb2Ast.extractStatements(block, (short) mutation);
         StmtList<V> stmtList = extractStatement(statements, location);
-        return RepeatStmt
-            .make(
-                RepeatStmt.Mode.get(mode),
-                Jaxb2Ast.convertPhraseToExpr(expr),
-                stmtList,
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block));
+        return new RepeatStmt<>(RepeatStmt.Mode.get(mode), Jaxb2Ast.convertPhraseToExpr(expr), stmtList, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     private Phrase<V> extractBlock(Value value) {
@@ -416,16 +403,16 @@ public class Jaxb2ProgramAst<V> {
         if ( shadow != null ) {
             Block shadowBlock = Jaxb2Ast.shadow2block(shadow);
             if ( block != null ) {
-                return ShadowExpr.make(Jaxb2Ast.convertPhraseToExpr(blockToAST(shadowBlock)), Jaxb2Ast.convertPhraseToExpr(blockToAST(block)));
+                return new ShadowExpr<V>(Jaxb2Ast.convertPhraseToExpr(blockToAST(shadowBlock)), Jaxb2Ast.convertPhraseToExpr(blockToAST(block)));
             }
-            return ShadowExpr.make(Jaxb2Ast.convertPhraseToExpr(blockToAST(shadowBlock)));
+            return new ShadowExpr<V>(Jaxb2Ast.convertPhraseToExpr(blockToAST(shadowBlock)), null);
         } else {
             return blockToAST(block);
         }
     }
 
     private StmtList<V> blocksToStmtList(List<Block> statementBolcks) {
-        StmtList<V> stmtList = StmtList.make();
+        StmtList<V> stmtList = new StmtList<V>();
         for ( Block sb : statementBolcks ) {
             convertPhraseToStmt(stmtList, sb);
         }
@@ -440,15 +427,15 @@ public class Jaxb2ProgramAst<V> {
 
         Stmt<V> stmt;
         if ( p.getKind().getCategory() == Category.EXPR ) {
-            stmt = ExprStmt.make((Expr<V>) p);
+            stmt = new ExprStmt<V>((Expr<V>) p);
         } else if ( p.getKind().getCategory() == Category.ACTOR ) {
-            stmt = ActionStmt.make((Action<V>) p);
+            stmt = new ActionStmt<V>((Action<V>) p);
         } else if ( p.getKind().getCategory() == Category.SENSOR ) {
-            stmt = SensorStmt.make((Sensor<V>) p);
+            stmt = new SensorStmt<V>((Sensor<V>) p);
         } else if ( p.getKind().getCategory() == Category.FUNCTION ) {
-            stmt = FunctionStmt.make((Function<V>) p);
+            stmt = new FunctionStmt<V>((Function<V>) p);
         } else if ( p.getKind().getCategory() == Category.METHOD ) {
-            stmt = MethodStmt.make((Method<V>) p);
+            stmt = new MethodStmt<V>((Method<V>) p);
         } else {
             stmt = (Stmt<V>) p;
         }

@@ -16,38 +16,16 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>naoActions_applyPosture</b> block from Blockly into the AST (abstract syntax tree). Objects from this class will generate code
- * for applying a posture<br/>
- * <br/>
- * The client must provide the {@link Posture} (name of posture).
- */
 @NepoBasic(name = "APPLY_POSTURE", category = "ACTOR", blocklyNames = {"naoActions_applyPosture"})
 public final class ApplyPosture<V> extends Action<V> {
 
     public final Posture posture;
 
-    private ApplyPosture(Posture posture, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public ApplyPosture(Posture posture, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.notNull(posture, "Missing posture in ApplyPosture block!");
         this.posture = posture;
         setReadOnly();
-    }
-
-    /**
-     * Creates instance of {@link ApplyPosture}. This instance is read only and can not be modified.
-     *
-     * @param port {@link Posture} which will be applied,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link ApplyPosture}
-     */
-    private static <V> ApplyPosture<V> make(Posture posture, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ApplyPosture<V>(posture, properties, comment);
-    }
-
-    public Posture getPosture() {
-        return this.posture;
     }
 
     @Override
@@ -55,19 +33,10 @@ public final class ApplyPosture<V> extends Action<V> {
         return "ApplyPosture [" + this.posture + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
-
         String posture = Jaxb2Ast.extractField(fields, BlocklyConstants.DIRECTION);
-
-        return ApplyPosture.make(Posture.get(posture), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new ApplyPosture<V>(Posture.get(posture), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

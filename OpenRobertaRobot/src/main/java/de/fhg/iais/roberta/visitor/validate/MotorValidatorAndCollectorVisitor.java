@@ -37,15 +37,15 @@ public abstract class MotorValidatorAndCollectorVisitor extends CommonNepoValida
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        checkAndVisitMotionParam(motorOnAction, motorOnAction.getParam());
+        checkAndVisitMotionParam(motorOnAction, motorOnAction.param);
         checkMotorPortAndAddUsedActor(motorOnAction);
 
         if ( motorOnAction.getInfos().getErrorCount() == 0 ) {
             ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(motorOnAction.getUserDefinedPort());
-            boolean hasDuration = motorOnAction.getParam().getDuration() != null;
+            boolean hasDuration = motorOnAction.param.getDuration() != null;
             if ( usedConfigurationBlock == null ) {
                 addErrorToPhrase(motorOnAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
-            } else if ( SC.OTHER.equals(usedConfigurationBlock.getComponentType()) && hasDuration ) {
+            } else if ( SC.OTHER.equals(usedConfigurationBlock.componentType) && hasDuration ) {
                 addErrorToPhrase(motorOnAction, "CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED");
             }
         }
@@ -56,7 +56,7 @@ public abstract class MotorValidatorAndCollectorVisitor extends CommonNepoValida
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         checkMotorPortAndAddUsedActor(motorSetPowerAction);
-        requiredComponentVisited(motorSetPowerAction, motorSetPowerAction.getPower());
+        requiredComponentVisited(motorSetPowerAction, motorSetPowerAction.power);
         return null;
     }
 
@@ -80,7 +80,7 @@ public abstract class MotorValidatorAndCollectorVisitor extends CommonNepoValida
 
     protected void checkForZeroSpeed(Action<Void> action, Expr<Void> speed) {
         if ( speed.getKind().hasName("NUM_CONST") ) {
-            if ( Math.abs(Double.parseDouble(((NumConst<Void>) speed).getValue())) < DOUBLE_EPS ) {
+            if ( Math.abs(Double.parseDouble(((NumConst<Void>) speed).value)) < DOUBLE_EPS ) {
                 addWarningToPhrase(action, "MOTOR_SPEED_0");
             }
         }
@@ -93,7 +93,7 @@ public abstract class MotorValidatorAndCollectorVisitor extends CommonNepoValida
             return;
         }
 
-        usedHardwareBuilder.addUsedActor(new UsedActor(moveAction.getUserDefinedPort(), actor.getComponentType()));
+        usedHardwareBuilder.addUsedActor(new UsedActor(moveAction.getUserDefinedPort(), actor.componentType));
     }
 
 }

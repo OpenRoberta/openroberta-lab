@@ -19,11 +19,4 @@ public final class LedOff<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> LedOff<V> make(Led led, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LedOff<V>(properties, comment, led);
-    }
-
-    public Led getLed() {
-        return this.led;
-    }
 }

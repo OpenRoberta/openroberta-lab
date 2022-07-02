@@ -34,7 +34,7 @@ public final class SenseboxConfigurationComponent extends ConfigurationComponent
         Mutation mutation = new Mutation();
         mutation.setItems(BigInteger.valueOf((this.getComponentProperties().size() / 2)));
         destination.setMutation(mutation);
-        Ast2Jaxb.addField(destination, "BOX_ID", this.getUserDefinedPortName());
+        Ast2Jaxb.addField(destination, "BOX_ID", this.userDefinedPortName);
         this.getComponentProperties().forEach((key, value) -> Ast2Jaxb.addField(destination, key, value));
         return destination;
     }

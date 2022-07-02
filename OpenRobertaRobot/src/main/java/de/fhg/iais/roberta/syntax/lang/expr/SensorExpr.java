@@ -15,28 +15,11 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 public final class SensorExpr<V> extends Expr<V> {
     public final Sensor<V> sensor;
 
-    private SensorExpr(Sensor<V> sens) {
+    public SensorExpr(Sensor<V> sens) {
         super(sens.getProperty(), sens.getComment());
         Assert.isTrue(sens.isReadOnly());
         this.sensor = sens;
         setReadOnly();
-    }
-
-    /**
-     * Create object of the class {@link SensorExpr}.
-     *
-     * @param sensor that we want to wrap,
-     * @return expression with wrapped sensor inside
-     */
-    public static <V> SensorExpr<V> make(Sensor<V> sens) {
-        return new SensorExpr<V>(sens);
-    }
-
-    /**
-     * @return sensor that is wrapped in the expression
-     */
-    public Sensor<V> getSens() {
-        return this.sensor;
     }
 
     @Override
@@ -61,7 +44,7 @@ public final class SensorExpr<V> extends Expr<V> {
 
     @Override
     public Block astToBlock() {
-        Phrase<V> p = getSens();
+        Phrase<V> p = this.sensor;
         return p.astToBlock();
     }
 }

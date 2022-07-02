@@ -100,14 +100,14 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public final Void visitAssertStmt(AssertStmt<Void> assertStmt) {
-        requiredComponentVisited(assertStmt, assertStmt.getAssert());
+        requiredComponentVisited(assertStmt, assertStmt.asserts);
         return null;
     }
 
     @Override
     public final Void visitAssignStmt(AssignStmt<Void> assignStmt) {
-        requiredComponentVisited(assignStmt, assignStmt.getExpr());
-        String variableName = assignStmt.getName().getValue();
+        requiredComponentVisited(assignStmt, assignStmt.expr);
+        String variableName = assignStmt.name.name;
         if ( this.getBuilder(UsedHardwareBean.Builder.class).containsGlobalVariable(variableName) ) {
             this.getBuilder(UsedHardwareBean.Builder.class).addMarkedVariableAsGlobal(variableName);
         }
@@ -116,7 +116,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public final Void visitBinary(Binary<Void> phrase) {
-        requiredComponentVisited(phrase, phrase.getLeft(), phrase.getRight());
+        requiredComponentVisited(phrase, phrase.left, phrase.getRight());
         return null;
     }
 
@@ -137,7 +137,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitDebugAction(DebugAction<Void> debugAction) {
-        requiredComponentVisited(debugAction, debugAction.getValue());
+        requiredComponentVisited(debugAction, debugAction.value);
         return null;
     }
 
@@ -160,9 +160,9 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        requiredComponentVisited(getSubFunct, getSubFunct.getParam());
-        if ( getSubFunct.getParam().get(0).toString().contains("ListCreate ") ||
-            getSubFunct.getParam().get(0).toString().contains("ListRepeat ") ) {
+        requiredComponentVisited(getSubFunct, getSubFunct.param);
+        if ( getSubFunct.param.get(0).toString().contains("ListCreate ") ||
+            getSubFunct.param.get(0).toString().contains("ListRepeat ") ) {
             addErrorToPhrase(getSubFunct, "BLOCK_USED_INCORRECTLY");
         }
         return null;
@@ -170,25 +170,25 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitIfStmt(IfStmt<Void> ifStmt) {
-        requiredComponentVisited(ifStmt, ifStmt.getExpr());
-        requiredComponentVisited(ifStmt, ifStmt.getThenList());
-        requiredComponentVisited(ifStmt, ifStmt.getElseList());
+        requiredComponentVisited(ifStmt, ifStmt.expr);
+        requiredComponentVisited(ifStmt, ifStmt.thenList);
+        requiredComponentVisited(ifStmt, ifStmt.elseList);
         return null;
     }
 
     @Override
     public Void visitTernaryExpr(TernaryExpr<Void> ternaryExpr) {
-        requiredComponentVisited(ternaryExpr, ternaryExpr.getCondition());
-        requiredComponentVisited(ternaryExpr, ternaryExpr.getThenPart());
-        requiredComponentVisited(ternaryExpr, ternaryExpr.getElsePart());
+        requiredComponentVisited(ternaryExpr, ternaryExpr.condition);
+        requiredComponentVisited(ternaryExpr, ternaryExpr.thenPart);
+        requiredComponentVisited(ternaryExpr, ternaryExpr.elsePart);
         return null;
     }
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        requiredComponentVisited(indexOfFunct, indexOfFunct.getParam());
-        if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ||
-            indexOfFunct.getParam().get(0).toString().contains("ListRepeat ") ) {
+        requiredComponentVisited(indexOfFunct, indexOfFunct.param);
+        if ( indexOfFunct.param.get(0).toString().contains("ListCreate ") ||
+            indexOfFunct.param.get(0).toString().contains("ListRepeat ") ) {
             addErrorToPhrase(indexOfFunct, "BLOCK_USED_INCORRECTLY");
         }
         return null;
@@ -196,9 +196,9 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        requiredComponentVisited(lengthOfIsEmptyFunct, lengthOfIsEmptyFunct.getParam());
-        if ( lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListCreate ") ||
-            lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListRepeat ") ) {
+        requiredComponentVisited(lengthOfIsEmptyFunct, lengthOfIsEmptyFunct.param);
+        if ( lengthOfIsEmptyFunct.param.get(0).toString().contains("ListCreate ") ||
+            lengthOfIsEmptyFunct.param.get(0).toString().contains("ListRepeat ") ) {
             addErrorToPhrase(lengthOfIsEmptyFunct, "BLOCK_USED_INCORRECTLY");
         }
         return null;
@@ -206,7 +206,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
-        requiredComponentVisited(listCreate, listCreate.getValue());
+        requiredComponentVisited(listCreate, listCreate.exprList);
         return null;
     }
 
@@ -217,9 +217,9 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
             ListElementOperations op = (ListElementOperations) iOp;
             this.usedMethodBuilder.addUsedMethod(op);
         }
-        requiredComponentVisited(listGetIndex, listGetIndex.getParam());
-        if ( listGetIndex.getParam().get(0).toString().contains("ListCreate ") ||
-            listGetIndex.getParam().get(0).toString().contains("ListRepeat ") ) {
+        requiredComponentVisited(listGetIndex, listGetIndex.param);
+        if ( listGetIndex.param.get(0).toString().contains("ListCreate ") ||
+            listGetIndex.param.get(0).toString().contains("ListRepeat ") ) {
             addErrorToPhrase(listGetIndex, "BLOCK_USED_INCORRECTLY");
         }
         return null;
@@ -228,20 +228,20 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
         usedMethodBuilder.addUsedMethod(FunctionNames.LISTS_REPEAT);
-        requiredComponentVisited(listRepeat, listRepeat.getParam());
+        requiredComponentVisited(listRepeat, listRepeat.param);
         return null;
     }
 
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        IListElementOperations iOp = listSetIndex.getElementOperation();
+        IListElementOperations iOp = listSetIndex.mode;
         if ( iOp instanceof ListElementOperations ) {
             ListElementOperations op = (ListElementOperations) iOp;
             this.usedMethodBuilder.addUsedMethod(op);
         }
-        requiredComponentVisited(listSetIndex, listSetIndex.getParam());
-        if ( listSetIndex.getParam().get(0).toString().contains("ListCreate ") ||
-            listSetIndex.getParam().get(0).toString().contains("ListRepeat ") ) {
+        requiredComponentVisited(listSetIndex, listSetIndex.param);
+        if ( listSetIndex.param.get(0).toString().contains("ListCreate ") ||
+            listSetIndex.param.get(0).toString().contains("ListRepeat ") ) {
             addErrorToPhrase(listSetIndex, "BLOCK_USED_INCORRECTLY");
         }
         return null;
@@ -249,21 +249,21 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        requiredComponentVisited(mainTask, mainTask.getVariables());
+        requiredComponentVisited(mainTask, mainTask.variables);
         return null;
     }
 
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.CAST);
-        requiredComponentVisited(mathCastCharFunct, mathCastCharFunct.getParam());
+        requiredComponentVisited(mathCastCharFunct, mathCastCharFunct.param);
         return null;
     }
 
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.CAST);
-        requiredComponentVisited(mathCastStringFunct, mathCastStringFunct.getParam());
+        requiredComponentVisited(mathCastStringFunct, mathCastStringFunct.param);
         return null;
     }
 
@@ -274,23 +274,23 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        requiredComponentVisited(mathConstrainFunct, mathConstrainFunct.getParam());
+        requiredComponentVisited(mathConstrainFunct, mathConstrainFunct.param);
         return null;
     }
 
     @Override
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        usedMethodBuilder.addUsedMethod(mathNumPropFunct.getFunctName());
-        requiredComponentVisited(mathNumPropFunct, mathNumPropFunct.getParam());
+        usedMethodBuilder.addUsedMethod(mathNumPropFunct.functName);
+        requiredComponentVisited(mathNumPropFunct, mathNumPropFunct.param);
         return null;
     }
 
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        usedMethodBuilder.addUsedMethod(mathOnListFunct.getFunctName());
-        requiredComponentVisited(mathOnListFunct, mathOnListFunct.getParam());
-        if ( mathOnListFunct.getParam().get(0).toString().contains("ListCreate ") ||
-            mathOnListFunct.getParam().get(0).toString().contains("ListRepeat ") ) {
+        usedMethodBuilder.addUsedMethod(mathOnListFunct.functName);
+        requiredComponentVisited(mathOnListFunct, mathOnListFunct.param);
+        if ( mathOnListFunct.param.get(0).toString().contains("ListCreate ") ||
+            mathOnListFunct.param.get(0).toString().contains("ListRepeat ") ) {
             addErrorToPhrase(mathOnListFunct, "BLOCK_USED_INCORRECTLY");
         }
         return null;
@@ -299,7 +299,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.POWER);
-        requiredComponentVisited(mathPowerFunct, mathPowerFunct.getParam());
+        requiredComponentVisited(mathPowerFunct, mathPowerFunct.param);
         return null;
     }
 
@@ -312,18 +312,18 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.RANDOM);
-        requiredComponentVisited(mathRandomIntFunct, mathRandomIntFunct.getParam());
+        requiredComponentVisited(mathRandomIntFunct, mathRandomIntFunct.param);
         return null;
     }
 
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        if ( mathSingleFunct.getFunctName() == FunctionNames.POW10 ) {
+        if ( mathSingleFunct.functName == FunctionNames.POW10 ) {
             usedMethodBuilder.addUsedMethod(FunctionNames.POWER); // combine pow10 and power into one
         } else {
-            usedMethodBuilder.addUsedMethod(mathSingleFunct.getFunctName());
+            usedMethodBuilder.addUsedMethod(mathSingleFunct.functName);
         }
-        requiredComponentVisited(mathSingleFunct, mathSingleFunct.getParam());
+        requiredComponentVisited(mathSingleFunct, mathSingleFunct.param);
         return null;
     }
 
@@ -335,9 +335,9 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
-        requiredComponentVisited(methodIfReturn, methodIfReturn.getCondition());
+        requiredComponentVisited(methodIfReturn, methodIfReturn.oraCondition);
         if ( !methodIfReturn.getReturnType().equals(BlocklyType.VOID) ) {
-            requiredComponentVisited(methodIfReturn, methodIfReturn.getReturnValue());
+            requiredComponentVisited(methodIfReturn, methodIfReturn.oraReturnValue);
         }
         return null;
     }
@@ -345,14 +345,14 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
         this.getBuilder(UsedHardwareBean.Builder.class).addUserDefinedMethod(methodReturn);
-        requiredComponentVisited(methodReturn, methodReturn.getParameters(), methodReturn.getBody());
-        requiredComponentVisited(methodReturn, methodReturn.getReturnValue());
+        requiredComponentVisited(methodReturn, methodReturn.getParameters(), methodReturn.body);
+        requiredComponentVisited(methodReturn, methodReturn.returnValue);
         return null;
     }
 
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
-        requiredComponentVisited(methodStmt, methodStmt.getMethod());
+        requiredComponentVisited(methodStmt, methodStmt.method);
         return null;
     }
 
@@ -360,7 +360,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
         this.getBuilder(UsedHardwareBean.Builder.class).addUserDefinedMethod(methodVoid);
         requiredComponentVisited(methodVoid, methodVoid.getParameters());
-        requiredComponentVisited(methodVoid, methodVoid.getBody());
+        requiredComponentVisited(methodVoid, methodVoid.body);
         return null;
     }
 
@@ -369,25 +369,25 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         requiredComponentVisited(nnStepStmt, nnStepStmt.getIoNeurons());
 
         boolean witNNDecl;
-        Data netDefinition = nnStepStmt.getNetDefinition();
-        if ( nnStepStmt.getNetDefinition() == null || nnStepStmt.getNetDefinition().getValue() == null ) {
+        Data netDefinition = nnStepStmt.netDefinition;
+        if ( nnStepStmt.netDefinition == null || nnStepStmt.netDefinition.getValue() == null ) {
             witNNDecl = false;
             nnStepDecl = new NNStepDecl(new JSONArray(), new JSONArray());
         } else {
             witNNDecl = true;
-            JSONObject rawNetDefinition = new JSONObject(nnStepStmt.getNetDefinition().getValue());
+            JSONObject rawNetDefinition = new JSONObject(nnStepStmt.netDefinition.getValue());
             nnStepDecl = new NNStepDecl(rawNetDefinition.getJSONArray("weights"), rawNetDefinition.getJSONArray("biases"));
         }
         String name;
         for ( Stmt<Void> neuron : nnStepStmt.getIoNeurons().get() ) {
             if ( neuron instanceof NNInputNeuronStmt ) {
-                name = ((NNInputNeuronStmt) neuron).getName();
+                name = ((NNInputNeuronStmt) neuron).name;
                 nnStepDecl.addInputNeuron(name);
             } else if ( neuron instanceof NNOutputNeuronStmt ) {
-                name = ((NNOutputNeuronStmt) neuron).getName();
+                name = ((NNOutputNeuronStmt) neuron).name;
                 nnStepDecl.addOutputNeuron(name);
             } else if ( neuron instanceof NNOutputNeuronWoVarStmt ) {
-                name = ((NNOutputNeuronWoVarStmt) neuron).getName();
+                name = ((NNOutputNeuronWoVarStmt) neuron).name;
                 nnStepDecl.addOutputNeuron(name);
             } else {
                 throw new DbcException("type of neuron is not input, output or outputWoVar");
@@ -403,13 +403,13 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitNNInputNeuronStmt(NNInputNeuronStmt<Void> nnInputNeuronStmt) {
-        requiredComponentVisited(nnInputNeuronStmt, nnInputNeuronStmt.getValue());
+        requiredComponentVisited(nnInputNeuronStmt, nnInputNeuronStmt.value);
         return null;
     }
 
     @Override
     public Void visitNNOutputNeuronStmt(NNOutputNeuronStmt<Void> nnOutputNeuronStmt) {
-        requiredComponentVisited(nnOutputNeuronStmt, nnOutputNeuronStmt.getValue());
+        requiredComponentVisited(nnOutputNeuronStmt, nnOutputNeuronStmt.value);
         return null;
     }
 
@@ -420,19 +420,19 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitNNChangeWeightStmt(NNChangeWeightStmt<Void> chgStmt) {
-        requiredComponentVisited(chgStmt, chgStmt.getValue());
+        requiredComponentVisited(chgStmt, chgStmt.value);
         return null;
     }
 
     @Override
     public Void visitNNChangeBiasStmt(NNChangeBiasStmt<Void> chgStmt) {
-        requiredComponentVisited(chgStmt, chgStmt.getValue());
+        requiredComponentVisited(chgStmt, chgStmt.value);
         return null;
     }
 
     @Override
     public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<Void> outputNeuronVal) {
-        String optErrorKey = nnBeanBuilder.checkNameOfOutputNeuron(outputNeuronVal.getName());
+        String optErrorKey = nnBeanBuilder.checkNameOfOutputNeuron(outputNeuronVal.name);
         if ( optErrorKey != null ) {
             addErrorToPhrase(outputNeuronVal, optErrorKey);
         }
@@ -451,29 +451,29 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
-        if ( repeatStmt.getExpr().getKind().hasName("EXPR_LIST") ) {
-            ExprList<Void> exprList = (ExprList<Void>) repeatStmt.getExpr();
-            String varName = ((Var<Void>) exprList.get().get(0)).getValue();
+        if ( repeatStmt.expr.getKind().hasName("EXPR_LIST") ) {
+            ExprList<Void> exprList = (ExprList<Void>) repeatStmt.expr;
+            String varName = ((Var<Void>) exprList.get().get(0)).name;
             this.getBuilder(UsedHardwareBean.Builder.class).addDeclaredVariable(varName);
             requiredComponentVisited(repeatStmt, exprList);
         } else {
-            requiredComponentVisited(repeatStmt, repeatStmt.getExpr());
+            requiredComponentVisited(repeatStmt, repeatStmt.expr);
         }
 
-        if ( repeatStmt.getMode() != RepeatStmt.Mode.WAIT ) {
+        if ( repeatStmt.mode != RepeatStmt.Mode.WAIT ) {
             increaseLoopCounter();
-            requiredComponentVisited(repeatStmt, repeatStmt.getList());
+            requiredComponentVisited(repeatStmt, repeatStmt.list);
             this.currentLoop--;
         } else {
-            requiredComponentVisited(repeatStmt, repeatStmt.getList());
+            requiredComponentVisited(repeatStmt, repeatStmt.list);
         }
         return null;
     }
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        requiredComponentVisited(rgbColor, rgbColor.getR(), rgbColor.getG(), rgbColor.getB());
-        optionalComponentVisited(rgbColor.getA());
+        requiredComponentVisited(rgbColor, rgbColor.R, rgbColor.G, rgbColor.B);
+        optionalComponentVisited(rgbColor.A);
         return null;
     }
 
@@ -503,32 +503,32 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.CAST);
-        requiredComponentVisited(textCharCastNumberFunct, textCharCastNumberFunct.getParam());
+        requiredComponentVisited(textCharCastNumberFunct, textCharCastNumberFunct.param);
         return null;
     }
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        requiredComponentVisited(textJoinFunct, textJoinFunct.getParam());
+        requiredComponentVisited(textJoinFunct, textJoinFunct.param);
         return null;
     }
 
     @Override
     public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
-        requiredComponentVisited(textPrintFunct, textPrintFunct.getParam());
+        requiredComponentVisited(textPrintFunct, textPrintFunct.param);
         return null;
     }
 
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.CAST);
-        requiredComponentVisited(textStringCastNumberFunct, textStringCastNumberFunct.getParam());
+        requiredComponentVisited(textStringCastNumberFunct, textStringCastNumberFunct.param);
         return null;
     }
 
     @Override
     public Void visitUnary(Unary<Void> phrase) {
-        requiredComponentVisited(phrase, phrase.getExpr());
+        requiredComponentVisited(phrase, phrase.expr);
         return null;
     }
 
@@ -539,7 +539,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        if ( var.isGlobal() ) {
+        if ( var.global ) {
             this.getBuilder(UsedHardwareBean.Builder.class).addVisitedVariable(var);
         }
         if ( var.getVarType().equals(BlocklyType.ARRAY)
@@ -555,10 +555,10 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         String blocktype = var.getProperty().getBlockType();
         boolean allowedEmptyExprInHiddenDecls = blocktype.equals("robLocalVariables_declare") || blocktype.equals("robControls_forEach");
         if ( !allowedEmptyExprInHiddenDecls ) {
-            requiredComponentVisited(var, var.getValue());
+            requiredComponentVisited(var, var.value);
         }
-        this.getBuilder(UsedHardwareBean.Builder.class).addGlobalVariable(var.getName());
-        this.getBuilder(UsedHardwareBean.Builder.class).addDeclaredVariable(var.getName());
+        this.getBuilder(UsedHardwareBean.Builder.class).addGlobalVariable(var.name);
+        this.getBuilder(UsedHardwareBean.Builder.class).addDeclaredVariable(var.name);
         return null;
     }
 
@@ -566,23 +566,23 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
         if ( this.waitsInLoops.get(this.loopCounter) != null ) {
             increaseWaitStmsInLoop();
-            requiredComponentVisited(waitStmt, waitStmt.getStatements());
+            requiredComponentVisited(waitStmt, waitStmt.statements);
             decreaseWaitStmtInLoop();
         } else {
-            requiredComponentVisited(waitStmt, waitStmt.getStatements());
+            requiredComponentVisited(waitStmt, waitStmt.statements);
         }
         return null;
     }
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        requiredComponentVisited(waitTimeStmt, waitTimeStmt.getTime());
+        requiredComponentVisited(waitTimeStmt, waitTimeStmt.time);
         return null;
     }
 
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        requiredComponentVisited(serialWriteAction, serialWriteAction.getValue());
+        requiredComponentVisited(serialWriteAction, serialWriteAction.value);
         return null;
     }
 

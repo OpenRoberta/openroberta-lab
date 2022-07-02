@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.syntax.lang.methods;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
@@ -18,13 +17,6 @@ public abstract class Method<V> extends Phrase<V> {
     protected ExprList<V> parameters;
     protected BlocklyType returnType;
 
-    /**
-     * This constructor set the kind of the method declaration used in the AST (abstract syntax tree). All possible kinds can be found in {@link BlockDescriptor}.
-     *
-     * @param kind of the the method declaration used in AST,
-     * @param properties of the block,
-     * @param comment of the user for the specific block
-     */
     public Method(BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
     }
@@ -37,9 +29,6 @@ public abstract class Method<V> extends Phrase<V> {
         return this.parameters;
     }
 
-    /**
-     * @return the return_
-     */
     public BlocklyType getReturnType() {
         return this.returnType;
     }

@@ -7,30 +7,21 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 
 @NepoBasic(name = "EXPR_LIST", category = "EXPR", blocklyNames = {})
 public final class ExprList<V> extends Expr<V> {
     public final List<Expr<V>> el = new ArrayList<Expr<V>>();
 
-    private ExprList() {
+    public ExprList() {
         super(BlocklyBlockProperties.make("1", "1", false, false, false, false, false, null, false, false), null);
     }
 
     /**
-     * @return writable object of type {@link ExprList}.
-     */
-    public static <V> ExprList<V> make() {
-        return new ExprList<V>();
-    }
-
-    /**
-     * Add new element to the list.
-     *
-     * @param expr
+     * Add new expression to the list.
      */
     public final void addExpr(Expr<V> expr) {
         Assert.isTrue(mayChange() && expr != null && expr.isReadOnly());
@@ -38,7 +29,7 @@ public final class ExprList<V> extends Expr<V> {
     }
 
     /**
-     * @return list with elements of type {@link Expr}.
+     * @return the expression list
      */
     public final List<Expr<V>> get() {
         Assert.isTrue(isReadOnly());

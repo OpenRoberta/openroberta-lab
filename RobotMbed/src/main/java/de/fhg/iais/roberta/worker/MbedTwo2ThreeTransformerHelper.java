@@ -315,8 +315,8 @@ public final class MbedTwo2ThreeTransformerHelper {
         int mX = Integer.MIN_VALUE;
         int mY = Integer.MAX_VALUE;
         for ( ConfigurationComponent confComp : defaultConf.getConfigurationComponentsValues() ) {
-            mX = Math.max(mX, confComp.getX());
-            mY = Math.min(mY, confComp.getY());
+            mX = Math.max(mX, confComp.x);
+            mY = Math.min(mY, confComp.y);
             // Register the default components for any of the ports
             String pin1 = confComp.getOptProperty("PIN1");
             if ( pin1 == null ) {
@@ -354,7 +354,7 @@ public final class MbedTwo2ThreeTransformerHelper {
 
         if ( confComp == null ) { // Otherwise generate a new one
             confComp = createComponent(confBlocklyName, port);
-            if ( confComp.getComponentType().equals("CALLIBOT") ) {
+            if ( confComp.componentType.equals("CALLIBOT") ) {
                 // Register Callibot as a default component, as it should be found regardless of the port
                 this.createdComps.put(Pair.of(confBlocklyName, "default"), confComp);
             } else {
@@ -362,10 +362,10 @@ public final class MbedTwo2ThreeTransformerHelper {
             }
         }
         String name;
-        if ( confComp.getComponentType().equals("CALLIBOT") ) {
+        if ( confComp.componentType.equals("CALLIBOT") ) {
             name = CALLIBOT.get(Pair.of(progBlockType, port));
         } else {
-            name = confComp.getUserDefinedPortName();
+            name = confComp.userDefinedPortName;
         }
         return Pair.of(confComp, name);
     }

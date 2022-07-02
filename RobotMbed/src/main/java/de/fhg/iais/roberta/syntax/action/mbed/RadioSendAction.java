@@ -25,7 +25,7 @@ public final class RadioSendAction<V> extends Action<V> {
     public final BlocklyType type;
     public final String power;
 
-    private RadioSendAction(Expr<V> msg, BlocklyType type, String power, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public RadioSendAction(Expr<V> msg, BlocklyType type, String power, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         this.message = msg;
         this.type = type;
@@ -33,41 +33,11 @@ public final class RadioSendAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link RadioSendAction}. This instance is read only and can not be modified.
-     *
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link RadioSendAction}
-     */
-    public static <V> RadioSendAction<V> make(Expr<V> expr, BlocklyType type, String power, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new RadioSendAction<>(expr, type, power, properties, comment);
-    }
-
-    public Expr<V> getMsg() {
-        return this.message;
-    }
-
-    public String getPower() {
-        return this.power;
-    }
-
-    public BlocklyType getType() {
-        return this.type;
-    }
-
     @Override
     public String toString() {
-        return "RadioSendAction [ " + getMsg().toString() + ", " + getType().toString() + ", " + getPower() + " ]";
+        return "RadioSendAction [ " + this.message.toString() + ", " + this.type.toString() + ", " + this.power + " ]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
@@ -75,8 +45,7 @@ public final class RadioSendAction<V> extends Action<V> {
         String power = Jaxb2Ast.extractField(fields, BlocklyConstants.POWER);
         String type = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
 
-        return RadioSendAction
-            .make(Jaxb2Ast.convertPhraseToExpr(message), BlocklyType.get(type), power, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new RadioSendAction<>(Jaxb2Ast.convertPhraseToExpr(message), BlocklyType.get(type), power, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

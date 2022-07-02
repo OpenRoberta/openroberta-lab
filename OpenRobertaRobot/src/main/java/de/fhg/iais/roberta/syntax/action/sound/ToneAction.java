@@ -34,23 +34,5 @@ public final class ToneAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> ToneAction<V> make(Expr<V> frequency, Expr<V> duration, String port, BlocklyBlockProperties properties, BlocklyComment comment, Hide hide) {
-        return new ToneAction<>(properties, comment, frequency, duration, port, hide);
-    }
 
-    public Expr<V> getDuration() {
-        return this.duration;
-    }
-
-    public Expr<V> getFrequency() {
-        return this.frequency;
-    }
-
-    public Hide getHide() {
-        return this.hide;
-    }
-
-    public String getPort() {
-        return this.port;
-    }
 }

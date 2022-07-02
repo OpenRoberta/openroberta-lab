@@ -5,14 +5,14 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 
-public class SensorMetaDataBean {
+public class ExternalSensorBean {
     private final String port;
     private final String mode;
     private final String slot;
     private final Mutation mutation;
     private final List<Hide> hide;
 
-    public SensorMetaDataBean(String port, String mode, String slot, Mutation mutation) {
+    public ExternalSensorBean(String port, String mode, String slot, Mutation mutation) {
         this.port = port;
         this.mode = mode;
         this.slot = slot;
@@ -20,7 +20,7 @@ public class SensorMetaDataBean {
         this.hide = null;
     }
 
-    public SensorMetaDataBean(String port, String mode, String slot, Mutation mutation, List<Hide> hide) {
+    public ExternalSensorBean(String port, String mode, String slot, Mutation mutation, List<Hide> hide) {
         this.port = port;
         this.mode = mode;
         this.slot = slot;
@@ -73,7 +73,7 @@ public class SensorMetaDataBean {
         if ( getClass() != obj.getClass() ) {
             return false;
         }
-        SensorMetaDataBean other = (SensorMetaDataBean) obj;
+        ExternalSensorBean other = (ExternalSensorBean) obj;
         if ( this.mode == null ) {
             if ( other.mode != null ) {
                 return false;

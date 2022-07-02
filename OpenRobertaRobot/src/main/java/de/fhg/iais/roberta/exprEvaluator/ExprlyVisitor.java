@@ -69,7 +69,7 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
      */
     @Override
     public NullConst<V> visitNullConst(ExprlyParser.NullConstContext ctx) {
-        return NullConst.make(BCMAKE, null);
+        return new NullConst<V>(BCMAKE, null);
     }
 
     /**
@@ -77,7 +77,7 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
      */
     @Override
     public ColorConst<V> visitCol(ExprlyParser.ColContext ctx) {
-        return ColorConst.make(ctx.COLOR().getText(), BCMAKE, null);
+        return new ColorConst<>(BCMAKE, null, ctx.COLOR().getText());
     }
 
     /**
@@ -90,28 +90,28 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
         p.setReadOnly();
         q.setReadOnly();
         if ( ctx.op.getType() == ExprlyParser.AND ) {
-            return Binary.make(Binary.Op.AND, p, q, "");
+            return new Binary<>(Binary.Op.AND, p, q, "", BlocklyBlockProperties.make("BINARY", "1"), null);
         }
         if ( ctx.op.getType() == ExprlyParser.OR ) {
-            return Binary.make(Binary.Op.OR, p, q, "");
+            return new Binary<>(Binary.Op.OR, p, q, "", BlocklyBlockProperties.make("BINARY", "1"), null);
         }
         if ( ctx.op.getType() == ExprlyParser.EQUAL ) {
-            return Binary.make(Binary.Op.EQ, p, q, "");
+            return new Binary<>(Binary.Op.EQ, p, q, "", BlocklyBlockProperties.make("BINARY", "1"), null);
         }
         if ( ctx.op.getType() == ExprlyParser.NEQUAL ) {
-            return Binary.make(Binary.Op.NEQ, p, q, "");
+            return new Binary<>(Binary.Op.NEQ, p, q, "", BlocklyBlockProperties.make("BINARY", "1"), null);
         }
         if ( ctx.op.getType() == ExprlyParser.GET ) {
-            return Binary.make(Binary.Op.GT, p, q, "");
+            return new Binary<>(Binary.Op.GT, p, q, "", BlocklyBlockProperties.make("BINARY", "1"), null);
         }
         if ( ctx.op.getType() == ExprlyParser.LET ) {
-            return Binary.make(Binary.Op.LT, p, q, "");
+            return new Binary<>(Binary.Op.LT, p, q, "", BlocklyBlockProperties.make("BINARY", "1"), null);
         }
         if ( ctx.op.getType() == ExprlyParser.GEQ ) {
-            return Binary.make(Binary.Op.GTE, p, q, "");
+            return new Binary<>(Binary.Op.GTE, p, q, "", BlocklyBlockProperties.make("BINARY", "1"), null);
         }
         if ( ctx.op.getType() == ExprlyParser.LEQ ) {
-            return Binary.make(Binary.Op.LTE, p, q, "");
+            return new Binary<>(Binary.Op.LTE, p, q, "", BlocklyBlockProperties.make("BINARY", "1"), null);
         }
         throw new UnsupportedOperationException("Invalid binary operation");
 
@@ -130,22 +130,22 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
             List<Expr<V>> args = new LinkedList<>();
             args.add(n0);
             args.add(n1);
-            return MathPowerFunct.make(FunctionNames.POWER, args, BCMAKE, null);
+            return new MathPowerFunct<V>(BCMAKE, null, FunctionNames.POWER, args);
         }
         if ( ctx.op.getType() == ExprlyParser.ADD ) {
-            return Binary.make(Binary.Op.ADD, n0, n1, "");
+            return new Binary<>(Binary.Op.ADD, n0, n1, "", BlocklyBlockProperties.make("BINARY", "1"), null);
         }
         if ( ctx.op.getType() == ExprlyParser.SUB ) {
-            return Binary.make(Binary.Op.MINUS, n0, n1, "");
+            return new Binary<>(Binary.Op.MINUS, n0, n1, "", BlocklyBlockProperties.make("BINARY", "1"), null);
         }
         if ( ctx.op.getType() == ExprlyParser.MUL ) {
-            return Binary.make(Binary.Op.MULTIPLY, n0, n1, "");
+            return new Binary<>(Binary.Op.MULTIPLY, n0, n1, "", BlocklyBlockProperties.make("BINARY", "1"), null);
         }
         if ( ctx.op.getType() == ExprlyParser.DIV ) {
-            return Binary.make(Binary.Op.DIVIDE, n0, n1, "");
+            return new Binary<>(Binary.Op.DIVIDE, n0, n1, "", BlocklyBlockProperties.make("BINARY", "1"), null);
         }
         if ( ctx.op.getType() == ExprlyParser.MOD ) {
-            return Binary.make(Binary.Op.MOD, n0, n1, "");
+            return new Binary<>(Binary.Op.MOD, n0, n1, "", BlocklyBlockProperties.make("BINARY", "1"), null);
         }
         throw new UnsupportedOperationException("Invalid binary operation");
 
@@ -156,7 +156,7 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
      */
     @Override
     public BoolConst<V> visitBoolConstB(ExprlyParser.BoolConstBContext ctx) {
-        return BoolConst.make(Boolean.parseBoolean(ctx.BOOL().getText().toLowerCase()), BCMAKE, null);
+        return new BoolConst<>(BCMAKE, null, Boolean.parseBoolean(ctx.BOOL().getText().toLowerCase()));
     }
 
     /**
@@ -172,7 +172,7 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
                 s += " ";
             }
         }
-        return StringConst.make(s, BCMAKE, null);
+        return new StringConst<V>(BCMAKE, null, s);
     }
 
     /**
@@ -190,7 +190,7 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
         if ( c.equals("sqrt_1_2") ) {
             c = "sqrt1_2";
         }
-        return MathConst.make(Const.get(c), BCMAKE, null);
+        return new MathConst<V>(BCMAKE, null, Const.get(c));
     }
 
     /**
@@ -198,7 +198,7 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
      */
     @Override
     public NumConst<V> visitIntConst(ExprlyParser.IntConstContext ctx) {
-        return NumConst.make(ctx.INT().getText());
+        return new NumConst<>(null, null, ctx.INT().getText());
     }
 
     /**
@@ -220,252 +220,185 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
             if ( args.get(i) instanceof ExprList<?> ) {
                 ExprList<V> e = (ExprList<V>) args.get(i);
                 e.setReadOnly();
-                args.set(i, ListCreate.make(BlocklyType.ARRAY, e, BCMAKE, null));
+                args.set(i, new ListCreate<V>(BlocklyType.ARRAY, e, BCMAKE, null));
             }
         }
 
         // check the function name and return the corresponfing one
         if ( f.equals("randInt") ) {
-            return FunctionExpr.make(MathRandomIntFunct.make(args, BCMAKE, null));
+            return new FunctionExpr<V>(new MathRandomIntFunct<V>(args, BCMAKE, null));
         }
         if ( f.equals("randFloat") ) {
-            return FunctionExpr.make(MathRandomFloatFunct.make(BCMAKE, null));
+            return new FunctionExpr<V>(new MathRandomFloatFunct<V>(BCMAKE, null));
         }
         if ( f.equals("sqrt") ) {
             f = "root";
         }
         if ( f.equals("isEven") || f.equals("isOdd") || f.equals("isPrime") || f.equals("isWhole") || f.equals("isPositive") || f.equals("isNegative") ) {
             f = f.substring(2);
-            return FunctionExpr.make(MathNumPropFunct.make(FunctionNames.get(f), args, BCMAKE, null));
+            return new FunctionExpr<V>(new MathNumPropFunct<V>(FunctionNames.get(f), args, BCMAKE, null));
         }
         if ( f.equals("isDivisibleBy") ) {
-            return FunctionExpr.make(MathNumPropFunct.make(FunctionNames.DIVISIBLE_BY, args, BCMAKE, null));
+            return new FunctionExpr<V>(new MathNumPropFunct<V>(FunctionNames.DIVISIBLE_BY, args, BCMAKE, null));
         }
         if ( f.equals("avg") ) {
             f = "average";
-            return FunctionExpr.make(MathOnListFunct.make(FunctionNames.get(f), args, BCMAKE, null));
+            return new FunctionExpr<V>(new MathOnListFunct<V>(FunctionNames.get(f), args, BCMAKE, null));
         }
         if ( f.equals("sd") ) {
             f = "std_dev";
-            return FunctionExpr.make(MathOnListFunct.make(FunctionNames.get(f), args, BCMAKE, null));
+            return new FunctionExpr<V>(new MathOnListFunct<V>(FunctionNames.get(f), args, BCMAKE, null));
         }
         if ( f.equals("randItem") ) {
             f = "random";
-            return FunctionExpr.make(MathOnListFunct.make(FunctionNames.get(f), args, BCMAKE, null));
+            return new FunctionExpr<V>(new MathOnListFunct<V>(FunctionNames.get(f), args, BCMAKE, null));
         }
         if ( f.equals("min") || f.equals("max") || f.equals("sum") || f.equals("median") ) {
-            return FunctionExpr.make(MathOnListFunct.make(FunctionNames.get(f), args, BCMAKE, null));
+            return new FunctionExpr<V>(new MathOnListFunct<V>(FunctionNames.get(f), args, BCMAKE, null));
         }
         if ( f.equals("lengthOf") ) {
-            return FunctionExpr.make(LengthOfIsEmptyFunct.make(FunctionNames.LIST_LENGTH, args, BCMAKE, null));
+            return new FunctionExpr<V>(new LengthOfIsEmptyFunct<V>(FunctionNames.LIST_LENGTH, args, BCMAKE, null));
         }
         if ( f.equals("indexOfFirst") ) {
-            return FunctionExpr.make(IndexOfFunct.make(IndexLocation.FIRST, args, BCMAKE, null));
+            return new FunctionExpr<V>(new IndexOfFunct<V>(IndexLocation.FIRST, args, BCMAKE, null));
         }
         if ( f.equals("indexOfLast") ) {
-            return FunctionExpr.make(IndexOfFunct.make(IndexLocation.LAST, args, BCMAKE, null));
+            return new FunctionExpr<V>(new IndexOfFunct<V>(IndexLocation.LAST, args, BCMAKE, null));
         }
         if ( f.contains("setIndex") ) {
             if ( f.equals("setIndex") ) {
-                return FunctionExpr.make(ListSetIndex.make(ListElementOperations.SET, IndexLocation.FROM_START, args, BCMAKE, null));
+                return new FunctionExpr<V>(new ListSetIndex<V>(ListElementOperations.SET, IndexLocation.FROM_START, args, BCMAKE, null));
             }
             if ( f.equals("setIndexFromEnd") ) {
-                return FunctionExpr.make(ListSetIndex.make(ListElementOperations.SET, IndexLocation.FROM_END, args, BCMAKE, null));
+                return new FunctionExpr<V>(new ListSetIndex<V>(ListElementOperations.SET, IndexLocation.FROM_END, args, BCMAKE, null));
             }
             if ( f.equals("setIndexFirst") ) {
-                return FunctionExpr.make(ListSetIndex.make(ListElementOperations.SET, IndexLocation.FIRST, args, BCMAKE, null));
+                return new FunctionExpr<V>(new ListSetIndex<V>(ListElementOperations.SET, IndexLocation.FIRST, args, BCMAKE, null));
             }
             if ( f.equals("setIndexLast") ) {
-                return FunctionExpr.make(ListSetIndex.make(ListElementOperations.SET, IndexLocation.LAST, args, BCMAKE, null));
+                return new FunctionExpr<V>(new ListSetIndex<V>(ListElementOperations.SET, IndexLocation.LAST, args, BCMAKE, null));
             }
         }
         if ( f.contains("insertIndex") ) {
             if ( f.equals("insertIndex") ) {
-                return FunctionExpr.make(ListSetIndex.make(ListElementOperations.INSERT, IndexLocation.FROM_START, args, BCMAKE, null));
+                return new FunctionExpr<V>(new ListSetIndex<V>(ListElementOperations.INSERT, IndexLocation.FROM_START, args, BCMAKE, null));
             }
             if ( f.equals("insertIndexFromEnd") ) {
-                return FunctionExpr.make(ListSetIndex.make(ListElementOperations.INSERT, IndexLocation.FROM_END, args, BCMAKE, null));
+                return new FunctionExpr<V>(new ListSetIndex<V>(ListElementOperations.INSERT, IndexLocation.FROM_END, args, BCMAKE, null));
             }
             if ( f.equals("insertIndexFirst") ) {
-                return FunctionExpr.make(ListSetIndex.make(ListElementOperations.INSERT, IndexLocation.FIRST, args, BCMAKE, null));
+                return new FunctionExpr<V>(new ListSetIndex<V>(ListElementOperations.INSERT, IndexLocation.FIRST, args, BCMAKE, null));
             }
             if ( f.equals("insertIndexLast") ) {
-                return FunctionExpr.make(ListSetIndex.make(ListElementOperations.INSERT, IndexLocation.LAST, args, BCMAKE, null));
+                return new FunctionExpr<V>(new ListSetIndex<V>(ListElementOperations.INSERT, IndexLocation.LAST, args, BCMAKE, null));
             }
         }
         if ( f.contains("getIndex") ) {
             if ( f.equals("getIndex") ) {
-                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.GET, IndexLocation.FROM_START, args, "VOID", BCMAKE, null));
+                return new FunctionExpr<V>(new ListGetIndex<V>(ListElementOperations.GET, IndexLocation.FROM_START, args, "VOID", BCMAKE, null));
             }
             if ( f.equals("getIndexFromEnd") ) {
-                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.GET, IndexLocation.FROM_END, args, "VOID", BCMAKE, null));
+                return new FunctionExpr<V>(new ListGetIndex<V>(ListElementOperations.GET, IndexLocation.FROM_END, args, "VOID", BCMAKE, null));
             }
             if ( f.equals("getIndexFirst") ) {
-                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.GET, IndexLocation.FIRST, args, "VOID", BCMAKE, null));
+                return new FunctionExpr<V>(new ListGetIndex<V>(ListElementOperations.GET, IndexLocation.FIRST, args, "VOID", BCMAKE, null));
             }
             if ( f.equals("getIndexLast") ) {
-                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.GET, IndexLocation.LAST, args, "VOID", BCMAKE, null));
+                return new FunctionExpr<V>(new ListGetIndex<V>(ListElementOperations.GET, IndexLocation.LAST, args, "VOID", BCMAKE, null));
             }
         }
         if ( f.contains("getAndRemoveIndex") ) {
             if ( f.equals("getAndRemoveIndex") ) {
-                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.GET_REMOVE, IndexLocation.FROM_START, args, "VOID", BCMAKE, null));
+                return new FunctionExpr<V>(new ListGetIndex<V>(ListElementOperations.GET_REMOVE, IndexLocation.FROM_START, args, "VOID", BCMAKE, null));
             }
             if ( f.equals("getAndRemoveIndexFromEnd") ) {
-                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.GET_REMOVE, IndexLocation.FROM_END, args, "VOID", BCMAKE, null));
+                return new FunctionExpr<V>(new ListGetIndex<V>(ListElementOperations.GET_REMOVE, IndexLocation.FROM_END, args, "VOID", BCMAKE, null));
             }
             if ( f.equals("getAndRemoveIndexFirst") ) {
-                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.GET_REMOVE, IndexLocation.FIRST, args, "VOID", BCMAKE, null));
+                return new FunctionExpr<V>(new ListGetIndex<V>(ListElementOperations.GET_REMOVE, IndexLocation.FIRST, args, "VOID", BCMAKE, null));
             }
             if ( f.equals("getAndRemoveIndexLast") ) {
-                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.GET_REMOVE, IndexLocation.LAST, args, "VOID", BCMAKE, null));
+                return new FunctionExpr<V>(new ListGetIndex<V>(ListElementOperations.GET_REMOVE, IndexLocation.LAST, args, "VOID", BCMAKE, null));
             }
         }
         if ( f.contains("removeIndex") ) {
             if ( f.equals("removeIndex") ) {
-                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.REMOVE, IndexLocation.FROM_START, args, "VOID", BCMAKE, null));
+                return new FunctionExpr<V>(new ListGetIndex<V>(ListElementOperations.REMOVE, IndexLocation.FROM_START, args, "VOID", BCMAKE, null));
             }
             if ( f.equals("removeIndexFromEnd") ) {
-                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.REMOVE, IndexLocation.FROM_END, args, "VOID", BCMAKE, null));
+                return new FunctionExpr<V>(new ListGetIndex<V>(ListElementOperations.REMOVE, IndexLocation.FROM_END, args, "VOID", BCMAKE, null));
             }
             if ( f.equals("removeIndexFirst") ) {
-                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.REMOVE, IndexLocation.FIRST, args, "VOID", BCMAKE, null));
+                return new FunctionExpr<V>(new ListGetIndex<V>(ListElementOperations.REMOVE, IndexLocation.FIRST, args, "VOID", BCMAKE, null));
             }
             if ( f.equals("removeIndexLast") ) {
-                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.REMOVE, IndexLocation.LAST, args, "VOID", BCMAKE, null));
+                return new FunctionExpr<V>(new ListGetIndex<V>(ListElementOperations.REMOVE, IndexLocation.LAST, args, "VOID", BCMAKE, null));
             }
         }
         if ( f.equals("repeatList") ) {
-            return FunctionExpr.make(ListRepeat.make(BlocklyType.VOID, args, BCMAKE, null));
+            return new FunctionExpr<V>(new ListRepeat<V>(BlocklyType.VOID, args, BCMAKE, null));
         }
         if ( f.contains("subList") ) {
 
             if ( f.equals("subList") ) {
-                return FunctionExpr
-                    .make(
-                        GetSubFunct
-                            .make(
-                                FunctionNames.GET_SUBLIST,
-                                new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.FROM_START)),
-                                args,
-                                BCMAKE,
-                                null));
+                return new FunctionExpr<V>(new GetSubFunct<V>(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.FROM_START)), args, BCMAKE, null));
             }
             if ( f.equals("subListFromIndexToLast") ) {
-                return FunctionExpr
-                    .make(
-                        GetSubFunct
-                            .make(
-                                FunctionNames.GET_SUBLIST,
-                                new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.LAST)),
-                                args,
-                                BCMAKE,
-                                null));
+                return new FunctionExpr<V>(new GetSubFunct<V>(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.LAST)), args, BCMAKE, null));
             }
             if ( f.equals("subListFromIndexToEnd") ) {
-                return FunctionExpr
-                    .make(
-                        GetSubFunct
-                            .make(
-                                FunctionNames.GET_SUBLIST,
-                                new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.FROM_END)),
-                                args,
-                                BCMAKE,
-                                null));
+                return new FunctionExpr<V>(new GetSubFunct<V>(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.FROM_END)), args, BCMAKE, null));
             }
             if ( f.equals("subListFromFirstToIndex") ) {
-                return FunctionExpr
-                    .make(
-                        GetSubFunct
-                            .make(
-                                FunctionNames.GET_SUBLIST,
-                                new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.FROM_START)),
-                                args,
-                                BCMAKE,
-                                null));
+                return new FunctionExpr<V>(new GetSubFunct<V>(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.FROM_START)), args, BCMAKE, null));
             }
             if ( f.equals("subListFromFirstToLast") ) {
-                return FunctionExpr
-                    .make(
-                        GetSubFunct
-                            .make(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.LAST)), args, BCMAKE, null));
+                return new FunctionExpr<V>(new GetSubFunct<V>(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.LAST)), args, BCMAKE, null));
             }
             if ( f.equals("subListFromFirstToEnd") ) {
-                return FunctionExpr
-                    .make(
-                        GetSubFunct
-                            .make(
-                                FunctionNames.GET_SUBLIST,
-                                new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.FROM_END)),
-                                args,
-                                BCMAKE,
-                                null));
+                return new FunctionExpr<V>(new GetSubFunct<V>(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.FROM_END)), args, BCMAKE, null));
             }
             if ( f.equals("subListFromEndToIndex") ) {
-                return FunctionExpr
-                    .make(
-                        GetSubFunct
-                            .make(
-                                FunctionNames.GET_SUBLIST,
-                                new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.FROM_START)),
-                                args,
-                                BCMAKE,
-                                null));
+                return new FunctionExpr<V>(new GetSubFunct<V>(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.FROM_START)), args, BCMAKE, null));
             }
             if ( f.equals("subListFromEndToLast") ) {
-                return FunctionExpr
-                    .make(
-                        GetSubFunct
-                            .make(
-                                FunctionNames.GET_SUBLIST,
-                                new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.LAST)),
-                                args,
-                                BCMAKE,
-                                null));
+                return new FunctionExpr<V>(new GetSubFunct<V>(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.LAST)), args, BCMAKE, null));
             }
             if ( f.equals("subListFromEndToEnd") ) {
-                return FunctionExpr
-                    .make(
-                        GetSubFunct
-                            .make(
-                                FunctionNames.GET_SUBLIST,
-                                new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.FROM_END)),
-                                args,
-                                BCMAKE,
-                                null));
+                return new FunctionExpr<V>(new GetSubFunct<V>(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.FROM_END)), args, BCMAKE, null));
             }
         }
         if ( f.equals("print") ) {
-            return FunctionExpr.make(TextPrintFunct.make(args, BCMAKE, null));
+            return new FunctionExpr<V>(new TextPrintFunct<V>(args, BCMAKE, null));
         }
         if ( f.equals("createTextWith") ) {
-            ExprList<V> args0 = ExprList.make();
+            ExprList<V> args0 = new ExprList<V>();
             for ( Expr<V> e : args ) {
                 e.setReadOnly();
                 args0.addExpr(e);
             }
             args0.setReadOnly();
-            return FunctionExpr.make(TextJoinFunct.make(args0, BCMAKE, null));
+            return new FunctionExpr<V>(new TextJoinFunct<V>(args0, BCMAKE, null));
 
         }
         if ( f.equals("constrain") ) {
-            return FunctionExpr.make(MathConstrainFunct.make(args, BCMAKE, null));
+            return new FunctionExpr<V>(new MathConstrainFunct<V>(args, BCMAKE, null));
         }
         if ( f.equals("isEmpty") ) {
-            return FunctionExpr.make(LengthOfIsEmptyFunct.make(FunctionNames.LIST_IS_EMPTY, args, BCMAKE, null));
+            return new FunctionExpr<V>(new LengthOfIsEmptyFunct<V>(FunctionNames.LIST_IS_EMPTY, args, BCMAKE, null));
         }
         if ( f.equals("getRGB") ) {
             if ( args.size() == 3 ) {
-                return (Expr<V>) RgbColor.make(BCMAKE, null, args.get(0), args.get(1), args.get(2), EmptyExpr.make(BlocklyType.NUMBER_INT));
+                return (Expr<V>) (RgbColor<V>) new RgbColor(BCMAKE, null, args.get(0), args.get(1), args.get(2), new EmptyExpr<V>(BlocklyType.NUMBER_INT));
             } else if ( args.size() == 4 ) {
-                return (Expr<V>) RgbColor.make(BCMAKE, null, args.get(0), args.get(1), args.get(2), args.get(3));
+                return (Expr<V>) (RgbColor<V>) new RgbColor(BCMAKE, null, args.get(0), args.get(1), args.get(2), args.get(3));
             } else {
-                Expr<V> empty = EmptyExpr.make(BlocklyType.NUMBER_INT);
-                return (Expr<V>) RgbColor.make(BCMAKE, null, empty, empty, empty, empty);
+                Expr<V> empty = new EmptyExpr<V>(BlocklyType.NUMBER_INT);
+                return (Expr<V>) (RgbColor<V>) new RgbColor(BCMAKE, null, empty, empty, empty, empty);
             }
         }
         try {
-            return FunctionExpr.make(MathSingleFunct.make(FunctionNames.get(f), args, BCMAKE, null));
+            return new FunctionExpr<V>(new MathSingleFunct<V>(FunctionNames.get(f), args, BCMAKE, null));
         } catch ( Exception e ) {
             throw new UnsupportedOperationException("Invalid function name: " + f);
         }
@@ -476,7 +409,7 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
      */
     @Override
     public NumConst<V> visitFloatConst(ExprlyParser.FloatConstContext ctx) {
-        return NumConst.make(ctx.FLOAT().getText());
+        return new NumConst<>(null, null, ctx.FLOAT().getText());
     }
 
     /**
@@ -487,7 +420,7 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
         Expr<V> e = visit(ctx.expr());
         e.setReadOnly();
         if ( ctx.op.getType() == ExprlyParser.NOT ) {
-            return Unary.make(Unary.Op.NOT, e, BCMAKE, null);
+            return new Unary<V>(Unary.Op.NOT, e, BCMAKE, null);
         }
         throw new UnsupportedOperationException("Invalid unary operation");
     }
@@ -500,10 +433,10 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
         Expr<V> e = visit(ctx.expr());
         e.setReadOnly();
         if ( ctx.op.getType() == ExprlyParser.ADD ) {
-            return Unary.make(Unary.Op.PLUS, e, BCMAKE, null);
+            return new Unary<V>(Unary.Op.PLUS, e, BCMAKE, null);
         }
         if ( ctx.op.getType() == ExprlyParser.SUB ) {
-            return Unary.make(Unary.Op.NEG, e, BCMAKE, null);
+            return new Unary<V>(Unary.Op.NEG, e, BCMAKE, null);
         }
         throw new UnsupportedOperationException("Invalid unary operation");
     }
@@ -515,7 +448,7 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
     public Var<V> visitVarName(ExprlyParser.VarNameContext ctx) {
         // By default we use VOID for the types of the variables, the type can be
         // checked later when compiling the program with the typechecker
-        return Var.make(BlocklyType.VOID, ctx.VAR().getText(), BCMAKE, null);
+        return new Var<>(BlocklyType.VOID, ctx.VAR().getText(), BCMAKE, null);
     }
 
     /**
@@ -523,7 +456,7 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
      */
     @Override
     public ExprList<V> visitListExpr(ExprlyParser.ListExprContext ctx) {
-        ExprList<V> list = ExprList.make();
+        ExprList<V> list = new ExprList<V>();
         for ( ExprlyParser.ExprContext expr : ctx.expr() ) {
             Expr<V> e = visit(expr);
             e.setReadOnly();
@@ -546,7 +479,7 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
      */
     @Override
     public ConnectConst<V> visitConn(ExprlyParser.ConnContext ctx) {
-        return ConnectConst.make(ctx.op0.getText(), ctx.op1.getText(), BCMAKE, null);
+        return new ConnectConst<V>(BCMAKE, null, ctx.op1.getText(), ctx.op0.getText());
     }
 
     /**
@@ -558,21 +491,21 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
         Expr<V> r = visit(ctx.expr(2));
         if ( q instanceof ExprList<?> ) {
             q.setReadOnly();
-            q = ListCreate.make(BlocklyType.VOID, (ExprList<V>) q, BCMAKE, null);
+            q = new ListCreate<V>(BlocklyType.VOID, (ExprList<V>) q, BCMAKE, null);
         }
         if ( r instanceof ExprList<?> ) {
             r.setReadOnly();
-            r = ListCreate.make(BlocklyType.VOID, (ExprList<V>) r, BCMAKE, null);
+            r = new ListCreate<V>(BlocklyType.VOID, (ExprList<V>) r, BCMAKE, null);
         }
         q.setReadOnly();
         r.setReadOnly();
-        StmtList<V> thenList = StmtList.make();
-        StmtList<V> elseList = StmtList.make();
-        thenList.addStmt(ExprStmt.make(q));
-        elseList.addStmt(ExprStmt.make(r));
+        StmtList<V> thenList = new StmtList<V>();
+        StmtList<V> elseList = new StmtList<V>();
+        thenList.addStmt(new ExprStmt<V>(q));
+        elseList.addStmt(new ExprStmt<V>(r));
         thenList.setReadOnly();
         elseList.setReadOnly();
-        TernaryExpr<V> ternaryExpr = TernaryExpr.make(visit(ctx.expr(0)), visit(ctx.expr(1)), visit(ctx.expr(2)), BCMAKE, null);
+        TernaryExpr<V> ternaryExpr = new TernaryExpr<V>(BCMAKE, null, visit(ctx.expr(0)), visit(ctx.expr(1)), visit(ctx.expr(2)));
         return ternaryExpr;
     }
 

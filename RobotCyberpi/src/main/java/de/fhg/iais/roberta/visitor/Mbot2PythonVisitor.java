@@ -177,7 +177,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        StmtList<Void> variables = mainTask.getVariables();
+        StmtList<Void> variables = mainTask.variables;
         variables.accept(this);
         generateUserDefinedMethods();
         nlIndent();
@@ -434,7 +434,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     private ConfigurationComponent getMbuildPort() {
         for ( Map.Entry<String, ConfigurationComponent> entry : configurationAst.getConfigurationComponents().entrySet() ) {
             ConfigurationComponent component = entry.getValue();
-            if ( component.getComponentType().equals("MBUILD_PORT") ) {
+            if ( component.componentType.equals("MBUILD_PORT") ) {
                 return component;
             }
         }
@@ -449,10 +449,10 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     private int getSensorNumber(String sensorName, String userDefinedName) {
         int index = 0;
         for ( ConfigurationComponent sensor : getMbuildModules() ) {
-            if ( sensor.getComponentType().equals(sensorName) ) {
+            if ( sensor.componentType.equals(sensorName) ) {
                 index++;
             }
-            if ( sensor.getUserDefinedPortName().equals(userDefinedName) ) {
+            if ( sensor.userDefinedPortName.equals(userDefinedName) ) {
                 break;
             }
         }
@@ -522,11 +522,11 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        MotorDuration<Void> distance = motorOnAction.getParam().getDuration();
+        MotorDuration<Void> distance = motorOnAction.param.getDuration();
         String port = getPortFromConfig(motorOnAction.getUserDefinedPort());
         if ( distance == null ) {
             this.sb.append("mbot2.EM_set_speed(");
-            motorOnAction.getParam().getSpeed().accept(this);
+            motorOnAction.param.getSpeed().accept(this);
             this.sb.append(", \"").append(port).append("\")");
         } else {
             this.sb.append("mbot2.EM_turn((");
@@ -536,7 +536,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
                 this.sb.append(" * 360");
             }
             this.sb.append(", ");
-            motorOnAction.getParam().getSpeed().accept(this);
+            motorOnAction.param.getSpeed().accept(this);
             this.sb.append(", \"").append(port).append("\")");
         }
         return null;
@@ -544,10 +544,10 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        if ( driveAction.getParam().getDuration() != null ) {
-            appendCurveForAction(driveAction.getParam(), driveAction.getParam(), driveAction.getParam().getDuration(), driveAction.getDirection());
+        if ( driveAction.param.getDuration() != null ) {
+            appendCurveForAction(driveAction.param, driveAction.param, driveAction.param.getDuration(), driveAction.direction);
         } else {
-            appendCurveAction(driveAction.getParam(), driveAction.getParam(), driveAction.getDirection());
+            appendCurveAction(driveAction.param, driveAction.param, driveAction.direction);
         }
 
         return null;
@@ -561,9 +561,9 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        String direction = turnAction.getDirection().toString().toLowerCase();
+        String direction = turnAction.direction.toString().toLowerCase();
 
-        if ( turnAction.getParam().getDuration() != null ) {
+        if ( turnAction.param.getDuration() != null ) {
             appendTurnForAction(turnAction, direction);
         } else {
             appendTurnAction(turnAction, direction);
@@ -579,9 +579,9 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
             optBracket = ")";
         }
         sb.append("mbot2.drive_speed(").append(multi);
-        turnAction.getParam().getSpeed().accept(this);
+        turnAction.param.getSpeed().accept(this);
         sb.append(optBracket).append(", ").append(multi);
-        turnAction.getParam().getSpeed().accept(this);
+        turnAction.param.getSpeed().accept(this);
         sb.append(optBracket).append(")");
 
     }
@@ -595,20 +595,20 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
             optBracket = ")";
         }
         sb.append(multi);
-        turnAction.getParam().getDuration().getValue().accept(this);
+        turnAction.param.getDuration().getValue().accept(this);
         sb.append(optBracket);
         this.sb.append(", ");
-        turnAction.getParam().getSpeed().accept(this);
+        turnAction.param.getSpeed().accept(this);
         this.sb.append(")");
     }
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
+        MotorDuration<Void> duration = curveAction.paramLeft.getDuration();
         if ( duration != null ) {
-            appendCurveForAction(curveAction.getParamLeft(), curveAction.getParamRight(), curveAction.getParamLeft().getDuration(), curveAction.getDirection());
+            appendCurveForAction(curveAction.paramLeft, curveAction.paramRight, curveAction.paramLeft.getDuration(), curveAction.direction);
         } else {
-            appendCurveAction(curveAction.getParamLeft(), curveAction.getParamRight(), curveAction.getDirection());
+            appendCurveAction(curveAction.paramLeft, curveAction.paramRight, curveAction.direction);
         }
 
         return null;
@@ -667,7 +667,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
     private ConfigurationComponent getDiffDrive() {
         for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
-            if ( component.getComponentType().equals(CyberpiConstants.DIFFERENTIALDRIVE) ) {
+            if ( component.componentType.equals(CyberpiConstants.DIFFERENTIALDRIVE) ) {
                 return component;
             }
         }
@@ -692,9 +692,9 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         this.sb.append("cyberpi.audio.play_tone(int(");
-        toneAction.getFrequency().accept(this);
+        toneAction.frequency.accept(this);
         this.sb.append("), ");
-        toneAction.getDuration().accept(this);
+        toneAction.duration.accept(this);
         this.sb.append(" * 0.001)");
         return null;
     }
@@ -702,20 +702,20 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         this.sb.append("cyberpi.audio.play_tone(int(")
-            .append(playNoteAction.getFrequency())
+            .append(playNoteAction.frequency)
             .append("), ")
-            .append(playNoteAction.getDuration())
+            .append(playNoteAction.duration)
             .append(" * 0.001)");
         return null;
     }
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        if ( volumeAction.getMode().name().equals("GET") ) {
+        if ( volumeAction.mode.name().equals("GET") ) {
             this.sb.append("cyberpi.audio.get_vol()");
         } else {
             this.sb.append("cyberpi.audio.set_vol(");
-            volumeAction.getVolume().accept(this);
+            volumeAction.volume.accept(this);
             this.sb.append(")");
         }
         return null;
@@ -751,7 +751,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
         this.sb.append("while True:");
         incrIndentation();
-        visitStmtList(waitStmt.getStatements());
+        visitStmtList(waitStmt.statements);
         decrIndentation();
         return null;
     }
@@ -759,7 +759,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
         this.sb.append("time.sleep(");
-        waitTimeStmt.getTime().accept(this);
+        waitTimeStmt.time.accept(this);
         this.sb.append("/1000)");
         return null;
     }
@@ -773,17 +773,17 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
         this.sb.append("(");
-        rgbColor.getR().accept(this);
+        rgbColor.R.accept(this);
         this.sb.append(", ");
-        rgbColor.getG().accept(this);
+        rgbColor.G.accept(this);
         this.sb.append(", ");
-        rgbColor.getB().accept(this);
+        rgbColor.B.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
-        return sensorGetSample.getSensor().accept(this);
+        return sensorGetSample.sensor.accept(this);
     }
 }

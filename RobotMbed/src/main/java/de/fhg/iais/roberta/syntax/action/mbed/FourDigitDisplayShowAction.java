@@ -28,24 +28,4 @@ public final class FourDigitDisplayShowAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> FourDigitDisplayShowAction<V> make(
-        Expr<V> value,
-        Expr<V> position,
-        Expr<V> colon,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new FourDigitDisplayShowAction<>(properties, comment, value, position, colon);
-    }
-
-    public Expr<V> getValue() {
-        return this.value;
-    }
-
-    public Expr<V> getPosition() {
-        return this.position;
-    }
-
-    public Expr<V> getColon() {
-        return this.colon;
-    }
 }

@@ -17,11 +17,6 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>naoActions_walk</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for .<br/>
- * <br/>
- * The client must provide the {@link walkToX}, {@link walkToY} and {@link walkToTheta} (coordinates the robot will walk to).
- */
 @NepoBasic(name = "WALK_ASYNC", category = "ACTOR", blocklyNames = {"naoActions_walk_async"})
 public final class WalkAsync<V> extends Action<V> {
 
@@ -29,7 +24,7 @@ public final class WalkAsync<V> extends Action<V> {
     public final Expr<V> YSpeed;
     public final Expr<V> ZSpeed;
 
-    private WalkAsync(Expr<V> XSpeed, Expr<V> YSpeed, Expr<V> ZSpeed, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public WalkAsync(Expr<V> XSpeed, Expr<V> YSpeed, Expr<V> ZSpeed, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         this.XSpeed = XSpeed;
         this.YSpeed = YSpeed;
@@ -37,44 +32,11 @@ public final class WalkAsync<V> extends Action<V> {
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link WalkAsync}. This instance is read only and can not be modified.
-     *
-     * @param X {@link walkToX} x coordinate,
-     * @param Y {@link walkToY} y coordinate,
-     * @param theta {@link walkToTheta} theta coordinate,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link WalkAsync}
-     */
-    private static <V> WalkAsync<V> make(Expr<V> walkToX, Expr<V> walkToY, Expr<V> walkToTheta, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new WalkAsync<V>(walkToX, walkToY, walkToTheta, properties, comment);
-    }
-
-    public Expr<V> getXSpeed() {
-        return this.XSpeed;
-    }
-
-    public Expr<V> getYSpeed() {
-        return this.YSpeed;
-    }
-
-    public Expr<V> getZSpeed() {
-        return this.ZSpeed;
-    }
-
     @Override
     public String toString() {
         return "WalkTo [" + this.XSpeed + ", " + this.YSpeed + ", " + this.ZSpeed + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 3);
 
@@ -82,13 +44,7 @@ public final class WalkAsync<V> extends Action<V> {
         Phrase<V> YSpeed = helper.extractValue(values, new ExprParam(BlocklyConstants.Y + BlocklyConstants.SPEED, BlocklyType.NUMBER_INT));
         Phrase<V> ZSpeed = helper.extractValue(values, new ExprParam(BlocklyConstants.Z + BlocklyConstants.SPEED, BlocklyType.NUMBER_INT));
 
-        return WalkAsync
-            .make(
-                Jaxb2Ast.convertPhraseToExpr(XSpeed),
-                Jaxb2Ast.convertPhraseToExpr(YSpeed),
-                Jaxb2Ast.convertPhraseToExpr(ZSpeed),
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block));
+        return new WalkAsync<V>(Jaxb2Ast.convertPhraseToExpr(XSpeed), Jaxb2Ast.convertPhraseToExpr(YSpeed), Jaxb2Ast.convertPhraseToExpr(ZSpeed), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

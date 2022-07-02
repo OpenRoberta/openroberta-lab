@@ -370,8 +370,8 @@ public class Administration {
             for ( Phrase<Void> phrase : tree ) {
                 if ( phrase.getKind().hasName("LOCATION") ) {
                     blockSet.getInstance().add(instance);
-                    instance.setX(((Location<Void>) phrase).getX());
-                    instance.setY(((Location<Void>) phrase).getY());
+                    instance.setX(((Location<Void>) phrase).x);
+                    instance.setY(((Location<Void>) phrase).y);
                 }
                 instance.getBlock().add(phrase.astToBlock());
             }

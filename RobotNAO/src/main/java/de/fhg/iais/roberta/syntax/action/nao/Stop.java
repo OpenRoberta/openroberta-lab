@@ -13,7 +13,4 @@ public final class Stop<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> Stop<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Stop<V>(properties, comment);
-    }
 }

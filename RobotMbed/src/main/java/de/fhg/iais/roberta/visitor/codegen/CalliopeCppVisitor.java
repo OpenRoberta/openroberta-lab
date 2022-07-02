@@ -187,8 +187,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
-        if ( var.getTypeVar().isArray() && var.getValue().getKind().hasName("EMPTY_EXPR") ) {
+        this.sb.append(getLanguageVarTypeFromBlocklyType(var.typeVar));
+        if ( var.typeVar.isArray() && var.value.getKind().hasName("EMPTY_EXPR") ) {
             this.sb.append(" &");
         }
         this.sb.append(whitespace() + var.getCodeSafeName());
@@ -198,10 +198,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     private Void generateUsedVars() {
         for ( final VarDeclaration<Void> var : this.getBean(UsedHardwareBean.class).getVisitedVars() ) {
             nlIndent();
-            if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                this.sb.append("___" + var.getName());
+            if ( !var.value.getKind().hasName("EMPTY_EXPR") ) {
+                this.sb.append("___" + var.name);
                 this.sb.append(whitespace() + "=" + whitespace());
-                var.getValue().accept(this);
+                var.value.accept(this);
                 this.sb.append(";");
             }
         }
@@ -210,13 +210,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
-        final Op op = binary.getOp();
+        final Op op = binary.op;
         if ( op == Op.MOD ) {
             this.sb.append("(int) ");
         } else if ( op == Op.NEQ ) {
             this.sb.append("!( ");
         }
-        generateSubExpr(this.sb, false, binary.getLeft(), binary);
+        generateSubExpr(this.sb, false, binary.left, binary);
         final String sym;
         if ( op.equals(Op.TEXT_APPEND) ) {
             sym = "=";
@@ -229,7 +229,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         this.sb.append(whitespace() + sym + whitespace());
         switch ( op ) {
             case TEXT_APPEND:
-                generateSubExpr(this.sb, false, binary.getLeft(), binary);
+                generateSubExpr(this.sb, false, binary.left, binary);
                 this.sb.append(" + ManagedString(");
                 generateSubExpr(this.sb, false, binary.getRight(), binary);
                 this.sb.append(")");
@@ -290,31 +290,31 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
-        final boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
-        switch ( repeatStmt.getMode() ) {
+        final boolean isWaitStmt = repeatStmt.mode == RepeatStmt.Mode.WAIT;
+        switch ( repeatStmt.mode ) {
             case UNTIL:
             case WHILE:
             case FOREVER:
                 increaseLoopCounter();
-                generateCodeFromStmtCondition("while", repeatStmt.getExpr());
+                generateCodeFromStmtCondition("while", repeatStmt.expr);
                 break;
             case TIMES:
             case FOR:
                 increaseLoopCounter();
-                generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
+                generateCodeFromStmtConditionFor("for", repeatStmt.expr);
                 break;
             case WAIT:
-                generateCodeFromStmtCondition("if", repeatStmt.getExpr());
+                generateCodeFromStmtCondition("if", repeatStmt.expr);
                 break;
             case FOR_EACH:
                 increaseLoopCounter();
-                generateCodeFromStmtCondition("for", repeatStmt.getExpr());
+                generateCodeFromStmtCondition("for", repeatStmt.expr);
                 break;
             default:
                 break;
         }
         incrIndentation();
-        repeatStmt.getList().accept(this);
+        repeatStmt.list.accept(this);
         if ( !isWaitStmt ) {
             addContinueLabelToLoop();
             nlIndent();
@@ -335,7 +335,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
         this.sb.append("while (true) {");
         incrIndentation();
-        visitStmtList(waitStmt.getStatements());
+        visitStmtList(waitStmt.statements);
         nlIndent();
         this.sb.append("_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);");
         decrIndentation();
@@ -347,7 +347,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
         this.sb.append("_uBit.sleep(");
-        waitTimeStmt.getTime().accept(this);
+        waitTimeStmt.time.accept(this);
         this.sb.append(");");
         return null;
     }
@@ -355,13 +355,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
         String ending = ")";
-        final String varType = displayTextAction.getMsg().getVarType().toString();
+        final String varType = displayTextAction.msg.getVarType().toString();
         this.sb.append("_uBit.display.");
         appendTextDisplayType(displayTextAction);
         if ( !varType.equals("STRING") ) {
             ending = wrapInManageStringToDisplay(displayTextAction, ending);
         } else {
-            displayTextAction.getMsg().accept(this);
+            displayTextAction.msg.accept(this);
         }
 
         this.sb.append(ending + ";");
@@ -378,7 +378,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         String port = lightStatusAction.getUserDefinedPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : "0";
+        String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : "0";
         switch ( pin1 ) {
             case "0":
                 this.sb.append("_uBit.rgb.off();");
@@ -399,9 +399,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         this.sb.append("_uBit.soundmotor.soundOn(");
-        toneAction.getFrequency().accept(this);
+        toneAction.frequency.accept(this);
         this.sb.append("); ").append("_uBit.sleep(");
-        toneAction.getDuration().accept(this);
+        toneAction.duration.accept(this);
         this.sb.append("); ").append("_uBit.soundmotor.soundOff();");
         return null;
     }
@@ -409,9 +409,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         this.sb.append("_uBit.soundmotor.soundOn(");
-        this.sb.append(playNoteAction.getFrequency());
+        this.sb.append(playNoteAction.frequency);
         this.sb.append("); ").append("_uBit.sleep(");
-        this.sb.append(playNoteAction.getDuration());
+        this.sb.append(playNoteAction.duration);
         this.sb.append("); ").append("_uBit.soundmotor.soundOff();");
         return null;
     }
@@ -420,12 +420,12 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         String port = motorOnAction.getUserDefinedPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
+        String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
         switch ( pin1 ) {
             case "0":
             case "2":
                 this.sb.append("_cbSetMotor(_buf, &_i2c, ").append(pin1).append(", ");
-                motorOnAction.getParam().getSpeed().accept(this);
+                motorOnAction.param.getSpeed().accept(this);
                 this.sb.append(");");
                 break;
             case "A":
@@ -435,7 +435,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                     this.sb.append(pin1);
                 }
                 this.sb.append("On(");
-                motorOnAction.getParam().getSpeed().accept(this);
+                motorOnAction.param.getSpeed().accept(this);
                 this.sb.append(");");
                 break;
             default:
@@ -458,7 +458,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         String port = motorStopAction.getUserDefinedPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
+        String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
         switch ( pin1 ) {
             case "0":
             case "2":
@@ -471,7 +471,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                     this.sb.append("//float, break and sleep doesn't work with more than one motor connected");
                 } else {
                     this.sb.append("_uBit.soundmotor.motor");
-                    switch ( (MotorStopMode) motorStopAction.getMode() ) {
+                    switch ( (MotorStopMode) motorStopAction.mode ) {
                         case FLOAT:
                             this.sb.append("Coast();");
                             break;
@@ -482,7 +482,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                             this.sb.append("Sleep();");
                             break;
                         default:
-                            throw new DbcException("Invalide stop mode " + motorStopAction.getMode());
+                            throw new DbcException("Invalide stop mode " + motorStopAction.mode);
                     }
                 }
                 break;
@@ -545,7 +545,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         String port = ultrasonicSensor.getUserDefinedPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        boolean isCallibot = confComp.getComponentType().equals("CALLIBOT");
+        boolean isCallibot = confComp.componentType.equals("CALLIBOT");
         if ( isCallibot ) {
             this.sb.append("_cbGetSampleUltrasonic(_buf, &_i2c)");
         } else {
@@ -558,7 +558,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         String port = infraredSensor.getUserDefinedPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
+        String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
         if ( pin1.equals("1") || pin1.contentEquals("2") ) {
             this.sb.append("_cbGetSampleInfrared(_buf, &_i2c, ").append(pin1).append(")");
         } else {
@@ -630,12 +630,12 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
-        String port = pinWriteValueSensor.getPort();
+        String port = pinWriteValueSensor.port;
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
-        String valueType = pinWriteValueSensor.getMode().equals(SC.DIGITAL) ? "DigitalValue(" : "AnalogValue(";
+        String valueType = pinWriteValueSensor.pinValue.equals(SC.DIGITAL) ? "DigitalValue(" : "AnalogValue(";
         this.sb.append("_uBit.io.").append(PIN_MAP.get(pin1)).append(".set").append(valueType);
-        pinWriteValueSensor.getValue().accept(this);
+        pinWriteValueSensor.value.accept(this);
         this.sb.append(");");
         return null;
     }
@@ -645,7 +645,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER) ) {
             this.sb.append("int _initTime = _uBit.systemTime();");
         }
-        mainTask.getVariables().accept(this);
+        mainTask.variables.accept(this);
         nlIndent();
         nlIndent();
         this.sb.append("int main()");
@@ -661,7 +661,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         }
         if ( this.robotConfiguration.isComponentTypePresent(SC.DIGITAL_PIN) ) {
             for ( ConfigurationComponent usedConfigurationBlock : this.robotConfiguration.getConfigurationComponentsValues() ) {
-                if ( usedConfigurationBlock.getComponentType().equals(SC.DIGITAL_PIN) ) {
+                if ( usedConfigurationBlock.componentType.equals(SC.DIGITAL_PIN) ) {
                     String pin1 = usedConfigurationBlock.getProperty("PIN1");
                     String mode = usedConfigurationBlock.getProperty("PIN_PULL");
                     if ( mode.equals("PIN_PULL_UP") ) {
@@ -680,7 +680,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             String integrationTime = "2_4MS";
             String gain = "1X";
             for ( ConfigurationComponent usedConfigurationBlock : this.robotConfiguration.getConfigurationComponentsValues() ) {
-                if ( usedConfigurationBlock.getComponentType().equals(SC.COLOUR) ) {
+                if ( usedConfigurationBlock.componentType.equals(SC.COLOUR) ) {
                     integrationTime = usedConfigurationBlock.getProperty("I_TIME");
                     gain = usedConfigurationBlock.getProperty("GAIN");
                     break;
@@ -713,11 +713,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
         this.sb.append("min(max(");
-        mathConstrainFunct.getParam().get(0).accept(this);
+        mathConstrainFunct.param.get(0).accept(this);
         this.sb.append(", ");
-        mathConstrainFunct.getParam().get(1).accept(this);
+        mathConstrainFunct.param.get(1).accept(this);
         this.sb.append("), ");
-        mathConstrainFunct.getParam().get(2).accept(this);
+        mathConstrainFunct.param.get(2).accept(this);
         this.sb.append(")");
         return null;
     }
@@ -725,12 +725,12 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
         this.sb.append("(_uBit.random(");
-        mathRandomIntFunct.getParam().get(1).accept(this);
+        mathRandomIntFunct.param.get(1).accept(this);
         this.sb.append(" - ");
-        mathRandomIntFunct.getParam().get(0).accept(this);
+        mathRandomIntFunct.param.get(0).accept(this);
         this.sb.append(" + 1)");
         this.sb.append(" + ");
-        mathRandomIntFunct.getParam().get(0).accept(this);
+        mathRandomIntFunct.param.get(0).accept(this);
         this.sb.append(")");
         return null;
     }
@@ -738,7 +738,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
         this.sb.append("ManagedString(");
-        mathCastStringFunct.getParam().get(0).accept(this);
+        mathCastStringFunct.param.get(0).accept(this);
         this.sb.append(")");
         return null;
     }
@@ -746,7 +746,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
         this.sb.append("ManagedString((char)(");
-        mathCastCharFunct.getParam().get(0).accept(this);
+        mathCastCharFunct.param.get(0).accept(this);
         this.sb.append("))");
         return null;
     }
@@ -754,7 +754,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
         this.sb.append("std::atof((");
-        textStringCastNumberFunct.getParam().get(0).accept(this);
+        textStringCastNumberFunct.param.get(0).accept(this);
         this.sb.append(").toCharArray())");
         return null;
     }
@@ -762,16 +762,16 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
         this.sb.append("(int)(");
-        textCharCastNumberFunct.getParam().get(0).accept(this);
+        textCharCastNumberFunct.param.get(0).accept(this);
         this.sb.append(".charAt(");
-        textCharCastNumberFunct.getParam().get(1).accept(this);
+        textCharCastNumberFunct.param.get(1).accept(this);
         this.sb.append("))");
         return null;
     }
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        final List<Expr<Void>> parameters = textJoinFunct.getParam().get();
+        final List<Expr<Void>> parameters = textJoinFunct.param.get();
         final int numberOfParameters = parameters.size();
         for ( int i = 0; i < numberOfParameters; i++ ) {
             this.sb.append("ManagedString(");
@@ -793,10 +793,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
         String end = ");";
-        if ( displayImageAction.getDisplayImageMode().name().equals("ANIMATION") ) {
+        if ( displayImageAction.displayImageMode.name().equals("ANIMATION") ) {
             try {
                 Expr<Void> values = displayImageAction.getValuesToDisplay();
-                int valuesSize = ((ListCreate<Void>) values).getValue().get().size();
+                int valuesSize = ((ListCreate<Void>) values).exprList.get().size();
                 this.sb.append("std::array<MicroBitImage, " + valuesSize + "> _animation = _convertToArray<MicroBitImage, " + valuesSize + ">(");
                 displayImageAction.getValuesToDisplay().accept(this);
                 this.sb.append(");");
@@ -812,7 +812,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             }
         }
         this.sb.append("_uBit.display.");
-        if ( displayImageAction.getDisplayImageMode().name().equals("ANIMATION") ) {
+        if ( displayImageAction.displayImageMode.name().equals("ANIMATION") ) {
             this.sb.append("animateImages(_animation, 200);");
             return null;
         } else {
@@ -825,16 +825,16 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitImageShiftFunction(ImageShiftFunction<Void> imageShiftFunction) {
-        imageShiftFunction.getImage().accept(this);
-        this.sb.append(".shiftImage" + capitalizeFirstLetter(imageShiftFunction.getShiftDirection().toString()) + "(");
-        imageShiftFunction.getPositions().accept(this);
+        imageShiftFunction.image.accept(this);
+        this.sb.append(".shiftImage" + capitalizeFirstLetter(imageShiftFunction.shiftDirection.toString()) + "(");
+        imageShiftFunction.positions.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
-        imageInvertFunction.getImage().accept(this);
+        imageInvertFunction.image.accept(this);
         this.sb.append(".invert()");
         return null;
     }
@@ -844,7 +844,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         this.sb.append("MicroBitImage(\"");
         for ( int i = 0; i < 5; i++ ) {
             for ( int j = 0; j < 5; j++ ) {
-                String pixel = image.getImage()[i][j].trim();
+                String pixel = image.image[i][j].trim();
                 if ( pixel.equals("#") ) {
                     pixel = "9";
                 } else if ( pixel.equals("") ) {
@@ -881,11 +881,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
         String port = ledOnAction.getUserDefinedPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : "0";
+        String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : "0";
         switch ( pin1 ) {
             case "0":
                 this.sb.append("_uBit.rgb.setColour(");
-                ledOnAction.getLedColor().accept(this);
+                ledOnAction.ledColor.accept(this);
                 this.sb.append(");");
                 break;
             case "1":
@@ -894,7 +894,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             case "4":
             case "5":
                 this.sb.append("_cbSetRGBLed(_buf, &_i2c, ").append(pin1).append(", ");
-                ledOnAction.getLedColor().accept(this);
+                ledOnAction.ledColor.accept(this);
                 this.sb.append(");");
                 break;
             default:
@@ -905,10 +905,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        String port = lightAction.getPort();
+        String port = lightAction.port;
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
-        String mode = lightAction.getMode().getValues()[0];
+        String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
+        String mode = lightAction.mode.getValues()[0];
         if ( mode.equals(BlocklyConstants.HIGH) ) {
             mode = "1";
         } else if ( mode.equals("LOW") ) {
@@ -922,22 +922,22 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
-        this.sb.append("_uBit.radio.setTransmitPower(" + radioSendAction.getPower() + ");");
+        this.sb.append("_uBit.radio.setTransmitPower(" + radioSendAction.power + ");");
         nlIndent();
-        switch ( radioSendAction.getType() ) {
+        switch ( radioSendAction.type ) {
             case NUMBER:
                 this.sb.append("_uBit.radio.datagram.send(ManagedString((int)(");
-                radioSendAction.getMsg().accept(this);
+                radioSendAction.message.accept(this);
                 this.sb.append("))");
                 break;
             case BOOLEAN:
                 this.sb.append("_uBit.radio.datagram.send(ManagedString((int)(");
-                radioSendAction.getMsg().accept(this);
+                radioSendAction.message.accept(this);
                 this.sb.append(")?true:false)");
                 break;
             case STRING:
                 this.sb.append("_uBit.radio.datagram.send(ManagedString((");
-                radioSendAction.getMsg().accept(this);
+                radioSendAction.message.accept(this);
                 this.sb.append("))");
                 break;
 
@@ -950,7 +950,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
-        switch ( radioReceiveAction.getType() ) {
+        switch ( radioReceiveAction.type ) {
             case BOOLEAN:
             case NUMBER:
                 this.sb.append("atoi((char*)_uBit.radio.datagram.recv().getBytes())");
@@ -967,7 +967,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
         this.sb.append("_uBit.radio.setGroup(");
-        radioSetChannelAction.getChannel().accept(this);
+        radioSetChannelAction.channel.accept(this);
         this.sb.append(");");
         return null;
     }
@@ -993,13 +993,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
         this.sb.append("MicroBitColor(");
-        rgbColor.getR().accept(this);
+        rgbColor.R.accept(this);
         this.sb.append(", ");
-        rgbColor.getG().accept(this);
+        rgbColor.G.accept(this);
         this.sb.append(", ");
-        rgbColor.getB().accept(this);
+        rgbColor.B.accept(this);
         this.sb.append(", ");
-        rgbColor.getA().accept(this);
+        rgbColor.A.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -1007,7 +1007,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
         this.sb.append("_uBit.display.setBrightness((");
-        displaySetBrightnessAction.getBrightness().accept(this);
+        displaySetBrightnessAction.brightness.accept(this);
         this.sb.append(") * _SET_BRIGHTNESS_MULTIPLIER);");
         return null;
     }
@@ -1021,11 +1021,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
         this.sb.append("_uBit.display.image.setPixelValue(");
-        displaySetPixelAction.getX().accept(this);
+        displaySetPixelAction.x.accept(this);
         this.sb.append(", ");
-        displaySetPixelAction.getY().accept(this);
+        displaySetPixelAction.y.accept(this);
         this.sb.append(", (");
-        displaySetPixelAction.getBrightness().accept(this);
+        displaySetPixelAction.brightness.accept(this);
         this.sb.append(") * _SET_BRIGHTNESS_MULTIPLIER);");
         return null;
     }
@@ -1033,9 +1033,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
         this.sb.append("round(_uBit.display.image.getPixelValue(");
-        displayGetPixelAction.getX().accept(this);
+        displayGetPixelAction.x.accept(this);
         this.sb.append(", ");
-        displayGetPixelAction.getY().accept(this);
+        displayGetPixelAction.y.accept(this);
         this.sb.append(") * _GET_BRIGHTNESS_MULTIPLIER)");
         return null;
     }
@@ -1043,11 +1043,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<Void> fourDigitDisplayShowAction) {
         this.sb.append("_fdd.show(");
-        fourDigitDisplayShowAction.getValue().accept(this);
+        fourDigitDisplayShowAction.value.accept(this);
         this.sb.append(", ");
-        fourDigitDisplayShowAction.getPosition().accept(this);
+        fourDigitDisplayShowAction.position.accept(this);
         this.sb.append(", ");
-        fourDigitDisplayShowAction.getColon().accept(this);
+        fourDigitDisplayShowAction.colon.accept(this);
         this.sb.append(");");
         return null;
     }
@@ -1061,9 +1061,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitLedBarSetAction(LedBarSetAction<Void> ledBarSetAction) {
         this.sb.append("_ledBar.setLed(");
-        ledBarSetAction.getX().accept(this);
+        ledBarSetAction.x.accept(this);
         this.sb.append(", ");
-        ledBarSetAction.getBrightness().accept(this);
+        ledBarSetAction.brightness.accept(this);
         this.sb.append(");");
         return null;
     }
@@ -1149,7 +1149,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     private void appendTextDisplayType(DisplayTextAction<Void> displayTextAction) {
-        if ( displayTextAction.getMode() == DisplayTextMode.TEXT ) {
+        if ( displayTextAction.mode == DisplayTextMode.TEXT ) {
             this.sb.append("scroll(");
         } else {
             this.sb.append("print(");
@@ -1158,7 +1158,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     private String wrapInManageStringToDisplay(DisplayTextAction<Void> displayTextAction, String ending) {
         this.sb.append("ManagedString(");
-        displayTextAction.getMsg().accept(this);
+        displayTextAction.msg.accept(this);
         ending += ")";
         return ending;
     }
@@ -1231,30 +1231,30 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitBothMotorsOnAction(BothMotorsOnAction<Void> bothMotorsOnAction) {
-        String portA = bothMotorsOnAction.getPortA();
-        String portB = bothMotorsOnAction.getPortB();
+        String portA = bothMotorsOnAction.portA;
+        String portB = bothMotorsOnAction.portB;
         ConfigurationComponent confCompA = this.robotConfiguration.getConfigurationComponent(portA);
         ConfigurationComponent confCompB = this.robotConfiguration.getConfigurationComponent(portB);
 
-        if ( confCompA.getComponentType().equals("CALLIBOT") ) {
+        if ( confCompA.componentType.equals("CALLIBOT") ) {
             this.sb.append("_cbSetMotors(_buf, &_i2c, ");
             if ( confCompA.getProperty("MOTOR_L").equals(portA) ) {
-                bothMotorsOnAction.getSpeedA().accept(this);
+                bothMotorsOnAction.speedA.accept(this);
                 this.sb.append(", ");
-                bothMotorsOnAction.getSpeedB().accept(this);
+                bothMotorsOnAction.speedB.accept(this);
             } else {
-                bothMotorsOnAction.getSpeedB().accept(this);
+                bothMotorsOnAction.speedB.accept(this);
                 this.sb.append(", ");
-                bothMotorsOnAction.getSpeedA().accept(this);
+                bothMotorsOnAction.speedA.accept(this);
             }
             this.sb.append(");");
         } else {
             this.sb.append("_uBit.soundmotor.motor").append(confCompA.getProperty("PIN1")).append("On(");
-            bothMotorsOnAction.getSpeedA().accept(this);
+            bothMotorsOnAction.speedA.accept(this);
             this.sb.append(");");
             nlIndent();
             this.sb.append("_uBit.soundmotor.motor").append(confCompB.getProperty("PIN1")).append("On(");
-            bothMotorsOnAction.getSpeedB().accept(this);
+            bothMotorsOnAction.speedB.accept(this);
             this.sb.append(");");
         }
         return null;
@@ -1309,7 +1309,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        writeToSerial(serialWriteAction.getValue());
+        writeToSerial(serialWriteAction.value);
         return null;
     }
 
@@ -1355,7 +1355,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction<Void> switchLedMatrixAction) {
-        if ( switchLedMatrixAction.isActivated() ) {
+        if ( switchLedMatrixAction.activated ) {
             this.sb.append("_uBit.display.enable();");
         } else {
             this.sb.append("_uBit.display.disable();");
@@ -1365,19 +1365,19 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitDebugAction(DebugAction<Void> debugAction) {
-        writeToSerial(debugAction.getValue());
+        writeToSerial(debugAction.value);
         return null;
     }
 
     @Override
     public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
-        if ( ((Binary<Void>) assertStmt.getAssert()).getLeft().getVarType().equals(BlocklyType.COLOR) ) {
+        if ( ((Binary<Void>) assertStmt.asserts).left.getVarType().equals(BlocklyType.COLOR) ) {
             this.sb.append("assertNepo((");
-            assertStmt.getAssert().accept(this);
-            this.sb.append("), \"").append(assertStmt.getMsg()).append("\", \"");
-            ((Binary<Void>) assertStmt.getAssert()).getLeft().accept(this);
-            this.sb.append("\", \"").append(((Binary<Void>) assertStmt.getAssert()).getOp().toString()).append("\", \"");
-            ((Binary<Void>) assertStmt.getAssert()).getRight().accept(this);
+            assertStmt.asserts.accept(this);
+            this.sb.append("), \"").append(assertStmt.msg).append("\", \"");
+            ((Binary<Void>) assertStmt.asserts).left.accept(this);
+            this.sb.append("\", \"").append(((Binary<Void>) assertStmt.asserts).op.toString()).append("\", \"");
+            ((Binary<Void>) assertStmt.asserts).getRight().accept(this);
             this.sb.append("\");");
         } else {
             super.visitAssertStmt(assertStmt);
@@ -1389,7 +1389,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitServoSetAction(ServoSetAction<Void> servoSetAction) {
         String port = servoSetAction.getUserDefinedPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        if ( confComp.getComponentType().equals("CALLIBOT") ) {
+        if ( confComp.componentType.equals("CALLIBOT") ) {
             this.sb.append("_cbSetServo(_buf, &_i2c, ");
             String i2cAddress = getCallibotPin(confComp, port);
             this.sb.append(i2cAddress);
@@ -1398,18 +1398,18 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             String pin = PIN_MAP.get(confComp.getProperty("PIN1"));
             this.sb.append("_uBit.io.").append(pin).append(".setServoValue(");
         }
-        servoSetAction.getValue().accept(this);
+        servoSetAction.value.accept(this);
         this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitMotionKitSingleSetAction(MotionKitSingleSetAction<Void> motionKitSingleSetAction) {
-        String userDefinedName = motionKitSingleSetAction.getPort();
+        String userDefinedName = motionKitSingleSetAction.port;
         String currentPort = PIN_MAP.get(userDefinedName);
         String rightMotorPort = PIN_MAP.get("C16"); // C16 is the right motor
         String leftMotorPort = PIN_MAP.get("C17"); // C17 is the left motor
-        String direction = motionKitSingleSetAction.getDirection();
+        String direction = motionKitSingleSetAction.direction;
         // for the right motor (C16) 0 is forwards and 180 is backwards
         // for the left  motor (C17) 180 is forwards and 0 is backwards
         if ( userDefinedName.equals(SC.BOTH) ) {
@@ -1433,7 +1433,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                     throw new DbcException("Invalid direction!");
             }
         } else {
-            switch ( motionKitSingleSetAction.getDirection() ) {
+            switch ( motionKitSingleSetAction.direction ) {
                 case SC.FOREWARD:
                     this.sb.append("_uBit.io.").append(currentPort).append(".setServoValue(");
                     this.sb.append(currentPort.equals(rightMotorPort) ? 0 : 180);
@@ -1460,7 +1460,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         String leftMotorPort = PIN_MAP.get("C17"); // C17 is the left motor
         // for the right motor (C16) 0 is forwards and 180 is backwards
         // for the left  motor (C17) 180 is forwards and 0 is backwards
-        switch ( motionKitDualSetAction.getDirectionRight() ) {
+        switch ( motionKitDualSetAction.directionRight ) {
             case SC.FOREWARD:
                 this.sb.append("_uBit.io.").append(rightMotorPort).append(".setServoValue(0);");
                 break;
@@ -1474,7 +1474,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                 throw new DbcException("Invalid direction!");
         }
         nlIndent();
-        switch ( motionKitDualSetAction.getDirectionLeft() ) {
+        switch ( motionKitDualSetAction.directionLeft ) {
             case SC.FOREWARD:
                 this.sb.append("_uBit.io.").append(leftMotorPort).append(".setServoValue(180);");
                 break;
@@ -1512,7 +1512,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     private Set<String> getMotorPins() {
         Set<String> motorPins = new HashSet<>();
         for ( ConfigurationComponent confComp : this.robotConfiguration.getConfigurationComponentsValues() ) {
-            String componentType = confComp.getComponentType();
+            String componentType = confComp.componentType;
             if ( componentType.equals("MOTOR") ) {
                 motorPins.add(confComp.getProperty("PIN1"));
             } else if ( componentType.equals("CALLIBOT") ) {

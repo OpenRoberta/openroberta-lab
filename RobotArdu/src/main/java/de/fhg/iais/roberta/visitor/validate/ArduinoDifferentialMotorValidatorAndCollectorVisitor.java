@@ -24,16 +24,16 @@ public class ArduinoDifferentialMotorValidatorAndCollectorVisitor extends Arduin
     }
 
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        checkAndVisitMotionParam(driveAction, driveAction.getParam());
+        checkAndVisitMotionParam(driveAction, driveAction.param);
         addMotorsToUsedActors();
         return null;
     }
 
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        requiredComponentVisited(curveAction, curveAction.getParamLeft().getSpeed(), curveAction.getParamRight().getSpeed());
-        Optional.ofNullable(curveAction.getParamLeft().getDuration()).ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
-        Optional.ofNullable(curveAction.getParamRight().getDuration()).ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
-        checkForZeroSpeedInCurve(curveAction.getParamLeft().getSpeed(), curveAction.getParamRight().getSpeed(), curveAction);
+        requiredComponentVisited(curveAction, curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed());
+        Optional.ofNullable(curveAction.paramLeft.getDuration()).ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
+        Optional.ofNullable(curveAction.paramRight.getDuration()).ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
+        checkForZeroSpeedInCurve(curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed(), curveAction);
         addMotorsToUsedActors();
         return null;
     }
@@ -44,15 +44,15 @@ public class ArduinoDifferentialMotorValidatorAndCollectorVisitor extends Arduin
     }
 
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        checkAndVisitMotionParam(turnAction, turnAction.getParam());
+        checkAndVisitMotionParam(turnAction, turnAction.param);
         addMotorsToUsedActors();
         return null;
     }
 
     protected void checkForZeroSpeedInCurve(Expr<Void> speedLeft, Expr<Void> speedRight, Action<Void> action) {
         if ( speedLeft.getKind().hasName("NUM_CONST") && speedRight.getKind().hasName("NUM_CONST") ) {
-            double speedLeftNumConst = Double.parseDouble(((NumConst<Void>) speedLeft).getValue());
-            double speedRightNumConst = Double.parseDouble(((NumConst<Void>) speedRight).getValue());
+            double speedLeftNumConst = Double.parseDouble(((NumConst<Void>) speedLeft).value);
+            double speedRightNumConst = Double.parseDouble(((NumConst<Void>) speedRight).value);
             boolean bothMotorsHaveZeroSpeed = (Math.abs(speedLeftNumConst) < DOUBLE_EPS) && (Math.abs(speedRightNumConst) < DOUBLE_EPS);
             if ( bothMotorsHaveZeroSpeed ) {
                 addWarningToPhrase(action, "MOTOR_SPEED_0");

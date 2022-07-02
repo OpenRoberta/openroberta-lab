@@ -30,7 +30,7 @@ import de.fhg.iais.roberta.visitor.hardware.actor.ISimpleSoundVisitor;
 public interface ISenseboxVisitor<V> extends IDisplayVisitor<V>, ISimpleSoundVisitor<V>, ILightVisitor<V>, IPinVisitor<V>, INeuralNetworkVisitor<V>, IHardwareVisitor<V> {
 
     default V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
-        return sensorGetSample.getSensor().accept(this);
+        return sensorGetSample.sensor.accept(this);
     }
 
     V visitAccelerometerSensor(AccelerometerSensor<V> accelerometerSensor);

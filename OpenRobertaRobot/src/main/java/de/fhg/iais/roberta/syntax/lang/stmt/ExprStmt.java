@@ -12,28 +12,11 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 public final class ExprStmt<V> extends Stmt<V> {
     public final Expr<V> expr;
 
-    private ExprStmt(Expr<V> expr) {
+    public ExprStmt(Expr<V> expr) {
         super(expr.getProperty(), expr.getComment());
         Assert.isTrue(expr.isReadOnly());
         this.expr = expr;
         setReadOnly();
-    }
-
-    /**
-     * Create object of the class {@link ExprStmt}.
-     *
-     * @param expr that we want to wrap
-     * @return statement with wrapped expression inside
-     */
-    public static <V> ExprStmt<V> make(Expr<V> expr) {
-        return new ExprStmt<V>(expr);
-    }
-
-    /**
-     * @return expression that is wrapped in the statement
-     */
-    public final Expr<V> getExpr() {
-        return this.expr;
     }
 
     @Override
@@ -46,6 +29,6 @@ public final class ExprStmt<V> extends Stmt<V> {
 
     @Override
     public Block astToBlock() {
-        return getExpr().astToBlock();
+        return this.expr.astToBlock();
     }
 }

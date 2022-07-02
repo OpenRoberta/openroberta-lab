@@ -14,7 +14,4 @@ public final class GetVolume<V> extends Sensor<V> {
         setReadOnly();
     }
 
-    public static <V> GetVolume<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new GetVolume<V>(properties, comment);
-    }
 }

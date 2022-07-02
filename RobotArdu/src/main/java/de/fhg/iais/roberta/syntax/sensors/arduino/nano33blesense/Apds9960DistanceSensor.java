@@ -13,17 +13,10 @@ public final class Apds9960DistanceSensor<V> extends BuiltinSensor<V> {
     @NepoValue(name = "VARIABLE_VALUE", type = BlocklyType.NUMBER)
     public final Expr<V> distance;
 
-    public Expr<V> getDistance() {
-        return distance;
-    }
-
     public Apds9960DistanceSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> distance) {
         super(properties, comment, null);
         this.distance = distance;
         setReadOnly();
     }
 
-    public static <V> Apds9960DistanceSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> distance) {
-        return new Apds9960DistanceSensor<>(properties, comment, distance);
-    }
 }

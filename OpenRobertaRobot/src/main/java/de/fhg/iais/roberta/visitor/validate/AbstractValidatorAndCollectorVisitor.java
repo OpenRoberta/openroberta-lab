@@ -145,7 +145,7 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
         } else if ( subPhrase instanceof StmtList<?> ) {
             for ( Stmt<?> stmt : ((StmtList<?>) subPhrase).get() ) {
                 if ( stmt instanceof ExprStmt<?> ) {
-                    if ( ((ExprStmt<?>) stmt).getExpr() instanceof EmptyExpr<?> ) {
+                    if ( ((ExprStmt<?>) stmt).expr instanceof EmptyExpr<?> ) {
                         addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
                     }
                 }

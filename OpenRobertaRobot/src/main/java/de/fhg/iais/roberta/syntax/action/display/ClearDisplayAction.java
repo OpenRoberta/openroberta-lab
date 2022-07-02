@@ -25,13 +25,4 @@ public final class ClearDisplayAction<V> extends Action<V> {
         this.hide = hide;
         setReadOnly();
     }
-
-    // TODO: remove, if Transformer is better engineered
-    public static <V> ClearDisplayAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment, String port) {
-        return new ClearDisplayAction(properties, comment, port, null);
-    }
-
-    public String getPort() {
-        return this.port;
-    }
 }

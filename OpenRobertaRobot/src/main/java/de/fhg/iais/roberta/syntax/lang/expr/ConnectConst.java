@@ -25,10 +25,6 @@ public final class ConnectConst<V> extends Expr<V> {
         setReadOnly();
     }
 
-    public static <V> ConnectConst<V> make(String dataValue, String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ConnectConst<V>(properties, comment, value, dataValue);
-    }
-
     @Override
     public Assoc getAssoc() {
         return Assoc.NONE;
@@ -37,10 +33,6 @@ public final class ConnectConst<V> extends Expr<V> {
     @Override
     public int getPrecedence() {
         return 999;
-    }
-
-    public String getValue() {
-        return this.value;
     }
 
     @Override

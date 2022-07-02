@@ -83,7 +83,7 @@ public class ValidatorAndCollectorVisitorTest {
     @Test
     public void requiredComponentVisitedVarArgs() {
         Phrase<Void> phrase = new SimplePhrase();
-        Phrase<Void> emptyExpression = EmptyExpr.make(BlocklyType.ANY);
+        Phrase<Void> emptyExpression = new EmptyExpr<Void>(BlocklyType.ANY);
 
         delegatedValidatorAndCollectorVisitor.requiredComponentVisited(phrase, emptyExpression);
 
@@ -127,7 +127,7 @@ public class ValidatorAndCollectorVisitorTest {
     @Test
     public void requiredComponentVisitedList() {
         Phrase<Void> phrase = new SimplePhrase();
-        Phrase<Void> emptyExpression = EmptyExpr.make(BlocklyType.ANY);
+        Phrase<Void> emptyExpression = new EmptyExpr<Void>(BlocklyType.ANY);
 
         delegatedValidatorAndCollectorVisitor.requiredComponentVisited(phrase, Arrays.asList(emptyExpression));
 

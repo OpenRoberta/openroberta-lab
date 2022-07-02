@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
 @NepoPhrase(name = "IMAGE_INVERT", category = "FUNCTION", blocklyNames = {"mbedImage_invert"})
 public final class ImageInvertFunction<V> extends Function<V> {
-    @NepoValue(name = "VAR",type = BlocklyType.PREDEFINED_IMAGE)
+    @NepoValue(name = "VAR", type = BlocklyType.PREDEFINED_IMAGE)
     public final Expr<V> image;
 
     public ImageInvertFunction(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> image) {
@@ -21,14 +21,6 @@ public final class ImageInvertFunction<V> extends Function<V> {
 
         this.image = image;
         setReadOnly();
-    }
-
-    public static <V> ImageInvertFunction<V> make(Expr<V> image, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ImageInvertFunction<>(properties, comment, image);
-    }
-
-    public Expr<V> getImage() {
-        return this.image;
     }
 
     @Override

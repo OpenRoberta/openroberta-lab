@@ -25,7 +25,7 @@ public final class PlotPointAction<V> extends Action<V> {
     public final Expr<V> value;
     public final Expr<V> tickmark;
 
-    private PlotPointAction(String port, Expr<V> value, Expr<V> tickmark, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public PlotPointAction(String port, Expr<V> value, Expr<V> tickmark, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         this.port = port;
         this.value = value;
@@ -33,41 +33,11 @@ public final class PlotPointAction<V> extends Action<V> {
         this.setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link PlotPointAction}. This instance is read only and can not be modified.
-     *
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link PlotPointAction}
-     */
-    public static <V> PlotPointAction<V> make(String port, Expr<V> value, Expr<V> tickmark, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PlotPointAction<>(port, value, tickmark, properties, comment);
-    }
-
-    public String getPort() {
-        return this.port;
-    }
-
-    public Expr<V> getValue() {
-        return this.value;
-    }
-
-    public Expr<V> getTickmark() {
-        return this.tickmark;
-    }
-
     @Override
     public String toString() {
         return "PlotPointAction []";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
@@ -75,13 +45,7 @@ public final class PlotPointAction<V> extends Action<V> {
         String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.EMPTY_PORT);
         Phrase<V> value = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
         Phrase<V> tickmark = helper.extractValue(values, new ExprParam(BlocklyConstants.TICKMARK, BlocklyType.NUMBER_INT));
-        return PlotPointAction
-            .make(
-                Jaxb2Ast.sanitizePort(port),
-                Jaxb2Ast.convertPhraseToExpr(value),
-                Jaxb2Ast.convertPhraseToExpr(tickmark),
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block));
+        return new PlotPointAction<>(Jaxb2Ast.sanitizePort(port), Jaxb2Ast.convertPhraseToExpr(value), Jaxb2Ast.convertPhraseToExpr(tickmark), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
 
     }
 
@@ -90,8 +54,8 @@ public final class PlotPointAction<V> extends Action<V> {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.ACTORPORT, port);
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, getValue());
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.TICKMARK, getTickmark());
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, this.value);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.TICKMARK, this.tickmark);
         return jaxbDestination;
     }
 }

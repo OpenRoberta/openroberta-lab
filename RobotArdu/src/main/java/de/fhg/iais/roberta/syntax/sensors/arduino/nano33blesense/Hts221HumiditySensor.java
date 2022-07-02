@@ -20,31 +20,16 @@ public final class Hts221HumiditySensor<V> extends BuiltinSensor<V> {
 
     public final Expr<V> humidity;
 
-    public Expr<V> getHumidity() {
-        return humidity;
-    }
-
-    private Hts221HumiditySensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> humidity) {
+    public Hts221HumiditySensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> humidity) {
         super(properties, comment, null);
         this.humidity = humidity;
         setReadOnly();
     }
 
-    public static <V> Hts221HumiditySensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> humidity) {
-        return new Hts221HumiditySensor<>(properties, comment, humidity);
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         Expr<V> humidity = helper.getVar(values, BlocklyConstants.VARIABLE_VALUE);
-        return Hts221HumiditySensor.make(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), humidity);
+        return new Hts221HumiditySensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), humidity);
     }
 
     @Override

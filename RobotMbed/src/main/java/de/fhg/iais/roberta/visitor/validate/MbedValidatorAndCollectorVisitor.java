@@ -92,17 +92,17 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitBothMotorsOnAction(BothMotorsOnAction<Void> bothMotorsOnAction) {
-        ConfigurationComponent usedActorA = robotConfiguration.optConfigurationComponent(bothMotorsOnAction.getPortA());
-        ConfigurationComponent usedActorB = robotConfiguration.optConfigurationComponent(bothMotorsOnAction.getPortB());
+        ConfigurationComponent usedActorA = robotConfiguration.optConfigurationComponent(bothMotorsOnAction.portA);
+        ConfigurationComponent usedActorB = robotConfiguration.optConfigurationComponent(bothMotorsOnAction.portB);
         boolean allActorsPresent = (usedActorA != null) && (usedActorB != null);
         if ( !allActorsPresent ) {
             addErrorToPhrase(bothMotorsOnAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
-        } else if ( bothMotorsOnAction.getPortA().equals(bothMotorsOnAction.getPortB()) || !usedActorA.getComponentType().equals(usedActorB.getComponentType()) ) {
+        } else if ( bothMotorsOnAction.portA.equals(bothMotorsOnAction.portB) || !usedActorA.componentType.equals(usedActorB.componentType) ) {
             addErrorToPhrase(bothMotorsOnAction, "BLOCK_NOT_EXECUTED");
-        } else if ( usedActorA.getComponentType().equals("CALLIBOT") ) {
+        } else if ( usedActorA.componentType.equals("CALLIBOT") ) {
             usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
         }
-        requiredComponentVisited(bothMotorsOnAction, bothMotorsOnAction.getSpeedA(), bothMotorsOnAction.getSpeedB());
+        requiredComponentVisited(bothMotorsOnAction, bothMotorsOnAction.speedA, bothMotorsOnAction.speedB);
         return null;
     }
 
@@ -144,7 +144,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
-        requiredComponentVisited(displayGetPixelAction, displayGetPixelAction.getX(), displayGetPixelAction.getY());
+        requiredComponentVisited(displayGetPixelAction, displayGetPixelAction.x, displayGetPixelAction.y);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DISPLAY_GRAYSCALE));
         return null;
     }
@@ -158,21 +158,21 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
-        requiredComponentVisited(displaySetBrightnessAction, displaySetBrightnessAction.getBrightness());
+        requiredComponentVisited(displaySetBrightnessAction, displaySetBrightnessAction.brightness);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DISPLAY_GRAYSCALE));
         return null;
     }
 
     @Override
     public Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
-        requiredComponentVisited(displaySetPixelAction, displaySetPixelAction.getBrightness(), displaySetPixelAction.getX(), displaySetPixelAction.getY());
+        requiredComponentVisited(displaySetPixelAction, displaySetPixelAction.brightness, displaySetPixelAction.x, displaySetPixelAction.y);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DISPLAY_GRAYSCALE));
         return null;
     }
 
     @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
-        requiredComponentVisited(displayTextAction, displayTextAction.getMsg());
+        requiredComponentVisited(displayTextAction, displayTextAction.msg);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DISPLAY));
         return null;
     }
@@ -189,9 +189,9 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         checkActorByTypeExists(fourDigitDisplayShowAction, "FOURDIGITDISPLAY");
         requiredComponentVisited(
             fourDigitDisplayShowAction,
-            fourDigitDisplayShowAction.getValue(),
-            fourDigitDisplayShowAction.getPosition(),
-            fourDigitDisplayShowAction.getColon());
+            fourDigitDisplayShowAction.value,
+            fourDigitDisplayShowAction.position,
+            fourDigitDisplayShowAction.colon);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.FOUR_DIGIT_DISPLAY));
         return null;
     }
@@ -207,7 +207,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
-        requiredComponentVisited(sensorGetSample, sensorGetSample.getSensor());
+        requiredComponentVisited(sensorGetSample, sensorGetSample.sensor);
         return null;
     }
 
@@ -233,14 +233,14 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
-        requiredComponentVisited(imageInvertFunction, imageInvertFunction.getImage());
+        requiredComponentVisited(imageInvertFunction, imageInvertFunction.image);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DISPLAY));
         return null;
     }
 
     @Override
     public Void visitImageShiftFunction(ImageShiftFunction<Void> imageShiftFunction) {
-        requiredComponentVisited(imageShiftFunction, imageShiftFunction.getImage(), imageShiftFunction.getPositions());
+        requiredComponentVisited(imageShiftFunction, imageShiftFunction.image, imageShiftFunction.positions);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DISPLAY));
         return null;
     }
@@ -260,14 +260,14 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     @Override
     public Void visitLedBarSetAction(LedBarSetAction<Void> ledBarSetAction) {
         checkActorByTypeExists(ledBarSetAction, "LEDBAR");
-        requiredComponentVisited(ledBarSetAction, ledBarSetAction.getX(), ledBarSetAction.getBrightness());
+        requiredComponentVisited(ledBarSetAction, ledBarSetAction.x, ledBarSetAction.brightness);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.LED_BAR));
         return null;
     }
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        requiredComponentVisited(ledOnAction, ledOnAction.getLedColor());
+        requiredComponentVisited(ledOnAction, ledOnAction.ledColor);
         return addActorMaybeCallibot(ledOnAction, SC.RGBLED);
     }
 
@@ -275,9 +275,9 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     public Void visitLightAction(LightAction<Void> lightAction) {
         // TODO: design better blockly blocks and don't reuse blocks with different number of parameters and don't use EmptyExpr
         String blocktype = lightAction.getProperty().getBlockType();
-        checkActorByPortExists(lightAction, lightAction.getPort());
+        checkActorByPortExists(lightAction, lightAction.port);
         if ( !blocktype.equals("robActions_brickLight_on") ) {
-            requiredComponentVisited(lightAction, lightAction.getRgbLedColor());
+            requiredComponentVisited(lightAction, lightAction.rgbLedColor);
         }
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
         return null;
@@ -310,7 +310,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         if ( isMotionKitPinsOverlapping() ) {
             addErrorToPhrase(motionKitSingleSetAction, "MOTIONKIT_PIN_OVERLAP_WARNING");
         } else {
-            usedHardwareBuilder.addUsedActor(new UsedActor(motionKitSingleSetAction.getPort(), "MOTIONKIT"));
+            usedHardwareBuilder.addUsedActor(new UsedActor(motionKitSingleSetAction.port, "MOTIONKIT"));
         }
         return null;
     }
@@ -322,10 +322,10 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        requiredComponentVisited(motorOnAction, motorOnAction.getParam().getSpeed());
-        MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
+        requiredComponentVisited(motorOnAction, motorOnAction.param.getSpeed());
+        MotorDuration<Void> duration = motorOnAction.param.getDuration();
         if ( duration != null ) {
-            checkForZeroSpeed(motorOnAction, motorOnAction.getParam().getSpeed());
+            checkForZeroSpeed(motorOnAction, motorOnAction.param.getSpeed());
             requiredComponentVisited(motorOnAction, duration.getValue());
         }
         return addActorMaybeCallibot(motorOnAction);
@@ -363,10 +363,10 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
-        ConfigurationComponent configurationComponent = checkActorByPortExists(pinWriteValueAction, pinWriteValueAction.getPort());
-        requiredComponentVisited(pinWriteValueAction, pinWriteValueAction.getValue());
+        ConfigurationComponent configurationComponent = checkActorByPortExists(pinWriteValueAction, pinWriteValueAction.port);
+        requiredComponentVisited(pinWriteValueAction, pinWriteValueAction.value);
         if ( configurationComponent != null ) {
-            usedHardwareBuilder.addUsedActor(new UsedActor(configurationComponent.getUserDefinedPortName(), configurationComponent.getComponentType()));
+            usedHardwareBuilder.addUsedActor(new UsedActor(configurationComponent.userDefinedPortName, configurationComponent.componentType));
         }
         return null;
     }
@@ -397,21 +397,21 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
-        requiredComponentVisited(radioSendAction, radioSendAction.getMsg());
+        requiredComponentVisited(radioSendAction, radioSendAction.message);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.RADIO));
         return null;
     }
 
     @Override
     public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
-        requiredComponentVisited(radioSetChannelAction, radioSetChannelAction.getChannel());
+        requiredComponentVisited(radioSetChannelAction, radioSetChannelAction.channel);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.RADIO));
         return null;
     }
 
     @Override
     public Void visitServoSetAction(ServoSetAction<Void> servoSetAction) {
-        requiredComponentVisited(servoSetAction, servoSetAction.getValue());
+        requiredComponentVisited(servoSetAction, servoSetAction.value);
         return addActorMaybeCallibot(servoSetAction, SC.SERVOMOTOR);
     }
 
@@ -424,7 +424,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitSingleMotorOnAction(SingleMotorOnAction<Void> singleMotorOnAction) {
-        requiredComponentVisited(singleMotorOnAction, singleMotorOnAction.getSpeed());
+        requiredComponentVisited(singleMotorOnAction, singleMotorOnAction.speed);
         return null;
     }
 
@@ -461,11 +461,11 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        requiredComponentVisited(toneAction, toneAction.getDuration(), toneAction.getFrequency());
+        requiredComponentVisited(toneAction, toneAction.duration, toneAction.frequency);
         checkActorByTypeExists(toneAction, "BUZZER");
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.MUSIC));
-        if ( toneAction.getDuration().getKind().hasName("NUM_CONST") ) {
-            double toneActionConst = Double.parseDouble(((NumConst<Void>) toneAction.getDuration()).getValue());
+        if ( toneAction.duration.getKind().hasName("NUM_CONST") ) {
+            double toneActionConst = Double.parseDouble(((NumConst<Void>) toneAction.duration).value);
             if ( toneActionConst <= 0 ) {
                 addWarningToPhrase(toneAction, "BLOCK_NOT_EXECUTED");
             }
@@ -500,7 +500,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         if ( usedSensor == null ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
         } else {
-            String type = usedSensor.getComponentType();
+            String type = usedSensor.componentType;
             switch ( sensor.getKind().getName() ) {
                 case "COLOR_SENSING":
                     if ( !type.equals("COLOUR") ) { // Mbed has COLOUR instead of COLOR
@@ -556,7 +556,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     private void checkForZeroSpeed(Phrase<Void> action, Expr<Void> speed) {
         if ( speed.getKind().hasName("NUM_CONST") ) {
             NumConst<Void> speedNumConst = (NumConst<Void>) speed;
-            if ( Math.abs(Double.parseDouble(speedNumConst.getValue())) < DOUBLE_EPS ) {
+            if ( Math.abs(Double.parseDouble(speedNumConst.value)) < DOUBLE_EPS ) {
                 addWarningToPhrase(action, "MOTOR_SPEED_0");
             }
         }
@@ -566,7 +566,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         final String userDefinedPort = phrase.getUserDefinedPort();
         ConfigurationComponent configurationComponent = checkActorByPortExists((Phrase<Void>) phrase, userDefinedPort);
         if ( configurationComponent != null ) {
-            return addActorMaybeCallibot(phrase, configurationComponent.getComponentType());
+            return addActorMaybeCallibot(phrase, configurationComponent.componentType);
         } else {
             return null; // checkActorByPortExists added the error message
         }
@@ -576,7 +576,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         final String userDefinedPort = phrase.getUserDefinedPort();
         ConfigurationComponent configurationComponent = checkActorByPortExists((Phrase<Void>) phrase, userDefinedPort);
         if ( configurationComponent != null ) {
-            if ( configurationComponent.getComponentType().equals(SC.CALLIBOT) ) {
+            if ( configurationComponent.componentType.equals(SC.CALLIBOT) ) {
                 usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
             } else {
                 usedHardwareBuilder.addUsedActor(new UsedActor(userDefinedPort, componentType));
@@ -595,7 +595,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
             return true;
         }
         for ( Map.Entry<String, ConfigurationComponent> confComp : usedConfig.entrySet() ) {
-            String confType = confComp.getValue().getComponentType();
+            String confType = confComp.getValue().componentType;
             if ( confType.equals(SC.SERVOMOTOR) || confType.equals(SC.DIGITAL_INPUT) || confType.equals(SC.ANALOG_INPUT) ) {
                 String pin1 = confComp.getValue().getProperty("PIN1");
                 if ( pin1.equals("1") || pin1.equals("2") || pin1.equals("4") || pin1.equals("5") || pin1.equals("C16") || pin1.equals("C17") ) {

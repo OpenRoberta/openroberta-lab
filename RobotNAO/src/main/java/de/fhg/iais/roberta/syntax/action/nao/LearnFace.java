@@ -21,7 +21,4 @@ public final class LearnFace<V> extends Action<V> {
         setReadOnly();
     }
 
-    public Expr<V> getFaceName() {
-        return this.faceName;
-    }
 }

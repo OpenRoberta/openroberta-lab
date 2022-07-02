@@ -9,9 +9,6 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>robSensors_code_getSample</b> Blockly block<br/>
- */
 @NepoPhrase(category = "SENSOR", blocklyNames = {"bob3Sensors_getCode", "robSensors_code_getSample"}, name = "BOB3_CODEPAD")
 public final class CodePadSensor<V> extends Sensor<V> {
     @NepoMutation(fieldName = BlocklyConstants.MODE)

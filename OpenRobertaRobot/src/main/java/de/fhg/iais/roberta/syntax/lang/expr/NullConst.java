@@ -12,7 +12,4 @@ public final class NullConst<V> extends Expr<V> {
         setReadOnly();
     }
 
-    public static <V> NullConst<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new NullConst<V>(properties, comment);
-    }
 }

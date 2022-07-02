@@ -22,14 +22,6 @@ public final class MathConst<V> extends Expr<V> {
         setReadOnly();
     }
 
-    public static <V> MathConst<V> make(Const mathConst, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MathConst<V>(properties, comment, mathConst);
-    }
-
-    public Const getMathConst() {
-        return this.mathConst;
-    }
-
     public enum Const {
         GOLDEN_RATIO(), PI(), E(), SQRT2(), SQRT1_2(), INFINITY();
 

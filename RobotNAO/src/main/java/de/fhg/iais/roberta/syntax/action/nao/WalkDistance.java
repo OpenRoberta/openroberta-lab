@@ -28,16 +28,4 @@ public final class WalkDistance<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> WalkDistance<V> make(DriveDirection walkDirection, Expr<V> distanceToWalk, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new WalkDistance<V>(properties, comment, walkDirection, distanceToWalk);
-    }
-
-    public DriveDirection getWalkDirection() {
-        return this.walkDirection;
-    }
-
-    public Expr<V> getDistanceToWalk() {
-        return this.distanceToWalk;
-    }
-
 }

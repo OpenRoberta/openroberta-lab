@@ -24,15 +24,4 @@ public final class MotionKitSingleSetAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> MotionKitSingleSetAction<V> make(String port, String direction, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MotionKitSingleSetAction<>(properties, comment, port, direction);
-    }
-
-    public String getPort() {
-        return this.port;
-    }
-
-    public String getDirection() {
-        return this.direction;
-    }
 }

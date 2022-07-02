@@ -31,23 +31,4 @@ public final class RgbColor<V> extends Expr<V> {
         setReadOnly();
     }
 
-    public static <V> RgbColor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> r, Expr<V> g, Expr<V> b, Expr<V> a) {
-        return new RgbColor(properties, comment, r, g, b, a);
-    }
-
-    public Expr<V> getA() {
-        return A;
-    }
-
-    public Expr<V> getB() {
-        return B;
-    }
-
-    public Expr<V> getG() {
-        return G;
-    }
-
-    public Expr<V> getR() {
-        return R;
-    }
 }

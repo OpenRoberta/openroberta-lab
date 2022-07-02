@@ -13,7 +13,4 @@ public final class ReceiveIRAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    private static <V> ReceiveIRAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ReceiveIRAction<>(properties, comment);
-    }
 }

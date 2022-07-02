@@ -63,7 +63,7 @@ public class WedoValidatorAndCollectorVisitor extends MotorValidatorAndCollector
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         checkActorPresence(lightAction);
-        requiredComponentVisited(lightAction, lightAction.getRgbLedColor());
+        requiredComponentVisited(lightAction, lightAction.rgbLedColor);
         return null;
     }
 
@@ -75,10 +75,10 @@ public class WedoValidatorAndCollectorVisitor extends MotorValidatorAndCollector
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        requiredComponentVisited(motorOnAction, motorOnAction.getParam().getSpeed());
+        requiredComponentVisited(motorOnAction, motorOnAction.param.getSpeed());
         checkActorPresence(motorOnAction);
-        if ( motorOnAction.getParam().getDuration() != null ) {
-            requiredComponentVisited(motorOnAction, motorOnAction.getParam().getDuration().getValue());
+        if ( motorOnAction.param.getDuration() != null ) {
+            requiredComponentVisited(motorOnAction, motorOnAction.param.getDuration().getValue());
         }
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOnAction.getUserDefinedPort(), SC.MOTOR));
         return null;
@@ -93,7 +93,7 @@ public class WedoValidatorAndCollectorVisitor extends MotorValidatorAndCollector
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         checkActorPresence(toneAction);
-        requiredComponentVisited(toneAction, toneAction.getFrequency(), toneAction.getDuration());
+        requiredComponentVisited(toneAction, toneAction.frequency, toneAction.duration);
         return null;
     }
 

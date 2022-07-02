@@ -20,19 +20,7 @@ public final class Apds9960ColorSensor<V> extends BuiltinSensor<V> {
 
     public final Expr<V> r, g, b;
 
-    public Expr<V> getR() {
-        return r;
-    }
-
-    public Expr<V> getG() {
-        return g;
-    }
-
-    public Expr<V> getB() {
-        return b;
-    }
-
-    private Apds9960ColorSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> r, Expr<V> g, Expr<V> b) {
+    public Apds9960ColorSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> r, Expr<V> g, Expr<V> b) {
         super(properties, comment, null);
         this.r = r;
         this.g = g;
@@ -40,23 +28,12 @@ public final class Apds9960ColorSensor<V> extends BuiltinSensor<V> {
         setReadOnly();
     }
 
-    public static <V> Apds9960ColorSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> r, Expr<V> g, Expr<V> b) {
-        return new Apds9960ColorSensor<>(properties, comment, r, g, b);
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 3);
         Expr<V> r = helper.getVar(values, BlocklyConstants.VARIABLE_R);
         Expr<V> g = helper.getVar(values, BlocklyConstants.VARIABLE_G);
         Expr<V> b = helper.getVar(values, BlocklyConstants.VARIABLE_B);
-        return Apds9960ColorSensor.make(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), r, g, b);
+        return new Apds9960ColorSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), r, g, b);
     }
 
     @Override

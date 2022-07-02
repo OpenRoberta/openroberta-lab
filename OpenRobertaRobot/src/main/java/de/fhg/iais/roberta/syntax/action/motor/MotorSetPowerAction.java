@@ -26,15 +26,4 @@ public final class MotorSetPowerAction<V> extends MoveAction<V> {
         setReadOnly();
     }
 
-    public static <V> MotorSetPowerAction<V> make(String port, Expr<V> power, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MotorSetPowerAction<V>(properties, comment, power, port);
-    }
-
-    /**
-     * @return value of the power of the motor.
-     */
-    public Expr<V> getPower() {
-        return this.power;
-    }
-
 }

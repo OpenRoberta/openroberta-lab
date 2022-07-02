@@ -14,21 +14,10 @@ public final class NumConst<V> extends Expr<V> {
     public final String value;
 
     public NumConst(BlocklyBlockProperties properties, BlocklyComment comment, String value) {
-        super(properties, comment);
+        super(properties == null ? BlocklyBlockProperties.make("NUM_CONST", "1") : properties, comment);
         Assert.isTrue(!value.equals(""));
         this.value = value;
         setReadOnly();
     }
 
-    public static <V> NumConst<V> make(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new NumConst<>(properties, comment, value);
-    }
-
-    public static <V> NumConst<V> make(String value) {
-        return new NumConst<>(BlocklyBlockProperties.make("NUM_CONST", "1"), null, value);
-    }
-
-    public String getValue() {
-        return this.value;
-    }
 }

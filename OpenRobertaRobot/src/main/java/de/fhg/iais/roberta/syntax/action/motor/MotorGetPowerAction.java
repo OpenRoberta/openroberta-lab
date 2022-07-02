@@ -20,8 +20,4 @@ public final class MotorGetPowerAction<V> extends MoveAction<V> {
         setReadOnly();
     }
 
-    public static <V> MotorGetPowerAction<V> make(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MotorGetPowerAction<V>(properties, comment, port);
-    }
-
 }

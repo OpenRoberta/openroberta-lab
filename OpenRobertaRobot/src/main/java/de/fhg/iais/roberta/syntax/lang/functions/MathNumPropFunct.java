@@ -13,58 +13,24 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
-/**
- * This class represents the <b>math_number_property</b> block from Blockly into the AST (abstract syntax tree).<br>
- * <br>
- * The user must provide name of the function and list of parameters. <br>
- * To create an instance from this class use the method {@link #make(FunctionNames, List, BlocklyBlockProperties, BlocklyComment)}.<br>
- * The enumeration {@link FunctionNames} contains all allowed functions.
- */
 @NepoBasic(name = "MATH_NUM_PROP_FUNCT", category = "FUNCTION", blocklyNames = {"math_number_property"})
 public final class MathNumPropFunct<V> extends Function<V> {
     public final FunctionNames functName;
     public final List<Expr<V>> param;
 
-    private MathNumPropFunct(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public MathNumPropFunct(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
         this.param = param;
         setReadOnly();
-    }
-
-    /**
-     * Creates instance of {@link MathNumPropFunct}. This instance is read only and can not be modified.
-     *
-     * @param name of the function; must be <b>not</b> null,
-     * @param param list of parameters for the function; must be <b>not</b> null,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment that user has added to the block,
-     * @return read only object of class {@link MathNumPropFunct}
-     */
-    public static <V> MathNumPropFunct<V> make(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MathNumPropFunct<V>(name, param, properties, comment);
-    }
-
-    /**
-     * @return name of the function
-     */
-    public FunctionNames getFunctName() {
-        return this.functName;
-    }
-
-    /**
-     * @return list of parameters for the function
-     */
-    public List<Expr<V>> getParam() {
-        return this.param;
     }
 
     @Override
@@ -87,13 +53,6 @@ public final class MathNumPropFunct<V> extends Function<V> {
         return "MathNumPropFunct [" + this.functName + ", " + this.param + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         boolean divisorInput = block.getMutation().isDivisorInput();
         String op = Jaxb2Ast.extractOperation(block, BlocklyConstants.PROPERTY);
@@ -105,7 +64,7 @@ public final class MathNumPropFunct<V> extends Function<V> {
             exprParams.add(new ExprParam(BlocklyConstants.DIVISOR, BlocklyType.NUMBER_INT));
         }
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return MathNumPropFunct.make(FunctionNames.get(op), params, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new MathNumPropFunct<V>(FunctionNames.get(op), params, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
@@ -115,10 +74,10 @@ public final class MathNumPropFunct<V> extends Function<V> {
 
         Mutation mutation = new Mutation();
         mutation.setDivisorInput(false);
-        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.PROPERTY, getFunctName().name());
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.NUMBER_TO_CHECK, getParam().get(0));
-        if ( getFunctName() == FunctionNames.DIVISIBLE_BY ) {
-            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DIVISOR, getParam().get(1));
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.PROPERTY, this.functName.name());
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.NUMBER_TO_CHECK, this.param.get(0));
+        if ( this.functName == FunctionNames.DIVISIBLE_BY ) {
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DIVISOR, this.param.get(1));
             mutation.setDivisorInput(true);
         }
         jaxbDestination.setMutation(mutation);

@@ -46,6 +46,6 @@ public interface IEv3Visitor<V> extends IActors4AutonomousDriveRobots<V>, IBluet
     V visitHTColorSensor(HTColorSensor<V> htColorSensor);
 
     default V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
-        return sensorGetSample.getSensor().accept(this);
+        return sensorGetSample.sensor.accept(this);
     }
 }

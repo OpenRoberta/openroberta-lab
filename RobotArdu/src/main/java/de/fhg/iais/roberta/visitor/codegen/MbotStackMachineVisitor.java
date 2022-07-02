@@ -96,9 +96,9 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitLightAction(LightAction<V> lightAction) {
-        String mode = lightAction.getMode().toString().toLowerCase();
-        lightAction.getRgbLedColor().accept(this);
-        String port = lightAction.getPort();
+        String mode = lightAction.mode.toString().toLowerCase();
+        lightAction.rgbLedColor.accept(this);
+        String port = lightAction.port;
         JSONObject o = makeNode(C.LIGHT_ACTION).put(C.MODE, mode).put(C.PORT, port).put(C.NAME, "mbot");
         return app(o);
     }
@@ -107,7 +107,7 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
         JSONObject o =
             makeNode(C.STATUS_LIGHT_ACTION)
-                .put(C.MODE, lightStatusAction.getStatus())
+                .put(C.MODE, lightStatusAction.status)
                 .put(C.PORT, lightStatusAction.getUserDefinedPort())
                 .put(C.NAME, "mbot");
         return app(o);
@@ -132,9 +132,9 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitDriveAction(DriveAction<V> driveAction) {
-        driveAction.getParam().getSpeed().accept(this);
-        boolean speedOnly = !processOptionalDuration(driveAction.getParam().getDuration());
-        DriveDirection driveDirection = (DriveDirection) driveAction.getDirection();
+        driveAction.param.getSpeed().accept(this);
+        boolean speedOnly = !processOptionalDuration(driveAction.param.getDuration());
+        DriveDirection driveDirection = (DriveDirection) driveAction.direction;
         JSONObject o = makeNode(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "mbot").put(C.SPEED_ONLY, speedOnly);
         if ( speedOnly ) {
             return app(o.put(C.SET_TIME, false));
@@ -146,9 +146,9 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitTurnAction(TurnAction<V> turnAction) {
-        turnAction.getParam().getSpeed().accept(this);
-        boolean speedOnly = !processOptionalDuration(turnAction.getParam().getDuration());
-        ITurnDirection turnDirection = turnAction.getDirection();
+        turnAction.param.getSpeed().accept(this);
+        boolean speedOnly = !processOptionalDuration(turnAction.param.getDuration());
+        ITurnDirection turnDirection = turnAction.direction;
         JSONObject o =
             makeNode(C.TURN_ACTION).put(C.TURN_DIRECTION, turnDirection.toString().toLowerCase()).put(C.NAME, "mbot").put(C.SPEED_ONLY, speedOnly);
         if ( speedOnly ) {
@@ -161,10 +161,10 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitCurveAction(CurveAction<V> curveAction) {
-        curveAction.getParamLeft().getSpeed().accept(this);
-        curveAction.getParamRight().getSpeed().accept(this);
-        boolean speedOnly = !processOptionalDuration(curveAction.getParamLeft().getDuration());
-        DriveDirection driveDirection = (DriveDirection) curveAction.getDirection();
+        curveAction.paramLeft.getSpeed().accept(this);
+        curveAction.paramRight.getSpeed().accept(this);
+        boolean speedOnly = !processOptionalDuration(curveAction.paramLeft.getDuration());
+        DriveDirection driveDirection = (DriveDirection) curveAction.direction;
 
         JSONObject o = makeNode(C.CURVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "mbot").put(C.SPEED_ONLY, speedOnly);
         if ( speedOnly ) {
@@ -183,8 +183,8 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitMotorOnAction(MotorOnAction<V> motorOnAction) {
-        motorOnAction.getParam().getSpeed().accept(this);
-        MotorDuration<V> duration = motorOnAction.getParam().getDuration();
+        motorOnAction.param.getSpeed().accept(this);
+        MotorDuration<V> duration = motorOnAction.param.getDuration();
         boolean speedOnly = !processOptionalDuration(duration);
         String port = motorOnAction.getUserDefinedPort();
         port = getMbotMotorPort(port);
@@ -210,7 +210,7 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         String port = motorSetPowerAction.getUserDefinedPort();
         port = getMbotMotorPort(port);
 
-        motorSetPowerAction.getPower().accept(this);
+        motorSetPowerAction.power.accept(this);
         JSONObject o = makeNode(C.MOTOR_SET_POWER).put(C.PORT, port.toLowerCase());
         return app(o);
     }
@@ -244,16 +244,16 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitToneAction(ToneAction<V> toneAction) {
-        toneAction.getFrequency().accept(this);
-        toneAction.getDuration().accept(this);
+        toneAction.frequency.accept(this);
+        toneAction.duration.accept(this);
         JSONObject o = makeNode(C.TONE_ACTION);
         return app(o);
     }
 
     @Override
     public V visitPlayNoteAction(PlayNoteAction<V> playNoteAction) {
-        String freq = playNoteAction.getFrequency();
-        String duration = playNoteAction.getDuration();
+        String freq = playNoteAction.frequency;
+        String duration = playNoteAction.duration;
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, freq));
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, duration));
         JSONObject o = makeNode(C.TONE_ACTION);
@@ -269,14 +269,14 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitLEDMatrixImageAction(LEDMatrixImageAction<V> ledMatrixImageAction) {
-        ledMatrixImageAction.getValuesToDisplay().accept(this);
-        JSONObject o = makeNode(C.SHOW_IMAGE_ACTION).put(C.MODE, ledMatrixImageAction.getDisplayImageMode().toString().toLowerCase());
+        ledMatrixImageAction.valuesToDisplay.accept(this);
+        JSONObject o = makeNode(C.SHOW_IMAGE_ACTION).put(C.MODE, ledMatrixImageAction.displayImageMode.toString().toLowerCase());
         return app(o);
     }
 
     @Override
     public V visitLEDMatrixTextAction(LEDMatrixTextAction<V> ledMatrixTextAction) {
-        ledMatrixTextAction.getMsg().accept(this);
+        ledMatrixTextAction.msg.accept(this);
         JSONObject o = makeNode(C.SHOW_TEXT_ACTION).put(C.MODE, C.TEXT);
         return app(o);
     }
@@ -287,7 +287,7 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         for ( int i = 0; i < 16; i++ ) {
             ArrayList<Integer> a = new ArrayList<>();
             for ( int j = 0; j < 8; j++ ) {
-                String pixel = ledMatrixImage.getImage()[i][7 - j].trim();
+                String pixel = ledMatrixImage.image[i][7 - j].trim();
                 if ( pixel.equals("#") ) {
                     pixel = "9";
                 } else if ( pixel.equals("") ) {
@@ -304,16 +304,16 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<V> ledMatrixImageShiftFunction) {
-        ledMatrixImageShiftFunction.getImage().accept(this);
-        ledMatrixImageShiftFunction.getPositions().accept(this);
-        IDirection direction = ledMatrixImageShiftFunction.getShiftDirection();
+        ledMatrixImageShiftFunction.image.accept(this);
+        ledMatrixImageShiftFunction.positions.accept(this);
+        IDirection direction = ledMatrixImageShiftFunction.shiftDirection;
         JSONObject o = makeNode(C.IMAGE_SHIFT_ACTION).put(C.DIRECTION, direction.toString().toLowerCase()).put(C.NAME, "mbot");
         return app(o);
     }
 
     @Override
     public V visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<V> ledMatrixImageInverFunction) {
-        ledMatrixImageInverFunction.getImage().accept(this);
+        ledMatrixImageInverFunction.image.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, C.IMAGE_INVERT_ACTION);
         return app(o);
     }

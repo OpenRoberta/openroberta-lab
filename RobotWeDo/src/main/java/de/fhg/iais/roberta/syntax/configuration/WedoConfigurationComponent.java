@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 
 /**
- * Just to override the name of the "usedDefinedPortName" field of the generic {@link ConfigurationComponent}. TODO should be removed if possible
+ * Just to override the name of the "usedDefinedPortName" field of the generic {@link ConfigurationComponent}. TODO: should be removed if possible
  */
 public final class WedoConfigurationComponent extends ConfigurationComponent {
     private WedoConfigurationComponent(
@@ -28,7 +28,7 @@ public final class WedoConfigurationComponent extends ConfigurationComponent {
     public Block astToBlock() {
         Block destination = new Block();
         Ast2Jaxb.setBasicProperties(this, destination);
-        Ast2Jaxb.addField(destination, "VAR", this.getUserDefinedPortName());
+        Ast2Jaxb.addField(destination, "VAR", this.userDefinedPortName);
         this.getComponentProperties().forEach((key, value) -> Ast2Jaxb.addField(destination, key, value));
         return destination;
     }

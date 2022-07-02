@@ -31,28 +31,4 @@ public final class DisplaySetPixelAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> DisplaySetPixelAction<V> make(Expr<V> x, Expr<V> y, Expr<V> brightness, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new DisplaySetPixelAction<>(properties, comment, x, y, brightness);
-    }
-
-    /**
-     * @return x of the pixel.
-     */
-    public Expr<V> getX() {
-        return this.x;
-    }
-
-    /**
-     * @return y of the pixel.
-     */
-    public Expr<V> getY() {
-        return this.y;
-    }
-
-    /**
-     * @return brightness of the display.
-     */
-    public Expr<V> getBrightness() {
-        return this.brightness;
-    }
 }

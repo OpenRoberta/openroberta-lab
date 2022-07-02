@@ -3,12 +3,12 @@ package de.fhg.iais.roberta.syntax.lang.expr;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 
 /**
- * {@link EmptyExpr} is used when in binary or unary expressions, expression is missing. When create instance from this class we pass as parameter the type of
+ * {@link EmptyExpr} is used when in binary or unary expressions, expression is missing. When we create instances from this class we pass as parameter the type of
  * the value should have the missing expression.
  */
 @NepoBasic(name = "EMPTY_EXPR", category = "EXPR", blocklyNames = {})
@@ -16,21 +16,11 @@ public final class EmptyExpr<V> extends Expr<V> {
 
     public final BlocklyType defVal;
 
-    private EmptyExpr(BlocklyType defVal) {
+    public EmptyExpr(BlocklyType defVal) {
         super(BlocklyBlockProperties.make("EMPTY_EXPR", "1"), null);
         Assert.isTrue(defVal != null);
         this.defVal = defVal;
         setReadOnly();
-    }
-
-    /**
-     * create read only instance from {@link EmptyExpr}.
-     *
-     * @param defVal type of the value that the missing expression should have.
-     * @return read only object of class {@link EmptyExpr}.
-     */
-    public static <V> EmptyExpr<V> make(BlocklyType defVal) {
-        return new EmptyExpr<V>(defVal);
     }
 
     /**

@@ -68,7 +68,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        requiredComponentVisited(mainTask, mainTask.getVariables());
+        requiredComponentVisited(mainTask, mainTask.variables);
         return null;
     }
 
@@ -102,7 +102,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
         if ( configurationComponent == null ) {
             addErrorToPhrase(encoderSensor, "CONFIGURATION_ERROR_MOTOR_MISSING");
         } else {
-            usedHardwareBuilder.addUsedActor(new UsedActor(encoderSensor.getUserDefinedPort(), configurationComponent.getComponentType()));
+            usedHardwareBuilder.addUsedActor(new UsedActor(encoderSensor.getUserDefinedPort(), configurationComponent.componentType));
         }
         return null;
     }
@@ -259,10 +259,10 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
         if ( usedConfigurationBlock == null ) {
             addErrorToPhrase(toneAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
-        requiredComponentVisited(toneAction, toneAction.getDuration(), toneAction.getFrequency());
+        requiredComponentVisited(toneAction, toneAction.duration, toneAction.frequency);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.MUSIC));
-        if ( toneAction.getDuration().getKind().hasName("NUM_CONST") ) {
-            double toneActionConst = Double.parseDouble(((NumConst<Void>) toneAction.getDuration()).getValue());
+        if ( toneAction.duration.getKind().hasName("NUM_CONST") ) {
+            double toneActionConst = Double.parseDouble(((NumConst<Void>) toneAction.duration).value);
             if ( toneActionConst <= 0 ) {
                 addWarningToPhrase(toneAction, "BLOCK_NOT_EXECUTED");
             }
@@ -282,8 +282,8 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        if ( volumeAction.getMode() == VolumeAction.Mode.SET ) {
-            requiredComponentVisited(volumeAction, volumeAction.getVolume());
+        if ( volumeAction.mode == VolumeAction.Mode.SET ) {
+            requiredComponentVisited(volumeAction, volumeAction.volume);
         }
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.SOUND));
         return null;
@@ -316,7 +316,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         super.visitDriveAction(driveAction);
-        if ( driveAction.getParam().getDuration() != null ) {
+        if ( driveAction.param.getDuration() != null ) {
             usedMethodBuilder.addUsedMethod(Mbot2Methods.DIFFDRIVEFOR);
         }
         return null;
@@ -325,7 +325,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
         super.visitCurveAction(curveAction);
-        if ( curveAction.getParamLeft().getDuration() != null ) {
+        if ( curveAction.paramLeft.getDuration() != null ) {
             usedMethodBuilder.addUsedMethod(Mbot2Methods.DIFFDRIVEFOR);
         }
         return null;
@@ -359,8 +359,8 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     private void checkSensorType(Phrase<Void> sensor, ConfigurationComponent configurationComponent) {
         String expectedComponentType = SENSOR_COMPONENT_TYPE_MAP.get(sensor.getKind().getName());
         String typeWithoutSensing = sensor.getKind().getName().replace("_SENSING", "");
-        if ( !(typeWithoutSensing.equalsIgnoreCase(configurationComponent.getComponentType())) ) {
-            if ( expectedComponentType != null && !expectedComponentType.equalsIgnoreCase(configurationComponent.getComponentType()) ) {
+        if ( !(typeWithoutSensing.equalsIgnoreCase(configurationComponent.componentType)) ) {
+            if ( expectedComponentType != null && !expectedComponentType.equalsIgnoreCase(configurationComponent.componentType) ) {
                 addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
             }
         }
@@ -371,7 +371,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
             try {
                 for ( List<ConfigurationComponent> subComponents : component.getSubComponents().values() ) {
                     for ( ConfigurationComponent subComponent : subComponents ) {
-                        if ( subComponent.getUserDefinedPortName().equals(userDefinedPort) ) {
+                        if ( subComponent.userDefinedPortName.equals(userDefinedPort) ) {
                             return subComponent;
                         }
                     }

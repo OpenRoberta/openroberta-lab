@@ -40,7 +40,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        mainTask.getVariables().accept(this);
+        mainTask.variables.accept(this);
         nlIndent();
         generateConfigurationVariables();
         generateTimerVariables();
@@ -80,7 +80,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
         this.sb.append("set_color(");
-        ledOnAction.getLedColor().accept(this);
+        ledOnAction.ledColor.accept(this);
         this.sb.append(");");
 
         return null;
@@ -95,7 +95,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
     @Override
     public Void visitStepMotorAction(StepMotorAction<Void> stepMotorAction) {
         this.sb.append("set_stepmotorpos(");
-        stepMotorAction.getStepMotorPos().accept(this);
+        stepMotorAction.stepMotorPos.accept(this);
         this.sb.append(");");
         return null;
     }
@@ -106,8 +106,8 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
         ConfigurationComponent configurationComponent = this.configuration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("TOUCHED");
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
-            String blockName = usedConfigurationBlock.getUserDefinedPortName();
-            if ( usedConfigurationBlock.getComponentType().equals(SC.TOUCH) && touchSensor.getSensorMetaDataBean().getPort().equals(blockName) ) {
+            String blockName = usedConfigurationBlock.userDefinedPortName;
+            if ( usedConfigurationBlock.componentType.equals(SC.TOUCH) && touchSensor.getSensorMetaDataBean().getPort().equals(blockName) ) {
                 if ( pin1.equals("PAD1") ) {
                     this.sb.append("_touchsensor_" + blockName + ".isRightTouched()");
                 }
@@ -142,7 +142,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
         nlIndent();
 
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
-            switch ( usedConfigurationBlock.getComponentType() ) {
+            switch ( usedConfigurationBlock.componentType ) {
                 case SC.RGBLED:
                     this.sb.append("#define LED_PIN 16");
                     nlIndent();
@@ -182,7 +182,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
                     }
                     break;
                 default:
-                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
+                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.componentType);
             }
         }
 
@@ -194,7 +194,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
 
         Set<String> headerFiles = new LinkedHashSet<>();
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
-            switch ( usedConfigurationBlock.getComponentType() ) {
+            switch ( usedConfigurationBlock.componentType ) {
                 case SC.RGBLED:
                     headerFiles.add("#include <Adafruit_NeoPixel.h>");
                     break;
@@ -217,7 +217,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
                     }
                     break;
                 default:
-                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
+                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.componentType);
             }
         }
         for ( String header : headerFiles ) {
@@ -233,8 +233,8 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
         int touchInitialized = 0;
 
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
-            String blockName = usedConfigurationBlock.getUserDefinedPortName();
-            switch ( usedConfigurationBlock.getComponentType() ) {
+            String blockName = usedConfigurationBlock.userDefinedPortName;
+            switch ( usedConfigurationBlock.componentType ) {
                 case SC.RGBLED:
                     this.sb.append("_rgbleds_" + blockName + ".begin();");
                     nlIndent();
@@ -273,7 +273,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
                     nlIndent();
                     break;
                 default:
-                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
+                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.componentType);
             }
         }
     }
@@ -281,8 +281,8 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
     private void generateConfigurationVariables() {
         int touchSensorCreated = 0;
         for ( ConfigurationComponent cc : this.configuration.getConfigurationComponentsValues() ) {
-            String blockName = cc.getUserDefinedPortName();
-            switch ( cc.getComponentType() ) {
+            String blockName = cc.userDefinedPortName;
+            switch ( cc.componentType ) {
                 case SC.RGBLED:
                     this.sb.append("Adafruit_NeoPixel _rgbleds_" + blockName + "(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);");
                     nlIndent();
@@ -311,8 +311,8 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
                     nlIndent();
                     break;
                 default:
-                    this.sb.append(cc.getComponentType());
-                    throw new DbcException("Configuration block is not supported: " + cc.getComponentType());
+                    this.sb.append(cc.componentType);
+                    throw new DbcException("Configuration block is not supported: " + cc.componentType);
             }
         }
     }
@@ -320,8 +320,8 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
     @Override
     protected void generateUserDefinedMethods() {
         for ( ConfigurationComponent cc : this.configuration.getConfigurationComponentsValues() ) {
-            String blockName = cc.getUserDefinedPortName();
-            switch ( cc.getComponentType() ) {
+            String blockName = cc.userDefinedPortName;
+            switch ( cc.componentType ) {
                 case SC.RGBLED:
                     this.sb.append("void set_color(uint32_t color) {");
                     incrIndentation();
@@ -418,7 +418,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
                     nlIndent();
                     break;
                 default:
-                    throw new DbcException("Configuration block is not supported: " + cc.getComponentType());
+                    throw new DbcException("Configuration block is not supported: " + cc.componentType);
             }
         }
     }

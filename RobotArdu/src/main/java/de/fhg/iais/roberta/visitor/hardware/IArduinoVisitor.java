@@ -30,7 +30,7 @@ public interface IArduinoVisitor<V>
     V visitDropSensor(DropSensor<V> dropSensor);
 
     default V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
-        return sensorGetSample.getSensor().accept(this);
+        return sensorGetSample.sensor.accept(this);
     }
 
     V visitHumiditySensor(HumiditySensor<V> humiditySensor);

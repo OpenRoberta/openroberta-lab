@@ -19,24 +19,11 @@ public final class NNStepStmt<V> extends Stmt<V> {
     public final Data netDefinition;
     public final StmtList<V> ioNeurons;
 
-    private NNStepStmt(Data netDefinition, StmtList<V> ioNeurons, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public NNStepStmt(Data netDefinition, StmtList<V> ioNeurons, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         this.netDefinition = netDefinition;
         this.ioNeurons = ioNeurons;
         setReadOnly();
-    }
-
-    /**
-     * create <b>nnStep</b> statement.
-     *
-     * @return read only object of class {@link NNStepStmt}
-     */
-    public static <V> NNStepStmt<V> make(Data netDefinition, StmtList<V> ioNeurons, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new NNStepStmt<>(netDefinition, ioNeurons, properties, comment);
-    }
-
-    public Data getNetDefinition() {
-        return this.netDefinition;
     }
 
     public StmtList<V> getIoNeurons() {
@@ -71,19 +58,12 @@ public final class NNStepStmt<V> extends Stmt<V> {
         return "nnStep()";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         helper.getDropdownFactory();
         final List<Statement> ioNeuronsWrapped = block.getStatement();
         final Data netDefinition = block.getData();
         final StmtList<V> ioNeurons = helper.extractStatement(ioNeuronsWrapped, "IONEURON");
-        return NNStepStmt.make(netDefinition, ioNeurons, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new NNStepStmt<>(netDefinition, ioNeurons, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

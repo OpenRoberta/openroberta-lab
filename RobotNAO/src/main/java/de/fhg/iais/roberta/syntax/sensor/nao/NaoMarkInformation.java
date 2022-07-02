@@ -16,34 +16,16 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.util.syntax.MotionParam;
 
-/**
- * This class represents the <b>naoSensors_naoMark</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
- * detecting a NaoMark.<br/>
- * <br/>
- */
 @NepoBasic(name = "NAO_MARK_INFORMATION", category = "SENSOR", blocklyNames = {"naoSensors_getMarkInformation"})
 public final class NaoMarkInformation<V> extends Sensor<V> {
 
     public final Expr<V> naoMarkId;
 
-    private NaoMarkInformation(Expr<V> naoMarkId, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public NaoMarkInformation(Expr<V> naoMarkId, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         this.naoMarkId = naoMarkId;
         setReadOnly();
-    }
-
-    /**
-     * Creates instance of {@link NaoMarkInformation}. This instance is read only and can not be modified.
-     *
-     * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link NaoMarkInformation}
-     */
-    static <V> NaoMarkInformation<V> make(Expr<V> naoMarkId, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new NaoMarkInformation<>(naoMarkId, properties, comment);
     }
 
     @Override
@@ -51,21 +33,10 @@ public final class NaoMarkInformation<V> extends Sensor<V> {
         return "NaoMarkInformation [" + this.naoMarkId.toString() + "]";
     }
 
-    public Expr<V> getNaoMarkId() {
-        return this.naoMarkId;
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         Phrase<V> naoMarkId = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER));
-        return NaoMarkInformation.make(Jaxb2Ast.convertPhraseToExpr(naoMarkId), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new NaoMarkInformation<>(Jaxb2Ast.convertPhraseToExpr(naoMarkId), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.syntax.action.mbed;
 
-import de.fhg.iais.roberta.inter.mode.action.IMotorStopMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
@@ -21,11 +20,4 @@ public final class SingleMotorStopAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> SingleMotorStopAction<V> make(MotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SingleMotorStopAction<>(properties, comment, mode);
-    }
-
-    public IMotorStopMode getMode() {
-        return mode;
-    }
 }

@@ -20,20 +20,13 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>mbedActions_display_text</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
- * showing a text message on the screen of the brick.<br>
- * <br>
- * To create an instance from this class use the method {@link #make(Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
- * <br>
- */
 @NepoBasic(name = "LED_MATRIX_TEXT_ACTION", category = "ACTOR", blocklyNames = {"mBotActions_display_text"})
 public final class LEDMatrixTextAction<V> extends Action<V> {
     public final String port;
     public final Expr<V> msg;
     public final String displayMode;
 
-    private LEDMatrixTextAction(String port, String displayMode, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public LEDMatrixTextAction(String port, String displayMode, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.isTrue(msg != null && port != null);
         this.port = port;
@@ -42,41 +35,11 @@ public final class LEDMatrixTextAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link LEDMatrixTextAction}. This instance is read only and can not be modified.
-     *
-     * @param msg that will be printed on the display of the brick; must be <b>not</b> null,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link LEDMatrixTextAction}
-     */
-    private static <V> LEDMatrixTextAction<V> make(String port, String displayMode, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LEDMatrixTextAction<>(port, displayMode, msg, properties, comment);
-    }
-
-    public String getPort() {
-        return this.port;
-    }
-
-    /**
-     * @return the message.
-     */
-    public Expr<V> getMsg() {
-        return this.msg;
-    }
-
     @Override
     public String toString() {
         return "DisplayTextAction [" + this.msg + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
@@ -88,7 +51,7 @@ public final class LEDMatrixTextAction<V> extends Action<V> {
         } catch ( DbcException e ) {
             displayMode = "TEXT";
         }
-        return LEDMatrixTextAction.make(port, displayMode, Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new LEDMatrixTextAction<>(port, displayMode, Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

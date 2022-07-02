@@ -197,26 +197,26 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
     @Override
     public final V visitNumConst(NumConst<V> numConst) {
-        JSONObject o = makeNode(C.EXPR).put(C.EXPR, numConst.getKind().getName()).put(C.VALUE, numConst.getValue());
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, numConst.getKind().getName()).put(C.VALUE, numConst.value);
         return app(o);
     }
 
     @Override
     public final V visitMathConst(MathConst<V> mathConst) {
-        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.MATH_CONST).put(C.VALUE, mathConst.getMathConst());
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.MATH_CONST).put(C.VALUE, mathConst.mathConst);
         return app(o);
     }
 
     @Override
     public final V visitBoolConst(BoolConst<V> boolConst) {
-        JSONObject o = makeNode(C.EXPR).put(C.EXPR, boolConst.getKind().getName()).put(C.VALUE, boolConst.getValue());
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, boolConst.getKind().getName()).put(C.VALUE, boolConst.value);
         return app(o);
     }
 
     @Override
     public final V visitStringConst(StringConst<V> stringConst) {
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, stringConst.getKind().getName());
-        o.put(C.VALUE, stringConst.getValue().replaceAll("[<>\\$]", ""));
+        o.put(C.VALUE, stringConst.value.replaceAll("[<>\\$]", ""));
         return app(o);
     }
 
@@ -271,55 +271,55 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
     @Override
     public final V visitRgbColor(RgbColor<V> rgbColor) {
-        rgbColor.getR().accept(this);
-        rgbColor.getG().accept(this);
-        rgbColor.getB().accept(this);
+        rgbColor.R.accept(this);
+        rgbColor.G.accept(this);
+        rgbColor.B.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.RGB_COLOR_CONST);
         return app(o);
     }
 
     @Override
     public final V visitShadowExpr(ShadowExpr<V> shadowExpr) {
-        if ( shadowExpr.getBlock() != null ) {
-            shadowExpr.getBlock().accept(this);
+        if ( shadowExpr.block != null ) {
+            shadowExpr.block.accept(this);
         } else {
-            shadowExpr.getShadow().accept(this);
+            shadowExpr.shadow.accept(this);
         }
         return null;
     }
 
     @Override
     public final V visitVar(Var<V> var) {
-        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, var.getValue());
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, var.name);
         return app(o);
     }
 
     @Override
     public final V visitVarDeclaration(VarDeclaration<V> var) {
-        if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
-            ExprList<V> list = (ExprList<V>) var.getValue();
+        if ( var.value.getKind().hasName("EXPR_LIST") ) {
+            ExprList<V> list = (ExprList<V>) var.value;
             if ( list.get().size() == 2 ) {
                 list.get().get(1).accept(this);
             } else {
                 list.get().get(0).accept(this);
             }
         } else {
-            var.getValue().accept(this);
+            var.value.accept(this);
         }
-        JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, var.getTypeVar()).put(C.NAME, var.getName());
+        JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, var.typeVar).put(C.NAME, var.name);
         return app(o);
     }
 
     @Override
     public final V visitUnary(Unary<V> unary) {
-        unary.getExpr().accept(this);
-        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.UNARY).put(C.OP, unary.getOp());
+        unary.expr.accept(this);
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.UNARY).put(C.OP, unary.op);
         return app(o);
     }
 
     @Override
     public final V visitBinary(Binary<V> binary) {
-        switch ( binary.getOp() ) {
+        switch ( binary.op ) {
             case AND:
             case OR:
                 /*
@@ -341,8 +341,8 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
                 appComment(C.BINARY, true);
 
-                boolean isOr = binary.getOp() == Op.OR;
-                binary.getLeft().accept(this);
+                boolean isOr = binary.op == Op.OR;
+                binary.left.accept(this);
                 JSONObject skipNextCondition = makeNode(C.JUMP).put(C.CONDITIONAL, isOr);
                 app(skipNextCondition);
 
@@ -357,20 +357,20 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
                 appComment(C.BINARY, false);
                 return null;
             default:
-                binary.getLeft().accept(this);
+                binary.left.accept(this);
                 binary.getRight().accept(this);
                 JSONObject o;
                 // FIXME: The math change should be removed from the binary expression since it is a statement
-                switch ( binary.getOp() ) {
+                switch ( binary.op ) {
                     case MATH_CHANGE:
-                        o = makeNode(C.MATH_CHANGE).put(C.NAME, ((Var<V>) binary.getLeft()).getValue());
+                        o = makeNode(C.MATH_CHANGE).put(C.NAME, ((Var<V>) binary.left).name);
                         break;
                     case TEXT_APPEND:
-                        o = makeNode(C.TEXT_APPEND).put(C.NAME, ((Var<V>) binary.getLeft()).getValue());
+                        o = makeNode(C.TEXT_APPEND).put(C.NAME, ((Var<V>) binary.left).name);
                         break;
 
                     default:
-                        o = makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, binary.getOp());
+                        o = makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, binary.op);
                         break;
                 }
                 return app(o);
@@ -381,21 +381,21 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
     @Override
     public final V visitMathPowerFunct(MathPowerFunct<V> mathPowerFunct) {
-        mathPowerFunct.getParam().get(0).accept(this);
-        mathPowerFunct.getParam().get(1).accept(this);
-        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, mathPowerFunct.getFunctName());
+        mathPowerFunct.param.get(0).accept(this);
+        mathPowerFunct.param.get(1).accept(this);
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, mathPowerFunct.functName);
         return app(o);
     }
 
     @Override
     public final V visitActionExpr(ActionExpr<V> actionExpr) {
-        actionExpr.getAction().accept(this);
+        actionExpr.action.accept(this);
         return null;
     }
 
     @Override
     public final V visitSensorExpr(SensorExpr<V> sensorExpr) {
-        sensorExpr.getSens().accept(this);
+        sensorExpr.sensor.accept(this);
         return null;
     }
 
@@ -469,43 +469,43 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
     @Override
     public final V visitStmtExpr(StmtExpr<V> stmtExpr) {
-        stmtExpr.getStmt().accept(this);
+        stmtExpr.stmt.accept(this);
         return null;
     }
 
     @Override
     public final V visitActionStmt(ActionStmt<V> actionStmt) {
-        actionStmt.getAction().accept(this);
+        actionStmt.action.accept(this);
         return null;
     }
 
     @Override
     public final V visitAssignStmt(AssignStmt<V> assignStmt) {
-        assignStmt.getExpr().accept(this);
-        JSONObject o = makeNode(C.ASSIGN_STMT).put(C.NAME, assignStmt.getName().getValue());
+        assignStmt.expr.accept(this);
+        JSONObject o = makeNode(C.ASSIGN_STMT).put(C.NAME, assignStmt.name.name);
         return app(o);
     }
 
     @Override
     public final V visitExprStmt(ExprStmt<V> exprStmt) {
-        exprStmt.getExpr().accept(this);
+        exprStmt.expr.accept(this);
         return null;
     }
 
     @Override
     public final V visitTernaryExpr(TernaryExpr<V> ternaryExpr) {
         appComment(C.IF_STMT, true);
-        ternaryExpr.getCondition().accept(this);
+        ternaryExpr.condition.accept(this);
         // JUMP when condition is not fullfilled
         JSONObject jumpOverThen = makeNode(C.JUMP).put(C.CONDITIONAL, false);
         app(jumpOverThen);
-        ternaryExpr.getThenPart().accept(this);
+        ternaryExpr.thenPart.accept(this);
         // JUMP because if is finished
         JSONObject jumpToEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
         app(jumpToEnd);
         jumpLinker.register(jumpToEnd, STATEMENT_END);
         jumpOverThen.put(C.TARGET, opArray.size());
-        ternaryExpr.getElsePart().accept(this);
+        ternaryExpr.elsePart.accept(this);
         jumpLinker.handle(STATEMENT_END).forEach(jump -> jump.put(C.TARGET, opArray.size()));
         appComment(C.IF_STMT, false);
         return null;
@@ -515,14 +515,14 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
     public final V visitIfStmt(IfStmt<V> ifStmt) {
         appComment(C.IF_STMT, true);
 
-        int numberOfThens = ifStmt.getExpr().size();
+        int numberOfThens = ifStmt.expr.size();
         // TODO: better a list of pairs. pair of lists needs this kind of for
         for ( int i = 0; i < numberOfThens; i++ ) {
-            ifStmt.getExpr().get(i).accept(this);
+            ifStmt.expr.get(i).accept(this);
             // JUMP when condition not fullfilled
             JSONObject jumpOverThen = makeNode(C.JUMP).put(C.CONDITIONAL, false);
             app(jumpOverThen);
-            ifStmt.getThenList().get(i).accept(this);
+            ifStmt.thenList.get(i).accept(this);
 
             // JUMP when if was fullfilled
             JSONObject jumpToEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
@@ -531,8 +531,8 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
             jumpOverThen.put(C.TARGET, opArray.size());
         }
-        if ( !ifStmt.getElseList().get().isEmpty() ) {
-            ifStmt.getElseList().accept(this);
+        if ( !ifStmt.elseList.get().isEmpty() ) {
+            ifStmt.elseList.accept(this);
         }
 
         jumpLinker.handle(STATEMENT_END)
@@ -555,7 +555,7 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
             JSONObject ov;
             if ( outputNeuronAsStmt.hasName("NN_OUTPUT_NEURON_STMT") ) {
                 NNOutputNeuronStmt outputNeuron = (NNOutputNeuronStmt) outputNeuronAsStmt;
-                ov = makeNode(C.ASSIGN_STMT).put(C.NAME, ((Var) outputNeuron.getValue()).getValue());
+                ov = makeNode(C.ASSIGN_STMT).put(C.NAME, ((Var) outputNeuron.value).name);
             } else if ( outputNeuronAsStmt.hasName("NN_OUTPUT_NEURON_WO_VAR_STMT") ) {
                 ov = makeNode(C.POP);
             } else {
@@ -568,7 +568,7 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
     @Override
     public final V visitNNInputNeuronStmt(NNInputNeuronStmt<V> inputNeuronStmt) {
-        inputNeuronStmt.getValue().accept(this);
+        inputNeuronStmt.value.accept(this);
         return null;
     }
 
@@ -586,39 +586,39 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
     @Override
     public final V visitNNChangeWeightStmt(NNChangeWeightStmt<V> chgStmt) {
-        chgStmt.getValue().accept(this);
-        JSONObject o = makeNode(C.NN_CHANGEWEIGHT_STMT).put(C.FROM, chgStmt.getFrom()).put(C.TO, chgStmt.getTo()).put(C.CHANGE, chgStmt.getChange());
+        chgStmt.value.accept(this);
+        JSONObject o = makeNode(C.NN_CHANGEWEIGHT_STMT).put(C.FROM, chgStmt.from).put(C.TO, chgStmt.to).put(C.CHANGE, chgStmt.change);
         app(o);
         return null;
     }
 
     @Override
     public final V visitNNChangeBiasStmt(NNChangeBiasStmt<V> chgStmt) {
-        chgStmt.getValue().accept(this);
-        JSONObject o = makeNode(C.NN_CHANGEBIAS_STMT).put(C.NAME, chgStmt.getName()).put(C.CHANGE, chgStmt.getChange());
+        chgStmt.value.accept(this);
+        JSONObject o = makeNode(C.NN_CHANGEBIAS_STMT).put(C.NAME, chgStmt.name).put(C.CHANGE, chgStmt.change);
         app(o);
         return null;
     }
 
     @Override
     public final V visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<V> getVal) {
-        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.NN_GETOUTPUTNEURON_VAL).put(C.NAME, getVal.getName());
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.NN_GETOUTPUTNEURON_VAL).put(C.NAME, getVal.name);
         app(o);
         return null;
     }
 
     @Override
     public final V visitRepeatStmt(RepeatStmt<V> repeatStmt) {
-        Mode mode = repeatStmt.getMode();
+        Mode mode = repeatStmt.mode;
         String blocklyId = repeatStmt.getProperty().getBlocklyId();
 
         switch ( mode ) {
             case WAIT:
                 // the very special case of a wait stmt. The AST is not perfectly designed for this case
-                repeatStmt.getExpr().accept(this);
+                repeatStmt.expr.accept(this);
                 JSONObject skipThenPart = makeNode(C.JUMP).put(C.CONDITIONAL, false);
                 app(skipThenPart);
-                repeatStmt.getList().accept(this);
+                repeatStmt.list.accept(this);
                 JSONObject breakStatement = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
                 addHighlightingToJump(breakStatement);
                 app(breakStatement);
@@ -630,16 +630,16 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
                 jumpLinker.isolate(() -> {
                     appComment(C.REPEAT_STMT, true);
 
-                    if ( !(repeatStmt.getExpr() instanceof ExprList<?>) ) {
-                        throw new DbcException(String.format("Expected %s to be an ExprList", repeatStmt.getExpr()));
+                    if ( !(repeatStmt.expr instanceof ExprList<?>) ) {
+                        throw new DbcException(String.format("Expected %s to be an ExprList", repeatStmt.expr));
                     }
 
-                    List<Expr<V>> exprList = ((ExprList<V>) repeatStmt.getExpr()).get();
+                    List<Expr<V>> exprList = ((ExprList<V>) repeatStmt.expr).get();
                     if ( !(exprList.get(0) instanceof Var<?>) ) {
                         throw new DbcException(String.format("Expected %s to be an variable", exprList.get(0)));
                     }
                     Var<V> variable = (Var<V>) exprList.get(0);
-                    String variableName = variable.getValue();
+                    String variableName = variable.name;
                     Expr<V> initialValue = exprList.get(1);
                     Expr<V> terminationValue = exprList.get(2);
                     Expr<V> incrementValue = exprList.get(3);
@@ -658,7 +658,7 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
                     addDebugStatement(repeatStmt);
 
-                    repeatStmt.getList().accept(this);
+                    repeatStmt.list.accept(this);
 
                     int programCounterAfterStatementList = opArray.size();
 
@@ -694,20 +694,20 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
             case FOR_EACH:
                 jumpLinker.isolate(() -> {
                     appComment(C.REPEAT_STMT, true);
-                    if ( !(repeatStmt.getExpr() instanceof Binary<?>) ) {
-                        throw new DbcException(String.format("Expected %s to be an Binary", repeatStmt.getExpr()));
+                    if ( !(repeatStmt.expr instanceof Binary<?>) ) {
+                        throw new DbcException(String.format("Expected %s to be an Binary", repeatStmt.expr));
                     }
 
-                    Binary<V> binary = (Binary<V>) repeatStmt.getExpr();
-                    if ( !(binary.getLeft() instanceof VarDeclaration<?>) ) {
-                        throw new DbcException(String.format("Expected %s to be a VarDeclaration", repeatStmt.getExpr()));
+                    Binary<V> binary = (Binary<V>) repeatStmt.expr;
+                    if ( !(binary.left instanceof VarDeclaration<?>) ) {
+                        throw new DbcException(String.format("Expected %s to be a VarDeclaration", repeatStmt.expr));
                     }
                     if ( !(binary.getRight() instanceof Var<?>) ) {
-                        throw new DbcException(String.format("Expected %s to be a VarDeclaration", repeatStmt.getExpr()));
+                        throw new DbcException(String.format("Expected %s to be a VarDeclaration", repeatStmt.expr));
                     }
 
-                    VarDeclaration<V> varDeclaration = (VarDeclaration<V>) binary.getLeft();
-                    String variableName = varDeclaration.getName();
+                    VarDeclaration<V> varDeclaration = (VarDeclaration<V>) binary.left;
+                    String variableName = varDeclaration.name;
                     String runVariableName = variableName + "_runningVariable";
                     Var<V> listVariable = (Var<V>) binary.getRight();
 
@@ -738,7 +738,7 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
                     app(makeNode(C.ASSIGN_STMT).put(C.NAME, variableName));
 
                     addDebugStatement(repeatStmt);
-                    repeatStmt.getList().accept(this);
+                    repeatStmt.list.accept(this);
 
                     int programCounterAfterStatementList = opArray.size();
 
@@ -780,7 +780,7 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
                     int beforeExprTarget = opArray.size();
                     addDebugStatement(repeatStmt);
 
-                    repeatStmt.getList().accept(this);
+                    repeatStmt.list.accept(this);
 
                     app(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, beforeExprTarget));
 
@@ -808,14 +808,14 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
                     int beforeExprTarget = opArray.size();
                     addDebugStatement(repeatStmt);
 
-                    repeatStmt.getExpr().accept(this);
+                    repeatStmt.expr.accept(this);
                     // no difference between WHILE and UNTIL because a NOT gets injected into UNTIL by jaxbToAST
                     JSONObject jumpOverWhile = makeNode(C.JUMP).put(C.CONDITIONAL, false);
                     addHighlightingToJump(jumpOverWhile);
                     jumpLinker.register(jumpOverWhile, BREAK);
 
                     app(jumpOverWhile);
-                    repeatStmt.getList().accept(this);
+                    repeatStmt.list.accept(this);
                     app(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, beforeExprTarget));
 
                     jumpLinker.handle(BREAK).forEach(statement -> {
@@ -843,7 +843,7 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
     @Override
     public final V visitSensorStmt(SensorStmt<V> sensorStmt) {
-        sensorStmt.getSensor().accept(this);
+        sensorStmt.sensor.accept(this);
         return null;
     }
 
@@ -853,7 +853,7 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
             .put(C.CONDITIONAL, C.ALWAYS);
 
         addHighlightingToJump(jump);
-        jumpLinker.register(jump, stmtFlowCon.getFlow() == Flow.BREAK ? BREAK : CONTINUE);
+        jumpLinker.register(jump, stmtFlowCon.flow == Flow.BREAK ? BREAK : CONTINUE);
         return app(jump);
     }
 
@@ -867,8 +867,8 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
     @Override
     public final V visitMainTask(MainTask<V> mainTask) {
-        mainTask.getVariables().accept(this);
-        if ( mainTask.getDebug().equals("TRUE") ) {
+        mainTask.variables.accept(this);
+        if ( mainTask.debug.equals("TRUE") ) {
             JSONObject o = makeNode(C.CREATE_DEBUG_ACTION);
             return app(o);
         }
@@ -892,7 +892,7 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
             int programCounterStart = opArray.size();
             addDebugStatement(waitStmt);
 
-            waitStmt.getStatements().get()
+            waitStmt.statements.get()
                 .forEach(statement -> statement.accept(this));
             this.getOpArray().add(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
             this.getOpArray().add(makeNode(C.WAIT_TIME_STMT));
@@ -907,7 +907,7 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
     @Override
     public final V visitWaitTimeStmt(WaitTimeStmt<V> waitTimeStmt) {
-        waitTimeStmt.getTime().accept(this);
+        waitTimeStmt.time.accept(this);
         JSONObject o = makeNode(C.WAIT_TIME_STMT);
         return app(o);
     }
@@ -925,13 +925,13 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
     @Override
     public final V visitStmtTextComment(StmtTextComment<V> textComment) {
         JSONObject o;
-        o = makeNode(C.COMMENT).put(C.VALUE, textComment.getTextComment());
+        o = makeNode(C.COMMENT).put(C.VALUE, textComment.textComment);
         return app(o);
     }
 
     @Override
     public final V visitFunctionStmt(FunctionStmt<V> functionStmt) {
-        functionStmt.getFunction().accept(this);
+        functionStmt.function.accept(this);
         return null;
     }
 
@@ -943,39 +943,39 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
     @Override
     public final V visitGetSubFunct(GetSubFunct<V> getSubFunct) {
-        getSubFunct.getParam().forEach(x -> x.accept(this));
+        getSubFunct.param.forEach(x -> x.accept(this));
 
         JSONObject o =
             makeNode(C.EXPR)
                 .put(C.EXPR, C.LIST_OPERATION)
                 .put(C.OP, C.LIST_GET_SUBLIST)
-                .put(C.POSITION, getSubFunct.getStrParam().stream().map(x -> x.toString().toLowerCase()).toArray());
+                .put(C.POSITION, getSubFunct.strParam.stream().map(x -> x.toString().toLowerCase()).toArray());
 
         return app(o);
     }
 
     @Override
     public final V visitIndexOfFunct(IndexOfFunct<V> indexOfFunct) {
-        indexOfFunct.getParam().forEach(x -> x.accept(this));
+        indexOfFunct.param.forEach(x -> x.accept(this));
         JSONObject o =
             makeNode(C.EXPR)
                 .put(C.EXPR, C.LIST_OPERATION)
                 .put(C.OP, C.LIST_FIND_ITEM)
-                .put(C.POSITION, indexOfFunct.getLocation().toString().toLowerCase());
+                .put(C.POSITION, indexOfFunct.location.toString().toLowerCase());
         return app(o);
     }
 
     @Override
     public final V visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<V> lengthOfIsEmptyFunct) {
-        lengthOfIsEmptyFunct.getParam().get(0).accept(this);
-        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, lengthOfIsEmptyFunct.getFunctName().toString().toLowerCase());
+        lengthOfIsEmptyFunct.param.get(0).accept(this);
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, lengthOfIsEmptyFunct.functName.toString().toLowerCase());
         return app(o);
     }
 
     @Override
     public final V visitListCreate(ListCreate<V> listCreate) {
-        listCreate.getValue().accept(this);
-        int n = listCreate.getValue().get().size();
+        listCreate.exprList.accept(this);
+        int n = listCreate.exprList.get().size();
 
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CREATE_LIST).put(C.NUMBER, n);
         return app(o);
@@ -983,55 +983,55 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
     @Override
     public final V visitListSetIndex(ListSetIndex<V> listSetIndex) {
-        listSetIndex.getParam().forEach(x -> x.accept(this));
+        listSetIndex.param.forEach(x -> x.accept(this));
         JSONObject o =
             makeNode(C.LIST_OPERATION)
-                .put(C.OP, listSetIndex.getElementOperation().toString().toLowerCase())
-                .put(C.POSITION, listSetIndex.getLocation().toString().toLowerCase());
+                .put(C.OP, listSetIndex.mode.toString().toLowerCase())
+                .put(C.POSITION, listSetIndex.location.toString().toLowerCase());
         return app(o);
     }
 
     @Override
     public final V visitListGetIndex(ListGetIndex<V> listGetIndex) {
-        listGetIndex.getParam().forEach(x -> x.accept(this));
+        listGetIndex.param.forEach(x -> x.accept(this));
         JSONObject o =
             makeNode(C.EXPR)
                 .put(C.EXPR, C.LIST_OPERATION)
                 .put(C.OP, listGetIndex.getElementOperation().toString().toLowerCase())
-                .put(C.POSITION, listGetIndex.getLocation().toString().toLowerCase());
+                .put(C.POSITION, listGetIndex.location.toString().toLowerCase());
         return app(o);
     }
 
     @Override
     public final V visitListRepeat(ListRepeat<V> listRepeat) {
-        listRepeat.getParam().forEach(x -> x.accept(this));
+        listRepeat.param.forEach(x -> x.accept(this));
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CREATE_LIST_REPEAT);
         return app(o);
     }
 
     @Override
     public final V visitMathConstrainFunct(MathConstrainFunct<V> mathConstrainFunct) {
-        mathConstrainFunct.getParam().get(0).accept(this);
-        mathConstrainFunct.getParam().get(1).accept(this);
-        mathConstrainFunct.getParam().get(2).accept(this);
+        mathConstrainFunct.param.get(0).accept(this);
+        mathConstrainFunct.param.get(1).accept(this);
+        mathConstrainFunct.param.get(2).accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.MATH_CONSTRAIN_FUNCTION);
         return app(o);
     }
 
     @Override
     public final V visitMathNumPropFunct(MathNumPropFunct<V> mathNumPropFunct) {
-        mathNumPropFunct.getParam().get(0).accept(this);
-        if ( mathNumPropFunct.getFunctName() == FunctionNames.DIVISIBLE_BY ) {
-            mathNumPropFunct.getParam().get(1).accept(this);
+        mathNumPropFunct.param.get(0).accept(this);
+        if ( mathNumPropFunct.functName == FunctionNames.DIVISIBLE_BY ) {
+            mathNumPropFunct.param.get(1).accept(this);
         }
-        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.MATH_PROP_FUNCT).put(C.OP, mathNumPropFunct.getFunctName());
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.MATH_PROP_FUNCT).put(C.OP, mathNumPropFunct.functName);
         return app(o);
     }
 
     @Override
     public final V visitMathOnListFunct(MathOnListFunct<V> mathOnListFunct) {
-        mathOnListFunct.getParam().forEach(x -> x.accept(this));
-        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.MATH_ON_LIST).put(C.OP, mathOnListFunct.getFunctName().toString().toLowerCase());
+        mathOnListFunct.param.forEach(x -> x.accept(this));
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.MATH_ON_LIST).put(C.OP, mathOnListFunct.functName.toString().toLowerCase());
         return app(o);
     }
 
@@ -1043,52 +1043,52 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
     @Override
     public final V visitMathRandomIntFunct(MathRandomIntFunct<V> mathRandomIntFunct) {
-        mathRandomIntFunct.getParam().get(0).accept(this);
-        mathRandomIntFunct.getParam().get(1).accept(this);
+        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.param.get(1).accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.RANDOM_INT);
         return app(o);
     }
 
     @Override
     public final V visitMathSingleFunct(MathSingleFunct<V> mathSingleFunct) {
-        mathSingleFunct.getParam().get(0).accept(this);
-        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, mathSingleFunct.getFunctName());
+        mathSingleFunct.param.get(0).accept(this);
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, mathSingleFunct.functName);
         return app(o);
     }
 
     @Override
     public V visitMathCastStringFunct(MathCastStringFunct<V> mathCastStringFunct) {
-        mathCastStringFunct.getParam().get(0).accept(this);
+        mathCastStringFunct.param.get(0).accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CAST_STRING);
         return app(o);
     }
 
     @Override
     public V visitMathCastCharFunct(MathCastCharFunct<V> mathCastCharFunct) {
-        mathCastCharFunct.getParam().get(0).accept(this);
+        mathCastCharFunct.param.get(0).accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CAST_CHAR);
         return app(o);
     }
 
     @Override
     public V visitTextStringCastNumberFunct(TextStringCastNumberFunct<V> textStringCastNumberFunct) {
-        textStringCastNumberFunct.getParam().get(0).accept(this);
+        textStringCastNumberFunct.param.get(0).accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CAST_STRING_NUMBER);
         return app(o);
     }
 
     @Override
     public V visitTextCharCastNumberFunct(TextCharCastNumberFunct<V> textCharCastNumberFunct) {
-        textCharCastNumberFunct.getParam().get(0).accept(this);
-        textCharCastNumberFunct.getParam().get(1).accept(this);
+        textCharCastNumberFunct.param.get(0).accept(this);
+        textCharCastNumberFunct.param.get(1).accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CAST_CHAR_NUMBER);
         return app(o);
     }
 
     @Override
     public final V visitTextJoinFunct(TextJoinFunct<V> textJoinFunct) {
-        textJoinFunct.getParam().accept(this);
-        int n = textJoinFunct.getParam().get().size();
+        textJoinFunct.param.accept(this);
+        int n = textJoinFunct.param.get().size();
         JSONObject o = makeNode(C.TEXT_JOIN).put(C.NUMBER, n);
         return app(o);
     }
@@ -1109,11 +1109,11 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
                 .stream()
                 .map(parameter -> (VarDeclaration<V>) parameter)
                 .forEach(parameter -> {
-                    JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, parameter.getTypeVar()).put(C.NAME, parameter.getName());
+                    JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, parameter.typeVar).put(C.NAME, parameter.name);
                     app(o);
                 });
 
-            methodVoid.getBody().accept(this);
+            methodVoid.body.accept(this);
 
 
             jumpLinker.handle(METHOD_END).forEach(statement -> {
@@ -1123,7 +1123,7 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
             parameters.get().stream()
                 .map(parameter -> (VarDeclaration<V>) parameter)
-                .forEach(parameter -> app(makeNode(C.UNBIND_VAR).put(C.NAME, parameter.getName())));
+                .forEach(parameter -> app(makeNode(C.UNBIND_VAR).put(C.NAME, parameter.name)));
 
             app(makeNode(C.RETURN).put(C.VALUES, false));
             appComment(C.METHOD_VOID, false);
@@ -1148,13 +1148,13 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
                 .stream()
                 .map(parameter -> (VarDeclaration<V>) parameter)
                 .forEach(parameter -> {
-                    JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, parameter.getTypeVar()).put(C.NAME, parameter.getName());
+                    JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, parameter.typeVar).put(C.NAME, parameter.name);
                     app(o);
                 });
 
-            methodReturn.getBody().accept(this);
+            methodReturn.body.accept(this);
 
-            methodReturn.getReturnValue().accept(this);
+            methodReturn.returnValue.accept(this);
 
             jumpLinker.handle(METHOD_END).forEach(statement -> {
                 statement.put(C.TARGET, opArray.size());
@@ -1163,7 +1163,7 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
             parameters.get().stream()
                 .map(parameter -> (VarDeclaration<V>) parameter)
-                .forEach(parameter -> app(makeNode(C.UNBIND_VAR).put(C.NAME, parameter.getName())));
+                .forEach(parameter -> app(makeNode(C.UNBIND_VAR).put(C.NAME, parameter.name)));
 
             app(makeNode(C.RETURN).put(C.VALUES, true));
             appComment(C.METHOD_RETURN, false);
@@ -1175,11 +1175,11 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
     public final V visitMethodIfReturn(MethodIfReturn<V> methodIfReturn) {
         appComment(C.IF_RETURN, true);
 
-        methodIfReturn.getCondition().accept(this);
+        methodIfReturn.oraCondition.accept(this);
         JSONObject jumpOverReturn = makeNode(C.JUMP).put(C.CONDITIONAL, false);
         app(jumpOverReturn);
 
-        methodIfReturn.getReturnValue().accept(this);
+        methodIfReturn.oraReturnValue.accept(this);
         JSONObject jumpToMethodEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
         addHighlightingToJump(jumpToMethodEnd);
         jumpLinker.register(jumpToMethodEnd, METHOD_END);
@@ -1193,7 +1193,7 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
 
     @Override
     public final V visitMethodStmt(MethodStmt<V> methodStmt) {
-        methodStmt.getMethod().accept(this);
+        methodStmt.method.accept(this);
         return null;
     }
 
@@ -1219,24 +1219,24 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
     @SuppressWarnings("unchecked")
     @Override
     public V visitAssertStmt(AssertStmt<V> assertStmt) {
-        assertStmt.getAssert().accept(this);
-        ((Binary<Void>) assertStmt.getAssert()).getLeft().accept((IVisitor<Void>) this);
-        ((Binary<Void>) assertStmt.getAssert()).getRight().accept((IVisitor<Void>) this);
-        String op = ((Binary<Void>) assertStmt.getAssert()).getOp().toString();
-        JSONObject o = makeNode(C.ASSERT_ACTION).put(C.MSG, assertStmt.getMsg()).put(C.OP, op);
+        assertStmt.asserts.accept(this);
+        ((Binary<Void>) assertStmt.asserts).left.accept((IVisitor<Void>) this);
+        ((Binary<Void>) assertStmt.asserts).getRight().accept((IVisitor<Void>) this);
+        String op = ((Binary<Void>) assertStmt.asserts).op.toString();
+        JSONObject o = makeNode(C.ASSERT_ACTION).put(C.MSG, assertStmt.msg).put(C.OP, op);
         return app(o);
     }
 
     @Override
     public V visitDebugAction(DebugAction<V> debugAction) {
-        debugAction.getValue().accept(this);
+        debugAction.value.accept(this);
         JSONObject o = makeNode(C.DEBUG_ACTION);
         return app(o);
     }
 
     @Override
     public V visitSerialWriteAction(SerialWriteAction<V> serialWriteAction) {
-        serialWriteAction.getValue().accept(this);
+        serialWriteAction.value.accept(this);
         JSONObject o = makeNode(C.SERIAL_WRITE_ACTION);
         return app(o);
     }

@@ -20,11 +20,4 @@ public final class StepMotorAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> StepMotorAction<V> make(Expr<V> stepMotorPos, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new StepMotorAction<>(properties, comment, stepMotorPos);
-    }
-
-    public Expr<V> getStepMotorPos() {
-        return this.stepMotorPos;
-    }
 }

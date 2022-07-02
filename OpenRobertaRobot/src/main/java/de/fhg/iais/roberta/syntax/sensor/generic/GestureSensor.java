@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forClass.NepoExternalSensor;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
-import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
 @NepoExpr(name = "GESTURE_SENSING", category = "SENSOR", blocklyNames = {"robSensors_gesture_getSample"},
     sampleValues = {@F2M(field = "GESTURE_UP", mode = "UP"), @F2M(field = "GESTURE_DOWN", mode = "DOWN"), @F2M(field = "GESTURE_FACE_DOWN", mode = "FACE_DOWN"),
@@ -15,8 +15,8 @@ import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
 @NepoExternalSensor()
 public final class GestureSensor<V> extends ExternalSensor<V> {
 
-    public GestureSensor(BlocklyBlockProperties properties, BlocklyComment comment, SensorMetaDataBean sensorMetaDataBean) {
-        super(properties, comment, sensorMetaDataBean);
+    public GestureSensor(BlocklyBlockProperties properties, BlocklyComment comment, ExternalSensorBean externalSensorBean) {
+        super(properties, comment, externalSensorBean);
         setReadOnly();
     }
 }

@@ -27,15 +27,9 @@ public final class ServoSetAction<V> extends Action<V> implements WithUserDefine
         setReadOnly();
     }
 
-    public static <V> ServoSetAction<V> make(String port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ServoSetAction<>(properties, comment, port, value);
-    }
-
+    @Override
     public String getUserDefinedPort() {
         return this.port;
     }
 
-    public Expr<V> getValue() {
-        return this.value;
-    }
 }

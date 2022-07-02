@@ -139,7 +139,7 @@ public class ExprlyTypechecker<T> {
             || this.expectedResultType.equals(BlocklyType.ARRAY_STRING)
             || this.expectedResultType.equals(BlocklyType.ARRAY_CONNECTION)) ) {
             if ( this.ast instanceof ListCreate<?> ) {
-                if ( ((ListCreate<T>) this.ast).getValue().get().size() == 0 ) {
+                if ( ((ListCreate<T>) this.ast).exprList.get().size() == 0 ) {
                     return;
                 }
             }
@@ -215,17 +215,17 @@ public class ExprlyTypechecker<T> {
                 addError(TcError.TcErrorMsg.ILLEGAL_RGB);
                 return rgbColor.getVarType();
             }
-            if ( rgbColor.getR() instanceof EmptyExpr<?> ) {
+            if ( rgbColor.R instanceof EmptyExpr<?> ) {
                 addError(TcError.TcErrorMsg.INVALID_RGB_RGBA, "NUM", okMap.get(this.robotName).contains("rgb") ? "3" : "4");
                 return rgbColor.getVarType();
             }
         }
 
         List<BlocklyType> c = new ArrayList<>(4);
-        c.add(checkAST(rgbColor.getR()));
-        c.add(checkAST(rgbColor.getG()));
-        c.add(checkAST(rgbColor.getB()));
-        c.add(checkAST(rgbColor.getA()));
+        c.add(checkAST(rgbColor.R));
+        c.add(checkAST(rgbColor.G));
+        c.add(checkAST(rgbColor.B));
+        c.add(checkAST(rgbColor.A));
 
         for ( int k = 0; k < c.size(); k++ ) {
             BlocklyType t = c.get(k);
@@ -234,7 +234,7 @@ public class ExprlyTypechecker<T> {
             } else if ( !t.equals(BlocklyType.VOID) ) {
                 if ( !t.equals(BlocklyType.NUMBER) ) {
                     ExprlyUnParser<T> up =
-                        new ExprlyUnParser<>(k == 0 ? rgbColor.getR() : k == 1 ? rgbColor.getG() : k == 2 ? rgbColor.getB() : rgbColor.getA());
+                        new ExprlyUnParser<>(k == 0 ? rgbColor.R : k == 1 ? rgbColor.G : k == 2 ? rgbColor.B : rgbColor.A);
                     addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
                 }
             }
@@ -262,11 +262,11 @@ public class ExprlyTypechecker<T> {
             return BlocklyType.VOID;
         }
         for ( VarDeclaration<T> v : this.vars ) {
-            if ( var.getValue().equals(v.getName()) ) {
+            if ( var.name.equals(v.name) ) {
                 return v.getVarType();
             }
         }
-        addError(TcError.TcErrorMsg.UNDECLARED_VARIABLE, "NAME", var.getValue());
+        addError(TcError.TcErrorMsg.UNDECLARED_VARIABLE, "NAME", var.name);
         return BlocklyType.VOID;
     }
 
@@ -295,12 +295,12 @@ public class ExprlyTypechecker<T> {
     private BlocklyType visitUnary(Unary<T> unary) throws UnsupportedOperationException {
 
         // Get type of the operand
-        BlocklyType t = checkAST(unary.getExpr());
+        BlocklyType t = checkAST(unary.expr);
         if ( t.equals(BlocklyType.NOTHING) ) {
             addError(TcError.TcErrorMsg.UNEXPECTED_METHOD);
         }
         // Check if the expression should should be boolean
-        if ( unary.getOp().equals(Unary.Op.NOT) ) {
+        if ( unary.op.equals(Unary.Op.NOT) ) {
             // If it should be boolean, check if it is
             if ( !t.equals(BlocklyType.BOOLEAN) && !t.equals(BlocklyType.VOID) && !t.equals(BlocklyType.NOTHING) ) {
                 addError(TcError.TcErrorMsg.INVALID_OPERAND_TYPE);
@@ -308,7 +308,7 @@ public class ExprlyTypechecker<T> {
             return BlocklyType.BOOLEAN;
 
             // Check if it's a number operation
-        } else if ( unary.getOp().equals(Unary.Op.PLUS) || unary.getOp().equals(Unary.Op.NEG) ) {
+        } else if ( unary.op.equals(Unary.Op.PLUS) || unary.op.equals(Unary.Op.NEG) ) {
 
             // If it is a number operation, check if the argument is boolean
             if ( !t.equals(BlocklyType.NUMBER) && !t.equals(BlocklyType.VOID) && !t.equals(BlocklyType.NOTHING) ) {
@@ -328,7 +328,7 @@ public class ExprlyTypechecker<T> {
      */
     private BlocklyType visitBinary(Binary<T> binary) throws UnsupportedOperationException {
         // Get type of the operands
-        BlocklyType tl = checkAST(binary.getLeft());
+        BlocklyType tl = checkAST(binary.left);
         BlocklyType tr = checkAST(binary.getRight());
 
         if ( tl.equals(BlocklyType.NOTHING) || tr.equals(BlocklyType.NOTHING) ) {
@@ -336,11 +336,11 @@ public class ExprlyTypechecker<T> {
         }
 
         // Check if its a number operation
-        if ( binary.getOp().equals(Binary.Op.ADD)
-            || binary.getOp().equals(Binary.Op.MINUS)
-            || binary.getOp().equals(Binary.Op.MULTIPLY)
-            || binary.getOp().equals(Binary.Op.DIVIDE)
-            || binary.getOp().equals(Binary.Op.MOD) ) {
+        if ( binary.op.equals(Binary.Op.ADD)
+            || binary.op.equals(Binary.Op.MINUS)
+            || binary.op.equals(Binary.Op.MULTIPLY)
+            || binary.op.equals(Binary.Op.DIVIDE)
+            || binary.op.equals(Binary.Op.MOD) ) {
             // Check if the left operand is a Number Type
             if ( !tl.equals(BlocklyType.NUMBER) && !tl.equals(BlocklyType.VOID) && !tl.equals(BlocklyType.NOTHING) ) {
                 addError(TcError.TcErrorMsg.INVALID_OPERAND_TYPE);
@@ -352,7 +352,7 @@ public class ExprlyTypechecker<T> {
             return BlocklyType.NUMBER;
         }
         // Check if the operation is a boolean operation
-        if ( binary.getOp().equals(Binary.Op.AND) || binary.getOp().equals(Binary.Op.OR) ) {
+        if ( binary.op.equals(Binary.Op.AND) || binary.op.equals(Binary.Op.OR) ) {
             // Check if the left operand is a Boolean Type
             if ( !tl.equals(BlocklyType.BOOLEAN) && !tl.equals(BlocklyType.VOID) && !tl.equals(BlocklyType.NOTHING) ) {
                 addError(TcError.TcErrorMsg.INVALID_OPERAND_TYPE);
@@ -364,7 +364,7 @@ public class ExprlyTypechecker<T> {
             return BlocklyType.BOOLEAN;
         }
         // Check if it's an equality or inequality operation
-        if ( binary.getOp().equals(Binary.Op.EQ) || binary.getOp().equals(Binary.Op.NEQ) ) {
+        if ( binary.op.equals(Binary.Op.EQ) || binary.op.equals(Binary.Op.NEQ) ) {
             // Check if both operands are of the same Type
             if ( !tl.equals(tr)
                 && !tl.equals(BlocklyType.VOID)
@@ -376,10 +376,10 @@ public class ExprlyTypechecker<T> {
             return BlocklyType.BOOLEAN;
         }
         // Check if operation is a inecuation
-        if ( binary.getOp().equals(Binary.Op.GT)
-            || binary.getOp().equals(Binary.Op.LT)
-            || binary.getOp().equals(Binary.Op.GTE)
-            || binary.getOp().equals(Binary.Op.LTE) ) {
+        if ( binary.op.equals(Binary.Op.GT)
+            || binary.op.equals(Binary.Op.LT)
+            || binary.op.equals(Binary.Op.GTE)
+            || binary.op.equals(Binary.Op.LTE) ) {
             // Check if the left operand is a Number Type
             if ( !tl.equals(BlocklyType.NUMBER) && !tl.equals(BlocklyType.VOID) && !tl.equals(BlocklyType.NOTHING) ) {
                 addError(TcError.TcErrorMsg.INVALID_OPERAND_TYPE);
@@ -482,8 +482,8 @@ public class ExprlyTypechecker<T> {
      */
     private BlocklyType visitMathNumPropFunct(MathNumPropFunct<T> mathNumPropFunct) {
         return functionHelper(
-            mathNumPropFunct.getParam(),
-            mathNumPropFunct.getFunctName().equals(FunctionNames.DIVISIBLE_BY) ? 2 : 1,
+            mathNumPropFunct.param,
+            mathNumPropFunct.functName.equals(FunctionNames.DIVISIBLE_BY) ? 2 : 1,
             BlocklyType.NUMBER,
             BlocklyType.BOOLEAN);
     }
@@ -500,7 +500,7 @@ public class ExprlyTypechecker<T> {
                 addError(TcError.TcErrorMsg.NO_TYPE, "TYPE", "list");
             }
         }
-        List<Expr<T>> args = mathOnListFunct.getParam();
+        List<Expr<T>> args = mathOnListFunct.param;
         // All the list functions take only one list
         // Check that is only one
         BlocklyType t = BlocklyType.VOID;
@@ -519,7 +519,7 @@ public class ExprlyTypechecker<T> {
                 }
             }
         }
-        if ( mathOnListFunct.getFunctName().equals(FunctionNames.RANDOM) ) {
+        if ( mathOnListFunct.functName.equals(FunctionNames.RANDOM) ) {
             if ( t.equals(BlocklyType.ARRAY_NUMBER) ) {
                 return BlocklyType.NUMBER;
             }
@@ -555,7 +555,7 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     private BlocklyType visitMathRandomIntFunct(MathRandomIntFunct<T> mathRandomIntFunct) {
-        return functionHelper(mathRandomIntFunct.getParam(), 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
+        return functionHelper(mathRandomIntFunct.param, 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
     }
 
     /**
@@ -565,12 +565,12 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     private BlocklyType visitMathSingleFunct(MathSingleFunct<T> mathSingleFunct) {
-        FunctionNames fname = mathSingleFunct.getFunctName();
+        FunctionNames fname = mathSingleFunct.functName;
         if ( fname.equals(FunctionNames.MAX) || fname.equals(FunctionNames.MIN) ) {
-            return functionHelper(mathSingleFunct.getParam(), 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
+            return functionHelper(mathSingleFunct.param, 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
 
         } else {
-            return functionHelper(mathSingleFunct.getParam(), 1, BlocklyType.NUMBER, BlocklyType.NUMBER);
+            return functionHelper(mathSingleFunct.param, 1, BlocklyType.NUMBER, BlocklyType.NUMBER);
         }
     }
 
@@ -581,7 +581,7 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     private BlocklyType visitMathPowerFunct(MathPowerFunct<T> mathPowerFunct) {
-        return functionHelper(mathPowerFunct.getParam(), 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
+        return functionHelper(mathPowerFunct.param, 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
     }
 
     /**
@@ -591,7 +591,7 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     private BlocklyType visitMathConstrainFunct(MathConstrainFunct<T> mathConstrainFunct) {
-        return functionHelper(mathConstrainFunct.getParam(), 3, BlocklyType.NUMBER, BlocklyType.NUMBER);
+        return functionHelper(mathConstrainFunct.param, 3, BlocklyType.NUMBER, BlocklyType.NUMBER);
     }
 
     /**
@@ -607,7 +607,7 @@ public class ExprlyTypechecker<T> {
             }
         }
         BlocklyType t;
-        List<Expr<T>> args = textJoinFunct.getParam().get();
+        List<Expr<T>> args = textJoinFunct.param.get();
 
         if ( args.size() < 2 ) {
             addError(TcError.TcErrorMsg.INVALID_ARGUMENT_NUMBER);
@@ -634,7 +634,7 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     private BlocklyType visitTextPrintFunct(TextPrintFunct<T> textPrintFunct) {
-        return functionHelper(textPrintFunct.getParam(), 1, BlocklyType.STRING, BlocklyType.NOTHING);
+        return functionHelper(textPrintFunct.param, 1, BlocklyType.STRING, BlocklyType.NOTHING);
     }
 
     /**
@@ -654,8 +654,8 @@ public class ExprlyTypechecker<T> {
         BlocklyType t, t0;
         t0 = BlocklyType.ARRAY;
         // Get parameters
-        List<Expr<T>> args = getSubFunct.getParam();
-        List<IMode> mode = getSubFunct.getStrParam();
+        List<Expr<T>> args = getSubFunct.param;
+        List<IMode> mode = getSubFunct.strParam;
         // Check the number of parameters
         int argNumber = indexArgumentNumber(mode.get(0)) + indexArgumentNumber(mode.get(1)) + 1;
         if ( args.size() != argNumber ) {
@@ -715,8 +715,8 @@ public class ExprlyTypechecker<T> {
         BlocklyType t, t0;
         t0 = BlocklyType.VOID;
         // Get parameters
-        List<Expr<T>> args = listGetIndex.getParam();
-        IIndexLocation mode = listGetIndex.getLocation();
+        List<Expr<T>> args = listGetIndex.param;
+        IIndexLocation mode = listGetIndex.location;
         int argNumber = indexArgumentNumber(mode) + 1;
         // Check the number of parameters
         if ( args.size() != argNumber ) {
@@ -778,8 +778,8 @@ public class ExprlyTypechecker<T> {
         BlocklyType t, t0;
         t0 = BlocklyType.ARRAY;
         // Get parameters
-        List<Expr<T>> args = listSetIndex.getParam();
-        IIndexLocation mode = listSetIndex.getLocation();
+        List<Expr<T>> args = listSetIndex.param;
+        IIndexLocation mode = listSetIndex.location;
         int argNumber = indexArgumentNumber(mode) + 2;
         // Check the number of parameters
         if ( args.size() != argNumber ) {
@@ -832,7 +832,7 @@ public class ExprlyTypechecker<T> {
         BlocklyType t, t0, t1;
         t0 = BlocklyType.VOID;
         t1 = BlocklyType.VOID;
-        List<Expr<T>> args = listRepeat.getParam();
+        List<Expr<T>> args = listRepeat.param;
         if ( args.size() != 2 ) {
             addError(TcError.TcErrorMsg.INVALID_ARGUMENT_NUMBER);
         }
@@ -884,8 +884,8 @@ public class ExprlyTypechecker<T> {
         }
         BlocklyType t, t0;
         t0 = BlocklyType.ARRAY;
-        FunctionNames fname = lengthOfIsEmptyFunct.getFunctName();
-        List<Expr<T>> args = lengthOfIsEmptyFunct.getParam();
+        FunctionNames fname = lengthOfIsEmptyFunct.functName;
+        List<Expr<T>> args = lengthOfIsEmptyFunct.param;
         if ( args.size() != 1 ) {
             addError(TcError.TcErrorMsg.INVALID_ARGUMENT_NUMBER);
         }
@@ -931,7 +931,7 @@ public class ExprlyTypechecker<T> {
             }
         }
         BlocklyType t, t1;
-        List<Expr<T>> args = indexOfFunct.getParam();
+        List<Expr<T>> args = indexOfFunct.param;
         if ( args.size() != 2 ) {
             addError(TcError.TcErrorMsg.INVALID_ARGUMENT_NUMBER);
             return BlocklyType.NUMBER;
@@ -976,18 +976,18 @@ public class ExprlyTypechecker<T> {
             }
         }
         BlocklyType t;
-        t = checkAST(ternaryExpr.getCondition());
+        t = checkAST(ternaryExpr.condition);
         if ( !t.equals(BlocklyType.BOOLEAN) ) {
             if ( t.equals(BlocklyType.NOTHING) ) {
                 addError(TcError.TcErrorMsg.UNEXPECTED_METHOD);
             } else {
-                ExprlyUnParser<T> up = new ExprlyUnParser<>(ternaryExpr.getCondition());
+                ExprlyUnParser<T> up = new ExprlyUnParser<>(ternaryExpr.condition);
                 addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
             }
         }
 
-        t = checkAST(ternaryExpr.getThenPart());
-        if ( !t.equals(checkAST(ternaryExpr.getElsePart())) ) {
+        t = checkAST(ternaryExpr.thenPart);
+        if ( !t.equals(checkAST(ternaryExpr.elsePart)) ) {
             addError(TcError.TcErrorMsg.INVALID_OPERAND_TYPE);
             return BlocklyType.VOID;
         } else {
@@ -1003,7 +1003,7 @@ public class ExprlyTypechecker<T> {
      */
     @SuppressWarnings("unchecked")
     private BlocklyType visitStmtExpr(StmtExpr<?> stmtExpr) {
-        return checkAST((Phrase<T>) stmtExpr.getStmt());
+        return checkAST((Phrase<T>) stmtExpr.stmt);
     }
 
     /**
@@ -1044,7 +1044,7 @@ public class ExprlyTypechecker<T> {
             return visitVar((Var<T>) ast);
         }
         if ( ast instanceof ListCreate<?> ) {
-            return visitExprList(((ListCreate<T>) ast).getValue());
+            return visitExprList(((ListCreate<T>) ast).exprList);
         }
         if ( ast instanceof ExprList<?> ) {
             return visitExprList((ExprList<T>) ast);

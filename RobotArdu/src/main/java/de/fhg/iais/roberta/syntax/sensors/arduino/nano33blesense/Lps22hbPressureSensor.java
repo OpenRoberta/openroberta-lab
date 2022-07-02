@@ -19,11 +19,4 @@ public final class Lps22hbPressureSensor<V> extends BuiltinSensor<V> {
         setReadOnly();
     }
 
-    public static <V> Lps22hbPressureSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> pressure) {
-        return new Lps22hbPressureSensor<>(properties, comment, pressure);
-    }
-
-    public Expr<V> getPressure() {
-        return pressure;
-    }
 }

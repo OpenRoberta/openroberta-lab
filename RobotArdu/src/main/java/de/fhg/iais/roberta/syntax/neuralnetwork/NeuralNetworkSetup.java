@@ -30,25 +30,4 @@ public final class NeuralNetworkSetup<V> extends Stmt<V> {
         setReadOnly();
     }
 
-    public static <V> NeuralNetworkSetup<V> make(
-        Expr<V> numberOfClasses,
-        Expr<V> numberInputNeurons,
-        Expr<V> maxNumberOfNeurons,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) //
-    {
-        return new NeuralNetworkSetup<>(properties, comment, numberOfClasses, numberInputNeurons, maxNumberOfNeurons);
-    }
-
-    public Expr<V> getNumberOfClasses() {
-        return this.numberOfClasses;
-    }
-
-    public Expr<V> getNumberInputNeurons() {
-        return numberInputNeurons;
-    }
-
-    public Expr<V> getMaxNumberOfNeurons() {
-        return maxNumberOfNeurons;
-    }
 }

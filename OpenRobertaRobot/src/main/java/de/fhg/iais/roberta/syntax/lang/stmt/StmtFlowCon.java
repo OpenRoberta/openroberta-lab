@@ -2,9 +2,9 @@ package de.fhg.iais.roberta.syntax.lang.stmt;
 
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "STMT", blocklyNames = {"controls_flow_statements"}, name = "STMT_FLOW_CONTROL")
@@ -17,14 +17,6 @@ public final class StmtFlowCon<V> extends Stmt<V> {
         Assert.isTrue(flow != null);
         this.flow = flow;
         setReadOnly();
-    }
-
-    public static <V> StmtFlowCon<V> make(Flow flow, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new StmtFlowCon<V>(properties, comment, flow);
-    }
-
-    public Flow getFlow() {
-        return this.flow;
     }
 
     public enum Flow {

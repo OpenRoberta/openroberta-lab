@@ -12,18 +12,11 @@ public final class PlotClearAction<V> extends Action<V> {
     @NepoField(name = "ACTORPORT", value = BlocklyConstants.EMPTY_PORT)
     public final String port;
 
-     public PlotClearAction(BlocklyBlockProperties properties, BlocklyComment comment, String port) {
+    public PlotClearAction(BlocklyBlockProperties properties, BlocklyComment comment, String port) {
         super(properties, comment);
         this.port = port;
         this.setReadOnly();
     }
 
-    public static <V> PlotClearAction<V> make(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PlotClearAction<>(properties, comment, port);
-    }
-
-    public String getPort() {
-        return this.port;
-    }
 
 }

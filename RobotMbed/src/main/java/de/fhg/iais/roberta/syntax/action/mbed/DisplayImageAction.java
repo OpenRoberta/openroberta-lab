@@ -21,50 +21,18 @@ import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>mbedActions_display_image</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code
- * for showing a image on display.<br/>
- * <br>
- * The client must provide the {@link DisplayImageMode} and {@link Expr} (image(s) to be displayed). <br>
- * <br>
- * To create an instance from this class use the method {@link #make(DisplayImageMode, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
- */
 @NepoBasic(name = "DISPLAY_IMAGE_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_display_image"})
 public final class DisplayImageAction<V> extends Action<V> {
 
     public final DisplayImageMode displayImageMode;
     public final Expr<V> valuesToDisplay;
 
-    private DisplayImageAction(DisplayImageMode displayImageMode, Expr<V> valuesToDisplay, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public DisplayImageAction(DisplayImageMode displayImageMode, Expr<V> valuesToDisplay, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.isTrue(displayImageMode != null && valuesToDisplay != null);
         this.displayImageMode = displayImageMode;
         this.valuesToDisplay = valuesToDisplay;
         setReadOnly();
-    }
-
-    /**
-     * Creates instance of {@link DisplayImageAction}. This instance is read only and can not be modified.
-     *
-     * @param mode {@link DisplayImageMode} how an image to be displayed; must <b>not</b> be null,
-     * @param param {@link Expr} image(s) to be displayed; must <b>not</b> be null,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link DisplayImageAction}
-     */
-    public static <V> DisplayImageAction<V> make(
-        DisplayImageMode displayImageMode,
-        Expr<V> valuesToDisplay,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new DisplayImageAction<>(displayImageMode, valuesToDisplay, properties, comment);
-    }
-
-    /**
-     * @return {@link DisplayImageMode} mode in which images will be displayed
-     */
-    public DisplayImageMode getDisplayImageMode() {
-        return this.displayImageMode;
     }
 
     /**
@@ -79,20 +47,12 @@ public final class DisplayImageAction<V> extends Action<V> {
         return "DisplayImageAction [" + this.displayImageMode + ", " + this.valuesToDisplay + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         String mode = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
         Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
-        return DisplayImageAction
-            .make(DisplayImageMode.get(mode), Jaxb2Ast.convertPhraseToExpr(image), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new DisplayImageAction<>(DisplayImageMode.get(mode), Jaxb2Ast.convertPhraseToExpr(image), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

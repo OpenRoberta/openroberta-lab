@@ -16,25 +16,19 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
 
-/**
- * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree). Object from
- * this class will generate code for setting the motor speed and type of movement connected on given port and turn the motor on.<br/>
- * <br/>
- * The client must provide the {@link ActorPort} and {@link MotionParam} (number of rotations or degrees and speed).
- */
 @NepoBasic(name = "MOTOR_ON_ACTION", category = "ACTOR", blocklyNames = {"sim_motor_on_for", "robActions_motor_on_for_ardu", "robActions_motor_on", "sim_motor_on", "robActions_motor_on_for", "mbedActions_motor_on"})
 public final class MotorOnAction<V> extends MoveAction<V> {
 
     public final MotionParam<V> param;
 
-    private MotorOnAction(String port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public MotorOnAction(String port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment, port);
         Assert.isTrue((param != null) && (port != null));
         this.param = param;
@@ -42,26 +36,6 @@ public final class MotorOnAction<V> extends MoveAction<V> {
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link MotorOnAction}. This instance is read only and can not be modified.
-     *
-     * @param port {@link ActorPort} on which the motor is connected,
-     * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link MotorOnAction}
-     */
-    public static <V> MotorOnAction<V> make(String port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MotorOnAction<>(port, param, properties, comment);
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         String port;
         List<Field> fields;
@@ -92,14 +66,7 @@ public final class MotorOnAction<V> extends MoveAction<V> {
             }
             mp = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(left)).duration(md).build();
         }
-        return MotorOnAction.make(port, mp, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
-    }
-
-    /**
-     * @return {@link MotionParam} for the motor (number of rotations or degrees and speed).
-     */
-    public MotionParam<V> getParam() {
-        return this.param;
+        return new MotorOnAction<>(port, mp, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     /**
@@ -131,8 +98,8 @@ public final class MotorOnAction<V> extends MoveAction<V> {
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.MOTORPORT, getUserDefinedPort().toString());
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.POWER, getParam().getSpeed());
-        if ( getParam().getDuration() != null ) {
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.POWER, this.param.getSpeed());
+        if ( this.param.getDuration() != null ) {
             if ( getDurationMode() != null ) {
                 Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.MOTORROTATION, getDurationMode().toString());
             }

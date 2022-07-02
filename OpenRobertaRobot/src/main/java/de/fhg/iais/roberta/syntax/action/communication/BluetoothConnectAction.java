@@ -22,12 +22,4 @@ public final class BluetoothConnectAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> BluetoothConnectAction<V> make(Expr<V> address, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BluetoothConnectAction<V>(properties, comment, address);
-    }
-
-    public Expr<V> getAddress() {
-        return this.address;
-    }
-
 }

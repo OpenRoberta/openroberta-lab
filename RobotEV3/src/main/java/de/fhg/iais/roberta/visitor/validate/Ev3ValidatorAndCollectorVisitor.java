@@ -50,25 +50,25 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
 
     @Override
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        requiredComponentVisited(bluetoothCheckConnectAction, bluetoothCheckConnectAction.getConnection());
+        requiredComponentVisited(bluetoothCheckConnectAction, bluetoothCheckConnectAction.connection);
         return null;
     }
 
     @Override
     public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
-        requiredComponentVisited(bluetoothConnectAction, bluetoothConnectAction.getAddress());
+        requiredComponentVisited(bluetoothConnectAction, bluetoothConnectAction.address);
         return null;
     }
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
-        requiredComponentVisited(bluetoothReceiveAction, bluetoothReceiveAction.getConnection());
+        requiredComponentVisited(bluetoothReceiveAction, bluetoothReceiveAction.connection);
         return null;
     }
 
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        requiredComponentVisited(bluetoothSendAction, bluetoothSendAction.getConnection(), bluetoothSendAction.getMsg());
+        requiredComponentVisited(bluetoothSendAction, bluetoothSendAction.connection, bluetoothSendAction.msg);
         return null;
     }
 
@@ -107,7 +107,7 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
         if ( configurationComponent == null ) {
             addErrorToPhrase(encoderSensor, "CONFIGURATION_ERROR_MOTOR_MISSING");
         } else {
-            usedHardwareBuilder.addUsedActor(new UsedActor(encoderSensor.getUserDefinedPort(), configurationComponent.getComponentType()));
+            usedHardwareBuilder.addUsedActor(new UsedActor(encoderSensor.getUserDefinedPort(), configurationComponent.componentType));
         }
         return null;
     }
@@ -155,8 +155,8 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        optionalComponentVisited(lightAction.getRgbLedColor());
-        usedHardwareBuilder.addUsedActor(new UsedActor(lightAction.getPort(), SC.LIGHT));
+        optionalComponentVisited(lightAction.rgbLedColor);
+        usedHardwareBuilder.addUsedActor(new UsedActor(lightAction.port, SC.LIGHT));
         return null;
     }
 
@@ -174,13 +174,13 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        usedHardwareBuilder.addUsedActor(new UsedActor(playNoteAction.getPort(), SC.SOUND));
+        usedHardwareBuilder.addUsedActor(new UsedActor(playNoteAction.port, SC.SOUND));
         return null;
     }
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        requiredComponentVisited(sayTextAction, sayTextAction.getMsg());
+        requiredComponentVisited(sayTextAction, sayTextAction.msg);
         if ( this.robotConfiguration.getRobotName().equals("ev3lejosv0") ) {
             addWarningToPhrase(sayTextAction, "BLOCK_NOT_SUPPORTED");
         }
@@ -190,9 +190,9 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
 
     @Override
     public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<Void> sayTextAction) {
-        requiredComponentVisited(sayTextAction, sayTextAction.getSpeed());
-        requiredComponentVisited(sayTextAction, sayTextAction.getPitch());
-        requiredComponentVisited(sayTextAction, sayTextAction.getMsg());
+        requiredComponentVisited(sayTextAction, sayTextAction.speed);
+        requiredComponentVisited(sayTextAction, sayTextAction.pitch);
+        requiredComponentVisited(sayTextAction, sayTextAction.msg);
         if ( this.robotConfiguration.getRobotName().equals("ev3lejosv0") ) {
             addWarningToPhrase(sayTextAction, "BLOCK_NOT_SUPPORTED");
         }
@@ -207,9 +207,9 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        optionalComponentVisited(showPictureAction.getX());
-        optionalComponentVisited(showPictureAction.getY());
-        usedHardwareBuilder.addUsedImage(showPictureAction.getPicture().toString());
+        optionalComponentVisited(showPictureAction.x);
+        optionalComponentVisited(showPictureAction.y);
+        usedHardwareBuilder.addUsedImage(showPictureAction.pic.toString());
         return null;
     }
 
@@ -235,15 +235,15 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        requiredComponentVisited(toneAction, toneAction.getDuration(), toneAction.getFrequency());
+        requiredComponentVisited(toneAction, toneAction.duration, toneAction.frequency);
 
-        if ( toneAction.getDuration().getKind().hasName("NUM_CONST") ) {
-            double toneActionConst = Double.parseDouble(((NumConst<Void>) toneAction.getDuration()).getValue());
+        if ( toneAction.duration.getKind().hasName("NUM_CONST") ) {
+            double toneActionConst = Double.parseDouble(((NumConst<Void>) toneAction.duration).value);
             if ( toneActionConst <= 0 ) {
                 addWarningToPhrase(toneAction, "BLOCK_NOT_EXECUTED");
             }
         }
-        usedHardwareBuilder.addUsedActor(new UsedActor(toneAction.getPort(), SC.SOUND));
+        usedHardwareBuilder.addUsedActor(new UsedActor(toneAction.port, SC.SOUND));
         return null;
     }
 
@@ -263,8 +263,8 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        if ( volumeAction.getMode() == VolumeAction.Mode.SET ) {
-            requiredComponentVisited(volumeAction, volumeAction.getVolume());
+        if ( volumeAction.mode == VolumeAction.Mode.SET ) {
+            requiredComponentVisited(volumeAction, volumeAction.volume);
         }
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.SOUND));
         return null;
@@ -275,7 +275,7 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
         if ( usedSensor == null ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
         } else {
-            String type = usedSensor.getComponentType();
+            String type = usedSensor.componentType;
             switch ( sensor.getKind().getName() ) {
                 case "COLOR_SENSING":
                     if ( !type.equals("COLOR") ) {

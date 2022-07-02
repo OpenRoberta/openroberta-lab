@@ -14,9 +14,9 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -30,7 +30,7 @@ public final class MethodIfReturn<V> extends Method<V> {
     public final Expr<V> oraReturnValue;
     public final BigInteger value;
 
-    private MethodIfReturn(
+    public MethodIfReturn(
         Expr<V> oraCondition,
         BlocklyType oraReturnType,
         Expr<V> oraReturnValue,
@@ -46,39 +46,10 @@ public final class MethodIfReturn<V> extends Method<V> {
         setReadOnly();
     }
 
-    /**
-     * creates instance of {@link MethodIfReturn}. This instance is read only and cannot be modified.
-     *
-     * @param condition expression, must be <b>not</b> null and read only
-     * @param returnType, see {@link BlocklyType} for all possible types
-     * @param returnValue
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment that user has added to the block,
-     * @return read only object of class {@link MethodIfReturn}
-     */
-    public static <V> MethodIfReturn<V> make(
-        Expr<V> condition,
-        BlocklyType returnType,
-        Expr<V> returnValue,
-        BigInteger value,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new MethodIfReturn<>(condition, returnType, returnValue, value, properties, comment);
-    }
-
-    public Expr<V> getCondition() {
-        return this.oraCondition;
-    }
-
     @Override
     public BlocklyType getReturnType() {
         return this.oraReturnType;
     }
-
-    public Expr<V> getReturnValue() {
-        return this.oraReturnValue;
-    }
-
 
     public BigInteger getValue() {
         return this.value;
@@ -89,27 +60,13 @@ public final class MethodIfReturn<V> extends Method<V> {
         return "MethodIfReturn [" + this.oraCondition + ", " + this.oraReturnType + ", " + this.oraReturnValue + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
         Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.CONDITION, BlocklyType.BOOLEAN));
         Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NULL));
         final Mutation mutation = block.getMutation();
         String mode = mutation.getReturnType() == null ? "void" : mutation.getReturnType();
-        return MethodIfReturn
-            .make(
-                Jaxb2Ast.convertPhraseToExpr(left),
-                BlocklyType.get(mode),
-                Jaxb2Ast.convertPhraseToExpr(right),
-                mutation.getValue(),
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block));
+        return new MethodIfReturn<>(Jaxb2Ast.convertPhraseToExpr(left), BlocklyType.get(mode), Jaxb2Ast.convertPhraseToExpr(right), mutation.getValue(), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
@@ -122,8 +79,8 @@ public final class MethodIfReturn<V> extends Method<V> {
             mutation.setReturnType(this.oraReturnType.getBlocklyName());
         }
         jaxbDestination.setMutation(mutation);
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.CONDITION, getCondition());
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, getReturnValue());
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.CONDITION, this.oraCondition);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, this.oraReturnValue);
 
         return jaxbDestination;
     }

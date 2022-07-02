@@ -94,8 +94,8 @@ public final class Project {
             blockSet.getInstance().add(instance);
             for ( Phrase<Void> phrase : tree ) {
                 if ( phrase.getKind().hasName("LOCATION") ) {
-                    instance.setX(((Location<Void>) phrase).getX());
-                    instance.setY(((Location<Void>) phrase).getY());
+                    instance.setX(((Location<Void>) phrase).x);
+                    instance.setY(((Location<Void>) phrase).y);
                 }
                 instance.getBlock().add(phrase.astToBlock());
             }
@@ -114,8 +114,8 @@ public final class Project {
         for ( ConfigurationComponent configComp : configurationComponents.values() ) {
             Instance instance = new Instance();
             blockSet.getInstance().add(instance);
-            instance.setX(String.valueOf(configComp.getX()));
-            instance.setY(String.valueOf(configComp.getY()));
+            instance.setX(String.valueOf(configComp.x));
+            instance.setY(String.valueOf(configComp.y));
             instance.getBlock().add(configComp.astToBlock());
         }
         return blockSet;
@@ -389,15 +389,15 @@ public final class Project {
                 this.project.configurationJSON.put("TRACKWIDTH", configurationAst.getTrackWidth());
                 this.project.configurationJSON.put("WHEELDIAMETER", configurationAst.getWheelDiameter());
                 for ( ConfigurationComponent sensor : configurationAst.getSensors() ) {
-                    sensorsJSON.put(sensor.getUserDefinedPortName(), sensor.getComponentType());
+                    sensorsJSON.put(sensor.userDefinedPortName, sensor.componentType);
                 }
                 for ( ConfigurationComponent actuator : configurationAst.getActors() ) {
                     JSONObject propJSON = new JSONObject();
-                    propJSON.put("TYPE", actuator.getComponentType());
+                    propJSON.put("TYPE", actuator.componentType);
                     for ( String prop : actuator.getComponentProperties().keySet() ) {
                         propJSON.put(prop, actuator.getComponentProperties().get(prop));
                     }
-                    actuatorsJSON.put(actuator.getUserDefinedPortName(), propJSON);
+                    actuatorsJSON.put(actuator.userDefinedPortName, propJSON);
                 }
                 this.project.configurationJSON.put("SENSORS", sensorsJSON);
                 this.project.configurationJSON.put("ACTUATORS", actuatorsJSON);

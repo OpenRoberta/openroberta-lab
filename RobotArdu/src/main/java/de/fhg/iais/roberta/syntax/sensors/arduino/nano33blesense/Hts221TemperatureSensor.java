@@ -20,31 +20,16 @@ public final class Hts221TemperatureSensor<V> extends BuiltinSensor<V> {
 
     public final Expr<V> temperature;
 
-    public Expr<V> getTemperature() {
-        return temperature;
-    }
-
-    private Hts221TemperatureSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> temperature) {
+    public Hts221TemperatureSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> temperature) {
         super(properties, comment, null);
         this.temperature = temperature;
         setReadOnly();
     }
 
-    public static <V> Hts221TemperatureSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> temperature) {
-        return new Hts221TemperatureSensor<>(properties, comment, temperature);
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         Expr<V> temperature = helper.getVar(values, BlocklyConstants.VARIABLE_VALUE);
-        return Hts221TemperatureSensor.make(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), temperature);
+        return new Hts221TemperatureSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), temperature);
     }
 
     @Override

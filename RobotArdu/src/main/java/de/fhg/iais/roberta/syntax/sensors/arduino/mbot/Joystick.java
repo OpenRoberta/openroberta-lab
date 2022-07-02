@@ -14,27 +14,16 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
 @NepoBasic(name = "ARDU_JOYSTICK_GETSAMPLE", category = "SENSOR", blocklyNames = {"robSensors_joystick_getSample"})
 public final class Joystick<V> extends ExternalSensor<V> {
     public final String joystickAxis;
 
-    public Joystick(String axis, SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment, sensorMetaDataBean);
+    public Joystick(String axis, ExternalSensorBean externalSensorBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(properties, comment, externalSensorBean);
         this.joystickAxis = axis;
         setReadOnly();
-    }
-
-    /**
-     * Create object of the class {@link Joystick}.
-     *
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of {@link Joystick}
-     */
-    public static <V> Joystick<V> make(String axis, SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Joystick<>(axis, sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -42,26 +31,15 @@ public final class Joystick<V> extends ExternalSensor<V> {
         return "Joystick [" + this.getMode() + ", " + this.getUserDefinedPort() + "]";
     }
 
-    public String getAxis() {
-        return this.joystickAxis;
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
 
         String port = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
         String mode = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
-        SensorMetaDataBean sensorData =
-            new SensorMetaDataBean(Jaxb2Ast.sanitizePort(port), factory.getMode(mode), Jaxb2Ast.sanitizeSlot(BlocklyConstants.EMPTY_SLOT), block.getMutation());
-        return Joystick.make(mode, sensorData, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        ExternalSensorBean sensorData =
+            new ExternalSensorBean(Jaxb2Ast.sanitizePort(port), factory.getMode(mode), Jaxb2Ast.sanitizeSlot(BlocklyConstants.EMPTY_SLOT), block.getMutation());
+        return new Joystick<>(mode, sensorData, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

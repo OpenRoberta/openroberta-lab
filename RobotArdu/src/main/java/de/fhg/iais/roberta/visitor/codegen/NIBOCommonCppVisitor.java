@@ -95,7 +95,7 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         decrIndentation();
-        mainTask.getVariables().accept(this);
+        mainTask.variables.accept(this);
         nlIndent();
         generateTimerVariables();
         generateUserDefinedMethods();
@@ -118,12 +118,12 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
         this.sb.append("rob.setLed(");
-        if ( ledOnAction.getSide().equals("Left") ) {
+        if ( ledOnAction.side.equals("Left") ) {
             this.sb.append("EYE_2, ");
         } else {
             this.sb.append("EYE_1, ");
         }
-        ledOnAction.getLedColor().accept(this);
+        ledOnAction.ledColor.accept(this);
         this.sb.append(");");
         return null;
     }
@@ -131,7 +131,7 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     @Override
     public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
         this.sb.append("rob.setLed(");
-        if ( ledOffAction.getSide().equals("Left") ) {
+        if ( ledOffAction.side.equals("Left") ) {
             this.sb.append("EYE_2, OFF);");
         } else {
             this.sb.append("EYE_1, OFF);");
@@ -142,8 +142,8 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     @Override
     public Void visitBodyLEDAction(BodyLEDAction<Void> bodyLEDAction) {
         this.sb.append("rob.setLed(");
-        this.sb.append(bodyLEDAction.getSide() + ", ");
-        this.sb.append(bodyLEDAction.getledState() + ");");
+        this.sb.append(bodyLEDAction.side + ", ");
+        this.sb.append(bodyLEDAction.ledState + ");");
         return null;
     }
 
@@ -156,7 +156,7 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     @Override
     public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
         this.sb.append("rob.transmitIRCode(");
-        sendIRAction.getCode().accept(this);
+        sendIRAction.code.accept(this);
         this.sb.append(");");
         return null;
     }
@@ -170,7 +170,7 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     @Override
     public Void visitRememberAction(RememberAction<Void> rememberAction) {
         this.sb.append("remember((int)(");
-        rememberAction.getCode().accept(this);
+        rememberAction.code.accept(this);
         this.sb.append("));");
         return null;
     }
@@ -207,11 +207,11 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
         this.sb.append("_CLAMP(");
-        mathConstrainFunct.getParam().get(0).accept(this);
+        mathConstrainFunct.param.get(0).accept(this);
         this.sb.append(", ");
-        mathConstrainFunct.getParam().get(1).accept(this);
+        mathConstrainFunct.param.get(1).accept(this);
         this.sb.append(", ");
-        mathConstrainFunct.getParam().get(2).accept(this);
+        mathConstrainFunct.param.get(2).accept(this);
         this.sb.append(")");
         return null;
     }
@@ -219,9 +219,9 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
         this.sb.append("randomNumber(");
-        mathRandomIntFunct.getParam().get(0).accept(this);
+        mathRandomIntFunct.param.get(0).accept(this);
         this.sb.append(", ");
-        mathRandomIntFunct.getParam().get(1).accept(this);
+        mathRandomIntFunct.param.get(1).accept(this);
         this.sb.append(")");
         return null;
     }

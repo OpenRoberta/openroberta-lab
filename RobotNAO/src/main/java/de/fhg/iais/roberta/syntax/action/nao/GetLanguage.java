@@ -10,28 +10,12 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
-/**
- * This class represents the <b>naoActions_getLanguage</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
- * getting the languages that are installed on NAO<br/>
- * <br/>
- */
 @NepoBasic(name = "GET_LANGUAGE", category = "ACTOR", blocklyNames = {"naoActions_getLanguage"})
 public final class GetLanguage<V> extends Action<V> {
 
-    private GetLanguage(BlocklyBlockProperties properties, BlocklyComment comment) {
+    public GetLanguage(BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         setReadOnly();
-    }
-
-    /**
-     * Creates instance of {@link GetLanguage}. This instance is read only and can not be modified.
-     *
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link GetLanguage}
-     */
-    private static <V> GetLanguage<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new GetLanguage<V>(properties, comment);
     }
 
     @Override
@@ -39,16 +23,9 @@ public final class GetLanguage<V> extends Action<V> {
         return "Get Language []";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
 
-        return GetLanguage.make(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new GetLanguage<V>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

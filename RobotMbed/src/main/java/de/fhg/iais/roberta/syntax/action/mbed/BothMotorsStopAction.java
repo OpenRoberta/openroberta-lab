@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.action.mbed;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
@@ -11,46 +10,16 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 
-/**
- * This class represents the <b>mbedActions_single_motor_stop</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate
- * code for turning off the motor.<br/>
- * <br/>
- * The client must provide the {@link ActorPort} and {@link MotorStopMode} (is the motor breaking or not).
- */
 @NepoBasic(name = "BOTH_MOTORS_STOP_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_motors_stop"})
 public final class BothMotorsStopAction<V> extends Action<V> {
 
-    private BothMotorsStopAction(BlocklyBlockProperties properties, BlocklyComment comment) {
+    public BothMotorsStopAction(BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link BothMotorsStopAction}. This instance is read only and can not be modified.
-     *
-     * @param mode of stopping {@link MotorStopMode}; must be <b>not</b> null,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link BothMotorsStopAction}
-     */
-    public static <V> BothMotorsStopAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BothMotorsStopAction<>(properties, comment);
-    }
-
-    @Override
-    public String toString() {
-        return "SingleMotorStopAction []";
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
-        return BothMotorsStopAction.make(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new BothMotorsStopAction<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
 
     }
 
@@ -60,4 +29,10 @@ public final class BothMotorsStopAction<V> extends Action<V> {
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         return jaxbDestination;
     }
+
+    @Override
+    public String toString() {
+        return "SingleMotorStopAction []";
+    }
+
 }

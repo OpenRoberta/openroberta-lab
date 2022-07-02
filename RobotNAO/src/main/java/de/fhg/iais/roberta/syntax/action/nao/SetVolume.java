@@ -19,7 +19,4 @@ public final class SetVolume<V> extends Action<V> {
         setReadOnly();
     }
 
-    public Expr<V> getVolume() {
-        return this.volume;
-    }
 }

@@ -9,11 +9,11 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -30,39 +30,12 @@ public final class Unary<V> extends Expr<V> {
     public final Op op;
     public final Expr<V> expr;
 
-    private Unary(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public Unary(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         Assert.isTrue(op != null && expr != null && expr.isReadOnly());
         this.op = op;
         this.expr = expr;
         setReadOnly();
-    }
-
-    /**
-     * creates instance of {@link Unary}. This instance is read only and can not be modified.
-     *
-     * @param op operator; ; must be <b>not</b> null,
-     * @param expr expression over which the operation is performed; must be <b>not</b> null and <b>read only</b>,,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link Unary}
-     */
-    public static <V> Unary<V> make(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Unary<V>(op, expr, properties, comment);
-    }
-
-    /**
-     * @return the operation in the binary expression. See enum {@link Op} for all possible operations
-     */
-    public Op getOp() {
-        return this.op;
-    }
-
-    /**
-     * @return the expression on which the operation is performed. Returns subclass of {@link Expr}
-     */
-    public Expr<V> getExpr() {
-        return this.expr;
     }
 
     @Override
@@ -161,10 +134,10 @@ public final class Unary<V> extends Expr<V> {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         if ( getProperty().getBlockType().equals(BlocklyConstants.MATH_SINGLE) ) {
-            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, getOp().name());
-            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.NUM, getExpr());
+            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, this.op.name());
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.NUM, this.expr);
         } else {
-            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.BOOL, getExpr());
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.BOOL, this.expr);
         }
         return jaxbDestination;
     }

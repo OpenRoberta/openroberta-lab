@@ -80,12 +80,12 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 public interface ILanguageVisitor<V> extends IVisitor<V> {
 
     default V visitActionExpr(ActionExpr<V> actionExpr) {
-        actionExpr.getAction().accept(this);
+        actionExpr.action.accept(this);
         return null;
     }
 
     default V visitActionStmt(ActionStmt<V> actionStmt) {
-        actionStmt.getAction().accept(this);
+        actionStmt.action.accept(this);
         return null;
     }
 
@@ -112,10 +112,10 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitEmptyList(EmptyList<V> emptyList);
 
     default V visitEvalExpr(EvalExpr<V> evalExpr) {
-        if ( evalExpr.getExpr() instanceof ListCreate<?> ) {
-            ((ListCreate<V>) evalExpr.getExpr()).accept(this);
+        if ( evalExpr.exprBlock instanceof ListCreate<?> ) {
+            ((ListCreate<V>) evalExpr.exprBlock).accept(this);
         } else {
-            evalExpr.getExpr().accept(this);
+            evalExpr.exprBlock.accept(this);
         }
         return null;
     }
@@ -123,7 +123,7 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitExprList(ExprList<V> exprList);
 
     default V visitExprStmt(ExprStmt<V> exprStmt) {
-        exprStmt.getExpr().accept(this);
+        exprStmt.expr.accept(this);
         return null;
     }
 
@@ -133,7 +133,7 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     }
 
     default V visitFunctionStmt(FunctionStmt<V> functionStmt) {
-        functionStmt.getFunction().accept(this);
+        functionStmt.function.accept(this);
         return null;
     }
 
@@ -219,20 +219,20 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitRgbColor(RgbColor<V> rgbColor);
 
     default V visitSensorExpr(SensorExpr<V> sensorExpr) {
-        sensorExpr.getSens().accept(this);
+        sensorExpr.sensor.accept(this);
         return null;
     }
 
     default V visitSensorStmt(SensorStmt<V> sensorStmt) {
-        sensorStmt.getSensor().accept(this);
+        sensorStmt.sensor.accept(this);
         return null;
     }
 
     default V visitShadowExpr(ShadowExpr<V> shadowExpr) {
-        if ( shadowExpr.getBlock() != null ) {
-            shadowExpr.getBlock().accept(this);
+        if ( shadowExpr.block != null ) {
+            shadowExpr.block.accept(this);
         } else {
-            shadowExpr.getShadow().accept(this);
+            shadowExpr.shadow.accept(this);
         }
         return null;
     }
@@ -242,7 +242,7 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     }
 
     default V visitStmtExpr(StmtExpr<V> stmtExpr) {
-        stmtExpr.getStmt().accept(this);
+        stmtExpr.stmt.accept(this);
         return null;
     }
 

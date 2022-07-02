@@ -20,11 +20,4 @@ public final class EmptyList<V> extends Expr<V> {
         setReadOnly();
     }
 
-    public static <V> EmptyList<V> make(BlocklyType typeVar, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new EmptyList<V>(properties, comment, typeVar);
-    }
-
-    public BlocklyType getTypeVar() {
-        return this.typeVar;
-    }
 }

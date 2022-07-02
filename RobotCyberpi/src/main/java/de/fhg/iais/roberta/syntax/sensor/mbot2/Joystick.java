@@ -10,16 +10,10 @@ import de.fhg.iais.roberta.transformer.forField.NepoHide;
 import de.fhg.iais.roberta.transformer.forField.NepoMutation;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
-import de.fhg.iais.roberta.util.ast.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
-
-/**
- * This class represents the <b>robSensors_joystick_getSample</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
- * stopping every movement of the robot.<br/>
- * <br/>
- */
 
 @NepoPhrase(name = "JOYSTICK_SENSING", category = "SENSOR", blocklyNames = {"robSensors_joystickKeys_getSample"},
     sampleValues = {@F2M(field = "JOYSTICK_PRESSED", mode = "PRESSED")})
@@ -46,8 +40,8 @@ public final class Joystick<V> extends Sensor<V> implements WithUserDefinedPort<
         setReadOnly();
     }
 
-    public Joystick(BlocklyBlockProperties properties, BlocklyComment comment, SensorMetaDataBean sensorMetaDataBean) {
-        this(properties, comment, sensorMetaDataBean.getMutation(), sensorMetaDataBean.getMode(), sensorMetaDataBean.getPort(), sensorMetaDataBean.getSlot(), null);
+    public Joystick(BlocklyBlockProperties properties, BlocklyComment comment, ExternalSensorBean externalSensorBean) {
+        this(properties, comment, externalSensorBean.getMutation(), externalSensorBean.getMode(), externalSensorBean.getPort(), externalSensorBean.getSlot(), null);
     }
 
     @Override

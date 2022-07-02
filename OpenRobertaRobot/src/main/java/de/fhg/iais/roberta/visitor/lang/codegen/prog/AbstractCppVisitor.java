@@ -82,11 +82,11 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
         this.sb.append("RGB(");
-        rgbColor.getR().accept(this);
+        rgbColor.R.accept(this);
         this.sb.append(", ");
-        rgbColor.getG().accept(this);
+        rgbColor.G.accept(this);
         this.sb.append(", ");
-        rgbColor.getB().accept(this);
+        rgbColor.B.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -99,7 +99,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitConnectConst(ConnectConst<Void> connectConst) {
-        this.sb.append(connectConst.getValue());
+        this.sb.append(connectConst.value);
         return null;
     }
 
@@ -152,11 +152,11 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
         if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) != null ) {
             if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) ) {
-                this.sb.append("goto " + stmtFlowCon.getFlow().toString().toLowerCase() + "_loop" + this.currentLoop.getLast() + ";");
+                this.sb.append("goto " + stmtFlowCon.flow.toString().toLowerCase() + "_loop" + this.currentLoop.getLast() + ";");
                 return null;
             }
         }
-        this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase() + ";");
+        this.sb.append(stmtFlowCon.flow.toString().toLowerCase() + ";");
         return null;
     }
 
@@ -168,7 +168,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
         this.sb.append("{");
-        listCreate.getValue().accept(this);
+        listCreate.exprList.accept(this);
         this.sb.append("}");
         return null;
     }
@@ -190,7 +190,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitMathConst(MathConst<Void> mathConst) {
-        switch ( mathConst.getMathConst() ) {
+        switch ( mathConst.mathConst ) {
             case PI:
                 this.sb.append("M_PI");
                 break;
@@ -219,60 +219,60 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
         String methodName = "_getFirstOccuranceOfElement(";
-        if ( indexOfFunct.getLocation() != IndexLocation.FIRST ) {
+        if ( indexOfFunct.location != IndexLocation.FIRST ) {
             methodName = "_getLastOccuranceOfElement(";
         }
         this.sb.append(methodName);
 
-        indexOfFunct.getParam().get(0).accept(this);
+        indexOfFunct.param.get(0).accept(this);
         this.sb.append(", ");
-        indexOfFunct.getParam().get(1).accept(this);
+        indexOfFunct.param.get(1).accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        if ( getSubFunct.getFunctName() == FunctionNames.GET_SUBLIST ) {
+        if ( getSubFunct.functName == FunctionNames.GET_SUBLIST ) {
             this.sb.append("_getSubList(");
-            getSubFunct.getParam().get(0).accept(this);
+            getSubFunct.param.get(0).accept(this);
             this.sb.append(", ");
-            switch ( (IndexLocation) getSubFunct.getStrParam().get(0) ) {
+            switch ( (IndexLocation) getSubFunct.strParam.get(0) ) {
                 case FIRST:
                     this.sb.append("0, ");
                     break;
                 case FROM_END:
-                    getSubFunct.getParam().get(0).accept(this);
+                    getSubFunct.param.get(0).accept(this);
                     this.sb.append(".size() - 1 - ");
-                    getSubFunct.getParam().get(1).accept(this);
+                    getSubFunct.param.get(1).accept(this);
                     this.sb.append(", ");
                     break;
                 case FROM_START:
-                    getSubFunct.getParam().get(1).accept(this);
+                    getSubFunct.param.get(1).accept(this);
                     this.sb.append(", ");
                     break;
                 default:
                     break;
             }
-            switch ( (IndexLocation) getSubFunct.getStrParam().get(1) ) {
+            switch ( (IndexLocation) getSubFunct.strParam.get(1) ) {
                 case LAST:
-                    getSubFunct.getParam().get(0).accept(this);
+                    getSubFunct.param.get(0).accept(this);
                     this.sb.append(".size() - 1");
                     break;
                 case FROM_END:
-                    getSubFunct.getParam().get(0).accept(this);
+                    getSubFunct.param.get(0).accept(this);
                     this.sb.append(".size() - 1 - ");
                     try {
-                        getSubFunct.getParam().get(2).accept(this);
+                        getSubFunct.param.get(2).accept(this);
                     } catch ( IndexOutOfBoundsException e ) { // means that our start index does not have a variable
-                        getSubFunct.getParam().get(1).accept(this);
+                        getSubFunct.param.get(1).accept(this);
                     }
                     break;
                 case FROM_START:
                     try {
-                        getSubFunct.getParam().get(2).accept(this);
+                        getSubFunct.param.get(2).accept(this);
                     } catch ( IndexOutOfBoundsException e ) { // means that our start index does not have a variable
-                        getSubFunct.getParam().get(1).accept(this);
+                        getSubFunct.param.get(1).accept(this);
                     }
                     break;
                 default:
@@ -304,33 +304,33 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
                 break;
         }
         this.sb.append(operation);
-        switch ( (IndexLocation) listGetIndex.getLocation() ) {
+        switch ( (IndexLocation) listGetIndex.location ) {
             case FIRST:
-                listGetIndex.getParam().get(0).accept(this);
+                listGetIndex.param.get(0).accept(this);
                 this.sb.append(", 0)");
                 break;
             case FROM_END:
-                listGetIndex.getParam().get(0).accept(this);
+                listGetIndex.param.get(0).accept(this);
                 this.sb.append(", ");
-                listGetIndex.getParam().get(0).accept(this);
+                listGetIndex.param.get(0).accept(this);
                 this.sb.append(".size() - 1 - ");
-                listGetIndex.getParam().get(1).accept(this);
+                listGetIndex.param.get(1).accept(this);
                 this.sb.append(")");
                 break;
             case FROM_START:
-                listGetIndex.getParam().get(0).accept(this);
+                listGetIndex.param.get(0).accept(this);
                 this.sb.append(", ");
-                listGetIndex.getParam().get(1).accept(this);
+                listGetIndex.param.get(1).accept(this);
                 this.sb.append(")");
                 break;
             case LAST:
-                listGetIndex.getParam().get(0).accept(this);
+                listGetIndex.param.get(0).accept(this);
                 this.sb.append(", ");
-                listGetIndex.getParam().get(0).accept(this);
+                listGetIndex.param.get(0).accept(this);
                 this.sb.append(".size() - 1)");
                 break;
             case RANDOM:
-                listGetIndex.getParam().get(0).accept(this);
+                listGetIndex.param.get(0).accept(this);
                 this.sb.append(", 0 /* absolutely random number */)");
                 break;
             default:
@@ -342,16 +342,16 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
         String operation = "";
-        switch ( (ListElementOperations) listSetIndex.getElementOperation() ) {
+        switch ( (ListElementOperations) listSetIndex.mode ) {
             case GET:
                 break;
             case GET_REMOVE:
                 break;
             case INSERT:
-                if ( ((IndexLocation) listSetIndex.getLocation()).equals(IndexLocation.LAST) ) {
-                    listSetIndex.getParam().get(0).accept(this);
+                if ( ((IndexLocation) listSetIndex.location).equals(IndexLocation.LAST) ) {
+                    listSetIndex.param.get(0).accept(this);
                     this.sb.append(".push_back(");
-                    listSetIndex.getParam().get(1).accept(this);
+                    listSetIndex.param.get(1).accept(this);
                     this.sb.append(")");
                     return null;
                 } else {
@@ -367,43 +367,43 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
                 break;
         }
         this.sb.append(operation);
-        switch ( (IndexLocation) listSetIndex.getLocation() ) {
+        switch ( (IndexLocation) listSetIndex.location ) {
             case FIRST:
-                listSetIndex.getParam().get(0).accept(this);
+                listSetIndex.param.get(0).accept(this);
                 this.sb.append(", 0, ");
-                listSetIndex.getParam().get(1).accept(this);
+                listSetIndex.param.get(1).accept(this);
                 this.sb.append(")");
                 break;
             case FROM_END:
-                listSetIndex.getParam().get(0).accept(this);
+                listSetIndex.param.get(0).accept(this);
                 this.sb.append(", ");
-                listSetIndex.getParam().get(0).accept(this);
+                listSetIndex.param.get(0).accept(this);
                 this.sb.append(".size() - 1 - ");
-                listSetIndex.getParam().get(2).accept(this);
+                listSetIndex.param.get(2).accept(this);
                 this.sb.append(", ");
-                listSetIndex.getParam().get(1).accept(this);
+                listSetIndex.param.get(1).accept(this);
                 this.sb.append(")");
                 break;
             case FROM_START:
-                listSetIndex.getParam().get(0).accept(this);
+                listSetIndex.param.get(0).accept(this);
                 this.sb.append(", ");
-                listSetIndex.getParam().get(2).accept(this);
+                listSetIndex.param.get(2).accept(this);
                 this.sb.append(", ");
-                listSetIndex.getParam().get(1).accept(this);
+                listSetIndex.param.get(1).accept(this);
                 this.sb.append(")");
                 break;
             case LAST:
-                listSetIndex.getParam().get(0).accept(this);
+                listSetIndex.param.get(0).accept(this);
                 this.sb.append(", ");
-                listSetIndex.getParam().get(0).accept(this);
+                listSetIndex.param.get(0).accept(this);
                 this.sb.append(".size() - 1, ");
-                listSetIndex.getParam().get(1).accept(this);
+                listSetIndex.param.get(1).accept(this);
                 this.sb.append(")");
                 break;
             case RANDOM:
-                listSetIndex.getParam().get(0).accept(this);
+                listSetIndex.param.get(0).accept(this);
                 this.sb.append(", 0 /* absolutely random number */, ");
-                listSetIndex.getParam().get(1).accept(this);
+                listSetIndex.param.get(1).accept(this);
                 this.sb.append(")");
                 break;
             default:
@@ -414,12 +414,12 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
-            lengthOfIsEmptyFunct.getParam().get(0).accept(this);
+        if ( lengthOfIsEmptyFunct.functName == FunctionNames.LIST_IS_EMPTY ) {
+            lengthOfIsEmptyFunct.param.get(0).accept(this);
             this.sb.append(".empty()");
         } else {
             this.sb.append("((int) ");
-            lengthOfIsEmptyFunct.getParam().get(0).accept(this);
+            lengthOfIsEmptyFunct.param.get(0).accept(this);
             this.sb.append(".size())");
         }
         return null;
@@ -427,7 +427,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        switch ( mathOnListFunct.getFunctName() ) {
+        switch ( mathOnListFunct.functName ) {
             case AVERAGE:
                 this.sb.append("_getListAverage(");
                 break;
@@ -449,13 +449,13 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
             case RANDOM:
                 // TODO it has no implementation and should probably be removed from blockly as well
                 this.sb.append("_getListElementByIndex(");
-                mathOnListFunct.getParam().get(0).accept(this);
+                mathOnListFunct.param.get(0).accept(this);
                 this.sb.append(", 0)");
                 return null;
             default:
                 break;
         }
-        mathOnListFunct.getParam().get(0).accept(this);
+        mathOnListFunct.param.get(0).accept(this);
         this.sb.append(")");
         return null;
     }
@@ -463,10 +463,10 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         boolean extraPar = false;
-        switch ( mathSingleFunct.getFunctName() ) {
+        switch ( mathSingleFunct.functName ) {
             case SQUARE:
                 this.sb.append("pow(");
-                mathSingleFunct.getParam().get(0).accept(this);
+                mathSingleFunct.param.get(0).accept(this);
                 this.sb.append(", 2)");
                 return null;
             case ROOT:
@@ -520,7 +520,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
             default:
                 break;
         }
-        mathSingleFunct.getParam().get(0).accept(this);
+        mathSingleFunct.param.get(0).accept(this);
         if ( extraPar ) {
             this.sb.append(")");
         }
@@ -531,9 +531,9 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        Expr<Void> n = mathConstrainFunct.getParam().get(0);
-        Expr<Void> min = mathConstrainFunct.getParam().get(1);
-        Expr<Void> max = mathConstrainFunct.getParam().get(2);
+        Expr<Void> n = mathConstrainFunct.param.get(0);
+        Expr<Void> min = mathConstrainFunct.param.get(1);
+        Expr<Void> max = mathConstrainFunct.param.get(2);
         this.sb.append("std::min(std::max((double) ");
         n.accept(this);
         this.sb.append(", (double) ");
@@ -546,44 +546,44 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        switch ( mathNumPropFunct.getFunctName() ) {
+        switch ( mathNumPropFunct.functName ) {
             case EVEN:
                 this.sb.append("(fmod(");
-                mathNumPropFunct.getParam().get(0).accept(this);
+                mathNumPropFunct.param.get(0).accept(this);
                 this.sb.append(", 2) == 0");
                 break;
             case ODD:
                 this.sb.append("(fmod(");
-                mathNumPropFunct.getParam().get(0).accept(this);
+                mathNumPropFunct.param.get(0).accept(this);
                 this.sb.append(", 2) != 0");
                 break;
             case PRIME:
                 this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.PRIME));
                 this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).accept(this);
+                mathNumPropFunct.param.get(0).accept(this);
                 break;
             case WHOLE:
                 this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).accept(this);
+                mathNumPropFunct.param.get(0).accept(this);
                 this.sb.append(" == floor(");
-                mathNumPropFunct.getParam().get(0).accept(this);
+                mathNumPropFunct.param.get(0).accept(this);
                 this.sb.append(")");
                 break;
             case POSITIVE:
                 this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).accept(this);
+                mathNumPropFunct.param.get(0).accept(this);
                 this.sb.append(" > 0");
                 break;
             case NEGATIVE:
                 this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).accept(this);
+                mathNumPropFunct.param.get(0).accept(this);
                 this.sb.append(" < 0");
                 break;
             case DIVISIBLE_BY:
                 this.sb.append("(fmod(");
-                mathNumPropFunct.getParam().get(0).accept(this);
+                mathNumPropFunct.param.get(0).accept(this);
                 this.sb.append(",");
-                mathNumPropFunct.getParam().get(1).accept(this);
+                mathNumPropFunct.param.get(1).accept(this);
                 this.sb.append(") == 0");
                 break;
             default:
@@ -609,7 +609,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
         // TODO check why this is not working for Arduinos!
         this.sb.append("(std::to_string(");
-        mathCastStringFunct.getParam().get(0).accept(this);
+        mathCastStringFunct.param.get(0).accept(this);
         this.sb.append("))");
         return null;
     }
@@ -617,7 +617,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
         this.sb.append("(char)(int)(");
-        mathCastCharFunct.getParam().get(0).accept(this);
+        mathCastCharFunct.param.get(0).accept(this);
         this.sb.append(")");
         return null;
     }
@@ -625,7 +625,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
         this.sb.append("std::stof(");
-        textStringCastNumberFunct.getParam().get(0).accept(this);
+        textStringCastNumberFunct.param.get(0).accept(this);
         this.sb.append(")");
         return null;
     }
@@ -634,9 +634,9 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
         this.sb.append("(int)(");
         this.sb.append("(");
-        textCharCastNumberFunct.getParam().get(0).accept(this);
+        textCharCastNumberFunct.param.get(0).accept(this);
         this.sb.append(")[");
-        textCharCastNumberFunct.getParam().get(1).accept(this);
+        textCharCastNumberFunct.param.get(1).accept(this);
         this.sb.append("])");
         return null;
     }
@@ -649,7 +649,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         methodVoid.getParameters().accept(this);
         this.sb.append(") {");
         incrIndentation();
-        methodVoid.getBody().accept(this);
+        methodVoid.body.accept(this);
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -664,10 +664,10 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         methodReturn.getParameters().accept(this);
         this.sb.append(") {");
         incrIndentation();
-        methodReturn.getBody().accept(this);
+        methodReturn.body.accept(this);
         nlIndent();
         this.sb.append("return ");
-        methodReturn.getReturnValue().accept(this);
+        methodReturn.returnValue.accept(this);
         this.sb.append(";");
         decrIndentation();
         nlIndent();
@@ -678,10 +678,10 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
         this.sb.append("if (");
-        methodIfReturn.getCondition().accept(this);
+        methodIfReturn.oraCondition.accept(this);
         this.sb.append(") ");
         this.sb.append("return ");
-        methodIfReturn.getReturnValue().accept(this);
+        methodIfReturn.oraReturnValue.accept(this);
         return null;
     }
 
@@ -710,7 +710,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
-        this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue().replaceAll("[<>\\$]", ""))).append("\"");
+        this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.value.replaceAll("[<>\\$]", ""))).append("\"");
         return null;
     }
 
@@ -718,11 +718,11 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
         // please overwrite this in the robot-specific class and throw an exeption if "assertNepo" could not be provided
         this.sb.append("assertNepo((");
-        assertStmt.getAssert().accept(this);
-        this.sb.append("), \"").append(assertStmt.getMsg()).append("\", ");
-        ((Binary<Void>) assertStmt.getAssert()).getLeft().accept(this);
-        this.sb.append(", \"").append(((Binary<Void>) assertStmt.getAssert()).getOp().toString()).append("\", ");
-        ((Binary<Void>) assertStmt.getAssert()).getRight().accept(this);
+        assertStmt.asserts.accept(this);
+        this.sb.append("), \"").append(assertStmt.msg).append("\", ");
+        ((Binary<Void>) assertStmt.asserts).left.accept(this);
+        this.sb.append(", \"").append(((Binary<Void>) assertStmt.asserts).op.toString()).append("\", ");
+        ((Binary<Void>) assertStmt.asserts).getRight().accept(this);
         this.sb.append(");");
         return null;
     }
@@ -740,7 +740,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         this.sb.append("Serial.println(");
-        serialWriteAction.getValue().accept(this);
+        serialWriteAction.value.accept(this);
         this.sb.append(");");
         return null;
     }
@@ -811,23 +811,23 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     protected void generateCodeFromTernary(TernaryExpr<Void> ternaryExpr) {
         this.sb.append("(" + whitespace() + "(" + whitespace());
-        ternaryExpr.getCondition().accept(this);
+        ternaryExpr.condition.accept(this);
         this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace() + "(" + whitespace());
-        ternaryExpr.getThenPart().accept(this);
+        ternaryExpr.thenPart.accept(this);
         this.sb.append(whitespace() + ")" + whitespace() + ":" + whitespace() + "(" + whitespace());
-        ternaryExpr.getElsePart().accept(this);
+        ternaryExpr.elsePart.accept(this);
         this.sb.append(")" + whitespace() + ")");
     }
 
     @Override
     protected void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
-        int exprSize = ifStmt.getExpr().size();
+        int exprSize = ifStmt.expr.size();
         String conditionStmt = "if";
         for ( int i = 0; i < exprSize; i++ ) {
-            generateCodeFromStmtCondition(conditionStmt, ifStmt.getExpr().get(i));
+            generateCodeFromStmtCondition(conditionStmt, ifStmt.expr.get(i));
             conditionStmt = "else" + whitespace() + "if";
             incrIndentation();
-            ifStmt.getThenList().get(i).accept(this);
+            ifStmt.thenList.get(i).accept(this);
             decrIndentation();
             if ( i + 1 < exprSize ) {
                 nlIndent();
@@ -839,11 +839,11 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     protected void generateCodeFromElse(IfStmt<Void> ifStmt) {
-        if ( !ifStmt.getElseList().get().isEmpty() ) {
+        if ( !ifStmt.elseList.get().isEmpty() ) {
             nlIndent();
             this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
             incrIndentation();
-            ifStmt.getElseList().accept(this);
+            ifStmt.elseList.accept(this);
             decrIndentation();
         }
         nlIndent();

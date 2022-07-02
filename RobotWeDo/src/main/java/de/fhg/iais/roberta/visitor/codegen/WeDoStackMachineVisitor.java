@@ -38,10 +38,10 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
 
     @Override
     public V visitLightAction(LightAction<V> lightAction) {
-        ConfigurationComponent confLedBlock = getConfigurationComponent(lightAction.getPort());
+        ConfigurationComponent confLedBlock = getConfigurationComponent(lightAction.port);
         String brickName = confLedBlock.getProperty("VAR");
         if ( brickName != null ) {
-            lightAction.getRgbLedColor().accept(this);
+            lightAction.rgbLedColor.accept(this);
             JSONObject o = makeNode(C.LED_ON_ACTION).put(C.NAME, brickName);
             return app(o);
         } else {
@@ -69,8 +69,8 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
         String brickName = confMotorBlock.getProperty("VAR");
         String port = confMotorBlock.getProperty("CONNECTOR");
         if ( brickName != null && port != null ) {
-            motorOnAction.getParam().getSpeed().accept(this);
-            MotorDuration<V> duration = motorOnAction.getParam().getDuration();
+            motorOnAction.param.getSpeed().accept(this);
+            MotorDuration<V> duration = motorOnAction.param.getDuration();
             boolean speedOnly = !processOptionalDuration(duration);
             JSONObject o = makeNode(C.MOTOR_ON_ACTION).put(C.NAME, brickName).put(C.PORT, port).put(C.SPEED_ONLY, speedOnly).put(C.SPEED_ONLY, speedOnly);
             if ( speedOnly ) {
@@ -151,12 +151,12 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
 
     @Override
     public V visitPlayNoteAction(PlayNoteAction<V> playNoteAction) {
-        ConfigurationComponent playNoteBlock = getConfigurationComponent(playNoteAction.getPort());
+        ConfigurationComponent playNoteBlock = getConfigurationComponent(playNoteAction.port);
         String brickName = playNoteBlock.getProperty("VAR");
         if ( brickName != null ) {
-            JSONObject frequency = makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.getFrequency());
+            JSONObject frequency = makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.frequency);
             app(frequency);
-            JSONObject duration = makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.getDuration());
+            JSONObject duration = makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.duration);
             app(duration);
             JSONObject o = makeNode(C.TONE_ACTION).put(C.NAME, brickName);
             return app(o);
@@ -167,11 +167,11 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
 
     @Override
     public V visitToneAction(ToneAction<V> toneAction) {
-        ConfigurationComponent toneBlock = getConfigurationComponent(toneAction.getPort());
+        ConfigurationComponent toneBlock = getConfigurationComponent(toneAction.port);
         String brickName = toneBlock.getProperty("VAR");
         if ( brickName != null ) {
-            toneAction.getFrequency().accept(this);
-            toneAction.getDuration().accept(this);
+            toneAction.frequency.accept(this);
+            toneAction.duration.accept(this);
             JSONObject o = makeNode(C.TONE_ACTION).put(C.NAME, brickName);
             return app(o);
         } else {
@@ -198,7 +198,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
 
     @Override
     public V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
-        sensorGetSample.getSensor().accept(this);
+        sensorGetSample.sensor.accept(this);
         return null;
     }
 

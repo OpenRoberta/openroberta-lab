@@ -59,9 +59,9 @@ public class BotnrollValidatorAndCollectorVisitor extends ArduinoDifferentialMot
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        checkAndVisitMotionParam(motorOnAction, motorOnAction.getParam());
+        checkAndVisitMotionParam(motorOnAction, motorOnAction.param);
         ConfigurationComponent actor = robotConfiguration.getConfigurationComponent(motorOnAction.getUserDefinedPort());
-        usedHardwareBuilder.addUsedActor(new UsedActor(motorOnAction.getUserDefinedPort(), actor.getComponentType()));
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOnAction.getUserDefinedPort(), actor.componentType));
         return null;
     }
 
@@ -78,7 +78,7 @@ public class BotnrollValidatorAndCollectorVisitor extends ArduinoDifferentialMot
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        requiredComponentVisited(toneAction, toneAction.getDuration(), toneAction.getFrequency());
+        requiredComponentVisited(toneAction, toneAction.duration, toneAction.frequency);
         return null;
     }
 

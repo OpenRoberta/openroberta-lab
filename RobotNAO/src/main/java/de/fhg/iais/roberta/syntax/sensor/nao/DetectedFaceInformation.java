@@ -16,7 +16,6 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.util.syntax.MotionParam;
 
 /**
  * This class represents the <b>naoSensors_getFaceInformation</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate
@@ -28,22 +27,10 @@ public final class DetectedFaceInformation<V> extends Sensor<V> {
 
     public final Expr<V> faceName;
 
-    private DetectedFaceInformation(Expr<V> faceName, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public DetectedFaceInformation(Expr<V> faceName, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(properties, comment);
         this.faceName = faceName;
         setReadOnly();
-    }
-
-    /**
-     * Creates instance of {@link DetectedFaceInformation}. This instance is read only and can not be modified.
-     *
-     * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link DetectedFaceInformation}
-     */
-    static <V> DetectedFaceInformation<V> make(Expr<V> savedFace, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new DetectedFaceInformation<>(savedFace, properties, comment);
     }
 
     @Override
@@ -51,21 +38,10 @@ public final class DetectedFaceInformation<V> extends Sensor<V> {
         return "DetectedFaceInformation [" + this.faceName + "]";
     }
 
-    public Expr<V> getFaceName() {
-        return this.faceName;
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         Phrase<V> faceName = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
-        return DetectedFaceInformation.make(Jaxb2Ast.convertPhraseToExpr(faceName), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new DetectedFaceInformation<>(Jaxb2Ast.convertPhraseToExpr(faceName), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
