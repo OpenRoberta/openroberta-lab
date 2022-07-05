@@ -3,7 +3,6 @@ import * as NN_UI from 'neuralnetwork.ui';
 import * as $ from 'jquery';
 import * as Blockly from 'blockly';
 import 'jquery-validate';
-import { each } from 'jquery';
 
 /**
  * initialize the callbacks needed by the NN tab. Called once at front end init time
@@ -57,7 +56,7 @@ export function mkNNfromProgramStartBlock() {
     var nnStepBlock = getTheNNstepBlock();
 
     if (startBlock.data === undefined || startBlock.data === null) {
-        if (nnStepBlock.data !== undefined && nnStepBlock.data !== null) {
+        if (nnStepBlock && nnStepBlock.data !== undefined && nnStepBlock.data !== null) {
             startBlock.data = nnStepBlock.data;
             delete nnStepBlock.data;
         }
@@ -65,14 +64,13 @@ export function mkNNfromProgramStartBlock() {
     let nnStateAsJson;
     try {
         nnStateAsJson = JSON.parse(startBlock.data);
+        var inputNeurons = [];
+        var outputNeurons = [];
+        extractInputOutputNeurons(inputNeurons, outputNeurons, nnStepBlock === null ? null : nnStepBlock.getChildren());
+        NN_UI.setupNN(nnStateAsJson, inputNeurons, outputNeurons);
     } catch (e) {
         // nnStateAsJson remains null
     }
-
-    var inputNeurons = [];
-    var outputNeurons = [];
-    extractInputOutputNeurons(inputNeurons, outputNeurons, nnStepBlock === null ? null : nnStepBlock.getChildren());
-    NN_UI.setupNN(nnStateAsJson, inputNeurons, outputNeurons);
 }
 
 /**

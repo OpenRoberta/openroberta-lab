@@ -37,7 +37,7 @@ define(["require", "exports", "guiState.controller", "neuralnetwork.ui", "jquery
         var startBlock = getTheStartBlock();
         var nnStepBlock = getTheNNstepBlock();
         if (startBlock.data === undefined || startBlock.data === null) {
-            if (nnStepBlock.data !== undefined && nnStepBlock.data !== null) {
+            if (nnStepBlock && nnStepBlock.data !== undefined && nnStepBlock.data !== null) {
                 startBlock.data = nnStepBlock.data;
                 delete nnStepBlock.data;
             }
@@ -45,14 +45,14 @@ define(["require", "exports", "guiState.controller", "neuralnetwork.ui", "jquery
         var nnStateAsJson;
         try {
             nnStateAsJson = JSON.parse(startBlock.data);
+            var inputNeurons = [];
+            var outputNeurons = [];
+            extractInputOutputNeurons(inputNeurons, outputNeurons, nnStepBlock === null ? null : nnStepBlock.getChildren());
+            NN_UI.setupNN(nnStateAsJson, inputNeurons, outputNeurons);
         }
         catch (e) {
             // nnStateAsJson remains null
         }
-        var inputNeurons = [];
-        var outputNeurons = [];
-        extractInputOutputNeurons(inputNeurons, outputNeurons, nnStepBlock === null ? null : nnStepBlock.getChildren());
-        NN_UI.setupNN(nnStateAsJson, inputNeurons, outputNeurons);
     }
     exports.mkNNfromProgramStartBlock = mkNNfromProgramStartBlock;
     /**
