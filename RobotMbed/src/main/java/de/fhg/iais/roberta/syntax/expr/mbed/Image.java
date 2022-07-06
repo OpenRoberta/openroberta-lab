@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
  * The client must provide the value for every pixel of the display (5x5). <br>
  */
 @NepoBasic(name = "IMAGE", category = "EXPR", blocklyNames = {"mbedImage_image"})
-public final class Image<V> extends Expr<V> {
+public final class Image extends Expr {
     public final String[][] image;
 
     public Image(String[][] image, BlocklyProperties properties) {
@@ -59,7 +59,7 @@ public final class Image<V> extends Expr<V> {
             + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 25);
         String[][] image = new String[5][5];
         for ( int i = 0; i < 5; i++ ) {
@@ -67,7 +67,7 @@ public final class Image<V> extends Expr<V> {
                 image[i][j] = Jaxb2Ast.extractField(fields, "P" + j + i);
             }
         }
-        return new Image<>(image, Jaxb2Ast.extractBlocklyProperties(block));
+        return new Image(image, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

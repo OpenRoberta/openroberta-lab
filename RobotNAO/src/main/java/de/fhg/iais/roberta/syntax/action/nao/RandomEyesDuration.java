@@ -17,22 +17,22 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "RANDOM_EYES_DURATION", category = "ACTOR", blocklyNames = {"naoActions_randomEyes"})
-public final class RandomEyesDuration<V> extends Action<V> {
+public final class RandomEyesDuration extends Action {
 
-    public final Expr<V> duration;
+    public final Expr duration;
 
-    public RandomEyesDuration(Expr<V> duration, BlocklyProperties properties) {
+    public RandomEyesDuration(Expr duration, BlocklyProperties properties) {
         super(properties);
         this.duration = duration;
         setReadOnly();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
 
-        Phrase<V> duration = helper.extractValue(values, new ExprParam(BlocklyConstants.DURATION, BlocklyType.NUMBER_INT));
+        Phrase duration = helper.extractValue(values, new ExprParam(BlocklyConstants.DURATION, BlocklyType.NUMBER_INT));
 
-        return new RandomEyesDuration<V>(Jaxb2Ast.convertPhraseToExpr(duration), Jaxb2Ast.extractBlocklyProperties(block));
+        return new RandomEyesDuration(Jaxb2Ast.convertPhraseToExpr(duration), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

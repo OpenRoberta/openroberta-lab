@@ -7,10 +7,10 @@ import de.fhg.iais.roberta.visitor.hardware.IHardwareVisitor;
 
 public interface ISpeechVisitor<V> extends IHardwareVisitor<V> {
 
-    V visitSetLanguageAction(SetLanguageAction<V> setLanguageAction);
+    V visitSetLanguageAction(SetLanguageAction setLanguageAction);
 
-    V visitSayTextAction(SayTextAction<V> sayTextAction);
+    V visitSayTextAction(SayTextAction sayTextAction);
 
-    V visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<V> sayTextAction);
+    V visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction sayTextAction);
 
 }

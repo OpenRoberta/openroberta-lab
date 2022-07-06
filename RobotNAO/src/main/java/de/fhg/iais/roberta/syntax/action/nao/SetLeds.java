@@ -20,12 +20,12 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "RGB_LED", category = "ACTOR", blocklyNames = {"naoActions_rgbLeds"})
-public final class SetLeds<V> extends Action<V> {
+public final class SetLeds extends Action {
 
     public final Led led;
-    public final Expr<V> Color;
+    public final Expr Color;
 
-    public SetLeds(Led led, Expr<V> Color, BlocklyProperties properties) {
+    public SetLeds(Led led, Expr Color, BlocklyProperties properties) {
         super(properties);
         this.led = led;
         Assert.notNull(Color);
@@ -33,15 +33,15 @@ public final class SetLeds<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
 
-        Phrase<V> Color = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
+        Phrase Color = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
 
         String leds = Jaxb2Ast.extractField(fields, BlocklyConstants.LED);
 
-        return new SetLeds<V>(Led.get(leds), Jaxb2Ast.convertPhraseToExpr(Color), Jaxb2Ast.extractBlocklyProperties(block));
+        return new SetLeds(Led.get(leds), Jaxb2Ast.convertPhraseToExpr(Color), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
  */
 public class MotorDuration<V> {
     private IMotorMoveMode type;
-    private Expr<V> value;
+    private Expr value;
 
     /**
      * This constructor creates correct object of the class {@link MotorDuration}.<br>
@@ -20,7 +20,7 @@ public class MotorDuration<V> {
      * @param type of the motor movement
      * @param value for the movement
      */
-    public MotorDuration(IMotorMoveMode type, Expr<V> value) {
+    public MotorDuration(IMotorMoveMode type, Expr value) {
         super();
         this.setType(type);
         this.value = value;
@@ -31,7 +31,7 @@ public class MotorDuration<V> {
      *
      * @return value of the duration as {@link Expr}
      */
-    public Expr<V> getValue() {
+    public Expr getValue() {
         return this.value;
     }
 
@@ -40,7 +40,7 @@ public class MotorDuration<V> {
      *
      * @param value
      */
-    public void setValue(Expr<V> value) {
+    public void setValue(Expr value) {
         this.value = value;
     }
 

@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoBasic(name = "DISPLAY_GET_BRIGHTNESS", category = "ACTOR", blocklyNames = {"mbedActions_display_getBrightness"})
-public final class DisplayGetBrightnessAction<V> extends Action<V> {
+public final class DisplayGetBrightnessAction extends Action {
 
     public DisplayGetBrightnessAction(BlocklyProperties properties) {
         super(properties);
@@ -22,9 +22,9 @@ public final class DisplayGetBrightnessAction<V> extends Action<V> {
         return "DisplayGetBrightnessAction []";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
 
-        return new DisplayGetBrightnessAction<>(Jaxb2Ast.extractBlocklyProperties(block));
+        return new DisplayGetBrightnessAction(Jaxb2Ast.extractBlocklyProperties(block));
 
     }
 

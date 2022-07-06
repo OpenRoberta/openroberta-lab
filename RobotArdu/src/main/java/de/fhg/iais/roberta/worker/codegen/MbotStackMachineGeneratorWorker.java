@@ -8,8 +8,8 @@ import de.fhg.iais.roberta.worker.AbstractStackMachineGeneratorWorker;
 
 public class MbotStackMachineGeneratorWorker extends AbstractStackMachineGeneratorWorker {
     @Override
-    protected AbstractStackMachineVisitor<Void> getVisitor(Project project, UsedHardwareBean usedHardwareBean) {
-        return new MbotStackMachineVisitor<>(project.getConfigurationAst(), project.getProgramAst().getTree());
+    protected AbstractStackMachineVisitor getVisitor(Project project, UsedHardwareBean usedHardwareBean) {
+        return new MbotStackMachineVisitor(project.getConfigurationAst(), project.getProgramAst().getTree());
 
     }
 }

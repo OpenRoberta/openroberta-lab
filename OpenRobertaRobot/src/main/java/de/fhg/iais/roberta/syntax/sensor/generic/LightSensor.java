@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
         @F2M(field = "LIGHT_LIGHT", mode = "LIGHT"), @F2M(field = "LIGHT_AMBIENTLIGHT", mode = "AMBIENTLIGHT"),
         @F2M(field = "LIGHT_VALUE", mode = "LIGHT_VALUE"), @F2M(field = "LIGHT_LINE", mode = "LINE")})
 @NepoExternalSensor()
-public final class LightSensor<V> extends ExternalSensor<V> {
+public final class LightSensor extends ExternalSensor {
 
     public LightSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);

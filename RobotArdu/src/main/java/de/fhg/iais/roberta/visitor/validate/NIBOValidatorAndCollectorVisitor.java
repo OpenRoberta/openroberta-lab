@@ -27,83 +27,83 @@ import de.fhg.iais.roberta.visitor.hardware.INIBOVisitor;
 
 public class NIBOValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements INIBOVisitor<Void> {
 
-    public NIBOValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public NIBOValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(brickConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitCodePadSensor(CodePadSensor<Void> codePadSensor) {
+    public Void visitCodePadSensor(CodePadSensor codePadSensor) {
         return null;
     }
 
     @Override
-    public Void visitBodyLEDAction(BodyLEDAction<Void> bodyLEDAction) {
+    public Void visitBodyLEDAction(BodyLEDAction bodyLEDAction) {
         return null;
     }
 
     @Override
-    public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
+    public Void visitSendIRAction(SendIRAction sendIRAction) {
         requiredComponentVisited(sendIRAction, sendIRAction.code);
         return null;
     }
 
     @Override
-    public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
+    public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
         return null;
     }
 
     @Override
-    public Void visitRememberAction(RememberAction<Void> rememberAction) {
+    public Void visitRememberAction(RememberAction rememberAction) {
         requiredComponentVisited(rememberAction, rememberAction.code);
         return null;
     }
 
     @Override
-    public Void visitRecallAction(RecallAction<Void> recallAction) {
+    public Void visitRecallAction(RecallAction recallAction) {
         return null;
     }
 
     @Override
-    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
+    public Void visitLedOffAction(LedOffAction ledOffAction) {
         return null;
     }
 
     @Override
-    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+    public Void visitLedOnAction(LedOnAction ledOnAction) {
         requiredComponentVisited(ledOnAction, ledOnAction.ledColor);
         return null;
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         return null;
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         return null;
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(lightSensor.getUserDefinedPort(), SC.LIGHT, lightSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(infraredSensor.getUserDefinedPort(), SC.INFRARED, infraredSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+    public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(temperatureSensor.getUserDefinedPort(), SC.TEMPERATURE, temperatureSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(timerSensor.getUserDefinedPort(), SC.TIMER, timerSensor.getMode()));
         return null;
     }

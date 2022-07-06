@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoBasic(name = "FOURDIGITDISPLAY_CLEAR_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_fourDigitDisplay_clear"})
-public final class FourDigitDisplayClearAction<V> extends Action<V> {
+public final class FourDigitDisplayClearAction extends Action {
 
     public FourDigitDisplayClearAction(BlocklyProperties properties) {
         super(properties);
@@ -22,8 +22,8 @@ public final class FourDigitDisplayClearAction<V> extends Action<V> {
         return "FourDigitDisplayClearAction []";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
-        return new FourDigitDisplayClearAction<>(Jaxb2Ast.extractBlocklyProperties(block));
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+        return new FourDigitDisplayClearAction(Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

@@ -14,11 +14,11 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
 @NepoBasic(name = "MATH_POWER_FUNCT", category = "EXPR", blocklyNames = {})
-public final class MathPowerFunct<V> extends Expr<V> {
+public final class MathPowerFunct extends Expr {
     public final FunctionNames functName;
-    public final List<Expr<V>> param;
+    public final List<Expr> param;
 
-    public MathPowerFunct(BlocklyProperties properties, FunctionNames name, List<Expr<V>> param) {
+    public MathPowerFunct(BlocklyProperties properties, FunctionNames name, List<Expr> param) {
         super(properties);
         Assert.isTrue(name != null && param != null);
         this.functName = name;

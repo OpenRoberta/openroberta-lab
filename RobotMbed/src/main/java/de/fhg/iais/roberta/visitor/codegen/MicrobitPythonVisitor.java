@@ -65,19 +65,19 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
      *
      * @param programPhrases to generate the code from
      */
-    public MicrobitPythonVisitor(List<List<Phrase<Void>>> programPhrases, ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean> beans) {
+    public MicrobitPythonVisitor(List<List<Phrase>> programPhrases, ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
         this.robotConfiguration = robotConfiguration;
     }
 
     @Override
-    public Void visitPredefinedImage(PredefinedImage<Void> predefinedImage) {
+    public Void visitPredefinedImage(PredefinedImage predefinedImage) {
         this.sb.append("microbit.Image." + predefinedImage.getImageName());
         return null;
     }
 
     @Override
-    public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
+    public Void visitEmptyExpr(EmptyExpr emptyExpr) {
         switch ( emptyExpr.getDefVal() ) {
             case PREDEFINED_IMAGE:
                 this.sb.append("microbit.Image.SILLY");
@@ -93,7 +93,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
+    public Void visitWaitStmt(WaitStmt waitStmt) {
         this.sb.append("while True:");
         incrIndentation();
         visitStmtList(waitStmt.statements);
@@ -103,7 +103,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+    public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         this.sb.append("microbit.sleep(");
         waitTimeStmt.time.accept(this);
         this.sb.append(")");
@@ -111,13 +111,13 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         this.sb.append("microbit.display.clear()");
         return null;
     }
 
     @Override
-    public Void visitImage(Image<Void> image) {
+    public Void visitImage(Image image) {
         this.sb.append("microbit.Image('");
         for ( int i = 0; i < 5; i++ ) {
             for ( int j = 0; j < 5; j++ ) {
@@ -138,7 +138,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
+    public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
         this.sb.append("microbit.display.");
         appendTextDisplayType(displayTextAction);
         if ( !displayTextAction.msg.getKind().hasName("STRING_CONST") ) {
@@ -152,7 +152,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         return null;
     }
 
-    private void appendTextDisplayType(DisplayTextAction<Void> displayTextAction) {
+    private void appendTextDisplayType(DisplayTextAction displayTextAction) {
         if ( displayTextAction.mode == DisplayTextMode.TEXT ) {
             this.sb.append("scroll(");
         } else {
@@ -161,7 +161,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
+    public Void visitDisplayImageAction(DisplayImageAction displayImageAction) {
         this.sb.append("microbit.display.show(");
         displayImageAction.getValuesToDisplay().accept(this);
         this.sb.append(")");
@@ -169,14 +169,14 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
+    public Void visitImageInvertFunction(ImageInvertFunction imageInvertFunction) {
         imageInvertFunction.image.accept(this);
         this.sb.append(".invert()");
         return null;
     }
 
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+    public Void visitKeysSensor(KeysSensor keysSensor) {
         String port = keysSensor.getUserDefinedPort();
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
@@ -185,13 +185,13 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+    public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
         this.sb.append("microbit.temperature()");
         return null;
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         switch ( timerSensor.getMode() ) {
             case SC.DEFAULT:
             case SC.VALUE:
@@ -209,7 +209,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
         if ( accelerometerSensor.getSlot().equals(SC.STRENGTH) ) {
             this.sb.append("math.sqrt(microbit.accelerometer.get_x()**2 + microbit.accelerometer.get_y()**2 + microbit.accelerometer.get_z()**2)");
         } else {
@@ -219,13 +219,13 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         this.sb.append("round(microbit.display.read_light_level() / 2.55)");
         return null;
     }
 
     @Override
-    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
+    public Void visitPinGetValueSensor(PinGetValueSensor pinValueSensor) {
         String port = pinValueSensor.getUserDefinedPort();
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
@@ -239,10 +239,10 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
+    public Void visitMainTask(MainTask mainTask) {
         this.usedGlobalVarInFunctions.clear();
         this.usedGlobalVarInFunctions.add("timer1");
-        StmtList<Void> variables = mainTask.variables;
+        StmtList variables = mainTask.variables;
         variables.accept(this);
         generateUserDefinedMethods();
         nlIndent();
@@ -302,13 +302,13 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
+    public Void visitGestureSensor(GestureSensor gestureSensor) {
         this.sb.append("\"" + gestureSensor.getMode().toString().toLowerCase().replace("_", " ") + "\" == microbit.accelerometer.current_gesture()");
         return null;
     }
 
     @Override
-    public Void visitImageShiftFunction(ImageShiftFunction<Void> imageShiftFunction) {
+    public Void visitImageShiftFunction(ImageShiftFunction imageShiftFunction) {
         imageShiftFunction.image.accept(this);
         this.sb.append(".shift_" + imageShiftFunction.shiftDirection.toString().toLowerCase() + "(");
         imageShiftFunction.positions.accept(this);
@@ -317,19 +317,19 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+    public Void visitCompassSensor(CompassSensor compassSensor) {
         this.sb.append("microbit.compass.heading()");
         return null;
     }
 
     @Override
-    public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
+    public Void visitPinTouchSensor(PinTouchSensor pinTouchSensor) {
         this.sb.append("microbit.pin" + pinTouchSensor.getUserDefinedPort() + ".is_touched()");
         return null;
     }
 
     @Override
-    public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
+    public Void visitRadioSendAction(RadioSendAction radioSendAction) {
         this.sb.append("radio.config(power=" + radioSendAction.power + ")");
         nlIndent();
         this.sb.append("radio.send(str(");
@@ -339,7 +339,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
+    public Void visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
         switch ( radioReceiveAction.type ) {
             case NUMBER:
                 this.sb.append("((lambda x: 0 if x is None else float(x))(radio.receive()))");
@@ -357,7 +357,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
+    public Void visitRadioSetChannelAction(RadioSetChannelAction radioSetChannelAction) {
         this.sb.append("radio.config(group=");
         radioSetChannelAction.channel.accept(this);
         this.sb.append(")");
@@ -365,7 +365,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
+    public Void visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
         String port = pinWriteValueAction.port;
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
@@ -378,7 +378,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
+    public Void visitDisplaySetPixelAction(DisplaySetPixelAction displaySetPixelAction) {
         this.sb.append("microbit.display.set_pixel(");
         displaySetPixelAction.x.accept(this);
         this.sb.append(", ");
@@ -390,7 +390,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
+    public Void visitDisplayGetPixelAction(DisplayGetPixelAction displayGetPixelAction) {
         this.sb.append("microbit.display.get_pixel(");
         displayGetPixelAction.x.accept(this);
         this.sb.append(", ");
@@ -437,13 +437,13 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
+    public Void visitStmtTextComment(StmtTextComment stmtTextComment) {
         this.sb.append("# " + stmtTextComment.textComment);
         return null;
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         this.sb.append("music.pitch(");
         toneAction.frequency.accept(this);
         this.sb.append(", ");
@@ -453,7 +453,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         this.sb
             .append("music.pitch(")
             .append(Integer.parseInt(playNoteAction.frequency.split("\\.")[0]))
@@ -464,27 +464,27 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitConnectConst(ConnectConst<Void> connectConst) {
+    public Void visitConnectConst(ConnectConst connectConst) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+    public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+    public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         throw new DbcException("Not supported!");
     }
 }

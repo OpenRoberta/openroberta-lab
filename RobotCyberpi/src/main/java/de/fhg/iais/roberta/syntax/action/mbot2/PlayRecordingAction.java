@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_play_recording"}, name = "PLAY_RECORDING_ACTION")
-public final class PlayRecordingAction<V> extends Action<V> implements WithUserDefinedPort<V> {
+public final class PlayRecordingAction extends Action implements WithUserDefinedPort {
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;
     @NepoHide

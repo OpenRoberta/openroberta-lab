@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
  * the value should have the missing expression.
  */
 @NepoBasic(name = "EMPTY_EXPR", category = "EXPR", blocklyNames = {})
-public final class EmptyExpr<V> extends Expr<V> {
+public final class EmptyExpr extends Expr {
 
     public final BlocklyType defVal;
 

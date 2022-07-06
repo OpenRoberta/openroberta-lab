@@ -61,16 +61,16 @@ import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
-public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IEv3Visitor<V> {
+public class Ev3StackMachineVisitor extends AbstractStackMachineVisitor implements IEv3Visitor<Void> {
 
-    public Ev3StackMachineVisitor(ConfigurationAst configuration, List<List<Phrase<Void>>> phrases, ILanguage language) {
+    public Ev3StackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, ILanguage language) {
         super(configuration);
         Assert.isTrue(!phrases.isEmpty());
 
     }
 
     @Override
-    public V visitColorConst(ColorConst<V> colorConst) {
+    public Void visitColorConst(ColorConst colorConst) {
         String color = "";
         switch ( colorConst.getHexValueAsString().toUpperCase() ) {
             case "#000000":
@@ -106,27 +106,27 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitShowPictureAction(ShowPictureAction<V> showPictureAction) {
+    public Void visitShowPictureAction(ShowPictureAction showPictureAction) {
         String image = showPictureAction.pic.toString();
         JSONObject o = makeNode(C.SHOW_IMAGE_ACTION).put(C.IMAGE, image).put(C.NAME, "ev3");
         return app(o);
     }
 
     @Override
-    public V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         JSONObject o = makeNode(C.CLEAR_DISPLAY_ACTION);
 
         return app(o);
     }
 
     @Override
-    public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         JSONObject o = makeNode(C.STATUS_LIGHT_ACTION).put(C.NAME, "ev3").put(C.PORT, "internal");
         return app(o);
     }
 
     @Override
-    public V visitToneAction(ToneAction<V> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         toneAction.frequency.accept(this);
         toneAction.duration.accept(this);
         JSONObject o = makeNode(C.TONE_ACTION);
@@ -134,7 +134,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitPlayNoteAction(PlayNoteAction<V> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         String freq = playNoteAction.frequency;
         String duration = playNoteAction.duration;
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, freq));
@@ -144,14 +144,14 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitPlayFileAction(PlayFileAction<V> playFileAction) {
+    public Void visitPlayFileAction(PlayFileAction playFileAction) {
         String image = playFileAction.fileName.toString();
         JSONObject o = makeNode(C.PLAY_FILE_ACTION).put(C.FILE, image).put(C.NAME, "ev3");
         return app(o);
     }
 
     @Override
-    public V visitVolumeAction(VolumeAction<V> volumeAction) {
+    public Void visitVolumeAction(VolumeAction volumeAction) {
         JSONObject o;
         if ( volumeAction.mode == VolumeAction.Mode.GET ) {
             o = makeNode(C.GET_VOLUME);
@@ -163,18 +163,18 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitSetLanguageAction(SetLanguageAction<V> setLanguageAction) {
+    public Void visitSetLanguageAction(SetLanguageAction setLanguageAction) {
         String language = getLanguageString(setLanguageAction.language);
         JSONObject o = makeNode(C.SET_LANGUAGE_ACTION).put(C.LANGUAGE, language);
         return app(o);
     }
 
     @Override
-    public V visitSayTextAction(SayTextAction<V> sayTextAction) {
+    public Void visitSayTextAction(SayTextAction sayTextAction) {
         sayTextAction.msg.accept(this);
-        NumConst<V> n = new NumConst<>(null, "30");
+        NumConst n = new NumConst(null, "30");
         n.accept(this);
-        NumConst<V> p = new NumConst<>(null, "50");
+        NumConst p = new NumConst(null, "50");
         p.accept(this);
         JSONObject o = makeNode(C.SAY_TEXT_ACTION);
 
@@ -182,7 +182,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<V> sayTextAction) {
+    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction sayTextAction) {
         sayTextAction.msg.accept(this);
         sayTextAction.speed.accept(this);
         sayTextAction.pitch.accept(this);
@@ -192,14 +192,14 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitMotorGetPowerAction(MotorGetPowerAction<V> motorGetPowerAction) {
+    public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         String port = motorGetPowerAction.getUserDefinedPort();
         JSONObject o = makeNode(C.MOTOR_GET_POWER).put(C.PORT, port.toLowerCase());
         return app(o);
     }
 
     @Override
-    public V visitDriveAction(DriveAction<V> driveAction) {
+    public Void visitDriveAction(DriveAction driveAction) {
         driveAction.param.getSpeed().accept(this);
         boolean speedOnly = !processOptionalDuration(driveAction.param.getDuration());
         ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
@@ -219,7 +219,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitTurnAction(TurnAction<V> turnAction) {
+    public Void visitTurnAction(TurnAction turnAction) {
         turnAction.param.getSpeed().accept(this);
         boolean speedOnly = !processOptionalDuration(turnAction.param.getDuration());
         ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
@@ -243,7 +243,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitCurveAction(CurveAction<V> curveAction) {
+    public Void visitCurveAction(CurveAction curveAction) {
         curveAction.paramLeft.getSpeed().accept(this);
         curveAction.paramRight.getSpeed().accept(this);
         boolean speedOnly = !processOptionalDuration(curveAction.paramLeft.getDuration());
@@ -264,15 +264,15 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitMotorDriveStopAction(MotorDriveStopAction<V> stopAction) {
+    public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         JSONObject o = makeNode(C.STOP_DRIVE).put(C.NAME, "ev3");
         return app(o);
     }
 
     @Override
-    public V visitMotorOnAction(MotorOnAction<V> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         motorOnAction.param.getSpeed().accept(this);
-        MotorDuration<V> duration = motorOnAction.param.getDuration();
+        MotorDuration duration = motorOnAction.param.getDuration();
         boolean speedOnly = !processOptionalDuration(duration);
         String port = motorOnAction.getUserDefinedPort();
         JSONObject o = makeNode(C.MOTOR_ON_ACTION).put(C.PORT, port.toLowerCase()).put(C.NAME, port.toLowerCase()).put(C.SPEED_ONLY, speedOnly);
@@ -287,7 +287,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitMotorSetPowerAction(MotorSetPowerAction<V> motorSetPowerAction) {
+    public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
         String port = motorSetPowerAction.getUserDefinedPort();
         motorSetPowerAction.power.accept(this);
         JSONObject o = makeNode(C.MOTOR_SET_POWER).put(C.PORT, port.toLowerCase());
@@ -295,14 +295,14 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         String port = motorStopAction.getUserDefinedPort();
         JSONObject o = makeNode(C.MOTOR_STOP).put(C.PORT, port.toLowerCase());
         return app(o);
     }
 
     @Override
-    public V visitShowTextAction(ShowTextAction<V> showTextAction) {
+    public Void visitShowTextAction(ShowTextAction showTextAction) {
         showTextAction.y.accept(this);
         showTextAction.x.accept(this);
         showTextAction.msg.accept(this);
@@ -311,7 +311,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitLightAction(LightAction<V> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         String mode = lightAction.mode.toString().toLowerCase();
         String color = lightAction.color.toString().toLowerCase();
         JSONObject o = makeNode(C.LIGHT_ACTION).put(C.MODE, mode).put(C.COLOR, color);
@@ -319,14 +319,14 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitTouchSensor(TouchSensor<V> touchSensor) {
+    public Void visitTouchSensor(TouchSensor touchSensor) {
         String port = touchSensor.getUserDefinedPort();
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TOUCH).put(C.PORT, port).put(C.NAME, "ev3");
         return app(o);
     }
 
     @Override
-    public V visitColorSensor(ColorSensor<V> colorSensor) {
+    public Void visitColorSensor(ColorSensor colorSensor) {
         String mode = colorSensor.getMode();
         String port = colorSensor.getUserDefinedPort();
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COLOR).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
@@ -334,12 +334,12 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitHTColorSensor(HTColorSensor<V> htColorSensor) {
+    public Void visitHTColorSensor(HTColorSensor htColorSensor) {
         return null;
     }
 
     @Override
-    public V visitEncoderSensor(EncoderSensor<V> encoderSensor) {
+    public Void visitEncoderSensor(EncoderSensor encoderSensor) {
         String mode = encoderSensor.getMode().toLowerCase();
         String port = encoderSensor.getUserDefinedPort().toLowerCase();
         JSONObject o;
@@ -352,14 +352,14 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitKeysSensor(KeysSensor<V> keysSensor) {
+    public Void visitKeysSensor(KeysSensor keysSensor) {
         String mode = keysSensor.getUserDefinedPort().toLowerCase();
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, mode).put(C.NAME, "ev3");
         return app(o);
     }
 
     @Override
-    public V visitTimerSensor(TimerSensor<V> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         String port = timerSensor.getUserDefinedPort();
         JSONObject o;
         if ( timerSensor.getMode().equals(SC.DEFAULT) || timerSensor.getMode().equals(SC.VALUE) ) {
@@ -371,14 +371,14 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitSoundSensor(SoundSensor<V> soundSensor) {
+    public Void visitSoundSensor(SoundSensor soundSensor) {
         // TODO check if this is really supported!
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.SOUND).put(C.MODE, C.VOLUME).put(C.NAME, "ev3");
         return app(o);
     }
 
     @Override
-    public V visitCompassSensor(CompassSensor<V> compassSensor) {
+    public Void visitCompassSensor(CompassSensor compassSensor) {
         // TODO check if this is really supported!
         String mode = compassSensor.getMode();
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COMPASS).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
@@ -386,7 +386,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitGyroSensor(GyroSensor<V> gyroSensor) {
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
         String mode = gyroSensor.getMode().toLowerCase();
         String port = gyroSensor.getUserDefinedPort().toLowerCase();
         JSONObject o;
@@ -399,17 +399,17 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitIRSeekerSensor(IRSeekerSensor<V> irSeekerSensor) {
+    public Void visitIRSeekerSensor(IRSeekerSensor irSeekerSensor) {
         return null;
     }
 
     @Override
-    public V visitInfraredSensor(InfraredSensor<V> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         return null;
     }
 
     @Override
-    public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         String mode = ultrasonicSensor.getMode();
         String port = ultrasonicSensor.getUserDefinedPort();
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
@@ -446,27 +446,27 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitBluetoothReceiveAction(BluetoothReceiveAction<V> bluetoothReceiveAction) {
+    public Void visitBluetoothReceiveAction(BluetoothReceiveAction bluetoothReceiveAction) {
         return null;
     }
 
     @Override
-    public V visitBluetoothConnectAction(BluetoothConnectAction<V> bluetoothConnectAction) {
+    public Void visitBluetoothConnectAction(BluetoothConnectAction bluetoothConnectAction) {
         return null;
     }
 
     @Override
-    public V visitBluetoothSendAction(BluetoothSendAction<V> bluetoothSendAction) {
+    public Void visitBluetoothSendAction(BluetoothSendAction bluetoothSendAction) {
         return null;
     }
 
     @Override
-    public V visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<V> bluetoothWaitForConnection) {
+    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction bluetoothWaitForConnection) {
         return null;
     }
 
     @Override
-    public V visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<V> bluetoothCheckConnectAction) {
+    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction bluetoothCheckConnectAction) {
         return null;
     }
 }

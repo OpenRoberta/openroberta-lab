@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoMutation;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "TEST_PHRASE_ALL", blocklyNames = {"test_phrase_all"}, category = "EXPR")
-public class TestPhraseWithAll<V> extends Expr<V> {
+public class TestPhraseWithAll extends Expr {
 
     @NepoMutation
     public final Mutation mutation;

@@ -17,13 +17,13 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "WALK_ASYNC", category = "ACTOR", blocklyNames = {"naoActions_walk_async"})
-public final class WalkAsync<V> extends Action<V> {
+public final class WalkAsync extends Action {
 
-    public final Expr<V> XSpeed;
-    public final Expr<V> YSpeed;
-    public final Expr<V> ZSpeed;
+    public final Expr XSpeed;
+    public final Expr YSpeed;
+    public final Expr ZSpeed;
 
-    public WalkAsync(Expr<V> XSpeed, Expr<V> YSpeed, Expr<V> ZSpeed, BlocklyProperties properties) {
+    public WalkAsync(Expr XSpeed, Expr YSpeed, Expr ZSpeed, BlocklyProperties properties) {
         super(properties);
         this.XSpeed = XSpeed;
         this.YSpeed = YSpeed;
@@ -36,14 +36,14 @@ public final class WalkAsync<V> extends Action<V> {
         return "WalkTo [" + this.XSpeed + ", " + this.YSpeed + ", " + this.ZSpeed + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 3);
 
-        Phrase<V> XSpeed = helper.extractValue(values, new ExprParam(BlocklyConstants.X + BlocklyConstants.SPEED, BlocklyType.NUMBER_INT));
-        Phrase<V> YSpeed = helper.extractValue(values, new ExprParam(BlocklyConstants.Y + BlocklyConstants.SPEED, BlocklyType.NUMBER_INT));
-        Phrase<V> ZSpeed = helper.extractValue(values, new ExprParam(BlocklyConstants.Z + BlocklyConstants.SPEED, BlocklyType.NUMBER_INT));
+        Phrase XSpeed = helper.extractValue(values, new ExprParam(BlocklyConstants.X + BlocklyConstants.SPEED, BlocklyType.NUMBER_INT));
+        Phrase YSpeed = helper.extractValue(values, new ExprParam(BlocklyConstants.Y + BlocklyConstants.SPEED, BlocklyType.NUMBER_INT));
+        Phrase ZSpeed = helper.extractValue(values, new ExprParam(BlocklyConstants.Z + BlocklyConstants.SPEED, BlocklyType.NUMBER_INT));
 
-        return new WalkAsync<V>(Jaxb2Ast.convertPhraseToExpr(XSpeed), Jaxb2Ast.convertPhraseToExpr(YSpeed), Jaxb2Ast.convertPhraseToExpr(ZSpeed), Jaxb2Ast.extractBlocklyProperties(block));
+        return new WalkAsync(Jaxb2Ast.convertPhraseToExpr(XSpeed), Jaxb2Ast.convertPhraseToExpr(YSpeed), Jaxb2Ast.convertPhraseToExpr(ZSpeed), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

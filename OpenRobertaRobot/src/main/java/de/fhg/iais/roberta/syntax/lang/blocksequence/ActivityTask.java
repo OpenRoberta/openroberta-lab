@@ -9,11 +9,11 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoExpr(category = "TASK", blocklyNames = {"robControls_activity"}, name = "ACTIVITY_TASK")
-public final class ActivityTask<V> extends Task<V> {
+public final class ActivityTask extends Task {
     @NepoValue(name = BlocklyConstants.ACTIVITY, type = BlocklyType.STRING)
-    public final Expr<V> activityName;
+    public final Expr activityName;
 
-    public ActivityTask(BlocklyProperties properties, Expr<V> activityName) {
+    public ActivityTask(BlocklyProperties properties, Expr activityName) {
         super(properties);
         Assert.isTrue(activityName.isReadOnly() && activityName != null);
         this.activityName = activityName;

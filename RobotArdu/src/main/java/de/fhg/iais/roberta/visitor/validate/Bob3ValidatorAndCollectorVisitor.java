@@ -8,12 +8,12 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 
 public class Bob3ValidatorAndCollectorVisitor extends NIBOValidatorAndCollectorVisitor {
 
-    public Bob3ValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public Bob3ValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(brickConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
+    public Void visitPinTouchSensor(PinTouchSensor pinTouchSensor) {
         switch ( pinTouchSensor.getUserDefinedPort() ) {
             case "1":
             case "2":

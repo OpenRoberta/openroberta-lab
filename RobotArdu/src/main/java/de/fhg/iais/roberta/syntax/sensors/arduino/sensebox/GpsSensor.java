@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
     sampleValues = {@F2M(field = "GPS_LATITUDE", mode = "LATITUDE"), @F2M(field = "GPS_SPEED", mode = "SPEED"), @F2M(field = "GPS_DATE", mode = "DATE"),
         @F2M(field = "GPS_TIME", mode = "TIME"), @F2M(field = "GPS_ALTITUDE", mode = "ALTITUDE"), @F2M(field = "GPS_LONGITUDE", mode = "LONGITUDE")})
 @NepoExternalSensor
-public final class GpsSensor<V> extends ExternalSensor<V> {
+public final class GpsSensor extends ExternalSensor {
 
     public GpsSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);

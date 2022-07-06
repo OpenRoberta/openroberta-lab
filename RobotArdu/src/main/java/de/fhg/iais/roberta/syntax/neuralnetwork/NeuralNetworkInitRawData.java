@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoBasic(name = "NEURAL_NETWORK_INIT_RAWDATA", category = "STMT", blocklyNames = {"robActions_aifes_initrawdata"})
-public final class NeuralNetworkInitRawData<V> extends Stmt<V> {
+public final class NeuralNetworkInitRawData extends Stmt {
     private NeuralNetworkInitRawData(BlocklyProperties properties) {
         super(properties);
         setReadOnly();
@@ -28,8 +28,8 @@ public final class NeuralNetworkInitRawData<V> extends Stmt<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
-        return new NeuralNetworkInitRawData<>(Jaxb2Ast.extractBlocklyProperties(block));
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+        return new NeuralNetworkInitRawData(Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

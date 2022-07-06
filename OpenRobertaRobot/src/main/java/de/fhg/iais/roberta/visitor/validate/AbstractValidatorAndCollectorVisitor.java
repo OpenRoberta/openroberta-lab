@@ -30,7 +30,7 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
     private final IVisitor<Void> mainVisitor;
 
     protected final ConfigurationAst robotConfiguration;
-    protected final ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders;
+    protected final ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders;
     protected final UsedMethodBean.Builder usedMethodBuilder;
     protected final UsedHardwareBean.Builder usedHardwareBuilder;
     protected final ErrorAndWarningBean.Builder errorAndWarningBuilder;
@@ -40,7 +40,7 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      * @param robotConfiguration for the program that should be validated and collected
      * @param beanBuilders must contain the builders as checked in the Assert.notNull below
      */
-    public AbstractValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public AbstractValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         this.robotConfiguration = robotConfiguration;
         this.beanBuilders = beanBuilders;
 
@@ -68,7 +68,7 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
     public AbstractValidatorAndCollectorVisitor(
         IVisitor<Void> mainVisitor,
         ConfigurationAst robotConfiguration,
-        ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
 
         this.mainVisitor = mainVisitor;
         this.robotConfiguration = robotConfiguration;
@@ -87,7 +87,7 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
         Assert.notNull(nnBeanBuilder, "beanBuilders must contain a instance of NNBean.Builder");
     }
 
-    protected <T extends IProjectBean.IBuilder<?>> T getBuilder(Class<T> clazz) {
+    protected <T extends IProjectBean.IBuilder> T getBuilder(Class<T> clazz) {
         return this.beanBuilders.getInstance(clazz);
     }
 
@@ -97,8 +97,8 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      *
      * @param subPhrase to be visited, if not empty
      */
-    protected void optionalComponentVisited(Phrase<Void> subPhrase) {
-        if ( !(subPhrase instanceof EmptyExpr<?>) ) {
+    protected void optionalComponentVisited(Phrase subPhrase) {
+        if ( !(subPhrase instanceof EmptyExpr) ) {
             subPhrase.accept(mainVisitor);
         }
     }
@@ -110,11 +110,11 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      * @param subPhrases the component of superPhrase to be checked and visited
      */
     @SafeVarargs
-    public final void requiredComponentVisited(Phrase<Void> superPhrase, Phrase<Void>... subPhrases) {
+    public final void requiredComponentVisited(Phrase superPhrase, Phrase... subPhrases) {
         if ( subPhrases.length <= 0 ) {
             throw new DbcException("at least one sub phrase is required");
         }
-        for ( Phrase<Void> subPhrase : subPhrases ) {
+        for ( Phrase subPhrase : subPhrases ) {
             mkEmptyCheck(superPhrase, subPhrase);
             subPhrase.accept(mainVisitor);
         }
@@ -126,26 +126,26 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      * @param superPhrase phrase, whose components should be checked and visited
      * @param subPhrases the component of superPhrase to be checked and visited
      */
-    public final <T extends Phrase<Void>> void requiredComponentVisited(Phrase<Void> superPhrase, List<T> subPhrases) {
-        for ( Phrase<Void> subPhrase : subPhrases ) {
+    public final <T extends Phrase> void requiredComponentVisited(Phrase superPhrase, List<T> subPhrases) {
+        for ( Phrase subPhrase : subPhrases ) {
             mkEmptyCheck(superPhrase, subPhrase);
             subPhrase.accept(mainVisitor);
         }
     }
 
-    private void mkEmptyCheck(Phrase<Void> superPhrase, Phrase<Void> subPhrase) {
-        if ( subPhrase instanceof EmptyExpr<?> ) {
+    private void mkEmptyCheck(Phrase superPhrase, Phrase subPhrase) {
+        if ( subPhrase instanceof EmptyExpr ) {
             addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
-        } else if ( subPhrase instanceof ExprList<?> ) {
-            for ( Expr<?> expr : ((ExprList<?>) subPhrase).get() ) {
-                if ( expr instanceof EmptyExpr<?> ) {
+        } else if ( subPhrase instanceof ExprList ) {
+            for ( Expr expr : ((ExprList) subPhrase).get() ) {
+                if ( expr instanceof EmptyExpr ) {
                     addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
                 }
             }
-        } else if ( subPhrase instanceof StmtList<?> ) {
-            for ( Stmt<?> stmt : ((StmtList<?>) subPhrase).get() ) {
-                if ( stmt instanceof ExprStmt<?> ) {
-                    if ( ((ExprStmt<?>) stmt).expr instanceof EmptyExpr<?> ) {
+        } else if ( subPhrase instanceof StmtList ) {
+            for ( Stmt stmt : ((StmtList) subPhrase).get() ) {
+                if ( stmt instanceof ExprStmt ) {
+                    if ( ((ExprStmt) stmt).expr instanceof EmptyExpr ) {
                         addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
                     }
                 }
@@ -159,7 +159,7 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      * @param phrase
      * @param message
      */
-    public void addErrorToPhrase(final Phrase<Void> phrase, final String message) {
+    public void addErrorToPhrase(final Phrase phrase, final String message) {
         phrase.addInfo(NepoInfo.error(message));
         errorAndWarningBuilder.addError(message);
     }
@@ -170,7 +170,7 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      * @param phrase
      * @param message
      */
-    public void addWarningToPhrase(final Phrase<Void> phrase, final String message) {
+    public void addWarningToPhrase(final Phrase phrase, final String message) {
         phrase.addInfo(NepoInfo.warning(message));
         errorAndWarningBuilder.addWarning(message);
     }

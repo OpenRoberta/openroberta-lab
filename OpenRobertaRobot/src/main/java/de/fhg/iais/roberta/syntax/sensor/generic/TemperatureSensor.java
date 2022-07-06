@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
     sampleValues = {@F2M(field = "TEMPERATURE_PRESSURE", mode = "PRESSURE"), @F2M(field = "TEMPERATURE", mode = "TEMPERATURE"),
         @F2M(field = "TEMPERATURE_TEMPERATURE", mode = "TEMPERATURE"), @F2M(field = "TEMPERATURE_VALUE", mode = "TEMPERATURE")})
 @NepoExternalSensor()
-public final class TemperatureSensor<V> extends ExternalSensor<V> {
+public final class TemperatureSensor extends ExternalSensor {
 
     public TemperatureSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);

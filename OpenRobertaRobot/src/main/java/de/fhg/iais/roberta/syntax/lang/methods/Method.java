@@ -11,9 +11,9 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
  * - {@link #getKind()}<br>
  * - {@link #getAs(Class)}<br>
  */
-public abstract class Method<V> extends Phrase<V> {
+public abstract class Method extends Phrase {
     protected String methodName;
-    protected ExprList<V> parameters;
+    protected ExprList parameters;
     protected BlocklyType returnType;
 
     public Method(BlocklyProperties properties) {
@@ -24,7 +24,7 @@ public abstract class Method<V> extends Phrase<V> {
         return this.methodName;
     }
 
-    public ExprList<V> getParameters() {
+    public ExprList getParameters() {
         return this.parameters;
     }
 

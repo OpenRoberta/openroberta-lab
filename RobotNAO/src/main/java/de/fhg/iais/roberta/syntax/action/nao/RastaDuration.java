@@ -8,11 +8,11 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "RASTA_DURATION", category = "ACTOR", blocklyNames = {"naoActions_rasta"})
-public final class RastaDuration<V> extends Action<V> {
+public final class RastaDuration extends Action {
     @NepoValue(name = "DURATION", type = BlocklyType.NUMBER_INT)
-    public final Expr<V> duration;
+    public final Expr duration;
 
-    public RastaDuration(BlocklyProperties properties, Expr<V> duration) {
+    public RastaDuration(BlocklyProperties properties, Expr duration) {
         super(properties);
         this.duration = duration;
         setReadOnly();

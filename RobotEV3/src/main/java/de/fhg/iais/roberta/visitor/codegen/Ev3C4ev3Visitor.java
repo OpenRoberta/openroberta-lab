@@ -110,7 +110,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
      * @param programPhrases
      */
     public Ev3C4ev3Visitor(
-        List<List<Phrase<Void>>> programPhrases,
+        List<List<Phrase>> programPhrases,
         ConfigurationAst brickConfiguration,
         String programName,
         ILanguage language,
@@ -162,7 +162,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
+    public Void visitMainTask(MainTask mainTask) {
         mainTask.variables.accept(this);
         nlIndent();
         generateUserDefinedMethods();
@@ -224,7 +224,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         }
     }
 
-    private void generateDebugInitialization(MainTask<Void> mainTask) {
+    private void generateDebugInitialization(MainTask mainTask) {
         boolean isDebug = mainTask.debug.equals("TRUE");
         if ( isDebug ) {
             this.sb.append("startLoggingThread(");
@@ -293,7 +293,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitMathConst(MathConst<Void> mathConst) {
+    public Void visitMathConst(MathConst mathConst) {
         if ( mathConst.mathConst == MathConst.Const.INFINITY ) {
             this.sb.append("HUGE_VAL");
             return null;
@@ -303,7 +303,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
+    public Void visitColorConst(ColorConst colorConst) {
         String colorConstant = getColorConstantByHex(colorConst.getHexValueAsString());
         this.sb.append(colorConstant);
         return null;
@@ -346,7 +346,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     // copied from AbstractCommonArduinoCppVisitor
     @Override
-    public Void visitBinary(Binary<Void> binary) {
+    public Void visitBinary(Binary binary) {
         Binary.Op op = binary.op;
         if ( op == Binary.Op.MOD ) {
             appendFloatModulo(binary);
@@ -367,7 +367,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    private void appendFloatModulo(Binary<Void> binary) {
+    private void appendFloatModulo(Binary binary) {
         this.sb.append("fmod(");
         generateSubExpr(this.sb, false, binary.left, binary);
         this.sb.append(", ");
@@ -375,13 +375,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.sb.append(")");
     }
 
-    private void appendCastToFloat(Binary<Void> binary) {
+    private void appendCastToFloat(Binary binary) {
         this.sb.append("((double) ");
         generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         this.sb.append(")");
     }
 
-    private void convertToString(Binary<Void> binary) {
+    private void convertToString(Binary binary) {
         switch ( binary.getRight().getVarType() ) {
             case BOOLEAN:
             case NUMBER:
@@ -399,8 +399,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     // end copied from AbstractCommonArduinoCppVisitor
 
     @Override
-    public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
-        Expr<Void> condition = repeatStmt.expr;
+    public Void visitRepeatStmt(RepeatStmt repeatStmt) {
+        Expr condition = repeatStmt.expr;
         boolean isWaitStmt = repeatStmt.mode == RepeatStmt.Mode.WAIT;
         if ( !isWaitStmt ) {
             increaseLoopCounter();
@@ -438,12 +438,12 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    private void generateCodeFromStmtConditionFor(Expr<Void> expr) {
-        final ExprList<Void> expressions = (ExprList<Void>) expr;
-        Expr<Void> counterName = expressions.get().get(0);
-        Expr<Void> counterInitialValue = expressions.get().get(1);
-        Expr<Void> counterTargetValue = expressions.get().get(2);
-        Expr<Void> counterStep = expressions.get().get(3);
+    private void generateCodeFromStmtConditionFor(Expr expr) {
+        final ExprList expressions = (ExprList) expr;
+        Expr counterName = expressions.get().get(0);
+        Expr counterInitialValue = expressions.get().get(1);
+        Expr counterTargetValue = expressions.get().get(2);
+        Expr counterStep = expressions.get().get(3);
         this.sb.append("for (" + "float ");
         counterName.accept(this);
         this.sb.append(" = ");
@@ -459,24 +459,24 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.sb.append(") {");
     }
 
-    private void generateForEachPrefix(Expr<Void> expression) {
-        ((Binary<Void>) expression).left.accept(this);
+    private void generateForEachPrefix(Expr expression) {
+        ((Binary) expression).left.accept(this);
         this.sb.append(";");
         nlIndent();
         this.sb.append("for(int i = 0; i < ");
-        ((Binary<Void>) expression).getRight().accept(this);
+        ((Binary) expression).getRight().accept(this);
         this.sb.append(".size(); ++i) {");
         incrIndentation();
         nlIndent();
-        ((Binary<Void>) expression).left.accept(this);
+        ((Binary) expression).left.accept(this);
         this.sb.append(" = _getListElementByIndex(");
-        ((Binary<Void>) expression).getRight().accept(this);
+        ((Binary) expression).getRight().accept(this);
         this.sb.append(", i);");
         decrIndentation();
     }
 
     @Override
-    public Void visitDebugAction(DebugAction<Void> debugAction) {
+    public Void visitDebugAction(DebugAction debugAction) {
         this.sb.append("printf(\"%s\\n\", ToString(");
         debugAction.value.accept(this);
         this.sb.append(").c_str());");
@@ -484,7 +484,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
+    public Void visitWaitStmt(WaitStmt waitStmt) {
         this.sb.append("while ( true ) {");
         incrIndentation();
         visitStmtList(waitStmt.statements);
@@ -497,7 +497,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+    public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         this.sb.append("Wait(");
         waitTimeStmt.time.accept(this);
         this.sb.append(");");
@@ -506,7 +506,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     // copied from Arduino
     @Override
-    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
+    public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
         if ( indexOfFunct.param.get(0).toString().contains("ListCreate ") ) {
             this.sb.append("null");
             return null;
@@ -529,7 +529,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     // end copied from Arduino
 
     @Override
-    public Void visitListCreate(ListCreate<Void> listCreate) {
+    public Void visitListCreate(ListCreate listCreate) {
         this.sb.append("(" + getListCreateCasting(listCreate.getVarType()));
         super.visitListCreate(listCreate);
         this.sb.append(")");
@@ -558,7 +558,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
      * TODO: I don't know why I am doing this, but it seems that without this a semicolon is lost, somehow... Artem Vinokurov 25.10.2018
      */
     @Override
-    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+    public Void visitListSetIndex(ListSetIndex listSetIndex) {
         super.visitListSetIndex(listSetIndex);
         this.sb.append(";");
         return null;
@@ -568,7 +568,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
      * TODO: There is something wrong with semicolon generation for calliope. Artem Vinokurov 25.10.2018
      */
     @Override
-    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+    public Void visitListGetIndex(ListGetIndex listGetIndex) {
         super.visitListGetIndex(listGetIndex);
         if ( ((ListElementOperations) listGetIndex.getElementOperation()).equals(ListElementOperations.REMOVE) ) {
             this.sb.append(";");
@@ -579,9 +579,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     // end copied from calliope
 
     @Override
-    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        Expr<Void> min = mathRandomIntFunct.param.get(0);
-        Expr<Void> max = mathRandomIntFunct.param.get(1);
+    public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
+        Expr min = mathRandomIntFunct.param.get(0);
+        Expr max = mathRandomIntFunct.param.get(1);
         this.sb.append("((rand() % (int) (");
         min.accept(this);
         this.sb.append(" - ");
@@ -593,7 +593,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+    public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         // TODO check why this is not working for Arduinos!
         this.sb.append("(ToString(");
         mathCastStringFunct.param.get(0).accept(this);
@@ -602,8 +602,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        List<Expr<Void>> texts = textJoinFunct.param.get();
+    public Void visitTextJoinFunct(TextJoinFunct textJoinFunct) {
+        List<Expr> texts = textJoinFunct.param.get();
         for ( int i = 0; i < texts.size(); i++ ) {
             this.sb.append("ToString(");
             texts.get(i).accept(this);
@@ -616,10 +616,10 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         String port = motorOnAction.getUserDefinedPort();
-        MotorDuration<Void> duration = motorOnAction.param.getDuration();
-        Expr<Void> speedExpression = motorOnAction.param.getSpeed();
+        MotorDuration duration = motorOnAction.param.getDuration();
+        Expr speedExpression = motorOnAction.param.getSpeed();
         if ( isActorOnPort(port) ) {
             boolean isRegulated = this.brickConfiguration.isMotorRegulated(port);
             if ( duration != null ) {
@@ -631,7 +631,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    private void generateRotateMotorForDuration(String port, Expr<Void> speedExpression, IMotorMoveMode durationMode, Expr<Void> durationExpression) {
+    private void generateRotateMotorForDuration(String port, Expr speedExpression, IMotorMoveMode durationMode, Expr durationExpression) {
         this.sb.append("RotateMotorForAngle(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ", ");
         visitSpeedExpression(speedExpression);
         this.sb.append(", ");
@@ -642,7 +642,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.sb.append(");");
     }
 
-    private void generateTurnOnMotor(String port, Expr<Void> speedExpression, boolean isRegulated) {
+    private void generateTurnOnMotor(String port, Expr speedExpression, boolean isRegulated) {
         String functionName = isRegulated ? "OnFwdReg" : "OnFwdEx";
         this.sb.append(functionName + "(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ", ");
         visitSpeedExpression(speedExpression);
@@ -653,9 +653,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
-        MotorDuration<Void> duration = driveAction.param.getDuration();
-        Expr<Void> speedExpression = driveAction.param.getSpeed();
+    public Void visitDriveAction(DriveAction driveAction) {
+        MotorDuration duration = driveAction.param.getDuration();
+        Expr speedExpression = driveAction.param.getSpeed();
         boolean reverse = isReverseGivenBrickConfigurationAndAction(driveAction.direction);
         if ( duration != null ) {
             generateDriveForDistance(speedExpression, duration.getValue(), reverse);
@@ -665,7 +665,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    private void generateDriveForDistance(Expr<Void> speedExpression, Expr<Void> distanceExpression, boolean reverse) {
+    private void generateDriveForDistance(Expr speedExpression, Expr distanceExpression, boolean reverse) {
         this.sb.append("RotateMotorForAngle(" + getDriveMotorPortsConstant() + ", ");
         visitSpeedExpression(speedExpression, reverse);
         this.sb.append(", ");
@@ -673,13 +673,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.sb.append(");");
     }
 
-    private void visitDistanceOfDrive(Expr<Void> distanceExpression) {
+    private void visitDistanceOfDrive(Expr distanceExpression) {
         this.sb.append("(");
         distanceExpression.accept(this);
         this.sb.append(" * 360) / (M_PI * WHEEL_DIAMETER)");
     }
 
-    private void generateDrive(Expr<Void> speedExpression, boolean reverse) {
+    private void generateDrive(Expr speedExpression, boolean reverse) {
         String methodName = reverse ? "OnRevSync" : "OnFwdSync";
         this.sb.append(methodName + "(" + getDriveMotorPortsConstant() + ", ");
         visitSpeedExpression(speedExpression);
@@ -687,7 +687,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+    public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         String port = motorGetPowerAction.getUserDefinedPort();
         if ( isActorOnPort(port) ) {
             this.sb.append("MotorPower(OUT_" + motorGetPowerAction.getUserDefinedPort() + ")");
@@ -696,7 +696,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+    public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
         String port = motorSetPowerAction.getUserDefinedPort();
         this.sb.append("SetPower(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ", ");
         visitSpeedExpression(motorSetPowerAction.power, isMotorReverse(port));
@@ -705,7 +705,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         String port = motorStopAction.getUserDefinedPort();
         if ( motorStopAction.mode == MotorStopMode.FLOAT ) {
             this.sb.append("Float(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ");");
@@ -716,14 +716,14 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+    public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         this.sb.append("Off(" + getDriveMotorPortsConstant() + ");");
         return null;
     }
 
     @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
-        MotorDuration<Void> duration = curveAction.paramLeft.getDuration();
+    public Void visitCurveAction(CurveAction curveAction) {
+        MotorDuration duration = curveAction.paramLeft.getDuration();
         boolean isReverse = isReverseGivenBrickConfigurationAndAction(curveAction.direction);
         this.sb.append(duration != null ? "SteerDriveForDistance(" : "SteerDrive(");
         this.sb.append(getLeftDriveMotorPort() + ", " + getRightDriveMotorPort() + ", ");
@@ -739,9 +739,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
-        MotorDuration<Void> duration = turnAction.param.getDuration();
-        Expr<Void> speedExpression = turnAction.param.getSpeed();
+    public Void visitTurnAction(TurnAction turnAction) {
+        MotorDuration duration = turnAction.param.getDuration();
+        Expr speedExpression = turnAction.param.getSpeed();
         int turn = getTurn(turnAction);
         if ( duration != null ) {
             generateTurnForDistance(speedExpression, duration.getValue(), turn);
@@ -765,7 +765,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return !Arrays.equals(charArray, sortedCharArray);
     }
 
-    private int getTurn(TurnAction<Void> turnAction) {
+    private int getTurn(TurnAction turnAction) {
         /**
          * Turn is from -200 to 200 O: motor run at the same power 100: one motor run at the specified power the other doesn't 200: one motor run at the
          * specified power and the other at negative power
@@ -783,7 +783,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return turn;
     }
 
-    private void generateTurnForDistance(Expr<Void> speedExpression, Expr<Void> distanceExpression, int turn) {
+    private void generateTurnForDistance(Expr speedExpression, Expr distanceExpression, int turn) {
         this.sb.append("RotateMotorForAngleWithTurn(" + getDriveMotorPortsConstant() + ", ");
         visitSpeedExpression(speedExpression);
         this.sb.append(", ");
@@ -791,24 +791,24 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.sb.append(", " + turn + ");");
     }
 
-    private void visitDistanceOfTurn(Expr<Void> distanceExpression) {
+    private void visitDistanceOfTurn(Expr distanceExpression) {
         this.sb.append("(");
         distanceExpression.accept(this);
         this.sb.append(" * TRACK_WIDTH / WHEEL_DIAMETER)");
     }
 
-    private void generateTurn(Expr<Void> speedExpression, int turn) {
+    private void generateTurn(Expr speedExpression, int turn) {
         this.sb.append("OnFwdSyncEx(" + getDriveMotorPortsConstant() + ", ");
         visitSpeedExpression(speedExpression);
         this.sb.append(", " + turn + ", RESET_NONE);");
 
     }
 
-    private void visitSpeedExpression(Expr<Void> speedExpression) {
+    private void visitSpeedExpression(Expr speedExpression) {
         visitSpeedExpression(speedExpression, false);
     }
 
-    private void visitSpeedExpression(Expr<Void> speedExpression, boolean reverse) {
+    private void visitSpeedExpression(Expr speedExpression, boolean reverse) {
         this.sb.append(reverse ? "-Speed(" : "Speed(");
         speedExpression.accept(this);
         this.sb.append(")");
@@ -870,7 +870,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
+    public Void visitEncoderSensor(EncoderSensor encoderSensor) {
         String port = encoderSensor.getUserDefinedPort();
         switch ( encoderSensor.getMode() ) {
             case SC.DEGREE:
@@ -912,7 +912,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         String timerNumber = timerSensor.getUserDefinedPort();
         switch ( timerSensor.getMode() ) {
             case SC.DEFAULT:
@@ -937,13 +937,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+    public Void visitTouchSensor(TouchSensor touchSensor) {
         this.sb.append("ReadEV3TouchSensor(").append(Ev3C4ev3Visitor.getPrefixedInputPort(touchSensor.getUserDefinedPort())).append(")");
         return null;
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         String port = ultrasonicSensor.getUserDefinedPort();
         if ( ultrasonicSensor.getMode().equals(SC.DISTANCE) ) {
             generateRealUltrasonicDistance(port);
@@ -962,13 +962,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+    public Void visitSoundSensor(SoundSensor soundSensor) {
         this.sb.append("ReadNXTSoundSensor(").append(Ev3C4ev3Visitor.getPrefixedInputPort(soundSensor.getUserDefinedPort())).append(", DB)");
         return null;
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
         String port = gyroSensor.getUserDefinedPort();
         String mode = gyroSensor.getMode();
         if ( mode.equals(SC.RESET) ) {
@@ -1001,7 +1001,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
+    public Void visitColorSensor(ColorSensor colorSensor) {
         String mode = colorSensor.getMode();
         String port = Ev3C4ev3Visitor.getPrefixedInputPort(colorSensor.getUserDefinedPort());
         switch ( mode ) {
@@ -1022,7 +1022,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
+    public Void visitHTColorSensor(HTColorSensor htColorSensor) {
         String mode = htColorSensor.getMode();
         String port = Ev3C4ev3Visitor.getPrefixedInputPort(htColorSensor.getUserDefinedPort());
         String functionName;
@@ -1047,7 +1047,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         String port = infraredSensor.getUserDefinedPort();
         switch ( infraredSensor.getMode() ) {
             case SC.DISTANCE:
@@ -1071,7 +1071,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+    public Void visitCompassSensor(CompassSensor compassSensor) {
         if ( compassSensor.getMode().equals(SC.CALIBRATE) ) {
             visitCalibrateCompass(compassSensor);
         } else {
@@ -1081,7 +1081,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    private void visitCalibrateCompass(CompassSensor<Void> compassSensor) {
+    private void visitCalibrateCompass(CompassSensor compassSensor) {
         String port = Ev3C4ev3Visitor.getPrefixedInputPort(compassSensor.getUserDefinedPort());
         nlIndent();
         this.sb.append("StartHTCompassCalibration(" + port + ");");
@@ -1090,7 +1090,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         nlIndent();
     }
 
-    private void visitReadCompass(CompassSensor<Void> compassSensor) {
+    private void visitReadCompass(CompassSensor compassSensor) {
         String mode = getCompassSensorReadModeConstant(compassSensor.getMode());
         this.sb.append("ReadHTCompassSensor(" + Ev3C4ev3Visitor.getPrefixedInputPort(compassSensor.getUserDefinedPort()) + ", " + mode + ")");
     }
@@ -1107,7 +1107,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
+    public Void visitIRSeekerSensor(IRSeekerSensor irSeekerSensor) {
         this.sb
             .append("ReadHTIrSensor(")
             .append(Ev3C4ev3Visitor.getPrefixedInputPort(irSeekerSensor.getUserDefinedPort()))
@@ -1137,7 +1137,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+    public Void visitKeysSensor(KeysSensor keysSensor) {
         this.sb.append("ButtonIsDown(" + getKeyConstant(keysSensor.getUserDefinedPort()) + ")");
         return null;
     }
@@ -1164,13 +1164,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         this.sb.append("LcdClean();");
         return null;
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+    public Void visitShowTextAction(ShowTextAction showTextAction) {
         this.sb.append("DrawString(ToString(");
         showTextAction.msg.accept(this);
         this.sb.append("), ");
@@ -1182,7 +1182,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
+    public Void visitPlayFileAction(PlayFileAction playFileAction) {
         String soundConstant = getSoundConstantByFileName(playFileAction.fileName);
         this.sb.append("PlaySystemSound(" + soundConstant + ");");
         return null;
@@ -1206,13 +1206,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         this.sb.append("NEPOPlayTone(" + playNoteAction.frequency + ", " + playNoteAction.duration + ");");
         return null;
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+    public Void visitVolumeAction(VolumeAction volumeAction) {
         switch ( volumeAction.mode ) {
             case SET:
                 generateSetVolume(volumeAction);
@@ -1226,7 +1226,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    private void generateSetVolume(VolumeAction<Void> volumeAction) {
+    private void generateSetVolume(VolumeAction volumeAction) {
         this.sb.append("SetVolume(");
         volumeAction.volume.accept(this);
         this.sb.append(");");
@@ -1237,7 +1237,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         this.sb.append("NEPOPlayTone(");
         toneAction.frequency.accept(this);
         this.sb.append(", ");
@@ -1247,14 +1247,14 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
+    public Void visitShowPictureAction(ShowPictureAction showPictureAction) {
         String picture = showPictureAction.pic.toString();
         this.sb.append("LcdPicture(LCD_COLOR_BLACK, 0, 0, " + picture + ");");
         return null;
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         String pattern = getLedPattern(lightAction.color, lightAction.mode);
         this.sb.append("SetLedPattern(" + pattern + ");");
         return null;
@@ -1282,7 +1282,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         switch ( lightStatusAction.status ) {
             case OFF:
                 this.sb.append("SetLedPattern(LED_BLACK);");
@@ -1297,7 +1297,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
+    public Void visitBluetoothReceiveAction(BluetoothReceiveAction bluetoothReceiveAction) {
         this.sb.append("NEPOReceiveStringFrom(");
         bluetoothReceiveAction.connection.accept(this);
         this.sb.append(")");
@@ -1305,7 +1305,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
+    public Void visitBluetoothConnectAction(BluetoothConnectAction bluetoothConnectAction) {
         this.sb.append("NEPOConnectTo(");
         bluetoothConnectAction.address.accept(this);
         this.sb.append(")");
@@ -1313,7 +1313,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
+    public Void visitBluetoothSendAction(BluetoothSendAction bluetoothSendAction) {
         this.sb.append("NEPOSendStringTo(");
         bluetoothSendAction.connection.accept(this);
         this.sb.append(", ");
@@ -1323,18 +1323,18 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
+    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction bluetoothWaitForConnection) {
         this.sb.append("NEPOWaitConnection()");
         return null;
     }
 
     @Override
-    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
+    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction bluetoothCheckConnectAction) {
         return null;
     }
 
     @Override
-    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+    public Void visitSetLanguageAction(SetLanguageAction setLanguageAction) {
         this.sb.append("SetLanguage(\"");
         this.sb.append(TTSLanguageMapper.getLanguageString(setLanguageAction.language));
         this.sb.append("\");");
@@ -1342,7 +1342,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
+    public Void visitSayTextAction(SayTextAction sayTextAction) {
         this.sb.append("Say(ToString(");
         sayTextAction.msg.accept(this);
         this.sb.append("), 30, 50);"); // set defaults
@@ -1350,7 +1350,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<Void> sayTextAction) {
+    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction sayTextAction) {
         this.sb.append("Say(ToString(");
         sayTextAction.msg.accept(this);
         this.sb.append("), ");

@@ -16,7 +16,7 @@ public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
     @Override
     public final void execute(Project project) {
         UsedHardwareBean usedHardwareBean = project.getWorkerResult(UsedHardwareBean.class);
-        AbstractStackMachineVisitor<Void> visitor = this.getVisitor(project, usedHardwareBean);
+        AbstractStackMachineVisitor visitor = this.getVisitor(project, usedHardwareBean);
         visitor.generateCodeFromPhrases(project.getProgramAst().getTree());
         JSONObject generatedCode = new JSONObject();
         generatedCode.put(C.OPS, visitor.getOpArray());
@@ -33,5 +33,5 @@ public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
      * @param usedHardwareBean the used hardware bean
      * @return the appropriate visitor for the current robot
      */
-    protected abstract AbstractStackMachineVisitor<Void> getVisitor(Project project, UsedHardwareBean usedHardwareBean);
+    protected abstract AbstractStackMachineVisitor getVisitor(Project project, UsedHardwareBean usedHardwareBean);
 }

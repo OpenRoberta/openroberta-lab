@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 
 public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollectorVisitor {
 
-    public CalliopeValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public CalliopeValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(brickConfiguration, beanBuilders);
     }
 }

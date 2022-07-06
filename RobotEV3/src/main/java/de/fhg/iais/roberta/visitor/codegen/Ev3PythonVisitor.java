@@ -88,7 +88,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
      * @param programPhrases to generate the code from
      */
     public Ev3PythonVisitor(
-        List<List<Phrase<Void>>> programPhrases,
+        List<List<Phrase>> programPhrases,
         ConfigurationAst brickConfiguration,
         ILanguage language,
         ClassToInstanceMap<IProjectBean> beans) {
@@ -100,7 +100,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
+    public Void visitWaitStmt(WaitStmt waitStmt) {
         this.sb.append("while True:");
         incrIndentation();
         visitStmtList(waitStmt.statements);
@@ -111,7 +111,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+    public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         this.sb.append("hal.waitFor(");
         waitTimeStmt.time.accept(this);
         this.sb.append(")");
@@ -119,13 +119,13 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         this.sb.append("hal.clearDisplay()");
         return null;
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+    public Void visitVolumeAction(VolumeAction volumeAction) {
         switch ( volumeAction.mode ) {
             case SET:
                 this.sb.append("hal.setVolume(");
@@ -142,7 +142,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+    public Void visitSetLanguageAction(SetLanguageAction setLanguageAction) {
         this.sb.append("hal.setLanguage(\"");
         this.sb.append(TTSLanguageMapper.getLanguageString(setLanguageAction.language));
         this.sb.append("\")");
@@ -150,7 +150,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
+    public Void visitSayTextAction(SayTextAction sayTextAction) {
         this.sb.append("hal.sayText(");
         if ( !sayTextAction.msg.getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
@@ -164,7 +164,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<Void> sayTextAction) {
+    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction sayTextAction) {
         this.sb.append("hal.sayText(");
         if ( !sayTextAction.msg.getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
@@ -182,13 +182,13 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         this.sb.append("hal.ledOn(" + getEnumCode(lightAction.color) + ", " + getEnumCode(lightAction.mode) + ")");
         return null;
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         switch ( lightStatusAction.status ) {
             case OFF:
                 this.sb.append("hal.ledOff()");
@@ -203,13 +203,13 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
+    public Void visitPlayFileAction(PlayFileAction playFileAction) {
         this.sb.append("hal.playFile(" + playFileAction.fileName + ")");
         return null;
     }
 
     @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
+    public Void visitShowPictureAction(ShowPictureAction showPictureAction) {
         this.sb.append("hal.drawPicture(predefinedImages['").append(showPictureAction.pic).append("'], ");
         showPictureAction.x.accept(this);
         this.sb.append(", ");
@@ -219,7 +219,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+    public Void visitShowTextAction(ShowTextAction showTextAction) {
         this.sb.append("hal.drawText(");
         if ( !showTextAction.msg.getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
@@ -237,7 +237,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         this.sb.append("hal.playTone(");
         toneAction.frequency.accept(this);
         this.sb.append(", ");
@@ -247,7 +247,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         this.sb.append("hal.playTone(float(");
         this.sb.append(playNoteAction.frequency);
         this.sb.append("), float(");
@@ -265,7 +265,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         String userDefinedPort = motorOnAction.getUserDefinedPort();
         if ( isActorOnPort(userDefinedPort) ) {
             String methodName;
@@ -289,7 +289,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+    public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
         String userDefinedPort = motorSetPowerAction.getUserDefinedPort();
         if ( isActorOnPort(userDefinedPort) ) {
             boolean isRegulated = this.brickConfiguration.isMotorRegulated(userDefinedPort);
@@ -302,7 +302,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+    public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         String userDefinedPort = motorGetPowerAction.getUserDefinedPort();
         if ( isActorOnPort(userDefinedPort) ) {
             boolean isRegulated = this.brickConfiguration.isMotorRegulated(userDefinedPort);
@@ -313,7 +313,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         if ( isActorOnPort(motorStopAction.getUserDefinedPort()) ) {
             this.sb
                 .append("hal.stopMotor('")
@@ -326,7 +326,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
+    public Void visitDriveAction(DriveAction driveAction) {
         if ( isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)) && isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.RIGHT)) ) {
             boolean isDuration = driveAction.param.getDuration() != null;
             String methodName = isDuration ? "hal.driveDistance(" : "hal.regulatedDrive(";
@@ -345,7 +345,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
+    public Void visitTurnAction(TurnAction turnAction) {
         String leftMotorPort = this.brickConfiguration.getFirstMotorPort(SC.LEFT);
         String rightMotorPort = this.brickConfiguration.getFirstMotorPort(SC.RIGHT);
         if ( isActorOnPort(leftMotorPort) && isActorOnPort(rightMotorPort) ) {
@@ -367,7 +367,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+    public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         String leftMotorPort = this.brickConfiguration.getFirstMotorPort(SC.LEFT);
         String rightMotorPort = this.brickConfiguration.getFirstMotorPort(SC.RIGHT);
         if ( isActorOnPort(leftMotorPort) && isActorOnPort(rightMotorPort) ) {
@@ -379,11 +379,11 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
+    public Void visitCurveAction(CurveAction curveAction) {
         String leftMotorPort = this.brickConfiguration.getFirstMotorPort(SC.LEFT);
         String rightMotorPort = this.brickConfiguration.getFirstMotorPort(SC.RIGHT);
         if ( isActorOnPort(leftMotorPort) && isActorOnPort(rightMotorPort) ) {
-            MotorDuration<Void> duration = curveAction.paramLeft.getDuration();
+            MotorDuration duration = curveAction.paramLeft.getDuration();
             this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EV3DevMethods.DRIVE_IN_CURVE)).append("(");
             this.sb.append(getEnumCode(curveAction.direction) + ", ");
             this.sb.append("'" + leftMotorPort + "', ");
@@ -400,7 +400,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+    public Void visitKeysSensor(KeysSensor keysSensor) {
         switch ( keysSensor.getMode() ) {
             case SC.PRESSED:
                 this.sb.append("hal.isKeyPressed('" + keysSensor.getUserDefinedPort().toLowerCase() + "')");
@@ -415,7 +415,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
+    public Void visitColorSensor(ColorSensor colorSensor) {
         String colorSensorPort = colorSensor.getUserDefinedPort();
         String colorSensorMode = colorSensor.getMode();
         String methodName;
@@ -440,7 +440,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
+    public Void visitHTColorSensor(HTColorSensor htColorSensor) {
         String colorSensorPort = htColorSensor.getUserDefinedPort();
         String colorSensorMode = htColorSensor.getMode();
         String methodName;
@@ -465,7 +465,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
+    public Void visitEncoderSensor(EncoderSensor encoderSensor) {
         String encoderSensorPort = encoderSensor.getUserDefinedPort().toString();
         if ( encoderSensor.getMode().equals(SC.RESET) ) {
             this.sb.append("hal.resetMotorTacho('" + encoderSensorPort + "')");
@@ -476,7 +476,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
         String gyroSensorPort = gyroSensor.getUserDefinedPort();
         if ( gyroSensor.getMode().equals(SC.RESET) ) {
             this.sb.append("hal.resetGyroSensor('" + gyroSensorPort + "')");
@@ -487,7 +487,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+    public Void visitCompassSensor(CompassSensor compassSensor) {
         String compassSensorPort = compassSensor.getUserDefinedPort();
         switch ( compassSensor.getMode() ) {
             case SC.CALIBRATE:
@@ -504,7 +504,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         String infraredSensorPort = infraredSensor.getUserDefinedPort();
         switch ( infraredSensor.getMode() ) {
             case SC.DISTANCE:
@@ -521,7 +521,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
+    public Void visitIRSeekerSensor(IRSeekerSensor irSeekerSensor) {
         String irSeekerSensorPort = irSeekerSensor.getUserDefinedPort();
         switch ( irSeekerSensor.getMode() ) {
             case SC.MODULATED:
@@ -537,7 +537,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         String timerNumber = timerSensor.getUserDefinedPort();
         switch ( timerSensor.getMode() ) {
             case SC.DEFAULT:
@@ -554,13 +554,13 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+    public Void visitTouchSensor(TouchSensor touchSensor) {
         this.sb.append("hal.isPressed('" + touchSensor.getUserDefinedPort() + "')");
         return null;
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         String ultrasonicSensorPort = ultrasonicSensor.getUserDefinedPort();
         if ( ultrasonicSensor.getMode().equals(SC.DISTANCE) ) {
             this.sb.append("hal.getUltraSonicSensorDistance('" + ultrasonicSensorPort + "')");
@@ -571,15 +571,15 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+    public Void visitSoundSensor(SoundSensor soundSensor) {
         String soundSensorPort = soundSensor.getUserDefinedPort();
         this.sb.append("hal.getSoundLevel('" + soundSensorPort + "')");
         return null;
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
-        StmtList<Void> variables = mainTask.variables;
+    public Void visitMainTask(MainTask mainTask) {
+        StmtList variables = mainTask.variables;
         variables.accept(this);
         generateUserDefinedMethods();
         nlIndent();
@@ -595,7 +595,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
+    public Void visitBluetoothReceiveAction(BluetoothReceiveAction bluetoothReadAction) {
         this.sb.append("hal.readMessage(");
         bluetoothReadAction.connection.accept(this);
         this.sb.append(")");
@@ -603,7 +603,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
+    public Void visitBluetoothConnectAction(BluetoothConnectAction bluetoothConnectAction) {
         this.sb.append("hal.establishConnectionTo(");
         if ( !bluetoothConnectAction.address.getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
@@ -617,7 +617,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
+    public Void visitBluetoothSendAction(BluetoothSendAction bluetoothSendAction) {
         this.sb.append("hal.sendMessage(");
         bluetoothSendAction.connection.accept(this);
         this.sb.append(", ");
@@ -633,29 +633,29 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
+    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction bluetoothWaitForConnection) {
         this.sb.append("hal.waitForConnection()");
         return null;
     }
 
     @Override
-    public Void visitConnectConst(ConnectConst<Void> connectConst) {
+    public Void visitConnectConst(ConnectConst connectConst) {
         return null;
     }
 
     @Override
-    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
+    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction bluetoothCheckConnectAction) {
         return null;
     }
 
     @Override
-    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
+    public Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.RANDOM_DOUBLE)).append("()");
         return null;
     }
 
     @Override
-    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
+    public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.RANDOM)).append("(");
         mathRandomIntFunct.param.get(0).accept(this);
         this.sb.append(", ");
@@ -921,7 +921,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
+    public Void visitColorConst(ColorConst colorConst) {
         String color = "";
         switch ( colorConst.getHexValueAsString().toUpperCase() ) {
             case "#000000":

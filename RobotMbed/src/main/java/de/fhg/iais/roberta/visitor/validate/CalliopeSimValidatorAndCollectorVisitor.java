@@ -27,36 +27,36 @@ import de.fhg.iais.roberta.visitor.IMbedVisitorWithoutDefault;
 
 public final class CalliopeSimValidatorAndCollectorVisitor extends MbedValidatorAndCollectorVisitor implements IMbedVisitorWithoutDefault<Void> {
 
-    public CalliopeSimValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public CalliopeSimValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(brickConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         addWarningToPhrase(ultrasonicSensor, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitUltrasonicSensor(ultrasonicSensor);
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         addWarningToPhrase(lightAction, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitLightAction(lightAction);
     }
 
     @Override
-    public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
+    public Void visitRadioSendAction(RadioSendAction radioSendAction) {
         addWarningToPhrase(radioSendAction, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitRadioSendAction(radioSendAction);
     }
 
     @Override
-    public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
+    public Void visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
         addWarningToPhrase(radioReceiveAction, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitRadioReceiveAction(radioReceiveAction);
     }
 
     @Override
-    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
+    public Void visitPinGetValueSensor(PinGetValueSensor pinValueSensor) {
         if ( pinValueSensor.getMode().equals(SC.PULSEHIGH) || pinValueSensor.getMode().equals(SC.PULSELOW) || pinValueSensor.getMode().equals(SC.PULSE) ) {
             addWarningToPhrase(pinValueSensor, "SIM_BLOCK_NOT_SUPPORTED");
         }
@@ -64,79 +64,79 @@ public final class CalliopeSimValidatorAndCollectorVisitor extends MbedValidator
     }
 
     @Override
-    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
+    public Void visitColorSensor(ColorSensor colorSensor) {
         addWarningToPhrase(colorSensor, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitColorSensor(colorSensor);
     }
 
     @Override
-    public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
+    public Void visitRadioSetChannelAction(RadioSetChannelAction radioSetChannelAction) {
         addWarningToPhrase(radioSetChannelAction, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitRadioSetChannelAction(radioSetChannelAction);
     }
 
     @Override
-    public Void visitRadioRssiSensor(RadioRssiSensor<Void> radioRssiSensor) {
+    public Void visitRadioRssiSensor(RadioRssiSensor radioRssiSensor) {
         addWarningToPhrase(radioRssiSensor, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitRadioRssiSensor(radioRssiSensor);
     }
 
     @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
         addWarningToPhrase(accelerometerSensor, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitAccelerometerSensor(accelerometerSensor);
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
         addWarningToPhrase(gyroSensor, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitGyroSensor(gyroSensor);
     }
 
     @Override
-    public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<Void> fourDigitDisplayShowAction) {
+    public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction fourDigitDisplayShowAction) {
         addWarningToPhrase(fourDigitDisplayShowAction, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitFourDigitDisplayShowAction(fourDigitDisplayShowAction);
     }
 
     @Override
-    public Void visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<Void> fourDigitDisplayClearAction) {
+    public Void visitFourDigitDisplayClearAction(FourDigitDisplayClearAction fourDigitDisplayClearAction) {
         addWarningToPhrase(fourDigitDisplayClearAction, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitFourDigitDisplayClearAction(fourDigitDisplayClearAction);
     }
 
     @Override
-    public Void visitLedBarSetAction(LedBarSetAction<Void> ledBarSetAction) {
+    public Void visitLedBarSetAction(LedBarSetAction ledBarSetAction) {
         addWarningToPhrase(ledBarSetAction, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitLedBarSetAction(ledBarSetAction);
     }
 
     @Override
-    public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
+    public Void visitHumiditySensor(HumiditySensor humiditySensor) {
         addWarningToPhrase(humiditySensor, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitHumiditySensor(humiditySensor);
     }
 
     @Override
-    public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction<Void> switchLedMatrixAction) {
+    public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction) {
         addWarningToPhrase(switchLedMatrixAction, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitSwitchLedMatrixAction(switchLedMatrixAction);
     }
 
     @Override
-    public Void visitServoSetAction(ServoSetAction<Void> servoSetAction) {
+    public Void visitServoSetAction(ServoSetAction servoSetAction) {
         addWarningToPhrase(servoSetAction, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitServoSetAction(servoSetAction);
     }
 
     @Override
-    public Void visitMotionKitSingleSetAction(MotionKitSingleSetAction<Void> motionKitSingleSetAction) {
+    public Void visitMotionKitSingleSetAction(MotionKitSingleSetAction motionKitSingleSetAction) {
         addWarningToPhrase(motionKitSingleSetAction, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitMotionKitSingleSetAction(motionKitSingleSetAction);
     }
 
     @Override
-    public Void visitMotionKitDualSetAction(MotionKitDualSetAction<Void> motionKitDualSetAction) {
+    public Void visitMotionKitDualSetAction(MotionKitDualSetAction motionKitDualSetAction) {
         addWarningToPhrase(motionKitDualSetAction, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitMotionKitDualSetAction(motionKitDualSetAction);
     }

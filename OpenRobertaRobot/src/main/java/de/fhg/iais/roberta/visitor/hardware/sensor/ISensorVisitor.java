@@ -37,7 +37,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param keysSensor to be visited
      */
-    default V visitKeysSensor(KeysSensor<V> keysSensor) {
+    default V visitKeysSensor(KeysSensor keysSensor) {
         throw new DbcException("KeysSensor not implemented!");
     }
 
@@ -46,7 +46,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param colorSensor to be visited
      */
-    default V visitColorSensor(ColorSensor<V> colorSensor) {
+    default V visitColorSensor(ColorSensor colorSensor) {
         throw new DbcException("ColorSensor not implemented!");
     }
 
@@ -55,7 +55,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param lightSensor to be visited
      */
-    default V visitLightSensor(LightSensor<V> lightSensor) {
+    default V visitLightSensor(LightSensor lightSensor) {
         throw new DbcException("LightSensor not implemented!");
     }
 
@@ -64,7 +64,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param soundSensor to be visited
      */
-    default V visitSoundSensor(SoundSensor<V> soundSensor) {
+    default V visitSoundSensor(SoundSensor soundSensor) {
         throw new DbcException("SoundSensor not implemented!");
     }
 
@@ -73,7 +73,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param encoderSensor to be visited
      */
-    default V visitEncoderSensor(EncoderSensor<V> encoderSensor) {
+    default V visitEncoderSensor(EncoderSensor encoderSensor) {
         throw new DbcException("EncoderSensor not implemented!");
     }
 
@@ -82,7 +82,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param gyroSensor to be visited
      */
-    default V visitGyroSensor(GyroSensor<V> gyroSensor) {
+    default V visitGyroSensor(GyroSensor gyroSensor) {
         throw new DbcException("GyroSensor not implemented!");
     }
 
@@ -91,7 +91,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param infraredSensor to be visited
      */
-    default V visitInfraredSensor(InfraredSensor<V> infraredSensor) {
+    default V visitInfraredSensor(InfraredSensor infraredSensor) {
         throw new DbcException("InfraredSensor not implemented!");
     }
 
@@ -100,7 +100,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param timerSensor to be visited
      */
-    default V visitTimerSensor(TimerSensor<V> timerSensor) {
+    default V visitTimerSensor(TimerSensor timerSensor) {
         throw new DbcException("TimerSensor not implemented!");
     }
 
@@ -109,7 +109,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param touchSensor to be visited
      */
-    default V visitTouchSensor(TouchSensor<V> touchSensor) {
+    default V visitTouchSensor(TouchSensor touchSensor) {
         throw new DbcException("TouchSensor not implemented!");
     }
 
@@ -118,7 +118,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param ultrasonicSensor to be visited
      */
-    default V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor) {
+    default V visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         throw new DbcException("UltrasonicSensor not implemented!");
     }
 
@@ -127,7 +127,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param compassSensor to be visited
      */
-    default V visitCompassSensor(CompassSensor<V> compassSensor) {
+    default V visitCompassSensor(CompassSensor compassSensor) {
         throw new DbcException("CompassSensor not implemented!");
     }
 
@@ -136,7 +136,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param temperatureSensor to be visited
      */
-    default V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor) {
+    default V visitTemperatureSensor(TemperatureSensor temperatureSensor) {
         throw new DbcException("TemperatureSensor not implemented!");
     }
 
@@ -145,7 +145,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param voltageSensor to be visited
      */
-    default V visitVoltageSensor(VoltageSensor<V> voltageSensor) {
+    default V visitVoltageSensor(VoltageSensor voltageSensor) {
         throw new DbcException("VoltageSensor not implemented!");
     }
 
@@ -154,7 +154,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param accelerometerSensor to be visited
      */
-    default V visitAccelerometerSensor(AccelerometerSensor<V> accelerometerSensor) {
+    default V visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
         throw new DbcException("AccelerometerSensor not implemented!");
     }
 
@@ -163,7 +163,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param pinTouchSensor to be visited
      */
-    default V visitPinTouchSensor(PinTouchSensor<V> pinTouchSensor) {
+    default V visitPinTouchSensor(PinTouchSensor pinTouchSensor) {
         throw new DbcException("PinTouchSensor not implemented!");
     }
 
@@ -172,7 +172,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param gestureSensor to be visited
      */
-    default V visitGestureSensor(GestureSensor<V> gestureSensor) {
+    default V visitGestureSensor(GestureSensor gestureSensor) {
         throw new DbcException("GestureSensor not implemented!");
     }
 
@@ -181,7 +181,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param pinGetValueSensor to be visited
      */
-    default V visitPinGetValueSensor(PinGetValueSensor<V> pinGetValueSensor) {
+    default V visitPinGetValueSensor(PinGetValueSensor pinGetValueSensor) {
         throw new DbcException("PinGetValueSensor not implemented!");
     }
 
@@ -190,7 +190,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param sensorGetSample to be visited
      */
-    default V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
+    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
         sensorGetSample.sensor.accept(this);
         return null;
     }
@@ -200,7 +200,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param irSeekerSensor to be visited
      */
-    default V visitIRSeekerSensor(IRSeekerSensor<V> irSeekerSensor) {
+    default V visitIRSeekerSensor(IRSeekerSensor irSeekerSensor) {
         throw new DbcException("IRSeekerSensor not implemented!");
     }
 
@@ -209,7 +209,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param moistureSensor to be visited
      */
-    default V visitMoistureSensor(MoistureSensor<V> moistureSensor) {
+    default V visitMoistureSensor(MoistureSensor moistureSensor) {
         throw new DbcException("MoistureSensor not implemented!");
     }
 
@@ -218,7 +218,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param humiditySensor to be visited
      */
-    default V visitHumiditySensor(HumiditySensor<V> humiditySensor) {
+    default V visitHumiditySensor(HumiditySensor humiditySensor) {
         throw new DbcException("HumiditySensor not implemented!");
     }
 
@@ -228,7 +228,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      * @param motionSensor to be visited
      */
 
-    default V visitMotionSensor(MotionSensor<V> motionSensor) {
+    default V visitMotionSensor(MotionSensor motionSensor) {
         throw new DbcException("MotionSensor not implemented!");
     }
 
@@ -238,7 +238,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      * @param dropSensor to be visited
      */
 
-    default V visitDropSensor(DropSensor<V> dropSensor) {
+    default V visitDropSensor(DropSensor dropSensor) {
         throw new DbcException("DropSensor not implemented!");
     }
 
@@ -248,7 +248,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      * @param pulseSensor to be visited
      */
 
-    default V visitPulseSensor(PulseSensor<V> pulseSensor) {
+    default V visitPulseSensor(PulseSensor pulseSensor) {
         throw new DbcException("PulseSensor not implemented!");
     }
 
@@ -258,7 +258,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      * @param rfidSensor to be visited
      */
 
-    default V visitRfidSensor(RfidSensor<V> rfidSensor) {
+    default V visitRfidSensor(RfidSensor rfidSensor) {
         throw new DbcException("RfidSensor not implemented!");
     }
 
@@ -268,7 +268,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      * @param vemlLightSensor to be visited
      */
 
-    default V visitVemlLightSensor(VemlLightSensor<V> vemlLightSensor) {
+    default V visitVemlLightSensor(VemlLightSensor vemlLightSensor) {
         throw new DbcException("VEML light sensor not implemented!");
     }
 
@@ -278,7 +278,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      * @param particleSensor to be visited
      */
 
-    default V visitParticleSensor(ParticleSensor<V> particleSensor) {
+    default V visitParticleSensor(ParticleSensor particleSensor) {
         throw new DbcException("Particle sensor not implemented!");
     }
 
@@ -287,7 +287,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param htColorSensor to be visited
      */
-    default V visitHTColorSensor(HTColorSensor<V> htColorSensor) {
+    default V visitHTColorSensor(HTColorSensor htColorSensor) {
         throw new DbcException("HTColorSensor not implemented!");
     }
 }

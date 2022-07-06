@@ -293,18 +293,18 @@ public class Jaxb2Ast {
      *
      * @param p to be converted to expression
      */
-    public static <V> Expr<V> convertPhraseToExpr(Phrase<V> p) {
-        Expr<V> expr;
+    public static Expr convertPhraseToExpr(Phrase p) {
+        Expr expr;
         if ( p.getKind().getCategory() == Category.SENSOR ) {
-            expr = new SensorExpr<V>((Sensor<V>) p);
+            expr = new SensorExpr((Sensor) p);
         } else if ( p.getKind().getCategory() == Category.ACTOR ) {
-            expr = new ActionExpr<V>((Action<V>) p);
+            expr = new ActionExpr((Action) p);
         } else if ( p.getKind().getCategory() == Category.FUNCTION ) {
-            expr = new FunctionExpr<V>((Function<V>) p);
+            expr = new FunctionExpr((Function) p);
         } else if ( p.getKind().getCategory() == Category.METHOD ) {
-            expr = new MethodExpr<>((Method<V>) p);
+            expr = new MethodExpr((Method) p);
         } else {
-            expr = (Expr<V>) p;
+            expr = (Expr) p;
         }
         return expr;
     }
@@ -315,11 +315,11 @@ public class Jaxb2Ast {
      * @param block from which variable is extracted
      * @return AST object representing variable
      */
-    public static <V> Phrase<V> extractVar(Block block) {
+    public static Phrase extractVar(Block block) {
         String typeVar = block.getMutation() != null ? block.getMutation().getDatatype() : BlocklyConstants.NUMBER;
         List<Field> fields = extractFields(block, (short) 1);
         String field = extractField(fields, BlocklyConstants.VAR);
-        return new Var<>(BlocklyType.get(typeVar), field, extractBlocklyProperties(block));
+        return new Var(BlocklyType.get(typeVar), field, extractBlocklyProperties(block));
     }
 
     public static Block shadow2block(Shadow shadow) {

@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "SET_LANGUAGE", category = "ACTOR", blocklyNames = {"naoActions_setLanguage", "robActions_setLanguage"})
-public final class SetLanguageAction<V> extends Action<V> {
+public final class SetLanguageAction extends Action {
 
     public final ILanguage language;
 
@@ -33,13 +33,13 @@ public final class SetLanguageAction<V> extends Action<V> {
         return "SetLanguage [" + this.language + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
 
         String language = Jaxb2Ast.extractField(fields, BlocklyConstants.LANGUAGE);
 
-        return new SetLanguageAction<V>(factory.getLanguageMode(language), Jaxb2Ast.extractBlocklyProperties(block));
+        return new SetLanguageAction(factory.getLanguageMode(language), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
 @NepoExpr(sampleValues = {@F2M(field = "ELECTRICCURRENT_VALUE", mode = "VALUE")}, name = "ELECTRIC_CURRENT", category = "SENSOR", blocklyNames = {"robSensors_electriccurrent_getSample"})
 @NepoExternalSensor
-public final class ElectricCurrentSensor<V> extends ExternalSensor<V> {
+public final class ElectricCurrentSensor extends ExternalSensor {
 
     public ElectricCurrentSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);

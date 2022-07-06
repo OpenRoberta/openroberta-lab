@@ -11,13 +11,13 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "SENSOR", blocklyNames = {"naoSensors_recognizeWord"}, name = "RECOGNIZE_WORD")
-public final class RecognizeWord<V> extends Sensor<V> {
+public final class RecognizeWord extends Sensor {
     @NepoValue(name = BlocklyConstants.WORD, type = BlocklyType.STRING)
-    public final Expr<V> vocabulary;
+    public final Expr vocabulary;
     @NepoField(name = BlocklyConstants.MODE)
     public final String mode;
 
-    public RecognizeWord(BlocklyProperties properties, Expr<V> vocabulary, String mode) {
+    public RecognizeWord(BlocklyProperties properties, Expr vocabulary, String mode) {
         super(properties);
         Assert.isTrue(vocabulary != null);
         this.vocabulary = vocabulary;

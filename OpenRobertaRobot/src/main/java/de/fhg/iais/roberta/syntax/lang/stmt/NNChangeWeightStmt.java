@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 @NepoPhrase(category = "STMT", blocklyNames = {"robActions_change_weight"}, name = "NN_CHANGE_WEIGHT_STMT")
-public final class NNChangeWeightStmt<V> extends Stmt<V> {
+public final class NNChangeWeightStmt extends Stmt {
     @NepoField(name = "FROM")
     public final String from;
 
@@ -20,9 +20,9 @@ public final class NNChangeWeightStmt<V> extends Stmt<V> {
     public final String change;
 
     @NepoValue(name = "VALUE", type = BlocklyType.NUMBER)
-    public final Expr<V> value;
+    public final Expr value;
 
-    public NNChangeWeightStmt(BlocklyProperties properties, String from, String to, String change, Expr<V> value) {
+    public NNChangeWeightStmt(BlocklyProperties properties, String from, String to, String change, Expr value) {
         super(properties);
         Assert.isTrue(value.isReadOnly() && value != null);
         this.from = from;

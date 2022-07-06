@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "AUTONOMOUS", category = "ACTOR", blocklyNames = {"naoActions_autonomous"})
-public final class Autonomous<V> extends Action<V> {
+public final class Autonomous extends Action {
 
     public final WorkingState onOff;
 
@@ -27,12 +27,12 @@ public final class Autonomous<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
 
         String onOff = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
 
-        return new Autonomous<>(WorkingState.get(onOff), Jaxb2Ast.extractBlocklyProperties(block));
+        return new Autonomous(WorkingState.get(onOff), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

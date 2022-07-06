@@ -59,7 +59,7 @@ public final class Project {
     private RobotFactory robotFactory;
     private boolean withWrapping = true;
     private boolean isNativeEditorCode = false;
-    private ProgramAst<Void> program = null;
+    private ProgramAst program = null;
     private ConfigurationAst configuration = null;
     private StringBuilder sourceCodeBuilder = new StringBuilder();
     private String compiledHex = "";
@@ -80,22 +80,22 @@ public final class Project {
         return writer.toString();
     }
 
-    private static BlockSet astToJaxb(ProgramAst<Void> program) {
+    private static BlockSet astToJaxb(ProgramAst program) {
         Assert.notNull(program);
-        List<List<Phrase<Void>>> astProgram = program.getTree();
+        List<List<Phrase>> astProgram = program.getTree();
         BlockSet blockSet = new BlockSet();
         blockSet.setDescription(program.getDescription());
         blockSet.setRobottype(program.getRobotType());
         blockSet.setTags(program.getTags());
         blockSet.setXmlversion(program.getXmlVersion());
 
-        for ( List<Phrase<Void>> tree : astProgram ) {
+        for ( List<Phrase> tree : astProgram ) {
             Instance instance = new Instance();
             blockSet.getInstance().add(instance);
-            for ( Phrase<Void> phrase : tree ) {
+            for ( Phrase phrase : tree ) {
                 if ( phrase.getKind().hasName("LOCATION") ) {
-                    instance.setX(((Location<Void>) phrase).x);
-                    instance.setY(((Location<Void>) phrase).y);
+                    instance.setX(((Location) phrase).x);
+                    instance.setY(((Location) phrase).y);
                 }
                 instance.getBlock().add(phrase.astToBlock());
             }
@@ -176,11 +176,11 @@ public final class Project {
     /**
      * @return the programTransformer
      */
-    public ProgramAst<Void> getProgramAst() {
+    public ProgramAst getProgramAst() {
         return this.program;
     }
 
-    public void setProgramAst(ProgramAst<Void> program) {
+    public void setProgramAst(ProgramAst program) {
         this.program = program;
     }
 
@@ -407,7 +407,7 @@ public final class Project {
             return this;
         }
 
-        public Builder setProgramAst(ProgramAst<Void> programAst) {
+        public Builder setProgramAst(ProgramAst programAst) {
             this.project.program = programAst;
             return this;
         }
@@ -452,7 +452,7 @@ public final class Project {
                     if ( xmlversion == null || xmlversion.isEmpty() ) {
                         blockSet.setXmlversion("2.0");
                     }
-                    Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst<>(this.project.robotFactory);
+                    Jaxb2ProgramAst transformer = new Jaxb2ProgramAst(this.project.robotFactory);
                     this.project.program = transformer.blocks2Ast(blockSet);
                 } catch ( JAXBException e ) {
                     LOG.error("Transformer failed", e);

@@ -19,11 +19,11 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "BOB3_RGB_LED_ON", category = "ACTOR", blocklyNames = {"makeblockActions_leds_on"})
-public final class LedOnAction<V> extends Action<V> {
-    public final Expr<V> ledColor;
+public final class LedOnAction extends Action {
+    public final Expr ledColor;
     public final String side;
 
-    public LedOnAction(String side, Expr<V> ledColor, BlocklyProperties properties) {
+    public LedOnAction(String side, Expr ledColor, BlocklyProperties properties) {
         super(properties);
         Assert.notNull(ledColor);
         this.ledColor = ledColor;
@@ -36,14 +36,14 @@ public final class LedOnAction<V> extends Action<V> {
         return "LedOnAction [ " + this.ledColor + " ]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         String side = Jaxb2Ast.extractField(fields, BlocklyConstants.LED + BlocklyConstants.SIDE);
 
-        Phrase<V> ledColor = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
+        Phrase ledColor = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
 
-        return new LedOnAction<>(side, Jaxb2Ast.convertPhraseToExpr(ledColor), Jaxb2Ast.extractBlocklyProperties(block));
+        return new LedOnAction(side, Jaxb2Ast.convertPhraseToExpr(ledColor), Jaxb2Ast.extractBlocklyProperties(block));
 
     }
 

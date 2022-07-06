@@ -12,15 +12,15 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_ultrasonic2_led"}, name = "ULTRASONIC2_LIGHT_ACTION")
-public final class Ultrasonic2LEDAction<V> extends Action<V> implements WithUserDefinedPort<V> {
+public final class Ultrasonic2LEDAction extends Action implements WithUserDefinedPort {
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;
     @NepoField(name = BlocklyConstants.LED, value = BlocklyConstants.EMPTY_PORT)
     public final String led;
     @NepoValue(name = BlocklyConstants.BRIGHTNESS, type = BlocklyType.NUMBER_INT)
-    public final Expr<V> brightness;
+    public final Expr brightness;
 
-    public Ultrasonic2LEDAction(BlocklyProperties properties, String port, String led, Expr<V> brightness) {
+    public Ultrasonic2LEDAction(BlocklyProperties properties, String port, String led, Expr brightness) {
         super(properties);
         Assert.notNull(brightness);
         Assert.nonEmptyString(port);

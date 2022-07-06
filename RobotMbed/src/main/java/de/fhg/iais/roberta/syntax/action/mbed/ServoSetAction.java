@@ -11,13 +11,13 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 @NepoPhrase(name = "SERVO_SET_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_servo_set"})
-public final class ServoSetAction<V> extends Action<V> implements WithUserDefinedPort<V> {
+public final class ServoSetAction extends Action implements WithUserDefinedPort {
     @NepoField(name = "PIN_PORT")
     public final String port;
     @NepoValue(name = "VALUE", type = BlocklyType.NUMBER_INT)
-    public final Expr<V> value;
+    public final Expr value;
 
-    public ServoSetAction(BlocklyProperties properties, String port, Expr<V> value) {
+    public ServoSetAction(BlocklyProperties properties, String port, Expr value) {
         super(properties);
         Assert.notNull(port);
         Assert.notNull(value);

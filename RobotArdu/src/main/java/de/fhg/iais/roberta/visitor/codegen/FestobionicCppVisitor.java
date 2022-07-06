@@ -42,18 +42,18 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
      *
      * @param phrases to generate the code from
      */
-    public FestobionicCppVisitor(List<List<Phrase<Void>>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
+    public FestobionicCppVisitor(List<List<Phrase>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, brickConfiguration, beans);
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         this.sb.append("digitalWrite(_led_").append(lightAction.port).append(", ").append(lightAction.mode.getValues()[0]).append(");");
         return null;
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         this.sb.append("_servo_").append(motorOnAction.getUserDefinedPort()).append(".write(");
         motorOnAction.param.getSpeed().accept(this);
         this.sb.append(");");
@@ -61,7 +61,7 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
+    public Void visitMainTask(MainTask mainTask) {
         mainTask.variables.accept(this);
         nlIndent();
         generateConfigurationVariables();

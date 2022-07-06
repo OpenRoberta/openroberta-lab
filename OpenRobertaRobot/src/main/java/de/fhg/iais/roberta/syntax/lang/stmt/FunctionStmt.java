@@ -9,10 +9,10 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * Wraps subclasses of the class {@link Function} so they can be used as {@link Stmt} in statements.
  */
 @NepoBasic(name = "FUNCTION_STMT", category = "STMT", blocklyNames = {})
-public final class FunctionStmt<V> extends Stmt<V> {
-    public final Function<V> function;
+public final class FunctionStmt extends Stmt {
+    public final Function function;
 
-    public FunctionStmt(Function<V> function) {
+    public FunctionStmt(Function function) {
         super(function.getProperty());
         Assert.isTrue(function != null && function.isReadOnly());
         this.function = function;

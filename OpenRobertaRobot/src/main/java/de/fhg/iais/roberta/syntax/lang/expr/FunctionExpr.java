@@ -12,10 +12,10 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
  * Wraps subclasses of the class {@link Function} so they can be used as {@link Expr} in expressions.
  */
 @NepoBasic(name = "FUNCTION_EXPR", category = "EXPR", blocklyNames = {})
-public final class FunctionExpr<V> extends Expr<V> {
-    public final Function<V> function;
+public final class FunctionExpr extends Expr {
+    public final Function function;
 
-    public FunctionExpr(Function<V> function) {
+    public FunctionExpr(Function function) {
         super(function.getProperty());
         Assert.isTrue(function.isReadOnly());
         this.function = function;
@@ -25,7 +25,7 @@ public final class FunctionExpr<V> extends Expr<V> {
     /**
      * @return function that is wrapped in the expression
      */
-    public Function<V> getFunction() {
+    public Function getFunction() {
         return this.function;
     }
 
@@ -51,7 +51,7 @@ public final class FunctionExpr<V> extends Expr<V> {
 
     @Override
     public Block astToBlock() {
-        Phrase<V> p = this.getFunction();
+        Phrase p = this.getFunction();
         return p.astToBlock();
     }
 }

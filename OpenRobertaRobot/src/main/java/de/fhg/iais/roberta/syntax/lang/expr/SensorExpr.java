@@ -12,10 +12,10 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
  * Wraps subclasses of the class {@link Sensor} so they can be used as {@link Expr} in expressions.
  */
 @NepoBasic(name = "SENSOR_EXPR", category = "EXPR", blocklyNames = {})
-public final class SensorExpr<V> extends Expr<V> {
-    public final Sensor<V> sensor;
+public final class SensorExpr extends Expr {
+    public final Sensor sensor;
 
-    public SensorExpr(Sensor<V> sens) {
+    public SensorExpr(Sensor sens) {
         super(sens.getProperty());
         Assert.isTrue(sens.isReadOnly());
         this.sensor = sens;
@@ -44,7 +44,7 @@ public final class SensorExpr<V> extends Expr<V> {
 
     @Override
     public Block astToBlock() {
-        Phrase<V> p = this.sensor;
+        Phrase p = this.sensor;
         return p.astToBlock();
     }
 }

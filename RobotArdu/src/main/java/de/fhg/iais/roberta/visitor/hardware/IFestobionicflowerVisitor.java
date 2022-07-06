@@ -8,14 +8,14 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 
 public interface IFestobionicflowerVisitor<V> {
 
-    V visitLedOffAction(LedOffAction<V> ledOffAction);
+    V visitLedOffAction(LedOffAction ledOffAction);
 
-    V visitLedOnAction(LedOnAction<V> ledOnAction);
+    V visitLedOnAction(LedOnAction ledOnAction);
 
-    V visitStepMotorAction(StepMotorAction<V> stepMotorAction);
+    V visitStepMotorAction(StepMotorAction stepMotorAction);
 
-    V visitTouchSensor(TouchSensor<Void> touchSensor);
+    V visitTouchSensor(TouchSensor touchSensor);
 
-    V visitLightSensor(LightSensor<V> lightSensor);
+    V visitLightSensor(LightSensor lightSensor);
 
 }

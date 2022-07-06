@@ -20,12 +20,12 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "LED_MATRIX_TEXT_ACTION", category = "ACTOR", blocklyNames = {"mBotActions_display_text"})
-public final class LEDMatrixTextAction<V> extends Action<V> {
+public final class LEDMatrixTextAction extends Action {
     public final String port;
-    public final Expr<V> msg;
+    public final Expr msg;
     public final String displayMode;
 
-    public LEDMatrixTextAction(String port, String displayMode, Expr<V> msg, BlocklyProperties properties) {
+    public LEDMatrixTextAction(String port, String displayMode, Expr msg, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(msg != null && port != null);
         this.port = port;
@@ -39,18 +39,18 @@ public final class LEDMatrixTextAction<V> extends Action<V> {
         return "DisplayTextAction [" + this.msg + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         final String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT);
-        Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.OUT, BlocklyType.STRING));
+        Phrase msg = helper.extractValue(values, new ExprParam(BlocklyConstants.OUT, BlocklyType.STRING));
         String displayMode = "";
         try {
             displayMode = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
         } catch ( DbcException e ) {
             displayMode = "TEXT";
         }
-        return new LEDMatrixTextAction<>(port, displayMode, Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlocklyProperties(block));
+        return new LEDMatrixTextAction(port, displayMode, Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

@@ -17,17 +17,17 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "IF_STMT", category = "STMT", blocklyNames = {"robControls_ifElse", "controls_if", "robControls_if"})
-public final class IfStmt<V> extends Stmt<V> {
-    public final List<Expr<V>> expr;
-    public final List<StmtList<V>> thenList;
-    public final StmtList<V> elseList;
+public final class IfStmt extends Stmt {
+    public final List<Expr> expr;
+    public final List<StmtList> thenList;
+    public final StmtList elseList;
     public final int _else;
     public final int _elseIf;
 
     public IfStmt(
-        BlocklyProperties properties, List<Expr<V>> expr,
-        List<StmtList<V>> thenList,
-        StmtList<V> elseList,
+        BlocklyProperties properties, List<Expr> expr,
+        List<StmtList> thenList,
+        StmtList elseList,
         int _else,
         int _elseIf) {
         super(properties);
@@ -61,7 +61,7 @@ public final class IfStmt<V> extends Stmt<V> {
         return sb.toString();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         Mutation mutation = block.getMutation();
         int _else = Jaxb2Ast.getElse(mutation);
         int _elseIf = Jaxb2Ast.getElseIf(mutation);
@@ -83,7 +83,7 @@ public final class IfStmt<V> extends Stmt<V> {
         int _else = this._else;
         int _elseIf = this._elseIf;
 
-        StmtList<?> elseList = this.elseList;
+        StmtList elseList = this.elseList;
         int expr = 0;
         expr = this.expr.size();
 

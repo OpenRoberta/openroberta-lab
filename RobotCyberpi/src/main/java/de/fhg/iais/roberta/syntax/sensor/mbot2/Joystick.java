@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 @NepoPhrase(name = "JOYSTICK_SENSING", category = "SENSOR", blocklyNames = {"robSensors_joystickKeys_getSample"},
     sampleValues = {@F2M(field = "JOYSTICK_PRESSED", mode = "PRESSED")})
-public final class Joystick<V> extends Sensor<V> implements WithUserDefinedPort<V> {
+public final class Joystick extends Sensor implements WithUserDefinedPort {
     @NepoMutation
     public final Mutation mutation;
     @NepoField(name = BlocklyConstants.MODE)

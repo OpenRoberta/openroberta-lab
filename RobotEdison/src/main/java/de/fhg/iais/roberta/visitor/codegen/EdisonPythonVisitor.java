@@ -70,7 +70,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      *
      * @param programPhrases to generate the code from
      */
-    public EdisonPythonVisitor(List<List<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
+    public EdisonPythonVisitor(List<List<Phrase>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
     }
 
@@ -130,7 +130,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         throw new DbcException("Not supported!");
     }
 
@@ -138,9 +138,9 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * Visit the block "controls_repeat_ext"
      */
     @Override
-    protected void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
+    protected void generateCodeFromStmtConditionFor(String stmtType, Expr expr) {
         this.sb.append(stmtType).append(" ");
-        ExprList<Void> expressions = (ExprList<Void>) expr;
+        ExprList expressions = (ExprList) expr;
         expressions.get().get(0).accept(this);
         this.sb.append(" in range(");
         expressions.get().get(2).accept(this);
@@ -153,7 +153,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param infraredSensor to be visited
      */
     @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.OBSTACLEDETECTION));
         this.sb.append("(");
 
@@ -174,7 +174,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     @Override
-    public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
+    public Void visitIRSeekerSensor(IRSeekerSensor irSeekerSensor) {
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.IRSEEK));
         switch ( irSeekerSensor.getMode() ) {
             case "RCCODE":
@@ -195,7 +195,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param lightSensor the sensor
      */
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         switch ( lightSensor.getUserDefinedPort() ) {
             case "LLIGHT":
                 this.sb.append("Ed.ReadLeftLightLevel() / 10");
@@ -220,13 +220,13 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param soundSensor the sensor
      */
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+    public Void visitSoundSensor(SoundSensor soundSensor) {
         this.sb.append("Ed.ReadClapSensor() == Ed.CLAP_DETECTED");
         return null;
     }
 
     @Override
-    public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
+    public Void visitSendIRAction(SendIRAction sendIRAction) {
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.IRSEND));
         this.sb.append("(");
         sendIRAction.code.accept(this);
@@ -235,14 +235,14 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     @Override
-    public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
+    public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.IRSEEK));
         this.sb.append("(0)");
         return null;
     }
 
     @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
+    public Void visitDriveAction(DriveAction driveAction) {
         String direction = "Ed.FORWARD";
         switch ( driveAction.direction.toString() ) {
             case "FOREWARD":
@@ -275,7 +275,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param mathOnListFunct to be visited
      */
     @Override
-    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+    public Void visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
         if ( mathOnListFunct.functName == FunctionNames.AVERAGE ) {
             this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(SUM));
             this.sb.append("(");
@@ -290,7 +290,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     @Override
-    public Void visitNumConst(NumConst<Void> numConst) {
+    public Void visitNumConst(NumConst numConst) {
         if ( isInteger(numConst.value) ) {
             super.visitNumConst(numConst);
         } else {
@@ -307,8 +307,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @return null
      */
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
-        StmtList<Void> variables = mainTask.variables;
+    public Void visitMainTask(MainTask mainTask) {
+        StmtList variables = mainTask.variables;
         variables.accept(this); //fill usedGlobalVarInFunctions with values
 
         nlIndent();
@@ -318,7 +318,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     @Override
-    public Void visitListCreate(ListCreate<Void> listCreate) {
+    public Void visitListCreate(ListCreate listCreate) {
         int listSize = listCreate.exprList.get().size();
 
         this.sb.append("Ed.List(").append(listSize).append(", [");
@@ -345,7 +345,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param keysSensor to be visited
      */
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+    public Void visitKeysSensor(KeysSensor keysSensor) {
         switch ( keysSensor.getUserDefinedPort() ) {
             case "REC":
                 this.sb.append("Ed.ReadKeypad() == Ed.KEYPAD_ROUND");
@@ -366,7 +366,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param curveAction to visit
      */
     @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
+    public Void visitCurveAction(CurveAction curveAction) {
         String direction;
 
         //determine the direction
@@ -403,7 +403,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param turnAction to be visited
      */
     @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
+    public Void visitTurnAction(TurnAction turnAction) {
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.DIFFTURN));
         this.sb.append("(Ed.SPIN_").append(turnAction.direction).append(", ");
         turnAction.param.getSpeed().accept(this);
@@ -419,12 +419,12 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+    public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         throw new DbcException("block is not implemented");
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.MOTORON));
         switch ( motorOnAction.getUserDefinedPort() ) {
             case "LMOTOR":
@@ -451,12 +451,12 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+    public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
         throw new DbcException("block is not implemented");
     }
 
     @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         switch ( motorStopAction.getUserDefinedPort() ) {
             case "B":
             case "LMOTOR":
@@ -473,7 +473,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     @Override
-    public Void visitBinary(Binary<Void> binary) {
+    public Void visitBinary(Binary binary) {
         if ( binary.op == Binary.Op.DIVIDE ) { // general implementation casts to float, which is not allowed on edison
             binary.left.accept(this);
             this.sb.append(" / ");
@@ -485,13 +485,13 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+    public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         this.sb.append("Ed.Drive(Ed.STOP, Ed.SPEED_1, 1)");
         return null;
     }
 
     @Override
-    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
+    public Void visitMathPowerFunct(MathPowerFunct mathPowerFunct) {
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(mathPowerFunct.functName));
         this.sb.append("(");
         mathPowerFunct.param.get(0).accept(this);
@@ -502,7 +502,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     @Override
-    public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
+    public Void visitMathSingleFunct(MathSingleFunct mathSingleFunct) {
         switch ( mathSingleFunct.functName ) {
             case POW10:
                 this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.POWER));
@@ -542,7 +542,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @return null
      */
     @Override
-    public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
+    public Void visitWaitStmt(WaitStmt waitStmt) {
         this.sb.append("while True:");
         incrIndentation();
         visitStmtList(waitStmt.statements);
@@ -553,7 +553,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     @Override
-    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+    public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         this.sb.append("Ed.TimeWait(");
         waitTimeStmt.time.accept(this);
         this.sb.append(", Ed.TIME_MILLISECONDS)");
@@ -566,7 +566,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param lightAction to be visited
      */
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         switch ( lightAction.port ) {
             case "RLED":
                 this.sb.append("Ed.RightLed(Ed.ON)");
@@ -587,7 +587,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param lightStatusAction to be visited
      */
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         switch ( lightStatusAction.getUserDefinedPort() ) {
             case "1":
             case "RLED":
@@ -612,7 +612,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param toneAction to be visited
      */
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         this.sb.append("Ed.PlayTone(8000000/");
         toneAction.frequency.accept(this);
         this.sb.append(", ");
@@ -626,7 +626,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         this.sb.append("Ed.PlayTone(4000000/"); //eigentlich 8mio aber die zahlen bei tiefen noten werden zu groß für edison
         this.sb.append(Integer.parseInt(playNoteAction.frequency.split("\\.")[0]));
         this.sb.append(", ").append(playNoteAction.duration).append(")");
@@ -636,12 +636,12 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+    public Void visitVolumeAction(VolumeAction volumeAction) {
         throw new DbcException("block is not implemented");
     }
 
     @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
+    public Void visitPlayFileAction(PlayFileAction playFileAction) {
         switch ( playFileAction.fileName.toLowerCase() ) {
             case "0":
                 this.sb.append("___soundfile1 = Ed.TuneString(7,\"c8e8g8z\")"); //positiv
@@ -681,7 +681,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     @Override
-    public Void visitResetSensor(ResetSensor<Void> resetSensor) {
+    public Void visitResetSensor(ResetSensor resetSensor) {
         switch ( resetSensor.sensor ) {
             case "OBSTACLEDETECTOR":
                 this.sb.append("Ed.ReadObstacleDetection()");
@@ -711,7 +711,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param sensorGetSample to be visited
      */
     @Override
-    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
+    public Void visitGetSampleSensor(GetSampleSensor sensorGetSample) {
         this.sb.append("(");
         sensorGetSample.sensor.accept(this);
         this.sb.append(")");
@@ -719,7 +719,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     @Override
-    public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
+    public Void visitMethodIfReturn(MethodIfReturn methodIfReturn) {
         this.sb.append("if ");
         methodIfReturn.oraCondition.accept(this);
         if ( !methodIfReturn.oraReturnValue.getKind().hasName("EMPTY_EXPR") ) {
@@ -732,27 +732,27 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     @Override
-    public Void visitConnectConst(ConnectConst<Void> connectConst) {
+    public Void visitConnectConst(ConnectConst connectConst) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+    public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+    public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         throw new DbcException("Not supported!");
     }
 }

@@ -14,15 +14,15 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_led_setBrightness"}, name = "CYBERPI_SET_BRIGHTNESS_ACTION")
-public final class LedBrightnessAction<V> extends Action<V> implements WithUserDefinedPort<V> {
+public final class LedBrightnessAction extends Action implements WithUserDefinedPort {
     @NepoValue(name = BlocklyConstants.BRIGHTNESS, type = BlocklyType.NUMBER_INT)
-    public final Expr<V> brightness;
+    public final Expr brightness;
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;
     @NepoHide
     public final Hide hide;
 
-    public LedBrightnessAction(BlocklyProperties properties, Expr<V> brightness, String port, Hide hide) {
+    public LedBrightnessAction(BlocklyProperties properties, Expr brightness, String port, Hide hide) {
         super(properties);
         Assert.notNull(brightness);
         Assert.notNull(port);

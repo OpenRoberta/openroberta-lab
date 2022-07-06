@@ -81,13 +81,13 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
      * @param programPhrases to generate the code from
      * @param programName name of the program
      */
-    protected AbstractJavaVisitor(List<List<Phrase<Void>>> programPhrases, String programName, ClassToInstanceMap<IProjectBean> beans) {
+    protected AbstractJavaVisitor(List<List<Phrase>> programPhrases, String programName, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
         this.programName = programName;
     }
 
     @Override
-    public Void visitNumConst(NumConst<Void> numConst) {
+    public Void visitNumConst(NumConst numConst) {
         // TODO Do we have always to cast to float
         if ( isInteger(numConst.value) ) {
             super.visitNumConst(numConst);
@@ -100,13 +100,13 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitNullConst(NullConst<Void> nullConst) {
+    public Void visitNullConst(NullConst nullConst) {
         this.sb.append("null");
         return null;
     }
 
     @Override
-    public Void visitMathConst(MathConst<Void> mathConst) {
+    public Void visitMathConst(MathConst mathConst) {
         switch ( mathConst.mathConst ) {
             case PI:
                 this.sb.append("(float) Math.PI");
@@ -133,7 +133,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitBinary(Binary<Void> binary) {
+    public Void visitBinary(Binary binary) {
         Op op = binary.op;
         if ( isEqualityOpOnStrings(binary) ) {
             generateCodeForStringEqualityOp(binary);
@@ -159,7 +159,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
+    public Void visitEmptyExpr(EmptyExpr emptyExpr) {
         switch ( emptyExpr.getDefVal() ) {
             case STRING:
                 this.sb.append("\"\"");
@@ -182,21 +182,21 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
+    public Void visitAssignStmt(AssignStmt assignStmt) {
         super.visitAssignStmt(assignStmt);
         this.sb.append(";");
         return null;
     }
 
     @Override
-    public Void visitExprStmt(ExprStmt<Void> exprStmt) {
+    public Void visitExprStmt(ExprStmt exprStmt) {
         super.visitExprStmt(exprStmt);
         this.sb.append(";");
         return null;
     }
 
     @Override
-    public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
+    public Void visitRepeatStmt(RepeatStmt repeatStmt) {
         boolean additionalClosingBracket = false;
         boolean isWaitStmt = repeatStmt.mode == RepeatStmt.Mode.WAIT;
         switch ( repeatStmt.mode ) {
@@ -248,14 +248,14 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
+    public Void visitFunctionStmt(FunctionStmt functionStmt) {
         super.visitFunctionStmt(functionStmt);
         this.sb.append(";");
         return null;
     }
 
     @Override
-    public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
+    public Void visitStmtFlowCon(StmtFlowCon stmtFlowCon) {
         if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) != null ) {
             if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) ) {
                 this.sb.append("if (true) " + stmtFlowCon.flow.toString().toLowerCase() + " loop" + this.currentLoop.getLast() + ";");
@@ -267,7 +267,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
+    public Void visitTextPrintFunct(TextPrintFunct textPrintFunct) {
         this.sb.append("System.out.println(");
         textPrintFunct.param.get(0).accept(this);
         this.sb.append(")");
@@ -275,7 +275,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitEmptyList(EmptyList<Void> emptyList) {
+    public Void visitEmptyList(EmptyList emptyList) {
         this.sb
             .append(
                 "new ArrayList<"
@@ -286,7 +286,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
+    public Void visitListRepeat(ListRepeat listRepeat) {
         this.sb.append("new ArrayList<>(Collections.nCopies( (int) ");
         listRepeat.param.get(1).accept(this);
         this.sb.append(", ");
@@ -299,7 +299,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
+    public Void visitMathSingleFunct(MathSingleFunct mathSingleFunct) {
         switch ( mathSingleFunct.functName ) {
             case SQUARE:
                 this.sb.append("(float) Math.pow(");
@@ -333,7 +333,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
+    public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
         this.sb.append("Math.min(Math.max(");
         mathConstrainFunct.param.get(0).accept(this);
         this.sb.append(", ");
@@ -345,7 +345,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
+    public Void visitMathNumPropFunct(MathNumPropFunct mathNumPropFunct) {
         switch ( mathNumPropFunct.functName ) {
             case EVEN:
                 this.sb.append("(");
@@ -392,7 +392,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+    public Void visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
         switch ( mathOnListFunct.functName ) {
             case MIN:
                 this.sb.append("Collections.min(");
@@ -418,13 +418,13 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
+    public Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
         this.sb.append("(float) Math.random()");
         return null;
     }
 
     @Override
-    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
+    public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.sb.append("( Math.round(Math.random() * (");
         mathRandomIntFunct.param.get(1).accept(this);
         this.sb.append(" - ");
@@ -436,14 +436,14 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
+    public Void visitMathPowerFunct(MathPowerFunct mathPowerFunct) {
         this.sb.append("(float) Math.pow(");
         super.visitMathPowerFunct(mathPowerFunct);
         return null;
     }
 
     @Override
-    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+    public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         this.sb.append("(String.valueOf(");
         mathCastStringFunct.param.get(0).accept(this);
         this.sb.append("))");
@@ -451,7 +451,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+    public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         this.sb.append("String.valueOf((char)(int)(");
         mathCastCharFunct.param.get(0).accept(this);
         this.sb.append("))");
@@ -459,7 +459,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         this.sb.append("Float.parseFloat(");
         textStringCastNumberFunct.param.get(0).accept(this);
         this.sb.append(")");
@@ -467,7 +467,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         this.sb.append("(int)(");
         textCharCastNumberFunct.param.get(0).accept(this);
         this.sb.append(".charAt(");
@@ -477,12 +477,12 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        List<Expr<Void>> exprs = textJoinFunct.param.get();
-        Iterator<Expr<Void>> iterator = exprs.iterator();
+    public Void visitTextJoinFunct(TextJoinFunct textJoinFunct) {
+        List<Expr> exprs = textJoinFunct.param.get();
+        Iterator<Expr> iterator = exprs.iterator();
         while ( iterator.hasNext() ) {
             this.sb.append("String.valueOf(");
-            Expr<Void> expr = iterator.next();
+            Expr expr = iterator.next();
             expr.accept(this);
             this.sb.append(")");
             if ( iterator.hasNext() ) {
@@ -493,7 +493,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
+    public Void visitMethodVoid(MethodVoid methodVoid) {
         nlIndent();
         this.sb.append("private void ");
         this.sb.append(methodVoid.getMethodName()).append("(");
@@ -508,7 +508,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
+    public Void visitMethodReturn(MethodReturn methodReturn) {
         nlIndent();
         this.sb.append("private ").append(getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
         this.sb.append(" ").append(methodReturn.getMethodName()).append("(");
@@ -527,7 +527,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
+    public Void visitMethodIfReturn(MethodIfReturn methodIfReturn) {
         this.sb.append("if (");
         methodIfReturn.oraCondition.accept(this);
         this.sb.append(") ");
@@ -537,7 +537,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
+    public Void visitMethodStmt(MethodStmt methodStmt) {
         super.visitMethodStmt(methodStmt);
         if ( methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn") ) {
             this.sb.append(";");
@@ -546,7 +546,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMethodCall(MethodCall<Void> methodCall) {
+    public Void visitMethodCall(MethodCall methodCall) {
         super.visitMethodCall(methodCall);
         if ( methodCall.getReturnType() == BlocklyType.VOID ) {
             this.sb.append(";");
@@ -555,22 +555,22 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitStringConst(StringConst<Void> stringConst) {
+    public Void visitStringConst(StringConst stringConst) {
         this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.value.replaceAll("[<>\\$]", ""))).append("\"");
         return null;
     }
 
     @Override
-    public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
+    public Void visitAssertStmt(AssertStmt assertStmt) {
         this.sb.append("if (!(");
         assertStmt.asserts.accept(this);
         this.sb.append(")) {");
         incrIndentation();
         nlIndent();
         this.sb.append("System.out.println(\"Assertion failed: \" + \"").append(assertStmt.msg).append("\" + ");
-        ((Binary<Void>) assertStmt.asserts).left.accept(this);
-        this.sb.append(" + \"").append(((Binary<Void>) assertStmt.asserts).op.toString()).append("\" + ");
-        ((Binary<Void>) assertStmt.asserts).getRight().accept(this);
+        ((Binary) assertStmt.asserts).left.accept(this);
+        this.sb.append(" + \"").append(((Binary) assertStmt.asserts).op.toString()).append("\" + ");
+        ((Binary) assertStmt.asserts).getRight().accept(this);
         this.sb.append(");");
         decrIndentation();
         nlIndent();
@@ -579,7 +579,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitDebugAction(DebugAction<Void> debugAction) {
+    public Void visitDebugAction(DebugAction debugAction) {
         this.sb.append("System.out.println(");
         debugAction.value.accept(this);
         this.sb.append(");");
@@ -587,7 +587,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+    public Void visitSerialWriteAction(SerialWriteAction serialWriteAction) {
         this.sb.append("System.out.println(");
         serialWriteAction.value.accept(this);
         this.sb.append(");");
@@ -640,20 +640,20 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         }
     }
 
-    private boolean isStringExpr(Expr<Void> e) {
+    private boolean isStringExpr(Expr e) {
         switch ( e.getKind().getName() ) {
             case "STRING_CONST":
                 return true;
             case "VAR":
-                return ((Var<?>) e).getVarType() == BlocklyType.STRING;
+                return ((Var) e).getVarType() == BlocklyType.STRING;
             case "FUNCTION_EXPR":
-                BlockDescriptor functionKind = ((FunctionExpr<?>) e).getFunction().getKind();
+                BlockDescriptor functionKind = ((FunctionExpr) e).getFunction().getKind();
                 return functionKind.hasName("TEXT_JOIN_FUNCT", "LIST_INDEX_OF");
             case "METHOD_EXPR":
-                MethodCall<?> methodCall = (MethodCall<?>) ((MethodExpr<?>) e).getMethod();
+                MethodCall methodCall = (MethodCall) ((MethodExpr) e).getMethod();
                 return methodCall.getKind().hasName("METHOD_CALL") && methodCall.getReturnType() == BlocklyType.STRING;
             case "ACTION_EXPR":
-                Action<?> action = ((ActionExpr<?>) e).action;
+                Action action = ((ActionExpr) e).action;
                 return action.getKind().hasName("BLUETOOTH_RECEIVED_ACTION");
 
             default:
@@ -662,7 +662,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    protected void generateCodeFromTernary(TernaryExpr<Void> ternaryExpr) {
+    protected void generateCodeFromTernary(TernaryExpr ternaryExpr) {
         this.sb.append("(" + whitespace() + "(" + whitespace());
         ternaryExpr.condition.accept(this);
         this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
@@ -673,7 +673,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    protected void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
+    protected void generateCodeFromIfElse(IfStmt ifStmt) {
         int exprSize = ifStmt.expr.size();
         String conditionStmt = "if";
         for ( int i = 0; i < exprSize; i++ ) {
@@ -690,7 +690,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    protected void generateCodeFromElse(IfStmt<Void> ifStmt) {
+    protected void generateCodeFromElse(IfStmt ifStmt) {
         if ( !ifStmt.elseList.get().isEmpty() ) {
             nlIndent();
             this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
@@ -702,15 +702,15 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         this.sb.append("}");
     }
 
-    private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
+    private void generateCodeFromStmtCondition(String stmtType, Expr expr) {
         this.sb.append(stmtType + whitespace() + "(" + whitespace());
         expr.accept(this);
         this.sb.append(whitespace() + ")" + whitespace() + "{");
     }
 
-    private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
+    private void generateCodeFromStmtConditionFor(String stmtType, Expr expr) {
         this.sb.append(stmtType + whitespace() + "(" + whitespace() + "float" + whitespace());
-        ExprList<Void> expressions = (ExprList<Void>) expr;
+        ExprList expressions = (ExprList) expr;
         expressions.get().get(0).accept(this);
         this.sb.append(whitespace() + "=" + whitespace());
         expressions.get().get(1).accept(this);
@@ -732,19 +732,19 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         this.sb.append(whitespace() + ")" + whitespace() + "{");
     }
 
-    private boolean isEqualityOpOnStrings(Binary<Void> binary) {
+    private boolean isEqualityOpOnStrings(Binary binary) {
         boolean isLeftAndRightString = isStringExpr(binary.left) && isStringExpr(binary.getRight());
         boolean isEqualityOp = binary.op == Op.EQ || binary.op == Op.NEQ;
         return isEqualityOp && isLeftAndRightString;
     }
 
-    private void generateCodeToStringCastOnExpr(Binary<Void> binary) {
+    private void generateCodeToStringCastOnExpr(Binary binary) {
         this.sb.append("String.valueOf(");
         generateSubExpr(this.sb, false, binary.getRight(), binary);
         this.sb.append(")");
     }
 
-    private void generateCodeForStringEqualityOp(Binary<Void> binary) {
+    private void generateCodeForStringEqualityOp(Binary binary) {
         if ( binary.op == Op.NEQ ) {
             this.sb.append("!");
         }

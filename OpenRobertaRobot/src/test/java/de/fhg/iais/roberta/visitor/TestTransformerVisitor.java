@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
-public class TestTransformerVisitor extends BaseVisitor<Phrase<Void>> implements ITransformerVisitor<Void> {
+public class TestTransformerVisitor extends BaseVisitor<Phrase> implements ITransformerVisitor {
 
     private final BlocklyDropdownFactory blocklyDropdownFactory;
 
@@ -22,22 +22,22 @@ public class TestTransformerVisitor extends BaseVisitor<Phrase<Void>> implements
     }
 
     @Override
-    public Phrase<Void> visitKeysSensor(KeysSensor<Phrase<Void>> keysSensor) {
-        return new KeysSensor<Void>(keysSensor.getProperty(), new ExternalSensorBean("KeysPort", "KeysMode", "KeysSlot", keysSensor.getMutation()));
+    public Phrase visitKeysSensor(KeysSensor keysSensor) {
+        return new KeysSensor(keysSensor.getProperty(), new ExternalSensorBean("KeysPort", "KeysMode", "KeysSlot", keysSensor.getMutation()));
     }
 
     @Override
-    public Phrase<Void> visitTemperatureSensor(TemperatureSensor<Phrase<Void>> temperatureSensor) {
-        return new TemperatureSensor<Void>(temperatureSensor.getProperty(), new ExternalSensorBean("TempPort", "TempMode", "TempSlot", temperatureSensor.getMutation()));
+    public Phrase visitTemperatureSensor(TemperatureSensor temperatureSensor) {
+        return new TemperatureSensor(temperatureSensor.getProperty(), new ExternalSensorBean("TempPort", "TempMode", "TempSlot", temperatureSensor.getMutation()));
     }
 
     @Override
-    public Phrase<Void> visitMotorOnAction(MotorOnAction<Phrase<Void>> motorOnAction) {
-        return new MotorOnAction<>("MotorPort", modifyMotionParam(motorOnAction.param), motorOnAction.getProperty());
+    public Phrase visitMotorOnAction(MotorOnAction motorOnAction) {
+        return new MotorOnAction("MotorPort", modifyMotionParam(motorOnAction.param), motorOnAction.getProperty());
     }
 
     @Override
-    public Phrase<Void> visitGetSampleSensor(GetSampleSensor<Phrase<Void>> sensorGetSample) {
+    public Phrase visitGetSampleSensor(GetSampleSensor sensorGetSample) {
         return new GetSampleSensor("TEMPERATURE_VALUE", "GetSamplePort", "GetSampleSlot", sensorGetSample.mutation, sensorGetSample.hide, sensorGetSample.getProperty(), this.blocklyDropdownFactory);
     }
 }

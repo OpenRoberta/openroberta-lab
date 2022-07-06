@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(category = "EXPR", blocklyNames = {"robSensors_get_weight"}, name = "NN_GET_WEIGHT")
-public final class NNGetWeight<V> extends Expr<V> {
+public final class NNGetWeight extends Expr {
     @NepoField(name = "FROM")
     public final String from;
 

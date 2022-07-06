@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoExpr(category = "EXPR", blocklyNames = {"math_integer", "math_number", "rob_math_u999"}, name = "NUM_CONST", blocklyType = BlocklyType.NUMBER)
-public final class NumConst<V> extends Expr<V> {
+public final class NumConst extends Expr {
     @NepoField(name = BlocklyConstants.NUM)
     public final String value;
 

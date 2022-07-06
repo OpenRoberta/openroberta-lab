@@ -75,12 +75,12 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     /**
      * initialize the cpp code generator visitor.
      */
-    protected AbstractCppVisitor(List<List<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
+    protected AbstractCppVisitor(List<List<Phrase>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
     }
 
     @Override
-    public Void visitRgbColor(RgbColor<Void> rgbColor) {
+    public Void visitRgbColor(RgbColor rgbColor) {
         this.sb.append("RGB(");
         rgbColor.R.accept(this);
         this.sb.append(", ");
@@ -92,19 +92,19 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitNullConst(NullConst<Void> nullConst) {
+    public Void visitNullConst(NullConst nullConst) {
         this.sb.append("NULL");
         return null;
     }
 
     @Override
-    public Void visitConnectConst(ConnectConst<Void> connectConst) {
+    public Void visitConnectConst(ConnectConst connectConst) {
         this.sb.append(connectConst.value);
         return null;
     }
 
     @Override
-    public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
+    public Void visitEmptyExpr(EmptyExpr emptyExpr) {
         switch ( emptyExpr.getDefVal() ) {
             case STRING:
                 this.sb.append("\"\"");
@@ -128,28 +128,28 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
+    public Void visitAssignStmt(AssignStmt assignStmt) {
         super.visitAssignStmt(assignStmt);
         this.sb.append(";");
         return null;
     }
 
     @Override
-    public Void visitExprStmt(ExprStmt<Void> exprStmt) {
+    public Void visitExprStmt(ExprStmt exprStmt) {
         super.visitExprStmt(exprStmt);
         this.sb.append(";");
         return null;
     }
 
     @Override
-    public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
+    public Void visitFunctionStmt(FunctionStmt functionStmt) {
         super.visitFunctionStmt(functionStmt);
         this.sb.append(";");
         return null;
     }
 
     @Override
-    public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
+    public Void visitStmtFlowCon(StmtFlowCon stmtFlowCon) {
         if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) != null ) {
             if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) ) {
                 this.sb.append("goto " + stmtFlowCon.flow.toString().toLowerCase() + "_loop" + this.currentLoop.getLast() + ";");
@@ -161,12 +161,12 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitEmptyList(EmptyList<Void> emptyList) {
+    public Void visitEmptyList(EmptyList emptyList) {
         return null;
     }
 
     @Override
-    public Void visitListCreate(ListCreate<Void> listCreate) {
+    public Void visitListCreate(ListCreate listCreate) {
         this.sb.append("{");
         listCreate.exprList.accept(this);
         this.sb.append("}");
@@ -174,7 +174,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
+    public Void visitListRepeat(ListRepeat listRepeat) {
         // This implementation assumes that robots providing a "list repeat" block have implemented a method "_createListRepeat(counter, element)" in one of the included files.
         this.sb.append("_createListRepeat(");
         listRepeat.getCounter().accept(this);
@@ -189,7 +189,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMathConst(MathConst<Void> mathConst) {
+    public Void visitMathConst(MathConst mathConst) {
         switch ( mathConst.mathConst ) {
             case PI:
                 this.sb.append("M_PI");
@@ -217,7 +217,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
+    public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
         String methodName = "_getFirstOccuranceOfElement(";
         if ( indexOfFunct.location != IndexLocation.FIRST ) {
             methodName = "_getLastOccuranceOfElement(";
@@ -232,7 +232,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
+    public Void visitGetSubFunct(GetSubFunct getSubFunct) {
         if ( getSubFunct.functName == FunctionNames.GET_SUBLIST ) {
             this.sb.append("_getSubList(");
             getSubFunct.param.get(0).accept(this);
@@ -284,7 +284,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+    public Void visitListGetIndex(ListGetIndex listGetIndex) {
         String operation = "";
         switch ( (ListElementOperations) listGetIndex.getElementOperation() ) {
             case GET:
@@ -340,7 +340,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+    public Void visitListSetIndex(ListSetIndex listSetIndex) {
         String operation = "";
         switch ( (ListElementOperations) listSetIndex.mode ) {
             case GET:
@@ -413,7 +413,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
+    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
         if ( lengthOfIsEmptyFunct.functName == FunctionNames.LIST_IS_EMPTY ) {
             lengthOfIsEmptyFunct.param.get(0).accept(this);
             this.sb.append(".empty()");
@@ -426,7 +426,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+    public Void visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
         switch ( mathOnListFunct.functName ) {
             case AVERAGE:
                 this.sb.append("_getListAverage(");
@@ -461,7 +461,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
+    public Void visitMathSingleFunct(MathSingleFunct mathSingleFunct) {
         boolean extraPar = false;
         switch ( mathSingleFunct.functName ) {
             case SQUARE:
@@ -530,10 +530,10 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        Expr<Void> n = mathConstrainFunct.param.get(0);
-        Expr<Void> min = mathConstrainFunct.param.get(1);
-        Expr<Void> max = mathConstrainFunct.param.get(2);
+    public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
+        Expr n = mathConstrainFunct.param.get(0);
+        Expr min = mathConstrainFunct.param.get(1);
+        Expr max = mathConstrainFunct.param.get(2);
         this.sb.append("std::min(std::max((double) ");
         n.accept(this);
         this.sb.append(", (double) ");
@@ -545,7 +545,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
+    public Void visitMathNumPropFunct(MathNumPropFunct mathNumPropFunct) {
         switch ( mathNumPropFunct.functName ) {
             case EVEN:
                 this.sb.append("(fmod(");
@@ -594,19 +594,19 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
+    public Void visitMathPowerFunct(MathPowerFunct mathPowerFunct) {
         this.sb.append("pow(");
         return super.visitMathPowerFunct(mathPowerFunct);
     }
 
     @Override
-    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
+    public Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
         this.sb.append("((double) rand() / (RAND_MAX))");
         return null;
     }
 
     @Override
-    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+    public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         // TODO check why this is not working for Arduinos!
         this.sb.append("(std::to_string(");
         mathCastStringFunct.param.get(0).accept(this);
@@ -615,7 +615,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+    public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         this.sb.append("(char)(int)(");
         mathCastCharFunct.param.get(0).accept(this);
         this.sb.append(")");
@@ -623,7 +623,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         this.sb.append("std::stof(");
         textStringCastNumberFunct.param.get(0).accept(this);
         this.sb.append(")");
@@ -631,7 +631,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         this.sb.append("(int)(");
         this.sb.append("(");
         textCharCastNumberFunct.param.get(0).accept(this);
@@ -642,7 +642,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
+    public Void visitMethodVoid(MethodVoid methodVoid) {
         nlIndent();
         this.sb.append("void ");
         this.sb.append(methodVoid.getMethodName()).append("(");
@@ -657,7 +657,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
+    public Void visitMethodReturn(MethodReturn methodReturn) {
         nlIndent();
         this.sb.append(getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
         this.sb.append(" ").append(methodReturn.getMethodName()).append("(");
@@ -676,7 +676,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
+    public Void visitMethodIfReturn(MethodIfReturn methodIfReturn) {
         this.sb.append("if (");
         methodIfReturn.oraCondition.accept(this);
         this.sb.append(") ");
@@ -686,7 +686,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
+    public Void visitMethodStmt(MethodStmt methodStmt) {
         super.visitMethodStmt(methodStmt);
         if ( methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn") ) {
             this.sb.append(";");
@@ -695,7 +695,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitMethodCall(MethodCall<Void> methodCall) {
+    public Void visitMethodCall(MethodCall methodCall) {
         super.visitMethodCall(methodCall);
         if ( methodCall.getReturnType() == BlocklyType.VOID ) {
             this.sb.append(";");
@@ -704,41 +704,41 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
+    public Void visitTextPrintFunct(TextPrintFunct textPrintFunct) {
         return null;
     }
 
     @Override
-    public Void visitStringConst(StringConst<Void> stringConst) {
+    public Void visitStringConst(StringConst stringConst) {
         this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.value.replaceAll("[<>\\$]", ""))).append("\"");
         return null;
     }
 
     @Override
-    public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
+    public Void visitAssertStmt(AssertStmt assertStmt) {
         // please overwrite this in the robot-specific class and throw an exeption if "assertNepo" could not be provided
         this.sb.append("assertNepo((");
         assertStmt.asserts.accept(this);
         this.sb.append("), \"").append(assertStmt.msg).append("\", ");
-        ((Binary<Void>) assertStmt.asserts).left.accept(this);
-        this.sb.append(", \"").append(((Binary<Void>) assertStmt.asserts).op.toString()).append("\", ");
-        ((Binary<Void>) assertStmt.asserts).getRight().accept(this);
+        ((Binary) assertStmt.asserts).left.accept(this);
+        this.sb.append(", \"").append(((Binary) assertStmt.asserts).op.toString()).append("\", ");
+        ((Binary) assertStmt.asserts).getRight().accept(this);
         this.sb.append(");");
         return null;
     }
 
     @Override
-    public Void visitDebugAction(DebugAction<Void> debugAction) {
+    public Void visitDebugAction(DebugAction debugAction) {
         throw new UnsupportedOperationException("should be overriden in a robot-specific class");
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         throw new UnsupportedOperationException("should be overriden in a robot-specific class");
     }
 
     @Override
-    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+    public Void visitSerialWriteAction(SerialWriteAction serialWriteAction) {
         this.sb.append("Serial.println(");
         serialWriteAction.value.accept(this);
         this.sb.append(");");
@@ -809,7 +809,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    protected void generateCodeFromTernary(TernaryExpr<Void> ternaryExpr) {
+    protected void generateCodeFromTernary(TernaryExpr ternaryExpr) {
         this.sb.append("(" + whitespace() + "(" + whitespace());
         ternaryExpr.condition.accept(this);
         this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace() + "(" + whitespace());
@@ -820,7 +820,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    protected void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
+    protected void generateCodeFromIfElse(IfStmt ifStmt) {
         int exprSize = ifStmt.expr.size();
         String conditionStmt = "if";
         for ( int i = 0; i < exprSize; i++ ) {
@@ -838,7 +838,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    protected void generateCodeFromElse(IfStmt<Void> ifStmt) {
+    protected void generateCodeFromElse(IfStmt ifStmt) {
         if ( !ifStmt.elseList.get().isEmpty() ) {
             nlIndent();
             this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
@@ -894,7 +894,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     protected void generateSignaturesOfUserDefinedMethods() {
-        for ( Method<Void> phrase : this.getBean(UsedHardwareBean.class).getUserDefinedMethods() ) {
+        for ( Method phrase : this.getBean(UsedHardwareBean.class).getUserDefinedMethods() ) {
             nlIndent();
             this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()) + " ");
             this.sb.append(phrase.getMethodName() + "(");
@@ -903,15 +903,15 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         }
     }
 
-    protected void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
+    protected void generateCodeFromStmtCondition(String stmtType, Expr expr) {
         this.sb.append(stmtType + whitespace() + "(" + whitespace());
         expr.accept(this);
         this.sb.append(whitespace() + ")" + whitespace() + "{");
     }
 
-    protected void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
+    protected void generateCodeFromStmtConditionFor(String stmtType, Expr expr) {
         this.sb.append(stmtType + whitespace() + "(" + "int" + whitespace());
-        final ExprList<Void> expressions = (ExprList<Void>) expr;
+        final ExprList expressions = (ExprList) expr;
         expressions.get().get(0).accept(this);
         this.sb.append(whitespace() + "=" + whitespace());
         expressions.get().get(1).accept(this);

@@ -8,11 +8,11 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "SET_VOLUME", category = "ACTOR", blocklyNames = {"naoActions_setVolume"})
-public final class SetVolume<V> extends Action<V> {
+public final class SetVolume extends Action {
     @NepoValue(name = "VOLUME", type = BlocklyType.NUMBER_INT)
-    public final Expr<V> volume;
+    public final Expr volume;
 
-    public SetVolume(BlocklyProperties properties, Expr<V> volume) {
+    public SetVolume(BlocklyProperties properties, Expr volume) {
         super(properties);
         this.volume = volume;
         setReadOnly();

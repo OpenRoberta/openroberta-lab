@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.visitor.validate.MicrobitSimValidatorAndCollectorVisi
 public class MicrobitSimValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
 
     @Override
-    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         return new MicrobitSimValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 }

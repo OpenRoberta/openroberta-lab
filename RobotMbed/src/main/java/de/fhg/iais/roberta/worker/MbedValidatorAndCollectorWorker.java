@@ -40,7 +40,7 @@ public abstract class MbedValidatorAndCollectorWorker extends AbstractValidatorA
     }
 
     @Override
-    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         return new MbedValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 }

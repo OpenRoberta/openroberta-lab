@@ -20,11 +20,11 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
 @NepoBasic(name = "MATH_NUM_PROP_FUNCT", category = "FUNCTION", blocklyNames = {"math_number_property"})
-public final class MathNumPropFunct<V> extends Function<V> {
+public final class MathNumPropFunct extends Function {
     public final FunctionNames functName;
-    public final List<Expr<V>> param;
+    public final List<Expr> param;
 
-    public MathNumPropFunct(FunctionNames name, List<Expr<V>> param, BlocklyProperties properties) {
+    public MathNumPropFunct(FunctionNames name, List<Expr> param, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
@@ -52,7 +52,7 @@ public final class MathNumPropFunct<V> extends Function<V> {
         return "MathNumPropFunct [" + this.functName + ", " + this.param + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         boolean divisorInput = block.getMutation().isDivisorInput();
         String op = Jaxb2Ast.extractOperation(block, BlocklyConstants.PROPERTY);
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
@@ -62,8 +62,8 @@ public final class MathNumPropFunct<V> extends Function<V> {
             Assert.isTrue(divisorInput, "Divisor input is not equal to true!");
             exprParams.add(new ExprParam(BlocklyConstants.DIVISOR, BlocklyType.NUMBER_INT));
         }
-        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return new MathNumPropFunct<V>(FunctionNames.get(op), params, Jaxb2Ast.extractBlocklyProperties(block));
+        List<Expr> params = helper.extractExprParameters(block, exprParams);
+        return new MathNumPropFunct(FunctionNames.get(op), params, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

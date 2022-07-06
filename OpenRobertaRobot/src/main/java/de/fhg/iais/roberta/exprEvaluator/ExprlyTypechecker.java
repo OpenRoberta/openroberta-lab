@@ -50,14 +50,14 @@ import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
-public class ExprlyTypechecker<T> {
+public class ExprlyTypechecker {
 
     private final LinkedList<TcError> errors;
-    private final Phrase<T> ast;
+    private final Phrase ast;
     private final String robotName;
     private BlocklyType resultType;
     private final BlocklyType expectedResultType;
-    private final List<VarDeclaration<T>> vars;
+    private final List<VarDeclaration> vars;
     private static Map<String, Set<String>> okMap; // This is a map of special restrictions for each robot
 
     /**
@@ -68,8 +68,8 @@ public class ExprlyTypechecker<T> {
      * @param list of already declared variables
      * @param name of robot
      **/
-    public ExprlyTypechecker(Phrase<T> ast, BlocklyType rt, List<VarDeclaration<T>> vars, String robotName) {
-        this.errors = new LinkedList<>();
+    public ExprlyTypechecker(Phrase ast, BlocklyType rt, List<VarDeclaration> vars, String robotName) {
+        this.errors = new LinkedList();
         this.expectedResultType = rt;
         this.ast = ast;
         this.vars = vars;
@@ -82,8 +82,8 @@ public class ExprlyTypechecker<T> {
      * @param Phrase that will be checked
      * @param Expected return type
      **/
-    public ExprlyTypechecker(Phrase<T> ast, BlocklyType rt) {
-        this.errors = new LinkedList<>();
+    public ExprlyTypechecker(Phrase ast, BlocklyType rt) {
+        this.errors = new LinkedList();
         this.expectedResultType = rt;
         this.ast = ast;
         this.vars = null;
@@ -138,8 +138,8 @@ public class ExprlyTypechecker<T> {
             || this.expectedResultType.equals(BlocklyType.ARRAY_BOOLEAN)
             || this.expectedResultType.equals(BlocklyType.ARRAY_STRING)
             || this.expectedResultType.equals(BlocklyType.ARRAY_CONNECTION)) ) {
-            if ( this.ast instanceof ListCreate<?> ) {
-                if ( ((ListCreate<T>) this.ast).exprList.get().size() == 0 ) {
+            if ( this.ast instanceof ListCreate ) {
+                if ( ((ListCreate) this.ast).exprList.get().size() == 0 ) {
                     return;
                 }
             }
@@ -159,7 +159,7 @@ public class ExprlyTypechecker<T> {
      * @param NumberConst Expression
      * @return Type of block
      */
-    private BlocklyType visitNumConst(NumConst<T> numConst) {
+    private BlocklyType visitNumConst(NumConst numConst) {
         return numConst.getVarType();
     }
 
@@ -167,7 +167,7 @@ public class ExprlyTypechecker<T> {
      * @param MathConst Expression
      * @return Type of block
      */
-    private BlocklyType visitMathConst(MathConst<T> mathConst) {
+    private BlocklyType visitMathConst(MathConst mathConst) {
         return mathConst.getVarType();
     }
 
@@ -175,7 +175,7 @@ public class ExprlyTypechecker<T> {
      * @param BoolConst Expression
      * @return Type of block
      */
-    private BlocklyType visitBoolConst(BoolConst<T> boolConst) {
+    private BlocklyType visitBoolConst(BoolConst boolConst) {
         return boolConst.getVarType();
     }
 
@@ -183,7 +183,7 @@ public class ExprlyTypechecker<T> {
      * @param StringConst Expression
      * @return Type of block
      */
-    private BlocklyType visitStringConst(StringConst<T> stringConst) {
+    private BlocklyType visitStringConst(StringConst stringConst) {
         return stringConst.getVarType();
     }
 
@@ -191,7 +191,7 @@ public class ExprlyTypechecker<T> {
      * @param ColorConst Expression
      * @return Type of block
      */
-    private BlocklyType visitColorConst(ColorConst<T> colorConst) {
+    private BlocklyType visitColorConst(ColorConst colorConst) {
         if ( this.robotName != null ) {
             if ( okMap.get(this.robotName).contains("noColor") ) {
                 addError(TcError.TcErrorMsg.NO_TYPE, "TYPE", "color");
@@ -206,7 +206,7 @@ public class ExprlyTypechecker<T> {
      * @param RgbColorAnno Expression
      * @return Type of block
      */
-    private BlocklyType visitRgbColor(RgbColor<T> rgbColor) {
+    private BlocklyType visitRgbColor(RgbColor rgbColor) {
         if ( this.robotName != null ) {
             if ( okMap.get(this.robotName).contains("noColor") ) {
                 addError(TcError.TcErrorMsg.NO_TYPE, "TYPE", "color");
@@ -215,13 +215,13 @@ public class ExprlyTypechecker<T> {
                 addError(TcError.TcErrorMsg.ILLEGAL_RGB);
                 return rgbColor.getVarType();
             }
-            if ( rgbColor.R instanceof EmptyExpr<?> ) {
+            if ( rgbColor.R instanceof EmptyExpr ) {
                 addError(TcError.TcErrorMsg.INVALID_RGB_RGBA, "NUM", okMap.get(this.robotName).contains("rgb") ? "3" : "4");
                 return rgbColor.getVarType();
             }
         }
 
-        List<BlocklyType> c = new ArrayList<>(4);
+        List<BlocklyType> c = new ArrayList(4);
         c.add(checkAST(rgbColor.R));
         c.add(checkAST(rgbColor.G));
         c.add(checkAST(rgbColor.B));
@@ -233,8 +233,8 @@ public class ExprlyTypechecker<T> {
                 addError(TcError.TcErrorMsg.UNEXPECTED_METHOD);
             } else if ( !t.equals(BlocklyType.VOID) ) {
                 if ( !t.equals(BlocklyType.NUMBER) ) {
-                    ExprlyUnParser<T> up =
-                        new ExprlyUnParser<>(k == 0 ? rgbColor.R : k == 1 ? rgbColor.G : k == 2 ? rgbColor.B : rgbColor.A);
+                    ExprlyUnParser up =
+                        new ExprlyUnParser(k == 0 ? rgbColor.R : k == 1 ? rgbColor.G : k == 2 ? rgbColor.B : rgbColor.A);
                     addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
                 }
             }
@@ -247,7 +247,7 @@ public class ExprlyTypechecker<T> {
      * @param ConnectConst Expression
      * @return Type of block
      */
-    private BlocklyType visitConnectConst(ConnectConst<T> connectConst) {
+    private BlocklyType visitConnectConst(ConnectConst connectConst) {
         return connectConst.getVarType();
     }
 
@@ -257,11 +257,11 @@ public class ExprlyTypechecker<T> {
      * @param Var Expression
      * @return Type of block
      */
-    private BlocklyType visitVar(Var<T> var) {
+    private BlocklyType visitVar(Var var) {
         if ( this.vars == null ) {
             return BlocklyType.VOID;
         }
-        for ( VarDeclaration<T> v : this.vars ) {
+        for ( VarDeclaration v : this.vars ) {
             if ( var.name.equals(v.name) ) {
                 return v.getVarType();
             }
@@ -274,7 +274,7 @@ public class ExprlyTypechecker<T> {
      * @param Empty Expression
      * @return Void BlocklyType
      */
-    private BlocklyType visitEmptyExpr(EmptyExpr<T> emptyExpr) {
+    private BlocklyType visitEmptyExpr(EmptyExpr emptyExpr) {
         return BlocklyType.VOID;
     }
 
@@ -282,7 +282,7 @@ public class ExprlyTypechecker<T> {
      * @param Null Expression
      * @return Void BlocklyType
      */
-    private BlocklyType visitNullConst(NullConst<T> nullConst) {
+    private BlocklyType visitNullConst(NullConst nullConst) {
         return BlocklyType.VOID;
     }
 
@@ -292,7 +292,7 @@ public class ExprlyTypechecker<T> {
      * @param Unary Expression
      * @return Return Type of block
      */
-    private BlocklyType visitUnary(Unary<T> unary) throws UnsupportedOperationException {
+    private BlocklyType visitUnary(Unary unary) throws UnsupportedOperationException {
 
         // Get type of the operand
         BlocklyType t = checkAST(unary.expr);
@@ -326,7 +326,7 @@ public class ExprlyTypechecker<T> {
      * @param Binary Expression
      * @return Return Type of block
      */
-    private BlocklyType visitBinary(Binary<T> binary) throws UnsupportedOperationException {
+    private BlocklyType visitBinary(Binary binary) throws UnsupportedOperationException {
         // Get type of the operands
         BlocklyType tl = checkAST(binary.left);
         BlocklyType tr = checkAST(binary.getRight());
@@ -400,7 +400,7 @@ public class ExprlyTypechecker<T> {
      * @param List Expression
      * @return Type of block
      */
-    private BlocklyType visitExprList(ExprList<T> list) throws IllegalArgumentException {
+    private BlocklyType visitExprList(ExprList list) throws IllegalArgumentException {
         if ( this.robotName != null ) {
             if ( okMap.get(this.robotName).contains("noList") ) {
                 addError(TcError.TcErrorMsg.NO_TYPE, "TYPE", "list");
@@ -409,7 +409,7 @@ public class ExprlyTypechecker<T> {
 
         // Get list of expressions in the list
         Boolean correct = true;
-        List<Expr<T>> eList = list.get();
+        List<Expr> eList = list.get();
         List<BlocklyType> tList = new ArrayList<>(eList.size());
         BlocklyType t = BlocklyType.VOID;
         // Check if it's an empty list, by default we'll return Array type in that case
@@ -470,7 +470,7 @@ public class ExprlyTypechecker<T> {
      * @param Function Expression
      * @return Return Type of block
      */
-    private BlocklyType visitFunctionExpr(FunctionExpr<T> funct) {
+    private BlocklyType visitFunctionExpr(FunctionExpr funct) {
         return checkAST(funct.getFunction());
     }
 
@@ -480,7 +480,7 @@ public class ExprlyTypechecker<T> {
      * @param Function
      * @return Return Type of function
      */
-    private BlocklyType visitMathNumPropFunct(MathNumPropFunct<T> mathNumPropFunct) {
+    private BlocklyType visitMathNumPropFunct(MathNumPropFunct mathNumPropFunct) {
         return functionHelper(
             mathNumPropFunct.param,
             mathNumPropFunct.functName.equals(FunctionNames.DIVISIBLE_BY) ? 2 : 1,
@@ -494,13 +494,13 @@ public class ExprlyTypechecker<T> {
      * @param Function
      * @return Return Type of function
      */
-    private BlocklyType visitMathOnListFunct(MathOnListFunct<T> mathOnListFunct) {
+    private BlocklyType visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
         if ( this.robotName != null ) {
             if ( okMap.get(this.robotName).contains("noList") ) {
                 addError(TcError.TcErrorMsg.NO_TYPE, "TYPE", "list");
             }
         }
-        List<Expr<T>> args = mathOnListFunct.param;
+        List<Expr> args = mathOnListFunct.param;
         // All the list functions take only one list
         // Check that is only one
         BlocklyType t = BlocklyType.VOID;
@@ -508,13 +508,13 @@ public class ExprlyTypechecker<T> {
             addError(TcError.TcErrorMsg.INVALID_ARGUMENT_NUMBER);
         }
         // Check that all the elements are numbers
-        for ( Expr<T> e : args ) {
+        for ( Expr e : args ) {
             t = checkAST(e);
             if ( t.equals(BlocklyType.NOTHING) ) {
                 addError(TcError.TcErrorMsg.UNEXPECTED_METHOD);
             } else if ( !t.equals(BlocklyType.VOID) ) {
                 if ( !t.equals(BlocklyType.ARRAY_NUMBER) && !t.equals(BlocklyType.ARRAY) ) {
-                    ExprlyUnParser<T> up = new ExprlyUnParser<>(e);
+                    ExprlyUnParser up = new ExprlyUnParser(e);
                     addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
                 }
             }
@@ -544,7 +544,7 @@ public class ExprlyTypechecker<T> {
      * @param Function
      * @return Return Type of function
      */
-    private BlocklyType visitMathRandomFloatFunct(MathRandomFloatFunct<T> mathRandomFloatFunct) {
+    private BlocklyType visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
         return BlocklyType.NUMBER;
     }
 
@@ -554,7 +554,7 @@ public class ExprlyTypechecker<T> {
      * @param Function
      * @return Return Type of function
      */
-    private BlocklyType visitMathRandomIntFunct(MathRandomIntFunct<T> mathRandomIntFunct) {
+    private BlocklyType visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         return functionHelper(mathRandomIntFunct.param, 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
     }
 
@@ -564,7 +564,7 @@ public class ExprlyTypechecker<T> {
      * @param Function
      * @return Return Type of function
      */
-    private BlocklyType visitMathSingleFunct(MathSingleFunct<T> mathSingleFunct) {
+    private BlocklyType visitMathSingleFunct(MathSingleFunct mathSingleFunct) {
         FunctionNames fname = mathSingleFunct.functName;
         if ( fname.equals(FunctionNames.MAX) || fname.equals(FunctionNames.MIN) ) {
             return functionHelper(mathSingleFunct.param, 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
@@ -580,7 +580,7 @@ public class ExprlyTypechecker<T> {
      * @param Function
      * @return Return Type of function
      */
-    private BlocklyType visitMathPowerFunct(MathPowerFunct<T> mathPowerFunct) {
+    private BlocklyType visitMathPowerFunct(MathPowerFunct mathPowerFunct) {
         return functionHelper(mathPowerFunct.param, 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
     }
 
@@ -590,7 +590,7 @@ public class ExprlyTypechecker<T> {
      * @param Function
      * @return Return Type of function
      */
-    private BlocklyType visitMathConstrainFunct(MathConstrainFunct<T> mathConstrainFunct) {
+    private BlocklyType visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
         return functionHelper(mathConstrainFunct.param, 3, BlocklyType.NUMBER, BlocklyType.NUMBER);
     }
 
@@ -600,26 +600,26 @@ public class ExprlyTypechecker<T> {
      * @param Function
      * @return Return Type of function
      */
-    private BlocklyType visitTextJoinFunct(TextJoinFunct<T> textJoinFunct) {
+    private BlocklyType visitTextJoinFunct(TextJoinFunct textJoinFunct) {
         if ( this.robotName != null ) {
             if ( okMap.get(this.robotName).contains("noTextJoin") ) {
                 addError(TcError.TcErrorMsg.NO_FUNCT, "FUNCT", "createTextWith");
             }
         }
         BlocklyType t;
-        List<Expr<T>> args = textJoinFunct.param.get();
+        List<Expr> args = textJoinFunct.param.get();
 
         if ( args.size() < 2 ) {
             addError(TcError.TcErrorMsg.INVALID_ARGUMENT_NUMBER);
         }
         // Check that is a number type
-        for ( Expr<T> e : args ) {
+        for ( Expr e : args ) {
             t = checkAST(e);
             if ( t.equals(BlocklyType.NOTHING) ) {
                 addError(TcError.TcErrorMsg.UNEXPECTED_METHOD);
             } else if ( !t.equals(BlocklyType.VOID) ) {
                 if ( !t.equals(BlocklyType.STRING) ) {
-                    ExprlyUnParser<T> up = new ExprlyUnParser<>(e);
+                    ExprlyUnParser up = new ExprlyUnParser(e);
                     addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
                 }
             }
@@ -633,7 +633,7 @@ public class ExprlyTypechecker<T> {
      * @param Function
      * @return Return Type of function
      */
-    private BlocklyType visitTextPrintFunct(TextPrintFunct<T> textPrintFunct) {
+    private BlocklyType visitTextPrintFunct(TextPrintFunct textPrintFunct) {
         return functionHelper(textPrintFunct.param, 1, BlocklyType.STRING, BlocklyType.NOTHING);
     }
 
@@ -643,7 +643,7 @@ public class ExprlyTypechecker<T> {
      * @param Function
      * @return Return Type of function
      */
-    private BlocklyType visitGetSubFunct(GetSubFunct<T> getSubFunct) {
+    private BlocklyType visitGetSubFunct(GetSubFunct getSubFunct) {
         if ( this.robotName != null ) {
             if ( okMap.get(this.robotName).contains("noList") ) {
                 addError(TcError.TcErrorMsg.NO_TYPE, "TYPE", "list");
@@ -654,7 +654,7 @@ public class ExprlyTypechecker<T> {
         BlocklyType t, t0;
         t0 = BlocklyType.ARRAY;
         // Get parameters
-        List<Expr<T>> args = getSubFunct.param;
+        List<Expr> args = getSubFunct.param;
         List<IMode> mode = getSubFunct.strParam;
         // Check the number of parameters
         int argNumber = indexArgumentNumber(mode.get(0)) + indexArgumentNumber(mode.get(1)) + 1;
@@ -678,12 +678,12 @@ public class ExprlyTypechecker<T> {
                         || t.equals(BlocklyType.ARRAY_STRING)
                         || t.equals(BlocklyType.ARRAY_CONNECTION)
                         || t.equals(BlocklyType.ARRAY_COLOUR)) ) {
-                        ExprlyUnParser<T> up = new ExprlyUnParser<>(args.get(i));
+                        ExprlyUnParser up = new ExprlyUnParser(args.get(i));
                         addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
                     }
                 } else {
                     if ( !t.equals(BlocklyType.NUMBER) ) {
-                        ExprlyUnParser<T> up = new ExprlyUnParser<>(args.get(i));
+                        ExprlyUnParser up = new ExprlyUnParser(args.get(i));
                         addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
                     }
                 }
@@ -706,7 +706,7 @@ public class ExprlyTypechecker<T> {
      * @param Function
      * @return Return Type of function
      */
-    private BlocklyType visitListGetIndex(ListGetIndex<T> listGetIndex) {
+    private BlocklyType visitListGetIndex(ListGetIndex listGetIndex) {
         if ( this.robotName != null ) {
             if ( okMap.get(this.robotName).contains("noList") ) {
                 addError(TcError.TcErrorMsg.NO_TYPE, "TYPE", "list");
@@ -715,7 +715,7 @@ public class ExprlyTypechecker<T> {
         BlocklyType t, t0;
         t0 = BlocklyType.VOID;
         // Get parameters
-        List<Expr<T>> args = listGetIndex.param;
+        List<Expr> args = listGetIndex.param;
         IIndexLocation mode = listGetIndex.location;
         int argNumber = indexArgumentNumber(mode) + 1;
         // Check the number of parameters
@@ -738,12 +738,12 @@ public class ExprlyTypechecker<T> {
                         || t.equals(BlocklyType.ARRAY_STRING)
                         || t.equals(BlocklyType.ARRAY_CONNECTION)
                         || t.equals(BlocklyType.ARRAY_COLOUR)) ) {
-                        ExprlyUnParser<T> up = new ExprlyUnParser<>(args.get(i));
+                        ExprlyUnParser up = new ExprlyUnParser(args.get(i));
                         addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
                     }
                 } else {
                     if ( !t.equals(BlocklyType.NUMBER) ) {
-                        ExprlyUnParser<T> up = new ExprlyUnParser<>(args.get(i));
+                        ExprlyUnParser up = new ExprlyUnParser(args.get(i));
                         addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
                     }
                 }
@@ -769,7 +769,7 @@ public class ExprlyTypechecker<T> {
      * @param Function
      * @return Return Type of function
      */
-    private BlocklyType visitListSetIndex(ListSetIndex<T> listSetIndex) {
+    private BlocklyType visitListSetIndex(ListSetIndex listSetIndex) {
         if ( this.robotName != null ) {
             if ( okMap.get(this.robotName).contains("noList") ) {
                 addError(TcError.TcErrorMsg.NO_TYPE, "TYPE", "list");
@@ -778,7 +778,7 @@ public class ExprlyTypechecker<T> {
         BlocklyType t, t0;
         t0 = BlocklyType.ARRAY;
         // Get parameters
-        List<Expr<T>> args = listSetIndex.param;
+        List<Expr> args = listSetIndex.param;
         IIndexLocation mode = listSetIndex.location;
         int argNumber = indexArgumentNumber(mode) + 2;
         // Check the number of parameters
@@ -800,12 +800,12 @@ public class ExprlyTypechecker<T> {
                         || t0.equals(BlocklyType.ARRAY_STRING)
                         || t0.equals(BlocklyType.ARRAY_CONNECTION)
                         || t0.equals(BlocklyType.ARRAY_COLOUR)) ) {
-                        ExprlyUnParser<T> up = new ExprlyUnParser<>(args.get(i));
+                        ExprlyUnParser up = new ExprlyUnParser(args.get(i));
                         addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
                     }
                 } else {
                     if ( !t.equals(BlocklyType.NUMBER) ) {
-                        ExprlyUnParser<T> up = new ExprlyUnParser<>(args.get(i));
+                        ExprlyUnParser up = new ExprlyUnParser(args.get(i));
                         addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
                     }
                 }
@@ -821,7 +821,7 @@ public class ExprlyTypechecker<T> {
      * @param Function
      * @return Return Type of function
      */
-    private BlocklyType visitListRepeat(ListRepeat<T> listRepeat) {
+    private BlocklyType visitListRepeat(ListRepeat listRepeat) {
         if ( this.robotName != null ) {
             if ( okMap.get(this.robotName).contains("noList") ) {
                 addError(TcError.TcErrorMsg.NO_TYPE, "TYPE", "list");
@@ -832,7 +832,7 @@ public class ExprlyTypechecker<T> {
         BlocklyType t, t0, t1;
         t0 = BlocklyType.VOID;
         t1 = BlocklyType.VOID;
-        List<Expr<T>> args = listRepeat.param;
+        List<Expr> args = listRepeat.param;
         if ( args.size() != 2 ) {
             addError(TcError.TcErrorMsg.INVALID_ARGUMENT_NUMBER);
         }
@@ -849,7 +849,7 @@ public class ExprlyTypechecker<T> {
             } else if ( !t.equals(BlocklyType.VOID) ) {
                 if ( i == 1 ) {
                     if ( !t1.equals(BlocklyType.NUMBER) ) {
-                        ExprlyUnParser<T> up = new ExprlyUnParser<>(args.get(i));
+                        ExprlyUnParser up = new ExprlyUnParser(args.get(i));
                         addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
                     }
                 }
@@ -876,7 +876,7 @@ public class ExprlyTypechecker<T> {
      * @param Function
      * @return Return Type of function
      */
-    private BlocklyType visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<T> lengthOfIsEmptyFunct) {
+    private BlocklyType visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
         if ( this.robotName != null ) {
             if ( okMap.get(this.robotName).contains("noList") ) {
                 addError(TcError.TcErrorMsg.NO_TYPE, "TYPE", "list");
@@ -885,7 +885,7 @@ public class ExprlyTypechecker<T> {
         BlocklyType t, t0;
         t0 = BlocklyType.ARRAY;
         FunctionNames fname = lengthOfIsEmptyFunct.functName;
-        List<Expr<T>> args = lengthOfIsEmptyFunct.param;
+        List<Expr> args = lengthOfIsEmptyFunct.param;
         if ( args.size() != 1 ) {
             addError(TcError.TcErrorMsg.INVALID_ARGUMENT_NUMBER);
         }
@@ -904,7 +904,7 @@ public class ExprlyTypechecker<T> {
                     || t0.equals(BlocklyType.ARRAY_STRING)
                     || t0.equals(BlocklyType.ARRAY_CONNECTION)
                     || t0.equals(BlocklyType.ARRAY_COLOUR)) ) {
-                    ExprlyUnParser<T> up = new ExprlyUnParser<>(args.get(i));
+                    ExprlyUnParser up = new ExprlyUnParser(args.get(i));
                     addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
                 }
             }
@@ -924,14 +924,14 @@ public class ExprlyTypechecker<T> {
      * @param Function
      * @return Return Type of function
      */
-    private BlocklyType visitIndexOfFunct(IndexOfFunct<T> indexOfFunct) {
+    private BlocklyType visitIndexOfFunct(IndexOfFunct indexOfFunct) {
         if ( this.robotName != null ) {
             if ( okMap.get(this.robotName).contains("noList") ) {
                 addError(TcError.TcErrorMsg.NO_TYPE, "TYPE", "list");
             }
         }
         BlocklyType t, t1;
-        List<Expr<T>> args = indexOfFunct.param;
+        List<Expr> args = indexOfFunct.param;
         if ( args.size() != 2 ) {
             addError(TcError.TcErrorMsg.INVALID_ARGUMENT_NUMBER);
             return BlocklyType.NUMBER;
@@ -947,14 +947,14 @@ public class ExprlyTypechecker<T> {
                     || t.equals(BlocklyType.ARRAY_STRING)
                     || t.equals(BlocklyType.ARRAY_CONNECTION)
                     || t.equals(BlocklyType.ARRAY_COLOUR)) ) {
-                    ExprlyUnParser<T> up = new ExprlyUnParser<>(args.get(0));
+                    ExprlyUnParser up = new ExprlyUnParser(args.get(0));
                     addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
                 } else if ( t.equals(BlocklyType.ARRAY_NUMBER) && !t1.equals(BlocklyType.NUMBER)
                     || t.equals(BlocklyType.ARRAY_BOOLEAN) && !t1.equals(BlocklyType.BOOLEAN)
                     || t.equals(BlocklyType.ARRAY_STRING) && !t1.equals(BlocklyType.STRING)
                     || t.equals(BlocklyType.ARRAY_CONNECTION) && !t1.equals(BlocklyType.CONNECTION)
                     || t.equals(BlocklyType.ARRAY_COLOUR) && !t1.equals(BlocklyType.COLOR) ) {
-                    ExprlyUnParser<T> up = new ExprlyUnParser<>(args.get(1));
+                    ExprlyUnParser up = new ExprlyUnParser(args.get(1));
                     addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
                 }
                 return BlocklyType.NUMBER;
@@ -969,7 +969,7 @@ public class ExprlyTypechecker<T> {
      * @param operation
      * @return Return Type of the possible results of the operation or Void if there's an error
      */
-    private BlocklyType visitTernaryExpr(TernaryExpr<T> ternaryExpr) {
+    private BlocklyType visitTernaryExpr(TernaryExpr ternaryExpr) {
         if ( this.robotName != null ) {
             if ( okMap.get(this.robotName).contains("noTernary") ) {
                 addError(TcError.TcErrorMsg.NO_FUNCT, "FUNCT", "ternary operation");
@@ -981,7 +981,7 @@ public class ExprlyTypechecker<T> {
             if ( t.equals(BlocklyType.NOTHING) ) {
                 addError(TcError.TcErrorMsg.UNEXPECTED_METHOD);
             } else {
-                ExprlyUnParser<T> up = new ExprlyUnParser<>(ternaryExpr.condition);
+                ExprlyUnParser up = new ExprlyUnParser(ternaryExpr.condition);
                 addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
             }
         }
@@ -1002,8 +1002,8 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of expr
      */
     @SuppressWarnings("unchecked")
-    private BlocklyType visitStmtExpr(StmtExpr<?> stmtExpr) {
-        return checkAST((Phrase<T>) stmtExpr.stmt);
+    private BlocklyType visitStmtExpr(StmtExpr stmtExpr) {
+        return checkAST((Phrase) stmtExpr.stmt);
     }
 
     /**
@@ -1012,102 +1012,102 @@ public class ExprlyTypechecker<T> {
      * @param ast, phrase to analyze
      * @return BlocklyType of ast
      */
-    public BlocklyType checkAST(Phrase<T> ast) throws UnsupportedOperationException {
-        if ( ast instanceof Binary<?> ) {
-            return visitBinary((Binary<T>) ast);
+    public BlocklyType checkAST(Phrase ast) throws UnsupportedOperationException {
+        if ( ast instanceof Binary ) {
+            return visitBinary((Binary) ast);
         }
-        if ( ast instanceof Unary<?> ) {
-            return visitUnary((Unary<T>) ast);
+        if ( ast instanceof Unary ) {
+            return visitUnary((Unary) ast);
         }
-        if ( ast instanceof MathConst<?> ) {
-            return visitMathConst((MathConst<T>) ast);
+        if ( ast instanceof MathConst ) {
+            return visitMathConst((MathConst) ast);
         }
-        if ( ast instanceof NumConst<?> ) {
-            return visitNumConst((NumConst<T>) ast);
+        if ( ast instanceof NumConst ) {
+            return visitNumConst((NumConst) ast);
         }
-        if ( ast instanceof BoolConst<?> ) {
-            return visitBoolConst((BoolConst<T>) ast);
+        if ( ast instanceof BoolConst ) {
+            return visitBoolConst((BoolConst) ast);
         }
-        if ( ast instanceof StringConst<?> ) {
-            return visitStringConst((StringConst<T>) ast);
+        if ( ast instanceof StringConst ) {
+            return visitStringConst((StringConst) ast);
         }
-        if ( ast instanceof ColorConst<?> ) {
-            return visitColorConst((ColorConst<T>) ast);
+        if ( ast instanceof ColorConst ) {
+            return visitColorConst((ColorConst) ast);
         }
-        if ( ast instanceof RgbColor<?> ) {
-            return visitRgbColor((RgbColor<T>) ast);
+        if ( ast instanceof RgbColor ) {
+            return visitRgbColor((RgbColor) ast);
         }
-        if ( ast instanceof ConnectConst<?> ) {
-            return visitConnectConst((ConnectConst<T>) ast);
+        if ( ast instanceof ConnectConst ) {
+            return visitConnectConst((ConnectConst) ast);
         }
-        if ( ast instanceof Var<?> ) {
-            return visitVar((Var<T>) ast);
+        if ( ast instanceof Var ) {
+            return visitVar((Var) ast);
         }
-        if ( ast instanceof ListCreate<?> ) {
-            return visitExprList(((ListCreate<T>) ast).exprList);
+        if ( ast instanceof ListCreate ) {
+            return visitExprList(((ListCreate) ast).exprList);
         }
-        if ( ast instanceof ExprList<?> ) {
-            return visitExprList((ExprList<T>) ast);
+        if ( ast instanceof ExprList ) {
+            return visitExprList((ExprList) ast);
         }
-        if ( ast instanceof FunctionExpr<?> ) {
-            return visitFunctionExpr((FunctionExpr<T>) ast);
+        if ( ast instanceof FunctionExpr ) {
+            return visitFunctionExpr((FunctionExpr) ast);
         }
-        if ( ast instanceof MathNumPropFunct<?> ) {
-            return visitMathNumPropFunct((MathNumPropFunct<T>) ast);
+        if ( ast instanceof MathNumPropFunct ) {
+            return visitMathNumPropFunct((MathNumPropFunct) ast);
         }
-        if ( ast instanceof MathOnListFunct<?> ) {
-            return visitMathOnListFunct((MathOnListFunct<T>) ast);
+        if ( ast instanceof MathOnListFunct ) {
+            return visitMathOnListFunct((MathOnListFunct) ast);
         }
-        if ( ast instanceof MathRandomFloatFunct<?> ) {
-            return visitMathRandomFloatFunct((MathRandomFloatFunct<T>) ast);
+        if ( ast instanceof MathRandomFloatFunct ) {
+            return visitMathRandomFloatFunct((MathRandomFloatFunct) ast);
         }
-        if ( ast instanceof MathRandomIntFunct<?> ) {
-            return visitMathRandomIntFunct((MathRandomIntFunct<T>) ast);
+        if ( ast instanceof MathRandomIntFunct ) {
+            return visitMathRandomIntFunct((MathRandomIntFunct) ast);
         }
-        if ( ast instanceof MathSingleFunct<?> ) {
-            return visitMathSingleFunct((MathSingleFunct<T>) ast);
+        if ( ast instanceof MathSingleFunct ) {
+            return visitMathSingleFunct((MathSingleFunct) ast);
         }
-        if ( ast instanceof LengthOfIsEmptyFunct<?> ) {
-            return visitLengthOfIsEmptyFunct((LengthOfIsEmptyFunct<T>) ast);
+        if ( ast instanceof LengthOfIsEmptyFunct ) {
+            return visitLengthOfIsEmptyFunct((LengthOfIsEmptyFunct) ast);
         }
-        if ( ast instanceof ListSetIndex<?> ) {
-            return visitListSetIndex((ListSetIndex<T>) ast);
+        if ( ast instanceof ListSetIndex ) {
+            return visitListSetIndex((ListSetIndex) ast);
         }
-        if ( ast instanceof ListGetIndex<?> ) {
-            return visitListGetIndex((ListGetIndex<T>) ast);
+        if ( ast instanceof ListGetIndex ) {
+            return visitListGetIndex((ListGetIndex) ast);
         }
-        if ( ast instanceof ListRepeat<?> ) {
-            return visitListRepeat((ListRepeat<T>) ast);
+        if ( ast instanceof ListRepeat ) {
+            return visitListRepeat((ListRepeat) ast);
         }
-        if ( ast instanceof GetSubFunct<?> ) {
-            return visitGetSubFunct((GetSubFunct<T>) ast);
+        if ( ast instanceof GetSubFunct ) {
+            return visitGetSubFunct((GetSubFunct) ast);
         }
-        if ( ast instanceof IndexOfFunct<?> ) {
-            return visitIndexOfFunct((IndexOfFunct<T>) ast);
+        if ( ast instanceof IndexOfFunct ) {
+            return visitIndexOfFunct((IndexOfFunct) ast);
         }
-        if ( ast instanceof TextPrintFunct<?> ) {
-            return visitTextPrintFunct((TextPrintFunct<T>) ast);
+        if ( ast instanceof TextPrintFunct ) {
+            return visitTextPrintFunct((TextPrintFunct) ast);
         }
-        if ( ast instanceof TextJoinFunct<?> ) {
-            return visitTextJoinFunct((TextJoinFunct<T>) ast);
+        if ( ast instanceof TextJoinFunct ) {
+            return visitTextJoinFunct((TextJoinFunct) ast);
         }
-        if ( ast instanceof MathConstrainFunct<?> ) {
-            return visitMathConstrainFunct((MathConstrainFunct<T>) ast);
+        if ( ast instanceof MathConstrainFunct ) {
+            return visitMathConstrainFunct((MathConstrainFunct) ast);
         }
-        if ( ast instanceof MathPowerFunct<?> ) {
-            return visitMathPowerFunct((MathPowerFunct<T>) ast);
+        if ( ast instanceof MathPowerFunct ) {
+            return visitMathPowerFunct((MathPowerFunct) ast);
         }
-        if ( ast instanceof NullConst<?> ) {
-            return visitNullConst((NullConst<T>) ast);
+        if ( ast instanceof NullConst ) {
+            return visitNullConst((NullConst) ast);
         }
-        if ( ast instanceof EmptyExpr<?> ) {
-            return visitEmptyExpr((EmptyExpr<T>) ast);
+        if ( ast instanceof EmptyExpr ) {
+            return visitEmptyExpr((EmptyExpr) ast);
         }
-        if ( ast instanceof StmtExpr<?> ) {
-            return visitStmtExpr((StmtExpr<T>) ast);
+        if ( ast instanceof StmtExpr ) {
+            return visitStmtExpr((StmtExpr) ast);
         }
-        if ( ast instanceof TernaryExpr<?> ) {
-            return visitTernaryExpr((TernaryExpr<T>) ast);
+        if ( ast instanceof TernaryExpr ) {
+            return visitTernaryExpr((TernaryExpr) ast);
         }
 
         throw new UnsupportedOperationException("Expression " + ast.toString() + "cannot be checked");
@@ -1124,19 +1124,19 @@ public class ExprlyTypechecker<T> {
      * @param return type of the function
      * @return return type of the function
      */
-    private BlocklyType functionHelper(List<Expr<T>> args, int argSize, BlocklyType checkedType, BlocklyType expectedReturn) {
+    private BlocklyType functionHelper(List<Expr> args, int argSize, BlocklyType checkedType, BlocklyType expectedReturn) {
         BlocklyType t;
         if ( args.size() != argSize ) {
             addError(TcError.TcErrorMsg.INVALID_ARGUMENT_NUMBER);
         }
         // Check that is a number type
-        for ( Expr<T> e : args ) {
+        for ( Expr e : args ) {
             t = checkAST(e);
             if ( t.equals(BlocklyType.NOTHING) ) {
                 addError(TcError.TcErrorMsg.UNEXPECTED_METHOD);
             } else if ( !t.equals(BlocklyType.VOID) ) {
                 if ( !t.equals(checkedType) ) {
-                    ExprlyUnParser<T> up = new ExprlyUnParser<>(e);
+                    ExprlyUnParser up = new ExprlyUnParser(e);
                     addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
                 }
             }
@@ -1161,18 +1161,18 @@ public class ExprlyTypechecker<T> {
 
     // Fill the HashMap of robot specific restrictions
     static {
-        HashMap<String, HashSet<String>> map = new HashMap<>();
-        HashSet<String> wedo = new HashSet<>();
-        HashSet<String> ev3 = new HashSet<>();
-        HashSet<String> nxt = new HashSet<>();
-        HashSet<String> microbit = new HashSet<>();
-        HashSet<String> botnroll = new HashSet<>();
-        HashSet<String> nao = new HashSet<>();
-        HashSet<String> bob3 = new HashSet<>();
-        HashSet<String> arduino = new HashSet<>();
-        HashSet<String> sensebox = new HashSet<>();
-        HashSet<String> mbot = new HashSet<>();
-        HashSet<String> calliope = new HashSet<>();
+        HashMap<String, HashSet<String>> map = new HashMap();
+        HashSet<String> wedo = new HashSet();
+        HashSet<String> ev3 = new HashSet();
+        HashSet<String> nxt = new HashSet();
+        HashSet<String> microbit = new HashSet();
+        HashSet<String> botnroll = new HashSet();
+        HashSet<String> nao = new HashSet();
+        HashSet<String> bob3 = new HashSet();
+        HashSet<String> arduino = new HashSet();
+        HashSet<String> sensebox = new HashSet();
+        HashSet<String> mbot = new HashSet();
+        HashSet<String> calliope = new HashSet();
 
         wedo.add("#FF1493");
         wedo.add("#800080");

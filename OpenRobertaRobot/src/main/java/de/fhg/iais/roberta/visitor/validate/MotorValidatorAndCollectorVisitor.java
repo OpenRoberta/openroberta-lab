@@ -25,18 +25,18 @@ public abstract class MotorValidatorAndCollectorVisitor extends CommonNepoValida
 
     public MotorValidatorAndCollectorVisitor(
         ConfigurationAst robotConfiguration,
-        ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(robotConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+    public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         checkMotorPortAndAddUsedActor(motorGetPowerAction);
         return null;
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         checkAndVisitMotionParam(motorOnAction, motorOnAction.param);
         checkMotorPortAndAddUsedActor(motorOnAction);
 
@@ -54,21 +54,21 @@ public abstract class MotorValidatorAndCollectorVisitor extends CommonNepoValida
     }
 
     @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+    public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
         checkMotorPortAndAddUsedActor(motorSetPowerAction);
         requiredComponentVisited(motorSetPowerAction, motorSetPowerAction.power);
         return null;
     }
 
     @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         checkMotorPortAndAddUsedActor(motorStopAction);
         return null;
     }
 
-    protected void checkAndVisitMotionParam(Action<Void> action, MotionParam<Void> param) {
-        MotorDuration<Void> duration = param.getDuration();
-        Expr<Void> speed = param.getSpeed();
+    protected void checkAndVisitMotionParam(Action action, MotionParam param) {
+        MotorDuration duration = param.getDuration();
+        Expr speed = param.getSpeed();
 
         requiredComponentVisited(action, speed);
 
@@ -78,15 +78,15 @@ public abstract class MotorValidatorAndCollectorVisitor extends CommonNepoValida
         }
     }
 
-    protected void checkForZeroSpeed(Action<Void> action, Expr<Void> speed) {
+    protected void checkForZeroSpeed(Action action, Expr speed) {
         if ( speed.getKind().hasName("NUM_CONST") ) {
-            if ( Math.abs(Double.parseDouble(((NumConst<Void>) speed).value)) < DOUBLE_EPS ) {
+            if ( Math.abs(Double.parseDouble(((NumConst) speed).value)) < DOUBLE_EPS ) {
                 addWarningToPhrase(action, "MOTOR_SPEED_0");
             }
         }
     }
 
-    private void checkMotorPortAndAddUsedActor(MoveAction<Void> moveAction) {
+    private void checkMotorPortAndAddUsedActor(MoveAction moveAction) {
         ConfigurationComponent actor = this.robotConfiguration.optConfigurationComponent(moveAction.getUserDefinedPort());
         if ( actor == null ) {
             addErrorToPhrase(moveAction, "CONFIGURATION_ERROR_MOTOR_MISSING");

@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "BOB3_RECALL", category = "ACTOR", blocklyNames = {"bob3Actions_recall"})
-public final class RecallAction<V> extends Action<V> {
+public final class RecallAction extends Action {
 
     public RecallAction(BlocklyProperties properties) {
         super(properties);

@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoExpr(category = "EXPR", blocklyNames = {"logic_boolean"}, name = "BOOL_CONST", blocklyType = BlocklyType.BOOLEAN)
-public final class BoolConst<V> extends Expr<V> {
+public final class BoolConst extends Expr {
     @NepoField(name = BlocklyConstants.BOOL)
     public final boolean value;
 

@@ -23,12 +23,12 @@ public abstract class DifferentialMotorOldConfValidatorAndCollectorVisitor exten
 
     public DifferentialMotorOldConfValidatorAndCollectorVisitor(
         ConfigurationAst robotConfiguration,
-        ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(robotConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
+    public Void visitCurveAction(CurveAction curveAction) {
         requiredComponentVisited(curveAction, curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed());
         Optional.ofNullable(curveAction.paramLeft.getDuration())
             .ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
@@ -41,7 +41,7 @@ public abstract class DifferentialMotorOldConfValidatorAndCollectorVisitor exten
     }
 
     @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
+    public Void visitTurnAction(TurnAction turnAction) {
         checkAndVisitMotionParam(turnAction, turnAction.param);
         checkLeftRightMotorPort(turnAction);
         addLeftAndRightMotorToUsedActors();
@@ -49,7 +49,7 @@ public abstract class DifferentialMotorOldConfValidatorAndCollectorVisitor exten
     }
 
     @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
+    public Void visitDriveAction(DriveAction driveAction) {
         checkAndVisitMotionParam(driveAction, driveAction.param);
         checkLeftRightMotorPort(driveAction);
         addLeftAndRightMotorToUsedActors();
@@ -57,13 +57,13 @@ public abstract class DifferentialMotorOldConfValidatorAndCollectorVisitor exten
     }
 
     @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+    public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         checkLeftRightMotorPort(stopAction);
         addLeftAndRightMotorToUsedActors();
         return null;
     }
 
-    private void checkLeftRightMotorPort(Phrase<Void> driveAction) {
+    private void checkLeftRightMotorPort(Phrase driveAction) {
         if ( hasTooManyMotors(driveAction) ) {
             return;
         }
@@ -75,7 +75,7 @@ public abstract class DifferentialMotorOldConfValidatorAndCollectorVisitor exten
         checkMotorRotationDirection(driveAction, leftMotor, rightMotor);
     }
 
-    protected boolean hasTooManyMotors(Phrase<Void> driveAction) {
+    protected boolean hasTooManyMotors(Phrase driveAction) {
         if ( this.robotConfiguration.getMotors(SC.RIGHT).size() > 1 ) {
             addErrorToPhrase(driveAction, "CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS");
             return true;
@@ -87,7 +87,7 @@ public abstract class DifferentialMotorOldConfValidatorAndCollectorVisitor exten
         return false;
     }
 
-    private void checkRightMotorPresenceAndRegulation(Phrase<Void> driveAction, ConfigurationComponent rightMotor) {
+    private void checkRightMotorPresenceAndRegulation(Phrase driveAction, ConfigurationComponent rightMotor) {
         if ( rightMotor == null ) {
             addErrorToPhrase(driveAction, "CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING");
         } else {
@@ -95,7 +95,7 @@ public abstract class DifferentialMotorOldConfValidatorAndCollectorVisitor exten
         }
     }
 
-    private void checkLeftMotorPresenceAndRegulation(Phrase<Void> driveAction, ConfigurationComponent leftMotor) {
+    private void checkLeftMotorPresenceAndRegulation(Phrase driveAction, ConfigurationComponent leftMotor) {
         if ( leftMotor == null ) {
             addErrorToPhrase(driveAction, "CONFIGURATION_ERROR_MOTOR_LEFT_MISSING");
         } else {
@@ -103,13 +103,13 @@ public abstract class DifferentialMotorOldConfValidatorAndCollectorVisitor exten
         }
     }
 
-    private void checkIfMotorRegulated(Phrase<Void> driveAction, ConfigurationComponent motor, String errorMsg) {
+    private void checkIfMotorRegulated(Phrase driveAction, ConfigurationComponent motor, String errorMsg) {
         if ( !motor.getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE) ) {
             addErrorToPhrase(driveAction, errorMsg);
         }
     }
 
-    private void checkMotorRotationDirection(Phrase<Void> driveAction, ConfigurationComponent leftMotor, ConfigurationComponent rightMotor) {
+    private void checkMotorRotationDirection(Phrase driveAction, ConfigurationComponent leftMotor, ConfigurationComponent rightMotor) {
         if ( (leftMotor == null) || (rightMotor == null) ) {
             return;
         }
@@ -120,10 +120,10 @@ public abstract class DifferentialMotorOldConfValidatorAndCollectorVisitor exten
         }
     }
 
-    private void checkForZeroSpeedInCurve(Expr<Void> speedLeft, Expr<Void> speedRight, Action<Void> action) {
+    private void checkForZeroSpeedInCurve(Expr speedLeft, Expr speedRight, Action action) {
         if ( speedLeft.getKind().hasName("NUM_CONST") && speedRight.getKind().hasName("NUM_CONST") ) {
-            double speedLeftNumConst = Double.parseDouble(((NumConst<Void>) speedLeft).value);
-            double speedRightNumConst = Double.parseDouble(((NumConst<Void>) speedRight).value);
+            double speedLeftNumConst = Double.parseDouble(((NumConst) speedLeft).value);
+            double speedRightNumConst = Double.parseDouble(((NumConst) speedRight).value);
 
             boolean bothMotorsHaveZeroSpeed = (Math.abs(speedLeftNumConst) < DOUBLE_EPS) && (Math.abs(speedRightNumConst) < DOUBLE_EPS);
             if ( bothMotorsHaveZeroSpeed ) {

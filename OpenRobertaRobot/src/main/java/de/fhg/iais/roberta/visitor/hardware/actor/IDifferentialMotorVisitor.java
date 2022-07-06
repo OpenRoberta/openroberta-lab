@@ -7,12 +7,12 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 
 public interface IDifferentialMotorVisitor<V> extends IMotorVisitor<V> {
 
-    V visitDriveAction(DriveAction<V> driveAction);
+    V visitDriveAction(DriveAction driveAction);
 
-    V visitCurveAction(CurveAction<V> curveAction);
+    V visitCurveAction(CurveAction curveAction);
 
-    V visitTurnAction(TurnAction<V> turnAction);
+    V visitTurnAction(TurnAction turnAction);
 
-    V visitMotorDriveStopAction(MotorDriveStopAction<V> stopAction);
+    V visitMotorDriveStopAction(MotorDriveStopAction stopAction);
 
 }

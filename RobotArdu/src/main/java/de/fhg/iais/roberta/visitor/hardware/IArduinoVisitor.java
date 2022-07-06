@@ -27,44 +27,44 @@ import de.fhg.iais.roberta.visitor.hardware.actor.ISimpleSoundVisitor;
 public interface IArduinoVisitor<V>
         extends IDisplayVisitor<V>, ISimpleSoundVisitor<V>, ILightVisitor<V>, IPinVisitor<V>, INeuralNetworkVisitor<V>, IHardwareVisitor<V> {
 
-    V visitDropSensor(DropSensor<V> dropSensor);
+    V visitDropSensor(DropSensor dropSensor);
 
-    default V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
+    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
         return sensorGetSample.sensor.accept(this);
     }
 
-    V visitHumiditySensor(HumiditySensor<V> humiditySensor);
+    V visitHumiditySensor(HumiditySensor humiditySensor);
 
-    V visitMotionSensor(MotionSensor<V> motionSensor);
+    V visitMotionSensor(MotionSensor motionSensor);
 
-    V visitAccelerometerSensor(AccelerometerSensor<V> accelerometerSensor);
+    V visitAccelerometerSensor(AccelerometerSensor accelerometerSensor);
 
-    V visitGyroSensor(GyroSensor<V> gyroSensor);
+    V visitGyroSensor(GyroSensor gyroSensor);
 
-    V visitInfraredSensor(InfraredSensor<V> infraredSensor);
+    V visitInfraredSensor(InfraredSensor infraredSensor);
 
-    V visitLightSensor(LightSensor<V> lightSensor);
+    V visitLightSensor(LightSensor lightSensor);
 
-    V visitMoistureSensor(MoistureSensor<V> moistureSensor);
+    V visitMoistureSensor(MoistureSensor moistureSensor);
 
-    V visitMotorOnAction(MotorOnAction<V> motorOnAction);
+    V visitMotorOnAction(MotorOnAction motorOnAction);
 
-    V visitPinGetValueSensor(PinGetValueSensor<V> pinGetValueSensor);
+    V visitPinGetValueSensor(PinGetValueSensor pinGetValueSensor);
 
-    V visitPulseSensor(PulseSensor<V> pulseSensor);
+    V visitPulseSensor(PulseSensor pulseSensor);
 
-    V visitRelayAction(RelayAction<V> relayAction);
+    V visitRelayAction(RelayAction relayAction);
 
-    V visitKeysSensor(KeysSensor<Void> button);
+    V visitKeysSensor(KeysSensor button);
 
-    V visitRfidSensor(RfidSensor<V> rfidSensor);
+    V visitRfidSensor(RfidSensor rfidSensor);
 
-    V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor);
+    V visitTemperatureSensor(TemperatureSensor temperatureSensor);
 
-    V visitTimerSensor(TimerSensor<V> timerSensor);
+    V visitTimerSensor(TimerSensor timerSensor);
 
-    V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor);
+    V visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor);
 
-    V visitVoltageSensor(VoltageSensor<V> voltageSensor);
+    V visitVoltageSensor(VoltageSensor voltageSensor);
 
 }

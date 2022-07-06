@@ -18,10 +18,10 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "TEXT_STRING_CAST_NUMBER_FUNCT", category = "FUNCTION", blocklyNames = {"text_cast_string_tonumber"})
-public final class TextStringCastNumberFunct<V> extends Function<V> {
-    public final List<Expr<V>> param;
+public final class TextStringCastNumberFunct extends Function {
+    public final List<Expr> param;
 
-    public TextStringCastNumberFunct(List<Expr<V>> param, BlocklyProperties properties) {
+    public TextStringCastNumberFunct(List<Expr> param, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(param != null);
         this.param = param;
@@ -48,11 +48,11 @@ public final class TextStringCastNumberFunct<V> extends Function<V> {
         return "TextStringCastNumberFunct [" + this.param + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
-        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return new TextStringCastNumberFunct<V>(params, Jaxb2Ast.extractBlocklyProperties(block));
+        List<Expr> params = helper.extractExprParameters(block, exprParams);
+        return new TextStringCastNumberFunct(params, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

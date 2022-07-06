@@ -10,12 +10,12 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public class MicrobitValidatorAndCollectorVisitor extends MbedValidatorAndCollectorVisitor {
     public MicrobitValidatorAndCollectorVisitor(
         ConfigurationAst brickConfiguration,
-        ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(brickConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         throw new DbcException("Infrared Sensor not supported on Microbit");
     }
 }

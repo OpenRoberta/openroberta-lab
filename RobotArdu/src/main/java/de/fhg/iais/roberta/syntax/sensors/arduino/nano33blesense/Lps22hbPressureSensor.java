@@ -8,11 +8,11 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoExpr(name = "LPS22HB_PRESSURE", category = "SENSOR", blocklyNames = {"robsensors_lps22hb_pressure_getDataAvailableSample"})
-public final class Lps22hbPressureSensor<V> extends BuiltinSensor<V> {
+public final class Lps22hbPressureSensor extends BuiltinSensor {
     @NepoValue(name = "VARIABLE_VALUE", type = BlocklyType.NUMBER)
-    public final Expr<V> pressure;
+    public final Expr pressure;
 
-    public Lps22hbPressureSensor(BlocklyProperties properties, Expr<V> pressure) {
+    public Lps22hbPressureSensor(BlocklyProperties properties, Expr pressure) {
         super(properties, null);
         this.pressure = pressure;
         setReadOnly();

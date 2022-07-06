@@ -79,7 +79,7 @@ public class AnnotationHelper {
      * @param astClass the subclass of Phrase, that should be used for the AST representation of the block
      * @return the AST phrase corresponding to the blockly block
      */
-    public static <V> Phrase<V> block2astByAnnotation(Block block, Class<?> astClass, Jaxb2ProgramAst<V> helper) {
+    public static Phrase block2astByAnnotation(Block block, Class<?> astClass, Jaxb2ProgramAst helper) {
         List<ConstructorParameter> constructorParameters = new ArrayList<>();
         constructorParameters.add(new ConstructorParameter(Jaxb2Ast.extractBlocklyProperties(block)));
 
@@ -113,7 +113,7 @@ public class AnnotationHelper {
             Object[] valueArray = constructorParameters.stream().map(ConstructorParameter::getValue).toArray(Object[]::new);
 
             @SuppressWarnings("unchecked")
-            Constructor<Phrase<V>> declaredConstructor = (Constructor<Phrase<V>>) astClass.getDeclaredConstructor(typeArray);
+            Constructor<Phrase> declaredConstructor = (Constructor<Phrase>) astClass.getDeclaredConstructor(typeArray);
             return declaredConstructor.newInstance(valueArray);
         } catch ( NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException | IllegalArgumentException e ) {
             throw new DbcException("Constructor in annotated AST class " + astClass.getSimpleName() + " not found or invalid", e);
@@ -173,7 +173,7 @@ public class AnnotationHelper {
      *
      * @return the JAXB (~~XML) representation
      */
-    public static Block astToBlock(Phrase<?> phrase) {
+    public static Block astToBlock(Phrase phrase) {
         Class<?> clazz = phrase.getClass();
         if ( !isNepoAnnotatedClass(clazz) ) {
             throw new DbcException("the default implementation of astToBlock() fails with the NOT annotated class " + clazz.getSimpleName());
@@ -190,7 +190,7 @@ public class AnnotationHelper {
                         if ( anno instanceof NepoField ) {
                             Ast2Jaxb.addField(jaxbDestination, ((NepoField) anno).name(), fieldToString(field.get(phrase)));
                         } else if ( anno instanceof NepoValue ) {
-                            Ast2Jaxb.addValue(jaxbDestination, ((NepoValue) anno).name(), (Phrase<?>) field.get(phrase));
+                            Ast2Jaxb.addValue(jaxbDestination, ((NepoValue) anno).name(), (Phrase) field.get(phrase));
                         } else if ( anno instanceof NepoData ) {
                             Ast2Jaxb.addData(jaxbDestination, (String) field.get(phrase));
                         } else if ( anno instanceof NepoMutation ) {
@@ -224,7 +224,7 @@ public class AnnotationHelper {
      * @param phrase from which a string representation is generated
      * @return the String representation of the phrase; return null, if the generation failed
      */
-    public static String toString(Phrase<?> phrase) {
+    public static String toString(Phrase phrase) {
         Class<?> clazz = phrase.getClass();
         if ( !isNepoAnnotatedClass(clazz) ) {
             return null;
@@ -253,19 +253,19 @@ public class AnnotationHelper {
         return sb.toString();
     }
 
-    private static <V> ConstructorParameter extractNepoValueConstructorParameters(
+    private static ConstructorParameter extractNepoValueConstructorParameters(
         Block block,
         NepoValue anno,
         Field field,
-        Jaxb2ProgramAst<V> helper,
+        Jaxb2ProgramAst helper,
         Class<?> astClass) {
         List<Value> values = block.getValue();
         if ( field.getType().equals(Expr.class) ) {
-            Phrase<V> sub = helper.extractValue(values, new ExprParam(anno.name(), anno.type()));
-            Expr<V> expr = Jaxb2Ast.convertPhraseToExpr(sub);
+            Phrase sub = helper.extractValue(values, new ExprParam(anno.name(), anno.type()));
+            Expr expr = Jaxb2Ast.convertPhraseToExpr(sub);
             return new ConstructorParameter(Expr.class, expr);
         } else if ( field.getType().equals(Var.class) ) {
-            Expr<V> sub = helper.getVar(values, anno.name());
+            Expr sub = helper.getVar(values, anno.name());
             if ( sub instanceof Var ) {
                 return new ConstructorParameter(Var.class, (Var) sub);
             }
@@ -302,7 +302,7 @@ public class AnnotationHelper {
         return new ConstructorParameter(Hide.class, hide);
     }
 
-    private static <V> ConstructorParameter extractNepoExternalSensorParameters(Block block, Jaxb2ProgramAst<V> helper) {
+    private static <V> ConstructorParameter extractNepoExternalSensorParameters(Block block, Jaxb2ProgramAst helper) {
         ExternalSensorBean sensorData = ExternalSensor.extractPortAndModeAndSlot(block, helper);
         return new ConstructorParameter(ExternalSensorBean.class, sensorData);
     }

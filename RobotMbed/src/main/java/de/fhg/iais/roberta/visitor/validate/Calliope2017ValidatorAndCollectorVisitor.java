@@ -14,30 +14,30 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
  */
 public final class Calliope2017ValidatorAndCollectorVisitor extends CalliopeValidatorAndCollectorVisitor {
 
-    public Calliope2017ValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public Calliope2017ValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(brickConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
+    public Void visitRadioSendAction(RadioSendAction radioSendAction) {
         addErrorToPhrase(radioSendAction, "BLOCK_NOT_SUPPORTED");
         return super.visitRadioSendAction(radioSendAction);
     }
 
     @Override
-    public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
+    public Void visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
         addErrorToPhrase(radioReceiveAction, "BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
-    public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
+    public Void visitRadioSetChannelAction(RadioSetChannelAction radioSetChannelAction) {
         addErrorToPhrase(radioSetChannelAction, "BLOCK_NOT_SUPPORTED");
         return super.visitRadioSetChannelAction(radioSetChannelAction);
     }
 
     @Override
-    public Void visitRadioRssiSensor(RadioRssiSensor<Void> radioRssiSensor) {
+    public Void visitRadioRssiSensor(RadioRssiSensor radioRssiSensor) {
         addErrorToPhrase(radioRssiSensor, "BLOCK_NOT_SUPPORTED");
         return super.visitRadioRssiSensor(radioRssiSensor);
     }

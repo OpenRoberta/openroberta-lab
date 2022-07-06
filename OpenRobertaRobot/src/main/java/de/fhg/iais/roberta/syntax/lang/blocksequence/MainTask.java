@@ -19,12 +19,12 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "MAIN_TASK", category = "TASK", blocklyNames = {"robControls_start_ardu", "robControls_start", "mbedcontrols_start"})
-public final class MainTask<V> extends Task<V> {
-    public final StmtList<V> variables;
+public final class MainTask extends Task {
+    public final StmtList variables;
     public final String debug;
     public final Data data;
 
-    public MainTask(BlocklyProperties properties, StmtList<V> variables, String debug, Data data) {
+    public MainTask(BlocklyProperties properties, StmtList variables, String debug, Data data) {
         super(properties);
         Assert.isTrue(variables.isReadOnly() && variables != null);
         this.variables = variables;
@@ -48,7 +48,7 @@ public final class MainTask<V> extends Task<V> {
         return "MainTask [" + this.variables + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         String debug = null;
         List<Field> fields = block.getField();
         if ( !fields.isEmpty() ) {
@@ -56,12 +56,12 @@ public final class MainTask<V> extends Task<V> {
         }
         if ( block.getMutation().isDeclare() == true ) {
             List<Statement> statements = Jaxb2Ast.extractStatements(block, (short) 1);
-            StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.ST);
-            return new MainTask<V>(Jaxb2Ast.extractBlocklyProperties(block), statement, debug, block.getData());
+            StmtList statement = helper.extractStatement(statements, BlocklyConstants.ST);
+            return new MainTask(Jaxb2Ast.extractBlocklyProperties(block), statement, debug, block.getData());
         }
-        StmtList<V> listOfVariables = new StmtList<V>();
+        StmtList listOfVariables = new StmtList();
         listOfVariables.setReadOnly();
-        return new MainTask<V>(Jaxb2Ast.extractBlocklyProperties(block), listOfVariables, debug, block.getData());
+        return new MainTask(Jaxb2Ast.extractBlocklyProperties(block), listOfVariables, debug, block.getData());
     }
 
     @Override

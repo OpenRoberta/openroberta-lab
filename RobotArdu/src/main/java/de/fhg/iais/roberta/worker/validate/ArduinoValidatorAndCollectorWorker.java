@@ -26,7 +26,7 @@ public abstract class ArduinoValidatorAndCollectorWorker extends AbstractValidat
     }
 
     @Override
-    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         return new ArduinoValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 

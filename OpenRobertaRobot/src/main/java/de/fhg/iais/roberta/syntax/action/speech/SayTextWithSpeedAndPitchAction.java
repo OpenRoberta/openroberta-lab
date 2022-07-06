@@ -10,15 +10,15 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_sayText_parameters"}, name = "SAY_TEXT_WITH_SPEED_AND_PITCH")
-public final class SayTextWithSpeedAndPitchAction<V> extends Action<V> {
+public final class SayTextWithSpeedAndPitchAction extends Action {
     @NepoValue(name = BlocklyConstants.OUT, type = BlocklyType.STRING)
-    public final Expr<V> msg;
+    public final Expr msg;
     @NepoValue(name = BlocklyConstants.VOICESPEED, type = BlocklyType.NUMBER_INT)
-    public final Expr<V> speed;
+    public final Expr speed;
     @NepoValue(name = BlocklyConstants.VOICEPITCH, type = BlocklyType.NUMBER_INT)
-    public final Expr<V> pitch;
+    public final Expr pitch;
 
-    public SayTextWithSpeedAndPitchAction(BlocklyProperties properties, Expr<V> msg, Expr<V> speed, Expr<V> pitch) {
+    public SayTextWithSpeedAndPitchAction(BlocklyProperties properties, Expr msg, Expr speed, Expr pitch) {
         super(properties);
         Assert.isTrue(msg != null && speed != null && pitch != null);
         this.msg = msg;

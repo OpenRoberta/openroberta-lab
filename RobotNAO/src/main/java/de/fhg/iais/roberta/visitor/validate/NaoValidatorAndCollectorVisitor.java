@@ -56,158 +56,158 @@ import de.fhg.iais.roberta.visitor.INaoVisitor;
 
 public class NaoValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements INaoVisitor<Void> {
 
-    public NaoValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public NaoValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(robotConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+    public Void visitTouchSensor(TouchSensor touchSensor) {
         return null;
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(ultrasonicSensor.getUserDefinedPort(), SC.ULTRASONIC, ultrasonicSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
         return null;
     }
 
     @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
         return null;
     }
 
     @Override
-    public Void visitSetIntensity(SetIntensity<Void> setIntensity) {
+    public Void visitSetIntensity(SetIntensity setIntensity) {
         requiredComponentVisited(setIntensity, setIntensity.Intensity);
         return null;
     }
 
     @Override
-    public Void visitFsrSensor(FsrSensor<Void> forceSensor) {
+    public Void visitFsrSensor(FsrSensor forceSensor) {
         return null;
     }
 
     @Override
-    public Void visitHand(Hand<Void> hand) {
+    public Void visitHand(Hand hand) {
         return null;
     }
 
     @Override
-    public Void visitMoveJoint(MoveJoint<Void> moveJoint) {
+    public Void visitMoveJoint(MoveJoint moveJoint) {
         requiredComponentVisited(moveJoint, moveJoint.degrees);
         return null;
     }
 
     @Override
-    public Void visitWalkDistance(WalkDistance<Void> walkDistance) {
+    public Void visitWalkDistance(WalkDistance walkDistance) {
         requiredComponentVisited(walkDistance, walkDistance.distanceToWalk);
         return null;
     }
 
     @Override
-    public Void visitTurnDegrees(TurnDegrees<Void> turnDegrees) {
+    public Void visitTurnDegrees(TurnDegrees turnDegrees) {
         requiredComponentVisited(turnDegrees, turnDegrees.degreesToTurn);
         return null;
     }
 
     @Override
-    public Void visitSetLeds(SetLeds<Void> setLeds) {
+    public Void visitSetLeds(SetLeds setLeds) {
         requiredComponentVisited(setLeds, setLeds.Color);
         return null;
     }
 
     @Override
-    public Void visitLedOff(LedOff<Void> ledOff) {
+    public Void visitLedOff(LedOff ledOff) {
         return null;
     }
 
     @Override
-    public Void visitLedReset(LedReset<Void> ledReset) {
+    public Void visitLedReset(LedReset ledReset) {
         return null;
     }
 
     @Override
-    public Void visitWalkAsync(WalkAsync<Void> walkAsync) {
+    public Void visitWalkAsync(WalkAsync walkAsync) {
         requiredComponentVisited(walkAsync, walkAsync.XSpeed, walkAsync.YSpeed, walkAsync.ZSpeed);
         return null;
     }
 
     @Override
-    public Void visitSetMode(SetMode<Void> setMode) {
+    public Void visitSetMode(SetMode setMode) {
         return null;
     }
 
     @Override
-    public Void visitApplyPosture(ApplyPosture<Void> applyPosture) {
+    public Void visitApplyPosture(ApplyPosture applyPosture) {
         return null;
     }
 
     @Override
-    public Void visitSetStiffness(SetStiffness<Void> setStiffness) {
+    public Void visitSetStiffness(SetStiffness setStiffness) {
         return null;
     }
 
     @Override
-    public Void visitAutonomous(Autonomous<Void> autonomous) {
+    public Void visitAutonomous(Autonomous autonomous) {
         return null;
     }
 
     @Override
-    public Void visitWalkTo(WalkTo<Void> walkTo) {
+    public Void visitWalkTo(WalkTo walkTo) {
         requiredComponentVisited(walkTo, walkTo.walkToX, walkTo.walkToY, walkTo.walkToTheta);
         return null;
     }
 
     @Override
-    public Void visitStop(Stop<Void> stop) {
+    public Void visitStop(Stop stop) {
         return null;
     }
 
     @Override
-    public Void visitAnimation(Animation<Void> animation) {
+    public Void visitAnimation(Animation animation) {
         return null;
     }
 
     @Override
-    public Void visitPointLookAt(PointLookAt<Void> pointLookAt) {
+    public Void visitPointLookAt(PointLookAt pointLookAt) {
         requiredComponentVisited(pointLookAt, pointLookAt.pointX, pointLookAt.pointY, pointLookAt.pointZ, pointLookAt.speed);
         return null;
     }
 
     @Override
-    public Void visitSetVolume(SetVolume<Void> setVolume) {
+    public Void visitSetVolume(SetVolume setVolume) {
         requiredComponentVisited(setVolume, setVolume.volume);
         return null;
     }
 
     @Override
-    public Void visitGetVolume(GetVolume<Void> getVolume) {
+    public Void visitGetVolume(GetVolume getVolume) {
         return null;
     }
 
     @Override
-    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+    public Void visitSetLanguageAction(SetLanguageAction setLanguageAction) {
         return null;
     }
 
     @Override
-    public Void visitGetLanguage(GetLanguage<Void> getLanguage) {
+    public Void visitGetLanguage(GetLanguage getLanguage) {
         return null;
     }
 
     @Override
-    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
+    public Void visitSayTextAction(SayTextAction sayTextAction) {
         requiredComponentVisited(sayTextAction, sayTextAction.msg);
         return null;
     }
 
     @Override
-    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<Void> sayTextAction) {
+    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction sayTextAction) {
         requiredComponentVisited(sayTextAction, sayTextAction.msg);
         requiredComponentVisited(sayTextAction, sayTextAction.pitch);
         requiredComponentVisited(sayTextAction, sayTextAction.speed);
@@ -215,113 +215,113 @@ public class NaoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
     }
 
     @Override
-    public Void visitPlayFile(PlayFile<Void> playFile) {
+    public Void visitPlayFile(PlayFile playFile) {
         requiredComponentVisited(playFile, playFile.msg);
         return null;
     }
 
     @Override
-    public Void visitRandomEyesDuration(RandomEyesDuration<Void> randomEyesDuration) {
+    public Void visitRandomEyesDuration(RandomEyesDuration randomEyesDuration) {
         requiredComponentVisited(randomEyesDuration, randomEyesDuration.duration);
         return null;
     }
 
     @Override
-    public Void visitRastaDuration(RastaDuration<Void> rastaDuration) {
+    public Void visitRastaDuration(RastaDuration rastaDuration) {
         requiredComponentVisited(rastaDuration, rastaDuration.duration);
         return null;
     }
 
     @Override
-    public Void visitDetectMarkSensor(DetectMarkSensor<Void> detectedMark) {
+    public Void visitDetectMarkSensor(DetectMarkSensor detectedMark) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(null, SC.DETECT_MARK, null));
         return null;
     }
 
     @Override
-    public Void visitTakePicture(TakePicture<Void> takePicture) {
+    public Void visitTakePicture(TakePicture takePicture) {
         requiredComponentVisited(takePicture, takePicture.pictureName);
         return null;
     }
 
     @Override
-    public Void visitRecordVideo(RecordVideo<Void> recordVideo) {
+    public Void visitRecordVideo(RecordVideo recordVideo) {
         requiredComponentVisited(recordVideo, recordVideo.videoName, recordVideo.duration);
         return null;
     }
 
     @Override
-    public Void visitLearnFace(LearnFace<Void> learnFace) {
+    public Void visitLearnFace(LearnFace learnFace) {
         requiredComponentVisited(learnFace, learnFace.faceName);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(null, SC.NAO_FACE, null));
         return null;
     }
 
     @Override
-    public Void visitForgetFace(ForgetFace<Void> forgetFace) {
+    public Void visitForgetFace(ForgetFace forgetFace) {
         requiredComponentVisited(forgetFace, forgetFace.faceName);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(null, SC.NAO_FACE, null));
         return null;
     }
 
     @Override
-    public Void visitDetectFaceSensor(DetectFaceSensor<Void> detectFace) {
+    public Void visitDetectFaceSensor(DetectFaceSensor detectFace) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(null, SC.NAO_FACE, null));
         return null;
     }
 
     @Override
-    public Void visitElectricCurrentSensor(ElectricCurrentSensor<Void> electricCurrent) {
+    public Void visitElectricCurrentSensor(ElectricCurrentSensor electricCurrent) {
         return null;
     }
 
     @Override
-    public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
+    public Void visitRecognizeWord(RecognizeWord recognizeWord) {
         requiredComponentVisited(recognizeWord, recognizeWord.vocabulary);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(null, SC.NAO_SPEECH, null));
         return null;
     }
 
     @Override
-    public Void visitNaoMarkInformation(NaoMarkInformation<Void> naoMarkInformation) {
+    public Void visitNaoMarkInformation(NaoMarkInformation naoMarkInformation) {
         requiredComponentVisited(naoMarkInformation, naoMarkInformation.naoMarkId);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(null, SC.DETECT_MARK, null));
         return null;
     }
 
     @Override
-    public Void visitDetectedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
+    public Void visitDetectedFaceInformation(DetectedFaceInformation detectedFaceInformation) {
         requiredComponentVisited(detectedFaceInformation, detectedFaceInformation.faceName);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(null, SC.NAO_FACE, null));
         return null;
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         addWarningToPhrase(timerSensor, "BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
-    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+    public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         addWarningToPhrase(mathCastStringFunct, "BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
-    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+    public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         addWarningToPhrase(mathCastCharFunct, "BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
-    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         addWarningToPhrase(textStringCastNumberFunct, "BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
-    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         addWarningToPhrase(textCharCastNumberFunct, "BLOCK_NOT_SUPPORTED");
         return null;
     }

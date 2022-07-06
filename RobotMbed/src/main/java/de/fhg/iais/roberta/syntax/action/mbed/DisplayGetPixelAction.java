@@ -18,11 +18,11 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "DISPLAY_GET_PIXEL", category = "ACTOR", blocklyNames = {"mbedActions_display_getPixel"})
-public final class DisplayGetPixelAction<V> extends Action<V> {
-    public final Expr<V> x;
-    public final Expr<V> y;
+public final class DisplayGetPixelAction extends Action {
+    public final Expr x;
+    public final Expr y;
 
-    public DisplayGetPixelAction(BlocklyProperties properties, Expr<V> x, Expr<V> y) {
+    public DisplayGetPixelAction(BlocklyProperties properties, Expr x, Expr y) {
         super(properties);
         Assert.notNull(x);
         Assert.notNull(y);
@@ -36,12 +36,12 @@ public final class DisplayGetPixelAction<V> extends Action<V> {
         return "DisplaySetBrightnessAction [ " + this.x + ", " + this.y + " ]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
 
-        Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
-        Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
-        return new DisplayGetPixelAction<>(Jaxb2Ast.extractBlocklyProperties(block), Jaxb2Ast.convertPhraseToExpr(x), Jaxb2Ast.convertPhraseToExpr(y));
+        Phrase x = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
+        Phrase y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
+        return new DisplayGetPixelAction(Jaxb2Ast.extractBlocklyProperties(block), Jaxb2Ast.convertPhraseToExpr(x), Jaxb2Ast.convertPhraseToExpr(y));
 
     }
 

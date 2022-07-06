@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "LED_RESET", category = "ACTOR", blocklyNames = {"naoActions_ledReset"})
-public final class LedReset<V> extends Action<V> {
+public final class LedReset extends Action {
     @NepoField(name = "LED")
     public final Led led;
 

@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "APPLY_POSTURE", category = "ACTOR", blocklyNames = {"naoActions_applyPosture"})
-public final class ApplyPosture<V> extends Action<V> {
+public final class ApplyPosture extends Action {
 
     public final Posture posture;
 
@@ -32,10 +32,10 @@ public final class ApplyPosture<V> extends Action<V> {
         return "ApplyPosture [" + this.posture + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         String posture = Jaxb2Ast.extractField(fields, BlocklyConstants.DIRECTION);
-        return new ApplyPosture<V>(Posture.get(posture), Jaxb2Ast.extractBlocklyProperties(block));
+        return new ApplyPosture(Posture.get(posture), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

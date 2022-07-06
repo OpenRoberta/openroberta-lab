@@ -29,13 +29,13 @@ import de.fhg.iais.roberta.util.syntax.FunctionNames;
  * The enumeration {@link Op} specifies the allowed binary operations.
  */
 @NepoBasic(name = "BINARY", category = "EXPR", blocklyNames = {"math_arithmetic", "math_change", "math_modulo", "robMath_change", "logic_compare", "logic_operation", "robText_append"})
-public final class Binary<V> extends Expr<V> {
+public final class Binary extends Expr {
     public final Op op;
-    public final Expr<V> left;
-    public final Expr<V> right;
+    public final Expr left;
+    public final Expr right;
     public final String operationRange;
 
-    public Binary(Op op, Expr<V> left, Expr<V> right, String operationRange, BlocklyProperties properties) {
+    public Binary(Op op, Expr left, Expr right, String operationRange, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(op != null && left != null && right != null && left.isReadOnly() && right.isReadOnly());
         this.op = op;
@@ -49,7 +49,7 @@ public final class Binary<V> extends Expr<V> {
     /**
      * @return the expression on the right hand side. Returns subclass of {@link Expr}
      */
-    public Expr<V> getRight() {
+    public Expr getRight() {
         return this.right;
     }
 
@@ -161,23 +161,23 @@ public final class Binary<V> extends Expr<V> {
         }
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
 
         List<Value> values;
-        Phrase<V> leftt;
-        Phrase<V> rightt;
+        Phrase leftt;
+        Phrase rightt;
         switch ( block.getType() ) {
             case BlocklyConstants.TEXT_APPEND:
                 values = Jaxb2Ast.extractValues(block, (short) 2);
                 leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, BlocklyType.STRING));
                 rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.TEXT, BlocklyType.STRING));
-                return new ExprStmt<V>(new Binary<V>(Op.TEXT_APPEND, Jaxb2Ast.convertPhraseToExpr(leftt), Jaxb2Ast.convertPhraseToExpr(rightt), "", Jaxb2Ast.extractBlocklyProperties(block)));
+                return new ExprStmt(new Binary(Op.TEXT_APPEND, Jaxb2Ast.convertPhraseToExpr(leftt), Jaxb2Ast.convertPhraseToExpr(rightt), "", Jaxb2Ast.extractBlocklyProperties(block)));
             case BlocklyConstants.ROB_MATH_CHANGE:
             case BlocklyConstants.MATH_CHANGE:
                 values = Jaxb2Ast.extractValues(block, (short) 2);
                 leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, BlocklyType.STRING));
                 rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.DELTA, BlocklyType.NUMBER_INT));
-                return new ExprStmt<V>(new Binary<V>(Op.MATH_CHANGE, Jaxb2Ast.convertPhraseToExpr(leftt), Jaxb2Ast.convertPhraseToExpr(rightt), "", Jaxb2Ast.extractBlocklyProperties(block)));
+                return new ExprStmt(new Binary(Op.MATH_CHANGE, Jaxb2Ast.convertPhraseToExpr(leftt), Jaxb2Ast.convertPhraseToExpr(rightt), "", Jaxb2Ast.extractBlocklyProperties(block)));
 
             case BlocklyConstants.MATH_MODULO:
                 return helper
@@ -193,8 +193,8 @@ public final class Binary<V> extends Expr<V> {
                     ArrayList<ExprParam> exprParams = new ArrayList<>();
                     exprParams.add(new ExprParam(BlocklyConstants.A, BlocklyType.NUMBER_INT));
                     exprParams.add(new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT));
-                    List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-                    return new MathPowerFunct<V>(Jaxb2Ast.extractBlocklyProperties(block), FunctionNames.POWER, params);
+                    List<Expr> params = helper.extractExprParameters(block, exprParams);
+                    return new MathPowerFunct(Jaxb2Ast.extractBlocklyProperties(block), FunctionNames.POWER, params);
                 }
             default:
                 return helper

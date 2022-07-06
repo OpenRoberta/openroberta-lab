@@ -30,13 +30,13 @@ import de.fhg.iais.roberta.util.syntax.MotorDuration;
  * The client must provide the {@link TurnDirection} and {@link MotionParam} (distance the robot should cover and speed).
  */
 @NepoBasic(name = "TURN_ACTION", category = "ACTOR", blocklyNames = {"robActions_motorDiff_turn", "robActions_motorDiff_turn_for"})
-public final class TurnAction<V> extends Action<V> {
+public final class TurnAction extends Action {
     public final ITurnDirection direction;
-    public final MotionParam<V> param;
+    public final MotionParam param;
     public final String port;
     public final List<Hide> hide;
 
-    public TurnAction(ITurnDirection direction, MotionParam<V> param, String port, List<Hide> hide, BlocklyProperties properties) {
+    public TurnAction(ITurnDirection direction, MotionParam param, String port, List<Hide> hide, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
@@ -51,33 +51,33 @@ public final class TurnAction<V> extends Action<V> {
         return "TurnAction [direction=" + this.direction + ", param=" + this.param + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields;
         String mode;
         List<Value> values;
-        MotionParam<V> mp;
+        MotionParam mp;
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         fields = Jaxb2Ast.extractFields(block, (short) 2);
         mode = Jaxb2Ast.extractField(fields, BlocklyConstants.DIRECTION);
 
         if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_TURN) ) {
             values = Jaxb2Ast.extractValues(block, (short) 1);
-            Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
-            mp = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(expr)).build();
+            Phrase expr = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
+            mp = new MotionParam.Builder().speed(Jaxb2Ast.convertPhraseToExpr(expr)).build();
         } else {
             values = Jaxb2Ast.extractValues(block, (short) 2);
-            Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
-            Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.DEGREE, BlocklyType.NUMBER_INT));
-            MotorDuration<V> md = new MotorDuration<V>(factory.getMotorMoveMode("DEGREE"), Jaxb2Ast.convertPhraseToExpr(right));
-            mp = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(left)).duration(md).build();
+            Phrase left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
+            Phrase right = helper.extractValue(values, new ExprParam(BlocklyConstants.DEGREE, BlocklyType.NUMBER_INT));
+            MotorDuration md = new MotorDuration(factory.getMotorMoveMode("DEGREE"), Jaxb2Ast.convertPhraseToExpr(right));
+            mp = new MotionParam.Builder().speed(Jaxb2Ast.convertPhraseToExpr(left)).duration(md).build();
         }
 
         if ( fields.stream().anyMatch(field -> field.getName().equals(BlocklyConstants.ACTORPORT)) ) {
             String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT);
-            return new TurnAction<>(factory.getTurnDirection(mode), mp, port, block.getHide(), Jaxb2Ast.extractBlocklyProperties(block));
+            return new TurnAction(factory.getTurnDirection(mode), mp, port, block.getHide(), Jaxb2Ast.extractBlocklyProperties(block));
         }
 
-        return new TurnAction<>(factory.getTurnDirection(mode), mp, BlocklyConstants.EMPTY_PORT, null, Jaxb2Ast.extractBlocklyProperties(block));
+        return new TurnAction(factory.getTurnDirection(mode), mp, BlocklyConstants.EMPTY_PORT, null, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

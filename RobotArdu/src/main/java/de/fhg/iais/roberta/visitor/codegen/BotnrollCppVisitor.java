@@ -53,19 +53,19 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public BotnrollCppVisitor(List<List<Phrase<Void>>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
+    public BotnrollCppVisitor(List<List<Phrase>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, brickConfiguration, beans);
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+    public Void visitShowTextAction(ShowTextAction showTextAction) {
         String toChar = "";
         String varType = showTextAction.msg.getVarType().toString();
         boolean isVar = showTextAction.msg.hasName("VAR");
         String mode = null;
-        Expr<Void> tt = showTextAction.msg;
+        Expr tt = showTextAction.msg;
         if ( !(tt instanceof StmtExpr) && tt.getKind().hasName("SENSOR_EXPR") ) {
-            ExternalSensor<Void> sens = (ExternalSensor<Void>) ((SensorExpr<Void>) tt).sensor;
+            ExternalSensor sens = (ExternalSensor) ((SensorExpr) tt).sensor;
             if ( sens.getKind().hasName("COLOR_SENSING") ) {
                 mode = sens.getMode();
             }
@@ -98,20 +98,20 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         this.sb.append("bnr.lcdClear();");
         return null;
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         this.sb.append("one.led(" + lightAction.mode.getValues()[0] + ");");
         return null;
 
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         //9 - sound port
         this.sb.append("tone(9, ");
         toneAction.frequency.accept(this);
@@ -122,7 +122,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         //9 - sound port
         this.sb.append("tone(9, ");
         this.sb.append(playNoteAction.frequency);
@@ -133,7 +133,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         ConfigurationComponent leftMotor = this.configuration.getConfigurationComponent("B");
         ConfigurationComponent rightMotor = this.configuration.getConfigurationComponent("A");
         final boolean reverse = leftMotor.isReverse() && rightMotor.isReverse();
@@ -164,7 +164,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     }
 
     @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         String port = motorStopAction.getUserDefinedPort().toString().equals("B") ? "1" : "2";
         if ( motorStopAction.mode == MotorStopMode.FLOAT ) {
             this.sb.append("one.stop1m(");
@@ -177,7 +177,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     }
 
     @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
+    public Void visitDriveAction(DriveAction driveAction) {
         ConfigurationComponent leftMotor = this.configuration.getConfigurationComponent("B");
         ConfigurationComponent rightMotor = this.configuration.getConfigurationComponent("A");
 
@@ -215,7 +215,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     }
 
     @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
+    public Void visitCurveAction(CurveAction curveAction) {
         ConfigurationComponent leftMotor = this.configuration.getConfigurationComponent("B");
         ConfigurationComponent rightMotor = this.configuration.getConfigurationComponent("A");
         final boolean isRegulatedDrive = leftMotor.isRegulated() && rightMotor.isRegulated();
@@ -252,7 +252,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     }
 
     @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
+    public Void visitTurnAction(TurnAction turnAction) {
         ConfigurationComponent leftMotor = this.configuration.getConfigurationComponent("B");
         ConfigurationComponent rightMotor = this.configuration.getConfigurationComponent("A");
         boolean isRegulatedDrive = leftMotor.isRegulated() || rightMotor.isRegulated();
@@ -298,13 +298,13 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     }
 
     @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+    public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         this.sb.append("one.stop();");
         return null;
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         this.sb.append("one.readAdc(");
         // ports from 0 to 7
         this.sb.append(lightSensor.getUserDefinedPort()); // we could add "-1" so the number of ports would be 1-8 for users
@@ -315,7 +315,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     }
 
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+    public Void visitKeysSensor(KeysSensor keysSensor) {
         switch ( keysSensor.getUserDefinedPort() ) {
             case SC.LEFT:
                 this.sb.append("bnr.buttonIsPressed(1)");
@@ -334,7 +334,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     }
 
     @Override
-    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
+    public Void visitColorSensor(ColorSensor colorSensor) {
         String port = colorSensor.getUserDefinedPort();
         String colors;
         if ( port.equals("1") ) {
@@ -366,19 +366,19 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     }
 
     @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+    public Void visitCompassSensor(CompassSensor compassSensor) {
         this.sb.append("bnr.readBearing()");
         return null;
     }
 
     @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
+    public Void visitVoltageSensor(VoltageSensor voltageSensor) {
         this.sb.append("one.readBattery()");
         return null;
     }
 
     @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         String port = infraredSensor.getUserDefinedPort();
         switch ( infraredSensor.getMode() ) {
             case SC.OBSTACLE:
@@ -399,7 +399,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         String port = ultrasonicSensor.getUserDefinedPort();
         if ( ultrasonicSensor.getUserDefinedPort().equals("3") ) {
             this.sb.append("bnr.sonar()");
@@ -410,7 +410,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
+    public Void visitMainTask(MainTask mainTask) {
         decrIndentation();
         mainTask.variables.accept(this);
         nlIndent();

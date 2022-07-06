@@ -21,29 +21,29 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
  */
 public interface IMbot2Visitor<V> extends IActors4AutonomousDriveRobots<V>, ISensorVisitor<V> {
 
-    V visitJoystick(Joystick<V> joystick);
+    V visitJoystick(Joystick joystick);
 
-    V visitSoundRecord(SoundRecord<V> soundRecord);
+    V visitSoundRecord(SoundRecord soundRecord);
 
-    V visitGyroResetAxis(GyroResetAxis<V> gyroResetAxis);
+    V visitGyroResetAxis(GyroResetAxis gyroResetAxis);
 
-    V visitPlayRecordingAction(PlayRecordingAction<V> playRecordingAction);
+    V visitPlayRecordingAction(PlayRecordingAction playRecordingAction);
 
-    V visitDisplaySetColourAction(DisplaySetColourAction<V> displaySetColourAction);
+    V visitDisplaySetColourAction(DisplaySetColourAction displaySetColourAction);
 
-    V visitQuadRGBSensor(QuadRGBSensor<V> quadRGBSensor);
+    V visitQuadRGBSensor(QuadRGBSensor quadRGBSensor);
 
-    V visitQuadRGBLightOnAction(QuadRGBLightOnAction<V> quadRGBLightOnAction);
+    V visitQuadRGBLightOnAction(QuadRGBLightOnAction quadRGBLightOnAction);
 
-    V visitQuadRGBLightOffAction(QuadRGBLightOffAction<V> quadRGBLightOffAction);
+    V visitQuadRGBLightOffAction(QuadRGBLightOffAction quadRGBLightOffAction);
 
-    V visitUltrasonic2LEDAction(Ultrasonic2LEDAction<V> ultrasonic2LEDAction);
+    V visitUltrasonic2LEDAction(Ultrasonic2LEDAction ultrasonic2LEDAction);
 
-    V visitLedsOffAction(LedsOffAction<V> ledsOffAction);
+    V visitLedsOffAction(LedsOffAction ledsOffAction);
 
-    V visitLedBrightnessAction(LedBrightnessAction<V> ledBrightnessAction);
+    V visitLedBrightnessAction(LedBrightnessAction ledBrightnessAction);
 
-    V visitPrintlnAction(PrintlnAction<V> printlnAction);
+    V visitPrintlnAction(PrintlnAction printlnAction);
 
-    V visitLedOnActionWithIndex(LedOnActionWithIndex<V> ledOnActionWithIndex);
+    V visitLedOnActionWithIndex(LedOnActionWithIndex ledOnActionWithIndex);
 }

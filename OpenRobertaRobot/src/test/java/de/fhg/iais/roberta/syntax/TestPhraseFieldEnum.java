@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "TEST_PHRASE_FIELD_ENUM", blocklyNames = {"test_phrase_field_enum"}, category = "EXPR")
-public class TestPhraseFieldEnum<V> extends Expr<V> {
+public class TestPhraseFieldEnum extends Expr {
     @NepoField(name = "TYPE")
     public final Type type;
 

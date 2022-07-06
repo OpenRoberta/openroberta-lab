@@ -21,13 +21,13 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "MOVE_JOINT", category = "ACTOR", blocklyNames = {"naoActions_moveJoint"})
-public final class MoveJoint<V> extends Action<V> {
+public final class MoveJoint extends Action {
 
     public final Joint joint;
     public final RelativeAbsolute relativeAbsolute;
-    public final Expr<V> degrees;
+    public final Expr degrees;
 
-    public MoveJoint(Joint joint, RelativeAbsolute relativeAbsolute, Expr<V> degrees, BlocklyProperties properties) {
+    public MoveJoint(Joint joint, RelativeAbsolute relativeAbsolute, Expr degrees, BlocklyProperties properties) {
         super(properties);
         Assert.notNull(joint, "Missing joint in MoveJoint block!");
         Assert.notNull(relativeAbsolute, "Missing relativeAbsolute in MoveJoint block!");
@@ -42,16 +42,16 @@ public final class MoveJoint<V> extends Action<V> {
         return "MoveJoint [" + this.joint + ", " + this.relativeAbsolute + ", " + this.degrees + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
 
         String joint = Jaxb2Ast.extractField(fields, BlocklyConstants.JOINT);
         String relativeAbsolute = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
 
-        Phrase<V> walkDistance = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
+        Phrase walkDistance = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
 
-        return new MoveJoint<V>(Joint.get(joint), RelativeAbsolute.get(relativeAbsolute), Jaxb2Ast.convertPhraseToExpr(walkDistance), Jaxb2Ast.extractBlocklyProperties(block));
+        return new MoveJoint(Joint.get(joint), RelativeAbsolute.get(relativeAbsolute), Jaxb2Ast.convertPhraseToExpr(walkDistance), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

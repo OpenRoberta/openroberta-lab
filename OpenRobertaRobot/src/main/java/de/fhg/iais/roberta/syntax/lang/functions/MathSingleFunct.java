@@ -19,11 +19,11 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
 @NepoBasic(name = "MATH_SINGLE_FUNCT", category = "FUNCTION", blocklyNames = {"math_trig", "math_single", "math_round"})
-public final class MathSingleFunct<V> extends Function<V> {
+public final class MathSingleFunct extends Function {
     public final FunctionNames functName;
-    public final List<Expr<V>> param;
+    public final List<Expr> param;
 
-    public MathSingleFunct(FunctionNames name, List<Expr<V>> param, BlocklyProperties properties) {
+    public MathSingleFunct(FunctionNames name, List<Expr> param, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
@@ -51,15 +51,15 @@ public final class MathSingleFunct<V> extends Function<V> {
         return "MathSingleFunct [" + this.functName + ", " + this.param + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         if ( Jaxb2Ast.getOperation(block, BlocklyConstants.OP).equals(BlocklyConstants.NEG) ) {
             return helper.blockToUnaryExpr(block, new ExprParam(BlocklyConstants.NUM, BlocklyType.NUMBER_INT), BlocklyConstants.OP);
         }
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.NUM, BlocklyType.NUMBER_INT));
         String op = Jaxb2Ast.getOperation(block, BlocklyConstants.OP);
-        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return new MathSingleFunct<V>(FunctionNames.get(op), params, Jaxb2Ast.extractBlocklyProperties(block));
+        List<Expr> params = helper.extractExprParameters(block, exprParams);
+        return new MathSingleFunct(FunctionNames.get(op), params, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

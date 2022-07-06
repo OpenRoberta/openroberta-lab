@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "BOB3_RGB_LED_OFF", category = "ACTOR", blocklyNames = {"makeblockActions_leds_off"})
-public final class LedOffAction<V> extends Action<V> {
+public final class LedOffAction extends Action {
     public final String side;
 
     public LedOffAction(String side, BlocklyProperties properties) {
@@ -28,10 +28,10 @@ public final class LedOffAction<V> extends Action<V> {
         return "LedOffAction [ ]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         String side = Jaxb2Ast.extractField(fields, BlocklyConstants.LED + BlocklyConstants.SIDE);
-        return new LedOffAction<>(side, Jaxb2Ast.extractBlocklyProperties(block));
+        return new LedOffAction(side, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

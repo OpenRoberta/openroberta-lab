@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 @NepoPhrase(category = "SENSOR", blocklyNames = {"robSensors_sound_record"}, name = "SOUND_RECORD")
-public final class SoundRecord<V> extends Sensor<V> implements WithUserDefinedPort<V> {
+public final class SoundRecord extends Sensor implements WithUserDefinedPort {
     @NepoField(name = BlocklyConstants.MODE)
     public final String mode;
     @NepoField(name = BlocklyConstants.SENSORPORT)

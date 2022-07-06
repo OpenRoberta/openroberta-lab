@@ -14,15 +14,15 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"robactions_display_set_colour"}, name = "DISPLAY_SET_COLOUR_ACTION")
-public final class DisplaySetColourAction<V> extends Action<V> implements WithUserDefinedPort<V> {
+public final class DisplaySetColourAction extends Action implements WithUserDefinedPort {
     @NepoValue(name = BlocklyConstants.COLOR, type = BlocklyType.COLOR)
-    public final Expr<V> color;
+    public final Expr color;
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;
     @NepoHide
     public final Hide hide;
 
-    public DisplaySetColourAction(BlocklyProperties properties, Expr<V> color, String port, Hide hide) {
+    public DisplaySetColourAction(BlocklyProperties properties, Expr color, String port, Hide hide) {
         super(properties);
         Assert.notNull(color);
         Assert.nonEmptyString(port);

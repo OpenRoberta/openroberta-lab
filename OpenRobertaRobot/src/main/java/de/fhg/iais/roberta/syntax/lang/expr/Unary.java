@@ -25,11 +25,11 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * The enumeration {@link Op} contains all allowed unary operations.
  */
 @NepoBasic(name = "UNARY", category = "EXPR", blocklyNames = {"logic_negate"})
-public final class Unary<V> extends Expr<V> {
+public final class Unary extends Expr {
     public final Op op;
-    public final Expr<V> expr;
+    public final Expr expr;
 
-    public Unary(Op op, Expr<V> expr, BlocklyProperties properties) {
+    public Unary(Op op, Expr expr, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(op != null && expr != null && expr.isReadOnly());
         this.op = op;
@@ -124,7 +124,7 @@ public final class Unary<V> extends Expr<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         return helper.blockToUnaryExpr(block, new ExprParam(BlocklyConstants.BOOL, BlocklyType.BOOLEAN), BlocklyConstants.NOT);
     }
 

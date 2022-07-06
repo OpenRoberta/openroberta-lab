@@ -67,16 +67,16 @@ import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.IMbedVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
-public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IMbedVisitor<V> {
+public class MbedStackMachineVisitor extends AbstractStackMachineVisitor implements IMbedVisitor<Void> {
 
-    public MbedStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase<Void>>> phrases) {
+    public MbedStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases) {
         super(configuration);
         Assert.isTrue(!phrases.isEmpty());
 
     }
 
     @Override
-    public V visitColorConst(ColorConst<V> colorConst) {
+    public Void visitColorConst(ColorConst colorConst) {
         int r = colorConst.getRedChannelInt();
         int g = colorConst.getGreenChannelInt();
         int b = colorConst.getBlueChannelInt();
@@ -86,14 +86,14 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         JSONObject o = makeNode(C.CLEAR_DISPLAY_ACTION);
 
         return app(o);
     }
 
     @Override
-    public V visitDisplayTextAction(DisplayTextAction<V> displayTextAction) {
+    public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
         displayTextAction.msg.accept(this);
         JSONObject o = makeNode(C.SHOW_TEXT_ACTION).put(C.MODE, displayTextAction.mode.toString().toLowerCase());
 
@@ -101,7 +101,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitImage(Image<V> image) {
+    public Void visitImage(Image image) {
         JSONArray jsonImage = new JSONArray();
         for ( int i = 0; i < 5; i++ ) {
             ArrayList<Integer> a = new ArrayList<>();
@@ -122,7 +122,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitPredefinedImage(PredefinedImage<V> predefinedImage) {
+    public Void visitPredefinedImage(PredefinedImage predefinedImage) {
         final String image = predefinedImage.getImageName().getImageString();
         JSONArray a =
             new JSONArray(
@@ -134,20 +134,20 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitDisplayImageAction(DisplayImageAction<V> displayImageAction) {
+    public Void visitDisplayImageAction(DisplayImageAction displayImageAction) {
         displayImageAction.getValuesToDisplay().accept(this);
         JSONObject o = makeNode(C.SHOW_IMAGE_ACTION).put(C.MODE, displayImageAction.displayImageMode.toString().toLowerCase());
         return app(o);
     }
 
     @Override
-    public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         JSONObject o = makeNode(C.STATUS_LIGHT_ACTION).put(C.NAME, "calliope").put(C.PORT, "internal");
         return app(o);
     }
 
     @Override
-    public V visitToneAction(ToneAction<V> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         toneAction.frequency.accept(this);
         toneAction.duration.accept(this);
         JSONObject o = makeNode(C.TONE_ACTION);
@@ -155,7 +155,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitPlayNoteAction(PlayNoteAction<V> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         String freq = playNoteAction.frequency;
         String duration = playNoteAction.duration;
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, freq));
@@ -165,12 +165,12 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitMotorGetPowerAction(MotorGetPowerAction<V> motorGetPowerAction) {
+    public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         return null;
     }
 
     @Override
-    public V visitMotorOnAction(MotorOnAction<V> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         motorOnAction.param.getSpeed().accept(this);
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
 
@@ -183,12 +183,12 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitMotorSetPowerAction(MotorSetPowerAction<V> motorSetPowerAction) {
+    public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
         return null;
     }
 
     @Override
-    public V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         String port = motorStopAction.getUserDefinedPort();
         ConfigurationComponent cc = this.configuration.optConfigurationComponent(port);
         String pin1 = ((cc == null) || cc.componentType.equals("CALLIBOT")) ? "0" : cc.getProperty("PIN1");
@@ -198,7 +198,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitPinWriteValueAction(PinWriteValueAction<V> pinWriteValueAction) {
+    public Void visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
         pinWriteValueAction.value.accept(this);
         String port = pinWriteValueAction.port;
         ConfigurationComponent cc = this.configuration.optConfigurationComponent(port);
@@ -210,7 +210,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitImageShiftFunction(ImageShiftFunction<V> imageShiftFunction) {
+    public Void visitImageShiftFunction(ImageShiftFunction imageShiftFunction) {
         imageShiftFunction.image.accept(this);
         imageShiftFunction.positions.accept(this);
         IDirection direction = imageShiftFunction.shiftDirection;
@@ -219,28 +219,28 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitImageInvertFunction(ImageInvertFunction<V> imageInvertFunction) {
+    public Void visitImageInvertFunction(ImageInvertFunction imageInvertFunction) {
         imageInvertFunction.image.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, C.IMAGE_INVERT_ACTION);
         return app(o);
     }
 
     @Override
-    public V visitGestureSensor(GestureSensor<V> gestureSensor) {
+    public Void visitGestureSensor(GestureSensor gestureSensor) {
         String mode = gestureSensor.getMode();
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GESTURE).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
         return app(o);
     }
 
     @Override
-    public V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor) {
+    public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
         String mode = temperatureSensor.getMode();
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TEMPERATURE).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
         return app(o);
     }
 
     @Override
-    public V visitKeysSensor(KeysSensor<V> keysSensor) {
+    public Void visitKeysSensor(KeysSensor keysSensor) {
         String port = keysSensor.getUserDefinedPort();
         ConfigurationComponent cc = this.configuration.optConfigurationComponent(port);
         String pin1 = (cc == null) ? "0" : cc.getProperty("PIN1");
@@ -250,13 +250,13 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitLightSensor(LightSensor<V> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.LIGHT).put(C.MODE, C.AMBIENTLIGHT).put(C.NAME, "calliope");
         return app(o);
     }
 
     @Override
-    public V visitTimerSensor(TimerSensor<V> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         String port = timerSensor.getUserDefinedPort();
         JSONObject o;
         if ( timerSensor.getMode().equals(SC.DEFAULT) || timerSensor.getMode().equals(SC.VALUE) ) {
@@ -268,7 +268,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitPinTouchSensor(PinTouchSensor<V> sensorGetSample) {
+    public Void visitPinTouchSensor(PinTouchSensor sensorGetSample) {
         String port = sensorGetSample.getUserDefinedPort();
         String mode = sensorGetSample.getMode();
 
@@ -277,27 +277,27 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitSoundSensor(SoundSensor<V> soundSensor) {
+    public Void visitSoundSensor(SoundSensor soundSensor) {
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.SOUND).put(C.MODE, C.VOLUME).put(C.NAME, "calliope");
         return app(o);
     }
 
     @Override
-    public V visitCompassSensor(CompassSensor<V> compassSensor) {
+    public Void visitCompassSensor(CompassSensor compassSensor) {
         String mode = compassSensor.getMode();
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COMPASS).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
         return app(o);
     }
 
     @Override
-    public V visitLedOnAction(LedOnAction<V> ledOnAction) {
+    public Void visitLedOnAction(LedOnAction ledOnAction) {
         ledOnAction.ledColor.accept(this);
         JSONObject o = makeNode(C.LED_ON_ACTION);
         return app(o);
     }
 
     @Override
-    public V visitPinGetValueSensor(PinGetValueSensor<V> pinValueSensor) {
+    public Void visitPinGetValueSensor(PinGetValueSensor pinValueSensor) {
         String port = pinValueSensor.getUserDefinedPort();
         ConfigurationComponent cc = this.configuration.optConfigurationComponent(port);
         String pin1 = (cc == null) ? "0" : cc.getProperty("PIN1");
@@ -309,20 +309,20 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<V> displaySetBrightnessAction) {
+    public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction displaySetBrightnessAction) {
         displaySetBrightnessAction.brightness.accept(this);
         JSONObject o = makeNode(C.DISPLAY_SET_BRIGHTNESS_ACTION);
         return app(o);
     }
 
     @Override
-    public V visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<V> displayGetBrightnessAction) {
+    public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction displayGetBrightnessAction) {
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.DISPLAY).put(C.MODE, C.BRIGHTNESS).put(C.NAME, "calliope");
         return app(o);
     }
 
     @Override
-    public V visitDisplaySetPixelAction(DisplaySetPixelAction<V> displaySetPixelAction) {
+    public Void visitDisplaySetPixelAction(DisplaySetPixelAction displaySetPixelAction) {
         displaySetPixelAction.x.accept(this);
         displaySetPixelAction.y.accept(this);
         displaySetPixelAction.brightness.accept(this);
@@ -331,7 +331,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitDisplayGetPixelAction(DisplayGetPixelAction<V> displayGetPixelAction) {
+    public Void visitDisplayGetPixelAction(DisplayGetPixelAction displayGetPixelAction) {
         displayGetPixelAction.x.accept(this);
         displayGetPixelAction.y.accept(this);
         JSONObject o = makeNode(C.DISPLAY_GET_PIXEL_BRIGHTNESS_ACTION);
@@ -339,17 +339,17 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitAccelerometerSensor(AccelerometerSensor<V> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
         return null;
     }
 
     @Override
-    public V visitGyroSensor(GyroSensor<V> gyroSensor) {
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
         return null;
     }
 
     @Override
-    public V visitBothMotorsOnAction(BothMotorsOnAction<V> bothMotorsOnAction) {
+    public Void visitBothMotorsOnAction(BothMotorsOnAction bothMotorsOnAction) {
         bothMotorsOnAction.speedA.accept(this);
         bothMotorsOnAction.speedB.accept(this);
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
@@ -367,7 +367,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitBothMotorsStopAction(BothMotorsStopAction<V> bothMotorsStopAction) {
+    public Void visitBothMotorsStopAction(BothMotorsStopAction bothMotorsStopAction) {
         JSONObject o = makeNode(C.MOTOR_STOP).put(C.PORT, "ab");
         return app(o);
     }
@@ -377,82 +377,82 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitSwitchLedMatrixAction(SwitchLedMatrixAction<V> switchLedMatrixAction) {
+    public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction) {
         return null;
     }
 
     @Override
-    public V visitLightAction(LightAction<V> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         return null;
     }
 
     @Override
-    public V visitRadioSendAction(RadioSendAction<V> radioSendAction) {
+    public Void visitRadioSendAction(RadioSendAction radioSendAction) {
         return null;
     }
 
     @Override
-    public V visitRadioReceiveAction(RadioReceiveAction<V> radioReceiveAction) {
+    public Void visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
         return null;
     }
 
     @Override
-    public V visitRadioSetChannelAction(RadioSetChannelAction<V> radioSetChannelAction) {
+    public Void visitRadioSetChannelAction(RadioSetChannelAction radioSetChannelAction) {
         return null;
     }
 
     @Override
-    public V visitRadioRssiSensor(RadioRssiSensor<V> radioRssiSensor) {
+    public Void visitRadioRssiSensor(RadioRssiSensor radioRssiSensor) {
         return null;
     }
 
     @Override
-    public V visitHumiditySensor(HumiditySensor<V> humiditySensor) {
+    public Void visitHumiditySensor(HumiditySensor humiditySensor) {
         return null;
     }
 
     @Override
-    public V visitInfraredSensor(InfraredSensor<V> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         return null;
     }
 
     @Override
-    public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         return null;
     }
 
     @Override
-    public V visitColorSensor(ColorSensor<V> colorSensor) {
+    public Void visitColorSensor(ColorSensor colorSensor) {
         return null;
     }
 
     @Override
-    public V visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<V> fourDigitDisplayShowAction) {
+    public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction fourDigitDisplayShowAction) {
         return null;
     }
 
     @Override
-    public V visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<V> fourDigitDisplayClearAction) {
+    public Void visitFourDigitDisplayClearAction(FourDigitDisplayClearAction fourDigitDisplayClearAction) {
         return null;
     }
 
     @Override
-    public V visitLedBarSetAction(LedBarSetAction<V> ledBarSetAction) {
+    public Void visitLedBarSetAction(LedBarSetAction ledBarSetAction) {
         return null;
     }
 
     @Override
-    public V visitServoSetAction(ServoSetAction<V> servoSetAction) {
+    public Void visitServoSetAction(ServoSetAction servoSetAction) {
         return null;
     }
 
     @Override
-    public V visitMotionKitSingleSetAction(MotionKitSingleSetAction<V> motionKitSingleSetAction) {
+    public Void visitMotionKitSingleSetAction(MotionKitSingleSetAction motionKitSingleSetAction) {
         return null;
     }
 
     @Override
-    public V visitMotionKitDualSetAction(MotionKitDualSetAction<V> motionKitDualSetAction) {
+    public Void visitMotionKitDualSetAction(MotionKitDualSetAction motionKitDualSetAction) {
         return null;
     }
 }

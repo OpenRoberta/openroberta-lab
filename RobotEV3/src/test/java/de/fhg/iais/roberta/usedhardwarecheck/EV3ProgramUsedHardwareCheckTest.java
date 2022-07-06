@@ -52,13 +52,13 @@ public class EV3ProgramUsedHardwareCheckTest extends Ev3LejosAstTest {
 
     @Test
     public void testCollector() {
-        List<List<Phrase<Void>>> phrasesOfPhrases = UnitTestHelper.getProgramAst(testFactory, file);
+        List<List<Phrase>> phrasesOfPhrases = UnitTestHelper.getProgramAst(testFactory, file);
         UsedHardwareBean.Builder usedHardwareBuilder = new UsedHardwareBean.Builder();
         UsedMethodBean.Builder usedMethodBuilder = new UsedMethodBean.Builder();
         ErrorAndWarningBean.Builder errorAndWarningBuilder = new ErrorAndWarningBean.Builder();
         NNBean.Builder nnBuilder = new NNBean.Builder();
 
-        ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder<?>> map = new ImmutableClassToInstanceMap.Builder<>();
+        ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder> map = new ImmutableClassToInstanceMap.Builder<>();
         map.put(UsedMethodBean.Builder.class, usedMethodBuilder);
         map.put(UsedHardwareBean.Builder.class, usedHardwareBuilder);
         map.put(ErrorAndWarningBean.Builder.class, errorAndWarningBuilder);
@@ -68,8 +68,8 @@ public class EV3ProgramUsedHardwareCheckTest extends Ev3LejosAstTest {
             new Ev3ValidatorAndCollectorVisitor(
                 makeLargeLargeMediumTouchGyroColorUltrasonic(),
                 map.build());
-        for ( List<Phrase<Void>> phrases : phrasesOfPhrases ) {
-            for ( Phrase<Void> phrase : phrases ) {
+        for ( List<Phrase> phrases : phrasesOfPhrases ) {
+            for ( Phrase phrase : phrases ) {
                 phrase.accept(checkVisitor);
             }
         }

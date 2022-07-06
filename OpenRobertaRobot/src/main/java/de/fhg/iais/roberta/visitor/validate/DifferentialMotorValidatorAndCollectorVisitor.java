@@ -25,45 +25,45 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitor extends Moto
 
     public DifferentialMotorValidatorAndCollectorVisitor(
         ConfigurationAst robotConfiguration,
-        ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(robotConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
+    public Void visitDriveAction(DriveAction driveAction) {
         checkAndAddDifferentialDriveBlock(driveAction);
         checkAndVisitMotionParam(driveAction, driveAction.param);
         return null;
     }
 
     @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
+    public Void visitCurveAction(CurveAction curveAction) {
         checkAndAddDifferentialDriveBlock(curveAction);
         checkForZeroSpeedInCurve(curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed(), curveAction);
         return null;
     }
 
     @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
+    public Void visitTurnAction(TurnAction turnAction) {
         checkAndVisitMotionParam(turnAction, turnAction.param);
         checkAndAddDifferentialDriveBlock(turnAction);
         return null;
     }
 
     @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+    public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         checkAndAddDifferentialDriveBlock(stopAction);
         return null;
     }
 
-    private void checkAndAddDifferentialDriveBlock(Action<Void> motionAction) {
+    private void checkAndAddDifferentialDriveBlock(Action motionAction) {
         if ( hasDifferentialDriveCheck(motionAction) ) {
             hasEncodersOnDifferentialDriveCheck(motionAction);
             addDifferentialDriveToUsedHardware();
         }
     }
 
-    private boolean hasDifferentialDriveCheck(Action<Void> motionAction) {
+    private boolean hasDifferentialDriveCheck(Action motionAction) {
         ConfigurationComponent differentialDrive = getDifferentialDrive();
         if ( differentialDrive == null ) {
             addErrorToPhrase(motionAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
@@ -85,7 +85,7 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitor extends Moto
         return null;
     }
 
-    private void hasEncodersOnDifferentialDriveCheck(Action<Void> motionParam) {
+    private void hasEncodersOnDifferentialDriveCheck(Action motionParam) {
         ConfigurationComponent differentialDrive = getDifferentialDrive();
         Assert.notNull(differentialDrive, "differentialDrive block is missing in the configuration");
         List<ConfigurationComponent> rightMotors = getEncodersOnPort(differentialDrive.getOptProperty("MOTOR_R"));
@@ -130,10 +130,10 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitor extends Moto
         return encoders;
     }
 
-    private void checkForZeroSpeedInCurve(Expr<Void> speedLeft, Expr<Void> speedRight, Action<Void> action) {
+    private void checkForZeroSpeedInCurve(Expr speedLeft, Expr speedRight, Action action) {
         if ( speedLeft.getKind().hasName("NUM_CONST") && speedRight.getKind().hasName("NUM_CONST") ) {
-            double speedLeftNumConst = Double.parseDouble(((NumConst<Void>) speedLeft).value);
-            double speedRightNumConst = Double.parseDouble(((NumConst<Void>) speedRight).value);
+            double speedLeftNumConst = Double.parseDouble(((NumConst) speedLeft).value);
+            double speedRightNumConst = Double.parseDouble(((NumConst) speedRight).value);
 
             boolean bothMotorsHaveZeroSpeed = (Math.abs(speedLeftNumConst) < DOUBLE_EPS) && (Math.abs(speedRightNumConst) < DOUBLE_EPS);
             if ( bothMotorsHaveZeroSpeed ) {

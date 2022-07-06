@@ -19,11 +19,11 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
 @NepoBasic(name = "LENGTH_OF_IS_EMPTY_FUNCT", category = "FUNCTION", blocklyNames = {"lists_length", "lists_isEmpty", "robLists_isEmpty", "robLists_length"})
-public final class LengthOfIsEmptyFunct<V> extends Function<V> {
+public final class LengthOfIsEmptyFunct extends Function {
     public final FunctionNames functName;
-    public final List<Expr<V>> param;
+    public final List<Expr> param;
 
-    public LengthOfIsEmptyFunct(FunctionNames name, List<Expr<V>> param, BlocklyProperties properties) {
+    public LengthOfIsEmptyFunct(FunctionNames name, List<Expr> param, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
@@ -51,11 +51,11 @@ public final class LengthOfIsEmptyFunct<V> extends Function<V> {
         return "LengthOfFunct [" + this.functName + ", " + this.param + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
-        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return new LengthOfIsEmptyFunct<V>(FunctionNames.get(block.getType()), params, Jaxb2Ast.extractBlocklyProperties(block));
+        List<Expr> params = helper.extractExprParameters(block, exprParams);
+        return new LengthOfIsEmptyFunct(FunctionNames.get(block.getType()), params, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

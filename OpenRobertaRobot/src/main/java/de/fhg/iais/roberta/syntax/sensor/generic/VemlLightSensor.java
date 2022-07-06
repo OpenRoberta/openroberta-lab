@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 @NepoExpr(name = "VEMLLIGHT_SENSING", category = "SENSOR", blocklyNames = {"robSensors_lightveml_getSample"},
     sampleValues = {@F2M(field = "LIGHTVEML_UVLIGHT", mode = "UVLIGHT"), @F2M(field = "LIGHTVEML_LIGHT", mode = "LIGHT")})
 @NepoExternalSensor()
-public final class VemlLightSensor<V> extends ExternalSensor<V> {
+public final class VemlLightSensor extends ExternalSensor {
 
     public VemlLightSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);

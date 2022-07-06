@@ -38,149 +38,149 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 public interface IFestobionicVisitor<V> extends IMotorVisitor<V>, ILightVisitor<V>, ISensorVisitor<V> {
     @Override
-    default V visitMotorSetPowerAction(MotorSetPowerAction<V> motorSetPowerAction) {
+    default V visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitMotorGetPowerAction(MotorGetPowerAction<V> motorGetPowerAction) {
+    default V visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
+    default V visitMotorStopAction(MotorStopAction motorStopAction) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitKeysSensor(KeysSensor<V> keysSensor) {
+    default V visitKeysSensor(KeysSensor keysSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitColorSensor(ColorSensor<V> colorSensor) {
+    default V visitColorSensor(ColorSensor colorSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitLightSensor(LightSensor<V> lightSensor) {
+    default V visitLightSensor(LightSensor lightSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitSoundSensor(SoundSensor<V> soundSensor) {
+    default V visitSoundSensor(SoundSensor soundSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitEncoderSensor(EncoderSensor<V> encoderSensor) {
+    default V visitEncoderSensor(EncoderSensor encoderSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitGyroSensor(GyroSensor<V> gyroSensor) {
+    default V visitGyroSensor(GyroSensor gyroSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitInfraredSensor(InfraredSensor<V> infraredSensor) {
+    default V visitInfraredSensor(InfraredSensor infraredSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitTouchSensor(TouchSensor<V> touchSensor) {
+    default V visitTouchSensor(TouchSensor touchSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor) {
+    default V visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitCompassSensor(CompassSensor<V> compassSensor) {
+    default V visitCompassSensor(CompassSensor compassSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor) {
+    default V visitTemperatureSensor(TemperatureSensor temperatureSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitVoltageSensor(VoltageSensor<V> voltageSensor) {
+    default V visitVoltageSensor(VoltageSensor voltageSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitAccelerometerSensor(AccelerometerSensor<V> accelerometerSensor) {
+    default V visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitPinTouchSensor(PinTouchSensor<V> pinTouchSensor) {
+    default V visitPinTouchSensor(PinTouchSensor pinTouchSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitGestureSensor(GestureSensor<V> gestureSensor) {
+    default V visitGestureSensor(GestureSensor gestureSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitPinGetValueSensor(PinGetValueSensor<V> pinGetValueSensor) {
+    default V visitPinGetValueSensor(PinGetValueSensor pinGetValueSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitIRSeekerSensor(IRSeekerSensor<V> irSeekerSensor) {
+    default V visitIRSeekerSensor(IRSeekerSensor irSeekerSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitMoistureSensor(MoistureSensor<V> moistureSensor) {
+    default V visitMoistureSensor(MoistureSensor moistureSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitHumiditySensor(HumiditySensor<V> humiditySensor) {
+    default V visitHumiditySensor(HumiditySensor humiditySensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitMotionSensor(MotionSensor<V> motionSensor) {
+    default V visitMotionSensor(MotionSensor motionSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitDropSensor(DropSensor<V> dropSensor) {
+    default V visitDropSensor(DropSensor dropSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitPulseSensor(PulseSensor<V> pulseSensor) {
+    default V visitPulseSensor(PulseSensor pulseSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitRfidSensor(RfidSensor<V> rfidSensor) {
+    default V visitRfidSensor(RfidSensor rfidSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    default V visitVemlLightSensor(VemlLightSensor<V> vemlLightSensor) {
+    default V visitVemlLightSensor(VemlLightSensor vemlLightSensor) {
         throw new DbcException("Not supported!");
     }
 
-    default V visitLedOffAction(LedOffAction<Void> ledOffAction) {
+    default V visitLedOffAction(LedOffAction ledOffAction) {
     	throw new DbcException("Not supported!");
     }
 
-    default V visitLedOnAction(LedOnAction<Void> ledOnAction) {
+    default V visitLedOnAction(LedOnAction ledOnAction) {
     	throw new DbcException("Not supported!");
     }
 	
-    default V visitStepMotorAction(StepMotorAction<Void> stepMotorAction) {
+    default V visitStepMotorAction(StepMotorAction stepMotorAction) {
     	throw new DbcException("Not supported!");
     }
 }

@@ -10,13 +10,13 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "STMT", blocklyNames = {"robActions_inputneuron"}, name = "NN_INPUT_NEURON_STMT")
-public final class NNInputNeuronStmt<V> extends Stmt<V> {
+public final class NNInputNeuronStmt extends Stmt {
     @NepoField(name = BlocklyConstants.NAME)
     public final String name;
     @NepoValue(name = BlocklyConstants.VALUE, type = BlocklyType.NUMBER)
-    public final Expr<V> value;
+    public final Expr value;
 
-    public NNInputNeuronStmt(BlocklyProperties properties, String name, Expr<V> value) {
+    public NNInputNeuronStmt(BlocklyProperties properties, String name, Expr value) {
         super(properties);
         Assert.isTrue(value.isReadOnly() && value != null);
         this.name = name;

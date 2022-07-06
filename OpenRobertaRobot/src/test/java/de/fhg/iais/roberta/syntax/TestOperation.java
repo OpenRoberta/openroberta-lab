@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoExpr(precedence = 10, assoc = Assoc.LEFT, blocklyType = BlocklyType.ARRAY, name = "TEST_OPERATION", category = "EXPR", blocklyNames = {"test_operation"})
-public class TestOperation<V> extends Expr<V> {
+public class TestOperation extends Expr {
     public TestOperation(BlocklyProperties properties) {
         super(properties);
     }

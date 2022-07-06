@@ -59,7 +59,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     private final String password;
 
     public SenseboxCppVisitor(
-        List<List<Phrase<Void>>> programPhrases,
+        List<List<Phrase>> programPhrases,
         ConfigurationAst brickConfiguration,
         String SSID,
         String password,
@@ -70,7 +70,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
+    public Void visitMainTask(MainTask mainTask) {
         this.decrIndentation();
         this.nlIndent();
         mainTask.variables.accept(this);
@@ -159,18 +159,18 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         return null;
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         this.sb.append("_display_").append(clearDisplayAction.port).append(".clearDisplay();");
         return null;
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+    public Void visitShowTextAction(ShowTextAction showTextAction) {
         this.sb.append("_display_").append(showTextAction.port).append(".setCursor(");
         showTextAction.x.accept(this);
         this.sb.append(", ");
@@ -191,7 +191,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitPlotPointAction(PlotPointAction<Void> plotPointAction) {
+    public Void visitPlotPointAction(PlotPointAction plotPointAction) {
         this.sb.append("_plot_").append(plotPointAction.port).append(".addDataPoint(");
         plotPointAction.tickmark.accept(this);
         this.sb.append(", ");
@@ -202,7 +202,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitPlotClearAction(PlotClearAction<Void> plotClearAction) {
+    public Void visitPlotClearAction(PlotClearAction plotClearAction) {
         ConfigurationComponent cc = this.configuration.optConfigurationComponentByType(SC.LCDI2C);
         String portName = null;
         if ( cc != null ) {
@@ -218,7 +218,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         this.sb.append("tone(_buzzer_").append(toneAction.port).append(", ");
         toneAction.frequency.accept(this);
         this.sb.append(");");
@@ -232,23 +232,23 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         throw new DbcException("play note not supported");
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+    public Void visitSoundSensor(SoundSensor soundSensor) {
         this.sb.append("get_microphone_volume(_mic_").append(soundSensor.getUserDefinedPort()).append(")");
         return null;
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         if ( !lightAction.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
             this.sb.append("digitalWrite(_led_").append(lightAction.port).append(", ").append(lightAction.mode.getValues()[0] + ");");
         } else {
             if ( lightAction.rgbLedColor.getClass().equals(ColorConst.class) ) {
-                ColorConst<Void> colorConst = (ColorConst<Void>) lightAction.rgbLedColor;
+                ColorConst colorConst = (ColorConst) lightAction.rgbLedColor;
                 this.sb
                     .append("_rgbled_")
                     .append(lightAction.port)
@@ -262,7 +262,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     .append(colorConst.getBlueChannelInt())
                     .append("));");
             } else if ( lightAction.rgbLedColor.getClass().equals(Var.class) ) {
-                String tempVarName = "___" + ((Var<Void>) lightAction.rgbLedColor).name;
+                String tempVarName = "___" + ((Var) lightAction.rgbLedColor).name;
                 this.sb
                     .append("_rgbled_")
                     .append(lightAction.port)
@@ -277,11 +277,11 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     .append(")));");
             } else {
                 this.sb.append("_rgbled_").append(lightAction.port).append(".setPixelColor(0, _rgbled_").append(lightAction.port).append(".Color(");
-                ((RgbColor<Void>) lightAction.rgbLedColor).R.accept(this);
+                ((RgbColor) lightAction.rgbLedColor).R.accept(this);
                 this.sb.append(", ");
-                ((RgbColor<Void>) lightAction.rgbLedColor).G.accept(this);
+                ((RgbColor) lightAction.rgbLedColor).G.accept(this);
                 this.sb.append(", ");
-                ((RgbColor<Void>) lightAction.rgbLedColor).B.accept(this);
+                ((RgbColor) lightAction.rgbLedColor).B.accept(this);
                 this.sb.append("));");
             }
             nlIndent();
@@ -291,7 +291,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         this.sb
             .append("_rgbled_")
             .append(lightStatusAction.getUserDefinedPort())
@@ -305,36 +305,36 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitRelayAction(RelayAction<Void> relayAction) {
+    public Void visitRelayAction(RelayAction relayAction) {
         return null;
     }
 
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> button) {
+    public Void visitKeysSensor(KeysSensor button) {
         this.sb.append("digitalRead(_button_").append(button.getUserDefinedPort()).append(")");
         return null;
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         this.sb.append("analogRead(_output_").append(lightSensor.getUserDefinedPort()).append(")/10.24");
         return null;
     }
 
     @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> potentiometer) {
+    public Void visitVoltageSensor(VoltageSensor potentiometer) {
         this.sb.append("((double)analogRead(_potentiometer_").append(potentiometer.getUserDefinedPort()).append("))*5/1024");
         return null;
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         this.sb.append("_hcsr04_").append(ultrasonicSensor.getUserDefinedPort()).append(".getDistance()");
         return null;
     }
 
     @Override
-    public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
+    public Void visitHumiditySensor(HumiditySensor humiditySensor) {
         this.sb.append("_hdc1080_").append(humiditySensor.getUserDefinedPort());
         switch ( humiditySensor.getMode() ) {
             case SC.HUMIDITY:
@@ -350,7 +350,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+    public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
         this.sb.append("_bmp280_").append(temperatureSensor.getUserDefinedPort());
         switch ( temperatureSensor.getMode() ) {
             case SC.TEMPERATURE:
@@ -366,7 +366,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitVemlLightSensor(VemlLightSensor<Void> vemlLightSensor) {
+    public Void visitVemlLightSensor(VemlLightSensor vemlLightSensor) {
         switch ( vemlLightSensor.getMode() ) {
             case SC.LIGHT:
                 this.sb.append("_tsl_").append(vemlLightSensor.getUserDefinedPort()).append(".getIlluminance()");
@@ -444,13 +444,13 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
         this.sb.append("_bmx055_").append(accelerometerSensor.getUserDefinedPort()).append(".getAcceleration").append(accelerometerSensor.getMode()).append("()");
         return null;
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
         switch ( gyroSensor.getMode() ) {
             case "X":
                 this.sb.append("_getValueFromBmx(1, 1)");
@@ -466,7 +466,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+    public Void visitCompassSensor(CompassSensor compassSensor) {
         switch ( compassSensor.getMode() ) {
             case "X":
                 this.sb.append("_getValueFromBmx(1, 2)");
@@ -482,7 +482,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
+    public Void visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
         switch ( pinWriteValueAction.pinValue ) {
             case SC.ANALOG:
                 this.sb.append("analogWrite(_output_").append(pinWriteValueAction.port).append(", ");
@@ -501,7 +501,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
+    public Void visitPinGetValueSensor(PinGetValueSensor pinGetValueSensor) {
         switch ( pinGetValueSensor.getMode() ) {
             case SC.ANALOG:
                 this.sb.append("analogRead(_input_").append(pinGetValueSensor.getUserDefinedPort()).append(")");
@@ -516,9 +516,9 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitSendDataAction(SendDataAction<Void> sendDataAction) {
+    public Void visitSendDataAction(SendDataAction sendDataAction) {
         if ( sendDataAction.destination.equals("SENSEMAP") ) {
-            for ( Pair<String, Expr<Void>> entry : sendDataAction.id2Phenomena ) {
+            for ( Pair<String, Expr> entry : sendDataAction.id2Phenomena ) {
                 this.sb.append("_osm.uploadMeasurement(");
                 entry.getSecond().accept(this);
                 this.sb.append(", _").append(entry.getFirst()).append(");");
@@ -532,7 +532,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
             String filename = cc.getOptProperty("NAO_FILENAME");
             this.sb.append("_dataFile = SD.open(").append("\"").append(filename).append("\", FILE_WRITE);");
             nlIndent();
-            for ( Pair<String, Expr<Void>> entry : sendDataAction.id2Phenomena ) {
+            for ( Pair<String, Expr> entry : sendDataAction.id2Phenomena ) {
                 this.sb.append("_dataFile.print(_").append(entry.getFirst()).append(");");
                 nlIndent();
                 this.sb.append("_dataFile.print(\" : \");");
@@ -550,7 +550,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitParticleSensor(ParticleSensor<Void> particleSensor) {
+    public Void visitParticleSensor(ParticleSensor particleSensor) {
         switch ( particleSensor.getMode() ) {
             case "PM25":
                 this.sb.append("_sds011_").append(particleSensor.getUserDefinedPort()).append(".getPm25()");
@@ -565,14 +565,14 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitGpsSensor(GpsSensor<Void> gpsSensor) {
+    public Void visitGpsSensor(GpsSensor gpsSensor) {
         String mode = gpsSensor.getMode().substring(0, 1) + gpsSensor.getMode().substring(1).toLowerCase();
         this.sb.append("_gps_").append(gpsSensor.getUserDefinedPort()).append(".get").append(mode).append("()");
         return null;
     }
 
     @Override
-    public Void visitEnvironmentalSensor(EnvironmentalSensor<Void> environmentalSensor) {
+    public Void visitEnvironmentalSensor(EnvironmentalSensor environmentalSensor) {
         ConfigurationComponent cc = this.configuration.optConfigurationComponent(environmentalSensor.getUserDefinedPort());
 
         String mode;

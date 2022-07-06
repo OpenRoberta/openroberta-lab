@@ -20,16 +20,16 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "METHOD_CALL", category = "METHOD", blocklyNames = {"robProcedures_callreturn", "robProcedures_callnoreturn"})
-public final class MethodCall<V> extends Method<V> {
+public final class MethodCall extends Method {
     public final String oraMethodName;
-    public final ExprList<V> oraParameters;
-    public final ExprList<V> oraParametersValues;
+    public final ExprList oraParameters;
+    public final ExprList oraParametersValues;
     public final BlocklyType oraReturnType;
 
     public MethodCall(
         String oraMethodName,
-        ExprList<V> oraParameters,
-        ExprList<V> oraParametersValues,
+        ExprList oraParameters,
+        ExprList oraParametersValues,
         BlocklyType oraReturnType,
         BlocklyProperties properties) {
         super(properties);
@@ -47,11 +47,11 @@ public final class MethodCall<V> extends Method<V> {
     }
 
     @Override
-    public ExprList<V> getParameters() {
+    public ExprList getParameters() {
         return this.oraParameters;
     }
 
-    public ExprList<V> getParametersValues() {
+    public ExprList getParametersValues() {
         return this.oraParametersValues;
     }
 
@@ -65,18 +65,18 @@ public final class MethodCall<V> extends Method<V> {
         return "MethodCall [" + this.oraMethodName + ", " + this.oraParameters + ", " + this.oraParametersValues + ", " + this.oraReturnType + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyType outputType = block.getMutation().getOutputType() == null ? BlocklyType.VOID : BlocklyType.get(block.getMutation().getOutputType());
         String methodName = block.getMutation().getName();
         List<Arg> arguments = block.getMutation().getArg();
-        ExprList<V> parameters = helper.argumentsToExprList(arguments);
+        ExprList parameters = helper.argumentsToExprList(arguments);
         BlocklyType[] types = Jaxb2Ast.argumentsToParametersType(arguments);
         int numberOfArguments = arguments.size();
         List<Value> values = Jaxb2Ast.extractValues(block, (short) numberOfArguments);
 
-        ExprList<V> parametersValues = helper.valuesToExprList(values, types, numberOfArguments, BlocklyConstants.ARG);
+        ExprList parametersValues = helper.valuesToExprList(values, types, numberOfArguments, BlocklyConstants.ARG);
 
-        return new MethodCall<>(methodName, parameters, parametersValues, outputType, Jaxb2Ast.extractBlocklyProperties(block));
+        return new MethodCall(methodName, parameters, parametersValues, outputType, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override
@@ -89,16 +89,16 @@ public final class MethodCall<V> extends Method<V> {
             mutation.setOutputType(this.oraReturnType.getBlocklyName());
         }
         if ( !this.oraParameters.get().isEmpty() ) {
-            for ( Expr<V> parameter : this.oraParameters.get() ) {
+            for ( Expr parameter : this.oraParameters.get() ) {
                 Arg arg = new Arg();
-                arg.setName(((Var<V>) parameter).name);
-                arg.setType(((Var<V>) parameter).getVarType().getBlocklyName());
+                arg.setName(((Var) parameter).name);
+                arg.setType(((Var) parameter).getVarType().getBlocklyName());
                 mutation.getArg().add(arg);
             }
         }
         jaxbDestination.setMutation(mutation);
         int counter = 0;
-        for ( Expr<V> parameterValue : this.oraParametersValues.get() ) {
+        for ( Expr parameterValue : this.oraParametersValues.get() ) {
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ARG + counter, parameterValue);
             counter++;
         }

@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 @NepoExpr(name = "PARTICLE_SENSOR_GETSAMPLE", category = "SENSOR", blocklyNames = {"robSensors_particle_getSample"},
     sampleValues = {@F2M(field = "PARTICLE_PM25", mode = "PM25"), @F2M(field = "PARTICLE_PM10", mode = "PM10")})
 @NepoExternalSensor()
-public final class ParticleSensor<V> extends ExternalSensor<V> {
+public final class ParticleSensor extends ExternalSensor {
 
     public ParticleSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);

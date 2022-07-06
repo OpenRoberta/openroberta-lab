@@ -11,17 +11,17 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"mbedActions_motors_on"}, name = "BOTH_MOTORS_ON_ACTION")
-public final class BothMotorsOnAction<V> extends Action<V> {
+public final class BothMotorsOnAction extends Action {
     @NepoValue(name = BlocklyConstants.POWER_A, type = BlocklyType.NUMBER_INT)
-    public final Expr<V> speedA;
+    public final Expr speedA;
     @NepoValue(name = BlocklyConstants.POWER_B, type = BlocklyType.NUMBER_INT)
-    public final Expr<V> speedB;
+    public final Expr speedB;
     @NepoField(name = BlocklyConstants.A, value = BlocklyConstants.A)
     public final String portA;
     @NepoField(name = BlocklyConstants.B, value = BlocklyConstants.B)
     public final String portB;
 
-    public BothMotorsOnAction(BlocklyProperties properties, Expr<V> speedA, Expr<V> speedB, String portA, String portB) {
+    public BothMotorsOnAction(BlocklyProperties properties, Expr speedA, Expr speedB, String portA, String portB) {
         super(properties);
         Assert.isTrue((speedA != null) && speedA.isReadOnly());
         Assert.isTrue((speedB != null) && speedB.isReadOnly());

@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.worker.AbstractValidatorAndCollectorWorker;
 public class FestobionicflowerValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
 
     @Override
-    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         return new FestobionicflowerValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 }

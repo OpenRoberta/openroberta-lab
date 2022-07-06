@@ -10,15 +10,15 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoBasic(name = "BOTH_MOTORS_STOP_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_motors_stop"})
-public final class BothMotorsStopAction<V> extends Action<V> {
+public final class BothMotorsStopAction extends Action {
 
     public BothMotorsStopAction(BlocklyProperties properties) {
         super(properties);
         setReadOnly();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
-        return new BothMotorsStopAction<>(Jaxb2Ast.extractBlocklyProperties(block));
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+        return new BothMotorsStopAction(Jaxb2Ast.extractBlocklyProperties(block));
 
     }
 

@@ -44,54 +44,54 @@ import de.fhg.iais.roberta.visitor.IEv3Visitor;
 
 public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorAndCollectorVisitorEv3 implements IEv3Visitor<Void> {
 
-    public Ev3ValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public Ev3ValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(robotConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
+    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction bluetoothCheckConnectAction) {
         requiredComponentVisited(bluetoothCheckConnectAction, bluetoothCheckConnectAction.connection);
         return null;
     }
 
     @Override
-    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
+    public Void visitBluetoothConnectAction(BluetoothConnectAction bluetoothConnectAction) {
         requiredComponentVisited(bluetoothConnectAction, bluetoothConnectAction.address);
         return null;
     }
 
     @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
+    public Void visitBluetoothReceiveAction(BluetoothReceiveAction bluetoothReceiveAction) {
         requiredComponentVisited(bluetoothReceiveAction, bluetoothReceiveAction.connection);
         return null;
     }
 
     @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
+    public Void visitBluetoothSendAction(BluetoothSendAction bluetoothSendAction) {
         requiredComponentVisited(bluetoothSendAction, bluetoothSendAction.connection, bluetoothSendAction.msg);
         return null;
     }
 
     @Override
-    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
+    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction bluetoothWaitForConnection) {
         return null;
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.DISPLAY));
         return null;
     }
 
     @Override
-    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
+    public Void visitColorSensor(ColorSensor colorSensor) {
         checkSensorPort(colorSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(colorSensor.getUserDefinedPort(), SC.COLOR, colorSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+    public Void visitCompassSensor(CompassSensor compassSensor) {
         checkSensorPort(compassSensor);
         //TODO There should exist a constant with value ev3dev
         if ( this.robotConfiguration.getRobotName().equals("ev3dev") && (compassSensor.getMode().equals(SC.CALIBRATE)) ) {
@@ -102,7 +102,7 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
     }
 
     @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
+    public Void visitEncoderSensor(EncoderSensor encoderSensor) {
         ConfigurationComponent configurationComponent = this.robotConfiguration.optConfigurationComponent(encoderSensor.getUserDefinedPort());
         if ( configurationComponent == null ) {
             addErrorToPhrase(encoderSensor, "CONFIGURATION_ERROR_MOTOR_MISSING");
@@ -113,7 +113,7 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
         checkSensorPort(gyroSensor);
         if ( !gyroSensor.getMode().equals(SC.RESET) ) {
             usedHardwareBuilder.addUsedSensor(new UsedSensor(gyroSensor.getUserDefinedPort(), SC.GYRO, gyroSensor.getMode()));
@@ -122,21 +122,21 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
     }
 
     @Override
-    public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
+    public Void visitHTColorSensor(HTColorSensor htColorSensor) {
         checkSensorPort(htColorSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(htColorSensor.getUserDefinedPort(), SC.HT_COLOR, htColorSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
+    public Void visitIRSeekerSensor(IRSeekerSensor irSeekerSensor) {
         checkSensorPort(irSeekerSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(irSeekerSensor.getUserDefinedPort(), SC.IRSEEKER, irSeekerSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         checkSensorPort(infraredSensor);
         String mode = infraredSensor.getMode();
         if ( infraredSensor.getMode().equals(SC.PRESENCE) ) {
@@ -148,38 +148,38 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
     }
 
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+    public Void visitKeysSensor(KeysSensor keysSensor) {
         // TODO Shouldn't we do this: checkSensorPort(keysSensor);
         return null;
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         optionalComponentVisited(lightAction.rgbLedColor);
         usedHardwareBuilder.addUsedActor(new UsedActor(lightAction.port, SC.LIGHT));
         return null;
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor(lightStatusAction.getUserDefinedPort(), SC.LIGHT));
         return null;
     }
 
     @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
+    public Void visitPlayFileAction(PlayFileAction playFileAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.SOUND));
         return null;
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor(playNoteAction.port, SC.SOUND));
         return null;
     }
 
     @Override
-    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
+    public Void visitSayTextAction(SayTextAction sayTextAction) {
         requiredComponentVisited(sayTextAction, sayTextAction.msg);
         if ( this.robotConfiguration.getRobotName().equals("ev3lejosv0") ) {
             addWarningToPhrase(sayTextAction, "BLOCK_NOT_SUPPORTED");
@@ -189,7 +189,7 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
     }
 
     @Override
-    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<Void> sayTextAction) {
+    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction sayTextAction) {
         requiredComponentVisited(sayTextAction, sayTextAction.speed);
         requiredComponentVisited(sayTextAction, sayTextAction.pitch);
         requiredComponentVisited(sayTextAction, sayTextAction.msg);
@@ -201,12 +201,12 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
     }
 
     @Override
-    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+    public Void visitSetLanguageAction(SetLanguageAction setLanguageAction) {
         return null;
     }
 
     @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
+    public Void visitShowPictureAction(ShowPictureAction showPictureAction) {
         optionalComponentVisited(showPictureAction.x);
         optionalComponentVisited(showPictureAction.y);
         usedHardwareBuilder.addUsedImage(showPictureAction.pic.toString());
@@ -214,31 +214,31 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+    public Void visitShowTextAction(ShowTextAction showTextAction) {
         requiredComponentVisited(showTextAction, showTextAction.msg, showTextAction.x, showTextAction.y);
         usedHardwareBuilder.addUsedActor(new UsedActor(showTextAction.port, SC.DISPLAY));
         return null;
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+    public Void visitSoundSensor(SoundSensor soundSensor) {
         checkSensorPort(soundSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(soundSensor.getUserDefinedPort(), SC.SOUND, soundSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(timerSensor.getUserDefinedPort(), SC.TIMER, timerSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         requiredComponentVisited(toneAction, toneAction.duration, toneAction.frequency);
 
         if ( toneAction.duration.getKind().hasName("NUM_CONST") ) {
-            double toneActionConst = Double.parseDouble(((NumConst<Void>) toneAction.duration).value);
+            double toneActionConst = Double.parseDouble(((NumConst) toneAction.duration).value);
             if ( toneActionConst <= 0 ) {
                 addWarningToPhrase(toneAction, "BLOCK_NOT_EXECUTED");
             }
@@ -248,21 +248,21 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
     }
 
     @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+    public Void visitTouchSensor(TouchSensor touchSensor) {
         checkSensorPort(touchSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(touchSensor.getUserDefinedPort(), SC.TOUCH, touchSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         checkSensorPort(ultrasonicSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(ultrasonicSensor.getUserDefinedPort(), SC.ULTRASONIC, ultrasonicSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+    public Void visitVolumeAction(VolumeAction volumeAction) {
         if ( volumeAction.mode == VolumeAction.Mode.SET ) {
             requiredComponentVisited(volumeAction, volumeAction.volume);
         }
@@ -270,7 +270,7 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
         return null;
     }
 
-    protected void checkSensorPort(ExternalSensor<Void> sensor) {
+    protected void checkSensorPort(ExternalSensor sensor) {
         ConfigurationComponent usedSensor = this.robotConfiguration.optConfigurationComponent(sensor.getUserDefinedPort());
         if ( usedSensor == null ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");

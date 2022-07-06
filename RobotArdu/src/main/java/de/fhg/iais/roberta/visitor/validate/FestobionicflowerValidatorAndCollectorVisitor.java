@@ -15,12 +15,12 @@ import de.fhg.iais.roberta.visitor.hardware.IFestobionicflowerVisitor;
 
 public final class FestobionicflowerValidatorAndCollectorVisitor extends ArduinoValidatorAndCollectorVisitor implements IFestobionicflowerVisitor<Void> {
 
-    public FestobionicflowerValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public FestobionicflowerValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(brickConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
+    public Void visitLedOffAction(LedOffAction ledOffAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
             addErrorToPhrase(ledOffAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
@@ -28,7 +28,7 @@ public final class FestobionicflowerValidatorAndCollectorVisitor extends Arduino
     }
 
     @Override
-    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+    public Void visitLedOnAction(LedOnAction ledOnAction) {
         if ( ledOnAction.ledColor.hasName("EMPTY_EXPR") ) {
             addErrorToPhrase(ledOnAction, "CONFIGURATION_ERROR_SENSOR_MISSING");
         } else if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
@@ -40,7 +40,7 @@ public final class FestobionicflowerValidatorAndCollectorVisitor extends Arduino
     }
 
     @Override
-    public Void visitStepMotorAction(StepMotorAction<Void> stepMotorAction) {
+    public Void visitStepMotorAction(StepMotorAction stepMotorAction) {
         if ( stepMotorAction.stepMotorPos.hasName("EMPTY_EXPR") ) {
             addErrorToPhrase(stepMotorAction, "CONFIGURATION_ERROR_SENSOR_MISSING");
         } else if ( !this.robotConfiguration.isComponentTypePresent(SC.STEPMOTOR) ) {
@@ -52,7 +52,7 @@ public final class FestobionicflowerValidatorAndCollectorVisitor extends Arduino
     }
 
     @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+    public Void visitTouchSensor(TouchSensor touchSensor) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.TOUCH) ) {
             addErrorToPhrase(touchSensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
         }
@@ -60,7 +60,7 @@ public final class FestobionicflowerValidatorAndCollectorVisitor extends Arduino
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LIGHT) ) {
             addErrorToPhrase(lightSensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
         }

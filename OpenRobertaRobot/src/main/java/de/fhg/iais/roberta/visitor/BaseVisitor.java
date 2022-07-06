@@ -14,7 +14,7 @@ public class BaseVisitor<V> implements IVisitor<V> {
      * @param visitable meant to be visited
      * @return output of delegated visit-method
      */
-    public V visit(Phrase<V> visitable) {
+    public V visit(Phrase visitable) {
         String className = visitable.getClass().getSimpleName();
         String methodName = String.format("visit%s", className);
         try {

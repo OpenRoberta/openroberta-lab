@@ -24,11 +24,11 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * To create an instance from this class use the method {@link #make(String, BlocklyProperties, BlocklyComment)}.<br>
  */
 @NepoBasic(name = "LIST_CREATE", category = "EXPR", blocklyNames = {"robLists_create_with", "lists_create_with"})
-public final class ListCreate<V> extends Expr<V> {
+public final class ListCreate extends Expr {
     public final BlocklyType typeVar;
-    public final ExprList<V> exprList;
+    public final ExprList exprList;
 
-    public ListCreate(BlocklyType typeVar, ExprList<V> exprList, BlocklyProperties properties) {
+    public ListCreate(BlocklyType typeVar, ExprList exprList, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(exprList != null && exprList.isReadOnly() && typeVar != null);
         this.exprList = exprList;
@@ -56,10 +56,10 @@ public final class ListCreate<V> extends Expr<V> {
         return "ListCreate [" + this.typeVar + ", " + this.exprList + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         String filename = Jaxb2Ast.extractField(fields, BlocklyConstants.LIST_TYPE);
-        return new ListCreate<V>(BlocklyType.get(filename), helper.blockToExprList(block, BlocklyType.ARRAY), Jaxb2Ast.extractBlocklyProperties(block));
+        return new ListCreate(BlocklyType.get(filename), helper.blockToExprList(block, BlocklyType.ARRAY), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override
@@ -68,7 +68,7 @@ public final class ListCreate<V> extends Expr<V> {
 
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
-        ExprList<?> exprList = this.exprList;
+        ExprList exprList = this.exprList;
         int numOfItems = exprList.get().size();
         Mutation mutation = new Mutation();
         mutation.setItems(BigInteger.valueOf(numOfItems));

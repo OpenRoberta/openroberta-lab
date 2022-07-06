@@ -10,18 +10,18 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
 @NepoBasic(name = "RADIO_RSSI", category = "SENSOR", blocklyNames = {"mbedSensors_getRssi", "robsensors_rssi_getsample"})
-public final class RadioRssiSensor<V> extends ExternalSensor<V> {
+public final class RadioRssiSensor extends ExternalSensor {
 
     private RadioRssiSensor(ExternalSensorBean externalSensorBean, BlocklyProperties properties) {
         super(properties, externalSensorBean);
         setReadOnly();
     }
 
-    public static <V> RadioRssiSensor<V> make(ExternalSensorBean externalSensorBean, BlocklyProperties properties) {
-        return new RadioRssiSensor<>(externalSensorBean, properties);
+    public static  RadioRssiSensor make(ExternalSensorBean externalSensorBean, BlocklyProperties properties) {
+        return new RadioRssiSensor(externalSensorBean, properties);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         ExternalSensorBean sensorData = extractPortAndModeAndSlot(block, helper);
         return RadioRssiSensor.make(sensorData, Jaxb2Ast.extractBlocklyProperties(block));
     }

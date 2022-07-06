@@ -93,19 +93,19 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     private List<String> requiredInputNeurons = new ArrayList<>();
     private List<String> requiredOutputNeurons = new ArrayList<>();
 
-    protected CommonNepoValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) //
+    protected CommonNepoValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) //
     {
         super(robotConfiguration, beanBuilders);
     }
 
     @Override
-    public final Void visitAssertStmt(AssertStmt<Void> assertStmt) {
+    public final Void visitAssertStmt(AssertStmt assertStmt) {
         requiredComponentVisited(assertStmt, assertStmt.asserts);
         return null;
     }
 
     @Override
-    public final Void visitAssignStmt(AssignStmt<Void> assignStmt) {
+    public final Void visitAssignStmt(AssignStmt assignStmt) {
         requiredComponentVisited(assignStmt, assignStmt.expr);
         String variableName = assignStmt.name.name;
         if ( this.getBuilder(UsedHardwareBean.Builder.class).containsGlobalVariable(variableName) ) {
@@ -115,51 +115,51 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public final Void visitBinary(Binary<Void> phrase) {
+    public final Void visitBinary(Binary phrase) {
         requiredComponentVisited(phrase, phrase.left, phrase.getRight());
         return null;
     }
 
     @Override
-    public final Void visitBoolConst(BoolConst<Void> boolConst) {
+    public final Void visitBoolConst(BoolConst boolConst) {
         return null;
     }
 
     @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
+    public Void visitColorConst(ColorConst colorConst) {
         return null;
     }
 
     @Override
-    public Void visitConnectConst(ConnectConst<Void> connectConst) {
+    public Void visitConnectConst(ConnectConst connectConst) {
         return null;
     }
 
     @Override
-    public Void visitDebugAction(DebugAction<Void> debugAction) {
+    public Void visitDebugAction(DebugAction debugAction) {
         requiredComponentVisited(debugAction, debugAction.value);
         return null;
     }
 
     @Override
-    public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
+    public Void visitEmptyExpr(EmptyExpr emptyExpr) {
         return null;
     }
 
     @Override
-    public Void visitEmptyList(EmptyList<Void> emptyList) {
+    public Void visitEmptyList(EmptyList emptyList) {
         this.getBuilder(UsedHardwareBean.Builder.class).setListsUsed(true);
         return null;
     }
 
     @Override
-    public final Void visitExprList(ExprList<Void> exprList) {
+    public final Void visitExprList(ExprList exprList) {
         requiredComponentVisited(exprList, exprList.get());
         return null;
     }
 
     @Override
-    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
+    public Void visitGetSubFunct(GetSubFunct getSubFunct) {
         requiredComponentVisited(getSubFunct, getSubFunct.param);
         if ( getSubFunct.param.get(0).toString().contains("ListCreate ") ||
             getSubFunct.param.get(0).toString().contains("ListRepeat ") ) {
@@ -169,7 +169,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitIfStmt(IfStmt<Void> ifStmt) {
+    public Void visitIfStmt(IfStmt ifStmt) {
         requiredComponentVisited(ifStmt, ifStmt.expr);
         requiredComponentVisited(ifStmt, ifStmt.thenList);
         requiredComponentVisited(ifStmt, ifStmt.elseList);
@@ -177,7 +177,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitTernaryExpr(TernaryExpr<Void> ternaryExpr) {
+    public Void visitTernaryExpr(TernaryExpr ternaryExpr) {
         requiredComponentVisited(ternaryExpr, ternaryExpr.condition);
         requiredComponentVisited(ternaryExpr, ternaryExpr.thenPart);
         requiredComponentVisited(ternaryExpr, ternaryExpr.elsePart);
@@ -185,7 +185,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
+    public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
         requiredComponentVisited(indexOfFunct, indexOfFunct.param);
         if ( indexOfFunct.param.get(0).toString().contains("ListCreate ") ||
             indexOfFunct.param.get(0).toString().contains("ListRepeat ") ) {
@@ -195,7 +195,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
+    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
         requiredComponentVisited(lengthOfIsEmptyFunct, lengthOfIsEmptyFunct.param);
         if ( lengthOfIsEmptyFunct.param.get(0).toString().contains("ListCreate ") ||
             lengthOfIsEmptyFunct.param.get(0).toString().contains("ListRepeat ") ) {
@@ -205,13 +205,13 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitListCreate(ListCreate<Void> listCreate) {
+    public Void visitListCreate(ListCreate listCreate) {
         requiredComponentVisited(listCreate, listCreate.exprList);
         return null;
     }
 
     @Override
-    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+    public Void visitListGetIndex(ListGetIndex listGetIndex) {
         IListElementOperations iOp = listGetIndex.getElementOperation();
         if ( iOp instanceof ListElementOperations ) {
             ListElementOperations op = (ListElementOperations) iOp;
@@ -226,14 +226,14 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
+    public Void visitListRepeat(ListRepeat listRepeat) {
         usedMethodBuilder.addUsedMethod(FunctionNames.LISTS_REPEAT);
         requiredComponentVisited(listRepeat, listRepeat.param);
         return null;
     }
 
     @Override
-    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+    public Void visitListSetIndex(ListSetIndex listSetIndex) {
         IListElementOperations iOp = listSetIndex.mode;
         if ( iOp instanceof ListElementOperations ) {
             ListElementOperations op = (ListElementOperations) iOp;
@@ -248,46 +248,46 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
+    public Void visitMainTask(MainTask mainTask) {
         this.nnBeanBuilder.setNN(mainTask.data);
         requiredComponentVisited(mainTask, mainTask.variables);
         return null;
     }
 
     @Override
-    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+    public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.CAST);
         requiredComponentVisited(mathCastCharFunct, mathCastCharFunct.param);
         return null;
     }
 
     @Override
-    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+    public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.CAST);
         requiredComponentVisited(mathCastStringFunct, mathCastStringFunct.param);
         return null;
     }
 
     @Override
-    public Void visitMathConst(MathConst<Void> mathConst) {
+    public Void visitMathConst(MathConst mathConst) {
         return null;
     }
 
     @Override
-    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
+    public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
         requiredComponentVisited(mathConstrainFunct, mathConstrainFunct.param);
         return null;
     }
 
     @Override
-    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
+    public Void visitMathNumPropFunct(MathNumPropFunct mathNumPropFunct) {
         usedMethodBuilder.addUsedMethod(mathNumPropFunct.functName);
         requiredComponentVisited(mathNumPropFunct, mathNumPropFunct.param);
         return null;
     }
 
     @Override
-    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+    public Void visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
         usedMethodBuilder.addUsedMethod(mathOnListFunct.functName);
         requiredComponentVisited(mathOnListFunct, mathOnListFunct.param);
         if ( mathOnListFunct.param.get(0).toString().contains("ListCreate ") ||
@@ -298,27 +298,27 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
+    public Void visitMathPowerFunct(MathPowerFunct mathPowerFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.POWER);
         requiredComponentVisited(mathPowerFunct, mathPowerFunct.param);
         return null;
     }
 
     @Override
-    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
+    public Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.RANDOM_DOUBLE);
         return null;
     }
 
     @Override
-    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
+    public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.RANDOM);
         requiredComponentVisited(mathRandomIntFunct, mathRandomIntFunct.param);
         return null;
     }
 
     @Override
-    public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
+    public Void visitMathSingleFunct(MathSingleFunct mathSingleFunct) {
         if ( mathSingleFunct.functName == FunctionNames.POW10 ) {
             usedMethodBuilder.addUsedMethod(FunctionNames.POWER); // combine pow10 and power into one
         } else {
@@ -329,13 +329,13 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitMethodCall(MethodCall<Void> methodCall) {
+    public Void visitMethodCall(MethodCall methodCall) {
         requiredComponentVisited(methodCall, methodCall.getParametersValues());
         return null;
     }
 
     @Override
-    public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
+    public Void visitMethodIfReturn(MethodIfReturn methodIfReturn) {
         requiredComponentVisited(methodIfReturn, methodIfReturn.oraCondition);
         if ( !methodIfReturn.getReturnType().equals(BlocklyType.VOID) ) {
             requiredComponentVisited(methodIfReturn, methodIfReturn.oraReturnValue);
@@ -344,7 +344,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
+    public Void visitMethodReturn(MethodReturn methodReturn) {
         this.getBuilder(UsedHardwareBean.Builder.class).addUserDefinedMethod(methodReturn);
         requiredComponentVisited(methodReturn, methodReturn.getParameters(), methodReturn.body);
         requiredComponentVisited(methodReturn, methodReturn.returnValue);
@@ -352,13 +352,13 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
+    public Void visitMethodStmt(MethodStmt methodStmt) {
         requiredComponentVisited(methodStmt, methodStmt.method);
         return null;
     }
 
     @Override
-    public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
+    public Void visitMethodVoid(MethodVoid methodVoid) {
         this.getBuilder(UsedHardwareBean.Builder.class).addUserDefinedMethod(methodVoid);
         requiredComponentVisited(methodVoid, methodVoid.getParameters());
         requiredComponentVisited(methodVoid, methodVoid.body);
@@ -366,12 +366,12 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitNNStepStmt(NNStepStmt<Void> nnStepStmt) {
+    public Void visitNNStepStmt(NNStepStmt nnStepStmt) {
         requiredComponentVisited(nnStepStmt, nnStepStmt.getIoNeurons());
 
         List<String> inputNeurons = new ArrayList<>();
         List<String> outputNeurons = new ArrayList<>();
-        for ( Stmt<Void> neuron : nnStepStmt.getIoNeurons().get() ) {
+        for ( Stmt neuron : nnStepStmt.getIoNeurons().get() ) {
             if ( neuron instanceof NNInputNeuronStmt ) {
                 inputNeurons.add(((NNInputNeuronStmt) neuron).name);
             } else if ( neuron instanceof NNOutputNeuronStmt ) {
@@ -390,36 +390,36 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitNNInputNeuronStmt(NNInputNeuronStmt<Void> nnInputNeuronStmt) {
+    public Void visitNNInputNeuronStmt(NNInputNeuronStmt nnInputNeuronStmt) {
         requiredComponentVisited(nnInputNeuronStmt, nnInputNeuronStmt.value);
         return null;
     }
 
     @Override
-    public Void visitNNOutputNeuronStmt(NNOutputNeuronStmt<Void> nnOutputNeuronStmt) {
+    public Void visitNNOutputNeuronStmt(NNOutputNeuronStmt nnOutputNeuronStmt) {
         requiredComponentVisited(nnOutputNeuronStmt, nnOutputNeuronStmt.value);
         return null;
     }
 
     @Override
-    public Void visitNNOutputNeuronWoVarStmt(NNOutputNeuronWoVarStmt<Void> nnOutputNeuronWoVarStmt) {
+    public Void visitNNOutputNeuronWoVarStmt(NNOutputNeuronWoVarStmt nnOutputNeuronWoVarStmt) {
         return null;
     }
 
     @Override
-    public Void visitNNChangeWeightStmt(NNChangeWeightStmt<Void> chgStmt) {
+    public Void visitNNChangeWeightStmt(NNChangeWeightStmt chgStmt) {
         requiredComponentVisited(chgStmt, chgStmt.value);
         return null;
     }
 
     @Override
-    public Void visitNNChangeBiasStmt(NNChangeBiasStmt<Void> chgStmt) {
+    public Void visitNNChangeBiasStmt(NNChangeBiasStmt chgStmt) {
         requiredComponentVisited(chgStmt, chgStmt.value);
         return null;
     }
 
     @Override
-    public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal<Void> outputNeuronVal) {
+    public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal outputNeuronVal) {
         String optErrorKey = nnBeanBuilder.checkNameOfOutputNeuron(outputNeuronVal.name);
         if ( optErrorKey != null ) {
             addErrorToPhrase(outputNeuronVal, optErrorKey);
@@ -428,30 +428,30 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitNNGetWeight(NNGetWeight<Void> getVal) {
+    public Void visitNNGetWeight(NNGetWeight getVal) {
         return null;
     }
 
     @Override
-    public Void visitNNGetBias(NNGetBias<Void> getVal) {
+    public Void visitNNGetBias(NNGetBias getVal) {
         return null;
     }
 
     @Override
-    public Void visitNullConst(NullConst<Void> nullConst) {
+    public Void visitNullConst(NullConst nullConst) {
         return null;
     }
 
     @Override
-    public Void visitNumConst(NumConst<Void> numConst) {
+    public Void visitNumConst(NumConst numConst) {
         return null;
     }
 
     @Override
-    public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
+    public Void visitRepeatStmt(RepeatStmt repeatStmt) {
         if ( repeatStmt.expr.getKind().hasName("EXPR_LIST") ) {
-            ExprList<Void> exprList = (ExprList<Void>) repeatStmt.expr;
-            String varName = ((Var<Void>) exprList.get().get(0)).name;
+            ExprList exprList = (ExprList) repeatStmt.expr;
+            String varName = ((Var) exprList.get().get(0)).name;
             this.getBuilder(UsedHardwareBean.Builder.class).addDeclaredVariable(varName);
             requiredComponentVisited(repeatStmt, exprList);
         } else {
@@ -469,74 +469,74 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitRgbColor(RgbColor<Void> rgbColor) {
+    public Void visitRgbColor(RgbColor rgbColor) {
         requiredComponentVisited(rgbColor, rgbColor.R, rgbColor.G, rgbColor.B);
         optionalComponentVisited(rgbColor.A);
         return null;
     }
 
     @Override
-    public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
+    public Void visitStmtFlowCon(StmtFlowCon stmtFlowCon) {
         boolean isInWaitStmt = this.waitsInLoops.get(this.currentLoop) != 0;
         this.getBuilder(UsedHardwareBean.Builder.class).putLoopLabel(this.currentLoop, isInWaitStmt);
         return null;
     }
 
     @Override
-    public Void visitStmtList(StmtList<Void> stmtList) {
+    public Void visitStmtList(StmtList stmtList) {
         requiredComponentVisited(stmtList, stmtList.get());
         return null;
     }
 
     @Override
-    public Void visitStmtTextComment(StmtTextComment<Void> textComment) {
+    public Void visitStmtTextComment(StmtTextComment textComment) {
         return null;
     }
 
     @Override
-    public Void visitStringConst(StringConst<Void> stringConst) {
+    public Void visitStringConst(StringConst stringConst) {
         return null;
     }
 
     @Override
-    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.CAST);
         requiredComponentVisited(textCharCastNumberFunct, textCharCastNumberFunct.param);
         return null;
     }
 
     @Override
-    public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
+    public Void visitTextJoinFunct(TextJoinFunct textJoinFunct) {
         requiredComponentVisited(textJoinFunct, textJoinFunct.param);
         return null;
     }
 
     @Override
-    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
+    public Void visitTextPrintFunct(TextPrintFunct textPrintFunct) {
         requiredComponentVisited(textPrintFunct, textPrintFunct.param);
         return null;
     }
 
     @Override
-    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.CAST);
         requiredComponentVisited(textStringCastNumberFunct, textStringCastNumberFunct.param);
         return null;
     }
 
     @Override
-    public Void visitUnary(Unary<Void> phrase) {
+    public Void visitUnary(Unary phrase) {
         requiredComponentVisited(phrase, phrase.expr);
         return null;
     }
 
     @Override
-    public Void visitVar(Var<Void> var) {
+    public Void visitVar(Var var) {
         return null;
     }
 
     @Override
-    public Void visitVarDeclaration(VarDeclaration<Void> var) {
+    public Void visitVarDeclaration(VarDeclaration var) {
         if ( var.global ) {
             this.getBuilder(UsedHardwareBean.Builder.class).addVisitedVariable(var);
         }
@@ -561,7 +561,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
+    public Void visitWaitStmt(WaitStmt waitStmt) {
         if ( this.waitsInLoops.get(this.loopCounter) != null ) {
             increaseWaitStmsInLoop();
             requiredComponentVisited(waitStmt, waitStmt.statements);
@@ -573,13 +573,13 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+    public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         requiredComponentVisited(waitTimeStmt, waitTimeStmt.time);
         return null;
     }
 
     @Override
-    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+    public Void visitSerialWriteAction(SerialWriteAction serialWriteAction) {
         requiredComponentVisited(serialWriteAction, serialWriteAction.value);
         return null;
     }

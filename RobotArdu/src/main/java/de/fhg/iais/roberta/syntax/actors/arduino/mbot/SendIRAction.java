@@ -17,10 +17,10 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "IR_SENDER", category = "ACTOR", blocklyNames = {"robCommunication_ir_sendBlock"})
-public final class SendIRAction<V> extends Action<V> {
-    public final Expr<V> message;
+public final class SendIRAction extends Action {
+    public final Expr message;
 
-    public SendIRAction(Expr<V> message, BlocklyProperties properties) {
+    public SendIRAction(Expr message, BlocklyProperties properties) {
         super(properties);
         this.message = message;
         setReadOnly();
@@ -31,10 +31,10 @@ public final class SendIRAction<V> extends Action<V> {
         return "LedOnAction [ " + this.message + " ]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
-        Phrase<V> message = helper.extractValue(values, new ExprParam(BlocklyConstants.MESSAGE, BlocklyType.STRING));
-        return new SendIRAction<>(Jaxb2Ast.convertPhraseToExpr(message), Jaxb2Ast.extractBlocklyProperties(block));
+        Phrase message = helper.extractValue(values, new ExprParam(BlocklyConstants.MESSAGE, BlocklyType.STRING));
+        return new SendIRAction(Jaxb2Ast.convertPhraseToExpr(message), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

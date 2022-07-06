@@ -14,35 +14,35 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 public interface INIBOVisitor<V> extends ILightVisitor<V>, ISensorVisitor<V> {
 
-    default V visitCodePadSensor(CodePadSensor<V> codePadSensor) {
+    default V visitCodePadSensor(CodePadSensor codePadSensor) {
         throw new DbcException("Block is not implemented!");
     }
 
-    default V visitBodyLEDAction(BodyLEDAction<V> bodyLEDAction) {
+    default V visitBodyLEDAction(BodyLEDAction bodyLEDAction) {
         throw new DbcException("Block is not implemented!");
     }
 
-    default V visitSendIRAction(SendIRAction<V> sendIRAction) {
+    default V visitSendIRAction(SendIRAction sendIRAction) {
         throw new DbcException("Block is not implemented!");
     }
 
-    default V visitReceiveIRAction(ReceiveIRAction<V> receiveIRAction) {
+    default V visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
         throw new DbcException("Block is not implemented!");
     }
 
-    default V visitRememberAction(RememberAction<V> rememberAction) {
+    default V visitRememberAction(RememberAction rememberAction) {
         throw new DbcException("Block is not implemented!");
     }
 
-    default V visitRecallAction(RecallAction<V> recallAction) {
+    default V visitRecallAction(RecallAction recallAction) {
         throw new DbcException("Block is not implemented!");
     }
 
-    default V visitLedOffAction(LedOffAction<V> ledOffAction) {
+    default V visitLedOffAction(LedOffAction ledOffAction) {
         throw new DbcException("Block is not implemented!");
     }
 
-    default V visitLedOnAction(LedOnAction<V> ledOnAction) {
+    default V visitLedOnAction(LedOnAction ledOnAction) {
         throw new DbcException("Block is not implemented!");
     }
 

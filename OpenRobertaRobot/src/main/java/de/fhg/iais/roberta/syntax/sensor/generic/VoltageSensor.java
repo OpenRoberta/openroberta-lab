@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 @NepoExpr(name = "VOLTAGE_SENSING", category = "SENSOR", blocklyNames = {"robSensors_battery_getSample", "robSensors_potentiometer_getSample"},
     sampleValues = {@F2M(field = "POTENTIOMETER_VALUE", mode = "VALUE")})
 @NepoExternalSensor()
-public final class VoltageSensor<V> extends ExternalSensor<V> {
+public final class VoltageSensor extends ExternalSensor {
 
     public VoltageSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);

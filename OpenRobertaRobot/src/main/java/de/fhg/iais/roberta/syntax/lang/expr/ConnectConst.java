@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 
 @NepoExpr(name = "CONNECTION_CONST", category = "EXPR", blocklyNames = {"robCommunication_connection"})
-public final class ConnectConst<V> extends Expr<V> {
+public final class ConnectConst extends Expr {
     @NepoField(name = "CONNECTION")
     public final String value;
 

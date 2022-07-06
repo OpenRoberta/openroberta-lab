@@ -19,69 +19,69 @@ import de.fhg.iais.roberta.visitor.hardware.INano33BleSensorVisitor;
 
 public class Nano33BleValidatorAndCollectorVisitor extends ArduinoValidatorAndCollectorVisitor implements INano33BleSensorVisitor<Void> {
 
-    public Nano33BleValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public Nano33BleValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(brickConfiguration, beanBuilders);
     }
 
 
     @Override
-    public Void visitApds9960ColorSensor(Apds9960ColorSensor<Void> sensor) {
+    public Void visitApds9960ColorSensor(Apds9960ColorSensor sensor) {
         requiredComponentVisited(sensor, sensor.r, sensor.g, sensor.b);
         usedHardwareBuilder.addUsedActor(new UsedActor(SC.APDS9960, SC.APDS9960));
         return null;
     }
 
     @Override
-    public Void visitApds9960DistanceSensor(Apds9960DistanceSensor<Void> sensor) {
+    public Void visitApds9960DistanceSensor(Apds9960DistanceSensor sensor) {
         requiredComponentVisited(sensor, sensor.distance);
         usedHardwareBuilder.addUsedActor(new UsedActor(SC.APDS9960, SC.APDS9960));
         return null;
     }
 
     @Override
-    public Void visitApds9960GestureSensor(Apds9960GestureSensor<Void> sensor) {
+    public Void visitApds9960GestureSensor(Apds9960GestureSensor sensor) {
         requiredComponentVisited(sensor, sensor.gesture);
         usedHardwareBuilder.addUsedActor(new UsedActor(SC.APDS9960, SC.APDS9960));
         return null;
     }
 
     @Override
-    public Void visitHts221HumiditySensor(Hts221HumiditySensor<Void> sensor) {
+    public Void visitHts221HumiditySensor(Hts221HumiditySensor sensor) {
         requiredComponentVisited(sensor, sensor.humidity);
         usedHardwareBuilder.addUsedActor(new UsedActor(SC.HTS221, SC.HTS221));
         return null;
     }
 
     @Override
-    public Void visitHts221TemperatureSensor(Hts221TemperatureSensor<Void> sensor) {
+    public Void visitHts221TemperatureSensor(Hts221TemperatureSensor sensor) {
         requiredComponentVisited(sensor, sensor.temperature);
         usedHardwareBuilder.addUsedActor(new UsedActor(SC.HTS221, SC.HTS221));
         return null;
     }
 
     @Override
-    public Void visitLps22hbPressureSensor(Lps22hbPressureSensor<Void> sensor) {
+    public Void visitLps22hbPressureSensor(Lps22hbPressureSensor sensor) {
         requiredComponentVisited(sensor, sensor.pressure);
         usedHardwareBuilder.addUsedActor(new UsedActor(SC.LPS22HB, SC.LPS22HB));
         return null;
     }
 
     @Override
-    public Void visitLsm9ds1AccSensor(Lsm9ds1AccSensor<Void> sensor) {
+    public Void visitLsm9ds1AccSensor(Lsm9ds1AccSensor sensor) {
         requiredComponentVisited(sensor, sensor.x, sensor.y, sensor.z);
         usedHardwareBuilder.addUsedActor(new UsedActor(SC.LSM9DS1, SC.LSM9DS1));
         return null;
     }
 
     @Override
-    public Void visitLsm9ds1GyroSensor(Lsm9ds1GyroSensor<Void> sensor) {
+    public Void visitLsm9ds1GyroSensor(Lsm9ds1GyroSensor sensor) {
         requiredComponentVisited(sensor, sensor.x, sensor.y, sensor.z);
         usedHardwareBuilder.addUsedActor(new UsedActor(SC.LSM9DS1, SC.LSM9DS1));
         return null;
     }
 
     @Override
-    public Void visitLsm9ds1MagneticFieldSensor(Lsm9ds1MagneticFieldSensor<Void> sensor) {
+    public Void visitLsm9ds1MagneticFieldSensor(Lsm9ds1MagneticFieldSensor sensor) {
         requiredComponentVisited(sensor, sensor.x, sensor.y, sensor.z);
         usedHardwareBuilder.addUsedActor(new UsedActor(SC.LSM9DS1, SC.LSM9DS1));
         return null;

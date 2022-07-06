@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "HAND", category = "ACTOR", blocklyNames = {"naoActions_hand"})
-public final class Hand<V> extends Action<V> {
+public final class Hand extends Action {
 
     public final TurnDirection turnDirection;
     public final Modus modus;
@@ -31,13 +31,13 @@ public final class Hand<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
 
         String turnDirection = Jaxb2Ast.extractField(fields, BlocklyConstants.SIDE);
         String modus = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
 
-        return new Hand<V>(TurnDirection.get(turnDirection), Modus.get(modus), Jaxb2Ast.extractBlocklyProperties(block));
+        return new Hand(TurnDirection.get(turnDirection), Modus.get(modus), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

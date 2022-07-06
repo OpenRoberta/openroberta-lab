@@ -23,14 +23,14 @@ import de.fhg.iais.roberta.util.syntax.MotionParam;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
 
 @NepoBasic(name = "DRIVE_ACTION", category = "ACTOR", blocklyNames = {"robActions_motorDiff_on_for", "robActions_motorDiff_on"})
-public final class DriveAction<V> extends Action<V> {
+public final class DriveAction extends Action {
 
     public final IDriveDirection direction;
-    public final MotionParam<V> param;
+    public final MotionParam param;
     public final String port;
     public final List<Hide> hide;
 
-    public DriveAction(IDriveDirection direction, MotionParam<V> param, String port, List<Hide> hide, BlocklyProperties properties) {
+    public DriveAction(IDriveDirection direction, MotionParam param, String port, List<Hide> hide, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
@@ -46,12 +46,12 @@ public final class DriveAction<V> extends Action<V> {
         return "DriveAction [" + this.direction + ", " + this.param + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields;
         String mode;
         List<Value> values;
-        MotionParam<V> mp;
-        Phrase<V> power;
+        MotionParam mp;
+        Phrase power;
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         fields = Jaxb2Ast.extractFields(block, (short) 3);
         mode = Jaxb2Ast.extractField(fields, BlocklyConstants.DIRECTION);
@@ -59,19 +59,19 @@ public final class DriveAction<V> extends Action<V> {
         if ( !block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_ON) ) {
             values = Jaxb2Ast.extractValues(block, (short) 2);
             power = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
-            Phrase<V> distance = helper.extractValue(values, new ExprParam(BlocklyConstants.DISTANCE, BlocklyType.NUMBER_INT));
-            MotorDuration<V> md = new MotorDuration<V>(factory.getMotorMoveMode("DISTANCE"), Jaxb2Ast.convertPhraseToExpr(distance));
-            mp = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(power)).duration(md).build();
+            Phrase distance = helper.extractValue(values, new ExprParam(BlocklyConstants.DISTANCE, BlocklyType.NUMBER_INT));
+            MotorDuration md = new MotorDuration(factory.getMotorMoveMode("DISTANCE"), Jaxb2Ast.convertPhraseToExpr(distance));
+            mp = new MotionParam.Builder().speed(Jaxb2Ast.convertPhraseToExpr(power)).duration(md).build();
         } else {
             values = Jaxb2Ast.extractValues(block, (short) 1);
             power = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
-            mp = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(power)).build();
+            mp = new MotionParam.Builder().speed(Jaxb2Ast.convertPhraseToExpr(power)).build();
         }
         if ( fields.stream().anyMatch(field -> field.getName().equals(BlocklyConstants.ACTORPORT)) ) {
             String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT);
-            return new DriveAction<>(factory.getDriveDirection(mode), mp, port, block.getHide(), Jaxb2Ast.extractBlocklyProperties(block));
+            return new DriveAction(factory.getDriveDirection(mode), mp, port, block.getHide(), Jaxb2Ast.extractBlocklyProperties(block));
         }
-        return new DriveAction<>(factory.getDriveDirection(mode), mp, BlocklyConstants.EMPTY_PORT, null, Jaxb2Ast.extractBlocklyProperties(block));
+        return new DriveAction(factory.getDriveDirection(mode), mp, BlocklyConstants.EMPTY_PORT, null, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

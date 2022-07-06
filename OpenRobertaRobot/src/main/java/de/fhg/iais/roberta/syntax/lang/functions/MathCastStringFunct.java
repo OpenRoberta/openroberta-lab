@@ -18,10 +18,10 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "MATH_CAST_STRING_FUNCT", category = "FUNCTION", blocklyNames = {"math_cast_toString"})
-public final class MathCastStringFunct<V> extends Function<V> {
-    public final List<Expr<V>> param;
+public final class MathCastStringFunct extends Function {
+    public final List<Expr> param;
 
-    public MathCastStringFunct(List<Expr<V>> param, BlocklyProperties properties) {
+    public MathCastStringFunct(List<Expr> param, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(param != null);
         this.param = param;
@@ -48,11 +48,11 @@ public final class MathCastStringFunct<V> extends Function<V> {
         return "MathCastStringFunct [" + this.param + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
-        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return new MathCastStringFunct<V>(params, Jaxb2Ast.extractBlocklyProperties(block));
+        List<Expr> params = helper.extractExprParameters(block, exprParams);
+        return new MathCastStringFunct(params, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

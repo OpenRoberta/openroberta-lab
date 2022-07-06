@@ -6,11 +6,11 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 
-public class ShadowExpr<V> extends Expr<V> {
-    public final Expr<V> shadow;
-    public final Expr<V> block;
+public class ShadowExpr extends Expr {
+    public final Expr shadow;
+    public final Expr block;
 
-    public ShadowExpr(Expr<V> shadow, Expr<V> block) {
+    public ShadowExpr(Expr shadow, Expr block) {
         super(BlocklyProperties.make("SHADOW_EXPR", "1"));
         Assert.isTrue(shadow != null);
         this.shadow = shadow;

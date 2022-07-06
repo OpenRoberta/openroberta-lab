@@ -19,17 +19,17 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 
 public class ArduinoDifferentialMotorValidatorAndCollectorVisitor extends ArduinoValidatorAndCollectorVisitor {
-    public ArduinoDifferentialMotorValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public ArduinoDifferentialMotorValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(brickConfiguration, beanBuilders);
     }
 
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
+    public Void visitDriveAction(DriveAction driveAction) {
         checkAndVisitMotionParam(driveAction, driveAction.param);
         addMotorsToUsedActors();
         return null;
     }
 
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
+    public Void visitCurveAction(CurveAction curveAction) {
         requiredComponentVisited(curveAction, curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed());
         Optional.ofNullable(curveAction.paramLeft.getDuration()).ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
         Optional.ofNullable(curveAction.paramRight.getDuration()).ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
@@ -38,21 +38,21 @@ public class ArduinoDifferentialMotorValidatorAndCollectorVisitor extends Arduin
         return null;
     }
 
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+    public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         addMotorsToUsedActors();
         return null;
     }
 
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
+    public Void visitTurnAction(TurnAction turnAction) {
         checkAndVisitMotionParam(turnAction, turnAction.param);
         addMotorsToUsedActors();
         return null;
     }
 
-    protected void checkForZeroSpeedInCurve(Expr<Void> speedLeft, Expr<Void> speedRight, Action<Void> action) {
+    protected void checkForZeroSpeedInCurve(Expr speedLeft, Expr speedRight, Action action) {
         if ( speedLeft.getKind().hasName("NUM_CONST") && speedRight.getKind().hasName("NUM_CONST") ) {
-            double speedLeftNumConst = Double.parseDouble(((NumConst<Void>) speedLeft).value);
-            double speedRightNumConst = Double.parseDouble(((NumConst<Void>) speedRight).value);
+            double speedLeftNumConst = Double.parseDouble(((NumConst) speedLeft).value);
+            double speedRightNumConst = Double.parseDouble(((NumConst) speedRight).value);
             boolean bothMotorsHaveZeroSpeed = (Math.abs(speedLeftNumConst) < DOUBLE_EPS) && (Math.abs(speedRightNumConst) < DOUBLE_EPS);
             if ( bothMotorsHaveZeroSpeed ) {
                 addWarningToPhrase(action, "MOTOR_SPEED_0");
@@ -65,13 +65,13 @@ public class ArduinoDifferentialMotorValidatorAndCollectorVisitor extends Arduin
         usedHardwareBuilder.addUsedActor(new UsedActor("A", SC.MEDIUM));
     }
 
-    protected void checkLeftRightMotorPort(Phrase<Void> driveAction) {
+    protected void checkLeftRightMotorPort(Phrase driveAction) {
         ConfigurationComponent leftMotor = this.robotConfiguration.getFirstMotor(SC.LEFT);
         ConfigurationComponent rightMotor = this.robotConfiguration.getFirstMotor(SC.RIGHT);
         checkRightMotorPresenceAndLeftMotorPresence(driveAction, rightMotor, leftMotor);
     }
 
-    protected void checkRightMotorPresenceAndLeftMotorPresence(Phrase<Void> driveAction, ConfigurationComponent rightMotor, ConfigurationComponent leftMotor) {
+    protected void checkRightMotorPresenceAndLeftMotorPresence(Phrase driveAction, ConfigurationComponent rightMotor, ConfigurationComponent leftMotor) {
         if ( rightMotor == null ) {
             addErrorToPhrase(driveAction, "CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING");
         }

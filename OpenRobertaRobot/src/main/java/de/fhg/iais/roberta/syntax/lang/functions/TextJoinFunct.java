@@ -17,10 +17,10 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "TEXT_JOIN_FUNCT", category = "FUNCTION", blocklyNames = {"robText_join", "text_join"})
-public final class TextJoinFunct<V> extends Function<V> {
-    public final ExprList<V> param;
+public final class TextJoinFunct extends Function {
+    public final ExprList param;
 
-    public TextJoinFunct(ExprList<V> param, BlocklyProperties properties) {
+    public TextJoinFunct(ExprList param, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(param != null);
         this.param = param;
@@ -47,9 +47,9 @@ public final class TextJoinFunct<V> extends Function<V> {
         return BlocklyType.STRING;
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
-        ExprList<V> exprList = helper.blockToExprList(block, BlocklyType.STRING);
-        return new TextJoinFunct<V>(exprList, Jaxb2Ast.extractBlocklyProperties(block));
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+        ExprList exprList = helper.blockToExprList(block, BlocklyType.STRING);
+        return new TextJoinFunct(exprList, Jaxb2Ast.extractBlocklyProperties(block));
 
     }
 

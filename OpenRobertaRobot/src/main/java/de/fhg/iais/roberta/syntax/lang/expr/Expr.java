@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 /**
  * the top class of all expressions. To find out which kind an {@link #Expr}-object is use {@link #getKind()}
  */
-public abstract class Expr<V> extends Phrase<V> {
+public abstract class Expr extends Phrase {
 
     public Expr(BlocklyProperties properties) {
         super(properties);

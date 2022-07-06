@@ -38,12 +38,12 @@ import de.fhg.iais.roberta.visitor.IEdisonVisitor;
 
 public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IEdisonVisitor<Void> {
 
-    public EdisonValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public EdisonValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(robotConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
+    public Void visitDriveAction(DriveAction driveAction) {
         requiredComponentVisited(driveAction, driveAction.param.getSpeed());
         usedMethodBuilder.addUsedMethod(EdisonMethods.DIFFDRIVE);
         addUsedMethodsForDriveActions();
@@ -56,7 +56,7 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     }
 
     @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
+    public Void visitCurveAction(CurveAction curveAction) {
         // the block has the description "steer"
         requiredComponentVisited(curveAction, curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed());
         addUsedMethodsForDriveActions();
@@ -70,7 +70,7 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     }
 
     @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
+    public Void visitTurnAction(TurnAction turnAction) {
         requiredComponentVisited(turnAction, turnAction.param.getSpeed());
         usedMethodBuilder.addUsedMethod(EdisonMethods.DIFFTURN);
         addUsedMethodsForDriveActions();
@@ -83,22 +83,22 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     }
 
     @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+    public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         return null;
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         return null;
     }
 
     @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+    public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         throw new DbcException("block is not implemented");
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         requiredComponentVisited(motorOnAction, motorOnAction.param.getSpeed());
         usedMethodBuilder.addUsedMethod(EdisonMethods.MOTORON);
         usedMethodBuilder.addUsedMethod(EdisonMethods.SHORTEN); //used inside helper method
@@ -114,68 +114,68 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     }
 
     @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+    public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
         throw new DbcException("block is not implemented");
     }
 
     @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         return null;
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         requiredComponentVisited(toneAction, toneAction.frequency, toneAction.duration);
         return null;
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         return null;
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+    public Void visitVolumeAction(VolumeAction volumeAction) {
         throw new DbcException("block is not implemented");
     }
 
     @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
+    public Void visitPlayFileAction(PlayFileAction playFileAction) {
         return null;
     }
 
     @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         usedMethodBuilder.addUsedMethod(EdisonMethods.OBSTACLEDETECTION);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(infraredSensor.getUserDefinedPort(), SC.INFRARED, infraredSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+    public Void visitKeysSensor(KeysSensor keysSensor) {
         return null;
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(lightSensor.getUserDefinedPort(), SC.LIGHT, lightSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
+    public Void visitIRSeekerSensor(IRSeekerSensor irSeekerSensor) {
         usedMethodBuilder.addUsedMethod(EdisonMethods.IRSEEK);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(irSeekerSensor.getUserDefinedPort(), SC.IRSEEKER, irSeekerSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         return null;
     }
 
     @Override
-    public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
+    public Void visitSendIRAction(SendIRAction sendIRAction) {
         requiredComponentVisited(sendIRAction, sendIRAction.code); //?
         usedMethodBuilder.addUsedMethod(EdisonMethods.IRSEND);
         sendIRAction.code.accept(this);
@@ -183,20 +183,20 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     }
 
     @Override
-    public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
+    public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
         usedMethodBuilder.addUsedMethod(EdisonMethods.IRSEEK);
         return null;
     }
 
     @Override
-    public Void visitResetSensor(ResetSensor<Void> voidResetSensor) {
+    public Void visitResetSensor(ResetSensor voidResetSensor) {
         return null;
     }
 
     @Override
-    public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
+    public Void visitWaitStmt(WaitStmt waitStmt) {
         //visit all statements to add their helper methods
-        for ( Stmt<Void> s : waitStmt.statements.get() ) {
+        for ( Stmt s : waitStmt.statements.get() ) {
             s.accept(this);
         }
         return super.visitWaitStmt(waitStmt);
@@ -208,7 +208,7 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
      * @param sensorGetSample to be visited
      */
     @Override
-    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
+    public Void visitGetSampleSensor(GetSampleSensor sensorGetSample) {
         switch ( sensorGetSample.sensorTypeAndMode ) {
             case "INFRARED_OBSTACLE":
                 usedMethodBuilder.addUsedMethod(EdisonMethods.OBSTACLEDETECTION);
@@ -223,12 +223,12 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         return null;
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+    public Void visitSoundSensor(SoundSensor soundSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(soundSensor.getUserDefinedPort(), SC.SOUND, soundSensor.getMode()));
         return null;
     }

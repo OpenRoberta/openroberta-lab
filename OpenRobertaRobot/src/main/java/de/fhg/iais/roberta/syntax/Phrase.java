@@ -11,7 +11,6 @@ import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.ITransformerVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
@@ -24,7 +23,7 @@ import de.fhg.iais.roberta.visitor.IVisitor;
  * <br>
  * To find out which kind a {@link #Phrase}-object is use {@link #getBlockDescriptor()}
  */
-abstract public class Phrase<V> {
+abstract public class Phrase {
     private static final Logger LOG = LoggerFactory.getLogger(Phrase.class);
     private boolean readOnly = false;
     private final BlocklyProperties property;
@@ -114,7 +113,7 @@ abstract public class Phrase<V> {
      *
      * @param visitor to be used
      */
-    public final V accept(IVisitor<V> visitor) {
+    public final <V> V accept(IVisitor<V> visitor) {
         // LOG.info("{}", this);
         if ( getProperty().isDisabled() || (getProperty().isInTask() != null && getProperty().isInTask() == false) ) {
             return null;
@@ -129,18 +128,8 @@ abstract public class Phrase<V> {
      * @param visitor the modify visitor to use
      * @return a newly constructed phrase
      */
-    public final Phrase<Void> modify(ITransformerVisitor<?> visitor) {
-        // don't use accept, go over ALL blocks
-        @SuppressWarnings("unchecked")
-        V v = ((IVisitor<V>) visitor).visit(this);
-
-        if ( v instanceof Phrase ) {
-            @SuppressWarnings("unchecked")
-            Phrase<Void> voidPhrase = (Phrase<Void>) v;
-            return voidPhrase;
-        } else {
-            throw new DbcException("Template parameter of this phrase is not a Phrase!");
-        }
+    public final Phrase modify(ITransformerVisitor visitor) {
+        return visitor.visit(this);
     }
 
     /**

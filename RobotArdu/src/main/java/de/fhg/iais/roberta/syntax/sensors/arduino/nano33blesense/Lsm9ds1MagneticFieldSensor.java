@@ -15,11 +15,11 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "LSM9DS1_MAGNETICFIELD", category = "SENSOR", blocklyNames = {"robsensors_lsm9ds1_magneticfield_getDataAvailableSample"})
-public final class Lsm9ds1MagneticFieldSensor<V> extends BuiltinSensor<V> {
+public final class Lsm9ds1MagneticFieldSensor extends BuiltinSensor {
 
-    public final Expr<V> x, y, z;
+    public final Expr x, y, z;
 
-    public Lsm9ds1MagneticFieldSensor(BlocklyProperties properties, Expr<V> x, Expr<V> y, Expr<V> z) {
+    public Lsm9ds1MagneticFieldSensor(BlocklyProperties properties, Expr x, Expr y, Expr z) {
         super(properties, null);
         this.x = x;
         this.y = y;
@@ -27,12 +27,12 @@ public final class Lsm9ds1MagneticFieldSensor<V> extends BuiltinSensor<V> {
         setReadOnly();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 3);
-        Expr<V> x = helper.getVar(values, BlocklyConstants.VARIABLE_X);
-        Expr<V> y = helper.getVar(values, BlocklyConstants.VARIABLE_Y);
-        Expr<V> z = helper.getVar(values, BlocklyConstants.VARIABLE_Z);
-        return new Lsm9ds1MagneticFieldSensor<>(Jaxb2Ast.extractBlocklyProperties(block), x, y, z);
+        Expr x = helper.getVar(values, BlocklyConstants.VARIABLE_X);
+        Expr y = helper.getVar(values, BlocklyConstants.VARIABLE_Y);
+        Expr z = helper.getVar(values, BlocklyConstants.VARIABLE_Z);
+        return new Lsm9ds1MagneticFieldSensor(Jaxb2Ast.extractBlocklyProperties(block), x, y, z);
     }
 
     @Override

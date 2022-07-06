@@ -47,14 +47,14 @@ public class ArduinoUsedHardwareCollectorVisitorTest {
 
     @Test
     public void testNormal() {
-        List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/collector/all_helper_methods.xml");
+        List<List<Phrase>> phrases = UnitTestHelper.getProgramAst(testFactory, "/collector/all_helper_methods.xml");
 
         ConfigurationAst nanoConfig = makeValidConfig();
         UsedHardwareBean.Builder usedHardwareBeanBuilder = new UsedHardwareBean.Builder();
         UsedMethodBean.Builder usedMethodBeanBuilder = new UsedMethodBean.Builder();
         ErrorAndWarningBean.Builder errorAndWarningBean = new ErrorAndWarningBean.Builder();
         NNBean.Builder nnBean = new NNBean.Builder();
-        ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders = ImmutableClassToInstanceMap.<IProjectBean.IBuilder<?>> builder()
+        ImmutableClassToInstanceMap<IProjectBean.IBuilder> beanBuilders = ImmutableClassToInstanceMap.<IProjectBean.IBuilder> builder()
             .put(UsedHardwareBean.Builder.class, usedHardwareBeanBuilder)
             .put(UsedMethodBean.Builder.class, usedMethodBeanBuilder)
             .put(ErrorAndWarningBean.Builder.class, errorAndWarningBean)

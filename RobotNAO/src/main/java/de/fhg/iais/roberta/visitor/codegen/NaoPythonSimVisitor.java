@@ -86,14 +86,14 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
      *
      * @param programPhrases to generate the code from
      */
-    public NaoPythonSimVisitor(List<List<Phrase<Void>>> programPhrases, ILanguage language, ClassToInstanceMap<IProjectBean> beans) {
+    public NaoPythonSimVisitor(List<List<Phrase>> programPhrases, ILanguage language, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
 
         this.language = language;
     }
 
     @Override
-    public Void visitRgbColor(RgbColor<Void> rgbColor) {
+    public Void visitRgbColor(RgbColor rgbColor) {
         this.sb.append("int(\"{:02x}{:02x}{:02x}\".format(min(max(");
         rgbColor.R.accept(this);
         this.sb.append(", 0), 255), min(max(");
@@ -105,7 +105,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
+    public Void visitWaitStmt(WaitStmt waitStmt) {
         this.sb.append("while robot.step(robot.timeStep) != -1:");
         incrIndentation();
         visitStmtList(waitStmt.statements);
@@ -116,7 +116,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+    public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         this.sb.append("wait(robot, ");
         waitTimeStmt.time.accept(this);
         this.sb.append(")");
@@ -124,11 +124,11 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
+    public Void visitMainTask(MainTask mainTask) {
         this.sb.append("robot = Nao()");
         nlIndent();
         this.sb.append("robot.load_motion_files()");
-        StmtList<Void> variables = mainTask.variables;
+        StmtList variables = mainTask.variables;
         variables.accept(this);
         generateUserDefinedMethods();
         nlIndent();
@@ -138,7 +138,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
         nlIndent();
         this.sb.append("robot.step(robot.timeStep)");
 
-        List<Stmt<Void>> variableList = variables.get();
+        List<Stmt> variableList = variables.get();
         if ( !variableList.isEmpty() ) {
             nlIndent();
             // insert global statement for all variables
@@ -150,9 +150,9 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
             // in visitMethodVoid, visitMethodReturn
             this.sb.append("global ");
             boolean first = true;
-            for ( Stmt<Void> s : variables.get() ) {
-                ExprStmt<Void> es = (ExprStmt<Void>) s;
-                VarDeclaration<Void> vd = (VarDeclaration<Void>) es.expr;
+            for ( Stmt s : variables.get() ) {
+                ExprStmt es = (ExprStmt) s;
+                VarDeclaration vd = (VarDeclaration) es.expr;
                 if ( first ) {
                     first = false;
                 } else {
@@ -165,7 +165,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitHand(Hand<Void> hand) {
+    public Void visitHand(Hand hand) {
         this.sb.append("move_hand_joint(robot, ");
         switch ( hand.turnDirection ) {
             case LEFT:
@@ -187,7 +187,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitMoveJoint(MoveJoint<Void> moveJoint) {
+    public Void visitMoveJoint(MoveJoint moveJoint) {
         this.sb.append("move_joint(robot, ");
         switch ( moveJoint.joint ) {
             case HEADYAW:
@@ -287,7 +287,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitWalkDistance(WalkDistance<Void> walkDistance) {
+    public Void visitWalkDistance(WalkDistance walkDistance) {
         this.sb.append("walk(robot, ");
         if ( walkDistance.walkDirection == DriveDirection.BACKWARD ) {
             this.sb.append("-");
@@ -298,7 +298,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitTurnDegrees(TurnDegrees<Void> turnDegrees) {
+    public Void visitTurnDegrees(TurnDegrees turnDegrees) {
         this.sb.append("turn(robot, ");
         if ( turnDegrees.turnDirection == TurnDirection.RIGHT ) {
             this.sb.append("-");
@@ -309,7 +309,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitSetLeds(SetLeds<Void> setLeds) {
+    public Void visitSetLeds(SetLeds setLeds) {
         this.sb.append("set_led(robot, Led.");
         this.sb.append(setLeds.led.toString());
         this.sb.append(", ");
@@ -319,7 +319,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitSetIntensity(SetIntensity<Void> setIntensity) {
+    public Void visitSetIntensity(SetIntensity setIntensity) {
         this.sb.append("set_intensity(robot, Led.");
         this.sb.append(setIntensity.led.toString());
         this.sb.append(", ");
@@ -329,7 +329,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitLedOff(LedOff<Void> ledOff) {
+    public Void visitLedOff(LedOff ledOff) {
         this.sb.append("set_led(robot, Led.");
         this.sb.append(ledOff.led.toString());
         this.sb.append(", 0)");
@@ -337,7 +337,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitLedReset(LedReset<Void> ledReset) {
+    public Void visitLedReset(LedReset ledReset) {
         this.sb.append("set_led(robot, Led.");
         this.sb.append(ledReset.led.toString());
         this.sb.append(", 0)");
@@ -345,7 +345,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+    public Void visitTouchSensor(TouchSensor touchSensor) {
         this.sb.append("is_touched(robot, ");
         this.sb.append(getEnumCode(touchSensor.getUserDefinedPort()));
         this.sb.append(", ");
@@ -355,13 +355,13 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> sonar) {
+    public Void visitUltrasonicSensor(UltrasonicSensor sonar) {
         this.sb.append("get_ultrasonic(robot)");
         return null;
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
         this.sb.append("get_gyro_");
         this.sb.append(gyroSensor.getSlot().toLowerCase());
         this.sb.append("(robot)");
@@ -369,7 +369,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometer) {
+    public Void visitAccelerometerSensor(AccelerometerSensor accelerometer) {
         this.sb.append("get_accelerometer_");
         this.sb.append(accelerometer.getUserDefinedPort().toLowerCase());
         this.sb.append("(robot)");
@@ -377,7 +377,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitFsrSensor(FsrSensor<Void> fsr) {
+    public Void visitFsrSensor(FsrSensor fsr) {
         this.sb.append("get_force(robot, BodySide.");
         this.sb.append(fsr.getUserDefinedPort().toUpperCase());
         this.sb.append(")");
@@ -385,7 +385,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
+    public Void visitRepeatStmt(RepeatStmt repeatStmt) {
         boolean isWaitStmt = repeatStmt.mode == RepeatStmt.Mode.WAIT;
         switch ( repeatStmt.mode ) {
             case UNTIL:
@@ -480,70 +480,70 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitConnectConst(ConnectConst<Void> connectConst) {
+    public Void visitConnectConst(ConnectConst connectConst) {
         return null;
     }
 
     @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
+    public Void visitColorConst(ColorConst colorConst) {
         this.sb.append(colorConst.getHexIntAsString());
         return null;
     }
 
     @Override
-    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
+    public Void visitGetSampleSensor(GetSampleSensor sensorGetSample) {
         return sensorGetSample.sensor.accept(this);
     }
 
     @Override
-    public Void visitWalkAsync(WalkAsync<Void> walkAsync) {
+    public Void visitWalkAsync(WalkAsync walkAsync) {
         return null;
     }
 
     @Override
-    public Void visitSetMode(SetMode<Void> setMode) {
+    public Void visitSetMode(SetMode setMode) {
         return null;
     }
 
     @Override
-    public Void visitApplyPosture(ApplyPosture<Void> applyPosture) {
+    public Void visitApplyPosture(ApplyPosture applyPosture) {
         this.sb.append("perform(robot, \"").append(applyPosture.posture).append("\")");
         return null;
     }
 
     @Override
-    public Void visitSetStiffness(SetStiffness<Void> setStiffness) {
+    public Void visitSetStiffness(SetStiffness setStiffness) {
         return null;
     }
 
     @Override
-    public Void visitAutonomous(Autonomous<Void> autonomous) {
+    public Void visitAutonomous(Autonomous autonomous) {
         return null;
     }
 
     @Override
-    public Void visitWalkTo(WalkTo<Void> walkTo) {
+    public Void visitWalkTo(WalkTo walkTo) {
         return null;
     }
 
     @Override
-    public Void visitStop(Stop<Void> stop) {
+    public Void visitStop(Stop stop) {
         return null;
     }
 
     @Override
-    public Void visitAnimation(Animation<Void> animation) {
+    public Void visitAnimation(Animation animation) {
         this.sb.append("perform(robot, \"").append(animation.move).append("\")");
         return null;
     }
 
     @Override
-    public Void visitPointLookAt(PointLookAt<Void> pointLookAt) {
+    public Void visitPointLookAt(PointLookAt pointLookAt) {
         return null;
     }
 
     @Override
-    public Void visitSetVolume(SetVolume<Void> setVolume) {
+    public Void visitSetVolume(SetVolume setVolume) {
         this.sb.append("setVolume(robot, ");
         setVolume.volume.accept(this);
         this.sb.append(")");
@@ -551,24 +551,24 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitGetVolume(GetVolume<Void> getVolume) {
+    public Void visitGetVolume(GetVolume getVolume) {
         this.sb.append("getVolume(robot)");
         return null;
     }
 
     @Override
-    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+    public Void visitSetLanguageAction(SetLanguageAction setLanguageAction) {
         this.sb.append("setLanguage(robot, \"").append(getLanguageString(setLanguageAction.language)).append("\")");
         return null;
     }
 
     @Override
-    public Void visitGetLanguage(GetLanguage<Void> getLanguage) {
+    public Void visitGetLanguage(GetLanguage getLanguage) {
         return null;
     }
 
     @Override
-    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
+    public Void visitSayTextAction(SayTextAction sayTextAction) {
         src.add("say(robot, str(");
         sayTextAction.msg.accept(this);
         src.add("))");
@@ -576,7 +576,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<Void> sayTextAction) {
+    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction sayTextAction) {
         src.add("say(robot, str(");
         sayTextAction.msg.accept(this);
         src.add("), ");
@@ -637,57 +637,57 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitPlayFile(PlayFile<Void> playFile) {
+    public Void visitPlayFile(PlayFile playFile) {
         return null;
     }
 
     @Override
-    public Void visitRandomEyesDuration(RandomEyesDuration<Void> randomEyesDuration) {
+    public Void visitRandomEyesDuration(RandomEyesDuration randomEyesDuration) {
         return null;
     }
 
     @Override
-    public Void visitRastaDuration(RastaDuration<Void> rastaDuration) {
+    public Void visitRastaDuration(RastaDuration rastaDuration) {
         return null;
     }
 
     @Override
-    public Void visitDetectMarkSensor(DetectMarkSensor<Void> detectedMark) {
+    public Void visitDetectMarkSensor(DetectMarkSensor detectedMark) {
         return null;
     }
 
     @Override
-    public Void visitTakePicture(TakePicture<Void> takePicture) {
+    public Void visitTakePicture(TakePicture takePicture) {
         return null;
     }
 
     @Override
-    public Void visitRecordVideo(RecordVideo<Void> recordVideo) {
+    public Void visitRecordVideo(RecordVideo recordVideo) {
         return null;
     }
 
     @Override
-    public Void visitLearnFace(LearnFace<Void> learnFace) {
+    public Void visitLearnFace(LearnFace learnFace) {
         return null;
     }
 
     @Override
-    public Void visitForgetFace(ForgetFace<Void> forgetFace) {
+    public Void visitForgetFace(ForgetFace forgetFace) {
         return null;
     }
 
     @Override
-    public Void visitDetectFaceSensor(DetectFaceSensor<Void> detectFace) {
+    public Void visitDetectFaceSensor(DetectFaceSensor detectFace) {
         return null;
     }
 
     @Override
-    public Void visitElectricCurrentSensor(ElectricCurrentSensor<Void> electricCurrent) {
+    public Void visitElectricCurrentSensor(ElectricCurrentSensor electricCurrent) {
         return null;
     }
 
     @Override
-    public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
+    public Void visitRecognizeWord(RecognizeWord recognizeWord) {
         this.sb.append("getRecognizedWord(robot, ");
         recognizeWord.vocabulary.accept(this);
         this.sb.append(")");
@@ -695,37 +695,37 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitNaoMarkInformation(NaoMarkInformation<Void> naoMarkInformation) {
+    public Void visitNaoMarkInformation(NaoMarkInformation naoMarkInformation) {
         return null;
     }
 
     @Override
-    public Void visitDetectedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
+    public Void visitDetectedFaceInformation(DetectedFaceInformation detectedFaceInformation) {
         return null;
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+    public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+    public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         throw new DbcException("Not supported!");
     }
 }

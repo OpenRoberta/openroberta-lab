@@ -10,5 +10,5 @@ public interface IPinVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param pinWriteValueAction to be visited
      */
-    V visitPinWriteValueAction(PinWriteValueAction<V> pinWriteValueAction);
+    V visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction);
 }

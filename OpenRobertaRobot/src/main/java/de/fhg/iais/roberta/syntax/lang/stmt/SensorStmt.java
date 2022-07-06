@@ -9,10 +9,10 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * Wraps subclasses of the class {@link Sensor} so they can be used as {@link Stmt} in statements.
  */
 @NepoBasic(name = "SENSOR_STMT", category = "STMT", blocklyNames = {})
-public final class SensorStmt<V> extends Stmt<V> {
-    public final Sensor<V> sensor;
+public final class SensorStmt extends Stmt {
+    public final Sensor sensor;
 
-    public SensorStmt(Sensor<V> sensor) {
+    public SensorStmt(Sensor sensor) {
         super(sensor.getProperty());
         Assert.isTrue(sensor != null && sensor.isReadOnly());
         this.sensor = sensor;

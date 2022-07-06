@@ -23,18 +23,18 @@ import de.fhg.iais.roberta.util.syntax.MotionParam;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
 
 @NepoBasic(name = "CURVE_ACTION", category = "ACTOR", blocklyNames = {"robActions_motorDiff_curve", "robActions_motorDiff_curve_for"})
-public final class CurveAction<V> extends Action<V> {
+public final class CurveAction extends Action {
 
     public final IDriveDirection direction;
-    public final MotionParam<V> paramLeft;
-    public final MotionParam<V> paramRight;
+    public final MotionParam paramLeft;
+    public final MotionParam paramRight;
     public final String port;
     public final List<Hide> hide;
 
     public CurveAction(
         IDriveDirection direction,
-        MotionParam<V> paramLeft,
-        MotionParam<V> paramRight,
+        MotionParam paramLeft,
+        MotionParam paramRight,
         String port,
         List<Hide> hide,
         BlocklyProperties properties) {
@@ -53,40 +53,40 @@ public final class CurveAction<V> extends Action<V> {
         return "CurveAction [" + this.direction + ", " + this.paramLeft + this.paramRight + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields;
         String mode;
         List<Value> values;
-        MotionParam<V> mpLeft;
-        MotionParam<V> mpRight;
-        Phrase<V> left;
-        Phrase<V> right;
+        MotionParam mpLeft;
+        MotionParam mpRight;
+        Phrase left;
+        Phrase right;
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         fields = Jaxb2Ast.extractFields(block, (short) 2);
         mode = Jaxb2Ast.extractField(fields, BlocklyConstants.DIRECTION);
 
         if ( !block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_CURVE) ) {
             values = Jaxb2Ast.extractValues(block, (short) 3);
-            Phrase<V> dist = helper.extractValue(values, new ExprParam(BlocklyConstants.DISTANCE, BlocklyType.NUMBER_INT));
-            MotorDuration<V> md = new MotorDuration<>(factory.getMotorMoveMode("DISTANCE"), Jaxb2Ast.convertPhraseToExpr(dist));
+            Phrase dist = helper.extractValue(values, new ExprParam(BlocklyConstants.DISTANCE, BlocklyType.NUMBER_INT));
+            MotorDuration md = new MotorDuration(factory.getMotorMoveMode("DISTANCE"), Jaxb2Ast.convertPhraseToExpr(dist));
             left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER_LEFT, BlocklyType.NUMBER_INT));
             right = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER_RIGHT, BlocklyType.NUMBER_INT));
-            mpLeft = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(left)).duration(md).build();
-            mpRight = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(right)).duration(md).build();
+            mpLeft = new MotionParam.Builder().speed(Jaxb2Ast.convertPhraseToExpr(left)).duration(md).build();
+            mpRight = new MotionParam.Builder().speed(Jaxb2Ast.convertPhraseToExpr(right)).duration(md).build();
         } else {
             values = Jaxb2Ast.extractValues(block, (short) 2);
             left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER_LEFT, BlocklyType.NUMBER_INT));
             right = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER_RIGHT, BlocklyType.NUMBER_INT));
-            mpLeft = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(left)).build();
-            mpRight = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(right)).build();
+            mpLeft = new MotionParam.Builder().speed(Jaxb2Ast.convertPhraseToExpr(left)).build();
+            mpRight = new MotionParam.Builder().speed(Jaxb2Ast.convertPhraseToExpr(right)).build();
         }
 
         if ( fields.stream().anyMatch(field -> field.getName().equals(BlocklyConstants.ACTORPORT)) ) {
             String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT);
-            return new CurveAction<>(factory.getDriveDirection(mode), mpLeft, mpRight, port, block.getHide(), Jaxb2Ast.extractBlocklyProperties(block));
+            return new CurveAction(factory.getDriveDirection(mode), mpLeft, mpRight, port, block.getHide(), Jaxb2Ast.extractBlocklyProperties(block));
         }
 
-        return new CurveAction<>(factory.getDriveDirection(mode), mpLeft, mpRight, BlocklyConstants.EMPTY_PORT, null, Jaxb2Ast.extractBlocklyProperties(block));
+        return new CurveAction(factory.getDriveDirection(mode), mpLeft, mpRight, BlocklyConstants.EMPTY_PORT, null, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

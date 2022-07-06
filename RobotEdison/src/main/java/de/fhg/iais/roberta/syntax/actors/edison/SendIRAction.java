@@ -9,12 +9,12 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"edisonCommunication_ir_sendBlock"}, name = "IR_SEND")
-public final class SendIRAction<V> extends Action<V> {
+public final class SendIRAction extends Action {
 
     @NepoValue(name = BlocklyConstants.MESSAGE, type = BlocklyType.NUMBER)
-    public final Expr<V> code;
+    public final Expr code;
 
-    public SendIRAction(BlocklyProperties properties, Expr<V> code) {
+    public SendIRAction(BlocklyProperties properties, Expr code) {
         super(properties);
         this.code = code;
         setReadOnly();

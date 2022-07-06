@@ -8,17 +8,17 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "TEST_PHRASE_WRONG_CONSTRUCTOR", blocklyNames = {"test_phrase_wrong_constructor"}, category = "EXPR")
-public class TestPhraseWrongConstructor<V> extends Phrase<V> {
+public class TestPhraseWrongConstructor extends Phrase {
     @NepoField(name = "TYPE")
     public final String type;
 
     @NepoValue(name = "VALUE", type = BlocklyType.ANY)
-    public final Expr<V> value;
+    public final Expr value;
 
     public TestPhraseWrongConstructor(
         BlocklyProperties property,
         
-        Expr<V> value, String type) {
+        Expr value, String type) {
         super(property);
         this.type = type;
         this.value = value;

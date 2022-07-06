@@ -17,14 +17,14 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(sampleValues = {@F2M(field = "ENCODER_DISTANCE", mode = "DISTANCE"), @F2M(field = "ENCODER_DEGREE", mode = "DEGREE"), @F2M(field = "ENCODER_ROTATION", mode = "ROTATION")}, name = "ENCODER_SENSING", category = "SENSOR", blocklyNames = {"robSensors_encoder_reset", "robSensors_encoder_getSample"})
-public final class EncoderSensor<V> extends ExternalSensor<V> {
+public final class EncoderSensor extends ExternalSensor {
 
     public EncoderSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);
         setReadOnly();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         ExternalSensorBean sensorData;
         if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_ENCODER_RESET) ) {
@@ -32,10 +32,10 @@ public final class EncoderSensor<V> extends ExternalSensor<V> {
             String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorData =
                 new ExternalSensorBean(Jaxb2Ast.sanitizePort(portName), factory.getMode("RESET"), Jaxb2Ast.sanitizeSlot(BlocklyConstants.NO_SLOT), null);
-            return new EncoderSensor<V>(Jaxb2Ast.extractBlocklyProperties(block), sensorData);
+            return new EncoderSensor(Jaxb2Ast.extractBlocklyProperties(block), sensorData);
         }
         sensorData = extractPortAndModeAndSlot(block, helper);
-        return new EncoderSensor<V>(Jaxb2Ast.extractBlocklyProperties(block), sensorData);
+        return new EncoderSensor(Jaxb2Ast.extractBlocklyProperties(block), sensorData);
     }
 
     @Override

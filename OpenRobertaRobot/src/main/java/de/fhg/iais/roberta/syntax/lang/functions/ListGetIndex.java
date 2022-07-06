@@ -23,17 +23,17 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "LIST_INDEX_OF", category = "FUNCTION", blocklyNames = {"robLists_getIndex", "lists_getIndex"})
-public final class ListGetIndex<V> extends Function<V> {
+public final class ListGetIndex extends Function {
     public final IListElementOperations mode;
     public final IIndexLocation location;
     public final String dataType;
 
-    public final List<Expr<V>> param;
+    public final List<Expr> param;
 
     public ListGetIndex(
         IListElementOperations mode,
         IIndexLocation name,
-        List<Expr<V>> param,
+        List<Expr> param,
         String dataType,
         BlocklyProperties properties) {
         super(properties);
@@ -69,7 +69,7 @@ public final class ListGetIndex<V> extends Function<V> {
         return "ListGetIndex [" + this.mode + ", " + this.location + ", " + this.param + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         List<ExprParam> exprParams = new ArrayList<>();
@@ -79,8 +79,8 @@ public final class ListGetIndex<V> extends Function<V> {
             exprParams.add(new ExprParam(BlocklyConstants.AT, BlocklyType.NUMBER_INT));
         }
         String dataType = block.getMutation().getDatatype();
-        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return new ListGetIndex<>(factory.getListElementOpertaion(op), factory.getIndexLocation(Jaxb2Ast.extractField(fields, BlocklyConstants.WHERE)), params, dataType, Jaxb2Ast.extractBlocklyProperties(block));
+        List<Expr> params = helper.extractExprParameters(block, exprParams);
+        return new ListGetIndex(factory.getListElementOpertaion(op), factory.getIndexLocation(Jaxb2Ast.extractField(fields, BlocklyConstants.WHERE)), params, dataType, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

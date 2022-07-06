@@ -19,10 +19,10 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "METHOD_VOID", category = "METHOD", blocklyNames = {"robProcedures_defnoreturn"})
-public final class MethodVoid<V> extends Method<V> {
-    public final StmtList<V> body;
+public final class MethodVoid extends Method {
+    public final StmtList body;
 
-    public MethodVoid(String methodName, ExprList<V> parameters, StmtList<V> body, BlocklyProperties properties) {
+    public MethodVoid(String methodName, ExprList parameters, StmtList body, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(!methodName.equals("") && parameters.isReadOnly() && body.isReadOnly());
         this.methodName = methodName;
@@ -37,15 +37,15 @@ public final class MethodVoid<V> extends Method<V> {
         return "MethodVoid [" + this.methodName + ", " + this.parameters + ", " + this.body + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         String name = Jaxb2Ast.extractField(fields, BlocklyConstants.NAME);
 
         List<Statement> statements = Jaxb2Ast.extractStatements(block, (short) 2);
-        ExprList<V> exprList = helper.statementsToMethodParameterDeclaration(statements, BlocklyConstants.ST);
-        StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.STACK);
+        ExprList exprList = helper.statementsToMethodParameterDeclaration(statements, BlocklyConstants.ST);
+        StmtList statement = helper.extractStatement(statements, BlocklyConstants.STACK);
 
-        return new MethodVoid<V>(name, exprList, statement, Jaxb2Ast.extractBlocklyProperties(block));
+        return new MethodVoid(name, exprList, statement, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

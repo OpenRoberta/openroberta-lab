@@ -29,49 +29,49 @@ import de.fhg.iais.roberta.visitor.hardware.actor.ISimpleSoundVisitor;
 
 public interface ISenseboxVisitor<V> extends IDisplayVisitor<V>, ISimpleSoundVisitor<V>, ILightVisitor<V>, IPinVisitor<V>, INeuralNetworkVisitor<V>, IHardwareVisitor<V> {
 
-    default V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
+    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
         return sensorGetSample.sensor.accept(this);
     }
 
-    V visitAccelerometerSensor(AccelerometerSensor<V> accelerometerSensor);
+    V visitAccelerometerSensor(AccelerometerSensor accelerometerSensor);
 
-    V visitCompassSensor(CompassSensor<V> compassSensor);
+    V visitCompassSensor(CompassSensor compassSensor);
 
-    V visitEnvironmentalSensor(EnvironmentalSensor<V> environmentalSensor);
+    V visitEnvironmentalSensor(EnvironmentalSensor environmentalSensor);
 
-    V visitGpsSensor(GpsSensor<V> gpsSensor);
+    V visitGpsSensor(GpsSensor gpsSensor);
 
-    V visitGyroSensor(GyroSensor<V> gyroSensor);
+    V visitGyroSensor(GyroSensor gyroSensor);
 
-    V visitHumiditySensor(HumiditySensor<V> humiditySensor);
+    V visitHumiditySensor(HumiditySensor humiditySensor);
 
-    V visitKeysSensor(KeysSensor<V> keysSensor);
+    V visitKeysSensor(KeysSensor keysSensor);
 
-    V visitMotorOnAction(MotorOnAction<V> motorOnAction);
+    V visitMotorOnAction(MotorOnAction motorOnAction);
 
-    V visitParticleSensor(ParticleSensor<V> particleSensor);
+    V visitParticleSensor(ParticleSensor particleSensor);
 
-    V visitPinGetValueSensor(PinGetValueSensor<V> pinGetValueSensor);
+    V visitPinGetValueSensor(PinGetValueSensor pinGetValueSensor);
 
-    V visitPlotClearAction(PlotClearAction<V> plotClearAction);
+    V visitPlotClearAction(PlotClearAction plotClearAction);
 
-    V visitPlotPointAction(PlotPointAction<V> plotPointAction);
+    V visitPlotPointAction(PlotPointAction plotPointAction);
 
-    V visitRelayAction(RelayAction<V> relayAction);
+    V visitRelayAction(RelayAction relayAction);
 
-    V visitSendDataAction(SendDataAction<V> sendDataAction);
+    V visitSendDataAction(SendDataAction sendDataAction);
 
-    V visitSoundSensor(SoundSensor<V> soundSensor);
+    V visitSoundSensor(SoundSensor soundSensor);
 
-    V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor);
+    V visitTemperatureSensor(TemperatureSensor temperatureSensor);
 
-    V visitTimerSensor(TimerSensor<V> timerSensor);
+    V visitTimerSensor(TimerSensor timerSensor);
 
-    V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor);
+    V visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor);
 
-    V visitVemlLightSensor(VemlLightSensor<V> vemlLightSensor);
+    V visitVemlLightSensor(VemlLightSensor vemlLightSensor);
 
-    V visitLightSensor(LightSensor<V> lightSensor);
+    V visitLightSensor(LightSensor lightSensor);
 
-    V visitVoltageSensor(VoltageSensor<V> voltageSensor);
+    V visitVoltageSensor(VoltageSensor voltageSensor);
 }

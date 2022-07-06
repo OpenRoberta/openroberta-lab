@@ -8,11 +8,11 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 @NepoPhrase(name = "PLAY_FILE", category = "ACTOR", blocklyNames = {"naoActions_playFile"})
-public final class PlayFile<V> extends Action<V> {
+public final class PlayFile extends Action {
     @NepoValue(name = "OUT")
-    public final Expr<V> msg;
+    public final Expr msg;
 
-    public PlayFile(BlocklyProperties properties, Expr<V> msg) {
+    public PlayFile(BlocklyProperties properties, Expr msg) {
         super(properties);
         Assert.isTrue(msg != null);
         this.msg = msg;

@@ -20,11 +20,11 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
 @NepoBasic(name = "MATH_ON_LIST_FUNCT", category = "FUNCTION", blocklyNames = {"math_on_list"})
-public final class MathOnListFunct<V> extends Function<V> {
+public final class MathOnListFunct extends Function {
     public final FunctionNames functName;
-    public final List<Expr<V>> param;
+    public final List<Expr> param;
 
-    public MathOnListFunct(FunctionNames name, List<Expr<V>> param, BlocklyProperties properties) {
+    public MathOnListFunct(FunctionNames name, List<Expr> param, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
@@ -52,12 +52,12 @@ public final class MathOnListFunct<V> extends Function<V> {
         return "MathOnListFunct [" + this.functName + ", " + this.param + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.LIST, BlocklyType.ARRAY));
         String op = Jaxb2Ast.getOperation(block, BlocklyConstants.OP);
-        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return new MathOnListFunct<V>(FunctionNames.get(op), params, Jaxb2Ast.extractBlocklyProperties(block));
+        List<Expr> params = helper.extractExprParameters(block, exprParams);
+        return new MathOnListFunct(FunctionNames.get(op), params, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

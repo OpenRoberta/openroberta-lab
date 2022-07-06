@@ -23,13 +23,13 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "LIST_SET_INDEX", category = "FUNCTION", blocklyNames = {"lists_setIndex", "robLists_setIndex"})
-public final class ListSetIndex<V> extends Function<V> {
+public final class ListSetIndex extends Function {
     public final IListElementOperations mode;
     public final IIndexLocation location;
 
-    public final List<Expr<V>> param;
+    public final List<Expr> param;
 
-    public ListSetIndex(IListElementOperations mode, IIndexLocation name, List<Expr<V>> param, BlocklyProperties properties) {
+    public ListSetIndex(IListElementOperations mode, IIndexLocation name, List<Expr> param, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(mode != null && name != null && param != null);
         this.mode = mode;
@@ -58,7 +58,7 @@ public final class ListSetIndex<V> extends Function<V> {
         return "ListSetIndex [" + this.mode + ", " + this.location + ", " + this.param + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         String op = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
@@ -69,8 +69,8 @@ public final class ListSetIndex<V> extends Function<V> {
         if ( block.getMutation().isAt() ) {
             exprParams.add(new ExprParam(BlocklyConstants.AT, BlocklyType.NUMBER_INT));
         }
-        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return new ListSetIndex<V>(factory.getListElementOpertaion(op), factory.getIndexLocation(Jaxb2Ast.extractField(fields, BlocklyConstants.WHERE)), params, Jaxb2Ast.extractBlocklyProperties(block));
+        List<Expr> params = helper.extractExprParameters(block, exprParams);
+        return new ListSetIndex(factory.getListElementOpertaion(op), factory.getIndexLocation(Jaxb2Ast.extractField(fields, BlocklyConstants.WHERE)), params, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

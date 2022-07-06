@@ -8,11 +8,11 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 @NepoPhrase(name = "FESTOBIONIC_STEPMOTOR", category = "ACTOR", blocklyNames = {"festobionicActions_stepmotor"})
-public final class StepMotorAction<V> extends Action<V> {
+public final class StepMotorAction extends Action {
     @NepoValue(name = "VALUE")
-    public final Expr<V> stepMotorPos;
+    public final Expr stepMotorPos;
 
-    public StepMotorAction(BlocklyProperties properties, Expr<V> stepMotorPos) {
+    public StepMotorAction(BlocklyProperties properties, Expr stepMotorPos) {
         super(properties);
         Assert.notNull(stepMotorPos);
         this.stepMotorPos = stepMotorPos;

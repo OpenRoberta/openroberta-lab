@@ -17,10 +17,10 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "BOB3_REMEMBER", category = "ACTOR", blocklyNames = {"bob3Actions_remember"})
-public final class RememberAction<V> extends Action<V> {
-    public final Expr<V> code;
+public final class RememberAction extends Action {
+    public final Expr code;
 
-    public RememberAction(Expr<V> code, BlocklyProperties properties) {
+    public RememberAction(Expr code, BlocklyProperties properties) {
         super(properties);
         this.code = code;
         setReadOnly();
@@ -31,10 +31,10 @@ public final class RememberAction<V> extends Action<V> {
         return "RememberAction [ ]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
-        Phrase<V> code = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER));
-        return new RememberAction<>(Jaxb2Ast.convertPhraseToExpr(code), Jaxb2Ast.extractBlocklyProperties(block));
+        Phrase code = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER));
+        return new RememberAction(Jaxb2Ast.convertPhraseToExpr(code), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

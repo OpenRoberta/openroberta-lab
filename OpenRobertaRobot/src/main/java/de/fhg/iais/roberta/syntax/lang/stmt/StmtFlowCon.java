@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "STMT", blocklyNames = {"controls_flow_statements"}, name = "STMT_FLOW_CONTROL")
-public final class StmtFlowCon<V> extends Stmt<V> {
+public final class StmtFlowCon extends Stmt {
     @NepoField(name = BlocklyConstants.FLOW)
     public final Flow flow;
 

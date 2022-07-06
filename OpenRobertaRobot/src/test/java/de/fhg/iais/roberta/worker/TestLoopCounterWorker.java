@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisit
 public class TestLoopCounterWorker extends AbstractValidatorAndCollectorWorker {
 
     @Override
-    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project p, ClassToInstanceMap<IProjectBean.IBuilder<?>> bb) {
+    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project p, ClassToInstanceMap<IProjectBean.IBuilder> bb) {
         return new TestLoopCounterVisitor(p.getConfigurationAst(), bb);
     }
 }

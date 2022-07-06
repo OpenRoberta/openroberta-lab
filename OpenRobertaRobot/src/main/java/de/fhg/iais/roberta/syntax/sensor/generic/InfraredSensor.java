@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
         @F2M(field = "INFRARED_SEEK", mode = "SEEK"), @F2M(field = "INFRARED_DISTANCE", mode = "DISTANCE"), @F2M(field = "INFRARED_VALUE", mode = "VALUE"),
         @F2M(field = "INFRARED_OBSTACLE", mode = "OBSTACLE"), @F2M(field = "INFRARED_PRESENCE", mode = "PRESENCE")})
 @NepoExternalSensor()
-public final class InfraredSensor<V> extends ExternalSensor<V> {
+public final class InfraredSensor extends ExternalSensor {
 
     public InfraredSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);

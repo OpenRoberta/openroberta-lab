@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 @NepoPhrase(name = "SINGLE_MOTOR_STOP_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_single_motor_stop"})
-public final class SingleMotorStopAction<V> extends Action<V> {
+public final class SingleMotorStopAction extends Action {
     @NepoField(name = "MODE")
     public final MotorStopMode mode;
 

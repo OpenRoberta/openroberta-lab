@@ -25,7 +25,7 @@ public class Sig {
         return new Sig(returnType, paramTypes);
     }
 
-    public BlocklyType typeCheck(Phrase<BlocklyType> phraseWhoseSignaturIsChecked, List<BlocklyType> paramTypes) {
+    public BlocklyType typeCheck(Phrase phraseWhoseSignaturIsChecked, List<BlocklyType> paramTypes) {
         if ( paramTypes.size() != this.paramTypes.length ) {
             phraseWhoseSignaturIsChecked.addInfo(NepoInfo.error("number of parameters don't match"));
         }

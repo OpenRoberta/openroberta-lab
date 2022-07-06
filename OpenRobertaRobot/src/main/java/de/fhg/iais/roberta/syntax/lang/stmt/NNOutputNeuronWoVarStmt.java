@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(category = "STMT", blocklyNames = {"robActions_outputneuron_wo_var"}, name = "NN_OUTPUT_NEURON_WO_VAR_STMT")
-public final class NNOutputNeuronWoVarStmt<V> extends Stmt<V> {
+public final class NNOutputNeuronWoVarStmt extends Stmt {
     @NepoField(name = "NAME")
     public final String name;
 

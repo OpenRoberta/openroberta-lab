@@ -13,13 +13,13 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_display_text", "robActions_display_text_i2c", "robActions_display_text_oledssd1306i2c"}, name = "SHOW_TEXT_ACTION")
-public final class ShowTextAction<V> extends Action<V> {
+public final class ShowTextAction extends Action {
     @NepoValue(name = BlocklyConstants.OUT, type = BlocklyType.STRING)
-    public final Expr<V> msg;
+    public final Expr msg;
     @NepoValue(name = BlocklyConstants.COL, type = BlocklyType.NUMBER_INT)
-    public final Expr<V> x;
+    public final Expr x;
     @NepoValue(name = BlocklyConstants.ROW, type = BlocklyType.NUMBER_INT)
-    public final Expr<V> y;
+    public final Expr y;
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;
     @NepoHide
@@ -28,9 +28,9 @@ public final class ShowTextAction<V> extends Action<V> {
     public ShowTextAction(
         BlocklyProperties properties,
         
-        Expr<V> msg,
-        Expr<V> column,
-        Expr<V> row,
+        Expr msg,
+        Expr column,
+        Expr row,
         String port,
         Hide hide) {
         super(properties);

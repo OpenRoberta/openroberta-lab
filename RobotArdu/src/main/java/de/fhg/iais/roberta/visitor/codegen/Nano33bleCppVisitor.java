@@ -38,12 +38,12 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
      *
      * @param phrases to generate the code from
      */
-    public Nano33bleCppVisitor(List<List<Phrase<Void>>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
+    public Nano33bleCppVisitor(List<List<Phrase>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, brickConfiguration, beans);
     }
 
     @Override
-    public Void visitLsm9ds1AccSensor(Lsm9ds1AccSensor<Void> sensor) {
+    public Void visitLsm9ds1AccSensor(Lsm9ds1AccSensor sensor) {
         this.sb
             .append("(IMU.accelerationAvailable()?(IMU.readAcceleration(xAsFloat,yAsFloat,zAsFloat),")
             .append("___" + phrase2varValue(sensor.x))
@@ -56,7 +56,7 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
     }
 
     @Override
-    public Void visitLsm9ds1GyroSensor(Lsm9ds1GyroSensor<Void> sensor) {
+    public Void visitLsm9ds1GyroSensor(Lsm9ds1GyroSensor sensor) {
         this.sb
             .append("(IMU.gyroscopeAvailable()?(IMU.readGyroscope(xAsFloat,yAsFloat,zAsFloat),")
             .append("___" + phrase2varValue(sensor.x))
@@ -69,7 +69,7 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
     }
 
     @Override
-    public Void visitLsm9ds1MagneticFieldSensor(Lsm9ds1MagneticFieldSensor<Void> sensor) {
+    public Void visitLsm9ds1MagneticFieldSensor(Lsm9ds1MagneticFieldSensor sensor) {
         this.sb
             .append("(IMU.magneticFieldAvailable()?(IMU.readMagneticField(xAsFloat,yAsFloat,zAsFloat),")
             .append("___" + phrase2varValue(sensor.x))
@@ -82,7 +82,7 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
     }
 
     @Override
-    public Void visitApds9960DistanceSensor(Apds9960DistanceSensor<Void> sensor) {
+    public Void visitApds9960DistanceSensor(Apds9960DistanceSensor sensor) {
         this.sb
             .append("(APDS.proximityAvailable()?(___") //
             .append(phrase2varValue(sensor.distance))
@@ -91,7 +91,7 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
     }
 
     @Override
-    public Void visitApds9960GestureSensor(Apds9960GestureSensor<Void> sensor) {
+    public Void visitApds9960GestureSensor(Apds9960GestureSensor sensor) {
         this.sb
             .append("(APDS.gestureAvailable()?(___") //
             .append(phrase2varValue(sensor.gesture))
@@ -100,7 +100,7 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
     }
 
     @Override
-    public Void visitApds9960ColorSensor(Apds9960ColorSensor<Void> sensor) {
+    public Void visitApds9960ColorSensor(Apds9960ColorSensor sensor) {
         this.sb
             .append("(APDS.colorAvailable()?(APDS.readColor(rAsInt,gAsInt,bAsInt),")
             .append("___" + phrase2varValue(sensor.r))
@@ -113,7 +113,7 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
     }
 
     @Override
-    public Void visitLps22hbPressureSensor(Lps22hbPressureSensor<Void> sensor) {
+    public Void visitLps22hbPressureSensor(Lps22hbPressureSensor sensor) {
         this.sb
             .append("(___") //
             .append(phrase2varValue(sensor.pressure))
@@ -122,7 +122,7 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
     }
 
     @Override
-    public Void visitHts221TemperatureSensor(Hts221TemperatureSensor<Void> sensor) {
+    public Void visitHts221TemperatureSensor(Hts221TemperatureSensor sensor) {
         this.sb
             .append("(___") //
             .append(phrase2varValue(sensor.temperature))
@@ -131,7 +131,7 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
     }
 
     @Override
-    public Void visitHts221HumiditySensor(Hts221HumiditySensor<Void> sensor) {
+    public Void visitHts221HumiditySensor(Hts221HumiditySensor sensor) {
         this.sb
             .append("(___") //
             .append(phrase2varValue(sensor.humidity))
@@ -140,44 +140,44 @@ public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33Ble
     }
 
     @Override
-    public Void visitNeuralNetworkSetup(NeuralNetworkSetup<Void> nn) {
+    public Void visitNeuralNetworkSetup(NeuralNetworkSetup nn) {
         this.sb.append("// visitNeuralNetworkSetup");
         return null;
     }
 
     @Override
-    public Void visitNeuralNetworkInitRawData(NeuralNetworkInitRawData<Void> nn) {
+    public Void visitNeuralNetworkInitRawData(NeuralNetworkInitRawData nn) {
         this.sb.append("// visitNeuralNetworkInitRawData");
         return null;
     }
 
     @Override
-    public Void visitNeuralNetworkAddRawData(NeuralNetworkAddRawData<Void> nn) {
+    public Void visitNeuralNetworkAddRawData(NeuralNetworkAddRawData nn) {
         this.sb.append("// visitNeuralNetworkAddRawData");
         return null;
     }
 
     @Override
-    public Void visitNeuralNetworkAddTrainingsData(NeuralNetworkAddTrainingsData<Void> nn) {
+    public Void visitNeuralNetworkAddTrainingsData(NeuralNetworkAddTrainingsData nn) {
         this.sb.append("// visitNeuralNetworkAddTrainingsData");
         return null;
     }
 
     @Override
-    public Void visitNeuralNetworkTrain(NeuralNetworkTrain<Void> nn) {
+    public Void visitNeuralNetworkTrain(NeuralNetworkTrain nn) {
         this.sb.append("// visitNeuralNetworkTrain");
         return null;
     }
 
     @Override
-    public Void visitNeuralNetworkClassify(NeuralNetworkClassify<Void> nn) {
+    public Void visitNeuralNetworkClassify(NeuralNetworkClassify nn) {
         this.sb.append("// visitNeuralNetworkClassify");
         return null;
     }
 
-    private String phrase2varValue(Expr<?> phrase) {
-        if ( phrase instanceof Var<?> ) {
-            return ((Var<?>) phrase).name;
+    private String phrase2varValue(Expr phrase) {
+        if ( phrase instanceof Var ) {
+            return ((Var) phrase).name;
         } else {
             throw new DbcException("Phrase MUST be a Var: " + phrase);
         }

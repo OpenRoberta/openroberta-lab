@@ -14,8 +14,8 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * {@link #setReadOnly()}.
  */
 @NepoBasic(name = "STMT_LIST", category = "STMT", blocklyNames = {})
-public final class StmtList<V> extends Stmt<V> {
-    public final List<Stmt<V>> sl = new ArrayList<Stmt<V>>();
+public final class StmtList extends Stmt {
+    public final List<Stmt> sl = new ArrayList<Stmt>();
 
     public StmtList() {
         super(BlocklyProperties.make("STMT_LIST", "1"));
@@ -26,7 +26,7 @@ public final class StmtList<V> extends Stmt<V> {
      *
      * @param stmt
      */
-    public final void addStmt(Stmt<V> stmt) {
+    public final void addStmt(Stmt stmt) {
         Assert.isTrue(mayChange() && stmt != null && stmt.isReadOnly());
         this.sl.add(stmt);
     }
@@ -34,7 +34,7 @@ public final class StmtList<V> extends Stmt<V> {
     /**
      * @return list with elements of type {@link Stmt}.
      */
-    public final List<Stmt<V>> get() {
+    public final List<Stmt> get() {
         Assert.isTrue(isReadOnly());
         return Collections.unmodifiableList(this.sl);
     }
@@ -42,7 +42,7 @@ public final class StmtList<V> extends Stmt<V> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for ( Stmt<V> stmt : this.sl ) {
+        for ( Stmt stmt : this.sl ) {
             sb.append(stmt.toString());
         }
         return sb.toString();

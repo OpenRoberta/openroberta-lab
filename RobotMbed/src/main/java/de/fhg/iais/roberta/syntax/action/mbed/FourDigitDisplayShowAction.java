@@ -10,15 +10,15 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"mbedActions_fourDigitDisplay_show"}, name = "FOURDIGITDISPLAY_SHOW_ACTION")
-public final class FourDigitDisplayShowAction<V> extends Action<V> {
+public final class FourDigitDisplayShowAction extends Action {
     @NepoValue(name = BlocklyConstants.VALUE, type = BlocklyType.NUMBER_INT)
-    public final Expr<V> value;
+    public final Expr value;
     @NepoValue(name = BlocklyConstants.POSITION, type = BlocklyType.NUMBER_INT)
-    public final Expr<V> position;
+    public final Expr position;
     @NepoValue(name = BlocklyConstants.COLON, type = BlocklyType.BOOLEAN)
-    public final Expr<V> colon;
+    public final Expr colon;
 
-    public FourDigitDisplayShowAction(BlocklyProperties properties, Expr<V> value, Expr<V> position, Expr<V> colon) {
+    public FourDigitDisplayShowAction(BlocklyProperties properties, Expr value, Expr position, Expr colon) {
         super(properties);
         Assert.isTrue(value != null && position != null && colon != null);
         this.value = value;

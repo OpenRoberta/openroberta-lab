@@ -60,12 +60,12 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
      *
      * @param phrases to generate the code from
      */
-    public ArduinoCppVisitor(List<List<Phrase<Void>>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
+    public ArduinoCppVisitor(List<List<Phrase>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, brickConfiguration, beans);
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+    public Void visitShowTextAction(ShowTextAction showTextAction) {
         this.sb.append("_lcd_" + showTextAction.port + ".setCursor(");
         showTextAction.x.accept(this);
         this.sb.append(",");
@@ -83,7 +83,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         this.sb.append("_lcd_").append(clearDisplayAction.port);
         if ( clearDisplayAction.getProperty().getBlockType().contains("oledssd1306i2c") ) {
             this.sb.append(".clearDisplay();");
@@ -97,7 +97,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
 
     @SuppressWarnings("unchecked")
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         if ( !lightAction.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
             this.sb.append("digitalWrite(_led_" + lightAction.port + ", " + lightAction.mode.getValues()[0] + ");");
         } else {
@@ -116,25 +116,25 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                 blueName = "analogWrite(_led_blue_" + lightAction.port;
             }
             if ( lightAction.rgbLedColor.getClass().equals(ColorConst.class) ) {
-                String hexValue = ((ColorConst<Void>) lightAction.rgbLedColor).getHexValueAsString();
+                String hexValue = ((ColorConst) lightAction.rgbLedColor).getHexValueAsString();
                 hexValue = hexValue.split("#")[1];
                 channels.put(redName, String.valueOf(Integer.decode("0x" + hexValue.substring(0, 2))));
                 channels.put(greenName, String.valueOf(Integer.decode("0x" + hexValue.substring(2, 4))));
                 channels.put(blueName, String.valueOf(Integer.decode("0x" + hexValue.substring(4, 6))));
             } else if ( lightAction.rgbLedColor.getClass().equals(Var.class) ) {
-                String tempVarName = "___" + ((Var<Void>) lightAction.rgbLedColor).name;
+                String tempVarName = "___" + ((Var) lightAction.rgbLedColor).name;
                 channels.put(redName, "RCHANNEL(" + tempVarName + ")");
                 channels.put(greenName, "GCHANNEL(" + tempVarName + ")");
                 channels.put(blueName, "BCHANNEL(" + tempVarName + ")");
             } else {
-                channels.put(redName, ((RgbColor<Void>) lightAction.rgbLedColor).R);
-                channels.put(greenName, ((RgbColor<Void>) lightAction.rgbLedColor).G);
-                channels.put(blueName, ((RgbColor<Void>) lightAction.rgbLedColor).B);
+                channels.put(redName, ((RgbColor) lightAction.rgbLedColor).R);
+                channels.put(greenName, ((RgbColor) lightAction.rgbLedColor).G);
+                channels.put(blueName, ((RgbColor) lightAction.rgbLedColor).B);
             }
             channels.forEach((name, v) -> {
                 this.sb.append(name).append(", ");
-                if ( v instanceof Phrase<?> ) {
-                    ((Phrase<Void>) v).accept(this);
+                if ( v instanceof Phrase ) {
+                    ((Phrase) v).accept(this);
                 } else {
                     this.sb.append(v);
                 }
@@ -146,7 +146,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         String[] colors =
             {
                 "red",
@@ -161,7 +161,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         boolean step = motorOnAction.param.getDuration() != null;
         if ( step ) {//step motor
             this.sb.append("_stepper_" + motorOnAction.getUserDefinedPort() + ".setSpeed(");
@@ -184,19 +184,19 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitRelayAction(RelayAction<Void> relayAction) {
+    public Void visitRelayAction(RelayAction relayAction) {
         this.sb.append("digitalWrite(_relay_").append(relayAction.port).append(", ").append(relayAction.mode.getValues()[0]).append(");");
         return null;
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         this.sb.append("analogRead(_output_" + lightSensor.getUserDefinedPort() + ")/10.24");
         return null;
     }
 
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> button) {
+    public Void visitKeysSensor(KeysSensor button) {
         this.sb.append("digitalRead(_taster_" + button.getUserDefinedPort() + ")");
         return null;
     }
@@ -225,7 +225,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         this.sb
             .append("_getUltrasonicDistance(_trigger_")
             .append(ultrasonicSensor.getUserDefinedPort())
@@ -237,25 +237,25 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitMoistureSensor(MoistureSensor<Void> moistureSensor) {
+    public Void visitMoistureSensor(MoistureSensor moistureSensor) {
         this.sb.append("analogRead(_moisturePin_" + moistureSensor.getUserDefinedPort() + ")/10.24");
         return null;
     }
 
     @Override
-    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+    public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
         this.sb.append("map(analogRead(_TMP36_" + temperatureSensor.getUserDefinedPort() + "), 0, 410, -50, 150)");
         return null;
     }
 
     @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> potentiometer) {
+    public Void visitVoltageSensor(VoltageSensor potentiometer) {
         this.sb.append("((double)analogRead(_output_" + potentiometer.getUserDefinedPort() + "))*5/1024");
         return null;
     }
 
     @Override
-    public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
+    public Void visitHumiditySensor(HumiditySensor humiditySensor) {
         switch ( humiditySensor.getMode() ) {
             case SC.HUMIDITY:
                 this.sb.append("_dht_" + humiditySensor.getUserDefinedPort() + ".readHumidity()");
@@ -270,13 +270,13 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitDropSensor(DropSensor<Void> dropSensor) {
+    public Void visitDropSensor(DropSensor dropSensor) {
         this.sb.append("analogRead(_S_" + dropSensor.getUserDefinedPort() + ")/10.24");
         return null;
     }
 
     @Override
-    public Void visitPulseSensor(PulseSensor<Void> pulseSensor) {
+    public Void visitPulseSensor(PulseSensor pulseSensor) {
         this.sb.append("analogRead(_SensorPin_" + pulseSensor.getUserDefinedPort() + ")");
         return null;
     }
@@ -319,7 +319,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitRfidSensor(RfidSensor<Void> rfidSensor) {
+    public Void visitRfidSensor(RfidSensor rfidSensor) {
         if ( !this.configuration.getRobotName().equals("unowifirev2") ) { // TODO remove once rfid library is supported for unowifirev2
             switch ( rfidSensor.getMode() ) {
                 case SC.PRESENCE:
@@ -390,7 +390,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         switch ( infraredSensor.getMode() ) {
             case SC.PRESENCE:
                 this.sb.append("_getIRPresence(_irrecv_").append(infraredSensor.getUserDefinedPort()).append(")");
@@ -405,25 +405,25 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitMotionSensor(MotionSensor<Void> motionSensor) {
+    public Void visitMotionSensor(MotionSensor motionSensor) {
         this.sb.append("digitalRead(_output_" + motionSensor.getUserDefinedPort() + ")");
         return null;
     }
 
     @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
         this.sb.append("_imu_").append(accelerometerSensor.getUserDefinedPort()).append(".readFloatAccel").append(accelerometerSensor.getMode()).append("()");
         return null;
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
         this.sb.append("_imu_").append(gyroSensor.getUserDefinedPort()).append(".readFloatGyro").append(gyroSensor.getMode()).append("()");
         return null;
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         this.sb.append("_uBit.soundmotor.soundOn(");
         this.sb.append(playNoteAction.frequency);
         this.sb.append("); ").append("_uBit.sleep(");
@@ -433,7 +433,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         //9 - sound port
         this.sb.append("tone(_buzzer_").append(toneAction.port).append(", ");
         toneAction.frequency.accept(this);
@@ -448,7 +448,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
+    public Void visitMainTask(MainTask mainTask) {
 
         mainTask.variables.accept(this);
         nlIndent();
@@ -932,7 +932,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
+    public Void visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
         switch ( pinWriteValueAction.pinValue ) {
             case SC.ANALOG:
                 this.sb.append("analogWrite(_output_").append(pinWriteValueAction.port).append(", (int)");
@@ -951,7 +951,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
+    public Void visitPinGetValueSensor(PinGetValueSensor pinGetValueSensor) {
         switch ( pinGetValueSensor.getMode() ) {
             case SC.ANALOG:
                 this.sb.append("analogRead(_input_").append(pinGetValueSensor.getUserDefinedPort()).append(")");

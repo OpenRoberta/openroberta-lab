@@ -19,12 +19,12 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "PLOT_POINT_ACTION", category = "ACTOR", blocklyNames = {"robactions_plot_point"})
-public final class PlotPointAction<V> extends Action<V> {
+public final class PlotPointAction extends Action {
     public final String port;
-    public final Expr<V> value;
-    public final Expr<V> tickmark;
+    public final Expr value;
+    public final Expr tickmark;
 
-    public PlotPointAction(String port, Expr<V> value, Expr<V> tickmark, BlocklyProperties properties) {
+    public PlotPointAction(String port, Expr value, Expr tickmark, BlocklyProperties properties) {
         super(properties);
         this.port = port;
         this.value = value;
@@ -37,14 +37,14 @@ public final class PlotPointAction<V> extends Action<V> {
         return "PlotPointAction []";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
         String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.EMPTY_PORT);
-        Phrase<V> value = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
-        Phrase<V> tickmark = helper.extractValue(values, new ExprParam(BlocklyConstants.TICKMARK, BlocklyType.NUMBER_INT));
-        return new PlotPointAction<>(Jaxb2Ast.sanitizePort(port), Jaxb2Ast.convertPhraseToExpr(value), Jaxb2Ast.convertPhraseToExpr(tickmark), Jaxb2Ast.extractBlocklyProperties(block));
+        Phrase value = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
+        Phrase tickmark = helper.extractValue(values, new ExprParam(BlocklyConstants.TICKMARK, BlocklyType.NUMBER_INT));
+        return new PlotPointAction(Jaxb2Ast.sanitizePort(port), Jaxb2Ast.convertPhraseToExpr(value), Jaxb2Ast.convertPhraseToExpr(tickmark), Jaxb2Ast.extractBlocklyProperties(block));
 
     }
 

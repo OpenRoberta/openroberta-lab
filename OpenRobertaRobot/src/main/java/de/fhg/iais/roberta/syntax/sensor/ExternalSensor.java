@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
-public abstract class ExternalSensor<V> extends Sensor<V> implements WithUserDefinedPort<V> {
+public abstract class ExternalSensor extends Sensor implements WithUserDefinedPort {
     private final ExternalSensorBean externalSensorBean;
 
     public ExternalSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
@@ -58,11 +58,11 @@ public abstract class ExternalSensor<V> extends Sensor<V> implements WithUserDef
         return this.getClass().getSimpleName() + " [" + this.getUserDefinedPort() + ", " + this.getMode() + ", " + this.getSlot() + "]";
     }
 
-    public static <V> ExternalSensorBean extractPortAndModeAndSlot(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  ExternalSensorBean extractPortAndModeAndSlot(Block block, Jaxb2ProgramAst helper) {
         return extractPortModeSlotMutationHide(block, helper);
     }
 
-    public static <V> ExternalSensorBean extractPortModeSlotMutationHide(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  ExternalSensorBean extractPortModeSlotMutationHide(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.EMPTY_PORT);
@@ -101,9 +101,9 @@ public abstract class ExternalSensor<V> extends Sensor<V> implements WithUserDef
     /**
      * TODO: this is an incredible bad design and must be refactored (InfraredSensor as default ... ... )
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         ExternalSensorBean sensorData = extractPortAndModeAndSlot(block, helper);
-        return new InfraredSensor<V>(Jaxb2Ast.extractBlocklyProperties(block), sensorData);
+        return new InfraredSensor(Jaxb2Ast.extractBlocklyProperties(block), sensorData);
     }
 
 }

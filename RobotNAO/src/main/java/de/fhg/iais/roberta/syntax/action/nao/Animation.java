@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 @NepoPhrase(name = "ANIMATION", category = "ACTOR", blocklyNames = {"naoActions_animation"})
-public final class Animation<V> extends Action<V> {
+public final class Animation extends Action {
     @NepoField(name = "MOVE")
     public final Move move;
 

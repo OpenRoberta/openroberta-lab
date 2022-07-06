@@ -18,10 +18,10 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "FORGET_FACE", category = "ACTOR", blocklyNames = {"naoActions_forgetFace"})
-public final class ForgetFace<V> extends Action<V> {
-    public final Expr<V> faceName;
+public final class ForgetFace extends Action {
+    public final Expr faceName;
 
-    public ForgetFace(Expr<V> faceName, BlocklyProperties properties) {
+    public ForgetFace(Expr faceName, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(faceName != null);
         this.faceName = faceName;
@@ -33,10 +33,10 @@ public final class ForgetFace<V> extends Action<V> {
         return "ForgetFace [" + this.faceName + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
-        Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.NAME, BlocklyType.STRING));
-        return new ForgetFace<>(Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlocklyProperties(block));
+        Phrase msg = helper.extractValue(values, new ExprParam(BlocklyConstants.NAME, BlocklyType.STRING));
+        return new ForgetFace(Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

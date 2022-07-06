@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "SET_MODE", category = "ACTOR", blocklyNames = {"naoActions_mode"})
-public final class SetMode<V> extends Action<V> {
+public final class SetMode extends Action {
 
     public final Modus modus;
 
@@ -32,12 +32,12 @@ public final class SetMode<V> extends Action<V> {
         return "Mode [" + this.modus + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
 
         String modus = Jaxb2Ast.extractField(fields, BlocklyConstants.DIRECTION);
 
-        return new SetMode<V>(Modus.get(modus), Jaxb2Ast.extractBlocklyProperties(block));
+        return new SetMode(Modus.get(modus), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

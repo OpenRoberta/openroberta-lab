@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(name = "PLOT_CLEAR_ACTION", category = "ACTOR", blocklyNames = {"robactions_plot_clear"})
-public final class PlotClearAction<V> extends Action<V> {
+public final class PlotClearAction extends Action {
     @NepoField(name = "ACTORPORT", value = BlocklyConstants.EMPTY_PORT)
     public final String port;
 

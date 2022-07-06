@@ -19,30 +19,30 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 public interface IMbotVisitor<V> extends ISensorVisitor<V>, IDifferentialMotorVisitor<V>, ILightVisitor<V>, ISimpleSoundVisitor<V> {
 
-    default V visitJoystick(Joystick<V> joystick) {
+    default V visitJoystick(Joystick joystick) {
         throw new DbcException("Block not supported");
     }
 
-    default V visitFlameSensor(FlameSensor<V> flameSensor) {
+    default V visitFlameSensor(FlameSensor flameSensor) {
         throw new DbcException("Block not supported");
     }
 
-    V visitSendIRAction(SendIRAction<V> sendIRAction);
+    V visitSendIRAction(SendIRAction sendIRAction);
 
-    V visitReceiveIRAction(ReceiveIRAction<V> receiveIRAction);
+    V visitReceiveIRAction(ReceiveIRAction receiveIRAction);
 
-    V visitLEDMatrixImageAction(LEDMatrixImageAction<V> ledMatrixImageAction);
+    V visitLEDMatrixImageAction(LEDMatrixImageAction ledMatrixImageAction);
 
-    V visitLEDMatrixTextAction(LEDMatrixTextAction<V> ledMatrixTextAction);
+    V visitLEDMatrixTextAction(LEDMatrixTextAction ledMatrixTextAction);
 
-    V visitLEDMatrixImage(LEDMatrixImage<V> ledMatrixImage);
+    V visitLEDMatrixImage(LEDMatrixImage ledMatrixImage);
 
-    V visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<V> ledMatrixImageShiftFunction);
+    V visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction ledMatrixImageShiftFunction);
 
-    V visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<V> ledMatrixImageInverFunction);
+    V visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction ledMatrixImageInverFunction);
 
-    V visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction<V> ledMatrixSetBrightnessAction);
+    V visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction ledMatrixSetBrightnessAction);
 
-    V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction);
+    V visitClearDisplayAction(ClearDisplayAction clearDisplayAction);
 
 }

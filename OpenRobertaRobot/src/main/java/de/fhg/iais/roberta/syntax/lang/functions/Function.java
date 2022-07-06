@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
  * - {@link #getKind()}<br>
  * - {@link #getAs(Class)}<br>
  */
-public abstract class Function<V> extends Phrase<V> {
+public abstract class Function extends Phrase {
 
     /**
      * create a mutable function of the given {@link BlockDescriptor}

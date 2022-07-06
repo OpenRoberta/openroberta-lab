@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 @NepoExpr(name = "ULTRASONIC_SENSING", category = "SENSOR", blocklyNames = {"robSensors_ultrasonic_getSample", "sim_ultrasonic_getSample"},
     sampleValues = {@F2M(field = "ULTRASONIC_DISTANCE", mode = "DISTANCE"), @F2M(field = "ULTRASONIC_PRESENCE", mode = "PRESENCE")})
 @NepoExternalSensor()
-public final class UltrasonicSensor<V> extends ExternalSensor<V> {
+public final class UltrasonicSensor extends ExternalSensor {
 
     public UltrasonicSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);

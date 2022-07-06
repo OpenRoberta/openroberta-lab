@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
         @F2M(field = "ENVIRONMENTAL_PRESSURE", mode = "PRESSURE"), @F2M(field = "ENVIRONMENTAL_HUMIDITY", mode = "HUMIDITY"),
         @F2M(field = "ENVIRONMENTAL_CO2EQUIVALENT", mode = "CO2EQUIVALENT")})
 @NepoExternalSensor
-public final class EnvironmentalSensor<V> extends ExternalSensor<V> {
+public final class EnvironmentalSensor extends ExternalSensor {
 
     public EnvironmentalSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);

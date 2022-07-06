@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "SENSOR", blocklyNames = {"bob3Sensors_getCode", "robSensors_code_getSample"}, name = "BOB3_CODEPAD")
-public final class CodePadSensor<V> extends Sensor<V> {
+public final class CodePadSensor extends Sensor {
     @NepoMutation(fieldName = BlocklyConstants.MODE)
     public final Mutation mutation;
     @NepoField(name = BlocklyConstants.MODE)

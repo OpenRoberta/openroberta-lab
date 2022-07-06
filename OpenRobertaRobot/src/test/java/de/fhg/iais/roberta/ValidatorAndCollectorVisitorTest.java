@@ -32,7 +32,7 @@ public class ValidatorAndCollectorVisitorTest {
     private TestValidatorAndCollectorVisitor delegatedValidatorAndCollectorVisitor;
     private TestValidatorAndCollectorVisitor mainValidatorAndCollectorVisitor;
     private ConfigurationAst robotConfiguration;
-    private ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilder;
+    private ClassToInstanceMap<IProjectBean.IBuilder> beanBuilder;
     private UsedMethodBean.Builder usedMethodBeanBuilder;
     private UsedHardwareBean.Builder usedHardwareBeanBuilder;
     private ErrorAndWarningBean.Builder errorAndWarningBeanBuilder;
@@ -41,7 +41,7 @@ public class ValidatorAndCollectorVisitorTest {
     @Before
     public void setUp() throws Exception {
         this.robotConfiguration = new ConfigurationAst.Builder().build();
-        ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder<?>> mapBuilder = new ImmutableClassToInstanceMap.Builder<>();
+        ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder> mapBuilder = new ImmutableClassToInstanceMap.Builder<>();
         usedMethodBeanBuilder = new UsedMethodBean.Builder();
         mapBuilder.put(UsedMethodBean.Builder.class, usedMethodBeanBuilder);
         usedHardwareBeanBuilder = new UsedHardwareBean.Builder();
@@ -59,7 +59,7 @@ public class ValidatorAndCollectorVisitorTest {
 
     @Test
     public void requiredComponentVisitedVarArgsWithoutEmptyExpression() {
-        Phrase<Void> phrase = new SimplePhrase();
+        Phrase phrase = new SimplePhrase();
         SimplePhrase childPhrase1 = new SimplePhrase();
         SimplePhrase childPhrase2 = new SimplePhrase();
 
@@ -82,8 +82,8 @@ public class ValidatorAndCollectorVisitorTest {
 
     @Test
     public void requiredComponentVisitedVarArgs() {
-        Phrase<Void> phrase = new SimplePhrase();
-        Phrase<Void> emptyExpression = new EmptyExpr<Void>(BlocklyType.ANY);
+        Phrase phrase = new SimplePhrase();
+        Phrase emptyExpression = new EmptyExpr(BlocklyType.ANY);
 
         delegatedValidatorAndCollectorVisitor.requiredComponentVisited(phrase, emptyExpression);
 
@@ -104,7 +104,7 @@ public class ValidatorAndCollectorVisitorTest {
 
     @Test
     public void requiredComponentVisitedListWithoutEmptyExpression() {
-        Phrase<Void> phrase = new SimplePhrase();
+        Phrase phrase = new SimplePhrase();
         SimplePhrase childPhrase1 = new SimplePhrase();
         SimplePhrase childPhrase2 = new SimplePhrase();
 
@@ -126,8 +126,8 @@ public class ValidatorAndCollectorVisitorTest {
 
     @Test
     public void requiredComponentVisitedList() {
-        Phrase<Void> phrase = new SimplePhrase();
-        Phrase<Void> emptyExpression = new EmptyExpr<Void>(BlocklyType.ANY);
+        Phrase phrase = new SimplePhrase();
+        Phrase emptyExpression = new EmptyExpr(BlocklyType.ANY);
 
         delegatedValidatorAndCollectorVisitor.requiredComponentVisited(phrase, Arrays.asList(emptyExpression));
 
@@ -149,7 +149,7 @@ public class ValidatorAndCollectorVisitorTest {
 
     @Test
     public void addErrorToPhrase() {
-        Phrase<Void> phrase = new SimplePhrase();
+        Phrase phrase = new SimplePhrase();
 
         String errorMessage = "WHATEVER";
         delegatedValidatorAndCollectorVisitor.addErrorToPhrase(phrase, errorMessage);
@@ -171,7 +171,7 @@ public class ValidatorAndCollectorVisitorTest {
 
     @Test
     public void addWarningToPhrase() {
-        Phrase<Void> phrase = new SimplePhrase();
+        Phrase phrase = new SimplePhrase();
 
         String warningMessage = "WHATEVER";
         delegatedValidatorAndCollectorVisitor.addWarningToPhrase(phrase, warningMessage);
@@ -202,7 +202,7 @@ public class ValidatorAndCollectorVisitorTest {
         assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(delegatedValidatorAndCollectorVisitor, null, beanBuilder)).isInstanceOf(DbcException.class);
 
         // ErrorAndWarninBean
-        ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> withoutErrorAndWarnings = (new ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder<?>>())
+        ImmutableClassToInstanceMap<IProjectBean.IBuilder> withoutErrorAndWarnings = (new ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder>())
             .put(UsedHardwareBean.Builder.class, usedHardwareBeanBuilder)
             .put(UsedMethodBean.Builder.class, usedMethodBeanBuilder)
             .put(NNBean.Builder.class, nnBeanBuilder)
@@ -211,7 +211,7 @@ public class ValidatorAndCollectorVisitorTest {
         assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(robotConfiguration, withoutErrorAndWarnings)).isInstanceOf(DbcException.class);
 
         // HardwareBean
-        ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> withoutHardware = (new ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder<?>>())
+        ImmutableClassToInstanceMap<IProjectBean.IBuilder> withoutHardware = (new ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder>())
             .put(UsedMethodBean.Builder.class, usedMethodBeanBuilder)
             .put(ErrorAndWarningBean.Builder.class, errorAndWarningBeanBuilder)
             .put(NNBean.Builder.class, nnBeanBuilder)
@@ -220,7 +220,7 @@ public class ValidatorAndCollectorVisitorTest {
         assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(robotConfiguration, withoutHardware)).isInstanceOf(DbcException.class);
 
         // MethodBean
-        ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> withoutMethod = (new ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder<?>>())
+        ImmutableClassToInstanceMap<IProjectBean.IBuilder> withoutMethod = (new ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder>())
             .put(UsedHardwareBean.Builder.class, usedHardwareBeanBuilder)
             .put(ErrorAndWarningBean.Builder.class, errorAndWarningBeanBuilder)
             .put(NNBean.Builder.class, nnBeanBuilder)
@@ -229,7 +229,7 @@ public class ValidatorAndCollectorVisitorTest {
         assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(robotConfiguration, withoutMethod)).isInstanceOf(DbcException.class);
 
         // NNBean
-        ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> withoutNN = (new ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder<?>>())
+        ImmutableClassToInstanceMap<IProjectBean.IBuilder> withoutNN = (new ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder>())
             .put(UsedMethodBean.Builder.class, usedMethodBeanBuilder)
             .put(UsedHardwareBean.Builder.class, usedHardwareBeanBuilder)
             .put(ErrorAndWarningBean.Builder.class, errorAndWarningBeanBuilder)
@@ -238,7 +238,7 @@ public class ValidatorAndCollectorVisitorTest {
         assertThatThrownBy(() -> new TestValidatorAndCollectorVisitor(robotConfiguration, withoutNN)).isInstanceOf(DbcException.class);
 
         // EVERYTHING IS FINE
-        ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> everything = (new ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder<?>>())
+        ImmutableClassToInstanceMap<IProjectBean.IBuilder> everything = (new ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder>())
             .put(UsedMethodBean.Builder.class, usedMethodBeanBuilder)
             .put(UsedHardwareBean.Builder.class, usedHardwareBeanBuilder)
             .put(ErrorAndWarningBean.Builder.class, errorAndWarningBeanBuilder)

@@ -12,13 +12,13 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_quadRGB_led_on"}, name = "QUADRGB_LIGHT_ACTION")
-public final class QuadRGBLightOnAction<V> extends Action<V> implements WithUserDefinedPort<V> {
+public final class QuadRGBLightOnAction extends Action implements WithUserDefinedPort {
     @NepoValue(name = BlocklyConstants.COLOR, type = BlocklyType.COLOR)
-    public final Expr<V> color;
+    public final Expr color;
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;
 
-    public QuadRGBLightOnAction(BlocklyProperties properties, Expr<V> color, String port) {
+    public QuadRGBLightOnAction(BlocklyProperties properties, Expr color, String port) {
         super(properties);
         Assert.notNull(color);
         Assert.nonEmptyString(port);

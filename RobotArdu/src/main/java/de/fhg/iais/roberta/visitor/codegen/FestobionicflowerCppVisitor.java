@@ -27,19 +27,19 @@ import de.fhg.iais.roberta.visitor.hardware.IFestobionicflowerVisitor;
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a StringBuilder.
  * <b>This representation is correct C code for Arduino.</b> <br>
  */
-public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppVisitor implements IFestobionicflowerVisitor<Void> {
+public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppVisitor implements IFestobionicflowerVisitor {
 
     /**
      * Initialize the C++ code generator visitor.
      *
      * @param phrases to generate the code from
      */
-    public FestobionicflowerCppVisitor(List<List<Phrase<Void>>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
+    public FestobionicflowerCppVisitor(List<List<Phrase>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, brickConfiguration, beans);
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
+    public Void visitMainTask(MainTask mainTask) {
         mainTask.variables.accept(this);
         nlIndent();
         generateConfigurationVariables();
@@ -78,7 +78,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
     }
 
     @Override
-    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+    public Void visitLedOnAction(LedOnAction ledOnAction) {
         this.sb.append("set_color(");
         ledOnAction.ledColor.accept(this);
         this.sb.append(");");
@@ -87,13 +87,13 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
     }
 
     @Override
-    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
+    public Void visitLedOffAction(LedOffAction ledOffAction) {
         this.sb.append("set_color(RGB(0x00, 0x00, 0x00));");
         return null;
     }
 
     @Override
-    public Void visitStepMotorAction(StepMotorAction<Void> stepMotorAction) {
+    public Void visitStepMotorAction(StepMotorAction stepMotorAction) {
         this.sb.append("set_stepmotorpos(");
         stepMotorAction.stepMotorPos.accept(this);
         this.sb.append(");");
@@ -101,7 +101,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
     }
 
     @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+    public Void visitTouchSensor(TouchSensor touchSensor) {
         String port = touchSensor.getUserDefinedPort();
         ConfigurationComponent configurationComponent = this.configuration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("TOUCHED");
@@ -121,7 +121,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         this.sb.append("getLuminosity()");
         return null;
     }

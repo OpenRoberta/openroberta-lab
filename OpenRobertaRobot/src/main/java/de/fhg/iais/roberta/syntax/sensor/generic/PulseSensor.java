@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 @NepoExpr(name = "PULSE_SENSING", category = "SENSOR", blocklyNames = {"robSensors_pulse_getSample"},
     sampleValues = {@F2M(field = "PULSE_VALUE", mode = "VALUE")})
 @NepoExternalSensor()
-public final class PulseSensor<V> extends ExternalSensor<V> {
+public final class PulseSensor extends ExternalSensor {
 
     public PulseSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);

@@ -17,11 +17,11 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "NAO_MARK_INFORMATION", category = "SENSOR", blocklyNames = {"naoSensors_getMarkInformation"})
-public final class NaoMarkInformation<V> extends Sensor<V> {
+public final class NaoMarkInformation extends Sensor {
 
-    public final Expr<V> naoMarkId;
+    public final Expr naoMarkId;
 
-    public NaoMarkInformation(Expr<V> naoMarkId, BlocklyProperties properties) {
+    public NaoMarkInformation(Expr naoMarkId, BlocklyProperties properties) {
         super(properties);
         this.naoMarkId = naoMarkId;
         setReadOnly();
@@ -32,10 +32,10 @@ public final class NaoMarkInformation<V> extends Sensor<V> {
         return "NaoMarkInformation [" + this.naoMarkId.toString() + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
-        Phrase<V> naoMarkId = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER));
-        return new NaoMarkInformation<>(Jaxb2Ast.convertPhraseToExpr(naoMarkId), Jaxb2Ast.extractBlocklyProperties(block));
+        Phrase naoMarkId = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER));
+        return new NaoMarkInformation(Jaxb2Ast.convertPhraseToExpr(naoMarkId), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

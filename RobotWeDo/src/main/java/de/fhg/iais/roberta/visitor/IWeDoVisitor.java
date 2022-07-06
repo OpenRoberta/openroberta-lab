@@ -14,22 +14,22 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 public interface IWeDoVisitor<V> extends IMotorVisitor<V>, ISoundVisitor<V>, ILightVisitor<V>, IDisplayVisitor<V>, ISensorVisitor<V> {
 
     @Override
-    default V visitVolumeAction(VolumeAction<V> volumeAction) {
+    default V visitVolumeAction(VolumeAction volumeAction) {
         throw new DbcException("operation not supported");
     }
 
     @Override
-    default V visitPlayFileAction(PlayFileAction<V> playFileAction) {
+    default V visitPlayFileAction(PlayFileAction playFileAction) {
         throw new DbcException("operation not supported");
     }
 
     @Override
-    default V visitMotorGetPowerAction(MotorGetPowerAction<V> motorGetPowerAction) {
+    default V visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         throw new DbcException("operation not supported");
     }
 
     @Override
-    default V visitMotorSetPowerAction(MotorSetPowerAction<V> motorSetPowerAction) {
+    default V visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
         throw new DbcException("operation not supported");
     }
 

@@ -401,9 +401,9 @@ public class ReuseIntegrationAsUnitTest {
             LOG.error("program XML has NOT version 3.1: " + programName);
             return false;
         }
-        Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst(testFactory);
-        ProgramAst<Void> generatedAst = transformer.blocks2Ast(blockSet);
-        List<Phrase<Void>> blocks = generatedAst.getTree().get(0);
+        Jaxb2ProgramAst transformer = new Jaxb2ProgramAst(testFactory);
+        ProgramAst generatedAst = transformer.blocks2Ast(blockSet);
+        List<Phrase> blocks = generatedAst.getTree().get(0);
         StringBuilder sb = new StringBuilder();
         for ( int i = 2; i < blocks.size(); i++ ) {
             sb.append(blocks.get(i).toString()).append("\n");

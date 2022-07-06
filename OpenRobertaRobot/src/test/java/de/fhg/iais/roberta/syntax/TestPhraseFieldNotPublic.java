@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "TEST_PHRASE_NOT_PUBLIC", blocklyNames = {"test_phrase_field_not_public"}, category = "EXPR")
-public class TestPhraseFieldNotPublic<V> extends Phrase<V> {
+public class TestPhraseFieldNotPublic extends Phrase {
     @NepoField(name = "MESSAGE")
     private final String message;
 

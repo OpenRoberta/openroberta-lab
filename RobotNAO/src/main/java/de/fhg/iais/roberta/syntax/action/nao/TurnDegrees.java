@@ -20,12 +20,12 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "TURN_DEGREES", category = "ACTOR", blocklyNames = {"naoActions_turn"})
-public final class TurnDegrees<V> extends Action<V> {
+public final class TurnDegrees extends Action {
 
     public final TurnDirection turnDirection;
-    public final Expr<V> degreesToTurn;
+    public final Expr degreesToTurn;
 
-    public TurnDegrees(TurnDirection turnDirection, Expr<V> degreesToTurn, BlocklyProperties properties) {
+    public TurnDegrees(TurnDirection turnDirection, Expr degreesToTurn, BlocklyProperties properties) {
         super(properties);
         Assert.notNull(turnDirection, "Missing degrees in TurnDegrees block!");
         this.turnDirection = turnDirection;
@@ -38,14 +38,14 @@ public final class TurnDegrees<V> extends Action<V> {
         return "TurnDegrees [" + this.turnDirection + ", " + this.degreesToTurn + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
 
         String turnDirection = Jaxb2Ast.extractField(fields, BlocklyConstants.DIRECTION);
-        Phrase<V> walkDistance = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
+        Phrase walkDistance = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
 
-        return new TurnDegrees<V>(TurnDirection.get(turnDirection), Jaxb2Ast.convertPhraseToExpr(walkDistance), Jaxb2Ast.extractBlocklyProperties(block));
+        return new TurnDegrees(TurnDirection.get(turnDirection), Jaxb2Ast.convertPhraseToExpr(walkDistance), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

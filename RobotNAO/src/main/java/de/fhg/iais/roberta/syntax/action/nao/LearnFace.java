@@ -9,11 +9,11 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 @NepoPhrase(name = "LEARN_FACE", category = "ACTOR", blocklyNames = {"naoActions_learnFace"})
-public final class LearnFace<V> extends Action<V> {
+public final class LearnFace extends Action {
     @NepoValue(name = "NAME", type = BlocklyType.STRING)
-    public final Expr<V> faceName;
+    public final Expr faceName;
 
-    public LearnFace(BlocklyProperties properties, Expr<V> faceName) {
+    public LearnFace(BlocklyProperties properties, Expr faceName) {
         super(properties);
         Assert.isTrue(faceName != null);
         this.faceName = faceName;

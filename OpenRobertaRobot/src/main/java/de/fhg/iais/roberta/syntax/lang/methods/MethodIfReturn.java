@@ -23,16 +23,16 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <i>if-return</i> statement inside method<br/>
  */
 @NepoBasic(name = "METHOD_IF_RETURN", category = "METHOD", blocklyNames = {"robProcedures_ifreturn"})
-public final class MethodIfReturn<V> extends Method<V> {
-    public final Expr<V> oraCondition;
+public final class MethodIfReturn extends Method {
+    public final Expr oraCondition;
     public final BlocklyType oraReturnType;
-    public final Expr<V> oraReturnValue;
+    public final Expr oraReturnValue;
     public final BigInteger value;
 
     public MethodIfReturn(
-        Expr<V> oraCondition,
+        Expr oraCondition,
         BlocklyType oraReturnType,
-        Expr<V> oraReturnValue,
+        Expr oraReturnValue,
         BigInteger value,
         BlocklyProperties properties) {
         super(properties);
@@ -58,13 +58,13 @@ public final class MethodIfReturn<V> extends Method<V> {
         return "MethodIfReturn [" + this.oraCondition + ", " + this.oraReturnType + ", " + this.oraReturnValue + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
-        Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.CONDITION, BlocklyType.BOOLEAN));
-        Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NULL));
+        Phrase left = helper.extractValue(values, new ExprParam(BlocklyConstants.CONDITION, BlocklyType.BOOLEAN));
+        Phrase right = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NULL));
         final Mutation mutation = block.getMutation();
         String mode = mutation.getReturnType() == null ? "void" : mutation.getReturnType();
-        return new MethodIfReturn<>(Jaxb2Ast.convertPhraseToExpr(left), BlocklyType.get(mode), Jaxb2Ast.convertPhraseToExpr(right), mutation.getValue(), Jaxb2Ast.extractBlocklyProperties(block));
+        return new MethodIfReturn(Jaxb2Ast.convertPhraseToExpr(left), BlocklyType.get(mode), Jaxb2Ast.convertPhraseToExpr(right), mutation.getValue(), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

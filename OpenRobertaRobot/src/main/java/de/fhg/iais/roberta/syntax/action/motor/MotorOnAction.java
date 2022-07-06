@@ -23,11 +23,11 @@ import de.fhg.iais.roberta.util.syntax.MotionParam;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
 
 @NepoBasic(name = "MOTOR_ON_ACTION", category = "ACTOR", blocklyNames = {"sim_motor_on_for", "robActions_motor_on_for_ardu", "robActions_motor_on", "sim_motor_on", "robActions_motor_on_for", "mbedActions_motor_on"})
-public final class MotorOnAction<V> extends MoveAction<V> {
+public final class MotorOnAction extends MoveAction {
 
-    public final MotionParam<V> param;
+    public final MotionParam param;
 
-    public MotorOnAction(String port, MotionParam<V> param, BlocklyProperties properties) {
+    public MotorOnAction(String port, MotionParam param, BlocklyProperties properties) {
         super(properties, port);
         Assert.isTrue((param != null) && (port != null));
         this.param = param;
@@ -35,11 +35,11 @@ public final class MotorOnAction<V> extends MoveAction<V> {
         setReadOnly();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         String port;
         List<Field> fields;
         List<Value> values;
-        MotionParam<V> mp;
+        MotionParam mp;
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_ON)
             || block.getType().equals(BlocklyConstants.SIM_MOTOR_ON)
@@ -48,24 +48,24 @@ public final class MotorOnAction<V> extends MoveAction<V> {
             fields = Jaxb2Ast.extractFields(block, (short) 1);
             values = Jaxb2Ast.extractValues(block, (short) 1);
             port = Jaxb2Ast.extractField(fields, BlocklyConstants.MOTORPORT);
-            Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
-            mp = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(expr)).build();
+            Phrase expr = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
+            mp = new MotionParam.Builder().speed(Jaxb2Ast.convertPhraseToExpr(expr)).build();
         } else {
             fields = Jaxb2Ast.extractFields(block, (short) 2);
             values = Jaxb2Ast.extractValues(block, (short) 2);
             port = Jaxb2Ast.extractField(fields, BlocklyConstants.MOTORPORT);
-            Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
-            Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
-            MotorDuration<V> md;
+            Phrase left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
+            Phrase right = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
+            MotorDuration md;
             if ( fields.size() == 1 ) {
-                md = new MotorDuration<>(null, Jaxb2Ast.convertPhraseToExpr(right));
+                md = new MotorDuration(null, Jaxb2Ast.convertPhraseToExpr(right));
             } else {
                 String mode = Jaxb2Ast.extractField(fields, BlocklyConstants.MOTORROTATION);
-                md = new MotorDuration<>(factory.getMotorMoveMode(mode), Jaxb2Ast.convertPhraseToExpr(right));
+                md = new MotorDuration(factory.getMotorMoveMode(mode), Jaxb2Ast.convertPhraseToExpr(right));
             }
-            mp = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(left)).duration(md).build();
+            mp = new MotionParam.Builder().speed(Jaxb2Ast.convertPhraseToExpr(left)).duration(md).build();
         }
-        return new MotorOnAction<>(port, mp, Jaxb2Ast.extractBlocklyProperties(block));
+        return new MotorOnAction(port, mp, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     /**
@@ -78,8 +78,8 @@ public final class MotorOnAction<V> extends MoveAction<V> {
     /**
      * @return value of the duration of the motor movement
      */
-    public Expr<V> getDurationValue() {
-        MotorDuration<V> duration = this.param.getDuration();
+    public Expr getDurationValue() {
+        MotorDuration duration = this.param.getDuration();
         if ( duration != null ) {
             return duration.getValue();
         }

@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"edisonCommunication_ir_receiveBlock"}, name = "IR_RECV")
-public final class ReceiveIRAction<V> extends Action<V> {
+public final class ReceiveIRAction extends Action {
 
     public ReceiveIRAction(BlocklyProperties properties) {
         super(properties);

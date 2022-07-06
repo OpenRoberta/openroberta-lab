@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 
 public final class Calliope2017NoBlueValidatorAndCollectorVisitor extends CalliopeValidatorAndCollectorVisitor {
 
-    public Calliope2017NoBlueValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public Calliope2017NoBlueValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(brickConfiguration, beanBuilders);
     }
 }

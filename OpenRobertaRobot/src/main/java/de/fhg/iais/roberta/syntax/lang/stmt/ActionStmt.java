@@ -9,10 +9,10 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * Wraps subclasses of the class {@link Action} so they can be used as {@link Stmt} in statements.
  */
 @NepoBasic(name = "AKTION_STMT", category = "STMT", blocklyNames = {})
-public final class ActionStmt<V> extends Stmt<V> {
-    public final Action<V> action;
+public final class ActionStmt extends Stmt {
+    public final Action action;
 
-    public ActionStmt(Action<V> action) {
+    public ActionStmt(Action action) {
         super(action.getProperty());
         Assert.isTrue(action.isReadOnly());
         this.action = action;

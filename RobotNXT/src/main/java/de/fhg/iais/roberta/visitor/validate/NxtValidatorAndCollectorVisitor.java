@@ -49,42 +49,42 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
         put("ULTRASONIC_SENSING", SC.ULTRASONIC);
     }});
 
-    public NxtValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public NxtValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(brickConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
+    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction bluetoothCheckConnectAction) {
         requiredComponentVisited(bluetoothCheckConnectAction, bluetoothCheckConnectAction.connection);
         return null;
     }
 
     @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
+    public Void visitBluetoothReceiveAction(BluetoothReceiveAction bluetoothReceiveAction) {
         requiredComponentVisited(bluetoothReceiveAction, bluetoothReceiveAction.connection);
         return null;
     }
 
     @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
+    public Void visitBluetoothSendAction(BluetoothSendAction bluetoothSendAction) {
         requiredComponentVisited(bluetoothSendAction, bluetoothSendAction.connection, bluetoothSendAction.msg);
         return null;
     }
 
     @Override
-    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
+    public Void visitColorSensor(ColorSensor colorSensor) {
         checkSensorPort(colorSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(colorSensor.getUserDefinedPort(), SC.COLOR, colorSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         return null;
     }
 
     @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
+    public Void visitEncoderSensor(EncoderSensor encoderSensor) {
         ConfigurationComponent configurationComponent = robotConfiguration.optConfigurationComponent(encoderSensor.getUserDefinedPort());
         if ( configurationComponent == null ) {
             addErrorToPhrase(encoderSensor, "CONFIGURATION_ERROR_MOTOR_MISSING");
@@ -95,19 +95,19 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
     }
 
     @Override
-    public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
+    public Void visitHTColorSensor(HTColorSensor htColorSensor) {
         checkSensorPort(htColorSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(htColorSensor.getUserDefinedPort(), SC.HT_COLOR, htColorSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+    public Void visitKeysSensor(KeysSensor keysSensor) {
         return null;
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         ConfigurationComponent configurationComponent = robotConfiguration.optConfigurationComponent(lightAction.port);
         if ( configurationComponent == null ) {
             addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_SENSOR_MISSING");
@@ -120,14 +120,14 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         checkSensorPort(lightSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(lightSensor.getUserDefinedPort(), SC.LIGHT, lightSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+    public Void visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
         super.visitMathOnListFunct(mathOnListFunct);
         if ( mathOnListFunct.functName == FunctionNames.STD_DEV ) {
             usedMethodBuilder.addUsedMethod(FunctionNames.POWER);
@@ -137,7 +137,7 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
     }
 
     @Override
-    public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
+    public Void visitMathSingleFunct(MathSingleFunct mathSingleFunct) {
         super.visitMathSingleFunct(mathSingleFunct);
         switch ( mathSingleFunct.functName ) {
             case ACOS:
@@ -177,57 +177,57 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
     }
 
     @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
+    public Void visitPlayFileAction(PlayFileAction playFileAction) {
         return null;
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.SOUND));
         return null;
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+    public Void visitShowTextAction(ShowTextAction showTextAction) {
         requiredComponentVisited(showTextAction, showTextAction.msg, showTextAction.x, showTextAction.y);
         return null;
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+    public Void visitSoundSensor(SoundSensor soundSensor) {
         checkSensorPort(soundSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(soundSensor.getUserDefinedPort(), SC.SOUND, soundSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(timerSensor.getUserDefinedPort(), SC.TIMER, timerSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         requiredComponentVisited(toneAction, toneAction.duration, toneAction.frequency);
         return null;
     }
 
     @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+    public Void visitTouchSensor(TouchSensor touchSensor) {
         checkSensorPort(touchSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(touchSensor.getUserDefinedPort(), SC.TOUCH, touchSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         checkSensorPort(ultrasonicSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(ultrasonicSensor.getUserDefinedPort(), SC.ULTRASONIC, ultrasonicSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+    public Void visitVolumeAction(VolumeAction volumeAction) {
         if ( volumeAction.mode == VolumeAction.Mode.SET ) {
             requiredComponentVisited(volumeAction, volumeAction.volume);
         }
@@ -235,7 +235,7 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
         return null;
     }
 
-    private void checkSensorPort(ExternalSensor<Void> sensor) {
+    private void checkSensorPort(ExternalSensor sensor) {
         ConfigurationComponent configurationComponent = robotConfiguration.optConfigurationComponent(sensor.getUserDefinedPort());
         if ( configurationComponent == null ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");

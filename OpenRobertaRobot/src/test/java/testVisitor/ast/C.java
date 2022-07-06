@@ -2,9 +2,9 @@ package testVisitor.ast;
 
 import testVisitor.ITestVisitor;
 
-public class C<V> extends Phrase<V> {
+public class C extends Phrase {
     @Override
-    public V accept(ITestVisitor<V> x) {
+    public <V> V accept(ITestVisitor<V> x) {
         print("visitor " + x.getClass().getName());
         return x.visitC(this);
     }

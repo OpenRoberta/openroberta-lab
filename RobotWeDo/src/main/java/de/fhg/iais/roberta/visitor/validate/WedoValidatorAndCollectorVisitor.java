@@ -45,36 +45,36 @@ public class WedoValidatorAndCollectorVisitor extends MotorValidatorAndCollector
 
     public WedoValidatorAndCollectorVisitor(
         ConfigurationAst robotConfiguration,
-        ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(robotConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         return null;
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+    public Void visitShowTextAction(ShowTextAction showTextAction) {
         requiredComponentVisited(showTextAction, showTextAction.msg);
         return null;
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         checkActorPresence(lightAction);
         requiredComponentVisited(lightAction, lightAction.rgbLedColor);
         return null;
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         checkActorPresence(lightStatusAction);
         return null;
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         requiredComponentVisited(motorOnAction, motorOnAction.param.getSpeed());
         checkActorPresence(motorOnAction);
         if ( motorOnAction.param.getDuration() != null ) {
@@ -85,57 +85,57 @@ public class WedoValidatorAndCollectorVisitor extends MotorValidatorAndCollector
     }
 
     @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         checkActorPresence(motorStopAction);
         return null;
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         checkActorPresence(toneAction);
         requiredComponentVisited(toneAction, toneAction.frequency, toneAction.duration);
         return null;
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         checkActorPresence(playNoteAction);
         return null;
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(timerSensor.getUserDefinedPort(), SC.TIMER, timerSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+    public Void visitKeysSensor(KeysSensor keysSensor) {
         checkSensorPresence(keysSensor);
         return null;
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
         checkSensorPresence(gyroSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(gyroSensor.getUserDefinedPort(), SC.GYRO, gyroSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         checkSensorPresence(infraredSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(infraredSensor.getUserDefinedPort(), SC.INFRARED, infraredSensor.getMode()));
         return null;
     }
 
-    private void checkSensorPresence(ExternalSensor<Void> sensor) {
+    private void checkSensorPresence(ExternalSensor sensor) {
         if ( !robotConfiguration.isComponentTypePresent(SENSOR_COMPONENT_TYPE_MAP.get(sensor.getKind().getName())) ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
         }
     }
 
-    private void checkActorPresence(Action<Void> actor) {
+    private void checkActorPresence(Action actor) {
         if ( !robotConfiguration.isComponentTypePresent(ACTOR_COMPONENT_TYPE_MAP.get(actor.getKind().getName())) ) {
             addErrorToPhrase(actor, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }

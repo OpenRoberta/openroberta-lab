@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
  * - {@link #getKind()}<br>
  * - {@link #getAs(Class)}<br>
  */
-public abstract class Stmt<V> extends Phrase<V> {
+public abstract class Stmt extends Phrase {
 
     public Stmt(BlocklyProperties properties) {
         super(properties);

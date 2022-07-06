@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 @NepoExpr(name = "DROP_SENSING", category = "SENSOR", blocklyNames = {"robSensors_drop_getSample"},
     sampleValues = {@F2M(field = "DROP_OFF_DISTANCE", mode = "DISTANCE"), @F2M(field = "DROP_VALUE", mode = "VALUE")})
 @NepoExternalSensor()
-public final class DropSensor<V> extends ExternalSensor<V> {
+public final class DropSensor extends ExternalSensor {
 
     public DropSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);

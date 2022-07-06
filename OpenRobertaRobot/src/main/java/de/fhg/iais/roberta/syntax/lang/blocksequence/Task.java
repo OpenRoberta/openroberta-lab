@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 
-public abstract class Task<V> extends Phrase<V> {
+public abstract class Task extends Phrase {
 
     public Task(BlocklyProperties properties) {
         super(properties);

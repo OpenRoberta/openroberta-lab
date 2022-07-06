@@ -22,12 +22,12 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "IMAGE_SHIFT", category = "FUNCTION", blocklyNames = {"mbedImage_shift"})
-public final class ImageShiftFunction<V> extends Function<V> {
-    public final Expr<V> image;
-    public final Expr<V> positions;
+public final class ImageShiftFunction extends Function {
+    public final Expr image;
+    public final Expr positions;
     public final IDirection shiftDirection;
 
-    public ImageShiftFunction(Expr<V> image, Expr<V> positions, IDirection shiftDirection, BlocklyProperties properties) {
+    public ImageShiftFunction(Expr image, Expr positions, IDirection shiftDirection, BlocklyProperties properties) {
         super(properties);
         Assert.notNull(image);
         Assert.notNull(positions);
@@ -58,14 +58,14 @@ public final class ImageShiftFunction<V> extends Function<V> {
         return "ImageShiftFunction [" + this.image + ", " + this.positions + ", " + this.shiftDirection + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
         IDirection shiftingDirection = factory.getDirection(Jaxb2Ast.extractField(fields, BlocklyConstants.OP));
-        Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.A, BlocklyType.PREDEFINED_IMAGE));
-        Phrase<V> numberOfPositions = helper.extractValue(values, new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT));
-        return new ImageShiftFunction<>(Jaxb2Ast.convertPhraseToExpr(image), Jaxb2Ast.convertPhraseToExpr(numberOfPositions), shiftingDirection, Jaxb2Ast.extractBlocklyProperties(block));
+        Phrase image = helper.extractValue(values, new ExprParam(BlocklyConstants.A, BlocklyType.PREDEFINED_IMAGE));
+        Phrase numberOfPositions = helper.extractValue(values, new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT));
+        return new ImageShiftFunction(Jaxb2Ast.convertPhraseToExpr(image), Jaxb2Ast.convertPhraseToExpr(numberOfPositions), shiftingDirection, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

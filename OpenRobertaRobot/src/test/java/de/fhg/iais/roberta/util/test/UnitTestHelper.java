@@ -166,26 +166,26 @@ public final class UnitTestHelper {
         }
     }
 
-    public static Phrase<Void> getAstOfFirstBlock(RobotFactory factory, String programBlocklyXmlFilename) {
+    public static Phrase getAstOfFirstBlock(RobotFactory factory, String programBlocklyXmlFilename) {
         return getProgramAst(factory, programBlocklyXmlFilename).get(0).get(1);
     }
 
     // TODO merge this with "getAstOfFirstBlock" - would require generifying the projects' program ast
-    public static <V> Phrase<V> getGenericAstOfFirstBlock(RobotFactory factory, String pathToProgramXml) throws Exception {
+    public static <V> Phrase getGenericAstOfFirstBlock(RobotFactory factory, String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        Jaxb2ProgramAst<V> transformer = new Jaxb2ProgramAst(factory);
-        List<List<Phrase<V>>> tree = transformer.blocks2Ast(project).getTree();
+        Jaxb2ProgramAst transformer = new Jaxb2ProgramAst(factory);
+        List<List<Phrase>> tree = transformer.blocks2Ast(project).getTree();
         return tree.get(0).get(1);
     }
 
-    public static List<List<Phrase<Void>>> getProgramAst(RobotFactory factory, String programBlocklyXmlFilename) {
+    public static List<List<Phrase>> getProgramAst(RobotFactory factory, String programBlocklyXmlFilename) {
         String programXml = Util.readResourceContent(programBlocklyXmlFilename);
         Project.Builder builder = setupWithProgramXMLWithDefaultConfig(factory, programXml);
         Project project = builder.build();
         return project.getProgramAst().getTree();
     }
 
-    public static Phrase<Void> getProgramAstFromExportXml(RobotFactory factory, String xml) {
+    public static Phrase getProgramAstFromExportXml(RobotFactory factory, String xml) {
         Project.Builder builder = setupWithExportXML(factory, xml);
         Project project = builder.build();
         return project.getProgramAst().getTree().get(0).get(1);

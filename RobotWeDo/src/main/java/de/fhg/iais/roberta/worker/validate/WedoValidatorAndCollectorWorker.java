@@ -12,7 +12,7 @@ public class WedoValidatorAndCollectorWorker extends AbstractValidatorAndCollect
 
     @Override
     protected CommonNepoValidatorAndCollectorVisitor getVisitor(
-        Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         return new WedoValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 

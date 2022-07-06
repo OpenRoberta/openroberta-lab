@@ -6,10 +6,10 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 @NepoBasic(name = "METHOD_STMT", category = "STMT", blocklyNames = {})
-public final class MethodStmt<V> extends Stmt<V> {
-    public final Method<V> method;
+public final class MethodStmt extends Stmt {
+    public final Method method;
 
-    public MethodStmt(Method<V> method) {
+    public MethodStmt(Method method) {
         super(method.getProperty());
         Assert.isTrue(method != null && method.isReadOnly());
         this.method = method;

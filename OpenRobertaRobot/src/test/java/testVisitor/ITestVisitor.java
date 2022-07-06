@@ -5,9 +5,9 @@ import testVisitor.ast.B;
 import testVisitor.ast.C;
 
 public interface ITestVisitor<V> {
-    V visitA(A<V> a);
+    V visitA(A a);
 
-    V visitB(B<V> b);
+    V visitB(B b);
 
-    V visitC(C<V> c);
+    V visitC(C c);
 }

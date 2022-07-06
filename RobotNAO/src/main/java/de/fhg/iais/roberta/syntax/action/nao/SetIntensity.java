@@ -20,12 +20,12 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "SET_INTENSITY", category = "ACTOR", blocklyNames = {"naoActions_setIntensity"})
-public final class SetIntensity<V> extends Action<V> {
+public final class SetIntensity extends Action {
 
     public final Led led;
-    public final Expr<V> Intensity;
+    public final Expr Intensity;
 
-    public SetIntensity(Led led, Expr<V> Intensity, BlocklyProperties properties) {
+    public SetIntensity(Led led, Expr Intensity, BlocklyProperties properties) {
         super(properties);
         this.led = led;
         Assert.notNull(Intensity);
@@ -33,15 +33,15 @@ public final class SetIntensity<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
 
-        Phrase<V> Intensity = helper.extractValue(values, new ExprParam(BlocklyConstants.INTENSITY, BlocklyType.NUMBER_INT));
+        Phrase Intensity = helper.extractValue(values, new ExprParam(BlocklyConstants.INTENSITY, BlocklyType.NUMBER_INT));
 
         String leds = Jaxb2Ast.extractField(fields, BlocklyConstants.LED);
 
-        return new SetIntensity<V>(Led.get(leds), Jaxb2Ast.convertPhraseToExpr(Intensity), Jaxb2Ast.extractBlocklyProperties(block));
+        return new SetIntensity(Led.get(leds), Jaxb2Ast.convertPhraseToExpr(Intensity), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

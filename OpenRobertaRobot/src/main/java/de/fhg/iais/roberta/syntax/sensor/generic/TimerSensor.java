@@ -17,14 +17,14 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(sampleValues = {@F2M(field = "TIMER_VALUE", mode = "VALUE"), @F2M(field = "TIME", mode = "VALUE")}, name = "TIMER_SENSING", category = "SENSOR", blocklyNames = {"mbedSensors_timer_reset", "robSensors_timer_getSample", "robSensors_timer_reset"})
-public final class TimerSensor<V> extends ExternalSensor<V> {
+public final class TimerSensor extends ExternalSensor {
 
     public TimerSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);
         setReadOnly();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         ExternalSensorBean externalSensorBean;
         //TODO This if statement should be removed when we have new implementation of reset sensor blockly block
@@ -33,10 +33,10 @@ public final class TimerSensor<V> extends ExternalSensor<V> {
             String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
             externalSensorBean =
                 new ExternalSensorBean(Jaxb2Ast.sanitizePort(portName), factory.getMode("RESET"), Jaxb2Ast.sanitizeSlot(BlocklyConstants.NO_SLOT), null);
-            return new TimerSensor<>(Jaxb2Ast.extractBlocklyProperties(block), externalSensorBean);
+            return new TimerSensor(Jaxb2Ast.extractBlocklyProperties(block), externalSensorBean);
         }
         externalSensorBean = extractPortAndModeAndSlot(block, helper);
-        return new TimerSensor<>(Jaxb2Ast.extractBlocklyProperties(block), externalSensorBean);
+        return new TimerSensor(Jaxb2Ast.extractBlocklyProperties(block), externalSensorBean);
     }
 
     @Override

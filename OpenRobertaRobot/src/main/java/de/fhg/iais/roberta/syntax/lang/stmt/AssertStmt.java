@@ -10,13 +10,13 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "STMT", blocklyNames = {"robActions_assert"}, name = "ASSERT_STMT")
-public final class AssertStmt<V> extends Stmt<V> {
+public final class AssertStmt extends Stmt {
     @NepoValue(name = BlocklyConstants.OUT, type = BlocklyType.BOOLEAN)
-    public final Expr<V> asserts;
+    public final Expr asserts;
     @NepoField(name = BlocklyConstants.TEXT)
     public final String msg;
 
-    public AssertStmt(BlocklyProperties properties, Expr<V> asserts, String msg) {
+    public AssertStmt(BlocklyProperties properties, Expr asserts, String msg) {
         super(properties);
         Assert.isTrue(asserts != null && asserts.isReadOnly());
         this.asserts = asserts;

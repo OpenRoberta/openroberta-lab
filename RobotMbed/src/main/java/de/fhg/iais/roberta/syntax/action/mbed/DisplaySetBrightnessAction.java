@@ -18,10 +18,10 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "DISPLAY_SET_BRIGHTNESS", category = "ACTOR", blocklyNames = {"mbedActions_display_setBrightness"})
-public final class DisplaySetBrightnessAction<V> extends Action<V> {
-    public final Expr<V> brightness;
+public final class DisplaySetBrightnessAction extends Action {
+    public final Expr brightness;
 
-    public DisplaySetBrightnessAction(BlocklyProperties properties, Expr<V> brightness) {
+    public DisplaySetBrightnessAction(BlocklyProperties properties, Expr brightness) {
         super(properties);
         Assert.notNull(brightness);
         this.brightness = brightness;
@@ -33,12 +33,12 @@ public final class DisplaySetBrightnessAction<V> extends Action<V> {
         return "DisplaySetBrightnessAction [ " + this.brightness + " ]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
 
-        Phrase<V> brightness = helper.extractValue(values, new ExprParam(BlocklyConstants.BRIGHTNESS, BlocklyType.NUMBER_INT));
+        Phrase brightness = helper.extractValue(values, new ExprParam(BlocklyConstants.BRIGHTNESS, BlocklyType.NUMBER_INT));
 
-        return new DisplaySetBrightnessAction<>(Jaxb2Ast.extractBlocklyProperties(block), Jaxb2Ast.convertPhraseToExpr(brightness));
+        return new DisplaySetBrightnessAction(Jaxb2Ast.extractBlocklyProperties(block), Jaxb2Ast.convertPhraseToExpr(brightness));
 
     }
 

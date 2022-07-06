@@ -56,9 +56,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class AnnotationHelperTest {
 
-    private static final List<Class<?>> VALID_TEST_PHRASES = Arrays.asList(TestPhrase.class, TestPhraseField.class, TestPhraseWithAll.class, TestPhraseFieldBoolean.class, TestPhraseFieldDouble.class, TestPhraseFieldEnum.class, TestOperation.class);
+    private static final List<Class> VALID_TEST_PHRASES = Arrays.asList(TestPhrase.class, TestPhraseField.class, TestPhraseWithAll.class, TestPhraseFieldBoolean.class, TestPhraseFieldDouble.class, TestPhraseFieldEnum.class, TestOperation.class);
 
-    private Jaxb2ProgramAst<?> jaxb2ProgramAst;
+    private Jaxb2ProgramAst jaxb2ProgramAst;
 
     @BeforeClass
     public static void setupPhrases() {
@@ -73,7 +73,7 @@ public class AnnotationHelperTest {
 
     @Before
     public void setUp() throws Exception {
-        jaxb2ProgramAst = new Jaxb2ProgramAst<>(null);
+        jaxb2ProgramAst = new Jaxb2ProgramAst(null);
     }
 
     @Test
@@ -135,11 +135,11 @@ public class AnnotationHelperTest {
     public void block2astByAnnotation_all() throws JAXBException, IOException {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldMutationData.xml");
 
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseWithAll.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseWithAll.class, jaxb2ProgramAst);
 
         assertThat(resultPhrase).isInstanceOf(TestPhraseWithAll.class);
 
-        TestPhraseWithAll<?> testPhrase = (TestPhraseWithAll<?>) resultPhrase;
+        TestPhraseWithAll testPhrase = (TestPhraseWithAll) resultPhrase;
         assertThat(testPhrase.type).isEqualTo("IMAGE");
         assertThat(testPhrase.mutation.isNext()).isEqualTo(true);
         assertThat(testPhrase.mutation.getDeclarationType()).isEqualTo("Number");
@@ -151,14 +151,14 @@ public class AnnotationHelperTest {
     @Test
     public void block2astByAnnotation_fieldAndValue() throws JAXBException, IOException {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldAndValue.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhrase.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhrase.class, jaxb2ProgramAst);
 
         assertThat(resultPhrase).isInstanceOf(TestPhrase.class);
-        TestPhrase<?> testPhrase = (TestPhrase<?>) resultPhrase;
+        TestPhrase testPhrase = (TestPhrase) resultPhrase;
         assertThat(testPhrase.type).isEqualTo("IMAGE");
 
         assertThat(testPhrase.value).isInstanceOf(TestPhraseField.class);
-        TestPhraseField<?> testPhraseField = (TestPhraseField<?>) testPhrase.value;
+        TestPhraseField testPhraseField = (TestPhraseField) testPhrase.value;
         assertThat(testPhraseField.type).isEqualTo("WHATEVER");
         assertThat(testPhraseField.value).isEqualTo(2.15);
         assertThat(testPhraseField.flag).isEqualTo(false);
@@ -168,10 +168,10 @@ public class AnnotationHelperTest {
     @Test
     public void block2astByAnnotation_fieldDefault() throws JAXBException, IOException {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldDefault.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseField.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseField.class, jaxb2ProgramAst);
 
         assertThat(resultPhrase).isInstanceOf(TestPhraseField.class);
-        TestPhraseField<?> testPhrase = (TestPhraseField<?>) resultPhrase;
+        TestPhraseField testPhrase = (TestPhraseField) resultPhrase;
         assertThat(testPhrase.type).isEqualTo("DEFAULT");
         assertThat(testPhrase.flag).isEqualTo(true);
         assertThat(testPhrase.value).isEqualTo(2.15);
@@ -181,30 +181,30 @@ public class AnnotationHelperTest {
     @Test
     public void block2astByAnnotation_fieldBoolean() throws JAXBException, IOException {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldBoolean.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldBoolean.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldBoolean.class, jaxb2ProgramAst);
 
         assertThat(resultPhrase).isInstanceOf(TestPhraseFieldBoolean.class);
-        TestPhraseFieldBoolean<?> testPhrase = (TestPhraseFieldBoolean<?>) resultPhrase;
+        TestPhraseFieldBoolean testPhrase = (TestPhraseFieldBoolean) resultPhrase;
         assertThat(testPhrase.flag).isEqualTo(true);
     }
 
     @Test
     public void block2astByAnnotation_fieldDouble() throws JAXBException, IOException {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldDouble.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldDouble.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldDouble.class, jaxb2ProgramAst);
 
         assertThat(resultPhrase).isInstanceOf(TestPhraseFieldDouble.class);
-        TestPhraseFieldDouble<?> testPhrase = (TestPhraseFieldDouble<?>) resultPhrase;
+        TestPhraseFieldDouble testPhrase = (TestPhraseFieldDouble) resultPhrase;
         assertThat(testPhrase.value).isEqualTo(2.15);
     }
 
     @Test
     public void block2astByAnnotation_fieldEnum() throws JAXBException, IOException {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldEnum.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldEnum.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldEnum.class, jaxb2ProgramAst);
 
         assertThat(resultPhrase).isInstanceOf(TestPhraseFieldEnum.class);
-        TestPhraseFieldEnum<?> testPhrase = (TestPhraseFieldEnum<?>) resultPhrase;
+        TestPhraseFieldEnum testPhrase = (TestPhraseFieldEnum) resultPhrase;
         assertThat(testPhrase.type).isEqualTo(TestPhraseFieldEnum.Type.RESET);
         assertThat(testPhrase.type1).isEqualTo(TestPhraseFieldEnum.Type.SET);
     }
@@ -212,10 +212,10 @@ public class AnnotationHelperTest {
     @Test
     public void block2astByAnnotation_propertiesComment() throws JAXBException, IOException {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_blockPropertiesAndComment.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseField.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseField.class, jaxb2ProgramAst);
 
         assertThat(resultPhrase).isInstanceOf(TestPhraseField.class);
-        TestPhraseField<?> testPhrase = (TestPhraseField<?>) resultPhrase;
+        TestPhraseField testPhrase = (TestPhraseField) resultPhrase;
         assertThat(testPhrase.type).isEqualTo("WHATEVER");
         assertThat(testPhrase.getProperty().getComment().getValue()).isEqualTo("Test");
         assertThat(testPhrase.getProperty().getComment().getH()).isEqualTo("80");
@@ -234,56 +234,56 @@ public class AnnotationHelperTest {
     @Test
     public void toString_all() throws JAXBException, IOException {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldMutationData.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseWithAll.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseWithAll.class, jaxb2ProgramAst);
         assertThat(AnnotationHelper.toString(resultPhrase)).isEqualTo("TestPhraseWithAll[type: IMAGE]");
     }
 
     @Test
     public void toString_fieldAndValue() throws JAXBException, URISyntaxException, IOException {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldAndValue.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhrase.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhrase.class, jaxb2ProgramAst);
         assertThat(AnnotationHelper.toString(resultPhrase)).isEqualTo("TestPhrase[type: IMAGE, value: TestPhraseField[type: WHATEVER, flag: false, value: 2.15, operationType: RESET]]");
     }
 
     @Test
     public void toString_fieldDefault() throws JAXBException, URISyntaxException, IOException {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldDefault.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseField.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseField.class, jaxb2ProgramAst);
         assertThat(AnnotationHelper.toString(resultPhrase)).isEqualTo("TestPhraseField[type: DEFAULT, flag: true, value: 2.15, operationType: SET]");
     }
 
     @Test
     public void toString_fieldBoolean() throws JAXBException, URISyntaxException, IOException {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldBoolean.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldBoolean.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldBoolean.class, jaxb2ProgramAst);
         assertThat(AnnotationHelper.toString(resultPhrase)).isEqualTo("TestPhraseFieldBoolean[flag: true]");
     }
 
     @Test
     public void toString_fieldDouble() throws JAXBException, URISyntaxException, IOException {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldDouble.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldDouble.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldDouble.class, jaxb2ProgramAst);
         assertThat(AnnotationHelper.toString(resultPhrase)).isEqualTo("TestPhraseFieldDouble[value: 2.15]");
     }
 
     @Test
     public void toString_fieldEnum() throws JAXBException, URISyntaxException, IOException {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldEnum.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldEnum.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldEnum.class, jaxb2ProgramAst);
         assertThat(AnnotationHelper.toString(resultPhrase)).isEqualTo("TestPhraseFieldEnum[type: RESET, type1: SET]");
     }
 
     @Test
     public void toString_propertiesComment() throws JAXBException, URISyntaxException, IOException {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_blockPropertiesAndComment.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseField.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseField.class, jaxb2ProgramAst);
         assertThat(AnnotationHelper.toString(resultPhrase)).isEqualTo("TestPhraseField[type: WHATEVER, flag: false, value: 2.15, operationType: RESET]");
     }
 
     @Test
     public void astToBlock_all() throws Exception {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldMutationData.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseWithAll.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseWithAll.class, jaxb2ProgramAst);
         Block resultBlock = AnnotationHelper.astToBlock(resultPhrase);
 
         XmlAssert.assertThat(blockToXml(resultBlock))
@@ -295,7 +295,7 @@ public class AnnotationHelperTest {
     @Test
     public void astToBlock_fieldAndValue() throws Exception {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldAndValue.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhrase.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhrase.class, jaxb2ProgramAst);
         Block resultBlock = AnnotationHelper.astToBlock(resultPhrase);
 
         XmlAssert.assertThat(blockToXml(resultBlock))
@@ -307,7 +307,7 @@ public class AnnotationHelperTest {
     @Test
     public void astToBlock_fieldDefault() throws Exception {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldDefault.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseField.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseField.class, jaxb2ProgramAst);
         Block resultBlock = AnnotationHelper.astToBlock(resultPhrase);
 
         XmlAssert.assertThat(blockToXml(resultBlock))
@@ -326,7 +326,7 @@ public class AnnotationHelperTest {
     @Test
     public void astToBlock_fieldBoolean() throws Exception {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldBoolean.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldBoolean.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldBoolean.class, jaxb2ProgramAst);
         Block resultBlock = AnnotationHelper.astToBlock(resultPhrase);
 
         XmlAssert.assertThat(blockToXml(resultBlock))
@@ -338,7 +338,7 @@ public class AnnotationHelperTest {
     @Test
     public void astToBlock_fieldDouble() throws Exception {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldDouble.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldDouble.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldDouble.class, jaxb2ProgramAst);
         Block resultBlock = AnnotationHelper.astToBlock(resultPhrase);
 
         XmlAssert.assertThat(blockToXml(resultBlock))
@@ -350,7 +350,7 @@ public class AnnotationHelperTest {
     @Test
     public void astToBlock_fieldEnum() throws Exception {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldEnum.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldEnum.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldEnum.class, jaxb2ProgramAst);
         Block resultBlock = AnnotationHelper.astToBlock(resultPhrase);
 
         XmlAssert.assertThat(blockToXml(resultBlock))
@@ -362,7 +362,7 @@ public class AnnotationHelperTest {
     @Test
     public void astToBlock_propertiesComment() throws Exception {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_blockPropertiesAndComment.xml");
-        Phrase<?> resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseField.class, jaxb2ProgramAst);
+        Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseField.class, jaxb2ProgramAst);
         Block resultBlock = AnnotationHelper.astToBlock(resultPhrase);
 
         XmlAssert.assertThat(blockToXml(resultBlock))

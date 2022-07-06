@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.worker.AbstractValidatorAndCollectorWorker;
 public class NxtSimValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
 
     @Override
-    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         return new NxtSimValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 }

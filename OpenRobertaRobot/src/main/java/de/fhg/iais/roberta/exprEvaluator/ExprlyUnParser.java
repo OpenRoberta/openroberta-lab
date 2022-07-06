@@ -60,9 +60,9 @@ import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
-public class ExprlyUnParser<T> {
+public class ExprlyUnParser {
     private String se;
-    private final Phrase<T> e;
+    private final Phrase e;
     private final static Map<FunctionNames, String> fnames;
     private final static Map<MathConst.Const, String> cnames;
     private final static Map<Binary.Op, String> bnames;
@@ -75,7 +75,7 @@ public class ExprlyUnParser<T> {
      *
      * @param Phrase that will be UnParsed
      **/
-    public ExprlyUnParser(Phrase<T> ast) {
+    public ExprlyUnParser(Phrase ast) {
         this.se = "";
         this.e = ast;
     }
@@ -140,10 +140,10 @@ public class ExprlyUnParser<T> {
             String test = red.substring(0, p.get(0)) + " " + red.substring(p.get(0) + 1, p.get(1)) + " " + red.substring(p.get(1) + 1, red.length());
             ExprlyParser parser = ExprlyUnParser.mkParser(test);
             parser.removeErrorListeners();
-            ExprlyVisitor<T> eval = new ExprlyVisitor<>();
+            ExprlyVisitor eval = new ExprlyVisitor();
             ExpressionContext expression = parser.expression();
             if ( parser.getNumberOfSyntaxErrors() == 0 ) {
-                ExprlyUnParser<T> unparser = new ExprlyUnParser<>(eval.visitExpression(expression));
+                ExprlyUnParser unparser = new ExprlyUnParser(eval.visitExpression(expression));
                 if ( unparser.UnParse().equals(this.se) ) {
                     red = test;
                 }
@@ -156,7 +156,7 @@ public class ExprlyUnParser<T> {
      * @param NumberConst Expression
      * @return Textual representation of the NumberConst
      */
-    public String visitNumConst(NumConst<T> numConst) {
+    public String visitNumConst(NumConst numConst) {
         return numConst.value;
     }
 
@@ -164,7 +164,7 @@ public class ExprlyUnParser<T> {
      * @param MathConst Expression
      * @return Textual representation of the MathConst
      */
-    public String visitMathConst(MathConst<T> mathConst) {
+    public String visitMathConst(MathConst mathConst) {
         return ExprlyUnParser.cnames.get(mathConst.mathConst);
     }
 
@@ -172,7 +172,7 @@ public class ExprlyUnParser<T> {
      * @param BoolConst Expression
      * @return Textual representation of the BoolConst
      */
-    public String visitBoolConst(BoolConst<T> boolConst) {
+    public String visitBoolConst(BoolConst boolConst) {
         return Boolean.toString(boolConst.value);
     }
 
@@ -180,7 +180,7 @@ public class ExprlyUnParser<T> {
      * @param StringConst Expression
      * @return Textual representation of the StringConst
      */
-    public String visitStringConst(StringConst<T> stringConst) {
+    public String visitStringConst(StringConst stringConst) {
         return "\"" + stringConst.value + "\"";
     }
 
@@ -188,7 +188,7 @@ public class ExprlyUnParser<T> {
      * @param ColorConst Expression
      * @return Textual representation of the ColorConst
      */
-    public String visitColorConst(ColorConst<T> colorConst) {
+    public String visitColorConst(ColorConst colorConst) {
         return colorConst.getHexValueAsString();
     }
 
@@ -196,8 +196,8 @@ public class ExprlyUnParser<T> {
      * @param RgbColorAnno Expression
      * @return Textual representation of the RGB Color
      */
-    public String visitRgbColor(RgbColor<T> rgbColor) {
-        if ( rgbColor.A instanceof EmptyExpr<?> ) {
+    public String visitRgbColor(RgbColor rgbColor) {
+        if ( rgbColor.A instanceof EmptyExpr ) {
             return "getRGB(" + visitAST(rgbColor.R) + "," + visitAST(rgbColor.G) + "," + visitAST(rgbColor.B) + ")";
         } else {
             return "getRGB("
@@ -216,7 +216,7 @@ public class ExprlyUnParser<T> {
      * @param ConnectConst Expression
      * @return Textual representation of the ConnectConst
      */
-    public String visitConnectConst(ConnectConst<T> connectConst) {
+    public String visitConnectConst(ConnectConst connectConst) {
         return "connect " + connectConst.value + "," + connectConst.value; // TODO: inspect generation. Was: connectConst.getDataValue()
     }
 
@@ -224,7 +224,7 @@ public class ExprlyUnParser<T> {
      * @param Var Expression
      * @return Textual representation of The Var value
      */
-    public String visitVar(Var<T> var) {
+    public String visitVar(Var var) {
 
         return var.name;
     }
@@ -233,7 +233,7 @@ public class ExprlyUnParser<T> {
      * @param Empty Expression
      * @return Empty String
      */
-    private String visitEmptyExpr(EmptyExpr<T> emptyExpr) {
+    private String visitEmptyExpr(EmptyExpr emptyExpr) {
         return "";
     }
 
@@ -241,7 +241,7 @@ public class ExprlyUnParser<T> {
      * @param Null Expression
      * @return Textual representation of null
      */
-    private String visitNullConst(NullConst<T> nullConst) {
+    private String visitNullConst(NullConst nullConst) {
         return "null";
     }
 
@@ -251,7 +251,7 @@ public class ExprlyUnParser<T> {
      * @param Unary Expression
      * @return Textual representation of the operation
      */
-    public String visitUnary(Unary<T> unary) throws UnsupportedOperationException {
+    public String visitUnary(Unary unary) throws UnsupportedOperationException {
         return ExprlyUnParser.unames.get(unary.op) + "(" + visitAST(unary.expr) + ")";
     }
 
@@ -261,7 +261,7 @@ public class ExprlyUnParser<T> {
      * @param Binary Expression
      * @return Textual representation of the operation
      */
-    public String visitBinary(Binary<T> binary) throws UnsupportedOperationException {
+    public String visitBinary(Binary binary) throws UnsupportedOperationException {
         return "(" + visitAST(binary.left) + ")" + ExprlyUnParser.bnames.get(binary.op) + "(" + visitAST(binary.getRight()) + ")";
     }
 
@@ -271,11 +271,11 @@ public class ExprlyUnParser<T> {
      * @param List Expression
      * @return Textual representation of List
      */
-    public String visitExprList(ExprList<T> list) {
+    public String visitExprList(ExprList list) {
         // Get list of expressions in the list
-        List<Expr<T>> eList = list.get();
+        List<Expr> eList = list.get();
         String t = "[";
-        for ( Expr<T> e : eList ) {
+        for ( Expr e : eList ) {
             t = t + visitAST(e) + ",";
         }
         if ( t.length() == 1 ) {
@@ -288,7 +288,7 @@ public class ExprlyUnParser<T> {
      * @param Function Expression
      * @return Textual representation of function
      */
-    public String visitFunctionExpr(FunctionExpr<T> funct) {
+    public String visitFunctionExpr(FunctionExpr funct) {
         return visitAST(funct.getFunction());
     }
 
@@ -298,7 +298,7 @@ public class ExprlyUnParser<T> {
      * @param Function
      * @return Return Type of function
      */
-    public String visitMathNumPropFunct(MathNumPropFunct<T> mathNumPropFunct) {
+    public String visitMathNumPropFunct(MathNumPropFunct mathNumPropFunct) {
         return ExprlyUnParser.fnames.get(mathNumPropFunct.functName) + "(" + paramList(mathNumPropFunct.param) + ")";
 
     }
@@ -309,7 +309,7 @@ public class ExprlyUnParser<T> {
      * @param Function
      * @return Textual representation of function
      */
-    public String visitMathOnListFunct(MathOnListFunct<T> mathOnListFunct) {
+    public String visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
         return ExprlyUnParser.fnames.get(mathOnListFunct.functName) + "(" + paramList(mathOnListFunct.param) + ")";
     }
 
@@ -317,7 +317,7 @@ public class ExprlyUnParser<T> {
      * @param Function
      * @return Textual representation of function
      */
-    public String visitMathRandomFloatFunct(MathRandomFloatFunct<T> mathRandomFloatFunct) {
+    public String visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
         return "randFloat()";
     }
 
@@ -327,7 +327,7 @@ public class ExprlyUnParser<T> {
      * @param Function
      * @return Textual representation of function
      */
-    public String visitMathRandomIntFunct(MathRandomIntFunct<T> mathRandomIntFunct) {
+    public String visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         return "randInt" + "(" + paramList(mathRandomIntFunct.param) + ")";
     }
 
@@ -337,9 +337,9 @@ public class ExprlyUnParser<T> {
      * @param Function
      * @return Textual representation of function
      */
-    public String visitMathSingleFunct(MathSingleFunct<T> mathSingleFunct) {
+    public String visitMathSingleFunct(MathSingleFunct mathSingleFunct) {
         // Get parameters
-        List<Expr<T>> args = mathSingleFunct.param;
+        List<Expr> args = mathSingleFunct.param;
         String fname = ExprlyUnParser.fnames.get(mathSingleFunct.functName);
         if ( fname.equals("pow") ) {
             return "(" + visitAST(args.get(0)) + ")" + "^" + "(" + visitAST(args.get(1)) + ")";
@@ -362,8 +362,8 @@ public class ExprlyUnParser<T> {
      * @param Function
      * @return Textual representation of function
      */
-    private String visitIndexOfFunct(IndexOfFunct<T> indexOfFunct) {
-        List<Expr<T>> args = indexOfFunct.param;
+    private String visitIndexOfFunct(IndexOfFunct indexOfFunct) {
+        List<Expr> args = indexOfFunct.param;
         if ( indexOfFunct.location.equals(IndexLocation.FIRST) ) {
             return "indexOfFirst(" + paramList(args) + ")";
         } else if ( indexOfFunct.location.equals(IndexLocation.LAST) ) {
@@ -378,8 +378,8 @@ public class ExprlyUnParser<T> {
      * @param Function
      * @return Textual representation of the function
      */
-    private String visitMathPowerFunct(MathPowerFunct<T> mathPowerFunct) {
-        List<Expr<T>> args = mathPowerFunct.param;
+    private String visitMathPowerFunct(MathPowerFunct mathPowerFunct) {
+        List<Expr> args = mathPowerFunct.param;
         return "(" + visitAST(args.get(0)) + ")^(" + visitAST(args.get(1)) + ")";
     }
 
@@ -389,7 +389,7 @@ public class ExprlyUnParser<T> {
      * @param Function
      * @return Textual representation of the function
      */
-    private String visitMathConstrainFunct(MathConstrainFunct<T> mathConstrainFunct) {
+    private String visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
         return "constrain(" + paramList(mathConstrainFunct.param) + ")";
     }
 
@@ -399,7 +399,7 @@ public class ExprlyUnParser<T> {
      * @param Function
      * @return Textual representation of the function
      */
-    private String visitTextJoinFunct(TextJoinFunct<T> textJoinFunct) {
+    private String visitTextJoinFunct(TextJoinFunct textJoinFunct) {
         return "createTextWith(" + paramList(textJoinFunct.param.get()) + ")";
     }
 
@@ -409,7 +409,7 @@ public class ExprlyUnParser<T> {
      * @param Function
      * @return Textual representation of the method
      */
-    private String visitTextPrintFunct(TextPrintFunct<T> textPrintFunct) {
+    private String visitTextPrintFunct(TextPrintFunct textPrintFunct) {
         return "print(" + paramList(textPrintFunct.param) + ")";
     }
 
@@ -419,7 +419,7 @@ public class ExprlyUnParser<T> {
      * @param Function
      * @return Textual representation of the function
      */
-    private String visitListRepeat(ListRepeat<T> listRepeat) {
+    private String visitListRepeat(ListRepeat listRepeat) {
         return "repeatList(" + paramList(listRepeat.param) + ")";
     }
 
@@ -429,7 +429,7 @@ public class ExprlyUnParser<T> {
      * @param Function
      * @return Textual representation of the function
      */
-    private String visitListGetIndex(ListGetIndex<T> listGetIndex) {
+    private String visitListGetIndex(ListGetIndex listGetIndex) {
         return listOperations.get(listGetIndex.getElementOperation())
             + "Index"
             + imodes.get(listGetIndex.location)
@@ -444,7 +444,7 @@ public class ExprlyUnParser<T> {
      * @param Function
      * @return Textual representation of the function
      */
-    private String visitListSetIndex(ListSetIndex<T> listSetIndex) {
+    private String visitListSetIndex(ListSetIndex listSetIndex) {
         return listOperations.get(listSetIndex.mode)
             + "Index"
             + imodes.get(listSetIndex.location)
@@ -459,7 +459,7 @@ public class ExprlyUnParser<T> {
      * @param Function
      * @return Textual representation of the function
      */
-    private String visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<T> lengthOfIsEmptyFunct) {
+    private String visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
         FunctionNames fname = lengthOfIsEmptyFunct.functName;
         if ( fname.equals(FunctionNames.LIST_LENGTH) ) {
             return "lengthOf(" + paramList(lengthOfIsEmptyFunct.param) + ")";
@@ -475,7 +475,7 @@ public class ExprlyUnParser<T> {
      * @param Function
      * @return Textual representation of the function
      */
-    private String visitGetSubFunct(GetSubFunct<T> getSubFunct) {
+    private String visitGetSubFunct(GetSubFunct getSubFunct) {
         List<IMode> mode = getSubFunct.strParam;
         String s = "subList";
         if ( !(mode.get(0).equals(IndexLocation.FROM_START) && mode.get(1).equals(IndexLocation.FROM_START)) ) {
@@ -504,7 +504,7 @@ public class ExprlyUnParser<T> {
      * @param operation
      * @return Return textual representation of the operation
      */
-    private String visitTernaryExpr(TernaryExpr<T> ternary) {
+    private String visitTernaryExpr(TernaryExpr ternary) {
         return "(("
             + visitAST(ternary.condition)
             + ")?("
@@ -515,13 +515,13 @@ public class ExprlyUnParser<T> {
 
     }
 
-    private String visitIfStmt(IfStmt<T> ifStmt) {
+    private String visitIfStmt(IfStmt ifStmt) {
         return "(("
             + visitAST(ifStmt.expr.get(0))
             + ")?("
-            + visitAST(((ExprStmt<T>) ifStmt.thenList.get(0).get().get(0)).expr)
+            + visitAST(((ExprStmt) ifStmt.thenList.get(0).get().get(0)).expr)
             + "):("
-            + visitAST(((ExprStmt<T>) ifStmt.elseList.get().get(0)).expr)
+            + visitAST(((ExprStmt) ifStmt.elseList.get().get(0)).expr)
             + "))";
     }
 
@@ -532,8 +532,8 @@ public class ExprlyUnParser<T> {
      * @return Return textual representation of expr
      */
     @SuppressWarnings("unchecked")
-    private String visitStmtExpr(StmtExpr<?> stmtExpr) {
-        return visitAST((Phrase<T>) stmtExpr.stmt);
+    private String visitStmtExpr(StmtExpr stmtExpr) {
+        return visitAST((Phrase) stmtExpr.stmt);
     }
 
     /**
@@ -542,105 +542,105 @@ public class ExprlyUnParser<T> {
      * @param ast, expression to unparse
      * @return Textual representation of the AST
      */
-    public String visitAST(Phrase<T> ast) throws UnsupportedOperationException {
-        if ( ast instanceof Binary<?> ) {
-            return visitBinary((Binary<T>) ast);
+    public String visitAST(Phrase ast) throws UnsupportedOperationException {
+        if ( ast instanceof Binary ) {
+            return visitBinary((Binary) ast);
         }
-        if ( ast instanceof Unary<?> ) {
-            return visitUnary((Unary<T>) ast);
+        if ( ast instanceof Unary ) {
+            return visitUnary((Unary) ast);
         }
-        if ( ast instanceof MathConst<?> ) {
-            return visitMathConst((MathConst<T>) ast);
+        if ( ast instanceof MathConst ) {
+            return visitMathConst((MathConst) ast);
         }
-        if ( ast instanceof NumConst<?> ) {
-            return visitNumConst((NumConst<T>) ast);
+        if ( ast instanceof NumConst ) {
+            return visitNumConst((NumConst) ast);
         }
-        if ( ast instanceof BoolConst<?> ) {
-            return visitBoolConst((BoolConst<T>) ast);
+        if ( ast instanceof BoolConst ) {
+            return visitBoolConst((BoolConst) ast);
         }
-        if ( ast instanceof StringConst<?> ) {
-            return visitStringConst((StringConst<T>) ast);
+        if ( ast instanceof StringConst ) {
+            return visitStringConst((StringConst) ast);
         }
-        if ( ast instanceof ColorConst<?> ) {
-            return visitColorConst((ColorConst<T>) ast);
+        if ( ast instanceof ColorConst ) {
+            return visitColorConst((ColorConst) ast);
         }
-        if ( ast instanceof RgbColor<?> ) {
-            return visitRgbColor((RgbColor<T>) ast);
+        if ( ast instanceof RgbColor ) {
+            return visitRgbColor((RgbColor) ast);
         }
-        if ( ast instanceof ConnectConst<?> ) {
-            return visitConnectConst((ConnectConst<T>) ast);
+        if ( ast instanceof ConnectConst ) {
+            return visitConnectConst((ConnectConst) ast);
         }
-        if ( ast instanceof Var<?> ) {
-            return visitVar((Var<T>) ast);
+        if ( ast instanceof Var ) {
+            return visitVar((Var) ast);
         }
-        if ( ast instanceof ExprList<?> ) {
-            return visitExprList((ExprList<T>) ast);
+        if ( ast instanceof ExprList ) {
+            return visitExprList((ExprList) ast);
         }
-        if ( ast instanceof FunctionExpr<?> ) {
-            return visitFunctionExpr((FunctionExpr<T>) ast);
+        if ( ast instanceof FunctionExpr ) {
+            return visitFunctionExpr((FunctionExpr) ast);
         }
-        if ( ast instanceof MathNumPropFunct<?> ) {
-            return visitMathNumPropFunct((MathNumPropFunct<T>) ast);
+        if ( ast instanceof MathNumPropFunct ) {
+            return visitMathNumPropFunct((MathNumPropFunct) ast);
         }
-        if ( ast instanceof MathOnListFunct<?> ) {
-            return visitMathOnListFunct((MathOnListFunct<T>) ast);
+        if ( ast instanceof MathOnListFunct ) {
+            return visitMathOnListFunct((MathOnListFunct) ast);
         }
-        if ( ast instanceof MathRandomFloatFunct<?> ) {
-            return visitMathRandomFloatFunct((MathRandomFloatFunct<T>) ast);
+        if ( ast instanceof MathRandomFloatFunct ) {
+            return visitMathRandomFloatFunct((MathRandomFloatFunct) ast);
         }
-        if ( ast instanceof MathRandomIntFunct<?> ) {
-            return visitMathRandomIntFunct((MathRandomIntFunct<T>) ast);
+        if ( ast instanceof MathRandomIntFunct ) {
+            return visitMathRandomIntFunct((MathRandomIntFunct) ast);
         }
-        if ( ast instanceof MathSingleFunct<?> ) {
-            return visitMathSingleFunct((MathSingleFunct<T>) ast);
+        if ( ast instanceof MathSingleFunct ) {
+            return visitMathSingleFunct((MathSingleFunct) ast);
         }
-        if ( ast instanceof ListCreate<?> ) {
-            return visitExprList(((ListCreate<T>) ast).exprList);
+        if ( ast instanceof ListCreate ) {
+            return visitExprList(((ListCreate) ast).exprList);
         }
-        if ( ast instanceof LengthOfIsEmptyFunct<?> ) {
-            return visitLengthOfIsEmptyFunct((LengthOfIsEmptyFunct<T>) ast);
+        if ( ast instanceof LengthOfIsEmptyFunct ) {
+            return visitLengthOfIsEmptyFunct((LengthOfIsEmptyFunct) ast);
         }
-        if ( ast instanceof ListSetIndex<?> ) {
-            return visitListSetIndex((ListSetIndex<T>) ast);
+        if ( ast instanceof ListSetIndex ) {
+            return visitListSetIndex((ListSetIndex) ast);
         }
-        if ( ast instanceof ListGetIndex<?> ) {
-            return visitListGetIndex((ListGetIndex<T>) ast);
+        if ( ast instanceof ListGetIndex ) {
+            return visitListGetIndex((ListGetIndex) ast);
         }
-        if ( ast instanceof ListRepeat<?> ) {
-            return visitListRepeat((ListRepeat<T>) ast);
+        if ( ast instanceof ListRepeat ) {
+            return visitListRepeat((ListRepeat) ast);
         }
-        if ( ast instanceof GetSubFunct<?> ) {
-            return visitGetSubFunct((GetSubFunct<T>) ast);
+        if ( ast instanceof GetSubFunct ) {
+            return visitGetSubFunct((GetSubFunct) ast);
         }
-        if ( ast instanceof TextPrintFunct<?> ) {
-            return visitTextPrintFunct((TextPrintFunct<T>) ast);
+        if ( ast instanceof TextPrintFunct ) {
+            return visitTextPrintFunct((TextPrintFunct) ast);
         }
-        if ( ast instanceof TextJoinFunct<?> ) {
-            return visitTextJoinFunct((TextJoinFunct<T>) ast);
+        if ( ast instanceof TextJoinFunct ) {
+            return visitTextJoinFunct((TextJoinFunct) ast);
         }
-        if ( ast instanceof MathConstrainFunct<?> ) {
-            return visitMathConstrainFunct((MathConstrainFunct<T>) ast);
+        if ( ast instanceof MathConstrainFunct ) {
+            return visitMathConstrainFunct((MathConstrainFunct) ast);
         }
-        if ( ast instanceof MathPowerFunct<?> ) {
-            return visitMathPowerFunct((MathPowerFunct<T>) ast);
+        if ( ast instanceof MathPowerFunct ) {
+            return visitMathPowerFunct((MathPowerFunct) ast);
         }
-        if ( ast instanceof NullConst<?> ) {
-            return visitNullConst((NullConst<T>) ast);
+        if ( ast instanceof NullConst ) {
+            return visitNullConst((NullConst) ast);
         }
-        if ( ast instanceof EmptyExpr<?> ) {
-            return visitEmptyExpr((EmptyExpr<T>) ast);
+        if ( ast instanceof EmptyExpr ) {
+            return visitEmptyExpr((EmptyExpr) ast);
         }
-        if ( ast instanceof IndexOfFunct<?> ) {
-            return visitIndexOfFunct((IndexOfFunct<T>) ast);
+        if ( ast instanceof IndexOfFunct ) {
+            return visitIndexOfFunct((IndexOfFunct) ast);
         }
-        if ( ast instanceof StmtExpr<?> ) {
-            return visitStmtExpr((StmtExpr<T>) ast);
+        if ( ast instanceof StmtExpr ) {
+            return visitStmtExpr((StmtExpr) ast);
         }
-        if ( ast instanceof IfStmt<?> ) {
-            return visitIfStmt((IfStmt<T>) ast);
+        if ( ast instanceof IfStmt ) {
+            return visitIfStmt((IfStmt) ast);
         }
-        if ( ast instanceof TernaryExpr<?> ) {
-            return visitTernaryExpr((TernaryExpr<T>) ast);
+        if ( ast instanceof TernaryExpr ) {
+            return visitTernaryExpr((TernaryExpr) ast);
         }
         throw new UnsupportedOperationException("Expression " + ast.toString() + "cannot be checked");
     }
@@ -651,9 +651,9 @@ public class ExprlyUnParser<T> {
      * @param param list
      * @return textual representation of the args
      */
-    public String paramList(List<Expr<T>> args) {
+    public String paramList(List<Expr> args) {
         String t = "";
-        for ( Expr<T> e : args ) {
+        for ( Expr e : args ) {
             t += visitAST(e) + ",";
         }
         return t.substring(0, t.length() - 1);

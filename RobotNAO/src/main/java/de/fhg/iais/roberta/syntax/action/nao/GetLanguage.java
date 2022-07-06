@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoBasic(name = "GET_LANGUAGE", category = "ACTOR", blocklyNames = {"naoActions_getLanguage"})
-public final class GetLanguage<V> extends Action<V> {
+public final class GetLanguage extends Action {
 
     public GetLanguage(BlocklyProperties properties) {
         super(properties);
@@ -22,9 +22,9 @@ public final class GetLanguage<V> extends Action<V> {
         return "Get Language []";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
 
-        return new GetLanguage<V>(Jaxb2Ast.extractBlocklyProperties(block));
+        return new GetLanguage(Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

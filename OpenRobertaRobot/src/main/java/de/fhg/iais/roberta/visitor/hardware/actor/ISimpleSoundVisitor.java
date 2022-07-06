@@ -11,12 +11,12 @@ public interface ISimpleSoundVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param toneAction to be visited
      */
-    V visitToneAction(ToneAction<V> toneAction);
+    V visitToneAction(ToneAction toneAction);
 
     /**
      * visit a {@link PlayNoteAction}.
      *
      * @param playNoteAction
      */
-    V visitPlayNoteAction(PlayNoteAction<V> playNoteAction);
+    V visitPlayNoteAction(PlayNoteAction playNoteAction);
 }

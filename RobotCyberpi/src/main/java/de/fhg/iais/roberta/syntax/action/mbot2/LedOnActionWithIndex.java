@@ -14,9 +14,9 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_led_on_new_config"}, name = "CYBERPI_LED_ON_ACTION")
-public final class LedOnActionWithIndex<V> extends Action<V> implements WithUserDefinedPort<V> {
+public final class LedOnActionWithIndex extends Action implements WithUserDefinedPort {
     @NepoValue(name = BlocklyConstants.COLOR, type = BlocklyType.COLOR)
-    public final Expr<V> color;
+    public final Expr color;
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;
     @NepoField(name = BlocklyConstants.LED, value = BlocklyConstants.EMPTY_PORT)
@@ -24,7 +24,7 @@ public final class LedOnActionWithIndex<V> extends Action<V> implements WithUser
     @NepoHide
     public final Hide hide;
 
-    public LedOnActionWithIndex(BlocklyProperties properties, Expr<V> color, String port, String led, Hide hide) {
+    public LedOnActionWithIndex(BlocklyProperties properties, Expr color, String port, String led, Hide hide) {
         super(properties);
         Assert.notNull(color);
         Assert.nonEmptyString(port);

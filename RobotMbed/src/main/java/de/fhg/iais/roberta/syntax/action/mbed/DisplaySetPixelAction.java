@@ -9,17 +9,17 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 @NepoPhrase(name = "DISPLAY_SET_PIXEL", category = "ACTOR", blocklyNames = {"mbedActions_display_setPixel"})
-public final class DisplaySetPixelAction<V> extends Action<V> {
+public final class DisplaySetPixelAction extends Action {
     @NepoValue(name = "X", type = BlocklyType.NUMBER)
-    public final Expr<V> x;
+    public final Expr x;
 
     @NepoValue(name = "Y", type = BlocklyType.NUMBER)
-    public final Expr<V> y;
+    public final Expr y;
 
     @NepoValue(name = "BRIGHTNESS", type = BlocklyType.NUMBER)
-    public final Expr<V> brightness;
+    public final Expr brightness;
 
-    public DisplaySetPixelAction(BlocklyProperties properties, Expr<V> x, Expr<V> y, Expr<V> brightness) {
+    public DisplaySetPixelAction(BlocklyProperties properties, Expr x, Expr y, Expr brightness) {
         super(properties);
         Assert.notNull(x);
         Assert.notNull(y);

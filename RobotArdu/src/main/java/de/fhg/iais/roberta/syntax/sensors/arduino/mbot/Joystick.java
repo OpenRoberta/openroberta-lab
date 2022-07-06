@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
 @NepoBasic(name = "ARDU_JOYSTICK_GETSAMPLE", category = "SENSOR", blocklyNames = {"robSensors_joystick_getSample"})
-public final class Joystick<V> extends ExternalSensor<V> {
+public final class Joystick extends ExternalSensor {
     public final String joystickAxis;
 
     public Joystick(String axis, ExternalSensorBean externalSensorBean, BlocklyProperties properties) {
@@ -30,7 +30,7 @@ public final class Joystick<V> extends ExternalSensor<V> {
         return "Joystick [" + this.getMode() + ", " + this.getUserDefinedPort() + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
 
@@ -38,7 +38,7 @@ public final class Joystick<V> extends ExternalSensor<V> {
         String mode = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
         ExternalSensorBean sensorData =
             new ExternalSensorBean(Jaxb2Ast.sanitizePort(port), factory.getMode(mode), Jaxb2Ast.sanitizeSlot(BlocklyConstants.EMPTY_SLOT), block.getMutation());
-        return new Joystick<>(mode, sensorData, Jaxb2Ast.extractBlocklyProperties(block));
+        return new Joystick(mode, sensorData, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

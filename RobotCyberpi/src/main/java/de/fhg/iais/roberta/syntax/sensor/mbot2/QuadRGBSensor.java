@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 @NepoPhrase(name = "QUAD_COLOR_SENSING", category = "SENSOR", blocklyNames = {"robSensors_line_getSample", "robSensors_quadrgb_getSample"},
     sampleValues = {@F2M(field = "QUADRGB_COLOUR", mode = "COLOUR"), @F2M(field = "QUADRGB_AMBIENTLIGHT", mode = "AMBIENTLIGHT"), @F2M(field = "QUADRGB_LINE", mode = "LINE")})
-public final class QuadRGBSensor<V> extends Sensor<V> implements WithUserDefinedPort<V> {
+public final class QuadRGBSensor extends Sensor implements WithUserDefinedPort {
     @NepoMutation(fieldName = BlocklyConstants.MODE)
     public final Mutation mutation;
     @NepoField(name = BlocklyConstants.MODE)

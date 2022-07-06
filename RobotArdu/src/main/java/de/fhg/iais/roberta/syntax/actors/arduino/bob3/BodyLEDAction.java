@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "BOB3_BODYLED", category = "ACTOR", blocklyNames = {"bob3Actions_set_led"})
-public final class BodyLEDAction<V> extends Action<V> {
+public final class BodyLEDAction extends Action {
     @NepoField(name = "LEDSIDE")
     public final String side;
     @NepoField(name = "LEDSTATE")

@@ -8,11 +8,11 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "BOB3_SENDIR", category = "ACTOR", blocklyNames = {"bob3Communication_sendBlock"})
-public final class SendIRAction<V> extends Action<V> {
+public final class SendIRAction extends Action {
     @NepoValue(name = "sendData", type = BlocklyType.NUMBER)
-    public final Expr<V> code;
+    public final Expr code;
 
-    public SendIRAction(BlocklyProperties properties, Expr<V> code) {
+    public SendIRAction(BlocklyProperties properties, Expr code) {
         super(properties);
         this.code = code;
         setReadOnly();

@@ -48,21 +48,21 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
-public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IMbotVisitor<V> {
+public class MbotStackMachineVisitor extends AbstractStackMachineVisitor implements IMbotVisitor<Void> {
 
-    public MbotStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase<Void>>> phrases) {
+    public MbotStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases) {
         super(configuration);
         Assert.isTrue(!phrases.isEmpty());
     }
 
     @Override
-    public V visitKeysSensor(KeysSensor<V> keysSensor) {
+    public Void visitKeysSensor(KeysSensor keysSensor) {
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, "center");
         return app(o);
     }
 
     @Override
-    public V visitTimerSensor(TimerSensor<V> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         String port = timerSensor.getUserDefinedPort();
         JSONObject o;
         if ( timerSensor.getMode().equals(SC.DEFAULT) || timerSensor.getMode().equals(SC.VALUE) ) {
@@ -74,7 +74,7 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         String mode = ultrasonicSensor.getMode();
         String port = ultrasonicSensor.getUserDefinedPort();
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "mbot");
@@ -82,7 +82,7 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitInfraredSensor(InfraredSensor<V> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         String port = infraredSensor.getUserDefinedPort();
         String slot = infraredSensor.getSlot();
         if ( slot.equals("1") ) {
@@ -95,7 +95,7 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitLightAction(LightAction<V> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         String mode = lightAction.mode.toString().toLowerCase();
         lightAction.rgbLedColor.accept(this);
         String port = lightAction.port;
@@ -104,7 +104,7 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         JSONObject o =
             makeNode(C.STATUS_LIGHT_ACTION)
                 .put(C.MODE, lightStatusAction.status)
@@ -114,7 +114,7 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitColorConst(ColorConst<V> colorConst) {
+    public Void visitColorConst(ColorConst colorConst) {
         int r = colorConst.getRedChannelInt();
         int g = colorConst.getGreenChannelInt();
         int b = colorConst.getBlueChannelInt();
@@ -124,14 +124,14 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitMotorGetPowerAction(MotorGetPowerAction<V> motorGetPowerAction) {
+    public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         String port = motorGetPowerAction.getUserDefinedPort();
         JSONObject o = makeNode(C.MOTOR_GET_POWER).put(C.PORT, port.toLowerCase());
         return app(o);
     }
 
     @Override
-    public V visitDriveAction(DriveAction<V> driveAction) {
+    public Void visitDriveAction(DriveAction driveAction) {
         driveAction.param.getSpeed().accept(this);
         boolean speedOnly = !processOptionalDuration(driveAction.param.getDuration());
         DriveDirection driveDirection = (DriveDirection) driveAction.direction;
@@ -145,7 +145,7 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitTurnAction(TurnAction<V> turnAction) {
+    public Void visitTurnAction(TurnAction turnAction) {
         turnAction.param.getSpeed().accept(this);
         boolean speedOnly = !processOptionalDuration(turnAction.param.getDuration());
         ITurnDirection turnDirection = turnAction.direction;
@@ -160,7 +160,7 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitCurveAction(CurveAction<V> curveAction) {
+    public Void visitCurveAction(CurveAction curveAction) {
         curveAction.paramLeft.getSpeed().accept(this);
         curveAction.paramRight.getSpeed().accept(this);
         boolean speedOnly = !processOptionalDuration(curveAction.paramLeft.getDuration());
@@ -176,15 +176,15 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitMotorDriveStopAction(MotorDriveStopAction<V> stopAction) {
+    public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         JSONObject o = makeNode(C.STOP_DRIVE).put(C.NAME, "mbot");
         return app(o);
     }
 
     @Override
-    public V visitMotorOnAction(MotorOnAction<V> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         motorOnAction.param.getSpeed().accept(this);
-        MotorDuration<V> duration = motorOnAction.param.getDuration();
+        MotorDuration duration = motorOnAction.param.getDuration();
         boolean speedOnly = !processOptionalDuration(duration);
         String port = motorOnAction.getUserDefinedPort();
         port = getMbotMotorPort(port);
@@ -206,7 +206,7 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitMotorSetPowerAction(MotorSetPowerAction<V> motorSetPowerAction) {
+    public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
         String port = motorSetPowerAction.getUserDefinedPort();
         port = getMbotMotorPort(port);
 
@@ -216,7 +216,7 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         String port = motorStopAction.getUserDefinedPort();
         port = getMbotMotorPort(port);
         JSONObject o = makeNode(C.MOTOR_STOP).put(C.PORT, port.toLowerCase());
@@ -243,7 +243,7 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitToneAction(ToneAction<V> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         toneAction.frequency.accept(this);
         toneAction.duration.accept(this);
         JSONObject o = makeNode(C.TONE_ACTION);
@@ -251,7 +251,7 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitPlayNoteAction(PlayNoteAction<V> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         String freq = playNoteAction.frequency;
         String duration = playNoteAction.duration;
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, freq));
@@ -261,28 +261,28 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         JSONObject o = makeNode(C.CLEAR_DISPLAY_ACTION);
 
         return app(o);
     }
 
     @Override
-    public V visitLEDMatrixImageAction(LEDMatrixImageAction<V> ledMatrixImageAction) {
+    public Void visitLEDMatrixImageAction(LEDMatrixImageAction ledMatrixImageAction) {
         ledMatrixImageAction.valuesToDisplay.accept(this);
         JSONObject o = makeNode(C.SHOW_IMAGE_ACTION).put(C.MODE, ledMatrixImageAction.displayImageMode.toString().toLowerCase());
         return app(o);
     }
 
     @Override
-    public V visitLEDMatrixTextAction(LEDMatrixTextAction<V> ledMatrixTextAction) {
+    public Void visitLEDMatrixTextAction(LEDMatrixTextAction ledMatrixTextAction) {
         ledMatrixTextAction.msg.accept(this);
         JSONObject o = makeNode(C.SHOW_TEXT_ACTION).put(C.MODE, C.TEXT);
         return app(o);
     }
 
     @Override
-    public V visitLEDMatrixImage(LEDMatrixImage<V> ledMatrixImage) {
+    public Void visitLEDMatrixImage(LEDMatrixImage ledMatrixImage) {
         JSONArray jsonImage = new JSONArray();
         for ( int i = 0; i < 16; i++ ) {
             ArrayList<Integer> a = new ArrayList<>();
@@ -303,7 +303,7 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<V> ledMatrixImageShiftFunction) {
+    public Void visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction ledMatrixImageShiftFunction) {
         ledMatrixImageShiftFunction.image.accept(this);
         ledMatrixImageShiftFunction.positions.accept(this);
         IDirection direction = ledMatrixImageShiftFunction.shiftDirection;
@@ -312,38 +312,38 @@ public class MbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<V> ledMatrixImageInverFunction) {
+    public Void visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction ledMatrixImageInverFunction) {
         ledMatrixImageInverFunction.image.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, C.IMAGE_INVERT_ACTION);
         return app(o);
     }
 
     @Override
-    public V visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction<V> ledMatrixSetBrightnessAction) {
+    public Void visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction ledMatrixSetBrightnessAction) {
         ledMatrixSetBrightnessAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 
     @Override
-    public V visitSendIRAction(SendIRAction<V> sendIRAction) {
+    public Void visitSendIRAction(SendIRAction sendIRAction) {
         sendIRAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 
     @Override
-    public V visitReceiveIRAction(ReceiveIRAction<V> receiveIRAction) {
+    public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
         receiveIRAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 
     @Override
-    public V visitSerialWriteAction(SerialWriteAction<V> serialWriteAction) {
+    public Void visitSerialWriteAction(SerialWriteAction serialWriteAction) {
         serialWriteAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 
     @Override
-    public V visitLightSensor(LightSensor<V> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         lightSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }

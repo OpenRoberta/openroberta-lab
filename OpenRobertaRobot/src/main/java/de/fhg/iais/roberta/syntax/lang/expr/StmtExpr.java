@@ -10,10 +10,10 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 /**
  * Wraps subclasses of the class {@link Stmt} so they can be used as {@link Expr} in expressions.
  */
-public class StmtExpr<V> extends Expr<V> {
-    public final Stmt<V> stmt;
+public class StmtExpr extends Expr {
+    public final Stmt stmt;
 
-    public StmtExpr(Stmt<V> stmt) {
+    public StmtExpr(Stmt stmt) {
         super(stmt.getProperty());
         Assert.isTrue(stmt.isReadOnly());
         this.stmt = stmt;
@@ -42,7 +42,7 @@ public class StmtExpr<V> extends Expr<V> {
 
     @Override
     public Block astToBlock() {
-        Phrase<V> p = this.stmt;
+        Phrase p = this.stmt;
         return p.astToBlock();
     }
 }

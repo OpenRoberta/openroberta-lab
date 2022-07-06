@@ -14,15 +14,15 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"robactions_println"}, name = "PRINTLN_ACTION")
-public final class PrintlnAction<V> extends Action<V> implements WithUserDefinedPort<V> {
+public final class PrintlnAction extends Action implements WithUserDefinedPort {
     @NepoValue(name = BlocklyConstants.OUT, type = BlocklyType.STRING)
-    public final Expr<V> msg;
+    public final Expr msg;
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;
     @NepoHide
     public final Hide hide;
 
-    public PrintlnAction(BlocklyProperties properties, Expr<V> msg, String port, Hide hide) {
+    public PrintlnAction(BlocklyProperties properties, Expr msg, String port, Hide hide) {
         super(properties);
         Assert.notNull(msg);
         this.msg = msg;

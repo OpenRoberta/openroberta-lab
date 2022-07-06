@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "SET_STIFFNESS", category = "ACTOR", blocklyNames = {"naoActions_stiffness"})
-public final class SetStiffness<V> extends Action<V> {
+public final class SetStiffness extends Action {
 
     public final BodyPart bodyPart;
     public final WorkingState onOff;
@@ -31,13 +31,13 @@ public final class SetStiffness<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
 
         String bodyPart = Jaxb2Ast.extractField(fields, BlocklyConstants.PART);
         String onOff = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
 
-        return new SetStiffness<V>(BodyPart.get(bodyPart), WorkingState.get(onOff), Jaxb2Ast.extractBlocklyProperties(block));
+        return new SetStiffness(BodyPart.get(bodyPart), WorkingState.get(onOff), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

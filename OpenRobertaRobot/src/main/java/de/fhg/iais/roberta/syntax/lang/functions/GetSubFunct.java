@@ -26,12 +26,12 @@ import de.fhg.iais.roberta.util.syntax.FunctionNames;
  * This class represents the <b>text_getSubstring</b> block
  */
 @NepoBasic(name = "GET_SUB_FUNCT", category = "FUNCTION", blocklyNames = {"lists_getSublist", "robLists_getSublist"})
-public final class GetSubFunct<V> extends Function<V> {
+public final class GetSubFunct extends Function {
     public final FunctionNames functName;
-    public final List<Expr<V>> param;
+    public final List<Expr> param;
     public final List<IMode> strParam;
 
-    public GetSubFunct(FunctionNames name, List<IMode> strParam, List<Expr<V>> param, BlocklyProperties properties) {
+    public GetSubFunct(FunctionNames name, List<IMode> strParam, List<Expr> param, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(name != null && param != null && strParam != null);
         this.functName = name;
@@ -60,7 +60,7 @@ public final class GetSubFunct<V> extends Function<V> {
         return "GetSubFunct [" + this.functName + ", " + this.strParam + ", " + this.param + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         List<IMode> strParams = new ArrayList<IMode>();
@@ -74,8 +74,8 @@ public final class GetSubFunct<V> extends Function<V> {
         if ( block.getMutation().isAt2() ) {
             exprParams.add(new ExprParam(BlocklyConstants.AT2, BlocklyType.NUMBER_INT));
         }
-        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return new GetSubFunct<V>(FunctionNames.GET_SUBLIST, strParams, params, Jaxb2Ast.extractBlocklyProperties(block));
+        List<Expr> params = helper.extractExprParameters(block, exprParams);
+        return new GetSubFunct(FunctionNames.GET_SUBLIST, strParams, params, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

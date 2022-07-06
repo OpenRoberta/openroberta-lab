@@ -20,11 +20,11 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "LIST_REPEAT_FUNCT", category = "FUNCTION", blocklyNames = {"lists_repeat", "robLists_repeat"})
-public final class ListRepeat<V> extends Function<V> {
+public final class ListRepeat extends Function {
     public final BlocklyType typeVar;
-    public final List<Expr<V>> param;
+    public final List<Expr> param;
 
-    public ListRepeat(BlocklyType typeVar, List<Expr<V>> param, BlocklyProperties properties) {
+    public ListRepeat(BlocklyType typeVar, List<Expr> param, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(param != null);
         this.param = param;
@@ -35,14 +35,14 @@ public final class ListRepeat<V> extends Function<V> {
     /**
      * @return element (what) to repeat from parameters
      */
-    public Expr<V> getElement() {
+    public Expr getElement() {
         return this.param.get(0);
     }
 
     /**
      * @return number (how often) to repeat from parameters
      */
-    public Expr<V> getCounter() {
+    public Expr getCounter() {
         return this.param.get(1);
     }
 
@@ -66,14 +66,14 @@ public final class ListRepeat<V> extends Function<V> {
         return "ListRepeat [" + this.typeVar + ", " + this.param + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         String filename = Jaxb2Ast.extractField(fields, BlocklyConstants.LIST_TYPE);
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.ITEM, BlocklyType.ARRAY));
         exprParams.add(new ExprParam(BlocklyConstants.NUM, BlocklyType.NUMBER_INT));
-        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return new ListRepeat<V>(BlocklyType.get(filename), params, Jaxb2Ast.extractBlocklyProperties(block));
+        List<Expr> params = helper.extractExprParameters(block, exprParams);
+        return new ListRepeat(BlocklyType.get(filename), params, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

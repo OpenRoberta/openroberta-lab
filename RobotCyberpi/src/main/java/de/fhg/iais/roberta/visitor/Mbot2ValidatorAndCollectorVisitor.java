@@ -62,18 +62,18 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
         put("GYRO_AXIS_RESET", SC.GYRO);
     }};
 
-    public Mbot2ValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public Mbot2ValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(robotConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
+    public Void visitMainTask(MainTask mainTask) {
         requiredComponentVisited(mainTask, mainTask.variables);
         return null;
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(clearDisplayAction.port);
         if ( usedConfigurationBlock == null ) {
             addErrorToPhrase(clearDisplayAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
@@ -83,21 +83,21 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     }
 
     @Override
-    public Void visitJoystick(Joystick<Void> joystick) {
+    public Void visitJoystick(Joystick joystick) {
         checkSensorPort(joystick);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(joystick.getUserDefinedPort(), SC.JOYSTICK, joystick.slot));
         return null;
     }
 
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+    public Void visitKeysSensor(KeysSensor keysSensor) {
         checkSensorPort(keysSensor);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.KEY));
         return null;
     }
 
     @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
+    public Void visitEncoderSensor(EncoderSensor encoderSensor) {
         ConfigurationComponent configurationComponent = this.robotConfiguration.optConfigurationComponent(encoderSensor.getUserDefinedPort());
         if ( configurationComponent == null ) {
             addErrorToPhrase(encoderSensor, "CONFIGURATION_ERROR_MOTOR_MISSING");
@@ -108,56 +108,56 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+    public Void visitSoundSensor(SoundSensor soundSensor) {
         checkSensorPort(soundSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(soundSensor.getUserDefinedPort(), SC.SOUND, soundSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitSoundRecord(SoundRecord<Void> soundRecord) {
+    public Void visitSoundRecord(SoundRecord soundRecord) {
         checkSensorPort(soundRecord);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(soundRecord.getUserDefinedPort(), CyberpiConstants.RECORD, soundRecord.mode));
         return null;
     }
 
     @Override
-    public Void visitPlayRecordingAction(PlayRecordingAction<Void> playRecordingAction) {
+    public Void visitPlayRecordingAction(PlayRecordingAction playRecordingAction) {
         checkActorPort(playRecordingAction);
         usedHardwareBuilder.addUsedActor(new UsedActor(playRecordingAction.getUserDefinedPort(), CyberpiConstants.RECORD));
         return null;
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         checkSensorPort(lightSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(lightSensor.getUserDefinedPort(), SC.LIGHT, lightSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
         checkSensorPort(gyroSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(gyroSensor.getUserDefinedPort(), SC.GYRO, gyroSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitGyroResetAxis(GyroResetAxis<Void> gyroResetAxis) {
+    public Void visitGyroResetAxis(GyroResetAxis gyroResetAxis) {
         checkSensorPort(gyroResetAxis);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(gyroResetAxis.getUserDefinedPort(), SC.GYRO, gyroResetAxis.slot));
         return null;
     }
 
     @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
         checkSensorPort(accelerometerSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(accelerometerSensor.getUserDefinedPort(), SC.ACCELEROMETER, accelerometerSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitDisplaySetColourAction(DisplaySetColourAction<Void> displaySetColourAction) {
+    public Void visitDisplaySetColourAction(DisplaySetColourAction displaySetColourAction) {
         checkActorPort(displaySetColourAction);
         usedHardwareBuilder.addUsedActor(new UsedActor(displaySetColourAction.getUserDefinedPort(), SC.DISPLAY));
         requiredComponentVisited(displaySetColourAction, displaySetColourAction.color);
@@ -165,7 +165,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         checkSensorPort(ultrasonicSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(ultrasonicSensor.getUserDefinedPort(), SC.ULTRASONIC, ultrasonicSensor.getMode()));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(ultrasonicSensor.getUserDefinedPort(), CyberpiConstants.MBUILDSENSOR, SC.ULTRASONIC));
@@ -173,7 +173,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     }
 
     @Override
-    public Void visitUltrasonic2LEDAction(Ultrasonic2LEDAction<Void> ultrasonic2LEDAction) {
+    public Void visitUltrasonic2LEDAction(Ultrasonic2LEDAction ultrasonic2LEDAction) {
         checkSensorPort(ultrasonic2LEDAction);
         requiredComponentVisited(ultrasonic2LEDAction, ultrasonic2LEDAction.brightness);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(ultrasonic2LEDAction.getUserDefinedPort(), SC.ULTRASONIC, SC.LED));
@@ -183,7 +183,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     }
 
     @Override
-    public Void visitQuadRGBSensor(QuadRGBSensor<Void> quadRGBSensor) {
+    public Void visitQuadRGBSensor(QuadRGBSensor quadRGBSensor) {
         checkSensorPort(quadRGBSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(quadRGBSensor.getUserDefinedPort(), CyberpiConstants.QUADRGB, quadRGBSensor.mode));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(quadRGBSensor.getUserDefinedPort(), CyberpiConstants.MBUILDSENSOR, CyberpiConstants.QUADRGB));
@@ -192,7 +192,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     }
 
     @Override
-    public Void visitQuadRGBLightOnAction(QuadRGBLightOnAction<Void> quadRGBLightOnAction) {
+    public Void visitQuadRGBLightOnAction(QuadRGBLightOnAction quadRGBLightOnAction) {
         checkSensorPort(quadRGBLightOnAction);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(quadRGBLightOnAction.getUserDefinedPort(), CyberpiConstants.QUADRGB, SC.LED));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(quadRGBLightOnAction.getUserDefinedPort(), CyberpiConstants.MBUILDSENSOR, CyberpiConstants.QUADRGB));
@@ -202,7 +202,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     }
 
     @Override
-    public Void visitQuadRGBLightOffAction(QuadRGBLightOffAction<Void> quadRGBLightOffAction) {
+    public Void visitQuadRGBLightOffAction(QuadRGBLightOffAction quadRGBLightOffAction) {
         checkSensorPort(quadRGBLightOffAction);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(quadRGBLightOffAction.getUserDefinedPort(), CyberpiConstants.QUADRGB, SC.LED));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(quadRGBLightOffAction.getUserDefinedPort(), CyberpiConstants.MBUILDSENSOR, CyberpiConstants.QUADRGB));
@@ -210,7 +210,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     }
 
     @Override
-    public Void visitLedOnActionWithIndex(LedOnActionWithIndex<Void> ledOnActionWithIndex) {
+    public Void visitLedOnActionWithIndex(LedOnActionWithIndex ledOnActionWithIndex) {
         checkActorPort(ledOnActionWithIndex);
         requiredComponentVisited(ledOnActionWithIndex, ledOnActionWithIndex.color);
         usedHardwareBuilder.addUsedActor(new UsedActor(ledOnActionWithIndex.getUserDefinedPort(), SC.RGBLED));
@@ -218,14 +218,14 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     }
 
     @Override
-    public Void visitLedsOffAction(LedsOffAction<Void> ledsOffAction) {
+    public Void visitLedsOffAction(LedsOffAction ledsOffAction) {
         checkActorPort(ledsOffAction);
         usedHardwareBuilder.addUsedActor(new UsedActor(ledsOffAction.getUserDefinedPort(), SC.RGBLED));
         return null;
     }
 
     @Override
-    public Void visitLedBrightnessAction(LedBrightnessAction<Void> ledBrightnessAction) {
+    public Void visitLedBrightnessAction(LedBrightnessAction ledBrightnessAction) {
         checkActorPort(ledBrightnessAction);
         requiredComponentVisited(ledBrightnessAction, ledBrightnessAction.brightness);
         usedHardwareBuilder.addUsedActor(new UsedActor(ledBrightnessAction.getUserDefinedPort(), SC.RGBLED));
@@ -233,7 +233,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     }
 
     @Override
-    public Void visitPrintlnAction(PrintlnAction<Void> printlnAction) {
+    public Void visitPrintlnAction(PrintlnAction printlnAction) {
         checkActorPort(printlnAction);
         requiredComponentVisited(printlnAction, printlnAction.msg);
         usedHardwareBuilder.addUsedActor(new UsedActor(printlnAction.getUserDefinedPort(), SC.DISPLAY));
@@ -241,7 +241,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+    public Void visitShowTextAction(ShowTextAction showTextAction) {
         ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(showTextAction.port);
         if ( usedConfigurationBlock == null ) {
             addErrorToPhrase(showTextAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
@@ -254,7 +254,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(toneAction.port);
         if ( usedConfigurationBlock == null ) {
             addErrorToPhrase(toneAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
@@ -262,7 +262,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
         requiredComponentVisited(toneAction, toneAction.duration, toneAction.frequency);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.MUSIC));
         if ( toneAction.duration.getKind().hasName("NUM_CONST") ) {
-            double toneActionConst = Double.parseDouble(((NumConst<Void>) toneAction.duration).value);
+            double toneActionConst = Double.parseDouble(((NumConst) toneAction.duration).value);
             if ( toneActionConst <= 0 ) {
                 addWarningToPhrase(toneAction, "BLOCK_NOT_EXECUTED");
             }
@@ -271,7 +271,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(playNoteAction.port);
         if ( usedConfigurationBlock == null ) {
             addErrorToPhrase(playNoteAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
@@ -281,7 +281,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+    public Void visitVolumeAction(VolumeAction volumeAction) {
         if ( volumeAction.mode == VolumeAction.Mode.SET ) {
             requiredComponentVisited(volumeAction, volumeAction.volume);
         }
@@ -290,31 +290,31 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(timerSensor.getUserDefinedPort(), SC.TIMER, timerSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
+    public Void visitPlayFileAction(PlayFileAction playFileAction) {
         addWarningToPhrase(playFileAction, "BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+    public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         addWarningToPhrase(motorGetPowerAction, "BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+    public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
         addWarningToPhrase(motorSetPowerAction, "BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
+    public Void visitDriveAction(DriveAction driveAction) {
         super.visitDriveAction(driveAction);
         if ( driveAction.param.getDuration() != null ) {
             usedMethodBuilder.addUsedMethod(Mbot2Methods.DIFFDRIVEFOR);
@@ -323,7 +323,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     }
 
     @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
+    public Void visitCurveAction(CurveAction curveAction) {
         super.visitCurveAction(curveAction);
         if ( curveAction.paramLeft.getDuration() != null ) {
             usedMethodBuilder.addUsedMethod(Mbot2Methods.DIFFDRIVEFOR);
@@ -331,18 +331,18 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
         return null;
     }
 
-    private void checkActorPort(WithUserDefinedPort<Void> action) {
+    private void checkActorPort(WithUserDefinedPort action) {
         Assert.isTrue(action instanceof Phrase, "checking Port of a non Phrase");
         ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(action.getUserDefinedPort());
         if ( usedConfigurationBlock == null ) {
-            Phrase<Void> actionAsPhrase = (Phrase<Void>) action;
+            Phrase actionAsPhrase = (Phrase) action;
             addErrorToPhrase(actionAsPhrase, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
     }
 
-    private void checkSensorPort(WithUserDefinedPort<Void> sensor) {
+    private void checkSensorPort(WithUserDefinedPort sensor) {
         Assert.isTrue(sensor instanceof Phrase, "checking Port of a non Phrase");
-        Phrase<Void> sensorAsSensor = (Phrase<Void>) sensor;
+        Phrase sensorAsSensor = (Phrase) sensor;
 
         String userDefinedPort = sensor.getUserDefinedPort();
         ConfigurationComponent configurationComponent = this.robotConfiguration.optConfigurationComponent(userDefinedPort);
@@ -356,7 +356,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
         checkSensorType(sensorAsSensor, configurationComponent);
     }
 
-    private void checkSensorType(Phrase<Void> sensor, ConfigurationComponent configurationComponent) {
+    private void checkSensorType(Phrase sensor, ConfigurationComponent configurationComponent) {
         String expectedComponentType = SENSOR_COMPONENT_TYPE_MAP.get(sensor.getKind().getName());
         String typeWithoutSensing = sensor.getKind().getName().replace("_SENSING", "");
         if ( !(typeWithoutSensing.equalsIgnoreCase(configurationComponent.componentType)) ) {

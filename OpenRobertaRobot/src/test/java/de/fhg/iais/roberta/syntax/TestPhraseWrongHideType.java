@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoHide;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "TEST_PHRASE_WRONG_HIDE_TYPE", blocklyNames = {"test_phrase_wrong_hide_type"}, category = "EXPR")
-public class TestPhraseWrongHideType<V> extends Phrase<V> {
+public class TestPhraseWrongHideType extends Phrase {
     @NepoHide
     public final String hide;
 

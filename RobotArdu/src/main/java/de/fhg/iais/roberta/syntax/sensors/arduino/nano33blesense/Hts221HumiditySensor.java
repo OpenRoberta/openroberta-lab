@@ -15,20 +15,20 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "HTS221_HUMIDITY", category = "SENSOR", blocklyNames = {"robsensors_hts221_humidity_getDataAvailableSample"})
-public final class Hts221HumiditySensor<V> extends BuiltinSensor<V> {
+public final class Hts221HumiditySensor extends BuiltinSensor {
 
-    public final Expr<V> humidity;
+    public final Expr humidity;
 
-    public Hts221HumiditySensor(BlocklyProperties properties, Expr<V> humidity) {
+    public Hts221HumiditySensor(BlocklyProperties properties, Expr humidity) {
         super(properties, null);
         this.humidity = humidity;
         setReadOnly();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
-        Expr<V> humidity = helper.getVar(values, BlocklyConstants.VARIABLE_VALUE);
-        return new Hts221HumiditySensor<>(Jaxb2Ast.extractBlocklyProperties(block), humidity);
+        Expr humidity = helper.getVar(values, BlocklyConstants.VARIABLE_VALUE);
+        return new Hts221HumiditySensor(Jaxb2Ast.extractBlocklyProperties(block), humidity);
     }
 
     @Override

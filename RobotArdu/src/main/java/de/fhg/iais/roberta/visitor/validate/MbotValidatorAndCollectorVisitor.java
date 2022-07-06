@@ -50,19 +50,19 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
         put("ULTRASONIC_SENSING", SC.ULTRASONIC);
     }});
 
-    public MbotValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public MbotValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(brickConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         checkActorPort(clearDisplayAction, clearDisplayAction.port);
         usedHardwareBuilder.addUsedActor(new UsedActor(clearDisplayAction.port, SC.LED_MATRIX));
         return null;
     }
 
     @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
+    public Void visitDriveAction(DriveAction driveAction) {
         checkAndVisitMotionParam(driveAction, driveAction.param);
         checkLeftRightMotorPort(driveAction);
         usedHardwareBuilder.addUsedActor(new UsedActor(driveAction.port, SC.DIFFERENTIAL_DRIVE));
@@ -70,7 +70,7 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
     }
 
     @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
+    public Void visitTurnAction(TurnAction turnAction) {
         checkAndVisitMotionParam(turnAction, turnAction.param);
         checkLeftRightMotorPort(turnAction);
         usedHardwareBuilder.addUsedActor(new UsedActor(turnAction.port, SC.DIFFERENTIAL_DRIVE));
@@ -78,7 +78,7 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
     }
 
     @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
+    public Void visitCurveAction(CurveAction curveAction) {
         requiredComponentVisited(curveAction, curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed());
         Optional.ofNullable(curveAction.paramLeft.getDuration()).ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
         Optional.ofNullable(curveAction.paramRight.getDuration()).ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
@@ -89,55 +89,55 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
     }
 
     @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+    public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor(stopAction.port, SC.DIFFERENTIAL_DRIVE));
         return null;
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         super.visitMotorOnAction(motorOnAction);
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOnAction.getUserDefinedPort(), SC.GEARED_MOTOR));
         return null;
     }
 
     @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+    public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         addWarningToPhrase(motorGetPowerAction, "BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+    public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
         return null;
     }
 
     @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor(motorStopAction.getUserDefinedPort(), SC.GEARED_MOTOR));
         return null;
     }
 
     @Override
-    public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
+    public Void visitSendIRAction(SendIRAction sendIRAction) {
         requiredComponentVisited(sendIRAction, sendIRAction.message);
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.IR_TRANSMITTER));
         return null;
     }
 
     @Override
-    public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
+    public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.IR_TRANSMITTER));
         return null;
     }
 
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+    public Void visitKeysSensor(KeysSensor keysSensor) {
         return null;
     }
 
     @Override
-    public Void visitLEDMatrixImageAction(LEDMatrixImageAction<Void> ledMatrixImageAction) {
+    public Void visitLEDMatrixImageAction(LEDMatrixImageAction ledMatrixImageAction) {
         if ( ledMatrixImageAction.valuesToDisplay.toString().contains("ListCreate ") ||
             ledMatrixImageAction.valuesToDisplay.toString().contains("ListRepeat ") ) {
             addErrorToPhrase(ledMatrixImageAction, "BLOCK_USED_INCORRECTLY");
@@ -150,7 +150,7 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
     }
 
     @Override
-    public Void visitLEDMatrixTextAction(LEDMatrixTextAction<Void> ledMatrixTextAction) {
+    public Void visitLEDMatrixTextAction(LEDMatrixTextAction ledMatrixTextAction) {
         requiredComponentVisited(ledMatrixTextAction, ledMatrixTextAction.msg);
         checkActorPort(ledMatrixTextAction, ledMatrixTextAction.port);
         usedHardwareBuilder.addUsedActor(new UsedActor(ledMatrixTextAction.port, SC.LED_MATRIX));
@@ -158,25 +158,25 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
     }
 
     @Override
-    public Void visitLEDMatrixImage(LEDMatrixImage<Void> ledMatrixImage) {
+    public Void visitLEDMatrixImage(LEDMatrixImage ledMatrixImage) {
         usedHardwareBuilder.addUsedIDImage(ledMatrixImage.getProperty().getBlocklyId(), ledMatrixImage.image);
         return null;
     }
 
     @Override
-    public Void visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<Void> ledMatrixImageShiftFunction) {
+    public Void visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction ledMatrixImageShiftFunction) {
         requiredComponentVisited(ledMatrixImageShiftFunction, ledMatrixImageShiftFunction.image, ledMatrixImageShiftFunction.positions);
         return null;
     }
 
     @Override
-    public Void visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<Void> ledMatrixImageInverFunction) {
+    public Void visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction ledMatrixImageInverFunction) {
         requiredComponentVisited(ledMatrixImageInverFunction, ledMatrixImageInverFunction.image);
         return null;
     }
 
     @Override
-    public Void visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction<Void> ledMatrixSetBrightnessAction) {
+    public Void visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction ledMatrixSetBrightnessAction) {
         requiredComponentVisited(ledMatrixSetBrightnessAction, ledMatrixSetBrightnessAction.brightness);
         checkActorPort(ledMatrixSetBrightnessAction, ledMatrixSetBrightnessAction.port);
         usedHardwareBuilder.addUsedActor(new UsedActor(ledMatrixSetBrightnessAction.port, SC.LED_MATRIX));
@@ -184,56 +184,56 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         requiredComponentVisited(lightAction, lightAction.rgbLedColor);
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.LED_ON_BOARD));
         return null;
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.LED_ON_BOARD));
         return null;
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor(playNoteAction.port, SC.BUZZER));
         return null;
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         requiredComponentVisited(toneAction, toneAction.duration, toneAction.frequency);
         usedHardwareBuilder.addUsedActor(new UsedActor(toneAction.port, SC.BUZZER));
         return null;
     }
 
     @Override
-    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+    public Void visitSerialWriteAction(SerialWriteAction serialWriteAction) {
         requiredComponentVisited(serialWriteAction, serialWriteAction.value);
         return null;
     }
 
     @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         checkSensorPort(infraredSensor);
         return super.visitInfraredSensor(infraredSensor);
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         checkSensorPort(lightSensor);
         return super.visitLightSensor(lightSensor);
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         checkSensorPort(ultrasonicSensor);
         return super.visitUltrasonicSensor(ultrasonicSensor);
     }
 
-    private void checkActorPort(Action<Void> action, String port) {
+    private void checkActorPort(Action action, String port) {
         ConfigurationComponent usedConfigurationBlock = robotConfiguration.optConfigurationComponent("ORT_" + port);
         if ( usedConfigurationBlock == null ) {
             addErrorToPhrase(action, "CONFIGURATION_ERROR_ACTOR_MISSING");
@@ -245,7 +245,7 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
     }
 
     @Override
-    protected void checkSensorPort(ExternalSensor<Void> sensor) {
+    protected void checkSensorPort(ExternalSensor sensor) {
         ConfigurationComponent usedSensor = this.robotConfiguration.optConfigurationComponent("ORT_" + sensor.getUserDefinedPort());
         if ( usedSensor == null ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");

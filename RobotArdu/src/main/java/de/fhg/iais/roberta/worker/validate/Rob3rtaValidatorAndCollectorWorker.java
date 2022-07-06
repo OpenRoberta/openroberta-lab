@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.visitor.validate.Rob3rtaValidatorAndCollectorVisitor;
 public class Rob3rtaValidatorAndCollectorWorker extends NIBOValidatorAndCollectorWorker {
 
     @Override
-    protected NIBOValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    protected NIBOValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         return new Rob3rtaValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 }

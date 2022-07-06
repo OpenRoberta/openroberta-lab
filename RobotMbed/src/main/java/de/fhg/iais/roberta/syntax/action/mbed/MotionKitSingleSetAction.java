@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 @NepoPhrase(name = "MOTIONKIT_SINGLE_SET_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_motionkit_single_set"})
-public final class MotionKitSingleSetAction<V> extends Action<V> {
+public final class MotionKitSingleSetAction extends Action {
     @NepoField(name = "MOTORPORT")
     public final String port;
 

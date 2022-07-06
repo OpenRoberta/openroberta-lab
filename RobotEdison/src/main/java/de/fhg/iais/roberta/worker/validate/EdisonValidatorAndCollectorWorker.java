@@ -16,7 +16,7 @@ public class EdisonValidatorAndCollectorWorker extends AbstractValidatorAndColle
 
     @Override
     protected CommonNepoValidatorAndCollectorVisitor getVisitor(
-        Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         return new EdisonValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 

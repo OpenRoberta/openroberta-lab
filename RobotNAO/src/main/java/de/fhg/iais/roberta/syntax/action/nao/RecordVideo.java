@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "RECORD_VIDEO", category = "ACTOR", blocklyNames = {"naoActions_recordVideo"})
-public final class RecordVideo<V> extends Action<V> {
+public final class RecordVideo extends Action {
 
     @Override
     public String toString() {
@@ -30,10 +30,10 @@ public final class RecordVideo<V> extends Action<V> {
 
     public final Resolution resolution;
     public final Camera camera;
-    public final Expr<V> duration;
-    public final Expr<V> videoName;
+    public final Expr duration;
+    public final Expr videoName;
 
-    public RecordVideo(Resolution resolution, Camera camera, Expr<V> duration, Expr<V> videoName, BlocklyProperties properties) {
+    public RecordVideo(Resolution resolution, Camera camera, Expr duration, Expr videoName, BlocklyProperties properties) {
         super(properties);
         Assert.notNull(resolution, "Missing resolution in RecordVideo block!");
         Assert.notNull(camera, "Missing camera in RecordVideo block!");
@@ -44,16 +44,16 @@ public final class RecordVideo<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
 
         String resolution = Jaxb2Ast.extractField(fields, BlocklyConstants.RESOLUTION);
         String camera = Jaxb2Ast.extractField(fields, BlocklyConstants.CAMERA);
-        Phrase<V> duration = helper.extractValue(values, new ExprParam(BlocklyConstants.DURATION, BlocklyType.NUMBER_INT));
-        Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.FILENAME, BlocklyType.NUMBER_INT));
+        Phrase duration = helper.extractValue(values, new ExprParam(BlocklyConstants.DURATION, BlocklyType.NUMBER_INT));
+        Phrase msg = helper.extractValue(values, new ExprParam(BlocklyConstants.FILENAME, BlocklyType.NUMBER_INT));
 
-        return new RecordVideo<>(Resolution.get(resolution), Camera.get(camera), Jaxb2Ast.convertPhraseToExpr(duration), Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlocklyProperties(block));
+        return new RecordVideo(Resolution.get(resolution), Camera.get(camera), Jaxb2Ast.convertPhraseToExpr(duration), Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

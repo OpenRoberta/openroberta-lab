@@ -42,7 +42,7 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
      * @param configurationAst the configuration
      * @param beans a map of available beans
      */
-    public NIBOCommonCppVisitor(List<List<Phrase<Void>>> phrases, ConfigurationAst configurationAst, ClassToInstanceMap<IProjectBean> beans) {
+    public NIBOCommonCppVisitor(List<List<Phrase>> phrases, ConfigurationAst configurationAst, ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, configurationAst, beans);
     }
 
@@ -77,7 +77,7 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     }
 
     @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         if ( infraredSensor.getMode().equals("REFLEXION") ) {
             this.sb.append("rob.getIRSensor()");
         } else {
@@ -87,13 +87,13 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     }
 
     @Override
-    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+    public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
         this.sb.append("rob.getTemperature()");
         return null;
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
+    public Void visitMainTask(MainTask mainTask) {
         decrIndentation();
         mainTask.variables.accept(this);
         nlIndent();
@@ -116,7 +116,7 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     }
 
     @Override
-    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+    public Void visitLedOnAction(LedOnAction ledOnAction) {
         this.sb.append("rob.setLed(");
         if ( ledOnAction.side.equals("Left") ) {
             this.sb.append("EYE_2, ");
@@ -129,7 +129,7 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     }
 
     @Override
-    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
+    public Void visitLedOffAction(LedOffAction ledOffAction) {
         this.sb.append("rob.setLed(");
         if ( ledOffAction.side.equals("Left") ) {
             this.sb.append("EYE_2, OFF);");
@@ -140,7 +140,7 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     }
 
     @Override
-    public Void visitBodyLEDAction(BodyLEDAction<Void> bodyLEDAction) {
+    public Void visitBodyLEDAction(BodyLEDAction bodyLEDAction) {
         this.sb.append("rob.setLed(");
         this.sb.append(bodyLEDAction.side + ", ");
         this.sb.append(bodyLEDAction.ledState + ");");
@@ -148,13 +148,13 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     }
 
     @Override
-    public Void visitCodePadSensor(CodePadSensor<Void> codePadSensor) {
+    public Void visitCodePadSensor(CodePadSensor codePadSensor) {
         this.sb.append("rob.getID()");
         return null;
     }
 
     @Override
-    public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
+    public Void visitSendIRAction(SendIRAction sendIRAction) {
         this.sb.append("rob.transmitIRCode(");
         sendIRAction.code.accept(this);
         this.sb.append(");");
@@ -162,13 +162,13 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     }
 
     @Override
-    public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
+    public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
         this.sb.append("rob.receiveIRCode(500)");
         return null;
     }
 
     @Override
-    public Void visitRememberAction(RememberAction<Void> rememberAction) {
+    public Void visitRememberAction(RememberAction rememberAction) {
         this.sb.append("remember((int)(");
         rememberAction.code.accept(this);
         this.sb.append("));");
@@ -176,26 +176,26 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     }
 
     @Override
-    public Void visitRecallAction(RecallAction<Void> recallAction) {
+    public Void visitRecallAction(RecallAction recallAction) {
         this.sb.append("recall()");
         return null;
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         this.sb.append("rob.setWhiteLeds(WHITE, WHITE);");
         return null;
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         this.sb.append("rob.setLed(2, OFF);");
         this.sb.append("rob.setLed(1, OFF);");
         return null;
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         if ( lightSensor.getMode().equals("REFLEXION") ) {
             this.sb.append("rob.getIRSensor()");
         } else {
@@ -205,7 +205,7 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     }
 
     @Override
-    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
+    public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
         this.sb.append("_CLAMP(");
         mathConstrainFunct.param.get(0).accept(this);
         this.sb.append(", ");
@@ -217,7 +217,7 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     }
 
     @Override
-    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
+    public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.sb.append("randomNumber(");
         mathRandomIntFunct.param.get(0).accept(this);
         this.sb.append(", ");
@@ -227,14 +227,14 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     }
 
     @Override
-    public Void visitDebugAction(DebugAction<Void> debugAction) {
+    public Void visitDebugAction(DebugAction debugAction) {
         // not to block generated test programs, we do nothing
         // throw new DbcException("DebugAction is not supported so far! ");
         return null;
     }
 
     @Override
-    public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
+    public Void visitAssertStmt(AssertStmt assertStmt) {
         // not to block generated test programs, we do nothing
         // throw new DbcException("AssertStmt is not supported so far! ");
         return null;

@@ -10,15 +10,15 @@ import testVisitor.ast.B;
 import testVisitor.ast.C;
 
 public interface AbstractVisitor<V> extends ITestVisitor<V> {
-    default List<V> visitAImpl(A<V> a) {
+    default List<V> visitAImpl(A a) {
         return Arrays.asList(a.b.accept(this), a.c.accept(this));
     }
 
-    default List<V> visitBImpl(B<V> b) {
+    default List<V> visitBImpl(B b) {
         return Arrays.asList(b.c.accept(this));
     }
 
-    default List<V> visitCImpl(C<V> c) {
+    default List<V> visitCImpl(C c) {
         return Collections.emptyList();
     }
 }

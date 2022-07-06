@@ -11,13 +11,13 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_motor_setPower"}, name = "MOTOR_SET_POWER_ACTION")
-public final class MotorSetPowerAction<V> extends MoveAction<V> {
+public final class MotorSetPowerAction extends MoveAction {
     @NepoValue(name = BlocklyConstants.POWER, type = BlocklyType.NUMBER_INT)
-    public final Expr<V> power;
+    public final Expr power;
     @NepoField(name = BlocklyConstants.MOTORPORT)
     public final String port;
 
-    public MotorSetPowerAction(BlocklyProperties properties, Expr<V> power, String port) {
+    public MotorSetPowerAction(BlocklyProperties properties, Expr power, String port) {
         super(properties, port);
         Assert.isTrue(port != null && power.isReadOnly());
         this.port = port;

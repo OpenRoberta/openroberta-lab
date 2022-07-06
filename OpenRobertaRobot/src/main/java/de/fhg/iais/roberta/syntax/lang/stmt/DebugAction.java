@@ -9,11 +9,11 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "STMT", blocklyNames = {"robActions_debug"}, name = "DEBUG_STMT")
-public final class DebugAction<V> extends Stmt<V> {
+public final class DebugAction extends Stmt {
     @NepoValue(name = BlocklyConstants.OUT, type = BlocklyType.ANY)
-    public final Expr<V> value;
+    public final Expr value;
 
-    public DebugAction(BlocklyProperties properties, Expr<V> value) {
+    public DebugAction(BlocklyProperties properties, Expr value) {
         super(properties);
         Assert.notNull(value);
         this.value = value;

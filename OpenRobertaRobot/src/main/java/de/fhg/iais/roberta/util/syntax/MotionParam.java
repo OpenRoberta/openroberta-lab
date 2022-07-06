@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
  * This class is parameter class used to set the speed of a motor and the type of movement the motor {@link MotorDuration.Mode}.
  */
 public class MotionParam<V> {
-    private final Expr<V> speed;
+    private final Expr speed;
     private final MotorDuration<V> duration;
 
     private MotionParam(Builder<V> mpb) {
@@ -17,7 +17,7 @@ public class MotionParam<V> {
     /**
      * @return speed of the motor
      */
-    public Expr<V> getSpeed() {
+    public Expr getSpeed() {
         return this.speed;
     }
 
@@ -37,7 +37,7 @@ public class MotionParam<V> {
      * Static class for building object of class {@link MotionParam}.
      */
     public static class Builder<V> {
-        private Expr<V> speed;
+        private Expr speed;
         private MotorDuration<V> duration;
 
         /**
@@ -46,7 +46,7 @@ public class MotionParam<V> {
          * @param speed
          * @return reference returned so calls can be chained
          */
-        public Builder<V> speed(Expr<V> speed) {
+        public Builder<V> speed(Expr speed) {
             this.speed = speed;
             return this;
         }

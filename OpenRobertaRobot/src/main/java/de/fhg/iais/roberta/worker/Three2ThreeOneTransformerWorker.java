@@ -12,7 +12,7 @@ public class Three2ThreeOneTransformerWorker extends AbstractTransformerWorker {
     }
 
     @Override
-    protected ITransformerVisitor<Void> getVisitor(Project project, NewUsedHardwareBean.Builder builder, ConfigurationAst configuration) {
+    protected ITransformerVisitor getVisitor(Project project, NewUsedHardwareBean.Builder builder, ConfigurationAst configuration) {
         return null;
     }
 }

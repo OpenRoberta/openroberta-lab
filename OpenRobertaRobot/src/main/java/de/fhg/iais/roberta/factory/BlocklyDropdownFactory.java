@@ -187,7 +187,7 @@ public class BlocklyDropdownFactory {
      * comment of the block @return returns instance of the specific sensor {@link Sensor} @throws
      */
     @SuppressWarnings("unchecked")
-    public Sensor<?> createSensor(
+    public Sensor createSensor(
         String sensorKey,
         String port,
         String slot,
@@ -196,11 +196,11 @@ public class BlocklyDropdownFactory {
 
         BlockDescriptor blockDescriptor = AstFactory.getBlockDescriptorByBlocklyFieldName(sensorKey);
         try {
-            Class<Sensor<?>> sensorClass = (Class<Sensor<?>>) blockDescriptor.getAstClass();
+            Class<Sensor> sensorClass = (Class<Sensor>) blockDescriptor.getAstClass();
             String mode = blockDescriptor.getSensorModeFromBlocklyField(sensorKey);
             ExternalSensorBean externalSensorBean = new ExternalSensorBean(Jaxb2Ast.sanitizePort(port), getMode(mode), Jaxb2Ast.sanitizeSlot(slot), mutation);
-            Constructor<Sensor<?>> constructor = sensorClass.getDeclaredConstructor(BlocklyProperties.class, ExternalSensorBean.class);
-            return (Sensor<?>) constructor.newInstance(properties, externalSensorBean);
+            Constructor<Sensor> constructor = sensorClass.getDeclaredConstructor(BlocklyProperties.class, ExternalSensorBean.class);
+            return (Sensor) constructor.newInstance(properties, externalSensorBean);
         } catch ( Exception e ) {
             LOG.error("Sensor " + sensorKey + " could not be created", e);
             throw new DbcException("Sensor " + sensorKey + " could not be created", e);

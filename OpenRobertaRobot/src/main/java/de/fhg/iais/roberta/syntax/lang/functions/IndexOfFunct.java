@@ -20,11 +20,11 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "TEXT_INDEX_OF_FUNCT", category = "FUNCTION", blocklyNames = {"lists_indexOf", "robLists_indexOf"})
-public final class IndexOfFunct<V> extends Function<V> {
+public final class IndexOfFunct extends Function {
     public final IIndexLocation location;
-    public final List<Expr<V>> param;
+    public final List<Expr> param;
 
-    public IndexOfFunct(IIndexLocation name, List<Expr<V>> param, BlocklyProperties properties) {
+    public IndexOfFunct(IIndexLocation name, List<Expr> param, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(name != null && param != null);
         this.location = name;
@@ -52,14 +52,14 @@ public final class IndexOfFunct<V> extends Function<V> {
         return "IndexOfFunct [" + this.location + ", " + this.param + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
         exprParams.add(new ExprParam(BlocklyConstants.FIND, BlocklyType.STRING));
         String op = Jaxb2Ast.getOperation(block, BlocklyConstants.END);
-        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return new IndexOfFunct<V>(factory.getIndexLocation(op), params, Jaxb2Ast.extractBlocklyProperties(block));
+        List<Expr> params = helper.extractExprParameters(block, exprParams);
+        return new IndexOfFunct(factory.getIndexLocation(op), params, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

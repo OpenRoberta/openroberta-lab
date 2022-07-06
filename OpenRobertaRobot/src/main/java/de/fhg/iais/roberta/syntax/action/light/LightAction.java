@@ -22,8 +22,8 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "LIGHT_ACTION", category = "ACTOR", blocklyNames = {"robActions_led_on", "sim_LED_on", "robActions_brickLight_on", "robActions_sensorLight_on"})
-public final class LightAction<V> extends Action<V> {
-    public final Expr<V> rgbLedColor;
+public final class LightAction extends Action {
+    public final Expr rgbLedColor;
     public final IBrickLedColor color;
     public final ILightMode mode;
     private static List<Field> fields;
@@ -31,7 +31,7 @@ public final class LightAction<V> extends Action<V> {
     private static boolean isActor;
     private static boolean isBlink;
 
-    public LightAction(String port, IBrickLedColor color, ILightMode mode, Expr<V> rgbLedColor, BlocklyProperties properties) {
+    public LightAction(String port, IBrickLedColor color, ILightMode mode, Expr rgbLedColor, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(mode != null);
         this.rgbLedColor = rgbLedColor;
@@ -46,10 +46,10 @@ public final class LightAction<V> extends Action<V> {
         return "LightAction [" + this.port + ", " + this.mode + ", " + this.color + ", " + this.rgbLedColor + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
-        Phrase<V> ledColor = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
+        Phrase ledColor = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
         fields = Jaxb2Ast.extractFields(block, (short) 3);
         isActor = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.EMPTY_PORT).equals(BlocklyConstants.EMPTY_PORT);
         isBlink = Jaxb2Ast.extractField(fields, BlocklyConstants.SWITCH_STATE, BlocklyConstants.DEFAULT).equals(BlocklyConstants.DEFAULT);
@@ -63,7 +63,7 @@ public final class LightAction<V> extends Action<V> {
                 ? Jaxb2Ast.extractField(fields, BlocklyConstants.SWITCH_BLINK, BlocklyConstants.DEFAULT)
                 : Jaxb2Ast.extractField(fields, BlocklyConstants.SWITCH_STATE, BlocklyConstants.DEFAULT);
         String color = Jaxb2Ast.extractField(fields, BlocklyConstants.SWITCH_COLOR, BlocklyConstants.DEFAULT);
-        return new LightAction<>(Jaxb2Ast.sanitizePort(port), factory.getBrickLedColor(color), factory.getBlinkMode(mode), Jaxb2Ast.convertPhraseToExpr(ledColor), Jaxb2Ast.extractBlocklyProperties(block));
+        return new LightAction(Jaxb2Ast.sanitizePort(port), factory.getBrickLedColor(color), factory.getBlinkMode(mode), Jaxb2Ast.convertPhraseToExpr(ledColor), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

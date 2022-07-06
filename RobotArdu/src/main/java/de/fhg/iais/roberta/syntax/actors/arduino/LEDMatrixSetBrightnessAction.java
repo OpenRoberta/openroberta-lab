@@ -19,11 +19,11 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "LED_MATRIX__SET_BRIGHTNESS", category = "ACTOR", blocklyNames = {"mBotactions_display_setbrightness"})
-public final class LEDMatrixSetBrightnessAction<V> extends Action<V> {
-    public final Expr<V> brightness;
+public final class LEDMatrixSetBrightnessAction extends Action {
+    public final Expr brightness;
     public final String port;
 
-    public LEDMatrixSetBrightnessAction(String port, Expr<V> brightness, BlocklyProperties properties) {
+    public LEDMatrixSetBrightnessAction(String port, Expr brightness, BlocklyProperties properties) {
         super(properties);
         Assert.notNull(brightness);
         this.port = port;
@@ -36,14 +36,14 @@ public final class LEDMatrixSetBrightnessAction<V> extends Action<V> {
         return "LEDMatrixSetBrightnessAction [ " + this.port + ", " + this.brightness + " ]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         final String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT);
 
-        Phrase<V> brightness = helper.extractValue(values, new ExprParam(BlocklyConstants.BRIGHTNESS, BlocklyType.NUMBER_INT));
+        Phrase brightness = helper.extractValue(values, new ExprParam(BlocklyConstants.BRIGHTNESS, BlocklyType.NUMBER_INT));
 
-        return new LEDMatrixSetBrightnessAction<>(port, Jaxb2Ast.convertPhraseToExpr(brightness), Jaxb2Ast.extractBlocklyProperties(block));
+        return new LEDMatrixSetBrightnessAction(port, Jaxb2Ast.convertPhraseToExpr(brightness), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

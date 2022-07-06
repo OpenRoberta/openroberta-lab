@@ -10,11 +10,11 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "IMAGE_INVERT", category = "FUNCTION", blocklyNames = {"mbedImage_invert"})
-public final class ImageInvertFunction<V> extends Function<V> {
+public final class ImageInvertFunction extends Function {
     @NepoValue(name = "VAR", type = BlocklyType.PREDEFINED_IMAGE)
-    public final Expr<V> image;
+    public final Expr image;
 
-    public ImageInvertFunction(BlocklyProperties properties, Expr<V> image) {
+    public ImageInvertFunction(BlocklyProperties properties, Expr image) {
         super(properties);
         Assert.notNull(image);
 

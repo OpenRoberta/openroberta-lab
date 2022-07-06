@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * This class describes the blockly-related properties (most of them are graphical properties) of a block from the AST.
  * <p>
  * Information contained in this class is used to recreate a blockly block when the AST is used to regenerate the original source.<br>
- * Every object that can be part of the AST (subclasses of Phrase<V>) should contain an instance an instance of this class, otherwise their graphical
+ * Every object that can be part of the AST (subclasses of Phrase) should contain an instance an instance of this class, otherwise their graphical
  * representation cannot be regenerated.<br>
  * <br>
  */

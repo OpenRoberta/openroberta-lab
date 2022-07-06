@@ -13,8 +13,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 
 @NepoBasic(name = "EXPR_LIST", category = "EXPR", blocklyNames = {})
-public final class ExprList<V> extends Expr<V> {
-    public final List<Expr<V>> el = new ArrayList<Expr<V>>();
+public final class ExprList extends Expr {
+    public final List<Expr> el = new ArrayList<Expr>();
 
     public ExprList() {
         super(new BlocklyProperties("1", "1", false, false, false, false, false, null, false, false, null));
@@ -23,7 +23,7 @@ public final class ExprList<V> extends Expr<V> {
     /**
      * Add new expression to the list.
      */
-    public final void addExpr(Expr<V> expr) {
+    public final void addExpr(Expr expr) {
         Assert.isTrue(mayChange() && expr != null && expr.isReadOnly());
         this.el.add(expr);
     }
@@ -31,7 +31,7 @@ public final class ExprList<V> extends Expr<V> {
     /**
      * @return the expression list
      */
-    public final List<Expr<V>> get() {
+    public final List<Expr> get() {
         Assert.isTrue(isReadOnly());
         return Collections.unmodifiableList(this.el);
     }
@@ -55,7 +55,7 @@ public final class ExprList<V> extends Expr<V> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
-        for ( Expr<?> expr : this.el ) {
+        for ( Expr expr : this.el ) {
             if ( first ) {
                 first = false;
             } else {

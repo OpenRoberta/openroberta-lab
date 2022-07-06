@@ -19,12 +19,12 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "SHOW_PICTURE_ACTION", category = "ACTOR", blocklyNames = {"robActions_display_picture", "robActions_display_picture_new"})
-public final class ShowPictureAction<V> extends Action<V> {
+public final class ShowPictureAction extends Action {
     public final String pic;
-    public final Expr<V> x;
-    public final Expr<V> y;
+    public final Expr x;
+    public final Expr y;
 
-    public ShowPictureAction(String pic, Expr<V> x, Expr<V> y, BlocklyProperties properties) {
+    public ShowPictureAction(String pic, Expr x, Expr y, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(pic != null && x != null && y != null);
         this.pic = pic;
@@ -38,13 +38,13 @@ public final class ShowPictureAction<V> extends Action<V> {
         return "ShowPictureAction [" + this.pic + ", " + this.x + ", " + this.y + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
         String pic = Jaxb2Ast.extractField(fields, BlocklyConstants.PICTURE);
-        Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
-        Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
-        return new ShowPictureAction<>(pic, Jaxb2Ast.convertPhraseToExpr(x), Jaxb2Ast.convertPhraseToExpr(y), Jaxb2Ast.extractBlocklyProperties(block));
+        Phrase x = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
+        Phrase y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
+        return new ShowPictureAction(pic, Jaxb2Ast.convertPhraseToExpr(x), Jaxb2Ast.convertPhraseToExpr(y), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

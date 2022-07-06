@@ -29,7 +29,7 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
 
     public SenseboxValidatorAndCollectorVisitor(
         ConfigurationAst brickConfiguration,
-        ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders,
+        ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders,
         String SSID,
         String password) {
         super(brickConfiguration, beanBuilders);
@@ -38,7 +38,7 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
     }
 
     @Override
-    public Void visitSendDataAction(SendDataAction<Void> sendDataAction) {
+    public Void visitSendDataAction(SendDataAction sendDataAction) {
         if ( this.SSID.equals("") || this.password.equals("") ) {
             addErrorToPhrase(sendDataAction, "CONFIGURATION_ERROR_WLAN_CREDENTIALS_MISSING");
             return null;
@@ -51,7 +51,7 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
             addErrorToPhrase(sendDataAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
             return null;
         }
-        for ( Pair<String, Expr<Void>> value : sendDataAction.id2Phenomena ) {
+        for ( Pair<String, Expr> value : sendDataAction.id2Phenomena ) {
             requiredComponentVisited(sendDataAction, value.getSecond());
         }
         usedHardwareBuilder.addUsedActor(new UsedActor(SC.NONE, SC.SEND_DATA));
@@ -59,7 +59,7 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
     }
 
     @Override
-    public Void visitEnvironmentalSensor(EnvironmentalSensor<Void> environmentalSensor) {
+    public Void visitEnvironmentalSensor(EnvironmentalSensor environmentalSensor) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.ENVIRONMENTAL) ) {
             addErrorToPhrase(environmentalSensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
         }
@@ -68,7 +68,7 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
     }
 
     @Override
-    public Void visitGpsSensor(GpsSensor<Void> gpsSensor) {
+    public Void visitGpsSensor(GpsSensor gpsSensor) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.GPS) ) {
             addErrorToPhrase(gpsSensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
         }
@@ -77,7 +77,7 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
     }
 
     @Override
-    public Void visitParticleSensor(ParticleSensor<Void> particleSensor) {
+    public Void visitParticleSensor(ParticleSensor particleSensor) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.PARTICLE) ) {
             addErrorToPhrase(particleSensor, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
@@ -86,7 +86,7 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
     }
 
     @Override
-    public Void visitPlotClearAction(PlotClearAction<Void> plotClearAction) {
+    public Void visitPlotClearAction(PlotClearAction plotClearAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
             addErrorToPhrase(plotClearAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
@@ -95,7 +95,7 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
     }
 
     @Override
-    public Void visitPlotPointAction(PlotPointAction<Void> plotPointAction) {
+    public Void visitPlotPointAction(PlotPointAction plotPointAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
             addErrorToPhrase(plotPointAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
@@ -106,7 +106,7 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
 
 
     @Override
-    public Void visitVemlLightSensor(VemlLightSensor<Void> vemlLightSensor) {
+    public Void visitVemlLightSensor(VemlLightSensor vemlLightSensor) {
         checkSensorPort(vemlLightSensor);
         switch ( vemlLightSensor.getMode() ) {
             case SC.LIGHT:
@@ -120,21 +120,21 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
     }
 
     @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+    public Void visitCompassSensor(CompassSensor compassSensor) {
         checkSensorPort(compassSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(compassSensor.getUserDefinedPort(), SC.COMPASS, compassSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+    public Void visitSoundSensor(SoundSensor soundSensor) {
         checkSensorPort(soundSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(soundSensor.getUserDefinedPort(), SC.SOUND, soundSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+    public Void visitShowTextAction(ShowTextAction showTextAction) {
         super.visitShowTextAction(showTextAction);
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
             addErrorToPhrase(showTextAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
@@ -143,7 +143,7 @@ public class SenseboxValidatorAndCollectorVisitor extends ArduinoValidatorAndCol
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         super.visitClearDisplayAction(clearDisplayAction);
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
             addErrorToPhrase(clearDisplayAction, "CONFIGURATION_ERROR_ACTOR_MISSING");

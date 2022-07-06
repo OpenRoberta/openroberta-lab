@@ -15,7 +15,7 @@ public class NaoSimValidatorAndCollectorWorker extends AbstractValidatorAndColle
 
     @Override
     protected CommonNepoValidatorAndCollectorVisitor getVisitor(
-        Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         return new NaoSimValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 

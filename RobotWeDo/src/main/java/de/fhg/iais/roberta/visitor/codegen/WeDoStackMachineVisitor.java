@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IWeDoVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
-public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IWeDoVisitor<V> {
+public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor implements IWeDoVisitor<Void> {
 
     public WeDoStackMachineVisitor(ConfigurationAst configuration) {
         super(configuration);
@@ -37,7 +37,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
     }
 
     @Override
-    public V visitLightAction(LightAction<V> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         ConfigurationComponent confLedBlock = getConfigurationComponent(lightAction.port);
         String brickName = confLedBlock.getProperty("VAR");
         if ( brickName != null ) {
@@ -50,7 +50,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
     }
 
     @Override
-    public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         ConfigurationComponent confLedBlock = getConfigurationComponent(lightStatusAction.getUserDefinedPort());
         String brickName = confLedBlock.getProperty("VAR");
         if ( brickName != null ) {
@@ -64,13 +64,13 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
     }
 
     @Override
-    public V visitMotorOnAction(MotorOnAction<V> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         ConfigurationComponent confMotorBlock = getConfigurationComponent(motorOnAction.getUserDefinedPort());
         String brickName = confMotorBlock.getProperty("VAR");
         String port = confMotorBlock.getProperty("CONNECTOR");
         if ( brickName != null && port != null ) {
             motorOnAction.param.getSpeed().accept(this);
-            MotorDuration<V> duration = motorOnAction.param.getDuration();
+            MotorDuration duration = motorOnAction.param.getDuration();
             boolean speedOnly = !processOptionalDuration(duration);
             JSONObject o = makeNode(C.MOTOR_ON_ACTION).put(C.NAME, brickName).put(C.PORT, port).put(C.SPEED_ONLY, speedOnly).put(C.SPEED_ONLY, speedOnly);
             if ( speedOnly ) {
@@ -85,7 +85,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
     }
 
     @Override
-    public V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         ConfigurationComponent confMotorBlock = getConfigurationComponent(motorStopAction.getUserDefinedPort());
         String brickName = confMotorBlock.getProperty("VAR");
         String port = confMotorBlock.getProperty("CONNECTOR");
@@ -98,20 +98,20 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
     }
 
     @Override
-    public V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         JSONObject o = makeNode(C.CLEAR_DISPLAY_ACTION);
         return app(o);
     }
 
     @Override
-    public V visitShowTextAction(ShowTextAction<V> showTextAction) {
+    public Void visitShowTextAction(ShowTextAction showTextAction) {
         showTextAction.msg.accept(this);
         JSONObject o = makeNode(C.SHOW_TEXT_ACTION);
         return app(o);
     }
 
     @Override
-    public V visitKeysSensor(KeysSensor<V> keysSensor) {
+    public Void visitKeysSensor(KeysSensor keysSensor) {
         ConfigurationComponent keysSensorBlock = getConfigurationComponent(keysSensor.getUserDefinedPort());
         String brickName = keysSensorBlock.getProperty("VAR");
         if ( brickName != null ) {
@@ -123,7 +123,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
     }
 
     @Override
-    public V visitGyroSensor(GyroSensor<V> gyroSensor) {
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
         ConfigurationComponent confGyroSensor = getConfigurationComponent(gyroSensor.getUserDefinedPort());
         String brickName = confGyroSensor.getProperty("VAR");
         String port = confGyroSensor.getProperty("CONNECTOR");
@@ -137,7 +137,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
     }
 
     @Override
-    public V visitInfraredSensor(InfraredSensor<V> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         ConfigurationComponent confInfraredSensor = getConfigurationComponent(infraredSensor.getUserDefinedPort());
         String brickName = confInfraredSensor.getProperty("VAR");
         String port = confInfraredSensor.getProperty("CONNECTOR");
@@ -150,7 +150,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
     }
 
     @Override
-    public V visitPlayNoteAction(PlayNoteAction<V> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         ConfigurationComponent playNoteBlock = getConfigurationComponent(playNoteAction.port);
         String brickName = playNoteBlock.getProperty("VAR");
         if ( brickName != null ) {
@@ -166,7 +166,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
     }
 
     @Override
-    public V visitToneAction(ToneAction<V> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         ConfigurationComponent toneBlock = getConfigurationComponent(toneAction.port);
         String brickName = toneBlock.getProperty("VAR");
         if ( brickName != null ) {
@@ -180,7 +180,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
     }
 
     @Override
-    public V visitTimerSensor(TimerSensor<V> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         JSONObject o;
         switch ( timerSensor.getMode() ) {
             case "DEFAULT":
@@ -197,40 +197,40 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
     }
 
     @Override
-    public V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
+    public Void visitGetSampleSensor(GetSampleSensor sensorGetSample) {
         sensorGetSample.sensor.accept(this);
         return null;
     }
 
     @Override
-    public V visitAssertStmt(AssertStmt<V> assertStmt) {
+    public Void visitAssertStmt(AssertStmt assertStmt) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public V visitDebugAction(DebugAction<V> debugAction) {
+    public Void visitDebugAction(DebugAction debugAction) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public V visitMathCastStringFunct(MathCastStringFunct<V> mathCastStringFunct) {
+    public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public V visitMathCastCharFunct(MathCastCharFunct<V> mathCastCharFunct) {
+    public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public V visitTextStringCastNumberFunct(TextStringCastNumberFunct<V> textStringCastNumberFunct) {
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public V visitTextCharCastNumberFunct(TextCharCastNumberFunct<V> textCharCastNumberFunct) {
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         throw new DbcException("Not supported!");
     }
 }

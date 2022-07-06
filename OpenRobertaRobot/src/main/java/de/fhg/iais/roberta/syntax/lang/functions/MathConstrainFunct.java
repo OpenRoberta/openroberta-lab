@@ -18,10 +18,10 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "MATH_CONSTRAIN_FUNCT", category = "FUNCTION", blocklyNames = {"math_constrain"})
-public final class MathConstrainFunct<V> extends Function<V> {
-    public final List<Expr<V>> param;
+public final class MathConstrainFunct extends Function {
+    public final List<Expr> param;
 
-    public MathConstrainFunct(List<Expr<V>> param, BlocklyProperties properties) {
+    public MathConstrainFunct(List<Expr> param, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(param != null);
         this.param = param;
@@ -48,13 +48,13 @@ public final class MathConstrainFunct<V> extends Function<V> {
         return "MathConstrainFunct [" + this.param + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
         exprParams.add(new ExprParam(BlocklyConstants.LOW, BlocklyType.NUMBER_INT));
         exprParams.add(new ExprParam(BlocklyConstants.HIGH, BlocklyType.NUMBER_INT));
-        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return new MathConstrainFunct<V>(params, Jaxb2Ast.extractBlocklyProperties(block));
+        List<Expr> params = helper.extractExprParameters(block, exprParams);
+        return new MathConstrainFunct(params, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

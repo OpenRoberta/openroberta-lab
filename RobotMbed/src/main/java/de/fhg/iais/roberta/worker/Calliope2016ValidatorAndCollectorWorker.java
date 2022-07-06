@@ -14,7 +14,7 @@ public class Calliope2016ValidatorAndCollectorWorker extends CalliopeValidatorAn
     }
 
     @Override
-    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         return new Calliope2016ValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 }

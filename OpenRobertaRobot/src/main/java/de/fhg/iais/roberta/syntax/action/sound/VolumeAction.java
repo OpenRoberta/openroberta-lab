@@ -21,13 +21,13 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "VOLUME_ACTION", category = "ACTOR", blocklyNames = {"robActions_play_getVolume", "robActions_play_setVolume"})
-public final class VolumeAction<V> extends Action<V> {
+public final class VolumeAction extends Action {
     public final Mode mode;
-    public final Expr<V> volume;
+    public final Expr volume;
     public final String port;
     public final List<Hide> hide;
 
-    public VolumeAction(Mode mode, Expr<V> volume, String port, List<Hide> hide, BlocklyProperties properties) {
+    public VolumeAction(Mode mode, Expr volume, String port, List<Hide> hide, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(volume != null && volume.isReadOnly() && mode != null);
         this.volume = volume;
@@ -42,25 +42,25 @@ public final class VolumeAction<V> extends Action<V> {
         return "VolumeAction [" + this.mode + ", " + this.volume + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
-        Phrase<V> expr;
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+        Phrase expr;
         Mode mode;
         if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_PLAY_SET_VOLUME) ) {
             List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
             expr = helper.extractValue(values, new ExprParam(BlocklyConstants.VOLUME, BlocklyType.NUMBER_INT));
             mode = VolumeAction.Mode.SET;
         } else {
-            expr = new NullConst<V>(Jaxb2Ast.extractBlocklyProperties(block));
+            expr = new NullConst(Jaxb2Ast.extractBlocklyProperties(block));
             mode = VolumeAction.Mode.GET;
         }
 
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         if ( fields.stream().anyMatch(field -> field.getName().equals(BlocklyConstants.ACTORPORT)) ) {
             String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT);
-            return new VolumeAction<>(mode, Jaxb2Ast.convertPhraseToExpr(expr), port, block.getHide(), Jaxb2Ast.extractBlocklyProperties(block));
+            return new VolumeAction(mode, Jaxb2Ast.convertPhraseToExpr(expr), port, block.getHide(), Jaxb2Ast.extractBlocklyProperties(block));
         }
 
-        return new VolumeAction<>(mode, Jaxb2Ast.convertPhraseToExpr(expr), BlocklyConstants.EMPTY_PORT, null, Jaxb2Ast.extractBlocklyProperties(block));
+        return new VolumeAction(mode, Jaxb2Ast.convertPhraseToExpr(expr), BlocklyConstants.EMPTY_PORT, null, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

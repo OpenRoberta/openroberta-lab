@@ -66,19 +66,19 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
         put("ENCODER_SENSING", SC.ENCODER);
     }});
 
-    public ArduinoValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public ArduinoValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(brickConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(accelerometerSensor.getUserDefinedPort(), SC.ACCELEROMETER, accelerometerSensor.getMode()));
         return null;
     }
 
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(clearDisplayAction.port);
         if ( usedConfigurationBlock == null ) {
             addErrorToPhrase(clearDisplayAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
@@ -87,15 +87,15 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     }
 
     @Override
-    public Void visitDropSensor(DropSensor<Void> dropSensor) {
+    public Void visitDropSensor(DropSensor dropSensor) {
         checkSensorPort(dropSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(dropSensor.getUserDefinedPort(), SC.DROP, dropSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
-        Sensor<Void> sensor = sensorGetSample.sensor;
+    public Void visitGetSampleSensor(GetSampleSensor sensorGetSample) {
+        Sensor sensor = sensorGetSample.sensor;
         requiredComponentVisited(sensorGetSample, sensor);
         // TODO remove once rfid library is supported for unowifirev2
         if ( sensor.getKind().hasName("RFID_SENSING") ) {
@@ -105,32 +105,32 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(gyroSensor.getUserDefinedPort(), SC.GYRO, gyroSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
+    public Void visitHumiditySensor(HumiditySensor humiditySensor) {
         checkSensorPort(humiditySensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(humiditySensor.getUserDefinedPort(), SC.HUMIDITY, humiditySensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(infraredSensor.getUserDefinedPort(), SC.INFRARED, infraredSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+    public Void visitKeysSensor(KeysSensor keysSensor) {
         checkSensorPort(keysSensor);
         return null;
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         if ( !lightAction.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
             optionalComponentVisited(lightAction.rgbLedColor);
             if ( !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
@@ -150,13 +150,13 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(lightSensor.getUserDefinedPort(), SC.LIGHT, lightSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         if ( lightStatusAction.getInfos().getErrorCount() == 0 ) {
             if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
                 addErrorToPhrase(lightStatusAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
@@ -166,7 +166,7 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     }
 
     @Override
-    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+    public Void visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
         if ( mathOnListFunct.param.get(0).toString().contains("ListCreate ") ) {
             addErrorToPhrase(mathOnListFunct, "BLOCK_USED_INCORRECTLY");
         }
@@ -174,62 +174,62 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     }
 
     @Override
-    public Void visitMoistureSensor(MoistureSensor<Void> moistureSensor) {
+    public Void visitMoistureSensor(MoistureSensor moistureSensor) {
         checkSensorPort(moistureSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(moistureSensor.getUserDefinedPort(), SC.MOISTURE, moistureSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitMotionSensor(MotionSensor<Void> motionSensor) {
+    public Void visitMotionSensor(MotionSensor motionSensor) {
         checkSensorPort(motionSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(motionSensor.getUserDefinedPort(), SC.MOTION, motionSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitNeuralNetworkAddRawData(NeuralNetworkAddRawData<Void> nn) {
+    public Void visitNeuralNetworkAddRawData(NeuralNetworkAddRawData nn) {
         requiredComponentVisited(nn, nn.rawData);
         return null;
     }
 
     @Override
-    public Void visitNeuralNetworkAddTrainingsData(NeuralNetworkAddTrainingsData<Void> nn) {
+    public Void visitNeuralNetworkAddTrainingsData(NeuralNetworkAddTrainingsData nn) {
         requiredComponentVisited(nn, nn.classNumber);
         return null;
     }
 
     @Override
-    public Void visitNeuralNetworkClassify(NeuralNetworkClassify<Void> nn) {
+    public Void visitNeuralNetworkClassify(NeuralNetworkClassify nn) {
         requiredComponentVisited(nn, nn.probabilities);
         return null;
     }
 
     @Override
-    public Void visitNeuralNetworkInitRawData(NeuralNetworkInitRawData<Void> nn) {
+    public Void visitNeuralNetworkInitRawData(NeuralNetworkInitRawData nn) {
         return null;
     }
 
     @Override
-    public Void visitNeuralNetworkSetup(NeuralNetworkSetup<Void> nn) {
+    public Void visitNeuralNetworkSetup(NeuralNetworkSetup nn) {
         requiredComponentVisited(nn, nn.numberOfClasses, nn.numberInputNeurons, nn.maxNumberOfNeurons);
         return null;
     }
 
     @Override
-    public Void visitNeuralNetworkTrain(NeuralNetworkTrain<Void> nn) {
+    public Void visitNeuralNetworkTrain(NeuralNetworkTrain nn) {
         return null;
     }
 
     @Override
-    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
+    public Void visitPinGetValueSensor(PinGetValueSensor pinGetValueSensor) {
         checkSensorPort(pinGetValueSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(pinGetValueSensor.getUserDefinedPort(), SC.PIN_VALUE, pinGetValueSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
+    public Void visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
         requiredComponentVisited(pinWriteValueAction, pinWriteValueAction.value);
         ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(pinWriteValueAction.port);
         if ( usedConfigurationBlock == null ) {
@@ -240,7 +240,7 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.BUZZER) ) {
             addErrorToPhrase(playNoteAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
@@ -248,14 +248,14 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     }
 
     @Override
-    public Void visitPulseSensor(PulseSensor<Void> pulseSensor) {
+    public Void visitPulseSensor(PulseSensor pulseSensor) {
         checkSensorPort(pulseSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(pulseSensor.getUserDefinedPort(), SC.PULSE, pulseSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitRelayAction(RelayAction<Void> relayAction) {
+    public Void visitRelayAction(RelayAction relayAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.RELAY) ) {
             addErrorToPhrase(relayAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
@@ -263,7 +263,7 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     }
 
     @Override
-    public Void visitRfidSensor(RfidSensor<Void> rfidSensor) {
+    public Void visitRfidSensor(RfidSensor rfidSensor) {
         if ( !this.robotConfiguration.getRobotName().equals("unowifirev2") ) { // TODO remove when rfid library is supported for unowifirev2
             checkSensorPort(rfidSensor);
         } else {
@@ -274,14 +274,14 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     }
 
     @Override
-    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+    public Void visitSerialWriteAction(SerialWriteAction serialWriteAction) {
         super.visitSerialWriteAction(serialWriteAction);
         usedHardwareBuilder.addUsedActor(new UsedActor(SC.SERIAL, SC.SERIAL));
         return null;
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+    public Void visitShowTextAction(ShowTextAction showTextAction) {
         requiredComponentVisited(showTextAction, showTextAction.msg, showTextAction.x, showTextAction.y);
         ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(showTextAction.port);
         if ( usedConfigurationBlock == null ) {
@@ -291,20 +291,20 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     }
 
     @Override
-    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+    public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
         checkSensorPort(temperatureSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(temperatureSensor.getUserDefinedPort(), SC.TEMPERATURE, temperatureSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(timerSensor.getUserDefinedPort(), SC.TIMER, timerSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         requiredComponentVisited(toneAction, toneAction.duration, toneAction.frequency);
         if ( !this.robotConfiguration.isComponentTypePresent(SC.BUZZER) ) {
             addErrorToPhrase(toneAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
@@ -313,19 +313,19 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(ultrasonicSensor.getUserDefinedPort(), SC.ULTRASONIC, ultrasonicSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
+    public Void visitVoltageSensor(VoltageSensor voltageSensor) {
         checkSensorPort(voltageSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(voltageSensor.getUserDefinedPort(), SC.VOLTAGE, voltageSensor.getMode()));
         return null;
     }
 
-    protected void checkSensorPort(ExternalSensor<Void> sensor) {
+    protected void checkSensorPort(ExternalSensor sensor) {
         ConfigurationComponent configurationComponent = this.robotConfiguration.optConfigurationComponent(sensor.getUserDefinedPort());
         if ( configurationComponent == null ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");

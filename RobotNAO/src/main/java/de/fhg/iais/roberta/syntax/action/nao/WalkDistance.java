@@ -13,13 +13,13 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(name = "WALK_DISTANCE", category = "ACTOR", blocklyNames = {"naoActions_walk"})
-public final class WalkDistance<V> extends Action<V> {
+public final class WalkDistance extends Action {
     @NepoField(name = "DIRECTION",value = BlocklyConstants.DIRECTION)
     public final DriveDirection walkDirection;
     @NepoValue(name = "POWER", type = BlocklyType.NUMBER_INT)
-    public final Expr<V> distanceToWalk;
+    public final Expr distanceToWalk;
 
-    public WalkDistance(BlocklyProperties properties, DriveDirection walkDirection, Expr<V> distanceToWalk) {
+    public WalkDistance(BlocklyProperties properties, DriveDirection walkDirection, Expr distanceToWalk) {
         super(properties);
         Assert.notNull(walkDirection, "Missing direction in WalkDistance block!");
         this.walkDirection = walkDirection;

@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "MOTOR_STOP_ACTION", category = "ACTOR", blocklyNames = {"makeblockActions_motor_stop", "sim_motor_stop", "mbedActions_motor_stop", "robActions_motor_stop"})
-public final class MotorStopAction<V> extends MoveAction<V> {
+public final class MotorStopAction extends MoveAction {
     public final IMotorStopMode mode;
 
     public MotorStopAction(String port, IMotorStopMode mode, BlocklyProperties properties) {
@@ -36,16 +36,16 @@ public final class MotorStopAction<V> extends MoveAction<V> {
         }
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.MOTORPORT);
         if ( fields.size() > 1 ) {
             String modeName = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
-            return new MotorStopAction<V>(Jaxb2Ast.sanitizePort(portName), factory.getMotorStopMode(modeName), Jaxb2Ast.extractBlocklyProperties(block));
+            return new MotorStopAction(Jaxb2Ast.sanitizePort(portName), factory.getMotorStopMode(modeName), Jaxb2Ast.extractBlocklyProperties(block));
 
         }
-        return new MotorStopAction<V>(Jaxb2Ast.sanitizePort(portName), null, Jaxb2Ast.extractBlocklyProperties(block));
+        return new MotorStopAction(Jaxb2Ast.sanitizePort(portName), null, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

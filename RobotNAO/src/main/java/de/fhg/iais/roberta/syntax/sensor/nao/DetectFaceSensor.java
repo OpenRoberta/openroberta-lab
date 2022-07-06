@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 @NepoExpr(name = "DETECT_FACE", category = "SENSOR", blocklyNames = {"robSensors_detectface_getSample"},
     sampleValues = {@F2M(field = "DETECTFACE_NAMEONE", mode = "NAMEONE")})
 @NepoExternalSensor
-public final class DetectFaceSensor<V> extends ExternalSensor<V> {
+public final class DetectFaceSensor extends ExternalSensor {
 
     public DetectFaceSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);

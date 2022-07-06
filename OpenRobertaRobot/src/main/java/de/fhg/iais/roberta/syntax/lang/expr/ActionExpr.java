@@ -11,10 +11,10 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
  * Wraps subclasses of the class {@link Action} so they can be used as {@link Expr} in expressions.
  */
 @NepoBasic(category = "EXPR", name = "ACTION_EXPR", blocklyNames = {})
-public final class ActionExpr<V> extends Expr<V> {
-    public final Action<V> action;
+public final class ActionExpr extends Expr {
+    public final Action action;
 
-    public ActionExpr(Action<V> action) {
+    public ActionExpr(Action action) {
         super(action.getProperty());
         Assert.isTrue(action.isReadOnly());
         this.action = action;

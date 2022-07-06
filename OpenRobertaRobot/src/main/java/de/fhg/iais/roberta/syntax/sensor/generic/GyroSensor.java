@@ -19,14 +19,14 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(sampleValues = {@F2M(field = "GYRO_TILTED", mode = "TILTED"), @F2M(field = "GYRO_Y", mode = "Y"), @F2M(field = "GYRO_RATE", mode = "RATE"), @F2M(field = "GYRO_Z", mode = "Z"), @F2M(field = "GYRO_X", mode = "X"), @F2M(field = "GYRO_ANGLE", mode = "ANGLE")}, name = "GYRO_SENSING", category = "SENSOR", blocklyNames = {"robSensors_gyro_getSample", "robSensors_gyro_reset", "mbedsensors_rotation_getsample"})
-public final class GyroSensor<V> extends ExternalSensor<V> {
+public final class GyroSensor extends ExternalSensor {
 
     public GyroSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);
         setReadOnly();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         ExternalSensorBean externalSensorBean;
         if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_GYRO_RESET) ) {
@@ -34,10 +34,10 @@ public final class GyroSensor<V> extends ExternalSensor<V> {
             String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
             externalSensorBean =
                 new ExternalSensorBean(Jaxb2Ast.sanitizePort(portName), factory.getMode("RESET"), Jaxb2Ast.sanitizeSlot(BlocklyConstants.NO_SLOT), null);
-            return new GyroSensor<>(Jaxb2Ast.extractBlocklyProperties(block), externalSensorBean);
+            return new GyroSensor(Jaxb2Ast.extractBlocklyProperties(block), externalSensorBean);
         } else {
             externalSensorBean = extractPortAndModeAndSlot(block, helper);
-            return new GyroSensor<>(Jaxb2Ast.extractBlocklyProperties(block), externalSensorBean);
+            return new GyroSensor(Jaxb2Ast.extractBlocklyProperties(block), externalSensorBean);
         }
     }
 

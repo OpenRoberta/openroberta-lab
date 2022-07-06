@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "RELAY_ACTION", category = "ACTOR", blocklyNames = {"robactions_set_relay"})
-public final class RelayAction<V> extends Action<V> {
+public final class RelayAction extends Action {
     public final String port;
     public final IRelayMode mode;
 
@@ -34,12 +34,12 @@ public final class RelayAction<V> extends Action<V> {
         return "RelayAction [" + this.port + ", " + this.mode + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.EMPTY_PORT);
         String mode = Jaxb2Ast.extractField(fields, BlocklyConstants.RELAYSTATE, BlocklyConstants.DEFAULT);
-        return new RelayAction<>(Jaxb2Ast.sanitizePort(port), factory.getRelayMode(mode), Jaxb2Ast.extractBlocklyProperties(block));
+        return new RelayAction(Jaxb2Ast.sanitizePort(port), factory.getRelayMode(mode), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

@@ -25,7 +25,7 @@ public class MicrobitValidatorAndCollectorWorker extends MbedValidatorAndCollect
     }
 
     @Override
-    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         return new MicrobitValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 }

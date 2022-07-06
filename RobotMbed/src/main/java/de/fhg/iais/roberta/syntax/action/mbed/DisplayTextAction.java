@@ -21,11 +21,11 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "DISPLAY_TEXT_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_display_text"})
-public final class DisplayTextAction<V> extends Action<V> {
+public final class DisplayTextAction extends Action {
     public final DisplayTextMode mode;
-    public final Expr<V> msg;
+    public final Expr msg;
 
-    public DisplayTextAction(BlocklyProperties properties, DisplayTextMode mode, Expr<V> msg) {
+    public DisplayTextAction(BlocklyProperties properties, DisplayTextMode mode, Expr msg) {
         super(properties);
         Assert.isTrue(msg != null && mode != null);
         this.msg = msg;
@@ -38,17 +38,17 @@ public final class DisplayTextAction<V> extends Action<V> {
         return "DisplayTextAction [" + this.mode + ", " + this.msg + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
-        Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.OUT, BlocklyType.STRING));
+        Phrase msg = helper.extractValue(values, new ExprParam(BlocklyConstants.OUT, BlocklyType.STRING));
         String displaMode = "";
         try {
             displaMode = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
         } catch ( DbcException e ) {
             displaMode = "TEXT";
         }
-        return new DisplayTextAction<>(Jaxb2Ast.extractBlocklyProperties(block), DisplayTextMode.get(displaMode), Jaxb2Ast.convertPhraseToExpr(msg));
+        return new DisplayTextAction(Jaxb2Ast.extractBlocklyProperties(block), DisplayTextMode.get(displaMode), Jaxb2Ast.convertPhraseToExpr(msg));
     }
 
     @Override

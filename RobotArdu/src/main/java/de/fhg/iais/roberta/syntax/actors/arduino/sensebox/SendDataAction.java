@@ -21,12 +21,12 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "DATA_SEND_ACTION", category = "ACTOR", blocklyNames = {"robActions_sendData"})
-public final class SendDataAction<V> extends Action<V> {
+public final class SendDataAction extends Action {
 
-    public final List<Pair<String, Expr<V>>> id2Phenomena;
+    public final List<Pair<String, Expr>> id2Phenomena;
     public final String destination;
 
-    public SendDataAction(String destination, List<Pair<String, Expr<V>>> id2Phenomena, BlocklyProperties properties) {
+    public SendDataAction(String destination, List<Pair<String, Expr>> id2Phenomena, BlocklyProperties properties) {
         super(properties);
         this.id2Phenomena = id2Phenomena;
         this.destination = destination;
@@ -38,15 +38,15 @@ public final class SendDataAction<V> extends Action<V> {
         return "DataSendAction []";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
-        ExprList<V> exprList = helper.blockToExprList(block, BlocklyType.NUMBER);
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+        ExprList exprList = helper.blockToExprList(block, BlocklyType.NUMBER);
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 999);
-        List<Pair<String, Expr<V>>> id2Phenomena = new ArrayList<>();
+        List<Pair<String, Expr>> id2Phenomena = new ArrayList<>();
         String destination = fields.get(0).getValue();
         for ( int i = 0; i < exprList.get().size(); i++ ) {
             id2Phenomena.add(Pair.of(fields.get(i + 1).getValue(), exprList.get().get(i)));
         }
-        return new SendDataAction<>(destination, id2Phenomena, Jaxb2Ast.extractBlocklyProperties(block));
+        return new SendDataAction(destination, id2Phenomena, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override
@@ -59,7 +59,7 @@ public final class SendDataAction<V> extends Action<V> {
         jaxbDestination.setMutation(mutation);
         Ast2Jaxb.addField(jaxbDestination, "DESTINATION", this.destination);
         int i = 0;
-        for ( Pair<String, Expr<V>> kv : this.id2Phenomena ) {
+        for ( Pair<String, Expr> kv : this.id2Phenomena ) {
             Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.PHEN + i, kv.getFirst());
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ADD + i, kv.getSecond());
             i++;

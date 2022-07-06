@@ -22,11 +22,11 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br/>
  */
 @NepoBasic(name = "NAO_FACE_INFORMATION", category = "SENSOR", blocklyNames = {"naoSensors_getFaceInformation"})
-public final class DetectedFaceInformation<V> extends Sensor<V> {
+public final class DetectedFaceInformation extends Sensor {
 
-    public final Expr<V> faceName;
+    public final Expr faceName;
 
-    public DetectedFaceInformation(Expr<V> faceName, BlocklyProperties properties) {
+    public DetectedFaceInformation(Expr faceName, BlocklyProperties properties) {
         super(properties);
         this.faceName = faceName;
         setReadOnly();
@@ -37,10 +37,10 @@ public final class DetectedFaceInformation<V> extends Sensor<V> {
         return "DetectedFaceInformation [" + this.faceName + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
-        Phrase<V> faceName = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
-        return new DetectedFaceInformation<>(Jaxb2Ast.convertPhraseToExpr(faceName), Jaxb2Ast.extractBlocklyProperties(block));
+        Phrase faceName = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
+        return new DetectedFaceInformation(Jaxb2Ast.convertPhraseToExpr(faceName), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

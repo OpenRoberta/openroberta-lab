@@ -20,6 +20,6 @@ public class Mbot2ValidatorAndCollectorVisitorTest {
 
     @Test
     public void driveActionTest(){
-       // List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, DEFAULT_XML);
+       // List<List<Phrase>> phrases = UnitTestHelper.getProgramAst(testFactory, DEFAULT_XML);
     }
 }

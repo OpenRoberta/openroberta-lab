@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 @NepoExpr(category = "EXPR", blocklyNames = {"math_constant"}, name = "MATH_CONST", blocklyType = BlocklyType.NUMBER)
-public final class MathConst<V> extends Expr<V> {
+public final class MathConst extends Expr {
     @NepoField(name = "CONSTANT")
     public final Const mathConst;
 

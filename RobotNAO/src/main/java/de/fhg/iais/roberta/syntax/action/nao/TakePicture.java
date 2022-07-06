@@ -20,12 +20,12 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "TAKE_PICTURE", category = "ACTOR", blocklyNames = {"naoActions_takePicture"})
-public final class TakePicture<V> extends Action<V> {
+public final class TakePicture extends Action {
 
     public final Camera camera;
-    public final Expr<V> pictureName;
+    public final Expr pictureName;
 
-    public TakePicture(Camera camera, Expr<V> pictureName, BlocklyProperties properties) {
+    public TakePicture(Camera camera, Expr pictureName, BlocklyProperties properties) {
         super(properties);
         Assert.notNull(camera, "Missing camera in TakePicture block!");
         Assert.isTrue(pictureName != null);
@@ -39,14 +39,14 @@ public final class TakePicture<V> extends Action<V> {
         return "TakePicture [" + this.camera + ", " + this.pictureName + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
 
         String camera = Jaxb2Ast.extractField(fields, BlocklyConstants.CAMERA);
-        Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.FILENAME, BlocklyType.NUMBER_INT));
+        Phrase msg = helper.extractValue(values, new ExprParam(BlocklyConstants.FILENAME, BlocklyType.NUMBER_INT));
 
-        return new TakePicture<>(Camera.get(camera), Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlocklyProperties(block));
+        return new TakePicture(Camera.get(camera), Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

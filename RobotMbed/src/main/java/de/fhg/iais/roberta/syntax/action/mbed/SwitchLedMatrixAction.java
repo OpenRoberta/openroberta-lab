@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.SC;
 
 @NepoBasic(name = "SWITCH_LED_MATRIX", category = "ACTOR", blocklyNames = {"mbedActions_switch_led_matrix"})
-public final class SwitchLedMatrixAction<V> extends Action<V> {
+public final class SwitchLedMatrixAction extends Action {
     public final boolean activated;
 
     public SwitchLedMatrixAction(BlocklyProperties properties, boolean activated) {
@@ -29,11 +29,11 @@ public final class SwitchLedMatrixAction<V> extends Action<V> {
         return "SwitchLedMatrixAction [" + this.activated + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
 
         boolean activated = Jaxb2Ast.extractField(fields, BlocklyConstants.STATE).equals("ON");
-        return new SwitchLedMatrixAction<>(Jaxb2Ast.extractBlocklyProperties(block), activated);
+        return new SwitchLedMatrixAction(Jaxb2Ast.extractBlocklyProperties(block), activated);
     }
 
     @Override

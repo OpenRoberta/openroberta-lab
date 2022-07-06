@@ -8,20 +8,20 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "NEURAL_NETWORK_SETUP", category = "STMT", blocklyNames = {"robActions_aifes_setupneuralnet"})
-public final class NeuralNetworkSetup<V> extends Stmt<V> {
+public final class NeuralNetworkSetup extends Stmt {
     @NepoValue(name = "NN_NUMBER_OF_CLASSES", type = BlocklyType.NUMBER)
-    public Expr<V> numberOfClasses;
+    public Expr numberOfClasses;
     @NepoValue(name = "NN_NUMBER_INPUT_NEURONS", type = BlocklyType.NUMBER)
-    public Expr<V> numberInputNeurons;
+    public Expr numberInputNeurons;
     @NepoValue(name = "NN_MAX_NUMBER_OF_NEURONS", type = BlocklyType.NUMBER)
-    public Expr<V> maxNumberOfNeurons;
+    public Expr maxNumberOfNeurons;
 
     public NeuralNetworkSetup(
         BlocklyProperties properties,
         
-        Expr<V> numberOfClasses,
-        Expr<V> numberInputNeurons,
-        Expr<V> maxNumberOfNeurons) {
+        Expr numberOfClasses,
+        Expr numberInputNeurons,
+        Expr maxNumberOfNeurons) {
         super(properties);
         this.numberOfClasses = numberOfClasses;
         this.numberInputNeurons = numberInputNeurons;

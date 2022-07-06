@@ -25,7 +25,7 @@ import de.fhg.iais.roberta.util.syntax.SC;
  * if possible
  * TODO: this class should be made abstract with astToBlock as the abstract method and ConfigurationComponentLeaf as the new normal configurationComponent
  */
-public class ConfigurationComponent extends Phrase<Void> {
+public class ConfigurationComponent extends Phrase {
     public final String componentType;
     public final boolean isActor; // TODO: for the new configuration there is currently no distinction between actors and sensors, should there be one?
     public final String userDefinedPortName;

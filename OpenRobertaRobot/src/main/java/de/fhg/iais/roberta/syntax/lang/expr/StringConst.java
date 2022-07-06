@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoExpr(category = "EXPR", blocklyNames = {"text"}, name = "STRING_CONST", blocklyType = BlocklyType.STRING)
-public final class StringConst<V> extends Expr<V> {
+public final class StringConst extends Expr {
     @NepoField(name = BlocklyConstants.TEXT)
     public final String value;
 

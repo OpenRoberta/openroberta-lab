@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 @NepoExpr(name = "KEYS_SENSING", category = "SENSOR", blocklyNames = {"robSensors_key_getSample"},
     sampleValues = {@F2M(field = "PLAYKEY_PRESSED", mode = "PRESSED"), @F2M(field = "KEY_PRESSED", mode = "PRESSED"), @F2M(field = "RECKEY_PRESSED", mode = "PRESSED")})
 @NepoExternalSensor()
-public final class KeysSensor<V> extends ExternalSensor<V> {
+public final class KeysSensor extends ExternalSensor {
 
     public KeysSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);

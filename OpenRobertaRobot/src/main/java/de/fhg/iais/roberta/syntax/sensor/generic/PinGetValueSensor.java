@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
         @F2M(field = "PIN_ANALOG", mode = "ANALOG"), @F2M(field = "PIN_PULSELOW", mode = "PULSELOW"), @F2M(field = "PIN_DIGITAL", mode = "DIGITAL"),
         @F2M(field = "OUT_ANALOG", mode = "ANALOG")})
 @NepoExternalSensor()
-public final class PinGetValueSensor<V> extends ExternalSensor<V> {
+public final class PinGetValueSensor extends ExternalSensor {
 
     public PinGetValueSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);

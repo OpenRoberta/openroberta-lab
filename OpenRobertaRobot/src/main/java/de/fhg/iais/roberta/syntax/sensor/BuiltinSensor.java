@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.sensor;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
-public abstract class BuiltinSensor<V> extends Sensor<V> {
+public abstract class BuiltinSensor extends Sensor {
 
     /**
      * This constructor expects no mode, port and slot. Used for internlal sensors, which don't need such things.

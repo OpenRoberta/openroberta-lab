@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_motor_getPower"}, name = "MOTOR_GET_POWER_ACTION")
-public final class MotorGetPowerAction<V> extends MoveAction<V> {
+public final class MotorGetPowerAction extends MoveAction {
     @NepoField(name = BlocklyConstants.MOTORPORT)
     public final String port;
 

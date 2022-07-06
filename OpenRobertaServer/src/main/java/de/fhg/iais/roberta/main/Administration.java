@@ -324,7 +324,7 @@ public class Administration {
     @SuppressWarnings("unused")
     private String xml2Ast2xml(String updatedProgram) throws Exception, JAXBException {
         BlockSet program = JaxbHelper.xml2BlockSet(updatedProgram);
-        Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst(null);
+        Jaxb2ProgramAst transformer = new Jaxb2ProgramAst(null);
         BlockSet blockSet = astToJaxb(transformer.blocks2Ast(program).getTree());
         return jaxbToXml(blockSet);
     }
@@ -362,16 +362,16 @@ public class Administration {
         return source.replaceAll(oldWord, newWord);
     }
 
-    private BlockSet astToJaxb(List<List<Phrase<Void>>> astProgram) {
+    private BlockSet astToJaxb(List<List<Phrase>> astProgram) {
         BlockSet blockSet = new BlockSet();
 
         Instance instance = new Instance();
-        for ( List<Phrase<Void>> tree : astProgram ) {
-            for ( Phrase<Void> phrase : tree ) {
+        for ( List<Phrase> tree : astProgram ) {
+            for ( Phrase phrase : tree ) {
                 if ( phrase.getKind().hasName("LOCATION") ) {
                     blockSet.getInstance().add(instance);
-                    instance.setX(((Location<Void>) phrase).x);
-                    instance.setY(((Location<Void>) phrase).y);
+                    instance.setX(((Location) phrase).x);
+                    instance.setY(((Location) phrase).y);
                 }
                 instance.getBlock().add(phrase.astToBlock());
             }

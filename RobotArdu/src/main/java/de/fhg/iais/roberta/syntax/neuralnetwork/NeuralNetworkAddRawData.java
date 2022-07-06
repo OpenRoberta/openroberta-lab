@@ -8,11 +8,11 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "NEURAL_NETWORK_ADD_RAWDATA", category = "STMT", blocklyNames = {"robActions_aifes_addrawdata"})
-public final class NeuralNetworkAddRawData<V> extends Stmt<V> {
+public final class NeuralNetworkAddRawData extends Stmt {
     @NepoValue(name = "NN_RAW_DATA", type = BlocklyType.CAPTURED_TYPE)
-    public Expr<V> rawData;
+    public Expr rawData;
 
-    public NeuralNetworkAddRawData(BlocklyProperties properties, Expr<V> rawData) {
+    public NeuralNetworkAddRawData(BlocklyProperties properties, Expr rawData) {
         super(properties);
         this.rawData = rawData;
         setReadOnly();

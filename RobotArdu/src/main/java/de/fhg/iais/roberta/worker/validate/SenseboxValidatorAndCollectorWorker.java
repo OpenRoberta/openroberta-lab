@@ -16,7 +16,7 @@ public class SenseboxValidatorAndCollectorWorker extends ArduinoValidatorAndColl
     }
 
     @Override
-    protected ArduinoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    protected ArduinoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         return new SenseboxValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, project.getSSID(), project.getPassword());
     }
 }

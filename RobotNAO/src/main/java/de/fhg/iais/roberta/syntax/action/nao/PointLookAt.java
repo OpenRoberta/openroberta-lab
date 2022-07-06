@@ -20,22 +20,22 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "POINT_LOOK_AT", category = "ACTOR", blocklyNames = {"naoActions_pointLookAt"})
-public final class PointLookAt<V> extends Action<V> {
+public final class PointLookAt extends Action {
 
     public final Frame frame;
     public final PointLook pointLook;
-    public final Expr<V> pointX;
-    public final Expr<V> pointY;
-    public final Expr<V> pointZ;
-    public final Expr<V> speed;
+    public final Expr pointX;
+    public final Expr pointY;
+    public final Expr pointZ;
+    public final Expr speed;
 
     public PointLookAt(
         Frame frame,
         PointLook pointLook,
-        Expr<V> pointX,
-        Expr<V> pointY,
-        Expr<V> pointZ,
-        Expr<V> speed,
+        Expr pointX,
+        Expr pointY,
+        Expr pointZ,
+        Expr speed,
         BlocklyProperties properties) {
         super(properties);
         //Assert.notNull(frame, "Missing frame in PointLookAt block!");
@@ -54,18 +54,18 @@ public final class PointLookAt<V> extends Action<V> {
         return "PointLookAt [" + this.frame + ", " + this.pointLook + ", " + this.pointX + ", " + this.pointY + ", " + this.pointZ + ", " + this.speed + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 4);
 
         String pointLook = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
         String frame = Jaxb2Ast.extractField(fields, BlocklyConstants.DIRECTION);
-        Phrase<V> pointX = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
-        Phrase<V> pointY = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
-        Phrase<V> pointZ = helper.extractValue(values, new ExprParam(BlocklyConstants.Z, BlocklyType.NUMBER_INT));
-        Phrase<V> speed = helper.extractValue(values, new ExprParam(BlocklyConstants.SPEED, BlocklyType.NUMBER_INT));
+        Phrase pointX = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
+        Phrase pointY = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
+        Phrase pointZ = helper.extractValue(values, new ExprParam(BlocklyConstants.Z, BlocklyType.NUMBER_INT));
+        Phrase speed = helper.extractValue(values, new ExprParam(BlocklyConstants.SPEED, BlocklyType.NUMBER_INT));
 
-        return new PointLookAt<V>(Frame.get(frame), PointLook.get(pointLook), Jaxb2Ast.convertPhraseToExpr(pointX), Jaxb2Ast.convertPhraseToExpr(pointY), Jaxb2Ast.convertPhraseToExpr(pointZ), Jaxb2Ast.convertPhraseToExpr(speed), Jaxb2Ast.extractBlocklyProperties(block));
+        return new PointLookAt(Frame.get(frame), PointLook.get(pointLook), Jaxb2Ast.convertPhraseToExpr(pointX), Jaxb2Ast.convertPhraseToExpr(pointY), Jaxb2Ast.convertPhraseToExpr(pointZ), Jaxb2Ast.convertPhraseToExpr(speed), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

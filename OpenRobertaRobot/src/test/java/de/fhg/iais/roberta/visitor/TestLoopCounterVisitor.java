@@ -22,83 +22,83 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 
 public class TestLoopCounterVisitor extends CommonNepoValidatorAndCollectorVisitor {
-    public TestLoopCounterVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) //
+    public TestLoopCounterVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) //
     {
         super(robotConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitActionExpr(ActionExpr<Void> actionExpr) {
+    public Void visitActionExpr(ActionExpr actionExpr) {
         return super.visitActionExpr(actionExpr);
     }
 
     @Override
-    public Void visitActionStmt(ActionStmt<Void> actionStmt) {
+    public Void visitActionStmt(ActionStmt actionStmt) {
         return super.visitActionStmt(actionStmt);
     }
 
     @Override
-    public Void visitActivityTask(ActivityTask<Void> activityTask) {
+    public Void visitActivityTask(ActivityTask activityTask) {
         return super.visitActivityTask(activityTask);
     }
 
     @Override
-    public Void visitEvalExpr(EvalExpr<Void> evalExpr) {
+    public Void visitEvalExpr(EvalExpr evalExpr) {
         return super.visitEvalExpr(evalExpr);
     }
 
     @Override
-    public Void visitExprStmt(ExprStmt<Void> exprStmt) {
+    public Void visitExprStmt(ExprStmt exprStmt) {
         return super.visitExprStmt(exprStmt);
     }
 
     @Override
-    public Void visitFunctionExpr(FunctionExpr<Void> functionExpr) {
+    public Void visitFunctionExpr(FunctionExpr functionExpr) {
         return super.visitFunctionExpr(functionExpr);
     }
 
     @Override
-    public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
+    public Void visitFunctionStmt(FunctionStmt functionStmt) {
         return super.visitFunctionStmt(functionStmt);
     }
 
     @Override
-    public Void visitLocation(Location<Void> location) {
+    public Void visitLocation(Location location) {
         return super.visitLocation(location);
     }
 
     @Override
-    public Void visitMethodExpr(MethodExpr<Void> methodExpr) {
+    public Void visitMethodExpr(MethodExpr methodExpr) {
         return super.visitMethodExpr(methodExpr);
     }
 
     @Override
-    public Void visitSensorExpr(SensorExpr<Void> sensorExpr) {
+    public Void visitSensorExpr(SensorExpr sensorExpr) {
         return super.visitSensorExpr(sensorExpr);
     }
 
     @Override
-    public Void visitSensorStmt(SensorStmt<Void> sensorStmt) {
+    public Void visitSensorStmt(SensorStmt sensorStmt) {
         return super.visitSensorStmt(sensorStmt);
     }
 
     @Override
-    public Void visitShadowExpr(ShadowExpr<Void> shadowExpr) {
+    public Void visitShadowExpr(ShadowExpr shadowExpr) {
         return super.visitShadowExpr(shadowExpr);
     }
 
     @Override
-    public Void visitStartActivityTask(StartActivityTask<Void> startActivityTask) {
+    public Void visitStartActivityTask(StartActivityTask startActivityTask) {
         return super.visitStartActivityTask(startActivityTask);
     }
 
     @Override
-    public Void visitStmtExpr(StmtExpr<Void> stmtExpr) {
+    public Void visitStmtExpr(StmtExpr stmtExpr) {
         return super.visitStmtExpr(stmtExpr);
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         return null;
     }
 }

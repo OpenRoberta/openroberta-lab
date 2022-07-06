@@ -14,22 +14,22 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoBasic(name = "NN_STEP_STMT", category = "STMT", blocklyNames = {"robactions_nnstep"})
-public final class NNStepStmt<V> extends Stmt<V> {
-    public final StmtList<V> ioNeurons;
+public final class NNStepStmt extends Stmt {
+    public final StmtList ioNeurons;
 
-    public NNStepStmt(BlocklyProperties properties, StmtList<V> ioNeurons) {
+    public NNStepStmt(BlocklyProperties properties, StmtList ioNeurons) {
         super(properties);
         this.ioNeurons = ioNeurons;
         setReadOnly();
     }
 
-    public StmtList<V> getIoNeurons() {
+    public StmtList getIoNeurons() {
         return this.ioNeurons;
     }
 
-    public List<Stmt<V>> getInputNeurons() {
-        final List<Stmt<V>> inputNeurons = new ArrayList<>();
-        for ( Stmt<V> ioNeuron : ioNeurons.get() ) {
+    public List<Stmt> getInputNeurons() {
+        final List<Stmt> inputNeurons = new ArrayList<>();
+        for ( Stmt ioNeuron : ioNeurons.get() ) {
             if ( ioNeuron.hasName("NN_INPUT_NEURON_STMT") ) {
                 inputNeurons.add(ioNeuron);
             }
@@ -40,9 +40,9 @@ public final class NNStepStmt<V> extends Stmt<V> {
     /**
      * @return the output neuron statements
      */
-    public List<Stmt<V>> getOutputNeurons() {
-        final List<Stmt<V>> outputNeurons = new ArrayList<>();
-        for ( Stmt<V> ioNeuron : ioNeurons.get() ) {
+    public List<Stmt> getOutputNeurons() {
+        final List<Stmt> outputNeurons = new ArrayList<>();
+        for ( Stmt ioNeuron : ioNeurons.get() ) {
             if ( ioNeuron.hasName("NN_OUTPUT_NEURON_STMT") || ioNeuron.hasName("NN_OUTPUT_NEURON_WO_VAR_STMT") ) {
                 outputNeurons.add(ioNeuron);
             }
@@ -55,12 +55,12 @@ public final class NNStepStmt<V> extends Stmt<V> {
         return "nnStep()";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         helper.getDropdownFactory();
         final List<Statement> ioNeuronsWrapped = block.getStatement();
         final Data netDefinition = block.getData();
-        final StmtList<V> ioNeurons = helper.extractStatement(ioNeuronsWrapped, "IONEURON");
-        return new NNStepStmt<V>(Jaxb2Ast.extractBlocklyProperties(block), ioNeurons);
+        final StmtList ioNeurons = helper.extractStatement(ioNeuronsWrapped, "IONEURON");
+        return new NNStepStmt(Jaxb2Ast.extractBlocklyProperties(block), ioNeurons);
     }
 
     @Override

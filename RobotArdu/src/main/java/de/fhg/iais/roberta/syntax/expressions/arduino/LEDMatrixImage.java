@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
  * To create an instance from this class use the method {@link #make(Expr, Expr, Expr, BlocklyProperties, BlocklyComment)}.<br>
  */
 @NepoBasic(name = "LED_MATRIX_IMAGE", category = "EXPR", blocklyNames = {"mBotImage_image"})
-public final class LEDMatrixImage<V> extends Expr<V> {
+public final class LEDMatrixImage extends Expr {
     public final static int X = 16;
     public final static int Y = 8;
     public final String[][] image;
@@ -68,7 +68,7 @@ public final class LEDMatrixImage<V> extends Expr<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) (X * Y));
         String[][] image = new String[X][Y];
         for ( int i = 0; i < X; i++ ) {
@@ -76,7 +76,7 @@ public final class LEDMatrixImage<V> extends Expr<V> {
                 image[i][j] = Jaxb2Ast.extractField(fields, "P" + i + (Y - 1 - j));
             }
         }
-        return new LEDMatrixImage<>(image, Jaxb2Ast.extractBlocklyProperties(block));
+        return new LEDMatrixImage(image, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

@@ -63,14 +63,14 @@ public class NaoSimValidatorAndCollectorVisitor extends NaoValidatorAndCollector
     public static final List<String> VALID_TOUCH_SENSOR_PORTS = Collections.singletonList("BUMPER");
     public static final List<String> VALID_TOUCH_SENSOR_SLOTS = Arrays.asList("LEFT", "RIGHT");
 
-    public NaoSimValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public NaoSimValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(robotConfiguration, beanBuilders);
         usedMethodBuilder.addUsedMethod(NaoSimMethods.WAIT_TIME);
         usedMethodBuilder.addUsedMethod(NaoSimMethods.RESET_POSE);
     }
 
     @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+    public Void visitTouchSensor(TouchSensor touchSensor) {
         boolean isPortValid = VALID_TOUCH_SENSOR_PORTS.stream().anyMatch(str -> str.equalsIgnoreCase(touchSensor.getUserDefinedPort()));
         boolean isSlotValid = VALID_TOUCH_SENSOR_SLOTS.stream().anyMatch(str -> str.equalsIgnoreCase(touchSensor.getSlot()));
 
@@ -83,13 +83,13 @@ public class NaoSimValidatorAndCollectorVisitor extends NaoValidatorAndCollector
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.GET_ULTRASONIC);
         return super.visitUltrasonicSensor(ultrasonicSensor);
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
         switch ( gyroSensor.getSlot().toUpperCase() ) {
             case "X":
                 usedMethodBuilder.addUsedMethod(NaoSimMethods.GET_GYRO_X);
@@ -102,7 +102,7 @@ public class NaoSimValidatorAndCollectorVisitor extends NaoValidatorAndCollector
     }
 
     @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
         switch ( accelerometerSensor.getUserDefinedPort().toUpperCase() ) {
             case "X":
                 usedMethodBuilder.addUsedMethod(NaoSimMethods.GET_ACCELEROMETER_X);
@@ -118,32 +118,32 @@ public class NaoSimValidatorAndCollectorVisitor extends NaoValidatorAndCollector
     }
 
     @Override
-    public Void visitSetIntensity(SetIntensity<Void> setIntensity) {
+    public Void visitSetIntensity(SetIntensity setIntensity) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.SET_LED);
         usedMethodBuilder.addUsedMethod(NaoSimMethods.SET_INTENSITY);
         return super.visitSetIntensity(setIntensity);
     }
 
     @Override
-    public Void visitFsrSensor(FsrSensor<Void> forceSensor) {
+    public Void visitFsrSensor(FsrSensor forceSensor) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.GET_FORCE);
         return super.visitFsrSensor(forceSensor);
     }
 
     @Override
-    public Void visitHand(Hand<Void> hand) {
+    public Void visitHand(Hand hand) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.MOVE_HAND_JOINT);
         return super.visitHand(hand);
     }
 
     @Override
-    public Void visitMoveJoint(MoveJoint<Void> moveJoint) {
+    public Void visitMoveJoint(MoveJoint moveJoint) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.MOVE_JOINT);
         return super.visitMoveJoint(moveJoint);
     }
 
     @Override
-    public Void visitWalkDistance(WalkDistance<Void> walkDistance) {
+    public Void visitWalkDistance(WalkDistance walkDistance) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.WALK_DISTANCE);
         usedMethodBuilder.addUsedMethod(NaoSimMethods.CALC_DIST);
         usedMethodBuilder.addUsedMethod(NaoSimMethods.GET_FORCE);
@@ -151,43 +151,43 @@ public class NaoSimValidatorAndCollectorVisitor extends NaoValidatorAndCollector
     }
 
     @Override
-    public Void visitTurnDegrees(TurnDegrees<Void> turnDegrees) {
+    public Void visitTurnDegrees(TurnDegrees turnDegrees) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.TURN);
         return super.visitTurnDegrees(turnDegrees);
     }
 
     @Override
-    public Void visitSetLeds(SetLeds<Void> setLeds) {
+    public Void visitSetLeds(SetLeds setLeds) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.SET_LED);
         return super.visitSetLeds(setLeds);
     }
 
     @Override
-    public Void visitLedOff(LedOff<Void> ledOff) {
+    public Void visitLedOff(LedOff ledOff) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.SET_LED);
         return super.visitLedOff(ledOff);
     }
 
     @Override
-    public Void visitLedReset(LedReset<Void> ledReset) {
+    public Void visitLedReset(LedReset ledReset) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.LED_OFF);
         return super.visitLedReset(ledReset);
     }
 
     @Override
-    public Void visitWalkAsync(WalkAsync<Void> walkAsync) {
+    public Void visitWalkAsync(WalkAsync walkAsync) {
         addWarningToPhrase(walkAsync, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitWalkAsync(walkAsync);
     }
 
     @Override
-    public Void visitSetMode(SetMode<Void> setMode) {
+    public Void visitSetMode(SetMode setMode) {
         addWarningToPhrase(setMode, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitSetMode(setMode);
     }
 
     @Override
-    public Void visitApplyPosture(ApplyPosture<Void> applyPosture) {
+    public Void visitApplyPosture(ApplyPosture applyPosture) {
         switch ( applyPosture.posture ) {
             case SITRELAX:
             case SIT:
@@ -204,31 +204,31 @@ public class NaoSimValidatorAndCollectorVisitor extends NaoValidatorAndCollector
     }
 
     @Override
-    public Void visitSetStiffness(SetStiffness<Void> setStiffness) {
+    public Void visitSetStiffness(SetStiffness setStiffness) {
         addWarningToPhrase(setStiffness, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitSetStiffness(setStiffness);
     }
 
     @Override
-    public Void visitAutonomous(Autonomous<Void> autonomous) {
+    public Void visitAutonomous(Autonomous autonomous) {
         addWarningToPhrase(autonomous, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitAutonomous(autonomous);
     }
 
     @Override
-    public Void visitWalkTo(WalkTo<Void> walkTo) {
+    public Void visitWalkTo(WalkTo walkTo) {
         addWarningToPhrase(walkTo, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitWalkTo(walkTo);
     }
 
     @Override
-    public Void visitStop(Stop<Void> stop) {
+    public Void visitStop(Stop stop) {
         addWarningToPhrase(stop, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitStop(stop);
     }
 
     @Override
-    public Void visitAnimation(Animation<Void> animation) {
+    public Void visitAnimation(Animation animation) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.ANIMATION);
         if ( animation.move == Move.BLINK ) {
             usedMethodBuilder.addUsedMethod(NaoSimMethods.SET_LED);
@@ -237,150 +237,150 @@ public class NaoSimValidatorAndCollectorVisitor extends NaoValidatorAndCollector
     }
 
     @Override
-    public Void visitPointLookAt(PointLookAt<Void> pointLookAt) {
+    public Void visitPointLookAt(PointLookAt pointLookAt) {
         addWarningToPhrase(pointLookAt, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitPointLookAt(pointLookAt);
     }
 
     @Override
-    public Void visitSetVolume(SetVolume<Void> setVolume) {
+    public Void visitSetVolume(SetVolume setVolume) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.SET_VOLUME);
         return super.visitSetVolume(setVolume);
     }
 
     @Override
-    public Void visitGetVolume(GetVolume<Void> getVolume) {
+    public Void visitGetVolume(GetVolume getVolume) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.GET_VOLUME);
         return super.visitGetVolume(getVolume);
     }
 
     @Override
-    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+    public Void visitSetLanguageAction(SetLanguageAction setLanguageAction) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.SET_LANGUAGE);
         return super.visitSetLanguageAction(setLanguageAction);
     }
 
     @Override
-    public Void visitGetLanguage(GetLanguage<Void> getLanguage) {
+    public Void visitGetLanguage(GetLanguage getLanguage) {
         addErrorToPhrase(getLanguage, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitGetLanguage(getLanguage);
     }
 
     @Override
-    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
+    public Void visitSayTextAction(SayTextAction sayTextAction) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.SAY_TEXT);
         return super.visitSayTextAction(sayTextAction);
     }
 
-    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction<Void> sayTextAction) {
+    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction sayTextAction) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.SAY_TEXT);
         return super.visitSayTextWithSpeedAndPitchAction(sayTextAction);
     }
 
     @Override
-    public Void visitPlayFile(PlayFile<Void> playFile) {
+    public Void visitPlayFile(PlayFile playFile) {
         addWarningToPhrase(playFile, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitPlayFile(playFile);
     }
 
     @Override
-    public Void visitRandomEyesDuration(RandomEyesDuration<Void> randomEyesDuration) {
+    public Void visitRandomEyesDuration(RandomEyesDuration randomEyesDuration) {
         addWarningToPhrase(randomEyesDuration, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitRandomEyesDuration(randomEyesDuration);
     }
 
     @Override
-    public Void visitRastaDuration(RastaDuration<Void> rastaDuration) {
+    public Void visitRastaDuration(RastaDuration rastaDuration) {
         addWarningToPhrase(rastaDuration, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitRastaDuration(rastaDuration);
     }
 
     @Override
-    public Void visitDetectMarkSensor(DetectMarkSensor<Void> detectedMark) {
+    public Void visitDetectMarkSensor(DetectMarkSensor detectedMark) {
         addWarningToPhrase(detectedMark, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitDetectMarkSensor(detectedMark);
     }
 
     @Override
-    public Void visitTakePicture(TakePicture<Void> takePicture) {
+    public Void visitTakePicture(TakePicture takePicture) {
         addWarningToPhrase(takePicture, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitTakePicture(takePicture);
     }
 
     @Override
-    public Void visitRecordVideo(RecordVideo<Void> recordVideo) {
+    public Void visitRecordVideo(RecordVideo recordVideo) {
         addWarningToPhrase(recordVideo, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitRecordVideo(recordVideo);
     }
 
     @Override
-    public Void visitLearnFace(LearnFace<Void> learnFace) {
+    public Void visitLearnFace(LearnFace learnFace) {
         addErrorToPhrase(learnFace, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitLearnFace(learnFace);
     }
 
     @Override
-    public Void visitForgetFace(ForgetFace<Void> forgetFace) {
+    public Void visitForgetFace(ForgetFace forgetFace) {
         addWarningToPhrase(forgetFace, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitForgetFace(forgetFace);
     }
 
     @Override
-    public Void visitDetectFaceSensor(DetectFaceSensor<Void> detectFace) {
+    public Void visitDetectFaceSensor(DetectFaceSensor detectFace) {
         addErrorToPhrase(detectFace, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitDetectFaceSensor(detectFace);
     }
 
     @Override
-    public Void visitElectricCurrentSensor(ElectricCurrentSensor<Void> electricCurrent) {
+    public Void visitElectricCurrentSensor(ElectricCurrentSensor electricCurrent) {
         addErrorToPhrase(electricCurrent, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitElectricCurrentSensor(electricCurrent);
     }
 
     @Override
-    public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
+    public Void visitRecognizeWord(RecognizeWord recognizeWord) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.GET_RECOGNIZED_WORD);
         return super.visitRecognizeWord(recognizeWord);
     }
 
     @Override
-    public Void visitNaoMarkInformation(NaoMarkInformation<Void> naoMarkInformation) {
+    public Void visitNaoMarkInformation(NaoMarkInformation naoMarkInformation) {
         addErrorToPhrase(naoMarkInformation, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitNaoMarkInformation(naoMarkInformation);
     }
 
     @Override
-    public Void visitDetectedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
+    public Void visitDetectedFaceInformation(DetectedFaceInformation detectedFaceInformation) {
         addErrorToPhrase(detectedFaceInformation, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitDetectedFaceInformation(detectedFaceInformation);
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         addWarningToPhrase(timerSensor, "BLOCK_NOT_SUPPORTED");
         return super.visitTimerSensor(timerSensor);
     }
 
     @Override
-    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+    public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         addWarningToPhrase(mathCastStringFunct, "BLOCK_NOT_SUPPORTED");
         return super.visitMathCastStringFunct(mathCastStringFunct);
     }
 
     @Override
-    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+    public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         addWarningToPhrase(mathCastCharFunct, "BLOCK_NOT_SUPPORTED");
         return super.visitMathCastCharFunct(mathCastCharFunct);
     }
 
     @Override
-    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         addWarningToPhrase(textStringCastNumberFunct, "BLOCK_NOT_SUPPORTED");
         return super.visitTextStringCastNumberFunct(textStringCastNumberFunct);
     }
 
     @Override
-    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         addWarningToPhrase(textCharCastNumberFunct, "BLOCK_NOT_SUPPORTED");
         return super.visitTextCharCastNumberFunct(textCharCastNumberFunct);
     }

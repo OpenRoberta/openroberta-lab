@@ -16,7 +16,7 @@ public class BotnrollValidatorAndCollectorWorker extends AbstractValidatorAndCol
     }
 
     @Override
-    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         return new BotnrollValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 }

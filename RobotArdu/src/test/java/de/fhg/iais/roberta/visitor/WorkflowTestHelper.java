@@ -28,16 +28,16 @@ public class WorkflowTestHelper {
 
     private RobotFactory robotFactory;
     protected List<IWorker> workerChain;
-    protected List<Phrase<Void>> phrases;
+    protected List<Phrase> phrases;
     protected List<ConfigurationComponent> configurationComponents;
 
     @Before
     public void setUp() throws Exception {
-        StmtList<Void> variables = new StmtList<Void>();
+        StmtList variables = new StmtList();
         variables.setReadOnly();
 
-        MainTask<Void> mainTask = new MainTask<Void>(BlocklyProperties.make("MAIN_FOR_TEST", "1"), variables, "false", null);
-        phrases = new ArrayList<>(Arrays.asList(new Location<>("0", "0"), mainTask));
+        MainTask mainTask = new MainTask(BlocklyProperties.make("MAIN_FOR_TEST", "1"), variables, "false", null);
+        phrases = new ArrayList<>(Arrays.asList(new Location("0", "0"), mainTask));
         configurationComponents = new ArrayList<>();
     }
 
@@ -46,7 +46,7 @@ public class WorkflowTestHelper {
     }
 
     protected Project executeWorkflow() {
-        ProgramAst<Void> programAst = new ProgramAst.Builder<Void>()
+        ProgramAst programAst = new ProgramAst.Builder()
             .setRobotType(robotFactory.getGroup())
             .addToTree(phrases)
             .build();
@@ -76,7 +76,7 @@ public class WorkflowTestHelper {
     }
 
     protected Project executeWorkflow(String workflowName) {
-        ProgramAst<Void> programAst = new ProgramAst.Builder<Void>()
+        ProgramAst programAst = new ProgramAst.Builder()
             .setRobotType(robotFactory.getGroup())
             .addToTree(phrases)
             .build();
@@ -103,7 +103,7 @@ public class WorkflowTestHelper {
         assertHasUsedSensor(usedHardwareBean, userDefinedPort, type, mode);
     }
 
-    protected void assertHasNoNepoInfo(Phrase<Void> phrase) {
+    protected void assertHasNoNepoInfo(Phrase phrase) {
         Assertions
             .assertThat(phrase
                 .getInfos()
@@ -111,7 +111,7 @@ public class WorkflowTestHelper {
             .isEmpty();
     }
 
-    protected void assertHasNepoInfo(Phrase<Void> phrase, NepoInfo.Severity severity, String message) {
+    protected void assertHasNepoInfo(Phrase phrase, NepoInfo.Severity severity, String message) {
         Assertions
             .assertThat(phrase
                 .getInfos()

@@ -21,7 +21,7 @@ public final class Rob3rtaCppVisitor extends NIBOCommonCppVisitor {
      * @param phrases to generate the code from
      * @param beans a map of available beans
      */
-    public Rob3rtaCppVisitor(List<List<Phrase<Void>>> phrases, ClassToInstanceMap<IProjectBean> beans) {
+    public Rob3rtaCppVisitor(List<List<Phrase>> phrases, ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, new ConfigurationAst.Builder().build(), beans);
     }
 
@@ -40,7 +40,7 @@ public final class Rob3rtaCppVisitor extends NIBOCommonCppVisitor {
     }
 
     @Override
-    public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
+    public Void visitPinTouchSensor(PinTouchSensor pinTouchSensor) {
         this.sb.append("( rob.getTouch(" + pinTouchSensor.getUserDefinedPort() + "_" + pinTouchSensor.getSlot() + ") == true )");
         return null;
     }

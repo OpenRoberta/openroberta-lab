@@ -21,8 +21,8 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * This class represents the <b>robSensors_getSample</b> block from Blockly. Both a sensor and a mode are needed (see sensorTypeAndMode)
  */
 @NepoBasic(name = "SENSOR_GET_SAMPLE", category = "SENSOR", blocklyNames = {"sim_getSample", "robSensors_getSample_ardu", "mbedsensors_getsample", "robSensors_getSample"})
-public final class GetSampleSensor<V> extends Sensor<V> {
-    public final Sensor<V> sensor;
+public final class GetSampleSensor extends Sensor {
+    public final Sensor sensor;
     public final String sensorPort;
     public final String slot;
     public final String sensorTypeAndMode;
@@ -48,7 +48,7 @@ public final class GetSampleSensor<V> extends Sensor<V> {
         this.sensorTypeAndMode = sensorTypeAndMode;
         this.mutation = mutation;
         this.hide = hide;
-        this.sensor = (Sensor<V>) factory.createSensor(sensorTypeAndMode, port, slot, mutation, properties);
+        this.sensor = (Sensor) factory.createSensor(sensorTypeAndMode, port, slot, mutation, properties);
         setReadOnly();
     }
 
@@ -57,7 +57,7 @@ public final class GetSampleSensor<V> extends Sensor<V> {
         return "GetSampleSensor [" + this.sensor + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         String mutationInput = block.getMutation().getInput();
         String modeName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORTYPE, mutationInput);

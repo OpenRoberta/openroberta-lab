@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "STMT", blocklyNames = {"text_comment"}, name = "TEXT_COMMENT")
-public final class StmtTextComment<V> extends Stmt<V> {
+public final class StmtTextComment extends Stmt {
     @NepoField(name = BlocklyConstants.TEXT)
     public final String textComment;
 

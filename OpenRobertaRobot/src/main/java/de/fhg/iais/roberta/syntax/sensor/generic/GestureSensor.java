@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
         @F2M(field = "GESTURE_FREEFALL", mode = "FREEFALL"), @F2M(field = "GESTURE_ACTIVE", mode = "GESTURE_ACTIVE"),
         @F2M(field = "GESTURE_SHAKE", mode = "SHAKE"), @F2M(field = "GESTURE_FACE_UP", mode = "FACE_UP")})
 @NepoExternalSensor()
-public final class GestureSensor<V> extends ExternalSensor<V> {
+public final class GestureSensor extends ExternalSensor {
 
     public GestureSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);

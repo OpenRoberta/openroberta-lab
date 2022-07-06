@@ -38,13 +38,13 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     protected ConfigurationAst configuration;
 
-    protected AbstractCommonArduinoCppVisitor(List<List<Phrase<Void>>> programPhrases, ConfigurationAst configuration, ClassToInstanceMap<IProjectBean> beans) {
+    protected AbstractCommonArduinoCppVisitor(List<List<Phrase>> programPhrases, ConfigurationAst configuration, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
         this.configuration = configuration;
     }
 
     protected void generateUsedVars() {
-        for ( VarDeclaration<Void> var : this.getBean(UsedHardwareBean.class).getVisitedVars() ) {
+        for ( VarDeclaration var : this.getBean(UsedHardwareBean.class).getVisitedVars() ) {
             this.sb.append("___" + var.name);
             this.sb.append(" = ");
             var.value.accept(this);
@@ -54,14 +54,14 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     }
 
     @Override
-    public Void visitVarDeclaration(VarDeclaration<Void> var) {
+    public Void visitVarDeclaration(VarDeclaration var) {
         this.sb.append(getLanguageVarTypeFromBlocklyType(var.typeVar));
         this.sb.append(whitespace() + var.getCodeSafeName());
         return null;
     }
 
     @Override
-    public Void visitBinary(Binary<Void> binary) {
+    public Void visitBinary(Binary binary) {
         Op op = binary.op;
         if ( op == Op.MOD ) {
             appendFloatModulo(binary);
@@ -82,7 +82,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         return null;
     }
 
-    private void appendFloatModulo(Binary<Void> binary) {
+    private void appendFloatModulo(Binary binary) {
         this.sb.append("fmod(");
         generateSubExpr(this.sb, false, binary.left, binary);
         this.sb.append(", ");
@@ -90,13 +90,13 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         this.sb.append(")");
     }
 
-    private void appendCastToFloat(Binary<Void> binary) {
+    private void appendCastToFloat(Binary binary) {
         this.sb.append("((float) ");
         generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         this.sb.append(")");
     }
 
-    private void convertToString(Binary<Void> binary) {
+    private void convertToString(Binary binary) {
         switch ( binary.getRight().getVarType() ) {
             case BOOLEAN:
             case NUMBER:
@@ -113,7 +113,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     }
 
     @Override
-    public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
+    public Void visitRepeatStmt(RepeatStmt repeatStmt) {
         boolean isWaitStmt = repeatStmt.mode == RepeatStmt.Mode.WAIT;
         boolean isArduinoLoop = repeatStmt.mode == RepeatStmt.Mode.FOREVER_ARDU;
         switch ( repeatStmt.mode ) {
@@ -164,7 +164,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     }
 
     @Override
-    public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
+    public Void visitWaitStmt(WaitStmt waitStmt) {
         this.sb.append("while (true) {");
         incrIndentation();
         visitStmtList(waitStmt.statements);
@@ -177,7 +177,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     }
 
     @Override
-    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
+    public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
         String methodName = indexOfFunct.location == IndexLocation.LAST ? "_getLastOccuranceOfElement(" : "_getFirstOccuranceOfElement(";
         this.sb.append(methodName);
         indexOfFunct.param.get(0).accept(this);
@@ -194,17 +194,17 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     }
 
     @Override
-    public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
+    public Void visitTextJoinFunct(TextJoinFunct textJoinFunct) {
         return null;
     }
 
     @Override
-    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
+    public Void visitTextPrintFunct(TextPrintFunct textPrintFunct) {
         return null;
     }
 
     @Override
-    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+    public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         this.sb.append("delay(");
         waitTimeStmt.time.accept(this);
         this.sb.append(");");
@@ -212,7 +212,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     }
 
     @Override
-    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
+    public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.sb.append("_randomIntegerInRange(");
         mathRandomIntFunct.param.get(0).accept(this);
         this.sb.append(", ");
@@ -222,7 +222,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         String timerNumber = timerSensor.getUserDefinedPort();
         switch ( timerSensor.getMode() ) {
             case SC.DEFAULT:
@@ -239,7 +239,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     }
 
     @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
+    public Void visitColorConst(ColorConst colorConst) {
         this.sb.append("RGB(");
         this.sb.append(colorConst.getRedChannelHex());
         this.sb.append(", ");
@@ -251,12 +251,12 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     }
 
     @Override
-    public Void visitDebugAction(DebugAction<Void> debugAction) {
+    public Void visitDebugAction(DebugAction debugAction) {
         writeToSerial(debugAction.value);
         return null;
     }
 
-    private void writeToSerial(Expr<Void> valueToWrite) {
+    private void writeToSerial(Expr valueToWrite) {
         this.sb.append("Serial.println(");
         valueToWrite.accept(this);
         this.sb.append(");");
@@ -278,22 +278,22 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     }
 
     @Override
-    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+    public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+    public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         throw new DbcException("Not supported!");
     }
 }

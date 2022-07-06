@@ -8,11 +8,11 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(category = "STMT", blocklyNames = {"robActions_aifes_classify"}, name = "NEURAL_NETWORK_CLASSIFY")
-public final class NeuralNetworkClassify<V> extends Stmt<V> {
+public final class NeuralNetworkClassify extends Stmt {
     @NepoValue(name = "NN_CLASS_PROBABILITIES", type = BlocklyType.ARRAY_NUMBER)
-    public final Expr<V> probabilities;
+    public final Expr probabilities;
 
-    public NeuralNetworkClassify(BlocklyProperties properties, Expr<V> probabilities) {
+    public NeuralNetworkClassify(BlocklyProperties properties, Expr probabilities) {
         super(properties);
         this.probabilities = probabilities;
         setReadOnly();

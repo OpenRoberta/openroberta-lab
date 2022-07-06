@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
  * This class stores the information of the location of the top block in a blockly program.
  */
 @NepoBasic(name = "LOCATION", category = "HELPER", blocklyNames = {})
-public final class Location<V> extends Task<V> {
+public final class Location extends Task {
     public final String x;
     public final String y;
 

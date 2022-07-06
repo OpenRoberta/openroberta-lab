@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"mbedActions_play_note"}, name = "PLAY_NOTE_ACTION")
-public final class PlayNoteAction<V> extends Action<V> {
+public final class PlayNoteAction extends Action {
     @NepoField(name = BlocklyConstants.DURATION, value = "2000")
     public final String duration;
     @NepoField(name = BlocklyConstants.FREQUENCE, value = "261.626")

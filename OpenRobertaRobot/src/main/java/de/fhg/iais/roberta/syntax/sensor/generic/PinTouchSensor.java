@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 @NepoExpr(name = "PIN_TOUCH_SENSING", category = "SENSOR", blocklyNames = {"robsensors_pintouch_getsample"},
     sampleValues = {@F2M(field = "PIN_TOUCHED", mode = "PIN_TOUCHED"), @F2M(field = "PINTOUCH_PRESSED", mode = "PRESSED")})
 @NepoExternalSensor()
-public final class PinTouchSensor<V> extends ExternalSensor<V> {
+public final class PinTouchSensor extends ExternalSensor {
 
     public PinTouchSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
         super(properties, externalSensorBean);

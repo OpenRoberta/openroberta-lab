@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * instance from this class use the method {@link #make(BlocklyType, String, boolean, String)}.<br>
  */
 @NepoBasic(name = "VAR", category = "EXPR", blocklyNames = {"variables_get"})
-public final class Var<V> extends Expr<V> {
+public final class Var extends Expr {
     public final BlocklyType typeVar;
     public final String name;
     public final static String CODE_SAFE_PREFIX = "___";
@@ -58,7 +58,7 @@ public final class Var<V> extends Expr<V> {
         return "Var [" + this.name + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         return Jaxb2Ast.extractVar(block);
     }
 

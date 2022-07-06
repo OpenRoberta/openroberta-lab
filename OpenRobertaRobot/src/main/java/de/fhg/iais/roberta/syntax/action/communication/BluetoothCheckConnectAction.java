@@ -10,11 +10,11 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"robCommunication_checkConnection"}, name = "BLUETOOTH_CHECK_CONNECT_ACTION")
-public final class BluetoothCheckConnectAction<V> extends Action<V> {
+public final class BluetoothCheckConnectAction extends Action {
     @NepoValue(name = BlocklyConstants.CONNECTION, type = BlocklyType.STRING)
-    public final Expr<V> connection;
+    public final Expr connection;
 
-    public BluetoothCheckConnectAction(BlocklyProperties properties, Expr<V> connection) {
+    public BluetoothCheckConnectAction(BlocklyProperties properties, Expr connection) {
         super(properties);
         Assert.isTrue(connection.isReadOnly() && connection != null);
         this.connection = connection;

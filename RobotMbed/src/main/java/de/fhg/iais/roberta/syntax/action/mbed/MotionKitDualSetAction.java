@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "MOTIONKIT_DUAL_SET_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_motionkit_dual_set"})
-public final class MotionKitDualSetAction<V> extends Action<V> {
+public final class MotionKitDualSetAction extends Action {
     public final String directionLeft;
     public final String directionRight;
 
@@ -34,12 +34,12 @@ public final class MotionKitDualSetAction<V> extends Action<V> {
         return "MotionKitDualSetAction [" + this.directionLeft + ", " + this.directionRight + "]";
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         String directionL = Jaxb2Ast.extractField(fields, BlocklyConstants.DIRECTION_LEFT);
         String directionR = Jaxb2Ast.extractField(fields, BlocklyConstants.DIRECTION_RIGHT);
-        return new MotionKitDualSetAction<>(Jaxb2Ast.extractBlocklyProperties(block), factory.getMode(directionL), factory.getMode(directionR));
+        return new MotionKitDualSetAction(Jaxb2Ast.extractBlocklyProperties(block), factory.getMode(directionL), factory.getMode(directionR));
     }
 
     @Override
