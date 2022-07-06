@@ -12,8 +12,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
@@ -22,8 +21,8 @@ import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 public abstract class ExternalSensor<V> extends Sensor<V> implements WithUserDefinedPort<V> {
     private final ExternalSensorBean externalSensorBean;
 
-    public ExternalSensor(BlocklyBlockProperties properties, BlocklyComment comment, ExternalSensorBean externalSensorBean) {
-        super(properties, comment);
+    public ExternalSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
+        super(properties);
         Assert.notNull(externalSensorBean.getMode());
         Assert.notNull(externalSensorBean.getPort());
         Assert.notNull(externalSensorBean.getSlot());
@@ -104,7 +103,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> implements WithUserDef
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         ExternalSensorBean sensorData = extractPortAndModeAndSlot(block, helper);
-        return new InfraredSensor<V>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), sensorData);
+        return new InfraredSensor<V>(Jaxb2Ast.extractBlocklyProperties(block), sensorData);
     }
 
 }

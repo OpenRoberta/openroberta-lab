@@ -15,7 +15,7 @@ public final class ActionExpr<V> extends Expr<V> {
     public final Action<V> action;
 
     public ActionExpr(Action<V> action) {
-        super(action.getProperty(), action.getComment());
+        super(action.getProperty());
         Assert.isTrue(action.isReadOnly());
         this.action = action;
         setReadOnly();

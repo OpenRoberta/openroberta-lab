@@ -2,8 +2,7 @@ package de.fhg.iais.roberta.syntax.configuration;
 
 import java.util.Map;
 
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 public class ConfigurationComponentLeaf extends ConfigurationComponent {
 
@@ -13,10 +12,10 @@ public class ConfigurationComponentLeaf extends ConfigurationComponent {
         String internalPortName,
         String userDefinedName,
         Map<String, String> componentProperties,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment,
+        BlocklyProperties properties,
+        
         int x,
         int y) {
-        super(componentType, isActor, internalPortName, userDefinedName, componentProperties, properties, comment, x, y);
+        super(componentType, isActor, internalPortName, userDefinedName, componentProperties, properties, x, y);
     }
 }

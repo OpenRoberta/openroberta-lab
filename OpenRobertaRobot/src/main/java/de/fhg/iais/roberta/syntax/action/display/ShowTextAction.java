@@ -8,8 +8,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoHide;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
@@ -27,14 +26,14 @@ public final class ShowTextAction<V> extends Action<V> {
     public final Hide hide;
 
     public ShowTextAction(
-        BlocklyBlockProperties properties,
-        BlocklyComment comment,
+        BlocklyProperties properties,
+        
         Expr<V> msg,
         Expr<V> column,
         Expr<V> row,
         String port,
         Hide hide) {
-        super(properties, comment);
+        super(properties);
         Assert.isTrue((msg != null) && (column != null) && (row != null));
         this.msg = msg;
         this.x = column;

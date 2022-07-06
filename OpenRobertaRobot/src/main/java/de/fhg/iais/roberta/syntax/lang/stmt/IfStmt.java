@@ -12,8 +12,7 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
@@ -26,14 +25,12 @@ public final class IfStmt<V> extends Stmt<V> {
     public final int _elseIf;
 
     public IfStmt(
-        List<Expr<V>> expr,
+        BlocklyProperties properties, List<Expr<V>> expr,
         List<StmtList<V>> thenList,
         StmtList<V> elseList,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment,
         int _else,
         int _elseIf) {
-        super(properties, comment);
+        super(properties);
         Assert.isTrue(expr.size() == thenList.size() && elseList.isReadOnly());
         this.expr = expr;
         this.thenList = thenList;
@@ -41,21 +38,6 @@ public final class IfStmt<V> extends Stmt<V> {
         this._else = _else;
         this._elseIf = _elseIf;
         setReadOnly();
-    }
-
-    /**
-     * if without else
-     */
-    public static <V> IfStmt<V> make(
-        List<Expr<V>> expr,
-        List<StmtList<V>> thenList,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment,
-        int _else,
-        int _elseIf) {
-        StmtList<V> elseList = new StmtList<V>();
-        elseList.setReadOnly();
-        return new IfStmt<V>(expr, thenList, elseList, properties, comment, _else, _elseIf);
     }
 
     @Override

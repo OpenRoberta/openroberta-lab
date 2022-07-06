@@ -16,8 +16,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
@@ -33,9 +32,8 @@ public final class PinWriteValueAction<V> extends Action<V> {
         String port,
         Expr<V> value,
         boolean actorPortAndMode,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        super(properties, comment);
+        BlocklyProperties properties) {
+        super(properties);
         Assert.notNull(pinValue);
         Assert.notNull(port);
         Assert.notNull(value);
@@ -67,7 +65,7 @@ public final class PinWriteValueAction<V> extends Action<V> {
             pinvalue = Jaxb2Ast.extractField(fields, BlocklyConstants.VALUETYPE);
         }
         Phrase<V> value = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
-        return new PinWriteValueAction<>(factory.getMode(pinvalue), Jaxb2Ast.sanitizePort(port), Jaxb2Ast.convertPhraseToExpr(value), actorPortAndMode, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new PinWriteValueAction<>(factory.getMode(pinvalue), Jaxb2Ast.sanitizePort(port), Jaxb2Ast.convertPhraseToExpr(value), actorPortAndMode, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

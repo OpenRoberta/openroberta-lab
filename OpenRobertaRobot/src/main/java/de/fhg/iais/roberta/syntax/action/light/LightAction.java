@@ -17,8 +17,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
@@ -32,8 +31,8 @@ public final class LightAction<V> extends Action<V> {
     private static boolean isActor;
     private static boolean isBlink;
 
-    public LightAction(String port, IBrickLedColor color, ILightMode mode, Expr<V> rgbLedColor, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public LightAction(String port, IBrickLedColor color, ILightMode mode, Expr<V> rgbLedColor, BlocklyProperties properties) {
+        super(properties);
         Assert.isTrue(mode != null);
         this.rgbLedColor = rgbLedColor;
         this.color = color;
@@ -64,7 +63,7 @@ public final class LightAction<V> extends Action<V> {
                 ? Jaxb2Ast.extractField(fields, BlocklyConstants.SWITCH_BLINK, BlocklyConstants.DEFAULT)
                 : Jaxb2Ast.extractField(fields, BlocklyConstants.SWITCH_STATE, BlocklyConstants.DEFAULT);
         String color = Jaxb2Ast.extractField(fields, BlocklyConstants.SWITCH_COLOR, BlocklyConstants.DEFAULT);
-        return new LightAction<>(Jaxb2Ast.sanitizePort(port), factory.getBrickLedColor(color), factory.getBlinkMode(mode), Jaxb2Ast.convertPhraseToExpr(ledColor), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new LightAction<>(Jaxb2Ast.sanitizePort(port), factory.getBrickLedColor(color), factory.getBlinkMode(mode), Jaxb2Ast.convertPhraseToExpr(ledColor), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

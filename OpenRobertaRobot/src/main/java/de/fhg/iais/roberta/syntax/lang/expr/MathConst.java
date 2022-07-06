@@ -5,8 +5,7 @@ import java.util.Locale;
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -15,8 +14,8 @@ public final class MathConst<V> extends Expr<V> {
     @NepoField(name = "CONSTANT")
     public final Const mathConst;
 
-    public MathConst(BlocklyBlockProperties properties, BlocklyComment comment, Const mathConst) {
-        super(properties, comment);
+    public MathConst(BlocklyProperties properties, Const mathConst) {
+        super(properties);
         Assert.isTrue(mathConst != null);
         this.mathConst = mathConst;
         setReadOnly();

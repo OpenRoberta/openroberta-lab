@@ -15,8 +15,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "RADIO_SEND_ACTION", category = "ACTOR", blocklyNames = {"mbedCommunication_sendBlock"})
@@ -25,8 +24,8 @@ public final class RadioSendAction<V> extends Action<V> {
     public final BlocklyType type;
     public final String power;
 
-    public RadioSendAction(Expr<V> msg, BlocklyType type, String power, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public RadioSendAction(BlocklyProperties properties, Expr<V> msg, BlocklyType type, String power) {
+        super(properties);
         this.message = msg;
         this.type = type;
         this.power = power;
@@ -45,7 +44,7 @@ public final class RadioSendAction<V> extends Action<V> {
         String power = Jaxb2Ast.extractField(fields, BlocklyConstants.POWER);
         String type = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
 
-        return new RadioSendAction<>(Jaxb2Ast.convertPhraseToExpr(message), BlocklyType.get(type), power, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new RadioSendAction<>(Jaxb2Ast.extractBlocklyProperties(block), Jaxb2Ast.convertPhraseToExpr(message), BlocklyType.get(type), power);
     }
 
     @Override

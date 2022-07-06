@@ -17,8 +17,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "DISPLAY_IMAGE_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_display_image"})
@@ -27,8 +26,8 @@ public final class DisplayImageAction<V> extends Action<V> {
     public final DisplayImageMode displayImageMode;
     public final Expr<V> valuesToDisplay;
 
-    public DisplayImageAction(DisplayImageMode displayImageMode, Expr<V> valuesToDisplay, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public DisplayImageAction(BlocklyProperties properties, DisplayImageMode displayImageMode, Expr<V> valuesToDisplay) {
+        super(properties);
         Assert.isTrue(displayImageMode != null && valuesToDisplay != null);
         this.displayImageMode = displayImageMode;
         this.valuesToDisplay = valuesToDisplay;
@@ -52,7 +51,7 @@ public final class DisplayImageAction<V> extends Action<V> {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         String mode = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
         Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
-        return new DisplayImageAction<>(DisplayImageMode.get(mode), Jaxb2Ast.convertPhraseToExpr(image), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new DisplayImageAction<>(Jaxb2Ast.extractBlocklyProperties(block), DisplayImageMode.get(mode), Jaxb2Ast.convertPhraseToExpr(image));
     }
 
     @Override

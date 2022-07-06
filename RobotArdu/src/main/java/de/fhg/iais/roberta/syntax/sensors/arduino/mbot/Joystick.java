@@ -11,8 +11,7 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
@@ -20,8 +19,8 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 public final class Joystick<V> extends ExternalSensor<V> {
     public final String joystickAxis;
 
-    public Joystick(String axis, ExternalSensorBean externalSensorBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment, externalSensorBean);
+    public Joystick(String axis, ExternalSensorBean externalSensorBean, BlocklyProperties properties) {
+        super(properties, externalSensorBean);
         this.joystickAxis = axis;
         setReadOnly();
     }
@@ -39,7 +38,7 @@ public final class Joystick<V> extends ExternalSensor<V> {
         String mode = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
         ExternalSensorBean sensorData =
             new ExternalSensorBean(Jaxb2Ast.sanitizePort(port), factory.getMode(mode), Jaxb2Ast.sanitizeSlot(BlocklyConstants.EMPTY_SLOT), block.getMutation());
-        return new Joystick<>(mode, sensorData, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new Joystick<>(mode, sensorData, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

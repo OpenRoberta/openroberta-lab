@@ -11,8 +11,7 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
@@ -21,8 +20,8 @@ public final class SetMode<V> extends Action<V> {
 
     public final Modus modus;
 
-    public SetMode(Modus modus, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public SetMode(Modus modus, BlocklyProperties properties) {
+        super(properties);
         Assert.notNull(modus, "Missing modus in Mode block!");
         this.modus = modus;
         setReadOnly();
@@ -38,7 +37,7 @@ public final class SetMode<V> extends Action<V> {
 
         String modus = Jaxb2Ast.extractField(fields, BlocklyConstants.DIRECTION);
 
-        return new SetMode<V>(Modus.get(modus), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new SetMode<V>(Modus.get(modus), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

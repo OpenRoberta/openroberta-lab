@@ -10,16 +10,15 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "BOB3_RGB_LED_OFF", category = "ACTOR", blocklyNames = {"makeblockActions_leds_off"})
 public final class LedOffAction<V> extends Action<V> {
     public final String side;
 
-    public LedOffAction(String side, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public LedOffAction(String side, BlocklyProperties properties) {
+        super(properties);
         this.side = side;
         setReadOnly();
     }
@@ -32,7 +31,7 @@ public final class LedOffAction<V> extends Action<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         String side = Jaxb2Ast.extractField(fields, BlocklyConstants.LED + BlocklyConstants.SIDE);
-        return new LedOffAction<>(side, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new LedOffAction<>(side, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

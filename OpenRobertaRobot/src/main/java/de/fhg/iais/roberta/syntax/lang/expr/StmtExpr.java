@@ -14,7 +14,7 @@ public class StmtExpr<V> extends Expr<V> {
     public final Stmt<V> stmt;
 
     public StmtExpr(Stmt<V> stmt) {
-        super(stmt.getProperty(), stmt.getComment());
+        super(stmt.getProperty());
         Assert.isTrue(stmt.isReadOnly());
         this.stmt = stmt;
         setReadOnly();

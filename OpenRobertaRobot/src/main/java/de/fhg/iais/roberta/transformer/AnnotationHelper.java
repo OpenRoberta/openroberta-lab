@@ -29,8 +29,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoHide;
 import de.fhg.iais.roberta.transformer.forField.NepoMutation;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.Assoc;
@@ -82,8 +81,7 @@ public class AnnotationHelper {
      */
     public static <V> Phrase<V> block2astByAnnotation(Block block, Class<?> astClass, Jaxb2ProgramAst<V> helper) {
         List<ConstructorParameter> constructorParameters = new ArrayList<>();
-        constructorParameters.add(new ConstructorParameter(Jaxb2Ast.extractBlockProperties(block)));
-        constructorParameters.add(new ConstructorParameter(BlocklyComment.class, Jaxb2Ast.extractComment(block)));
+        constructorParameters.add(new ConstructorParameter(Jaxb2Ast.extractBlocklyProperties(block)));
 
         if ( isNepoExternalSensorAnnotatedClass(astClass) ) {
             constructorParameters.add(extractNepoExternalSensorParameters(block, helper));
@@ -318,8 +316,7 @@ public class AnnotationHelper {
 
     public static void checkNepoAnnotatedClass(Class<?> nepoAnnotatedClass) {
         List<Class<?>> constructorParameterTypes = new ArrayList<>();
-        constructorParameterTypes.add(BlocklyBlockProperties.class);
-        constructorParameterTypes.add(BlocklyComment.class);
+        constructorParameterTypes.add(BlocklyProperties.class);
 
         if ( isNepoExternalSensorAnnotatedClass(nepoAnnotatedClass) ) {
             constructorParameterTypes.add(ExternalSensorBean.class);

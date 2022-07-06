@@ -28,8 +28,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
@@ -54,8 +53,8 @@ public final class EvalExpr<V> extends Expr<V> {
      */
     public final Expr<V> exprBlock;
 
-    public EvalExpr(String expr, Expr<V> exprBlock, String type, BlocklyBlockProperties properties, BlocklyComment comment) throws Exception {
-        super(properties, comment);
+    public EvalExpr(String expr, Expr<V> exprBlock, String type, BlocklyProperties properties) throws Exception {
+        super(properties);
         this.expr = expr;
         this.type = type;
         if ( exprBlock instanceof ExprList<?> ) {
@@ -74,7 +73,7 @@ public final class EvalExpr<V> extends Expr<V> {
             } else {
                 blocklyType = BlocklyType.ANY;
             }
-            this.exprBlock = new ListCreate<V>(blocklyType, exprList, properties, comment);
+            this.exprBlock = new ListCreate<V>(blocklyType, exprList, properties);
         } else {
             this.exprBlock = exprBlock;
         }
@@ -86,15 +85,15 @@ public final class EvalExpr<V> extends Expr<V> {
      *
      * @param expr representation of the expression to evaluate
      * @param type type for this expression,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param properties of the block (see {@link BlocklyProperties}),
      * @param comment added from the user,
      * @return read only object representing the binary expression
      */
-    public static <V> EvalExpr<V> make(String expr, String type, BlocklyBlockProperties properties, BlocklyComment comment) throws Exception {
+    public static <V> EvalExpr<V> make(String expr, String type, BlocklyProperties properties) throws Exception {
         final List<NepoInfo> annotations = new ArrayList<>();
         Expr<V> astOfExpr = EvalExpr.expr2AST(expr, annotations);
         astOfExpr.setReadOnly();
-        EvalExpr<V> evalExpr = new EvalExpr<>(expr, astOfExpr, type, properties, comment);
+        EvalExpr<V> evalExpr = new EvalExpr<>(expr, astOfExpr, type, properties);
         for ( NepoInfo nepoInfo : annotations ) {
             evalExpr.addInfo(nepoInfo);
             astOfExpr.addInfo(nepoInfo);
@@ -139,7 +138,7 @@ public final class EvalExpr<V> extends Expr<V> {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         String expr = Jaxb2Ast.extractField(fields, "EXPRESSION");
         String type = Jaxb2Ast.extractField(fields, "TYPE");
-        return (Phrase<V>) EvalExpr.make(expr, type, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return (Phrase<V>) EvalExpr.make(expr, type, Jaxb2Ast.extractBlocklyProperties(block));
 
     }
 
@@ -156,7 +155,7 @@ public final class EvalExpr<V> extends Expr<V> {
             for ( String s : err.getError() ) {
                 LOG.error(s);
             }
-            NullConst<V> errorExpr = new NullConst<V>(BlocklyBlockProperties.make("EVAL", "1"), null);
+            NullConst<V> errorExpr = new NullConst<V>(BlocklyProperties.make("EVAL", "1"));
             annotations.add(NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_PARSE"));
             return errorExpr;
         } else {

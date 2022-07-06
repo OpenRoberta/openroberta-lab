@@ -11,8 +11,7 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "HTS221_TEMPERATURE", category = "SENSOR", blocklyNames = {"robsensors_hts221_temperature_getDataAvailableSample"})
@@ -20,8 +19,8 @@ public final class Hts221TemperatureSensor<V> extends BuiltinSensor<V> {
 
     public final Expr<V> temperature;
 
-    public Hts221TemperatureSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> temperature) {
-        super(properties, comment, null);
+    public Hts221TemperatureSensor(BlocklyProperties properties, Expr<V> temperature) {
+        super(properties, null);
         this.temperature = temperature;
         setReadOnly();
     }
@@ -29,7 +28,7 @@ public final class Hts221TemperatureSensor<V> extends BuiltinSensor<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         Expr<V> temperature = helper.getVar(values, BlocklyConstants.VARIABLE_VALUE);
-        return new Hts221TemperatureSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), temperature);
+        return new Hts221TemperatureSensor<>(Jaxb2Ast.extractBlocklyProperties(block), temperature);
     }
 
     @Override

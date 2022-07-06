@@ -13,8 +13,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
@@ -23,8 +22,8 @@ public final class LedBarSetAction<V> extends Action<V> {
     public final Expr<V> x;
     public final Expr<V> brightness;
 
-    public LedBarSetAction(Expr<V> x, Expr<V> brightness, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public LedBarSetAction(BlocklyProperties properties, Expr<V> x, Expr<V> brightness) {
+        super(properties);
         Assert.notNull(x);
         Assert.notNull(brightness);
         this.x = x;
@@ -42,7 +41,7 @@ public final class LedBarSetAction<V> extends Action<V> {
 
         Phrase<V> brightness = helper.extractValue(values, new ExprParam(BlocklyConstants.BRIGHTNESS, BlocklyType.NUMBER_INT));
         Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
-        return new LedBarSetAction<>(Jaxb2Ast.convertPhraseToExpr(x), Jaxb2Ast.convertPhraseToExpr(brightness), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new LedBarSetAction<>(Jaxb2Ast.extractBlocklyProperties(block), Jaxb2Ast.convertPhraseToExpr(x), Jaxb2Ast.convertPhraseToExpr(brightness));
     }
 
     @Override

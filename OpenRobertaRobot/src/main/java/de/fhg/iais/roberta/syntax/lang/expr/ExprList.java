@@ -7,7 +7,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.Assoc;
@@ -17,7 +17,7 @@ public final class ExprList<V> extends Expr<V> {
     public final List<Expr<V>> el = new ArrayList<Expr<V>>();
 
     public ExprList() {
-        super(BlocklyBlockProperties.make("1", "1", false, false, false, false, false, null, false, false), null);
+        super(new BlocklyProperties("1", "1", false, false, false, false, false, null, false, false, null));
     }
 
     /**

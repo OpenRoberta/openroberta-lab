@@ -6,8 +6,7 @@ import java.util.Map;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 public class ConfigurationComponentNode extends ConfigurationComponent {
     private final LinkedHashMap<String, List<ConfigurationComponent>> subComponents;
@@ -18,12 +17,12 @@ public class ConfigurationComponentNode extends ConfigurationComponent {
         String internalPortName,
         String userDefinedName,
         Map<String, String> componentProperties,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment,
+        BlocklyProperties properties,
+        
         int x,
         int y,
         LinkedHashMap<String, List<ConfigurationComponent>> subComponents) {
-        super(componentType, isActor, internalPortName, userDefinedName, componentProperties, properties, comment, x, y);
+        super(componentType, isActor, internalPortName, userDefinedName, componentProperties, properties, x, y);
         this.subComponents = subComponents;
     }
 

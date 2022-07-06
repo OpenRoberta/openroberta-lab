@@ -13,8 +13,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "RANDOM_EYES_DURATION", category = "ACTOR", blocklyNames = {"naoActions_randomEyes"})
@@ -22,8 +21,8 @@ public final class RandomEyesDuration<V> extends Action<V> {
 
     public final Expr<V> duration;
 
-    public RandomEyesDuration(Expr<V> duration, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public RandomEyesDuration(Expr<V> duration, BlocklyProperties properties) {
+        super(properties);
         this.duration = duration;
         setReadOnly();
     }
@@ -33,7 +32,7 @@ public final class RandomEyesDuration<V> extends Action<V> {
 
         Phrase<V> duration = helper.extractValue(values, new ExprParam(BlocklyConstants.DURATION, BlocklyType.NUMBER_INT));
 
-        return new RandomEyesDuration<V>(Jaxb2Ast.convertPhraseToExpr(duration), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new RandomEyesDuration<V>(Jaxb2Ast.convertPhraseToExpr(duration), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

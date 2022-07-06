@@ -13,15 +13,14 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 /**
  * This class represents the <b>makeblockColours</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate color.<br/>
  * <br>
  * The client must provide the value for each color channel. <br>
  * <br>
- * To create an instance from this class use the method {@link #make(Expr, Expr, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
+ * To create an instance from this class use the method {@link #make(Expr, Expr, Expr, BlocklyProperties, BlocklyComment)}.<br>
  */
 @NepoBasic(name = "LED_MATRIX_IMAGE", category = "EXPR", blocklyNames = {"mBotImage_image"})
 public final class LEDMatrixImage<V> extends Expr<V> {
@@ -29,8 +28,8 @@ public final class LEDMatrixImage<V> extends Expr<V> {
     public final static int Y = 8;
     public final String[][] image;
 
-    public LEDMatrixImage(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public LEDMatrixImage(String[][] image, BlocklyProperties properties) {
+        super(properties);
         this.image = image;
         setReadOnly();
     }
@@ -77,7 +76,7 @@ public final class LEDMatrixImage<V> extends Expr<V> {
                 image[i][j] = Jaxb2Ast.extractField(fields, "P" + i + (Y - 1 - j));
             }
         }
-        return new LEDMatrixImage<>(image, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new LEDMatrixImage<>(image, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

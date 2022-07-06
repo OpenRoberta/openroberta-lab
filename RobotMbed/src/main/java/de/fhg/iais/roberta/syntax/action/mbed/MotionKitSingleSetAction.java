@@ -3,8 +3,7 @@ package de.fhg.iais.roberta.syntax.action.mbed;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 @NepoPhrase(name = "MOTIONKIT_SINGLE_SET_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_motionkit_single_set"})
@@ -15,8 +14,8 @@ public final class MotionKitSingleSetAction<V> extends Action<V> {
     @NepoField(name = "DIRECTION")
     public final String direction;
 
-    public MotionKitSingleSetAction(BlocklyBlockProperties properties, BlocklyComment comment, String port, String direction) {
-        super(properties, comment);
+    public MotionKitSingleSetAction(BlocklyProperties properties, String port, String direction) {
+        super(properties);
         Assert.notNull(port);
         Assert.notNull(direction);
         this.port = port;

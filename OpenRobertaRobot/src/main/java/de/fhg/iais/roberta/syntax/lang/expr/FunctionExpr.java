@@ -16,7 +16,7 @@ public final class FunctionExpr<V> extends Expr<V> {
     public final Function<V> function;
 
     public FunctionExpr(Function<V> function) {
-        super(function.getProperty(), function.getComment());
+        super(function.getProperty());
         Assert.isTrue(function.isReadOnly());
         this.function = function;
         setReadOnly();

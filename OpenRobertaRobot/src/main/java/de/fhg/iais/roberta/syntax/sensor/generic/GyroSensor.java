@@ -14,16 +14,15 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.F2M;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(sampleValues = {@F2M(field = "GYRO_TILTED", mode = "TILTED"), @F2M(field = "GYRO_Y", mode = "Y"), @F2M(field = "GYRO_RATE", mode = "RATE"), @F2M(field = "GYRO_Z", mode = "Z"), @F2M(field = "GYRO_X", mode = "X"), @F2M(field = "GYRO_ANGLE", mode = "ANGLE")}, name = "GYRO_SENSING", category = "SENSOR", blocklyNames = {"robSensors_gyro_getSample", "robSensors_gyro_reset", "mbedsensors_rotation_getsample"})
 public final class GyroSensor<V> extends ExternalSensor<V> {
 
-    public GyroSensor(BlocklyBlockProperties properties, BlocklyComment comment, ExternalSensorBean externalSensorBean) {
-        super(properties, comment, externalSensorBean);
+    public GyroSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
+        super(properties, externalSensorBean);
         setReadOnly();
     }
 
@@ -35,10 +34,10 @@ public final class GyroSensor<V> extends ExternalSensor<V> {
             String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
             externalSensorBean =
                 new ExternalSensorBean(Jaxb2Ast.sanitizePort(portName), factory.getMode("RESET"), Jaxb2Ast.sanitizeSlot(BlocklyConstants.NO_SLOT), null);
-            return new GyroSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), externalSensorBean);
+            return new GyroSensor<>(Jaxb2Ast.extractBlocklyProperties(block), externalSensorBean);
         } else {
             externalSensorBean = extractPortAndModeAndSlot(block, helper);
-            return new GyroSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), externalSensorBean);
+            return new GyroSensor<>(Jaxb2Ast.extractBlocklyProperties(block), externalSensorBean);
         }
     }
 

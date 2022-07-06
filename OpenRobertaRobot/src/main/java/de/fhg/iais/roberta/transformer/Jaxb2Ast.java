@@ -6,7 +6,6 @@ import javax.annotation.Nonnull;
 
 import de.fhg.iais.roberta.blockly.generated.Arg;
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Comment;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Shadow;
@@ -25,10 +24,9 @@ import de.fhg.iais.roberta.syntax.lang.functions.Function;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 public class Jaxb2Ast {
@@ -218,36 +216,12 @@ public class Jaxb2Ast {
     }
 
     /**
-     * Extracts the comment from {@link Block}
+     * Extracts the blockly properties of the {@link Block}.
      *
-     * @param block as source
+     * @param block the blockly block
      */
-    public static BlocklyComment extractComment(Block block) {
-        if ( block.getComment() != null ) {
-            Comment comment = block.getComment();
-            return BlocklyComment.make(comment.getValue(), comment.isPinned(), comment.getH(), comment.getW());
-        }
-        return null;
-    }
-
-    /**
-     * Extracts the visual state of the {@link Block}.
-     *
-     * @param block as a source
-     */
-    public static BlocklyBlockProperties extractBlockProperties(Block block) {
-        return BlocklyBlockProperties
-            .make(
-                block.getType(),
-                block.getId(),
-                isDisabled(block),
-                isCollapsed(block),
-                isInline(block),
-                isDeletable(block),
-                isMovable(block),
-                isInTask(block),
-                isShadow(block),
-                isErrorAttribute(block));
+    public static BlocklyProperties extractBlocklyProperties(Block block) {
+        return new BlocklyProperties(block.getType(), block.getId(), isDisabled(block), isCollapsed(block), isInline(block), isDeletable(block), isMovable(block), isInTask(block), isShadow(block), isErrorAttribute(block), block.getComment());
     }
 
     public static int getElseIf(Mutation mutation) {
@@ -345,7 +319,7 @@ public class Jaxb2Ast {
         String typeVar = block.getMutation() != null ? block.getMutation().getDatatype() : BlocklyConstants.NUMBER;
         List<Field> fields = extractFields(block, (short) 1);
         String field = extractField(fields, BlocklyConstants.VAR);
-        return new Var<>(BlocklyType.get(typeVar), field, extractBlockProperties(block), extractComment(block));
+        return new Var<>(BlocklyType.get(typeVar), field, extractBlocklyProperties(block));
     }
 
     public static Block shadow2block(Shadow shadow) {

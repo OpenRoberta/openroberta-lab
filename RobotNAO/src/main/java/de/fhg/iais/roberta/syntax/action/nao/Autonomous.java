@@ -12,8 +12,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "AUTONOMOUS", category = "ACTOR", blocklyNames = {"naoActions_autonomous"})
@@ -21,8 +20,8 @@ public final class Autonomous<V> extends Action<V> {
 
     public final WorkingState onOff;
 
-    public Autonomous(WorkingState onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public Autonomous(WorkingState onOff, BlocklyProperties properties) {
+        super(properties);
         Assert.notNull(onOff, "Missing onOff in Autonomous block!");
         this.onOff = onOff;
         setReadOnly();
@@ -33,7 +32,7 @@ public final class Autonomous<V> extends Action<V> {
 
         String onOff = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
 
-        return new Autonomous<>(WorkingState.get(onOff), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new Autonomous<>(WorkingState.get(onOff), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

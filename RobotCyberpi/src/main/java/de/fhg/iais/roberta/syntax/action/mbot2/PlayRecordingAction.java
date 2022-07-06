@@ -6,8 +6,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoHide;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
@@ -18,8 +17,8 @@ public final class PlayRecordingAction<V> extends Action<V> implements WithUserD
     @NepoHide
     public final Hide hide;
 
-    public PlayRecordingAction(BlocklyBlockProperties properties, BlocklyComment comment, String port, Hide hide) {
-        super(properties, comment);
+    public PlayRecordingAction(BlocklyProperties properties, String port, Hide hide) {
+        super(properties);
         Assert.nonEmptyString(port);
         this.hide = hide;
         this.port = port;

@@ -5,8 +5,7 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
@@ -15,8 +14,8 @@ public final class QuadRGBLightOffAction<V> extends Action<V> implements WithUse
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;
 
-    public QuadRGBLightOffAction(BlocklyBlockProperties properties, BlocklyComment comment, String port) {
-        super(properties, comment);
+    public QuadRGBLightOffAction(BlocklyProperties properties, String port) {
+        super(properties);
         Assert.nonEmptyString(port);
         this.port = port;
         setReadOnly();

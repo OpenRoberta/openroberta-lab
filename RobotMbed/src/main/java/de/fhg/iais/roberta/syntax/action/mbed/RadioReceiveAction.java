@@ -12,16 +12,15 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "RADIO_RECEIVE_ACTION", category = "ACTOR", blocklyNames = {"mbedCommunication_receiveBlock"})
 public final class RadioReceiveAction<V> extends Action<V> {
     public final BlocklyType type;
 
-    public RadioReceiveAction(BlocklyType type, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public RadioReceiveAction(BlocklyProperties properties, BlocklyType type) {
+        super(properties);
         this.type = type;
         setReadOnly();
     }
@@ -34,7 +33,7 @@ public final class RadioReceiveAction<V> extends Action<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         String type = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
-        return new RadioReceiveAction<>(BlocklyType.get(type), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new RadioReceiveAction<>(Jaxb2Ast.extractBlocklyProperties(block), BlocklyType.get(type));
 
     }
 

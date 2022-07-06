@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.IWorker;
 
@@ -36,7 +36,7 @@ public class WorkflowTestHelper {
         StmtList<Void> variables = new StmtList<Void>();
         variables.setReadOnly();
 
-        MainTask<Void> mainTask = new MainTask<Void>(BlocklyBlockProperties.make("MAIN_FOR_TEST", "1"), null, variables, "false", null);
+        MainTask<Void> mainTask = new MainTask<Void>(BlocklyProperties.make("MAIN_FOR_TEST", "1"), variables, "false", null);
         phrases = new ArrayList<>(Arrays.asList(new Location<>("0", "0"), mainTask));
         configurationComponents = new ArrayList<>();
     }
@@ -96,7 +96,7 @@ public class WorkflowTestHelper {
         return project;
     }
 
-    protected final static BlocklyBlockProperties bp = BlocklyBlockProperties.make("BLOCK_FOR_TEST", "1");
+    protected final static BlocklyProperties bp = BlocklyProperties.make("BLOCK_FOR_TEST", "1");
 
     protected void assertHasUsedSensor(Project project, String userDefinedPort, String type, String mode) {
         UsedHardwareBean usedHardwareBean = getUsedHardwareBean(project);

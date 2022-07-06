@@ -16,8 +16,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
@@ -28,8 +27,8 @@ public final class MotorOnAction<V> extends MoveAction<V> {
 
     public final MotionParam<V> param;
 
-    public MotorOnAction(String port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment, port);
+    public MotorOnAction(String port, MotionParam<V> param, BlocklyProperties properties) {
+        super(properties, port);
         Assert.isTrue((param != null) && (port != null));
         this.param = param;
 
@@ -66,7 +65,7 @@ public final class MotorOnAction<V> extends MoveAction<V> {
             }
             mp = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(left)).duration(md).build();
         }
-        return new MotorOnAction<>(port, mp, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new MotorOnAction<>(port, mp, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     /**

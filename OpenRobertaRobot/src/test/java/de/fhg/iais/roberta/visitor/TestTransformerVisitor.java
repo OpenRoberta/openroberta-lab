@@ -23,21 +23,21 @@ public class TestTransformerVisitor extends BaseVisitor<Phrase<Void>> implements
 
     @Override
     public Phrase<Void> visitKeysSensor(KeysSensor<Phrase<Void>> keysSensor) {
-        return new KeysSensor<Void>(keysSensor.getProperty(), keysSensor.getComment(), new ExternalSensorBean("KeysPort", "KeysMode", "KeysSlot", keysSensor.getMutation()));
+        return new KeysSensor<Void>(keysSensor.getProperty(), new ExternalSensorBean("KeysPort", "KeysMode", "KeysSlot", keysSensor.getMutation()));
     }
 
     @Override
     public Phrase<Void> visitTemperatureSensor(TemperatureSensor<Phrase<Void>> temperatureSensor) {
-        return new TemperatureSensor<Void>(temperatureSensor.getProperty(), temperatureSensor.getComment(), new ExternalSensorBean("TempPort", "TempMode", "TempSlot", temperatureSensor.getMutation()));
+        return new TemperatureSensor<Void>(temperatureSensor.getProperty(), new ExternalSensorBean("TempPort", "TempMode", "TempSlot", temperatureSensor.getMutation()));
     }
 
     @Override
     public Phrase<Void> visitMotorOnAction(MotorOnAction<Phrase<Void>> motorOnAction) {
-        return new MotorOnAction<>("MotorPort", modifyMotionParam(motorOnAction.param), motorOnAction.getProperty(), motorOnAction.getComment());
+        return new MotorOnAction<>("MotorPort", modifyMotionParam(motorOnAction.param), motorOnAction.getProperty());
     }
 
     @Override
     public Phrase<Void> visitGetSampleSensor(GetSampleSensor<Phrase<Void>> sensorGetSample) {
-        return new GetSampleSensor("TEMPERATURE_VALUE", "GetSamplePort", "GetSampleSlot", sensorGetSample.mutation, sensorGetSample.hide, sensorGetSample.getProperty(), sensorGetSample.getComment(), this.blocklyDropdownFactory);
+        return new GetSampleSensor("TEMPERATURE_VALUE", "GetSamplePort", "GetSampleSlot", sensorGetSample.mutation, sensorGetSample.hide, sensorGetSample.getProperty(), this.blocklyDropdownFactory);
     }
 }

@@ -4,8 +4,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoExpr(category = "EXPR", blocklyNames = {"robControls_start_activity"}, name = "START_ACTIVITY_TASK", blocklyType = BlocklyType.NULL)
@@ -13,8 +12,8 @@ public final class StartActivityTask<V> extends Expr<V> {
     @NepoValue(name = BlocklyConstants.ACTIVITY, type = BlocklyType.STRING)
     public Expr<V> activityName;
 
-    public StartActivityTask(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> activityName) {
-        super(properties, comment);
+    public StartActivityTask(BlocklyProperties properties, Expr<V> activityName) {
+        super(properties);
         this.activityName = activityName;
         setReadOnly();
     }

@@ -13,8 +13,7 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
@@ -25,8 +24,8 @@ public final class MainTask<V> extends Task<V> {
     public final String debug;
     public final Data data;
 
-    public MainTask(BlocklyBlockProperties properties, BlocklyComment comment, StmtList<V> variables, String debug, Data data) {
-        super(properties, comment);
+    public MainTask(BlocklyProperties properties, StmtList<V> variables, String debug, Data data) {
+        super(properties);
         Assert.isTrue(variables.isReadOnly() && variables != null);
         this.variables = variables;
         this.debug = debug;
@@ -58,11 +57,11 @@ public final class MainTask<V> extends Task<V> {
         if ( block.getMutation().isDeclare() == true ) {
             List<Statement> statements = Jaxb2Ast.extractStatements(block, (short) 1);
             StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.ST);
-            return new MainTask<V>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), statement, debug, block.getData());
+            return new MainTask<V>(Jaxb2Ast.extractBlocklyProperties(block), statement, debug, block.getData());
         }
         StmtList<V> listOfVariables = new StmtList<V>();
         listOfVariables.setReadOnly();
-        return new MainTask<V>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), listOfVariables, debug, block.getData());
+        return new MainTask<V>(Jaxb2Ast.extractBlocklyProperties(block), listOfVariables, debug, block.getData());
     }
 
     @Override

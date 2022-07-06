@@ -4,8 +4,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 
 /**
@@ -18,8 +17,8 @@ public abstract class Function<V> extends Phrase<V> {
     /**
      * create a mutable function of the given {@link BlockDescriptor}
      */
-    public Function(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public Function(BlocklyProperties properties) {
+        super(properties);
 
     }
 

@@ -217,10 +217,10 @@ public class AnnotationHelperTest {
         assertThat(resultPhrase).isInstanceOf(TestPhraseField.class);
         TestPhraseField<?> testPhrase = (TestPhraseField<?>) resultPhrase;
         assertThat(testPhrase.type).isEqualTo("WHATEVER");
-        assertThat(testPhrase.getComment().getComment()).isEqualTo("Test");
-        assertThat(testPhrase.getComment().getHeight()).isEqualTo("80");
-        assertThat(testPhrase.getComment().getWidth()).isEqualTo("160");
-        assertThat(testPhrase.getComment().isPinned()).isEqualTo(false);
+        assertThat(testPhrase.getProperty().getComment().getValue()).isEqualTo("Test");
+        assertThat(testPhrase.getProperty().getComment().getH()).isEqualTo("80");
+        assertThat(testPhrase.getProperty().getComment().getW()).isEqualTo("160");
+        assertThat(testPhrase.getProperty().getComment().isPinned()).isEqualTo(false);
         assertThat(testPhrase.getProperty().isInTask()).isEqualTo(true);
         assertThat(testPhrase.getProperty().getBlocklyId()).isEqualTo("b2Ieob%0r|errWxr`reW");
         assertThat(testPhrase.getProperty().getBlockType()).isEqualTo("TEST_PHRASE_FIELD");
@@ -425,14 +425,14 @@ public class AnnotationHelperTest {
     public void checkNepoAnnotatedClass_wrongConstructor() {
         Assertions.assertThatThrownBy(() -> AnnotationHelper.checkNepoAnnotatedClass(TestPhraseWrongConstructor.class))
             .isInstanceOf(NepoAnnotationException.class)
-            .hasMessageContaining("Excepted a constructor with the following parameter types [class de.fhg.iais.roberta.util.ast.BlocklyBlockProperties, class de.fhg.iais.roberta.util.ast.BlocklyComment, class java.lang.String, class de.fhg.iais.roberta.syntax.lang.expr.Expr] on TestPhraseWrongConstructor");
+            .hasMessageContaining("Excepted a constructor with the following parameter types [class de.fhg.iais.roberta.util.ast.BlocklyProperties, class java.lang.String, class de.fhg.iais.roberta.syntax.lang.expr.Expr] on TestPhraseWrongConstructor");
     }
 
     @Test
     public void checkNepoAnnotatedClass_constructorNotPublic() {
         Assertions.assertThatThrownBy(() -> AnnotationHelper.checkNepoAnnotatedClass(TestPhraseConstructorNotPublic.class))
             .isInstanceOf(NepoAnnotationException.class)
-            .hasMessageContaining("Constructor de.fhg.iais.roberta.syntax.TestPhraseConstructorNotPublic(de.fhg.iais.roberta.util.ast.BlocklyBlockProperties,de.fhg.iais.roberta.util.ast.BlocklyComment,java.lang.String,de.fhg.iais.roberta.syntax.lang.expr.Expr) on TestPhraseConstructorNotPublic must be public");
+            .hasMessageContaining("Constructor de.fhg.iais.roberta.syntax.TestPhraseConstructorNotPublic(de.fhg.iais.roberta.util.ast.BlocklyProperties,java.lang.String,de.fhg.iais.roberta.syntax.lang.expr.Expr) on TestPhraseConstructorNotPublic must be public");
     }
 
     private String blockToXml(Block resultBlock) throws Exception {

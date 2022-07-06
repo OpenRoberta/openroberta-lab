@@ -8,8 +8,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoHide;
 import de.fhg.iais.roberta.transformer.forField.NepoMutation;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
@@ -29,8 +28,8 @@ public final class Joystick<V> extends Sensor<V> implements WithUserDefinedPort<
     @NepoHide
     public final Hide hide;
 
-    public Joystick(BlocklyBlockProperties properties, BlocklyComment comment, Mutation mutation, String mode, String port, String slot, Hide hide) {
-        super(properties, comment);
+    public Joystick(BlocklyProperties properties, Mutation mutation, String mode, String port, String slot, Hide hide) {
+        super(properties);
         Assert.nonEmptyString(port);
         this.mutation = mutation;
         this.mode = mode;
@@ -40,8 +39,8 @@ public final class Joystick<V> extends Sensor<V> implements WithUserDefinedPort<
         setReadOnly();
     }
 
-    public Joystick(BlocklyBlockProperties properties, BlocklyComment comment, ExternalSensorBean externalSensorBean) {
-        this(properties, comment, externalSensorBean.getMutation(), externalSensorBean.getMode(), externalSensorBean.getPort(), externalSensorBean.getSlot(), null);
+    public Joystick(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
+        this(properties, externalSensorBean.getMutation(), externalSensorBean.getMode(), externalSensorBean.getPort(), externalSensorBean.getSlot(), null);
     }
 
     @Override

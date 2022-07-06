@@ -7,16 +7,15 @@ import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "LED_MATRIX_IMAGE_INVERT", category = "FUNCTION", blocklyNames = {"mBotImage_invert"})
 public final class LEDMatrixImageInvertFunction<V> extends Function<V> {
     @NepoValue(name = "VAR", type = BlocklyType.PREDEFINED_IMAGE)
     public final Expr<V> image;
 
-    public LEDMatrixImageInvertFunction(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> image) {
-        super(properties, comment);
+    public LEDMatrixImageInvertFunction(BlocklyProperties properties, Expr<V> image) {
+        super(properties);
         Assert.notNull(image);
 
         this.image = image;

@@ -5,8 +5,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 @NepoPhrase(name = "DISPLAY_SET_PIXEL", category = "ACTOR", blocklyNames = {"mbedActions_display_setPixel"})
@@ -20,8 +19,8 @@ public final class DisplaySetPixelAction<V> extends Action<V> {
     @NepoValue(name = "BRIGHTNESS", type = BlocklyType.NUMBER)
     public final Expr<V> brightness;
 
-    public DisplaySetPixelAction(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> x, Expr<V> y, Expr<V> brightness) {
-        super(properties, comment);
+    public DisplaySetPixelAction(BlocklyProperties properties, Expr<V> x, Expr<V> y, Expr<V> brightness) {
+        super(properties);
         Assert.notNull(x);
         Assert.notNull(y);
         Assert.notNull(brightness);

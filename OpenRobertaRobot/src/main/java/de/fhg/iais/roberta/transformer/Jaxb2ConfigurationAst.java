@@ -24,8 +24,7 @@ import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponentLeaf;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponentNode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 public final class Jaxb2ConfigurationAst {
 
@@ -100,8 +99,7 @@ public final class Jaxb2ConfigurationAst {
                     portName,
                     userDefinedName,
                     properties,
-                    Jaxb2Ast.extractBlockProperties(topBlock),
-                    Jaxb2Ast.extractComment(topBlock),
+                    Jaxb2Ast.extractBlocklyProperties(topBlock),
                     0,
                     0);
             allComponents.add(configComp);
@@ -145,8 +143,7 @@ public final class Jaxb2ConfigurationAst {
                 userDefinedName,
                 userDefinedName,
                 map,
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block),
+                Jaxb2Ast.extractBlocklyProperties(block),
                 Integer.parseInt(x),
                 Integer.parseInt(y));
         }
@@ -165,8 +162,7 @@ public final class Jaxb2ConfigurationAst {
             userDefinedName,
             userDefinedName,
             map,
-            Jaxb2Ast.extractBlockProperties(block),
-            Jaxb2Ast.extractComment(block),
+            Jaxb2Ast.extractBlocklyProperties(block),
             Integer.parseInt(x),
             Integer.parseInt(y), subcomponents);
     }
@@ -199,8 +195,7 @@ public final class Jaxb2ConfigurationAst {
                             String.class,
                             String.class,
                             Map.class,
-                            BlocklyBlockProperties.class,
-                            BlocklyComment.class,
+                            BlocklyProperties.class,
                             Integer.TYPE,
                             Integer.TYPE);
                 constructor.setAccessible(true);
@@ -211,8 +206,7 @@ public final class Jaxb2ConfigurationAst {
                         null,
                         userDefinedName,
                         map,
-                        Jaxb2Ast.extractBlockProperties(firstBlock),
-                        Jaxb2Ast.extractComment(firstBlock),
+                        Jaxb2Ast.extractBlocklyProperties(firstBlock),
                         Integer.parseInt(instance.getX()),
                         Integer.parseInt(instance.getY()));
             } catch ( ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e ) {
@@ -225,8 +219,7 @@ public final class Jaxb2ConfigurationAst {
                 userDefinedName,
                 userDefinedName,
                 map,
-                Jaxb2Ast.extractBlockProperties(firstBlock),
-                Jaxb2Ast.extractComment(firstBlock),
+                Jaxb2Ast.extractBlocklyProperties(firstBlock),
                 Integer.parseInt(instance.getX()),
                 Integer.parseInt(instance.getY()));
         }

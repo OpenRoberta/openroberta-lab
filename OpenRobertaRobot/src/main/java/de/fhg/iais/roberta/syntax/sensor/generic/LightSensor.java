@@ -4,8 +4,7 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.forClass.F2M;
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forClass.NepoExternalSensor;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
 @NepoExpr(name = "LIGHT_SENSING", category = "SENSOR", blocklyNames = {"robSensors_light_getSample", "sim_light_getSample"},
@@ -15,8 +14,8 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 @NepoExternalSensor()
 public final class LightSensor<V> extends ExternalSensor<V> {
 
-    public LightSensor(BlocklyBlockProperties properties, BlocklyComment comment, ExternalSensorBean externalSensorBean) {
-        super(properties, comment, externalSensorBean);
+    public LightSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
+        super(properties, externalSensorBean);
         setReadOnly();
     }
 

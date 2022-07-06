@@ -13,8 +13,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "RELAY_ACTION", category = "ACTOR", blocklyNames = {"robactions_set_relay"})
@@ -22,8 +21,8 @@ public final class RelayAction<V> extends Action<V> {
     public final String port;
     public final IRelayMode mode;
 
-    public RelayAction(String port, IRelayMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public RelayAction(String port, IRelayMode mode, BlocklyProperties properties) {
+        super(properties);
         Assert.isTrue(mode != null);
         this.port = port;
         this.mode = mode;
@@ -40,7 +39,7 @@ public final class RelayAction<V> extends Action<V> {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.EMPTY_PORT);
         String mode = Jaxb2Ast.extractField(fields, BlocklyConstants.RELAYSTATE, BlocklyConstants.DEFAULT);
-        return new RelayAction<>(Jaxb2Ast.sanitizePort(port), factory.getRelayMode(mode), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new RelayAction<>(Jaxb2Ast.sanitizePort(port), factory.getRelayMode(mode), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

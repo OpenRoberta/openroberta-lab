@@ -16,8 +16,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "POINT_LOOK_AT", category = "ACTOR", blocklyNames = {"naoActions_pointLookAt"})
@@ -37,9 +36,8 @@ public final class PointLookAt<V> extends Action<V> {
         Expr<V> pointY,
         Expr<V> pointZ,
         Expr<V> speed,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        super(properties, comment);
+        BlocklyProperties properties) {
+        super(properties);
         //Assert.notNull(frame, "Missing frame in PointLookAt block!");
         //Assert.notNull(pointLook, "Missing point look in PointLookAt block!");
         this.frame = frame;
@@ -67,7 +65,7 @@ public final class PointLookAt<V> extends Action<V> {
         Phrase<V> pointZ = helper.extractValue(values, new ExprParam(BlocklyConstants.Z, BlocklyType.NUMBER_INT));
         Phrase<V> speed = helper.extractValue(values, new ExprParam(BlocklyConstants.SPEED, BlocklyType.NUMBER_INT));
 
-        return new PointLookAt<V>(Frame.get(frame), PointLook.get(pointLook), Jaxb2Ast.convertPhraseToExpr(pointX), Jaxb2Ast.convertPhraseToExpr(pointY), Jaxb2Ast.convertPhraseToExpr(pointZ), Jaxb2Ast.convertPhraseToExpr(speed), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new PointLookAt<V>(Frame.get(frame), PointLook.get(pointLook), Jaxb2Ast.convertPhraseToExpr(pointX), Jaxb2Ast.convertPhraseToExpr(pointY), Jaxb2Ast.convertPhraseToExpr(pointZ), Jaxb2Ast.convertPhraseToExpr(speed), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

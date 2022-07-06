@@ -7,8 +7,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
@@ -19,8 +18,8 @@ public final class QuadRGBLightOnAction<V> extends Action<V> implements WithUser
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
     public final String port;
 
-    public QuadRGBLightOnAction(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> color, String port) {
-        super(properties, comment);
+    public QuadRGBLightOnAction(BlocklyProperties properties, Expr<V> color, String port) {
+        super(properties);
         Assert.notNull(color);
         Assert.nonEmptyString(port);
         this.color = color;

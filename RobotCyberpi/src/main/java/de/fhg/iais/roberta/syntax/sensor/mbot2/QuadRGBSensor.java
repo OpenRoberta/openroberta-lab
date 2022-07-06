@@ -6,8 +6,7 @@ import de.fhg.iais.roberta.transformer.forClass.F2M;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoMutation;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
@@ -24,8 +23,8 @@ public final class QuadRGBSensor<V> extends Sensor<V> implements WithUserDefined
     @NepoField(name = BlocklyConstants.SLOT)
     public final String slot;
 
-    public QuadRGBSensor(BlocklyBlockProperties properties, BlocklyComment comment, Mutation mutation, String mode, String sensorPort, String slot) {
-        super(properties, comment);
+    public QuadRGBSensor(BlocklyProperties properties, Mutation mutation, String mode, String sensorPort, String slot) {
+        super(properties);
         this.mutation = mutation;
         this.mode = mode;
         this.sensorPort = sensorPort;
@@ -33,8 +32,8 @@ public final class QuadRGBSensor<V> extends Sensor<V> implements WithUserDefined
         setReadOnly();
     }
 
-    public QuadRGBSensor(BlocklyBlockProperties properties, BlocklyComment comment, ExternalSensorBean externalSensorBean) {
-        this(properties, comment, externalSensorBean.getMutation(), externalSensorBean.getMode(), externalSensorBean.getPort(), externalSensorBean.getSlot());
+    public QuadRGBSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
+        this(properties, externalSensorBean.getMutation(), externalSensorBean.getMode(), externalSensorBean.getPort(), externalSensorBean.getSlot());
     }
 
     @Override

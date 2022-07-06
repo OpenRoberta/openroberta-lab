@@ -15,8 +15,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "SHOW_PICTURE_ACTION", category = "ACTOR", blocklyNames = {"robActions_display_picture", "robActions_display_picture_new"})
@@ -25,8 +24,8 @@ public final class ShowPictureAction<V> extends Action<V> {
     public final Expr<V> x;
     public final Expr<V> y;
 
-    public ShowPictureAction(String pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public ShowPictureAction(String pic, Expr<V> x, Expr<V> y, BlocklyProperties properties) {
+        super(properties);
         Assert.isTrue(pic != null && x != null && y != null);
         this.pic = pic;
         this.x = x;
@@ -45,7 +44,7 @@ public final class ShowPictureAction<V> extends Action<V> {
         String pic = Jaxb2Ast.extractField(fields, BlocklyConstants.PICTURE);
         Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
         Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
-        return new ShowPictureAction<>(pic, Jaxb2Ast.convertPhraseToExpr(x), Jaxb2Ast.convertPhraseToExpr(y), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new ShowPictureAction<>(pic, Jaxb2Ast.convertPhraseToExpr(x), Jaxb2Ast.convertPhraseToExpr(y), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

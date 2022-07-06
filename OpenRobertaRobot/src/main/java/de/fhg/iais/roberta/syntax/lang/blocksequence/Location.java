@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.syntax.lang.blocksequence;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 
@@ -15,7 +15,7 @@ public final class Location<V> extends Task<V> {
     public final String y;
 
     public Location(String x, String y) {
-        super(BlocklyBlockProperties.make("t", "t", true, false, false, false, false, true, false, false), null);
+        super(new BlocklyProperties("t", "t", true, false, false, false, false, true, false, false, null));
         Assert.isTrue(!x.equals("") && !y.equals(""));
         this.x = x;
         this.y = y;

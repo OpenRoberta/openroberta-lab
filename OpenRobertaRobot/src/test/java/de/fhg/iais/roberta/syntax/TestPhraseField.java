@@ -3,8 +3,7 @@ package de.fhg.iais.roberta.syntax;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "TEST_PHRASE_FIELD", blocklyNames = {"test_phrase_field"}, category = "EXPR")
 public class TestPhraseField<V> extends Expr<V> {
@@ -21,13 +20,13 @@ public class TestPhraseField<V> extends Expr<V> {
     public final OperationType operationType;
 
     public TestPhraseField(
-        BlocklyBlockProperties properties,
-        BlocklyComment comment,
+        BlocklyProperties properties,
+        
         String type,
         boolean flag,
         double value,
         OperationType operationType) {
-        super(properties, comment);
+        super(properties);
         this.type = type;
         this.flag = flag;
         this.value = value;

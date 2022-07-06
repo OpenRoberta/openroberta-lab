@@ -2,16 +2,15 @@ package de.fhg.iais.roberta.syntax;
 
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "TEST_PHRASE_NOT_PUBLIC", blocklyNames = {"test_phrase_field_not_public"}, category = "EXPR")
 public class TestPhraseFieldNotPublic<V> extends Phrase<V> {
     @NepoField(name = "MESSAGE")
     private final String message;
 
-    public TestPhraseFieldNotPublic(BlocklyBlockProperties property, BlocklyComment comment, String message) {
-        super(property, comment);
+    public TestPhraseFieldNotPublic(BlocklyProperties property,  String message) {
+        super(property);
         this.message = message;
     }
 }

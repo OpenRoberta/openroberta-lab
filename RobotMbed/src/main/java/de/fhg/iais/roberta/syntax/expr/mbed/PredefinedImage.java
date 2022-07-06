@@ -6,8 +6,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.Assoc;
@@ -18,8 +17,8 @@ public final class PredefinedImage<V> extends Expr<V> {
     @NepoField(name = BlocklyConstants.IMAGE)
     public final String imageName;
 
-    public PredefinedImage(BlocklyBlockProperties properties, BlocklyComment comment, String imageName) {
-        super(properties, comment);
+    public PredefinedImage(BlocklyProperties properties, String imageName) {
+        super(properties);
         Assert.notNull(imageName);
         this.imageName = imageName;
         setReadOnly();

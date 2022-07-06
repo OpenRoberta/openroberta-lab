@@ -12,8 +12,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
@@ -24,8 +23,8 @@ public final class MathSingleFunct<V> extends Function<V> {
     public final FunctionNames functName;
     public final List<Expr<V>> param;
 
-    public MathSingleFunct(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public MathSingleFunct(FunctionNames name, List<Expr<V>> param, BlocklyProperties properties) {
+        super(properties);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
         this.param = param;
@@ -60,7 +59,7 @@ public final class MathSingleFunct<V> extends Function<V> {
         exprParams.add(new ExprParam(BlocklyConstants.NUM, BlocklyType.NUMBER_INT));
         String op = Jaxb2Ast.getOperation(block, BlocklyConstants.OP);
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return new MathSingleFunct<V>(FunctionNames.get(op), params, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new MathSingleFunct<V>(FunctionNames.get(op), params, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

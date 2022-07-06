@@ -12,8 +12,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
@@ -22,8 +21,8 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 public final class MathRandomIntFunct<V> extends Function<V> {
     public final List<Expr<V>> param;
 
-    public MathRandomIntFunct(List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public MathRandomIntFunct(List<Expr<V>> param, BlocklyProperties properties) {
+        super(properties);
         Assert.isTrue(param != null);
         this.param = param;
         setReadOnly();
@@ -54,7 +53,7 @@ public final class MathRandomIntFunct<V> extends Function<V> {
         exprParams.add(new ExprParam(BlocklyConstants.FROM, BlocklyType.NUMBER_INT));
         exprParams.add(new ExprParam(BlocklyConstants.TO, BlocklyType.NUMBER_INT));
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return new MathRandomIntFunct<V>(params, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new MathRandomIntFunct<V>(params, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

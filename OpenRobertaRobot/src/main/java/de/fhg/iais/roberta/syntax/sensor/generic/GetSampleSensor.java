@@ -13,8 +13,7 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
@@ -37,11 +36,11 @@ public final class GetSampleSensor<V> extends Sensor<V> {
         String slot,
         Mutation mutation,
         List<Hide> hide,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment,
+        BlocklyProperties properties,
+        
         BlocklyDropdownFactory factory) //
     {
-        super(properties, comment);
+        super(properties);
         Assert.notNull(sensorTypeAndMode);
         Assert.notNull(port);
         this.sensorPort = port;
@@ -49,7 +48,7 @@ public final class GetSampleSensor<V> extends Sensor<V> {
         this.sensorTypeAndMode = sensorTypeAndMode;
         this.mutation = mutation;
         this.hide = hide;
-        this.sensor = (Sensor<V>) factory.createSensor(sensorTypeAndMode, port, slot, mutation, properties, comment);
+        this.sensor = (Sensor<V>) factory.createSensor(sensorTypeAndMode, port, slot, mutation, properties);
         setReadOnly();
     }
 
@@ -72,7 +71,7 @@ public final class GetSampleSensor<V> extends Sensor<V> {
         } else {
             slotName = Jaxb2Ast.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
         }
-        return new GetSampleSensor(modeName, portName, slotName, block.getMutation(), block.getHide(), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), helper.getDropdownFactory());
+        return new GetSampleSensor(modeName, portName, slotName, block.getMutation(), block.getHide(), Jaxb2Ast.extractBlocklyProperties(block), helper.getDropdownFactory());
     }
 
     @Override

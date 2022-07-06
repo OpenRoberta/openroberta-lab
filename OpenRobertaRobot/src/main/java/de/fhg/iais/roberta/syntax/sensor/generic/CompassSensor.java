@@ -12,16 +12,15 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.F2M;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(sampleValues = {@F2M(field = "COMPASS_COMPASS", mode = "COMPASS"), @F2M(field = "COMPASS_X", mode = "X"), @F2M(field = "COMPASS_Y", mode = "Y"), @F2M(field = "COMPASS_ANGLE", mode = "ANGLE"), @F2M(field = "COMPASS_Z", mode = "Z")}, name = "COMPASS_SENSING", category = "SENSOR", blocklyNames = {"robSensors_compass_getSample", "mbedsensors_compass_getsample", "robSensors_compass_calibrate"})
 public final class CompassSensor<V> extends ExternalSensor<V> {
 
-    public CompassSensor(BlocklyBlockProperties properties, BlocklyComment comment, ExternalSensorBean externalSensorBean) {
-        super(properties, comment, externalSensorBean);
+    public CompassSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
+        super(properties, externalSensorBean);
         setReadOnly();
     }
 
@@ -33,10 +32,10 @@ public final class CompassSensor<V> extends ExternalSensor<V> {
             String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
             externalSensorBean =
                 new ExternalSensorBean(Jaxb2Ast.sanitizePort(portName), factory.getMode("CALIBRATE"), Jaxb2Ast.sanitizeSlot(BlocklyConstants.NO_SLOT), null);
-            return new CompassSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), externalSensorBean);
+            return new CompassSensor<>(Jaxb2Ast.extractBlocklyProperties(block), externalSensorBean);
         }
         ExternalSensorBean sensorData = extractPortAndModeAndSlot(block, helper);
-        return new CompassSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), sensorData);
+        return new CompassSensor<>(Jaxb2Ast.extractBlocklyProperties(block), sensorData);
     }
 
     @Override

@@ -13,16 +13,15 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "BOB3_REMEMBER", category = "ACTOR", blocklyNames = {"bob3Actions_remember"})
 public final class RememberAction<V> extends Action<V> {
     public final Expr<V> code;
 
-    public RememberAction(Expr<V> code, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public RememberAction(Expr<V> code, BlocklyProperties properties) {
+        super(properties);
         this.code = code;
         setReadOnly();
     }
@@ -35,7 +34,7 @@ public final class RememberAction<V> extends Action<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         Phrase<V> code = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER));
-        return new RememberAction<>(Jaxb2Ast.convertPhraseToExpr(code), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new RememberAction<>(Jaxb2Ast.convertPhraseToExpr(code), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

@@ -13,7 +13,7 @@ public final class SensorStmt<V> extends Stmt<V> {
     public final Sensor<V> sensor;
 
     public SensorStmt(Sensor<V> sensor) {
-        super(sensor.getProperty(), sensor.getComment());
+        super(sensor.getProperty());
         Assert.isTrue(sensor != null && sensor.isReadOnly());
         this.sensor = sensor;
         setReadOnly();

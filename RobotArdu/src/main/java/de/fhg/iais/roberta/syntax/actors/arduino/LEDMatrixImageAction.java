@@ -16,8 +16,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "LED_MATRIX_IMAGE_ACTION", category = "ACTOR", blocklyNames = {"mBotActions_display_image"})
@@ -27,8 +26,8 @@ public final class LEDMatrixImageAction<V> extends Action<V> {
     public final Expr<V> valuesToDisplay;
     public final String displayImageMode;
 
-    public LEDMatrixImageAction(String port, String displayImageMode, Expr<V> valuesToDisplay, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public LEDMatrixImageAction(String port, String displayImageMode, Expr<V> valuesToDisplay, BlocklyProperties properties) {
+        super(properties);
         Assert.isTrue(port != null && displayImageMode != null && valuesToDisplay != null);
         this.port = port;
         this.displayImageMode = displayImageMode;
@@ -47,7 +46,7 @@ public final class LEDMatrixImageAction<V> extends Action<V> {
         final String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT);
         String mode = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
         Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
-        return new LEDMatrixImageAction<>(port, mode, Jaxb2Ast.convertPhraseToExpr(image), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new LEDMatrixImageAction<>(port, mode, Jaxb2Ast.convertPhraseToExpr(image), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

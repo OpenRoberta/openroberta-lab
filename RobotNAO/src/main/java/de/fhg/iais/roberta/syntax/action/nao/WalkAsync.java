@@ -13,8 +13,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "WALK_ASYNC", category = "ACTOR", blocklyNames = {"naoActions_walk_async"})
@@ -24,8 +23,8 @@ public final class WalkAsync<V> extends Action<V> {
     public final Expr<V> YSpeed;
     public final Expr<V> ZSpeed;
 
-    public WalkAsync(Expr<V> XSpeed, Expr<V> YSpeed, Expr<V> ZSpeed, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public WalkAsync(Expr<V> XSpeed, Expr<V> YSpeed, Expr<V> ZSpeed, BlocklyProperties properties) {
+        super(properties);
         this.XSpeed = XSpeed;
         this.YSpeed = YSpeed;
         this.ZSpeed = ZSpeed;
@@ -44,7 +43,7 @@ public final class WalkAsync<V> extends Action<V> {
         Phrase<V> YSpeed = helper.extractValue(values, new ExprParam(BlocklyConstants.Y + BlocklyConstants.SPEED, BlocklyType.NUMBER_INT));
         Phrase<V> ZSpeed = helper.extractValue(values, new ExprParam(BlocklyConstants.Z + BlocklyConstants.SPEED, BlocklyType.NUMBER_INT));
 
-        return new WalkAsync<V>(Jaxb2Ast.convertPhraseToExpr(XSpeed), Jaxb2Ast.convertPhraseToExpr(YSpeed), Jaxb2Ast.convertPhraseToExpr(ZSpeed), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new WalkAsync<V>(Jaxb2Ast.convertPhraseToExpr(XSpeed), Jaxb2Ast.convertPhraseToExpr(YSpeed), Jaxb2Ast.convertPhraseToExpr(ZSpeed), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

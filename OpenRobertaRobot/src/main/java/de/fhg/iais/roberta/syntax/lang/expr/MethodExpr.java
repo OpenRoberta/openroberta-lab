@@ -16,7 +16,7 @@ public final class MethodExpr<V> extends Expr<V> {
     public final Method<V> method;
 
     public MethodExpr(Method<V> method) {
-        super(method.getProperty(), method.getComment());
+        super(method.getProperty());
         Assert.isTrue(method.isReadOnly());
         this.method = method;
         setReadOnly();

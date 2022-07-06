@@ -11,8 +11,7 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "FLAMESENSOR_GET_SAMPLE", category = "SENSOR", blocklyNames = {"robSensors_flame_getSample"})
@@ -20,8 +19,8 @@ public final class FlameSensor<V> extends Sensor<V> {
 
     public final String port;
 
-    public FlameSensor(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public FlameSensor(String port, BlocklyProperties properties) {
+        super(properties);
         this.port = port;
         setReadOnly();
     }
@@ -30,7 +29,7 @@ public final class FlameSensor<V> extends Sensor<V> {
         final BlocklyDropdownFactory factory = helper.getDropdownFactory();
         final List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         final String port = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
-        return new FlameSensor<>(Jaxb2Ast.sanitizePort(port), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new FlameSensor<>(Jaxb2Ast.sanitizePort(port), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

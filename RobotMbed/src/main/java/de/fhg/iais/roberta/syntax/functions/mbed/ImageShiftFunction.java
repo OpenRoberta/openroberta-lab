@@ -18,8 +18,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "IMAGE_SHIFT", category = "FUNCTION", blocklyNames = {"mbedImage_shift"})
@@ -28,8 +27,8 @@ public final class ImageShiftFunction<V> extends Function<V> {
     public final Expr<V> positions;
     public final IDirection shiftDirection;
 
-    public ImageShiftFunction(Expr<V> image, Expr<V> positions, IDirection shiftDirection, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public ImageShiftFunction(Expr<V> image, Expr<V> positions, IDirection shiftDirection, BlocklyProperties properties) {
+        super(properties);
         Assert.notNull(image);
         Assert.notNull(positions);
         Assert.notNull(shiftDirection);
@@ -66,7 +65,7 @@ public final class ImageShiftFunction<V> extends Function<V> {
         IDirection shiftingDirection = factory.getDirection(Jaxb2Ast.extractField(fields, BlocklyConstants.OP));
         Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.A, BlocklyType.PREDEFINED_IMAGE));
         Phrase<V> numberOfPositions = helper.extractValue(values, new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT));
-        return new ImageShiftFunction<>(Jaxb2Ast.convertPhraseToExpr(image), Jaxb2Ast.convertPhraseToExpr(numberOfPositions), shiftingDirection, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new ImageShiftFunction<>(Jaxb2Ast.convertPhraseToExpr(image), Jaxb2Ast.convertPhraseToExpr(numberOfPositions), shiftingDirection, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

@@ -16,8 +16,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "BLUETOOTH_RECEIVED_ACTION", category = "ACTOR", blocklyNames = {"robCommunication_receiveBlock"})
@@ -32,9 +31,8 @@ public final class BluetoothReceiveAction<V> extends Action<V> {
         Expr<V> bluetoothRecieveConnection,
         String channel,
         String dataType,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        super(properties, comment);
+        BlocklyProperties properties) {
+        super(properties);
         this.connection = bluetoothRecieveConnection;
         this.channel = channel;
         this.dataType = dataType;
@@ -51,11 +49,11 @@ public final class BluetoothReceiveAction<V> extends Action<V> {
         if ( fields.size() == 3 ) {
             String bluetoothRecieveChannel = Jaxb2Ast.extractField(fields, BlocklyConstants.CHANNEL);
             String bluetoothRecieveDataType = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
-            return new BluetoothReceiveAction<V>(dataValue, Jaxb2Ast.convertPhraseToExpr(bluetoothRecieveConnection), bluetoothRecieveChannel, bluetoothRecieveDataType, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+            return new BluetoothReceiveAction<V>(dataValue, Jaxb2Ast.convertPhraseToExpr(bluetoothRecieveConnection), bluetoothRecieveChannel, bluetoothRecieveDataType, Jaxb2Ast.extractBlocklyProperties(block));
         } else {
             String bluetoothReceiveChannel = "-1";
             String bluetoothRecieveDataType = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
-            return new BluetoothReceiveAction<V>(dataValue, Jaxb2Ast.convertPhraseToExpr(bluetoothRecieveConnection), bluetoothReceiveChannel, bluetoothRecieveDataType, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+            return new BluetoothReceiveAction<V>(dataValue, Jaxb2Ast.convertPhraseToExpr(bluetoothRecieveConnection), bluetoothReceiveChannel, bluetoothRecieveDataType, Jaxb2Ast.extractBlocklyProperties(block));
         }
     }
 

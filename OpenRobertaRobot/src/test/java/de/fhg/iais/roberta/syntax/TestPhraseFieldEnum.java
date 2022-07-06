@@ -3,8 +3,7 @@ package de.fhg.iais.roberta.syntax;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "TEST_PHRASE_FIELD_ENUM", blocklyNames = {"test_phrase_field_enum"}, category = "EXPR")
 public class TestPhraseFieldEnum<V> extends Expr<V> {
@@ -15,10 +14,10 @@ public class TestPhraseFieldEnum<V> extends Expr<V> {
     public final Type type1;
 
     public TestPhraseFieldEnum(
-        BlocklyBlockProperties properties,
-        BlocklyComment comment,
+        BlocklyProperties properties,
+        
         Type type, Type type1) {
-        super(properties, comment);
+        super(properties);
         this.type = type;
         this.type1 = type1;
     }

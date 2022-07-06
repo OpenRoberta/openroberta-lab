@@ -6,7 +6,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
@@ -18,7 +18,7 @@ public final class StmtList<V> extends Stmt<V> {
     public final List<Stmt<V>> sl = new ArrayList<Stmt<V>>();
 
     public StmtList() {
-        super(BlocklyBlockProperties.make("STMT_LIST", "1"), null);
+        super(BlocklyProperties.make("STMT_LIST", "1"));
     }
 
     /**

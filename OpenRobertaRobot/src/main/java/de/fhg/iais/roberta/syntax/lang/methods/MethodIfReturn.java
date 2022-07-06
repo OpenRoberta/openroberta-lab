@@ -14,8 +14,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
@@ -35,9 +34,8 @@ public final class MethodIfReturn<V> extends Method<V> {
         BlocklyType oraReturnType,
         Expr<V> oraReturnValue,
         BigInteger value,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        super(properties, comment);
+        BlocklyProperties properties) {
+        super(properties);
         Assert.isTrue(oraCondition != null && oraCondition.isReadOnly() && oraReturnType != null && oraReturnValue != null && oraReturnValue.isReadOnly());
         this.oraCondition = oraCondition;
         this.oraReturnType = oraReturnType;
@@ -66,7 +64,7 @@ public final class MethodIfReturn<V> extends Method<V> {
         Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NULL));
         final Mutation mutation = block.getMutation();
         String mode = mutation.getReturnType() == null ? "void" : mutation.getReturnType();
-        return new MethodIfReturn<>(Jaxb2Ast.convertPhraseToExpr(left), BlocklyType.get(mode), Jaxb2Ast.convertPhraseToExpr(right), mutation.getValue(), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new MethodIfReturn<>(Jaxb2Ast.convertPhraseToExpr(left), BlocklyType.get(mode), Jaxb2Ast.convertPhraseToExpr(right), mutation.getValue(), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

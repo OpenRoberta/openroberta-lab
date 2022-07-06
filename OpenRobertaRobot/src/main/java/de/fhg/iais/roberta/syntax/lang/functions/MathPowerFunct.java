@@ -7,8 +7,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
@@ -19,8 +18,8 @@ public final class MathPowerFunct<V> extends Expr<V> {
     public final FunctionNames functName;
     public final List<Expr<V>> param;
 
-    public MathPowerFunct(BlocklyBlockProperties properties, BlocklyComment comment, FunctionNames name, List<Expr<V>> param) {
-        super(properties, comment);
+    public MathPowerFunct(BlocklyProperties properties, FunctionNames name, List<Expr<V>> param) {
+        super(properties);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
         this.param = param;

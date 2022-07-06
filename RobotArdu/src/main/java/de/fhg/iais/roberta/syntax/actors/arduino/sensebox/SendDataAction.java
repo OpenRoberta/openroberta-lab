@@ -17,8 +17,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.basic.Pair;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "DATA_SEND_ACTION", category = "ACTOR", blocklyNames = {"robActions_sendData"})
@@ -27,8 +26,8 @@ public final class SendDataAction<V> extends Action<V> {
     public final List<Pair<String, Expr<V>>> id2Phenomena;
     public final String destination;
 
-    public SendDataAction(String destination, List<Pair<String, Expr<V>>> id2Phenomena, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public SendDataAction(String destination, List<Pair<String, Expr<V>>> id2Phenomena, BlocklyProperties properties) {
+        super(properties);
         this.id2Phenomena = id2Phenomena;
         this.destination = destination;
         this.setReadOnly();
@@ -47,7 +46,7 @@ public final class SendDataAction<V> extends Action<V> {
         for ( int i = 0; i < exprList.get().size(); i++ ) {
             id2Phenomena.add(Pair.of(fields.get(i + 1).getValue(), exprList.get().get(i)));
         }
-        return new SendDataAction<>(destination, id2Phenomena, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new SendDataAction<>(destination, id2Phenomena, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

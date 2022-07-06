@@ -9,8 +9,7 @@ import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
 import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.ITransformerVisitor;
@@ -28,8 +27,7 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 abstract public class Phrase<V> {
     private static final Logger LOG = LoggerFactory.getLogger(Phrase.class);
     private boolean readOnly = false;
-    private final BlocklyBlockProperties property;
-    private final BlocklyComment comment;
+    private final BlocklyProperties property;
     private final BlockDescriptor blockDescriptor;
 
     private final NepoInfos infos = new NepoInfos(); // the content of the info object is MUTABLE !!!
@@ -39,11 +37,10 @@ abstract public class Phrase<V> {
      *
      * @param comment that the user added to the block
      */
-    public Phrase(BlocklyBlockProperties property, BlocklyComment comment) {
+    public Phrase(BlocklyProperties property) {
         Assert.isTrue(property != null, "block property is null!");
         this.blockDescriptor = AstFactory.getBlockDescriptor(this.getClass());
         this.property = property;
-        this.comment = comment;
     }
 
     /**
@@ -53,11 +50,10 @@ abstract public class Phrase<V> {
      * @param property
      * @param comment
      */
-    public Phrase(BlockDescriptor blockDescriptor, BlocklyBlockProperties property, BlocklyComment comment) {
+    public Phrase(BlockDescriptor blockDescriptor, BlocklyProperties property) {
         Assert.isTrue(property != null, "block property is null!");
         this.blockDescriptor = blockDescriptor;
         this.property = property;
-        this.comment = comment;
     }
 
     /**
@@ -95,15 +91,8 @@ abstract public class Phrase<V> {
         return blockDescriptor.hasName(namesToCheck);
     }
 
-    public BlocklyBlockProperties getProperty() {
+    public BlocklyProperties getProperty() {
         return this.property;
-    }
-
-    /**
-     * @return comment that the user added to the block
-     */
-    public final BlocklyComment getComment() {
-        return this.comment;
     }
 
     /**

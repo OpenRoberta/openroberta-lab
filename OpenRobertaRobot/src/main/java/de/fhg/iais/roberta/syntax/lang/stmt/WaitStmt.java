@@ -18,8 +18,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
@@ -33,8 +32,8 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 public final class WaitStmt<V> extends Stmt<V> {
     public final StmtList<V> statements;
 
-    public WaitStmt(StmtList<V> statements, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public WaitStmt(BlocklyProperties properties, StmtList<V> statements) {
+        super(properties);
         Assert.isTrue(statements != null && statements.isReadOnly());
         this.statements = statements;
         setReadOnly();
@@ -65,10 +64,10 @@ public final class WaitStmt<V> extends Stmt<V> {
             statement = helper.extractStatement(statementss, BlocklyConstants.DO + i);
             list
                 .addStmt(
-                    new RepeatStmt<V>(Mode.WAIT, Jaxb2Ast.convertPhraseToExpr(expr), statement, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block)));
+                    new RepeatStmt<V>(Mode.WAIT, Jaxb2Ast.convertPhraseToExpr(expr), statement, Jaxb2Ast.extractBlocklyProperties(block)));
         }
         list.setReadOnly();
-        return new WaitStmt<>(list, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new WaitStmt<>(Jaxb2Ast.extractBlocklyProperties(block), list);
     }
 
     @Override

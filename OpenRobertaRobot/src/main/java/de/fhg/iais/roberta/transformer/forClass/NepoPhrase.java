@@ -9,15 +9,14 @@ import java.lang.annotation.Target;
 
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 /**
  * <b>This Nepo class annotation can be used to parse complete xml blocks as exported from blockly to AST classes.</b><br>
  * It is used for statement-like blocks
  * <br><br>
  * Each class annotated by {@link NepoPhrase} must have a constructor accepting the following types in this specific order:<br>
- * ({@link BlockDescriptor}, {@link BlocklyBlockProperties}, {@link BlocklyComment}, fieldsValues... )<br>
+ * ({@link BlockDescriptor}, {@link BlocklyProperties}, {@link BlocklyComment}, fieldsValues... )<br>
  * where fieldsValues... is a placeholder for the list of fields annotated with a Nepo field Annotation. They must be <b>in the order there are defined!</b>
  */
 @Documented

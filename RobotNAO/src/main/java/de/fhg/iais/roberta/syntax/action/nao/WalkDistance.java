@@ -9,8 +9,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(name = "WALK_DISTANCE", category = "ACTOR", blocklyNames = {"naoActions_walk"})
@@ -20,8 +19,8 @@ public final class WalkDistance<V> extends Action<V> {
     @NepoValue(name = "POWER", type = BlocklyType.NUMBER_INT)
     public final Expr<V> distanceToWalk;
 
-    public WalkDistance(BlocklyBlockProperties properties, BlocklyComment comment, DriveDirection walkDirection, Expr<V> distanceToWalk) {
-        super(properties, comment);
+    public WalkDistance(BlocklyProperties properties, DriveDirection walkDirection, Expr<V> distanceToWalk) {
+        super(properties);
         Assert.notNull(walkDirection, "Missing direction in WalkDistance block!");
         this.walkDirection = walkDirection;
         this.distanceToWalk = distanceToWalk;

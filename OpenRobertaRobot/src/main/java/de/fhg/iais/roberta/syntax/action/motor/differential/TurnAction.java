@@ -17,8 +17,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
@@ -37,8 +36,8 @@ public final class TurnAction<V> extends Action<V> {
     public final String port;
     public final List<Hide> hide;
 
-    public TurnAction(ITurnDirection direction, MotionParam<V> param, String port, List<Hide> hide, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public TurnAction(ITurnDirection direction, MotionParam<V> param, String port, List<Hide> hide, BlocklyProperties properties) {
+        super(properties);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
         this.param = param;
@@ -75,10 +74,10 @@ public final class TurnAction<V> extends Action<V> {
 
         if ( fields.stream().anyMatch(field -> field.getName().equals(BlocklyConstants.ACTORPORT)) ) {
             String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT);
-            return new TurnAction<>(factory.getTurnDirection(mode), mp, port, block.getHide(), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+            return new TurnAction<>(factory.getTurnDirection(mode), mp, port, block.getHide(), Jaxb2Ast.extractBlocklyProperties(block));
         }
 
-        return new TurnAction<>(factory.getTurnDirection(mode), mp, BlocklyConstants.EMPTY_PORT, null, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new TurnAction<>(factory.getTurnDirection(mode), mp, BlocklyConstants.EMPTY_PORT, null, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

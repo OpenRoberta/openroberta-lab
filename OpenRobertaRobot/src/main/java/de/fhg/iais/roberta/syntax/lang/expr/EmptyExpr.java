@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.lang.expr;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 
@@ -17,7 +17,7 @@ public final class EmptyExpr<V> extends Expr<V> {
     public final BlocklyType defVal;
 
     public EmptyExpr(BlocklyType defVal) {
-        super(BlocklyBlockProperties.make("EMPTY_EXPR", "1"), null);
+        super(BlocklyProperties.make("EMPTY_EXPR", "1"));
         Assert.isTrue(defVal != null);
         this.defVal = defVal;
         setReadOnly();

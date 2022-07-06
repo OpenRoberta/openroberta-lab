@@ -9,8 +9,7 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.Assoc;
@@ -21,7 +20,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * Client must provide operation and expression over which operation is executed. <br>
  * <br>
- * To create an instance from this class use the method {@link #make(Op, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
+ * To create an instance from this class use the method {@link #make(Op, Expr, BlocklyProperties, BlocklyComment)}.<br>
  * <br>
  * The enumeration {@link Op} contains all allowed unary operations.
  */
@@ -30,8 +29,8 @@ public final class Unary<V> extends Expr<V> {
     public final Op op;
     public final Expr<V> expr;
 
-    public Unary(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public Unary(Op op, Expr<V> expr, BlocklyProperties properties) {
+        super(properties);
         Assert.isTrue(op != null && expr != null && expr.isReadOnly());
         this.op = op;
         this.expr = expr;

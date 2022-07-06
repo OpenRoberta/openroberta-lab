@@ -13,7 +13,7 @@ public final class FunctionStmt<V> extends Stmt<V> {
     public final Function<V> function;
 
     public FunctionStmt(Function<V> function) {
-        super(function.getProperty(), function.getComment());
+        super(function.getProperty());
         Assert.isTrue(function != null && function.isReadOnly());
         this.function = function;
         setReadOnly();

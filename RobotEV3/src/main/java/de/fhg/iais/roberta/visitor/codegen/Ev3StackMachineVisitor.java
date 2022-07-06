@@ -172,9 +172,9 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitSayTextAction(SayTextAction<V> sayTextAction) {
         sayTextAction.msg.accept(this);
-        NumConst<V> n = new NumConst<>(null, null, "30");
+        NumConst<V> n = new NumConst<>(null, "30");
         n.accept(this);
-        NumConst<V> p = new NumConst<>(null, null, "50");
+        NumConst<V> p = new NumConst<>(null, "50");
         p.accept(this);
         JSONObject o = makeNode(C.SAY_TEXT_ACTION);
 

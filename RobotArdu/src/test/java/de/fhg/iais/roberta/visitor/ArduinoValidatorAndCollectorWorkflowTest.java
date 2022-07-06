@@ -54,7 +54,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitKeysSensor_withoutPort() {
-        KeysSensor<Void> keysSensor = new KeysSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        KeysSensor<Void> keysSensor = new KeysSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(keysSensor);
 
         executeWorkflow();
@@ -66,7 +66,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitKeysSensor_withPort() {
         configurationComponents.add(new ConfigurationComponent(SC.KEY, false, "P1", "P1", new HashMap<>()));
 
-        KeysSensor<Void> keysSensor = new KeysSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        KeysSensor<Void> keysSensor = new KeysSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(keysSensor);
 
         executeWorkflow();
@@ -76,7 +76,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitMoistureSensor_withoutPort() {
-        MoistureSensor<Void> moistureSensor = new MoistureSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        MoistureSensor<Void> moistureSensor = new MoistureSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(moistureSensor);
 
         executeWorkflow();
@@ -88,7 +88,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitMoistureSensor_withPort() {
         configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
 
-        MoistureSensor<Void> moistureSensor = new MoistureSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        MoistureSensor<Void> moistureSensor = new MoistureSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(moistureSensor);
 
         Project project = executeWorkflow();
@@ -101,7 +101,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitMoistureSensor_withPortWrongSensor() {
         configurationComponents.add(new ConfigurationComponent(SC.MOTION, false, "P1", "P1", new HashMap<>()));
 
-        MoistureSensor<Void> moistureSensor = new MoistureSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        MoistureSensor<Void> moistureSensor = new MoistureSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(moistureSensor);
 
         executeWorkflow();
@@ -111,7 +111,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitMotionSensor_withoutPort() {
-        MotionSensor<Void> motionSensor = new MotionSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        MotionSensor<Void> motionSensor = new MotionSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(motionSensor);
 
         executeWorkflow();
@@ -123,7 +123,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitMotion_withPort() {
         configurationComponents.add(new ConfigurationComponent(SC.MOTION, false, "P1", "P1", new HashMap<>()));
 
-        MotionSensor<Void> motionSensor = new MotionSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        MotionSensor<Void> motionSensor = new MotionSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(motionSensor);
 
         Project project = executeWorkflow();
@@ -136,7 +136,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitMotion_withPortWrongSensorType() {
         configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
 
-        MotionSensor<Void> motionSensor = new MotionSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        MotionSensor<Void> motionSensor = new MotionSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(motionSensor);
 
         executeWorkflow();
@@ -146,7 +146,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitPulseSensor_withoutPort() {
-        PulseSensor<Void> pulseSensor = new PulseSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        PulseSensor<Void> pulseSensor = new PulseSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(pulseSensor);
 
         executeWorkflow();
@@ -158,7 +158,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitDropSensor_withPort() {
         configurationComponents.add(new ConfigurationComponent(SC.DROP, false, "P1", "P1", new HashMap<>()));
 
-        DropSensor<Void> dropSensor = new DropSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        DropSensor<Void> dropSensor = new DropSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(dropSensor);
 
         Project project = executeWorkflow();
@@ -169,7 +169,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitDropSensor_withoutPort() {
-        DropSensor<Void> dropSensor = new DropSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        DropSensor<Void> dropSensor = new DropSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(dropSensor);
 
         executeWorkflow();
@@ -181,7 +181,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitDropSensor_withWrongSensorType() {
         configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
 
-        DropSensor<Void> dropSensor = new DropSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        DropSensor<Void> dropSensor = new DropSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(dropSensor);
 
         executeWorkflow();
@@ -193,7 +193,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitRfidSensor_withPort() {
         configurationComponents.add(new ConfigurationComponent(SC.RFID, false, "P1", "P1", new HashMap<>()));
 
-        RfidSensor<Void> rfidSensor = new RfidSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        RfidSensor<Void> rfidSensor = new RfidSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(rfidSensor);
 
         Project project = executeWorkflow();
@@ -208,7 +208,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
         configurationComponents.add(new ConfigurationComponent(SC.RFID, false, "P1", "P1", new HashMap<>()));
 
-        RfidSensor<Void> rfidSensor = new RfidSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        RfidSensor<Void> rfidSensor = new RfidSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(rfidSensor);
 
         executeWorkflow();
@@ -218,7 +218,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitRfidSensor_withoutPort() {
-        RfidSensor<Void> rfidSensor = new RfidSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        RfidSensor<Void> rfidSensor = new RfidSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(rfidSensor);
 
         executeWorkflow();
@@ -230,7 +230,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitRfidSensor_withWrongSensorType() {
         configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
 
-        RfidSensor<Void> rfidSensor = new RfidSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        RfidSensor<Void> rfidSensor = new RfidSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(rfidSensor);
 
         executeWorkflow();
@@ -242,7 +242,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitHumiditySensor_withPort() {
         configurationComponents.add(new ConfigurationComponent(SC.HUMIDITY, false, "P1", "P1", new HashMap<>()));
 
-        HumiditySensor<Void> humiditySensor = new HumiditySensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        HumiditySensor<Void> humiditySensor = new HumiditySensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(humiditySensor);
 
         Project project = executeWorkflow();
@@ -253,7 +253,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitHumiditySensor_withoutPort() {
-        HumiditySensor<Void> humiditySensor = new HumiditySensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        HumiditySensor<Void> humiditySensor = new HumiditySensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(humiditySensor);
 
         executeWorkflow();
@@ -265,7 +265,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitHumiditySensor_withWrongSensorType() {
         configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
 
-        HumiditySensor<Void> humiditySensor = new HumiditySensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        HumiditySensor<Void> humiditySensor = new HumiditySensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(humiditySensor);
 
         executeWorkflow();
@@ -277,7 +277,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitVoltageSensor_withPort() {
         configurationComponents.add(new ConfigurationComponent(SC.POTENTIOMETER, false, "P1", "P1", new HashMap<>()));
 
-        VoltageSensor<Void> voltageSensor = new VoltageSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        VoltageSensor<Void> voltageSensor = new VoltageSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(voltageSensor);
 
         Project project = executeWorkflow();
@@ -288,7 +288,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitVoltageSensor_withoutPort() {
-        VoltageSensor<Void> voltageSensor = new VoltageSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        VoltageSensor<Void> voltageSensor = new VoltageSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(voltageSensor);
 
         executeWorkflow();
@@ -300,7 +300,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitVoltageSensor_withWrongSensorType() {
         configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
 
-        VoltageSensor<Void> voltageSensor = new VoltageSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        VoltageSensor<Void> voltageSensor = new VoltageSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(voltageSensor);
 
         executeWorkflow();
@@ -313,11 +313,11 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
         configurationComponents.add(new ConfigurationComponent(SC.STEPMOTOR, true, "P1", "P1", new HashMap<>()));
 
         MotionParam<Void> motionParam = new MotionParam.Builder<Void>()
-            .speed(new NumConst<Void>(null, null, "10"))
-            .duration(new MotorDuration<>(null, new NumConst<Void>(null, null, "10")))
+            .speed(new NumConst<Void>(null, "10"))
+            .duration(new MotorDuration<>(null, new NumConst<Void>(null, "10")))
             .build();
 
-        MotorOnAction<Void> motorOnAction = new MotorOnAction<>("P1", motionParam, bp, null);
+        MotorOnAction<Void> motorOnAction = new MotorOnAction<>("P1", motionParam, bp);
         phrases.add(motorOnAction);
 
         executeWorkflow();
@@ -328,11 +328,11 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     @Test
     public void visitMotorOnAction_withoutPort() {
         MotionParam<Void> motionParam = new MotionParam.Builder<Void>()
-            .speed(new NumConst<Void>(null, null, "10"))
-            .duration(new MotorDuration<>(null, new NumConst<Void>(null, null, "10")))
+            .speed(new NumConst<Void>(null, "10"))
+            .duration(new MotorDuration<>(null, new NumConst<Void>(null, "10")))
             .build();
 
-        MotorOnAction<Void> motorOnAction = new MotorOnAction<>("P1", motionParam, bp, null);
+        MotorOnAction<Void> motorOnAction = new MotorOnAction<>("P1", motionParam, bp);
         phrases.add(motorOnAction);
 
         executeWorkflow();
@@ -345,11 +345,11 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
         configurationComponents.add(new ConfigurationComponent(SC.OTHER, true, "P1", "P1", new HashMap<>()));
 
         MotionParam<Void> motionParam = new MotionParam.Builder<Void>()
-            .speed(new NumConst<Void>(null, null, "10"))
-            .duration(new MotorDuration<>(null, new NumConst<Void>(null, null, "10")))
+            .speed(new NumConst<Void>(null, "10"))
+            .duration(new MotorDuration<>(null, new NumConst<Void>(null, "10")))
             .build();
 
-        MotorOnAction<Void> motorOnAction = new MotorOnAction<>("P1", motionParam, bp, null);
+        MotorOnAction<Void> motorOnAction = new MotorOnAction<>("P1", motionParam, bp);
         phrases.add(motorOnAction);
 
         executeWorkflow();
@@ -362,10 +362,10 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
         configurationComponents.add(new ConfigurationComponent(SC.STEPMOTOR, true, "P1", "P1", new HashMap<>()));
 
         MotionParam<Void> motionParam = new MotionParam.Builder<Void>()
-            .speed(new NumConst<Void>(null, null, "10"))
+            .speed(new NumConst<Void>(null, "10"))
             .build();
 
-        MotorOnAction<Void> motorOnAction = new MotorOnAction<>("P1", motionParam, bp, null);
+        MotorOnAction<Void> motorOnAction = new MotorOnAction<>("P1", motionParam, bp);
         phrases.add(motorOnAction);
 
         executeWorkflow();
@@ -377,9 +377,9 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitLightAction() {
         configurationComponents.add(new ConfigurationComponent(SC.RGBLED, true, "P1", "P1", new HashMap<>()));
 
-        RgbColor<Void> rgbColor = (RgbColor<Void>) new RgbColor(bp, null, new NumConst<Object>(null, null, "10"), new NumConst<Object>(null, null, "10"), new NumConst<Object>(null, null, "10"), new NumConst<Object>(null, null, "10"));
+        RgbColor<Void> rgbColor = (RgbColor<Void>) new RgbColor(bp, new NumConst<Object>(null, "10"), new NumConst<Object>(null, "10"), new NumConst<Object>(null, "10"), new NumConst<Object>(null, "10"));
 
-        LightAction<Void> lightAction = new LightAction<>("P1", BrickLedColor.ORANGE, LightMode.DEFAULT, rgbColor, bp, null);
+        LightAction<Void> lightAction = new LightAction<>("P1", BrickLedColor.ORANGE, LightMode.DEFAULT, rgbColor, bp);
         phrases.add(lightAction);
 
         executeWorkflow();
@@ -389,9 +389,9 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitLightAction_noActor() {
-        RgbColor<Void> rgbColor = (RgbColor<Void>) new RgbColor(bp, null, new NumConst<Object>(null, null, "10"), new NumConst<Object>(null, null, "10"), new NumConst<Object>(null, null, "10"), new NumConst<Object>(null, null, "10"));
+        RgbColor<Void> rgbColor = (RgbColor<Void>) new RgbColor(bp, new NumConst<Object>(null, "10"), new NumConst<Object>(null, "10"), new NumConst<Object>(null, "10"), new NumConst<Object>(null, "10"));
 
-        LightAction<Void> lightAction = new LightAction<>("P1", BrickLedColor.ORANGE, LightMode.DEFAULT, rgbColor, bp, null);
+        LightAction<Void> lightAction = new LightAction<>("P1", BrickLedColor.ORANGE, LightMode.DEFAULT, rgbColor, bp);
         phrases.add(lightAction);
 
         executeWorkflow();
@@ -403,7 +403,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitPlayNoteAction() {
         configurationComponents.add(new ConfigurationComponent(SC.BUZZER, true, "P1", "P1", new HashMap<>()));
 
-        PlayNoteAction<Void> playNoteAction = new PlayNoteAction<>(bp, null, "100", "100", "P1", null);
+        PlayNoteAction<Void> playNoteAction = new PlayNoteAction<>(bp, "100", "100", "P1", null);
         phrases.add(playNoteAction);
 
         executeWorkflow();
@@ -413,7 +413,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitPlayNoteAction_noPort() {
-        PlayNoteAction<Void> playNoteAction = new PlayNoteAction<>(bp, null, "100", "100", "P1", null);
+        PlayNoteAction<Void> playNoteAction = new PlayNoteAction<>(bp, "100", "100", "P1", null);
         phrases.add(playNoteAction);
 
         executeWorkflow();
@@ -425,7 +425,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitLightStatusActionOff() {
         configurationComponents.add(new ConfigurationComponent(SC.RGBLED, true, "P1", "P1", new HashMap<>()));
 
-        LightStatusAction<Void> lightStatusAction = new LightStatusAction<>("P1", LightStatusAction.Status.OFF, bp, null);
+        LightStatusAction<Void> lightStatusAction = new LightStatusAction<>("P1", LightStatusAction.Status.OFF, bp);
         phrases.add(lightStatusAction);
 
         executeWorkflow();
@@ -434,7 +434,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitLightStatusActionOff_noPort() {
-        LightStatusAction<Void> lightStatusAction = new LightStatusAction<>("P1", LightStatusAction.Status.OFF, bp, null);
+        LightStatusAction<Void> lightStatusAction = new LightStatusAction<>("P1", LightStatusAction.Status.OFF, bp);
         phrases.add(lightStatusAction);
 
         executeWorkflow();
@@ -445,7 +445,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitLightStatusActionReset() {
         configurationComponents.add(new ConfigurationComponent(SC.RGBLED, true, "P1", "P1", new HashMap<>()));
 
-        LightStatusAction<Void> lightStatusAction = new LightStatusAction<>("P1", LightStatusAction.Status.RESET, bp, null);
+        LightStatusAction<Void> lightStatusAction = new LightStatusAction<>("P1", LightStatusAction.Status.RESET, bp);
         phrases.add(lightStatusAction);
 
         executeWorkflow();
@@ -454,7 +454,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitLightStatusActionReset_noPort() {
-        LightStatusAction<Void> lightStatusAction = new LightStatusAction<>("P1", LightStatusAction.Status.RESET, bp, null);
+        LightStatusAction<Void> lightStatusAction = new LightStatusAction<>("P1", LightStatusAction.Status.RESET, bp);
         phrases.add(lightStatusAction);
 
         executeWorkflow();
@@ -465,7 +465,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitRelayAction() {
         configurationComponents.add(new ConfigurationComponent(SC.RELAY, true, "P1", "P1", new HashMap<>()));
 
-        RelayAction<Void> relayAction = new RelayAction<>("P1", RelayMode.DEFAULT, bp, null);
+        RelayAction<Void> relayAction = new RelayAction<>("P1", RelayMode.DEFAULT, bp);
         phrases.add(relayAction);
 
         executeWorkflow();
@@ -474,7 +474,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitRelayAction_noPort() {
-        RelayAction<Void> relayAction = new RelayAction<>("P1", RelayMode.DEFAULT, bp, null);
+        RelayAction<Void> relayAction = new RelayAction<>("P1", RelayMode.DEFAULT, bp);
         phrases.add(relayAction);
 
         executeWorkflow();
@@ -485,7 +485,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitShowTexAction() {
         configurationComponents.add(new ConfigurationComponent(SC.DISPLAY, true, "P1", "P1", new HashMap<>()));
 
-        ShowTextAction<Void> showTextAction = new ShowTextAction<Void>(bp, null, new NumConst<Void>(null, null, "Text"), new NumConst<Void>(null, null, "0"), new NumConst<Void>(null, null, "0"), "P1", null);
+        ShowTextAction<Void> showTextAction = new ShowTextAction<Void>(bp, new NumConst<Void>(null, "Text"), new NumConst<Void>(null, "0"), new NumConst<Void>(null, "0"), "P1", null);
         phrases.add(showTextAction);
 
         executeWorkflow();
@@ -496,7 +496,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitPinGetValueSensor() {
         configurationComponents.add(new ConfigurationComponent(SC.OTHER, false, "P1", "P1", new HashMap<>()));
 
-        PinGetValueSensor<Void> pinGetValueSensor = new PinGetValueSensor<Void>(bp, null, new ExternalSensorBean("P1", "", "", null));
+        PinGetValueSensor<Void> pinGetValueSensor = new PinGetValueSensor<Void>(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(pinGetValueSensor);
 
         executeWorkflow();
@@ -507,7 +507,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitPinWriteValueAction() {
         configurationComponents.add(new ConfigurationComponent(SC.DIGITAL_PIN, true, "P1", "P1", new HashMap<>()));
 
-        PinWriteValueAction<Void> pinWriteValueAction = new PinWriteValueAction<>("1", "P1", new NumConst<Void>(null, null, "1"), true, bp, null);
+        PinWriteValueAction<Void> pinWriteValueAction = new PinWriteValueAction<>("1", "P1", new NumConst<Void>(null, "1"), true, bp);
         phrases.add(pinWriteValueAction);
 
         executeWorkflow();
@@ -516,7 +516,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitPinWriteValueAction_noPort() {
-        PinWriteValueAction<Void> pinWriteValueAction = new PinWriteValueAction<>("1", "P1", new NumConst<Void>(null, null, "1"), true, bp, null);
+        PinWriteValueAction<Void> pinWriteValueAction = new PinWriteValueAction<>("1", "P1", new NumConst<Void>(null, "1"), true, bp);
         phrases.add(pinWriteValueAction);
 
         executeWorkflow();
@@ -526,11 +526,11 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     @Test
     public void visitIndexOfFunct() {
         List<Expr<Void>> param = new ArrayList<>();
-        param.add(new NumConst<Void>(null, null, "10"));
-        param.add(new NumConst<Void>(null, null, "10"));
-        param.add(new NumConst<Void>(null, null, "10"));
+        param.add(new NumConst<Void>(null, "10"));
+        param.add(new NumConst<Void>(null, "10"));
+        param.add(new NumConst<Void>(null, "10"));
 
-        IndexOfFunct<Void> listSetIndex = new IndexOfFunct<Void>(IndexLocation.FIRST, param, bp, null);
+        IndexOfFunct<Void> listSetIndex = new IndexOfFunct<Void>(IndexLocation.FIRST, param, bp);
         phrases.add(listSetIndex);
 
         executeWorkflow();
@@ -540,11 +540,11 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     @Test
     public void visitIndexOfFunct_noFirsstElement() {
         List<Expr<Void>> param = new ArrayList<>();
-        param.add(new NumConst<Void>(null, null, "ListCreate "));
-        param.add(new NumConst<Void>(null, null, "10"));
-        param.add(new NumConst<Void>(null, null, "10"));
+        param.add(new NumConst<Void>(null, "ListCreate "));
+        param.add(new NumConst<Void>(null, "10"));
+        param.add(new NumConst<Void>(null, "10"));
 
-        IndexOfFunct<Void> listSetIndex = new IndexOfFunct<Void>(IndexLocation.FIRST, param, bp, null);
+        IndexOfFunct<Void> listSetIndex = new IndexOfFunct<Void>(IndexLocation.FIRST, param, bp);
         phrases.add(listSetIndex);
 
         executeWorkflow();
@@ -554,11 +554,11 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     @Test
     public void visitListGetIndex() {
         List<Expr<Void>> param = new ArrayList<>();
-        param.add(new NumConst<Void>(null, null, "10"));
-        param.add(new NumConst<Void>(null, null, "10"));
-        param.add(new NumConst<Void>(null, null, "10"));
+        param.add(new NumConst<Void>(null, "10"));
+        param.add(new NumConst<Void>(null, "10"));
+        param.add(new NumConst<Void>(null, "10"));
 
-        ListGetIndex<Void> listGetIndex = new ListGetIndex<>(ListElementOperations.GET, IndexLocation.FIRST, param, null, bp, null);
+        ListGetIndex<Void> listGetIndex = new ListGetIndex<>(ListElementOperations.GET, IndexLocation.FIRST, param, null, bp);
         phrases.add(listGetIndex);
 
         executeWorkflow();
@@ -568,11 +568,11 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     @Test
     public void visitListGetIndex_noFirsstElement() {
         List<Expr<Void>> param = new ArrayList<>();
-        param.add(new NumConst<Void>(null, null, "ListCreate "));
-        param.add(new NumConst<Void>(null, null, "10"));
-        param.add(new NumConst<Void>(null, null, "10"));
+        param.add(new NumConst<Void>(null, "ListCreate "));
+        param.add(new NumConst<Void>(null, "10"));
+        param.add(new NumConst<Void>(null, "10"));
 
-        ListGetIndex<Void> listGetIndex = new ListGetIndex<>(ListElementOperations.GET, IndexLocation.FIRST, param, null, bp, null);
+        ListGetIndex<Void> listGetIndex = new ListGetIndex<>(ListElementOperations.GET, IndexLocation.FIRST, param, null, bp);
         phrases.add(listGetIndex);
 
         executeWorkflow();
@@ -582,11 +582,11 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     @Test
     public void visitLengthOfIsEmptyFunct() {
         List<Expr<Void>> param = new ArrayList<>();
-        param.add(new NumConst<Void>(null, null, "10"));
-        param.add(new NumConst<Void>(null, null, "10"));
-        param.add(new NumConst<Void>(null, null, "10"));
+        param.add(new NumConst<Void>(null, "10"));
+        param.add(new NumConst<Void>(null, "10"));
+        param.add(new NumConst<Void>(null, "10"));
 
-        LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct = new LengthOfIsEmptyFunct<Void>(FunctionNames.LIST_IS_EMPTY, param, bp, null);
+        LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct = new LengthOfIsEmptyFunct<Void>(FunctionNames.LIST_IS_EMPTY, param, bp);
         phrases.add(lengthOfIsEmptyFunct);
 
         executeWorkflow();
@@ -596,11 +596,11 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     @Test
     public void visitLengthOfIsEmptyFunct_noFirsstElement() {
         List<Expr<Void>> param = new ArrayList<>();
-        param.add(new NumConst<Void>(null, null, "ListCreate "));
-        param.add(new NumConst<Void>(null, null, "10"));
-        param.add(new NumConst<Void>(null, null, "10"));
+        param.add(new NumConst<Void>(null, "ListCreate "));
+        param.add(new NumConst<Void>(null, "10"));
+        param.add(new NumConst<Void>(null, "10"));
 
-        LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct = new LengthOfIsEmptyFunct<Void>(FunctionNames.LIST_IS_EMPTY, param, bp, null);
+        LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct = new LengthOfIsEmptyFunct<Void>(FunctionNames.LIST_IS_EMPTY, param, bp);
         phrases.add(lengthOfIsEmptyFunct);
 
         executeWorkflow();
@@ -610,11 +610,11 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     @Test
     public void visitMathOnListFunct() {
         List<Expr<Void>> param = new ArrayList<>();
-        param.add(new NumConst<Void>(null, null, "10"));
-        param.add(new NumConst<Void>(null, null, "10"));
-        param.add(new NumConst<Void>(null, null, "10"));
+        param.add(new NumConst<Void>(null, "10"));
+        param.add(new NumConst<Void>(null, "10"));
+        param.add(new NumConst<Void>(null, "10"));
 
-        MathOnListFunct<Void> mathOnListFunct = new MathOnListFunct<Void>(FunctionNames.LIST_IS_EMPTY, param, bp, null);
+        MathOnListFunct<Void> mathOnListFunct = new MathOnListFunct<Void>(FunctionNames.LIST_IS_EMPTY, param, bp);
         phrases.add(mathOnListFunct);
 
         executeWorkflow();
@@ -624,11 +624,11 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     @Test
     public void visitMathOnListFunct_noFirstElement() {
         List<Expr<Void>> param = new ArrayList<>();
-        param.add(new NumConst<Void>(null, null, "ListCreate "));
-        param.add(new NumConst<Void>(null, null, "10"));
-        param.add(new NumConst<Void>(null, null, "10"));
+        param.add(new NumConst<Void>(null, "ListCreate "));
+        param.add(new NumConst<Void>(null, "10"));
+        param.add(new NumConst<Void>(null, "10"));
 
-        MathOnListFunct<Void> mathOnListFunct = new MathOnListFunct<Void>(FunctionNames.LIST_IS_EMPTY, param, bp, null);
+        MathOnListFunct<Void> mathOnListFunct = new MathOnListFunct<Void>(FunctionNames.LIST_IS_EMPTY, param, bp);
         phrases.add(mathOnListFunct);
 
         executeWorkflow();

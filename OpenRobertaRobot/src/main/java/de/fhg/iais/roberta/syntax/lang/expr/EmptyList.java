@@ -3,8 +3,7 @@ package de.fhg.iais.roberta.syntax.lang.expr;
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
@@ -13,8 +12,8 @@ public final class EmptyList<V> extends Expr<V> {
     @NepoField(name = BlocklyConstants.LIST_TYPE)
     public final BlocklyType typeVar;
 
-    public EmptyList(BlocklyBlockProperties properties, BlocklyComment comment, BlocklyType typeVar) {
-        super(properties, comment);
+    public EmptyList(BlocklyProperties properties, BlocklyType typeVar) {
+        super(properties);
         Assert.isTrue(typeVar != null);
         this.typeVar = typeVar;
         setReadOnly();

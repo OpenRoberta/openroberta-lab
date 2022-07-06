@@ -13,8 +13,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
@@ -22,8 +21,8 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 public final class DisplaySetBrightnessAction<V> extends Action<V> {
     public final Expr<V> brightness;
 
-    public DisplaySetBrightnessAction(Expr<V> brightness, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public DisplaySetBrightnessAction(BlocklyProperties properties, Expr<V> brightness) {
+        super(properties);
         Assert.notNull(brightness);
         this.brightness = brightness;
         setReadOnly();
@@ -39,7 +38,7 @@ public final class DisplaySetBrightnessAction<V> extends Action<V> {
 
         Phrase<V> brightness = helper.extractValue(values, new ExprParam(BlocklyConstants.BRIGHTNESS, BlocklyType.NUMBER_INT));
 
-        return new DisplaySetBrightnessAction<>(Jaxb2Ast.convertPhraseToExpr(brightness), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new DisplaySetBrightnessAction<>(Jaxb2Ast.extractBlocklyProperties(block), Jaxb2Ast.convertPhraseToExpr(brightness));
 
     }
 

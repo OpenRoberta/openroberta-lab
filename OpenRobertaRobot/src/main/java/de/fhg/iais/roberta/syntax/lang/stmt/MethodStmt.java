@@ -10,7 +10,7 @@ public final class MethodStmt<V> extends Stmt<V> {
     public final Method<V> method;
 
     public MethodStmt(Method<V> method) {
-        super(method.getProperty(), method.getComment());
+        super(method.getProperty());
         Assert.isTrue(method != null && method.isReadOnly());
         this.method = method;
         setReadOnly();

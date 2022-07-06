@@ -5,8 +5,7 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoHide;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -19,8 +18,8 @@ public final class ClearDisplayAction<V> extends Action<V> {
     @NepoHide
     public final Hide hide;
 
-    public ClearDisplayAction(BlocklyBlockProperties properties, BlocklyComment comment, String port, Hide hide) {
-        super(properties, comment);
+    public ClearDisplayAction(BlocklyProperties properties, String port, Hide hide) {
+        super(properties);
         this.port = port;
         this.hide = hide;
         setReadOnly();

@@ -13,8 +13,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -27,8 +26,8 @@ public final class DetectedFaceInformation<V> extends Sensor<V> {
 
     public final Expr<V> faceName;
 
-    public DetectedFaceInformation(Expr<V> faceName, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public DetectedFaceInformation(Expr<V> faceName, BlocklyProperties properties) {
+        super(properties);
         this.faceName = faceName;
         setReadOnly();
     }
@@ -41,7 +40,7 @@ public final class DetectedFaceInformation<V> extends Sensor<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         Phrase<V> faceName = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
-        return new DetectedFaceInformation<>(Jaxb2Ast.convertPhraseToExpr(faceName), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new DetectedFaceInformation<>(Jaxb2Ast.convertPhraseToExpr(faceName), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

@@ -16,7 +16,7 @@ public final class SensorExpr<V> extends Expr<V> {
     public final Sensor<V> sensor;
 
     public SensorExpr(Sensor<V> sens) {
-        super(sens.getProperty(), sens.getComment());
+        super(sens.getProperty());
         Assert.isTrue(sens.isReadOnly());
         this.sensor = sens;
         setReadOnly();

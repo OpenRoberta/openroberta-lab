@@ -1,8 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 /**
  * the top class of all statements. There are two ways for a client to find out which kind of statement an {@link #Stmt}-object is:<br>
@@ -11,8 +10,8 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
  */
 public abstract class Stmt<V> extends Phrase<V> {
 
-    public Stmt(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public Stmt(BlocklyProperties properties) {
+        super(properties);
     }
 
 }

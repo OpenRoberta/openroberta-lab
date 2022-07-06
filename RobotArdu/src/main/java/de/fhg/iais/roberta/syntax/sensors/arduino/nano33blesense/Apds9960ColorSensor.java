@@ -11,8 +11,7 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "APDS9960_COLOR", category = "SENSOR", blocklyNames = {"robsensors_apds9960_color_getDataAvailableSample"})
@@ -20,8 +19,8 @@ public final class Apds9960ColorSensor<V> extends BuiltinSensor<V> {
 
     public final Expr<V> r, g, b;
 
-    public Apds9960ColorSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> r, Expr<V> g, Expr<V> b) {
-        super(properties, comment, null);
+    public Apds9960ColorSensor(BlocklyProperties properties, Expr<V> r, Expr<V> g, Expr<V> b) {
+        super(properties, null);
         this.r = r;
         this.g = g;
         this.b = b;
@@ -33,7 +32,7 @@ public final class Apds9960ColorSensor<V> extends BuiltinSensor<V> {
         Expr<V> r = helper.getVar(values, BlocklyConstants.VARIABLE_R);
         Expr<V> g = helper.getVar(values, BlocklyConstants.VARIABLE_G);
         Expr<V> b = helper.getVar(values, BlocklyConstants.VARIABLE_B);
-        return new Apds9960ColorSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), r, g, b);
+        return new Apds9960ColorSensor<>(Jaxb2Ast.extractBlocklyProperties(block), r, g, b);
     }
 
     @Override

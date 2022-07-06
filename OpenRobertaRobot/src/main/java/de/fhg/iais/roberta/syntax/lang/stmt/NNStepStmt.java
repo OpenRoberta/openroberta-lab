@@ -11,15 +11,14 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoBasic(name = "NN_STEP_STMT", category = "STMT", blocklyNames = {"robactions_nnstep"})
 public final class NNStepStmt<V> extends Stmt<V> {
     public final StmtList<V> ioNeurons;
 
-    public NNStepStmt(BlocklyBlockProperties properties, BlocklyComment comment, StmtList<V> ioNeurons) {
-        super(properties, comment);
+    public NNStepStmt(BlocklyProperties properties, StmtList<V> ioNeurons) {
+        super(properties);
         this.ioNeurons = ioNeurons;
         setReadOnly();
     }
@@ -61,7 +60,7 @@ public final class NNStepStmt<V> extends Stmt<V> {
         final List<Statement> ioNeuronsWrapped = block.getStatement();
         final Data netDefinition = block.getData();
         final StmtList<V> ioNeurons = helper.extractStatement(ioNeuronsWrapped, "IONEURON");
-        return new NNStepStmt<V>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), ioNeurons);
+        return new NNStepStmt<V>(Jaxb2Ast.extractBlocklyProperties(block), ioNeurons);
     }
 
     @Override

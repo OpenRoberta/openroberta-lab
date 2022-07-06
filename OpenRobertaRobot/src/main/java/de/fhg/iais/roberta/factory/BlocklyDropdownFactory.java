@@ -38,8 +38,7 @@ import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -193,16 +192,15 @@ public class BlocklyDropdownFactory {
         String port,
         String slot,
         Mutation mutation,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
+        BlocklyProperties properties) {
 
         BlockDescriptor blockDescriptor = AstFactory.getBlockDescriptorByBlocklyFieldName(sensorKey);
         try {
             Class<Sensor<?>> sensorClass = (Class<Sensor<?>>) blockDescriptor.getAstClass();
             String mode = blockDescriptor.getSensorModeFromBlocklyField(sensorKey);
             ExternalSensorBean externalSensorBean = new ExternalSensorBean(Jaxb2Ast.sanitizePort(port), getMode(mode), Jaxb2Ast.sanitizeSlot(slot), mutation);
-            Constructor<Sensor<?>> constructor = sensorClass.getDeclaredConstructor(BlocklyBlockProperties.class, BlocklyComment.class, ExternalSensorBean.class);
-            return (Sensor<?>) constructor.newInstance(properties, comment, externalSensorBean);
+            Constructor<Sensor<?>> constructor = sensorClass.getDeclaredConstructor(BlocklyProperties.class, ExternalSensorBean.class);
+            return (Sensor<?>) constructor.newInstance(properties, externalSensorBean);
         } catch ( Exception e ) {
             LOG.error("Sensor " + sensorKey + " could not be created", e);
             throw new DbcException("Sensor " + sensorKey + " could not be created", e);

@@ -11,8 +11,7 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "LSM9DS1_ACCELERATION", category = "SENSOR", blocklyNames = {"robsensors_lsm9ds1_acceleration_getDataAvailableSample"})
@@ -20,8 +19,8 @@ public final class Lsm9ds1AccSensor<V> extends BuiltinSensor<V> {
 
     public final Expr<V> x, y, z;
 
-    public Lsm9ds1AccSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> x, Expr<V> y, Expr<V> z) {
-        super(properties, comment, null);
+    public Lsm9ds1AccSensor(BlocklyProperties properties, Expr<V> x, Expr<V> y, Expr<V> z) {
+        super(properties, null);
         this.x = x;
         this.y = y;
         this.z = z;
@@ -33,7 +32,7 @@ public final class Lsm9ds1AccSensor<V> extends BuiltinSensor<V> {
         Expr<V> x = helper.getVar(values, BlocklyConstants.VARIABLE_X);
         Expr<V> y = helper.getVar(values, BlocklyConstants.VARIABLE_Y);
         Expr<V> z = helper.getVar(values, BlocklyConstants.VARIABLE_Z);
-        return new Lsm9ds1AccSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), x, y, z);
+        return new Lsm9ds1AccSensor<>(Jaxb2Ast.extractBlocklyProperties(block), x, y, z);
     }
 
     @Override

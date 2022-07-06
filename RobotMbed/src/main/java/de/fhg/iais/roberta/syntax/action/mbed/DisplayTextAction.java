@@ -17,8 +17,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "DISPLAY_TEXT_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_display_text"})
@@ -26,8 +25,8 @@ public final class DisplayTextAction<V> extends Action<V> {
     public final DisplayTextMode mode;
     public final Expr<V> msg;
 
-    public DisplayTextAction(DisplayTextMode mode, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public DisplayTextAction(BlocklyProperties properties, DisplayTextMode mode, Expr<V> msg) {
+        super(properties);
         Assert.isTrue(msg != null && mode != null);
         this.msg = msg;
         this.mode = mode;
@@ -49,7 +48,7 @@ public final class DisplayTextAction<V> extends Action<V> {
         } catch ( DbcException e ) {
             displaMode = "TEXT";
         }
-        return new DisplayTextAction<>(DisplayTextMode.get(displaMode), Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new DisplayTextAction<>(Jaxb2Ast.extractBlocklyProperties(block), DisplayTextMode.get(displaMode), Jaxb2Ast.convertPhraseToExpr(msg));
     }
 
     @Override

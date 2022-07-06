@@ -12,16 +12,15 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.F2M;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(sampleValues = {@F2M(field = "TIMER_VALUE", mode = "VALUE"), @F2M(field = "TIME", mode = "VALUE")}, name = "TIMER_SENSING", category = "SENSOR", blocklyNames = {"mbedSensors_timer_reset", "robSensors_timer_getSample", "robSensors_timer_reset"})
 public final class TimerSensor<V> extends ExternalSensor<V> {
 
-    public TimerSensor(BlocklyBlockProperties properties, BlocklyComment comment, ExternalSensorBean externalSensorBean) {
-        super(properties, comment, externalSensorBean);
+    public TimerSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
+        super(properties, externalSensorBean);
         setReadOnly();
     }
 
@@ -34,10 +33,10 @@ public final class TimerSensor<V> extends ExternalSensor<V> {
             String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
             externalSensorBean =
                 new ExternalSensorBean(Jaxb2Ast.sanitizePort(portName), factory.getMode("RESET"), Jaxb2Ast.sanitizeSlot(BlocklyConstants.NO_SLOT), null);
-            return new TimerSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), externalSensorBean);
+            return new TimerSensor<>(Jaxb2Ast.extractBlocklyProperties(block), externalSensorBean);
         }
         externalSensorBean = extractPortAndModeAndSlot(block, helper);
-        return new TimerSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), externalSensorBean);
+        return new TimerSensor<>(Jaxb2Ast.extractBlocklyProperties(block), externalSensorBean);
     }
 
     @Override

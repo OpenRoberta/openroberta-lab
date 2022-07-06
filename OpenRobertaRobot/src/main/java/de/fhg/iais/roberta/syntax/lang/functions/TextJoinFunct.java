@@ -11,8 +11,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
@@ -21,8 +20,8 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 public final class TextJoinFunct<V> extends Function<V> {
     public final ExprList<V> param;
 
-    public TextJoinFunct(ExprList<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public TextJoinFunct(ExprList<V> param, BlocklyProperties properties) {
+        super(properties);
         Assert.isTrue(param != null);
         this.param = param;
         setReadOnly();
@@ -50,7 +49,7 @@ public final class TextJoinFunct<V> extends Function<V> {
 
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         ExprList<V> exprList = helper.blockToExprList(block, BlocklyType.STRING);
-        return new TextJoinFunct<V>(exprList, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new TextJoinFunct<V>(exprList, Jaxb2Ast.extractBlocklyProperties(block));
 
     }
 

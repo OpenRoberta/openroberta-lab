@@ -3,8 +3,7 @@ package de.fhg.iais.roberta.syntax.lang.expr;
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
@@ -22,8 +21,8 @@ public final class RgbColor<V> extends Expr<V> {
     @NepoValue(name = BlocklyConstants.ALPHA, type = BlocklyType.NUMBER_INT)
     public final Expr<V> A;
 
-    public RgbColor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> r, Expr<V> g, Expr<V> b, Expr<V> a) {
-        super(properties, comment);
+    public RgbColor(BlocklyProperties properties, Expr<V> r, Expr<V> g, Expr<V> b, Expr<V> a) {
+        super(properties);
         R = r;
         G = g;
         B = b;

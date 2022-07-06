@@ -16,8 +16,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "LED_MATRIX_TEXT_ACTION", category = "ACTOR", blocklyNames = {"mBotActions_display_text"})
@@ -26,8 +25,8 @@ public final class LEDMatrixTextAction<V> extends Action<V> {
     public final Expr<V> msg;
     public final String displayMode;
 
-    public LEDMatrixTextAction(String port, String displayMode, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public LEDMatrixTextAction(String port, String displayMode, Expr<V> msg, BlocklyProperties properties) {
+        super(properties);
         Assert.isTrue(msg != null && port != null);
         this.port = port;
         this.msg = msg;
@@ -51,7 +50,7 @@ public final class LEDMatrixTextAction<V> extends Action<V> {
         } catch ( DbcException e ) {
             displayMode = "TEXT";
         }
-        return new LEDMatrixTextAction<>(port, displayMode, Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new LEDMatrixTextAction<>(port, displayMode, Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

@@ -13,8 +13,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
@@ -38,9 +37,8 @@ public final class VarDeclaration<V> extends Expr<V> {
         Phrase<V> value,
         boolean next,
         boolean global,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        super(properties, comment);
+        BlocklyProperties properties) {
+        super(properties);
         Assert.isTrue(!name.equals("") && typeVar != null && value.isReadOnly());
         this.name = name;
         this.typeVar = typeVar;
@@ -83,7 +81,7 @@ public final class VarDeclaration<V> extends Expr<V> {
         Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, typeVar));
         boolean next = block.getMutation().isNext();
 
-        return new VarDeclaration<>(typeVar, name, Jaxb2Ast.convertPhraseToExpr(expr), next, isGlobalVariable, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new VarDeclaration<>(typeVar, name, Jaxb2Ast.convertPhraseToExpr(expr), next, isGlobalVariable, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

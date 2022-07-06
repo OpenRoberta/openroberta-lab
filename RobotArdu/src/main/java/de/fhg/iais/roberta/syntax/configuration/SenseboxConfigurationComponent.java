@@ -6,8 +6,7 @@ import java.util.Map;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 /**
  * Just to override the name of the "usedDefinedPortName" field and add the mutation to the generic {@link ConfigurationComponent}. TODO should be removed if
@@ -20,11 +19,11 @@ public final class SenseboxConfigurationComponent extends ConfigurationComponent
         String portName,
         String userDefinedName,
         Map<String, String> componentProperties,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment,
+        BlocklyProperties properties,
+        
         int x,
         int y) {
-        super(componentType, isActor, portName, userDefinedName, componentProperties, properties, comment, x, y);
+        super(componentType, isActor, portName, userDefinedName, componentProperties, properties, x, y);
     }
 
     @Override

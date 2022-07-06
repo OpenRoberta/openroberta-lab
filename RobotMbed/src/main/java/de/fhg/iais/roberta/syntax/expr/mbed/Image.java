@@ -13,8 +13,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 /**
  * This class represents the <b>mbedImage_image</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate an image.<br/>
@@ -24,8 +23,8 @@ import de.fhg.iais.roberta.util.ast.BlocklyComment;
 public final class Image<V> extends Expr<V> {
     public final String[][] image;
 
-    public Image(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public Image(String[][] image, BlocklyProperties properties) {
+        super(properties);
         this.image = image;
         setReadOnly();
     }
@@ -68,7 +67,7 @@ public final class Image<V> extends Expr<V> {
                 image[i][j] = Jaxb2Ast.extractField(fields, "P" + j + i);
             }
         }
-        return new Image<>(image, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new Image<>(image, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

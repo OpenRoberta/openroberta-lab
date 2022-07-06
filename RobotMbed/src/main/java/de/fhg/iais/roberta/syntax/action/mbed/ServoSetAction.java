@@ -6,8 +6,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
@@ -18,8 +17,8 @@ public final class ServoSetAction<V> extends Action<V> implements WithUserDefine
     @NepoValue(name = "VALUE", type = BlocklyType.NUMBER_INT)
     public final Expr<V> value;
 
-    public ServoSetAction(BlocklyBlockProperties properties, BlocklyComment comment, String port, Expr<V> value) {
-        super(properties, comment);
+    public ServoSetAction(BlocklyProperties properties, String port, Expr<V> value) {
+        super(properties);
         Assert.notNull(port);
         Assert.notNull(value);
         this.port = port;

@@ -15,8 +15,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
@@ -32,9 +31,8 @@ public final class MethodCall<V> extends Method<V> {
         ExprList<V> oraParameters,
         ExprList<V> oraParametersValues,
         BlocklyType oraReturnType,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        super(properties, comment);
+        BlocklyProperties properties) {
+        super(properties);
         Assert.isTrue(!oraMethodName.equals("") && oraParameters.isReadOnly() && oraParametersValues.isReadOnly());
         this.oraMethodName = oraMethodName;
         this.oraParameters = oraParameters;
@@ -78,7 +76,7 @@ public final class MethodCall<V> extends Method<V> {
 
         ExprList<V> parametersValues = helper.valuesToExprList(values, types, numberOfArguments, BlocklyConstants.ARG);
 
-        return new MethodCall<>(methodName, parameters, parametersValues, outputType, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new MethodCall<>(methodName, parameters, parametersValues, outputType, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

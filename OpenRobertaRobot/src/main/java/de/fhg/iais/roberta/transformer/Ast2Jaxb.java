@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Comment;
 import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
@@ -22,8 +21,9 @@ import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfo.Severity;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -36,24 +36,23 @@ public final class Ast2Jaxb {
     /**
      * Sets the basic properties(<i>comments and visual state</i>) of a Blockly block. <br>
      * <br>
-     * <b>astSource</b> is representation of the block in the AST,<br>
-     * <b>jaxbDestination</b> is representation of the block with JAXB classes
+     * <b>phrase</b> is representation of the block in the AST,<br>
+     * <b>block</b> is representation of the block with JAXB classes
      *
-     * @param astSource block from which properties are extracted; must be <b>not</b> null,
-     * @param jaxbDestination to which properties are applied; must be <b>not</b> null,
+     * @param phrase from which properties are extracted; must be <b>not</b> null,
+     * @param block to which properties are applied; must be <b>not</b> null,
      */
-    public static void setBasicProperties(Phrase<?> astSource, Block jaxbDestination) {
-        Assert.notNull(astSource);
-        Assert.notNull(jaxbDestination);
-        if ( astSource.getProperty() == null ) {
+    public static void setBasicProperties(Phrase<?> phrase, Block block) {
+        Assert.notNull(phrase);
+        Assert.notNull(block);
+        BlocklyProperties property = phrase.getProperty();
+        if ( property == null ) {
             return;
         }
-        String blockType;
-        blockType = astSource.getProperty().getBlockType();
-        setProperties(astSource, jaxbDestination, blockType);
-        addComment(astSource, jaxbDestination);
-        addError(astSource, jaxbDestination);
-        addWarning(astSource, jaxbDestination);
+        setProperties(phrase, block, property.getBlockType());
+        addError(phrase, block);
+        addWarning(phrase, block);
+        block.setComment(property.getComment());
     }
 
     /**
@@ -63,18 +62,18 @@ public final class Ast2Jaxb {
      *
      * @param block to which the statement will be added; must be <b>not</b> null,
      * @param name of the statement; must be <b>non-empty</b> string
-     * @param value is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
+     * @param phrase is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
      *     {@link BlockDescriptor#STMT_LIST}
      */
-    public static void addStatement(Block block, String name, Phrase<?> value) {
+    public static void addStatement(Block block, String name, Phrase<?> phrase) {
         Assert.isTrue(!name.equals(""));
         Assert.notNull(block);
-        Assert.notNull(value);
-        Assert.isTrue(value.getKind().hasName("STMT_LIST"), "Phrase is not STMT_LIST");
-        if ( !((StmtList<?>) value).get().isEmpty() ) {
+        Assert.notNull(phrase);
+        Assert.isTrue(phrase.getKind().hasName("STMT_LIST"), "Phrase is not STMT_LIST");
+        if ( !((StmtList<?>) phrase).get().isEmpty() ) {
             Statement statement = new Statement();
             statement.setName(name);
-            statement.getBlock().addAll(extractStmtList(value));
+            statement.getBlock().addAll(extractStmtList(phrase));
             block.getStatement().add(statement);
         }
     }
@@ -347,17 +346,6 @@ public final class Ast2Jaxb {
     private static void setMovable(Phrase<?> astObject, Block block) {
         if ( astObject.getProperty().isMovable() != null ) {
             block.setMovable(astObject.getProperty().isMovable());
-        }
-    }
-
-    private static void addComment(Phrase<?> astSource, Block block) {
-        if ( astSource.getComment() != null ) {
-            Comment comment = new Comment();
-            comment.setValue(astSource.getComment().getComment());
-            comment.setPinned(astSource.getComment().isPinned());
-            comment.setH(astSource.getComment().getHeight());
-            comment.setW(astSource.getComment().getWidth());
-            block.setComment(comment);
         }
     }
 

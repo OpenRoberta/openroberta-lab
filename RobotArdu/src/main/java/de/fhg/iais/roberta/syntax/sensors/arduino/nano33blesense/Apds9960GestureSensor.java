@@ -11,8 +11,7 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "APDS9960_GESTURE", category = "SENSOR", blocklyNames = {"robsensors_apds9960_gesture_getDataAvailableSample"})
@@ -20,8 +19,8 @@ public final class Apds9960GestureSensor<V> extends BuiltinSensor<V> {
 
     public final Expr<V> gesture;
 
-    public Apds9960GestureSensor(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> gesture) {
-        super(properties, comment, null);
+    public Apds9960GestureSensor(BlocklyProperties properties, Expr<V> gesture) {
+        super(properties, null);
         this.gesture = gesture;
         setReadOnly();
     }
@@ -29,7 +28,7 @@ public final class Apds9960GestureSensor<V> extends BuiltinSensor<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         Expr<V> gesture = helper.getVar(values, BlocklyConstants.VARIABLE_VALUE);
-        return new Apds9960GestureSensor<>(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), gesture);
+        return new Apds9960GestureSensor<>(Jaxb2Ast.extractBlocklyProperties(block), gesture);
     }
 
     @Override

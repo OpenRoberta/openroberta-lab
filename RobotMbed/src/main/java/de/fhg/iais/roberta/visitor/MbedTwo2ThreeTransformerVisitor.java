@@ -37,7 +37,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -75,7 +75,7 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-        return new LedOnAction<>(ledOnAction.getProperty(), ledOnAction.getComment(), (Expr<Void>) ledOnAction.ledColor.modify(this), compAndName.getSecond(), ledOnAction.hide);
+        return new LedOnAction<>(ledOnAction.getProperty(), (Expr<Void>) ledOnAction.ledColor.modify(this), compAndName.getSecond(), ledOnAction.hide);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-        return new LightAction<>(compAndName.getSecond(), lightAction.color, lightAction.mode, (Expr<Void>) lightAction.rgbLedColor.modify(this), lightAction.getProperty(), lightAction.getComment());
+        return new LightAction<>(compAndName.getSecond(), lightAction.color, lightAction.mode, (Expr<Void>) lightAction.rgbLedColor.modify(this), lightAction.getProperty());
     }
 
     @Override
@@ -100,7 +100,7 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-        return new LightStatusAction<>(compAndName.getSecond(), lightStatusAction.status, lightStatusAction.getProperty(), lightStatusAction.getComment());
+        return new LightStatusAction<>(compAndName.getSecond(), lightStatusAction.status, lightStatusAction.getProperty());
     }
 
     @Override
@@ -110,7 +110,7 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-        return new PinWriteValueAction<>(pinWriteValueAction.pinValue, compAndName.getSecond(), (Expr<Void>) pinWriteValueAction.value.modify(this), pinWriteValueAction.actorPortAndMode, pinWriteValueAction.getProperty(), pinWriteValueAction.getComment());
+        return new PinWriteValueAction<>(pinWriteValueAction.pinValue, compAndName.getSecond(), (Expr<Void>) pinWriteValueAction.value.modify(this), pinWriteValueAction.actorPortAndMode, pinWriteValueAction.getProperty());
     }
 
     @Override
@@ -119,7 +119,7 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-        return new ServoSetAction<>(servoSetAction.getProperty(), servoSetAction.getComment(), compAndName.getSecond(), (Expr<Void>) servoSetAction.value.modify(this));
+        return new ServoSetAction<>(servoSetAction.getProperty(), compAndName.getSecond(), (Expr<Void>) servoSetAction.value.modify(this));
     }
 
     @Override
@@ -129,7 +129,7 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-        return new LedBarSetAction<>((Expr<Void>) ledBarSetAction.x.modify(this), (Expr<Void>) ledBarSetAction.brightness.modify(this), ledBarSetAction.getProperty(), ledBarSetAction.getComment());
+        return new LedBarSetAction<>(ledBarSetAction.getProperty(), (Expr<Void>) ledBarSetAction.x.modify(this), (Expr<Void>) ledBarSetAction.brightness.modify(this));
     }
 
     @Override
@@ -139,7 +139,7 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-        return new FourDigitDisplayShowAction<>(fourDigitDisplayShowAction.getProperty(), fourDigitDisplayShowAction.getComment(), (Expr<Void>) fourDigitDisplayShowAction.value.modify(this), (Expr<Void>) fourDigitDisplayShowAction.position.modify(this), (Expr<Void>) fourDigitDisplayShowAction.colon.modify(this));
+        return new FourDigitDisplayShowAction<>(fourDigitDisplayShowAction.getProperty(), (Expr<Void>) fourDigitDisplayShowAction.value.modify(this), (Expr<Void>) fourDigitDisplayShowAction.position.modify(this), (Expr<Void>) fourDigitDisplayShowAction.colon.modify(this));
     }
 
     @Override
@@ -149,7 +149,7 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-        return new FourDigitDisplayClearAction<>(fourDigitDisplayClearAction.getProperty(), fourDigitDisplayClearAction.getComment());
+        return new FourDigitDisplayClearAction<>(fourDigitDisplayClearAction.getProperty());
     }
 
     @Override
@@ -158,7 +158,7 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-        return new PlayNoteAction<>(playNoteAction.getProperty(), playNoteAction.getComment(), playNoteAction.duration, playNoteAction.frequency, compAndName.getSecond(), playNoteAction.hide);
+        return new PlayNoteAction<>(playNoteAction.getProperty(), playNoteAction.duration, playNoteAction.frequency, compAndName.getSecond(), playNoteAction.hide);
     }
 
     @Override
@@ -167,7 +167,7 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-        return new ToneAction<>(toneAction.getProperty(), toneAction.getComment(), (Expr<Void>) toneAction.frequency.modify(this), (Expr<Void>) toneAction.duration.modify(this), compAndName.getSecond(), toneAction.hide);
+        return new ToneAction<>(toneAction.getProperty(), (Expr<Void>) toneAction.frequency.modify(this), (Expr<Void>) toneAction.duration.modify(this), compAndName.getSecond(), toneAction.hide);
     }
 
     @Override
@@ -180,7 +180,7 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
         MotionParam.Builder<Void> motionParamBuilder = new MotionParam.Builder<>();
         motionParamBuilder.speed((Expr<Void>) singleMotorOnAction.speed.modify(this));
 
-        return new MotorOnAction<>(compAndName.getSecond(), motionParamBuilder.build(), modifyPropertyType(singleMotorOnAction.getProperty(), "mbedActions_motor_on"), singleMotorOnAction.getComment());
+        return new MotorOnAction<>(compAndName.getSecond(), motionParamBuilder.build(), modifyPropertyType(singleMotorOnAction.getProperty(), "mbedActions_motor_on"));
     }
 
     @Override
@@ -190,7 +190,7 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-        return new MotorStopAction<Void>(compAndName.getSecond(), singleMotorStopAction.mode, modifyPropertyType(singleMotorStopAction.getProperty(), "mbedActions_motor_stop"), singleMotorStopAction.getComment());
+        return new MotorStopAction<Void>(compAndName.getSecond(), singleMotorStopAction.mode, modifyPropertyType(singleMotorStopAction.getProperty(), "mbedActions_motor_stop"));
     }
 
     @Override
@@ -212,13 +212,13 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
 
             Expr<Void> speed = (Expr<Void>) motorOnAction.param.getSpeed().modify(this);
 
-            return new BothMotorsOnAction<Void>(modifyPropertyType(motorOnAction.getProperty(), "mbedActions_motors_on"), motorOnAction.getComment(), speed, speed, compAndNameA.getSecond(), compAndNameB.getSecond());
+            return new BothMotorsOnAction<Void>(modifyPropertyType(motorOnAction.getProperty(), "mbedActions_motors_on"), speed, speed, compAndNameA.getSecond(), compAndNameB.getSecond());
         } else { // only replace the port for the others
             Pair<ConfigurationComponent, String> compAndName = this.helper.getComponentAndName(motorOnAction.getKind().getName(), "", port);
 
             this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-            return new MotorOnAction<>(compAndName.getSecond(), modifyMotionParam(motorOnAction.param), motorOnAction.getProperty(), motorOnAction.getComment());
+            return new MotorOnAction<>(compAndName.getSecond(), modifyMotionParam(motorOnAction.param), motorOnAction.getProperty());
         }
     }
 
@@ -239,14 +239,14 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
             this.builder.addUsedConfigurationComponent(compAndNameA.getFirst());
             this.builder.addUsedConfigurationComponent(compAndNameB.getFirst());
 
-            return new BothMotorsStopAction<>(modifyPropertyType(motorStopAction.getProperty(), "mbedActions_motors_stop"), motorStopAction.getComment());
+            return new BothMotorsStopAction<>(modifyPropertyType(motorStopAction.getProperty(), "mbedActions_motors_stop"));
         } else {
             Pair<ConfigurationComponent, String> compAndName =
                 this.helper.getComponentAndName(motorStopAction.getKind().getName(), "", motorStopAction.getUserDefinedPort());
 
             this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-            return new MotorStopAction<Void>(compAndName.getSecond(), motorStopAction.mode, motorStopAction.getProperty(), motorStopAction.getComment());
+            return new MotorStopAction<Void>(compAndName.getSecond(), motorStopAction.mode, motorStopAction.getProperty());
         }
     }
 
@@ -267,7 +267,7 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
         this.builder.addUsedConfigurationComponent(compAndNameA.getFirst());
         this.builder.addUsedConfigurationComponent(compAndNameB.getFirst());
 
-        return new BothMotorsOnAction<Void>(bothMotorsOnAction.getProperty(), bothMotorsOnAction.getComment(), (Expr<Void>) bothMotorsOnAction.speedA.modify(this), (Expr<Void>) bothMotorsOnAction.speedB.modify(this), compAndNameA.getSecond(), compAndNameB.getSecond());
+        return new BothMotorsOnAction<Void>(bothMotorsOnAction.getProperty(), (Expr<Void>) bothMotorsOnAction.speedA.modify(this), (Expr<Void>) bothMotorsOnAction.speedB.modify(this), compAndNameA.getSecond(), compAndNameB.getSecond());
     }
 
     @Override
@@ -278,42 +278,42 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
         this.builder.addUsedConfigurationComponent(compAndNameA.getFirst());
         this.builder.addUsedConfigurationComponent(compAndNameB.getFirst());
 
-        return new BothMotorsStopAction<>(bothMotorsStopAction.getProperty(), bothMotorsStopAction.getComment());
+        return new BothMotorsStopAction<>(bothMotorsStopAction.getProperty());
     }
 
     @Override
     public Phrase<Void> visitKeysSensor(KeysSensor<Phrase<Void>> keysSensor) {
-        return new KeysSensor<Void>(keysSensor.getProperty(), keysSensor.getComment(), collectSensorAndGetNewBean(keysSensor));
+        return new KeysSensor<Void>(keysSensor.getProperty(), collectSensorAndGetNewBean(keysSensor));
     }
 
     @Override
     public Phrase<Void> visitUltrasonicSensor(UltrasonicSensor<Phrase<Void>> ultrasonicSensor) {
-        return new UltrasonicSensor<Void>(ultrasonicSensor.getProperty(), ultrasonicSensor.getComment(), collectSensorAndGetNewBean(ultrasonicSensor));
+        return new UltrasonicSensor<Void>(ultrasonicSensor.getProperty(), collectSensorAndGetNewBean(ultrasonicSensor));
     }
 
     @Override
     public Phrase<Void> visitCompassSensor(CompassSensor<Phrase<Void>> compassSensor) {
-        return new CompassSensor<>(compassSensor.getProperty(), compassSensor.getComment(), collectSensorAndGetNewBean(compassSensor));
+        return new CompassSensor<>(compassSensor.getProperty(), collectSensorAndGetNewBean(compassSensor));
     }
 
     @Override
     public Phrase<Void> visitTemperatureSensor(TemperatureSensor<Phrase<Void>> temperatureSensor) {
-        return new TemperatureSensor<Void>(temperatureSensor.getProperty(), temperatureSensor.getComment(), collectSensorAndGetNewBean(temperatureSensor));
+        return new TemperatureSensor<Void>(temperatureSensor.getProperty(), collectSensorAndGetNewBean(temperatureSensor));
     }
 
     @Override
     public Phrase<Void> visitSoundSensor(SoundSensor<Phrase<Void>> soundSensor) {
-        return new SoundSensor<Void>(soundSensor.getProperty(), soundSensor.getComment(), collectSensorAndGetNewBean(soundSensor));
+        return new SoundSensor<Void>(soundSensor.getProperty(), collectSensorAndGetNewBean(soundSensor));
     }
 
     @Override
     public Phrase<Void> visitLightSensor(LightSensor<Phrase<Void>> lightSensor) {
-        return new LightSensor<Void>(lightSensor.getProperty(), lightSensor.getComment(), collectSensorAndGetNewBean(lightSensor));
+        return new LightSensor<Void>(lightSensor.getProperty(), collectSensorAndGetNewBean(lightSensor));
     }
 
     @Override
     public Phrase<Void> visitHumiditySensor(HumiditySensor<Phrase<Void>> humiditySensor) {
-        return new HumiditySensor<Void>(humiditySensor.getProperty(), humiditySensor.getComment(), collectSensorAndGetNewBean(humiditySensor));
+        return new HumiditySensor<Void>(humiditySensor.getProperty(), collectSensorAndGetNewBean(humiditySensor));
     }
 
     @Override
@@ -330,7 +330,7 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
                 accelerometerSensor.getUserDefinedPort(),
                 accelerometerSensor.getMutation());
 
-        return new AccelerometerSensor<Void>(accelerometerSensor.getProperty(), accelerometerSensor.getComment(), bean);
+        return new AccelerometerSensor<Void>(accelerometerSensor.getProperty(), bean);
     }
 
     @Override
@@ -342,17 +342,17 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
         // Previously X, Y were saved in the port, now the should be in the slot
         ExternalSensorBean bean = new ExternalSensorBean(compAndName.getSecond(), gyroSensor.getMode(), gyroSensor.getUserDefinedPort(), gyroSensor.getMutation());
 
-        return new GyroSensor<>(gyroSensor.getProperty(), gyroSensor.getComment(), bean);
+        return new GyroSensor<>(gyroSensor.getProperty(), bean);
     }
 
     @Override
     public Phrase<Void> visitInfraredSensor(InfraredSensor<Phrase<Void>> infraredSensor) {
-        return new InfraredSensor<Void>(infraredSensor.getProperty(), infraredSensor.getComment(), collectSensorAndGetNewBean(infraredSensor));
+        return new InfraredSensor<Void>(infraredSensor.getProperty(), collectSensorAndGetNewBean(infraredSensor));
     }
 
     @Override
     public Phrase<Void> visitPinGetValueSensor(PinGetValueSensor<Phrase<Void>> pinGetValueSensor) {
-        return new PinGetValueSensor<Void>(pinGetValueSensor.getProperty(), pinGetValueSensor.getComment(), collectSensorAndGetNewBean(pinGetValueSensor));
+        return new PinGetValueSensor<Void>(pinGetValueSensor.getProperty(), collectSensorAndGetNewBean(pinGetValueSensor));
     }
 
     @Override
@@ -370,35 +370,25 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase<Void>> i
 
             this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-            return new GetSampleSensor(sensorGetSample.sensorTypeAndMode, compAndName.getSecond(), sensorGetSample.sensorPort, sensorGetSample.mutation, sensorGetSample.hide, sensorGetSample.getProperty(), sensorGetSample.getComment(), getBlocklyDropdownFactory());
+            return new GetSampleSensor(sensorGetSample.sensorTypeAndMode, compAndName.getSecond(), sensorGetSample.sensorPort, sensorGetSample.mutation, sensorGetSample.hide, sensorGetSample.getProperty(), getBlocklyDropdownFactory());
         } else if ( sensor.hasName("TIMER_SENSING")
             || sensor.hasName("PIN_TOUCH_SENSING")
             || sensor.getKind().getName().contains("GESTURE") ) {
-            return new GetSampleSensor(sensorGetSample.sensorTypeAndMode, sensorGetSample.sensorPort, sensorGetSample.sensorPort, sensorGetSample.mutation, sensorGetSample.hide, sensorGetSample.getProperty(), sensorGetSample.getComment(), getBlocklyDropdownFactory());
+            return new GetSampleSensor(sensorGetSample.sensorTypeAndMode, sensorGetSample.sensorPort, sensorGetSample.sensorPort, sensorGetSample.mutation, sensorGetSample.hide, sensorGetSample.getProperty(), getBlocklyDropdownFactory());
         } else {
-            return new GetSampleSensor(sensorGetSample.sensorTypeAndMode, collectSensorAndGetNewBean(sensor).getPort(), sensorGetSample.slot, sensorGetSample.mutation, sensorGetSample.hide, sensorGetSample.getProperty(), sensorGetSample.getComment(), getBlocklyDropdownFactory());
+            return new GetSampleSensor(sensorGetSample.sensorTypeAndMode, collectSensorAndGetNewBean(sensor).getPort(), sensorGetSample.slot, sensorGetSample.mutation, sensorGetSample.hide, sensorGetSample.getProperty(), getBlocklyDropdownFactory());
         }
     }
 
     @Override
     public Phrase<Void> visitWaitStmt(WaitStmt<Phrase<Void>> waitStmt) {
         // replaces the specific and now deprecated mbedControls_wait_for with the generic robControls_wait_for
-        return new WaitStmt<>((StmtList<Void>) waitStmt.statements.modify(this), modifyPropertyType(waitStmt.getProperty(), "robControls_wait_for"), waitStmt.getComment());
+        return new WaitStmt<>(modifyPropertyType(waitStmt.getProperty(), "robControls_wait_for"), (StmtList<Void>) waitStmt.statements.modify(this));
     }
 
-    private BlocklyBlockProperties modifyPropertyType(BlocklyBlockProperties oldProperty, String newType) {
-        return BlocklyBlockProperties
-            .make(
-                newType, // TODO blockly type is hardcoded in this solution, do it differently?
-                oldProperty.getBlocklyId(),
-                oldProperty.isDisabled(),
-                oldProperty.isCollapsed(),
-                oldProperty.isInline(),
-                oldProperty.isDeletable(),
-                oldProperty.isMovable(),
-                oldProperty.isInTask(),
-                oldProperty.isShadow(),
-                oldProperty.isErrorAttribute());
+    private BlocklyProperties modifyPropertyType(BlocklyProperties oldProperty, String newType) {
+        // TODO blockly type is hardcoded in this solution, do it differently?
+        return new BlocklyProperties(newType, oldProperty.getBlocklyId(), oldProperty.isDisabled(), oldProperty.isCollapsed(), oldProperty.isInline(), oldProperty.isDeletable(), oldProperty.isMovable(), oldProperty.isInTask(), oldProperty.isShadow(), oldProperty.isErrorAttribute(), oldProperty.getComment());
     }
 
     /**

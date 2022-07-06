@@ -5,8 +5,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
@@ -17,8 +16,8 @@ public final class NNOutputNeuronStmt<V> extends Stmt<V> {
     @NepoValue(name = BlocklyConstants.VALUE, type = BlocklyType.NUMBER)
     public final Expr<V> value;
 
-    public NNOutputNeuronStmt(BlocklyBlockProperties properties, BlocklyComment comment, String name, Expr<V> value) {
-        super(properties, comment);
+    public NNOutputNeuronStmt(BlocklyProperties properties, String name, Expr<V> value) {
+        super(properties);
         Assert.isTrue(value.isReadOnly() && value != null);
         this.name = name;
         this.value = value;

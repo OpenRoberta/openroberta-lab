@@ -7,8 +7,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"mbedActions_motors_on"}, name = "BOTH_MOTORS_ON_ACTION")
@@ -22,8 +21,8 @@ public final class BothMotorsOnAction<V> extends Action<V> {
     @NepoField(name = BlocklyConstants.B, value = BlocklyConstants.B)
     public final String portB;
 
-    public BothMotorsOnAction(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> speedA, Expr<V> speedB, String portA, String portB) {
-        super(properties, comment);
+    public BothMotorsOnAction(BlocklyProperties properties, Expr<V> speedA, Expr<V> speedB, String portA, String portB) {
+        super(properties);
         Assert.isTrue((speedA != null) && speedA.isReadOnly());
         Assert.isTrue((speedB != null) && speedB.isReadOnly());
         this.portA = portA;

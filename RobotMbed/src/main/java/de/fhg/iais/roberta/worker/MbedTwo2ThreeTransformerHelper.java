@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 public final class MbedTwo2ThreeTransformerHelper {
@@ -429,7 +429,7 @@ public final class MbedTwo2ThreeTransformerHelper {
             name = getName(port, confBlocklyName);
             properties = Collections.singletonMap("PIN1", port);
         }
-        BlocklyBlockProperties blocklyProperties = BlocklyBlockProperties.make(confBlocklyName, name, false, false, false, true, true, true, false, false);
-        return new ConfigurationComponent(confType, true, name, name, properties, blocklyProperties, null, xPos, yPos);
+        BlocklyProperties blocklyProperties = new BlocklyProperties(confBlocklyName, name, false, false, false, true, true, true, false, false, null);
+        return new ConfigurationComponent(confType, true, name, name, properties, blocklyProperties, xPos, yPos);
     }
 }

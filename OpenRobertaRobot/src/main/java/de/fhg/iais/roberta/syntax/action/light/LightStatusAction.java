@@ -11,8 +11,7 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
@@ -22,8 +21,8 @@ public final class LightStatusAction<V> extends Action<V> implements WithUserDef
     public final Status status;
     public final String userDefinedPort;
 
-    public LightStatusAction(String userDefinedPort, Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public LightStatusAction(String userDefinedPort, Status status, BlocklyProperties properties) {
+        super(properties);
         Assert.isTrue(status != null);
         this.status = status;
         this.userDefinedPort = userDefinedPort;
@@ -50,7 +49,7 @@ public final class LightStatusAction<V> extends Action<V> implements WithUserDef
             || block.getType().equals("robActions_leds_off") ) {
             status = LightStatusAction.Status.OFF;
         }
-        return new LightStatusAction<>(Jaxb2Ast.sanitizePort(port), status, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new LightStatusAction<>(Jaxb2Ast.sanitizePort(port), status, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

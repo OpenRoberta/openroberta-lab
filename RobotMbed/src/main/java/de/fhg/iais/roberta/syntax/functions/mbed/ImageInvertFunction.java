@@ -7,16 +7,15 @@ import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "IMAGE_INVERT", category = "FUNCTION", blocklyNames = {"mbedImage_invert"})
 public final class ImageInvertFunction<V> extends Function<V> {
     @NepoValue(name = "VAR", type = BlocklyType.PREDEFINED_IMAGE)
     public final Expr<V> image;
 
-    public ImageInvertFunction(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> image) {
-        super(properties, comment);
+    public ImageInvertFunction(BlocklyProperties properties, Expr<V> image) {
+        super(properties);
         Assert.notNull(image);
 
         this.image = image;

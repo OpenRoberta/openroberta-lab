@@ -13,8 +13,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAst;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.SC;
 
@@ -50,8 +49,7 @@ public class ConfigurationComponent extends Phrase<Void> {
             internalPortName,
             userDefinedPortName,
             componentProperties,
-            BlocklyBlockProperties.make(name, "1"),
-            BlocklyComment.make("empty-comment", false, "10", "10"),
+            BlocklyProperties.make(name, "1"),
             0,
             0);
     }
@@ -75,11 +73,11 @@ public class ConfigurationComponent extends Phrase<Void> {
         String internalPortName,
         String userDefinedPortName,
         Map<String, String> componentProperties,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment,
+        BlocklyProperties properties,
+        
         int x,
         int y) {
-        super(new BlockDescriptor(name, Category.CONFIGURATION_BLOCK, ConfigurationComponent.class, new String[0], Collections.emptyMap()), properties, comment);
+        super(new BlockDescriptor(name, Category.CONFIGURATION_BLOCK, ConfigurationComponent.class, new String[0], Collections.emptyMap()), properties);
         this.componentType = name;
         this.isActor = isActor;
         this.internalPortName = internalPortName;

@@ -3,8 +3,7 @@ package de.fhg.iais.roberta.syntax.configuration;
 import java.util.Map;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 
 /**
@@ -17,11 +16,11 @@ public final class WedoConfigurationComponent extends ConfigurationComponent {
         String portName,
         String userDefinedName,
         Map<String, String> componentProperties,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment,
+        BlocklyProperties properties,
+        
         int x,
         int y) {
-        super(componentType, isActor, portName, userDefinedName, componentProperties, properties, comment, x, y);
+        super(componentType, isActor, portName, userDefinedName, componentProperties, properties, x, y);
     }
 
     @Override

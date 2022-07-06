@@ -14,8 +14,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
@@ -24,8 +23,8 @@ public final class AssignStmt<V> extends Stmt<V> {
     public final Var<V> name;
     public final Expr<V> expr;
 
-    public AssignStmt(Var<V> name, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public AssignStmt(BlocklyProperties properties, Var<V> name, Expr<V> expr) {
+        super(properties);
         Assert.isTrue(name != null && expr != null && name.isReadOnly() && expr.isReadOnly());
         this.name = name;
         this.expr = expr;
@@ -51,7 +50,7 @@ public final class AssignStmt<V> extends Stmt<V> {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         Phrase<V> p = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.CAPTURED_TYPE));
         Expr<V> exprr = Jaxb2Ast.convertPhraseToExpr(p);
-        return new AssignStmt<V>((Var<V>) Jaxb2Ast.extractVar(block), Jaxb2Ast.convertPhraseToExpr(exprr), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new AssignStmt<V>(Jaxb2Ast.extractBlocklyProperties(block), (Var<V>) Jaxb2Ast.extractVar(block), Jaxb2Ast.convertPhraseToExpr(exprr));
     }
 
     @Override

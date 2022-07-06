@@ -10,8 +10,7 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
-import de.fhg.iais.roberta.util.ast.BlocklyBlockProperties;
-import de.fhg.iais.roberta.util.ast.BlocklyComment;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.SC;
 
@@ -19,8 +18,8 @@ import de.fhg.iais.roberta.util.syntax.SC;
 public final class SwitchLedMatrixAction<V> extends Action<V> {
     public final boolean activated;
 
-    public SwitchLedMatrixAction(boolean activated, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(properties, comment);
+    public SwitchLedMatrixAction(BlocklyProperties properties, boolean activated) {
+        super(properties);
         this.activated = activated;
         setReadOnly();
     }
@@ -34,7 +33,7 @@ public final class SwitchLedMatrixAction<V> extends Action<V> {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
 
         boolean activated = Jaxb2Ast.extractField(fields, BlocklyConstants.STATE).equals("ON");
-        return new SwitchLedMatrixAction<>(activated, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new SwitchLedMatrixAction<>(Jaxb2Ast.extractBlocklyProperties(block), activated);
     }
 
     @Override

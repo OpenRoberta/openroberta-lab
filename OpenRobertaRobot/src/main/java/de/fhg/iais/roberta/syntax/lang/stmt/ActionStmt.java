@@ -13,7 +13,7 @@ public final class ActionStmt<V> extends Stmt<V> {
     public final Action<V> action;
 
     public ActionStmt(Action<V> action) {
-        super(action.getProperty(), action.getComment());
+        super(action.getProperty());
         Assert.isTrue(action.isReadOnly());
         this.action = action;
         setReadOnly();
