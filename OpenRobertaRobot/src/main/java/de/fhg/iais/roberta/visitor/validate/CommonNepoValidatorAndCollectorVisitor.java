@@ -4,14 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
-import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
@@ -372,6 +368,10 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         List<String> inputNeurons = new ArrayList<>();
         List<String> outputNeurons = new ArrayList<>();
         for ( Stmt neuron : nnStepStmt.getIoNeurons().get() ) {
+            if ( neuron.getProperty().isDisabled() ) {
+                addErrorToPhrase(nnStepStmt, "NN_STEP_INCONSISTENT");
+                return null;
+            }
             if ( neuron instanceof NNInputNeuronStmt ) {
                 inputNeurons.add(((NNInputNeuronStmt) neuron).name);
             } else if ( neuron instanceof NNOutputNeuronStmt ) {

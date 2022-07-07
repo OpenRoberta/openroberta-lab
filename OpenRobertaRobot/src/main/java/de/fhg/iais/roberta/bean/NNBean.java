@@ -53,11 +53,10 @@ public class NNBean implements IProjectBean {
         private List<String> outputNeurons = new ArrayList<>();
 
         /**
-         * data contains the NN definition. Store it for later usage. Not yet used.
-         * @param data
+         * data contains the NN definition. Save it for later usage.
          */
         public void setNN(Data data) {
-            if (data == null) {
+            if ( data == null ) {
                 this.weights = new JSONArray();
                 this.bias = new JSONArray();
             } else {
@@ -68,7 +67,7 @@ public class NNBean implements IProjectBean {
         }
 
         public String processInputOutputNeurons(List<String> inputNeurons, List<String> outputNeurons) {
-            if ( !neuronNamesConsistent(inputNeurons) || !neuronNamesConsistent(outputNeurons) ) {
+            if ( !neuronNamesConsistent(inputNeurons, outputNeurons) ) {
                 return "NN_STEP_INCONSISTENT";
             }
             if ( nnStepWasFound ) {
@@ -92,14 +91,15 @@ public class NNBean implements IProjectBean {
             }
         }
 
-        private boolean neuronNamesConsistent(List<String> list) {
-            Set<String> set = new HashSet<>(list);
+        private boolean neuronNamesConsistent(List<String> l1, List<String> l2) {
+            Set<String> set = new HashSet<>(l1);
+            set.addAll(l2);
             for ( String s : set ) {
                 if ( s.isEmpty() || !Util.isValidJavaIdentifier(s) ) {
                     return false;
                 }
             }
-            return list.size() == set.size();
+            return l1.size() + l2.size() == set.size();
         }
 
         private boolean neuronsMatch(List<String> l1, List<String> l2) {

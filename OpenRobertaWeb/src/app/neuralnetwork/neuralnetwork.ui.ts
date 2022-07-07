@@ -27,7 +27,7 @@ enum FocusStyle {
 let D3: typeof _D3; // used for lazy loading
 type D3Selection = _D3.Selection<any>;
 
-let focusStyle = FocusStyle.CLICK_WEIGHT_BIAS;
+let focusStyle = FocusStyle.SHOW_ALL;
 let focusNode = null;
 
 let state: State = null;
@@ -41,7 +41,7 @@ export function setupNN(stateFromStartBlock: any, inputNeurons: string[], output
 export async function runNNEditor() {
     D3 = await import('d3');
     D3.select('#goto-sim').on('click', () => {
-        $.when($('#tabProgram').trigger('click')).done(function() {
+        $.when($('#tabProgram').trigger('click')).done(function () {
             $('#simButton').trigger('click');
         });
     });
@@ -64,19 +64,19 @@ export async function runNNEditor() {
         reconstructNNIncludingUI();
     });
 
-    let activationDropdown = D3.select('#nn-activations').on('change', function() {
+    let activationDropdown = D3.select('#nn-activations').on('change', function () {
         state.activationKey = this.value;
         state.activation = H.activations[this.value];
         drawNetworkUI(network);
     });
     activationDropdown.property('value', getKeyFromValue(H.activations, state.activation));
 
-    D3.select('#nn-show-precision').on('change', function() {
+    D3.select('#nn-show-precision').on('change', function () {
         state.precision = this.value;
         drawNetworkUI(network);
     });
 
-    D3.select('#nn-focus').on('change', function() {
+    D3.select('#nn-focus').on('change', function () {
         focusStyle = FocusStyle[(this as HTMLSelectElement).value];
         if (focusStyle === undefined || focusStyle === null) {
             focusStyle = FocusStyle.SHOW_ALL;
@@ -105,7 +105,7 @@ export async function runNNEditor() {
 }
 
 export function resetUiOnTerminate() {
-    $('#nn-editCard').css("display", "none");
+    $('#nn-editCard').css('display', 'none');
     focusNode = null;
 }
 
@@ -232,19 +232,19 @@ function drawNetworkUI(network: Network): void {
         let nodeGroup: D3Selection = container.append('g').attr({
             class: nodeClass,
             id: `${nodeId}`,
-            transform: `translate(${x},${y})`
+            transform: `translate(${x},${y})`,
         });
 
         let mainRectAngle = nodeGroup.append('rect').attr({
             x: 0,
             y: 0,
             width: nodeSize,
-            height: nodeSize
+            height: nodeSize,
         });
         if (focusNode !== undefined && focusNode != null && focusNode.id === node.id) {
             mainRectAngle.style('fill', 'yellow');
         }
-        nodeGroup.on('click', function() {
+        nodeGroup.on('click', function () {
             if (node.inputLinks.length > 0) {
                 if (focusNode == node) {
                     focusNode = null;
@@ -260,7 +260,7 @@ function drawNetworkUI(network: Network): void {
             x: 10,
             y: 0.66 * nodeSize,
             'text-anchor': 'start',
-            cursor: 'default'
+            cursor: 'default',
         });
         labelForId.append('tspan').text(nodeId);
         if (nodeType !== NodeType.INPUT) {
@@ -269,10 +269,10 @@ function drawNetworkUI(network: Network): void {
                 x: -biasSize - 2,
                 y: nodeSize - biasSize + 3,
                 width: biasSize,
-                height: biasSize
+                height: biasSize,
             });
             if (focusStyle !== FocusStyle.CLICK_NODE || focusNode === node) {
-                biasRect.on('click', function() {
+                biasRect.on('click', function () {
                     updateEditCard(node, D3.mouse(container.node()));
                 });
             }
@@ -294,12 +294,12 @@ function drawNetworkUI(network: Network): void {
             .insert('div', ':first-child')
             .attr({
                 id: `canvas-${nodeId}`,
-                class: 'canvas'
+                class: 'canvas',
             })
             .style({
                 position: 'absolute',
                 left: `${x + 3}px`,
-                top: `${y + 3}px`
+                top: `${y + 3}px`,
             });
     }
 
@@ -320,19 +320,19 @@ function drawNetworkUI(network: Network): void {
         let datum = {
             source: {
                 y: source.cx + nodeSize / 2 + 2,
-                x: source.cy
+                x: source.cy,
             },
             target: {
                 y: dest.cx - nodeSize / 2,
-                x: dest.cy + ((index - (length - 1) / 2) / length) * 12
-            }
+                x: dest.cy + ((index - (length - 1) / 2) / length) * 12,
+            },
         };
         let diagonal = D3.svg.diagonal().projection((d) => [d.y, d.x]);
         line.attr({
             'marker-start': 'url(#markerArrow)',
             class: 'link',
             id: link.source.id + '-' + link.dest.id,
-            d: diagonal(datum, 0)
+            d: diagonal(datum, 0),
         });
 
         // Show the value of the link depending on focus-style
@@ -360,7 +360,7 @@ function drawNetworkUI(network: Network): void {
                 .append('path')
                 .attr('d', diagonal(datum, 0))
                 .attr('class', cssForPath)
-                .on('click', function() {
+                .on('click', function () {
                     updateEditCard(link, D3.mouse(this));
                 });
         }
@@ -420,7 +420,7 @@ function drawNetworkUI(network: Network): void {
                 class: 'nn-showval',
                 id: 'val-' + id,
                 x: x,
-                y: y
+                y: y,
             })
             .text(valueToShow);
         drawValuesBox(text, valueForColor);
@@ -464,7 +464,7 @@ function updateEditCard(nodeOrLink?: Node | Link, coordinates?: [number, number]
     editCard.style({
         left: `${coordinates[0] + 20}px`,
         top: `${coordinates[1]}px`,
-        display: 'block'
+        display: 'block',
     });
     let name = nodeOrLink instanceof Link ? 'NN_WEIGHT' : 'NN_BIAS';
     editCard.select('.nn-type').text(MSG.get(name));
@@ -484,7 +484,7 @@ function updateUI() {
             container.select(`#${baseName}`).style({
                 'stroke-dashoffset': 0,
                 'stroke-width': linkWidthScale(Math.abs(link.weight.get())),
-                stroke: colorScale(link.weight.get())
+                stroke: colorScale(link.weight.get()),
             });
             const val = container.select(`#val-${baseName}`);
             if (!val.empty()) {
@@ -533,7 +533,11 @@ function mkColorScaleWeight(): _D3.scale.Linear<string, number> {
         }
     }
     network.forEachLink(updMaxWeight);
-    return D3.scale.linear<string, number>().domain([-1, 0, 1]).range(['#f59322', '#222222', '#0877bd']).clamp(true);
+    return D3.scale
+        .linear<string, number>()
+        .domain([-0.01, 0, +0.01])
+        .range(['#f59322', '#222222', '#0877bd'])
+        .clamp(true);
 }
 
 function mkColorScaleBias(): _D3.scale.Linear<string, number> {
@@ -562,8 +566,8 @@ function nodeOrLink2Value(nodeOrLink: Node | Link): string {
     return nodeOrLink instanceof Link
         ? nodeOrLink.weight.getWithPrecision('*', state.weightSuppressMultOp)
         : nodeOrLink instanceof Node
-            ? nodeOrLink.bias.getWithPrecision('*', state.weightSuppressMultOp)
-            : '';
+        ? nodeOrLink.bias.getWithPrecision('*', state.weightSuppressMultOp)
+        : '';
 }
 
 function value2NodeOrLink(nodeOrLink: Node | Link, value: string) {

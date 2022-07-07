@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2022-06-28 14:51:33.349889",
+		"lastupdated": "2022-07-07 14:04:52.563688",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -649,7 +649,7 @@
 	"TOOLBOX_CONTROL": "Control",
 	"TOOLBOX_LOGIC": "Logic",
 	"TOOLBOX_MATH": "Math",
-	"TOOLBOX_NEURAL_NETWORK": "Neural Network",
+	"TOOLBOX_NN": "Neural Network",
 	"TOOLBOX_TEXT": "Text",
 	"TOOLBOX_LIST": "Lists",
 	"TOOLBOX_COLOUR": "Colours",
@@ -1818,6 +1818,7 @@
 	"NN_GET_BIAS": "get the bias from",
 	"NN_GET_BIAS_TOOLTIP": "return the value of the bias of a neuron.",
 	"NN_VALUE": "value:",
+	"NN_STORE": "store into:",
 	"NN_TO": "to",
 	"NN_BY": "by",
 	"NN_TARGET": "to",
@@ -1832,8 +1833,7 @@
 	"NN_CLICK_NODE": "select node by clicking, then change",
 	"NN_SHOW_ALL": "show all, change by clicking",
 	"NN_STEPS_INCONSISTENT": "if you use many NNStep-blocks, names and order of neurons must match",
-	"NN_STEP_INCONSISTENT": "names of neurons must be nonempty, different and valid",
-	"NN_OUTPUT_NEURON_MISSING": "unknown name of output neuron in get value of output neuron block",
+	"NN_STEP_INCONSISTENT": "names of all neurons must be nonempty, different and valid",
 	"NN_SHOW_MATH": "computation of neuron",
 	"NN_SHOW_PRECISION": "decimal places",
 	"MIN_ANGLE": "Minimum angle",
