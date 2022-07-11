@@ -62,6 +62,17 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     function setupNN(stateFromStartBlock, inputNeurons, outputNeurons) {
         state = new neuralnetwork_uistate_1.State(stateFromStartBlock, inputNeurons, outputNeurons);
         makeNetworkFromState();
+        var allNeuronsForBlocklyDropdown = [];
+        for (var _i = 0, _a = network.network; _i < _a.length; _i++) {
+            var layer = _a[_i];
+            var names = [];
+            for (var _b = 0, layer_1 = layer; _b < layer_1.length; _b++) {
+                var neuron = layer_1[_b];
+                names.push(neuron.id);
+            }
+            allNeuronsForBlocklyDropdown.push(names);
+        }
+        neuronNameHelper['allNeuronNamesPerLayer'] = allNeuronsForBlocklyDropdown;
     }
     exports.setupNN = setupNN;
     function runNNEditor() {

@@ -16,10 +16,12 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 @NepoBasic(name = "NN_STEP_STMT", category = "STMT", blocklyNames = {"robactions_nnstep"})
 public final class NNStepStmt extends Stmt {
     public final StmtList ioNeurons;
+    public final Data netDefinition; // deprecated, only used to copy this value to the start block later
 
-    public NNStepStmt(BlocklyProperties properties, StmtList ioNeurons) {
+    public NNStepStmt(BlocklyProperties properties, StmtList ioNeurons, Data netDefinition) {
         super(properties);
         this.ioNeurons = ioNeurons;
+        this.netDefinition = netDefinition;
         setReadOnly();
     }
 
@@ -55,12 +57,12 @@ public final class NNStepStmt extends Stmt {
         return "nnStep()";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         helper.getDropdownFactory();
         final List<Statement> ioNeuronsWrapped = block.getStatement();
         final Data netDefinition = block.getData();
         final StmtList ioNeurons = helper.extractStatement(ioNeuronsWrapped, "IONEURON");
-        return new NNStepStmt(Jaxb2Ast.extractBlocklyProperties(block), ioNeurons);
+        return new NNStepStmt(Jaxb2Ast.extractBlocklyProperties(block), ioNeurons, netDefinition);
     }
 
     @Override
@@ -68,6 +70,7 @@ public final class NNStepStmt extends Stmt {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Ast2Jaxb.addStatement(jaxbDestination, "IONEURON", ioNeurons);
+        jaxbDestination.setData(netDefinition);
         return jaxbDestination;
     }
 }

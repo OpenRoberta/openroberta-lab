@@ -41,7 +41,7 @@ public class NNBean implements IProjectBean {
         return biases;
     }
 
-    public boolean isWellDefined() {
+    public boolean hasAtLeastOneInputAndOutputNeuron() {
         return inputNeurons.size() > 0 && outputNeurons.size() > 0;
     }
 
@@ -67,6 +67,9 @@ public class NNBean implements IProjectBean {
         }
 
         public String processInputOutputNeurons(List<String> inputNeurons, List<String> outputNeurons) {
+            if ( inputNeurons.size() <= 0 || outputNeurons.size() <= 0 ) {
+                return "NN_STEP_INPUTOUTPUT_MISSING";
+            }
             if ( !neuronNamesConsistent(inputNeurons, outputNeurons) ) {
                 return "NN_STEP_INCONSISTENT";
             }
@@ -79,6 +82,18 @@ public class NNBean implements IProjectBean {
                 nnStepWasFound = true;
                 this.inputNeurons = inputNeurons;
                 this.outputNeurons = outputNeurons;
+            }
+            if ( this.weights.length() < 2 || this.bias.length() < 2 ) {
+                return "NN_INSPECT_NN";
+            }
+            if ( this.inputNeurons.size() != this.weights.getJSONArray(0).length() ) {
+                return "NN_INSPECT_NN";
+            }
+            if ( this.outputNeurons.size() != this.weights.getJSONArray(this.weights.length() - 1).length() ) {
+                return "NN_INSPECT_NN";
+            }
+            if ( this.outputNeurons.size() != this.bias.getJSONArray(this.bias.length() - 1).length() ) {
+                return "NN_INSPECT_NN";
             }
             return null;
         }

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2022-07-07 14:04:52.563688",
+		"lastupdated": "2022-07-12 11:38:46.090233",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1224,6 +1224,7 @@
 	"MENU_SIM_CHANGE_COLOR_TOOLTIP": "Choose a color for the selected obstacle / color area.",
 	"MENU_SIM_CONFIG_EXPORT": "Download simulation settings.",
 	"MENU_SIM_CONFIG_IMPORT": "Upload simulation settings.",
+	"MENU_SIM_TRAIL_TOOLTIP": "Enable/Disable robot draw trail.",
 	"MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP": "Step forward to the next breakpoint in the program.",
 	"MENU_DEBUG_STEP_OVER_TOOLTIP": "Step Over to the next block in the program.",
 	"MENU_DEBUG_STEP_INTO_TOOLTIP": "Step Into to the next block in the program.",
@@ -1834,6 +1835,8 @@
 	"NN_SHOW_ALL": "show all, change by clicking",
 	"NN_STEPS_INCONSISTENT": "if you use many NNStep-blocks, names and order of neurons must match",
 	"NN_STEP_INCONSISTENT": "names of all neurons must be nonempty, different and valid",
+	"NN_STEP_INPUTOUTPUT_MISSING": "at least one input and one output neurons are required",
+	"NN_INSPECT_NN": "after adding or removing input or output neurons, inspect the net",
 	"NN_SHOW_MATH": "computation of neuron",
 	"NN_SHOW_PRECISION": "decimal places",
 	"MIN_ANGLE": "Minimum angle",

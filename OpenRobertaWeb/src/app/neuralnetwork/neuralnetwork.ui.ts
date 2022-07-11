@@ -12,6 +12,8 @@ import * as MSG from './neuralnetwork.msg';
 
 import * as _D3 from 'd3';
 
+declare var neuronNameHelper: any;
+
 enum NodeType {
     INPUT,
     HIDDEN,
@@ -36,6 +38,15 @@ let network: Network = null;
 export function setupNN(stateFromStartBlock: any, inputNeurons: string[], outputNeurons: string[]) {
     state = new State(stateFromStartBlock, inputNeurons, outputNeurons);
     makeNetworkFromState();
+    let allNeuronsForBlocklyDropdown = [];
+    for (const layer of network.network) {
+        let names = [];
+        for (const neuron of layer) {
+            names.push(neuron.id);
+        }
+        allNeuronsForBlocklyDropdown.push(names);
+    }
+    neuronNameHelper['allNeuronNamesPerLayer'] = allNeuronsForBlocklyDropdown;
 }
 
 export async function runNNEditor() {
@@ -44,6 +55,17 @@ export async function runNNEditor() {
         $.when($('#tabProgram').trigger('click')).done(function () {
             $('#simButton').trigger('click');
         });
+    });
+
+    D3.select('#nn-focus').on('change', function () {
+        focusStyle = FocusStyle[(this as HTMLSelectElement).value];
+        if (focusStyle === undefined || focusStyle === null) {
+            focusStyle = FocusStyle.SHOW_ALL;
+        }
+        if (focusStyle !== FocusStyle.CLICK_NODE) {
+            focusNode = null;
+        }
+        drawNetworkUI(network);
     });
 
     D3.select('#nn-add-layers').on('click', () => {
@@ -73,17 +95,6 @@ export async function runNNEditor() {
 
     D3.select('#nn-show-precision').on('change', function () {
         state.precision = this.value;
-        drawNetworkUI(network);
-    });
-
-    D3.select('#nn-focus').on('change', function () {
-        focusStyle = FocusStyle[(this as HTMLSelectElement).value];
-        if (focusStyle === undefined || focusStyle === null) {
-            focusStyle = FocusStyle.SHOW_ALL;
-        }
-        if (focusStyle !== FocusStyle.CLICK_NODE) {
-            focusNode = null;
-        }
         drawNetworkUI(network);
     });
 

@@ -122,8 +122,8 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     protected void generateNNStuff() {
         NNBean nnBean = this.getBean(CodeGeneratorSetupBean.class).getNNBean();
-        if ( nnBean != null && nnBean.isWellDefined() ) {
-            for ( String neuron:nnBean.getOutputNeurons() ) {
+        if ( nnBean != null && nnBean.hasAtLeastOneInputAndOutputNeuron() ) {
+            for ( String neuron : nnBean.getOutputNeurons() ) {
                 src.nlI().add("private float ____", neuron, ";");
             }
             final JSONArray weights = nnBean.getWeights();
@@ -133,7 +133,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
                 JSONArray biasesForLayer = biases.getJSONArray(layer + 1);
                 int numberOfNeurons = weightsForLayer.getJSONArray(0).length();
                 for ( int targetNum = 0; targetNum < numberOfNeurons; targetNum++ ) {
-                    String targetName =  (layer == weights.length() - 2) ? nnBean.getOutputNeurons().get(targetNum) : ("h" + (layer + 1) + "n" + (targetNum + 1));
+                    String targetName = (layer == weights.length() - 2) ? nnBean.getOutputNeurons().get(targetNum) : ("h" + (layer + 1) + "n" + (targetNum + 1));
                     src.nlI().add("private float ____b_", targetName, " = ");
                     writeWeightTerm(biasesForLayer.getString(targetNum));
                     src.add(";");
@@ -153,7 +153,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
                 for ( int targetNum = 0; targetNum < numberOfNeurons; targetNum++ ) {
                     String targetName;
                     String targetPrefix;
-                    if (layer == weights.length() - 2) {
+                    if ( layer == weights.length() - 2 ) {
                         // output
                         targetName = nnBean.getOutputNeurons().get(targetNum);
                         targetPrefix = "";
@@ -166,7 +166,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
                     for ( int sourceNum = 0; sourceNum < weightsForLayer.length(); sourceNum++ ) {
                         String sourceName;
                         String sourcePrefix;
-                        if (layer == 0) {
+                        if ( layer == 0 ) {
                             // input
                             sourceName = nnBean.getInputNeurons().get(sourceNum);
                             sourcePrefix = "_";
