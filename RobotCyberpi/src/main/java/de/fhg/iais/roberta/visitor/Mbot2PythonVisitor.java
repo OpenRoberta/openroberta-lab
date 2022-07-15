@@ -211,6 +211,10 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
         this.sb.append("except Exception as e:");
         incrIndentation();
         nlIndent();
+        this.sb.append("cyberpi.display.show_label(\"Exeption on Mbot 2\", 16, int(8 * 0 + 5), int(17 * 0))");
+        nlIndent();
+        this.sb.append("cyberpi.display.show_label(e, 16, int(8 * 0 + 5), int(17 * 1))");
+        nlIndent();
         this.sb.append("raise");
         decrIndentation();
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.ENCODER) ) {
