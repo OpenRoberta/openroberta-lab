@@ -102,7 +102,7 @@ public class NNBean implements IProjectBean {
             if ( outputNeurons.contains(name) ) {
                 return null;
             } else {
-                return "NN_STEPS_INCONSISTENT";
+                return "NN_INVALID_NEURONNAME";
             }
         }
 

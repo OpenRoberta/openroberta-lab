@@ -1043,6 +1043,7 @@ Blockly.Msg.NN_HIDDEN_LAYER = "hidden layer";
 Blockly.Msg.NN_HIDDEN_LAYERS = "hidden layers";
 Blockly.Msg.NN_INPUT_NEURON = "input neuron";
 Blockly.Msg.NN_INSPECT_NN = "after adding or removing input or output neurons, inspect the net";
+Blockly.Msg.NN_INVALID_NEURONNAME = "invalid neuron name";
 Blockly.Msg.NN_OUTPUT_NEURON = "output neuron";
 Blockly.Msg.NN_REGULARIZATION = "regularization";
 Blockly.Msg.NN_SHOW_ALL = "show all, change by clicking";

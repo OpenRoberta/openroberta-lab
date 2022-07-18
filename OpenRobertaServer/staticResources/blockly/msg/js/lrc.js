@@ -1043,6 +1043,7 @@ Blockly.Msg.NN_HIDDEN_LAYER = "hidden layer";  // untranslated
 Blockly.Msg.NN_HIDDEN_LAYERS = "hidden layers";  // untranslated
 Blockly.Msg.NN_INPUT_NEURON = "input neuron";  // untranslated
 Blockly.Msg.NN_INSPECT_NN = "after adding or removing input or output neurons, inspect the net";  // untranslated
+Blockly.Msg.NN_INVALID_NEURONNAME = "invalid neuron name";  // untranslated
 Blockly.Msg.NN_OUTPUT_NEURON = "output neuron";  // untranslated
 Blockly.Msg.NN_REGULARIZATION = "regularization";  // untranslated
 Blockly.Msg.NN_SHOW_ALL = "show all, change by clicking";  // untranslated

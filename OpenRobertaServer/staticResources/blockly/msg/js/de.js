@@ -1043,6 +1043,7 @@ Blockly.Msg.NN_HIDDEN_LAYER = "verborgene Schicht";
 Blockly.Msg.NN_HIDDEN_LAYERS = "verborgene Schichten";
 Blockly.Msg.NN_INPUT_NEURON = "Eingabe-Neuron";
 Blockly.Msg.NN_INSPECT_NN = "betrachte und passe das Netz an, wenn Eingabe- oder Ausgabe-Neuronen hinzugefügt oder entfernt werden";
+Blockly.Msg.NN_INVALID_NEURONNAME = "Name des Neurons ist ungültig";
 Blockly.Msg.NN_OUTPUT_NEURON = "Ausgabe-Neuron";
 Blockly.Msg.NN_REGULARIZATION = "Regulierung";
 Blockly.Msg.NN_SHOW_ALL = "alle zeigen, durch Klick ändern";
