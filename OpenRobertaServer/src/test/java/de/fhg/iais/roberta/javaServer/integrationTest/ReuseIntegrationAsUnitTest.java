@@ -307,8 +307,8 @@ public class ReuseIntegrationAsUnitTest {
     @Ignore
     @Test
     public void testOneRobotSpecificProgramAsUnitTests() throws Exception {
-        String robotName = "xNN";
-        String programName = "nn_step";
+        String robotName = "mbot2";
+        String programName = "action";
         LOG.info("========= testing program " + programName + " for robot " + robotName);
         final String resourceDirectory = setupRobotFactoryAndGetResourceDirForRobotSpecificTests(robotName);
         runRegenerateAndCodeGenerationForOneRobotSpecificProgram(resourceDirectory, programName + ".xml", robotName, Collections.emptyList());
