@@ -182,7 +182,12 @@ body.blocklyMinimalBody * {
 
 .googleLogo {
     background: url(../css/svg/Google_logo.svg) no-repeat;
-    background-size: 100% 100%;
+    background-size: contain;
+}
+
+.NRWMinLogo {
+    background: url(../css/img/AK_Schule.png) no-repeat;
+    background-size: contain;
 }
 
 .img-nepo {
@@ -314,7 +319,7 @@ body.blocklyMinimalBody * {
 }
 
 canvas.border {
-	border: 2px solid grey;
+    border: 2px solid grey;
 }
 
 #webotsDiv {
@@ -746,34 +751,34 @@ div.rightMenuButton:hover,
 }
 
 button#simCustomColorObject.typcn:before {
-	color: #FBED00;
+    color: #FBED00;
 }
 
 button#simCustomObstacle.typcn:before {
-	color: 009EE3;
+    color: 009 EE3;
 }
 
 .huebee__container {
-  position: absolute;
-  left: 0;
-  top: 6px;
-  padding: 10px;
-  padding-top: 24px;
-  background: #e7e7e7;
-  border-radius: 2px;
-  box-shadow: none;
+    position: absolute;
+    left: 0;
+    top: 6px;
+    padding: 10px;
+    padding-top: 24px;
+    background: #e7e7e7;
+    border-radius: 2px;
+    box-shadow: none;
 }
 
 .huebee__cursor {
-  border: 5px solid #fff;
-  border-radius: 2px;
-  width: 30px;
-  height: 30px;
+    border: 5px solid #fff;
+    border-radius: 2px;
+    width: 30px;
+    height: 30px;
 }
 
 .huebee {
-  /* disable reveal/hide transition */
-  transition: none;
+    /* disable reveal/hide transition */
+    transition: none;
 }
 
 .huebee__close-button {
@@ -788,15 +793,16 @@ button#simCustomObstacle.typcn:before {
 }
 
 .huebee__close-button__x {
-  stroke-width: 2;
-  stroke: #bbb;
+    stroke-width: 2;
+    stroke: #bbb;
 }
+
 .huebee__close-button__x:hover, .huebee__close-button__x:focus {
-  stroke: #333;
+    stroke: #333;
 }
 
 .huebee__close-button:hover, .huebee__close-button:focus {
-  background: #e7e7e7;
+    background: #e7e7e7;
 }
 
 #codeButtons {
@@ -1023,7 +1029,7 @@ button#simCustomObstacle.typcn:before {
 }
 
 .dropdown-menu > li > a {
-	position: relative;
+    position: relative;
     padding-right: 70px;
 }
 
@@ -2372,22 +2378,22 @@ input[type=range]:focus::-ms-fill-upper {
     background-color: #e7e7e7;
 }
 
-#simEditButtons >.btn-group > .dropdown-menu {
+#simEditButtons > .btn-group > .dropdown-menu {
     width: 48px;
     margin-top: 6px;
 }
 
 #simEditButtons > .btn-group > .dropdown-menu > li > a {
-    padding-left:5px;
-    padding-right:0;
+    padding-left: 5px;
+    padding-right: 0;
     text-align: center;
     height: 35px;
     font-size: 28px;
 }
 
-.simChangeObject.disabled { 
-	color: #bbb;
-	cursor: not-allowed;
+.simChangeObject.disabled {
+    color: #bbb;
+    cursor: not-allowed;
 }
 
 #simStop, #simControl.typcn-media-stop {
@@ -2395,16 +2401,17 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 #simStop.disabled {
-	color: #F6B3B9;
+    color: #F6B3B9;
     cursor: not-allowed;
 }
+
 #simControl.blue, #simControlStepOver.blue, #simControlStepInto.blue {
-	color: #1C5A94;
+    color: #1C5A94;
 }
 
 .typcn-media-play-outline.rotated:before {
-	display: inline-block;
-	transform: rotate(-90deg);
+    display: inline-block;
+    transform: rotate(-90deg);
 }
 
 @keyframes iais-loading-spin {

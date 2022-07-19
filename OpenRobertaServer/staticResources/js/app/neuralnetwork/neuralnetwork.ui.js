@@ -96,6 +96,16 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                                 $('#simButton').trigger('click');
                             });
                         });
+                        D3.select('#nn-focus').on('change', function () {
+                            focusStyle = FocusStyle[this.value];
+                            if (focusStyle === undefined || focusStyle === null) {
+                                focusStyle = FocusStyle.SHOW_ALL;
+                            }
+                            if (focusStyle !== FocusStyle.CLICK_NODE) {
+                                focusNode = null;
+                            }
+                            drawNetworkUI(network);
+                        });
                         D3.select('#nn-add-layers').on('click', function () {
                             if (state.numHiddenLayers >= 6) {
                                 return;
@@ -120,16 +130,6 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                         activationDropdown.property('value', getKeyFromValue(H.activations, state.activation));
                         D3.select('#nn-show-precision').on('change', function () {
                             state.precision = this.value;
-                            drawNetworkUI(network);
-                        });
-                        D3.select('#nn-focus').on('change', function () {
-                            focusStyle = FocusStyle[this.value];
-                            if (focusStyle === undefined || focusStyle === null) {
-                                focusStyle = FocusStyle.SHOW_ALL;
-                            }
-                            if (focusStyle !== FocusStyle.CLICK_NODE) {
-                                focusNode = null;
-                            }
                             drawNetworkUI(network);
                         });
                         // Listen for css-responsive changes and redraw the svg network.
