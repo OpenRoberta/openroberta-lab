@@ -118,7 +118,7 @@ export class NNumber {
  * after every forward and back propagation run.
  */
 export class Node {
-    readonly id: string;
+    id: string; // may ONLY be changed, when names of input/output neurons are edited
     readonly inputLinks: Link[] = [];
     bias: NNumber = new NNumber();
     readonly outputs: Link[] = [];
@@ -289,7 +289,7 @@ export class Network {
      * @param inputIds List of ids for the input nodes.
      */
     constructor(state: STATE.State) {
-        let shape = [state.numInputs].concat(state.networkShape).concat([state.numOutputs]);
+        let shape = [state.inputs.length].concat(state.networkShape).concat([state.outputs.length]);
         let numLayers = shape.length;
         let id = 1;
         /** List of layers, with each layer being a list of nodes. */
@@ -511,6 +511,28 @@ export class Network {
         return biasesAllLayers;
     }
 
+    getInputNames(): string[] {
+        let inputNames: string[] = [];
+        if (this.network != null && this.network.length > 0) {
+            let inputLayer = this.network[0];
+            for (let node of inputLayer) {
+                inputNames.push(node.id);
+            }
+        }
+        return inputNames;
+    }
+
+    getOutputNames(): string[] {
+        let outputNames: string[] = [];
+        if (this.network != null && this.network.length > 0) {
+            let outputLayer = this.network[this.network.length - 1];
+            for (let node of outputLayer) {
+                outputNames.push(node.id);
+            }
+        }
+        return outputNames;
+    }
+
     getOutputNeuronVal(id: String): number {
         let node = this.getNeuronById(id);
         return node != null ? node.output : 0;
@@ -532,7 +554,7 @@ export class Network {
     getBias(name: String): number {
         let node = this.getNeuronById(name);
         if (node != null) {
-            return node.bias.get()
+            return node.bias.get();
         } else {
             return 0;
         }

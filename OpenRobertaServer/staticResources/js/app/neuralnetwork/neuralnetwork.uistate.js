@@ -3,7 +3,7 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
     exports.State = void 0;
     // the GUI state.
     var State = /** @class */ (function () {
-        function State(json, inputNeurons, outputNeurons) {
+        function State(json) {
             // [key: string]: any; not needed anymore
             this.learningRate = 0.03;
             this.regularizationRate = 0;
@@ -23,8 +23,8 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
             this.precision = '2';
             this.weightArcMaxSize = 8;
             this.weightSuppressMultOp = true;
-            this.numInputs = 0;
-            this.numOutputs = 0;
+            this.inputs = ['n1'];
+            this.outputs = ['n2'];
             // if no JSON is available from the program, the default from above is taken
             if (json !== undefined && json != null) {
                 this.learningRate = json.learningRate !== undefined ? json.learningRate : this.learningRate;
@@ -46,19 +46,9 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
                 this.precision = json.precision !== undefined ? json.precision : this.precision;
                 this.weightArcMaxSize = json.weightArcMaxSize !== undefined ? json.weightArcMaxSize : this.weightArcMaxSize;
                 this.weightSuppressMultOp = json.weightSuppressMultOp !== undefined ? json.weightSuppressMultOp : this.weightSuppressMultOp;
+                this.inputs = json.inputs !== undefined ? json.inputs : this.inputs;
+                this.outputs = json.outputs !== undefined ? json.outputs : this.outputs;
                 // this.x = json.x !== undefined ? json.x : this.x;
-            }
-            if (inputNeurons !== undefined && inputNeurons != null) {
-                this.numInputs = inputNeurons.length;
-                this.inputs = inputNeurons;
-            }
-            else {
-                this.numInputs = 0;
-                this.inputs = [];
-            }
-            if (outputNeurons !== undefined && outputNeurons != null) {
-                this.numOutputs = outputNeurons.length;
-                this.outputs = outputNeurons;
             }
         }
         return State;

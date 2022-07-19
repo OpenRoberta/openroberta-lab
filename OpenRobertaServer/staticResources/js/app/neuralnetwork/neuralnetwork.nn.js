@@ -280,7 +280,7 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
          * @param inputIds List of ids for the input nodes.
          */
         function Network(state) {
-            var shape = [state.numInputs].concat(state.networkShape).concat([state.numOutputs]);
+            var shape = [state.inputs.length].concat(state.networkShape).concat([state.outputs.length]);
             var numLayers = shape.length;
             var id = 1;
             /** List of layers, with each layer being a list of nodes. */
@@ -496,6 +496,28 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
                 }
             }
             return biasesAllLayers;
+        };
+        Network.prototype.getInputNames = function () {
+            var inputNames = [];
+            if (this.network != null && this.network.length > 0) {
+                var inputLayer = this.network[0];
+                for (var _i = 0, inputLayer_1 = inputLayer; _i < inputLayer_1.length; _i++) {
+                    var node = inputLayer_1[_i];
+                    inputNames.push(node.id);
+                }
+            }
+            return inputNames;
+        };
+        Network.prototype.getOutputNames = function () {
+            var outputNames = [];
+            if (this.network != null && this.network.length > 0) {
+                var outputLayer = this.network[this.network.length - 1];
+                for (var _i = 0, outputLayer_1 = outputLayer; _i < outputLayer_1.length; _i++) {
+                    var node = outputLayer_1[_i];
+                    outputNames.push(node.id);
+                }
+            }
+            return outputNames;
         };
         Network.prototype.getOutputNeuronVal = function (id) {
             var node = this.getNeuronById(id);

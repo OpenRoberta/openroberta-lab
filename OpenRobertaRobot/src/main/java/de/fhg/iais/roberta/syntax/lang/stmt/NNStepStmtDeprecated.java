@@ -13,12 +13,12 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
-@NepoBasic(name = "NN_STEP_STMT", category = "STMT", blocklyNames = {"robactions_nn_step"})
-public final class NNStepStmt extends Stmt {
+@NepoBasic(name = "NN_STEP_STMT_DEPRECATED", category = "STMT", blocklyNames = {"robactions_nnstep"})
+public final class NNStepStmtDeprecated extends Stmt {
     public final StmtList ioNeurons;
     public final Data netDefinition; // deprecated, only used to copy this value to the start block later
 
-    public NNStepStmt(BlocklyProperties properties, StmtList ioNeurons, Data netDefinition) {
+    public NNStepStmtDeprecated(BlocklyProperties properties, StmtList ioNeurons, Data netDefinition) {
         super(properties);
         this.ioNeurons = ioNeurons;
         this.netDefinition = netDefinition;
@@ -62,7 +62,7 @@ public final class NNStepStmt extends Stmt {
         final List<Statement> ioNeuronsWrapped = block.getStatement();
         final Data netDefinition = block.getData();
         final StmtList ioNeurons = helper.extractStatement(ioNeuronsWrapped, "IONEURON");
-        return new NNStepStmt(Jaxb2Ast.extractBlocklyProperties(block), ioNeurons, netDefinition);
+        return new NNStepStmtDeprecated(Jaxb2Ast.extractBlocklyProperties(block), ioNeurons, netDefinition);
     }
 
     @Override

@@ -35,24 +35,14 @@ define(["require", "exports", "guiState.controller", "neuralnetwork.ui", "jquery
      */
     function mkNNfromProgramStartBlock() {
         var startBlock = getTheStartBlock();
-        var nnStepBlock = getTheNNstepBlock();
-        if (startBlock.data === undefined || startBlock.data === null) {
-            if (nnStepBlock && nnStepBlock.data !== undefined && nnStepBlock.data !== null) {
-                startBlock.data = nnStepBlock.data;
-                delete nnStepBlock.data;
-            }
-        }
         var nnStateAsJson;
         try {
             nnStateAsJson = JSON.parse(startBlock.data);
-            var inputNeurons = [];
-            var outputNeurons = [];
-            extractInputOutputNeurons(inputNeurons, outputNeurons, nnStepBlock === null ? null : nnStepBlock.getChildren());
-            NN_UI.setupNN(nnStateAsJson, inputNeurons, outputNeurons);
         }
         catch (e) {
             // nnStateAsJson remains null
         }
+        NN_UI.setupNN(nnStateAsJson);
     }
     exports.mkNNfromProgramStartBlock = mkNNfromProgramStartBlock;
     /**
@@ -75,44 +65,5 @@ define(["require", "exports", "guiState.controller", "neuralnetwork.ui", "jquery
             }
         }
         throw 'start block not found. That is impossible.';
-    }
-    /**
-     * @return the NNStep blocks from the program (blocks), prefer a block, that carries the deprecated nn in data.
-     * Return null, if no block found.
-     */
-    function getTheNNstepBlock() {
-        var nnStepBlock = null;
-        for (var _i = 0, _a = Blockly.Workspace.getByContainer('blocklyDiv').getAllBlocks(); _i < _a.length; _i++) {
-            var block = _a[_i];
-            if (block.type === 'robActions_NNstep') {
-                nnStepBlock = block;
-                if (nnStepBlock.data !== undefined && nnStepBlock.data !== null) {
-                    return nnStepBlock;
-                }
-            }
-        }
-        return nnStepBlock;
-    }
-    /**
-     * distribute the input/output neuron declaration of the NNStep stmt to three lists
-     * @param inputNeurons inout parameter: filled with the names of the input neurons
-     * @param outputNeurons inout parameter: filled with the names of the ouput neurons with vars
-     * @param outputNeuronsWoVar inout parameter: filled with the names of ouput neurons without vars
-     * @param neurons the sub-block list found in the NNStep block
-     */
-    function extractInputOutputNeurons(inputNeurons, outputNeurons, neurons) {
-        for (var _i = 0, neurons_1 = neurons; _i < neurons_1.length; _i++) {
-            var block = neurons_1[_i];
-            if (block.type === 'robActions_inputneuron') {
-                inputNeurons.push(block.getFieldValue('NAME'));
-            }
-            else if (block.type === 'robActions_outputneuron' || block.type === 'robActions_outputneuron_wo_var') {
-                outputNeurons.push(block.getFieldValue('NAME'));
-            }
-            var next = block.getChildren();
-            if (next) {
-                extractInputOutputNeurons(inputNeurons, outputNeurons, next);
-            }
-        }
     }
 });

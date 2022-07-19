@@ -12,8 +12,6 @@ import * as MSG from './neuralnetwork.msg';
 
 import * as _D3 from 'd3';
 
-declare var neuronNameHelper: any;
-
 enum NodeType {
     INPUT,
     HIDDEN,
@@ -35,18 +33,15 @@ let focusNode = null;
 let state: State = null;
 let network: Network = null;
 
-export function setupNN(stateFromStartBlock: any, inputNeurons: string[], outputNeurons: string[]) {
-    state = new State(stateFromStartBlock, inputNeurons, outputNeurons);
+let heightOfWholeNNDiv = 0;
+let widthOfWholeNNDiv = 0;
+
+let inputNeuronNameEditingMode = false;
+let outputNeuronNameEditingMode = false;
+
+export function setupNN(stateFromStartBlock: any) {
+    state = new State(stateFromStartBlock);
     makeNetworkFromState();
-    let allNeuronsForBlocklyDropdown = [];
-    for (const layer of network.network) {
-        let names = [];
-        for (const neuron of layer) {
-            names.push(neuron.id);
-        }
-        allNeuronsForBlocklyDropdown.push(names);
-    }
-    neuronNameHelper['allNeuronNamesPerLayer'] = allNeuronsForBlocklyDropdown;
 }
 
 export async function runNNEditor() {
@@ -153,8 +148,10 @@ function drawNetworkUI(network: Network): void {
     // set the width of the svg container.
     const mainPart = D3.select('#nn-main-part')[0][0] as HTMLDivElement;
     mainPart.setAttribute('style', 'height:' + mainPartHeight + 'px');
-    const widthOfWholeNNDiv = mainPart.clientWidth;
-    const heightOfWholeNNDiv = mainPartHeight;
+
+    widthOfWholeNNDiv = mainPart.clientWidth;
+    heightOfWholeNNDiv = mainPartHeight;
+
     svg.attr('width', widthOfWholeNNDiv);
     svg.attr('height', heightOfWholeNNDiv);
 
@@ -186,6 +183,7 @@ function drawNetworkUI(network: Network): void {
     // Draw the input layer separately.
     let numNodes = networkImpl[0].length;
     let cxI = layerStartX(0);
+    addPlusMinusControl(cxI - nodeSize / 2 - biasSize, 0);
     for (let i = 0; i < numNodes; i++) {
         let node = networkImpl[0][i];
         let cy = nodeStartY(i);
@@ -215,6 +213,7 @@ function drawNetworkUI(network: Network): void {
         let outputLayer = networkImpl[numLayers - 1];
         let numOutputs = outputLayer.length;
         let cxO = layerStartX(numLayers - 1);
+        addPlusMinusControl(cxO - nodeSize / 2 - biasSize, numLayers - 1);
         for (let j = 0; j < numOutputs; j++) {
             let node = outputLayer[j];
             let cy = nodeStartY(j);
@@ -251,12 +250,17 @@ function drawNetworkUI(network: Network): void {
             y: 0,
             width: nodeSize,
             height: nodeSize,
+            'marker-start': 'url(#markerArrow)',
         });
         if (focusNode !== undefined && focusNode != null && focusNode.id === node.id) {
-            mainRectAngle.style('fill', 'yellow');
+            mainRectAngle.attr('style', 'outline: medium solid orange;');
         }
         nodeGroup.on('click', function () {
-            if (node.inputLinks.length > 0) {
+            if (inputNeuronNameEditingMode && node.inputLinks.length === 0) {
+                runNameCard(node, D3.mouse(container.node()));
+            } else if (outputNeuronNameEditingMode && node.outputs.length === 0) {
+                runNameCard(node, D3.mouse(container.node()));
+            } else if (node.inputLinks.length > 0) {
                 if (focusNode == node) {
                     focusNode = null;
                 } else {
@@ -275,29 +279,7 @@ function drawNetworkUI(network: Network): void {
         });
         labelForId.append('tspan').text(nodeId);
         if (nodeType !== NodeType.INPUT) {
-            let biasRect = nodeGroup.append('rect').attr({
-                id: `bias-${nodeId}`,
-                x: -biasSize - 2,
-                y: nodeSize - biasSize + 3,
-                width: biasSize,
-                height: biasSize,
-            });
-            if (focusStyle !== FocusStyle.CLICK_NODE || focusNode === node) {
-                biasRect.on('click', function () {
-                    updateEditCard(node, D3.mouse(container.node()));
-                });
-            }
-            // Show the bias value depending on focus-style
-            if (focusStyle === FocusStyle.SHOW_ALL || (focusStyle === FocusStyle.CLICK_NODE && focusNode === node)) {
-                drawValue(
-                    nodeGroup,
-                    nodeId,
-                    -2 * biasSize,
-                    nodeSize + 2 * biasSize,
-                    node.bias.get(),
-                    node.bias.getWithPrecision(state.precision, state.weightSuppressMultOp)
-                );
-            }
+            drawBias(container, nodeGroup, node);
         }
 
         // Draw the node's canvas.
@@ -372,7 +354,7 @@ function drawNetworkUI(network: Network): void {
                 .attr('d', diagonal(datum, 0))
                 .attr('class', cssForPath)
                 .on('click', function () {
-                    updateEditCard(link, D3.mouse(this));
+                    runEditCard(link, D3.mouse(this));
                 });
         }
         return line;
@@ -385,45 +367,151 @@ function drawNetworkUI(network: Network): void {
 
     function addPlusMinusControl(x: number, layerIdx: number) {
         let div = D3.select('#nn-network').append('div').classed('nn-plus-minus-neurons', true).style('left', `${x}px`);
-        let i = layerIdx - 1;
+        let isInputLayer = layerIdx == 0;
+        let isOutputLayer = layerIdx == numLayers - 1;
+        let hiddenIdx = layerIdx - 1;
         let firstRow = div.append('div');
+        let callbackPlus = null;
+        if (isInputLayer) {
+            callbackPlus = () => {
+                let numNeurons = state.inputs.length;
+                if (numNeurons >= 9) {
+                    return;
+                }
+                state.inputs.push('in' + (numNeurons + 1));
+                reconstructNNIncludingUI();
+            };
+        } else if (isOutputLayer) {
+            callbackPlus = () => {
+                let numNeurons = state.outputs.length;
+                if (numNeurons >= 9) {
+                    return;
+                }
+                state.outputs.push('out' + (numNeurons + 1));
+                reconstructNNIncludingUI();
+            };
+        } else {
+            callbackPlus = () => {
+                let numNeurons = state.networkShape[hiddenIdx];
+                if (numNeurons >= 9) {
+                    return;
+                }
+                state.networkShape[hiddenIdx]++;
+                reconstructNNIncludingUI();
+            };
+        }
         firstRow
             .append('button')
             .attr('class', 'nn-plus-minus-neuron-button')
-            .on('click', () => {
-                let numNeurons = state.networkShape[i];
-                if (numNeurons >= 6) {
-                    return;
-                }
-                state.networkShape[i]++;
-                reconstructNNIncludingUI();
-            })
+            .on('click', callbackPlus)
             .append('i')
             .attr('class', 'material-icons nn-middle-size')
             .text('add');
 
-        firstRow
-            .append('button')
-            .attr('class', 'nn-plus-minus-neuron-button')
-            .on('click', () => {
-                let numNeurons = state.networkShape[i];
+        let callbackMinus = null;
+        if (isInputLayer) {
+            callbackMinus = () => {
+                let numNeurons = state.inputs.length;
                 if (numNeurons <= 1) {
                     return;
                 }
-                state.networkShape[i]--;
+                state.inputs.pop();
                 reconstructNNIncludingUI();
-            })
+            };
+        } else if (isOutputLayer) {
+            callbackMinus = () => {
+                let numNeurons = state.outputs.length;
+                if (numNeurons <= 1) {
+                    return;
+                }
+                state.outputs.pop();
+                reconstructNNIncludingUI();
+            };
+        } else {
+            callbackMinus = () => {
+                let numNeurons = state.networkShape[hiddenIdx];
+                if (numNeurons >= 9) {
+                    return;
+                }
+                state.networkShape[hiddenIdx]--;
+                reconstructNNIncludingUI();
+            };
+        }
+        firstRow
+            .append('button')
+            .attr('class', 'nn-plus-minus-neuron-button')
+            .on('click', callbackMinus)
             .append('i')
             .attr('class', 'material-icons nn-middle-size')
             .text('remove');
-
-        let suffix = state.networkShape[i] > 1 ? 's' : '';
-        div.append('div')
-            .attr('class', 'nn-bold')
-            .text(state.networkShape[i] + ' neuron' + suffix);
+        if (isInputLayer) {
+            let button = firstRow.append('button');
+            let bc = inputNeuronNameEditingMode ? 'rgb(143, 164, 2)' : 'rgb(239, 239, 239)';
+            button.style('background-color', bc);
+            button
+                .attr('class', 'nn-plus-minus-neuron-button')
+                .on('click', () => {
+                    inputNeuronNameEditingMode = !inputNeuronNameEditingMode;
+                    let bc = inputNeuronNameEditingMode ? 'rgb(143, 164, 2)' : 'rgb(239, 239, 239)';
+                    button.style('background-color', bc);
+                })
+                .append('i')
+                .attr('class', 'material-icons nn-middle-size')
+                .text('input');
+        } else if (isOutputLayer) {
+            let button = firstRow.append('button');
+            let bc = outputNeuronNameEditingMode ? 'rgb(242, 148, 0)' : 'rgb(239, 239, 239)';
+            button.style('background-color', bc);
+            button
+                .attr('class', 'nn-plus-minus-neuron-button')
+                .on('click', () => {
+                    outputNeuronNameEditingMode = !outputNeuronNameEditingMode;
+                    let bc = outputNeuronNameEditingMode ? 'rgb(242, 148, 0)' : 'rgb(239, 239, 239)';
+                    button.style('background-color', bc);
+                })
+                .append('i')
+                .attr('class', 'material-icons nn-middle-size')
+                .text('input');
+        }
     }
 
-    function drawValue(container: D3Selection, id: string, x: number, y: number, valueForColor: number, valueToShow: string) {
+    function drawBias(container: D3Selection, nodeGroup: D3Selection, node: Node) {
+        const nodeId = node.id;
+        if (focusStyle === FocusStyle.SHOW_ALL || (focusStyle === FocusStyle.CLICK_NODE && focusNode === node)) {
+            let biasRect = drawValue(
+                nodeGroup,
+                nodeId,
+                -biasSize - 2,
+                nodeSize + 2 * biasSize,
+                node.bias.get(),
+                node.bias.getWithPrecision(state.precision, state.weightSuppressMultOp)
+            );
+            biasRect.attr('class', 'nn-bias-click');
+            if (focusStyle !== FocusStyle.CLICK_NODE || focusNode === node) {
+                biasRect.on('click', function () {
+                    (D3.event as any).stopPropagation();
+                    runEditCard(node, D3.mouse(container.node()));
+                });
+            }
+        } else {
+            let biasRect = nodeGroup.append('rect').attr({
+                id: `bias-${nodeId}`,
+                x: -biasSize - 2,
+                y: nodeSize - biasSize + 3,
+                width: biasSize,
+                height: biasSize,
+            });
+            biasRect.attr('class', 'nn-bias-click');
+            if (focusStyle !== FocusStyle.CLICK_NODE || focusNode === node) {
+                biasRect.on('click', function () {
+                    (D3.event as any).stopPropagation();
+                    runEditCard(node, D3.mouse(container.node()));
+                });
+            }
+        }
+    }
+
+    function drawValue(container: D3Selection, id: string, x: number, y: number, valueForColor: number, valueToShow: string): D3Selection {
         container.append('rect').attr('id', 'rect-val-' + id);
         const text = container
             .append('text')
@@ -435,11 +523,14 @@ function drawNetworkUI(network: Network): void {
             })
             .text(valueToShow);
         drawValuesBox(text, valueForColor);
+        return text;
     }
 }
 
-function updateEditCard(nodeOrLink?: Node | Link, coordinates?: [number, number]) {
+function runEditCard(nodeOrLink: Node | Link, coordinates: [number, number]) {
     let editCard = D3.select('#nn-editCard');
+    let plusButton = D3.select('#nn-type-plus');
+    let minusButton = D3.select('#nn-type-minus');
     let finishedButton = D3.select('#nn-type-finished');
 
     let input = editCard.select('input');
@@ -467,18 +558,101 @@ function updateEditCard(nodeOrLink?: Node | Link, coordinates?: [number, number]
             let event = D3.event as any;
             value2NodeOrLink(nodeOrLink, event.target.value);
         });
+    plusButton.on('click', () => {
+        let oldV = input.property('value');
+        let newV = H.updValue(oldV, 1);
+        input.property('value', newV);
+        value2NodeOrLink(nodeOrLink, newV);
+        return;
+    });
+    minusButton.on('click', () => {
+        let oldV = input.property('value');
+        let newV = H.updValue(oldV, -1);
+        input.property('value', newV);
+        value2NodeOrLink(nodeOrLink, newV);
+        return;
+    });
     finishedButton.on('click', () => {
         editCard.style('display', 'none');
         return;
     });
-
+    let xPos = coordinates[0] + 20;
+    let yPos = coordinates[1];
+    if (xPos > widthOfWholeNNDiv - 360) {
+        xPos = widthOfWholeNNDiv - 370;
+    }
+    // abandoned idea for tablets. Better use a floating keyboard.
+    // let yPos = coordinates[1];
+    // if (yPos > heightOfWholeNNDiv / 2.0) {
+    //    yPos = yPos / 2.0;
+    // }
     editCard.style({
-        left: `${coordinates[0] + 20}px`,
-        top: `${coordinates[1]}px`,
+        left: `${xPos}px`,
+        top: `${yPos}px`,
         display: 'block',
     });
     let name = nodeOrLink instanceof Link ? 'NN_WEIGHT' : 'NN_BIAS';
     editCard.select('.nn-type').text(MSG.get(name));
+    (input.node() as HTMLInputElement).focus();
+}
+
+function checkInputOutputNeuronNameValid(oldName: string, newName: string) {
+    if (newName.length > 6) {
+        return false;
+    }
+    if (oldName === newName) {
+        return true;
+    }
+    let allNodes = network.network;
+    if (allNodes[0].find((v) => v.id === newName) || allNodes[allNodes.length - 1].find((v) => v.id === newName)) {
+        return false;
+    }
+    return true;
+}
+
+function runNameCard(node: Node, coordinates: [number, number]) {
+    let nameCard = D3.select('#nn-nameCard');
+    let finishedButton = D3.select('#nn-name-finished');
+
+    let input = nameCard.select('input');
+    input.property('value', node.id);
+    input.on('keypress', () => {
+        let event = D3.event as any;
+        if (event.which === 13) {
+            let userInput = input.property('value');
+            if (checkInputOutputNeuronNameValid(node.id, userInput)) {
+                node.id = userInput;
+                nameCard.style('display', 'none');
+                drawNetworkUI(network);
+            } else {
+                input.property('value', node.id);
+            }
+        }
+    });
+    finishedButton.on('click', () => {
+        let event = D3.event as any;
+        event.preventDefault && event.preventDefault();
+        let userInput = input.property('value');
+        if (checkInputOutputNeuronNameValid(node.id, userInput)) {
+            node.id = userInput;
+            nameCard.style('display', 'none');
+            drawNetworkUI(network);
+        } else {
+            input.property('value', node.id);
+        }
+    });
+    let xPos = coordinates[0] + 20;
+    let yPos = coordinates[1];
+    if (xPos > widthOfWholeNNDiv - 320) {
+        xPos = widthOfWholeNNDiv - 330;
+    }
+    nameCard.style({
+        left: `${xPos}px`,
+        top: `${yPos}px`,
+        display: 'block',
+    });
+    let name = 'POPUP_NAME';
+    nameCard.select('.nn-type').text(MSG.get(name));
     (input.node() as HTMLInputElement).focus();
 }
 
@@ -605,6 +779,8 @@ export function getStateAsJSONString(): string {
     try {
         state.weights = network.getWeightArray();
         state.biases = network.getBiasArray();
+        state.inputs = network.getInputNames();
+        state.outputs = network.getOutputNames();
         return JSON.stringify(state);
     } catch (e) {
         LOG.error('failed to create a JSON string from nn state');

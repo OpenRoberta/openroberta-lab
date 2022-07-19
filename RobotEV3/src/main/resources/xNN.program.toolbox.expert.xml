@@ -329,10 +329,7 @@
         <block type="math_cast_toChar"></block>
     </category>
     <category name="TOOLBOX_NN" svg="true">
-        <block type="robActions_NNstep"></block>
-        <block type="robActions_inputneuron"></block>
-        <block type="robActions_outputneuron"></block>
-        <block type="robActions_outputneuron_wo_var"></block>
+        <block type="robActions_NN_step"></block>
         <block type="robSensors_get_outputneuron_val"></block>
         <block type="robActions_change_weight"></block>
         <block type="robActions_change_bias"></block>

@@ -86,7 +86,7 @@
     position: absolute;
     line-height: 28px;
     top: -58px;
-    width: 80px;
+    width: 120px;
     height: 44px;
 }
 
@@ -104,7 +104,7 @@
     margin-bottom: 5px;
 }
 
-#nn-features .nn-plus-minus-neurons .nn-plus-minus-neuron-button:first-of-type {
+#nn-features .nn-plus-minus-neurons .nn-plus-minus-neuron-button {
     margin-right: 5px;
 }
 
@@ -119,6 +119,7 @@
     font-size: 16px;
     font-weight: bold;
     text-anchor: end;
+    cursor: pointer;
 }
 
 #nn-features svg #markerArrow {
@@ -136,7 +137,7 @@
 
 #nn-features .node_hidden rect {
     cursor: default;
-    fill: rgb(144, 133, 186);
+    fill: lightgrey;
     stroke-width: 1;
     stroke: black;
 }
@@ -171,6 +172,10 @@
     cursor: pointer;
 }
 
+#nn-features .core .nn-bias-click {
+    cursor: pointer;
+}
+
 #nn-features .canvas canvas {
     position: absolute;
     top: -2px;
@@ -198,12 +203,24 @@
     left: 240px;
 }
 
-#nn-editCard .nn-type-button {
+#nn-nameCard {
+    display: none;
+    position: absolute;
+    padding: 5px;
+    border: 1px solid #aaa;
+    z-index: 10;
+    background: #fff;
+    cursor: default;
+    border-radius: 5px;
+    left: 240px;
+}
+
+.nn-type-button {
     position: relative;
     top: 5px;
 }
 
-#nn-editCard .nn-type {
+.nn-type {
     height: 40px;
     style: "font-size: 14px"
 }

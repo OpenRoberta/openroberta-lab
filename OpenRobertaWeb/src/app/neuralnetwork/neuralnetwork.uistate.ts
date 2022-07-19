@@ -23,12 +23,10 @@ export class State {
     weightArcMaxSize = 8;
     weightSuppressMultOp = true;
 
-    numInputs = 0;
-    numOutputs = 0;
-    inputs: string[];
-    outputs: string[];
+    inputs = ['n1'];
+    outputs = ['n2'];
 
-    constructor(json: any, inputNeurons: string[], outputNeurons: string[]) {
+    constructor(json: any) {
         // if no JSON is available from the program, the default from above is taken
         if (json !== undefined && json != null) {
             this.learningRate = json.learningRate !== undefined ? json.learningRate : this.learningRate;
@@ -50,19 +48,10 @@ export class State {
             this.precision = json.precision !== undefined ? json.precision : this.precision;
             this.weightArcMaxSize = json.weightArcMaxSize !== undefined ? json.weightArcMaxSize : this.weightArcMaxSize;
             this.weightSuppressMultOp = json.weightSuppressMultOp !== undefined ? json.weightSuppressMultOp : this.weightSuppressMultOp;
+            this.inputs = json.inputs !== undefined ? json.inputs : this.inputs;
+            this.outputs = json.outputs !== undefined ? json.outputs : this.outputs;
 
             // this.x = json.x !== undefined ? json.x : this.x;
-        }
-        if (inputNeurons !== undefined && inputNeurons != null) {
-            this.numInputs = inputNeurons.length;
-            this.inputs = inputNeurons;
-        } else {
-            this.numInputs = 0;
-            this.inputs = [];
-        }
-        if (outputNeurons !== undefined && outputNeurons != null) {
-            this.numOutputs = outputNeurons.length;
-            this.outputs = outputNeurons;
         }
     }
 }

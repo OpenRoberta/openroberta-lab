@@ -98,6 +98,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
         });
         $('#tabProgram').onWrap('hide.bs.tab', function (e) {
             Blockly.hideChaff();
+            seen = false;
         });
         $('#tabProgram').onWrap('hidden.bs.tab', function (e) {
             blocklyWorkspace.setVisible(false);
