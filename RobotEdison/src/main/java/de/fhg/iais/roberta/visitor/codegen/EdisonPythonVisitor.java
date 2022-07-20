@@ -205,7 +205,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
                 break;
             case "LINETRACKER":
                 if ( lightSensor.getMode().equals("LINE") ) {
-                    this.sb.append("Ed.ReadLineState() == Ed.LINE_ON_BLACK");
+                    this.sb.append("(Ed.ReadLineState() == Ed.LINE_ON_BLACK)");
                 } else {
                     this.sb.append("Ed.ReadLineTracker() / 10");
                 }
@@ -221,7 +221,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
-        this.sb.append("Ed.ReadClapSensor() == Ed.CLAP_DETECTED");
+        this.sb.append("(Ed.ReadClapSensor() == Ed.CLAP_DETECTED)");
         return null;
     }
 
@@ -348,10 +348,10 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     public Void visitKeysSensor(KeysSensor keysSensor) {
         switch ( keysSensor.getUserDefinedPort() ) {
             case "REC":
-                this.sb.append("Ed.ReadKeypad() == Ed.KEYPAD_ROUND");
+                this.sb.append("(Ed.ReadKeypad() == Ed.KEYPAD_ROUND)");
                 break;
             case "PLAY":
-                this.sb.append("Ed.ReadKeypad() == Ed.KEYPAD_TRIANGLE");
+                this.sb.append("(Ed.ReadKeypad() == Ed.KEYPAD_TRIANGLE)");
                 break;
             default:
         }
