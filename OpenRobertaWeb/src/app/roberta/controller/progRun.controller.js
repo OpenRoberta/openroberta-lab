@@ -22,6 +22,25 @@ function init(workspace) {
 
 function initEvents() {
     Blockly.bindEvent_(blocklyWorkspace.robControls.runOnBrick, 'mousedown', null, function (e) {
+        if ($('#runOnBrick').hasClass('disabled')) {
+            let notificationElement = $('#releaseInfo');
+            let notificationElementTitle = notificationElement.children('#releaseInfoTitle');
+            let notificationElementDescription = notificationElement.children('#releaseInfoContent');
+            notificationElementDescription.html(Blockly.Msg.POPUP_RUN_NOTIFICATION);
+            notificationElementTitle.html(Blockly.Msg.POPUP_ATTENTION);
+            let a = notificationElement.on('notificationFadeInComplete', function () {
+                clearTimeout(a.data('hideInteval'));
+                var id = setTimeout(function () {
+                    notificationElement.fadeOut(500);
+                }, 10000);
+                a.data('hideInteval', id);
+            });
+            notificationElement.fadeIn(500, function () {
+                $(this).trigger('notificationFadeInComplete');
+            });
+
+            return false;
+        }
         LOG.info('runOnBrick from blockly button');
         runOnBrick();
         return false;

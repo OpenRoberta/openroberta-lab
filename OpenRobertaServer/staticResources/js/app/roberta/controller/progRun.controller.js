@@ -13,6 +13,24 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
     exports.init = init;
     function initEvents() {
         Blockly.bindEvent_(blocklyWorkspace.robControls.runOnBrick, 'mousedown', null, function (e) {
+            if ($('#runOnBrick').hasClass('disabled')) {
+                var notificationElement_1 = $('#releaseInfo');
+                var notificationElementTitle = notificationElement_1.children('#releaseInfoTitle');
+                var notificationElementDescription = notificationElement_1.children('#releaseInfoContent');
+                notificationElementDescription.html(Blockly.Msg.POPUP_RUN_NOTIFICATION);
+                notificationElementTitle.html(Blockly.Msg.POPUP_ATTENTION);
+                var a_1 = notificationElement_1.on('notificationFadeInComplete', function () {
+                    clearTimeout(a_1.data('hideInteval'));
+                    var id = setTimeout(function () {
+                        notificationElement_1.fadeOut(500);
+                    }, 10000);
+                    a_1.data('hideInteval', id);
+                });
+                notificationElement_1.fadeIn(500, function () {
+                    $(this).trigger('notificationFadeInComplete');
+                });
+                return false;
+            }
             LOG.info('runOnBrick from blockly button');
             runOnBrick();
             return false;
