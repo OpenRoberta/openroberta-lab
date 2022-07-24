@@ -75,14 +75,15 @@ public class NEPOprog {
     float ___o3 = 0;
     
     public void run() throws Exception {
-        ____w_in1_h1n1 += 1;
-        ____b_h1n2 = 2;
-        ___o3 = ____w_in1_h1n1;
-        ___o3 = ____b_h1n2;
+        ____w_in1_in1 += 1;
+        ____b_h1n1 = 2;
+        ___o3 = ____w_in1_in1;
+        ___o3 = ____b_h1n1;
         ____nnStep(1,2,1 + 2);
         ___o1 = ____out1;
         ___o2 = ____out2;
         
-        ___o3 = ____out3;
+        ___o3 = ____out1;
+        
     }
 }

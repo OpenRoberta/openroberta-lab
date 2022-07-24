@@ -92,6 +92,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronWoVarStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmtDeprecated;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
@@ -545,7 +546,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     }
 
     @Override
-    public final Void visitNNStepStmt(NNStepStmt nnStepStmt) {
+    public final Void visitNNStepStmtDeprecated(NNStepStmtDeprecated nnStepStmt) {
         final List<Stmt> inputNeurons = nnStepStmt.getInputNeurons();
         final List<Stmt> outputNeurons = nnStepStmt.getOutputNeurons();
         for ( Stmt inputNeuron : inputNeurons ) {
@@ -565,6 +566,11 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
             }
             app(ov);
         }
+        return null;
+    }
+
+    @Override
+    public final Void visitNNStepStmt(NNStepStmt nnStepStmt) {
         return null;
     }
 

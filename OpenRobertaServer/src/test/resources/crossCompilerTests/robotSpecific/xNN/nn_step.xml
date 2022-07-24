@@ -41,7 +41,7 @@
 				</block>
 				<block type="robActions_change_weight" id="+vbXoR;PBKv!Kb*pd]UU" intask="true">
 					<field name="FROM">in1</field>
-					<field name="TO">h1n1</field>
+					<field name="TO">in1</field>
 					<field name="CHANGE">INCR</field>
 					<value name="VALUE">
 						<block type="math_number" id="}^Y}^X/t4^UwIwuAqcP1" intask="true">
@@ -50,7 +50,7 @@
 					</value>
 				</block>
 				<block type="robActions_change_bias" id="(?,@L[SG/cLbLzGaAZt%" intask="true">
-					<field name="NAME">h1n2</field>
+					<field name="NAME">h1n1</field>
 					<field name="CHANGE">SET</field>
 					<value name="VALUE">
 						<block type="math_number" id="{R[LO9!/af[En#PsMzE6" intask="true">
@@ -64,7 +64,7 @@
 					<value name="VALUE">
 						<block type="robSensors_get_weight" id="p0e]^wPW6S?||c*3#SaU" intask="true">
 							<field name="FROM">in1</field>
-							<field name="TO">h1n1</field>
+							<field name="TO">in1</field>
 						</block>
 					</value>
 				</block>
@@ -73,7 +73,7 @@
 					<field name="VAR">o3</field>
 					<value name="VALUE">
 						<block type="robSensors_get_bias" id="HtG1CT@?3vB1A9}q01k_" intask="true">
-							<field name="NAME">h1n2</field>
+							<field name="NAME">h1n1</field>
 						</block>
 					</value>
 				</block>
@@ -141,9 +141,11 @@
 					<field name="VAR">o3</field>
 					<value name="VALUE">
 						<block type="robSensors_get_outputneuron_val" id="dmmTNn%GSgJpw0rm|ryj" intask="true">
-							<field name="NAME">out3</field>
+							<field name="NAME">out1</field>
 						</block>
 					</value>
+				</block>
+				<block type="robActions_NN_step" id="#aib.cRl4KcBd?jpvfTY" intask="true">
 				</block>
 			</instance>
 		</block_set>

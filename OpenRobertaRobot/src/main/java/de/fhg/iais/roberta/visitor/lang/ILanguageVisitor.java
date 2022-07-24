@@ -68,6 +68,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronWoVarStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmtDeprecated;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
@@ -199,6 +200,8 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitMethodVoid(MethodVoid methodVoid);
 
     V visitNNStepStmt(NNStepStmt nnStepStmt);
+
+    V visitNNStepStmtDeprecated(NNStepStmtDeprecated nnStepStmt);
 
     V visitNNInputNeuronStmt(NNInputNeuronStmt nnInputNeuronStmt);
 

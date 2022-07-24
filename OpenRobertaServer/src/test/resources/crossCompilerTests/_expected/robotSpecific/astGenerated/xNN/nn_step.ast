@@ -1,12 +1,13 @@
-NNChangeWeightStmt[from: in1, to: h1n1, change: INCR, value: NumConst[value: 1]]
-NNChangeBiasStmt[name: h1n2, change: SET, value: NumConst[value: 2]]
+NNChangeWeightStmt[from: in1, to: in1, change: INCR, value: NumConst[value: 1]]
+NNChangeBiasStmt[name: h1n1, change: SET, value: NumConst[value: 2]]
 
-Var [o3] := NNGetWeight[from: in1, to: h1n1]
+Var [o3] := NNGetWeight[from: in1, to: in1]
 
 
-Var [o3] := NNGetBias[name: h1n2]
+Var [o3] := NNGetBias[name: h1n1]
 
 nnStep()
 
-Var [o3] := NNGetOutputNeuronVal[name: out3]
+Var [o3] := NNGetOutputNeuronVal[name: out1]
 
+nnStep()

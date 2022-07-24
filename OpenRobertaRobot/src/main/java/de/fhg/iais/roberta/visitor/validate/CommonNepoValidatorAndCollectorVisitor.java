@@ -66,6 +66,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronWoVarStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmtDeprecated;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
@@ -362,7 +363,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitNNStepStmt(NNStepStmt nnStepStmt) {
+    public Void visitNNStepStmtDeprecated(NNStepStmtDeprecated nnStepStmt) {
         requiredComponentVisited(nnStepStmt, nnStepStmt.getIoNeurons());
 
         List<String> inputNeurons = new ArrayList<>();
@@ -386,6 +387,11 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         if ( optErrorKey != null ) {
             addErrorToPhrase(nnStepStmt, optErrorKey);
         }
+        return null;
+    }
+
+    @Override
+    public Void visitNNStepStmt(NNStepStmt nnStepStmt) {
         return null;
     }
 

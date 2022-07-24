@@ -46,6 +46,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronWoVarStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmtDeprecated;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
@@ -315,7 +316,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     }
 
     @Override
-    public Void visitNNStepStmt(NNStepStmt nnStepStmt) {
+    public Void visitNNStepStmtDeprecated(NNStepStmtDeprecated nnStepStmt) {
         this.src.add("____nnStep(");
         boolean first = true;
         for ( Stmt stmt : nnStepStmt.getInputNeurons() ) {
@@ -326,6 +327,11 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
         for ( Stmt stmt : nnStepStmt.getOutputNeurons() ) {
             stmt.accept(this);
         }
+        return null;
+    }
+
+    @Override
+    public Void visitNNStepStmt(NNStepStmt nnStepStmt) {
         return null;
     }
 

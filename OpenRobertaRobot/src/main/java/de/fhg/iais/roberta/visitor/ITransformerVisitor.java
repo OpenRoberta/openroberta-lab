@@ -102,6 +102,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronWoVarStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmtDeprecated;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
@@ -387,12 +388,17 @@ public interface ITransformerVisitor extends ISensorVisitor<Phrase>, IAllActorsV
     }
 
     @Override
-    default Phrase visitNNStepStmt(NNStepStmt nnStepStmt) {
+    default Phrase visitNNStepStmtDeprecated(NNStepStmtDeprecated nnStepStmt) {
         StmtList newIoNeurons = new StmtList();
         for ( Stmt e : nnStepStmt.getIoNeurons().get() ) {
             newIoNeurons.get().add((Stmt) e.modify(this));
         }
-        return new NNStepStmt(nnStepStmt.getProperty(), newIoNeurons, nnStepStmt.netDefinition);
+        return new NNStepStmtDeprecated(nnStepStmt.getProperty(), newIoNeurons, nnStepStmt.netDefinition);
+    }
+
+    @Override
+    default Phrase visitNNStepStmt(NNStepStmt nnStepStmt) {
+        return null;
     }
 
     @Override
