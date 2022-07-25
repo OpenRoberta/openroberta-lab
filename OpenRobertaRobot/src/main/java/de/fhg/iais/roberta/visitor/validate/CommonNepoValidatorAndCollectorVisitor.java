@@ -1,16 +1,16 @@
 package de.fhg.iais.roberta.visitor.validate;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
@@ -60,15 +60,11 @@ import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeBiasStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeWeightStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronWoVarStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetBiasStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetInputNeuronVal;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetWeightStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmtDeprecated;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
@@ -76,7 +72,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
@@ -85,10 +81,8 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     private final HashMap<Integer, Integer> waitsInLoops = new HashMap<>();
     private int loopCounter = 0;
     private int currentLoop = 0;
-    // the following data is needed to enforce, that all NNStep blocks have the same input and output neurons
-    private boolean nnStepFound = false;
-    private List<String> requiredInputNeurons = new ArrayList<>();
-    private List<String> requiredOutputNeurons = new ArrayList<>();
+
+    private NNBean nnBean; // set by the start block, used to check neuron name consistency etc.
 
     protected CommonNepoValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) //
     {
@@ -246,7 +240,11 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
-        this.nnBeanBuilder.setNN(mainTask.data);
+        String optError = this.nnBeanBuilder.setNN(mainTask.data);
+        if ( optError != null ) {
+            addErrorToPhrase(mainTask, optError);
+        }
+        this.nnBean = this.nnBeanBuilder.build();
         requiredComponentVisited(mainTask, mainTask.variables);
         return null;
     }
@@ -363,84 +361,83 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitNNStepStmtDeprecated(NNStepStmtDeprecated nnStepStmt) {
-        requiredComponentVisited(nnStepStmt, nnStepStmt.getIoNeurons());
+    public Void visitNNStepStmt(NNStepStmt stmt) {
+        return null;
+    }
 
-        List<String> inputNeurons = new ArrayList<>();
-        List<String> outputNeurons = new ArrayList<>();
-        for ( Stmt neuron : nnStepStmt.getIoNeurons().get() ) {
-            if ( neuron.getProperty().isDisabled() ) {
-                addErrorToPhrase(nnStepStmt, "NN_STEP_INCONSISTENT");
-                return null;
-            }
-            if ( neuron instanceof NNInputNeuronStmt ) {
-                inputNeurons.add(((NNInputNeuronStmt) neuron).name);
-            } else if ( neuron instanceof NNOutputNeuronStmt ) {
-                outputNeurons.add(((NNOutputNeuronStmt) neuron).name);
-            } else if ( neuron instanceof NNOutputNeuronWoVarStmt ) {
-                outputNeurons.add(((NNOutputNeuronWoVarStmt) neuron).name);
-            } else {
-                throw new DbcException("type of neuron is not input, output or outputWoVar");
-            }
+    @Override
+    public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal get) {
+        checkNeuronName(get, false, false, true, get.name);
+        return null;
+    }
+
+    @Override
+    public Void visitNNSetInputNeuronVal(NNSetInputNeuronVal get) {
+        checkNeuronName(get, true, false, false, get.name);
+        return null;
+    }
+
+    @Override
+    public Void visitNNSetWeightStmt(NNSetWeightStmt stmt) {
+        checkConnectedNeuronNames(stmt, stmt.from, stmt.to);
+        requiredComponentVisited(stmt, stmt.value);
+        return null;
+    }
+
+    @Override
+    public Void visitNNSetBiasStmt(NNSetBiasStmt stmt) {
+        checkNeuronName(stmt, false, true, true, stmt.name);
+        requiredComponentVisited(stmt, stmt.value);
+        return null;
+    }
+
+    @Override
+    public Void visitNNGetWeight(NNGetWeight get) {
+        checkConnectedNeuronNames(get, get.from, get.to);
+        return null;
+    }
+
+    @Override
+    public Void visitNNGetBias(NNGetBias get) {
+        checkNeuronName(get, false, true, true, get.name);
+        return null;
+    }
+
+    private int getLevelOfNeuron(String name) {
+        if ( nnBean.getInputNeurons().contains(name) ) {
+            return 0;
         }
-        String optErrorKey = nnBeanBuilder.processInputOutputNeurons(inputNeurons, outputNeurons);
-        if ( optErrorKey != null ) {
-            addErrorToPhrase(nnStepStmt, optErrorKey);
+        if ( nnBean.getOutputNeurons().contains(name) ) {
+            return nnBean.getNetworkShape().size() + 1;
         }
-        return null;
-    }
-
-    @Override
-    public Void visitNNStepStmt(NNStepStmt nnStepStmt) {
-        return null;
-    }
-
-    @Override
-    public Void visitNNInputNeuronStmt(NNInputNeuronStmt nnInputNeuronStmt) {
-        requiredComponentVisited(nnInputNeuronStmt, nnInputNeuronStmt.value);
-        return null;
-    }
-
-    @Override
-    public Void visitNNOutputNeuronStmt(NNOutputNeuronStmt nnOutputNeuronStmt) {
-        requiredComponentVisited(nnOutputNeuronStmt, nnOutputNeuronStmt.value);
-        return null;
-    }
-
-    @Override
-    public Void visitNNOutputNeuronWoVarStmt(NNOutputNeuronWoVarStmt nnOutputNeuronWoVarStmt) {
-        return null;
-    }
-
-    @Override
-    public Void visitNNChangeWeightStmt(NNChangeWeightStmt chgStmt) {
-        requiredComponentVisited(chgStmt, chgStmt.value);
-        return null;
-    }
-
-    @Override
-    public Void visitNNChangeBiasStmt(NNChangeBiasStmt chgStmt) {
-        requiredComponentVisited(chgStmt, chgStmt.value);
-        return null;
-    }
-
-    @Override
-    public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal outputNeuronVal) {
-        String optErrorKey = nnBeanBuilder.checkNameOfOutputNeuron(outputNeuronVal.name);
-        if ( optErrorKey != null ) {
-            addErrorToPhrase(outputNeuronVal, optErrorKey);
+        if ( name.length() != 4 || name.charAt(0) != 'h' || name.charAt(2) != 'n' ) {
+            return -1;
         }
-        return null;
+        int level = Integer.parseInt(name.substring(1, 2));
+        if ( level >= 1 && level <= nnBean.getNetworkShape().size() ) {
+            return level;
+        } else {
+            return -1;
+        }
     }
 
-    @Override
-    public Void visitNNGetWeight(NNGetWeight getVal) {
-        return null;
+    private void checkNeuronName(Phrase toBeChecked, boolean inputLegal, boolean hiddenLegal, boolean outputLegal, String name) {
+        int level = getLevelOfNeuron(name);
+        int outputLevel = nnBean.getNetworkShape().size() + 1;
+        if ( level <= -1 || level == 0 && !inputLegal || level == outputLevel && !outputLegal ) {
+            toBeChecked.addInfo(NepoInfo.error("NN_INVALID_NEURONNAME"));
+        }
+        if ( level > 1 && level < outputLevel && !hiddenLegal ) {
+            toBeChecked.addInfo(NepoInfo.error("NN_INVALID_NEURONNAME"));
+        }
     }
 
-    @Override
-    public Void visitNNGetBias(NNGetBias getVal) {
-        return null;
+    private void checkConnectedNeuronNames(Phrase toBeChecked, String n1, String n2) {
+        int l1 = getLevelOfNeuron(n1);
+        int l2 = getLevelOfNeuron(n2);
+        if ( l1 <= -1 || l2 <= -1 || l1 + 1 != l2 ) {
+            toBeChecked.addInfo(NepoInfo.error("NN_INVALID_NEURONNAMES"));
+        }
     }
 
     @Override

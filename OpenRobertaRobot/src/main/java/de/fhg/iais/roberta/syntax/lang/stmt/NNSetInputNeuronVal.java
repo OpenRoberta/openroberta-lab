@@ -9,20 +9,17 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "STMT", blocklyNames = {"robActions_change_bias"}, name = "NN_CHANGE_BIAS_STMT")
-public final class NNChangeBiasStmt extends Stmt {
+@NepoPhrase(category = "STMT", blocklyNames = {"robActions_set_inputneuron_val"}, name = "NN_SET_INPUT_NEURON_STMT")
+public final class NNSetInputNeuronVal extends Stmt {
     @NepoField(name = BlocklyConstants.NAME)
     public final String name;
-    @NepoField(name = BlocklyConstants.CHANGE)
-    public final String change;
     @NepoValue(name = BlocklyConstants.VALUE, type = BlocklyType.NUMBER)
     public final Expr value;
 
-    public NNChangeBiasStmt(BlocklyProperties properties, String name, String change, Expr value) {
+    public NNSetInputNeuronVal(BlocklyProperties properties, String name, Expr value) {
         super(properties);
         Assert.isTrue(value.isReadOnly() && value != null);
         this.name = name;
-        this.change = change;
         this.value = value;
         setReadOnly();
     }

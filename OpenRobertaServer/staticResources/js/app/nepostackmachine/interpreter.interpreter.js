@@ -226,13 +226,16 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         break;
                     }
                     case C.NN_STEP_STMT:
-                        this.evalNNStep(stmt[C.ARG1], stmt[C.ARG2]);
+                        UI.getNetwork().forwardProp();
                         break;
-                    case C.NN_CHANGEWEIGHT_STMT:
-                        UI.getNetwork().changeWeight(stmt[C.FROM], stmt[C.TO], stmt[C.CHANGE], this.state.pop());
+                    case C.NN_SETINPUTNEURON_STMT:
+                        UI.getNetwork().setInputNeuronVal(stmt[C.NAME], this.state.pop());
                         break;
-                    case C.NN_CHANGEBIAS_STMT:
-                        UI.getNetwork().changeBias(stmt[C.NAME], stmt[C.CHANGE], this.state.pop());
+                    case C.NN_SETWEIGHT_STMT:
+                        UI.getNetwork().changeWeight(stmt[C.FROM], stmt[C.TO], this.state.pop());
+                        break;
+                    case C.NN_SETBIAS_STMT:
+                        UI.getNetwork().changeBias(stmt[C.NAME], this.state.pop());
                         break;
                     case C.LED_ON_ACTION: {
                         var color_1 = this.state.pop();
@@ -957,21 +960,6 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     default:
                         U.dbcException('invalid binary expr supOp: ' + subOp);
                 }
-            }
-        };
-        Interpreter.prototype.evalNNStep = function (numberInputNeurons, numberOutputNeurons) {
-            var s = this.state;
-            var inputData = [];
-            for (var i = 0; i < numberInputNeurons; i++) {
-                inputData.push(s.pop());
-            }
-            inputData = inputData.reverse();
-            var outputData = UI.getNetwork().oneStep(inputData);
-            if (outputData.length != numberOutputNeurons) {
-                U.dbcException('NN returned wrong number of outputs: ' + outputData.length.toString + ' !=' + numberOutputNeurons.toString);
-            }
-            for (var i = outputData.length - 1; i >= 0; i--) {
-                s.push(outputData[i]);
             }
         };
         /**

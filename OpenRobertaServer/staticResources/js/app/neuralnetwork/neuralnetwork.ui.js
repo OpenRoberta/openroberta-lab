@@ -244,6 +244,8 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         updateUI();
         return;
         function drawNode(node, nodeType, cx, cy, container) {
+            if (node.id === '') {
+            }
             var nodeId = node.id;
             var x = cx - nodeSize / 2;
             var y = cy - nodeSize / 2;
@@ -263,8 +265,15 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             if (focusNode !== undefined && focusNode != null && focusNode.id === node.id) {
                 mainRectAngle.attr('style', 'outline: medium solid orange;');
             }
-            nodeGroup.on('click', function () {
-                if (inputNeuronNameEditingMode && node.inputLinks.length === 0) {
+            nodeGroup
+                .on('dblclick', function () {
+                runNameCard(node, D3.mouse(container.node()));
+            })
+                .on('click', function () {
+                if (D3.event.shiftKey) {
+                    runNameCard(node, D3.mouse(container.node()));
+                }
+                else if (inputNeuronNameEditingMode && node.inputLinks.length === 0) {
                     runNameCard(node, D3.mouse(container.node()));
                 }
                 else if (outputNeuronNameEditingMode && node.outputs.length === 0) {
@@ -353,6 +362,15 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             var node = selection.node();
             return node.offsetHeight + node.offsetTop;
         }
+        function selectDefaultId() {
+            var i = 1;
+            while (true) {
+                var id = 'n' + i++;
+                if (state.inputs.indexOf(id) <= -1 && state.outputs.indexOf(id) <= -1) {
+                    return id;
+                }
+            }
+        }
         function addPlusMinusControl(x, layerIdx) {
             var div = D3.select('#nn-network').append('div').classed('nn-plus-minus-neurons', true).style('left', "".concat(x, "px"));
             var isInputLayer = layerIdx == 0;
@@ -366,7 +384,8 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                     if (numNeurons >= 9) {
                         return;
                     }
-                    state.inputs.push('in' + (numNeurons + 1));
+                    var id = selectDefaultId();
+                    state.inputs.push(id);
                     reconstructNNIncludingUI();
                 };
             }
@@ -376,7 +395,8 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                     if (numNeurons >= 9) {
                         return;
                     }
-                    state.outputs.push('out' + (numNeurons + 1));
+                    var id = selectDefaultId();
+                    state.outputs.push(id);
                     reconstructNNIncludingUI();
                 };
             }
@@ -580,6 +600,10 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     }
     function checkInputOutputNeuronNameValid(oldName, newName) {
         if (newName.length > 6) {
+            return false;
+        }
+        var validIdRegexp = new RegExp('^[A-Za-z][A-Za-z0-9_]*$');
+        if (!validIdRegexp.test(newName)) {
             return false;
         }
         if (oldName === newName) {

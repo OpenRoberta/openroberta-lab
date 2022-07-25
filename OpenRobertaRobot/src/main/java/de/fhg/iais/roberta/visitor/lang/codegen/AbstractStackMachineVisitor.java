@@ -86,13 +86,10 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeBiasStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeWeightStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronWoVarStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetBiasStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetInputNeuronVal;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetWeightStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmtDeprecated;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
@@ -546,64 +543,16 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     }
 
     @Override
-    public final Void visitNNStepStmtDeprecated(NNStepStmtDeprecated nnStepStmt) {
-        final List<Stmt> inputNeurons = nnStepStmt.getInputNeurons();
-        final List<Stmt> outputNeurons = nnStepStmt.getOutputNeurons();
-        for ( Stmt inputNeuron : inputNeurons ) {
-            inputNeuron.accept(this);
-        }
-        JSONObject o = makeNode(C.NN_STEP_STMT).put(C.ARG1, inputNeurons.size()).put(C.ARG2, outputNeurons.size());
-        app(o);
-        for ( Stmt outputNeuronAsStmt : outputNeurons ) {
-            JSONObject ov;
-            if ( outputNeuronAsStmt.hasName("NN_OUTPUT_NEURON_STMT") ) {
-                NNOutputNeuronStmt outputNeuron = (NNOutputNeuronStmt) outputNeuronAsStmt;
-                ov = makeNode(C.ASSIGN_STMT).put(C.NAME, ((Var) outputNeuron.value).name);
-            } else if ( outputNeuronAsStmt.hasName("NN_OUTPUT_NEURON_WO_VAR_STMT") ) {
-                ov = makeNode(C.POP);
-            } else {
-                throw new DbcException("invalid output neuron");
-            }
-            app(ov);
-        }
-        return null;
-    }
-
-    @Override
     public final Void visitNNStepStmt(NNStepStmt nnStepStmt) {
-        return null;
-    }
-
-    @Override
-    public final Void visitNNInputNeuronStmt(NNInputNeuronStmt inputNeuronStmt) {
-        inputNeuronStmt.value.accept(this);
-        return null;
-    }
-
-    @Override
-    public final Void visitNNOutputNeuronStmt(NNOutputNeuronStmt nnOutputNeuronStmt) {
-        // code is generated in method visitNNStepStmt
-        return null;
-    }
-
-    @Override
-    public final Void visitNNOutputNeuronWoVarStmt(NNOutputNeuronWoVarStmt nnOutputNeuronWoVarStmt) {
-        // code is generated in method visitNNGetOutputNeuronVal
-        return null;
-    }
-
-    @Override
-    public final Void visitNNChangeWeightStmt(NNChangeWeightStmt chgStmt) {
-        chgStmt.value.accept(this);
-        JSONObject o = makeNode(C.NN_CHANGEWEIGHT_STMT).put(C.FROM, chgStmt.from).put(C.TO, chgStmt.to).put(C.CHANGE, chgStmt.change);
+        JSONObject o = makeNode(C.NN_STEP_STMT);
         app(o);
         return null;
     }
 
     @Override
-    public final Void visitNNChangeBiasStmt(NNChangeBiasStmt chgStmt) {
-        chgStmt.value.accept(this);
-        JSONObject o = makeNode(C.NN_CHANGEBIAS_STMT).put(C.NAME, chgStmt.name).put(C.CHANGE, chgStmt.change);
+    public final Void visitNNSetInputNeuronVal(NNSetInputNeuronVal setStmt) {
+        setStmt.value.accept(this);
+        JSONObject o = makeNode(C.NN_SETINPUTNEURON_STMT).put(C.NAME, setStmt.name);
         app(o);
         return null;
     }
@@ -611,6 +560,22 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     @Override
     public final Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal getVal) {
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.NN_GETOUTPUTNEURON_VAL).put(C.NAME, getVal.name);
+        app(o);
+        return null;
+    }
+
+    @Override
+    public final Void visitNNSetWeightStmt(NNSetWeightStmt chgStmt) {
+        chgStmt.value.accept(this);
+        JSONObject o = makeNode(C.NN_SETWEIGHT_STMT).put(C.FROM, chgStmt.from).put(C.TO, chgStmt.to);
+        app(o);
+        return null;
+    }
+
+    @Override
+    public final Void visitNNSetBiasStmt(NNSetBiasStmt chgStmt) {
+        chgStmt.value.accept(this);
+        JSONObject o = makeNode(C.NN_SETBIAS_STMT).put(C.NAME, chgStmt.name);
         app(o);
         return null;
     }

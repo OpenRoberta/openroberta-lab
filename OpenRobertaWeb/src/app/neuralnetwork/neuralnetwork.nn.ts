@@ -123,7 +123,7 @@ export class Node {
     bias: NNumber = new NNumber();
     readonly outputs: Link[] = [];
     totalInput: number;
-    output: number;
+    output: number = 0;
     /** Error derivative with respect to this node's output. */
     outputDer = 0;
     /** Error derivative with respect to this node's total input. */
@@ -329,16 +329,8 @@ export class Network {
      * @param inputs The input array. Its length should match the number of input
      *     nodes in the network.
      */
-    forwardProp(inputs: number[]): void {
+    forwardProp(): void {
         let inputLayer = this.network[0];
-        if (inputs.length !== inputLayer.length) {
-            throw new Error('The number of inputs must match the number of nodes in' + ' the input layer');
-        }
-        // Update the input layer.
-        for (let i = 0; i < inputLayer.length; i++) {
-            let node = inputLayer[i];
-            node.output = inputs[i];
-        }
         for (let layerIdx = 1; layerIdx < this.network.length; layerIdx++) {
             let currentLayer = this.network[layerIdx];
             // Update all the nodes in this layer.
@@ -533,6 +525,11 @@ export class Network {
         return outputNames;
     }
 
+    setInputNeuronVal(id: String, val: number): void {
+        let node = this.getNeuronById(id);
+        node.output = val;
+    }
+
     getOutputNeuronVal(id: String): number {
         let node = this.getNeuronById(id);
         return node != null ? node.output : 0;
@@ -561,36 +558,19 @@ export class Network {
     }
 
     /**
-     * one step of the neural network. Called from the simulation
-     * @param inputData array of values for the input neurons
-     * @return the array of values for the output neurons WITH variables
-     */
-    oneStep(inputData: number[]): number[] {
-        this.forwardProp(inputData);
-        let outputData = [];
-        let outputs = this.network[this.network.length - 1];
-        for (let j = 0; j < outputs.length; j++) {
-            let node = outputs[j];
-            outputData.push(node.output);
-        }
-        return outputData;
-    }
-
-    /**
      * finds a link and updates its weight. Called from the simulation
      * @param from id of the source of the link
      * @param to id of the target of the link
      * @param change either 'SET' or 'INCR'
      * @param value update for the weight
      */
-    changeWeight(from: String, to: String, change: String, value: number): void {
+    changeWeight(from: String, to: String, value: number): void {
         let fromNode = this.getNeuronById(from);
         if (fromNode != null) {
             for (let i = 0; i < fromNode.outputs.length; i++) {
                 let link = fromNode.outputs[i];
                 if (link.dest.id === to) {
-                    let newVal = change === 'SET' ? value : link.weight.get() + value;
-                    link.weight.setAsNumber(newVal);
+                    link.weight.setAsNumber(value);
                     return;
                 }
             }
@@ -603,11 +583,10 @@ export class Network {
      * @param change either 'SET' or 'INCR'
      * @param value update for the bias
      */
-    changeBias(id: String, change: String, value: number): void {
+    changeBias(id: String, value: number): void {
         let node = this.getNeuronById(id);
         if (node != null) {
-            let newBias = change === 'SET' ? value : node.bias.get() + value;
-            node.bias.setAsNumber(newBias);
+            node.bias.setAsNumber(value);
             return;
         }
     }

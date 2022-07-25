@@ -96,13 +96,10 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeBiasStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeWeightStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronWoVarStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetBiasStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetInputNeuronVal;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetWeightStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmtDeprecated;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
@@ -388,47 +385,28 @@ public interface ITransformerVisitor extends ISensorVisitor<Phrase>, IAllActorsV
     }
 
     @Override
-    default Phrase visitNNStepStmtDeprecated(NNStepStmtDeprecated nnStepStmt) {
-        StmtList newIoNeurons = new StmtList();
-        for ( Stmt e : nnStepStmt.getIoNeurons().get() ) {
-            newIoNeurons.get().add((Stmt) e.modify(this));
-        }
-        return new NNStepStmtDeprecated(nnStepStmt.getProperty(), newIoNeurons, nnStepStmt.netDefinition);
-    }
-
-    @Override
     default Phrase visitNNStepStmt(NNStepStmt nnStepStmt) {
-        return null;
+        return new NNStepStmt(nnStepStmt.getProperty());
     }
 
     @Override
-    default Phrase visitNNInputNeuronStmt(NNInputNeuronStmt inNeuron) {
-        return new NNInputNeuronStmt(inNeuron.getProperty(), inNeuron.name, (Expr) inNeuron.modify(this));
-    }
-
-    @Override
-    default Phrase visitNNOutputNeuronStmt(NNOutputNeuronStmt outNeuron) {
-        return new NNOutputNeuronStmt(outNeuron.getProperty(), outNeuron.name, (Expr) outNeuron.modify(this));
-    }
-
-    @Override
-    default Phrase visitNNOutputNeuronWoVarStmt(NNOutputNeuronWoVarStmt outNeuron) {
-        return new NNOutputNeuronWoVarStmt(outNeuron.getProperty(), outNeuron.name);
-    }
-
-    @Override
-    default Phrase visitNNChangeWeightStmt(NNChangeWeightStmt chgStmt) {
-        return new NNChangeWeightStmt(chgStmt.getProperty(), chgStmt.from, chgStmt.to, chgStmt.change, (Expr) chgStmt.modify(this));
-    }
-
-    @Override
-    default Phrase visitNNChangeBiasStmt(NNChangeBiasStmt chgStmt) {
-        return new NNChangeBiasStmt(chgStmt.getProperty(), chgStmt.name, chgStmt.change, (Expr) chgStmt.modify(this));
+    default Phrase visitNNSetInputNeuronVal(NNSetInputNeuronVal setVal) {
+        return new NNSetBiasStmt(setVal.getProperty(), setVal.name, (Expr) setVal.modify(this));
     }
 
     @Override
     default Phrase visitNNGetOutputNeuronVal(NNGetOutputNeuronVal getStmt) {
         return new NNGetOutputNeuronVal(getStmt.getProperty(), getStmt.name);
+    }
+
+    @Override
+    default Phrase visitNNSetWeightStmt(NNSetWeightStmt chgStmt) {
+        return new NNSetWeightStmt(chgStmt.getProperty(), chgStmt.from, chgStmt.to, (Expr) chgStmt.modify(this));
+    }
+
+    @Override
+    default Phrase visitNNSetBiasStmt(NNSetBiasStmt chgStmt) {
+        return new NNSetBiasStmt(chgStmt.getProperty(), chgStmt.name, (Expr) chgStmt.modify(this));
     }
 
     @Override

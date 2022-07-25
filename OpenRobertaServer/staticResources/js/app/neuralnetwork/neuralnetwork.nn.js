@@ -124,6 +124,7 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
             this.inputLinks = [];
             this.bias = new NNumber();
             this.outputs = [];
+            this.output = 0;
             /** Error derivative with respect to this node's output. */
             this.outputDer = 0;
             /** Error derivative with respect to this node's total input. */
@@ -319,16 +320,8 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
          * @param inputs The input array. Its length should match the number of input
          *     nodes in the network.
          */
-        Network.prototype.forwardProp = function (inputs) {
+        Network.prototype.forwardProp = function () {
             var inputLayer = this.network[0];
-            if (inputs.length !== inputLayer.length) {
-                throw new Error('The number of inputs must match the number of nodes in' + ' the input layer');
-            }
-            // Update the input layer.
-            for (var i = 0; i < inputLayer.length; i++) {
-                var node = inputLayer[i];
-                node.output = inputs[i];
-            }
             for (var layerIdx = 1; layerIdx < this.network.length; layerIdx++) {
                 var currentLayer = this.network[layerIdx];
                 // Update all the nodes in this layer.
@@ -519,6 +512,10 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
             }
             return outputNames;
         };
+        Network.prototype.setInputNeuronVal = function (id, val) {
+            var node = this.getNeuronById(id);
+            node.output = val;
+        };
         Network.prototype.getOutputNeuronVal = function (id) {
             var node = this.getNeuronById(id);
             return node != null ? node.output : 0;
@@ -545,35 +542,19 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
             }
         };
         /**
-         * one step of the neural network. Called from the simulation
-         * @param inputData array of values for the input neurons
-         * @return the array of values for the output neurons WITH variables
-         */
-        Network.prototype.oneStep = function (inputData) {
-            this.forwardProp(inputData);
-            var outputData = [];
-            var outputs = this.network[this.network.length - 1];
-            for (var j = 0; j < outputs.length; j++) {
-                var node = outputs[j];
-                outputData.push(node.output);
-            }
-            return outputData;
-        };
-        /**
          * finds a link and updates its weight. Called from the simulation
          * @param from id of the source of the link
          * @param to id of the target of the link
          * @param change either 'SET' or 'INCR'
          * @param value update for the weight
          */
-        Network.prototype.changeWeight = function (from, to, change, value) {
+        Network.prototype.changeWeight = function (from, to, value) {
             var fromNode = this.getNeuronById(from);
             if (fromNode != null) {
                 for (var i = 0; i < fromNode.outputs.length; i++) {
                     var link = fromNode.outputs[i];
                     if (link.dest.id === to) {
-                        var newVal = change === 'SET' ? value : link.weight.get() + value;
-                        link.weight.setAsNumber(newVal);
+                        link.weight.setAsNumber(value);
                         return;
                     }
                 }
@@ -585,11 +566,10 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
          * @param change either 'SET' or 'INCR'
          * @param value update for the bias
          */
-        Network.prototype.changeBias = function (id, change, value) {
+        Network.prototype.changeBias = function (id, value) {
             var node = this.getNeuronById(id);
             if (node != null) {
-                var newBias = change === 'SET' ? value : node.bias.get() + value;
-                node.bias.setAsNumber(newBias);
+                node.bias.setAsNumber(value);
                 return;
             }
         };

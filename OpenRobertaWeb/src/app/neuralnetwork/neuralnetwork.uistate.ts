@@ -23,8 +23,8 @@ export class State {
     weightArcMaxSize = 8;
     weightSuppressMultOp = true;
 
-    inputs = ['n1'];
-    outputs = ['n2'];
+    inputs = [];
+    outputs = [];
 
     constructor(json: any) {
         // if no JSON is available from the program, the default from above is taken

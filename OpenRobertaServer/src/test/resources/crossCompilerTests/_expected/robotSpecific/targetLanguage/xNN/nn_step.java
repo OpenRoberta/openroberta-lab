@@ -28,33 +28,34 @@ public class NEPOprog {
     private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
     private Hal hal = new Hal(brickConfiguration, usedSensors);
     
-    private float ____out1;
-    private float ____out2;
-    private float ____out3;
-    private float ____b_h1n1 = 1;
-    private float ____w_in1_h1n1 = 1;
-    private float ____w_in2_h1n1 = 1;
-    private float ____w_in3_h1n1 = 1;
-    private float ____b_h1n2 = 1;
-    private float ____w_in1_h1n2 = 1;
-    private float ____w_in2_h1n2 = 1;
-    private float ____w_in3_h1n2 = 1;
-    private float ____b_out1 = -1;
-    private float ____w_h1n1_out1 = -1;
-    private float ____w_h1n2_out1 = -1;
-    private float ____b_out2 = -1;
-    private float ____w_h1n1_out2 = -1;
-    private float ____w_h1n2_out2 = -1;
-    private float ____b_out3 = -1;
-    private float ____w_h1n1_out3 = -1;
-    private float ____w_h1n2_out3 = -1;
+    private float ____i1;
+    private float ____i2;
+    private float ____o1;
+    private float ____o2;
+    private float ____b_h1n1 = -1;
+    private float ____w_i1_h1n1 = 1;
+    private float ____w_i2_h1n1 = 1;
+    private float ____b_h1n2 = -1;
+    private float ____w_i1_h1n2 = 1;
+    private float ____w_i2_h1n2 = 1;
+    private float ____b_h1n3 = -1;
+    private float ____w_i1_h1n3 = 1;
+    private float ____w_i2_h1n3 = 1;
+    private float ____b_o1 = -1;
+    private float ____w_h1n1_o1 = 1;
+    private float ____w_h1n2_o1 = 1;
+    private float ____w_h1n3_o1 = 1;
+    private float ____b_o2 = -1;
+    private float ____w_h1n1_o2 = 1;
+    private float ____w_h1n2_o2 = 1;
+    private float ____w_h1n3_o2 = 1;
     
-    private void ____nnStep( float _in1, float _in2, float _in3) {
-        float ____h1n1 = ____b_h1n1 + _in1 * ____w_in1_h1n1 + _in2 * ____w_in2_h1n1 + _in3 * ____w_in3_h1n1;
-        float ____h1n2 = ____b_h1n2 + _in1 * ____w_in1_h1n2 + _in2 * ____w_in2_h1n2 + _in3 * ____w_in3_h1n2;
-        ____out1 = ____b_out1 + ____h1n1 * ____w_h1n1_out1 + ____h1n2 * ____w_h1n2_out1;
-        ____out2 = ____b_out2 + ____h1n1 * ____w_h1n1_out2 + ____h1n2 * ____w_h1n2_out2;
-        ____out3 = ____b_out3 + ____h1n1 * ____w_h1n1_out3 + ____h1n2 * ____w_h1n2_out3;
+    private void ____nnStep() {
+        float ____h1n1 = ____b_h1n1 + ____i1 * ____w_i1_h1n1 + ____i2 * ____w_i2_h1n1;
+        float ____h1n2 = ____b_h1n2 + ____i1 * ____w_i1_h1n2 + ____i2 * ____w_i2_h1n2;
+        float ____h1n3 = ____b_h1n3 + ____i1 * ____w_i1_h1n3 + ____i2 * ____w_i2_h1n3;
+        ____o1 = ____b_o1 + ____h1n1 * ____w_h1n1_o1 + ____h1n2 * ____w_h1n2_o1 + ____h1n3 * ____w_h1n3_o1;
+        ____o2 = ____b_o2 + ____h1n1 * ____w_h1n1_o2 + ____h1n2 * ____w_h1n2_o2 + ____h1n3 * ____w_h1n3_o2;
     }
     
     public static void main(String[] args) {
@@ -70,20 +71,21 @@ public class NEPOprog {
         }
     }
     
-    float ___o1 = 0;
-    float ___o2 = 0;
-    float ___o3 = 0;
+    float ___x = 0;
     
     public void run() throws Exception {
-        ____w_in1_in1 += 1;
-        ____b_h1n1 = 2;
-        ___o3 = ____w_in1_in1;
-        ___o3 = ____b_h1n1;
-        ____nnStep(1,2,1 + 2);
-        ___o1 = ____out1;
-        ___o2 = ____out2;
-        
-        ___o3 = ____out1;
-        
+        ____i1 = 5;
+        ____i2 = 5;
+        ____nnStep();
+        ___x = ____o1;
+        ___x = ____o2;
+        ____w_i1_h1n1 = 5;
+        ____w_h1n1_o1 = 5;
+        ____b_h1n1 = 5;
+        ____b_o1 = 5;
+        ___x = ____w_i1_h1n3;
+        ___x = ____w_h1n1_o1;
+        ___x = ____b_h1n2;
+        ___x = ____b_o1;
     }
 }

@@ -23,8 +23,8 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
             this.precision = '2';
             this.weightArcMaxSize = 8;
             this.weightSuppressMultOp = true;
-            this.inputs = ['n1'];
-            this.outputs = ['n2'];
+            this.inputs = [];
+            this.outputs = [];
             // if no JSON is available from the program, the default from above is taken
             if (json !== undefined && json != null) {
                 this.learningRate = json.learningRate !== undefined ? json.learningRate : this.learningRate;

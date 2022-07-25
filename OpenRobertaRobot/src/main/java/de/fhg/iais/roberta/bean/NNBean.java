@@ -17,12 +17,14 @@ public class NNBean implements IProjectBean {
     private final List<String> outputNeurons;
     private final JSONArray weights;
     private final JSONArray biases;
+    private final List<Integer> networkShape;
 
-    public NNBean(List<String> inputNeurons, List<String> outputNeurons, JSONArray weights, JSONArray biases) {
+    public NNBean(List<String> inputNeurons, List<String> outputNeurons, JSONArray weights, JSONArray biases, List<Integer> networkShape) {
         this.inputNeurons = inputNeurons;
         this.outputNeurons = outputNeurons;
         this.weights = weights;
         this.biases = biases;
+        this.networkShape = networkShape;
     }
 
     public List<String> getInputNeurons() {
@@ -31,6 +33,10 @@ public class NNBean implements IProjectBean {
 
     public List<String> getOutputNeurons() {
         return outputNeurons;
+    }
+
+    public List<Integer> getNetworkShape() {
+        return networkShape;
     }
 
     public JSONArray getWeights() {
@@ -48,61 +54,30 @@ public class NNBean implements IProjectBean {
     public static class Builder implements IBuilder<NNBean> {
         private JSONArray weights = null;
         private JSONArray bias = null;
-        private boolean nnStepWasFound = false;
         private List<String> inputNeurons = new ArrayList<>();
         private List<String> outputNeurons = new ArrayList<>();
+        private List<Integer> networkShape = new ArrayList<>();
 
         /**
          * data contains the NN definition. Save it for later usage.
          */
-        public void setNN(Data data) {
+        public String setNN(Data data) {
             if ( data == null ) {
                 this.weights = new JSONArray();
                 this.bias = new JSONArray();
+                return null;
             } else {
                 JSONObject netStateDefinition = new JSONObject(data.getValue());
                 this.weights = netStateDefinition.getJSONArray("weights");
                 this.bias = netStateDefinition.getJSONArray("biases");
-            }
-        }
-
-        public String processInputOutputNeurons(List<String> inputNeurons, List<String> outputNeurons) {
-            if ( inputNeurons.size() <= 0 || outputNeurons.size() <= 0 ) {
-                return "NN_STEP_INPUTOUTPUT_MISSING";
-            }
-            if ( !neuronNamesConsistent(inputNeurons, outputNeurons) ) {
-                return "NN_STEP_INCONSISTENT";
-            }
-            if ( nnStepWasFound ) {
-                // check, that input/output of previous NNStep blocks match
-                if ( !neuronsMatch(this.inputNeurons, inputNeurons) || !neuronsMatch(this.outputNeurons, outputNeurons) ) {
-                    return "NN_STEPS_INCONSISTENT";
+                netStateDefinition.getJSONArray("inputs").forEach(i -> inputNeurons.add((String) i));
+                netStateDefinition.getJSONArray("outputs").forEach(o -> outputNeurons.add((String) o));
+                netStateDefinition.getJSONArray("networkShape").forEach(c -> networkShape.add((Integer) c));
+                if ( !neuronNamesConsistent(inputNeurons, outputNeurons) ) {
+                    return "NN_INVALID_NEURONNAME";
+                } else {
+                    return null;
                 }
-            } else {
-                nnStepWasFound = true;
-                this.inputNeurons = inputNeurons;
-                this.outputNeurons = outputNeurons;
-            }
-            if ( this.weights.length() < 2 || this.bias.length() < 2 ) {
-                return "NN_INSPECT_NN";
-            }
-            if ( this.inputNeurons.size() != this.weights.getJSONArray(0).length() ) {
-                return "NN_INSPECT_NN";
-            }
-            if ( this.outputNeurons.size() != this.weights.getJSONArray(this.weights.length() - 1).length() ) {
-                return "NN_INSPECT_NN";
-            }
-            if ( this.outputNeurons.size() != this.bias.getJSONArray(this.bias.length() - 1).length() ) {
-                return "NN_INSPECT_NN";
-            }
-            return null;
-        }
-
-        public String checkNameOfOutputNeuron(String name) {
-            if ( outputNeurons.contains(name) ) {
-                return null;
-            } else {
-                return "NN_INVALID_NEURONNAME";
             }
         }
 
@@ -117,13 +92,9 @@ public class NNBean implements IProjectBean {
             return l1.size() + l2.size() == set.size();
         }
 
-        private boolean neuronsMatch(List<String> l1, List<String> l2) {
-            return l1.equals(l2);
-        }
-
         @Override
         public NNBean build() {
-            return new NNBean(inputNeurons, outputNeurons, weights, bias);
+            return new NNBean(inputNeurons, outputNeurons, weights, bias, networkShape);
         }
     }
 }

@@ -40,14 +40,10 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeBiasStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNChangeWeightStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronWoVarStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetBiasStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetInputNeuronVal;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetWeightStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmtDeprecated;
-import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
@@ -124,6 +120,9 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     protected void generateNNStuff() {
         NNBean nnBean = this.getBean(CodeGeneratorSetupBean.class).getNNBean();
         if ( nnBean != null && nnBean.hasAtLeastOneInputAndOutputNeuron() ) {
+            for ( String neuron : nnBean.getInputNeurons() ) {
+                src.nlI().add("private float ____", neuron, ";");
+            }
             for ( String neuron : nnBean.getOutputNeurons() ) {
                 src.nlI().add("private float ____", neuron, ";");
             }
@@ -146,7 +145,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
                     }
                 }
             }
-            src.nlI().nlI().add("private void ____nnStep(").collect(nnBean.getInputNeurons(), " float _", ", float _", "").add(") {").INCR();
+            src.nlI().nlI().add("private void ____nnStep() {").INCR();
             for ( int layer = 0; layer < weights.length() - 1; layer++ ) {
                 final JSONArray weightsForLayer = weights.getJSONArray(layer);
                 final JSONArray biasesForLayer = biases.getJSONArray(layer + 1);
@@ -170,13 +169,11 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
                         if ( layer == 0 ) {
                             // input
                             sourceName = nnBean.getInputNeurons().get(sourceNum);
-                            sourcePrefix = "_";
                         } else {
                             // hidden
                             sourceName = "h" + layer + "n" + (sourceNum + 1);
-                            sourcePrefix = "____";
                         }
-                        src.add(" + ", sourcePrefix, sourceName, " * ____w_", sourceName, "_", targetName);
+                        src.add(" + ____", sourceName, " * ____w_", sourceName, "_", targetName);
                     }
                     src.add(";");
                 }
@@ -316,37 +313,15 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     }
 
     @Override
-    public Void visitNNStepStmtDeprecated(NNStepStmtDeprecated nnStepStmt) {
-        this.src.add("____nnStep(");
-        boolean first = true;
-        for ( Stmt stmt : nnStepStmt.getInputNeurons() ) {
-            first = src.addIf(first, ",");
-            stmt.accept(this);
-        }
-        this.src.add(");").nlI();
-        for ( Stmt stmt : nnStepStmt.getOutputNeurons() ) {
-            stmt.accept(this);
-        }
-        return null;
-    }
-
-    @Override
     public Void visitNNStepStmt(NNStepStmt nnStepStmt) {
+        this.src.add("____nnStep();");
         return null;
     }
 
     @Override
-    public Void visitNNChangeWeightStmt(NNChangeWeightStmt chgStmt) {
-        this.src.add("____w_", chgStmt.from, "_", chgStmt.to, (chgStmt.change.equals("SET") ? " = " : " += "));
-        chgStmt.value.accept(this);
-        this.src.add(";");
-        return null;
-    }
-
-    @Override
-    public Void visitNNChangeBiasStmt(NNChangeBiasStmt chgStmt) {
-        this.src.add("____b_", chgStmt.name, (chgStmt.change.equals("SET") ? " = " : " += "));
-        chgStmt.value.accept(this);
+    public Void visitNNSetInputNeuronVal(NNSetInputNeuronVal setVal) {
+        src.add("____").add(setVal.name).add(" = ");
+        setVal.value.accept(this);
         this.src.add(";");
         return null;
     }
@@ -354,6 +329,22 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     @Override
     public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal getVal) {
         src.add("____").add(getVal.name);
+        return null;
+    }
+
+    @Override
+    public Void visitNNSetWeightStmt(NNSetWeightStmt chgStmt) {
+        this.src.add("____w_", chgStmt.from, "_", chgStmt.to, " = ");
+        chgStmt.value.accept(this);
+        this.src.add(";");
+        return null;
+    }
+
+    @Override
+    public Void visitNNSetBiasStmt(NNSetBiasStmt chgStmt) {
+        this.src.add("____b_", chgStmt.name, " = ");
+        chgStmt.value.accept(this);
+        this.src.add(";");
         return null;
     }
 
@@ -366,24 +357,6 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     @Override
     public Void visitNNGetBias(NNGetBias getVal) {
         src.add("____b_", getVal.name);
-        return null;
-    }
-
-    @Override
-    public Void visitNNInputNeuronStmt(NNInputNeuronStmt nnInputNeuronStmt) {
-        nnInputNeuronStmt.value.accept(this);
-        return null;
-    }
-
-    @Override
-    public Void visitNNOutputNeuronStmt(NNOutputNeuronStmt nnOutputNeuronStmt) {
-        nnOutputNeuronStmt.value.accept(this);
-        src.add(" = ____", nnOutputNeuronStmt.name, ";").nlI();
-        return null;
-    }
-
-    @Override
-    public Void visitNNOutputNeuronWoVarStmt(NNOutputNeuronWoVarStmt nnOutputNeuronWoVarStmt) {
         return null;
     }
 

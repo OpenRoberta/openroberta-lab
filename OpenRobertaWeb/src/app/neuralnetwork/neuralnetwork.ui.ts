@@ -235,6 +235,8 @@ function drawNetworkUI(network: Network): void {
     return;
 
     function drawNode(node: Node, nodeType: NodeType, cx: number, cy: number, container: D3Selection) {
+        if (node.id === '') {
+        }
         let nodeId = node.id;
         let x = cx - nodeSize / 2;
         let y = cy - nodeSize / 2;
@@ -255,20 +257,26 @@ function drawNetworkUI(network: Network): void {
         if (focusNode !== undefined && focusNode != null && focusNode.id === node.id) {
             mainRectAngle.attr('style', 'outline: medium solid orange;');
         }
-        nodeGroup.on('click', function () {
-            if (inputNeuronNameEditingMode && node.inputLinks.length === 0) {
+        nodeGroup
+            .on('dblclick', function () {
                 runNameCard(node, D3.mouse(container.node()));
-            } else if (outputNeuronNameEditingMode && node.outputs.length === 0) {
-                runNameCard(node, D3.mouse(container.node()));
-            } else if (node.inputLinks.length > 0) {
-                if (focusNode == node) {
-                    focusNode = null;
-                } else {
-                    focusNode = node;
+            })
+            .on('click', function () {
+                if ((D3.event as any).shiftKey) {
+                    runNameCard(node, D3.mouse(container.node()));
+                } else if (inputNeuronNameEditingMode && node.inputLinks.length === 0) {
+                    runNameCard(node, D3.mouse(container.node()));
+                } else if (outputNeuronNameEditingMode && node.outputs.length === 0) {
+                    runNameCard(node, D3.mouse(container.node()));
+                } else if (node.inputLinks.length > 0) {
+                    if (focusNode == node) {
+                        focusNode = null;
+                    } else {
+                        focusNode = node;
+                    }
+                    drawNetworkUI(network);
                 }
-                drawNetworkUI(network);
-            }
-        });
+            });
 
         let labelForId = nodeGroup.append('text').attr({
             class: 'main-label',
@@ -365,6 +373,16 @@ function drawNetworkUI(network: Network): void {
         return node.offsetHeight + node.offsetTop;
     }
 
+    function selectDefaultId(): string {
+        let i = 1;
+        while (true) {
+            let id = 'n' + i++;
+            if (state.inputs.indexOf(id) <= -1 && state.outputs.indexOf(id) <= -1) {
+                return id;
+            }
+        }
+    }
+
     function addPlusMinusControl(x: number, layerIdx: number) {
         let div = D3.select('#nn-network').append('div').classed('nn-plus-minus-neurons', true).style('left', `${x}px`);
         let isInputLayer = layerIdx == 0;
@@ -378,7 +396,8 @@ function drawNetworkUI(network: Network): void {
                 if (numNeurons >= 9) {
                     return;
                 }
-                state.inputs.push('in' + (numNeurons + 1));
+                const id = selectDefaultId();
+                state.inputs.push(id);
                 reconstructNNIncludingUI();
             };
         } else if (isOutputLayer) {
@@ -387,7 +406,8 @@ function drawNetworkUI(network: Network): void {
                 if (numNeurons >= 9) {
                     return;
                 }
-                state.outputs.push('out' + (numNeurons + 1));
+                const id = selectDefaultId();
+                state.outputs.push(id);
                 reconstructNNIncludingUI();
             };
         } else {
@@ -598,6 +618,10 @@ function runEditCard(nodeOrLink: Node | Link, coordinates: [number, number]) {
 
 function checkInputOutputNeuronNameValid(oldName: string, newName: string) {
     if (newName.length > 6) {
+        return false;
+    }
+    const validIdRegexp = new RegExp('^[A-Za-z][A-Za-z0-9_]*$');
+    if (!validIdRegexp.test(newName)) {
         return false;
     }
     if (oldName === newName) {

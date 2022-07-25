@@ -191,9 +191,10 @@ public class C {
     public static final String NEG = "NEG";
     public static final String NEQ = "NEQ";
     public static final String NN_STEP_STMT = "nnStepStmt";
-    public static final String NN_CHANGEWEIGHT_STMT = "nnChangeWeightStmt";
-    public static final String NN_CHANGEBIAS_STMT = "nnChangeBiasStmt";
+    public static final String NN_SETINPUTNEURON_STMT = "nnSetInputNeuronStmt";
     public static final String NN_GETOUTPUTNEURON_VAL = "nnGetOutputNeuronVal";
+    public static final String NN_SETWEIGHT_STMT = "nnSetWeightStmt";
+    public static final String NN_SETBIAS_STMT = "nnSetBiasStmt";
     public static final String NN_GETWEIGHT = "nnGetWeight";
     public static final String NN_GETBIAS = "nnGetBias";
     public static final String NOOP_STMT = "createNoopStmt";
