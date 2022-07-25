@@ -14,8 +14,8 @@ ___numberList = Ed.List(3, [0,0,0])
 
 def sensors():
     global ___numberVar, ___booleanVar, ___numberList
-    ___booleanVar = Ed.ReadKeypad() == Ed.KEYPAD_TRIANGLE
-    ___booleanVar = Ed.ReadKeypad() == Ed.KEYPAD_ROUND
+    ___booleanVar = (Ed.ReadKeypad() == Ed.KEYPAD_TRIANGLE)
+    ___booleanVar = (Ed.ReadKeypad() == Ed.KEYPAD_ROUND)
     ___booleanVar = _obstacleDetection(Ed.OBSTACLE_LEFT)
     ___booleanVar = _obstacleDetection(Ed.OBSTACLE_RIGHT)
     ___booleanVar = _obstacleDetection(Ed.OBSTACLE_AHEAD)
@@ -23,8 +23,8 @@ def sensors():
     ___numberVar = Ed.ReadLeftLightLevel() / 10
     ___numberVar = Ed.ReadRightLightLevel() / 10
     ___numberVar = Ed.ReadLineTracker() / 10
-    ___booleanVar = Ed.ReadLineState() == Ed.LINE_ON_BLACK
-    ___booleanVar = Ed.ReadClapSensor() == Ed.CLAP_DETECTED
+    ___booleanVar = (Ed.ReadLineState() == Ed.LINE_ON_BLACK)
+    ___booleanVar = (Ed.ReadClapSensor() == Ed.CLAP_DETECTED)
     Ed.ReadObstacleDetection()
     Ed.ReadKeypad()
     Ed.ReadClapSensor()
@@ -34,11 +34,11 @@ def sensors():
 def sensorWaitUntil():
     global ___numberVar, ___booleanVar, ___numberList
     while True:
-        if (Ed.ReadKeypad() == Ed.KEYPAD_TRIANGLE) == True:
+        if ((Ed.ReadKeypad() == Ed.KEYPAD_TRIANGLE)) == True:
             break
         pass
     while True:
-        if (Ed.ReadKeypad() == Ed.KEYPAD_ROUND) == True:
+        if ((Ed.ReadKeypad() == Ed.KEYPAD_ROUND)) == True:
             break
         pass
     while True:
@@ -70,11 +70,11 @@ def sensorWaitUntil():
             break
         pass
     while True:
-        if (Ed.ReadLineState() == Ed.LINE_ON_BLACK) == True:
+        if ((Ed.ReadLineState() == Ed.LINE_ON_BLACK)) == True:
             break
         pass
     while True:
-        if (Ed.ReadClapSensor() == Ed.CLAP_DETECTED) == True:
+        if ((Ed.ReadClapSensor() == Ed.CLAP_DETECTED)) == True:
             break
         pass
 
