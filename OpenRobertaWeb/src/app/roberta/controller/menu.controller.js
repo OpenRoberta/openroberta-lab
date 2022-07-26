@@ -1,25 +1,18 @@
-import * as LOG from 'log';
-import * as UTIL from 'util';
 import * as MSG from 'message';
 import * as COMM from 'comm';
 import * as WRAP from 'wrap';
 import * as ROBOT_C from 'robot.controller';
 import * as SOCKET_C from 'socket.controller';
 import * as USER_C from 'user.controller';
-import * as USER from 'user.model';
 import * as NOTIFICATION_C from 'notification.controller';
 import * as USERGROUP_C from 'userGroup.controller';
 import * as GUISTATE_C from 'guiState.controller';
 import * as PROGRAM_C from 'program.controller';
-import * as PROGRAM_M from 'program.model';
 import * as MULT_SIM from 'multSim.controller';
 import * as RUN_C from 'progRun.controller';
 import * as CONFIGURATION_C from 'configuration.controller';
 import * as IMPORT_C from 'import.controller';
-import * as EnjoyHint from 'enjoyHint';
 import * as TOUR_C from 'tour.controller';
-import * as SIM from 'simulation.simulation';
-import * as PROGLIST from 'progList.model';
 import * as SOURCECODE_C from 'sourceCodeEditor.controller';
 import * as $ from 'jquery';
 import * as Blockly from 'blockly';
@@ -646,6 +639,19 @@ function initMenuEvents() {
             $('#tabConfiguration').clickWrap();
         },
         'tabConfiguration clicked'
+    );
+    $('#menuTabNN').onWrap(
+        'click',
+        '',
+        function (event) {
+            if ($('#tabNN').hasClass('tabClicked')) {
+                $('.scroller-right').clickWrap();
+            } else if ($('#tabNN').hasClass('tabClicked')) {
+                $('.scroller-right').clickWrap();
+            }
+            $('#tabNN').clickWrap();
+        },
+        'tabNN clicked'
     );
 
     // Close submenu on mouseleave

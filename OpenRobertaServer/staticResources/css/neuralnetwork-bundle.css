@@ -18,7 +18,7 @@
 #nn-top-controls {
     width: 100%;
     border-bottom: 1px solid #ddd;
-    padding: 18px 0;
+    padding: 16px 0;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
     background: white;
     display: -webkit-box;
@@ -34,6 +34,13 @@
     flex-grow: 1;
     margin-left: 10px;
     margin-top: 6px;
+}
+
+#nn-show-math-all.nn-control {
+    flex: 30%;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 30%;
 }
 
 #nn-top-controls .nn-control .label {
@@ -54,9 +61,40 @@
     position: relative;
 }
 
+#goto-sim {
+    position: absolute;
+    min-height: 48px;
+    max-width: 48px;
+    min-width: 48px;
+    right: 10px;
+    bottom: 10px;
+    font-size: 36px;
+    background-color: #ffffff;
+    color: #333333;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 2px 0 0 0;
+    margin: 0;
+    z-index: 9999;
+}
+
+#goto-sim:hover {
+    background-color: #BACC1E;
+}
+
+.nn-selection {
+    min-height: 36px;
+    border: none;
+    border-radius: 2px;
+    background-color: #23b6ac;
+    color: #ffffff;
+    padding: 6px;
+}
+
 #nn-show-math {
-    alignment: left;
     background-color: #f0f0f0;
+    min-height: 36px;
+    padding: 6px;
+    border-radius: 2px;
 }
 
 #nn-main-part {
@@ -90,22 +128,48 @@
     height: 44px;
 }
 
-#nn-features .nn-plus-minus-neuron-button {
-    background-color: rgb(239, 239, 239);
-    width: 35px;
-    height: 28px;
-    min-width: 35px;
-    border-radius: 3px;
-    border-width: thin;
+button.nn-btn {
+    background-color: #23b6ac;
+    width: 36px;
+    height: 36px;
+    border-radius: 2px;
+    padding: 0;
+    font-size: 20px;
+    margin-right: inherit;
+    border: none;
+    color: #ffffff;
+}
+
+button#nn-type-plus, button#nn-type-minus, button#nn-type-finished, button#nn-name-finished {
+    width: 27px;
+    height: 27px;
+}
+
+#nn-features .nn-plus-minus-neuron-button.active-input {
+    background-color: #BACC1E;
+}
+
+#nn-features .nn-plus-minus-neuron-button.active-output {
+    background-color: #f29400;
+}
+
+
+button.nn-btn:hover {
+    background-color: #ade7e4;
+}
+
+.nn-selection option {
+    background-color: #ffffff;
+    color: #333333;
 }
 
 #nn-top-controls .nn-num-layers-group {
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 #nn-features .nn-plus-minus-neurons .nn-plus-minus-neuron-button {
-    margin-right: 5px;
+    margin-right: 4px;
 }
 
 #nn-features svg .main-label {
@@ -131,22 +195,16 @@
 #nn-features .node_input rect {
     cursor: default;
     fill: rgb(143, 164, 2);
-    stroke-width: 1;
-    stroke: black;
 }
 
 #nn-features .node_hidden rect {
     cursor: default;
     fill: lightgrey;
-    stroke-width: 1;
-    stroke: black;
 }
 
 #nn-features .node_output rect {
     cursor: default;
     fill: rgb(242, 148, 0);
-    stroke-width: 1;
-    stroke: black;
 }
 
 #nn-features .core .link {

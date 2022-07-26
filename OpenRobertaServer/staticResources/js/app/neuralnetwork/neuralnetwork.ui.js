@@ -263,7 +263,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 'marker-start': 'url(#markerArrow)',
             });
             if (focusNode !== undefined && focusNode != null && focusNode.id === node.id) {
-                mainRectAngle.attr('style', 'outline: medium solid orange;');
+                mainRectAngle.attr('style', 'outline: medium solid #fbdc00;');
             }
             nodeGroup
                 .on('dblclick', function () {
@@ -412,11 +412,10 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             }
             firstRow
                 .append('button')
-                .attr('class', 'nn-plus-minus-neuron-button')
+                .attr('class', 'nn-btn nn-plus-minus-neuron-button')
                 .on('click', callbackPlus)
-                .append('i')
-                .attr('class', 'material-icons nn-middle-size')
-                .text('add');
+                .append('span')
+                .attr('class', 'typcn typcn-plus');
             var callbackMinus = null;
             if (isInputLayer) {
                 callbackMinus = function () {
@@ -450,40 +449,57 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             }
             firstRow
                 .append('button')
-                .attr('class', 'nn-plus-minus-neuron-button')
+                .attr('class', 'nn-btn nn-plus-minus-neuron-button')
                 .on('click', callbackMinus)
-                .append('i')
-                .attr('class', 'material-icons nn-middle-size')
-                .text('remove');
+                .append('span')
+                .attr('class', 'typcn typcn-minus');
             if (isInputLayer) {
-                var button_1 = firstRow.append('button');
-                var bc = inputNeuronNameEditingMode ? 'rgb(143, 164, 2)' : 'rgb(239, 239, 239)';
-                button_1.style('background-color', bc);
-                button_1
-                    .attr('class', 'nn-plus-minus-neuron-button')
+                var button = firstRow.append('button');
+                button
+                    .attr('class', 'nn-btn nn-plus-minus-neuron-button')
                     .on('click', function () {
                     inputNeuronNameEditingMode = !inputNeuronNameEditingMode;
-                    var bc = inputNeuronNameEditingMode ? 'rgb(143, 164, 2)' : 'rgb(239, 239, 239)';
-                    button_1.style('background-color', bc);
+                    if (inputNeuronNameEditingMode) {
+                        D3.event['target'].parentElement.classList.add('active-input');
+                        D3.event['target'].classList.add('active-input');
+                    }
+                    else {
+                        D3.event['target'].parentElement.classList.remove('active-input');
+                        D3.event['target'].classList.remove('active-input');
+                    }
                 })
-                    .append('i')
-                    .attr('class', 'material-icons nn-middle-size')
-                    .text('input');
+                    .append('span')
+                    .attr('class', 'typcn typcn-edit');
+                if (inputNeuronNameEditingMode) {
+                    button.classed('active-input', true);
+                }
+                else {
+                    button.classed('active-input', false);
+                }
             }
             else if (isOutputLayer) {
-                var button_2 = firstRow.append('button');
-                var bc = outputNeuronNameEditingMode ? 'rgb(242, 148, 0)' : 'rgb(239, 239, 239)';
-                button_2.style('background-color', bc);
-                button_2
-                    .attr('class', 'nn-plus-minus-neuron-button')
+                var button = firstRow.append('button');
+                button
+                    .attr('class', 'nn-btn nn-plus-minus-neuron-button')
                     .on('click', function () {
                     outputNeuronNameEditingMode = !outputNeuronNameEditingMode;
-                    var bc = outputNeuronNameEditingMode ? 'rgb(242, 148, 0)' : 'rgb(239, 239, 239)';
-                    button_2.style('background-color', bc);
+                    if (outputNeuronNameEditingMode) {
+                        D3.event['target'].parentElement.classList.add('active-output');
+                        D3.event['target'].classList.add('active-output');
+                    }
+                    else {
+                        D3.event['target'].parentElement.classList.remove('active-output');
+                        D3.event['target'].classList.remove('active-output');
+                    }
                 })
-                    .append('i')
-                    .attr('class', 'material-icons nn-middle-size')
-                    .text('input');
+                    .append('span')
+                    .attr('class', 'typcn typcn-edit');
+                if (outputNeuronNameEditingMode) {
+                    button.classed('active-output', true);
+                }
+                else {
+                    button.classed('active-output', false);
+                }
             }
         }
         function drawBias(container, nodeGroup, node) {
@@ -553,7 +569,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             else if (event.which === 13) {
                 editCard.style('display', 'none');
                 event.preventDefault && event.preventDefault();
-                return;
+                return false;
             }
             input.node().focus();
         })
@@ -577,7 +593,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         });
         finishedButton.on('click', function () {
             editCard.style('display', 'none');
-            return;
+            return false;
         });
         var xPos = coordinates[0] + 20;
         var yPos = coordinates[1];

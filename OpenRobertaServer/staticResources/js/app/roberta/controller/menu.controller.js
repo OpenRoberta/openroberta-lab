@@ -566,6 +566,15 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             }
             $('#tabConfiguration').clickWrap();
         }, 'tabConfiguration clicked');
+        $('#menuTabNN').onWrap('click', '', function (event) {
+            if ($('#tabNN').hasClass('tabClicked')) {
+                $('.scroller-right').clickWrap();
+            }
+            else if ($('#tabNN').hasClass('tabClicked')) {
+                $('.scroller-right').clickWrap();
+            }
+            $('#tabNN').clickWrap();
+        }, 'tabNN clicked');
         // Close submenu on mouseleave
         $('.navbar-fixed-top').on('mouseleave', function (event) {
             $('.navbar-fixed-top .dropdown').removeClass('open');

@@ -256,7 +256,7 @@ function drawNetworkUI(network: Network): void {
             'marker-start': 'url(#markerArrow)',
         });
         if (focusNode !== undefined && focusNode != null && focusNode.id === node.id) {
-            mainRectAngle.attr('style', 'outline: medium solid orange;');
+            mainRectAngle.attr('style', 'outline: medium solid #fbdc00;');
         }
         nodeGroup
             .on('dblclick', function () {
@@ -423,11 +423,10 @@ function drawNetworkUI(network: Network): void {
         }
         firstRow
             .append('button')
-            .attr('class', 'nn-plus-minus-neuron-button')
+            .attr('class', 'nn-btn nn-plus-minus-neuron-button')
             .on('click', callbackPlus)
-            .append('i')
-            .attr('class', 'material-icons nn-middle-size')
-            .text('add');
+            .append('span')
+            .attr('class', 'typcn typcn-plus');
 
         let callbackMinus = null;
         if (isInputLayer) {
@@ -460,39 +459,52 @@ function drawNetworkUI(network: Network): void {
         }
         firstRow
             .append('button')
-            .attr('class', 'nn-plus-minus-neuron-button')
+            .attr('class', 'nn-btn nn-plus-minus-neuron-button')
             .on('click', callbackMinus)
-            .append('i')
-            .attr('class', 'material-icons nn-middle-size')
-            .text('remove');
+            .append('span')
+            .attr('class', 'typcn typcn-minus');
         if (isInputLayer) {
             let button = firstRow.append('button');
-            let bc = inputNeuronNameEditingMode ? 'rgb(143, 164, 2)' : 'rgb(239, 239, 239)';
-            button.style('background-color', bc);
             button
-                .attr('class', 'nn-plus-minus-neuron-button')
+                .attr('class', 'nn-btn nn-plus-minus-neuron-button')
                 .on('click', () => {
                     inputNeuronNameEditingMode = !inputNeuronNameEditingMode;
-                    let bc = inputNeuronNameEditingMode ? 'rgb(143, 164, 2)' : 'rgb(239, 239, 239)';
-                    button.style('background-color', bc);
+                    if (inputNeuronNameEditingMode) {
+                        D3.event['target'].parentElement.classList.add('active-input');
+                        D3.event['target'].classList.add('active-input');
+                    } else {
+                        D3.event['target'].parentElement.classList.remove('active-input');
+                        D3.event['target'].classList.remove('active-input');
+                    }
                 })
-                .append('i')
-                .attr('class', 'material-icons nn-middle-size')
-                .text('input');
+                .append('span')
+                .attr('class', 'typcn typcn-edit');
+            if (inputNeuronNameEditingMode) {
+                button.classed('active-input', true);
+            } else {
+                button.classed('active-input', false);
+            }
         } else if (isOutputLayer) {
             let button = firstRow.append('button');
-            let bc = outputNeuronNameEditingMode ? 'rgb(242, 148, 0)' : 'rgb(239, 239, 239)';
-            button.style('background-color', bc);
             button
-                .attr('class', 'nn-plus-minus-neuron-button')
+                .attr('class', 'nn-btn nn-plus-minus-neuron-button')
                 .on('click', () => {
                     outputNeuronNameEditingMode = !outputNeuronNameEditingMode;
-                    let bc = outputNeuronNameEditingMode ? 'rgb(242, 148, 0)' : 'rgb(239, 239, 239)';
-                    button.style('background-color', bc);
+                    if (outputNeuronNameEditingMode) {
+                        D3.event['target'].parentElement.classList.add('active-output');
+                        D3.event['target'].classList.add('active-output');
+                    } else {
+                        D3.event['target'].parentElement.classList.remove('active-output');
+                        D3.event['target'].classList.remove('active-output');
+                    }
                 })
-                .append('i')
-                .attr('class', 'material-icons nn-middle-size')
-                .text('input');
+                .append('span')
+                .attr('class', 'typcn typcn-edit');
+            if (outputNeuronNameEditingMode) {
+                button.classed('active-output', true);
+            } else {
+                button.classed('active-output', false);
+            }
         }
     }
 
@@ -571,7 +583,7 @@ function runEditCard(nodeOrLink: Node | Link, coordinates: [number, number]) {
             } else if (event.which === 13) {
                 editCard.style('display', 'none');
                 event.preventDefault && event.preventDefault();
-                return;
+                return false;
             }
             (input.node() as HTMLInputElement).focus();
         })
@@ -595,7 +607,7 @@ function runEditCard(nodeOrLink: Node | Link, coordinates: [number, number]) {
     });
     finishedButton.on('click', () => {
         editCard.style('display', 'none');
-        return;
+        return false;
     });
     let xPos = coordinates[0] + 20;
     let yPos = coordinates[1];
