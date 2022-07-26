@@ -39,9 +39,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", "./neuralnetwork.uistate", "log", "./neuralnetwork.msg"], function (require, exports, H, neuralnetwork_nn_1, neuralnetwork_uistate_1, LOG, MSG) {
+define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", "./neuralnetwork.uistate", "log", "./neuralnetwork.msg", "util"], function (require, exports, H, neuralnetwork_nn_1, neuralnetwork_uistate_1, LOG, MSG, UTIL) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.getNetwork = exports.getStateAsJSONString = exports.resetUiOnTerminate = exports.runNNEditor = exports.setupNN = void 0;
+    exports.getNetwork = exports.saveNN2Blockly = exports.resetUiOnTerminate = exports.runNNEditor = exports.setupNN = void 0;
     var NodeType;
     (function (NodeType) {
         NodeType[NodeType["INPUT"] = 0] = "INPUT";
@@ -615,7 +615,23 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         }
         return true;
     }
+    function updateNodeName(node, newId) {
+        for (var i = 0; i < state.inputs.length; i++) {
+            if (state.inputs[i] === node.id) {
+                state.inputs[i] = newId;
+            }
+        }
+        for (var i = 0; i < state.outputs.length; i++) {
+            if (state.outputs[i] === node.id) {
+                state.outputs[i] = newId;
+            }
+        }
+        node.id = newId;
+    }
     function runNameCard(node, coordinates) {
+        if (node.inputLinks.length !== 0 && node.outputs.length !== 0) {
+            return; // only input and output neurons can change its name
+        }
         var nameCard = D3.select('#nn-nameCard');
         var finishedButton = D3.select('#nn-name-finished');
         var input = nameCard.select('input');
@@ -625,7 +641,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             if (event.which === 13) {
                 var userInput = input.property('value');
                 if (checkInputOutputNeuronNameValid(node.id, userInput)) {
-                    node.id = userInput;
+                    updateNodeName(node, userInput);
                     nameCard.style('display', 'none');
                     drawNetworkUI(network);
                 }
@@ -768,24 +784,22 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         }
     }
     /**
-     * extract weights and biases from the network (only this can be changed either by the program or the user),
-     * put them into the state and return the state to be stored in the blockly XML in the NNStep block
-     * @return the stringified state
+     * extract data from the network and put it into the state and store the state in the NNStep block
      */
-    function getStateAsJSONString() {
+    function saveNN2Blockly() {
+        var startBlock = UTIL.getTheStartBlock();
         try {
             state.weights = network.getWeightArray();
             state.biases = network.getBiasArray();
             state.inputs = network.getInputNames();
             state.outputs = network.getOutputNames();
-            return JSON.stringify(state);
+            startBlock.data = JSON.stringify(state);
         }
         catch (e) {
             LOG.error('failed to create a JSON string from nn state');
-            return '';
         }
     }
-    exports.getStateAsJSONString = getStateAsJSONString;
+    exports.saveNN2Blockly = saveNN2Blockly;
     function getNetwork() {
         return network;
     }

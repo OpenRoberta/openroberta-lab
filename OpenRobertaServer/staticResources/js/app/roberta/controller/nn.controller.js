@@ -1,4 +1,4 @@
-define(["require", "exports", "guiState.controller", "neuralnetwork.ui", "jquery", "blockly", "jquery-validate"], function (require, exports, GUISTATE_C, NN_UI, $, Blockly) {
+define(["require", "exports", "guiState.controller", "neuralnetwork.ui", "jquery", "util", "jquery-validate"], function (require, exports, GUISTATE_C, NN_UI, $, UTIL) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.mkNNfromNNStepDataAndRunNNEditor = exports.mkNNfromProgramStartBlock = exports.saveNN2Blockly = exports.init = void 0;
     /**
@@ -25,8 +25,7 @@ define(["require", "exports", "guiState.controller", "neuralnetwork.ui", "jquery
      * - reset node selection (yellow node)
      */
     function saveNN2Blockly() {
-        var startBlock = getTheStartBlock();
-        startBlock.data = NN_UI.getStateAsJSONString();
+        NN_UI.saveNN2Blockly();
         NN_UI.resetUiOnTerminate();
     }
     exports.saveNN2Blockly = saveNN2Blockly;
@@ -34,7 +33,7 @@ define(["require", "exports", "guiState.controller", "neuralnetwork.ui", "jquery
      * create the NN from the program XML. Called, when the simulation starts
      */
     function mkNNfromProgramStartBlock() {
-        var startBlock = getTheStartBlock();
+        var startBlock = UTIL.getTheStartBlock();
         var nnStateAsJson;
         try {
             nnStateAsJson = JSON.parse(startBlock.data);
@@ -53,17 +52,4 @@ define(["require", "exports", "guiState.controller", "neuralnetwork.ui", "jquery
         NN_UI.runNNEditor();
     }
     exports.mkNNfromNNStepDataAndRunNNEditor = mkNNfromNNStepDataAndRunNNEditor;
-    /**
-     * @return the (unique) start block from the program. Must exist.
-     */
-    function getTheStartBlock() {
-        var startBlock = null;
-        for (var _i = 0, _a = Blockly.Workspace.getByContainer('blocklyDiv').getTopBlocks(); _i < _a.length; _i++) {
-            var block = _a[_i];
-            if (!block.isDeletable()) {
-                return block;
-            }
-        }
-        throw 'start block not found. That is impossible.';
-    }
 });

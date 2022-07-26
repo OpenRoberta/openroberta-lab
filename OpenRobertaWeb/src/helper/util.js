@@ -10,6 +10,19 @@ import * as WEBOTSIM from 'webots.simulation';
 
 const ANIMATION_DURATION = CONST.ANIMATION_DURATION;
 
+/**
+ * @return the (unique) start block from the program. Must exist.
+ */
+function getTheStartBlock() {
+    var startBlock = null;
+    for (const block of Blockly.Workspace.getByContainer('blocklyDiv').getTopBlocks()) {
+        if (!block.isDeletable()) {
+            return block;
+        }
+    }
+    throw 'start block not found. That is impossible.';
+}
+
 var ratioWorkspace = 1;
 var simRobotWindowPositions = [];
 /**
@@ -857,6 +870,7 @@ function toFixedPrecision(value, precision) {
 }
 
 export {
+    getTheStartBlock,
     base64decode,
     clone,
     isEmpty,

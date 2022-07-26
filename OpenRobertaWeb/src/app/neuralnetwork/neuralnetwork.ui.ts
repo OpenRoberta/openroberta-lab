@@ -11,6 +11,7 @@ import * as LOG from 'log';
 import * as MSG from './neuralnetwork.msg';
 
 import * as _D3 from 'd3';
+import * as UTIL from 'util';
 
 enum NodeType {
     INPUT,
@@ -634,7 +635,24 @@ function checkInputOutputNeuronNameValid(oldName: string, newName: string) {
     return true;
 }
 
+function updateNodeName(node: Node, newId: string) {
+    for (let i = 0; i < state.inputs.length; i++) {
+        if (state.inputs[i] === node.id) {
+            state.inputs[i] = newId;
+        }
+    }
+    for (let i = 0; i < state.outputs.length; i++) {
+        if (state.outputs[i] === node.id) {
+            state.outputs[i] = newId;
+        }
+    }
+    node.id = newId;
+}
+
 function runNameCard(node: Node, coordinates: [number, number]) {
+    if (node.inputLinks.length !== 0 && node.outputs.length !== 0) {
+        return; // only input and output neurons can change its name
+    }
     let nameCard = D3.select('#nn-nameCard');
     let finishedButton = D3.select('#nn-name-finished');
 
@@ -645,7 +663,7 @@ function runNameCard(node: Node, coordinates: [number, number]) {
         if (event.which === 13) {
             let userInput = input.property('value');
             if (checkInputOutputNeuronNameValid(node.id, userInput)) {
-                node.id = userInput;
+                updateNodeName(node, userInput);
                 nameCard.style('display', 'none');
                 drawNetworkUI(network);
             } else {
@@ -795,20 +813,18 @@ function value2NodeOrLink(nodeOrLink: Node | Link, value: string) {
 }
 
 /**
- * extract weights and biases from the network (only this can be changed either by the program or the user),
- * put them into the state and return the state to be stored in the blockly XML in the NNStep block
- * @return the stringified state
+ * extract data from the network and put it into the state and store the state in the NNStep block
  */
-export function getStateAsJSONString(): string {
+export function saveNN2Blockly(): void {
+    var startBlock = UTIL.getTheStartBlock();
     try {
         state.weights = network.getWeightArray();
         state.biases = network.getBiasArray();
         state.inputs = network.getInputNames();
         state.outputs = network.getOutputNames();
-        return JSON.stringify(state);
+        startBlock.data = JSON.stringify(state);
     } catch (e) {
         LOG.error('failed to create a JSON string from nn state');
-        return '';
     }
 }
 

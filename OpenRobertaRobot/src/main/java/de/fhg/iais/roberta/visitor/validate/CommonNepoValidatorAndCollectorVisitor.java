@@ -72,7 +72,6 @@ import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
@@ -425,10 +424,10 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         int level = getLevelOfNeuron(name);
         int outputLevel = nnBean.getNetworkShape().size() + 1;
         if ( level <= -1 || level == 0 && !inputLegal || level == outputLevel && !outputLegal ) {
-            toBeChecked.addInfo(NepoInfo.error("NN_INVALID_NEURONNAME"));
+            addErrorToPhrase(toBeChecked, "NN_INVALID_NEURONNAME");
         }
         if ( level > 1 && level < outputLevel && !hiddenLegal ) {
-            toBeChecked.addInfo(NepoInfo.error("NN_INVALID_NEURONNAME"));
+            addErrorToPhrase(toBeChecked, "NN_INVALID_NEURONNAME");
         }
     }
 
@@ -436,7 +435,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         int l1 = getLevelOfNeuron(n1);
         int l2 = getLevelOfNeuron(n2);
         if ( l1 <= -1 || l2 <= -1 || l1 + 1 != l2 ) {
-            toBeChecked.addInfo(NepoInfo.error("NN_INVALID_NEURONNAMES"));
+            addErrorToPhrase(toBeChecked, "NN_INVALID_NEURONNAMES");
         }
     }
 

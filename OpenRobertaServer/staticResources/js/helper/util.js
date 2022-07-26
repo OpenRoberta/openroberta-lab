@@ -1,7 +1,21 @@
 define(["require", "exports", "message", "log", "jquery", "blockly", "simulation.constants", "guiState.controller", "webots.simulation", "jquery-validate", "bootstrap"], function (require, exports, MSG, LOG, $, Blockly, simulation_constants_1, GUISTATE_C, WEBOTSIM) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.toFixedPrecision = exports.closeSimRobotWindow = exports.openSimRobotWindow = exports.removeLinks = exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = void 0;
+    exports.toFixedPrecision = exports.closeSimRobotWindow = exports.openSimRobotWindow = exports.removeLinks = exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = exports.getTheStartBlock = void 0;
     var ANIMATION_DURATION = simulation_constants_1.default.ANIMATION_DURATION;
+    /**
+     * @return the (unique) start block from the program. Must exist.
+     */
+    function getTheStartBlock() {
+        var startBlock = null;
+        for (var _i = 0, _a = Blockly.Workspace.getByContainer('blocklyDiv').getTopBlocks(); _i < _a.length; _i++) {
+            var block = _a[_i];
+            if (!block.isDeletable()) {
+                return block;
+            }
+        }
+        throw 'start block not found. That is impossible.';
+    }
+    exports.getTheStartBlock = getTheStartBlock;
     var ratioWorkspace = 1;
     var simRobotWindowPositions = [];
     /**

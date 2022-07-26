@@ -1,7 +1,7 @@
 import * as GUISTATE_C from 'guiState.controller';
 import * as NN_UI from 'neuralnetwork.ui';
 import * as $ from 'jquery';
-import * as Blockly from 'blockly';
+import * as UTIL from 'util';
 import 'jquery-validate';
 
 /**
@@ -43,8 +43,7 @@ export function init() {
  * - reset node selection (yellow node)
  */
 export function saveNN2Blockly() {
-    var startBlock = getTheStartBlock();
-    startBlock.data = NN_UI.getStateAsJSONString();
+    NN_UI.saveNN2Blockly();
     NN_UI.resetUiOnTerminate();
 }
 
@@ -52,7 +51,7 @@ export function saveNN2Blockly() {
  * create the NN from the program XML. Called, when the simulation starts
  */
 export function mkNNfromProgramStartBlock() {
-    var startBlock = getTheStartBlock();
+    var startBlock = UTIL.getTheStartBlock();
     let nnStateAsJson;
     try {
         nnStateAsJson = JSON.parse(startBlock.data);
@@ -68,17 +67,4 @@ export function mkNNfromProgramStartBlock() {
 export function mkNNfromNNStepDataAndRunNNEditor() {
     mkNNfromProgramStartBlock();
     NN_UI.runNNEditor();
-}
-
-/**
- * @return the (unique) start block from the program. Must exist.
- */
-function getTheStartBlock() {
-    var startBlock = null;
-    for (const block of Blockly.Workspace.getByContainer('blocklyDiv').getTopBlocks()) {
-        if (!block.isDeletable()) {
-            return block;
-        }
-    }
-    throw 'start block not found. That is impossible.';
 }
