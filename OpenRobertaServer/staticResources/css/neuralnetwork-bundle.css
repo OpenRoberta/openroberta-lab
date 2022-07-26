@@ -215,6 +215,13 @@
     left: 240px;
 }
 
+#nn-name-message {
+    border: 12px 4px 4px 4px;
+    background: #fff;
+    color: #333;
+}
+
+
 .nn-type-button {
     position: relative;
     top: 5px;

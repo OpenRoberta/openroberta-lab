@@ -617,22 +617,22 @@ function runEditCard(nodeOrLink: Node | Link, coordinates: [number, number]) {
     (input.node() as HTMLInputElement).focus();
 }
 
-function checkInputOutputNeuronNameValid(oldName: string, newName: string) {
+function checkInputOutputNeuronNameValid(oldName: string, newName: string): string {
     if (newName.length > 6) {
-        return false;
+        return 'NN_TOO_LONG';
     }
     const validIdRegexp = new RegExp('^[A-Za-z][A-Za-z0-9_]*$');
     if (!validIdRegexp.test(newName)) {
-        return false;
+        return 'NN_INVALID';
     }
     if (oldName === newName) {
-        return true;
+        return null;
     }
     let allNodes = network.network;
     if (allNodes[0].find((v) => v.id === newName) || allNodes[allNodes.length - 1].find((v) => v.id === newName)) {
-        return false;
+        return 'NN_UN_USE';
     }
-    return true;
+    return null;
 }
 
 function updateNodeName(node: Node, newId: string) {
@@ -655,19 +655,25 @@ function runNameCard(node: Node, coordinates: [number, number]) {
     }
     let nameCard = D3.select('#nn-nameCard');
     let finishedButton = D3.select('#nn-name-finished');
-
     let input = nameCard.select('input');
     input.property('value', node.id);
+
+    let message = D3.select('#nn-name-message');
+    message.style('color', '#333');
+    message.text(MSG.get('NN_CHANGE'));
+
     input.on('keypress', () => {
         let event = D3.event as any;
         if (event.which === 13) {
             let userInput = input.property('value');
-            if (checkInputOutputNeuronNameValid(node.id, userInput)) {
+            let check = checkInputOutputNeuronNameValid(node.id, userInput);
+            if (check === null) {
                 updateNodeName(node, userInput);
                 nameCard.style('display', 'none');
                 drawNetworkUI(network);
             } else {
-                input.property('value', node.id);
+                message.style('color', 'red');
+                message.text(MSG.get(check));
             }
         }
     });
@@ -675,12 +681,14 @@ function runNameCard(node: Node, coordinates: [number, number]) {
         let event = D3.event as any;
         event.preventDefault && event.preventDefault();
         let userInput = input.property('value');
-        if (checkInputOutputNeuronNameValid(node.id, userInput)) {
+        let check = checkInputOutputNeuronNameValid(node.id, userInput);
+        if (checkInputOutputNeuronNameValid(node.id, userInput) === null) {
             node.id = userInput;
             nameCard.style('display', 'none');
             drawNetworkUI(network);
         } else {
-            input.property('value', node.id);
+            message.style('color', 'red');
+            message.text(MSG.get(check));
         }
     });
     let xPos = coordinates[0] + 20;

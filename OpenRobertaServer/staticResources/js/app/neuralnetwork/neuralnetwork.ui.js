@@ -600,20 +600,20 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     }
     function checkInputOutputNeuronNameValid(oldName, newName) {
         if (newName.length > 6) {
-            return false;
+            return 'NN_TOO_LONG';
         }
         var validIdRegexp = new RegExp('^[A-Za-z][A-Za-z0-9_]*$');
         if (!validIdRegexp.test(newName)) {
-            return false;
+            return 'NN_INVALID';
         }
         if (oldName === newName) {
-            return true;
+            return null;
         }
         var allNodes = network.network;
         if (allNodes[0].find(function (v) { return v.id === newName; }) || allNodes[allNodes.length - 1].find(function (v) { return v.id === newName; })) {
-            return false;
+            return 'NN_UN_USE';
         }
-        return true;
+        return null;
     }
     function updateNodeName(node, newId) {
         for (var i = 0; i < state.inputs.length; i++) {
@@ -636,17 +636,22 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         var finishedButton = D3.select('#nn-name-finished');
         var input = nameCard.select('input');
         input.property('value', node.id);
+        var message = D3.select('#nn-name-message');
+        message.style('color', '#333');
+        message.text(MSG.get('NN_CHANGE'));
         input.on('keypress', function () {
             var event = D3.event;
             if (event.which === 13) {
                 var userInput = input.property('value');
-                if (checkInputOutputNeuronNameValid(node.id, userInput)) {
+                var check = checkInputOutputNeuronNameValid(node.id, userInput);
+                if (check === null) {
                     updateNodeName(node, userInput);
                     nameCard.style('display', 'none');
                     drawNetworkUI(network);
                 }
                 else {
-                    input.property('value', node.id);
+                    message.style('color', 'red');
+                    message.text(MSG.get(check));
                 }
             }
         });
@@ -654,13 +659,15 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             var event = D3.event;
             event.preventDefault && event.preventDefault();
             var userInput = input.property('value');
-            if (checkInputOutputNeuronNameValid(node.id, userInput)) {
+            var check = checkInputOutputNeuronNameValid(node.id, userInput);
+            if (checkInputOutputNeuronNameValid(node.id, userInput) === null) {
                 node.id = userInput;
                 nameCard.style('display', 'none');
                 drawNetworkUI(network);
             }
             else {
-                input.property('value', node.id);
+                message.style('color', 'red');
+                message.text(MSG.get(check));
             }
         });
         var xPos = coordinates[0] + 20;
