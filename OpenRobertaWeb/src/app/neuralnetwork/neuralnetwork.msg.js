@@ -12,9 +12,4 @@ export function get(key) {
     return key;
 }
 
-var toIntegrateIntoBlocklyMsg = {
-    NN_CHANGE: 'Ändere den Namen',
-    NN_TOO_LONG: 'nicht mehr als 6 Zeichen',
-    NN_INVALID: 'ungültiger Name',
-    NN_UN_USE: 'wird bereits verwendet',
-};
+var toIntegrateIntoBlocklyMsg = {};

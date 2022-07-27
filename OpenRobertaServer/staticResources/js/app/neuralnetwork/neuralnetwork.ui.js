@@ -97,6 +97,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                             if (focusStyle !== FocusStyle.CLICK_NODE) {
                                 focusNode = null;
                             }
+                            hideAllCards();
                             drawNetworkUI(network);
                         });
                         D3.select('#nn-add-layers').on('click', function () {
@@ -105,6 +106,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                             }
                             state.networkShape[state.numHiddenLayers] = 2;
                             state.numHiddenLayers++;
+                            hideAllCards();
                             reconstructNNIncludingUI();
                         });
                         D3.select('#nn-remove-layers').on('click', function () {
@@ -113,6 +115,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                             }
                             state.numHiddenLayers--;
                             state.networkShape.splice(state.numHiddenLayers);
+                            hideAllCards();
                             reconstructNNIncludingUI();
                         });
                         activationDropdown = D3.select('#nn-activations').on('change', function () {
@@ -127,8 +130,10 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                         });
                         // Listen for css-responsive changes and redraw the svg network.
                         window.addEventListener('resize', function () {
+                            hideAllCards();
                             drawNetworkUI(network);
                         });
+                        hideAllCards();
                         reconstructNNIncludingUI();
                         return [2 /*return*/];
                 }
@@ -137,7 +142,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     }
     exports.runNNEditor = runNNEditor;
     function resetUiOnTerminate() {
-        $('#nn-editCard').css('display', 'none');
+        hideAllCards();
         focusNode = null;
     }
     exports.resetUiOnTerminate = resetUiOnTerminate;
@@ -386,6 +391,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                     }
                     var id = selectDefaultId();
                     state.inputs.push(id);
+                    hideAllCards();
                     reconstructNNIncludingUI();
                 };
             }
@@ -397,6 +403,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                     }
                     var id = selectDefaultId();
                     state.outputs.push(id);
+                    hideAllCards();
                     reconstructNNIncludingUI();
                 };
             }
@@ -407,6 +414,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                         return;
                     }
                     state.networkShape[hiddenIdx]++;
+                    hideAllCards();
                     reconstructNNIncludingUI();
                 };
             }
@@ -424,6 +432,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                         return;
                     }
                     state.inputs.pop();
+                    hideAllCards();
                     reconstructNNIncludingUI();
                 };
             }
@@ -434,6 +443,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                         return;
                     }
                     state.outputs.pop();
+                    hideAllCards();
                     reconstructNNIncludingUI();
                 };
             }
@@ -444,6 +454,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                         return;
                     }
                     state.networkShape[hiddenIdx]--;
+                    hideAllCards();
                     reconstructNNIncludingUI();
                 };
             }
@@ -567,7 +578,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 value2NodeOrLink(nodeOrLink, event.target.value);
             }
             else if (event.which === 13) {
-                editCard.style('display', 'none');
+                hideAllCards();
                 event.preventDefault && event.preventDefault();
                 return false;
             }
@@ -592,7 +603,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             return;
         });
         finishedButton.on('click', function () {
-            editCard.style('display', 'none');
+            hideAllCards();
             return false;
         });
         var xPos = coordinates[0] + 20;
@@ -615,19 +626,16 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         input.node().focus();
     }
     function checkInputOutputNeuronNameValid(oldName, newName) {
-        if (newName.length > 6) {
-            return 'NN_TOO_LONG';
-        }
         var validIdRegexp = new RegExp('^[A-Za-z][A-Za-z0-9_]*$');
         if (!validIdRegexp.test(newName)) {
-            return 'NN_INVALID';
+            return 'NN_INVALID_NEURONNAME';
         }
         if (oldName === newName) {
             return null;
         }
         var allNodes = network.network;
         if (allNodes[0].find(function (v) { return v.id === newName; }) || allNodes[allNodes.length - 1].find(function (v) { return v.id === newName; })) {
-            return 'NN_UN_USE';
+            return 'NN_USED_NEURONNAME';
         }
         return null;
     }
@@ -644,6 +652,12 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         }
         node.id = newId;
     }
+    function hideAllCards() {
+        var editCard = D3.select('#nn-editCard');
+        editCard.style('display', 'none');
+        var nameCard = D3.select('#nn-nameCard');
+        nameCard.style('display', 'none');
+    }
     function runNameCard(node, coordinates) {
         if (node.inputLinks.length !== 0 && node.outputs.length !== 0) {
             return; // only input and output neurons can change its name
@@ -654,7 +668,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         input.property('value', node.id);
         var message = D3.select('#nn-name-message');
         message.style('color', '#333');
-        message.text(MSG.get('NN_CHANGE'));
+        message.text(MSG.get('NN_CHANGE_NEURONNAME'));
         input.on('keypress', function () {
             var event = D3.event;
             if (event.which === 13) {
@@ -662,7 +676,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 var check = checkInputOutputNeuronNameValid(node.id, userInput);
                 if (check === null) {
                     updateNodeName(node, userInput);
-                    nameCard.style('display', 'none');
+                    hideAllCards();
                     drawNetworkUI(network);
                 }
                 else {
@@ -678,7 +692,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             var check = checkInputOutputNeuronNameValid(node.id, userInput);
             if (checkInputOutputNeuronNameValid(node.id, userInput) === null) {
                 node.id = userInput;
-                nameCard.style('display', 'none');
+                hideAllCards();
                 drawNetworkUI(network);
             }
             else {

@@ -61,6 +61,7 @@ export async function runNNEditor() {
         if (focusStyle !== FocusStyle.CLICK_NODE) {
             focusNode = null;
         }
+        hideAllCards();
         drawNetworkUI(network);
     });
 
@@ -70,6 +71,7 @@ export async function runNNEditor() {
         }
         state.networkShape[state.numHiddenLayers] = 2;
         state.numHiddenLayers++;
+        hideAllCards();
         reconstructNNIncludingUI();
     });
 
@@ -79,6 +81,7 @@ export async function runNNEditor() {
         }
         state.numHiddenLayers--;
         state.networkShape.splice(state.numHiddenLayers);
+        hideAllCards();
         reconstructNNIncludingUI();
     });
 
@@ -96,8 +99,10 @@ export async function runNNEditor() {
 
     // Listen for css-responsive changes and redraw the svg network.
     window.addEventListener('resize', () => {
+        hideAllCards();
         drawNetworkUI(network);
     });
+    hideAllCards();
     reconstructNNIncludingUI();
     return;
 
@@ -112,7 +117,7 @@ export async function runNNEditor() {
 }
 
 export function resetUiOnTerminate() {
-    $('#nn-editCard').css('display', 'none');
+    hideAllCards();
     focusNode = null;
 }
 
@@ -399,6 +404,7 @@ function drawNetworkUI(network: Network): void {
                 }
                 const id = selectDefaultId();
                 state.inputs.push(id);
+                hideAllCards();
                 reconstructNNIncludingUI();
             };
         } else if (isOutputLayer) {
@@ -409,6 +415,7 @@ function drawNetworkUI(network: Network): void {
                 }
                 const id = selectDefaultId();
                 state.outputs.push(id);
+                hideAllCards();
                 reconstructNNIncludingUI();
             };
         } else {
@@ -418,6 +425,7 @@ function drawNetworkUI(network: Network): void {
                     return;
                 }
                 state.networkShape[hiddenIdx]++;
+                hideAllCards();
                 reconstructNNIncludingUI();
             };
         }
@@ -436,6 +444,7 @@ function drawNetworkUI(network: Network): void {
                     return;
                 }
                 state.inputs.pop();
+                hideAllCards();
                 reconstructNNIncludingUI();
             };
         } else if (isOutputLayer) {
@@ -445,6 +454,7 @@ function drawNetworkUI(network: Network): void {
                     return;
                 }
                 state.outputs.pop();
+                hideAllCards();
                 reconstructNNIncludingUI();
             };
         } else {
@@ -454,6 +464,7 @@ function drawNetworkUI(network: Network): void {
                     return;
                 }
                 state.networkShape[hiddenIdx]--;
+                hideAllCards();
                 reconstructNNIncludingUI();
             };
         }
@@ -581,7 +592,7 @@ function runEditCard(nodeOrLink: Node | Link, coordinates: [number, number]) {
                 event.preventDefault && event.preventDefault();
                 value2NodeOrLink(nodeOrLink, event.target.value);
             } else if (event.which === 13) {
-                editCard.style('display', 'none');
+                hideAllCards();
                 event.preventDefault && event.preventDefault();
                 return false;
             }
@@ -606,7 +617,7 @@ function runEditCard(nodeOrLink: Node | Link, coordinates: [number, number]) {
         return;
     });
     finishedButton.on('click', () => {
-        editCard.style('display', 'none');
+        hideAllCards();
         return false;
     });
     let xPos = coordinates[0] + 20;
@@ -630,19 +641,16 @@ function runEditCard(nodeOrLink: Node | Link, coordinates: [number, number]) {
 }
 
 function checkInputOutputNeuronNameValid(oldName: string, newName: string): string {
-    if (newName.length > 6) {
-        return 'NN_TOO_LONG';
-    }
     const validIdRegexp = new RegExp('^[A-Za-z][A-Za-z0-9_]*$');
     if (!validIdRegexp.test(newName)) {
-        return 'NN_INVALID';
+        return 'NN_INVALID_NEURONNAME';
     }
     if (oldName === newName) {
         return null;
     }
     let allNodes = network.network;
     if (allNodes[0].find((v) => v.id === newName) || allNodes[allNodes.length - 1].find((v) => v.id === newName)) {
-        return 'NN_UN_USE';
+        return 'NN_USED_NEURONNAME';
     }
     return null;
 }
@@ -661,6 +669,13 @@ function updateNodeName(node: Node, newId: string) {
     node.id = newId;
 }
 
+function hideAllCards() {
+    let editCard = D3.select('#nn-editCard');
+    editCard.style('display', 'none');
+    let nameCard = D3.select('#nn-nameCard');
+    nameCard.style('display', 'none');
+}
+
 function runNameCard(node: Node, coordinates: [number, number]) {
     if (node.inputLinks.length !== 0 && node.outputs.length !== 0) {
         return; // only input and output neurons can change its name
@@ -672,7 +687,7 @@ function runNameCard(node: Node, coordinates: [number, number]) {
 
     let message = D3.select('#nn-name-message');
     message.style('color', '#333');
-    message.text(MSG.get('NN_CHANGE'));
+    message.text(MSG.get('NN_CHANGE_NEURONNAME'));
 
     input.on('keypress', () => {
         let event = D3.event as any;
@@ -681,7 +696,7 @@ function runNameCard(node: Node, coordinates: [number, number]) {
             let check = checkInputOutputNeuronNameValid(node.id, userInput);
             if (check === null) {
                 updateNodeName(node, userInput);
-                nameCard.style('display', 'none');
+                hideAllCards();
                 drawNetworkUI(network);
             } else {
                 message.style('color', 'red');
@@ -696,7 +711,7 @@ function runNameCard(node: Node, coordinates: [number, number]) {
         let check = checkInputOutputNeuronNameValid(node.id, userInput);
         if (checkInputOutputNeuronNameValid(node.id, userInput) === null) {
             node.id = userInput;
-            nameCard.style('display', 'none');
+            hideAllCards();
             drawNetworkUI(network);
         } else {
             message.style('color', 'red');
