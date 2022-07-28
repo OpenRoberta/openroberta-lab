@@ -693,7 +693,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             var userInput = input.property('value');
             var check = checkInputOutputNeuronNameValid(node.id, userInput);
             if (checkInputOutputNeuronNameValid(node.id, userInput) === null) {
-                node.id = userInput;
+                updateNodeName(node, userInput);
                 hideAllCards();
                 drawNetworkUI(network);
             }

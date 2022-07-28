@@ -712,7 +712,7 @@ function runNameCard(node: Node, coordinates: [number, number]) {
         let userInput = input.property('value');
         let check = checkInputOutputNeuronNameValid(node.id, userInput);
         if (checkInputOutputNeuronNameValid(node.id, userInput) === null) {
-            node.id = userInput;
+            updateNodeName(node, userInput);
             hideAllCards();
             drawNetworkUI(network);
         } else {
