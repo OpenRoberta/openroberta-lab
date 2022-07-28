@@ -48,12 +48,12 @@ export function setupNN(stateFromStartBlock: any) {
 export async function runNNEditor() {
     D3 = await import('d3');
     D3.select('#goto-sim').on('click', () => {
-        $.when($('#tabProgram').trigger('click')).done(function () {
+        $.when($('#tabProgram').trigger('click')).done(function() {
             $('#simButton').trigger('click');
         });
     });
 
-    D3.select('#nn-focus').on('change', function () {
+    D3.select('#nn-focus').on('change', function() {
         focusStyle = FocusStyle[(this as HTMLSelectElement).value];
         if (focusStyle === undefined || focusStyle === null) {
             focusStyle = FocusStyle.SHOW_ALL;
@@ -85,14 +85,14 @@ export async function runNNEditor() {
         reconstructNNIncludingUI();
     });
 
-    let activationDropdown = D3.select('#nn-activations').on('change', function () {
+    let activationDropdown = D3.select('#nn-activations').on('change', function() {
         state.activationKey = this.value;
         state.activation = H.activations[this.value];
         drawNetworkUI(network);
     });
     activationDropdown.property('value', getKeyFromValue(H.activations, state.activation));
 
-    D3.select('#nn-show-precision').on('change', function () {
+    D3.select('#nn-show-precision').on('change', function() {
         state.precision = this.value;
         drawNetworkUI(network);
     });
@@ -250,7 +250,7 @@ function drawNetworkUI(network: Network): void {
         let nodeGroup: D3Selection = container.append('g').attr({
             class: nodeClass,
             id: `${nodeId}`,
-            transform: `translate(${x},${y})`,
+            transform: `translate(${x},${y})`
         });
 
         let mainRectAngle = nodeGroup.append('rect').attr({
@@ -258,16 +258,16 @@ function drawNetworkUI(network: Network): void {
             y: 0,
             width: nodeSize,
             height: nodeSize,
-            'marker-start': 'url(#markerArrow)',
+            'marker-start': 'url(#markerArrow)'
         });
         if (focusNode !== undefined && focusNode != null && focusNode.id === node.id) {
             mainRectAngle.attr('style', 'outline: medium solid #fbdc00;');
         }
         nodeGroup
-            .on('dblclick', function () {
+            .on('dblclick', function() {
                 runNameCard(node, D3.mouse(container.node()));
             })
-            .on('click', function () {
+            .on('click', function() {
                 if ((D3.event as any).shiftKey) {
                     runNameCard(node, D3.mouse(container.node()));
                 } else if (inputNeuronNameEditingMode && node.inputLinks.length === 0) {
@@ -289,7 +289,7 @@ function drawNetworkUI(network: Network): void {
             x: 10,
             y: 0.66 * nodeSize,
             'text-anchor': 'start',
-            cursor: 'default',
+            cursor: 'default'
         });
         labelForId.append('tspan').text(nodeId);
         if (nodeType !== NodeType.INPUT) {
@@ -301,12 +301,12 @@ function drawNetworkUI(network: Network): void {
             .insert('div', ':first-child')
             .attr({
                 id: `canvas-${nodeId}`,
-                class: 'canvas',
+                class: 'canvas'
             })
             .style({
                 position: 'absolute',
                 left: `${x + 3}px`,
-                top: `${y + 3}px`,
+                top: `${y + 3}px`
             });
     }
 
@@ -327,19 +327,19 @@ function drawNetworkUI(network: Network): void {
         let datum = {
             source: {
                 y: source.cx + nodeSize / 2 + 2,
-                x: source.cy,
+                x: source.cy
             },
             target: {
                 y: dest.cx - nodeSize / 2,
-                x: dest.cy + ((index - (length - 1) / 2) / length) * 12,
-            },
+                x: dest.cy + ((index - (length - 1) / 2) / length) * 12
+            }
         };
         let diagonal = D3.svg.diagonal().projection((d) => [d.y, d.x]);
         line.attr({
             'marker-start': 'url(#markerArrow)',
             class: 'link',
             id: link.source.id + '-' + link.dest.id,
-            d: diagonal(datum, 0),
+            d: diagonal(datum, 0)
         });
 
         // Show the value of the link depending on focus-style
@@ -367,7 +367,7 @@ function drawNetworkUI(network: Network): void {
                 .append('path')
                 .attr('d', diagonal(datum, 0))
                 .attr('class', cssForPath)
-                .on('click', function () {
+                .on('click', function() {
                     runEditCard(link, D3.mouse(this));
                 });
         }
@@ -532,7 +532,7 @@ function drawNetworkUI(network: Network): void {
             );
             biasRect.attr('class', 'nn-bias-click');
             if (focusStyle !== FocusStyle.CLICK_NODE || focusNode === node) {
-                biasRect.on('click', function () {
+                biasRect.on('click', function() {
                     (D3.event as any).stopPropagation();
                     runEditCard(node, D3.mouse(container.node()));
                 });
@@ -543,11 +543,11 @@ function drawNetworkUI(network: Network): void {
                 x: -biasSize - 2,
                 y: nodeSize - biasSize + 3,
                 width: biasSize,
-                height: biasSize,
+                height: biasSize
             });
             biasRect.attr('class', 'nn-bias-click');
             if (focusStyle !== FocusStyle.CLICK_NODE || focusNode === node) {
-                biasRect.on('click', function () {
+                biasRect.on('click', function() {
                     (D3.event as any).stopPropagation();
                     runEditCard(node, D3.mouse(container.node()));
                 });
@@ -563,7 +563,7 @@ function drawNetworkUI(network: Network): void {
                 class: 'nn-showval',
                 id: 'val-' + id,
                 x: x,
-                y: y,
+                y: y
             })
             .text(valueToShow);
         drawValuesBox(text, valueForColor);
@@ -633,7 +633,7 @@ function runEditCard(nodeOrLink: Node | Link, coordinates: [number, number]) {
     editCard.style({
         left: `${xPos}px`,
         top: `${yPos}px`,
-        display: 'block',
+        display: 'block'
     });
     let name = nodeOrLink instanceof Link ? 'NN_WEIGHT' : 'NN_BIAS';
     editCard.select('.nn-type').text(MSG.get(name));
@@ -670,10 +670,12 @@ function updateNodeName(node: Node, newId: string) {
 }
 
 function hideAllCards() {
-    let editCard = D3.select('#nn-editCard');
-    editCard.style('display', 'none');
-    let nameCard = D3.select('#nn-nameCard');
-    nameCard.style('display', 'none');
+    if (D3 !== undefined && D3 !== null) {
+        let editCard = D3.select('#nn-editCard');
+        editCard.style('display', 'none');
+        let nameCard = D3.select('#nn-nameCard');
+        nameCard.style('display', 'none');
+    }
 }
 
 function runNameCard(node: Node, coordinates: [number, number]) {
@@ -726,7 +728,7 @@ function runNameCard(node: Node, coordinates: [number, number]) {
     nameCard.style({
         left: `${xPos}px`,
         top: `${yPos}px`,
-        display: 'block',
+        display: 'block'
     });
     let name = 'POPUP_NAME';
     nameCard.select('.nn-type').text(MSG.get(name));
@@ -746,7 +748,7 @@ function updateUI() {
             container.select(`#${baseName}`).style({
                 'stroke-dashoffset': 0,
                 'stroke-width': linkWidthScale(Math.abs(link.weight.get())),
-                stroke: colorScale(link.weight.get()),
+                stroke: colorScale(link.weight.get())
             });
             const val = container.select(`#val-${baseName}`);
             if (!val.empty()) {
@@ -828,8 +830,8 @@ function nodeOrLink2Value(nodeOrLink: Node | Link): string {
     return nodeOrLink instanceof Link
         ? nodeOrLink.weight.getWithPrecision('*', state.weightSuppressMultOp)
         : nodeOrLink instanceof Node
-        ? nodeOrLink.bias.getWithPrecision('*', state.weightSuppressMultOp)
-        : '';
+            ? nodeOrLink.bias.getWithPrecision('*', state.weightSuppressMultOp)
+            : '';
 }
 
 function value2NodeOrLink(nodeOrLink: Node | Link, value: string) {
