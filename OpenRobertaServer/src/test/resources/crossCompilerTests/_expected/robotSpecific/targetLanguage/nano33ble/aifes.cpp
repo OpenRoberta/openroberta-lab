@@ -4,104 +4,224 @@
 #include <Arduino.h>
 
 #include <Arduino_LSM9DS1.h>
+#include <aifes.h>
 #include <Arduino_HTS221.h>
 #include <Arduino_LPS22HB.h>
 #include <Arduino_APDS9960.h>
 #include <NEPODefs.h>
 
-void ____getAllRawData();
-void ____printClassWithHighestProbability();
+void ____checkClassification(bool ___expectSmall);
 
 
-double ___classes;
-double ___inputs;
-double ___neurons;
-std::list<double> ___probabilities;
-double ___mostLikelyClass;
-double ___pOfMostLikelyClass;
-double ___x;
-double ___y;
-double ___z;
+double ___error;
+std::list<double> ___outputs;
+bool ___success;
+double ___output;
 float xAsFloat, yAsFloat, zAsFloat;
-int _taster_record = 2;
+uint32_t global_epoch_counter = 0;
+uint32_t FNN_structure[3] = {2,3,1};
+AIFES_E_activations FNN_activations[2];
+uint32_t weight_number = AIFES_E_flat_weights_number_fnn_f32(FNN_structure,3);
+float *FlatWeights;
+AIFES_E_model_parameter_fnn_f32 FNN;
+uint32_t i;
+AIFES_E_init_weights_parameter_fnn_f32  FNN_INIT_WEIGHTS;
+AIFES_E_training_parameter_fnn_f32  FNN_TRAIN;
+
+void printLoss(float loss) {
+    global_epoch_counter++;
+}
+
+float input_data[4][2];
+float target_data[4][1];
+float classify_data[2];
+int8_t errorInference = 0;
+int8_t targetSet = 0;
+int8_t targetData = 0;
+int8_t trainingSet = 0;
+int8_t trainingData = 0;
+int8_t currentClassifySet = 0;
+uint16_t input_shape[] = {4, (uint16_t)FNN_structure[0]};
+aitensor_t input_tensor = AITENSOR_2D_F32(input_shape, input_data);
+uint16_t target_shape[] = {4, (uint16_t)FNN_structure[2]};
+aitensor_t target_tensor = AITENSOR_2D_F32(target_shape, target_data);
+float output_train_data[4];
+uint16_t output_train_shape[] = {4, (uint16_t)FNN_structure[2]};
+aitensor_t output_train_tensor = AITENSOR_2D_F32(output_train_shape, output_train_data);
+uint16_t classify_shape[] = {1, (uint16_t)FNN_structure[0]};
+aitensor_t classify_tensor = AITENSOR_2D_F32(classify_shape, classify_data);
+float output_classify_data[1];
+uint16_t output_classify_shape[] = {1, (uint16_t)FNN_structure[2]};
+aitensor_t output_classify_tensor = AITENSOR_2D_F32(output_classify_shape, output_classify_data);
+
+void addInputData(float data) {
+     input_data[trainingSet][trainingData] = data;
+     if ((trainingSet >= 3) && (trainingData >= 1 )) {
+          trainingSet = 0;
+          trainingData = 0;
+     } else if ((trainingSet < 3) && (trainingData >= 1)){
+          trainingSet = trainingSet + 1;
+          trainingData = 0;
+     } else if (trainingData < 1) {
+          trainingData = trainingData + 1;
+     }
+}
+
+void addTargetData(float data) {
+     target_data[targetSet][targetData] = data;
+     if ((targetSet >= 3) && (targetData >= 0)) {
+          targetSet = 0;
+          targetData = 0;
+     } else if ((targetSet < 3) && (targetData >= 0)){
+          targetSet = targetSet + 1;
+          targetData = 0;
+     } else if (targetData < 0) {
+          targetData = targetData + 1;
+     }
+}
+
+void addClassifyData(float data) {
+     classify_data[currentClassifySet] = data;
+     if (currentClassifySet >= 1) {
+          currentClassifySet = 0;
+     } else if (currentClassifySet < 1) {
+          currentClassifySet = currentClassifySet + 1;
+     }
+}
 int _led_L = LED_BUILTIN;
 int rAsInt, gAsInt, bAsInt;
 
-void ____getAllRawData() {
-    // visitNeuralNetworkInitRawData
-    while (true) {
-        if ( digitalRead(_taster_record) ) {
-            break;
-        }
-        delay(1);
+void ____checkClassification(bool ___expectSmall) {
+    if ( ___error != 0 ) {
+        Serial.println("Error in classify");
+        Serial.println(___error);
+        ___success = false;
     }
-    while ( true ) {
-        if ( ! digitalRead(_taster_record) ) {
-            break;
+    ___output = _getListElementByIndex(___outputs, 0);
+    if ( ___expectSmall ) {
+        if ( ___output > 0.2 ) {
+            Serial.println("LT-Error in output");
+            Serial.println(___output);
+            ___success = false;
         }
-        while (true) {
-            if ( (IMU.accelerationAvailable()?(IMU.readAcceleration(xAsFloat,yAsFloat,zAsFloat),___x = (double) xAsFloat,___y = (double) yAsFloat,___z = (double) zAsFloat,1) : 0) ) {
-                break;
-            }
-            delay(1);
+    } else {
+        if ( ___output < 0.8 ) {
+            Serial.println("GT-Error in output");
+            Serial.println(___output);
+            ___success = false;
         }
-        // visitNeuralNetworkAddRawData
-        // visitNeuralNetworkAddRawData
-        // visitNeuralNetworkAddRawData
-        delay(1);
     }
-}
-
-void ____printClassWithHighestProbability() {
-    ___mostLikelyClass = 0;
-    ___pOfMostLikelyClass = 0;
-    for ( double ___i : ___probabilities ) {
-        if ( _getListElementByIndex(___probabilities, ___i) > ___pOfMostLikelyClass ) {
-            ___mostLikelyClass = ___i;
-            ___pOfMostLikelyClass = _getListElementByIndex(___probabilities, ___i);
-        }
-        delay(1);
-    }
-    Serial.println(___mostLikelyClass);
-    Serial.println(___pOfMostLikelyClass);
 }
 
 void setup()
 {
     Serial.begin(9600);
     IMU.begin();
-    pinMode(_taster_record, INPUT);
+    FNN_activations[0] = AIfES_E_sigmoid;
+    FNN_activations[1] = AIfES_E_sigmoid;
+    FNN.layer_count = 3;
+    FNN.fnn_structure = FNN_structure;
+    FNN.fnn_activations = FNN_activations;
+    FlatWeights = (float *)malloc(sizeof(float)*weight_number);
+    FNN.flat_weights = FlatWeights;
+    FNN_INIT_WEIGHTS.init_weights_method = AIfES_E_init_uniform;
+    FNN_INIT_WEIGHTS.min_init_uniform = -2;
+    FNN_INIT_WEIGHTS.max_init_uniform = 2;
+    FNN_TRAIN.optimizer = AIfES_E_adam;
+    FNN_TRAIN.learn_rate = 0.5f;
+    FNN_TRAIN.sgd_momentum = 0.0;
+    FNN_TRAIN.batch_size = 4;
+    FNN_TRAIN.epochs = 1000;
+    FNN_TRAIN.epochs_loss_print_interval = 10;
+    FNN_TRAIN.early_stopping = AIfES_E_early_stopping_on;
+    FNN_TRAIN.early_stopping_target_loss = 0.004;
+    FNN_TRAIN.loss_print_function = printLoss;
     HTS.begin();
     pinMode(_led_L, OUTPUT);
     BARO.begin();
     APDS.begin();
-    ___classes = 4;
-    ___inputs = 3;
-    ___neurons = 30;
-    ___probabilities = _createListRepeat(___classes, (double) 0);
-    ___mostLikelyClass = 0;
-    ___pOfMostLikelyClass = 0;
-    ___x = 0;
-    ___y = 0;
-    ___z = 0;
+    ___error = 0;
+    ___outputs = {0};
+    ___success = true;
+    ___output = 0;
 }
 
 void loop()
 {
-    // visitNeuralNetworkSetup
-    for (int ___classNumber = 0; ___classNumber < ___classes; ___classNumber += 1) {
-        for (int ___datasets = 1; ___datasets < 10; ___datasets += 1) {
-            ____getAllRawData();
-            // visitNeuralNetworkAddTrainingsData
-            delay(1);
+    ___success = true;
+    Serial.println("START");
+    trainingData = 0;
+    trainingSet = 0;
+    targetData = 0;
+    targetSet = 0;
+    currentClassifySet = 0;
+
+    for (int i = 0; i < 4; i++){
+        for (int j = 0; j < 2; j++) {
+            input_data[i][j] = 0.0;
         }
-        delay(1);
+     }
+
+    for (int i = 0; i < 4; i++){
+        for (int j = 0; j < 1; j++) {
+            target_data[i][j] = 0.0;
+        }
+     }
+    addInputData(0);
+    addInputData(0);
+    addTargetData(0);
+    addInputData(0);
+    addInputData(1);
+    addTargetData(1);
+    addInputData(1);
+    addInputData(0);
+    addTargetData(1);
+    addInputData(1);
+    addInputData(1);
+    addTargetData(0);
+    ___error = AIFES_E_training_fnn_f32(&input_tensor,&target_tensor,&FNN,&FNN_TRAIN,&FNN_INIT_WEIGHTS,&output_train_tensor);
+    if ( ___error != 0 ) {
+        Serial.println("Error in train");
+        Serial.println(___error);
+        ___success = false;
+    } else {
+
+    for (int i = 0; i < 2; i++) {
+        classify_data[i] = 0.0;
     }
-    // visitNeuralNetworkTrain
-    while ( true ) {
-        ____getAllRawData();
-        // visitNeuralNetworkClassify
-        ____printClassWithHighestProbability();
-        delay(1);
+        addClassifyData(0);
+        addClassifyData(0);
+        ___error = (errorInference = AIFES_E_inference_fnn_f32(&classify_tensor,&FNN,&output_classify_tensor)==0?(___outputs.assign(output_classify_data, output_classify_data + ___outputs.size()),0):errorInference);
+        ____checkClassification(true);
+
+    for (int i = 0; i < 2; i++) {
+        classify_data[i] = 0.0;
+    }
+        addClassifyData(0);
+        addClassifyData(1);
+        ___error = (errorInference = AIFES_E_inference_fnn_f32(&classify_tensor,&FNN,&output_classify_tensor)==0?(___outputs.assign(output_classify_data, output_classify_data + ___outputs.size()),0):errorInference);
+        ____checkClassification(false);
+
+    for (int i = 0; i < 2; i++) {
+        classify_data[i] = 0.0;
+    }
+        addClassifyData(1);
+        addClassifyData(0);
+        ___error = (errorInference = AIFES_E_inference_fnn_f32(&classify_tensor,&FNN,&output_classify_tensor)==0?(___outputs.assign(output_classify_data, output_classify_data + ___outputs.size()),0):errorInference);
+        ____checkClassification(false);
+
+    for (int i = 0; i < 2; i++) {
+        classify_data[i] = 0.0;
+    }
+        addClassifyData(1);
+        addClassifyData(1);
+        ___error = (errorInference = AIFES_E_inference_fnn_f32(&classify_tensor,&FNN,&output_classify_tensor)==0?(___outputs.assign(output_classify_data, output_classify_data + ___outputs.size()),0):errorInference);
+        ____checkClassification(true);
+        if ( ___success ) {
+            Serial.println("SUCCESS");
+        } else {
+            Serial.println("AT LEAST ONE ERROR");
+        }
+        delay(10000);
     }
 }

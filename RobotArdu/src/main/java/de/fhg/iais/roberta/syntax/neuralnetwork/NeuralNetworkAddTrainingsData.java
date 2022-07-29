@@ -18,4 +18,21 @@ public final class NeuralNetworkAddTrainingsData extends Stmt {
         setReadOnly();
     }
 
+    public String getValueNNTrain(Expr rawData) {
+        String rawValue = rawData.toString();
+        if ( rawValue.contains("NumConst") ) {
+            rawValue = rawValue.replace("NumConst", "");
+            rawValue = rawValue.replace("[", "");
+            rawValue = rawValue.replace("]", "");
+            rawValue = rawValue.replace("value: ", "");
+        }
+        if ( rawValue.contains("Var") ) {
+            rawValue = rawValue.replace("Var", "");
+            rawValue = rawValue.replace("[", "");
+            rawValue = rawValue.replace("]", "");
+            rawValue = rawValue.replace(" ", "___");
+        }
+        return rawValue;
+    }
+
 }

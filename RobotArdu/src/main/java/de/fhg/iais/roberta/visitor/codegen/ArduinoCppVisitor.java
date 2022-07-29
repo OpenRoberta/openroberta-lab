@@ -599,6 +599,9 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                 case SC.HTS221:
                     headerFiles.add("#include <Arduino_HTS221.h>");
                     break;
+                case "AIFES":
+                    headerFiles.add("#include <aifes.h>");
+                    break;
                 default:
                     throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.componentType);
             }
@@ -749,6 +752,32 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                 case SC.HTS221:
                     this.sb.append("HTS").append(".begin();");
                     nlIndent();
+                    break;
+                case "AIFES":
+                    int FNN_3_LAYERS = Integer.parseInt(usedConfigurationBlock.getProperty("AIFES_FNN_LAYERS"));
+                    for ( int i = 0; i < FNN_3_LAYERS - 1; i++ ) {
+                        if ( i != 0 ) {
+                            this.sb.append("    ");
+                        }
+                        this.sb.append("FNN_activations[" + i + "] = " + "AIfES_E_" + usedConfigurationBlock.getProperty("AIFES_LEARNINGFUNCTION") + ";\n");
+                    }
+                    this.sb.append("    FNN.layer_count = " + usedConfigurationBlock.getProperty("AIFES_FNN_LAYERS") + ";\n")
+                        .append("    FNN.fnn_structure = FNN_structure;\n")
+                        .append("    FNN.fnn_activations = FNN_activations;\n")
+                        .append("    FlatWeights = (float *)malloc(sizeof(float)*weight_number);\n")
+                        .append("    FNN.flat_weights = FlatWeights;\n")
+                        .append("    FNN_INIT_WEIGHTS.init_weights_method = AIfES_E_" + usedConfigurationBlock.getProperty("AIFES_WEIGHT") + ";\n")
+                        .append("    FNN_INIT_WEIGHTS.min_init_uniform = " + usedConfigurationBlock.getProperty("AIFES_MIN_WEIGHT") + ";\n")
+                        .append("    FNN_INIT_WEIGHTS.max_init_uniform = " + usedConfigurationBlock.getProperty("AIFES_MAX_WEIGHT") + ";\n")
+                        .append("    FNN_TRAIN.optimizer = AIfES_E_" + usedConfigurationBlock.getProperty("AIFES_OPTIMIER") + ";\n")
+                        .append("    FNN_TRAIN.learn_rate = " + usedConfigurationBlock.getProperty("AIFES_LEARNINGRATE") + "f;\n")
+                        .append("    FNN_TRAIN.sgd_momentum = " + usedConfigurationBlock.getProperty("AIFES_MOMENTUM") + ";\n")
+                        .append("    FNN_TRAIN.batch_size = " + usedConfigurationBlock.getProperty("AIFES_DATASET") + ";\n")
+                        .append("    FNN_TRAIN.epochs = " + usedConfigurationBlock.getProperty("AIFES_EPOCHS") + ";\n")
+                        .append("    FNN_TRAIN.epochs_loss_print_interval = 10;\n")
+                        .append("    FNN_TRAIN.early_stopping = AIfES_E_early_stopping_on;\n")//Prüfe early_stopping, ob in config
+                        .append("    FNN_TRAIN.early_stopping_target_loss = 0.004;\n")
+                        .append("    FNN_TRAIN.loss_print_function = printLoss;\n    ");
                     break;
                 default:
                     throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.componentType);
@@ -929,6 +958,49 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                     break;
                 case SC.LPS22HB:
                 case SC.HTS221:
+                    break;
+                case "AIFES":
+                    this.sb.append("uint32_t global_epoch_counter = 0; \n")
+                        .append("uint32_t FNN_structure[" + cc.getProperty("AIFES_FNN_LAYERS") + "] = {" + cc.getProperty("AIFES_NUMBER_INPUT_NEURONS") + "," + cc.getProperty("AIFES_NUMBER_HIDDENLAYERS_NEURONS") + "," + cc.getProperty("AIFES_NUMBER_OUTPUT_NEURONS") + "}; \n")
+                        .append("AIFES_E_activations FNN_activations[" + (Integer.parseInt(cc.getProperty("AIFES_FNN_LAYERS")) + -1) + "];\n")
+                        .append("uint32_t weight_number = AIFES_E_flat_weights_number_fnn_f32(FNN_structure," + cc.getProperty("AIFES_FNN_LAYERS") + ");\n")
+                        .append("float *FlatWeights;\n")
+                        .append("AIFES_E_model_parameter_fnn_f32 FNN;\n")
+                        .append("uint32_t i;\n")
+                        .append("AIFES_E_init_weights_parameter_fnn_f32  FNN_INIT_WEIGHTS;\n")
+                        .append("AIFES_E_training_parameter_fnn_f32  FNN_TRAIN;\n")
+                        .append("\nvoid printLoss(float loss) {\n    global_epoch_counter++;\n}\n \n")
+                        .append("float input_data[" + cc.getProperty("AIFES_DATASET") + "][" + cc.getProperty("AIFES_NUMBER_INPUT_NEURONS") + "];\n")
+                        .append("float target_data[" + cc.getProperty("AIFES_DATASET") + "][" + cc.getProperty("AIFES_NUMBER_OUTPUT_NEURONS") + "];\n")
+                        .append("float classify_data[" + cc.getProperty("AIFES_NUMBER_INPUT_NEURONS") + "];\n")
+                        .append("int8_t errorInference = 0;\n")
+                        .append("int8_t targetSet = 0;\n")
+                        .append("int8_t targetData = 0;\n")
+                        .append("int8_t trainingSet = 0;\n")
+                        .append("int8_t trainingData = 0;\n")
+                        .append("int8_t currentClassifySet = 0;\n")
+                        .append("uint16_t input_shape[] = {" + (Integer.parseInt(cc.getProperty("AIFES_DATASET"))) + ", (uint16_t)FNN_structure[0]};\n")
+                        .append("aitensor_t input_tensor = AITENSOR_2D_F32(input_shape, input_data);\n")
+                        .append("uint16_t target_shape[] = {" + (Integer.parseInt(cc.getProperty("AIFES_DATASET"))) + ", (uint16_t)FNN_structure[" + (Integer.parseInt(cc.getProperty("AIFES_FNN_LAYERS")) - 1) + "]};\n")
+                        .append("aitensor_t target_tensor = AITENSOR_2D_F32(target_shape, target_data);\n")
+                        .append("float output_train_data[" + (Integer.parseInt(cc.getProperty("AIFES_DATASET"))) + "];\n")
+                        .append("uint16_t output_train_shape[] = {" + (Integer.parseInt(cc.getProperty("AIFES_DATASET"))) + ", (uint16_t)FNN_structure[" + (Integer.parseInt(cc.getProperty("AIFES_FNN_LAYERS")) - 1) + "]};\n")
+                        .append("aitensor_t output_train_tensor = AITENSOR_2D_F32(output_train_shape, output_train_data);\n")
+                        .append("uint16_t classify_shape[] = {1, (uint16_t)FNN_structure[0]};\n")
+                        .append("aitensor_t classify_tensor = AITENSOR_2D_F32(classify_shape, classify_data);\n")
+                        .append("float output_classify_data[1];\n")
+                        .append("uint16_t output_classify_shape[] = {1, (uint16_t)FNN_structure[" + (Integer.parseInt(cc.getProperty("AIFES_FNN_LAYERS")) - 1) + "]};\n")
+                        .append("aitensor_t output_classify_tensor = AITENSOR_2D_F32(output_classify_shape, output_classify_data);\n")
+
+                        .append("\nvoid addInputData(float data) {\n     input_data[trainingSet][trainingData] = data;\n     if ((trainingSet >= " + (Integer.parseInt(cc.getProperty("AIFES_DATASET")) - 1) + ") && (trainingData >= " + (Integer.parseInt(cc.getProperty("AIFES_NUMBER_INPUT_NEURONS")) + -1) + " )) {\n          trainingSet = 0;\n          trainingData = 0;\n     }")
+                        .append(" else if ((trainingSet < " + (Integer.parseInt(cc.getProperty("AIFES_DATASET")) - 1) + ") && (trainingData >= " + (Integer.parseInt(cc.getProperty("AIFES_NUMBER_INPUT_NEURONS")) + -1) + ")){\n          trainingSet = trainingSet + 1;\n          trainingData = 0;\n     }")
+                        .append(" else if (trainingData < " + (Integer.parseInt(cc.getProperty("AIFES_NUMBER_INPUT_NEURONS")) + -1) + ") {\n          trainingData = trainingData + 1;\n     }\n}\n")
+
+                        .append("\nvoid addTargetData(float data) {\n     target_data[targetSet][targetData] = data;\n     if ((targetSet >= " + (Integer.parseInt(cc.getProperty("AIFES_DATASET")) - 1) + ") && (targetData >= " + (Integer.parseInt(cc.getProperty("AIFES_NUMBER_OUTPUT_NEURONS")) + -1) + ")) {\n          targetSet = 0;\n          targetData = 0;\n     }")
+                        .append(" else if ((targetSet < " + (Integer.parseInt(cc.getProperty("AIFES_DATASET")) - 1) + ") && (targetData >= " + (Integer.parseInt(cc.getProperty("AIFES_NUMBER_OUTPUT_NEURONS")) + -1) + ")){\n          targetSet = targetSet + 1;\n          targetData = 0;\n     }")
+                        .append(" else if (targetData < " + (Integer.parseInt(cc.getProperty("AIFES_NUMBER_OUTPUT_NEURONS")) + -1) + ") {\n          targetData = targetData + 1;\n     }\n}\n")
+
+                        .append("\nvoid addClassifyData(float data) {\n     classify_data[currentClassifySet] = data;\n     if (currentClassifySet >= 1) {\n          currentClassifySet = 0;\n     } else if (currentClassifySet < 1) {\n          currentClassifySet = currentClassifySet + 1;\n     }\n}\n");
                     break;
                 default:
                     throw new DbcException("Configuration block is not supported: " + cc.componentType);

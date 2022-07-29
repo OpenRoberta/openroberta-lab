@@ -22,9 +22,11 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
+import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkAddClassifyData;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkAddRawData;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkAddTrainingsData;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkClassify;
+import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkInitClassifyData;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkInitRawData;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkSetup;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkTrain;
@@ -228,6 +230,17 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     public Void visitNeuralNetworkTrain(NeuralNetworkTrain nn) {
         return null;
     }
+
+    @Override
+    public Void visitNeuralNetworkAddClassifyData(NeuralNetworkAddClassifyData nn) {
+        return null;
+    }
+
+    @Override
+    public Void visitNeuralNetworkInitClassifyData(NeuralNetworkInitClassifyData nn) {
+        return null;
+    }
+
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor pinGetValueSensor) {

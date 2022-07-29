@@ -7,18 +7,18 @@ import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
-@NepoPhrase(name = "NEURAL_NETWORK_ADD_RAWDATA", category = "STMT", blocklyNames = {"robActions_aifes_addrawdata"})
-public final class NeuralNetworkAddRawData extends Stmt {
-    @NepoValue(name = "NN_RAW_DATA", type = BlocklyType.CAPTURED_TYPE)
-    public Expr rawData;
+@NepoPhrase(name = "NEURAL_NETWORK_ADD_CLASSFYDATA", category = "STMT", blocklyNames = {"robActions_aifes_addclassifydata"})
+public final class NeuralNetworkAddClassifyData extends Stmt {
+    @NepoValue(name = "NN_CLASSIFY_DATA", type = BlocklyType.CAPTURED_TYPE)
+    public Expr classNumber;
 
-    public NeuralNetworkAddRawData(BlocklyProperties properties, Expr rawData) {
+    public NeuralNetworkAddClassifyData(BlocklyProperties properties, Expr classNumber) {
         super(properties);
-        this.rawData = rawData;
+        this.classNumber = classNumber;
         setReadOnly();
     }
 
-    public String getValueNN(Expr rawData) {
+    public String getValueNNClassify(Expr rawData) {
         String rawValue = rawData.toString();
         if ( rawValue.contains("NumConst") ) {
             rawValue = rawValue.replace("NumConst", "");
