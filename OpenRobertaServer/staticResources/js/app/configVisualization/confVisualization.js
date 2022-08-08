@@ -91,31 +91,38 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
             };
             this.createBlockPorts = function (block) {
                 block.ports = [];
-                block.inputList.forEach(function (input, index) {
-                    if (index === 0) {
-                        if (_this.robot.getPortByName(block.confBlock)) {
-                            _this.appendPortAndConnection(block, input.fieldRow[0].textElement_, name, block.confBlock);
-                        }
-                    }
-                    else {
-                        input.fieldRow.forEach(function (_a) {
-                            var fieldGroup_ = _a.fieldGroup_, name = _a.name, value_ = _a.value_;
-                            name = name || value_;
-                            if (name) {
-                                var connectedTo = _this.robot.getPortByName(block.confBlock + ' ' + value_)
-                                    ? block.confBlock + ' ' + value_
-                                    : _this.robot.getPortByName(block.getFieldValue(name))
-                                        ? block.getFieldValue(name)
-                                        : _this.robot.getPortByName(name)
-                                            ? name
-                                            : null;
-                                if (connectedTo) {
-                                    _this.appendPortAndConnection(block, fieldGroup_, name, connectedTo);
-                                }
+                if (block.inputList.length > 0) {
+                    block.inputList.forEach(function (input, index) {
+                        if (index === 0) {
+                            if (_this.robot.getPortByName(block.confBlock)) {
+                                _this.appendPortAndConnection(block, input.fieldRow[0].textElement_, name, block.confBlock);
                             }
-                        });
+                        }
+                        else {
+                            input.fieldRow.forEach(function (_a) {
+                                var fieldGroup_ = _a.fieldGroup_, name = _a.name, value_ = _a.value_;
+                                name = name || value_;
+                                if (name) {
+                                    var connectedTo = _this.robot.getPortByName(block.confBlock + ' ' + value_)
+                                        ? block.confBlock + ' ' + value_
+                                        : _this.robot.getPortByName(block.getFieldValue(name))
+                                            ? block.getFieldValue(name)
+                                            : _this.robot.getPortByName(name)
+                                                ? name
+                                                : null;
+                                    if (connectedTo) {
+                                        _this.appendPortAndConnection(block, fieldGroup_, name, connectedTo);
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+                else {
+                    if (_this.robot.getPortByName(block.confBlock)) {
+                        _this.appendPortAndConnection(block, block.inputList[0], block.confBlock, block.confBlock);
                     }
-                });
+                }
             };
             this.appendPortAndConnection = function (block, svgElement, name, connectedTo) {
                 var matrix = svgElement.transform.baseVal.getItem(0).matrix;

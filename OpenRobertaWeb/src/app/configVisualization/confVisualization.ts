@@ -255,29 +255,35 @@ export class CircuitVisualization {
 
     createBlockPorts = (block) => {
         block.ports = [];
-        block.inputList.forEach((input, index) => {
-            if (index === 0) {
-                if (this.robot.getPortByName(block.confBlock)) {
-                    this.appendPortAndConnection(block, input.fieldRow[0].textElement_, name, block.confBlock);
-                }
-            } else {
-                input.fieldRow.forEach(({ fieldGroup_, name, value_ }) => {
-                    name = name || value_;
-                    if (name) {
-                        const connectedTo = this.robot.getPortByName(block.confBlock + ' ' + value_)
-                            ? block.confBlock + ' ' + value_
-                            : this.robot.getPortByName(block.getFieldValue(name))
-                            ? block.getFieldValue(name)
-                            : this.robot.getPortByName(name)
-                            ? name
-                            : null;
-                        if (connectedTo) {
-                            this.appendPortAndConnection(block, fieldGroup_, name, connectedTo);
-                        }
+        if (block.inputList.length > 0) {
+            block.inputList.forEach((input, index) => {
+                if (index === 0) {
+                    if (this.robot.getPortByName(block.confBlock)) {
+                        this.appendPortAndConnection(block, input.fieldRow[0].textElement_, name, block.confBlock);
                     }
-                });
+                } else {
+                    input.fieldRow.forEach(({ fieldGroup_, name, value_ }) => {
+                        name = name || value_;
+                        if (name) {
+                            const connectedTo = this.robot.getPortByName(block.confBlock + ' ' + value_)
+                                ? block.confBlock + ' ' + value_
+                                : this.robot.getPortByName(block.getFieldValue(name))
+                                ? block.getFieldValue(name)
+                                : this.robot.getPortByName(name)
+                                ? name
+                                : null;
+                            if (connectedTo) {
+                                this.appendPortAndConnection(block, fieldGroup_, name, connectedTo);
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            if (this.robot.getPortByName(block.confBlock)) {
+                this.appendPortAndConnection(block, block.inputList[0], block.confBlock, block.confBlock);
             }
-        });
+        }
     };
 
     appendPortAndConnection = (block, svgElement, name, connectedTo) => {
