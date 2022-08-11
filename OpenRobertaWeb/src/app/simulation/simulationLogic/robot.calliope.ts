@@ -206,6 +206,12 @@ export default class RobotCalliope extends RobotBaseStationary {
             this.buttons.color2Keys['#cb0034e1'] = ['A', 'B'];
             this.buttons.color2Keys['#cc0033e0'] = ['A', 'B'];
             this.buttons.color2Keys['#0000ff99'] = ['A', 'B'];
+            this.buttons.color2Keys['#fe0000b3'] = ['A', 'B'];
+            this.buttons.color2Keys['#cb0033e0'] = ['A', 'B'];
+            this.buttons.color2Keys['#0000fe99'] = ['A', 'B'];
+            this.buttons.color2Keys['#ca0034e0'] = ['A', 'B'];
+            this.buttons.color2Keys['#d3002bd8'] = ['A', 'B'];
+            this.buttons.color2Keys['#cb0033e0'] = ['A', 'B'];
         }
         if (mySensorPins.length > 0) {
             this.pinSensors = new Pins(mySensorPins, this.id, { x: -28, y: 30 }, { x: 269, y: 125 });

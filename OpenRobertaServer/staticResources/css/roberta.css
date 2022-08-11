@@ -505,6 +505,7 @@ canvas.border {
 
 #valuesContent {
     min-width: 330px;
+    overflow-y: auto;
 }
 
 .customDropdown {
@@ -1185,6 +1186,7 @@ button#simCustomObstacle.typcn:before {
     right: 24px;
     color: #f1f1f1;
     position: absolute;
+    z-index: 99999;
 }
 
 .simWindow#simRobotWindow button.close:hover {

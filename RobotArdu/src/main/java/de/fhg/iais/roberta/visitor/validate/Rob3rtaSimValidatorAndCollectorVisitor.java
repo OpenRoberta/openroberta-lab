@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
 
-public class Rob3rtaSimValidatorAndCollectorVisitor extends NIBOValidatorAndCollectorVisitor {
+public class Rob3rtaSimValidatorAndCollectorVisitor extends Rob3rtaValidatorAndCollectorVisitor {
     public Rob3rtaSimValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(brickConfiguration, beanBuilders);
     }
