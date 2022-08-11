@@ -160,15 +160,17 @@
             <h3 class="auto-cursor-target" id="ProgrammingBlocksArduino-»OLEDSSD1306I²Cshowtext...incolumn...inrow...«">
                 »OLED SSD 1306 I²C show text ... in column ... in row ... «</h3>
             <p>With this block you can display a text on the OLED SSD 1306 display, which can be connected via I²C to
-                your Arduino. This display has 100 columns and 50 rows.</p>
+                your Arduino. This display has 128 by either 32 or 64 pixels. Because each character is 7 by 5 pixels
+                large, this results in an effective size of 122 columns and either 24 or 56 rows depending on the
+                display size.</p>
             <p>Input values:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-left">String, the text that you want display.</li>
                 <li class="typcn typcn-arrow-left">Number, the column in which the text will be displayed. Number
-                    between 0 and 100.</li>
+                    between 0 and 122.</li>
                 <li class="typcn typcn-arrow-left">Number, the row in which the text will be displayed. Number between 0
-                    and 50.</li>
+                    and 24 or 56 depending on the display.</li>
             </ul><br>
         </div>
         <div id="robActions_display_clear_oledssd1306i2c" class="help expert">
