@@ -407,11 +407,11 @@ export const ROBOTS = {
 
             //build in
             { name: 'joystick', position: { x: 35, y: 285 } },
-            { name: 'buzzer', position: { x: 98, y: 238 } },
+            { name: 'buzzer', position: { x: 235, y: 340 } },
             { name: 'accelerometer', position: { x: 108, y: 238 } },
-            { name: 'rgbled', position: { x: 118, y: 238 } },
-            { name: 'light', position: { x: 138, y: 238 } },
-            { name: 'sound', position: { x: 148, y: 238 } },
+            { name: 'rgbled', position: { x: 116, y: 340 } },
+            { name: 'light', position: { x: 49, y: 246 } },
+            { name: 'sound', position: { x: 66, y: 246 } },
             { name: 'gyro', position: { x: 158, y: 238 } },
             { name: 'lcd', position: { x: 128, y: 288 } },
         ],
