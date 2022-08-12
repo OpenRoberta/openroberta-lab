@@ -19,7 +19,7 @@ define(["require", "exports", "robot.base.mobile", "robot.sensors", "./robot.act
         __extends(RobotEv3, _super);
         function RobotEv3(id, configuration, interpreter, savedName, myListener) {
             var _this = _super.call(this, id, configuration, interpreter, savedName, myListener) || this;
-            _this.volume = 50;
+            _this.volume = 0.5;
             _this.tts = new robot_actuators_1.TTS();
             _this.webAudio = new robot_actuators_1.WebAudio();
             _this.timer = new robot_sensors_1.Timer(5);
@@ -37,7 +37,7 @@ define(["require", "exports", "robot.base.mobile", "robot.sensors", "./robot.act
         };
         RobotEv3.prototype.reset = function () {
             _super.prototype.reset.call(this);
-            this.volume = 50;
+            this.volume = 0.5;
         };
         // this method might go up to BaseMobileRobots as soon as the configuration has detailed information about the sensors geometry and location on the robot
         RobotEv3.prototype.configure = function (configuration) {

@@ -19,7 +19,7 @@ define(["require", "exports", "robot.sensors", "./robot.actuators", "robot.base.
         __extends(RobotCalliope, _super);
         function RobotCalliope(id, configuration, interpreter, savedName, myListener) {
             var _this = _super.call(this, id, configuration, interpreter, savedName, myListener) || this;
-            _this.volume = 50;
+            _this.volume = 0.5;
             _this.webAudio = new robot_actuators_1.WebAudio();
             _this.topView = '<div id="mbedContent"><form id="mbed-form"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons"></div></form></div>';
             _this.timer = new robot_sensors_1.Timer(1);
@@ -231,7 +231,7 @@ define(["require", "exports", "robot.sensors", "./robot.actuators", "robot.base.
         };
         RobotCalliope.prototype.reset = function () {
             _super.prototype.reset.call(this);
-            this.volume = 50;
+            this.volume = 0.5;
         };
         RobotCalliope.prototype.updateActions = function (robot, dt, interpreterRunning) {
             _super.prototype.updateActions.call(this, robot, dt, interpreterRunning);

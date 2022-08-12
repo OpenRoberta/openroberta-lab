@@ -19,7 +19,7 @@ export default class RobotCalliope extends RobotBaseStationary {
         //
     }
 
-    volume: number = 50;
+    volume: number = 0.5;
     webAudio: WebAudio = new WebAudio();
     buttons: TouchKeys;
     pinSensors: Pins;
@@ -232,7 +232,7 @@ export default class RobotCalliope extends RobotBaseStationary {
 
     override reset() {
         super.reset();
-        this.volume = 50;
+        this.volume = 0.5;
     }
 
     override timer: Timer = new Timer(1);

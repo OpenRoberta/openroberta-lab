@@ -8,7 +8,7 @@ import * as $ from 'jquery';
 export default class RobotEv3 extends RobotBaseMobile {
     chassis: ChassisDiffDrive;
     led: StatusLed;
-    volume: number = 50;
+    volume: number = 0.5;
     tts: TTS = new TTS();
     webAudio: WebAudio = new WebAudio();
     override timer: Timer = new Timer(5);
@@ -31,7 +31,7 @@ export default class RobotEv3 extends RobotBaseMobile {
 
     override reset() {
         super.reset();
-        this.volume = 50;
+        this.volume = 0.5;
     }
 
     // this method might go up to BaseMobileRobots as soon as the configuration has detailed information about the sensors geometry and location on the robot
