@@ -144,11 +144,11 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
         $('#fieldOrderBy').change(function (e) {
             var fieldData = e.target.value.split(':');
             var row = parseInt(fieldData[0]);
-            console.log(row);
             $('#galleryTable').bootstrapTable('refreshOptions', {
                 sortName: row,
                 sortOrder: fieldData[1],
             });
+            configureTagsInput();
         });
         //        TODO reactivate this once the table-view is improved
         //        $('#toogleView').clickWrap(function (e) {
