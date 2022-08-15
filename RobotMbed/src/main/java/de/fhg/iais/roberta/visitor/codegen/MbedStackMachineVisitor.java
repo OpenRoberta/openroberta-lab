@@ -82,14 +82,14 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
         int b = colorConst.getBlueChannelInt();
 
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, new JSONArray(Arrays.asList(r, g, b)));
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         JSONObject o = makeNode(C.CLEAR_DISPLAY_ACTION);
 
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
         displayTextAction.msg.accept(this);
         JSONObject o = makeNode(C.SHOW_TEXT_ACTION).put(C.MODE, displayTextAction.mode.toString().toLowerCase());
 
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
         }
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, image.getKind().getName().toLowerCase());
         o.put(C.VALUE, jsonImage);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
                 Arrays.stream(image.split("\\\\n")).map(x -> new JSONArray(Arrays.stream(x.split(",")).mapToInt(Integer::parseInt).toArray())).toArray());
 
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.IMAGE).put(C.VALUE, a);
-        return app(o);
+        return add(o);
 
     }
 
@@ -137,13 +137,13 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
     public Void visitDisplayImageAction(DisplayImageAction displayImageAction) {
         displayImageAction.getValuesToDisplay().accept(this);
         JSONObject o = makeNode(C.SHOW_IMAGE_ACTION).put(C.MODE, displayImageAction.displayImageMode.toString().toLowerCase());
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         JSONObject o = makeNode(C.STATUS_LIGHT_ACTION).put(C.NAME, "calliope");
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -151,17 +151,17 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
         toneAction.frequency.accept(this);
         toneAction.duration.accept(this);
         JSONObject o = makeNode(C.TONE_ACTION);
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         String freq = playNoteAction.frequency;
         String duration = playNoteAction.duration;
-        app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, freq));
-        app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, duration));
+        add(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, freq));
+        add(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, duration));
         JSONObject o = makeNode(C.TONE_ACTION);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -172,14 +172,14 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
     @Override
     public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         motorOnAction.param.getSpeed().accept(this);
-        app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
+        add(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
 
         String port = motorOnAction.getUserDefinedPort();
         ConfigurationComponent cc = this.configuration.optConfigurationComponent(port);
         String pin1 = ((cc == null) || cc.componentType.equals("CALLIBOT")) ? "0" : cc.getProperty("PIN1");
 
         JSONObject o = makeNode(C.MOTOR_ON_ACTION).put(C.PORT, pin1.toLowerCase()).put(C.NAME, pin1.toLowerCase());
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -194,7 +194,7 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
         String pin1 = ((cc == null) || cc.componentType.equals("CALLIBOT")) ? "0" : cc.getProperty("PIN1");
 
         JSONObject o = makeNode(C.MOTOR_STOP).put(C.PORT, pin1.toLowerCase());
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -206,7 +206,7 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
 
         String mode = pinWriteValueAction.pinValue;
         JSONObject o = makeNode(C.WRITE_PIN_ACTION).put(C.PIN, pin1).put(C.MODE, mode.toLowerCase());
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -215,28 +215,28 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
         imageShiftFunction.positions.accept(this);
         IDirection direction = imageShiftFunction.shiftDirection;
         JSONObject o = makeNode(C.IMAGE_SHIFT_ACTION).put(C.DIRECTION, direction.toString().toLowerCase());
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitImageInvertFunction(ImageInvertFunction imageInvertFunction) {
         imageInvertFunction.image.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, C.IMAGE_INVERT_ACTION);
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitGestureSensor(GestureSensor gestureSensor) {
         String mode = gestureSensor.getMode();
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GESTURE).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
         String mode = temperatureSensor.getMode();
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TEMPERATURE).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -246,13 +246,13 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
         String pin1 = (cc == null) ? "0" : cc.getProperty("PIN1");
 
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, pin1).put(C.NAME, "calliope");
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitLightSensor(LightSensor lightSensor) {
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.LIGHT).put(C.MODE, C.AMBIENTLIGHT).put(C.NAME, "calliope");
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -264,7 +264,7 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
         } else {
             o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "calliope");
         }
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -273,27 +273,27 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
         String mode = sensorGetSample.getMode();
 
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.PIN + port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.SOUND).put(C.MODE, C.VOLUME).put(C.NAME, "calliope");
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor compassSensor) {
         String mode = compassSensor.getMode();
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COMPASS).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitLedOnAction(LedOnAction ledOnAction) {
         ledOnAction.ledColor.accept(this);
         JSONObject o = makeNode(C.LED_ON_ACTION);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -305,20 +305,20 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
 
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.PIN + pin1).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
 
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction displaySetBrightnessAction) {
         displaySetBrightnessAction.brightness.accept(this);
         JSONObject o = makeNode(C.DISPLAY_SET_BRIGHTNESS_ACTION);
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction displayGetBrightnessAction) {
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.DISPLAY).put(C.MODE, C.BRIGHTNESS).put(C.NAME, "calliope");
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -327,7 +327,7 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
         displaySetPixelAction.y.accept(this);
         displaySetPixelAction.brightness.accept(this);
         JSONObject o = makeNode(C.DISPLAY_SET_PIXEL_BRIGHTNESS_ACTION);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -335,7 +335,7 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
         displayGetPixelAction.x.accept(this);
         displayGetPixelAction.y.accept(this);
         JSONObject o = makeNode(C.DISPLAY_GET_PIXEL_BRIGHTNESS_ACTION);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -362,13 +362,13 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
 
         JSONObject o = makeNode(C.BOTH_MOTORS_ON_ACTION).put(C.PORT_A, pin1A.toLowerCase()).put(C.PORT_B, pin1B.toLowerCase());
 
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitBothMotorsStopAction(BothMotorsStopAction bothMotorsStopAction) {
         JSONObject o = makeNode(C.MOTOR_STOP).put(C.PORT, "ab");
-        return app(o);
+        return add(o);
     }
 
     private int map(int x, int in_min, int in_max, int out_min, int out_max) {

@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.visitor.codegen;
 import org.json.JSONObject;
 
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.util.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
@@ -26,6 +25,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.MotorDuration;
 import de.fhg.iais.roberta.visitor.IWeDoVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
@@ -43,7 +43,7 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
         if ( brickName != null ) {
             lightAction.rgbLedColor.accept(this);
             JSONObject o = makeNode(C.LED_ON_ACTION).put(C.NAME, brickName);
-            return app(o);
+            return add(o);
         } else {
             throw new DbcException("No robot name or no port!");
         }
@@ -57,7 +57,7 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
             // for wedo this block is only for setting off the led, so no test for status required lightStatusAction.getStatus()
 
             JSONObject o = makeNode(C.STATUS_LIGHT_ACTION).put(C.NAME, brickName);
-            return app(o);
+            return add(o);
         } else {
             throw new DbcException("No robot name or no port!");
         }
@@ -74,10 +74,10 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
             boolean speedOnly = !processOptionalDuration(duration);
             JSONObject o = makeNode(C.MOTOR_ON_ACTION).put(C.NAME, brickName).put(C.PORT, port).put(C.SPEED_ONLY, speedOnly).put(C.SPEED_ONLY, speedOnly);
             if ( speedOnly ) {
-                return app(o);
+                return add(o);
             } else {
-                app(o);
-                return app(makeNode(C.MOTOR_STOP).put(C.NAME, brickName).put(C.PORT, port));
+                add(o);
+                return add(makeNode(C.MOTOR_STOP).put(C.NAME, brickName).put(C.PORT, port));
             }
         } else {
             throw new DbcException("No robot name or no port");
@@ -91,7 +91,7 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
         String port = confMotorBlock.getProperty("CONNECTOR");
         if ( brickName != null && port != null ) {
             JSONObject o = makeNode(C.MOTOR_STOP).put(C.NAME, brickName).put(C.PORT, port);
-            return app(o);
+            return add(o);
         } else {
             throw new DbcException("No robot name or no port");
         }
@@ -100,14 +100,14 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         JSONObject o = makeNode(C.CLEAR_DISPLAY_ACTION);
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitShowTextAction(ShowTextAction showTextAction) {
         showTextAction.msg.accept(this);
         JSONObject o = makeNode(C.SHOW_TEXT_ACTION);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -116,7 +116,7 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
         String brickName = keysSensorBlock.getProperty("VAR");
         if ( brickName != null ) {
             JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.NAME, brickName);
-            return app(o);
+            return add(o);
         } else {
             throw new DbcException("operation not supported");
         }
@@ -130,7 +130,7 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
         String slot = gyroSensor.getSlot(); // the mode is in the slot?
         if ( brickName != null && port != null ) {
             JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GYRO).put(C.NAME, brickName).put(C.PORT, port).put(C.MODE, slot);
-            return app(o);
+            return add(o);
         } else {
             throw new DbcException("operation not supported");
         }
@@ -143,7 +143,7 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
         String port = confInfraredSensor.getProperty("CONNECTOR");
         if ( brickName != null && port != null ) {
             JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.INFRARED).put(C.NAME, brickName).put(C.PORT, port);
-            return app(o);
+            return add(o);
         } else {
             throw new DbcException("No robot name or no port!");
         }
@@ -155,11 +155,11 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
         String brickName = playNoteBlock.getProperty("VAR");
         if ( brickName != null ) {
             JSONObject frequency = makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.frequency);
-            app(frequency);
+            add(frequency);
             JSONObject duration = makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.duration);
-            app(duration);
+            add(duration);
             JSONObject o = makeNode(C.TONE_ACTION).put(C.NAME, brickName);
-            return app(o);
+            return add(o);
         } else {
             throw new DbcException("No robot name or no port!");
         }
@@ -173,7 +173,7 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
             toneAction.frequency.accept(this);
             toneAction.duration.accept(this);
             JSONObject o = makeNode(C.TONE_ACTION).put(C.NAME, brickName);
-            return app(o);
+            return add(o);
         } else {
             throw new DbcException("No robot name or no port!");
         }
@@ -193,7 +193,7 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
             default:
                 throw new DbcException("Invalid Timer Mode " + timerSensor.getMode());
         }
-        return app(o);
+        return add(o);
     }
 
     @Override

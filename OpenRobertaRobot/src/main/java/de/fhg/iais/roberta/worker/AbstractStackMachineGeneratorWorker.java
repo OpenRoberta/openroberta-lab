@@ -19,7 +19,7 @@ public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
         AbstractStackMachineVisitor visitor = this.getVisitor(project, usedHardwareBean);
         visitor.generateCodeFromPhrases(project.getProgramAst().getTree());
         JSONObject generatedCode = new JSONObject();
-        generatedCode.put(C.OPS, visitor.getOpArray());
+        generatedCode.put(C.OPS, visitor.getCode());
         project.setSourceCode(generatedCode.toString(2));
         project.setCompiledHex(generatedCode.toString(2));
         project.setResult(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);

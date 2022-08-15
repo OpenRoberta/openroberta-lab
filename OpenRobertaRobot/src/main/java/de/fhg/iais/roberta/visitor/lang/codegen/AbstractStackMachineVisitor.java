@@ -114,6 +114,7 @@ import static de.fhg.iais.roberta.util.visitor.JumpLinker.JumpTarget.CONTINUE;
 import static de.fhg.iais.roberta.util.visitor.JumpLinker.JumpTarget.INTERNAL_BREAK;
 import static de.fhg.iais.roberta.util.visitor.JumpLinker.JumpTarget.METHOD_END;
 import static de.fhg.iais.roberta.util.visitor.JumpLinker.JumpTarget.STATEMENT_END;
+import de.fhg.iais.roberta.util.visitor.StackMachineBuilder;
 import de.fhg.iais.roberta.visitor.BaseVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
@@ -122,7 +123,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     private static final Predicate<String> IS_INVALID_BLOCK_ID = s -> s.equals("1");
     private static final List<Class<? extends Phrase>> DONT_ADD_DEBUG_STOP = Arrays.asList(Expr.class, VarDeclaration.class, Sensor.class, MainTask.class, ExprStmt.class, StmtList.class, RepeatStmt.class, WaitStmt.class);
 
-    private List<JSONObject> opArray = new ArrayList<>();
+    private StackMachineBuilder codeBuilder = new StackMachineBuilder();
     protected final ConfigurationAst configuration;
 
     private final JumpLinker jumpLinker = new JumpLinker();
@@ -135,14 +136,14 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
      */
     private final Set<String> possibleDebugStops = new HashSet<>();
     /**
-     * blocklyIds which will be initiated with next block
+     * blocklyIds which will be added to the next block to be highlighted
      */
-    private final Set<String> toInitiateBlocks = new HashSet<>();
+    private final Set<String> toHighlightBlocks = new HashSet<>();
 
     /**
-     * blocklyIds which are initiated but not yet terminated
+     * blocklyIds which are highlighted but not yet terminated
      */
-    private final Set<String> openBlocks = new HashSet<>();
+    private final Set<String> currentlyHighlightedBlocks = new HashSet<>();
 
     protected boolean debugger = true;
 
@@ -161,14 +162,14 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     private boolean shouldBeHighlighted(Phrase visitable) {
         boolean isNotMainTask = !(visitable instanceof MainTask);
-        return isNotMainTask && !openBlocks.contains(visitable.getProperty().getBlocklyId());
+        return isNotMainTask && !currentlyHighlightedBlocks.contains(visitable.getProperty().getBlocklyId());
     }
 
     protected void endPhrase(Phrase phrase) {
         String blocklyId = phrase.getProperty().getBlocklyId();
         if ( debugger && isValidBlocklyId(blocklyId) ) {
-            if ( !opArray.isEmpty() ) {
-                JSONObject lastElement = opArray.get(opArray.size() - 1);
+            if ( !codeBuilder.isEmpty() ) {
+                JSONObject lastElement = codeBuilder.getLast();
                 if ( !lastElement.has(C.HIGHTLIGHT_MINUS) ) {
                     lastElement.put(C.HIGHTLIGHT_MINUS, Collections.singletonList(blocklyId));
                 } else {
@@ -178,16 +179,16 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                     }
                 }
             }
-            toInitiateBlocks.remove(blocklyId);
-            openBlocks.remove(blocklyId);
+            toHighlightBlocks.remove(blocklyId);
+            currentlyHighlightedBlocks.remove(blocklyId);
         }
     }
 
     protected void beginPhrase(Phrase phrase) {
         String blocklyId = phrase.getProperty().getBlocklyId();
         if ( debugger && isValidBlocklyId(blocklyId) ) {
-            toInitiateBlocks.add(blocklyId);
-            openBlocks.add(blocklyId);
+            toHighlightBlocks.add(blocklyId);
+            currentlyHighlightedBlocks.add(blocklyId);
 
             if ( DONT_ADD_DEBUG_STOP.stream().noneMatch(cls -> cls.isInstance(phrase)) ) {
                 possibleDebugStops.add(blocklyId);
@@ -198,32 +199,32 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     @Override
     public final Void visitNumConst(NumConst numConst) {
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, numConst.getKind().getName()).put(C.VALUE, numConst.value);
-        return app(o);
+        return add(o);
     }
 
     @Override
     public final Void visitMathConst(MathConst mathConst) {
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.MATH_CONST).put(C.VALUE, mathConst.mathConst);
-        return app(o);
+        return add(o);
     }
 
     @Override
     public final Void visitBoolConst(BoolConst boolConst) {
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, boolConst.getKind().getName()).put(C.VALUE, boolConst.value);
-        return app(o);
+        return add(o);
     }
 
     @Override
     public final Void visitStringConst(StringConst stringConst) {
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, stringConst.getKind().getName());
         o.put(C.VALUE, stringConst.value.replaceAll("[<>\\$]", ""));
-        return app(o);
+        return add(o);
     }
 
     @Override
     public final Void visitNullConst(NullConst nullConst) {
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, "C." + nullConst.getKind().getName());
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -266,7 +267,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                 throw new DbcException("Invalid color constant: " + colorConst.getHexIntAsString());
         }
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.COLOR_CONST).put(C.VALUE, colorId);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -275,7 +276,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         rgbColor.G.accept(this);
         rgbColor.B.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.RGB_COLOR_CONST);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -291,7 +292,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     @Override
     public final Void visitVar(Var var) {
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, var.name);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -307,14 +308,14 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
             var.value.accept(this);
         }
         JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, var.typeVar).put(C.NAME, var.name);
-        return app(o);
+        return add(o);
     }
 
     @Override
     public final Void visitUnary(Unary unary) {
         unary.expr.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.UNARY).put(C.OP, unary.op);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -344,15 +345,15 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                 boolean isOr = binary.op == Op.OR;
                 binary.left.accept(this);
                 JSONObject skipNextCondition = makeNode(C.JUMP).put(C.CONDITIONAL, isOr);
-                app(skipNextCondition);
+                add(skipNextCondition);
 
                 binary.getRight().accept(this);
                 JSONObject jumpToEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
-                app(jumpToEnd);
+                add(jumpToEnd);
 
-                skipNextCondition.put(C.TARGET, opArray.size());
-                app(makeNode(C.EXPR).put(C.EXPR, C.BOOL_CONST).put(C.VALUE, isOr));
-                jumpToEnd.put(C.TARGET, opArray.size());
+                skipNextCondition.put(C.TARGET, codeBuilder.size());
+                add(makeNode(C.EXPR).put(C.EXPR, C.BOOL_CONST).put(C.VALUE, isOr));
+                jumpToEnd.put(C.TARGET, codeBuilder.size());
 
                 appComment(C.BINARY, false);
                 return null;
@@ -373,7 +374,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                         o = makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, binary.op);
                         break;
                 }
-                return app(o);
+                return add(o);
 
         }
 
@@ -384,7 +385,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         mathPowerFunct.param.get(0).accept(this);
         mathPowerFunct.param.get(1).accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, mathPowerFunct.functName);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -454,7 +455,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
             default:
                 throw new DbcException("Operation not supported");
         }
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -483,7 +484,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     public final Void visitAssignStmt(AssignStmt assignStmt) {
         assignStmt.expr.accept(this);
         JSONObject o = makeNode(C.ASSIGN_STMT).put(C.NAME, assignStmt.name.name);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -498,15 +499,15 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         ternaryExpr.condition.accept(this);
         // JUMP when condition is not fullfilled
         JSONObject jumpOverThen = makeNode(C.JUMP).put(C.CONDITIONAL, false);
-        app(jumpOverThen);
+        add(jumpOverThen);
         ternaryExpr.thenPart.accept(this);
         // JUMP because if is finished
         JSONObject jumpToEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
-        app(jumpToEnd);
+        add(jumpToEnd);
         jumpLinker.register(jumpToEnd, STATEMENT_END);
-        jumpOverThen.put(C.TARGET, opArray.size());
+        jumpOverThen.put(C.TARGET, codeBuilder.size());
         ternaryExpr.elsePart.accept(this);
-        jumpLinker.handle(STATEMENT_END).forEach(jump -> jump.put(C.TARGET, opArray.size()));
+        jumpLinker.handle(STATEMENT_END).forEach(jump -> jump.put(C.TARGET, codeBuilder.size()));
         appComment(C.IF_STMT, false);
         return null;
     }
@@ -521,22 +522,22 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
             ifStmt.expr.get(i).accept(this);
             // JUMP when condition not fullfilled
             JSONObject jumpOverThen = makeNode(C.JUMP).put(C.CONDITIONAL, false);
-            app(jumpOverThen);
+            add(jumpOverThen);
             ifStmt.thenList.get(i).accept(this);
 
             // JUMP when if was fullfilled
             JSONObject jumpToEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
-            app(jumpToEnd);
+            add(jumpToEnd);
             jumpLinker.register(jumpToEnd, STATEMENT_END);
 
-            jumpOverThen.put(C.TARGET, opArray.size());
+            jumpOverThen.put(C.TARGET, codeBuilder.size());
         }
         if ( !ifStmt.elseList.get().isEmpty() ) {
             ifStmt.elseList.accept(this);
         }
 
         jumpLinker.handle(STATEMENT_END)
-            .forEach(jump -> jump.put(C.TARGET, opArray.size()));
+            .forEach(jump -> jump.put(C.TARGET, codeBuilder.size()));
 
         appComment(C.IF_STMT, false);
         return null;
@@ -545,7 +546,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     @Override
     public final Void visitNNStepStmt(NNStepStmt nnStepStmt) {
         JSONObject o = makeNode(C.NN_STEP_STMT);
-        app(o);
+        add(o);
         return null;
     }
 
@@ -553,14 +554,14 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     public final Void visitNNSetInputNeuronVal(NNSetInputNeuronVal setStmt) {
         setStmt.value.accept(this);
         JSONObject o = makeNode(C.NN_SETINPUTNEURON_STMT).put(C.NAME, setStmt.name);
-        app(o);
+        add(o);
         return null;
     }
 
     @Override
     public final Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal getVal) {
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.NN_GETOUTPUTNEURON_VAL).put(C.NAME, getVal.name);
-        app(o);
+        add(o);
         return null;
     }
 
@@ -568,7 +569,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     public final Void visitNNSetWeightStmt(NNSetWeightStmt chgStmt) {
         chgStmt.value.accept(this);
         JSONObject o = makeNode(C.NN_SETWEIGHT_STMT).put(C.FROM, chgStmt.from).put(C.TO, chgStmt.to);
-        app(o);
+        add(o);
         return null;
     }
 
@@ -576,21 +577,21 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     public final Void visitNNSetBiasStmt(NNSetBiasStmt chgStmt) {
         chgStmt.value.accept(this);
         JSONObject o = makeNode(C.NN_SETBIAS_STMT).put(C.NAME, chgStmt.name);
-        app(o);
+        add(o);
         return null;
     }
 
     @Override
     public final Void visitNNGetWeight(NNGetWeight getVal) {
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.NN_GETWEIGHT).put(C.FROM, getVal.from).put(C.TO, getVal.to);
-        app(o);
+        add(o);
         return null;
     }
 
     @Override
     public final Void visitNNGetBias(NNGetBias getVal) {
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.NN_GETBIAS).put(C.NAME, getVal.name);
-        app(o);
+        add(o);
         return null;
     }
 
@@ -604,13 +605,13 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                 // the very special case of a wait stmt. The AST is not perfectly designed for this case
                 repeatStmt.expr.accept(this);
                 JSONObject skipThenPart = makeNode(C.JUMP).put(C.CONDITIONAL, false);
-                app(skipThenPart);
+                add(skipThenPart);
                 repeatStmt.list.accept(this);
                 JSONObject breakStatement = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
                 addHighlightingToJump(breakStatement);
-                app(breakStatement);
+                add(breakStatement);
                 jumpLinker.register(breakStatement, INTERNAL_BREAK);
-                skipThenPart.put(C.TARGET, opArray.size());
+                skipThenPart.put(C.TARGET, codeBuilder.size());
                 return null;
             case FOR:
             case TIMES:
@@ -633,33 +634,33 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
                     // Initialize Var
                     initialValue.accept(this);
-                    app(makeNode(C.VAR_DECLARATION).put(C.TYPE, initialValue.getVarType()).put(C.NAME, variableName));
+                    add(makeNode(C.VAR_DECLARATION).put(C.TYPE, initialValue.getVarType()).put(C.NAME, variableName));
 
-                    int programCounterAfterInitialization = opArray.size();
+                    int programCounterAfterInitialization = codeBuilder.size();
                     // Termination Expr
                     variable.accept(this);
                     terminationValue.accept(this);
-                    app(makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, Op.LT));
+                    add(makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, Op.LT));
                     JSONObject jump = makeNode(C.JUMP).put(C.CONDITIONAL, false);
-                    app(jump);
+                    add(jump);
 
                     addDebugStatement(repeatStmt);
 
                     repeatStmt.list.accept(this);
 
-                    int programCounterAfterStatementList = opArray.size();
+                    int programCounterAfterStatementList = codeBuilder.size();
 
                     // Increment
                     incrementValue.accept(this);
                     variable.accept(this);
-                    app(makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, Op.ADD));
-                    app(makeNode(C.ASSIGN_STMT).put(C.NAME, variableName));
+                    add(makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, Op.ADD));
+                    add(makeNode(C.ASSIGN_STMT).put(C.NAME, variableName));
 
-                    app(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, programCounterAfterInitialization));
-                    int programCounterAfterForLoop = opArray.size();
+                    add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, programCounterAfterInitialization));
+                    int programCounterAfterForLoop = codeBuilder.size();
                     jump.put(C.TARGET, programCounterAfterForLoop);
 
-                    app(makeNode(C.UNBIND_VAR).put(C.NAME, variableName));
+                    add(makeNode(C.UNBIND_VAR).put(C.NAME, variableName));
 
                     jumpLinker.handle(CONTINUE).forEach(statement -> {
                         statement.put(C.TARGET, programCounterAfterStatementList);
@@ -699,48 +700,48 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                     Var listVariable = (Var) binary.getRight();
 
                     // Init run variable (int i = 0)
-                    app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
-                    app(makeNode(C.VAR_DECLARATION).put(C.TYPE, BlocklyType.NUMBER).put(C.NAME, runVariableName));
+                    add(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
+                    add(makeNode(C.VAR_DECLARATION).put(C.TYPE, BlocklyType.NUMBER).put(C.NAME, runVariableName));
 
                     // Init variable (Element element)
                     varDeclaration.accept(this);
-                    int programCounterAfterInitialization = opArray.size();
+                    int programCounterAfterInitialization = codeBuilder.size();
 
                     // Termination expr ( i < list.length )
-                    app(makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, runVariableName));
+                    add(makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, runVariableName));
                     listVariable.accept(this);
-                    app(makeNode(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, FunctionNames.LIST_LENGTH.toString().toLowerCase()));
-                    app(makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, Op.LT));
+                    add(makeNode(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, FunctionNames.LIST_LENGTH.toString().toLowerCase()));
+                    add(makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, Op.LT));
 
                     JSONObject jump = makeNode(C.JUMP).put(C.CONDITIONAL, false);
-                    app(jump);
+                    add(jump);
 
                     // Assign variable ( element = list.get(i) )
                     listVariable.accept(this);
-                    app(makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, runVariableName));
-                    app(makeNode(C.EXPR)
+                    add(makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, runVariableName));
+                    add(makeNode(C.EXPR)
                         .put(C.EXPR, C.LIST_OPERATION)
                         .put(C.OP, ListElementOperations.GET.toString().toLowerCase())
                         .put(C.POSITION, IndexLocation.FROM_START.toString().toLowerCase()));
-                    app(makeNode(C.ASSIGN_STMT).put(C.NAME, variableName));
+                    add(makeNode(C.ASSIGN_STMT).put(C.NAME, variableName));
 
                     addDebugStatement(repeatStmt);
                     repeatStmt.list.accept(this);
 
-                    int programCounterAfterStatementList = opArray.size();
+                    int programCounterAfterStatementList = codeBuilder.size();
 
                     // Increment (i = i + 1)
-                    app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
-                    app(makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, runVariableName));
-                    app(makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, Op.ADD));
-                    app(makeNode(C.ASSIGN_STMT).put(C.NAME, runVariableName));
+                    add(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
+                    add(makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, runVariableName));
+                    add(makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, Op.ADD));
+                    add(makeNode(C.ASSIGN_STMT).put(C.NAME, runVariableName));
 
-                    app(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, programCounterAfterInitialization));
-                    int programCounterAfterForLoop = opArray.size();
+                    add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, programCounterAfterInitialization));
+                    int programCounterAfterForLoop = codeBuilder.size();
                     jump.put(C.TARGET, programCounterAfterForLoop);
 
-                    app(makeNode(C.UNBIND_VAR).put(C.NAME, variableName));
-                    app(makeNode(C.UNBIND_VAR).put(C.NAME, runVariableName));
+                    add(makeNode(C.UNBIND_VAR).put(C.NAME, variableName));
+                    add(makeNode(C.UNBIND_VAR).put(C.NAME, runVariableName));
 
                     jumpLinker.handle(CONTINUE).forEach(statement -> {
                         statement.put(C.TARGET, programCounterAfterStatementList);
@@ -764,15 +765,15 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                 jumpLinker.isolate(() -> {
                     appComment(C.REPEAT_STMT, true);
 
-                    int beforeExprTarget = opArray.size();
+                    int beforeExprTarget = codeBuilder.size();
                     addDebugStatement(repeatStmt);
 
                     repeatStmt.list.accept(this);
 
-                    app(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, beforeExprTarget));
+                    add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, beforeExprTarget));
 
                     jumpLinker.handle(BREAK).forEach(statement -> {
-                        statement.put(C.TARGET, opArray.size());
+                        statement.put(C.TARGET, codeBuilder.size());
                         removeOpenBlocksFromUnhighlight(statement, blocklyId);
                     });
 
@@ -792,7 +793,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
             case UNTIL:
                 jumpLinker.isolate(() -> {
                     appComment(C.REPEAT_STMT, true);
-                    int beforeExprTarget = opArray.size();
+                    int beforeExprTarget = codeBuilder.size();
                     addDebugStatement(repeatStmt);
 
                     repeatStmt.expr.accept(this);
@@ -801,12 +802,12 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                     addHighlightingToJump(jumpOverWhile);
                     jumpLinker.register(jumpOverWhile, BREAK);
 
-                    app(jumpOverWhile);
+                    add(jumpOverWhile);
                     repeatStmt.list.accept(this);
-                    app(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, beforeExprTarget));
+                    add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, beforeExprTarget));
 
                     jumpLinker.handle(BREAK).forEach(statement -> {
-                        statement.put(C.TARGET, opArray.size());
+                        statement.put(C.TARGET, codeBuilder.size());
                         removeOpenBlocksFromUnhighlight(statement);
                     });
 
@@ -841,7 +842,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
         addHighlightingToJump(jump);
         jumpLinker.register(jump, stmtFlowCon.flow == Flow.BREAK ? BREAK : CONTINUE);
-        return app(jump);
+        return add(jump);
     }
 
     @Override
@@ -857,7 +858,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         mainTask.variables.accept(this);
         if ( mainTask.debug.equals("TRUE") ) {
             JSONObject o = makeNode(C.CREATE_DEBUG_ACTION);
-            return app(o);
+            return add(o);
         }
         return null;
     }
@@ -876,16 +877,16 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     public final Void visitWaitStmt(WaitStmt waitStmt) {
         jumpLinker.isolate(() -> {
             appComment(C.WAIT_STMT, true);
-            int programCounterStart = opArray.size();
+            int programCounterStart = codeBuilder.size();
             addDebugStatement(waitStmt);
 
             waitStmt.statements.get()
                 .forEach(statement -> statement.accept(this));
-            this.getOpArray().add(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
-            this.getOpArray().add(makeNode(C.WAIT_TIME_STMT));
-            app(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, programCounterStart));
+            this.codeBuilder.add(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
+            this.codeBuilder.add(makeNode(C.WAIT_TIME_STMT));
+            add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, programCounterStart));
 
-            jumpLinker.handle(INTERNAL_BREAK).forEach((statement) -> statement.put(C.TARGET, opArray.size()));
+            jumpLinker.handle(INTERNAL_BREAK).forEach((statement) -> statement.put(C.TARGET, codeBuilder.size()));
 
             appComment(C.WAIT_STMT, false);
         });
@@ -896,7 +897,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     public final Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         waitTimeStmt.time.accept(this);
         JSONObject o = makeNode(C.WAIT_TIME_STMT);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -913,7 +914,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     public final Void visitStmtTextComment(StmtTextComment textComment) {
         JSONObject o;
         o = makeNode(C.COMMENT).put(C.VALUE, textComment.textComment);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -938,7 +939,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                 .put(C.OP, C.LIST_GET_SUBLIST)
                 .put(C.POSITION, getSubFunct.strParam.stream().map(x -> x.toString().toLowerCase()).toArray());
 
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -949,14 +950,14 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                 .put(C.EXPR, C.LIST_OPERATION)
                 .put(C.OP, C.LIST_FIND_ITEM)
                 .put(C.POSITION, indexOfFunct.location.toString().toLowerCase());
-        return app(o);
+        return add(o);
     }
 
     @Override
     public final Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
         lengthOfIsEmptyFunct.param.get(0).accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, lengthOfIsEmptyFunct.functName.toString().toLowerCase());
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -965,7 +966,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         int n = listCreate.exprList.get().size();
 
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CREATE_LIST).put(C.NUMBER, n);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -975,7 +976,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
             makeNode(C.LIST_OPERATION)
                 .put(C.OP, listSetIndex.mode.toString().toLowerCase())
                 .put(C.POSITION, listSetIndex.location.toString().toLowerCase());
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -986,14 +987,14 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                 .put(C.EXPR, C.LIST_OPERATION)
                 .put(C.OP, listGetIndex.getElementOperation().toString().toLowerCase())
                 .put(C.POSITION, listGetIndex.location.toString().toLowerCase());
-        return app(o);
+        return add(o);
     }
 
     @Override
     public final Void visitListRepeat(ListRepeat listRepeat) {
         listRepeat.param.forEach(x -> x.accept(this));
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CREATE_LIST_REPEAT);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -1002,7 +1003,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         mathConstrainFunct.param.get(1).accept(this);
         mathConstrainFunct.param.get(2).accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.MATH_CONSTRAIN_FUNCTION);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -1012,20 +1013,20 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
             mathNumPropFunct.param.get(1).accept(this);
         }
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.MATH_PROP_FUNCT).put(C.OP, mathNumPropFunct.functName);
-        return app(o);
+        return add(o);
     }
 
     @Override
     public final Void visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
         mathOnListFunct.param.forEach(x -> x.accept(this));
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.MATH_ON_LIST).put(C.OP, mathOnListFunct.functName.toString().toLowerCase());
-        return app(o);
+        return add(o);
     }
 
     @Override
     public final Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.RANDOM_DOUBLE);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -1033,35 +1034,35 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         mathRandomIntFunct.param.get(0).accept(this);
         mathRandomIntFunct.param.get(1).accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.RANDOM_INT);
-        return app(o);
+        return add(o);
     }
 
     @Override
     public final Void visitMathSingleFunct(MathSingleFunct mathSingleFunct) {
         mathSingleFunct.param.get(0).accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, mathSingleFunct.functName);
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         mathCastStringFunct.param.get(0).accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CAST_STRING);
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         mathCastCharFunct.param.get(0).accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CAST_CHAR);
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         textStringCastNumberFunct.param.get(0).accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CAST_STRING_NUMBER);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -1069,7 +1070,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         textCharCastNumberFunct.param.get(0).accept(this);
         textCharCastNumberFunct.param.get(1).accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CAST_CHAR_NUMBER);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -1077,7 +1078,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         textJoinFunct.param.accept(this);
         int n = textJoinFunct.param.get().size();
         JSONObject o = makeNode(C.TEXT_JOIN).put(C.NUMBER, n);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -1097,22 +1098,22 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                 .map(parameter -> (VarDeclaration) parameter)
                 .forEach(parameter -> {
                     JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, parameter.typeVar).put(C.NAME, parameter.name);
-                    app(o);
+                    add(o);
                 });
 
             methodVoid.body.accept(this);
 
 
             jumpLinker.handle(METHOD_END).forEach(statement -> {
-                statement.put(C.TARGET, opArray.size());
+                statement.put(C.TARGET, codeBuilder.size());
                 removeOpenBlocksFromUnhighlight(statement, methodVoid.getProperty().getBlocklyId());
             });
 
             parameters.get().stream()
                 .map(parameter -> (VarDeclaration) parameter)
-                .forEach(parameter -> app(makeNode(C.UNBIND_VAR).put(C.NAME, parameter.name)));
+                .forEach(parameter -> add(makeNode(C.UNBIND_VAR).put(C.NAME, parameter.name)));
 
-            app(makeNode(C.RETURN).put(C.VALUES, false));
+            add(makeNode(C.RETURN).put(C.VALUES, false));
             appComment(C.METHOD_VOID, false);
         });
         return null;
@@ -1136,7 +1137,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                 .map(parameter -> (VarDeclaration) parameter)
                 .forEach(parameter -> {
                     JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, parameter.typeVar).put(C.NAME, parameter.name);
-                    app(o);
+                    add(o);
                 });
 
             methodReturn.body.accept(this);
@@ -1144,15 +1145,15 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
             methodReturn.returnValue.accept(this);
 
             jumpLinker.handle(METHOD_END).forEach(statement -> {
-                statement.put(C.TARGET, opArray.size());
+                statement.put(C.TARGET, codeBuilder.size());
                 removeOpenBlocksFromUnhighlight(statement, methodReturn.getProperty().getBlocklyId());
             });
 
             parameters.get().stream()
                 .map(parameter -> (VarDeclaration) parameter)
-                .forEach(parameter -> app(makeNode(C.UNBIND_VAR).put(C.NAME, parameter.name)));
+                .forEach(parameter -> add(makeNode(C.UNBIND_VAR).put(C.NAME, parameter.name)));
 
-            app(makeNode(C.RETURN).put(C.VALUES, true));
+            add(makeNode(C.RETURN).put(C.VALUES, true));
             appComment(C.METHOD_RETURN, false);
         });
         return null;
@@ -1164,15 +1165,15 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
         methodIfReturn.oraCondition.accept(this);
         JSONObject jumpOverReturn = makeNode(C.JUMP).put(C.CONDITIONAL, false);
-        app(jumpOverReturn);
+        add(jumpOverReturn);
 
         methodIfReturn.oraReturnValue.accept(this);
         JSONObject jumpToMethodEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
         addHighlightingToJump(jumpToMethodEnd);
         jumpLinker.register(jumpToMethodEnd, METHOD_END);
 
-        app(jumpToMethodEnd);
-        jumpOverReturn.put(C.TARGET, opArray.size());
+        add(jumpToMethodEnd);
+        jumpOverReturn.put(C.TARGET, codeBuilder.size());
 
         appComment(C.IF_RETURN, false);
         return null;
@@ -1189,11 +1190,11 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         appComment(C.METHOD_CALL, true);
 
         JSONObject returnAddress = makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST);
-        app(returnAddress);
+        add(returnAddress);
         methodCall.getParametersValues().get()
             .forEach(v -> v.accept(this));
-        app(createJumpToMethod(methodCall));
-        returnAddress.put(C.VALUE, opArray.size());
+        add(createJumpToMethod(methodCall));
+        returnAddress.put(C.VALUE, codeBuilder.size());
         appComment(C.METHOD_CALL, false);
         return null;
     }
@@ -1211,39 +1212,39 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         ((Binary) assertStmt.asserts).getRight().accept((IVisitor) this);
         String op = ((Binary) assertStmt.asserts).op.toString();
         JSONObject o = makeNode(C.ASSERT_ACTION).put(C.MSG, assertStmt.msg).put(C.OP, op);
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitDebugAction(DebugAction debugAction) {
         debugAction.value.accept(this);
         JSONObject o = makeNode(C.DEBUG_ACTION);
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitSerialWriteAction(SerialWriteAction serialWriteAction) {
         serialWriteAction.value.accept(this);
         JSONObject o = makeNode(C.SERIAL_WRITE_ACTION);
-        return app(o);
+        return add(o);
     }
 
     private void addHighlightingToJump(JSONObject o) {
         if ( !debugger ) {
             return;
         }
-        o.put(C.HIGHTLIGHT_MINUS, new ArrayList<>(openBlocks));
+        o.put(C.HIGHTLIGHT_MINUS, new ArrayList<>(currentlyHighlightedBlocks));
     }
 
     private void addDebugStatement(Phrase phrase) {
         if ( debugger ) {
             possibleDebugStops.add(phrase.getProperty().getBlocklyId());
-            app(makeNode(C.COMMENT));
+            add(makeNode(C.COMMENT));
         }
     }
 
     private Void appComment(Object commentType, boolean isStart) {
-        return app(makeNode(C.COMMENT).put(C.TARGET, commentType).put(C.TYPE, isStart ? C.START : C.END));
+        return add(makeNode(C.COMMENT).put(C.TARGET, commentType).put(C.TYPE, isStart ? C.START : C.END));
     }
 
     private void removeOpenBlocksFromUnhighlight(JSONObject statement) {
@@ -1260,7 +1261,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         }
 
         List<Object> newUnhighlight = statement.getJSONArray(C.HIGHTLIGHT_MINUS).toList().stream()
-            .filter(id -> !openBlocks.contains(id) || id.equals(repeatId))
+            .filter(id -> !currentlyHighlightedBlocks.contains(id) || id.equals(repeatId))
             .collect(Collectors.toList());
         statement.put(C.HIGHTLIGHT_MINUS, newUnhighlight);
     }
@@ -1273,7 +1274,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     }
 
     private void registerMethodDeclaration(String methodName) {
-        methodDeclarations.put(methodName, opArray.size());
+        methodDeclarations.put(methodName, codeBuilder.size());
     }
 
     private List<JSONObject> getRegisteredMethodCalls(String methodName) {
@@ -1326,7 +1327,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                 methods.add(phrase);
             }
         }
-        app(makeNode(C.STOP));
+        add(makeNode(C.STOP));
         for ( Phrase method : methods ) {
             method.accept(this);
         }
@@ -1335,10 +1336,10 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     protected final JSONObject makeNode(String opCode) {
         JSONObject operation = new JSONObject().put(C.OPCODE, opCode);
-        if ( !toInitiateBlocks.isEmpty() ) {
-            toInitiateBlocks.removeIf(IS_INVALID_BLOCK_ID);
-            operation.put(C.HIGHTLIGHT_PLUS, new ArrayList<>(toInitiateBlocks));
-            toInitiateBlocks.clear();
+        if ( !toHighlightBlocks.isEmpty() ) {
+            toHighlightBlocks.removeIf(IS_INVALID_BLOCK_ID);
+            operation.put(C.HIGHTLIGHT_PLUS, new ArrayList<>(toHighlightBlocks));
+            toHighlightBlocks.clear();
         }
         if ( !possibleDebugStops.isEmpty() ) {
             possibleDebugStops.removeIf(IS_INVALID_BLOCK_ID);
@@ -1348,8 +1349,8 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         return operation;
     }
 
-    protected Void app(JSONObject o) {
-        this.getOpArray().add(o);
+    protected Void add(JSONObject o) {
+        this.codeBuilder.add(o);
         return null;
     }
 
@@ -1357,8 +1358,8 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         // nothing to do
     }
 
-    public List<JSONObject> getOpArray() {
-        return this.opArray;
+    public List<JSONObject> getCode() {
+        return this.codeBuilder.getCode();
     }
 
     private boolean isValidBlocklyId(String blocklyId) {

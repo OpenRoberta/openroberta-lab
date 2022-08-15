@@ -58,7 +58,7 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, "center");
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
         } else {
             o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "mbot");
         }
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
         String mode = ultrasonicSensor.getMode();
         String port = ultrasonicSensor.getUserDefinedPort();
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "mbot");
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
             slot = C.RIGHT;
         }
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.INFRARED).put(C.PORT, port).put(C.MODE, slot).put(C.NAME, "mbot");
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -100,7 +100,7 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
         lightAction.rgbLedColor.accept(this);
         String port = lightAction.port;
         JSONObject o = makeNode(C.LIGHT_ACTION).put(C.MODE, mode).put(C.PORT, port).put(C.NAME, "mbot");
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
                 .put(C.MODE, lightStatusAction.status)
                 .put(C.PORT, lightStatusAction.getUserDefinedPort())
                 .put(C.NAME, "mbot");
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -120,14 +120,14 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
         int b = colorConst.getBlueChannelInt();
 
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, new JSONArray(Arrays.asList(r, g, b)));
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         String port = motorGetPowerAction.getUserDefinedPort();
         JSONObject o = makeNode(C.MOTOR_GET_POWER).put(C.PORT, port.toLowerCase());
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -137,10 +137,10 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
         DriveDirection driveDirection = (DriveDirection) driveAction.direction;
         JSONObject o = makeNode(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "mbot").put(C.SPEED_ONLY, speedOnly);
         if ( speedOnly ) {
-            return app(o.put(C.SET_TIME, false));
+            return add(o.put(C.SET_TIME, false));
         } else {
-            app(o.put(C.SET_TIME, true));
-            return app(makeNode(C.STOP_DRIVE).put(C.NAME, "mbot"));
+            add(o.put(C.SET_TIME, true));
+            return add(makeNode(C.STOP_DRIVE).put(C.NAME, "mbot"));
         }
     }
 
@@ -152,10 +152,10 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
         JSONObject o =
             makeNode(C.TURN_ACTION).put(C.TURN_DIRECTION, turnDirection.toString().toLowerCase()).put(C.NAME, "mbot").put(C.SPEED_ONLY, speedOnly);
         if ( speedOnly ) {
-            return app(o.put(C.SET_TIME, false));
+            return add(o.put(C.SET_TIME, false));
         } else {
-            app(o.put(C.SET_TIME, true));
-            return app(makeNode(C.STOP_DRIVE).put(C.NAME, "mbot"));
+            add(o.put(C.SET_TIME, true));
+            return add(makeNode(C.STOP_DRIVE).put(C.NAME, "mbot"));
         }
     }
 
@@ -168,17 +168,17 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
 
         JSONObject o = makeNode(C.CURVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "mbot").put(C.SPEED_ONLY, speedOnly);
         if ( speedOnly ) {
-            return app(o.put(C.SET_TIME, false));
+            return add(o.put(C.SET_TIME, false));
         } else {
-            app(o.put(C.SET_TIME, true));
-            return app(makeNode(C.STOP_DRIVE).put(C.NAME, "mbot"));
+            add(o.put(C.SET_TIME, true));
+            return add(makeNode(C.STOP_DRIVE).put(C.NAME, "mbot"));
         }
     }
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         JSONObject o = makeNode(C.STOP_DRIVE).put(C.NAME, "mbot");
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -191,9 +191,9 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
 
         JSONObject o = makeNode(C.MOTOR_ON_ACTION).put(C.PORT, port.toLowerCase()).put(C.NAME, "mbot").put(C.SPEED_ONLY, speedOnly);
         if ( speedOnly ) {
-            return app(o.put(C.SET_TIME, false));
+            return add(o.put(C.SET_TIME, false));
         } else {
-            app(o.put(C.SET_TIME, true));
+            add(o.put(C.SET_TIME, true));
             if ( duration.getType() == null ) {
                 o.put(C.MOTOR_DURATION, C.TIME);
 
@@ -201,8 +201,8 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
                 String durationType = duration.getType().toString().toLowerCase();
                 o.put(C.MOTOR_DURATION, durationType);
             }
-            app(o);
-            return app(makeNode(C.MOTOR_STOP).put(C.PORT, port.toLowerCase()));
+            add(o);
+            return add(makeNode(C.MOTOR_STOP).put(C.PORT, port.toLowerCase()));
         }
     }
 
@@ -213,7 +213,7 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
 
         motorSetPowerAction.power.accept(this);
         JSONObject o = makeNode(C.MOTOR_SET_POWER).put(C.PORT, port.toLowerCase());
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -221,7 +221,7 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
         String port = motorStopAction.getUserDefinedPort();
         port = getMbotMotorPort(port);
         JSONObject o = makeNode(C.MOTOR_STOP).put(C.PORT, port.toLowerCase());
-        return app(o);
+        return add(o);
     }
 
     private int map(int x, int in_min, int in_max, int out_min, int out_max) {
@@ -248,38 +248,38 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
         toneAction.frequency.accept(this);
         toneAction.duration.accept(this);
         JSONObject o = makeNode(C.TONE_ACTION);
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         String freq = playNoteAction.frequency;
         String duration = playNoteAction.duration;
-        app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, freq));
-        app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, duration));
+        add(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, freq));
+        add(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, duration));
         JSONObject o = makeNode(C.TONE_ACTION);
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         JSONObject o = makeNode(C.CLEAR_DISPLAY_ACTION);
 
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitLEDMatrixImageAction(LEDMatrixImageAction ledMatrixImageAction) {
         ledMatrixImageAction.valuesToDisplay.accept(this);
         JSONObject o = makeNode(C.SHOW_IMAGE_ACTION).put(C.MODE, ledMatrixImageAction.displayImageMode.toString().toLowerCase());
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitLEDMatrixTextAction(LEDMatrixTextAction ledMatrixTextAction) {
         ledMatrixTextAction.msg.accept(this);
         JSONObject o = makeNode(C.SHOW_TEXT_ACTION).put(C.MODE, C.TEXT);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -300,7 +300,7 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
         }
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.IMAGE);
         o.put(C.VALUE, jsonImage);
-        return app(o);
+        return add(o);
     }
 
     @Override
@@ -309,14 +309,14 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
         ledMatrixImageShiftFunction.positions.accept(this);
         IDirection direction = ledMatrixImageShiftFunction.shiftDirection;
         JSONObject o = makeNode(C.IMAGE_SHIFT_ACTION).put(C.DIRECTION, direction.toString().toLowerCase()).put(C.NAME, "mbot");
-        return app(o);
+        return add(o);
     }
 
     @Override
     public Void visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction ledMatrixImageInverFunction) {
         ledMatrixImageInverFunction.image.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, C.IMAGE_INVERT_ACTION);
-        return app(o);
+        return add(o);
     }
 
     @Override
