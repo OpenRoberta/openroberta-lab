@@ -1,0 +1,1303 @@
+<head>
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+</head>
+
+<body>
+    <div id="helpContent">
+        <div id="robControls_start_ardu" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»Programstart«"><span style="color: rgb(0,0,0);">»Program start«</span><span
+                    style="color: rgb(0,0,0);"> </span></h3>
+            <p>Each program starts with the »Start« block, which cannot be deleted. The first block you want to use is
+                connected directly to the »Sequence connection« on the »Repeat indefinitely« block.</p>
+            <p>For systems based on an Arduino or similar microcontroller, there is always a »repeat indefinitely« loop
+                connected to the start block, which also cannot be removed. This is due to the fact that such
+                microcontrollers are usually programmed for exactly one task, which then has to be executed again and
+                again. If you only want one run of the program, you can simply make the robot wait at the end of the
+                loop for a very long time.</p>
+            <p>Settings:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-plus">create a new global variable</li>
+                <li class="typcn typcn-minus">delete the global variable</li>
+            </ul><br>
+            <p><span>If global variables have been created:</span>
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-pen">Text, name of the variable</li>
+                <li class="typcn typcn-arrow-sorted-down">Type of the variable, »Number«, »Boolean«, »String«, »Color«,
+                    »Connection«, »List Number«, »List Boolean«, »List String«, »List Connection«</li>
+                <li class="typcn typcn-arrow-left">Value, that corresponds to the variable type. This is the initial
+                    value of the variable.</li>
+            </ul>
+        </div>
+        <div id="robActions_motor_on" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»motor...onspeedRPM...«[Expertblock]">»motor ... on speed RPM ... « <span
+                    class="typcn typcn-star"></span></h3>
+            <p>With this block you can control a single motor on your robot and determine the rotation speed.</p>
+            <p>Options and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">motor, select the motor you want to control.</li>
+                <li class="typcn typcn-arrow-left">number, the desired rotational speed of the motor, given in
+                    revolutions per minute, between -200 and 200.</li>
+            </ul>
+        </div>
+        <div id="robActions_motor_on_for" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»motor..onspeedRPM...for...«[Expertblock]">»motor .. on speed RPM ... for ...
+                « <span class="typcn typcn-star"></span></h3>
+            <p>With this block you can control a single motor on your robot and make it run for a certain number of
+                revolutions.</p>
+            <p>Options and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">motor, select the motor you want to control.</li>
+                <li class="typcn typcn-arrow-left">number, the desired rotational speed of the motor, given in
+                    revolutions per minute, between -200 and 200.</li>
+                <li class="typcn typcn-arrow-sorted-down">unit, choose whether you want to specify the rotation in
+                    degrees or whole rotations.</li>
+                <li class="typcn typcn-arrow-left">number, the number of rotations the motor should perform.</li>
+            </ul>
+        </div>
+        <div id="robActions_motor_stop" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»stopmotor...«[Expertblock]">»stop motor ... « <span
+                    class="typcn typcn-star"></span></h3>
+            <p>With this block you can stop a motor of your robot.</p>
+            <p>Options:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">motor, select the motor you want to stop.</li>
+            </ul>
+        </div>
+        <div id="robActions_motorDiff_on_for" class="help beginner">
+            <h3 class="auto-cursor-target" id="BlockdescriptionmBot2-»drive...speedRPM...distancecm...«"><span
+                    style="color: rgb(85,85,85);">»drive ... speed RPM ... distance cm ... «</span></h3>
+            <p>With this block, you can make your robot drive a specified distance. The robot can move either forwards
+                or backwards. You can also control the speed of the robot by adjusting the rotation speed of the motors.
+            </p>
+            <p>Options and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">direction, select whether the robot should drive forwards or
+                    backwards.</li>
+                <li class="typcn typcn-arrow-left">number, rotation speed of the motors in revolutions per minute,
+                    between -200 and 200.</li>
+                <li class="typcn typcn-arrow-left">number, distance that the robot is to cover in centimetres.</li>
+            </ul>
+        </div>
+        <div id="robActions_motorDiff_on" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»drive...speedRPM...«">»drive ... speed RPM ... «</h3>
+            <p>With this block you can make your robot move in a desired direction. The robot can move either forwards
+                or backwards. The robot will continue to move in this direction at the set speed until it is either
+                stopped by another block or its speed or direction is changed.</p>
+            <p>Options and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">direction, select whether the robot should drive forwards or
+                    backwards.</li>
+                <li class="typcn typcn-arrow-left">number, rotation speed of the motors in revolutions per minute,
+                    between -200 and 200.</li>
+            </ul>
+        </div>
+        <div id="robActions_motorDiff_stop" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»stop«">»stop«</h3>
+            <p>With this block you can stop your robot.</p>
+        </div>
+        <div id="robActions_motorDiff_turn_for" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»turn...speedRPM...degree...«">»turn ... speed RPM ... degree ... «</h3>
+            <p>With this block you can rotate your robot to a desired angle.</p>
+            <p>Options and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">direction, choose the direction in which you want your robot
+                    to turn, either left or right.</li>
+                <li class="typcn typcn-arrow-left">number, rotation speed of the motors in revolutions per minute,
+                    between -200 and 200.</li>
+                <li class="typcn typcn-arrow-left">number, the number of degrees the robot should rotate.</li>
+            </ul>
+        </div>
+        <div id="robActions_motorDiff_turn" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»turn...speedRPM...«">»turn ... speed RPM ... «</h3>
+            <p>With this block you can make your robot turn. The robot will continue to rotate after this block until
+                another block changes the direction of movement or stops the robot.</p>
+            <p>Options and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">direction, choose the direction in which you want your robot
+                    to turn, either left or right.</li>
+                <li class="typcn typcn-arrow-left">number, rotation speed of the motors in revolutions per minute,
+                    between -200 and 200.</li>
+            </ul>
+        </div>
+        <div id="robActions_motorDiff_curve_for" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»steer...speedRPMleft...speedRMPright...distancecm...«">»steer ... speed RPM
+                left ... speed RMP right ... distance cm ... «</h3>
+            <p>With this block you can make your robot move in one direction and control the motors at different speeds
+                so that the robot can make a turn. This block lets your robot travel a desired distance.</p>
+            <p>Options and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">direction, select whether the robot should drive forwards or
+                    backwards.</li>
+                <li class="typcn typcn-arrow-left">number, the rotation speed of the left engine in revolutions per
+                    minute, between -200 and 200.</li>
+                <li class="typcn typcn-arrow-left">number, the rotation speed of the right engine in revolutions per
+                    minute, between -200 and 200.</li>
+                <li class="typcn typcn-arrow-left">number, distance that the robot is to cover in centimetres.</li>
+            </ul>
+        </div>
+        <div id="robActions_motorDiff_curve" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»steer...speedRPMleft...speedRPMright...«">»steer ... speed RPM left ... speed
+                RPM right ... «</h3>
+            <p>With this block you can make your robot move in one direction while controlling the motors at different
+                speeds so that the robot can make a turn. The robot will continue to move at these speeds until it is
+                either stopped or a block changes the direction of movement.</p>
+            <p>Options and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">direction, select whether the robot should drive forwards or
+                    backwards.</li>
+                <li class="typcn typcn-arrow-left">number, the rotation speed of the left engine in revolutions per
+                    minute, between -200 and 200.</li>
+                <li class="typcn typcn-arrow-left">number, the rotation speed of the right engine in revolutions per
+                    minute, between -200 and 200.</li>
+            </ul>
+        </div>
+        <div id="robActions_display_text" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»showtext...incolumn...inrow...«[Expertblock]">»show text ... in column ... in
+                row ... « <span class="typcn typcn-star"></span></h3>
+            <p>With this block you can show a text on the display of your robot.</p>
+            <p>Input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">string, the text to be shown on the display.</li>
+                <li class="typcn typcn-arrow-left">number, the column in which the text is to begin, between 0 and 127.
+                </li>
+                <li class="typcn typcn-arrow-sorted-down">number, the row in which the text is to begin, between 0 and
+                    127.</li>
+            </ul>
+        </div>
+        <div id="robActions_println" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»showtextinnextrow...«">»show text in next row ... «</h3>
+            <p>With this block you can show a text on the display of your robot. The text automatically starts in the
+                next line, i.e. if you have already shown text on the display, this text will be shown in the next line.
+            </p>
+            <p>Input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">string, the text to be shown on the display.</li>
+            </ul>
+        </div>
+        <div id="robActions_display_set_colour" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»setdisplaybrushcolour...«[Expertblock]">»set display brush colour ... « <span
+                    class="typcn typcn-star"></span></h3>
+            <p>With this block you can change the colour of your display, e.g. the colour in which the text is shown.
+            </p>
+            <p>Input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">colour, the colour in which the text should be displayed.</li>
+            </ul>
+        </div>
+        <div id="robActions_display_clear" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»cleardisplay«">»clear display«</h3>
+            <p>With this block you can clear the contents of the screen.</p>
+        </div>
+        <div id="robActions_serial_print" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»showonSerialMonitor...«[Expertblock]">»show on Serial Monitor ... « <span
+                    class="typcn typcn-star"></span></h3>
+            <p>With this block you can print a text on the serial monitor. You can read out the serial monitor e.g. via
+                the Open Roberta Connector.</p>
+            <p>Input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">string, the text to be shown on the Serial Monitor.</li>
+            </ul>
+        </div>
+        <div id="mbedActions_play_tone" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»playfrequencyHz...durationms...«">»play frequency Hz ... duration ms ... «
+            </h3>
+            <p>With this block you can make your robot play a sound. You can choose the frequency and the length of the
+                sound.</p>
+            <p>Input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">number, the frequency of the sound in Hz. The human ear can perceive
+                    sounds between about 20 and 20,000 Hz.</li>
+                <li class="typcn typcn-arrow-left">number, the duration for which the sound is to be played in
+                    milliseconds.</li>
+            </ul>
+        </div>
+        <div id="robActions_play_setVolume" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»setvolume%...«">»set volume % ... «</h3>
+            <p>With this block you can change the volume of your robot's loudspeaker.</p>
+            <p>Input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">number, the volume of the speaker in percent between 0 and 100.</li>
+            </ul>
+        </div>
+        <div id="robActions_play_getVolume" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»getvolume«[Expertblock]">»get volume« <span class="typcn typcn-star"></span>
+            </h3>
+            <p>With this block you can query the current volume of your robot's loudspeaker.</p>
+            <p>Return values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">number, the current volume of the speaker.</li>
+            </ul>
+        </div>
+        <div id="mbedActions_play_note" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»playnote...«">»play note ... «</h3>
+            <p>With this block you can let your robot play a note. You can choose from three octaves.</p>
+            <p>Options:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">duration, the length of time for which the note is to be
+                    played.</li>
+                <li class="typcn typcn-arrow-sorted-down">note, the note to be played.</li>
+            </ul>
+        </div>
+        <div id="robActions_play_recording" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»playrecord«[Expertblock]">»play record« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>With this block you can play back a previously recorded recording.</p>
+        </div>
+        <div id="robActions_led_on_new_config" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»turnRGBLEDon...colour...«">»turn RGB LED on ... colour ... «</h3>
+            <p>With this block you can control an RGB LED on your robot and change its colour.</p>
+            <p>Options and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">LED, select the LED you want to control.</li>
+                <li class="typcn typcn-arrow-left">colour, the colour in which the LED should light up.</li>
+            </ul>
+        </div>
+        <div id="robActions_leds_off" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»turnRGBLEDoff...«">»turn RGB LED off ... «</h3>
+            <p>With this block you can switch off an RGB LED of your robot.</p>
+            <p>Options:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">LED, select the LED you want to switch off.</li>
+            </ul>
+        </div>
+        <div id="robActions_led_setBrightness" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»setbrightnessRGBLEDs...«">»set brightness RGB LEDs ... «</h3>
+            <p>With this block you can control the brightness of the RGB LEDs of your robot.</p>
+            <p>Input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">number, the brightness of the LEDs in percent between 0 and 100.</li>
+            </ul>
+        </div>
+        <div id="robActions_ultrasonic2_led" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»setLED...ultrasonicsensor2...brightness...«[Expertblock]">»set LED ...
+                ultrasonic sensor 2 ... brightness ... « <span class="typcn typcn-star"></span></h3>
+            <p>With this block you can control the brightness of the LEDs of the ultrasound sensor.</p>
+            <p>Options and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">LED, select the LED of the ultrasound sensor you want to
+                    control.</li>
+                <li class="typcn typcn-arrow-sorted-down">sensor, select the ultrasonic sensor you want to control.</li>
+                <li class="typcn typcn-arrow-left">number, the brightness of the LEDs in percent between 0 and 100.</li>
+            </ul>
+        </div>
+        <div id="robActions_quadRGB_led_on" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»turnRGBLEDonquadrgbsensor...colour...«[Expertblock]">»turn RGB LED on quad
+                rgb sensor ... colour ... « <span class="typcn typcn-star"></span></h3>
+            <p>With this block you can control the colour of the Quad RGB sensor.</p>
+            <p>Options and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">sensor, select the Quad RGB sensor you want to control.</li>
+                <li class="typcn typcn-arrow-left">colour, the colour in which the LEDs of the sensor should light up.
+                </li>
+            </ul>
+        </div>
+        <div id="robActions_quadRGB_led_off" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»turnRGBLEDoffquadrgbsensor...«[Expertblock]">»turn RGB LED off quad rgb
+                sensor ... « <span class="typcn typcn-star"></span></h3>
+            <p>With this block you can switch off the LEDs of a Quad RGB sensor.</p>
+            <p>Options:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">sensor, select the Quad RGB sensor you want to control.</li>
+            </ul>
+        </div>
+        <div id="robSensors_ultrasonic_getSample" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»getdistancecmultrasonicsensor...«">»get distance cm ultrasonic sensor ... «
+            </h3>
+            <p>With this block you can query an ultrasonic sensor of your robot. This sensor measures the distance to
+                the nearest object by emitting ultrasonic waves and calculating the distance to the object from the
+                reflection of these waves.</p>
+            <p>Options:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">sensor, select the ultrasonic sensor you want to query.</li>
+            </ul>
+            <p class="auto-cursor-target">Return value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">number, distance to the nearest object in centimetres.</li>
+            </ul>
+        </div>
+        <div id="robSensors_quadrgb_getSample" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»get...quadrgbsensor...«">»get ... quad rgb sensor ...«</h3>
+            <p>With this block you can query a Quad RGB sensor of your robot. This sensor can measure the brightness,
+                colour and RGB composition of the background.</p>
+            <p>Options:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">property, choose the property that you want to measure.</li>
+                <li class="typcn typcn-arrow-sorted-down">sensor, select the Quad RGB sensor you want to query.</li>
+                <li class="typcn typcn-arrow-sorted-down">sensor, select one of the four sensors of the Quad RGB sensor
+                    that you want to query.</li>
+            </ul>
+            <p class="auto-cursor-target">Return values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">colour, the colour of the surface.</li>
+                <li class="typcn typcn-arrow-right">number, the brightness of the surface in percent between 0 and 100.
+                </li>
+                <li class="typcn typcn-arrow-right">list of numbers, the composition of the colour from red, green and
+                    blue, each of the three numbers respectively between 0 and 255.</li>
+            </ul>
+        </div>
+        <div id="robSensors_line_getSample" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»getlinequadrgbsensor...«[Expertblock]">»get line quad rgb sensor ... « <span
+                    class="typcn typcn-star"></span></h3>
+            <p>With this block you can use the Quad RGB sensor of your robot to read the binary code of a line. Each
+                light sensor corresponds to one bit, so the sensor can read a total of 4 bits. A light area of the line
+                is read as »1«, a dark area is read as »0«.</p>
+            <p>Options:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">sensor, select the Quad RGB sensor you want to query.</li>
+            </ul>
+            <p class="auto-cursor-target">Return value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">number, the 4 bit number corresponding to the line. Number
+                    between 0 and 15.</li>
+            </ul>
+        </div>
+        <div id="robSensors_sound_getSample" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»getsound%microphone«">»get sound % microphone«</h3>
+            <p>With this block you can query the microphone of your robot. The microphone measures the volume of the
+                ambient noise.</p>
+            <p>Return value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">number, the volume of the ambient noise in percent, between 0 and
+                    100.</li>
+            </ul>
+        </div>
+        <div id="robSensors_sound_record" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»...recording«[Expertblock]">» ... recording« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>With this block you can control the microphone of your robot and either start or stop a recording. The
+                recording is saved on the robot and can be played back later.</p>
+            <p>Options:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">control, choose whether you want to start or stop the
+                    recording.</li>
+            </ul>
+        </div>
+        <div id="robSensors_joystickKeys_getSample" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»joystick...pressed?«">»joystick ... pressed?«</h3>
+            <p>With this block you can query the joystick of your robot to see if it is currently being pressed in one
+                direction.</p>
+            <p>Options:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">direction, choose the direction o the joystick you want to
+                    query.</li>
+            </ul>
+            <p class="auto-cursor-target">Return value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">boolean, »true« if the joystick is pressed in the chosen direction,
+                    »false« otherwise.</li>
+            </ul>
+        </div>
+        <div id="robSensors_key_getSample" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»button...pressed?«">»button ... pressed?«</h3>
+            <p>Mit diesem Block kannst du die Tasten deines Roboters abfragen, ob sie gerade gedrückt werden.</p>
+            <p>Optionen:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">Taste, wähle die Taste, die du abfragen möchtest.</li>
+            </ul>
+            <p class="auto-cursor-target">Rückgabewerte:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Wahrheitswert, »wahr«, wenn die Taste gedrückt wird, sonst »falsch«.
+                </li>
+            </ul>
+        </div>
+        <div id="robSensors_light_getSample" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»getvalue%lightsensor«[Expertblock]">»get value % light sensor« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>With this block you can query the light sensor of your robot. This sensor measures the brightness of the
+                ambient light.</p>
+            <p>Return value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">number, the brightness of the surroundings in percent between 0 and
+                    100.</li>
+            </ul>
+        </div>
+        <div id="robSensors_gyro_getSample" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»getangle°gyroscope...«">»get angle ° gyroscope ... «</h3>
+            <p>With this block you can query the gyro sensor of your robot. This sensor measures the rotation of your
+                robot.</p>
+            <p>Options:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">axis, select the axis around which the rotation is to be
+                    measured.</li>
+            </ul>
+            <p class="auto-cursor-target">Return value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">number, the angle of rotation around the chosen axis.</li>
+            </ul>
+        </div>
+        <div id="robSensors_gyro_reset_axis" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»resetgyroscope...«">»reset gyroscope ... «</h3>
+            <p>With this block you can reset the gyro sensor of your robot. This will set the current angle to 0
+                degrees.</p>
+            <p>Options:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">axis, select the axis which angle is to be reset.</li>
+            </ul>
+        </div>
+        <div id="robSensors_accelerometer_getSample" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»getvaluegaccelerometer...«[Expertblock]">»get value g accelerometer ... «
+                <span class="typcn typcn-star"></span></h3>
+            <p>With this block you can query the accelerometer of your robot. This sensor measures the acceleration that
+                your robot experiences in a certain direction. The magnitude of the acceleration is then compared to the
+                acceleration due to gravity and given in multiples of the acceleration due to gravity.</p>
+            <p>Options:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">axis, select the axis in whose direction the acceleration is
+                    to be measured.</li>
+            </ul>
+            <p class="auto-cursor-target">Return value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">number, the strength of acceleration in the selected direction,
+                    given in multiples of the acceleration due to gravity.</li>
+            </ul>
+        </div>
+        <div id="robSensors_timer_getSample" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»getvaluemstimer...«">»get value ms timer ... «</h3>
+            <p>With this block you can query one of the internal timers of your robot. The first timer is automatically
+                started with the programme, all others must be started manually with the block »Reset timer ...«.</p>
+            <p>Options:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">timer, choose the timer that you want to query.</li>
+            </ul>
+            <p class="auto-cursor-target">Return value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Number, the time since the timer was started or last reset in
+                    milliseconds.</li>
+            </ul>
+        </div>
+        <div id="robSensors_timer_reset" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»resettimer...«">»reset timer ... «</h3>
+            <p>With this block you can reset or start a timer of your robot if the timer has not been started yet.</p>
+            <p>Options:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">timer, choose the timer you want to reset.</li>
+            </ul>
+        </div>
+        <div id="robSensors_encoder_getSample" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»get...encoder...«">»get ... encoder ... «</h3>
+            <p>With this sensor you can query one of the encoders of your robot's motors. These sensors measure the
+                rotation of the motors in degrees.</p>
+            <p>Options:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">unit, choose in which unit you want to measure the rotation
+                    in. You can choose between angles in degrees and full rotations.</li>
+                <li class="typcn typcn-arrow-sorted-down">motor, choose which motor's angle of rotation you want to
+                    query.</li>
+            </ul>
+            <p class="auto-cursor-target">Return value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">number, the angle of rotation in the chosen unit.</li>
+            </ul>
+        </div>
+        <div id="robSensors_encoder_reset" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»resetencoder...«">»reset encoder ... «</h3>
+            <p>With this block you can reset one of the robot's encoders. This means that the current rotation angle is
+                set to 0 degrees. The encoders measure the rotation angle of a motor of your robot.</p>
+            <p>Options:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">motor, choose whose motor's encoder you want to reset.</li>
+            </ul>
+        </div>
+        <div id="robControls_if" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»ifdo«">»if do«</h3>
+            <p>With the block »if do« you can selectively trigger actions to be executed by your robot. The »if do«
+                block therefore requires a logical value as an input parameter, the condition. Only if the condition of
+                the »if« statement is true, the inserted block will be executed. In a nested »if do« block, if a further
+                distinction was added, the first »if« condition is queried. If it is not fulfilled (condition = false),
+                the second »else if« condition will be checked. Also this second condition requires a logical value as
+                an input parameter.</p>
+            <p>The conditions may arbitrarily be expanded by clicking the "+" plus symbol. The "-" minus symbol reduces
+                the block.</p>
+            <p>Settings and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-plus">Insert an additional condition.</li>
+                <li class="typcn typcn-minus">Delete the last condition.</li>
+                <li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li>
+                <li class="typcn typcn-arrow-left">Blocks that will be executed.</li>
+            </ul>
+        </div>
+        <div id="robControls_ifElse" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»ifdoelse«">»if do else«</h3>
+            <p>With the block »if do else« you can selectively trigger actions which are executed by your robot. The »if
+                do then« block therefore requires a logical value as an input parameter. If the condition in »if« is
+                true the inserted block will be executed, otherwise (condition is not fulfilled = false) the block
+                connected to the »else« statement will be executed. In a nested »if do else« block with further
+                distinctions added, the first »if« condition is queried. If it is not true, the second condition »else
+                if« is checked. Also the second condition requires a logical value as an input parameter. Only when both
+                conditions are not true, the block which is inserted at the »else« statement will be executed.</p>
+            <p>The conditions may arbitrarily be expanded by clicking the "+" plus symbol. The "-" minus symbol reduces
+                the block.</p>
+            <p>Settings:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-plus">Insert an additional if-do-else condition.</li>
+                <li class="typcn typcn-minus">Delete the last if-do-else condition.</li>
+                <li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li>
+                <li class="typcn typcn-arrow-left">Do blocks that will be executed if the according condition evaluates
+                    to »true«.</li>
+                <li class="typcn typcn-arrow-left">Else blocks that will be executed if the according condition
+                    evaluates to »false«.</li>
+            </ul><br>
+        </div>
+        <div id="robControls_loopForever" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»repeatindefinitely«">»repeat indefinitely«</h3>
+            <p>With the block »repeat indefinitely« you can endlessly run the blocks on your robot. All blocks which are
+                within the »repeat indefinitely« block will be executed endlessly. The blocks are applied sequentially
+                from top to bottom. Once the last block has been executed, the program repeats with the first block
+                again. Therefore, this block is also called »loop«.</p>
+            <p>Input:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Blocks to be repeated indefinitely.</li>
+            </ul><br>
+        </div>
+        <div id="controls_repeat_ext" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»repeatntimes«">»repeat n times«</h3>
+            <p>With the block »repeat« you can run other block as many times as you like. All blocks in the »repeat«
+                block will be executed as often as defined in the entry field. The blocks are applied sequentially from
+                top to bottom. Once the last block has been executed, the program repeats with the first block again.
+                Therefore, this block is also called »loop«.</p>
+            <div class="confluence-information-macro confluence-information-macro-information">
+                <div class="confluence-information-macro-body">
+                    <p>Only integer values can be entered.</p>
+                </div>
+            </div>
+            <p>Settings and input:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Number that indicates how often the contained blocks will be
+                    repeated.</li>
+                <li class="typcn typcn-arrow-left">Blocks to be repeated as often as defined.</li>
+            </ul><br>
+        </div>
+        <div id="controls_whileUntil" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»repeatwhile/until«[Expertblock]">»repeat while/until« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>With the block »repeat while/until« you can run other block as many times as you like. All blocks in the
+                »repeat while/until« block will be executed as long as the condition in the entry field is true. The
+                blocks are applied sequentially from top to bottom. Once the last block has been executed, the program
+                repeats with the first block again if the condition is still true. Therefore, this block is also called
+                »conditional loop«.</p>
+            <p>Settings and input:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">»while« or »until«, defining the type of the conditional
+                    repetition.</li>
+                <li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li>
+                <li class="typcn typcn-arrow-left">Blocks that will be repeated while/until the condition evaluates to
+                    »true«. </li>
+            </ul><br>
+        </div>
+        <div id="robControls_forEach" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»foreachiteminlist«[Expertblock]">»for each item in list« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>With the block »for each item in list« all list items will successively be bound to a variable. The
+                variable can be used within the loop. With each loop cycle the next item of the list will be bound until
+                all list elements have been processed.</p>
+            <p>Settings and input value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">Type of list elements, »Number«, »String«, »Boolean«,
+                    »Colour«, »Connection«</li>
+                <li class="typcn typcn-pen">Variable, name of free choice; list elements will be delivered one after the
+                    other to the variable.</li>
+                <li class="typcn typcn-arrow-left">List that contains elements of the desired type. If the list elements
+                    are not of the correct type then the list will not fit to the input slot.</li>
+                <li class="typcn typcn-arrow-left">Blocks which will be executed as often as there are elements in the
+                    list.</li>
+            </ul><br>
+        </div>
+        <div id="robControls_for" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»countwithfromto«[Expertblock]">»count with from to« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>With the block »count with from to« you can run other block as many times as you like. All blocks in the
+                »count with from to« block will be executed as long as the counting is in progress. The blocks are
+                applied sequentially from top to bottom. Once the last block has been executed, the program repeats with
+                the first block again if the counting is in progress. The last parameter declares the step width for
+                counting.</p>
+            <p>Settings:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-pen">Variable, name of free choice; numbers of the counter will be delivered one
+                    after the other to the variable. </li>
+                <li class="typcn typcn-arrow-left">Number, initial value of the counter.</li>
+                <li class="typcn typcn-arrow-left">Number, final value of the counter. As the counter exceeds this value
+                    the loop ends.</li>
+                <li class="typcn typcn-arrow-left">Number, defining the increment. The variable value will increase by
+                    this amount after every loop cycle.</li>
+                <li class="typcn typcn-arrow-left">Blocks that will be executed in every loop cycle.</li>
+            </ul><br>
+        </div>
+        <div id="controls_flow_statements" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»breakout/continuewithnextiterationofloop«[Expertblock]">»break out/continue
+                with next iteration of loop« <span class="typcn typcn-star"></span></h3>
+            <p>With the block »break out/continue with next iteration of loop« a loop can be terminated ahead of
+                schedule. As soon as the block is entered within a sequence of blocks, all further blocks up to the end
+                of the loop will be ignored.</p>
+            <p>Settings:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">Type of breaking behavior, »break out« or »continue with next
+                    iteration«.</li>
+            </ul>
+        </div>
+        <div id="robControls_wait_time" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»wait«">»wait«</h3>
+            <p>With the block »wait« you can "pause" your program at the point where you inserted the »wait« block. Your
+                program will then remain for the specified duration at this point. After the specified time the next
+                block will be executed. For example you can display text in the screen of your robot for exactly the
+                time you specified in the »wait« block.</p>
+            <p>Settings:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Number, waiting time in milliseconds.</li>
+            </ul><br>
+        </div>
+        <div id="robControls_wait_for" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»waituntil«">»wait until«</h3>
+            <p>With the block »wait until« you can "stop" your program at the point you insert the »wait until« block.
+                Your program then waits until the condition is true. The »wait until« block you can extended by click on
+                "+" symbol. Your program then waits until (at least) one of the condition of your »wait until« block is
+                true.</p>
+            <p>Settings:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-plus">Add a new condition.</li>
+                <li class="typcn typcn-minus">Delete the last condition.</li>
+                <li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li>
+            </ul><br>
+        </div>
+        <div id="logic_compare" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»comparison«">»comparison«</h3>
+            <p>With the block »comparison« you can compare different parameters of the same type (number, color, logical
+                value, text). This block can only be used in conjunction with another block which requires a logical
+                value as an input parameter.</p>
+            <p>Settings and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Value for the left hand side.</li>
+                <li class="typcn typcn-arrow-sorted-down">Comparison, select one of =, ≠, &lt;, ≤, &gt;, ≥</li>
+                <li class="typcn typcn-arrow-left">Value for the right hand side.</li>
+            </ul><br>
+            <p style="text-align: left;">Return value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Boolean value, »true« or »false«.</li>
+            </ul>
+        </div>
+        <div id="logic_operation" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»and/or«">»and/or«</h3>
+            <p>With the block »and/or« you can interrelate logical values with each other. The »and/or« block with the
+                setting "and" will be true only if both logical parameters are "'true"'. If the block has the setting
+                »or« it is sufficient if one of the two parameters is "true", so that the »and/or« block will return
+                true.</p>
+            <p>Settings:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Boolean value on the left hand side.</li>
+                <li class="typcn typcn-arrow-sorted-down">Boolean function, »and« or »or«.</li>
+                <li class="typcn typcn-arrow-left">Boolean value on the right hand side.</li>
+            </ul>Return value:<li class="typcn typcn-arrow-right">Boolean value »true« or»false«.</li>
+        </div>
+        <div id="logic_negate" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»not«[Expertblock]">»not« <span class="typcn typcn-star"></span></h3>
+            <p>Using the »not« lets you invert a logical value and pass this value to another block.</p>
+            <p>Input value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Boolean value, to be inverted.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Boolean value, »true« or »false«; result of inverting.</li>
+            </ul><br>
+        </div>
+        <div id="logic_boolean" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»true/false«">»true/false«</h3>
+            <p>With the block »true/false« you can return either the logical value »true« or »false« to another block.
+            </p>
+            <p>Settings:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">Boolean value, make your choice.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Boolean value, »true« or »false«.</li>
+            </ul><br>
+        </div>
+        <div id="logic_null" class="help expert">
+            <h3 style="text-align: left;" id="BlockdescriptionmBot2-»null«[Expertblock]">»null« <span
+                    class="typcn typcn-star"></span></h3>
+            <p style="text-align: left;">The block »null« is a place holder for an input value that is not yet
+                specified. If for instance a new connection variable has been created and is not yet bound, the initial
+                value of this connection will be set to »null«.</p>
+            <p style="text-align: left;">Input value: none</p>
+            <p style="text-align: left;">Return value::
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Boolean value, »null«.</li>
+            </ul>
+        </div>
+        <div id="logic_ternary" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»test«[Expertblock]">»test« <span class="typcn typcn-star"></span></h3>
+            <p>Using the »test« block will perform a test and returns a value which depends on the test result.</p>
+            <p>Input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Boolean value for the test; if no input value is given "true" will be
+                    assumed.</li>
+                <li class="typcn typcn-arrow-left">Arbitrary value, evaluated by a block.</li>
+                <li class="typcn typcn-arrow-left">Arbitrary value, evaluated by a block.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Value of arbitrary type.</li>
+            </ul><br>
+        </div>
+        <div id="math_number" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»parameter«">»parameter«</h3>
+            <p>With the block »parameter« you can send numbers to another block.</p>
+            <p> Settings:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-pen">Number</li>
+            </ul><br>
+            <p style="text-align: left;">Return value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right"> Number</li>
+            </ul>
+        </div>
+        <div id="math_arithmetic" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»calculating«">»calculating«</h3>
+            <p>With the block »calculating« you can sum up, subtract, multiply, and divide numbers. This block can only
+                be used in conjunction with another block which requires a number as an input parameter.</p>
+            <p>Settings and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left"> Number</li>
+                <li class="typcn typcn-arrow-sorted-down"> Mathematical operator, choose one of +, −, ×, ÷, ^</li>
+                <li class="typcn typcn-arrow-left">Number</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right"> Number, result of the calculation.</li>
+            </ul><br>
+        </div>
+        <div id="math_single" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»mathematicalfunction«[Expertblock]">»mathematical function« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>With the block »mathematical function« some elementary mathematical functions may be calculated.
+                Available functions are »square root«, »absolute«, »invert« (multiply by -1), »ln« (natural logarithm),
+                »log10« (decadic logarithm), »e^« (exponential function), »10^« (base 10 exponent)</p>
+            <p>Settings and input value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">Mathematical function, choose one.</li>
+                <li class="typcn typcn-arrow-left">Number to apply the function to.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right"> Number, result of the function application.</li>
+            </ul><br>
+        </div>
+        <div id="math_trig" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»trigonometricfunction«[Expertblock]">»trigonometric function« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>With the block »trigonometric function« sine, cosine, tangent and their respective revers functions can
+                be calculated. Input values are expected in radian measure(see hint above).</p>
+            <p>Settings and input value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">Trigonometric function, choose one.</li>
+                <li class="typcn typcn-arrow-left">Number, in radian measure.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right"> Number, result of the trigonometric calculation.</li>
+            </ul><br>
+        </div>
+        <div id="math_constant" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»constant«[Expertblock]">»constant« <span class="typcn typcn-star"></span>
+            </h3>
+            <p>With the »constant« block some mathematical constant values are available: »π« (3,1415...), »e«
+                (2,718...), »φ« (1,618...), »sqrt(2)« (1,414...), »sqrt(½)« (0,7071...), »∞«</p>
+            <p>Settings:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">Mathematical constants, choose one.</li>
+            </ul>
+            <p>Return value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right"> Number, value of the selected mathematical constant. Infinity will
+                    return »infinity«.</li>
+            </ul><br>
+        </div>
+        <div id="math_number_property" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»numberproperty«[Expertblock]">»number property« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>With the block »number property« you check whether a given number has a specific property: »even«, »odd«,
+                »prime«, »whole«, »positive«, »negative«, »divisible by«.</p>
+            <p>Input value and settings:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Number, the property of this input value will be checked.</li>
+                <li class="typcn typcn-arrow-sorted-down">Number property, choose one.</li>
+                <li class="typcn typcn-arrow-left">Number, evaluated from a block. The second input value is only
+                    required for the property »divisible by«.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Boolean value, »true« or »false«, depending on the selected
+                    property.</li>
+            </ul><br>
+        </div>
+        <div id="robMath_change" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»changebyx«[Expertblock]">»change by x« <span class="typcn typcn-star"></span>
+            </h3>
+            <p>The block »change by x« increments a numerical variable by a defined value.</p>
+            <p>Settings:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">Variable name, which value is to be changed. Choose the
+                    variable to be changed.</li>
+                <li class="typcn typcn-arrow-left">Number, given by a block.</li>
+            </ul><br>
+        </div>
+        <div id="math_round" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»round«[Expertblock]">»round« <span class="typcn typcn-star"></span></h3>
+            <p>With the block »round« values may be rounded. Rounding will set the decimal places to 0. It depends on
+                the value of the decimal places whether the block rounds up or down. You may also decide by settings to
+                always round up or down.</p>
+            <p>Settings and input value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">Type of rounding, choose a round mode.</li>
+                <li class="typcn typcn-arrow-left">Number, given by a block.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Number, rounded whole number, according to the round mode.</li>
+            </ul><br>
+        </div>
+        <div id="math_on_list" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»listevaluation«[Expertblock]">»list evaluation« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>With the block »list evaluation« you may analyze a list.</p>
+            <p>Settings:</p>
+            <ul>
+                <li>sum - addition of all list values</li>
+                <li>min - smallest value in the list</li>
+                <li>max - largest value in the list</li>
+                <li>average - average of all list values</li>
+                <li>median - median of all list values</li>
+                <li>standard deviation - standard deviation of all list values</li>
+                <li>random item - one list value randomly selected</li>
+            </ul>
+            <p>Settings and input value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">Mode of list evaluation, choose one mode.</li>
+                <li class="typcn typcn-arrow-left">List of numbers</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Number, calculated according to the selected list evaluation mode.
+                </li>
+            </ul><br>
+        </div>
+        <div id="math_modulo" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»remainderof«[Expertblock]">»remainder of« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>The block »remainder of« calculates a divison and returns the remainder of the division.</p>
+            <p>Input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Number to be divided (dividend).</li>
+                <li class="typcn typcn-arrow-left">Number, divisor.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Number, rest of the division.</li>
+            </ul><br>
+        </div>
+        <div id="math_constrain" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»constrain«[Expertblock]">»constrain« <span class="typcn typcn-star"></span>
+            </h3>
+            <p>The block »constrain« ensures that given boundaries will not be exceeded.</p>
+            <p>Input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Number, that will be constrained.</li>
+                <li class="typcn typcn-arrow-left">Number, lower bound.</li>
+                <li class="typcn typcn-arrow-left">Number, upper bound.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Number, constrained by the lower and the upper bound.</li>
+            </ul><br>
+        </div>
+        <div id="math_random_int" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»randominteger«[Expertblock]">»random integer« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>With the block »random integer« you may generate random integer numbers within defined limits</p>
+            <p>Input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Number, lower bound</li>
+                <li class="typcn typcn-arrow-left">Number, upper bound</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Number, a whole random number from within the upper and lower
+                    bounds.</li>
+            </ul><br>
+        </div>
+        <div id="math_random_float" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»randomfraction«[Expertblock]">»random fraction« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>With the block »random fraction« a random value between 0.0 and 1.0 is calculated.</p>
+            <p>Return value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Number, positive random value between 0.0 and 1.0.</li>
+            </ul><br>
+        </div>
+        <div id="text" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»Text«">»Text«</h3>
+            <p>The simple »Text« block creates a little text.</p>
+            <p>Input value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-pen">String, containing arbitrary characters.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">String, containing arbitrary characters.</li>
+            </ul><br>
+        </div>
+        <div id="robText_join" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»createtext«[Expertblock]">»create text« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>The »create text« block compiles a text from different input parameters. Using the + sign will insert
+                further input slots. All input parameters will be connected one after the other. Essentially the »create
+                text« block converts an arbitrary input value into a text string.</p>
+            <p>Input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Arbitrary values (numbers, text, logical values, colours)</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">String, containing arbitrary characters, compiled sequentially from
+                    all input values.</li>
+            </ul><br>
+        </div>
+        <div id="robText_append" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»appendtext«[Expertblock]">»append text« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>The »append text« block will append some string to a given string, for instance to extend a message with
+                a signature.</p>
+            <p>Input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">String, to which some other text will be appended.</li>
+                <li class="typcn typcn-arrow-left">String, that shall be appended.</li>
+            </ul><br>
+        </div>
+        <div id="variables_set" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»setvariable«">»set variable«</h3>
+            <p>Using the block »set variable« will assign a value to a variable. Depending on the variable type the
+                value may be assigned by an input connector.</p>
+            <p>Settings and input value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">Variable, which value is to be changed.</li>
+                <li class="typcn typcn-arrow-left">Value, new value for the variable, evaluated from a suitable block.
+                </li>
+            </ul><br>
+        </div>
+        <div id="variables_get" class="help beginner">
+            <h3 id="BlockdescriptionmBot2-»getvariable«">»get variable«</h3>
+            <p>Using the block »get variable« returns the value of a variable to another block.The type of the output
+                parameter is equal to the type that has been assigned to the variable in the »start« block.</p>
+            <p><span>Settings:</span>
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">Variable, that will be read. The value will not be changed by
+                    reading.</li>
+            </ul><span>Return value:</span>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Value, stored in the variable.</li>
+            </ul><span><br></span>
+        </div>
+        <div id="robLists_create_with" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»createlist«[Expertblock]">»create list« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>The block »empty list« creates a list with no content.The block »list« generates a list with some
+                predefined values.</p>
+            <p>This block may only be used in the context of a »set variable« block.</p>Using + or − enables you to
+            extend or reduce the list at its end.<p>Settings and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">List type, »Number«, »String«, »Boolean«, »Colour«,
+                    »Connection«.</li>
+                <li class="typcn typcn-plus">Create further list element, append to the end of the list.</li>
+                <li class="typcn typcn-minus">Delete list element at the end of the list.</li>
+                <li class="typcn typcn-arrow-left">Values, according to the list type. Here the input of initial values
+                    is possible.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Empty list or list, containing elements of the specified list type.
+                </li>
+            </ul><br>
+        </div>
+        <div id="robLists_repeat" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»repeatelementinlist«[Expertblock]">»repeat element in list« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>The »repeat element in list« block generates a list of equal elements. </p>
+            <p>Settings:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-sorted-down">List type, »Number«, »Boolean«, »String«, »Colour« or
+                    »Connection«.</li>
+                <li class="typcn typcn-arrow-left">List element, according to the selected list type. This value will be
+                    repeated in the list.</li>
+                <li class="typcn typcn-arrow-left"> Number, defining how often the list element will be repeated.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">List of the specified list type, containing the specified number of
+                    equal elements.</li>
+            </ul><br>
+        </div>
+        <div id="robLists_length" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»lengthof«[Expertblock]">»length of« <span class="typcn typcn-star"></span>
+            </h3>
+            <p>The »length of« block returns a value which is the lenght of the list given as parameter. An empty list
+                has a length of 0.</p>
+            <p>Input value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">List, evaluated by an appropriate block.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Integer, number of list elements.</li>
+            </ul><br>
+        </div>
+        <div id="robLists_isEmpty" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»isempty?«[Expertblock]">»is empty?« <span class="typcn typcn-star"></span>
+            </h3>
+            <p>A list given as parameter will be checked whether it is empty.</p>
+            <p>Input value:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">List, evaluated by an appropriate block.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Boolean, either »true« or »false«.</li>
+            </ul><br>
+        </div>
+        <div id="robLists_indexOf" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»findinlist«[Expertblock]">»find in list« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>A list is searched for an item. If the item is in the list, the list position will be returned. If the
+                item is not in the list the result is -1.</p>
+            <p>Settings and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">List, that will be examined.</li>
+                <li class="typcn typcn-arrow-sorted-down">Position of the occurrence, either »first« or »last«.</li>
+                <li class="typcn typcn-arrow-left">Value, list item to be found.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Number, indicating the position where the element was found in the
+                    list. <br>Note: Counting list positions will start with 0.</li>
+            </ul><br>
+        </div>
+        <div id="robLists_getIndex" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»getlistelement«[Expertblock]">»get list element« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>This block accesses an item of a list. Depending on the settings this item may be altered.</p>
+            <p>A list is given as parameter. Then a drop-down-list specifies what will happen to the list item under
+                consideration.</p>
+            <p>Settings:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">List, that is under consideration.</li>
+                <li class="typcn typcn-arrow-sorted-down">Action for the element found: »get« reads the element and
+                    leaves it unchanged, »get and remove« reads the element and removes it from the list, »remove« just
+                    removes the element from the list.</li>
+                <li class="typcn typcn-arrow-sorted-down">Position of the element found: »#«, »# from end«, »first«,
+                    »last« or »random« .</li>
+                <li class="typcn typcn-arrow-left">Number, indicating the list position. This input value is not
+                    required if »first«, »last« or »random« was selected as position.<br>Note: Counting of list
+                    positions starts with 0.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">List element that has been found at the specified list position;
+                    »undefined«, if the list position does not exist. <br>With selection of »remove« there is no return
+                    value; instead the list will be shortened by this list element.</li>
+            </ul><br>
+        </div>
+        <div id="robLists_setIndex" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»setlistelement«[Expertblock]">»set list element« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>In a list given as input parameter one specified element will be replaced by a new value.</p>
+            <p>Settings and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">List, that will be changed.</li>
+                <li class="typcn typcn-arrow-sorted-down">Action for the element found; »set« changes the element,
+                    »insert at« inserts a new element into the list.</li>
+                <li class="typcn typcn-arrow-sorted-down">Position for the element to be changed: »#«, »# from end«,
+                    »first«, »last« or »random« .</li>
+                <li class="typcn typcn-arrow-left">Number, indicating the list position. This input value is not
+                    required if »first«, »last« or »random« was selected.<br>Note: Counting of list positions begins
+                    with 0.</li>
+                <li class="typcn typcn-arrow-left">List element, that will be set or inserted at the selected list
+                    position.</li>
+            </ul><br>
+        </div>
+        <div id="robLists_getSublist" class="help expert">
+            <h3 id="BlockdescriptionmBot2-»getsublist«[Expertblock]">»get sublist« <span
+                    class="typcn typcn-star"></span></h3>
+            <p>From a list given as parameter a sublist will be created. The sublist contains all those elements that
+                match the further specifications of the block.</p>
+            <p>Settings and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">List to be examined.</li>
+                <li class="typcn typcn-arrow-sorted-down">Position, start of the sublist: »#«, »# from end« or »first«.
+                </li>
+                <li class="typcn typcn-arrow-left">Number, indicating the list position. This input value is not
+                    required if »first« has been selected.<br>Note: Counting of list positions starts with 0.</li>
+                <li class="typcn typcn-arrow-sorted-down">Position, end of the sublist: »#«, »# from end« or »last«.
+                </li>
+                <li class="typcn typcn-arrow-left">Number, indicating the list position. This input value is not
+                    required if »last« has been selected.<br>Note: Counting of list positions starts with 0.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">List, a sublist of the same type as the given list.</li>
+            </ul><br>
+        </div>
+        <div id="robProcedures_defnoreturn" class="help expert">
+            <h3
+                id="BlockdescriptionmBot2-Functionblockwith/withoutinputparameterandwithoutreturnparameter[Expertblock]">
+                Function block with/without input parameter and without return parameter <span
+                    class="typcn typcn-star"></span></h3>
+            <p>In a function block with/without input parameter and without return parameter a sequence of program
+                statements will be condensed. The input parameters will be determined by the local variables of the
+                function block. Local variables may be generated by using the »+« sign of the function block. Local
+                variables will not be initialized.</p>
+            <p>If a function block contains an if-block the function may be terminated before reaching it's end.</p>
+            <p>The function block is available in the »Functions« category immediately after its definition. Using
+                function blocks improves the readability of complex programs.</p>
+            <p>Settings:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-pen">Function name, no special characters and white spaces allowed</li>
+                <li class="typcn typcn-plus">Generate new local variables, that will be assigned with the function call.
+                </li>
+                <li class="typcn typcn-minus">Delete the associated local variable.</li>
+            </ul><br>
+            <div class="confluence-information-macro confluence-information-macro-note">
+                <div class="confluence-information-macro-body">
+                    <ul>
+                        <li>The name of a function block has to start with a lower case letter. Special characters are
+                            not allowed in a function block name.</li>
+                        <li>If the function block defines input parameters (local variables), all the parameter slots
+                            have to be occupied when calling the function.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="robProcedures_defreturn" class="help expert">
+            <h3 id="BlockdescriptionmBot2-Functionblockwith/withoutinputparameterandwithreturnparameter[Expertblock]">
+                Function block with/without input parameter and with return parameter <span
+                    class="typcn typcn-star"></span></h3>
+            <p>In a function block with/without input parameter and with return parameter a sequence of program
+                statements will be condensed. The input parameters will be determined by the local variables of the
+                function block. Local variables may be generated by using the »+« sign of the function block. Local
+                variables will not be initialized. After running through all the blocks of the function a value will be
+                returned.</p>
+            <p>If a function block contains an if-block the function may be terminated before reaching it's end. An
+                alternative value may be returned by the if-block.</p>
+            <p>The function block is available in the »Functions« category immediately after its definition. Using
+                function blocks improves the readability of complex programs.</p>
+            <p>Settings:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-pen">Function name, no special characters and white spaces allowed</li>
+                <li class="typcn typcn-plus">Generate new local variables, that will be assigned with the function call.
+                </li>
+                <li class="typcn typcn-minus">Delete the associated local variable.</li>
+                <li class="typcn typcn-arrow-sorted-down">Data type for the return value; choose one data type.</li>
+                <li class="typcn typcn-arrow-left">Block, that returns a value of the defined data type.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Value of the defined data type, evaluated in an appropriate block.
+                </li>
+            </ul><br>
+            <div class="confluence-information-macro confluence-information-macro-note">
+                <div class="confluence-information-macro-body">
+                    <ul>
+                        <li>The name of a function block has to start with a lower case letter. Special characters are
+                            not allowed in a function block name.</li>
+                        <li>If the function block defines input parameters (local variables), all the parameter slots
+                            have to be occupied when calling the function.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="robProcedures_ifreturn" class="help expert">
+            <h3 id="BlockdescriptionmBot2-Ifstatementwithinafunction[Expertblock]">If statement within a function <span
+                    class="typcn typcn-star"></span></h3>
+            <p>The if statement within a function is of special importance. As the function sequence meets an if
+                statement the validity of the condition will be checked.</p>
+            <h4 id="BlockdescriptionmBot2-Ifstatementwithinafunctionwithreturnvalue:">If statement within a function
+                with return value:</h4>
+            <ul>
+                <li>If the condition evaluates to »true« the rest of the function will be ignored and the function
+                    terminates. The second input value of the if statement will be returned. A possibly defined return
+                    value of the function will be ignored. The return value data type is determined by the return data
+                    type of the function definition.</li>
+                <li>If the condition evaluates to »false« the sequence of the function blocks will be continued. The
+                    return value of the function will be returned after reaching the end of the function.</li>
+            </ul>
+            <h4 id="BlockdescriptionmBot2-Ifstatementwithinafunctionwithnoreturnvalue:">If statement within a function
+                with no return value:</h4>
+            <ul>
+                <li>An if statement within a function without return value has just the if statement as input parameter.
+                </li>
+                <li>If the condition evaluates to »true« the rest of the function will be ignored and the function
+                    terminates.</li>
+                <li>If the condition evaluates to »false« the sequence of the function blocks will be continued.</li>
+            </ul>
+            <p>Settings and input values:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Boolean value, possibly evaluated by a condition.</li>
+                <li class="typcn typcn-arrow-left">Value of the specified data type.</li>
+            </ul>Return value:<ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Value of the specified data type.</li>
+            </ul><br>
+        </div>
+    </div>
+</body>
