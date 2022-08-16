@@ -17,11 +17,12 @@ public class StackmachinePrettyPrinter {
             StringBuilder sb = new StringBuilder();
             JSONObject stackMachineOp = stackMachineCode.getJSONObject(i);
             String opc = stackMachineOp.getString("opc");
-            sb.append(String.format("%4d: %-10s %-16s", i, "", opc));
+            String label = stackMachineOp.optString("label", "");
+            sb.append(String.format("%4d: %-10s %-16s", i, label, opc));
             Set<String> opKeySet = new TreeSet(stackMachineOp.keySet());
             for ( String key : opKeySet ) {
-                if ( key.equals("opc") || key.equals("+") || key.equals("-") || key.equals("possibleDebugStop") ) {
-                    // already printed or print later
+                if ( key.equals("opc") || key.equals("label") || key.equals("+") || key.equals("-") || key.equals("possibleDebugStop") ) {
+                    // already printed or printed later
                 } else {
                     sb.append(key).append(": ").append(stackMachineOp.get(key)).append(", ");
                 }

@@ -105,15 +105,10 @@ import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.basic.C;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
-import de.fhg.iais.roberta.util.visitor.JumpLinker;
-import static de.fhg.iais.roberta.util.visitor.JumpLinker.JumpTarget.BREAK;
-import static de.fhg.iais.roberta.util.visitor.JumpLinker.JumpTarget.CONTINUE;
-import static de.fhg.iais.roberta.util.visitor.JumpLinker.JumpTarget.INTERNAL_BREAK;
-import static de.fhg.iais.roberta.util.visitor.JumpLinker.JumpTarget.METHOD_END;
-import static de.fhg.iais.roberta.util.visitor.JumpLinker.JumpTarget.STATEMENT_END;
 import de.fhg.iais.roberta.util.visitor.StackMachineBuilder;
 import de.fhg.iais.roberta.visitor.BaseVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -125,8 +120,6 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     private StackMachineBuilder codeBuilder = new StackMachineBuilder();
     protected final ConfigurationAst configuration;
-
-    private final JumpLinker jumpLinker = new JumpLinker();
 
     private final Map<String, List<JSONObject>> methodCalls = new HashMap<>();
     private final Map<String, Integer> methodDeclarations = new HashMap<>();
@@ -323,39 +316,17 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         switch ( binary.op ) {
             case AND:
             case OR:
-                /*
-                Jumps are needed because of lazy evaluation
-
-                AND                       OR
-                left                      left
-                 ▼                         ▼
-                JUMP false──┐             JUMP true ──┐
-                 ▼          │              ▼          │
-                right       │             right       │
-                 ▼          │              ▼          │
-                JUMP Always─┼─┐           JUMP Always─┼─┐
-                 ▼          │ │            ▼          │ │
-                false◄──────┘ │           true◄───────┘ │
-                 ▼            │            ▼            │
-                  ◄───────────┘             ◄───────────┘
-                 */
-
-                appComment(C.BINARY, true);
-
+                // Jumps are needed because of lazy evaluation
+                int uniqueCompoundNumber = codeBuilder.pushCompound(StackMachineBuilder.Compound.BINARY);
+                appComment(C.BINARY, true).put(C.N, uniqueCompoundNumber);
                 boolean isOr = binary.op == Op.OR;
                 binary.left.accept(this);
-                JSONObject skipNextCondition = makeNode(C.JUMP).put(C.CONDITIONAL, isOr);
-                add(skipNextCondition);
-
+                add(makeNode(C.JUMP).put(C.CONDITIONAL, isOr).put(C.TARGET, "b_m_" + uniqueCompoundNumber));
                 binary.getRight().accept(this);
-                JSONObject jumpToEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
-                add(jumpToEnd);
-
-                skipNextCondition.put(C.TARGET, codeBuilder.size());
-                add(makeNode(C.EXPR).put(C.EXPR, C.BOOL_CONST).put(C.VALUE, isOr));
-                jumpToEnd.put(C.TARGET, codeBuilder.size());
-
-                appComment(C.BINARY, false);
+                add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, "b_e_" + uniqueCompoundNumber));
+                add(makeNode(C.EXPR).put(C.EXPR, C.BOOL_CONST).put(C.VALUE, isOr).put(C.LABEL, "b_m_" + uniqueCompoundNumber));
+                appComment(C.BINARY, false).put(C.LABEL, "b_e_" + uniqueCompoundNumber);
+                codeBuilder.popCompound(StackMachineBuilder.Compound.BINARY);
                 return null;
             default:
                 binary.left.accept(this);
@@ -495,51 +466,41 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     public final Void visitTernaryExpr(TernaryExpr ternaryExpr) {
-        appComment(C.IF_STMT, true);
+        int uniqueCompoundNumber = codeBuilder.pushCompound(StackMachineBuilder.Compound.TERNARY);
+        appComment(C.TERNARY, true).put(C.N, uniqueCompoundNumber);
         ternaryExpr.condition.accept(this);
-        // JUMP when condition is not fullfilled
-        JSONObject jumpOverThen = makeNode(C.JUMP).put(C.CONDITIONAL, false);
-        add(jumpOverThen);
+        add(makeNode(C.JUMP).put(C.CONDITIONAL, false).put(C.TARGET, "t_m_" + uniqueCompoundNumber)); // JUMP when condition is not fullfilled
         ternaryExpr.thenPart.accept(this);
-        // JUMP because if is finished
-        JSONObject jumpToEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
-        add(jumpToEnd);
-        jumpLinker.register(jumpToEnd, STATEMENT_END);
-        jumpOverThen.put(C.TARGET, codeBuilder.size());
+        add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, "t_e_" + uniqueCompoundNumber));  // JUMP because if is finished
+        appComment(C.TERNARY).put(C.LABEL, "t_m_" + uniqueCompoundNumber);
         ternaryExpr.elsePart.accept(this);
-        jumpLinker.handle(STATEMENT_END).forEach(jump -> jump.put(C.TARGET, codeBuilder.size()));
-        appComment(C.IF_STMT, false);
+        appComment(C.TERNARY, false).put(C.LABEL, "t_e_" + uniqueCompoundNumber);
+        codeBuilder.popCompound(StackMachineBuilder.Compound.TERNARY);
         return null;
     }
 
     @Override
     public final Void visitIfStmt(IfStmt ifStmt) {
-        appComment(C.IF_STMT, true);
+        int uniqueCompoundNumber = codeBuilder.pushCompound(StackMachineBuilder.Compound.IF);
+        appComment(C.IF_STMT, true).put(C.N, uniqueCompoundNumber);
 
+        boolean hasElse = !ifStmt.elseList.get().isEmpty();
         int numberOfThens = ifStmt.expr.size();
-        // TODO: better a list of pairs. pair of lists needs this kind of for
         for ( int i = 0; i < numberOfThens; i++ ) {
+            appComment(C.IF_STMT).put(C.LABEL, "i_" + i + "_" + uniqueCompoundNumber);
             ifStmt.expr.get(i).accept(this);
-            // JUMP when condition not fullfilled
-            JSONObject jumpOverThen = makeNode(C.JUMP).put(C.CONDITIONAL, false);
-            add(jumpOverThen);
+            // JUMP to next then condition if condition is not fullfilled
+            add(makeNode(C.JUMP).put(C.CONDITIONAL, false).put(C.TARGET, "i_" + (i + 1) + "_" + uniqueCompoundNumber));
             ifStmt.thenList.get(i).accept(this);
-
-            // JUMP when if was fullfilled
-            JSONObject jumpToEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
-            add(jumpToEnd);
-            jumpLinker.register(jumpToEnd, STATEMENT_END);
-
-            jumpOverThen.put(C.TARGET, codeBuilder.size());
+            // JUMP to end when if was fullfilled
+            add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, "i_e_" + uniqueCompoundNumber));
         }
+        appComment(C.IF_STMT).put(C.LABEL, "i_" + numberOfThens + "_" + uniqueCompoundNumber);
         if ( !ifStmt.elseList.get().isEmpty() ) {
             ifStmt.elseList.accept(this);
         }
-
-        jumpLinker.handle(STATEMENT_END)
-            .forEach(jump -> jump.put(C.TARGET, codeBuilder.size()));
-
-        appComment(C.IF_STMT, false);
+        appComment(C.IF_STMT, false).put(C.LABEL, "i_e_" + uniqueCompoundNumber);
+        codeBuilder.popCompound(StackMachineBuilder.Compound.IF);
         return null;
     }
 
@@ -601,232 +562,148 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         String blocklyId = repeatStmt.getProperty().getBlocklyId();
 
         switch ( mode ) {
-            case WAIT:
-                // the very special case of a wait stmt. The AST is not perfectly designed for this case
-                repeatStmt.expr.accept(this);
-                JSONObject skipThenPart = makeNode(C.JUMP).put(C.CONDITIONAL, false);
-                add(skipThenPart);
-                repeatStmt.list.accept(this);
-                JSONObject breakStatement = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
-                addHighlightingToJump(breakStatement);
-                add(breakStatement);
-                jumpLinker.register(breakStatement, INTERNAL_BREAK);
-                skipThenPart.put(C.TARGET, codeBuilder.size());
-                return null;
             case FOR:
-            case TIMES:
-                jumpLinker.isolate(() -> {
-                    appComment(C.REPEAT_STMT, true);
+            case TIMES: {
+                int uniqueCompoundNumber = codeBuilder.pushCompound(StackMachineBuilder.Compound.REPEAT);
+                appComment(C.REPEAT_STMT, true).put(C.N, uniqueCompoundNumber);
 
-                    if ( !(repeatStmt.expr instanceof ExprList) ) {
-                        throw new DbcException(String.format("Expected %s to be an ExprList", repeatStmt.expr));
-                    }
+                if ( !(repeatStmt.expr instanceof ExprList) ) {
+                    throw new DbcException(String.format("Expected %s to be an ExprList", repeatStmt.expr));
+                }
 
-                    List<Expr> exprList = ((ExprList) repeatStmt.expr).get();
-                    if ( !(exprList.get(0) instanceof Var) ) {
-                        throw new DbcException(String.format("Expected %s to be an variable", exprList.get(0)));
-                    }
-                    Var variable = (Var) exprList.get(0);
-                    String variableName = variable.name;
-                    Expr initialValue = exprList.get(1);
-                    Expr terminationValue = exprList.get(2);
-                    Expr incrementValue = exprList.get(3);
+                List<Expr> exprList = ((ExprList) repeatStmt.expr).get();
+                if ( !(exprList.get(0) instanceof Var) ) {
+                    throw new DbcException(String.format("Expected %s to be an variable", exprList.get(0)));
+                }
+                Var variable = (Var) exprList.get(0);
+                String variableName = variable.name;
+                Expr initialValue = exprList.get(1);
+                Expr terminationValue = exprList.get(2);
+                Expr incrementValue = exprList.get(3);
 
-                    // Initialize Var
-                    initialValue.accept(this);
-                    add(makeNode(C.VAR_DECLARATION).put(C.TYPE, initialValue.getVarType()).put(C.NAME, variableName));
+                // initialize Var
+                initialValue.accept(this);
+                add(makeNode(C.VAR_DECLARATION).put(C.TYPE, initialValue.getVarType()).put(C.NAME, variableName));
 
-                    int programCounterAfterInitialization = codeBuilder.size();
-                    // Termination Expr
-                    variable.accept(this);
-                    terminationValue.accept(this);
-                    add(makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, Op.LT));
-                    JSONObject jump = makeNode(C.JUMP).put(C.CONDITIONAL, false);
-                    add(jump);
+                // check the termination Expr
+                appComment(C.REPEAT_STMT).put(C.LABEL, "r_l_" + uniqueCompoundNumber);
+                variable.accept(this);
+                terminationValue.accept(this);
+                add(makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, Op.LT));
+                add(makeNode(C.JUMP).put(C.CONDITIONAL, false).put(C.TARGET, "r_e_" + uniqueCompoundNumber));
+                addDebugStatement(repeatStmt);
+                repeatStmt.list.accept(this);
 
-                    addDebugStatement(repeatStmt);
+                // Increment
+                appComment(C.REPEAT_STMT).put(C.LABEL, "r_c_" + uniqueCompoundNumber);
+                incrementValue.accept(this);
+                variable.accept(this);
+                add(makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, Op.ADD));
+                add(makeNode(C.ASSIGN_STMT).put(C.NAME, variableName));
+                add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, "r_l_" + uniqueCompoundNumber));
 
-                    repeatStmt.list.accept(this);
-
-                    int programCounterAfterStatementList = codeBuilder.size();
-
-                    // Increment
-                    incrementValue.accept(this);
-                    variable.accept(this);
-                    add(makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, Op.ADD));
-                    add(makeNode(C.ASSIGN_STMT).put(C.NAME, variableName));
-
-                    add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, programCounterAfterInitialization));
-                    int programCounterAfterForLoop = codeBuilder.size();
-                    jump.put(C.TARGET, programCounterAfterForLoop);
-
-                    add(makeNode(C.UNBIND_VAR).put(C.NAME, variableName));
-
-                    jumpLinker.handle(CONTINUE).forEach(statement -> {
-                        statement.put(C.TARGET, programCounterAfterStatementList);
-                        removeOpenBlocksFromUnhighlight(statement);
-                    });
-
-                    jumpLinker.handle(BREAK).forEach(statement -> {
-                        statement.put(C.TARGET, programCounterAfterForLoop);
-                        removeOpenBlocksFromUnhighlight(statement, blocklyId);
-                    });
-
-                    if ( !jumpLinker.isEmpty() ) {
-                        throw new DbcException("Invalid flow control expression");
-                    }
-
-                    appComment(C.REPEAT_STMT, false);
-                });
+                appComment(C.REPEAT_STMT).put(C.LABEL, "r_e_" + uniqueCompoundNumber);
+                add(makeNode(C.UNBIND_VAR).put(C.NAME, variableName));
+                appComment(C.REPEAT_STMT, false);
+                codeBuilder.popCompound(StackMachineBuilder.Compound.REPEAT);
                 return null;
-            case FOR_EACH:
-                jumpLinker.isolate(() -> {
-                    appComment(C.REPEAT_STMT, true);
-                    if ( !(repeatStmt.expr instanceof Binary) ) {
-                        throw new DbcException(String.format("Expected %s to be an Binary", repeatStmt.expr));
-                    }
+            }
+            case FOR_EACH: {
+                int uniqueCompoundNumber = codeBuilder.pushCompound(StackMachineBuilder.Compound.REPEAT);
+                appComment(C.REPEAT_STMT, true).put(C.N, uniqueCompoundNumber);
 
-                    Binary binary = (Binary) repeatStmt.expr;
-                    if ( !(binary.left instanceof VarDeclaration) ) {
-                        throw new DbcException(String.format("Expected %s to be a VarDeclaration", repeatStmt.expr));
-                    }
-                    if ( !(binary.getRight() instanceof Var) ) {
-                        throw new DbcException(String.format("Expected %s to be a VarDeclaration", repeatStmt.expr));
-                    }
+                if ( !(repeatStmt.expr instanceof Binary) ) {
+                    throw new DbcException(String.format("Expected %s to be an Binary", repeatStmt.expr));
+                }
+                Binary binary = (Binary) repeatStmt.expr;
+                if ( !(binary.left instanceof VarDeclaration) ) {
+                    throw new DbcException(String.format("Expected %s to be a VarDeclaration", repeatStmt.expr));
+                }
+                if ( !(binary.getRight() instanceof Var) ) {
+                    throw new DbcException(String.format("Expected %s to be a VarDeclaration", repeatStmt.expr));
+                }
 
-                    VarDeclaration varDeclaration = (VarDeclaration) binary.left;
-                    String variableName = varDeclaration.name;
-                    String runVariableName = variableName + "_runningVariable";
-                    Var listVariable = (Var) binary.getRight();
+                VarDeclaration varDeclaration = (VarDeclaration) binary.left;
+                String variableName = varDeclaration.name;
+                String runVariableName = variableName + "_runningVariable";
+                Var listVariable = (Var) binary.getRight();
 
-                    // Init run variable (int i = 0)
-                    add(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
-                    add(makeNode(C.VAR_DECLARATION).put(C.TYPE, BlocklyType.NUMBER).put(C.NAME, runVariableName));
+                // Init run variable (int i = 0)
+                add(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
+                add(makeNode(C.VAR_DECLARATION).put(C.TYPE, BlocklyType.NUMBER).put(C.NAME, runVariableName));
 
-                    // Init variable (Element element)
-                    varDeclaration.accept(this);
-                    int programCounterAfterInitialization = codeBuilder.size();
+                // Init the first value of the variable (Element element)
+                varDeclaration.accept(this);
 
-                    // Termination expr ( i < list.length )
-                    add(makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, runVariableName));
-                    listVariable.accept(this);
-                    add(makeNode(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, FunctionNames.LIST_LENGTH.toString().toLowerCase()));
-                    add(makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, Op.LT));
+                // Termination expr ( i < list.length )
+                appComment(C.REPEAT_STMT).put(C.LABEL, "r_l_" + uniqueCompoundNumber);
+                add(makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, runVariableName));
+                listVariable.accept(this);
+                add(makeNode(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, FunctionNames.LIST_LENGTH.toString().toLowerCase()));
+                add(makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, Op.LT));
 
-                    JSONObject jump = makeNode(C.JUMP).put(C.CONDITIONAL, false);
-                    add(jump);
+                add(makeNode(C.JUMP).put(C.CONDITIONAL, false).put(C.TARGET, "r_e_" + uniqueCompoundNumber));
 
-                    // Assign variable ( element = list.get(i) )
-                    listVariable.accept(this);
-                    add(makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, runVariableName));
-                    add(makeNode(C.EXPR)
-                        .put(C.EXPR, C.LIST_OPERATION)
-                        .put(C.OP, ListElementOperations.GET.toString().toLowerCase())
-                        .put(C.POSITION, IndexLocation.FROM_START.toString().toLowerCase()));
-                    add(makeNode(C.ASSIGN_STMT).put(C.NAME, variableName));
+                // Assign variable ( element = list.get(i) )
+                listVariable.accept(this);
+                add(makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, runVariableName));
+                add(makeNode(C.EXPR)
+                    .put(C.EXPR, C.LIST_OPERATION)
+                    .put(C.OP, ListElementOperations.GET.toString().toLowerCase())
+                    .put(C.POSITION, IndexLocation.FROM_START.toString().toLowerCase()));
+                add(makeNode(C.ASSIGN_STMT).put(C.NAME, variableName));
 
-                    addDebugStatement(repeatStmt);
-                    repeatStmt.list.accept(this);
+                addDebugStatement(repeatStmt);
+                repeatStmt.list.accept(this);
 
-                    int programCounterAfterStatementList = codeBuilder.size();
+                appComment(C.REPEAT_STMT).put(C.LABEL, "r_c_" + uniqueCompoundNumber);
+                // Increment (i = i + 1)
+                add(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
+                add(makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, runVariableName));
+                add(makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, Op.ADD));
+                add(makeNode(C.ASSIGN_STMT).put(C.NAME, runVariableName));
 
-                    // Increment (i = i + 1)
-                    add(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
-                    add(makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, runVariableName));
-                    add(makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, Op.ADD));
-                    add(makeNode(C.ASSIGN_STMT).put(C.NAME, runVariableName));
+                add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, "r_l_" + uniqueCompoundNumber));
 
-                    add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, programCounterAfterInitialization));
-                    int programCounterAfterForLoop = codeBuilder.size();
-                    jump.put(C.TARGET, programCounterAfterForLoop);
-
-                    add(makeNode(C.UNBIND_VAR).put(C.NAME, variableName));
-                    add(makeNode(C.UNBIND_VAR).put(C.NAME, runVariableName));
-
-                    jumpLinker.handle(CONTINUE).forEach(statement -> {
-                        statement.put(C.TARGET, programCounterAfterStatementList);
-                        removeOpenBlocksFromUnhighlight(statement);
-                    });
-
-                    jumpLinker.handle(BREAK).forEach(statement -> {
-                        statement.put(C.TARGET, programCounterAfterForLoop);
-                        removeOpenBlocksFromUnhighlight(statement, blocklyId);
-                    });
-
-                    if ( !jumpLinker.isEmpty() ) {
-                        throw new DbcException("Invalid flow control expression");
-                    }
-
-                    appComment(C.REPEAT_STMT, false);
-                });
+                appComment(C.REPEAT_STMT).put(C.LABEL, "r_e_" + uniqueCompoundNumber);
+                add(makeNode(C.UNBIND_VAR).put(C.NAME, variableName));
+                add(makeNode(C.UNBIND_VAR).put(C.NAME, runVariableName));
+                appComment(C.REPEAT_STMT, false);
+                codeBuilder.popCompound(StackMachineBuilder.Compound.REPEAT);
                 return null;
+            }
             case FOREVER:
-            case FOREVER_ARDU:
-                jumpLinker.isolate(() -> {
-                    appComment(C.REPEAT_STMT, true);
-
-                    int beforeExprTarget = codeBuilder.size();
-                    addDebugStatement(repeatStmt);
-
-                    repeatStmt.list.accept(this);
-
-                    add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, beforeExprTarget));
-
-                    jumpLinker.handle(BREAK).forEach(statement -> {
-                        statement.put(C.TARGET, codeBuilder.size());
-                        removeOpenBlocksFromUnhighlight(statement, blocklyId);
-                    });
-
-                    jumpLinker.handle(CONTINUE).forEach(statement -> {
-                        statement.put(C.TARGET, beforeExprTarget);
-                        removeOpenBlocksFromUnhighlight(statement);
-                    });
-
-                    if ( !jumpLinker.isEmpty() ) {
-                        throw new DbcException("Invalid flow control expression");
-                    }
-
-                    appComment(C.REPEAT_STMT, false);
-                });
+            case FOREVER_ARDU: {
+                int uniqueCompoundNumber = codeBuilder.pushCompound(StackMachineBuilder.Compound.REPEAT);
+                appComment(C.REPEAT_STMT, true).put(C.LABEL, "r_s_" + uniqueCompoundNumber);
+                appComment(C.REPEAT_STMT).put(C.LABEL, "r_l_" + uniqueCompoundNumber);
+                addDebugStatement(repeatStmt);
+                repeatStmt.list.accept(this);
+                add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, "r_s_" + uniqueCompoundNumber));
+                appComment(C.REPEAT_STMT, false).put(C.LABEL, "r_e_" + uniqueCompoundNumber);
+                codeBuilder.popCompound(StackMachineBuilder.Compound.REPEAT);
                 return null;
+            }
             case WHILE:
-            case UNTIL:
-                jumpLinker.isolate(() -> {
-                    appComment(C.REPEAT_STMT, true);
-                    int beforeExprTarget = codeBuilder.size();
-                    addDebugStatement(repeatStmt);
+            case UNTIL: {
+                int uniqueCompoundNumber = codeBuilder.pushCompound(StackMachineBuilder.Compound.REPEAT);
+                appComment(C.REPEAT_STMT, true).put(C.LABEL, "r_l_" + uniqueCompoundNumber);
+                addDebugStatement(repeatStmt);
 
-                    repeatStmt.expr.accept(this);
-                    // no difference between WHILE and UNTIL because a NOT gets injected into UNTIL by jaxbToAST
-                    JSONObject jumpOverWhile = makeNode(C.JUMP).put(C.CONDITIONAL, false);
-                    addHighlightingToJump(jumpOverWhile);
-                    jumpLinker.register(jumpOverWhile, BREAK);
-
-                    add(jumpOverWhile);
-                    repeatStmt.list.accept(this);
-                    add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, beforeExprTarget));
-
-                    jumpLinker.handle(BREAK).forEach(statement -> {
-                        statement.put(C.TARGET, codeBuilder.size());
-                        removeOpenBlocksFromUnhighlight(statement);
-                    });
-
-                    jumpLinker.handle(CONTINUE).forEach(statement -> {
-                        statement.put(C.TARGET, beforeExprTarget);
-                        removeOpenBlocksFromUnhighlight(statement, blocklyId);
-                    });
-
-                    if ( !jumpLinker.isEmpty() ) {
-                        throw new DbcException("Invalid flow control expression");
-                    }
-
-                    appComment(C.REPEAT_STMT, false);
-                });
+                repeatStmt.expr.accept(this);
+                // no difference between WHILE and UNTIL because a NOT gets injected into UNTIL by jaxbToAST
+                JSONObject jumpOverWhile = makeNode(C.JUMP).put(C.CONDITIONAL, false).put(C.TARGET, "r_e_" + uniqueCompoundNumber);
+                addHighlightingToJump(jumpOverWhile);
+                add(jumpOverWhile);
+                repeatStmt.list.accept(this);
+                add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, "r_l_" + uniqueCompoundNumber));
+                appComment(C.REPEAT_STMT, false).put(C.LABEL, "r_e_" + uniqueCompoundNumber);
+                codeBuilder.popCompound(StackMachineBuilder.Compound.REPEAT);
                 return null;
+            }
             default:
                 throw new DbcException("Invalid repeat mode: " + mode);
         }
-
     }
 
     @Override
@@ -837,11 +714,14 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     public final Void visitStmtFlowCon(StmtFlowCon stmtFlowCon) {
-        JSONObject jump = makeNode(C.JUMP)
-            .put(C.CONDITIONAL, C.ALWAYS);
-
+        int uniqueCompundNumber = codeBuilder.getUniqueCompoundNumberForBreakOrContinue();
+        JSONObject jump = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
+        if ( stmtFlowCon.flow == Flow.BREAK ) {
+            jump.put(C.TARGET, "r_e_" + uniqueCompundNumber);
+        } else {
+            jump.put(C.TARGET, "r_l_" + uniqueCompundNumber);
+        }
         addHighlightingToJump(jump);
-        jumpLinker.register(jump, stmtFlowCon.flow == Flow.BREAK ? BREAK : CONTINUE);
         return add(jump);
     }
 
@@ -875,23 +755,33 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     public final Void visitWaitStmt(WaitStmt waitStmt) {
-        jumpLinker.isolate(() -> {
-            appComment(C.WAIT_STMT, true);
-            int programCounterStart = codeBuilder.size();
-            addDebugStatement(waitStmt);
+        int uniqueCompoundNumber = codeBuilder.pushCompound(StackMachineBuilder.Compound.WAIT);
+        int orCounter = 0;
+        appComment(C.WAIT_STMT, true).put(C.N, uniqueCompoundNumber).put(C.LABEL, "w_s_" + uniqueCompoundNumber);
+        addDebugStatement(waitStmt);
 
-            waitStmt.statements.get()
-                .forEach(statement -> statement.accept(this));
-            this.codeBuilder.add(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
-            this.codeBuilder.add(makeNode(C.WAIT_TIME_STMT));
-            add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, programCounterStart));
-
-            jumpLinker.handle(INTERNAL_BREAK).forEach((statement) -> statement.put(C.TARGET, codeBuilder.size()));
-
-            appComment(C.WAIT_STMT, false);
-        });
+        for ( Stmt repeatStmtInWait : waitStmt.statements.get() ) {
+            Assert.isTrue(repeatStmtInWait instanceof RepeatStmt, "Invalid structure for wait stmt");
+            RepeatStmt repeatStmt = (RepeatStmt) repeatStmtInWait;
+            Assert.isTrue(repeatStmt.mode == Mode.WAIT, "Invalid structure for wait stmt");
+            appComment(C.WAIT_STMT).put(C.LABEL, "w_" + orCounter + "_" + uniqueCompoundNumber);
+            repeatStmt.expr.accept(this);
+            add(makeNode(C.JUMP).put(C.CONDITIONAL, false).put(C.TARGET, "w_" + (orCounter + 1) + "_" + uniqueCompoundNumber));
+            repeatStmt.list.accept(this);
+            JSONObject breakStatement = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, "w_e_" + uniqueCompoundNumber);
+            addHighlightingToJump(breakStatement);
+            add(breakStatement);
+            orCounter++;
+        }
+        appComment(C.WAIT_STMT).put(C.LABEL, "w_" + orCounter + "_" + uniqueCompoundNumber);
+        this.codeBuilder.add(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
+        this.codeBuilder.add(makeNode(C.WAIT_TIME_STMT));
+        add(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, "w_s_" + uniqueCompoundNumber));
+        appComment(C.WAIT_STMT, false).put(C.LABEL, "w_e_" + uniqueCompoundNumber);
+        codeBuilder.popCompound(StackMachineBuilder.Compound.WAIT);
         return null;
     }
+
 
     @Override
     public final Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
@@ -1083,99 +973,76 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     public final Void visitMethodVoid(MethodVoid methodVoid) {
-        jumpLinker.isolate(() -> {
-            registerMethodDeclaration(methodVoid.getMethodName());
-            appComment(C.METHOD_VOID, true);
+        int uniqueCompoundNumber = codeBuilder.pushCompound(StackMachineBuilder.Compound.METHOD);
+        appComment(C.METHOD_VOID, true).put(C.LABEL, "mthd_s_" + methodVoid.getMethodName());
 
-            // Start of method
-            ExprList parameters = methodVoid.getParameters();
-            if ( !parameters.get().stream().allMatch(parameter -> parameter instanceof VarDeclaration) ) {
-                throw new DbcException(String.format("Expected %s to be a list of VarDeclarations", parameters.get()));
-            }
-
-            Lists.reverse(parameters.get())
-                .stream()
-                .map(parameter -> (VarDeclaration) parameter)
-                .forEach(parameter -> {
-                    JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, parameter.typeVar).put(C.NAME, parameter.name);
-                    add(o);
-                });
-
-            methodVoid.body.accept(this);
-
-
-            jumpLinker.handle(METHOD_END).forEach(statement -> {
-                statement.put(C.TARGET, codeBuilder.size());
-                removeOpenBlocksFromUnhighlight(statement, methodVoid.getProperty().getBlocklyId());
+        // Start of method
+        ExprList parameters = methodVoid.getParameters();
+        if ( !parameters.get().stream().allMatch(parameter -> parameter instanceof VarDeclaration) ) {
+            throw new DbcException(String.format("Expected %s to be a list of VarDeclarations", parameters.get()));
+        }
+        Lists.reverse(parameters.get())
+            .stream()
+            .map(parameter -> (VarDeclaration) parameter)
+            .forEach(parameter -> {
+                JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, parameter.typeVar).put(C.NAME, parameter.name);
+                add(o);
             });
+        methodVoid.body.accept(this);
+        appComment(C.METHOD_VOID, true).put(C.LABEL, "mthd_e_" + uniqueCompoundNumber);
+        parameters.get().stream()
+            .map(parameter -> (VarDeclaration) parameter)
+            .forEach(parameter -> add(makeNode(C.UNBIND_VAR).put(C.NAME, parameter.name)));
 
-            parameters.get().stream()
-                .map(parameter -> (VarDeclaration) parameter)
-                .forEach(parameter -> add(makeNode(C.UNBIND_VAR).put(C.NAME, parameter.name)));
-
-            add(makeNode(C.RETURN).put(C.VALUES, false));
-            appComment(C.METHOD_VOID, false);
-        });
+        add(makeNode(C.RETURN).put(C.VALUES, false));
+        appComment(C.METHOD_VOID, false);
+        codeBuilder.popCompound(StackMachineBuilder.Compound.METHOD);
         return null;
     }
 
 
     @Override
     public final Void visitMethodReturn(MethodReturn methodReturn) {
-        jumpLinker.isolate(() -> {
-            registerMethodDeclaration(methodReturn.getMethodName());
-            appComment(C.METHOD_RETURN, true);
+        int uniqueCompoundNumber = codeBuilder.pushCompound(StackMachineBuilder.Compound.METHOD);
+        appComment(C.METHOD_RETURN, true).put(C.LABEL, "mthd_s_" + methodReturn.getMethodName());
 
-            // Start of method
-            ExprList parameters = methodReturn.getParameters();
-            if ( !parameters.get().stream().allMatch(parameter -> parameter instanceof VarDeclaration) ) {
-                throw new DbcException(String.format("Expected %s to be a list of VarDeclarations", parameters.get()));
-            }
-
-            Lists.reverse(parameters.get())
-                .stream()
-                .map(parameter -> (VarDeclaration) parameter)
-                .forEach(parameter -> {
-                    JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, parameter.typeVar).put(C.NAME, parameter.name);
-                    add(o);
-                });
-
-            methodReturn.body.accept(this);
-
-            methodReturn.returnValue.accept(this);
-
-            jumpLinker.handle(METHOD_END).forEach(statement -> {
-                statement.put(C.TARGET, codeBuilder.size());
-                removeOpenBlocksFromUnhighlight(statement, methodReturn.getProperty().getBlocklyId());
+        // Start of method
+        ExprList parameters = methodReturn.getParameters();
+        if ( !parameters.get().stream().allMatch(parameter -> parameter instanceof VarDeclaration) ) {
+            throw new DbcException(String.format("Expected %s to be a list of VarDeclarations", parameters.get()));
+        }
+        Lists.reverse(parameters.get())
+            .stream()
+            .map(parameter -> (VarDeclaration) parameter)
+            .forEach(parameter -> {
+                JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, parameter.typeVar).put(C.NAME, parameter.name);
+                add(o);
             });
-
-            parameters.get().stream()
-                .map(parameter -> (VarDeclaration) parameter)
-                .forEach(parameter -> add(makeNode(C.UNBIND_VAR).put(C.NAME, parameter.name)));
-
-            add(makeNode(C.RETURN).put(C.VALUES, true));
-            appComment(C.METHOD_RETURN, false);
-        });
+        methodReturn.body.accept(this);
+        methodReturn.returnValue.accept(this);
+        appComment(C.METHOD_VOID, true).put(C.LABEL, "mthd_e_" + uniqueCompoundNumber);
+        parameters.get().stream()
+            .map(parameter -> (VarDeclaration) parameter)
+            .forEach(parameter -> add(makeNode(C.UNBIND_VAR).put(C.NAME, parameter.name)));
+        add(makeNode(C.RETURN).put(C.VALUES, true));
+        appComment(C.METHOD_RETURN, false);
+        codeBuilder.popCompound(StackMachineBuilder.Compound.METHOD);
         return null;
     }
 
     @Override
     public final Void visitMethodIfReturn(MethodIfReturn methodIfReturn) {
-        appComment(C.IF_RETURN, true);
-
+        int uniqueCompoundNumberReturn = codeBuilder.pushCompound(StackMachineBuilder.Compound.RETURN);
+        int uniqueCompoundNumberMethod = codeBuilder.getUniqueCompoundNumber(StackMachineBuilder.Compound.METHOD);
+        appComment(C.IF_RETURN, true).put(C.N, uniqueCompoundNumberMethod);
         methodIfReturn.oraCondition.accept(this);
-        JSONObject jumpOverReturn = makeNode(C.JUMP).put(C.CONDITIONAL, false);
-        add(jumpOverReturn);
-
+        add(makeNode(C.JUMP).put(C.CONDITIONAL, false).put(C.TARGET, "rtn_" + uniqueCompoundNumberReturn));
         methodIfReturn.oraReturnValue.accept(this);
-        JSONObject jumpToMethodEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
+        JSONObject jumpToMethodEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, "mthd_e_" + uniqueCompoundNumberMethod);
         addHighlightingToJump(jumpToMethodEnd);
-        jumpLinker.register(jumpToMethodEnd, METHOD_END);
-
         add(jumpToMethodEnd);
-        jumpOverReturn.put(C.TARGET, codeBuilder.size());
-
-        appComment(C.IF_RETURN, false);
+        appComment(C.IF_RETURN, false).put(C.LABEL, "rtn_" + uniqueCompoundNumberReturn);
+        codeBuilder.popCompound(StackMachineBuilder.Compound.RETURN);
         return null;
     }
 
@@ -1187,15 +1054,13 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     public final Void visitMethodCall(MethodCall methodCall) {
-        appComment(C.METHOD_CALL, true);
-
-        JSONObject returnAddress = makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST);
-        add(returnAddress);
+        int uniqueCompoundNumber = codeBuilder.pushCompound(StackMachineBuilder.Compound.CALL);
+        add(makeNode(C.RETURN_ADDRESS).put(C.TARGET, "rtn_" + uniqueCompoundNumber));
         methodCall.getParametersValues().get()
             .forEach(v -> v.accept(this));
-        add(createJumpToMethod(methodCall));
-        returnAddress.put(C.VALUE, codeBuilder.size());
-        appComment(C.METHOD_CALL, false);
+        add(makeNode(C.CALL).put(C.TARGET, "mthd_s_" + methodCall.getMethodName()));
+        appComment(C.CALL, false).put(C.LABEL, "rtn_" + uniqueCompoundNumber);
+        codeBuilder.popCompound(StackMachineBuilder.Compound.CALL);
         return null;
     }
 
@@ -1243,8 +1108,16 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         }
     }
 
-    private Void appComment(Object commentType, boolean isStart) {
-        return add(makeNode(C.COMMENT).put(C.TARGET, commentType).put(C.TYPE, isStart ? C.START : C.END));
+    private JSONObject appComment(Object commentType, boolean isStart) {
+        JSONObject comment = makeNode(C.COMMENT).put(C.TEXT, commentType).put(C.TYPE, isStart ? C.START : C.END);
+        codeBuilder.add(comment);
+        return comment;
+    }
+
+    private JSONObject appComment(Object commentType) {
+        JSONObject comment = makeNode(C.COMMENT).put(C.TEXT, commentType);
+        codeBuilder.add(comment);
+        return comment;
     }
 
     private void removeOpenBlocksFromUnhighlight(JSONObject statement) {
@@ -1266,21 +1139,6 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         statement.put(C.HIGHTLIGHT_MINUS, newUnhighlight);
     }
 
-    private JSONObject createJumpToMethod(MethodCall methodCall) {
-        JSONObject jump = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
-        methodCalls.putIfAbsent(methodCall.getMethodName(), new ArrayList<>());
-        methodCalls.get(methodCall.getMethodName()).add(jump);
-        return jump;
-    }
-
-    private void registerMethodDeclaration(String methodName) {
-        methodDeclarations.put(methodName, codeBuilder.size());
-    }
-
-    private List<JSONObject> getRegisteredMethodCalls(String methodName) {
-        return methodCalls.getOrDefault(methodName, new ArrayList<>());
-    }
-
     protected final ConfigurationComponent getConfigurationComponent(String userDefinedName) {
         ConfigurationComponent configurationComponent = this.configuration.getConfigurationComponent(userDefinedName);
         return configurationComponent;
@@ -1299,12 +1157,6 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         } else {
             return false;
         }
-    }
-
-    private void bindMethods() {
-        methodDeclarations
-            .forEach((methodName, address) -> getRegisteredMethodCalls(methodName)
-                .forEach(jsonObject -> jsonObject.put(C.TARGET, address)));
     }
 
     protected final DriveDirection getDriveDirection(boolean isReverse) {
@@ -1331,7 +1183,6 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         for ( Phrase method : methods ) {
             method.accept(this);
         }
-        bindMethods();
     }
 
     protected final JSONObject makeNode(String opCode) {

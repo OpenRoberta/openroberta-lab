@@ -29,6 +29,24 @@ export class State {
      */
     constructor(ops: any[]) {
         this.operations = ops;
+        let labels = {};
+        for (let i = 0; i < ops.length; i++) {
+            const op = ops[i];
+            const label = op[C.LABEL];
+            if (op[C.LABEL] !== undefined) {
+                labels[label] = i;
+            }
+        }
+        for (let i = 0; i < ops.length; i++) {
+            const op = ops[i];
+            if (op[C.OPCODE] === C.JUMP || op[C.OPCODE] === C.CALL || op[C.OPCODE] === C.RETURN_ADDRESS) {
+                const opNumber = labels[op[C.TARGET]];
+                if (opNumber === undefined) {
+                    throw 'invalid label ' + op[C.TARGET] + ' encountered';
+                }
+                op[C.TARGET] = labels[op[C.TARGET]];
+            }
+        }
         this.pc = 0;
         this.bindings = {};
         this.stack = [];

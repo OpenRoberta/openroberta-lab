@@ -33,6 +33,7 @@ public class C {
     public static final String BUTTONS = "buttons";
     public static final String BUTTON_A = "A";
     public static final String BUTTON_B = "B";
+    public static final String CALL = "call";
     public static final String CAST_CHAR = "mathCastCharFunct";
     public static final String CAST_STRING = "mathCastStringFunct";
     public static final String CAST_STRING_NUMBER = "textStringCastNumberFunct";
@@ -126,6 +127,7 @@ public class C {
     public static final String ITEM = "item";
     public static final String JUMP = "jump";
     public static final String KIND = "kind";
+    public static final String LABEL = "label";
     public static final String LANGUAGE = "language";
     public static final String LAST = "last";
     public static final String LED_COLOR_CONST = "ledColor";
@@ -246,6 +248,7 @@ public class C {
     public static final String REPEAT_STMT_CONTINUATION = "RepeatStmtCont";
     public static final String RESET = "reset";
     public static final String RETURN = "return";
+    public static final String RETURN_ADDRESS = "returnAddress";
     public static final String RETURN_TYPE = "returnType";
     public static final String RGB = "rgb";
     public static final String RGB_COLOR_CONST = "rgbColor";
@@ -286,6 +289,7 @@ public class C {
     public static final String TARGET = "target";
     public static final String TERMINATE_BLOCK = "TERMINATE_BLOCK";
     public static final String TEMPERATURE = "temperature";
+    public static final String TERNARY = "ternary";
     public static final String TERNARY_EXPR = "createTernaryExpr";
     public static final String TEXT = "text";
     public static final String TEXT_APPEND = "textAppend";

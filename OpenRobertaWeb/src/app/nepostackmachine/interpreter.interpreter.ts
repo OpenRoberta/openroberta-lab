@@ -245,6 +245,13 @@ export class Interpreter {
                     }
                     break;
                 }
+                case C.CALL: {
+                    this.state.pc = stmt[C.TARGET];
+                    break;
+                }
+                case C.RETURN_ADDRESS:
+                    this.state.push(+stmt[C.TARGET]);
+                    break;
                 case C.ASSIGN_STMT: {
                     const name = stmt[C.NAME];
                     this.state.setVar(name, this.state.pop());

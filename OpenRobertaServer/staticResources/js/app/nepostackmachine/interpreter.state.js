@@ -20,6 +20,24 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util", "
          */
         function State(ops) {
             this.operations = ops;
+            var labels = {};
+            for (var i = 0; i < ops.length; i++) {
+                var op = ops[i];
+                var label = op[C.LABEL];
+                if (op[C.LABEL] !== undefined) {
+                    labels[label] = i;
+                }
+            }
+            for (var i = 0; i < ops.length; i++) {
+                var op = ops[i];
+                if (op[C.OPCODE] === C.JUMP || op[C.OPCODE] === C.CALL || op[C.OPCODE] === C.RETURN_ADDRESS) {
+                    var opNumber = labels[op[C.TARGET]];
+                    if (opNumber === undefined) {
+                        throw 'invalid label ' + op[C.TARGET] + ' encountered';
+                    }
+                    op[C.TARGET] = labels[op[C.TARGET]];
+                }
+            }
             this.pc = 0;
             this.bindings = {};
             this.stack = [];
