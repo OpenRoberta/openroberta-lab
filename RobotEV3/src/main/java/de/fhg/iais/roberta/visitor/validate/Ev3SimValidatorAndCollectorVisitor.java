@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import com.google.common.collect.ClassToInstanceMap;
-
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
@@ -18,25 +17,25 @@ public class Ev3SimValidatorAndCollectorVisitor extends Ev3ValidatorAndCollector
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction bluetoothReceiveAction) {
-        addWarningToPhrase(bluetoothReceiveAction, "SIM_BLOCK_NOT_SUPPORTED");
+        addErrorToPhrase(bluetoothReceiveAction, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitBluetoothReceiveAction(bluetoothReceiveAction);
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor compassSensor) {
-        addWarningToPhrase(compassSensor, "SIM_BLOCK_NOT_SUPPORTED");
+        addErrorToPhrase(compassSensor, "SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
-        addWarningToPhrase(soundSensor, "SIM_BLOCK_NOT_SUPPORTED");
+        addErrorToPhrase(soundSensor, "SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
     public Void visitHTColorSensor(HTColorSensor htColorSensor) {
-        addWarningToPhrase(htColorSensor, "SIM_BLOCK_NOT_SUPPORTED");
+        addErrorToPhrase(htColorSensor, "SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 

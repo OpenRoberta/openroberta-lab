@@ -1,14 +1,12 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import com.google.common.collect.ClassToInstanceMap;
-
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.SendIRAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
-import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 public class MbotSimValidatorAndCollectorVisitor extends MbotValidatorAndCollectorVisitor implements IMbotVisitor<Void> {
@@ -18,7 +16,7 @@ public class MbotSimValidatorAndCollectorVisitor extends MbotValidatorAndCollect
 
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor irSeekerSensor) {
-        irSeekerSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        addErrorToPhrase(irSeekerSensor, "SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 
@@ -30,14 +28,14 @@ public class MbotSimValidatorAndCollectorVisitor extends MbotValidatorAndCollect
 
     @Override
     public Void visitSendIRAction(SendIRAction sendIRAction) {
-        addErrorToPhrase(sendIRAction, "SIM_BLOCK_NOT_SUPPORTED");
+        addWarningToPhrase(sendIRAction, "SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
         super.visitReceiveIRAction(receiveIRAction);
-        receiveIRAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        addErrorToPhrase(receiveIRAction, "SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 }
