@@ -1,196 +1,26 @@
-{"ops": [
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": [
-      "W!j^Rc5sw{uz`7ST*suV",
-      "@;6h9Ai;BoR/oSCP:`.0"
-    ],
-    "value": "0",
-    "-": ["W!j^Rc5sw{uz`7ST*suV"]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "number",
-    "type": "NUMBER",
-    "-": ["@;6h9Ai;BoR/oSCP:`.0"]
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "+": [
-      "nB#lP?1?LPS^qQ~qMX1x",
-      "0=}/?qDwP6qk2sAt*n)e"
-    ],
-    "value": true,
-    "-": ["nB#lP?1?LPS^qQ~qMX1x"]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "boolean2",
-    "type": "BOOLEAN",
-    "-": ["0=}/?qDwP6qk2sAt*n)e"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": [
-      ",1ErKvso`1=9n(vmW!~0",
-      "W*:5okE#%siQ6Tfm@44`"
-    ],
-    "value": "",
-    "-": ["W*:5okE#%siQ6Tfm@44`"]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "string",
-    "type": "STRING",
-    "-": [",1ErKvso`1=9n(vmW!~0"]
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": ["CLp%K@{+xR(CqH[u2Nqg"],
-    "+": ["CLp%K@{+xR(CqH[u2Nqg"],
-    "value": "Variable Test START",
-    "-": ["CLp%K@{+xR(CqH[u2Nqg"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["2:yL/pUY4]!s/pn2x?|R"],
-    "expr": "NUM_CONST",
-    "+": [
-      "2:yL/pUY4]!s/pn2x?|R",
-      "!FEXP|nuVWc@M9S{J`=M",
-      "R`70)3BF@SsQ}pf#JAHj"
-    ],
-    "value": "0",
-    "-": ["R`70)3BF@SsQ}pf#JAHj"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["{_OkDM0VlwyZGx(][wR6"],
-    "value": "5",
-    "-": ["{_OkDM0VlwyZGx(][wR6"]
-  },
-  {
-    "op": "ADD",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["!FEXP|nuVWc@M9S{J`=M"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "number",
-    "-": ["2:yL/pUY4]!s/pn2x?|R"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": [".Sc9/z0!w!tsyK4|n/|P"],
-    "expr": "NUM_CONST",
-    "+": [
-      "E{|Yfg*:Ds.[r9@%ds`I",
-      ".Sc9/z0!w!tsyK4|n/|P",
-      "fX,s^}:bs,(0kwo+e](w"
-    ],
-    "value": "3",
-    "-": ["E{|Yfg*:Ds.[r9@%ds`I"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": [");C^kCSl*gA84giL1;(!"],
-    "value": "0.999999999999",
-    "-": [");C^kCSl*gA84giL1;(!"]
-  },
-  {
-    "op": "ADD",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["fX,s^}:bs,(0kwo+e](w"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "number",
-    "-": [".Sc9/z0!w!tsyK4|n/|P"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["!l8n5ZbHsT}LBFqR[z8S"],
-    "expr": "STRING_CONST",
-    "+": [
-      "vh_~r4N`|j}Gu}5*f)E]",
-      "!l8n5ZbHsT}LBFqR[z8S"
-    ],
-    "value": "abc",
-    "-": ["vh_~r4N`|j}Gu}5*f)E]"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "string",
-    "-": ["!l8n5ZbHsT}LBFqR[z8S"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["!5,-^Me:V*.[d_[U4S(~"],
-    "expr": "STRING_CONST",
-    "+": [
-      "9lVikezG@Z(I3)[Ae7l^",
-      "!5,-^Me:V*.[d_[U4S(~"
-    ],
-    "value": "123",
-    "-": ["9lVikezG@Z(I3)[Ae7l^"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "string",
-    "-": ["!5,-^Me:V*.[d_[U4S(~"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["9ZR=p,%xelvz15L_vddd"],
-    "expr": "STRING_CONST",
-    "+": [
-      "9ZR=p,%xelvz15L_vddd",
-      "vcw:,L]pnjXyjr|zzA|R"
-    ],
-    "value": "³½¹]",
-    "-": ["vcw:,L]pnjXyjr|zzA|R"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "string",
-    "-": ["9ZR=p,%xelvz15L_vddd"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["x7P.2WbD~,`y66hr~X{h"],
-    "expr": "BOOL_CONST",
-    "+": [
-      "6`z~enMWJis}4Pb^y+PW",
-      "x7P.2WbD~,`y66hr~X{h",
-      "FvmUEpGOpww`0O_L9*/X"
-    ],
-    "value": true,
-    "-": ["FvmUEpGOpww`0O_L9*/X"]
-  },
-  {
-    "op": "NOT",
-    "opc": "expr",
-    "expr": "Unary",
-    "-": ["6`z~enMWJis}4Pb^y+PW"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "boolean2",
-    "-": ["x7P.2WbD~,`y66hr~X{h"]
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": ["tXc))a{i;nX:Gu^~VS+j"],
-    "+": ["tXc))a{i;nX:Gu^~VS+j"],
-    "value": "Variable Test START END",
-    "-": ["tXc))a{i;nX:Gu^~VS+j"]
-  },
-  {"opc": "stop"}
-]}
+   0:            expr            expr: NUM_CONST, value: 0,               > +: ["W!j^Rc5sw{uz`7ST*suV","@;6h9Ai;BoR/oSCP:`.0"], -: ["W!j^Rc5sw{uz`7ST*suV"], 
+   1:            VarDeclaration  name: number, type: NUMBER,              > -: ["@;6h9Ai;BoR/oSCP:`.0"], 
+   2:            expr            expr: BOOL_CONST, value: true,           > +: ["nB#lP?1?LPS^qQ~qMX1x","0=}/?qDwP6qk2sAt*n)e"], -: ["nB#lP?1?LPS^qQ~qMX1x"], 
+   3:            VarDeclaration  name: boolean2, type: BOOLEAN,           > -: ["0=}/?qDwP6qk2sAt*n)e"], 
+   4:            expr            expr: STRING_CONST, value: ,             > +: [",1ErKvso`1=9n(vmW!~0","W*:5okE#%siQ6Tfm@44`"], -: ["W*:5okE#%siQ6Tfm@44`"], 
+   5:            VarDeclaration  name: string, type: STRING,              > -: [",1ErKvso`1=9n(vmW!~0"], 
+   6:            comment         value: Variable Test START,              > +: ["CLp%K@{+xR(CqH[u2Nqg"], -: ["CLp%K@{+xR(CqH[u2Nqg"], possibleDebugStop: ["CLp%K@{+xR(CqH[u2Nqg"], 
+   7:            expr            expr: NUM_CONST, value: 0,               > +: ["2:yL/pUY4]!s/pn2x?|R","!FEXP|nuVWc@M9S{J`=M","R`70)3BF@SsQ}pf#JAHj"], -: ["R`70)3BF@SsQ}pf#JAHj"], possibleDebugStop: ["2:yL/pUY4]!s/pn2x?|R"], 
+   8:            expr            expr: NUM_CONST, value: 5,               > +: ["{_OkDM0VlwyZGx(][wR6"], -: ["{_OkDM0VlwyZGx(][wR6"], 
+   9:            expr            expr: Binary, op: ADD,                   > -: ["!FEXP|nuVWc@M9S{J`=M"], 
+  10:            AssignStmt      name: number,                            > -: ["2:yL/pUY4]!s/pn2x?|R"], 
+  11:            expr            expr: NUM_CONST, value: 3,               > +: ["E{|Yfg*:Ds.[r9@%ds`I",".Sc9/z0!w!tsyK4|n/|P","fX,s^}:bs,(0kwo+e](w"], -: ["E{|Yfg*:Ds.[r9@%ds`I"], possibleDebugStop: [".Sc9/z0!w!tsyK4|n/|P"], 
+  12:            expr            expr: NUM_CONST, value: 0.999999999999,  > +: [");C^kCSl*gA84giL1;(!"], -: [");C^kCSl*gA84giL1;(!"], 
+  13:            expr            expr: Binary, op: ADD,                   > -: ["fX,s^}:bs,(0kwo+e](w"], 
+  14:            AssignStmt      name: number,                            > -: [".Sc9/z0!w!tsyK4|n/|P"], 
+  15:            expr            expr: STRING_CONST, value: abc,          > +: ["vh_~r4N`|j}Gu}5*f)E]","!l8n5ZbHsT}LBFqR[z8S"], -: ["vh_~r4N`|j}Gu}5*f)E]"], possibleDebugStop: ["!l8n5ZbHsT}LBFqR[z8S"], 
+  16:            AssignStmt      name: string,                            > -: ["!l8n5ZbHsT}LBFqR[z8S"], 
+  17:            expr            expr: STRING_CONST, value: 123,          > +: ["9lVikezG@Z(I3)[Ae7l^","!5,-^Me:V*.[d_[U4S(~"], -: ["9lVikezG@Z(I3)[Ae7l^"], possibleDebugStop: ["!5,-^Me:V*.[d_[U4S(~"], 
+  18:            AssignStmt      name: string,                            > -: ["!5,-^Me:V*.[d_[U4S(~"], 
+  19:            expr            expr: STRING_CONST, value: ³½¹],         > +: ["9ZR=p,%xelvz15L_vddd","vcw:,L]pnjXyjr|zzA|R"], -: ["vcw:,L]pnjXyjr|zzA|R"], possibleDebugStop: ["9ZR=p,%xelvz15L_vddd"], 
+  20:            AssignStmt      name: string,                            > -: ["9ZR=p,%xelvz15L_vddd"], 
+  21:            expr            expr: BOOL_CONST, value: true,           > +: ["6`z~enMWJis}4Pb^y+PW","x7P.2WbD~,`y66hr~X{h","FvmUEpGOpww`0O_L9*/X"], -: ["FvmUEpGOpww`0O_L9*/X"], possibleDebugStop: ["x7P.2WbD~,`y66hr~X{h"], 
+  22:            expr            expr: Unary, op: NOT,                    > -: ["6`z~enMWJis}4Pb^y+PW"], 
+  23:            AssignStmt      name: boolean2,                          > -: ["x7P.2WbD~,`y66hr~X{h"], 
+  24:            comment         value: Variable Test START END,          > +: ["tXc))a{i;nX:Gu^~VS+j"], -: ["tXc))a{i;nX:Gu^~VS+j"], possibleDebugStop: ["tXc))a{i;nX:Gu^~VS+j"], 
+  25:            stop                                                     > 

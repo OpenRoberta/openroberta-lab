@@ -75,8 +75,14 @@
   },
   {
     "opc": "comment",
+    "text": "IfStatement",
     "type": "start",
-    "target": "IfStatement"
+    "n": 1
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_0_1"
   },
   {
     "opc": "expr",
@@ -91,7 +97,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 38
+    "target": "i_1_1"
   },
   {
     "opc": "expr",
@@ -184,17 +190,29 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 38
+    "target": "i_e_1"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "IfStatement",
+    "label": "i_1_1"
   },
   {
     "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_e_1",
+    "type": "end"
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
     "type": "start",
-    "target": "IfStatement"
+    "n": 2
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_0_2"
   },
   {
     "opc": "expr",
@@ -209,7 +227,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 62
+    "target": "i_1_2"
   },
   {
     "opc": "expr",
@@ -301,17 +319,29 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 62
+    "target": "i_e_2"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "IfStatement",
+    "label": "i_1_2"
   },
   {
     "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_e_2",
+    "type": "end"
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
     "type": "start",
-    "target": "IfStatement"
+    "n": 3
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_0_3"
   },
   {
     "opc": "expr",
@@ -326,7 +356,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 87
+    "target": "i_1_3"
   },
   {
     "opc": "expr",
@@ -424,12 +454,18 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 87
+    "target": "i_e_3"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "IfStatement",
+    "label": "i_1_3"
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_e_3",
+    "type": "end"
   },
   {
     "opc": "comment",

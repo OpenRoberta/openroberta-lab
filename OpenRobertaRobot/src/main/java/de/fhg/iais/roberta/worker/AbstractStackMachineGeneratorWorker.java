@@ -6,7 +6,6 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.basic.C;
-import de.fhg.iais.roberta.util.visitor.StackmachinePrettyPrinter;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 /**
@@ -24,7 +23,6 @@ public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
         project.setSourceCode(generatedCode.toString(2));
         project.setCompiledHex(generatedCode.toString(2));
         project.setResult(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);
-        System.out.println(StackmachinePrettyPrinter.prettyPrint(generatedCode, true, true));
     }
 
     /**

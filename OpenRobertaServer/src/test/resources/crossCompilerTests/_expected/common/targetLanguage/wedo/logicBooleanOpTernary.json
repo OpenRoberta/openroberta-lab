@@ -15,8 +15,9 @@
   },
   {
     "opc": "comment",
+    "text": "ternary",
     "type": "start",
-    "target": "IfStatement"
+    "n": 1
   },
   {
     "opc": "expr",
@@ -26,7 +27,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 10
+    "target": "t_m_1"
   },
   {
     "opc": "expr",
@@ -46,7 +47,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 13
+    "target": "t_e_1"
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "label": "t_m_1"
   },
   {
     "opc": "expr",
@@ -65,8 +71,9 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "ternary",
+    "label": "t_e_1",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -74,8 +81,9 @@
   },
   {
     "opc": "comment",
+    "text": "ternary",
     "type": "start",
-    "target": "IfStatement"
+    "n": 2
   },
   {
     "opc": "expr",
@@ -85,7 +93,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 22
+    "target": "t_m_2"
   },
   {
     "opc": "expr",
@@ -105,7 +113,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 25
+    "target": "t_e_2"
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "label": "t_m_2"
   },
   {
     "opc": "expr",
@@ -124,8 +137,9 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "ternary",
+    "label": "t_e_2",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -133,13 +147,15 @@
   },
   {
     "opc": "comment",
+    "text": "ternary",
     "type": "start",
-    "target": "IfStatement"
+    "n": 3
   },
   {
     "opc": "comment",
+    "text": "ternary",
     "type": "start",
-    "target": "IfStatement"
+    "n": 4
   },
   {
     "opc": "expr",
@@ -149,7 +165,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 33
+    "target": "t_m_4"
   },
   {
     "opc": "expr",
@@ -159,7 +175,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 34
+    "target": "t_e_4"
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "label": "t_m_4"
   },
   {
     "opc": "expr",
@@ -168,102 +189,14 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "ternary",
+    "label": "t_e_4",
+    "type": "end"
   },
   {
     "opc": "jump",
     "conditional": false,
-    "target": 40
-  },
-  {
-    "opc": "expr",
-    "name": "x",
-    "expr": "Var"
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": "1"
-  },
-  {
-    "op": "ADD",
-    "opc": "expr",
-    "expr": "Binary"
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 43
-  },
-  {
-    "opc": "expr",
-    "name": "x",
-    "expr": "Var"
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": "1000"
-  },
-  {
-    "op": "ADD",
-    "opc": "expr",
-    "expr": "Binary"
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "x"
-  },
-  {
-    "opc": "comment",
-    "type": "start",
-    "target": "IfStatement"
-  },
-  {
-    "opc": "comment",
-    "type": "start",
-    "target": "IfStatement"
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": false
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 51
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": false
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 52
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": true
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 58
+    "target": "t_m_3"
   },
   {
     "opc": "expr",
@@ -283,7 +216,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 61
+    "target": "t_e_3"
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "label": "t_m_3"
   },
   {
     "opc": "expr",
@@ -302,8 +240,9 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "ternary",
+    "label": "t_e_3",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -311,38 +250,15 @@
   },
   {
     "opc": "comment",
+    "text": "ternary",
     "type": "start",
-    "target": "IfStatement"
+    "n": 5
   },
   {
     "opc": "comment",
+    "text": "ternary",
     "type": "start",
-    "target": "IfStatement"
-  },
-  {
-    "opc": "comment",
-    "type": "start",
-    "target": "IfStatement"
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": true
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 70
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": true
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 71
+    "n": 6
   },
   {
     "opc": "expr",
@@ -350,24 +266,9 @@
     "value": false
   },
   {
-    "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
-  },
-  {
     "opc": "jump",
     "conditional": false,
-    "target": 75
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": true
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 76
+    "target": "t_m_6"
   },
   {
     "opc": "expr",
@@ -375,14 +276,30 @@
     "value": false
   },
   {
+    "opc": "jump",
+    "conditional": "always",
+    "target": "t_e_6"
+  },
+  {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "ternary",
+    "label": "t_m_6"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "label": "t_e_6",
+    "type": "end"
   },
   {
     "opc": "jump",
     "conditional": false,
-    "target": 82
+    "target": "t_m_5"
   },
   {
     "opc": "expr",
@@ -402,7 +319,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 85
+    "target": "t_e_5"
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "label": "t_m_5"
   },
   {
     "opc": "expr",
@@ -421,8 +343,9 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "ternary",
+    "label": "t_e_5",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -430,18 +353,161 @@
   },
   {
     "opc": "comment",
+    "text": "ternary",
     "type": "start",
-    "target": "IfStatement"
+    "n": 7
   },
   {
     "opc": "comment",
+    "text": "ternary",
     "type": "start",
-    "target": "IfStatement"
+    "n": 8
   },
   {
     "opc": "comment",
+    "text": "ternary",
     "type": "start",
-    "target": "IfStatement"
+    "n": 9
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": "t_m_9"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": "t_e_9"
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "label": "t_m_9"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "label": "t_e_9",
+    "type": "end"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": "t_m_8"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": "t_e_8"
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "label": "t_m_8"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "label": "t_e_8",
+    "type": "end"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": "t_m_7"
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": "t_e_7"
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "label": "t_m_7"
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "label": "t_e_7",
+    "type": "end"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "x"
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "type": "start",
+    "n": 10
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "type": "start",
+    "n": 11
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "type": "start",
+    "n": 12
   },
   {
     "opc": "expr",
@@ -461,7 +527,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 96
+    "target": "t_m_12"
   },
   {
     "opc": "expr",
@@ -471,7 +537,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 97
+    "target": "t_e_12"
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "label": "t_m_12"
   },
   {
     "opc": "expr",
@@ -480,13 +551,14 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "ternary",
+    "label": "t_e_12",
+    "type": "end"
   },
   {
     "opc": "jump",
     "conditional": false,
-    "target": 101
+    "target": "t_m_11"
   },
   {
     "opc": "expr",
@@ -496,7 +568,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 102
+    "target": "t_e_11"
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "label": "t_m_11"
   },
   {
     "opc": "expr",
@@ -505,13 +582,14 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "ternary",
+    "label": "t_e_11",
+    "type": "end"
   },
   {
     "opc": "jump",
     "conditional": false,
-    "target": 108
+    "target": "t_m_10"
   },
   {
     "opc": "expr",
@@ -531,7 +609,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 111
+    "target": "t_e_10"
+  },
+  {
+    "opc": "comment",
+    "text": "ternary",
+    "label": "t_m_10"
   },
   {
     "opc": "expr",
@@ -550,8 +633,9 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "ternary",
+    "label": "t_e_10",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",

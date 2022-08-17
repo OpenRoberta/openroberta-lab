@@ -1,669 +1,96 @@
-{"ops": [
-  {
-    "NUMBER": 0,
-    "opc": "expr",
-    "expr": "createList",
-    "+": [
-      "k,FIL~3cd3@r8OmIkZKL",
-      "nwhx`GM6+KD~bu.f-Z)."
-    ],
-    "-": ["nwhx`GM6+KD~bu.f-Z)."]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "initialEmptyNumbers",
-    "type": "ARRAY_NUMBER",
-    "-": ["k,FIL~3cd3@r8OmIkZKL"]
-  },
-  {
-    "NUMBER": 0,
-    "opc": "expr",
-    "expr": "createList",
-    "+": [
-      "YmUeK:p%]wmpg!55Esn+",
-      "70@Bg,}_cLmBAJDe2OJu"
-    ],
-    "-": ["YmUeK:p%]wmpg!55Esn+"]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "initialEmptyBoolean",
-    "type": "ARRAY_BOOLEAN",
-    "-": ["70@Bg,}_cLmBAJDe2OJu"]
-  },
-  {
-    "NUMBER": 0,
-    "opc": "expr",
-    "expr": "createList",
-    "+": [
-      "1GnyozdD^chnK0WL)aeC",
-      "b42YcB})X]t;X*?;Z,F|"
-    ],
-    "-": ["1GnyozdD^chnK0WL)aeC"]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "initialEmptyStrings",
-    "type": "ARRAY_STRING",
-    "-": ["b42YcB})X]t;X*?;Z,F|"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": [
-      "l~k*s4=u*C+W0m:*U,(Y",
-      "G;vY,h-n:T8N}xu?gZHo"
-    ],
-    "value": "3",
-    "-": ["l~k*s4=u*C+W0m:*U,(Y"]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "number",
-    "type": "NUMBER",
-    "-": ["G;vY,h-n:T8N}xu?gZHo"]
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "+": [
-      "!I.+LY96_.;G+dmIx;dW",
-      "6g(]h@I0zE9%+7,-3nzU"
-    ],
-    "value": true,
-    "-": ["6g(]h@I0zE9%+7,-3nzU"]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "bool",
-    "type": "BOOLEAN",
-    "-": ["!I.+LY96_.;G+dmIx;dW"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": [
-      "Fs5TpT-KKD1}mzto|z==",
-      "nen#FIO;Jojj9,c@x[Z8"
-    ],
-    "value": "c",
-    "-": ["nen#FIO;Jojj9,c@x[Z8"]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "string",
-    "type": "STRING",
-    "-": ["Fs5TpT-KKD1}mzto|z=="]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": [
-      ",tEc}Gyk0_+bk^hj9#OT",
-      "zumh?#6]72=t%l2(M*]Z"
-    ],
-    "value": "0",
-    "-": [",tEc}Gyk0_+bk^hj9#OT"]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "item",
-    "type": "NUMBER",
-    "-": ["zumh?#6]72=t%l2(M*]Z"]
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": ["7D#!g?fg:kt3S7s)5ToX"],
-    "+": ["7D#!g?fg:kt3S7s)5ToX"],
-    "value": "Basis List Operations START",
-    "-": ["7D#!g?fg:kt3S7s)5ToX"]
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": ["5j)r!TAw;s~%%gt+|MhY"],
-    "+": ["5j)r!TAw;s~%%gt+|MhY"],
-    "type": "start",
-    "target": "IfStatement"
-  },
-  {
-    "opc": "expr",
-    "name": "initialEmptyNumbers",
-    "expr": "Var",
-    "+": [
-      ":Zez+X:gS9=AJJ]UKXyK",
-      "C9*u3Xo6IP,9LRESZ`*-"
-    ],
-    "-": [":Zez+X:gS9=AJJ]UKXyK"]
-  },
-  {
-    "op": "list_is_empty",
-    "opc": "expr",
-    "expr": "list_operation",
-    "-": ["C9*u3Xo6IP,9LRESZ`*-"]
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 38
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["Z:=R*D5qW!Si*OuH{H/|"],
-    "expr": "NUM_CONST",
-    "+": [
-      "i/32XY%@TVhz:}cTe0ot",
-      "v4@o;EtjKIJiD#6:LEab",
-      "Z:=R*D5qW!Si*OuH{H/|"
-    ],
-    "value": "1",
-    "-": ["v4@o;EtjKIJiD#6:LEab"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["Tw,A4Ml_kl)mUutF934A"],
-    "value": "2",
-    "-": ["Tw,A4Ml_kl)mUutF934A"]
-  },
-  {
-    "NUMBER": 2,
-    "opc": "expr",
-    "expr": "createList",
-    "-": ["i/32XY%@TVhz:}cTe0ot"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "initialEmptyNumbers",
-    "-": ["Z:=R*D5qW!Si*OuH{H/|"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["a#=3E5E.RhoB{:Sw-*Fq"],
-    "name": "initialEmptyNumbers",
-    "expr": "Var",
-    "+": [
-      "Wj@gcCT!t4ex4dyw{XkN",
-      "hx*~^#n#!-5{/=2)8q?y",
-      "a#=3E5E.RhoB{:Sw-*Fq"
-    ],
-    "-": ["hx*~^#n#!-5{/=2)8q?y"]
-  },
-  {
-    "op": "list_length",
-    "opc": "expr",
-    "expr": "list_operation",
-    "-": ["Wj@gcCT!t4ex4dyw{XkN"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "item",
-    "-": ["a#=3E5E.RhoB{:Sw-*Fq"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["wmp4@Nw4pWpl(vcNWo-?"],
-    "name": "initialEmptyNumbers",
-    "expr": "Var",
-    "+": [
-      "p-Mfb!b|!jPlahfFf0qt",
-      "NV,X-SEyRnLpp-}})QnM",
-      "wmp4@Nw4pWpl(vcNWo-?"
-    ],
-    "-": ["p-Mfb!b|!jPlahfFf0qt"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["/OlcrVTS2bTHu+-O(mMI"],
-    "value": "1",
-    "-": ["/OlcrVTS2bTHu+-O(mMI"]
-  },
-  {
-    "op": "list_find_item",
-    "opc": "expr",
-    "expr": "list_operation",
-    "position": "first",
-    "-": ["NV,X-SEyRnLpp-}})QnM"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "item",
-    "-": ["wmp4@Nw4pWpl(vcNWo-?"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["2ed4dsG5rV{{7+A|3CML"],
-    "name": "initialEmptyNumbers",
-    "expr": "Var",
-    "+": [
-      "N%m/u0GBa2u{W2)3^(v7",
-      "d0#5@{kxqf|6YSx8rd)P",
-      "2ed4dsG5rV{{7+A|3CML"
-    ],
-    "-": ["N%m/u0GBa2u{W2)3^(v7"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["*Jiy*65Jh9NHV?h6x!+B"],
-    "value": "5",
-    "-": ["*Jiy*65Jh9NHV?h6x!+B"]
-  },
-  {
-    "op": "list_find_item",
-    "opc": "expr",
-    "expr": "list_operation",
-    "position": "first",
-    "-": ["d0#5@{kxqf|6YSx8rd)P"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "item",
-    "-": ["2ed4dsG5rV{{7+A|3CML"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["C5h*e!2gA%oLdXsoh00n"],
-    "name": "initialEmptyNumbers",
-    "expr": "Var",
-    "+": [
-      "C5h*e!2gA%oLdXsoh00n",
-      "h/SPK6`,dyl0k~0bsf7N"
-    ],
-    "-": ["h/SPK6`,dyl0k~0bsf7N"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["EKFT;?1[raj}4XI|oBw9"],
-    "value": "2",
-    "-": ["EKFT;?1[raj}4XI|oBw9"]
-  },
-  {
-    "op": "set",
-    "opc": "list_operation",
-    "position": "first",
-    "-": ["C5h*e!2gA%oLdXsoh00n"]
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 38
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "-": ["5j)r!TAw;s~%%gt+|MhY"],
-    "target": "IfStatement"
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": [",Xmkn|*Z1lkPlIV2WgMU"],
-    "+": [",Xmkn|*Z1lkPlIV2WgMU"],
-    "type": "start",
-    "target": "IfStatement"
-  },
-  {
-    "opc": "expr",
-    "name": "initialEmptyBoolean",
-    "expr": "Var",
-    "+": [
-      "uDm/2lEGSQ6Q1[u=cx|H",
-      "/]0F6=1ocMXS7gfH0.E{"
-    ],
-    "-": ["/]0F6=1ocMXS7gfH0.E{"]
-  },
-  {
-    "op": "list_is_empty",
-    "opc": "expr",
-    "expr": "list_operation",
-    "-": ["uDm/2lEGSQ6Q1[u=cx|H"]
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 62
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["^%6+]Al4(C]4_EHnrCa6"],
-    "expr": "BOOL_CONST",
-    "+": [
-      "^%6+]Al4(C]4_EHnrCa6",
-      "tqJOT|N{^c0a|qx7YeZK",
-      "H__Hna*RXO(l0SdY|(/?"
-    ],
-    "value": true,
-    "-": ["tqJOT|N{^c0a|qx7YeZK"]
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "+": ["+)98kc[[H1|bd%=C#Yez"],
-    "value": false,
-    "-": ["+)98kc[[H1|bd%=C#Yez"]
-  },
-  {
-    "NUMBER": 2,
-    "opc": "expr",
-    "expr": "createList",
-    "-": ["H__Hna*RXO(l0SdY|(/?"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "initialEmptyBoolean",
-    "-": ["^%6+]Al4(C]4_EHnrCa6"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["(jJb9k;E|bs*!ZPm#+.u"],
-    "name": "initialEmptyBoolean",
-    "expr": "Var",
-    "+": [
-      "6[C/#y]QIyJbwG=J(2N7",
-      "9a24+q!w(.c2F_LoW5uL",
-      "(jJb9k;E|bs*!ZPm#+.u"
-    ],
-    "-": ["9a24+q!w(.c2F_LoW5uL"]
-  },
-  {
-    "op": "list_length",
-    "opc": "expr",
-    "expr": "list_operation",
-    "-": ["6[C/#y]QIyJbwG=J(2N7"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "item",
-    "-": ["(jJb9k;E|bs*!ZPm#+.u"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["AS*Ivq+=eNG82T!kDFy7"],
-    "name": "initialEmptyBoolean",
-    "expr": "Var",
-    "+": [
-      ":X-5ugpt{m;X`:v|IR!l",
-      "FKL(E||NdF-TCcbLH557",
-      "AS*Ivq+=eNG82T!kDFy7"
-    ],
-    "-": ["FKL(E||NdF-TCcbLH557"]
-  },
-  {
-    "opc": "expr",
-    "name": "bool",
-    "expr": "Var",
-    "+": ["/BDpTth#H:9{~G5L%^BX"],
-    "-": ["/BDpTth#H:9{~G5L%^BX"]
-  },
-  {
-    "op": "list_find_item",
-    "opc": "expr",
-    "expr": "list_operation",
-    "position": "first",
-    "-": [":X-5ugpt{m;X`:v|IR!l"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "item",
-    "-": ["AS*Ivq+=eNG82T!kDFy7"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["]?TKf+I%.aOO*I!{Q^F="],
-    "name": "initialEmptyBoolean",
-    "expr": "Var",
-    "+": [
-      ")buVYIKxov7Uy)pwpcjL",
-      "]?TKf+I%.aOO*I!{Q^F=",
-      "HRLB?kmw=~2AVi3ZP-/o"
-    ],
-    "-": ["HRLB?kmw=~2AVi3ZP-/o"]
-  },
-  {
-    "opc": "expr",
-    "expr": "C.NULL_CONST",
-    "+": ["Zq)aK`-pzb9sR_XYZmzF"],
-    "-": ["Zq)aK`-pzb9sR_XYZmzF"]
-  },
-  {
-    "op": "list_find_item",
-    "opc": "expr",
-    "expr": "list_operation",
-    "position": "first",
-    "-": [")buVYIKxov7Uy)pwpcjL"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "item",
-    "-": ["]?TKf+I%.aOO*I!{Q^F="]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["m?zcv(G3?L5+=sG@sx=d"],
-    "name": "initialEmptyBoolean",
-    "expr": "Var",
-    "+": [
-      "m?zcv(G3?L5+=sG@sx=d",
-      "*5^o6X^7x*qlL%YPhoOY"
-    ],
-    "-": ["*5^o6X^7x*qlL%YPhoOY"]
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "+": ["u|Lq|DD!PA(E?7h%fMsT"],
-    "value": true,
-    "-": ["u|Lq|DD!PA(E?7h%fMsT"]
-  },
-  {
-    "op": "insert",
-    "opc": "list_operation",
-    "position": "last",
-    "-": ["m?zcv(G3?L5+=sG@sx=d"]
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 62
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "-": [",Xmkn|*Z1lkPlIV2WgMU"],
-    "target": "IfStatement"
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": ["4p1WV:MoMW*V9U[wiQpw"],
-    "+": ["4p1WV:MoMW*V9U[wiQpw"],
-    "type": "start",
-    "target": "IfStatement"
-  },
-  {
-    "opc": "expr",
-    "name": "initialEmptyStrings",
-    "expr": "Var",
-    "+": [
-      "qhTAkkQV7_//22AFyiqJ",
-      "teLW@-In(_ZJ7T/hKaJq"
-    ],
-    "-": ["teLW@-In(_ZJ7T/hKaJq"]
-  },
-  {
-    "op": "list_is_empty",
-    "opc": "expr",
-    "expr": "list_operation",
-    "-": ["qhTAkkQV7_//22AFyiqJ"]
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 87
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": [")s/|9,`|Z!U=Q|E(Q!),"],
-    "expr": "STRING_CONST",
-    "+": [
-      ")s/|9,`|Z!U=Q|E(Q!),",
-      "%`dhn1_]%tk/k654jXO3",
-      "f[em_1/~SV4pu)q*Pp=C"
-    ],
-    "value": "a",
-    "-": ["%`dhn1_]%tk/k654jXO3"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": ["mk@C+nZE--Y+@L~?ezT?"],
-    "value": "b",
-    "-": ["mk@C+nZE--Y+@L~?ezT?"]
-  },
-  {
-    "NUMBER": 2,
-    "opc": "expr",
-    "expr": "createList",
-    "-": ["f[em_1/~SV4pu)q*Pp=C"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "initialEmptyStrings",
-    "-": [")s/|9,`|Z!U=Q|E(Q!),"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["XweoOj6.AEa}^f^X{S]P"],
-    "name": "initialEmptyStrings",
-    "expr": "Var",
-    "+": [
-      "XweoOj6.AEa}^f^X{S]P",
-      "kL}edsC.aq_0rJ7-Fr5?",
-      "o_OADG*+K7dad},].d6#"
-    ],
-    "-": ["kL}edsC.aq_0rJ7-Fr5?"]
-  },
-  {
-    "op": "list_length",
-    "opc": "expr",
-    "expr": "list_operation",
-    "-": ["o_OADG*+K7dad},].d6#"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "item",
-    "-": ["XweoOj6.AEa}^f^X{S]P"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["9(#HWR6X4Z1oF/yZ`Jyn"],
-    "name": "initialEmptyStrings",
-    "expr": "Var",
-    "+": [
-      "gv8.-S_i^t!.Gc;R?U[K",
-      "9(#HWR6X4Z1oF/yZ`Jyn",
-      "CT]AlcQjdXezL|kit%KA"
-    ],
-    "-": ["gv8.-S_i^t!.Gc;R?U[K"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": ["~;CATa|c]H9Bq21rF[^O"],
-    "value": "a",
-    "-": ["~;CATa|c]H9Bq21rF[^O"]
-  },
-  {
-    "op": "list_find_item",
-    "opc": "expr",
-    "expr": "list_operation",
-    "position": "first",
-    "-": ["CT]AlcQjdXezL|kit%KA"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "item",
-    "-": ["9(#HWR6X4Z1oF/yZ`Jyn"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["s3)!k|~,K}b?O@}%#4O@"],
-    "name": "initialEmptyStrings",
-    "expr": "Var",
-    "+": [
-      "s3)!k|~,K}b?O@}%#4O@",
-      "J|6]vIK8MRYx,s}Zm]j|"
-    ],
-    "-": ["J|6]vIK8MRYx,s}Zm]j|"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": ["ny+rpChpsBAIq+(cae]y"],
-    "value": "c",
-    "-": ["ny+rpChpsBAIq+(cae]y"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["M)nRV9gIY(_HH^UeE*0|"],
-    "value": "2",
-    "-": ["M)nRV9gIY(_HH^UeE*0|"]
-  },
-  {
-    "op": "set",
-    "opc": "list_operation",
-    "position": "from_end",
-    "-": ["s3)!k|~,K}b?O@}%#4O@"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["MUq)qF@S.`DK|}Px#jDZ"],
-    "name": "initialEmptyStrings",
-    "expr": "Var",
-    "+": [
-      "MUq)qF@S.`DK|}Px#jDZ",
-      "0]E^)yd`2:+BV0cV{,I7"
-    ],
-    "-": ["0]E^)yd`2:+BV0cV{,I7"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": ["F|R#Sl(alO*y|=J-[enu"],
-    "value": "d",
-    "-": ["F|R#Sl(alO*y|=J-[enu"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["}d0-nA.{q@xP=Y3kfDRN"],
-    "value": "1",
-    "-": ["}d0-nA.{q@xP=Y3kfDRN"]
-  },
-  {
-    "op": "insert",
-    "opc": "list_operation",
-    "position": "from_end",
-    "-": ["MUq)qF@S.`DK|}Px#jDZ"]
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 87
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "-": ["4p1WV:MoMW*V9U[wiQpw"],
-    "target": "IfStatement"
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": ["q@5l{Ufiz^DSW:)_2y2W"],
-    "+": ["q@5l{Ufiz^DSW:)_2y2W"],
-    "value": "Basis List Operations END",
-    "-": ["q@5l{Ufiz^DSW:)_2y2W"]
-  },
-  {"opc": "stop"}
-]}
+   0:            expr            NUMBER: 0, expr: createList,                                > +: ["k,FIL~3cd3@r8OmIkZKL","nwhx`GM6+KD~bu.f-Z)."], -: ["nwhx`GM6+KD~bu.f-Z)."], 
+   1:            VarDeclaration  name: initialEmptyNumbers, type: ARRAY_NUMBER,              > -: ["k,FIL~3cd3@r8OmIkZKL"], 
+   2:            expr            NUMBER: 0, expr: createList,                                > +: ["YmUeK:p%]wmpg!55Esn+","70@Bg,}_cLmBAJDe2OJu"], -: ["YmUeK:p%]wmpg!55Esn+"], 
+   3:            VarDeclaration  name: initialEmptyBoolean, type: ARRAY_BOOLEAN,             > -: ["70@Bg,}_cLmBAJDe2OJu"], 
+   4:            expr            NUMBER: 0, expr: createList,                                > +: ["1GnyozdD^chnK0WL)aeC","b42YcB})X]t;X*?;Z,F|"], -: ["1GnyozdD^chnK0WL)aeC"], 
+   5:            VarDeclaration  name: initialEmptyStrings, type: ARRAY_STRING,              > -: ["b42YcB})X]t;X*?;Z,F|"], 
+   6:            expr            expr: NUM_CONST, value: 3,                                  > +: ["l~k*s4=u*C+W0m:*U,(Y","G;vY,h-n:T8N}xu?gZHo"], -: ["l~k*s4=u*C+W0m:*U,(Y"], 
+   7:            VarDeclaration  name: number, type: NUMBER,                                 > -: ["G;vY,h-n:T8N}xu?gZHo"], 
+   8:            expr            expr: BOOL_CONST, value: true,                              > +: ["!I.+LY96_.;G+dmIx;dW","6g(]h@I0zE9%+7,-3nzU"], -: ["6g(]h@I0zE9%+7,-3nzU"], 
+   9:            VarDeclaration  name: bool, type: BOOLEAN,                                  > -: ["!I.+LY96_.;G+dmIx;dW"], 
+  10:            expr            expr: STRING_CONST, value: c,                               > +: ["Fs5TpT-KKD1}mzto|z==","nen#FIO;Jojj9,c@x[Z8"], -: ["nen#FIO;Jojj9,c@x[Z8"], 
+  11:            VarDeclaration  name: string, type: STRING,                                 > -: ["Fs5TpT-KKD1}mzto|z=="], 
+  12:            expr            expr: NUM_CONST, value: 0,                                  > +: [",tEc}Gyk0_+bk^hj9#OT","zumh?#6]72=t%l2(M*]Z"], -: [",tEc}Gyk0_+bk^hj9#OT"], 
+  13:            VarDeclaration  name: item, type: NUMBER,                                   > -: ["zumh?#6]72=t%l2(M*]Z"], 
+  14:            comment         value: Basis List Operations START,                         > +: ["7D#!g?fg:kt3S7s)5ToX"], -: ["7D#!g?fg:kt3S7s)5ToX"], possibleDebugStop: ["7D#!g?fg:kt3S7s)5ToX"], 
+  15:            comment         n: 1, text: IfStatement, type: start,                       > +: ["5j)r!TAw;s~%%gt+|MhY"], possibleDebugStop: ["5j)r!TAw;s~%%gt+|MhY"], 
+  16: i_0_1      comment         text: IfStatement,                                          > 
+  17:            expr            expr: Var, name: initialEmptyNumbers,                       > +: [":Zez+X:gS9=AJJ]UKXyK","C9*u3Xo6IP,9LRESZ`*-"], -: [":Zez+X:gS9=AJJ]UKXyK"], 
+  18:            expr            expr: list_operation, op: list_is_empty,                    > -: ["C9*u3Xo6IP,9LRESZ`*-"], 
+  19:            jump            conditional: false, target: i_1_1,                          > 
+  20:            expr            expr: NUM_CONST, value: 1,                                  > +: ["i/32XY%@TVhz:}cTe0ot","v4@o;EtjKIJiD#6:LEab","Z:=R*D5qW!Si*OuH{H/|"], -: ["v4@o;EtjKIJiD#6:LEab"], possibleDebugStop: ["Z:=R*D5qW!Si*OuH{H/|"], 
+  21:            expr            expr: NUM_CONST, value: 2,                                  > +: ["Tw,A4Ml_kl)mUutF934A"], -: ["Tw,A4Ml_kl)mUutF934A"], 
+  22:            expr            NUMBER: 2, expr: createList,                                > -: ["i/32XY%@TVhz:}cTe0ot"], 
+  23:            AssignStmt      name: initialEmptyNumbers,                                  > -: ["Z:=R*D5qW!Si*OuH{H/|"], 
+  24:            expr            expr: Var, name: initialEmptyNumbers,                       > +: ["Wj@gcCT!t4ex4dyw{XkN","hx*~^#n#!-5{/=2)8q?y","a#=3E5E.RhoB{:Sw-*Fq"], -: ["hx*~^#n#!-5{/=2)8q?y"], possibleDebugStop: ["a#=3E5E.RhoB{:Sw-*Fq"], 
+  25:            expr            expr: list_operation, op: list_length,                      > -: ["Wj@gcCT!t4ex4dyw{XkN"], 
+  26:            AssignStmt      name: item,                                                 > -: ["a#=3E5E.RhoB{:Sw-*Fq"], 
+  27:            expr            expr: Var, name: initialEmptyNumbers,                       > +: ["p-Mfb!b|!jPlahfFf0qt","NV,X-SEyRnLpp-}})QnM","wmp4@Nw4pWpl(vcNWo-?"], -: ["p-Mfb!b|!jPlahfFf0qt"], possibleDebugStop: ["wmp4@Nw4pWpl(vcNWo-?"], 
+  28:            expr            expr: NUM_CONST, value: 1,                                  > +: ["/OlcrVTS2bTHu+-O(mMI"], -: ["/OlcrVTS2bTHu+-O(mMI"], 
+  29:            expr            expr: list_operation, op: list_find_item, position: first,  > -: ["NV,X-SEyRnLpp-}})QnM"], 
+  30:            AssignStmt      name: item,                                                 > -: ["wmp4@Nw4pWpl(vcNWo-?"], 
+  31:            expr            expr: Var, name: initialEmptyNumbers,                       > +: ["N%m/u0GBa2u{W2)3^(v7","d0#5@{kxqf|6YSx8rd)P","2ed4dsG5rV{{7+A|3CML"], -: ["N%m/u0GBa2u{W2)3^(v7"], possibleDebugStop: ["2ed4dsG5rV{{7+A|3CML"], 
+  32:            expr            expr: NUM_CONST, value: 5,                                  > +: ["*Jiy*65Jh9NHV?h6x!+B"], -: ["*Jiy*65Jh9NHV?h6x!+B"], 
+  33:            expr            expr: list_operation, op: list_find_item, position: first,  > -: ["d0#5@{kxqf|6YSx8rd)P"], 
+  34:            AssignStmt      name: item,                                                 > -: ["2ed4dsG5rV{{7+A|3CML"], 
+  35:            expr            expr: Var, name: initialEmptyNumbers,                       > +: ["C5h*e!2gA%oLdXsoh00n","h/SPK6`,dyl0k~0bsf7N"], -: ["h/SPK6`,dyl0k~0bsf7N"], possibleDebugStop: ["C5h*e!2gA%oLdXsoh00n"], 
+  36:            expr            expr: NUM_CONST, value: 2,                                  > +: ["EKFT;?1[raj}4XI|oBw9"], -: ["EKFT;?1[raj}4XI|oBw9"], 
+  37:            list_operation  op: set, position: first,                                   > -: ["C5h*e!2gA%oLdXsoh00n"], 
+  38:            jump            conditional: always, target: i_e_1,                         > 
+  39: i_1_1      comment         text: IfStatement,                                          > 
+  40: i_e_1      comment         text: IfStatement, type: end,                               > -: ["5j)r!TAw;s~%%gt+|MhY"], 
+  41:            comment         n: 2, text: IfStatement, type: start,                       > +: [",Xmkn|*Z1lkPlIV2WgMU"], possibleDebugStop: [",Xmkn|*Z1lkPlIV2WgMU"], 
+  42: i_0_2      comment         text: IfStatement,                                          > 
+  43:            expr            expr: Var, name: initialEmptyBoolean,                       > +: ["uDm/2lEGSQ6Q1[u=cx|H","/]0F6=1ocMXS7gfH0.E{"], -: ["/]0F6=1ocMXS7gfH0.E{"], 
+  44:            expr            expr: list_operation, op: list_is_empty,                    > -: ["uDm/2lEGSQ6Q1[u=cx|H"], 
+  45:            jump            conditional: false, target: i_1_2,                          > 
+  46:            expr            expr: BOOL_CONST, value: true,                              > +: ["^%6+]Al4(C]4_EHnrCa6","tqJOT|N{^c0a|qx7YeZK","H__Hna*RXO(l0SdY|(/?"], -: ["tqJOT|N{^c0a|qx7YeZK"], possibleDebugStop: ["^%6+]Al4(C]4_EHnrCa6"], 
+  47:            expr            expr: BOOL_CONST, value: false,                             > +: ["+)98kc[[H1|bd%=C#Yez"], -: ["+)98kc[[H1|bd%=C#Yez"], 
+  48:            expr            NUMBER: 2, expr: createList,                                > -: ["H__Hna*RXO(l0SdY|(/?"], 
+  49:            AssignStmt      name: initialEmptyBoolean,                                  > -: ["^%6+]Al4(C]4_EHnrCa6"], 
+  50:            expr            expr: Var, name: initialEmptyBoolean,                       > +: ["6[C/#y]QIyJbwG=J(2N7","9a24+q!w(.c2F_LoW5uL","(jJb9k;E|bs*!ZPm#+.u"], -: ["9a24+q!w(.c2F_LoW5uL"], possibleDebugStop: ["(jJb9k;E|bs*!ZPm#+.u"], 
+  51:            expr            expr: list_operation, op: list_length,                      > -: ["6[C/#y]QIyJbwG=J(2N7"], 
+  52:            AssignStmt      name: item,                                                 > -: ["(jJb9k;E|bs*!ZPm#+.u"], 
+  53:            expr            expr: Var, name: initialEmptyBoolean,                       > +: [":X-5ugpt{m;X`:v|IR!l","FKL(E||NdF-TCcbLH557","AS*Ivq+=eNG82T!kDFy7"], -: ["FKL(E||NdF-TCcbLH557"], possibleDebugStop: ["AS*Ivq+=eNG82T!kDFy7"], 
+  54:            expr            expr: Var, name: bool,                                      > +: ["/BDpTth#H:9{~G5L%^BX"], -: ["/BDpTth#H:9{~G5L%^BX"], 
+  55:            expr            expr: list_operation, op: list_find_item, position: first,  > -: [":X-5ugpt{m;X`:v|IR!l"], 
+  56:            AssignStmt      name: item,                                                 > -: ["AS*Ivq+=eNG82T!kDFy7"], 
+  57:            expr            expr: Var, name: initialEmptyBoolean,                       > +: [")buVYIKxov7Uy)pwpcjL","]?TKf+I%.aOO*I!{Q^F=","HRLB?kmw=~2AVi3ZP-/o"], -: ["HRLB?kmw=~2AVi3ZP-/o"], possibleDebugStop: ["]?TKf+I%.aOO*I!{Q^F="], 
+  58:            expr            expr: C.NULL_CONST,                                         > +: ["Zq)aK`-pzb9sR_XYZmzF"], -: ["Zq)aK`-pzb9sR_XYZmzF"], 
+  59:            expr            expr: list_operation, op: list_find_item, position: first,  > -: [")buVYIKxov7Uy)pwpcjL"], 
+  60:            AssignStmt      name: item,                                                 > -: ["]?TKf+I%.aOO*I!{Q^F="], 
+  61:            expr            expr: Var, name: initialEmptyBoolean,                       > +: ["m?zcv(G3?L5+=sG@sx=d","*5^o6X^7x*qlL%YPhoOY"], -: ["*5^o6X^7x*qlL%YPhoOY"], possibleDebugStop: ["m?zcv(G3?L5+=sG@sx=d"], 
+  62:            expr            expr: BOOL_CONST, value: true,                              > +: ["u|Lq|DD!PA(E?7h%fMsT"], -: ["u|Lq|DD!PA(E?7h%fMsT"], 
+  63:            list_operation  op: insert, position: last,                                 > -: ["m?zcv(G3?L5+=sG@sx=d"], 
+  64:            jump            conditional: always, target: i_e_2,                         > 
+  65: i_1_2      comment         text: IfStatement,                                          > 
+  66: i_e_2      comment         text: IfStatement, type: end,                               > -: [",Xmkn|*Z1lkPlIV2WgMU"], 
+  67:            comment         n: 3, text: IfStatement, type: start,                       > +: ["4p1WV:MoMW*V9U[wiQpw"], possibleDebugStop: ["4p1WV:MoMW*V9U[wiQpw"], 
+  68: i_0_3      comment         text: IfStatement,                                          > 
+  69:            expr            expr: Var, name: initialEmptyStrings,                       > +: ["qhTAkkQV7_//22AFyiqJ","teLW@-In(_ZJ7T/hKaJq"], -: ["teLW@-In(_ZJ7T/hKaJq"], 
+  70:            expr            expr: list_operation, op: list_is_empty,                    > -: ["qhTAkkQV7_//22AFyiqJ"], 
+  71:            jump            conditional: false, target: i_1_3,                          > 
+  72:            expr            expr: STRING_CONST, value: a,                               > +: [")s/|9,`|Z!U=Q|E(Q!),","%`dhn1_]%tk/k654jXO3","f[em_1/~SV4pu)q*Pp=C"], -: ["%`dhn1_]%tk/k654jXO3"], possibleDebugStop: [")s/|9,`|Z!U=Q|E(Q!),"], 
+  73:            expr            expr: STRING_CONST, value: b,                               > +: ["mk@C+nZE--Y+@L~?ezT?"], -: ["mk@C+nZE--Y+@L~?ezT?"], 
+  74:            expr            NUMBER: 2, expr: createList,                                > -: ["f[em_1/~SV4pu)q*Pp=C"], 
+  75:            AssignStmt      name: initialEmptyStrings,                                  > -: [")s/|9,`|Z!U=Q|E(Q!),"], 
+  76:            expr            expr: Var, name: initialEmptyStrings,                       > +: ["XweoOj6.AEa}^f^X{S]P","kL}edsC.aq_0rJ7-Fr5?","o_OADG*+K7dad},].d6#"], -: ["kL}edsC.aq_0rJ7-Fr5?"], possibleDebugStop: ["XweoOj6.AEa}^f^X{S]P"], 
+  77:            expr            expr: list_operation, op: list_length,                      > -: ["o_OADG*+K7dad},].d6#"], 
+  78:            AssignStmt      name: item,                                                 > -: ["XweoOj6.AEa}^f^X{S]P"], 
+  79:            expr            expr: Var, name: initialEmptyStrings,                       > +: ["gv8.-S_i^t!.Gc;R?U[K","9(#HWR6X4Z1oF/yZ`Jyn","CT]AlcQjdXezL|kit%KA"], -: ["gv8.-S_i^t!.Gc;R?U[K"], possibleDebugStop: ["9(#HWR6X4Z1oF/yZ`Jyn"], 
+  80:            expr            expr: STRING_CONST, value: a,                               > +: ["~;CATa|c]H9Bq21rF[^O"], -: ["~;CATa|c]H9Bq21rF[^O"], 
+  81:            expr            expr: list_operation, op: list_find_item, position: first,  > -: ["CT]AlcQjdXezL|kit%KA"], 
+  82:            AssignStmt      name: item,                                                 > -: ["9(#HWR6X4Z1oF/yZ`Jyn"], 
+  83:            expr            expr: Var, name: initialEmptyStrings,                       > +: ["s3)!k|~,K}b?O@}%#4O@","J|6]vIK8MRYx,s}Zm]j|"], -: ["J|6]vIK8MRYx,s}Zm]j|"], possibleDebugStop: ["s3)!k|~,K}b?O@}%#4O@"], 
+  84:            expr            expr: STRING_CONST, value: c,                               > +: ["ny+rpChpsBAIq+(cae]y"], -: ["ny+rpChpsBAIq+(cae]y"], 
+  85:            expr            expr: NUM_CONST, value: 2,                                  > +: ["M)nRV9gIY(_HH^UeE*0|"], -: ["M)nRV9gIY(_HH^UeE*0|"], 
+  86:            list_operation  op: set, position: from_end,                                > -: ["s3)!k|~,K}b?O@}%#4O@"], 
+  87:            expr            expr: Var, name: initialEmptyStrings,                       > +: ["MUq)qF@S.`DK|}Px#jDZ","0]E^)yd`2:+BV0cV{,I7"], -: ["0]E^)yd`2:+BV0cV{,I7"], possibleDebugStop: ["MUq)qF@S.`DK|}Px#jDZ"], 
+  88:            expr            expr: STRING_CONST, value: d,                               > +: ["F|R#Sl(alO*y|=J-[enu"], -: ["F|R#Sl(alO*y|=J-[enu"], 
+  89:            expr            expr: NUM_CONST, value: 1,                                  > +: ["}d0-nA.{q@xP=Y3kfDRN"], -: ["}d0-nA.{q@xP=Y3kfDRN"], 
+  90:            list_operation  op: insert, position: from_end,                             > -: ["MUq)qF@S.`DK|}Px#jDZ"], 
+  91:            jump            conditional: always, target: i_e_3,                         > 
+  92: i_1_3      comment         text: IfStatement,                                          > 
+  93: i_e_3      comment         text: IfStatement, type: end,                               > -: ["4p1WV:MoMW*V9U[wiQpw"], 
+  94:            comment         value: Basis List Operations END,                           > +: ["q@5l{Ufiz^DSW:)_2y2W"], -: ["q@5l{Ufiz^DSW:)_2y2W"], possibleDebugStop: ["q@5l{Ufiz^DSW:)_2y2W"], 
+  95:            stop                                                                        > 

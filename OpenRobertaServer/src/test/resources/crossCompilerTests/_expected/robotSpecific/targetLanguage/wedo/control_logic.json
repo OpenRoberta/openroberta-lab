@@ -40,55 +40,50 @@
     "type": "COLOR"
   },
   {
-    "opc": "comment",
-    "type": "start",
-    "target": "createMethodCall"
+    "opc": "returnAddress",
+    "target": "rtn_1"
   },
   {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": 11
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 17
+    "opc": "call",
+    "target": "mthd_s_control"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodCall"
+    "text": "call",
+    "label": "rtn_1",
+    "type": "end"
+  },
+  {
+    "opc": "returnAddress",
+    "target": "rtn_2"
+  },
+  {
+    "opc": "call",
+    "target": "mthd_s_logic"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodCall"
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": 15
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 140
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "target": "createMethodCall"
+    "text": "call",
+    "label": "rtn_2",
+    "type": "end"
   },
   {"opc": "stop"},
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "label": "mthd_s_control",
+    "type": "start"
   },
   {
     "opc": "comment",
+    "text": "IfStatement",
     "type": "start",
-    "target": "IfStatement"
+    "n": 4
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_0_4"
   },
   {
     "opc": "expr",
@@ -98,22 +93,34 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 22
+    "target": "i_1_4"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 22
+    "target": "i_e_4"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "IfStatement",
+    "label": "i_1_4"
   },
   {
     "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_e_4",
+    "type": "end"
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
     "type": "start",
-    "target": "IfStatement"
+    "n": 5
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_0_5"
   },
   {
     "opc": "expr",
@@ -123,12 +130,17 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 27
+    "target": "i_1_5"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 30
+    "target": "i_e_5"
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_1_5"
   },
   {
     "opc": "expr",
@@ -138,22 +150,34 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 30
+    "target": "i_2_5"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 30
+    "target": "i_e_5"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "IfStatement",
+    "label": "i_2_5"
   },
   {
     "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_e_5",
+    "type": "end"
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
     "type": "start",
-    "target": "IfStatement"
+    "n": 6
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_0_6"
   },
   {
     "opc": "expr",
@@ -163,22 +187,29 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 35
+    "target": "i_1_6"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 35
+    "target": "i_e_6"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "IfStatement",
+    "label": "i_1_6"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "RepeatStmt"
+    "text": "IfStatement",
+    "label": "i_e_6",
+    "type": "end"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_7",
+    "type": "start"
   },
   {
     "opc": "expr",
@@ -193,27 +224,29 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 42
+    "target": "r_e_7"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 42
+    "target": "r_e_7"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 37
+    "target": "r_l_7"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_e_7",
+    "type": "end"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_l_8",
+    "type": "start"
   },
   {
     "opc": "expr",
@@ -223,27 +256,29 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 48
+    "target": "r_e_8"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 44
+    "target": "r_l_8"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 44
+    "target": "r_l_8"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_e_8",
+    "type": "end"
   },
   {
     "opc": "comment",
+    "text": "RepeatStmt",
     "type": "start",
-    "target": "RepeatStmt"
+    "n": 9
   },
   {
     "opc": "expr",
@@ -254,6 +289,11 @@
     "opc": "VarDeclaration",
     "name": "k0",
     "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_9"
   },
   {
     "opc": "expr",
@@ -273,7 +313,12 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 61
+    "target": "r_e_9"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_c_9"
   },
   {
     "opc": "expr",
@@ -297,7 +342,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 52
+    "target": "r_l_9"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_e_9"
   },
   {
     "opc": "unbindVar",
@@ -305,13 +355,14 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "type": "end"
   },
   {
     "opc": "comment",
+    "text": "RepeatStmt",
     "type": "start",
-    "target": "RepeatStmt"
+    "n": 10
   },
   {
     "opc": "expr",
@@ -322,6 +373,11 @@
     "opc": "VarDeclaration",
     "name": "i",
     "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_10"
   },
   {
     "opc": "expr",
@@ -341,7 +397,12 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 75
+    "target": "r_e_10"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_c_10"
   },
   {
     "opc": "expr",
@@ -365,7 +426,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 66
+    "target": "r_l_10"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_e_10"
   },
   {
     "opc": "unbindVar",
@@ -373,13 +439,20 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "type": "end"
   },
   {
     "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_s_11",
     "type": "start",
-    "target": "WaitStmt"
+    "n": 11
+  },
+  {
+    "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_0_11"
   },
   {
     "opc": "expr",
@@ -389,12 +462,17 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 81
+    "target": "w_1_11"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 84
+    "target": "w_e_11"
+  },
+  {
+    "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_1_11"
   },
   {
     "opc": "expr",
@@ -405,17 +483,25 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 78
+    "target": "w_s_11"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "WaitStmt"
+    "text": "WaitStmt",
+    "label": "w_e_11",
+    "type": "end"
   },
   {
     "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_s_12",
     "type": "start",
-    "target": "WaitStmt"
+    "n": 12
+  },
+  {
+    "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_0_12"
   },
   {
     "opc": "expr",
@@ -425,12 +511,17 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 89
+    "target": "w_1_12"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 95
+    "target": "w_e_12"
+  },
+  {
+    "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_1_12"
   },
   {
     "opc": "expr",
@@ -440,12 +531,17 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 92
+    "target": "w_2_12"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 95
+    "target": "w_e_12"
+  },
+  {
+    "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_2_12"
   },
   {
     "opc": "expr",
@@ -456,12 +552,13 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 86
+    "target": "w_s_12"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "WaitStmt"
+    "text": "WaitStmt",
+    "label": "w_e_12",
+    "type": "end"
   },
   {
     "opc": "expr",
@@ -471,8 +568,15 @@
   {"opc": "WaitTimeSTMT"},
   {
     "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_s_13",
     "type": "start",
-    "target": "WaitStmt"
+    "n": 13
+  },
+  {
+    "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_0_13"
   },
   {
     "GetSample": "buttons",
@@ -492,12 +596,17 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 104
+    "target": "w_1_13"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 107
+    "target": "w_e_13"
+  },
+  {
+    "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_1_13"
   },
   {
     "opc": "expr",
@@ -508,17 +617,25 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 99
+    "target": "w_s_13"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "WaitStmt"
+    "text": "WaitStmt",
+    "label": "w_e_13",
+    "type": "end"
   },
   {
     "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_s_14",
     "type": "start",
-    "target": "WaitStmt"
+    "n": 14
+  },
+  {
+    "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_0_14"
   },
   {
     "GetSample": "gyro",
@@ -540,12 +657,17 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 114
+    "target": "w_1_14"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 117
+    "target": "w_e_14"
+  },
+  {
+    "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_1_14"
   },
   {
     "opc": "expr",
@@ -556,17 +678,25 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 109
+    "target": "w_s_14"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "WaitStmt"
+    "text": "WaitStmt",
+    "label": "w_e_14",
+    "type": "end"
   },
   {
     "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_s_15",
     "type": "start",
-    "target": "WaitStmt"
+    "n": 15
+  },
+  {
+    "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_0_15"
   },
   {
     "GetSample": "infrared",
@@ -587,12 +717,17 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 124
+    "target": "w_1_15"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 127
+    "target": "w_e_15"
+  },
+  {
+    "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_1_15"
   },
   {
     "opc": "expr",
@@ -603,17 +738,25 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 119
+    "target": "w_s_15"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "WaitStmt"
+    "text": "WaitStmt",
+    "label": "w_e_15",
+    "type": "end"
   },
   {
     "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_s_16",
     "type": "start",
-    "target": "WaitStmt"
+    "n": 16
+  },
+  {
+    "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_0_16"
   },
   {
     "GetSample": "timer",
@@ -633,12 +776,17 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 134
+    "target": "w_1_16"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 137
+    "target": "w_e_16"
+  },
+  {
+    "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_1_16"
   },
   {
     "opc": "expr",
@@ -649,12 +797,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 129
+    "target": "w_s_16"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "WaitStmt"
+    "text": "WaitStmt",
+    "label": "w_e_16",
+    "type": "end"
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_3",
+    "type": "start"
   },
   {
     "opc": "return",
@@ -662,13 +817,14 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "type": "end"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "label": "mthd_s_logic",
+    "type": "start"
   },
   {
     "opc": "expr",
@@ -768,8 +924,9 @@
   {"opc": "ShowTextAction"},
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 18
   },
   {
     "opc": "expr",
@@ -779,7 +936,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 170
+    "target": "b_m_18"
   },
   {
     "opc": "expr",
@@ -789,23 +946,26 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 171
+    "target": "b_e_18"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_18",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_18",
+    "type": "end"
   },
   {"opc": "ShowTextAction"},
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 19
   },
   {
     "opc": "expr",
@@ -815,7 +975,7 @@
   {
     "opc": "jump",
     "conditional": true,
-    "target": 178
+    "target": "b_m_19"
   },
   {
     "opc": "expr",
@@ -825,17 +985,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 179
+    "target": "b_e_19"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_19",
     "value": true
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_19",
+    "type": "end"
   },
   {"opc": "ShowTextAction"},
   {
@@ -867,12 +1029,18 @@
   },
   {"opc": "ShowTextAction"},
   {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_17",
+    "type": "start"
+  },
+  {
     "opc": "return",
     "values": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "type": "end"
   }
 ]}

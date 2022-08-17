@@ -60,6 +60,7 @@ import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
+import de.fhg.iais.roberta.util.visitor.StackmachinePrettyPrinter;
 
 public class ReuseIntegrationAsUnitTest {
 
@@ -224,7 +225,7 @@ public class ReuseIntegrationAsUnitTest {
             builder.setRobot(robotName).setProgramName("NEPOprog").setSSID("test").setPassword("test").setLanguage(Language.ENGLISH);
             Project project = builder.build();
             String msg = UnitTestHelper.executeWorkflow("getsimulationcode", testFactory, project);
-            String stackMachineCode = project.getCompiledHex();
+            String stackMachineCode = StackmachinePrettyPrinter.prettyPrint(new JSONObject(project.getCompiledHex()), true, true);
             codeGenerationOk = codeGenerationOk &&
                 compareExpectedToGenerated(
                     CROSS_COMPILER_TESTS + EXPECTED + COMMON + STACKMACHINE_CODE_GENERATED,

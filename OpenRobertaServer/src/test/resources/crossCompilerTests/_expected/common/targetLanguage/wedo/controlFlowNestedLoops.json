@@ -15,13 +15,20 @@
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_s_1",
+    "type": "start"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_l_1"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_2",
+    "type": "start"
   },
   {
     "opc": "expr",
@@ -46,12 +53,13 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 49
+    "target": "r_e_2"
   },
   {
     "opc": "comment",
+    "text": "RepeatStmt",
     "type": "start",
-    "target": "RepeatStmt"
+    "n": 3
   },
   {
     "opc": "expr",
@@ -62,6 +70,11 @@
     "opc": "VarDeclaration",
     "name": "i",
     "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_3"
   },
   {
     "opc": "expr",
@@ -81,12 +94,13 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 46
+    "target": "r_e_3"
   },
   {
     "opc": "comment",
+    "text": "RepeatStmt",
     "type": "start",
-    "target": "RepeatStmt"
+    "n": 4
   },
   {
     "opc": "expr",
@@ -97,6 +111,11 @@
     "opc": "VarDeclaration",
     "name": "k0",
     "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_4"
   },
   {
     "opc": "expr",
@@ -116,12 +135,18 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 39
+    "target": "r_e_4"
   },
   {
     "opc": "comment",
+    "text": "IfStatement",
     "type": "start",
-    "target": "IfStatement"
+    "n": 5
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_0_5"
   },
   {
     "opc": "expr",
@@ -136,22 +161,28 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 30
+    "target": "i_1_5"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 34
+    "target": "r_l_4"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 30
+    "target": "i_e_5"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "IfStatement",
+    "label": "i_1_5"
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_e_5",
+    "type": "end"
   },
   {
     "opc": "expr",
@@ -166,6 +197,11 @@
   {
     "opc": "mathChange",
     "name": "X"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_c_4"
   },
   {
     "opc": "expr",
@@ -189,7 +225,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 20
+    "target": "r_l_4"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_e_4"
   },
   {
     "opc": "unbindVar",
@@ -197,8 +238,13 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "type": "end"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_c_3"
   },
   {
     "opc": "expr",
@@ -222,7 +268,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 13
+    "target": "r_l_3"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_e_3"
   },
   {
     "opc": "unbindVar",
@@ -230,38 +281,41 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "type": "end"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 5
+    "target": "r_l_2"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_e_2",
+    "type": "end"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 52
+    "target": "r_e_1"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 4
+    "target": "r_s_1"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_e_1",
+    "type": "end"
   },
   {
     "opc": "comment",
+    "text": "RepeatStmt",
     "type": "start",
-    "target": "RepeatStmt"
+    "n": 6
   },
   {
     "opc": "expr",
@@ -272,6 +326,11 @@
     "opc": "VarDeclaration",
     "name": "j",
     "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_6"
   },
   {
     "opc": "expr",
@@ -291,7 +350,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 85
+    "target": "r_e_6"
   },
   {
     "opc": "expr",
@@ -309,8 +368,9 @@
   },
   {
     "opc": "comment",
+    "text": "RepeatStmt",
     "type": "start",
-    "target": "RepeatStmt"
+    "n": 7
   },
   {
     "opc": "expr",
@@ -321,6 +381,11 @@
     "opc": "VarDeclaration",
     "name": "k",
     "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_7"
   },
   {
     "opc": "expr",
@@ -340,7 +405,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 78
+    "target": "r_e_7"
   },
   {
     "opc": "expr",
@@ -355,6 +420,11 @@
   {
     "opc": "mathChange",
     "name": "X"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_c_7"
   },
   {
     "opc": "expr",
@@ -378,7 +448,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 66
+    "target": "r_l_7"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_e_7"
   },
   {
     "opc": "unbindVar",
@@ -386,8 +461,13 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "type": "end"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_c_6"
   },
   {
     "opc": "expr",
@@ -411,7 +491,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 56
+    "target": "r_l_6"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_e_6"
   },
   {
     "opc": "unbindVar",
@@ -419,23 +504,41 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "type": "end"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_s_8",
+    "type": "start"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_l_8"
   },
   {
     "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_s_9",
+    "type": "start"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_9"
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
     "type": "start",
-    "target": "IfStatement"
+    "n": 10
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_0_10"
   },
   {
     "opc": "expr",
@@ -455,17 +558,29 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 119
+    "target": "i_1_10"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_s_11",
+    "type": "start"
   },
   {
     "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_11"
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
     "type": "start",
-    "target": "IfStatement"
+    "n": 12
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_0_12"
   },
   {
     "opc": "expr",
@@ -480,22 +595,28 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 101
+    "target": "i_1_12"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 95
+    "target": "r_l_11"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 101
+    "target": "i_e_12"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "IfStatement",
+    "label": "i_1_12"
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_e_12",
+    "type": "end"
   },
   {
     "opc": "expr",
@@ -514,22 +635,29 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 107
+    "target": "r_e_11"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 95
+    "target": "r_s_11"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_e_11",
+    "type": "end"
   },
   {
     "opc": "comment",
+    "text": "IfStatement",
     "type": "start",
-    "target": "IfStatement"
+    "n": 13
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_0_13"
   },
   {
     "opc": "expr",
@@ -544,22 +672,28 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 114
+    "target": "i_1_13"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 122
+    "target": "r_e_9"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 114
+    "target": "i_e_13"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "IfStatement",
+    "label": "i_1_13"
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_e_13",
+    "type": "end"
   },
   {
     "opc": "expr",
@@ -578,52 +712,73 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 119
+    "target": "i_e_10"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "IfStatement",
+    "label": "i_1_10"
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_e_10",
+    "type": "end"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 122
+    "target": "r_e_9"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 89
+    "target": "r_s_9"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_e_9",
+    "type": "end"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 125
+    "target": "r_e_8"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 88
+    "target": "r_s_8"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_e_8",
+    "type": "end"
   },
   {
     "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_s_14",
+    "type": "start"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_14"
+  },
+  {
+    "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_s_15",
     "type": "start",
-    "target": "RepeatStmt"
+    "n": 15
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "WaitStmt"
+    "text": "WaitStmt",
+    "label": "w_0_15"
   },
   {
     "opc": "expr",
@@ -633,17 +788,22 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 132
+    "target": "w_1_15"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 140
+    "target": "r_e_14"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 138
+    "target": "w_e_15"
+  },
+  {
+    "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_1_15"
   },
   {
     "opc": "expr",
@@ -653,12 +813,17 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 135
+    "target": "w_2_15"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 138
+    "target": "w_e_15"
+  },
+  {
+    "opc": "comment",
+    "text": "WaitStmt",
+    "label": "w_2_15"
   },
   {
     "opc": "expr",
@@ -669,22 +834,24 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 128
+    "target": "w_s_15"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "WaitStmt"
+    "text": "WaitStmt",
+    "label": "w_e_15",
+    "type": "end"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 127
+    "target": "r_s_14"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_e_14",
+    "type": "end"
   },
   {
     "opc": "comment",

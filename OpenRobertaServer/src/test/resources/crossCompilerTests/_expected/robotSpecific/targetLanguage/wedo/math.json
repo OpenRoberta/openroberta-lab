@@ -40,30 +40,25 @@
     "type": "COLOR"
   },
   {
-    "opc": "comment",
-    "type": "start",
-    "target": "createMethodCall"
+    "opc": "returnAddress",
+    "target": "rtn_1"
   },
   {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": 11
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 13
+    "opc": "call",
+    "target": "mthd_s_math"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodCall"
+    "text": "call",
+    "label": "rtn_1",
+    "type": "end"
   },
   {"opc": "stop"},
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "label": "mthd_s_math",
+    "type": "start"
   },
   {
     "opc": "expr",
@@ -510,12 +505,18 @@
   },
   {"opc": "ShowTextAction"},
   {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_2",
+    "type": "start"
+  },
+  {
     "opc": "return",
     "values": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "type": "end"
   }
 ]}
