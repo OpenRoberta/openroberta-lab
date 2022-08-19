@@ -1,11 +1,6 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.collect.ClassToInstanceMap;
-
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.UsedSensor;
@@ -15,33 +10,7 @@ import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.nao.Animation;
-import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
-import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
-import de.fhg.iais.roberta.syntax.action.nao.ForgetFace;
-import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
-import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
-import de.fhg.iais.roberta.syntax.action.nao.Hand;
-import de.fhg.iais.roberta.syntax.action.nao.LearnFace;
-import de.fhg.iais.roberta.syntax.action.nao.LedOff;
-import de.fhg.iais.roberta.syntax.action.nao.LedReset;
-import de.fhg.iais.roberta.syntax.action.nao.MoveJoint;
-import de.fhg.iais.roberta.syntax.action.nao.PlayFile;
-import de.fhg.iais.roberta.syntax.action.nao.PointLookAt;
-import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
-import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
-import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
-import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
-import de.fhg.iais.roberta.syntax.action.nao.SetLeds;
-import de.fhg.iais.roberta.syntax.action.nao.SetMode;
-import de.fhg.iais.roberta.syntax.action.nao.SetStiffness;
-import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
-import de.fhg.iais.roberta.syntax.action.nao.Stop;
-import de.fhg.iais.roberta.syntax.action.nao.TakePicture;
-import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
-import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
-import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
-import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
+import de.fhg.iais.roberta.syntax.action.nao.*;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
@@ -54,30 +23,18 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
-import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectFaceSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectMarkSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
-import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrentSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
-import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
+import de.fhg.iais.roberta.syntax.lang.stmt.*;
+import de.fhg.iais.roberta.syntax.sensor.generic.*;
+import de.fhg.iais.roberta.syntax.sensor.nao.*;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.INaoVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
@@ -106,7 +63,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         rgbColor.G.accept(this);
         this.sb.append(", 0), 255), min(max(");
         rgbColor.B.accept(this);
-        this.sb.append(", 0), 255), 16))");
+        this.sb.append(", 0), 255)), 16)");
         return null;
     }
 
