@@ -460,7 +460,7 @@ function drawNetworkUI(network: Network): void {
         } else {
             callbackMinus = () => {
                 let numNeurons = state.networkShape[hiddenIdx];
-                if (numNeurons >= 9) {
+                if (numNeurons <= 1) {
                     return;
                 }
                 state.networkShape[hiddenIdx]--;

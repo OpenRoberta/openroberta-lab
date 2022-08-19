@@ -450,7 +450,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             else {
                 callbackMinus = function () {
                     var numNeurons = state.networkShape[hiddenIdx];
-                    if (numNeurons >= 9) {
+                    if (numNeurons <= 1) {
                         return;
                     }
                     state.networkShape[hiddenIdx]--;
