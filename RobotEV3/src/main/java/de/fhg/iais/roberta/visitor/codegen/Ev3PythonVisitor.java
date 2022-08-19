@@ -11,13 +11,10 @@ import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.util.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
@@ -43,10 +40,10 @@ import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
-import de.fhg.iais.roberta.util.syntax.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
@@ -65,6 +62,9 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.FunctionNames;
+import de.fhg.iais.roberta.util.syntax.MotorDuration;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.EV3DevMethods;
 import de.fhg.iais.roberta.visitor.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -702,6 +702,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
             this.sb.append(TTSLanguageMapper.getLanguageString(this.language));
             this.sb.append("\")");
         }
+        generateNNStuff("python");
     }
 
     @Override

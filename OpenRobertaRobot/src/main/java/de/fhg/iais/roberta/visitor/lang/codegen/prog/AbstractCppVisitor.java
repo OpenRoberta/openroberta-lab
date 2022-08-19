@@ -869,6 +869,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
                     }
                 }
             }
+            generateNNStuff("c++");
         }
     }
 

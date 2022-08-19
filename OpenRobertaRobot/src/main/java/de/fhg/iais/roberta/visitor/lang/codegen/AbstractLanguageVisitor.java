@@ -117,14 +117,19 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
             });
     }
 
-    protected void generateNNStuff() {
+    /**
+     * generate code for the xNN neural networks in one of the 3 target languages "java" "python" "c++"
+     *
+     * @param targetLanguage
+     */
+    protected final void generateNNStuff(String targetLanguage) {
         NNBean nnBean = this.getBean(CodeGeneratorSetupBean.class).getNNBean();
         if ( nnBean != null && nnBean.hasAtLeastOneInputAndOutputNeuron() ) {
             for ( String neuron : nnBean.getInputNeurons() ) {
-                src.nlI().add("private float ____", neuron, ";");
+                mkDecl(targetLanguage, neuron);
             }
             for ( String neuron : nnBean.getOutputNeurons() ) {
-                src.nlI().add("private float ____", neuron, ";");
+                mkDecl(targetLanguage, neuron);
             }
             final JSONArray weights = nnBean.getWeights();
             final JSONArray biases = nnBean.getBiases();
@@ -134,35 +139,33 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
                 int numberOfNeurons = weightsForLayer.getJSONArray(0).length();
                 for ( int targetNum = 0; targetNum < numberOfNeurons; targetNum++ ) {
                     String targetName = (layer == weights.length() - 2) ? nnBean.getOutputNeurons().get(targetNum) : ("h" + (layer + 1) + "n" + (targetNum + 1));
-                    src.nlI().add("private float ____b_", targetName, " = ");
-                    writeWeightTerm(biasesForLayer.getString(targetNum));
-                    src.add(";");
+                    mkDeclWithAssign(targetLanguage, "b_" + targetName);
+                    mkWeightTerm(targetLanguage, biasesForLayer.getString(targetNum));
                     for ( int sourceNum = 0; sourceNum < weightsForLayer.length(); sourceNum++ ) {
                         String sourceName = (layer == 0) ? nnBean.getInputNeurons().get(sourceNum) : ("h" + layer + "n" + (sourceNum + 1));
-                        src.nlI().add("private float ____w_", sourceName, "_", targetName, " = ");
-                        writeWeightTerm(weightsForLayer.getJSONArray(sourceNum).getString(targetNum));
-                        src.add(";");
+                        mkDeclWithAssign(targetLanguage, "w_" + sourceName + "_" + targetName);
+                        mkWeightTerm(targetLanguage, weightsForLayer.getJSONArray(sourceNum).getString(targetNum));
                     }
                 }
             }
-            src.nlI().nlI().add("private void ____nnStep() {").INCR();
+            mkNnStepStart(targetLanguage);
             for ( int layer = 0; layer < weights.length() - 1; layer++ ) {
                 final JSONArray weightsForLayer = weights.getJSONArray(layer);
                 final JSONArray biasesForLayer = biases.getJSONArray(layer + 1);
                 int numberOfNeurons = weightsForLayer.getJSONArray(0).length();
                 for ( int targetNum = 0; targetNum < numberOfNeurons; targetNum++ ) {
                     String targetName;
-                    String targetPrefix;
+                    boolean optDeclNeeded;
                     if ( layer == weights.length() - 2 ) {
                         // output
                         targetName = nnBean.getOutputNeurons().get(targetNum);
-                        targetPrefix = "";
+                        optDeclNeeded = false;
                     } else {
                         // hidden
                         targetName = "h" + (layer + 1) + "n" + (targetNum + 1);
-                        targetPrefix = "float ";
+                        optDeclNeeded = true;
                     }
-                    src.nlI().add(targetPrefix, "____", targetName, " = ____b_", targetName);
+                    mkStepAssign(targetLanguage, optDeclNeeded, targetName);
                     for ( int sourceNum = 0; sourceNum < weightsForLayer.length(); sourceNum++ ) {
                         String sourceName;
                         String sourcePrefix;
@@ -175,14 +178,94 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
                         }
                         src.add(" + ____", sourceName, " * ____w_", sourceName, "_", targetName);
                     }
-                    src.add(";");
+                    mkStmtTerminator(targetLanguage);
                 }
             }
-            src.DECR().nlI().add("}").nlI();
+            mkNnStepEnd(targetLanguage);
         }
     }
 
-    private void writeWeightTerm(String weight) {
+    private void mkStmtTerminator(String targetLanguage) {
+        if ( targetLanguage.equals("java") ) {
+            src.add(";");
+        } else if ( targetLanguage.equals("python") ) {
+            // no terminator at all
+        } else if ( targetLanguage.equals("c++") ) {
+            src.add(";");
+        } else {
+            Assert.fail("invalid target language for xNN: " + targetLanguage);
+        }
+    }
+
+    private void mkStepAssign(String targetLanguage, boolean optDeclNeeded, String targetName) {
+        if ( targetLanguage.equals("java") ) {
+            src.nlI().add(optDeclNeeded ? "float " : "", "____", targetName, " = ____b_", targetName);
+        } else if ( targetLanguage.equals("python") ) {
+            if ( !optDeclNeeded ) {
+                // global variable. Declare that
+                src.nlI().add("global ____").add(targetName);
+            }
+            src.nlI().add("____", targetName, " = ____b_", targetName);
+        } else if ( targetLanguage.equals("c++") ) {
+            src.nlI().add(optDeclNeeded ? "double " : "", "____", targetName, " = ____b_", targetName);
+        } else {
+            Assert.fail("invalid target language for xNN: " + targetLanguage);
+        }
+    }
+
+    private void mkNnStepStart(String targetLanguage) {
+        src.nlI().nlI();
+        if ( targetLanguage.equals("java") ) {
+            src.add("private void ____nnStep() {");
+        } else if ( targetLanguage.equals("python") ) {
+            src.nlI().add("def ____nnStep():");
+        } else if ( targetLanguage.equals("c++") ) {
+            src.nlI().add("void ____nnStep() {");
+        } else {
+            Assert.fail("invalid target language for xNN: " + targetLanguage);
+        }
+        src.INCR();
+    }
+
+    private void mkNnStepEnd(String targetLanguage) {
+        src.DECR().nlI();
+        if ( targetLanguage.equals("java") ) {
+            src.add("}").nlI();
+        } else if ( targetLanguage.equals("python") ) {
+            // no terminator at all
+        } else if ( targetLanguage.equals("c++") ) {
+            src.add("}").nlI();
+        } else {
+            Assert.fail("invalid target language for xNN: " + targetLanguage);
+        }
+    }
+
+
+    private void mkDecl(String targetLanguage, String neuron) {
+        if ( targetLanguage.equals("java") ) {
+            src.nlI().add("private float ____", neuron, ";");
+        } else if ( targetLanguage.equals("python") ) {
+            src.nlI().add("____", neuron, " = 0");
+        } else if ( targetLanguage.equals("c++") ) {
+            src.nlI().add("double ____", neuron, ";");
+        } else {
+            Assert.fail("invalid target language for xNN: " + targetLanguage);
+        }
+    }
+
+    private void mkDeclWithAssign(String targetLanguage, String neuron) {
+        if ( targetLanguage.equals("java") ) {
+            src.nlI().add("private float ____", neuron, " = ");
+        } else if ( targetLanguage.equals("python") ) {
+            src.nlI().add("____", neuron, " = ");
+        } else if ( targetLanguage.equals("c++") ) {
+            src.nlI().add("double ____", neuron, " = ");
+        } else {
+            Assert.fail("invalid target language for xNN: " + targetLanguage);
+        }
+    }
+
+    private void mkWeightTerm(String targetLanguage, String weight) {
         char firstChar = weight.charAt(0);
         if ( firstChar == '*' ) {
             src.add(weight.substring(1));
@@ -190,6 +273,15 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
             src.add("1.0/").add(weight.substring(1));
         } else {
             src.add(weight);
+        }
+        if ( targetLanguage.equals("java") ) {
+            src.add(";");
+        } else if ( targetLanguage.equals("python") ) {
+            // no terminator at all
+        } else if ( targetLanguage.equals("c++") ) {
+            src.add(";");
+        } else {
+            Assert.fail("invalid target language for xNN: " + targetLanguage);
         }
     }
 
