@@ -414,7 +414,7 @@ public class Ev3StackMachineVisitor extends AbstractStackMachineVisitor implemen
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.INFRARED).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
         return add(o);
     }
-
+    
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         String mode = ultrasonicSensor.getMode();
