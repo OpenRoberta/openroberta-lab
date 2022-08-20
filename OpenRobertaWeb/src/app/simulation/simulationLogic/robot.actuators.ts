@@ -570,8 +570,17 @@ export abstract class LegoChassis extends ChassisDiffDrive implements ILabel {
     private updateEncoders(running: boolean, values: any) {
         if (running) {
             values.encoder = {};
-            values.encoder[this.left.port.toLowerCase()] = this.encoder.left * this.ENC;
-            values.encoder[this.right.port.toLowerCase()] = this.encoder.right * this.ENC;
+            values.encoder[this.left.port.toLowerCase()] = {};
+            values.encoder[this.right.port.toLowerCase()] = {};
+            values.encoder[this.left.port.toLowerCase()][C.DEGREE] = this.encoder.left * this.ENC;
+            values.encoder[this.right.port.toLowerCase()][C.DEGREE] = this.encoder.right * this.ENC;
+            values.encoder[this.left.port.toLowerCase()][C.ROTATION] = (this.encoder.left * this.ENC) / 360;
+            values.encoder[this.right.port.toLowerCase()][C.ROTATION] = (this.encoder.right * this.ENC) / 360;
+            values.encoder[this.left.port.toLowerCase()][C.ROTATION] = (this.encoder.left * this.ENC) / 360;
+            values.encoder[this.right.port.toLowerCase()][C.ROTATION] = (this.encoder.right * this.ENC) / 360;
+            values.encoder[this.left.port.toLowerCase()][C.DISTANCE] = this.encoder.left / 3;
+            values.encoder[this.right.port.toLowerCase()][C.DISTANCE] = this.encoder.right / 3;
+            console.log(values.encoder);
         }
     }
 }
