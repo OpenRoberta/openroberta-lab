@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import com.google.common.collect.ClassToInstanceMap;
-
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
@@ -21,14 +20,14 @@ public final class NxtSimValidatorAndCollectorVisitor extends NxtValidatorAndCol
     @Override
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction bluetoothCheckConnectAction) {
         super.visitBluetoothCheckConnectAction(bluetoothCheckConnectAction);
-        addWarningToPhrase(bluetoothCheckConnectAction, "SIM_BLOCK_NOT_SUPPORTED");
+        addErrorToPhrase(bluetoothCheckConnectAction, "SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction bluetoothReceiveAction) {
         super.visitBluetoothReceiveAction(bluetoothReceiveAction);
-        addWarningToPhrase(bluetoothReceiveAction, "SIM_BLOCK_NOT_SUPPORTED");
+        addErrorToPhrase(bluetoothReceiveAction, "SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 
@@ -43,7 +42,7 @@ public final class NxtSimValidatorAndCollectorVisitor extends NxtValidatorAndCol
     public Void visitColorSensor(ColorSensor colorSensor) {
         super.visitColorSensor(colorSensor);
         if ( colorSensor.getMode().equals("AMBIENTLIGHT") ) {
-            addWarningToPhrase(colorSensor, "SIM_BLOCK_NOT_SUPPORTED");
+            addErrorToPhrase(colorSensor, "SIM_BLOCK_NOT_SUPPORTED");
         }
         return null;
     }
@@ -51,7 +50,7 @@ public final class NxtSimValidatorAndCollectorVisitor extends NxtValidatorAndCol
     @Override
     public Void visitConnectConst(ConnectConst connectConst) {
         super.visitConnectConst(connectConst);
-        addWarningToPhrase(connectConst, "SIM_BLOCK_NOT_SUPPORTED");
+        addErrorToPhrase(connectConst, "SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 
@@ -59,7 +58,7 @@ public final class NxtSimValidatorAndCollectorVisitor extends NxtValidatorAndCol
     public Void visitLightSensor(LightSensor lightSensor) {
         super.visitLightSensor(lightSensor);
         if ( lightSensor.getMode().equals("AMBIENTLIGHT") ) {
-            addWarningToPhrase(lightSensor, "SIM_BLOCK_NOT_SUPPORTED");
+            addErrorToPhrase(lightSensor, "SIM_BLOCK_NOT_SUPPORTED");
         }
         return null;
     }
@@ -67,7 +66,7 @@ public final class NxtSimValidatorAndCollectorVisitor extends NxtValidatorAndCol
     @Override
     public Void visitHTColorSensor(HTColorSensor htColorSensor) {
         super.visitHTColorSensor(htColorSensor);
-        addWarningToPhrase(htColorSensor, "SIM_BLOCK_NOT_SUPPORTED");
+        addErrorToPhrase(htColorSensor, "SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 }
