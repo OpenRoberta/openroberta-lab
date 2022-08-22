@@ -21,7 +21,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
-import de.fhg.iais.roberta.transformer.forClass.NepoExternalSensor;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoData;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
@@ -36,8 +35,10 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 
 public class AnnotationHelper {
 
-    public static List<Class<? extends Annotation>> NEPO_FIELD_ANNOTATIONS =
-        Arrays.asList(NepoValue.class, NepoField.class, NepoData.class, NepoHide.class, NepoMutation.class, NepoExternalSensor.class);
+    private static List<Class<? extends Annotation>> NEPO_FIELD_ANNOTATIONS =
+        Arrays.asList(NepoValue.class, NepoField.class, NepoData.class, NepoHide.class, NepoMutation.class);
+
+    private static final String externalSensorClassName = ExternalSensor.class.getName();
 
     /**
      * check whether the class is annotated with a @NepoPhrase or @NepoOp or @NepoExternalSensor annotation
@@ -57,18 +58,13 @@ public class AnnotationHelper {
     }
 
     /**
-     * check whether the class is annotated with a @NepoExternalSensor annotation
+     * check whether the class is a subclass of ExternalSensor
      *
      * @param clazz
      * @return true, if annotated
      */
-    public static boolean isNepoExternalSensorAnnotatedClass(Class<?> clazz) {
-        for ( Annotation anno : clazz.getAnnotations() ) {
-            if ( anno instanceof NepoExternalSensor ) {
-                return true;
-            }
-        }
-        return false;
+    public static boolean isExternalSensorSubClass(Class<?> clazz) {
+        return clazz.getSuperclass().getName().equals(externalSensorClassName);
     }
 
     /**
@@ -83,7 +79,7 @@ public class AnnotationHelper {
         List<ConstructorParameter> constructorParameters = new ArrayList<>();
         constructorParameters.add(new ConstructorParameter(Jaxb2Ast.extractBlocklyProperties(block)));
 
-        if ( isNepoExternalSensorAnnotatedClass(astClass) ) {
+        if ( isExternalSensorSubClass(astClass) ) {
             constructorParameters.add(extractNepoExternalSensorParameters(block, helper));
         } else {
             for ( Field field : astClass.getDeclaredFields() ) {
@@ -179,7 +175,7 @@ public class AnnotationHelper {
             throw new DbcException("the default implementation of astToBlock() fails with the NOT annotated class " + clazz.getSimpleName());
         }
 
-        if ( isNepoExternalSensorAnnotatedClass(clazz) ) {
+        if ( isExternalSensorSubClass(clazz) ) {
             return phrase.astToBlock();
         } else {
             Block jaxbDestination = new Block();
@@ -318,7 +314,7 @@ public class AnnotationHelper {
         List<Class<?>> constructorParameterTypes = new ArrayList<>();
         constructorParameterTypes.add(BlocklyProperties.class);
 
-        if ( isNepoExternalSensorAnnotatedClass(nepoAnnotatedClass) ) {
+        if ( isExternalSensorSubClass(nepoAnnotatedClass) ) {
             constructorParameterTypes.add(ExternalSensorBean.class);
         } else {
             for ( Field field : nepoAnnotatedClass.getDeclaredFields() ) {

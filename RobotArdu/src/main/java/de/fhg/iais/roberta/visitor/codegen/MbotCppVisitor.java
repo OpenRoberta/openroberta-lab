@@ -59,7 +59,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.FlameSensor;
-import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.Joystick;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
@@ -420,12 +419,6 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitFlameSensor(FlameSensor _meFlameSensor) {
         this.sb.append("_meFlameSensor" + _meFlameSensor.port + ".readAnalog()");
-        return null;
-    }
-
-    @Override
-    public Void visitJoystick(Joystick joystick) {
-        this.sb.append("_meJoystick" + joystick.getUserDefinedPort() + ".read" + joystick.getMode() + "()");
         return null;
     }
 
