@@ -1,15 +1,15 @@
-package de.fhg.iais.roberta.worker;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+package de.fhg.iais.roberta.worker.validate;
 
 import com.google.common.collect.ClassToInstanceMap;
-
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 import de.fhg.iais.roberta.visitor.validate.MbedValidatorAndCollectorVisitor;
+import de.fhg.iais.roberta.worker.AbstractValidatorAndCollectorWorker;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 
 public abstract class MbedValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
