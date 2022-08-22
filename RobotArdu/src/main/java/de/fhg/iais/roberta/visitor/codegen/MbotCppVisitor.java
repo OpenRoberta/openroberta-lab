@@ -425,7 +425,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitJoystick(Joystick joystick) {
-        this.sb.append("_meJoystick" + joystick.getUserDefinedPort() + ".read" + joystick.joystickAxis + "()");
+        this.sb.append("_meJoystick" + joystick.getUserDefinedPort() + ".read" + joystick.getMode() + "()");
         return null;
     }
 

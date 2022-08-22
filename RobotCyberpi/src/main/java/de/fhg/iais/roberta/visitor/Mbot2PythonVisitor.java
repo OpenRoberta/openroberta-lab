@@ -248,7 +248,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     @Override
     public Void visitJoystick(Joystick joystick) {
         this.sb.append("cyberpi.controller.is_press(\"");
-        String slot = joystick.slot.toLowerCase();
+        String slot = joystick.getSlot().toLowerCase();
         if ( slot.equals("center") ) {
             this.sb.append("middle");
         } else if ( slot.equals("any") ) {
@@ -378,7 +378,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     @Override
     public Void visitQuadRGBSensor(QuadRGBSensor quadRGBSensor) {
         int index = getSensorNumber(CyberpiConstants.MBUILD_QUADRGB, quadRGBSensor.getUserDefinedPort());
-        String mode = quadRGBSensor.mode;
+        String mode = quadRGBSensor.getMode();
         switch ( mode ) {
             case "LINE":
                 this.sb.append("mbuild.quad_rgb_sensor.get_line_sta(\"all\", ").append(index).append(")");
@@ -386,11 +386,11 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
             case SC.COLOUR:
                 this.sb.append("_colors[")
                     .append("mbuild.quad_rgb_sensor.get_color_sta(").append("\"")
-                    .append(quadRGBSensor.slot).append("\", ").append(index).append(")")
+                    .append(quadRGBSensor.getSlot()).append("\", ").append(index).append(")")
                     .append("]");
                 break;
             case SC.AMBIENTLIGHT:
-                this.sb.append("mbuild.quad_rgb_sensor.get_light(").append("\"").append(quadRGBSensor.slot).append("\", ").append(index).append(")");
+                this.sb.append("mbuild.quad_rgb_sensor.get_light(").append("\"").append(quadRGBSensor.getSlot()).append("\", ").append(index).append(")");
                 break;
             case SC.RGB:
                 this.sb.append("[").append(getRGBString("red", index, quadRGBSensor)).append(", ")
@@ -432,7 +432,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     }
 
     private String getRGBString(String colour, int index, QuadRGBSensor quadRGBSensor) {
-        return "mbuild.quad_rgb_sensor.get_" + colour + "(\"" + quadRGBSensor.slot + "\", " + index + ")";
+        return "mbuild.quad_rgb_sensor.get_" + colour + "(\"" + quadRGBSensor.getSlot() + "\", " + index + ")";
     }
 
     private ConfigurationComponent getMbuildPort() {

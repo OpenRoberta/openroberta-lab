@@ -85,7 +85,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     @Override
     public Void visitJoystick(Joystick joystick) {
         checkSensorPort(joystick);
-        usedHardwareBuilder.addUsedSensor(new UsedSensor(joystick.getUserDefinedPort(), SC.JOYSTICK, joystick.slot));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(joystick.getUserDefinedPort(), SC.JOYSTICK, joystick.getSlot()));
         return null;
     }
 
@@ -185,7 +185,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     @Override
     public Void visitQuadRGBSensor(QuadRGBSensor quadRGBSensor) {
         checkSensorPort(quadRGBSensor);
-        usedHardwareBuilder.addUsedSensor(new UsedSensor(quadRGBSensor.getUserDefinedPort(), CyberpiConstants.QUADRGB, quadRGBSensor.mode));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(quadRGBSensor.getUserDefinedPort(), CyberpiConstants.QUADRGB, quadRGBSensor.getMode()));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(quadRGBSensor.getUserDefinedPort(), CyberpiConstants.MBUILDSENSOR, CyberpiConstants.QUADRGB));
 
         return null;
