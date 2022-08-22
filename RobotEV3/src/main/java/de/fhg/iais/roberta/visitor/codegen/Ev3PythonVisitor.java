@@ -52,6 +52,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
@@ -478,11 +479,14 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitGyroSensor(GyroSensor gyroSensor) {
         String gyroSensorPort = gyroSensor.getUserDefinedPort();
-        if ( gyroSensor.getMode().equals(SC.RESET) ) {
-            this.sb.append("hal.resetGyroSensor('" + gyroSensorPort + "')");
-        } else {
-            this.sb.append("hal.getGyroSensorValue('" + gyroSensorPort + "', " + getEnumCode(gyroSensor.getMode()) + ")");
-        }
+        this.sb.append("hal.getGyroSensorValue('" + gyroSensorPort + "', " + getEnumCode(gyroSensor.getMode()) + ")");
+        return null;
+    }
+
+    @Override
+    public Void visitGyroReset(GyroReset gyroReset) {
+        String gyroSensorPort = gyroReset.getUserDefinedPort();
+        this.sb.append("hal.resetGyroSensor('" + gyroSensorPort + "')");
         return null;
     }
 

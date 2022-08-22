@@ -7,6 +7,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
@@ -42,6 +43,8 @@ public interface ISensorVisitorWithoutDefaults<V> extends IHardwareVisitor<V> {
     V visitEncoderSensor(EncoderSensor encoderSensor);
 
     V visitGyroSensor(GyroSensor gyroSensor);
+
+    V visitGyroReset(GyroReset gyroReset);
 
     V visitInfraredSensor(InfraredSensor infraredSensor);
 

@@ -7,8 +7,6 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
@@ -58,11 +56,11 @@ public abstract class ExternalSensor extends Sensor implements WithUserDefinedPo
         return this.getClass().getSimpleName() + " [" + this.getUserDefinedPort() + ", " + this.getMode() + ", " + this.getSlot() + "]";
     }
 
-    public static  ExternalSensorBean extractPortAndModeAndSlot(Block block, Jaxb2ProgramAst helper) {
+    public static ExternalSensorBean extractPortAndModeAndSlot(Block block, Jaxb2ProgramAst helper) {
         return extractPortModeSlotMutationHide(block, helper);
     }
 
-    public static  ExternalSensorBean extractPortModeSlotMutationHide(Block block, Jaxb2ProgramAst helper) {
+    public static ExternalSensorBean extractPortModeSlotMutationHide(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.EMPTY_PORT);
@@ -97,13 +95,4 @@ public abstract class ExternalSensor extends Sensor implements WithUserDefinedPo
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SLOT, slotValue);
         return jaxbDestination;
     }
-
-    /**
-     * TODO: this is an incredible bad design and must be refactored (InfraredSensor as default ... ... )
-     */
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
-        ExternalSensorBean sensorData = extractPortAndModeAndSlot(block, helper);
-        return new InfraredSensor(Jaxb2Ast.extractBlocklyProperties(block), sensorData);
-    }
-
 }

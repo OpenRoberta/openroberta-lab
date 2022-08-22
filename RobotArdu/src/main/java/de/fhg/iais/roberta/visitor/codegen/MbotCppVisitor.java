@@ -48,6 +48,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -376,8 +377,12 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitGyroSensor(GyroSensor gyroSensor) {
-        this.sb.append("myGyro" + gyroSensor.getUserDefinedPort() + ".getGyro" + gyroSensor.getMode() + "()");
-        return null;
+        throw new DbcException("not implemented");
+    }
+
+    @Override
+    public Void visitGyroReset(GyroReset gyroReset) {
+        throw new DbcException("not implemented");
     }
 
     @Override

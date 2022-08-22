@@ -43,6 +43,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
@@ -390,11 +391,14 @@ public class Ev3StackMachineVisitor extends AbstractStackMachineVisitor implemen
         String mode = gyroSensor.getMode().toLowerCase();
         String port = gyroSensor.getUserDefinedPort().toLowerCase();
         JSONObject o;
-        if ( mode.equals(C.RESET) ) {
-            o = makeNode(C.GYRO_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
-        } else {
-            o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GYRO).put(C.MODE, mode).put(C.PORT, port).put(C.NAME, "ev3");
-        }
+        o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GYRO).put(C.MODE, mode).put(C.PORT, port).put(C.NAME, "ev3");
+        return add(o);
+    }
+
+    @Override
+    public Void visitGyroReset(GyroReset gyroReset) {
+        String port = gyroReset.getUserDefinedPort().toLowerCase();
+        JSONObject o = makeNode(C.GYRO_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
         return add(o);
     }
 
@@ -410,7 +414,7 @@ public class Ev3StackMachineVisitor extends AbstractStackMachineVisitor implemen
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.INFRARED).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
         return add(o);
     }
-    
+
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         String mode = ultrasonicSensor.getMode();

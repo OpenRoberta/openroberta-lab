@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -42,6 +43,8 @@ public interface ISenseboxVisitor<V> extends IDisplayVisitor<V>, ISimpleSoundVis
     V visitGpsSensor(GpsSensor gpsSensor);
 
     V visitGyroSensor(GyroSensor gyroSensor);
+
+    V visitGyroReset(GyroReset gyroReset);
 
     V visitHumiditySensor(HumiditySensor humiditySensor);
 

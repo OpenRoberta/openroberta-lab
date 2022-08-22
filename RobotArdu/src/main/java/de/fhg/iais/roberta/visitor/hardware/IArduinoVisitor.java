@@ -5,6 +5,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -25,7 +26,7 @@ import de.fhg.iais.roberta.visitor.hardware.actor.IPinVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISimpleSoundVisitor;
 
 public interface IArduinoVisitor<V>
-        extends IDisplayVisitor<V>, ISimpleSoundVisitor<V>, ILightVisitor<V>, IPinVisitor<V>, INeuralNetworkVisitor<V>, IHardwareVisitor<V> {
+    extends IDisplayVisitor<V>, ISimpleSoundVisitor<V>, ILightVisitor<V>, IPinVisitor<V>, INeuralNetworkVisitor<V>, IHardwareVisitor<V> {
 
     V visitDropSensor(DropSensor dropSensor);
 
@@ -40,6 +41,8 @@ public interface IArduinoVisitor<V>
     V visitAccelerometerSensor(AccelerometerSensor accelerometerSensor);
 
     V visitGyroSensor(GyroSensor gyroSensor);
+
+    V visitGyroReset(GyroReset gyroReset);
 
     V visitInfraredSensor(InfraredSensor infraredSensor);
 

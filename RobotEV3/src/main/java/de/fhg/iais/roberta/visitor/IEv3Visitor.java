@@ -5,6 +5,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
@@ -30,6 +31,8 @@ public interface IEv3Visitor<V> extends IActors4AutonomousDriveRobots<V>, IBluet
     V visitEncoderSensor(EncoderSensor encoderSensor);
 
     V visitGyroSensor(GyroSensor gyroSensor);
+
+    V visitGyroReset(GyroReset gyroReset);
 
     V visitInfraredSensor(InfraredSensor infraredSensor);
 

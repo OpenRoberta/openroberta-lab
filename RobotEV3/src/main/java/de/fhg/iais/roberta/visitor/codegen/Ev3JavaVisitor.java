@@ -67,6 +67,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
@@ -568,12 +569,16 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
             case SC.RATE:
                 this.sb.append("hal.getGyroSensorRate(" + gyroSensorPort + ")");
                 break;
-            case SC.RESET:
-                this.sb.append("hal.resetGyroSensor(" + gyroSensorPort + ");");
-                break;
             default:
                 throw new DbcException("Invalid GyroSensorMode");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitGyroReset(GyroReset gyroReset) {
+        String gyroSensorPort = "SensorPort.S" + gyroReset.getUserDefinedPort();
+        this.sb.append("hal.resetGyroSensor(" + gyroSensorPort + ");");
         return null;
     }
 

@@ -74,6 +74,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
@@ -972,11 +973,14 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitGyroSensor(GyroSensor gyroSensor) {
         String port = gyroSensor.getUserDefinedPort();
         String mode = gyroSensor.getMode();
-        if ( mode.equals(SC.RESET) ) {
-            generateResetGyroSensor(port);
-        } else {
-            generateReadGyro(port, mode);
-        }
+        generateReadGyro(port, mode);
+        return null;
+    }
+
+    @Override
+    public Void visitGyroReset(GyroReset gyroReset) {
+        String port = gyroReset.getUserDefinedPort();
+        generateResetGyroSensor(port);
         return null;
     }
 

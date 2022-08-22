@@ -117,6 +117,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
@@ -742,6 +743,12 @@ public interface ITransformerVisitor extends ISensorVisitor<Phrase>, IAllActorsV
     default Phrase visitGyroSensor(GyroSensor gyroSensor) {
         return new GyroSensor(gyroSensor.getProperty(), new ExternalSensorBean(gyroSensor.getUserDefinedPort(), gyroSensor.getMode(), gyroSensor.getSlot(), gyroSensor.getMutation()));
     }
+
+    @Override
+    default Phrase visitGyroReset(GyroReset gyroReset) {
+        return new GyroReset(gyroReset.getProperty(), new ExternalSensorBean(gyroReset.getUserDefinedPort(), gyroReset.getMode(), gyroReset.getSlot(), gyroReset.getMutation()));
+    }
+
 
     @Override
     default Phrase visitInfraredSensor(InfraredSensor infraredSensor) {
