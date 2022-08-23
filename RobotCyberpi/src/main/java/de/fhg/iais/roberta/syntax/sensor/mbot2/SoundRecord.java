@@ -1,35 +1,15 @@
 package de.fhg.iais.roberta.syntax.sensor.mbot2;
 
-import de.fhg.iais.roberta.blockly.generated.Hide;
-import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
-import de.fhg.iais.roberta.transformer.forField.NepoField;
-import de.fhg.iais.roberta.transformer.forField.NepoHide;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
+import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
 @NepoPhrase(category = "SENSOR", blocklyNames = {"robSensors_sound_record"}, name = "SOUND_RECORD")
-public final class SoundRecord extends Sensor implements WithUserDefinedPort {
-    @NepoField(name = BlocklyConstants.MODE)
-    public final String mode;
-    @NepoField(name = BlocklyConstants.SENSORPORT)
-    public final String sensorPort;
-    @NepoHide
-    public final Hide hide;
+public final class SoundRecord extends ExternalSensor {
 
-    public SoundRecord(BlocklyProperties properties, String mode, String sensorPort, Hide hide) {
-        super(properties);
-        this.mode = mode;
-        this.sensorPort = sensorPort;
-        this.hide = hide;
+    public SoundRecord(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
+        super(properties, externalSensorBean);
         setReadOnly();
     }
-
-    @Override
-    public String getUserDefinedPort() {
-        return this.sensorPort;
-    }
-
-
 }

@@ -530,13 +530,15 @@
                             </value>
                         </block>
                         <block type="robSensors_sound_record" id="icLF{7#BTkaS6wIyST|x" intask="true">
-                            <field name="MODE">start</field>
+                            <field name="MODE">START</field>
                             <field name="SENSORPORT">_S</field>
+                            <field name="SLOT"/>
                             <hide name="SENSORPORT" value="_S"/>
                         </block>
                         <block type="robSensors_sound_record" id="_Kkno+Rg/*1,=-25O{p2" intask="true">
-                            <field name="MODE">stop</field>
+                            <field name="MODE">STOP</field>
                             <field name="SENSORPORT">_S</field>
+                            <field name="SLOT"/>
                             <hide name="SENSORPORT" value="_S"/>
                         </block>
                         <block type="robSensors_gyro_reset_axis" id="mjncs]2^yA32]y8(=@iq" intask="true">

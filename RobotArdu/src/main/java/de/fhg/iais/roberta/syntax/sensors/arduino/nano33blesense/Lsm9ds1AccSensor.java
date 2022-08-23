@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.syntax.sensor.BuiltinSensor;
+import de.fhg.iais.roberta.syntax.sensor.InternalSensor;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "LSM9DS1_ACCELERATION", category = "SENSOR", blocklyNames = {"robsensors_lsm9ds1_acceleration_getDataAvailableSample"})
-public final class Lsm9ds1AccSensor extends BuiltinSensor {
+public final class Lsm9ds1AccSensor extends InternalSensor {
 
     public final Expr x, y, z;
 
@@ -27,7 +27,7 @@ public final class Lsm9ds1AccSensor extends BuiltinSensor {
         setReadOnly();
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 3);
         Expr x = helper.getVar(values, BlocklyConstants.VARIABLE_X);
         Expr y = helper.getVar(values, BlocklyConstants.VARIABLE_Y);

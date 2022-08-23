@@ -490,10 +490,13 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitSoundRecord(SoundRecord soundRecord) {
-        if ( soundRecord.mode.equals("start") ) {
+        String mode = soundRecord.getMode();
+        if ( mode.equals("START") ) {
             this.sb.append("cyberpi.audio.record()");
-        } else {
+        } else if ( mode.equals("STOP") ) {
             this.sb.append("cyberpi.audio.stop_record()");
+        } else {
+            throw new DbcException("invalid mode for SoundRecord: " + mode);
         }
         return null;
     }
@@ -513,7 +516,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     @Override
     public Void visitGyroResetAxis(GyroResetAxis gyroResetAxis) {
         this.sb.append("cyberpi.reset_rotation(\"")
-            .append(gyroResetAxis.slot.toLowerCase())
+            .append(gyroResetAxis.getSlot().toLowerCase())
             .append("\")");
         return null;
     }

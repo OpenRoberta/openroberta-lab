@@ -117,7 +117,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     @Override
     public Void visitSoundRecord(SoundRecord soundRecord) {
         checkSensorPort(soundRecord);
-        usedHardwareBuilder.addUsedSensor(new UsedSensor(soundRecord.getUserDefinedPort(), CyberpiConstants.RECORD, soundRecord.mode));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(soundRecord.getUserDefinedPort(), CyberpiConstants.RECORD, soundRecord.getMode()));
         return null;
     }
 
@@ -145,7 +145,7 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     @Override
     public Void visitGyroResetAxis(GyroResetAxis gyroResetAxis) {
         checkSensorPort(gyroResetAxis);
-        usedHardwareBuilder.addUsedSensor(new UsedSensor(gyroResetAxis.getUserDefinedPort(), SC.GYRO, gyroResetAxis.slot));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(gyroResetAxis.getUserDefinedPort(), SC.GYRO, gyroResetAxis.getSlot()));
         return null;
     }
 
