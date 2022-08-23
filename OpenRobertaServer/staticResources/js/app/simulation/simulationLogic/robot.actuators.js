@@ -538,7 +538,6 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                 values.encoder[this.right.port.toLowerCase()][C.ROTATION] = (this.encoder.right * this.ENC) / 360;
                 values.encoder[this.left.port.toLowerCase()][C.DISTANCE] = this.encoder.left / 3;
                 values.encoder[this.right.port.toLowerCase()][C.DISTANCE] = this.encoder.right / 3;
-                console.log(values.encoder);
             }
         };
         return LegoChassis;
