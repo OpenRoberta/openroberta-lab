@@ -92,7 +92,7 @@ void ____sensors() {
 void setup() {
     ___b = true;
     ___c = 0;
-    
+
 }
 
 void loop()

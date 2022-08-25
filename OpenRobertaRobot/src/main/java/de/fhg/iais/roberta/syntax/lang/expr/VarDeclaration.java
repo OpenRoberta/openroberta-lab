@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
@@ -40,7 +41,7 @@ public final class VarDeclaration extends Expr {
         BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(!name.equals("") && typeVar != null && value.isReadOnly());
-        this.name = name;
+        this.name = Util.sanitizeProgramProperty(name);
         this.typeVar = typeVar;
         this.value = value;
         this.next = next;

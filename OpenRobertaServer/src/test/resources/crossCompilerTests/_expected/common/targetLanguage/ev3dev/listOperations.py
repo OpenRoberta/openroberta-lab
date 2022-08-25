@@ -92,7 +92,7 @@ def run():
     ___result = ___result + float(sum(___input))/len(___input)
     ___result = ___result + _median(___input)
     ___result = ___result + _standard_deviation(___input)
-    # 161.414... 
+    # 161.414...
     # 161.414 - sim, 161.5 - board, OK
 
 def main():

@@ -72,7 +72,7 @@ void setup() {
     ___n = 0;
     ___b = true;
     ___c = RGB(0xFF, 0xFF, 0xFF);
-    
+
 }
 
 void loop()

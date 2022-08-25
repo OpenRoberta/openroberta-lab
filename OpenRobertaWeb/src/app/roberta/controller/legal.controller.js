@@ -1,6 +1,5 @@
 import * as LOG from 'log';
 import * as GUISTATE_C from 'guiState.controller';
-import * as Blockly from 'blockly';
 import * as $ from 'jquery';
 import 'jquery-validate';
 
@@ -131,7 +130,6 @@ function loadLegalTexts() {
 export { init, initView, loadLegalTexts };
 
 function toggleLegal($button) {
-    Blockly.hideChaff();
     if ($('#legalButton').hasClass('rightActive')) {
         $('#blockly').closeRightView();
     } else {

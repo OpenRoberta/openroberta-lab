@@ -54,11 +54,11 @@ void loop()
     analogWrite(_led_red_R, 204);
     analogWrite(_led_green_R, 0);
     analogWrite(_led_blue_R, 0);
-    
+
     analogWrite(_led_red_R, 0);
     analogWrite(_led_green_R, 0);
     analogWrite(_led_blue_R, 0);
-    
+
     _lcd_O.setCursor(0,1);
     _lcd_O.print("Hallo");
     _lcd_O.display();

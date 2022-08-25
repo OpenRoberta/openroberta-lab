@@ -24,7 +24,7 @@ int _led_L = LED_BUILTIN;
 
 void ____text() {
     Serial.println("");
-    // 
+    //
     ___stringVar += ___stringVar;
 }
 

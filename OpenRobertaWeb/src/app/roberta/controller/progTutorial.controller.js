@@ -105,7 +105,6 @@ export { init, loadFromTutorial };
 
 function initStepEvents() {
     $('#tutorial-list.nav li.step a').on('click', function () {
-        Blockly.hideChaff();
         step = $(this).text() - 2;
         nextStep();
         openTutorialView();
@@ -505,7 +504,6 @@ function closeTutorialView() {
 }
 
 function exitTutorial() {
-    Blockly.hideChaff();
     $('#tutorial-navigation').fadeOut(750);
     $('#head-navigation').fadeIn(750);
     $('#tutorialButton').fadeOut();

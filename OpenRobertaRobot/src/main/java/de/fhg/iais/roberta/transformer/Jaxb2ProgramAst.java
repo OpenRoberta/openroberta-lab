@@ -417,9 +417,9 @@ public class Jaxb2ProgramAst {
         }
     }
 
-    private StmtList blocksToStmtList(List<Block> statementBolcks) {
+    private StmtList blocksToStmtList(List<Block> statementBlocks) {
         StmtList stmtList = new StmtList();
-        for ( Block sb : statementBolcks ) {
+        for ( Block sb : statementBlocks ) {
             convertPhraseToStmt(stmtList, sb);
         }
         stmtList.setReadOnly();

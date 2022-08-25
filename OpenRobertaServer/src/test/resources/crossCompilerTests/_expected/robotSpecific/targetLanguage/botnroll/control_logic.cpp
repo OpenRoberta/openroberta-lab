@@ -116,7 +116,7 @@ void setup()
     ___booleanList = {true, true};
     ___stringList = {"", ""};
     ___colourList = {RGB(0xFF, 0xFF, 0xFF), RGB(0xFF, 0xFF, 0xFF)};
-    
+
 }
 
 void loop()

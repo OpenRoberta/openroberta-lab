@@ -592,7 +592,6 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "interprete
             return;
         }
         $('.fromRight.rightActive').addClass('shifting');
-        Blockly.hideChaff();
         $('.blocklyToolboxDiv').css('display', 'inherit');
         var that = this; //$('#blockly')
         $('.fromRight.rightActive').animate({
@@ -633,7 +632,6 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "interprete
             return;
         }
         var $blockly = $('#blockly');
-        Blockly.hideChaff();
         var width;
         var smallScreen;
         if ($(window).width() < 768) {

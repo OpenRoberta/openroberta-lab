@@ -45,6 +45,12 @@ public class Util {
     private static final String PROPERTY_DEFAULT_PATH = "classpath:/openRoberta.properties";
     // see: https://stackoverflow.com/questions/201323/how-can-i-validate-an-email-address-using-a-regular-expression
     private static final Pattern VALID_EMAIL = Pattern.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
+    private static final Pattern PROGRAM_NAME_PATTERN = Pattern.compile("^[a-zA-Z][a-zA-Z_$0-9]*$");
+    private static final Pattern CONFIG_NAME_PATTERN = Pattern.compile("^$|^[a-zA-Z][a-zA-Z_$0-9]*$");
+    private static final Pattern NUMBER_PATTERN = Pattern.compile("^(-?\\d+((.|e-|e\\+)?\\d*|_?\\d*[a-zA-Z]{0,3})?|(0x|0X)[0-9a-fA-F]*)$");
+    private static final Pattern FILENAME_PATTERN = Pattern.compile("^[\\w-]+.[A-Za-z]{1,6}$");
+    private static final Pattern PORT_NAME_PATTERN = Pattern.compile("^\\w+$");
+    private static final String INVALID = "invalid";
     /**
      * YAML parser. NOT thread-safe!
      */
@@ -603,5 +609,55 @@ public class Util {
             path = path.resolve(dir);
         }
         return path.toAbsolutePath().normalize().toString();
+    }
+
+    /**
+     * Helper method to sanitize the configuration component properties.
+     * Invalid property values will be replaced with the value "invalid".
+     *
+     * @param componentProperties
+     */
+    public static void sanitizeConfigurationProperties(Map<String, String> componentProperties) {
+        for ( Map.Entry<String, String> pair : componentProperties.entrySet() ) {
+            String key = pair.getKey();
+            String value = pair.getValue();
+            boolean isValid = key.equals("NAO_FILENAME") ? FILENAME_PATTERN.matcher(value).matches() : CONFIG_NAME_PATTERN.matcher(value).matches() || NUMBER_PATTERN.matcher(value).matches();
+            if ( !isValid ) {
+                try {
+                    pair.setValue(INVALID);
+                } catch ( UnsupportedOperationException uoe ) {
+                    LOG.error("SingeltonMap is immutable");
+                }
+            }
+        }
+    }
+
+    /**
+     * Helper method to sanitize the configuration component port name set by the user
+     *
+     * @param internalPortName
+     * @return the original value or "invalid" if the value does not match a pattern.
+     */
+    public static String sanitizeConfigurationInternalPortName(String internalPortName) {
+        boolean isValid = internalPortName == null || PORT_NAME_PATTERN.matcher(internalPortName).matches();
+        return isValid ? internalPortName : INVALID;
+    }
+
+    /**
+     * Helper method to sanitize the program block name set by the user
+     *
+     * @param value
+     * @return the original value or if NUM_CONST, "0", otherwise "invalid" if the value does not match a pattern.
+     */
+    public static String sanitizeProgramProperty(String value, String blockName) {
+        boolean isValid = PROGRAM_NAME_PATTERN.matcher(value).matches() || NUMBER_PATTERN.matcher(value).matches();
+        if ( !isValid ) {
+            value = blockName.equals("NUM_CONST") ? "0" : INVALID;
+        }
+        return value;
+    }
+
+    public static String sanitizeProgramProperty(String value) {
+        return sanitizeProgramProperty(value, "");
     }
 }

@@ -67,6 +67,7 @@ import de.fhg.iais.roberta.util.UtilForXmlTransformation;
 import de.fhg.iais.roberta.util.XsltTransformer;
 import de.fhg.iais.roberta.util.archiver.UserProgramsArchiver;
 import de.fhg.iais.roberta.util.basic.Pair;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 @Path("/program")

@@ -40,10 +40,10 @@ int main () {
     NEPOInitEV3();
     NEPOSetAllSensors(NULL, NXTSound, NULL, EV3Ir);
     startLoggingThread(0);
-    
-    
+
+
     ____sensors();
-    
+
     NEPOFreeEV3();
     return 0;
 }

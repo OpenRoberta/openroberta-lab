@@ -23,6 +23,6 @@ void loop()
 {
     _lcd_lcd1602.setCursor(0,0);
     _lcd_lcd1602.print(___s);
-    
+
     _lcd_lcd1602.clear();
 }

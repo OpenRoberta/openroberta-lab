@@ -1,4 +1,4 @@
-define(["require", "exports", "log", "guiState.controller", "blockly", "jquery", "jquery-validate"], function (require, exports, LOG, GUISTATE_C, Blockly, $) {
+define(["require", "exports", "log", "guiState.controller", "jquery", "jquery-validate"], function (require, exports, LOG, GUISTATE_C, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.loadLegalTexts = exports.initView = exports.init = void 0;
     var INITIAL_WIDTH = 0.5;
@@ -93,7 +93,6 @@ define(["require", "exports", "log", "guiState.controller", "blockly", "jquery",
     }
     exports.loadLegalTexts = loadLegalTexts;
     function toggleLegal($button) {
-        Blockly.hideChaff();
         if ($('#legalButton').hasClass('rightActive')) {
             $('#blockly').closeRightView();
         }

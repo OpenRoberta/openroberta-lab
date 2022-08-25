@@ -24,27 +24,27 @@ import lejos.remote.nxt.NXTConnection;
 
 public class NEPOprog {
     private static Configuration brickConfiguration;
-    
+
     private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
     private Hal hal = new Hal(brickConfiguration, usedSensors);
-    
+
     public static void main(String[] args) {
         try {
              brickConfiguration = new EV3Configuration.Builder()
                 .setWheelDiameter(5.6)
                 .setTrackWidth(18.0)
                 .build();
-            
+
             new NEPOprog().run();
         } catch ( Exception e ) {
             Hal.displayExceptionWaitForKeyPress(e);
         }
     }
-    
+
     float ___number = 0;
     boolean ___boolean2 = true;
     String ___string = "";
-    
+
     public void run() throws Exception {
         // Variable Test START
         ___number = 0 + 5;

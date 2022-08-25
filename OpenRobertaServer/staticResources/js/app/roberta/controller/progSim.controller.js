@@ -87,7 +87,6 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
             var C = this;
             $('#simControl').onWrap('click.sim', function () {
                 if (!SIM.isInterpreterRunning()) {
-                    Blockly.hideChaff();
                     NN_CTRL.mkNNfromProgramStartBlock();
                     var myCallback = function (result) {
                         if (result.rc == 'ok') {
@@ -332,7 +331,6 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
         ProgSimDebugController.prototype.toggleSimEvent = function (event) {
             var C = this;
             var SIM = this.SIM;
-            Blockly.hideChaff();
             if ($('#simControl').hasClass('typcn-media-play-outline')) {
                 var myCallback = function (result) {
                     if (result.rc == 'ok') {
@@ -494,7 +492,6 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
                 return __generator(this, function (_b) {
                     numberOfPrograms = 0;
                     C = this;
-                    Blockly.hideChaff();
                     C.extractedPrograms = [];
                     myPromises = [];
                     _loop_1 = function (item) {
@@ -658,7 +655,6 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
             $('#simControl').onWrap('click.sim', function () {
                 var _this = this;
                 if (!SIM.isInterpreterRunning()) {
-                    Blockly.hideChaff();
                     NN_CTRL.mkNNfromProgramStartBlock();
                     $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
                     $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);

@@ -27,14 +27,14 @@ public class NEPOprog {
 
     private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
     private Hal hal = new Hal(brickConfiguration, usedSensors);
-    
+
     private void ____text() {
         hal.drawText("", ___numberVar, ___numberVar);
         //
         hal.drawText(String.valueOf(String.valueOf(___stringVar) + String.valueOf(___stringVar)), ___numberVar, ___numberVar);
         ___stringVar += String.valueOf(___stringVar);
     }
-    
+
     private void ____colours() {
         hal.drawText(String.valueOf(PickColor.BLACK), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf(PickColor.BLUE), ___numberVar, ___numberVar);
@@ -45,61 +45,61 @@ public class NEPOprog {
         hal.drawText(String.valueOf(PickColor.YELLOW), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf(PickColor.WHITE), ___numberVar, ___numberVar);
     }
-    
+
     private void ____messages() {
         hal.drawText(String.valueOf(hal.establishConnectionTo(String.valueOf(___stringVar))), ___numberVar, ___numberVar);
         hal.sendMessage(String.valueOf(___stringVar), ___connectionVar);
         hal.drawText(String.valueOf(hal.readMessage(___connectionVar)), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf(hal.waitForConnection()), ___numberVar, ___numberVar);
     }
-    
+
     private void ____function_parameter(float ___x, boolean ___x2, String ___x3, PickColor ___x4, NXTConnection ___x5, ArrayList<Float> ___x6, ArrayList<Boolean> ___x7, ArrayList<String> ___x8, ArrayList<PickColor> ___x9, ArrayList<NXTConnection> ___x10) {
         if (___booleanVar) return ;
     }
-    
+
     private float ____function_return_numberVar() {
         return ___numberVar;
     }
-    
+
     private boolean ____function_return_booleanVar() {
         return ___booleanVar;
     }
-    
+
     private String ____function_return_stringVar() {
         return ___stringVar;
     }
-    
+
     private PickColor ____function_return_colourVar() {
         return ___colourVar;
     }
-    
+
     private NXTConnection ____function_return_connectionVar() {
         return ___connectionVar;
     }
-    
+
     private ArrayList<Float> ____function_return_numberList() {
         return ___numberList;
     }
-    
+
     private ArrayList<Boolean> ____function_return_booleanList() {
         return ___booleanList;
     }
-    
+
     private ArrayList<String> ____function_return_stringList() {
         return ___stringList;
     }
-    
+
     private ArrayList<PickColor> ____function_return_colourList() {
         return ___colourList;
     }
-    
+
     private ArrayList<NXTConnection> ____function_return_connectionList() {
         return ___connectionList;
     }
 
     public static void main(String[] args) {
         try {
-            brickConfiguration = new EV3Configuration.Builder()
+             brickConfiguration = new EV3Configuration.Builder()
                 .setWheelDiameter(5.6)
                 .setTrackWidth(18.0)
                 .build();

@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
@@ -37,7 +38,7 @@ public final class MethodReturn extends Method {
         BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(!methodName.equals("") && parameters.isReadOnly() && body.isReadOnly() && returnValue.isReadOnly());
-        this.methodName = methodName;
+        this.methodName = Util.sanitizeProgramProperty(methodName);
         this.parameters = parameters;
         this.body = body;
         this.returnType = returnType;

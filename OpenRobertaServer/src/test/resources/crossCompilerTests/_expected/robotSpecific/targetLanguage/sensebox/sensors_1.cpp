@@ -271,7 +271,7 @@ void ____sensorsWaitUntil() {
 void setup()
 {
     Serial.begin(9600);
-    
+
     pinMode(_input_S3, INPUT);
     Serial1.begin(9600);
     _bmx055_B.beginAcc(0x03);

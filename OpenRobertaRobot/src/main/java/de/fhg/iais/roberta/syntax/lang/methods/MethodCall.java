@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
@@ -34,7 +35,7 @@ public final class MethodCall extends Method {
         BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(!oraMethodName.equals("") && oraParameters.isReadOnly() && oraParametersValues.isReadOnly());
-        this.oraMethodName = oraMethodName;
+        this.oraMethodName = Util.sanitizeProgramProperty(oraMethodName);
         this.oraParameters = oraParameters;
         this.oraParametersValues = oraParametersValues;
         this.oraReturnType = oraReturnType;

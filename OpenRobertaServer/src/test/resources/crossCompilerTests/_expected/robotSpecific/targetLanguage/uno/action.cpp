@@ -62,7 +62,7 @@ void ____display() {
     Serial.println(___s);
     _lcd_L3.setCursor(___n,___n);
     _lcd_L3.print(___s);
-    
+
     _lcd_L3.clear();
     _lcd_O.setCursor(0,1);
     _lcd_O.print("Hallo");
@@ -82,11 +82,11 @@ void ____lights() {
     analogWrite(_led_red_R2, RCHANNEL(___c));
     analogWrite(_led_green_R2, GCHANNEL(___c));
     analogWrite(_led_blue_R2, BCHANNEL(___c));
-    
+
     analogWrite(_led_red_R2, 0);
     analogWrite(_led_green_R2, 0);
     analogWrite(_led_blue_R2, 0);
-    
+
 }
 
 void ____pin() {

@@ -36,7 +36,7 @@ std::list<BluetoothConnectionHandle> ___connectionList = ((std::list<BluetoothCo
 
 void ____text() {
     DrawString(ToString(""), ___numberVar, ___numberVar);
-    // 
+    //
     DrawString(ToString(ToString(___stringVar) + ToString(___stringVar)), ___numberVar, ___numberVar);
     ___stringVar += ___stringVar;
 }
@@ -107,8 +107,8 @@ int main () {
     NEPOInitEV3();
     NEPOSetAllSensors(NULL, NULL, NULL, NULL);
     startLoggingThread(OUT_BC);
-    
-    
+
+
     ____text();
     ____colours();
     ____messages();
@@ -123,7 +123,7 @@ int main () {
     DrawString(ToString(____function_return_stringList()), ___numberVar, ___numberVar);
     DrawString(ToString(____function_return_colourList()), ___numberVar, ___numberVar);
     DrawString(ToString(____function_return_connectionList()), ___numberVar, ___numberVar);
-    
+
     NEPOFreeEV3();
     return 0;
 }

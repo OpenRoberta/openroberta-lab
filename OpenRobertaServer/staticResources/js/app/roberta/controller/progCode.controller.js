@@ -78,7 +78,6 @@ define(["require", "exports", "message", "util", "guiState.controller", "program
         }, 'code refresh clicked');
     }
     function toggleCode($button) {
-        Blockly.hideChaff();
         if ($('#codeButton').hasClass('rightActive')) {
             $('#blockly').closeRightView();
         }

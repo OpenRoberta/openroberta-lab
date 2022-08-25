@@ -40,7 +40,7 @@ void ____sensors() {
 void setup()
 {
     Serial.begin(9600);
-    
+
     Wire.begin();
     _iaqSensor_E.begin(BME680_I2C_ADDR_PRIMARY, Wire);
     bsec_virtual_sensor_t _sensorList[10] = {
