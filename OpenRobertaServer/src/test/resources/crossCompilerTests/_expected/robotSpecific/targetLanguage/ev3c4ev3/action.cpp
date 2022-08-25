@@ -131,17 +131,17 @@ void ____lights() {
     SetLedPattern(LED_RED_FLASH);
     SetLedPattern(LED_RED_PULSE);
     SetLedPattern(LED_BLACK);
-    
+
 }
 
 int main () {
     NEPOInitEV3();
     NEPOSetAllSensors(NULL, NULL, NULL, NULL);
     SetLanguage("en");startLoggingThread(OUT_ABCD);
-    
-    
+
+
     ____action();
-    
+
     NEPOFreeEV3();
     return 0;
 }

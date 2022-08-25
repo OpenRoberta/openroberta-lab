@@ -118,11 +118,11 @@ int main () {
     NEPOSetAllSensors(NULL, NULL, NULL, NULL);
     startLoggingThread(OUT_BC);
     srand (time(NULL));
-    
-    
+
+
     ____math();
     ____lists();
-    
+
     NEPOFreeEV3();
     return 0;
 }

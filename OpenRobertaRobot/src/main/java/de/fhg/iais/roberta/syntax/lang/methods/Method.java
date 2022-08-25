@@ -15,7 +15,7 @@ public abstract class Method extends Phrase {
     protected String methodName;
     protected ExprList parameters;
     protected BlocklyType returnType;
-    protected final static String CODE_SAFE_PREFIX = "____";
+    protected static final String CODE_SAFE_PREFIX = "____";
 
     public Method(BlocklyProperties properties) {
         super(properties);

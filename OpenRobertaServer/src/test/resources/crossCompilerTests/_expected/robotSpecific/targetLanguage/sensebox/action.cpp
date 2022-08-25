@@ -50,25 +50,25 @@ void ____action() {
     _display_myDisplay.setTextColor(WHITE, BLACK);
     _display_myDisplay.println(___n);
     _display_myDisplay.display();
-    
+
     _display_myDisplay.setCursor(___n, ___n);
     _display_myDisplay.setTextSize(1);
     _display_myDisplay.setTextColor(WHITE, BLACK);
     _display_myDisplay.println(___b);
     _display_myDisplay.display();
-    
+
     _display_myDisplay.setCursor(___n, ___n);
     _display_myDisplay.setTextSize(1);
     _display_myDisplay.setTextColor(WHITE, BLACK);
     _display_myDisplay.println(___s);
     _display_myDisplay.display();
-    
+
     _display_myDisplay.setCursor(___n, ___n);
     _display_myDisplay.setTextSize(1);
     _display_myDisplay.setTextColor(WHITE, BLACK);
     _display_myDisplay.println(___c);
     _display_myDisplay.display();
-    
+
     _display_myDisplay.clearDisplay();
     tone(_buzzer_B2, ___n);
     delay(___n);
@@ -81,9 +81,9 @@ void ____action() {
     _rgbled_R2.show();
     _rgbled_R2.setPixelColor(0, _rgbled_R2.Color(0,0,0));
     _rgbled_R2.show();
-    
+
     _osm.uploadMeasurement(___n, _ID1);
-    
+
     _dataFile = SD.open("FILE.TXT", FILE_WRITE);
     _dataFile.print(_ID1);
     _dataFile.print(" : ");
@@ -91,9 +91,9 @@ void ____action() {
     _dataFile.close();
     _plot_myDisplay.clear();
     _plot_myDisplay.drawPlot();
-    
+
     _plot_myDisplay.addDataPoint(___n, ___n);
-    
+
     digitalWrite(_output_A, ___n);
     analogWrite(_output_A2, 1);
 }
@@ -101,7 +101,7 @@ void ____action() {
 void setup()
 {
     Serial.begin(9600);
-    
+
     _rgbled_R2.begin();
     pinMode(_output_A, OUTPUT);
     pinMode(_led_G, OUTPUT);

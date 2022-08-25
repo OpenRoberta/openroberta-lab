@@ -339,6 +339,7 @@ function initMenu() {
  */
 function initMenuEvents() {
     // TODO check if this prevents iPads and iPhones to only react on double clicks
+
     if (!navigator.userAgent.match(/iPad/i) && !navigator.userAgent.match(/iPhone/i)) {
         $('[rel="tooltip"]').not('.rightMenuButton').tooltip({
             container: 'body',
@@ -353,6 +354,15 @@ function initMenuEvents() {
     document.addEventListener('gesturestart', function (e) {
         e.preventDefault();
         e.stopPropagation();
+    });
+
+    $('.blocklyButtonBack, .blocklyWidgetDiv, #head-navigation, #main-section, #tutorial-navigation').on('mousedown touchstart keydown', function (e) {
+        if ($(e.target).not('.blocklyTreeLabel, .blocklytreerow, .toolboxicon, div.goog-menuitem-content, div.goog-menuitem, img').length > 0) {
+            if ($(e.target).filter('.blocklyhtmlinput').length > 0 && !(e.metaKey || e.ctrlKey)) {
+                return;
+            }
+            Blockly.hideChaff();
+        }
     });
 
     $('.modal').onWrap('shown.bs.modal', function () {

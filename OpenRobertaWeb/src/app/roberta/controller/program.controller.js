@@ -116,7 +116,6 @@ function initEvents() {
         $(window).resize();
     });
     $('#tabProgram').onWrap('hide.bs.tab', function (e) {
-        Blockly.hideChaff();
         seen = false;
     });
     $('#tabProgram').onWrap('hidden.bs.tab', function (e) {
@@ -531,7 +530,6 @@ function resetView() {
 }
 
 function loadToolbox(level) {
-    Blockly.hideChaff();
     GUISTATE_C.setProgramToolboxLevel(level);
     var xml = GUISTATE_C.getToolbox(level);
     if (xml) {
@@ -545,7 +543,6 @@ function loadToolbox(level) {
 }
 
 function loadExternalToolbox(toolbox) {
-    Blockly.hideChaff();
     if (toolbox) {
         blocklyWorkspace.updateToolbox(toolbox);
     }
@@ -560,7 +557,6 @@ function programToBlocklyWorkspace(xml, opt_fromShowSource) {
         return;
     }
     listenToBlocklyEvents = false;
-    Blockly.hideChaff();
     blocklyWorkspace.clear();
     var dom = Blockly.Xml.textToDom(xml, blocklyWorkspace);
     Blockly.Xml.domToWorkspace(dom, blocklyWorkspace);
@@ -610,5 +606,5 @@ export {
     resetView,
     loadToolbox,
     loadExternalToolbox,
-    programToBlocklyWorkspace
+    programToBlocklyWorkspace,
 };

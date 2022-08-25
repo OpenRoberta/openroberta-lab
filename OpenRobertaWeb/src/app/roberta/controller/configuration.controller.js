@@ -1,6 +1,5 @@
 import * as LOG from 'log';
 import * as UTIL from 'util';
-import * as COMM from 'comm';
 import * as MSG from 'message';
 import * as GUISTATE_C from 'guiState.controller';
 import * as Blockly from 'blockly';
@@ -84,10 +83,6 @@ function initEvents() {
         },
         'tabConfiguration clicked'
     );
-
-    $('#tabConfiguration').onWrap('hide.bs.tab', function (e) {
-        Blockly.hideChaff(false);
-    });
 
     $('#tabConfiguration').onWrap('hidden.bs.tab', function (e) {
         var dom = confVis ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
@@ -419,7 +414,6 @@ function resetConfVisIfAvailable() {
 function configurationToBricklyWorkspace(xml) {
     // removing changelistener in blockly doesn't work, so no other way
     listenToBricklyEvents = false;
-    Blockly.hideChaff();
     bricklyWorkspace.clear();
     Blockly.svgResize(bricklyWorkspace);
     var dom = Blockly.Xml.textToDom(xml, bricklyWorkspace);

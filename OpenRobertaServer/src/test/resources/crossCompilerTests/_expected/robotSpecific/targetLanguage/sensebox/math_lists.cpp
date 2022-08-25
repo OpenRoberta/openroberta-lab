@@ -115,7 +115,7 @@ void ____lists() {
 void setup()
 {
     Serial.begin(9600);
-    
+
     ___numVar = 0;
     ___boolVar = true;
     ___stringVar = "";

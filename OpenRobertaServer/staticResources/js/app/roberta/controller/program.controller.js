@@ -97,7 +97,6 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
             $(window).resize();
         });
         $('#tabProgram').onWrap('hide.bs.tab', function (e) {
-            Blockly.hideChaff();
             seen = false;
         });
         $('#tabProgram').onWrap('hidden.bs.tab', function (e) {
@@ -465,7 +464,6 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
     }
     exports.resetView = resetView;
     function loadToolbox(level) {
-        Blockly.hideChaff();
         GUISTATE_C.setProgramToolboxLevel(level);
         var xml = GUISTATE_C.getToolbox(level);
         if (xml) {
@@ -480,7 +478,6 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
     }
     exports.loadToolbox = loadToolbox;
     function loadExternalToolbox(toolbox) {
-        Blockly.hideChaff();
         if (toolbox) {
             blocklyWorkspace.updateToolbox(toolbox);
         }
@@ -494,7 +491,6 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
             return;
         }
         listenToBlocklyEvents = false;
-        Blockly.hideChaff();
         blocklyWorkspace.clear();
         var dom = Blockly.Xml.textToDom(xml, blocklyWorkspace);
         Blockly.Xml.domToWorkspace(dom, blocklyWorkspace);

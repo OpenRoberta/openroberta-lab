@@ -636,7 +636,6 @@ $.fn.closeRightView = function (opt_callBack) {
         return;
     }
     $('.fromRight.rightActive').addClass('shifting');
-    Blockly.hideChaff();
     $('.blocklyToolboxDiv').css('display', 'inherit');
     var that = this; //$('#blockly')
     $('.fromRight.rightActive').animate(
@@ -681,7 +680,6 @@ $.fn.openRightView = function ($view, initialViewWidth, opt_callBack) {
         return;
     }
     let $blockly = $('#blockly');
-    Blockly.hideChaff();
     var width;
     var smallScreen;
     if ($(window).width() < 768) {

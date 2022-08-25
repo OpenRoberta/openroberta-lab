@@ -53,7 +53,6 @@ function initEvents() {
 }
 
 function toggleHelp($button) {
-    Blockly.hideChaff();
     if ($('#helpButton').hasClass('rightActive')) {
         $('#blockly').closeRightView();
     } else {

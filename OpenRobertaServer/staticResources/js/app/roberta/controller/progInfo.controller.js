@@ -66,7 +66,6 @@ define(["require", "exports", "guiState.controller", "blockly", "jquery", "jquer
         });
     }
     function toggleInfo($button) {
-        Blockly.hideChaff();
         if ($('#infoButton').hasClass('rightActive')) {
             $('#blockly').closeRightView();
         }

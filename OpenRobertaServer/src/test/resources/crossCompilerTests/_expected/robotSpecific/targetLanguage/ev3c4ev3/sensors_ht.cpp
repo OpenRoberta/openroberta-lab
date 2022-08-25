@@ -23,9 +23,9 @@ std::list<Color> ___colourList = ((std::list<Color>){White, White});
 std::list<BluetoothConnectionHandle> ___connectionList = ((std::list<BluetoothConnectionHandle>){___connectionVar, ___connectionVar});
 
 void ____sensors() {
-    
+
     StartHTCompassCalibration(IN_2);Wait(40000);StopHTCompassCalibration(IN_2);
-    
+
     DrawString(ToString(ReadHTCompassSensor(IN_2, HTCompassAngle)), ___numberVar, ___numberVar);
     DrawString(ToString(ReadHTCompassSensor(IN_2, HTCompassCompass)), ___numberVar, ___numberVar);
     DrawString(ToString(ReadHTIrSensor(IN_4, Modulated)), ___numberVar, ___numberVar);
@@ -78,10 +78,10 @@ int main () {
     NEPOInitEV3();
     NEPOSetAllSensors(NULL, HTCompass, HTColorV2, HTIr);
     startLoggingThread(0);
-    
-    
+
+
     ____sensors();
-    
+
     NEPOFreeEV3();
     return 0;
 }

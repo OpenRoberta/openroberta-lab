@@ -45,6 +45,7 @@ import de.fhg.iais.roberta.util.syntax.MotionParam;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.worker.validate.UnoValidatorAndCollectorWorker;
+import static org.junit.Assert.assertEquals;
 
 public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper {
 
@@ -551,7 +552,8 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
         phrases.add(listSetIndex);
 
         executeWorkflow();
-        assertHasNepoInfo(listSetIndex, NepoInfo.Severity.ERROR, "BLOCK_USED_INCORRECTLY");
+        assertEquals((((NumConst) listSetIndex.param.get(0)).value), "0");
+        assertHasNoNepoInfo(listSetIndex);
     }
 
     @Test
@@ -579,7 +581,8 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
         phrases.add(listGetIndex);
 
         executeWorkflow();
-        assertHasNepoInfo(listGetIndex, NepoInfo.Severity.ERROR, "BLOCK_USED_INCORRECTLY");
+        assertEquals((((NumConst) listGetIndex.param.get(0)).value), "0");
+        assertHasNoNepoInfo(listGetIndex);
     }
 
     @Test
@@ -607,7 +610,8 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
         phrases.add(lengthOfIsEmptyFunct);
 
         executeWorkflow();
-        assertHasNepoInfo(lengthOfIsEmptyFunct, NepoInfo.Severity.ERROR, "BLOCK_USED_INCORRECTLY");
+        assertEquals((((NumConst) lengthOfIsEmptyFunct.param.get(0)).value), "0");
+        assertHasNoNepoInfo(lengthOfIsEmptyFunct);
     }
 
     @Test
@@ -635,7 +639,8 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
         phrases.add(mathOnListFunct);
 
         executeWorkflow();
-        assertHasNepoInfo(mathOnListFunct, NepoInfo.Severity.ERROR, "BLOCK_USED_INCORRECTLY");
+        assertEquals((((NumConst) mathOnListFunct.param.get(0)).value), "0");
+        assertHasNoNepoInfo(mathOnListFunct);
     }
 
 }

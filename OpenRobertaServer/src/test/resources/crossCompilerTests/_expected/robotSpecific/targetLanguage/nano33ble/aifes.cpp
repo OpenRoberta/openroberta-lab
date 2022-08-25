@@ -18,8 +18,8 @@ std::list<double> ___outputs;
 bool ___success;
 double ___output;
 float xAsFloat, yAsFloat, zAsFloat;
-uint32_t global_epoch_counter = 0;
-uint32_t FNN_structure[3] = {2,3,1};
+uint32_t global_epoch_counter = 0; 
+uint32_t FNN_structure[3] = {2,3,1}; 
 AIFES_E_activations FNN_activations[2];
 uint32_t weight_number = AIFES_E_flat_weights_number_fnn_f32(FNN_structure,3);
 float *FlatWeights;
@@ -31,7 +31,7 @@ AIFES_E_training_parameter_fnn_f32  FNN_TRAIN;
 void printLoss(float loss) {
     global_epoch_counter++;
 }
-
+ 
 float input_data[4][2];
 float target_data[4][1];
 float classify_data[2];
@@ -185,7 +185,7 @@ void loop()
         Serial.println(___error);
         ___success = false;
     } else {
-
+        
     for (int i = 0; i < 2; i++) {
         classify_data[i] = 0.0;
     }
@@ -193,7 +193,7 @@ void loop()
         addClassifyData(0);
         ___error = (errorInference = AIFES_E_inference_fnn_f32(&classify_tensor,&FNN,&output_classify_tensor)==0?(___outputs.assign(output_classify_data, output_classify_data + ___outputs.size()),0):errorInference);
         ____checkClassification(true);
-
+        
     for (int i = 0; i < 2; i++) {
         classify_data[i] = 0.0;
     }
@@ -201,7 +201,7 @@ void loop()
         addClassifyData(1);
         ___error = (errorInference = AIFES_E_inference_fnn_f32(&classify_tensor,&FNN,&output_classify_tensor)==0?(___outputs.assign(output_classify_data, output_classify_data + ___outputs.size()),0):errorInference);
         ____checkClassification(false);
-
+        
     for (int i = 0; i < 2; i++) {
         classify_data[i] = 0.0;
     }
@@ -209,7 +209,7 @@ void loop()
         addClassifyData(0);
         ___error = (errorInference = AIFES_E_inference_fnn_f32(&classify_tensor,&FNN,&output_classify_tensor)==0?(___outputs.assign(output_classify_data, output_classify_data + ___outputs.size()),0):errorInference);
         ____checkClassification(false);
-
+        
     for (int i = 0; i < 2; i++) {
         classify_data[i] = 0.0;
     }

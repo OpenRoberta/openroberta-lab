@@ -33,7 +33,7 @@ int _v_colour_temp;
 
 void ____text() {
     Serial.println("");
-    // 
+    //
     ___stringVar += ___stringVar;
 }
 
@@ -41,39 +41,39 @@ void ____colours() {
     analogWrite(_led_red_R, 204);
     analogWrite(_led_green_R, 0);
     analogWrite(_led_blue_R, 0);
-    
+
     analogWrite(_led_red_R, 153);
     analogWrite(_led_green_R, 153);
     analogWrite(_led_blue_R, 153);
-    
+
     analogWrite(_led_red_R, 255);
     analogWrite(_led_green_R, 102);
     analogWrite(_led_blue_R, 0);
-    
+
     analogWrite(_led_red_R, 255);
     analogWrite(_led_green_R, 204);
     analogWrite(_led_blue_R, 51);
-    
+
     analogWrite(_led_red_R, 51);
     analogWrite(_led_green_R, 204);
     analogWrite(_led_blue_R, 0);
-    
+
     analogWrite(_led_red_R, 0);
     analogWrite(_led_green_R, 204);
     analogWrite(_led_blue_R, 204);
-    
+
     analogWrite(_led_red_R, 51);
     analogWrite(_led_green_R, 102);
     analogWrite(_led_blue_R, 255);
-    
+
     analogWrite(_led_red_R, 204);
     analogWrite(_led_green_R, 51);
     analogWrite(_led_blue_R, 204);
-    
+
     analogWrite(_led_red_R, ___numberVar);
     analogWrite(_led_green_R, ___numberVar);
     analogWrite(_led_blue_R, ___numberVar);
-    
+
 }
 
 void ____function_parameter(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::list<double> ___x5, std::list<bool> ___x6, std::list<String> ___x7, std::list<unsigned int> ___x8) {

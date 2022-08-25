@@ -119,7 +119,7 @@ public class NEPOprog {
 
     public static void main(String[] args) {
         try {
-            brickConfiguration = new EV3Configuration.Builder()
+             brickConfiguration = new EV3Configuration.Builder()
                 .setWheelDiameter(5.6)
                 .setTrackWidth(18.0)
                 .build();

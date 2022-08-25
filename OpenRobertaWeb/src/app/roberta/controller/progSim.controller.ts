@@ -80,7 +80,6 @@ class ProgSimController {
             'click.sim',
             function () {
                 if (!SIM.isInterpreterRunning()) {
-                    Blockly.hideChaff();
                     NN_CTRL.mkNNfromProgramStartBlock();
                     let myCallback = function (result) {
                         if (result.rc == 'ok') {
@@ -450,7 +449,6 @@ class ProgSimDebugController extends ProgSimController {
     private toggleSimEvent(event: string) {
         let C = this;
         let SIM: SimulationRoberta = this.SIM as SimulationRoberta;
-        Blockly.hideChaff();
         if ($('#simControl').hasClass('typcn-media-play-outline')) {
             let myCallback = function (result) {
                 if (result.rc == 'ok') {
@@ -570,7 +568,6 @@ class ProgSimMultiController extends ProgSimController {
     private async loadProgramms(): Promise<any[]> {
         let numberOfPrograms = 0;
         let C = this;
-        Blockly.hideChaff();
         C.extractedPrograms = [];
         let myPromises: Promise<void>[] = [];
         for (let item of this.selectedPrograms) {
@@ -786,7 +783,6 @@ class ProgSimMultiController extends ProgSimController {
             'click.sim',
             function () {
                 if (!SIM.isInterpreterRunning()) {
-                    Blockly.hideChaff();
                     NN_CTRL.mkNNfromProgramStartBlock();
                     $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
                     $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);

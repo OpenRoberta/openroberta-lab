@@ -71,7 +71,6 @@ function initEvents() {
 }
 
 function toggleInfo($button) {
-    Blockly.hideChaff();
     if ($('#infoButton').hasClass('rightActive')) {
         $('#blockly').closeRightView();
     } else {

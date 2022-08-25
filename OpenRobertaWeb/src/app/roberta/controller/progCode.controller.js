@@ -105,7 +105,6 @@ function initEvents() {
 }
 
 function toggleCode($button) {
-    Blockly.hideChaff();
     if ($('#codeButton').hasClass('rightActive')) {
         $('#blockly').closeRightView();
     } else {

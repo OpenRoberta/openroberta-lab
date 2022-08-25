@@ -170,10 +170,10 @@ int main () {
     NEPOResetEV3GyroSensor(IN_2);
     NEPOResetEV3GyroSensor(IN_2);
     startLoggingThread(OUT_BC);
-    
-    
+
+
     ____sensors();
-    
+
     NEPOFreeEV3();
     return 0;
 }

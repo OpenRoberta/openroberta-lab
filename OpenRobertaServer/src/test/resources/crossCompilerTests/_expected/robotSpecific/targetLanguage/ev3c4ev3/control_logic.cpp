@@ -101,11 +101,11 @@ int main () {
     NEPOInitEV3();
     NEPOSetAllSensors(NULL, NULL, NULL, NULL);
     startLoggingThread(OUT_BC);
-    
-    
+
+
     ____control();
     ____logic();
-    
+
     NEPOFreeEV3();
     return 0;
 }

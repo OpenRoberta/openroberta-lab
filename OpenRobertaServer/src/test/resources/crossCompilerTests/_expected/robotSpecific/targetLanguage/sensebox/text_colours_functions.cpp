@@ -32,7 +32,7 @@ std::list<unsigned int> ___colourList;
 
 
 void ____text() {
-    // 
+    //
     ___stringVar += ___stringVar;
 }
 
@@ -78,7 +78,7 @@ std::list<unsigned int> ____function_return_colourList() {
 void setup()
 {
     Serial.begin(9600);
-    
+
     ___numVar = 0;
     ___boolVar = true;
     ___stringVar = "";
