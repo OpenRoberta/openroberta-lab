@@ -304,7 +304,7 @@ export class SimulationRoberta implements Simulation {
         } else {
             $('#robotLayer').data('hovered', false);
         }
-        if (e && !(e as unknown as SimMouseEvent).startX) {
+        if (e && e.type !== 'mouseout' && e.type !== 'touchcancel' && e.type !== 'touchend' && !(e as unknown as SimMouseEvent).startX) {
             UTIL.extendMouseEvent(e, this.scale, $('#robotLayer'));
             this.lastMousePosition = {
                 x: e.startX,

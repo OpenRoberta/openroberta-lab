@@ -292,7 +292,7 @@ define(["require", "exports", "interpreter.constants", "util", "interpreter.inte
             else {
                 $('#robotLayer').data('hovered', false);
             }
-            if (e && !e.startX) {
+            if (e && e.type !== 'mouseout' && e.type !== 'touchcancel' && e.type !== 'touchend' && !e.startX) {
                 UTIL.extendMouseEvent(e, this.scale, $('#robotLayer'));
                 this.lastMousePosition = {
                     x: e.startX,

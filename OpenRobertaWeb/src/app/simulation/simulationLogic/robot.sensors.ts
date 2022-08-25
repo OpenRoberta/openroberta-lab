@@ -850,6 +850,7 @@ export class TouchKeys extends Keys implements IMouse {
     protected lastMouseColor: string;
     protected lastMousePosition: Point;
     protected id: number;
+    private uCtx: CanvasRenderingContext2D;
 
     constructor(keys: TouchKey[], id: number, layer?: JQuery<HTMLElement>) {
         super();
@@ -875,6 +876,10 @@ export class TouchKeys extends Keys implements IMouse {
             x: myEvent.startX,
             y: myEvent.startY,
         };
+        if (this.lastMousePosition) {
+            let myMouseColorData = this.uCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
+            this.lastMouseColor = UTIL.RGBAToHexA([myMouseColorData[0], myMouseColorData[1], myMouseColorData[2], myMouseColorData[3]]);
+        }
         this.isDown = true;
         let myKeys: string[] = this.color2Keys[this.lastMouseColor];
         if (myKeys && myKeys.length > 0) {
@@ -901,11 +906,14 @@ export class TouchKeys extends Keys implements IMouse {
             this.$touchLayer.data('hovered', true);
             this.$touchLayer.css('cursor', 'pointer');
             e.stopImmediatePropagation();
+            myKeys.forEach((key) => {
+                this.keys[key].value = true;
+            });
         }
     }
 
     handleMouseOutUp(e: JQuery.TouchEventBase<any, any, any, any>): void {
-        if (e.type === 'mouseout' || e.type === 'touchcancel') {
+        if (e.type === 'mouseout' || e.type === 'touchcancel' || e.type === 'touchend') {
             this.lastMousePosition = null;
         }
         for (let button in this.keys) {
@@ -923,9 +931,8 @@ export class TouchKeys extends Keys implements IMouse {
         udCtx: CanvasRenderingContext2D,
         personalObstacleList: any[]
     ): void {
-        if (this.lastMousePosition) {
-            let myMouseColorData = uCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
-            this.lastMouseColor = UTIL.RGBAToHexA([myMouseColorData[0], myMouseColorData[1], myMouseColorData[2], myMouseColorData[3]]);
+        if (this.uCtx === undefined) {
+            this.uCtx = uCtx;
         }
         values['buttons'] = {};
         for (let key in this.keys) {
@@ -936,7 +943,7 @@ export class TouchKeys extends Keys implements IMouse {
     protected addMouseEvents(id: number) {
         this.$touchLayer.on('mousedown.R' + id + ' touchstart.R' + id, this.handleMouseDown.bind(this));
         this.$touchLayer.on('mousemove.R' + id + ' touchmove.R' + id, this.handleMouseMove.bind(this));
-        this.$touchLayer.on('mouseup.R' + id + ' touchend.R' + id + 'mouseout.R' + id + 'touchcancel.R' + id, this.handleMouseOutUp.bind(this));
+        this.$touchLayer.on('mouseup.R' + id + ' touchend.R' + id + ' mouseout.R' + id + ' touchcancel.R' + id, this.handleMouseOutUp.bind(this));
     }
 }
 

@@ -714,6 +714,10 @@ define(["require", "exports", "robot.base.mobile", "simulation.math", "util", "r
                 x: myEvent.startX,
                 y: myEvent.startY,
             };
+            if (this.lastMousePosition) {
+                var myMouseColorData = this.uCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
+                this.lastMouseColor = UTIL.RGBAToHexA([myMouseColorData[0], myMouseColorData[1], myMouseColorData[2], myMouseColorData[3]]);
+            }
             this.isDown = true;
             var myKeys = this.color2Keys[this.lastMouseColor];
             if (myKeys && myKeys.length > 0) {
@@ -726,6 +730,7 @@ define(["require", "exports", "robot.base.mobile", "simulation.math", "util", "r
             }
         };
         TouchKeys.prototype.handleMouseMove = function (e) {
+            var _this = this;
             if (e && !e.startX) {
                 UTIL.extendMouseEvent(e, simulation_roberta_1.SimulationRoberta.Instance.scale, this.$touchLayer);
             }
@@ -739,10 +744,13 @@ define(["require", "exports", "robot.base.mobile", "simulation.math", "util", "r
                 this.$touchLayer.data('hovered', true);
                 this.$touchLayer.css('cursor', 'pointer');
                 e.stopImmediatePropagation();
+                myKeys.forEach(function (key) {
+                    _this.keys[key].value = true;
+                });
             }
         };
         TouchKeys.prototype.handleMouseOutUp = function (e) {
-            if (e.type === 'mouseout' || e.type === 'touchcancel') {
+            if (e.type === 'mouseout' || e.type === 'touchcancel' || e.type === 'touchend') {
                 this.lastMousePosition = null;
             }
             for (var button in this.keys) {
@@ -751,9 +759,8 @@ define(["require", "exports", "robot.base.mobile", "simulation.math", "util", "r
             this.isDown = false;
         };
         TouchKeys.prototype.updateSensor = function (running, dt, myRobot, values, uCtx, udCtx, personalObstacleList) {
-            if (this.lastMousePosition) {
-                var myMouseColorData = uCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
-                this.lastMouseColor = UTIL.RGBAToHexA([myMouseColorData[0], myMouseColorData[1], myMouseColorData[2], myMouseColorData[3]]);
+            if (this.uCtx === undefined) {
+                this.uCtx = uCtx;
             }
             values['buttons'] = {};
             for (var key in this.keys) {
@@ -763,7 +770,7 @@ define(["require", "exports", "robot.base.mobile", "simulation.math", "util", "r
         TouchKeys.prototype.addMouseEvents = function (id) {
             this.$touchLayer.on('mousedown.R' + id + ' touchstart.R' + id, this.handleMouseDown.bind(this));
             this.$touchLayer.on('mousemove.R' + id + ' touchmove.R' + id, this.handleMouseMove.bind(this));
-            this.$touchLayer.on('mouseup.R' + id + ' touchend.R' + id + 'mouseout.R' + id + 'touchcancel.R' + id, this.handleMouseOutUp.bind(this));
+            this.$touchLayer.on('mouseup.R' + id + ' touchend.R' + id + ' mouseout.R' + id + ' touchcancel.R' + id, this.handleMouseOutUp.bind(this));
         };
         return TouchKeys;
     }(Keys));
