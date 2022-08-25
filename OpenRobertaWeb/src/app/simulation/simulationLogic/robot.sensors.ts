@@ -1396,9 +1396,9 @@ export class VolumeMeterSensor implements ISensor, ILabel {
     volume: number = 0;
 
     constructor(myRobot: RobotBase) {
-        /*    if (window.navigator.mediaDevices === undefined) {
-            window.navigator['mediaDevices'] = {};
-        }*/
+        if (window.navigator.mediaDevices === undefined) {
+            (window.navigator as any)['mediaDevices'] = {};
+        }
         this.webAudio = (myRobot as any).webAudio;
         window.navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator['webkitGetUserMedia'] || navigator['mozGetUserMedia'];
         let sensor = this;

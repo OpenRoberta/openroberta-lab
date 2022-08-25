@@ -350,6 +350,8 @@ export class RectangleSimulationObject extends BaseSimulationObject {
         this.isDown = this.isMouseOn(myEvent);
         if (this.isDown) {
             e.stopImmediatePropagation();
+            this.mouseOldX = myEvent.startX;
+            this.mouseOldY = myEvent.startY;
         }
         if (this.isDown && !this.selected) {
             $('#robotLayer').css('cursor', 'pointer');
@@ -604,6 +606,8 @@ export class CircleSimulationObject extends BaseSimulationObject {
         this.isDown = UTIL.checkInCircle(myEvent.startX, myEvent.startY, this.x, this.y, this.r);
         if (this.isDown) {
             e.stopImmediatePropagation();
+            this.mouseOldX = myEvent.startX;
+            this.mouseOldY = myEvent.startY;
         }
         if (this.isDown && !this.selected) {
             $('#robotLayer').css('cursor', 'pointer');
@@ -853,6 +857,8 @@ export class TriangleSimulationObject extends BaseSimulationObject {
         this.isDown = this.isMouseOn(myEvent);
         if (this.isDown) {
             e.stopImmediatePropagation();
+            this.mouseOldX = myEvent.startX;
+            this.mouseOldY = myEvent.startY;
         }
         if (this.isDown && !this.selected) {
             $('#robotLayer').css('cursor', 'pointer');

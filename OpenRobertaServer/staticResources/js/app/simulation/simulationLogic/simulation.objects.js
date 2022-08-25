@@ -328,6 +328,8 @@ define(["require", "exports", "jquery", "util", "simulation.roberta"], function 
             this.isDown = this.isMouseOn(myEvent);
             if (this.isDown) {
                 e.stopImmediatePropagation();
+                this.mouseOldX = myEvent.startX;
+                this.mouseOldY = myEvent.startY;
             }
             if (this.isDown && !this.selected) {
                 $('#robotLayer').css('cursor', 'pointer');
@@ -583,6 +585,8 @@ define(["require", "exports", "jquery", "util", "simulation.roberta"], function 
             this.isDown = UTIL.checkInCircle(myEvent.startX, myEvent.startY, this.x, this.y, this.r);
             if (this.isDown) {
                 e.stopImmediatePropagation();
+                this.mouseOldX = myEvent.startX;
+                this.mouseOldY = myEvent.startY;
             }
             if (this.isDown && !this.selected) {
                 $('#robotLayer').css('cursor', 'pointer');
@@ -832,6 +836,8 @@ define(["require", "exports", "jquery", "util", "simulation.roberta"], function 
             this.isDown = this.isMouseOn(myEvent);
             if (this.isDown) {
                 e.stopImmediatePropagation();
+                this.mouseOldX = myEvent.startX;
+                this.mouseOldY = myEvent.startY;
             }
             if (this.isDown && !this.selected) {
                 $('#robotLayer').css('cursor', 'pointer');

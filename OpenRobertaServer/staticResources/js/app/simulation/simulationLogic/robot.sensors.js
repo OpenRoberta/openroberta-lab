@@ -1131,9 +1131,9 @@ define(["require", "exports", "robot.base.mobile", "simulation.math", "util", "r
         function VolumeMeterSensor(myRobot) {
             this.labelPriority = 16;
             this.volume = 0;
-            /*    if (window.navigator.mediaDevices === undefined) {
+            if (window.navigator.mediaDevices === undefined) {
                 window.navigator['mediaDevices'] = {};
-            }*/
+            }
             this.webAudio = myRobot.webAudio;
             window.navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator['webkitGetUserMedia'] || navigator['mozGetUserMedia'];
             var sensor = this;
