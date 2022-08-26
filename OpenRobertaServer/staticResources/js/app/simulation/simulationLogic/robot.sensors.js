@@ -714,7 +714,7 @@ define(["require", "exports", "robot.base.mobile", "simulation.math", "util", "r
                 x: myEvent.startX,
                 y: myEvent.startY,
             };
-            if (this.lastMousePosition) {
+            if (this.uCtx !== undefined) {
                 var myMouseColorData = this.uCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
                 this.lastMouseColor = UTIL.RGBAToHexA([myMouseColorData[0], myMouseColorData[1], myMouseColorData[2], myMouseColorData[3]]);
             }
@@ -730,7 +730,6 @@ define(["require", "exports", "robot.base.mobile", "simulation.math", "util", "r
             }
         };
         TouchKeys.prototype.handleMouseMove = function (e) {
-            var _this = this;
             if (e && !e.startX) {
                 UTIL.extendMouseEvent(e, simulation_roberta_1.SimulationRoberta.Instance.scale, this.$touchLayer);
             }
@@ -739,20 +738,18 @@ define(["require", "exports", "robot.base.mobile", "simulation.math", "util", "r
                 x: myEvent.startX,
                 y: myEvent.startY,
             };
+            if (this.uCtx !== undefined) {
+                var myMouseColorData = this.uCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
+                this.lastMouseColor = UTIL.RGBAToHexA([myMouseColorData[0], myMouseColorData[1], myMouseColorData[2], myMouseColorData[3]]);
+            }
             var myKeys = this.color2Keys[this.lastMouseColor];
             if (myKeys && myKeys.length > 0) {
                 this.$touchLayer.data('hovered', true);
                 this.$touchLayer.css('cursor', 'pointer');
                 e.stopImmediatePropagation();
-                myKeys.forEach(function (key) {
-                    _this.keys[key].value = true;
-                });
             }
         };
         TouchKeys.prototype.handleMouseOutUp = function (e) {
-            if (e.type === 'mouseout' || e.type === 'touchcancel' || e.type === 'touchend') {
-                this.lastMousePosition = null;
-            }
             for (var button in this.keys) {
                 this.keys[button].value = false;
             }
@@ -860,11 +857,9 @@ define(["require", "exports", "robot.base.mobile", "simulation.math", "util", "r
             }
         };
         Pins.prototype.updateSensor = function (running, dt, myRobot, values, uCtx, udCtx, personalObstacleList) {
-            if (this.lastMousePosition) {
-                var myMouseColorData = uCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
-                this.lastMouseColor = UTIL.RGBAToHexA([myMouseColorData[0], myMouseColorData[1], myMouseColorData[2], myMouseColorData[3]]);
+            if (this.uCtx === undefined) {
+                this.uCtx = uCtx;
             }
-            //values['keys'].Reset = false; // TODO check if we need this really!
             for (var key in this.keys) {
                 values['pin' + key] = {};
                 values['pin' + key]['pressed'] = this.keys[key]['value'] === true;
@@ -946,10 +941,28 @@ define(["require", "exports", "robot.base.mobile", "simulation.math", "util", "r
             return _super.call(this, keys, id, $('#brick' + id)) || this;
         }
         MbotButton.prototype.handleMouseDown = function (e) {
+            var _this = this;
             if (e && !e.startX) {
                 UTIL.extendMouseEvent(e, 1, this.$touchLayer);
             }
-            _super.prototype.handleMouseDown.call(this, e);
+            var myEvent = e;
+            this.lastMousePosition = {
+                x: myEvent.startX,
+                y: myEvent.startY,
+            };
+            var myCtx = this.$touchLayer.get(0).getContext('2d');
+            var myMouseColorData = myCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
+            this.lastMouseColor = UTIL.RGBAToHexA([myMouseColorData[0], myMouseColorData[1], myMouseColorData[2], myMouseColorData[3]]);
+            this.isDown = true;
+            var myKeys = this.color2Keys[this.lastMouseColor];
+            if (myKeys && myKeys.length > 0) {
+                this.$touchLayer.data('hovered', true);
+                this.$touchLayer.css('cursor', 'pointer');
+                e.stopImmediatePropagation();
+                myKeys.forEach(function (key) {
+                    _this.keys[key].value = true;
+                });
+            }
         };
         MbotButton.prototype.handleMouseMove = function (e) {
             if (e && !e.startX) {
@@ -961,6 +974,9 @@ define(["require", "exports", "robot.base.mobile", "simulation.math", "util", "r
                 y: myEvent.startY,
             };
             var myKeys = this.color2Keys[this.lastMouseColor];
+            var myCtx = this.$touchLayer.get(0).getContext('2d');
+            var myMouseColorData = myCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
+            this.lastMouseColor = UTIL.RGBAToHexA([myMouseColorData[0], myMouseColorData[1], myMouseColorData[2], myMouseColorData[3]]);
             if (myKeys && myKeys.length > 0) {
                 this.$touchLayer.data('hovered', true);
                 this.$touchLayer.css('cursor', 'pointer');
@@ -976,11 +992,6 @@ define(["require", "exports", "robot.base.mobile", "simulation.math", "util", "r
             }
         };
         MbotButton.prototype.updateSensor = function (running, dt, myRobot, values, uCtx, udCtx, personalObstacleList) {
-            if (this.lastMousePosition) {
-                var myCtx = this.$touchLayer.get(0).getContext('2d');
-                var myMouseColorData = myCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
-                this.lastMouseColor = UTIL.RGBAToHexA([myMouseColorData[0], myMouseColorData[1], myMouseColorData[2], myMouseColorData[3]]);
-            }
             values['buttons'] = {};
             for (var key in this.keys) {
                 values['buttons'][key] = this.keys[key]['value'] === true;

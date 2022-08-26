@@ -850,7 +850,7 @@ export class TouchKeys extends Keys implements IMouse {
     protected lastMouseColor: string;
     protected lastMousePosition: Point;
     protected id: number;
-    private uCtx: CanvasRenderingContext2D;
+    protected uCtx: CanvasRenderingContext2D;
 
     constructor(keys: TouchKey[], id: number, layer?: JQuery<HTMLElement>) {
         super();
@@ -876,7 +876,7 @@ export class TouchKeys extends Keys implements IMouse {
             x: myEvent.startX,
             y: myEvent.startY,
         };
-        if (this.lastMousePosition) {
+        if (this.uCtx !== undefined) {
             let myMouseColorData = this.uCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
             this.lastMouseColor = UTIL.RGBAToHexA([myMouseColorData[0], myMouseColorData[1], myMouseColorData[2], myMouseColorData[3]]);
         }
@@ -901,21 +901,19 @@ export class TouchKeys extends Keys implements IMouse {
             x: myEvent.startX,
             y: myEvent.startY,
         };
+        if (this.uCtx !== undefined) {
+            let myMouseColorData = this.uCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
+            this.lastMouseColor = UTIL.RGBAToHexA([myMouseColorData[0], myMouseColorData[1], myMouseColorData[2], myMouseColorData[3]]);
+        }
         let myKeys: string[] = this.color2Keys[this.lastMouseColor];
         if (myKeys && myKeys.length > 0) {
             this.$touchLayer.data('hovered', true);
             this.$touchLayer.css('cursor', 'pointer');
             e.stopImmediatePropagation();
-            myKeys.forEach((key) => {
-                this.keys[key].value = true;
-            });
         }
     }
 
     handleMouseOutUp(e: JQuery.TouchEventBase<any, any, any, any>): void {
-        if (e.type === 'mouseout' || e.type === 'touchcancel' || e.type === 'touchend') {
-            this.lastMousePosition = null;
-        }
         for (let button in this.keys) {
             this.keys[button].value = false;
         }
@@ -1051,11 +1049,9 @@ export class Pins extends TouchKeys implements IDrawable {
         udCtx: CanvasRenderingContext2D,
         personalObstacleList: any[]
     ): void {
-        if (this.lastMousePosition) {
-            let myMouseColorData = uCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
-            this.lastMouseColor = UTIL.RGBAToHexA([myMouseColorData[0], myMouseColorData[1], myMouseColorData[2], myMouseColorData[3]]);
+        if (this.uCtx === undefined) {
+            this.uCtx = uCtx;
         }
-        //values['keys'].Reset = false; // TODO check if we need this really!
         for (let key in this.keys) {
             values['pin' + key] = {};
             values['pin' + key]['pressed'] = this.keys[key]['value'] === true;
@@ -1134,7 +1130,24 @@ export class MbotButton extends TouchKeys {
         if (e && !(e as unknown as SimMouseEvent).startX) {
             UTIL.extendMouseEvent(e, 1, this.$touchLayer);
         }
-        super.handleMouseDown(e);
+        let myEvent = e as unknown as SimMouseEvent;
+        this.lastMousePosition = {
+            x: myEvent.startX,
+            y: myEvent.startY,
+        };
+        let myCtx = (this.$touchLayer as any).get(0).getContext('2d');
+        let myMouseColorData = myCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
+        this.lastMouseColor = UTIL.RGBAToHexA([myMouseColorData[0], myMouseColorData[1], myMouseColorData[2], myMouseColorData[3]]);
+        this.isDown = true;
+        let myKeys: string[] = this.color2Keys[this.lastMouseColor];
+        if (myKeys && myKeys.length > 0) {
+            this.$touchLayer.data('hovered', true);
+            this.$touchLayer.css('cursor', 'pointer');
+            e.stopImmediatePropagation();
+            myKeys.forEach((key) => {
+                this.keys[key].value = true;
+            });
+        }
     }
 
     override handleMouseMove(e: JQuery.TouchEventBase<any, any, any, any>): void {
@@ -1147,6 +1160,9 @@ export class MbotButton extends TouchKeys {
             y: myEvent.startY,
         };
         let myKeys: string[] = this.color2Keys[this.lastMouseColor];
+        let myCtx = (this.$touchLayer as any).get(0).getContext('2d');
+        let myMouseColorData = myCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
+        this.lastMouseColor = UTIL.RGBAToHexA([myMouseColorData[0], myMouseColorData[1], myMouseColorData[2], myMouseColorData[3]]);
         if (myKeys && myKeys.length > 0) {
             this.$touchLayer.data('hovered', true);
             this.$touchLayer.css('cursor', 'pointer');
@@ -1169,11 +1185,6 @@ export class MbotButton extends TouchKeys {
         udCtx: CanvasRenderingContext2D,
         personalObstacleList: any[]
     ): void {
-        if (this.lastMousePosition) {
-            let myCtx = (this.$touchLayer as any).get(0).getContext('2d');
-            let myMouseColorData = myCtx.getImageData(this.lastMousePosition.x, this.lastMousePosition.y, 1, 1).data;
-            this.lastMouseColor = UTIL.RGBAToHexA([myMouseColorData[0], myMouseColorData[1], myMouseColorData[2], myMouseColorData[3]]);
-        }
         values['buttons'] = {};
         for (let key in this.keys) {
             values['buttons'][key] = this.keys[key]['value'] === true;
