@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.visitor.lang;
 
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -17,6 +18,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetBias;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetOutputNeuronVal;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetWeight;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
@@ -58,14 +62,16 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetBiasStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetInputNeuronVal;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetWeightStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
+import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
@@ -73,189 +79,201 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 
 public interface ILanguageVisitor<V> extends IVisitor<V> {
 
-    default V visitActionExpr(ActionExpr<V> actionExpr) {
-        actionExpr.getAction().accept(this);
+    default V visitActionExpr(ActionExpr actionExpr) {
+        actionExpr.action.accept(this);
         return null;
     }
 
-    default V visitActionStmt(ActionStmt<V> actionStmt) {
-        actionStmt.getAction().accept(this);
+    default V visitActionStmt(ActionStmt actionStmt) {
+        actionStmt.action.accept(this);
         return null;
     }
 
-    default V visitActivityTask(ActivityTask<V> activityTask) {
+    default V visitActivityTask(ActivityTask activityTask) {
         return null;
     }
 
-    V visitAssertStmt(AssertStmt<V> assertStmt);
+    V visitAssertStmt(AssertStmt assertStmt);
 
-    V visitAssignStmt(AssignStmt<V> assignStmt);
+    V visitAssignStmt(AssignStmt assignStmt);
 
-    V visitBinary(Binary<V> binary);
+    V visitBinary(Binary binary);
 
-    V visitBoolConst(BoolConst<V> boolConst);
+    V visitBoolConst(BoolConst boolConst);
 
-    V visitColorConst(ColorConst<V> colorConst);
+    V visitColorConst(ColorConst colorConst);
 
-    V visitConnectConst(ConnectConst<V> connectConst);
+    V visitConnectConst(ConnectConst connectConst);
 
-    V visitDebugAction(DebugAction<V> debugAction);
+    V visitDebugAction(DebugAction debugAction);
 
-    V visitEmptyExpr(EmptyExpr<V> emptyExpr);
+    V visitEmptyExpr(EmptyExpr emptyExpr);
 
-    V visitEmptyList(EmptyList<V> emptyList);
+    V visitEmptyList(EmptyList emptyList);
 
-    default V visitEvalExpr(EvalExpr<V> evalExpr) {
-        if ( evalExpr.getExpr() instanceof ListCreate<?> ) {
-            ((ListCreate<V>) evalExpr.getExpr()).accept(this);
+    default V visitEvalExpr(EvalExpr evalExpr) {
+        if ( evalExpr.exprBlock instanceof ListCreate ) {
+            ((ListCreate) evalExpr.exprBlock).accept(this);
         } else {
-            evalExpr.getExpr().accept(this);
+            evalExpr.exprBlock.accept(this);
         }
         return null;
     }
 
-    V visitExprList(ExprList<V> exprList);
+    V visitExprList(ExprList exprList);
 
-    default V visitExprStmt(ExprStmt<V> exprStmt) {
-        exprStmt.getExpr().accept(this);
+    default V visitExprStmt(ExprStmt exprStmt) {
+        exprStmt.expr.accept(this);
         return null;
     }
 
-    default V visitFunctionExpr(FunctionExpr<V> functionExpr) {
+    default V visitFunctionExpr(FunctionExpr functionExpr) {
         functionExpr.getFunction().accept(this);
         return null;
     }
 
-    default V visitFunctionStmt(FunctionStmt<V> functionStmt) {
-        functionStmt.getFunction().accept(this);
+    default V visitFunctionStmt(FunctionStmt functionStmt) {
+        functionStmt.function.accept(this);
         return null;
     }
 
-    V visitGetSubFunct(GetSubFunct<V> getSubFunct);
+    V visitGetSubFunct(GetSubFunct getSubFunct);
 
-    V visitIfStmt(IfStmt<V> ifStmt);
+    V visitIfStmt(IfStmt ifStmt);
 
-    V visitIndexOfFunct(IndexOfFunct<V> indexOfFunct);
+    V visitTernaryExpr(TernaryExpr ternaryExpr);
 
-    V visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<V> lengthOfIsEmptyFunct);
+    V visitIndexOfFunct(IndexOfFunct indexOfFunct);
 
-    V visitListCreate(ListCreate<V> listCreate);
+    V visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct);
 
-    V visitListGetIndex(ListGetIndex<V> listGetIndex);
+    V visitListCreate(ListCreate listCreate);
 
-    V visitListRepeat(ListRepeat<V> listRepeat);
+    V visitListGetIndex(ListGetIndex listGetIndex);
 
-    V visitListSetIndex(ListSetIndex<V> listSetIndex);
+    V visitListRepeat(ListRepeat listRepeat);
 
-    default V visitLocation(Location<V> location) {
+    V visitListSetIndex(ListSetIndex listSetIndex);
+
+    default V visitLocation(Location location) {
         return null;
     }
 
-    V visitMainTask(MainTask<V> mainTask);
+    V visitMainTask(MainTask mainTask);
 
-    V visitMathCastCharFunct(MathCastCharFunct<V> mathCastCharFunct);
+    V visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct);
 
-    V visitMathCastStringFunct(MathCastStringFunct<V> mathCastStringFunct);
+    V visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct);
 
-    V visitMathConst(MathConst<V> mathConst);
+    V visitMathConst(MathConst mathConst);
 
-    V visitMathConstrainFunct(MathConstrainFunct<V> mathConstrainFunct);
+    V visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct);
 
-    V visitMathNumPropFunct(MathNumPropFunct<V> mathNumPropFunct);
+    V visitMathNumPropFunct(MathNumPropFunct mathNumPropFunct);
 
-    V visitMathOnListFunct(MathOnListFunct<V> mathOnListFunct);
+    V visitMathOnListFunct(MathOnListFunct mathOnListFunct);
 
-    V visitMathPowerFunct(MathPowerFunct<V> mathPowerFunct);
+    V visitMathPowerFunct(MathPowerFunct mathPowerFunct);
 
-    V visitMathRandomFloatFunct(MathRandomFloatFunct<V> mathRandomFloatFunct);
+    V visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct);
 
-    V visitMathRandomIntFunct(MathRandomIntFunct<V> mathRandomIntFunct);
+    V visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct);
 
-    V visitMathSingleFunct(MathSingleFunct<V> mathSingleFunct);
+    V visitMathSingleFunct(MathSingleFunct mathSingleFunct);
 
-    V visitMethodCall(MethodCall<V> methodCall);
+    V visitMethodCall(MethodCall methodCall);
 
-    default V visitMethodExpr(MethodExpr<V> methodExpr) {
+    default V visitMethodExpr(MethodExpr methodExpr) {
         methodExpr.getMethod().accept(this);
         return null;
     }
 
-    V visitMethodIfReturn(MethodIfReturn<V> methodIfReturn);
+    V visitMethodIfReturn(MethodIfReturn methodIfReturn);
 
-    V visitMethodReturn(MethodReturn<V> methodReturn);
+    V visitMethodReturn(MethodReturn methodReturn);
 
-    V visitMethodStmt(MethodStmt<V> methodStmt);
+    V visitMethodStmt(MethodStmt methodStmt);
 
-    V visitMethodVoid(MethodVoid<V> methodVoid);
+    V visitMethodVoid(MethodVoid methodVoid);
 
-    V visitNNStepStmt(NNStepStmt<V> nnStepStmt);
+    V visitNNStepStmt(NNStepStmt nnStepStmt);
 
-    V visitNNInputNeuronStmt(NNInputNeuronStmt<V> nnInputNeuronStmt);
+    V visitNNSetInputNeuronVal(NNSetInputNeuronVal nnSetInputNeuronVal);
 
-    V visitNNOutputNeuronStmt(NNOutputNeuronStmt<V> nnOutputNeuronStmt);
+    V visitNNGetOutputNeuronVal(NNGetOutputNeuronVal nnGetOutputNeuronVal);
 
-    V visitNullConst(NullConst<V> nullConst);
+    V visitNNSetWeightStmt(NNSetWeightStmt nnSetWeightStmt);
 
-    V visitNumConst(NumConst<V> numConst);
+    V visitNNSetBiasStmt(NNSetBiasStmt nnSetBiasStmt);
 
-    V visitRepeatStmt(RepeatStmt<V> repeatStmt);
+    V visitNNGetWeight(NNGetWeight nnGetWeight);
 
-    V visitRgbColor(RgbColor<V> rgbColor);
+    V visitNNGetBias(NNGetBias nnGetBias);
 
-    default V visitSensorExpr(SensorExpr<V> sensorExpr) {
-        sensorExpr.getSens().accept(this);
+    V visitNullConst(NullConst nullConst);
+
+    V visitNumConst(NumConst numConst);
+
+    V visitRepeatStmt(RepeatStmt repeatStmt);
+
+    V visitRgbColor(RgbColor rgbColor);
+
+    default V visitSensorExpr(SensorExpr sensorExpr) {
+        sensorExpr.sensor.accept(this);
         return null;
     }
 
-    default V visitSensorStmt(SensorStmt<V> sensorStmt) {
-        sensorStmt.getSensor().accept(this);
+    default V visitSensorStmt(SensorStmt sensorStmt) {
+        sensorStmt.sensor.accept(this);
         return null;
     }
 
-    default V visitShadowExpr(ShadowExpr<V> shadowExpr) {
-        if ( shadowExpr.getBlock() != null ) {
-            shadowExpr.getBlock().accept(this);
+    default V visitShadowExpr(ShadowExpr shadowExpr) {
+        if ( shadowExpr.block != null ) {
+            shadowExpr.block.accept(this);
         } else {
-            shadowExpr.getShadow().accept(this);
+            shadowExpr.shadow.accept(this);
         }
         return null;
     }
 
-    default V visitStartActivityTask(StartActivityTask<V> startActivityTask) {
+    default V visitStartActivityTask(StartActivityTask startActivityTask) {
         return null;
     }
 
-    default V visitStmtExpr(StmtExpr<V> stmtExpr) {
-        stmtExpr.getStmt().accept(this);
+    default V visitStmtExpr(StmtExpr stmtExpr) {
+        stmtExpr.stmt.accept(this);
         return null;
     }
 
-    V visitStmtFlowCon(StmtFlowCon<V> stmtFlowCon);
+    V visitStmtFlowCon(StmtFlowCon stmtFlowCon);
 
-    V visitStmtList(StmtList<V> stmtList);
+    V visitStmtList(StmtList stmtList);
 
-    V visitStmtTextComment(StmtTextComment<V> stmtTextComment);
+    V visitStmtTextComment(StmtTextComment stmtTextComment);
 
-    V visitStringConst(StringConst<V> stringConst);
+    V visitStringConst(StringConst stringConst);
 
-    V visitTextCharCastNumberFunct(TextCharCastNumberFunct<V> textCharCastNumberFunct);
+    V visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct);
 
-    V visitTextJoinFunct(TextJoinFunct<V> textJoinFunct);
+    V visitTextJoinFunct(TextJoinFunct textJoinFunct);
 
-    V visitTextPrintFunct(TextPrintFunct<V> textPrintFunct);
+    V visitTextPrintFunct(TextPrintFunct textPrintFunct);
 
-    V visitTextStringCastNumberFunct(TextStringCastNumberFunct<V> textStringCastNumberFunct);
+    V visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct);
 
-    V visitTimerSensor(TimerSensor<V> timerSensor);
+    V visitTimerSensor(TimerSensor timerSensor);
 
-    V visitUnary(Unary<V> unary);
+    V visitUnary(Unary unary);
 
-    V visitVar(Var<V> var);
+    V visitVar(Var var);
 
-    V visitVarDeclaration(VarDeclaration<V> var);
+    V visitVarDeclaration(VarDeclaration var);
 
-    V visitWaitStmt(WaitStmt<V> waitStmt);
+    V visitWaitStmt(WaitStmt waitStmt);
 
-    V visitWaitTimeStmt(WaitTimeStmt<V> waitTimeStmt);
+    V visitWaitTimeStmt(WaitTimeStmt waitTimeStmt);
+
+    V visitSerialWriteAction(SerialWriteAction serialWriteAction);
 
 }

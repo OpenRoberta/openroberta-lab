@@ -42,7 +42,7 @@
                 <li class="typcn typcn-arrow-sorted-down">motor port, choose the port where the motor is connected to.
                 </li>
                 <li class="typcn typcn-arrow-left">value, speed between -100 to 100. Negative values let the motor turn
-                    backwards.</li>
+                    backwards. This value will be internally clipped to be between -100 and 100. </li>
             </ul>
         </div>
         <div id="robActions_motor_on_for" class="help expert">
@@ -58,7 +58,8 @@
                 <li class="typcn typcn-arrow-sorted-down">motor port, choose the one where the motor that you want to
                     program is connected to.</li>
                 <li class="typcn typcn-arrow-left">number, spped between -100 and 100. 100 is the maximum speed.
-                    Negative values lets the motor rotate into the other direction.</li>
+                    Negative values lets the motor rotate into the other direction. This value will be internally
+                    clipped to be between -100 and 100. </li>
                 <li class="typcn typcn-arrow-sorted-down">rotation or degree. Choose the one which fits best. 1 rotation
                     is the same than 360 degrees.</li>
                 <li class="typcn typcn-arrow-left">number, rotations or degrees, only positive numbers are allowed.</li>
@@ -95,7 +96,7 @@
                 <li class="typcn typcn-arrow-sorted-down">motor port, choose the port where the motor is connected to.
                 </li>
                 <li class="typcn typcn-arrow-left">number, speed between -100 and 100. Negative values let the motor run
-                    backwards.</li>
+                    backwards. This value will be internally clipped to be between -100 and 100. </li>
             </ul>
         </div>
         <div id="robActions_motor_stop" class="help expert">
@@ -121,7 +122,8 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">direction, forwards or backwards. Choose the direction.</li>
                 <li class="typcn typcn-arrow-left"><span>number, speed between -100 to 100. 100 is the maximum speed.
-                        Negative values lets the motor rotate into the other direction.</span></li>
+                        Negative values lets the motor rotate into the other direction. This value will be internally
+                        clipped to be between -100 and 100. </span></li>
             </ul>
         </div>
         <div id="robActions_motorDiff_on_for" class="help beginner">
@@ -138,7 +140,8 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Drive, »forwards« or »backwards«. Select a direction.</li>
                 <li class="typcn typcn-arrow-left">Number, speed between -100 and 100. If the number is negative, the
-                    motors will rotate backwards.</li>
+                    motors will rotate backwards. This value will be internally clipped to be between -100 and 100.
+                </li>
                 <li class="typcn typcn-arrow-left">Number, the distance to drive in cm.</li>
             </ul>
         </div>
@@ -161,7 +164,8 @@
                 <li class="typcn typcn-arrow-sorted-down">Turn, »right« or »left«. Select the desired direction for
                     turning.</li>
                 <li class="typcn typcn-arrow-left">Number, speed between -100 and 100. If the number is negative, the
-                    motors will rotate backwards.</li>
+                    robot will turn the other way around. This value will be internally clipped to be between -100 and
+                    100. </li>
             </ul>
             <div class="confluence-information-macro confluence-information-macro-note">
                 <div class="confluence-information-macro-body">
@@ -185,7 +189,8 @@
                 <li class="typcn typcn-arrow-sorted-down">Turn, »right« or »left«. Select the desired direction for
                     turning.</li>
                 <li class="typcn typcn-arrow-left">Number, speed between -100 and 100. If the number is negative, the
-                    motors will rotate backwards.</li>
+                    robot will turn the other way around. This value will be internally clipped to be between -100 and
+                    100.</li>
                 <li class="typcn typcn-arrow-left">Number, degrees the robot shall turn. Degree of 360 will perform a
                     full turn around. Negative numbers are not allowed.</li>
             </ul>
@@ -203,9 +208,11 @@
                 <li class="typcn typcn-arrow-sorted-down">Turning direction, »forwards« or »backwards«. Select your
                     desired moving direction.</li>
                 <li class="typcn typcn-arrow-left">Number, speed between -100 and 100 for the left motor. If the number
-                    is negative the motor will run backwards.</li>
+                    is negative the motor will run backwards. This value will be internally clipped to be between -100
+                    and 100.</li>
                 <li class="typcn typcn-arrow-left">Number, speed between -100 and 100 for the left motor. If the number
-                    is negative the motor will run backwards.</li>
+                    is negative the motor will run backwards. This value will be internally clipped to be between -100
+                    and 100.</li>
             </ul><br>
         </div>
         <div id="robActions_motorDiff_curve_for" class="help beginner">
@@ -222,9 +229,11 @@
                 <li class="typcn typcn-arrow-sorted-down">Turning direction, »forwards« or »backwards«. Select your
                     desired moving direction.</li>
                 <li class="typcn typcn-arrow-left">Number, speed between -100 and 100 for the left motor. If the number
-                    is negative the motor will run backwards.</li>
+                    is negative the motor will run backwards. This value will be internally clipped to be between -100
+                    and 100.</li>
                 <li class="typcn typcn-arrow-left">Number, speed between -100 and 100 for the left motor. If the number
-                    is negative the motor will run backwards.</li>
+                    is negative the motor will run backwards. This value will be internally clipped to be between -100
+                    and 100.</li>
                 <li class="typcn typcn-arrow-left">Number, the distance in cm to be driven.</li>
             </ul><br>
         </div>
@@ -232,16 +241,15 @@
             <h3 id="ProgrammingBlocksEV3-»showtext«">»show text«</h3>
             <p>With the »show text« block you can display text and numbers on the display of your robot. You can also
                 specify in which column and row the text or numbers should be displayed on the robot screen.</p>
-            <p>The EV3 display contains some rows and columns, counted from 0 in the top left corner. Depending on the
-                system (lejos or EV3dev) there are different numbers of rows and columns available.</p>
+            <p>The EV3 display contains some rows and columns, counted from 0 in the top left corner.</p>
             <p>If there was text on the display prior to the show text block then the former text will be overwritten.
             </p>
             <p>Input values:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-left">String, input of a text string to be shown in the display.</li>
-                <li class="typcn typcn-arrow-left">Number, column for the text to start.</li>
-                <li class="typcn typcn-arrow-left">Number, row for the text to start.</li>
+                <li class="typcn typcn-arrow-left">Number, column for the text to start between 0 and 17.</li>
+                <li class="typcn typcn-arrow-left">Number, row for the text to start between 0 and 7.</li>
             </ul>
         </div>
         <div id="robActions_display_picture_new" class="help expert">
@@ -312,7 +320,8 @@
             <p>Setting:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-left">Number, volume for loudness. 0 = no tone, 100 = maximum volume.</li>
+                <li class="typcn typcn-arrow-left">Number, volume for loudness. 0 = no tone, 100 = maximum volume. This
+                    value will be internally clipped to be between 0 and 100.</li>
             </ul>
         </div>
         <div id="robActions_play_getVolume" class="help expert">
@@ -359,9 +368,11 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-left">String, text your want your robot to say.</li>
                 <li class="typcn typcn-arrow-left">Number, speaking rate in percent, i.e. my number between 1 and 100,
-                    the higher the number, the faster the robot speaks.</li>
+                    the higher the number, the faster the robot speaks. This value will be internally clipped to be
+                    between 0 and 100.</li>
                 <li class="typcn typcn-arrow-left">Number, voice pitch of the robot in percent. Number between 1 and
-                    100, the higher the number, the higher the voice pitch of the robot.</li>
+                    100, the higher the number, the higher the voice pitch of the robot. This value will be internally
+                    clipped to be between 0 and 100.</li>
             </ul><br>
         </div>
         <div id="robActions_brickLight_on" class="help beginner">
@@ -448,7 +459,8 @@
                 »number«. The numerical values are between 0 (black) to 100(white). With these various settings this
                 block can be configured according to the specific requirements.</p>
             <p>In mode »colour« the light sensor emits light and detects the basic colour under the sensor. Values for
-                basic colours are BLACK, WHITE, GREY, RED, GREEN, BLUE, YELLOW, BROWN.</p>
+                basic colours are BLACK, WHITE, RED, GREEN, BLUE, YELLOW, BROWN. The colour GREY means, that the
+                registered colour doesn't match any of the predefined ones.</p>
             <p>In mode »light« the light sensor emits light with its red LED and measures the light intensity of the
                 reflected light on a scale of 0 to 100.</p>
             <p>In the mode »RGB« the light sensor emits red, green and blue light and measures the reflected light

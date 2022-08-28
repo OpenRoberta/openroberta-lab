@@ -1,0 +1,21 @@
+
+(repeat [FOREVER_ARDU, BoolConst[value: true]]
+if SensorExpr [PinTouchSensor [EAR, PRESSED, 2]]
+,thenMethodStmt [MethodCall [beleuchten, Var [farbe], ColorConst[hexValue: #FFFFFF], VOID]]
+
+if SensorExpr [PinTouchSensor [EAR, PRESSED, 1]]
+,thenMethodStmt [MethodCall [beleuchten, Var [farbe], ColorConst[hexValue: #FF0088], VOID]]
+
+if SensorExpr [PinTouchSensor [WHEEL, PRESSED, A]]
+,thenMethodStmt [MethodCall [beleuchten, Var [farbe], ColorConst[hexValue: #FF0000], VOID]]
+
+if SensorExpr [PinTouchSensor [WHEEL, PRESSED, B]]
+,thenMethodStmt [MethodCall [beleuchten, Var [farbe], ColorConst[hexValue: #0000FF], VOID]]
+
+if SensorExpr [PinTouchSensor [WHEEL, PRESSED, C]]
+,thenMethodStmt [MethodCall [beleuchten, Var [farbe], ColorConst[hexValue: #00FF00], VOID]]
+
+if SensorExpr [PinTouchSensor [WHEEL, PRESSED, D]]
+,thenMethodStmt [MethodCall [beleuchten, Var [farbe], ColorConst[hexValue: #FFFF00], VOID]]
+MethodStmt [MethodCall [ausmachen, , , VOID]]
+)

@@ -13,6 +13,6 @@ public interface IVisitor<V> {
      * @param visitable meant to be visited
      * @return output of delegated visit-method
      */
-    V visit(Phrase<V> visitable);
+    V visit(Phrase visitable);
 
 }

@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.factory.EV3Factory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.LightMode;
@@ -12,17 +12,16 @@ import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.mode.action.ev3.ShowPicture;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
-import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class RobotModeFactoryTest {
-    EV3Factory factory = new EV3Factory(new PluginProperties("ev3lejosv0", "", "", Util.loadProperties("classpath:/ev3lejosv0.properties")));
+    RobotFactory factory = new RobotFactory(new PluginProperties("ev3lejosv0", "", "", Util.loadProperties("classpath:/ev3lejosv0.properties")));
     BlocklyDropdownFactory dropdownFactory = this.factory.getBlocklyDropdownFactory();
 
     @Test
@@ -73,21 +72,6 @@ public class RobotModeFactoryTest {
     @Test(expected = DbcException.class)
     public void invalidBrickLedColor() {
         this.dropdownFactory.getBrickLedColor("Q");
-    }
-
-    @Test
-    public void getShowPictureFromString() {
-        Assert.assertEquals(this.factory.getShowPicture("EYESCLOSED"), ShowPicture.EYESCLOSED);
-    }
-
-    @Test
-    public void getShowPictureByAlternativeName() {
-        Assert.assertEquals(this.factory.getShowPicture("BRILLE"), ShowPicture.OLDGLASSES);
-    }
-
-    @Test(expected = DbcException.class)
-    public void invalidShowPicture() {
-        this.factory.getShowPicture("Q");
     }
 
     @Test

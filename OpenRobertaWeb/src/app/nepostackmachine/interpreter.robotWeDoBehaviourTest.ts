@@ -71,7 +71,7 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
         return duration;
     }
 
-    public motorOnAction(name: string, port: number, duration: number, speed: number): number {
+    public motorOnAction(name: string, port: number, durationType: string, duration: number, speed: number, time: number): number {
         const robotText = 'robot: ' + name + ', port: ' + port;
         const durText = duration === undefined ? ' w.o. duration' : ' for ' + duration + ' msec';
         U.info(robotText + ' motor speed ' + speed + durText);
@@ -181,6 +181,14 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
     }
 
     public getVolumeAction(_s: State): void {
+        throw new Error('Method not implemented.');
+    }
+
+    remember(num: number): void {
+        throw new Error('Method not implemented.');
+    }
+
+    recall(s: State): void {
         throw new Error('Method not implemented.');
     }
 

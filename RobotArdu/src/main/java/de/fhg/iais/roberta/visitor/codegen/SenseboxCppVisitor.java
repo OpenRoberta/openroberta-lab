@@ -11,25 +11,22 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -37,6 +34,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -50,8 +48,10 @@ import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
-import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.hardware.ISenseboxVisitor;
 
 public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implements ISenseboxVisitor<Void> {
@@ -60,7 +60,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     private final String password;
 
     public SenseboxCppVisitor(
-        List<List<Phrase<Void>>> programPhrases,
+        List<List<Phrase>> programPhrases,
         ConfigurationAst brickConfiguration,
         String SSID,
         String password,
@@ -71,10 +71,10 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
+    public Void visitMainTask(MainTask mainTask) {
         this.decrIndentation();
         this.nlIndent();
-        mainTask.getVariables().accept(this);
+        mainTask.variables.accept(this);
         this.nlIndent();
         this.generateConfigurationVariables();
         generateTimerVariables();
@@ -160,18 +160,18 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         return null;
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         this.sb.append("_display_").append(clearDisplayAction.port).append(".clearDisplay();");
         return null;
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+    public Void visitShowTextAction(ShowTextAction showTextAction) {
         this.sb.append("_display_").append(showTextAction.port).append(".setCursor(");
         showTextAction.x.accept(this);
         this.sb.append(", ");
@@ -192,22 +192,22 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitPlotPointAction(PlotPointAction<Void> plotPointAction) {
-        this.sb.append("_plot_").append(plotPointAction.getPort()).append(".addDataPoint(");
-        plotPointAction.getTickmark().accept(this);
+    public Void visitPlotPointAction(PlotPointAction plotPointAction) {
+        this.sb.append("_plot_").append(plotPointAction.port).append(".addDataPoint(");
+        plotPointAction.tickmark.accept(this);
         this.sb.append(", ");
-        plotPointAction.getValue().accept(this);
+        plotPointAction.value.accept(this);
         this.sb.append(");");
         nlIndent();
         return null;
     }
 
     @Override
-    public Void visitPlotClearAction(PlotClearAction<Void> plotClearAction) {
+    public Void visitPlotClearAction(PlotClearAction plotClearAction) {
         ConfigurationComponent cc = this.configuration.optConfigurationComponentByType(SC.LCDI2C);
         String portName = null;
         if ( cc != null ) {
-            portName = cc.getUserDefinedPortName();
+            portName = cc.userDefinedPortName;
         }
         if ( portName != null ) {
             this.sb.append("_plot_").append(portName).append(".clear();");
@@ -219,42 +219,42 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
-        this.sb.append("tone(_buzzer_").append(toneAction.getPort()).append(", ");
-        toneAction.getFrequency().accept(this);
+    public Void visitToneAction(ToneAction toneAction) {
+        this.sb.append("tone(_buzzer_").append(toneAction.port).append(", ");
+        toneAction.frequency.accept(this);
         this.sb.append(");");
         nlIndent();
         this.sb.append("delay(");
-        toneAction.getDuration().accept(this);
+        toneAction.duration.accept(this);
         this.sb.append(");");
         nlIndent();
-        this.sb.append("noTone(_buzzer_").append(toneAction.getPort()).append(");");
+        this.sb.append("noTone(_buzzer_").append(toneAction.port).append(");");
         return null;
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         throw new DbcException("play note not supported");
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+    public Void visitSoundSensor(SoundSensor soundSensor) {
         this.sb.append("get_microphone_volume(_mic_").append(soundSensor.getUserDefinedPort()).append(")");
         return null;
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
-        if ( !lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) ) {
-            this.sb.append("digitalWrite(_led_").append(lightAction.getPort()).append(", ").append(lightAction.getMode().getValues()[0] + ");");
+    public Void visitLightAction(LightAction lightAction) {
+        if ( !lightAction.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
+            this.sb.append("digitalWrite(_led_").append(lightAction.port).append(", ").append(lightAction.mode.getValues()[0] + ");");
         } else {
-            if ( lightAction.getRgbLedColor().getClass().equals(ColorConst.class) ) {
-                ColorConst<Void> colorConst = (ColorConst<Void>) lightAction.getRgbLedColor();
+            if ( lightAction.rgbLedColor.getClass().equals(ColorConst.class) ) {
+                ColorConst colorConst = (ColorConst) lightAction.rgbLedColor;
                 this.sb
                     .append("_rgbled_")
-                    .append(lightAction.getPort())
+                    .append(lightAction.port)
                     .append(".setPixelColor(0, _rgbled_")
-                    .append(lightAction.getPort())
+                    .append(lightAction.port)
                     .append(".Color(")
                     .append(colorConst.getRedChannelInt())
                     .append(", ")
@@ -262,13 +262,13 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     .append(", ")
                     .append(colorConst.getBlueChannelInt())
                     .append("));");
-            } else if ( lightAction.getRgbLedColor().getClass().equals(Var.class) ) {
-                String tempVarName = "___" + ((Var<Void>) lightAction.getRgbLedColor()).getValue();
+            } else if ( lightAction.rgbLedColor.getClass().equals(Var.class) ) {
+                String tempVarName = "___" + ((Var) lightAction.rgbLedColor).name;
                 this.sb
                     .append("_rgbled_")
-                    .append(lightAction.getPort())
+                    .append(lightAction.port)
                     .append(".setPixelColor(0, _rgbled_")
-                    .append(lightAction.getPort())
+                    .append(lightAction.port)
                     .append(".Color(RCHANNEL(")
                     .append(tempVarName)
                     .append("), GCHANNEL(")
@@ -277,22 +277,22 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     .append(tempVarName)
                     .append(")));");
             } else {
-                this.sb.append("_rgbled_").append(lightAction.getPort()).append(".setPixelColor(0, _rgbled_").append(lightAction.getPort()).append(".Color(");
-                ((RgbColor<Void>) lightAction.getRgbLedColor()).getR().accept(this);
+                this.sb.append("_rgbled_").append(lightAction.port).append(".setPixelColor(0, _rgbled_").append(lightAction.port).append(".Color(");
+                ((RgbColor) lightAction.rgbLedColor).R.accept(this);
                 this.sb.append(", ");
-                ((RgbColor<Void>) lightAction.getRgbLedColor()).getG().accept(this);
+                ((RgbColor) lightAction.rgbLedColor).G.accept(this);
                 this.sb.append(", ");
-                ((RgbColor<Void>) lightAction.getRgbLedColor()).getB().accept(this);
+                ((RgbColor) lightAction.rgbLedColor).B.accept(this);
                 this.sb.append("));");
             }
             nlIndent();
-            this.sb.append("_rgbled_").append(lightAction.getPort()).append(".show();");
+            this.sb.append("_rgbled_").append(lightAction.port).append(".show();");
         }
         return null;
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         this.sb
             .append("_rgbled_")
             .append(lightStatusAction.getUserDefinedPort())
@@ -306,44 +306,36 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        this.sb.append("Serial.println(");
-        serialWriteAction.getValue().accept(this);
-        this.sb.append(");");
+    public Void visitRelayAction(RelayAction relayAction) {
         return null;
     }
 
     @Override
-    public Void visitRelayAction(RelayAction<Void> relayAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitKeysSensor(KeysSensor<Void> button) {
+    public Void visitKeysSensor(KeysSensor button) {
         this.sb.append("digitalRead(_button_").append(button.getUserDefinedPort()).append(")");
         return null;
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         this.sb.append("analogRead(_output_").append(lightSensor.getUserDefinedPort()).append(")/10.24");
         return null;
     }
 
     @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> potentiometer) {
+    public Void visitVoltageSensor(VoltageSensor potentiometer) {
         this.sb.append("((double)analogRead(_potentiometer_").append(potentiometer.getUserDefinedPort()).append("))*5/1024");
         return null;
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         this.sb.append("_hcsr04_").append(ultrasonicSensor.getUserDefinedPort()).append(".getDistance()");
         return null;
     }
 
     @Override
-    public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
+    public Void visitHumiditySensor(HumiditySensor humiditySensor) {
         this.sb.append("_hdc1080_").append(humiditySensor.getUserDefinedPort());
         switch ( humiditySensor.getMode() ) {
             case SC.HUMIDITY:
@@ -359,7 +351,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+    public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
         this.sb.append("_bmp280_").append(temperatureSensor.getUserDefinedPort());
         switch ( temperatureSensor.getMode() ) {
             case SC.TEMPERATURE:
@@ -375,7 +367,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitVemlLightSensor(VemlLightSensor<Void> vemlLightSensor) {
+    public Void visitVemlLightSensor(VemlLightSensor vemlLightSensor) {
         switch ( vemlLightSensor.getMode() ) {
             case SC.LIGHT:
                 this.sb.append("_tsl_").append(vemlLightSensor.getUserDefinedPort()).append(".getIlluminance()");
@@ -453,13 +445,13 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
         this.sb.append("_bmx055_").append(accelerometerSensor.getUserDefinedPort()).append(".getAcceleration").append(accelerometerSensor.getMode()).append("()");
         return null;
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
         switch ( gyroSensor.getMode() ) {
             case "X":
                 this.sb.append("_getValueFromBmx(1, 1)");
@@ -475,7 +467,12 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+    public Void visitGyroReset(GyroReset gyroReset) {
+        throw new DbcException("GyroReset not implemented");
+    }
+
+    @Override
+    public Void visitCompassSensor(CompassSensor compassSensor) {
         switch ( compassSensor.getMode() ) {
             case "X":
                 this.sb.append("_getValueFromBmx(1, 2)");
@@ -491,16 +488,16 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
-        switch ( pinWriteValueAction.getMode() ) {
+    public Void visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
+        switch ( pinWriteValueAction.pinValue ) {
             case SC.ANALOG:
-                this.sb.append("analogWrite(_output_").append(pinWriteValueAction.getPort()).append(", ");
-                pinWriteValueAction.getValue().accept(this);
+                this.sb.append("analogWrite(_output_").append(pinWriteValueAction.port).append(", ");
+                pinWriteValueAction.value.accept(this);
                 this.sb.append(");");
                 break;
             case SC.DIGITAL:
-                this.sb.append("digitalWrite(_output_").append(pinWriteValueAction.getPort()).append(", ");
-                pinWriteValueAction.getValue().accept(this);
+                this.sb.append("digitalWrite(_output_").append(pinWriteValueAction.port).append(", ");
+                pinWriteValueAction.value.accept(this);
                 this.sb.append(");");
                 break;
             default:
@@ -510,7 +507,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
+    public Void visitPinGetValueSensor(PinGetValueSensor pinGetValueSensor) {
         switch ( pinGetValueSensor.getMode() ) {
             case SC.ANALOG:
                 this.sb.append("analogRead(_input_").append(pinGetValueSensor.getUserDefinedPort()).append(")");
@@ -525,15 +522,15 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitSendDataAction(SendDataAction<Void> sendDataAction) {
-        if ( sendDataAction.getDestination().equals("SENSEMAP") ) {
-            for ( Pair<String, Expr<Void>> entry : sendDataAction.getId2Phenomena() ) {
+    public Void visitSendDataAction(SendDataAction sendDataAction) {
+        if ( sendDataAction.destination.equals("SENSEMAP") ) {
+            for ( Pair<String, Expr> entry : sendDataAction.id2Phenomena ) {
                 this.sb.append("_osm.uploadMeasurement(");
                 entry.getSecond().accept(this);
                 this.sb.append(", _").append(entry.getFirst()).append(");");
                 nlIndent();
             }
-        } else if ( sendDataAction.getDestination().equals("SDCARD") ) {
+        } else if ( sendDataAction.destination.equals("SDCARD") ) {
             ConfigurationComponent cc = this.configuration.optConfigurationComponentByType(SC.SENSEBOX_SDCARD);
             if ( cc == null ) {
                 return null;
@@ -541,7 +538,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
             String filename = cc.getOptProperty("NAO_FILENAME");
             this.sb.append("_dataFile = SD.open(").append("\"").append(filename).append("\", FILE_WRITE);");
             nlIndent();
-            for ( Pair<String, Expr<Void>> entry : sendDataAction.getId2Phenomena() ) {
+            for ( Pair<String, Expr> entry : sendDataAction.id2Phenomena ) {
                 this.sb.append("_dataFile.print(_").append(entry.getFirst()).append(");");
                 nlIndent();
                 this.sb.append("_dataFile.print(\" : \");");
@@ -559,7 +556,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitParticleSensor(ParticleSensor<Void> particleSensor) {
+    public Void visitParticleSensor(ParticleSensor particleSensor) {
         switch ( particleSensor.getMode() ) {
             case "PM25":
                 this.sb.append("_sds011_").append(particleSensor.getUserDefinedPort()).append(".getPm25()");
@@ -574,14 +571,14 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitGpsSensor(GpsSensor<Void> gpsSensor) {
+    public Void visitGpsSensor(GpsSensor gpsSensor) {
         String mode = gpsSensor.getMode().substring(0, 1) + gpsSensor.getMode().substring(1).toLowerCase();
         this.sb.append("_gps_").append(gpsSensor.getUserDefinedPort()).append(".get").append(mode).append("()");
         return null;
     }
 
     @Override
-    public Void visitEnvironmentalSensor(EnvironmentalSensor<Void> environmentalSensor) {
+    public Void visitEnvironmentalSensor(EnvironmentalSensor environmentalSensor) {
         ConfigurationComponent cc = this.configuration.optConfigurationComponent(environmentalSensor.getUserDefinedPort());
 
         String mode;
@@ -601,9 +598,9 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
 
         this.sb
             .append("_readIaq(_iaqSensor_")
-            .append(cc.getUserDefinedPortName())
+            .append(cc.userDefinedPortName)
             .append(", _iaqSensor_")
-            .append(cc.getUserDefinedPortName())
+            .append(cc.userDefinedPortName)
             .append(".")
             .append(mode)
             .append(")");
@@ -613,11 +610,11 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     private void generateConfigurationSetup() {
         String bmx55PortName;
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
-            switch ( usedConfigurationBlock.getComponentType() ) {
+            switch ( usedConfigurationBlock.componentType ) {
                 case SC.LED:
                     for ( UsedActor usedActor : this.getBean(UsedHardwareBean.class).getUsedActors() ) {
                         if ( usedActor.getType().equals(SC.LED) ) {
-                            this.sb.append("pinMode(_led_").append(usedConfigurationBlock.getUserDefinedPortName()).append(", OUTPUT);");
+                            this.sb.append("pinMode(_led_").append(usedConfigurationBlock.userDefinedPortName).append(", OUTPUT);");
                             nlIndent();
                             break;
                         }
@@ -626,28 +623,28 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.RGBLED:
                     for ( UsedActor usedActor : this.getBean(UsedHardwareBean.class).getUsedActors() ) {
                         if ( usedActor.getType().equals(SC.RGBLED) ) {
-                            this.sb.append("_rgbled_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".begin();");
+                            this.sb.append("_rgbled_").append(usedConfigurationBlock.userDefinedPortName).append(".begin();");
                             this.nlIndent();
                             break;
                         }
                     }
                     break;
                 case SC.KEY:
-                    this.sb.append("pinMode(_button_").append(usedConfigurationBlock.getUserDefinedPortName()).append(", INPUT);");
+                    this.sb.append("pinMode(_button_").append(usedConfigurationBlock.userDefinedPortName).append(", INPUT);");
                     this.nlIndent();
                     break;
                 case SC.HUMIDITY:
-                    this.sb.append("_hdc1080_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".begin();");
+                    this.sb.append("_hdc1080_").append(usedConfigurationBlock.userDefinedPortName).append(".begin();");
                     this.nlIndent();
                     break;
                 case SC.TEMPERATURE:
-                    this.sb.append("_bmp280_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".begin();");
+                    this.sb.append("_bmp280_").append(usedConfigurationBlock.userDefinedPortName).append(".begin();");
                     this.nlIndent();
                     break;
                 case SC.LIGHTVEML:
-                    this.sb.append("_veml_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".begin();");
+                    this.sb.append("_veml_").append(usedConfigurationBlock.userDefinedPortName).append(".begin();");
                     this.nlIndent();
-                    this.sb.append("_tsl_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".begin();");
+                    this.sb.append("_tsl_").append(usedConfigurationBlock.userDefinedPortName).append(".begin();");
                     this.nlIndent();
                     break;
                 case SC.WIRELESS:
@@ -666,7 +663,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.ACCELEROMETER:
                     for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
                         if ( usedSensor.getType().equals(SC.ACCELEROMETER) ) {
-                            this.sb.append("_bmx055_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".beginAcc(0x03);");
+                            this.sb.append("_bmx055_").append(usedConfigurationBlock.userDefinedPortName).append(".beginAcc(0x03);");
                             nlIndent();
                             break;
                         }
@@ -675,7 +672,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.COMPASS:
                     for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
                         if ( usedSensor.getType().equals(SC.COMPASS) ) {
-                            bmx55PortName = this.configuration.optConfigurationComponentByType(SC.ACCELEROMETER).getUserDefinedPortName();
+                            bmx55PortName = this.configuration.optConfigurationComponentByType(SC.ACCELEROMETER).userDefinedPortName;
                             this.sb.append("_bmx055_").append(bmx55PortName).append(".beginMagn();");
                             nlIndent();
                             break;
@@ -685,7 +682,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.GYRO:
                     for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
                         if ( usedSensor.getType().equals(SC.GYRO) ) {
-                            bmx55PortName = this.configuration.optConfigurationComponentByType(SC.ACCELEROMETER).getUserDefinedPortName();
+                            bmx55PortName = this.configuration.optConfigurationComponentByType(SC.ACCELEROMETER).userDefinedPortName;
                             this.sb.append("_bmx055_").append(bmx55PortName).append(".beginGyro();");
                             nlIndent();
                             break;
@@ -709,26 +706,26 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     nlIndent();
                     this.sb.append("delay(2000);");
                     nlIndent();
-                    this.sb.append("_display_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".begin(SSD1306_SWITCHCAPVCC, 0x3D);");
+                    this.sb.append("_display_").append(usedConfigurationBlock.userDefinedPortName).append(".begin(SSD1306_SWITCHCAPVCC, 0x3D);");
                     nlIndent();
-                    this.sb.append("_display_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".display();");
+                    this.sb.append("_display_").append(usedConfigurationBlock.userDefinedPortName).append(".display();");
                     nlIndent();
                     this.sb.append("delay(100);");
                     nlIndent();
-                    this.sb.append("_display_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".clearDisplay();");
+                    this.sb.append("_display_").append(usedConfigurationBlock.userDefinedPortName).append(".clearDisplay();");
                     nlIndent();
                     for ( UsedActor usedActor : this.getBean(UsedHardwareBean.class).getUsedActors() ) {
                         if ( usedActor.getType().equals(SC.SENSEBOX_PLOTTING) ) {
                             this.sb
                                 .append("_plot_")
-                                .append(usedConfigurationBlock.getUserDefinedPortName())
+                                .append(usedConfigurationBlock.userDefinedPortName)
                                 .append(".setTitle(\"")
                                 .append(usedConfigurationBlock.getProperty("TITLE"))
                                 .append("\");");
                             nlIndent();
                             this.sb
                                 .append("_plot_")
-                                .append(usedConfigurationBlock.getUserDefinedPortName())
+                                .append(usedConfigurationBlock.userDefinedPortName)
                                 .append(".setXLabel(\"")
                                 .append(usedConfigurationBlock.getProperty("XLABEL"))
                                 .append("\");");
@@ -736,7 +733,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                             nlIndent();
                             this.sb
                                 .append("_plot_")
-                                .append(usedConfigurationBlock.getUserDefinedPortName())
+                                .append(usedConfigurationBlock.userDefinedPortName)
                                 .append(".setYLabel(\"")
                                 .append(usedConfigurationBlock.getProperty("YLABEL"))
                                 .append("\");");
@@ -744,7 +741,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                             nlIndent();
                             this.sb
                                 .append("_plot_")
-                                .append(usedConfigurationBlock.getUserDefinedPortName())
+                                .append(usedConfigurationBlock.userDefinedPortName)
                                 .append(".setXRange(")
                                 .append(usedConfigurationBlock.getProperty("XSTART"))
                                 .append(", ")
@@ -753,7 +750,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                             nlIndent();
                             this.sb
                                 .append("_plot_")
-                                .append(usedConfigurationBlock.getUserDefinedPortName())
+                                .append(usedConfigurationBlock.userDefinedPortName)
                                 .append(".setYRange(")
                                 .append(usedConfigurationBlock.getProperty("YSTART"))
                                 .append(", ")
@@ -762,23 +759,23 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                             nlIndent();
                             this.sb
                                 .append("_plot_")
-                                .append(usedConfigurationBlock.getUserDefinedPortName())
+                                .append(usedConfigurationBlock.userDefinedPortName)
                                 .append(".setXTick(")
                                 .append(usedConfigurationBlock.getProperty("XTICK"))
                                 .append(");");
                             nlIndent();
                             this.sb
                                 .append("_plot_")
-                                .append(usedConfigurationBlock.getUserDefinedPortName())
+                                .append(usedConfigurationBlock.userDefinedPortName)
                                 .append(".setYTick(")
                                 .append(usedConfigurationBlock.getProperty("YTICK"))
                                 .append(");");
                             nlIndent();
-                            this.sb.append("_plot_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".setXPrecision(0);");
+                            this.sb.append("_plot_").append(usedConfigurationBlock.userDefinedPortName).append(".setXPrecision(0);");
                             nlIndent();
-                            this.sb.append("_plot_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".setYPrecision(0);");
+                            this.sb.append("_plot_").append(usedConfigurationBlock.userDefinedPortName).append(".setYPrecision(0);");
                             nlIndent();
-                            this.sb.append("_plot_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".clear();");
+                            this.sb.append("_plot_").append(usedConfigurationBlock.userDefinedPortName).append(".clear();");
                             nlIndent();
                             break;
                         }
@@ -786,12 +783,12 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     break;
                 case SC.DIGITAL_PIN:
                 case SC.ANALOG_PIN:
-                    this.sb.append("pinMode(_input_" + usedConfigurationBlock.getUserDefinedPortName() + ", INPUT);");
+                    this.sb.append("pinMode(_input_" + usedConfigurationBlock.userDefinedPortName + ", INPUT);");
                     nlIndent();
                     break;
                 case SC.ANALOG_INPUT:
                 case SC.DIGITAL_INPUT:
-                    this.sb.append("pinMode(_output_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
+                    this.sb.append("pinMode(_output_" + usedConfigurationBlock.userDefinedPortName + ", OUTPUT);");
                     nlIndent();
                     break;
                 case SC.PARTICLE:
@@ -804,13 +801,13 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     }
                     break;
                 case SC.GPS:
-                    this.sb.append("_gps_" + usedConfigurationBlock.getUserDefinedPortName() + ".begin();");
+                    this.sb.append("_gps_" + usedConfigurationBlock.userDefinedPortName + ".begin();");
                     nlIndent();
                     break;
                 case SC.ENVIRONMENTAL:
                     this.sb.append("Wire.begin();");
                     nlIndent();
-                    this.sb.append("_iaqSensor_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".begin(BME680_I2C_ADDR_PRIMARY, Wire);");
+                    this.sb.append("_iaqSensor_").append(usedConfigurationBlock.userDefinedPortName).append(".begin(BME680_I2C_ADDR_PRIMARY, Wire);");
                     nlIndent();
                     this.sb.append("bsec_virtual_sensor_t _sensorList[10] = {");
                     incrIndentation();
@@ -840,7 +837,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     nlIndent();
                     this.sb
                         .append("_iaqSensor_")
-                        .append(usedConfigurationBlock.getUserDefinedPortName())
+                        .append(usedConfigurationBlock.userDefinedPortName)
                         .append(".updateSubscription(_sensorList, 10, BSEC_SAMPLE_RATE_LP);");
                     nlIndent();
                     break;
@@ -854,15 +851,15 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.SENSEBOX:
                     break;
                 default:
-                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
+                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.componentType);
             }
         }
     }
 
     private void generateConfigurationVariables() {
         for ( ConfigurationComponent cc : this.configuration.getConfigurationComponentsValues() ) {
-            String blockName = cc.getUserDefinedPortName();
-            switch ( cc.getComponentType() ) {
+            String blockName = cc.userDefinedPortName;
+            switch ( cc.componentType ) {
                 case SC.LED:
                     for ( UsedActor usedActor : this.getBean(UsedHardwareBean.class).getUsedActors() ) {
                         if ( usedActor.getType().equals(SC.LED) ) {
@@ -938,7 +935,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     if ( sensebox != null ) {
                         for ( UsedActor usedActor : this.getBean(UsedHardwareBean.class).getUsedActors() ) {
                             if ( usedActor.getType().equals(SC.SEND_DATA) ) {
-                                this.sb.append("OpenSenseMap _osm(\"").append(sensebox.getUserDefinedPortName()).append("\", _bee_);");
+                                this.sb.append("OpenSenseMap _osm(\"").append(sensebox.userDefinedPortName).append("\", _bee_);");
                                 nlIndent();
                                 break;
                             }
@@ -977,7 +974,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.LCDI2C:
                     this.sb.append("#define OLED_RESET 4");
                     nlIndent();
-                    this.sb.append("Adafruit_SSD1306 _display_").append(cc.getUserDefinedPortName()).append("(OLED_RESET);");
+                    this.sb.append("Adafruit_SSD1306 _display_").append(cc.userDefinedPortName).append("(OLED_RESET);");
                     nlIndent();
                     break;
                 case SC.SENSEBOX_SDCARD:
@@ -1011,7 +1008,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.GYRO:
                     break;
                 case SC.GPS:
-                    this.sb.append("GPS _gps_" + cc.getUserDefinedPortName() + ";");
+                    this.sb.append("GPS _gps_" + cc.userDefinedPortName + ";");
                     nlIndent();
                     break;
                 case SC.PARTICLE:
@@ -1020,7 +1017,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                             this.sb
                                 .append("SDS011 _sds011")
                                 .append("_")
-                                .append(cc.getUserDefinedPortName())
+                                .append(cc.userDefinedPortName)
                                 .append("(")
                                 .append(cc.getProperty("SERIAL"))
                                 .append(");");
@@ -1030,22 +1027,22 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     }
                     break;
                 case SC.ENVIRONMENTAL:
-                    this.sb.append("Bsec _iaqSensor_").append(cc.getUserDefinedPortName()).append(';');
+                    this.sb.append("Bsec _iaqSensor_").append(cc.userDefinedPortName).append(';');
                     nlIndent();
                     break;
                 case SC.ROBOT:
                     break;
                 default:
-                    throw new DbcException("Configuration block is not supported: " + cc.getComponentType());
+                    throw new DbcException("Configuration block is not supported: " + cc.componentType);
             }
         }
         for ( ConfigurationComponent cc : this.configuration.getConfigurationComponentsValues() ) {
-            if ( cc.getComponentType().equals(SC.LCDI2C) ) {
-                String blockName = cc.getUserDefinedPortName();
+            if ( cc.componentType.equals(SC.LCDI2C) ) {
+                String blockName = cc.userDefinedPortName;
                 ConfigurationComponent displayConfigurationComponent = this.configuration.optConfigurationComponentByType(SC.LCDI2C);
                 String displayName;
                 if ( displayConfigurationComponent != null ) {
-                    displayName = displayConfigurationComponent.getUserDefinedPortName();
+                    displayName = displayConfigurationComponent.userDefinedPortName;
                 } else {
                     displayName = "NO PORT";
                 }

@@ -9,9 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import de.fhg.iais.roberta.syntax.SC;
+import org.apache.commons.lang3.StringUtils;
+
+import com.ibm.icu.text.UTF16.StringComparator;
+
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.SC;
 
 /**
  * An AST representation of the old/new configurations. Contains an insertion ordered Map of {@link ConfigurationComponent}s. May have subclasses with hardcoded
@@ -60,7 +65,7 @@ public final class ConfigurationAst {
                     this.componentTypes.add(entry.getKey().split("_")[0]);
                 }
             } else {
-                this.componentTypes.add(confComp.getComponentType());
+                this.componentTypes.add(confComp.componentType);
             }
         }
     }
@@ -68,14 +73,14 @@ public final class ConfigurationAst {
     private static LinkedHashMap<String, ConfigurationComponent> buildConfigurationComponentMap(Iterable<ConfigurationComponent> configurationComponents) {
         LinkedHashMap<String, ConfigurationComponent> map = new LinkedHashMap<>();
         for ( ConfigurationComponent confComp : configurationComponents ) {
-            map.put(confComp.getUserDefinedPortName(), confComp);
+            map.put(confComp.userDefinedPortName, confComp);
         }
         return map;
     }
 
     // TODO add better differentiation
     private static boolean isSuperBlock(ConfigurationComponent confComp) {
-        return confComp.getComponentType().equals("CALLIBOT");
+        return confComp.componentType.equals("CALLIBOT");
     }
 
     public String getRobotName() {
@@ -154,7 +159,7 @@ public final class ConfigurationAst {
 
     public ConfigurationComponent optConfigurationComponentByType(String type) {
         for ( ConfigurationComponent configComp : this.configurationComponents.values() ) {
-            if ( configComp.getComponentType().equals(type) ) {
+            if ( configComp.componentType.equals(type) ) {
                 return configComp;
             }
         }
@@ -176,8 +181,8 @@ public final class ConfigurationAst {
             .values()
             .stream()
             .filter(ConfigurationComponent::isActor)
-            .filter(actor -> type.equals(actor.getComponentType()))
-            .sorted((actor1, actor2) -> Comparator.comparing(ConfigurationComponent::getInternalPortName).compare(actor1, actor2))
+            .filter(actor -> type.equals(actor.componentType))
+            .sorted((actor1, actor2) -> StringUtils.compare(actor1.internalPortName, actor2.internalPortName))
             .collect(Collectors.toList());
     }
 
@@ -227,7 +232,7 @@ public final class ConfigurationAst {
         if ( firstMotor == null ) {
             return null;
         } else {
-            return firstMotor.getUserDefinedPortName();
+            return firstMotor.userDefinedPortName;
         }
     }
 

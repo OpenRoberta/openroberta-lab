@@ -1,48 +1,18 @@
 package de.fhg.iais.roberta.syntax.sensors.arduino.sensebox;
 
-import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
-import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
-import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.F2M;
+import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
-/**
- * This class represents the <b>robSensors_touch_isPressed</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate
- * code for checking if the sensor is pressed.<br/>
- * <br>
- * The client must provide the {@link SensorPort}.<br>
- * <br>
- * To create an instance from this class use the method {@link #make(SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
- */
-public class GpsSensor<V> extends ExternalSensor<V> {
+@NepoExpr(name = "GPS", category = "SENSOR", blocklyNames = {"robSensors_gps_getSample"},
+    sampleValues = {@F2M(field = "GPS_LATITUDE", mode = "LATITUDE"), @F2M(field = "GPS_SPEED", mode = "SPEED"), @F2M(field = "GPS_DATE", mode = "DATE"),
+        @F2M(field = "GPS_TIME", mode = "TIME"), @F2M(field = "GPS_ALTITUDE", mode = "ALTITUDE"), @F2M(field = "GPS_LONGITUDE", mode = "LONGITUDE")})
+public final class GpsSensor extends ExternalSensor {
 
-    private GpsSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(sensorMetaDataBean, BlockTypeContainer.getByName("GPS"), properties, comment);
+    public GpsSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
+        super(properties, externalSensorBean);
         setReadOnly();
-    }
-
-    @Override
-    public String toString() {
-        return "GpsSensor []";
-    }
-
-    public static <V> GpsSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new GpsSensor<>(sensorMetaDataBean, properties, comment);
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
-        SensorMetaDataBean sensorData = extractPortAndModeAndSlot(block, helper);
-        return GpsSensor.make(sensorData, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 }

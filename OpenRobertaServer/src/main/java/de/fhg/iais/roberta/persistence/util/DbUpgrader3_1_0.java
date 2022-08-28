@@ -27,8 +27,8 @@ public class DbUpgrader3_1_0 implements DbUpgraderInterface {
      */
     @Override
     public boolean isUpgradeDone() {
-        Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
-        DbExecutor dbExecutor = DbExecutor.make(nativeSession);
+        Session hibernateSession = this.sessionFactoryWrapper.getHibernateSession();
+        DbExecutor dbExecutor = DbExecutor.make(hibernateSession);
         try {
             int ardus = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from ROBOT where NAME = 'ardu'")).intValue();
             int botnroll = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from ROBOT where NAME = 'botnroll'")).intValue();
@@ -40,7 +40,7 @@ public class DbUpgrader3_1_0 implements DbUpgraderInterface {
                 return true;
             }
         } finally {
-            nativeSession.close();
+            hibernateSession.close();
         }
     }
 
@@ -52,9 +52,8 @@ public class DbUpgrader3_1_0 implements DbUpgraderInterface {
     @Override
     public void run() {
         LOG.info("upgrade of the database starts");
-        Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
-        nativeSession.beginTransaction();
-        DbExecutor dbExecutor = DbExecutor.make(nativeSession);
+        Session hibernateSession = this.sessionFactoryWrapper.getHibernateSession();
+        DbExecutor dbExecutor = DbExecutor.make(hibernateSession);
         LOG.info("inserting 'botnroll' into the ROBOT table");
         dbExecutor.update("insert into ROBOT values (DEFAULT,'botnroll',now,null,0)");
         // TODO: why is 'ardu' inserted. Compatibility reasons?
@@ -64,13 +63,13 @@ public class DbUpgrader3_1_0 implements DbUpgraderInterface {
         } else {
             LOG.info("'ardu' found in the ROBOT table");
         }
-        DbSetup dbSetup = new DbSetup(nativeSession);
+        DbSetup dbSetup = new DbSetup(hibernateSession);
         dbSetup
             .sqlFile(
                 null, //
                 null,
                 "/dbUpgrade/3-1-0.sql");
-        nativeSession.getTransaction().commit();
-        nativeSession.close();
+        hibernateSession.getTransaction().commit();
+        hibernateSession.close();
     }
 }

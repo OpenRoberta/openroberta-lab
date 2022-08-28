@@ -4,8 +4,6 @@ define(["require", "exports"], function (require, exports) {
     var ARobotBehaviour = /** @class */ (function () {
         function ARobotBehaviour() {
             this.hardwareState = {};
-            this.hardwareState.timers = {};
-            this.hardwareState.timers['start'] = Date.now();
             this.hardwareState.actions = {};
             this.hardwareState.sensors = {};
             this.blocking = false;

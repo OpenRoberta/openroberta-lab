@@ -6,30 +6,24 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.mode.action.nao.BodyPart;
 import de.fhg.iais.roberta.mode.general.WorkingState;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>naoActions_PartialStiffnessOn</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate
- * code for removing the stiffness from one part of the robots body.<br/>
- * <br/>
- * The client must provide the {@link BodyPart} (body part in which the motors are released).
- */
-public final class SetStiffness<V> extends Action<V> {
+@NepoBasic(name = "SET_STIFFNESS", category = "ACTOR", blocklyNames = {"naoActions_stiffness"})
+public final class SetStiffness extends Action {
 
-    private final BodyPart bodyPart;
-    private final WorkingState onOff;
+    public final BodyPart bodyPart;
+    public final WorkingState onOff;
 
-    private SetStiffness(BodyPart bodyPart, WorkingState onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("SET_STIFFNESS"), properties, comment);
+    public SetStiffness(BodyPart bodyPart, WorkingState onOff, BlocklyProperties properties) {
+        super(properties);
         Assert.notNull(bodyPart, "Missing body part in SetStiffness block!");
         Assert.notNull(onOff, "Missing onOff in SetStiffness block!");
         this.bodyPart = bodyPart;
@@ -37,40 +31,13 @@ public final class SetStiffness<V> extends Action<V> {
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link SetStiffness}. This instance is read only and can not be modified.
-     *
-     * @param part {@link BodyPart} on which the stiffness is turned off,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link SetStiffness}
-     */
-    private static <V> SetStiffness<V> make(BodyPart bodyPart, WorkingState onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SetStiffness<V>(bodyPart, onOff, properties, comment);
-    }
-
-    public BodyPart getBodyPart() {
-        return this.bodyPart;
-    }
-
-    public WorkingState getOnOff() {
-        return this.onOff;
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
 
         String bodyPart = Jaxb2Ast.extractField(fields, BlocklyConstants.PART);
         String onOff = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
 
-        return SetStiffness.make(BodyPart.get(bodyPart), WorkingState.get(onOff), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new SetStiffness(BodyPart.get(bodyPart), WorkingState.get(onOff), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

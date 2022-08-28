@@ -11,7 +11,7 @@ define(["require", "exports"], function (require, exports) {
                 fill: 'red',
                 stroke: 'black',
                 'stroke-width': 1,
-                transform: "translate(" + position.x + ", " + position.y + ")",
+                transform: "translate(".concat(position.x, ", ").concat(position.y, ")"),
                 r: 3,
             }, parent);
             this.connectedTo = connectedTo;
@@ -22,7 +22,7 @@ define(["require", "exports"], function (require, exports) {
         }
         Port.prototype.moveTo = function (position) {
             this.position_ = position;
-            this.element_.setAttribute('transform', "translate(" + position.x + ", " + position.y + ")");
+            this.element_.setAttribute('transform', "translate(".concat(position.x, ", ").concat(position.y, ")"));
         };
         Object.defineProperty(Port.prototype, "element", {
             get: function () {

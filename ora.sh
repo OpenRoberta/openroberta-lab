@@ -49,9 +49,9 @@ function _export {
          ;;
   esac
   
-  echo 'script for starting the server is copied'
-  cp admin.sh admin-help.txt ${exportpath}
-  chmod ugo+rx admin.sh
+  echo 'script for starting the server is copied (.sh and .bat)'
+  cp admin.sh admin-help.txt admin.bat ${exportpath}
+  chmod ugo+rx admin.sh admin.bat
 }
 
 # ---------------------------------------- begin of the script ----------------------------------------------------

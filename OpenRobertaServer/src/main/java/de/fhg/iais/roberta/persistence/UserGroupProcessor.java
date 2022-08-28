@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.persistence;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,7 @@ import de.fhg.iais.roberta.persistence.dao.UserGroupDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
@@ -91,7 +92,7 @@ public class UserGroupProcessor extends AbstractProcessor {
      *
      * @param groupOwner The user, who's user groups will be returned.
      * @return A list of all user groups that the specified user is the owner of. Returns null, if the specified user is null or is not allowed to own user
-     *         groups.
+     *     groups.
      */
     public List<UserGroup> getGroupsByOwner(User groupOwner) {
         if ( groupOwner == null ) {
@@ -116,7 +117,7 @@ public class UserGroupProcessor extends AbstractProcessor {
      * @param groupName The name the new user group shall have.
      * @param groupOwner The owner of the new user group.
      * @param initialMembers The number of members that shall be generated for the new user group. If a member can not be generated, he is omitted. The actually
-     *        created group might have less members than specified therefore.
+     *     created group might have less members than specified therefore.
      * @return The newly created user group or null, if the user group can not be created
      */
     public UserGroup createGroup(String groupName, User groupOwner, List<String> initialMembers) {
@@ -132,7 +133,6 @@ public class UserGroupProcessor extends AbstractProcessor {
             this.setStatus(ProcessorStatus.FAILED, Key.GROUP_ERROR_MISSING_RIGHTS_TO_BE_GROUP_OWNER, processorParameters);
             return null;
         }
-
         if ( this.userGroupDao.getNumberOfGroupsOfOwner(groupOwner) >= UserGroupProcessor.OWNER_GROUP_LIMIT ) {
             this.setStatus(ProcessorStatus.FAILED, Key.GROUP_CREATE_ERROR_GROUP_LIMIT_REACHED, processorParameters);
             return null;
@@ -156,42 +156,30 @@ public class UserGroupProcessor extends AbstractProcessor {
         }
 
         String accountPrefix = groupName + UserGroupProcessor.GROUP_NAME_DELIMITER;
-        Pattern p = Pattern.compile(UserProcessor.ILLEGAL_USER_NAME_CHARACTER_PATTERN, Pattern.CASE_INSENSITIVE);
-        Matcher illegalCharacterMatcher;
 
         for ( String newMemberName : initialMembers ) {
-            illegalCharacterMatcher = p.matcher(newMemberName);
+            Matcher illegalCharacterMatcher = UserProcessor.ILLEGAL_USER_NAME_CHARACTER_PATTERN.matcher(newMemberName);
             if ( illegalCharacterMatcher.find() ) {
                 this.setStatus(ProcessorStatus.FAILED, Key.USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS, processorParameters);
                 return null;
             }
         }
 
-        this.userGroupDao.lockTable();
-
-        Pair<Key, UserGroup> createStatus = this.userGroupDao.persistGroup(groupName, groupOwner, null);
+        Pair<Key, UserGroup> createStatus = this.userGroupDao.persistGroup(groupName, groupOwner, null); // data base changed
         UserGroup userGroup = createStatus.getSecond();
 
         boolean succeeded = createStatus.getFirst().equals(Key.GROUP_CREATE_SUCCESS) && userGroup != null;
-
         ProcessorStatus status = succeeded ? ProcessorStatus.SUCCEEDED : ProcessorStatus.FAILED;
-
         this.setStatus(status, createStatus.getFirst(), processorParameters);
-
         if ( succeeded ) {
-
-            //TODO: Currently only ADMIN_READ is supported. Implement other visibilities.
+            //TODO Currently only ADMIN_READ is supported. Implement other visibilities.
             userGroup.setAccessRight(AccessRight.ADMIN_READ);
-
             if ( initialMembers.size() > 0 ) {
-
-                String memberAccountName;
-                User member;
-
                 for ( String newMemberName : initialMembers ) {
-                    memberAccountName = accountPrefix + newMemberName;
+                    String memberAccountName = accountPrefix + newMemberName;
                     try {
-                        member = this.userDao.persistUser(userGroup, memberAccountName, memberAccountName, "STUDENT");
+                        User member = this.userDao.persistNewUser(userGroup, memberAccountName, memberAccountName, "STUDENT"); // data base changed
+                        Assert.notNull(member);
                         userGroup.addMember(member);
                     } catch ( Exception e ) {
                         this.setStatus(ProcessorStatus.FAILED, Key.SERVER_ERROR, processorParameters);
@@ -218,34 +206,25 @@ public class UserGroupProcessor extends AbstractProcessor {
 
         Map<String, String> processorParameters = new HashMap<>();
         processorParameters.put("USERGROUP_OWNER", groupOwner.getAccount());
-        int deletedRows;
 
-        this.userGroupDao.lockTable();
+        List<UserGroup> groupsToBeDeletedLater = new ArrayList<>();
 
         for ( String groupName : groupNames ) {
             UserGroup userGroup = this.userGroupDao.load(groupName, groupOwner);
-
-            if ( userGroup == null && groupNames.size() == 1 ) {
+            if ( userGroup == null ) {
                 processorParameters.put("USERGROUP_NAME", groupName);
                 this.setStatus(ProcessorStatus.FAILED, Key.GROUP_DELETE_ERROR_GROUP_DOES_NOT_EXISTS, processorParameters);
                 return;
             }
-
             if ( !deleteIfGroupHasMembers && userGroup.getMembers().size() > 0 ) {
                 this.setStatus(ProcessorStatus.FAILED, Key.GROUP_DELETE_ERROR_GROUP_HAS_MEMBERS, processorParameters);
                 return;
             }
-            deletedRows = this.userGroupDao.delete(groupName, groupOwner);
-
-            //In case the user-group had members, all members will be deleted automatically,
-            //because their user-group foreign key is set to "delete cascade"
-
-            if ( deletedRows != 1 ) {
-                this.setStatus(ProcessorStatus.FAILED, Key.GROUP_DELETE_ERROR, processorParameters);
-                return;
-            }
+            groupsToBeDeletedLater.add(userGroup);
         }
-
+        for ( UserGroup userGroup : groupsToBeDeletedLater ) {
+            this.userGroupDao.delete(userGroup);
+        }
         this.setStatus(ProcessorStatus.SUCCEEDED, Key.GROUP_DELETE_SUCCESS, processorParameters);
     }
 
@@ -266,8 +245,7 @@ public class UserGroupProcessor extends AbstractProcessor {
 
         processorParameters.put("CURRENT_MEMBER_ACCOUNT", member.getAccount());
 
-        Pattern p = Pattern.compile(UserProcessor.ILLEGAL_USER_NAME_CHARACTER_PATTERN, Pattern.CASE_INSENSITIVE);
-        Matcher illegalCharacterMatcher = p.matcher(newAccount);
+        Matcher illegalCharacterMatcher = UserProcessor.ILLEGAL_USER_NAME_CHARACTER_PATTERN.matcher(newAccount);
 
         if ( illegalCharacterMatcher.find() ) {
             this.setStatus(ProcessorStatus.FAILED, Key.USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS, processorParameters);
@@ -296,15 +274,23 @@ public class UserGroupProcessor extends AbstractProcessor {
 
     /**
      * Checks for a given user if he can own a user group. Includes a null check.<br/>
-     * A user can own a group, if:<br/>
-     * - he is not a member of another group <br/>
+     * A user can own a group, if he/she:<br/>
+     * - is not a member of group <br/>
      * - is associated with a validated email address.
      *
-     * @param owner The user who shall be tested
-     * @return True, if the user can own a user group, false otherwise
+     * @param owner The user to be tested
+     * @return true, if the user can own a user group, false otherwise
      */
     protected boolean canOwnGroup(User owner) {
-        return owner != null && owner.getUserGroup() == null && (!this.isPublicServer || owner.getEmail() != null && owner.isActivated());
+        if ( owner == null || owner.getUserGroup() != null ) {
+            return false;
+        } else if ( !this.isPublicServer ) { // test server allow not validated email addresses
+            return true;
+        } else {
+            String email = owner.getEmail();
+            email = email == null ? "" : email;
+            return owner.isActivated() && !email.equals("");
+        }
     }
 
     /**
@@ -396,8 +382,6 @@ public class UserGroupProcessor extends AbstractProcessor {
 
         String accountPrefix = userGroup.getName() + UserGroupProcessor.GROUP_NAME_DELIMITER;
         String memberAccountName;
-        Pattern p = Pattern.compile(UserProcessor.ILLEGAL_USER_NAME_CHARACTER_PATTERN, Pattern.CASE_INSENSITIVE);
-        Matcher illegalCharacterMatcher;
         UserDao userDao = new UserDao(this.dbSession);
         User member;
         for ( String newMemberName : newMemberNames ) {
@@ -407,7 +391,7 @@ public class UserGroupProcessor extends AbstractProcessor {
                 return;
             }
 
-            illegalCharacterMatcher = p.matcher(newMemberName);
+            Matcher illegalCharacterMatcher = UserProcessor.ILLEGAL_USER_NAME_CHARACTER_PATTERN.matcher(newMemberName);
             if ( illegalCharacterMatcher.find() ) {
                 this.setStatus(ProcessorStatus.FAILED, Key.USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS, processorParameters);
                 return;
@@ -425,7 +409,7 @@ public class UserGroupProcessor extends AbstractProcessor {
             newMemberName = newMemberName.trim();
             memberAccountName = accountPrefix + newMemberName;
             try {
-                member = this.userDao.persistUser(userGroup, memberAccountName, memberAccountName, "STUDENT");
+                member = this.userDao.persistNewUser(userGroup, memberAccountName, memberAccountName, "STUDENT");
                 userGroup.addMember(member);
             } catch ( Exception e ) {
                 this.setStatus(ProcessorStatus.FAILED, Key.SERVER_ERROR, processorParameters);

@@ -1,11 +1,10 @@
-import * as exports from 'exports';
 import * as $ from 'jquery';
 import 'bootstrap-table';
 
 // switches for logging:
 var logToLog = true; // log to HTML-list with id #log
 var logToComm = true; // log to server along with the next ajax call
-var logToConsole = false; // log ERROR to console for DEBUGGING
+var logToConsole = true; // log ERROR to console for DEBUGGING
 
 var markerINFO = '[[INFO]] ';
 var markerERROR = '[[ERR ]] ';

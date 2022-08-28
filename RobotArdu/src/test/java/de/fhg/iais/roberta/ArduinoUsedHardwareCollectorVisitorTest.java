@@ -15,18 +15,17 @@ import com.google.common.collect.Lists;
 
 import de.fhg.iais.roberta.bean.ErrorAndWarningBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
-import de.fhg.iais.roberta.visitor.collect.ArduinoUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.validate.ArduinoValidatorAndCollectorVisitor;
 
 public class ArduinoUsedHardwareCollectorVisitorTest {
@@ -48,16 +47,18 @@ public class ArduinoUsedHardwareCollectorVisitorTest {
 
     @Test
     public void testNormal() {
-        List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/collector/all_helper_methods.xml");
+        List<List<Phrase>> phrases = UnitTestHelper.getProgramAst(testFactory, "/collector/all_helper_methods.xml");
 
         ConfigurationAst nanoConfig = makeValidConfig();
         UsedHardwareBean.Builder usedHardwareBeanBuilder = new UsedHardwareBean.Builder();
         UsedMethodBean.Builder usedMethodBeanBuilder = new UsedMethodBean.Builder();
         ErrorAndWarningBean.Builder errorAndWarningBean = new ErrorAndWarningBean.Builder();
-        ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders = ImmutableClassToInstanceMap.<IProjectBean.IBuilder<?>> builder()
+        NNBean.Builder nnBean = new NNBean.Builder();
+        ImmutableClassToInstanceMap<IProjectBean.IBuilder> beanBuilders = ImmutableClassToInstanceMap.<IProjectBean.IBuilder> builder()
             .put(UsedHardwareBean.Builder.class, usedHardwareBeanBuilder)
             .put(UsedMethodBean.Builder.class, usedMethodBeanBuilder)
             .put(ErrorAndWarningBean.Builder.class, errorAndWarningBean)
+            .put(NNBean.Builder.class, nnBean)
             .build();
         ArduinoValidatorAndCollectorVisitor visitor = new ArduinoValidatorAndCollectorVisitor(nanoConfig, beanBuilders);
 

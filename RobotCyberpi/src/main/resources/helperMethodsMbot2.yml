@@ -1,0 +1,30 @@
+include: "classpath:/common.methods.yml"
+
+## FunctionNames
+
+DIFFDRIVEFOR:
+  PYTHON: |
+    def _diffDriveFor(rpmL, rpmR, distance):
+        speedL = rpmL * _circumference / 60
+        speedR = rpmR * _circumference / 60
+        r = (speedL + speedR) * _trackWidth / 2
+        w = speedR / speedL / _trackWidth
+        timeToWait = abs(distance / (r * w))
+        if _diffPortsSwapped:
+            mbot2.drive_speed(-rpmR, RpmL)
+        else:
+            mbot2.drive_speed(rpmL, -rpmR)
+        time.sleep(timeToWait)
+        mbot2.EM_stop()
+
+RGBASSTRING:
+  PYTHON: |
+    def _RGBAsString(rgb):
+        r, g, b = rgb
+        color_diffs = []
+        for color in _colors:
+            cr, cg, cb = _colors[color]
+            color_diff = math.sqrt(abs(r - cr)**2 + abs(g - cg)**2 + abs(b - cb)**2)
+            color_diffs.append((color_diff, color))
+        return min(color_diffs)[1]
+

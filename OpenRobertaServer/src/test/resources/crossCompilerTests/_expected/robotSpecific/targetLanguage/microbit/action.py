@@ -50,6 +50,7 @@ def play():
 def pin():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     microbit.pin1.write_analog(___numberVar);
+    microbit.pin2.write_digital(___numberVar);
 
 def run():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList

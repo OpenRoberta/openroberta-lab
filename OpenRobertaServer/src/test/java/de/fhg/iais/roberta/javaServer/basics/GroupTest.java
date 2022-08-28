@@ -1,8 +1,5 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-
 import java.util.List;
 import java.util.Random;
 
@@ -24,7 +21,9 @@ import de.fhg.iais.roberta.persistence.util.DbExecutor;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.util.basic.Pair;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 @Ignore
 public class GroupTest {
@@ -42,7 +41,7 @@ public class GroupTest {
     @AfterClass
     public static void tearDown() {
         LOG.info("***** show some data in the db");
-        Session session = sessionFactoryWrapper.getNativeSession();
+        Session session = sessionFactoryWrapper.getHibernateSession();
         DbExecutor dbExecutor = DbExecutor.make(session);
         dbExecutor.sqlStmt("select * from USER");
         dbExecutor.sqlStmt("select * from USERGROUP");
@@ -64,7 +63,7 @@ public class GroupTest {
         }
         {
             LOG.info("***** step 2: show that activated = false");
-            Session session = sessionFactoryWrapper.getNativeSession();
+            Session session = sessionFactoryWrapper.getHibernateSession();
             DbExecutor dbExecutor = DbExecutor.make(session);
             dbExecutor.sqlStmt("select ACCOUNT, ACTIVATED from USER where ACCOUNT = 'testUser'");
             session.close();
@@ -95,7 +94,7 @@ public class GroupTest {
         }
         {
             LOG.info("***** step 5: show that activated = true");
-            Session session = sessionFactoryWrapper.getNativeSession();
+            Session session = sessionFactoryWrapper.getHibernateSession();
             DbExecutor dbExecutor = DbExecutor.make(session);
             dbExecutor.sqlStmt("select ACCOUNT, ACTIVATED from USER where ACCOUNT = 'testUser'");
             session.close();

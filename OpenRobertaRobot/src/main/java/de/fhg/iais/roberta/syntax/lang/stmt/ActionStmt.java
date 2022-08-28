@@ -1,38 +1,22 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
  * Wraps subclasses of the class {@link Action} so they can be used as {@link Stmt} in statements.
  */
-public class ActionStmt<V> extends Stmt<V> {
-    private final Action<V> action;
+@NepoBasic(name = "AKTION_STMT", category = "STMT", blocklyNames = {})
+public final class ActionStmt extends Stmt {
+    public final Action action;
 
-    private ActionStmt(Action<V> action) {
-        super(BlockTypeContainer.getByName("AKTION_STMT"), action.getProperty(), action.getComment());
+    public ActionStmt(Action action) {
+        super(action.getProperty());
         Assert.isTrue(action.isReadOnly());
         this.action = action;
         setReadOnly();
-    }
-
-    /**
-     * Create object of the class {@link AssignStmt}.
-     *
-     * @param action that we want to wrap
-     * @return statement with wrapped action inside
-     */
-    public static <V> ActionStmt<V> make(Action<V> action) {
-        return new ActionStmt<V>(action);
-    }
-
-    /**
-     * @return action that is wrapped in the statement
-     */
-    public Action<V> getAction() {
-        return this.action;
     }
 
     @Override
@@ -44,6 +28,6 @@ public class ActionStmt<V> extends Stmt<V> {
 
     @Override
     public Block astToBlock() {
-        return getAction().astToBlock();
+        return this.action.astToBlock();
     }
 }

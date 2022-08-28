@@ -40,54 +40,36 @@
     "type": "COLOR"
   },
   {
-    "opc": "comment",
-    "type": "start",
-    "target": "createMethodCall"
+    "opc": "returnAddress",
+    "target": "rtn_1"
   },
   {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": 11
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 45
+    "opc": "call",
+    "target": "mthd_s_text"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodCall"
+    "text": "call",
+    "label": "rtn_1",
+    "type": "end"
+  },
+  {
+    "opc": "returnAddress",
+    "target": "rtn_2"
+  },
+  {
+    "opc": "call",
+    "target": "mthd_s_colour"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodCall"
+    "text": "call",
+    "label": "rtn_2",
+    "type": "end"
   },
   {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": 15
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 55
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "target": "createMethodCall"
-  },
-  {
-    "opc": "comment",
-    "type": "start",
-    "target": "createMethodCall"
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": 23
+    "opc": "returnAddress",
+    "target": "rtn_3"
   },
   {
     "opc": "expr",
@@ -110,104 +92,81 @@
     "expr": "Var"
   },
   {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 78
+    "opc": "call",
+    "target": "mthd_s_parameters"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodCall"
+    "text": "call",
+    "label": "rtn_3",
+    "type": "end"
+  },
+  {
+    "opc": "returnAddress",
+    "target": "rtn_4"
+  },
+  {
+    "opc": "call",
+    "target": "mthd_s_function_return_numberVar"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodCall"
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": 27
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 95
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "target": "createMethodCall"
+    "text": "call",
+    "label": "rtn_4",
+    "type": "end"
   },
   {"opc": "ShowTextAction"},
   {
-    "opc": "comment",
-    "type": "start",
-    "target": "createMethodCall"
+    "opc": "returnAddress",
+    "target": "rtn_5"
   },
   {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": 32
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 99
+    "opc": "call",
+    "target": "mthd_s_function_return_booleanVar"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodCall"
+    "text": "call",
+    "label": "rtn_5",
+    "type": "end"
   },
   {"opc": "ShowTextAction"},
   {
-    "opc": "comment",
-    "type": "start",
-    "target": "createMethodCall"
+    "opc": "returnAddress",
+    "target": "rtn_6"
   },
   {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": 37
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 103
+    "opc": "call",
+    "target": "mthd_s_function_return_stringVar"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodCall"
+    "text": "call",
+    "label": "rtn_6",
+    "type": "end"
   },
   {"opc": "ShowTextAction"},
   {
-    "opc": "comment",
-    "type": "start",
-    "target": "createMethodCall"
+    "opc": "returnAddress",
+    "target": "rtn_7"
   },
   {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": 42
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 107
+    "opc": "call",
+    "target": "mthd_s_function_return_colourVar"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodCall"
+    "text": "call",
+    "label": "rtn_7",
+    "type": "end"
   },
   {"opc": "ShowTextAction"},
   {"opc": "stop"},
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "label": "mthd_s_text",
+    "type": "start"
   },
   {
     "opc": "expr",
@@ -235,18 +194,25 @@
   },
   {"opc": "ShowTextAction"},
   {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_8",
+    "type": "start"
+  },
+  {
     "opc": "return",
     "values": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "type": "end"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "label": "mthd_s_colour",
+    "type": "start"
   },
   {
     "opc": "expr",
@@ -339,18 +305,25 @@
     "name": "colourVar"
   },
   {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_9",
+    "type": "start"
+  },
+  {
     "opc": "return",
     "values": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "type": "end"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "label": "mthd_s_parameters",
+    "type": "start"
   },
   {
     "opc": "VarDeclaration",
@@ -374,8 +347,9 @@
   },
   {
     "opc": "comment",
+    "text": "createMethodIfReturn",
     "type": "start",
-    "target": "createMethodIfReturn"
+    "n": 10
   },
   {
     "opc": "expr",
@@ -385,7 +359,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 88
+    "target": "rtn_11"
   },
   {
     "opc": "expr",
@@ -394,12 +368,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 89
+    "target": "mthd_e_10"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodIfReturn"
+    "text": "createMethodIfReturn",
+    "label": "rtn_11",
+    "type": "end"
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_10",
+    "type": "start"
   },
   {
     "opc": "unbindVar",
@@ -423,13 +404,14 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "type": "end"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodReturn"
+    "text": "createMethodReturn",
+    "label": "mthd_s_function_return_numberVar",
+    "type": "start"
   },
   {
     "opc": "expr",
@@ -437,18 +419,25 @@
     "expr": "Var"
   },
   {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_12",
+    "type": "start"
+  },
+  {
     "opc": "return",
     "values": true
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodReturn"
+    "text": "createMethodReturn",
+    "type": "end"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodReturn"
+    "text": "createMethodReturn",
+    "label": "mthd_s_function_return_booleanVar",
+    "type": "start"
   },
   {
     "opc": "expr",
@@ -456,18 +445,25 @@
     "expr": "Var"
   },
   {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_13",
+    "type": "start"
+  },
+  {
     "opc": "return",
     "values": true
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodReturn"
+    "text": "createMethodReturn",
+    "type": "end"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodReturn"
+    "text": "createMethodReturn",
+    "label": "mthd_s_function_return_stringVar",
+    "type": "start"
   },
   {
     "opc": "expr",
@@ -475,18 +471,25 @@
     "expr": "Var"
   },
   {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_14",
+    "type": "start"
+  },
+  {
     "opc": "return",
     "values": true
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodReturn"
+    "text": "createMethodReturn",
+    "type": "end"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodReturn"
+    "text": "createMethodReturn",
+    "label": "mthd_s_function_return_colourVar",
+    "type": "start"
   },
   {
     "opc": "expr",
@@ -494,12 +497,18 @@
     "expr": "Var"
   },
   {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_15",
+    "type": "start"
+  },
+  {
     "opc": "return",
     "values": true
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodReturn"
+    "text": "createMethodReturn",
+    "type": "end"
   }
 ]}

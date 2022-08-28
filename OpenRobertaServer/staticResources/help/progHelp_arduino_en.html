@@ -102,8 +102,12 @@
                 <li class="typcn typcn-arrow-sorted-down"><span><span>Port, choose the configuration, in which you set
                             the pins you connected</span> the display to.</span></li>
                 <li class="typcn typcn-arrow-left">Text, to be shown on the display.</li>
-                <li class="typcn typcn-arrow-left">number, column-id the text is going to be shown.</li>
-                <li class="typcn typcn-arrow-left">number, row-id, the text should start at.</li>
+                <li class="typcn typcn-arrow-left">number, column-id the text is going to be shown. <span
+                        style="color: rgb(51,51,51);">This value will be internally clipped to be between 0 and
+                        15.</span></li>
+                <li class="typcn typcn-arrow-left">number, row-id, the text should start at. <span
+                        style="color: rgb(51,51,51);">This value will be internally clipped to be between 0 and
+                        1.</span></li>
             </ul>
         </div>
         <div id="robActions_display_clear" class="help expert">
@@ -132,8 +136,12 @@
                 <li class="typcn typcn-arrow-sorted-down"><span>Port, choose the configuration, in which you set the
                         pins you connected</span> the display to.</li>
                 <li class="typcn typcn-arrow-left">Text, to be shown on the display.</li>
-                <li class="typcn typcn-arrow-left">number, column-id the text is going to be shown.</li>
-                <li class="typcn typcn-arrow-left">number, row-id, the text should start at.</li>
+                <li class="typcn typcn-arrow-left">number, column-id the text is going to be shown. <span
+                        style="color: rgb(51,51,51);">This value will be internally clipped to be between 0 and
+                        15.</span></li>
+                <li class="typcn typcn-arrow-left">number, row-id, the text should start at. <span
+                        style="color: rgb(51,51,51);">This value will be internally clipped to be between 0 and
+                        1.</span></li>
             </ul>
         </div>
         <div id="robActions_display_clear_i2c" class="help beginner">
@@ -152,15 +160,17 @@
             <h3 class="auto-cursor-target" id="ProgrammingBlocksArduino-»OLEDSSD1306I²Cshowtext...incolumn...inrow...«">
                 »OLED SSD 1306 I²C show text ... in column ... in row ... «</h3>
             <p>With this block you can display a text on the OLED SSD 1306 display, which can be connected via I²C to
-                your Arduino. This display has 100 columns and 50 rows.</p>
+                your Arduino. This display has 128 by either 32 or 64 pixels. Because each character is 7 by 5 pixels
+                large, this results in an effective size of 122 columns and either 24 or 56 rows depending on the
+                display size.</p>
             <p>Input values:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-left">String, the text that you want display.</li>
                 <li class="typcn typcn-arrow-left">Number, the column in which the text will be displayed. Number
-                    between 0 and 100.</li>
+                    between 0 and 122.</li>
                 <li class="typcn typcn-arrow-left">Number, the row in which the text will be displayed. Number between 0
-                    and 50.</li>
+                    and 24 or 56 depending on the display.</li>
             </ul><br>
         </div>
         <div id="robActions_display_clear_oledssd1306i2c" class="help expert">
@@ -239,7 +249,9 @@
                     an analog value to an actuator. (By changing this option the pickable actuators change)</li>
                 <li class="typcn typcn-arrow-sorted-down"><span><span>Port, choose the configuration, in which you set
                             the pins you connected</span> the actuator to.</span></li>
-                <li class="typcn typcn-arrow-left">Number, value to be written.</li>
+                <li class="typcn typcn-arrow-left">Number, value to be written. Either 0 or 1 when using digital or
+                    between 0 and 1023 when using analog signals. This value will be internally clipped between 0 and
+                    1023.</li>
             </ul><br>
         </div>
         <div id="robSensors_out_getSample" class="help beginner">

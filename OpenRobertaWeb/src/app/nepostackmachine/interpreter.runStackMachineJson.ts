@@ -76,7 +76,8 @@ function processOps(fileName: string) {
             function () {
                 callbackOnTermination(fileName);
             },
-            []
+            [],
+            fileName
         );
         while (!interpreter.isTerminated()) {
             interpreter.run(new Date().getTime() + MAX_MSEC_TO_RUN);

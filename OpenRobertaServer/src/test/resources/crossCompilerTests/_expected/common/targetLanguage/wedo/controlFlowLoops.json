@@ -25,8 +25,9 @@
   },
   {
     "opc": "comment",
+    "text": "RepeatStmt",
     "type": "start",
-    "target": "RepeatStmt"
+    "n": 1
   },
   {
     "opc": "expr",
@@ -37,6 +38,11 @@
     "opc": "VarDeclaration",
     "name": "k0",
     "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_1"
   },
   {
     "opc": "expr",
@@ -56,7 +62,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 21
+    "target": "r_e_1"
   },
   {
     "opc": "expr",
@@ -76,6 +82,11 @@
   {
     "opc": "AssignStmt",
     "name": "x"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_c_1"
   },
   {
     "opc": "expr",
@@ -99,7 +110,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 8
+    "target": "r_l_1"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_e_1"
   },
   {
     "opc": "unbindVar",
@@ -107,13 +123,14 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "type": "end"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_l_2",
+    "type": "start"
   },
   {
     "opc": "expr",
@@ -138,7 +155,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 34
+    "target": "r_e_2"
   },
   {
     "opc": "expr",
@@ -162,17 +179,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 24
+    "target": "r_l_2"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_e_2",
+    "type": "end"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_l_3",
+    "type": "start"
   },
   {
     "opc": "expr",
@@ -192,7 +211,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 45
+    "target": "r_e_3"
   },
   {
     "opc": "expr",
@@ -216,17 +235,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 36
+    "target": "r_l_3"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_e_3",
+    "type": "end"
   },
   {
     "opc": "comment",
+    "text": "RepeatStmt",
     "type": "start",
-    "target": "RepeatStmt"
+    "n": 4
   },
   {
     "opc": "expr",
@@ -237,6 +258,11 @@
     "opc": "VarDeclaration",
     "name": "i",
     "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_4"
   },
   {
     "opc": "expr",
@@ -256,7 +282,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 62
+    "target": "r_e_4"
   },
   {
     "opc": "expr",
@@ -276,6 +302,11 @@
   {
     "opc": "AssignStmt",
     "name": "x"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_c_4"
   },
   {
     "opc": "expr",
@@ -299,7 +330,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 49
+    "target": "r_l_4"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_e_4"
   },
   {
     "opc": "unbindVar",
@@ -307,13 +343,14 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "type": "end"
   },
   {
     "opc": "comment",
+    "text": "RepeatStmt",
     "type": "start",
-    "target": "RepeatStmt"
+    "n": 5
   },
   {
     "opc": "expr",
@@ -324,6 +361,11 @@
     "opc": "VarDeclaration",
     "name": "j",
     "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_5"
   },
   {
     "opc": "expr",
@@ -343,7 +385,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 80
+    "target": "r_e_5"
   },
   {
     "opc": "expr",
@@ -363,6 +405,11 @@
   {
     "opc": "AssignStmt",
     "name": "x"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_c_5"
   },
   {
     "opc": "expr",
@@ -386,7 +433,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 67
+    "target": "r_l_5"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_e_5"
   },
   {
     "opc": "unbindVar",
@@ -394,13 +446,14 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "type": "end"
   },
   {
     "opc": "comment",
+    "text": "RepeatStmt",
     "type": "start",
-    "target": "RepeatStmt"
+    "n": 6
   },
   {
     "opc": "expr",
@@ -411,6 +464,11 @@
     "opc": "VarDeclaration",
     "name": "k",
     "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_6"
   },
   {
     "opc": "expr",
@@ -430,7 +488,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 98
+    "target": "r_e_6"
   },
   {
     "opc": "expr",
@@ -450,6 +508,11 @@
   {
     "opc": "AssignStmt",
     "name": "x"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_c_6"
   },
   {
     "opc": "expr",
@@ -473,7 +536,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 85
+    "target": "r_l_6"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_e_6"
   },
   {
     "opc": "unbindVar",
@@ -481,13 +549,14 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "type": "end"
   },
   {
     "opc": "comment",
+    "text": "RepeatStmt",
     "type": "start",
-    "target": "RepeatStmt"
+    "n": 7
   },
   {
     "opc": "expr",
@@ -498,6 +567,11 @@
     "opc": "VarDeclaration",
     "name": "o",
     "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_7"
   },
   {
     "opc": "expr",
@@ -517,7 +591,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 116
+    "target": "r_e_7"
   },
   {
     "opc": "expr",
@@ -537,6 +611,11 @@
   {
     "opc": "AssignStmt",
     "name": "x"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_c_7"
   },
   {
     "opc": "expr",
@@ -560,7 +639,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 103
+    "target": "r_l_7"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_e_7"
   },
   {
     "opc": "unbindVar",
@@ -568,13 +652,14 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "type": "end"
   },
   {
     "opc": "comment",
+    "text": "RepeatStmt",
     "type": "start",
-    "target": "RepeatStmt"
+    "n": 8
   },
   {
     "opc": "expr",
@@ -585,6 +670,11 @@
     "opc": "VarDeclaration",
     "name": "p",
     "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_8"
   },
   {
     "opc": "expr",
@@ -604,7 +694,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 134
+    "target": "r_e_8"
   },
   {
     "opc": "expr",
@@ -624,6 +714,11 @@
   {
     "opc": "AssignStmt",
     "name": "x"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_c_8"
   },
   {
     "opc": "expr",
@@ -647,7 +742,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 121
+    "target": "r_l_8"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_e_8"
   },
   {
     "opc": "unbindVar",
@@ -655,13 +755,14 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "type": "end"
   },
   {
     "opc": "comment",
+    "text": "RepeatStmt",
     "type": "start",
-    "target": "RepeatStmt"
+    "n": 9
   },
   {
     "opc": "expr",
@@ -672,6 +773,11 @@
     "opc": "VarDeclaration",
     "name": "m",
     "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_9"
   },
   {
     "opc": "expr",
@@ -691,7 +797,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 156
+    "target": "r_e_9"
   },
   {
     "opc": "expr",
@@ -732,6 +838,11 @@
     "name": "x"
   },
   {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_c_9"
+  },
+  {
     "opc": "expr",
     "name": "y",
     "expr": "Var"
@@ -753,7 +864,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 139
+    "target": "r_l_9"
+  },
+  {
+    "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_e_9"
   },
   {
     "opc": "unbindVar",
@@ -761,18 +877,30 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "type": "end"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_s_10",
+    "type": "start"
   },
   {
     "opc": "comment",
+    "text": "RepeatStmt",
+    "label": "r_l_10"
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
     "type": "start",
-    "target": "IfStatement"
+    "n": 11
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_0_11"
   },
   {
     "opc": "expr",
@@ -792,7 +920,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 179
+    "target": "i_1_11"
   },
   {
     "opc": "expr",
@@ -815,8 +943,14 @@
   },
   {
     "opc": "comment",
+    "text": "IfStatement",
     "type": "start",
-    "target": "IfStatement"
+    "n": 12
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_0_12"
   },
   {
     "opc": "expr",
@@ -826,22 +960,28 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 173
+    "target": "i_1_12"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 159
+    "target": "r_l_10"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 173
+    "target": "i_e_12"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "IfStatement",
+    "label": "i_1_12"
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_e_12",
+    "type": "end"
   },
   {
     "opc": "expr",
@@ -865,7 +1005,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 185
+    "target": "i_e_11"
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_1_11"
   },
   {
     "opc": "expr",
@@ -885,32 +1030,39 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 185
+    "target": "i_2_11"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 187
+    "target": "r_e_10"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 185
+    "target": "i_e_11"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "IfStatement"
+    "text": "IfStatement",
+    "label": "i_2_11"
+  },
+  {
+    "opc": "comment",
+    "text": "IfStatement",
+    "label": "i_e_11",
+    "type": "end"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 159
+    "target": "r_s_10"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "RepeatStmt"
+    "text": "RepeatStmt",
+    "label": "r_e_10",
+    "type": "end"
   },
   {
     "opc": "comment",

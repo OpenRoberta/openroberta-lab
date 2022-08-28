@@ -4,11 +4,6 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
@@ -16,33 +11,25 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents the <b>naoSensors_getFaceInformation</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate
  * code for detecting a NaoMark.<br/>
  * <br/>
  */
-public final class DetectedFaceInformation<V> extends Sensor<V> {
+@NepoBasic(name = "NAO_FACE_INFORMATION", category = "SENSOR", blocklyNames = {"naoSensors_getFaceInformation"})
+public final class DetectedFaceInformation extends Sensor {
 
-    private final Expr<V> faceName;
+    public final Expr faceName;
 
-    private DetectedFaceInformation(Expr<V> faceName, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("NAO_FACE_INFORMATION"), properties, comment);
+    public DetectedFaceInformation(Expr faceName, BlocklyProperties properties) {
+        super(properties);
         this.faceName = faceName;
         setReadOnly();
-    }
-
-    /**
-     * Creates instance of {@link DetectedFaceInformation}. This instance is read only and can not be modified.
-     *
-     * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link DetectedFaceInformation}
-     */
-    static <V> DetectedFaceInformation<V> make(Expr<V> savedFace, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new DetectedFaceInformation<>(savedFace, properties, comment);
     }
 
     @Override
@@ -50,21 +37,10 @@ public final class DetectedFaceInformation<V> extends Sensor<V> {
         return "DetectedFaceInformation [" + this.faceName + "]";
     }
 
-    public Expr<V> getFaceName() {
-        return this.faceName;
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
-        Phrase<V> faceName = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
-        return DetectedFaceInformation.make(Jaxb2Ast.convertPhraseToExpr(faceName), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        Phrase faceName = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
+        return new DetectedFaceInformation(Jaxb2Ast.convertPhraseToExpr(faceName), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

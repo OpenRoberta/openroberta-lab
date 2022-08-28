@@ -1,0 +1,6 @@
+
+(repeat [FOREVER_ARDU, BoolConst[value: true]]
+if Binary [LTE, FunctionExpr [MathRandomIntFunct [[NumConst[value: 1], NumConst[value: 25]]]], NumConst[value: 5]]
+,thenMethodStmt [MethodCall [beleuchten, Var [farbe], ColorConst[hexValue: #FF0000], VOID]]
+MethodStmt [MethodCall [ausmachen, , , VOID]]
+)

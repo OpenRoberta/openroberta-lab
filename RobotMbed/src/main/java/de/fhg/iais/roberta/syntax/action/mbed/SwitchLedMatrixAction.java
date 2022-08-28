@@ -4,40 +4,24 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.util.syntax.SC;
 
-public class SwitchLedMatrixAction<V> extends Action<V> {
-    private final boolean activated;
+@NepoBasic(name = "SWITCH_LED_MATRIX", category = "ACTOR", blocklyNames = {"mbedActions_switch_led_matrix"})
+public final class SwitchLedMatrixAction extends Action {
+    public final boolean activated;
 
-    private SwitchLedMatrixAction(boolean activated, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("SWITCH_LED_MATRIX"), properties, comment);
+    public SwitchLedMatrixAction(BlocklyProperties properties, boolean activated) {
+        super(properties);
         this.activated = activated;
         setReadOnly();
-    }
-
-    /**
-     * Create object of the class {@link SwitchLedMatrixAction}.
-     *
-     * @param state state of the leds
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of {@link SwitchLedMatrixAction}
-     */
-    public static <V> SwitchLedMatrixAction<V> make(boolean activated, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SwitchLedMatrixAction<>(activated, properties, comment);
-    }
-
-    public boolean isActivated() {
-        return this.activated;
     }
 
     @Override
@@ -45,18 +29,11 @@ public class SwitchLedMatrixAction<V> extends Action<V> {
         return "SwitchLedMatrixAction [" + this.activated + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
 
         boolean activated = Jaxb2Ast.extractField(fields, BlocklyConstants.STATE).equals("ON");
-        return SwitchLedMatrixAction.make(activated, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new SwitchLedMatrixAction(Jaxb2Ast.extractBlocklyProperties(block), activated);
     }
 
     @Override

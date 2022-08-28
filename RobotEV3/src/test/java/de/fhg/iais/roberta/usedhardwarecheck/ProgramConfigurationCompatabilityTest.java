@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.Ev3LejosAstTest;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
@@ -31,7 +31,7 @@ public class ProgramConfigurationCompatabilityTest extends Ev3LejosAstTest {
         final ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, touchSensor, ultrasonicSensor));
 
-        Project.Builder builder1 = UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/visitors/program_config_compatibility.xml"));
+        Project.Builder builder1 = UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory, Util.readResourceContent("/visitors/program_config_compatibility.xml"));
         builder1.setConfigurationAst(builder.build());
         Ev3ValidatorAndCollectorWorker worker = new Ev3ValidatorAndCollectorWorker();
         Project project = builder1.build();
@@ -58,7 +58,7 @@ public class ProgramConfigurationCompatabilityTest extends Ev3LejosAstTest {
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, touchSensor, colorSensor, gyroSensor, ultrasonicSensor));
 
         Project.Builder builder1 =
-            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/visitors" + "/program_config_compatibility_gyro_touch_ultra_color.xml"));
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory, Util.readResourceContent("/visitors" + "/program_config_compatibility_gyro_touch_ultra_color.xml"));
         builder1.setConfigurationAst(builder.build());
         Ev3ValidatorAndCollectorWorker worker = new Ev3ValidatorAndCollectorWorker();
         Project project = builder1.build();

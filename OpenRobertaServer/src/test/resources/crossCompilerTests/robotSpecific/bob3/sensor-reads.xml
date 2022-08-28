@@ -11,11 +11,21 @@
               <mutation next="true" declaration_type="Boolean"/>
               <field name="VAR">b</field>
               <field name="TYPE">Boolean</field>
+              <value name="VALUE">
+                <block type="logic_boolean" id="Jg/PXVr%Hv(fXE8-4,K{" intask="true">
+                  <field name="BOOL">TRUE</field>
+                </block>
+              </value>
             </block>
             <block type="robGlobalVariables_declare" id="er=yfbM1!AwLxNHxB:+x" intask="true" deletable="false" movable="false">
               <mutation next="false" declaration_type="Number"/>
               <field name="VAR">c</field>
               <field name="TYPE">Number</field>
+              <value name="VALUE">
+                <block type="math_number" id="h2qJMeUl:JTqD9F(,((5" intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
             </block>
           </statement>
         </block>

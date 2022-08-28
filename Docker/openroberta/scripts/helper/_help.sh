@@ -2,7 +2,7 @@
 
 echo "run.sh [-q] [-yes] [-D]                                              be quiet, answer all questions with 'y', debug mode"
 echo "       help                                                          this text"
-echo "       gen <server> | start <server> | stop <server>                 gen builds image; start first tries to stop, then (re-)starts the server; stop stops the server"
+echo "       gen <server> | start <server> <-rdbg>| stop <server>          gen builds image; start first tries to stop, then (re-)starts the server; stop stops the server"
 echo "       from-hub <server> <repo-name>                                 loads an image from a hub. A repo-name is 'openroberta/server_<x64-or-arm32v7>:<version-as-3.9.0>"
 echo "       deploy <server>                                               deploy first calls gen, then calls start"
 echo "       admin <server> <admin-cmd>                                    execute admin command on server, e.g. 'cleanup-temp-user-dirs'"

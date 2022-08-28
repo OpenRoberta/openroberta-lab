@@ -1,9 +1,7 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -11,7 +9,7 @@ import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -21,7 +19,7 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
@@ -47,7 +45,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
-import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
+import de.fhg.iais.roberta.util.syntax.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
@@ -83,8 +81,8 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.dbc.VisitorException;
+import de.fhg.iais.roberta.visitor.INxtVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.INxtVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
 /**
@@ -101,14 +99,14 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
      * @param brickConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
      */
-    public NxtNxcVisitor(List<List<Phrase<Void>>> programPhrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
+    public NxtNxcVisitor(List<List<Phrase>> programPhrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
         this.brickConfiguration = brickConfiguration;
     }
 
     @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
-        String color = "";
+    public Void visitColorConst(ColorConst colorConst) {
+        String color;
         switch ( colorConst.getHexValueAsString().toUpperCase() ) {
             case "#000000":
                 color = "BLACK";
@@ -162,28 +160,19 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         return null;
     }
 
-    protected Void generateUsedVars() {
-        for ( VarDeclaration<Void> var : this.getBean(UsedHardwareBean.class).getVisitedVars() ) {
+    private Void generateUsedVars() {
+        for ( VarDeclaration var : this.getBean(UsedHardwareBean.class).getVisitedVars() ) {
             nlIndent();
-            if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                if ( var.getTypeVar().isArray() ) {
-                    this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
-                    this.sb.append("__");
+            if ( !var.value.getKind().hasName("EMPTY_EXPR") ) {
+                if ( var.typeVar.isArray() ) {
+                    this.sb.append(getLanguageVarTypeFromBlocklyType(var.typeVar)).append(" ").append("__");
                 }
-                this.sb.append("___" + var.getName());
-                this.sb.append(var.getTypeVar().isArray() ? "[]" : "");
-                this.sb.append(" = ");
-                var.getValue().accept(this);
+                this.sb.append("___").append(var.name).append(var.typeVar.isArray() ? "[]" : "").append(" = ");
+                var.value.accept(this);
                 this.sb.append(";");
-                if ( var.getTypeVar().isArray() ) {
+                if ( var.typeVar.isArray() ) {
                     nlIndent();
-                    //this.sb.append("for(int i = 0; i < ArrayLen(" + var.getName() + "); i++) {");
-                    //incrIndentation();
-                    //nlIndent();
-                    this.sb.append("___" + var.getName()).append(" = _____" + var.getName() + ";");
-                    //decrIndentation();
-                    //nlIndent();
-                    //this.sb.append("}");
+                    this.sb.append("___").append(var.name).append(" = _____").append(var.name).append(";");
                 }
             }
         }
@@ -191,32 +180,29 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
-        this.sb.append(var.getCodeSafeName());
-        if ( var.getTypeVar().isArray() ) {
+    public Void visitVarDeclaration(VarDeclaration var) {
+        this.sb.append(getLanguageVarTypeFromBlocklyType(var.typeVar)).append(" ").append(var.getCodeSafeName());
+        if ( var.typeVar.isArray() ) {
             this.sb.append("[");
-            if ( var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                // nothing to do
-            } else {
-                ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                this.sb.append(list.getValue().get().size());
+            if ( !var.value.getKind().hasName("EMPTY_EXPR") ) {
+                ListCreate list = (ListCreate) var.value;
+                this.sb.append(list.exprList.get().size());
             }
             this.sb.append("]");
         }
         return null;
     }
 
-    //TODO: fix the string concatenation
     @Override
-    public Void visitBinary(Binary<Void> binary) {
-        Op op = binary.getOp();
-        if ( op == Op.ADD || op == Op.MINUS || op == Op.DIVIDE || op == Op.MULTIPLY ) {
+    public Void visitBinary(Binary binary) {
+        Op op = binary.op;
+        boolean isOpBasicMaths = op == Op.ADD || op == Op.MINUS || op == Op.DIVIDE || op == Op.MULTIPLY;
+        if ( isOpBasicMaths ) {
             this.sb.append("(");
         }
-        generateSubExpr(this.sb, false, binary.getLeft(), binary);
+        generateSubExpr(this.sb, false, binary.left, binary);
         String sym = getBinaryOperatorSymbol(op);
-        this.sb.append(whitespace() + sym + whitespace());
+        this.sb.append(" ").append(sym).append(" ");
         switch ( op ) {
             case TEXT_APPEND:
                 if ( binary.getRight().getVarType().toString().contains("NUMBER") ) {
@@ -232,56 +218,49 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
                 this.sb.append(")*1.0)");
                 break;
-
             default:
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
-        if ( op == Op.ADD || op == Op.MINUS || op == Op.DIVIDE || op == Op.MULTIPLY ) {
+        if ( isOpBasicMaths ) {
             this.sb.append(")");
         }
         return null;
     }
 
     @Override
-    public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
-        boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
-        switch ( repeatStmt.getMode() ) {
+    public Void visitRepeatStmt(RepeatStmt repeatStmt) {
+        boolean isWaitStmt = repeatStmt.mode == RepeatStmt.Mode.WAIT;
+        switch ( repeatStmt.mode ) {
             case UNTIL:
             case WHILE:
             case FOREVER:
                 increaseLoopCounter();
-                generateCodeFromStmtCondition("while", repeatStmt.getExpr());
+                generateCodeFromStmtCondition("while", repeatStmt.expr);
                 break;
             case TIMES:
             case FOR:
                 increaseLoopCounter();
-                generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
+                generateCodeFromStmtConditionFor("for", repeatStmt.expr);
                 break;
             case WAIT:
-                generateCodeFromStmtCondition("if", repeatStmt.getExpr());
+                generateCodeFromStmtCondition("if", repeatStmt.expr);
                 break;
             case FOR_EACH:
                 increaseLoopCounter();
-                ((VarDeclaration<Void>) ((Binary<Void>) repeatStmt.getExpr()).getLeft()).accept(this);
+                ((Binary) repeatStmt.expr).left.accept(this);
                 this.sb.append(";");
                 nlIndent();
-                this.sb.append("for(int ___i = 0; ___i < ArrayLen(___");
-                this.sb.append(((Var<Void>) ((Binary<Void>) repeatStmt.getExpr()).getRight()).getValue());
-                this.sb.append("); ++___i) {");
+                this.sb.append("for(int ___i = 0; ___i < ArrayLen(___").append(((Var) ((Binary) repeatStmt.expr).getRight()).name).append("); ++___i) {");
                 incrIndentation();
                 nlIndent();
-                this.sb.append("___");
-                this.sb.append(((VarDeclaration<Void>) ((Binary<Void>) repeatStmt.getExpr()).getLeft()).getName());
-                this.sb.append(" = ___");
-                this.sb.append(((Var<Void>) ((Binary<Void>) repeatStmt.getExpr()).getRight()).getValue());
-                this.sb.append("[___i];");
+                this.sb.append("___").append(((VarDeclaration) ((Binary) repeatStmt.expr).left).name).append(" = ___").append(((Var) ((Binary) repeatStmt.expr).getRight()).name).append("[___i];");
                 decrIndentation();
                 break;
             case FOREVER_ARDU:
                 throw new DbcException("FOREVER_ARDU is invalid with nxt");
         }
         incrIndentation();
-        repeatStmt.getList().accept(this);
+        repeatStmt.list.accept(this);
         if ( !isWaitStmt ) {
             addContinueLabelToLoop();
         } else {
@@ -296,10 +275,10 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
+    public Void visitWaitStmt(WaitStmt waitStmt) {
         this.sb.append("while (true) {");
         incrIndentation();
-        visitStmtList(waitStmt.getStatements());
+        visitStmtList(waitStmt.statements);
         nlIndent();
         this.sb.append("Wait(15);");
         decrIndentation();
@@ -309,28 +288,27 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+    public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         this.sb.append("Wait(");
-        waitTimeStmt.getTime().accept(this);
+        waitTimeStmt.time.accept(this);
         this.sb.append(");");
         return null;
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+    public Void visitShowTextAction(ShowTextAction showTextAction) {
         this.sb.append(NxtNxcVisitor.getMethodForShowText(showTextAction));
         this.sb.append("(");
         showTextAction.x.accept(this);
         this.sb.append(", (MAXLINES - ");
         showTextAction.y.accept(this);
-
         this.sb.append(") * MAXLINES, ");
         showTextAction.msg.accept(this);
         this.sb.append(");");
         return null;
     }
 
-    public static String getMethodForShowText(ShowTextAction<Void> showTextAction) {
+    public static String getMethodForShowText(ShowTextAction showTextAction) {
         String methodName;
         switch ( showTextAction.msg.getVarType() ) {
             case ARRAY_STRING:
@@ -399,17 +377,17 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         this.sb.append("ClearScreen();");
         return null;
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        switch ( volumeAction.getMode() ) {
+    public Void visitVolumeAction(VolumeAction volumeAction) {
+        switch ( volumeAction.mode ) {
             case SET:
                 this.sb.append("volume = (");
-                volumeAction.getVolume().accept(this);
+                volumeAction.volume.accept(this);
                 this.sb.append(") * 4 / 100.0;");
                 break;
             case GET:
@@ -422,36 +400,30 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        this.sb.append("PlayFile(" + playFileAction.getFileName() + ");");
+    public Void visitPlayFileAction(PlayFileAction playFileAction) {
+        this.sb.append("PlayFile(").append(playFileAction.fileName).append(");");
         return null;
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         this.sb.append("PlayToneEx(");
-        toneAction.getFrequency().accept(this);
+        toneAction.frequency.accept(this);
         this.sb.append(", ");
-        toneAction.getDuration().accept(this);
+        toneAction.duration.accept(this);
         this.sb.append(", volume, false);");
         nlIndent();
         this.sb.append("Wait(");
-        toneAction.getDuration().accept(this);
+        toneAction.duration.accept(this);
         this.sb.append(");");
         return null;
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        this.sb.append("PlayToneEx(");
-        this.sb.append(playNoteAction.getFrequency());
-        this.sb.append(", ");
-        this.sb.append(playNoteAction.getDuration());
-        this.sb.append(", volume, false);");
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
+        this.sb.append("PlayToneEx(").append(playNoteAction.frequency).append(", ").append(playNoteAction.duration).append(", volume, false);");
         nlIndent();
-        this.sb.append("Wait(");
-        this.sb.append(playNoteAction.getDuration());
-        this.sb.append(");");
+        this.sb.append("Wait(").append(playNoteAction.duration).append(");");
         return null;
     }
 
@@ -467,7 +439,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         String userDefinedPort = motorOnAction.getUserDefinedPort();
         if ( isActorOnPort(userDefinedPort) ) {
             final boolean reverse;
@@ -476,7 +448,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             } else {
                 reverse = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getOptProperty(SC.MOTOR_REVERSE).equals("ON");
             }
-            final boolean isDuration = motorOnAction.getParam().getDuration() != null;
+            final boolean isDuration = motorOnAction.param.getDuration() != null;
             final boolean isRegulatedDrive;
             if ( this.brickConfiguration.getConfigurationComponent(userDefinedPort).getOptProperty(SC.MOTOR_REGULATION) == null ) {
                 isRegulatedDrive = false;
@@ -486,23 +458,23 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             String sign = reverse ? "-" : "";
             String methodNamePart = reverse ? "OnRev" : "OnFwd";
             if ( isDuration ) {
-                this.sb.append("RotateMotor(OUT_" + userDefinedPort + ", " + sign + "MIN(MAX(");
-                motorOnAction.getParam().getSpeed().accept(this);
+                this.sb.append("RotateMotor(OUT_").append(userDefinedPort).append(", ").append(sign).append("MIN(MAX(");
+                motorOnAction.param.getSpeed().accept(this);
                 this.sb.append(", -100), 100)");
                 if ( motorOnAction.getDurationMode() == MotorMoveMode.ROTATIONS ) {
                     this.sb.append(", 360 * ");
                 } else {
                     this.sb.append(", ");
                 }
-                motorOnAction.getParam().getDuration().getValue().accept(this);
+                motorOnAction.param.getDuration().getValue().accept(this);
             } else {
                 if ( isRegulatedDrive ) {
-                    this.sb.append(methodNamePart + "RegEx(OUT_" + userDefinedPort + ", MIN(MAX(");
-                    motorOnAction.getParam().getSpeed().accept(this);
+                    this.sb.append(methodNamePart).append("RegEx(OUT_").append(userDefinedPort).append(", MIN(MAX(");
+                    motorOnAction.param.getSpeed().accept(this);
                     this.sb.append(", -100), 100), OUT_REGMODE_SPEED, RESET_NONE");
                 } else {
-                    this.sb.append(methodNamePart + "(OUT_" + userDefinedPort + ", MIN(MAX(");
-                    motorOnAction.getParam().getSpeed().accept(this);
+                    this.sb.append(methodNamePart).append("(OUT_").append(userDefinedPort).append(", MIN(MAX(");
+                    motorOnAction.param.getSpeed().accept(this);
                     this.sb.append(", -100), 100)");
                 }
             }
@@ -512,57 +484,52 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+    public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
         String userDefinedPort = motorSetPowerAction.getUserDefinedPort();
         if ( isActorOnPort(userDefinedPort) ) {
             final boolean reverse = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
             String sign = reverse ? "-" : "";
             final String methodName = "OnFwdRegEx";
-            //final boolean isRegulated = brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
-            this.sb.append(methodName + "(OUT_" + userDefinedPort + ", " + sign + "MIN(MAX(");
-            motorSetPowerAction.getPower().accept(this);
-            this.sb.append(", -100), 100), OUT_REGMODE_SPEED, RESET_NONE");
-            this.sb.append(");");
+            this.sb.append(methodName + "(OUT_").append(userDefinedPort).append(", ").append(sign).append("MIN(MAX(");
+            motorSetPowerAction.power.accept(this);
+            this.sb.append(", -100), 100), OUT_REGMODE_SPEED, RESET_NONE").append(");");
         }
         return null;
     }
 
     @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+    public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         if ( isActorOnPort(motorGetPowerAction.getUserDefinedPort()) ) {
             final String methodName = "MotorPower";
-            this.sb.append(methodName + "(OUT_" + motorGetPowerAction.getUserDefinedPort());
-            this.sb.append(")");
+            this.sb.append(methodName + "(OUT_").append(motorGetPowerAction.getUserDefinedPort()).append(")");
         }
         return null;
     }
 
     @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        if ( motorStopAction.getMode() == MotorStopMode.FLOAT ) {
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
+        if ( motorStopAction.mode == MotorStopMode.FLOAT ) {
             if ( isActorOnPort(motorStopAction.getUserDefinedPort()) ) {
-                this.sb.append("Float(OUT_" + motorStopAction.getUserDefinedPort());
-                this.sb.append(");");
+                this.sb.append("Float(OUT_").append(motorStopAction.getUserDefinedPort()).append(");");
             }
         } else {
             if ( isActorOnPort(motorStopAction.getUserDefinedPort()) ) {
-                this.sb.append("Off(OUT_" + motorStopAction.getUserDefinedPort());
-                this.sb.append(");");
+                this.sb.append("Off(OUT_").append(motorStopAction.getUserDefinedPort()).append(");");
             }
         }
         return null;
     }
 
     @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
+    public Void visitDriveAction(DriveAction driveAction) {
         ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
         ConfigurationComponent rightMotor = this.brickConfiguration.getFirstMotor(SC.RIGHT);
-        String leftMotorPort = leftMotor.getUserDefinedPortName();
-        String rightMotorPort = rightMotor.getUserDefinedPortName();
+        String leftMotorPort = leftMotor.userDefinedPortName;
+        String rightMotorPort = rightMotor.userDefinedPortName;
 
-        final boolean isDuration = driveAction.getParam().getDuration() != null;
+        final boolean isDuration = driveAction.param.getDuration() != null;
         final boolean reverse = leftMotor.getProperty(SC.MOTOR_REVERSE).equals(SC.ON) || rightMotor.getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
-        final boolean localReverse = driveAction.getDirection() == DriveDirection.BACKWARD;
+        final boolean localReverse = driveAction.direction == DriveDirection.BACKWARD;
 
         String methodName = isDuration ? "RotateMotorEx" : "OnFwdRegEx";
         this.sb.append(methodName).append("(OUT_");
@@ -574,11 +541,11 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             this.sb.append(", ");
         }
         this.sb.append("MIN(MAX(");
-        driveAction.getParam().getSpeed().accept(this);
+        driveAction.param.getSpeed().accept(this);
         this.sb.append(", -100), 100)").append(", ");
         if ( isDuration ) {
             this.sb.append("(");
-            driveAction.getParam().getDuration().getValue().accept(this);
+            driveAction.param.getDuration().getValue().accept(this);
             this.sb.append(" * 360 / (PI * WHEELDIAMETER)), 0, true, true);");
             nlIndent();
             this.sb.append("Wait(1");
@@ -594,23 +561,22 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         Assert.isTrue(port1.length() == 1 && port2.length() == 1);
         char[] charArray = (port1 + port2).toCharArray();
         Arrays.sort(charArray);
-        String port = new String(charArray);
-        return port;
+        return new String(charArray);
     }
 
     @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
+    public Void visitTurnAction(TurnAction turnAction) {
         ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
         ConfigurationComponent rightMotor = this.brickConfiguration.getFirstMotor(SC.RIGHT);
-        String leftMotorPort = leftMotor.getUserDefinedPortName();
-        String rightMotorPort = rightMotor.getUserDefinedPortName();
+        String leftMotorPort = leftMotor.userDefinedPortName;
+        String rightMotorPort = rightMotor.userDefinedPortName;
 
-        final boolean isDuration = turnAction.getParam().getDuration() != null;
+        final boolean isDuration = turnAction.param.getDuration() != null;
         final boolean reverse = leftMotor.getProperty(SC.MOTOR_REVERSE).equals(SC.ON) || rightMotor.getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
 
         int turnpct = 100;
         String methodName = isDuration ? "RotateMotorEx" : "OnFwdSync";
-        this.sb.append(methodName + "(OUT_");
+        this.sb.append(methodName).append("(OUT_");
         if ( leftMotorPort.charAt(0) < rightMotorPort.charAt(0) ) {
             turnpct *= -1;
         }
@@ -619,16 +585,16 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         }
         String sortedPort = createSortedPorts(leftMotorPort, rightMotorPort);
         this.sb.append(sortedPort).append(", MIN(MAX(");
-        turnAction.getParam().getSpeed().accept(this);
+        turnAction.param.getSpeed().accept(this);
         this.sb.append(", -100), 100)");
-        if ( turnAction.getDirection() == TurnDirection.LEFT ) {
+        if ( turnAction.direction == TurnDirection.LEFT ) {
             turnpct *= -1;
         }
         this.sb.append(", ");
         if ( isDuration ) {
             this.sb.append("(");
-            turnAction.getParam().getDuration().getValue().accept(this);
-            this.sb.append(" * TRACKWIDTH / WHEELDIAMETER), " + turnpct + ", true, true);");
+            turnAction.param.getDuration().getValue().accept(this);
+            this.sb.append(" * TRACKWIDTH / WHEELDIAMETER), ").append(turnpct).append(", true, true);");
             nlIndent();
             this.sb.append("Wait(1");
         } else {
@@ -640,29 +606,26 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
+    public Void visitCurveAction(CurveAction curveAction) {
         ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
         ConfigurationComponent rightMotor = this.brickConfiguration.getFirstMotor(SC.RIGHT);
-        String leftMotorPort = leftMotor.getUserDefinedPortName();
-        String rightMotorPort = rightMotor.getUserDefinedPortName();
+        String leftMotorPort = leftMotor.userDefinedPortName;
+        String rightMotorPort = rightMotor.userDefinedPortName;
 
-        final boolean isDuration = curveAction.getParamLeft().getDuration() != null;
+        final boolean isDuration = curveAction.paramLeft.getDuration() != null;
         final boolean confForward = leftMotor.getProperty(SC.MOTOR_REVERSE).equals(SC.OFF);
-        final boolean blockForward = curveAction.getDirection() == DriveDirection.FOREWARD;
+        final boolean blockForward = curveAction.direction == DriveDirection.FOREWARD;
 
         String methodName = isDuration ? "SteerDriveEx" : "SteerDrive";
 
-        this.sb.append(methodName).append("(OUT_").append(leftMotorPort);
-        this.sb.append(", OUT_").append(rightMotorPort);
-        this.sb.append(", MIN(MAX(");
-        curveAction.getParamLeft().getSpeed().accept(this);
+        this.sb.append(methodName).append("(OUT_").append(leftMotorPort).append(", OUT_").append(rightMotorPort).append(", MIN(MAX(");
+        curveAction.paramLeft.getSpeed().accept(this);
         this.sb.append(", -100), 100), MIN(MAX(");
-        curveAction.getParamRight().getSpeed().accept(this);
-        this.sb.append(", -100), 100), ");
-        this.sb.append(confForward == blockForward);
+        curveAction.paramRight.getSpeed().accept(this);
+        this.sb.append(", -100), 100), ").append(confForward == blockForward);
         if ( isDuration ) {
             this.sb.append(", ");
-            curveAction.getParamLeft().getDuration().getValue().accept(this);
+            curveAction.paramLeft.getDuration().getValue().accept(this);
         }
         this.sb.append(");");
 
@@ -670,11 +633,11 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+    public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
         ConfigurationComponent rightMotor = this.brickConfiguration.getFirstMotor(SC.RIGHT);
-        String leftMotorPort = leftMotor.getUserDefinedPortName();
-        String rightMotorPort = rightMotor.getUserDefinedPortName();
+        String leftMotorPort = leftMotor.userDefinedPortName;
+        String rightMotorPort = rightMotor.userDefinedPortName;
 
         String sortedPorts = createSortedPorts(leftMotorPort, rightMotorPort);
         this.sb.append("Off(OUT_").append(sortedPorts).append(");");
@@ -683,23 +646,20 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
-        if ( lightAction.getMode().toString().equals("ON") ) {
-            this.sb.append("SetSensorColor" + lightAction.getColor().getValues()[0] + "(");
+    public Void visitLightAction(LightAction lightAction) {
+        if ( lightAction.mode.toString().equals("ON") ) {
+            this.sb.append("SetSensorColor").append(lightAction.color.getValues()[0]).append("(");
         } else {
             this.sb.append("SetSensorColorNone(");
         }
-        this.sb.append(lightAction.getPort());
-        this.sb.append(");");
+        this.sb.append(lightAction.port).append(");");
         return null;
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        String portName = this.brickConfiguration.getConfigurationComponent(lightSensor.getUserDefinedPort()).getInternalPortName();
-        this.sb.append("_readLightSensor(");
-        this.sb.append(portName);
-        this.sb.append(", ");
+    public Void visitLightSensor(LightSensor lightSensor) {
+        String portName = this.brickConfiguration.getConfigurationComponent(lightSensor.getUserDefinedPort()).internalPortName;
+        this.sb.append("_readLightSensor(").append(portName).append(", ");
         switch ( lightSensor.getMode() ) {
             case "LIGHT":
                 this.sb.append("1");
@@ -715,52 +675,50 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
-        this.sb.append("ButtonPressed(" + getCodeName(keysSensor.getUserDefinedPort()) + ", false)");
+    public Void visitKeysSensor(KeysSensor keysSensor) {
+        this.sb.append("ButtonPressed(").append(getCodeName(keysSensor.getUserDefinedPort())).append(", false)");
         return null;
     }
 
     @Override
-    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
+    public Void visitColorSensor(ColorSensor colorSensor) {
         this.sb.append("SensorColor(");
-        String portName = this.brickConfiguration.getConfigurationComponent(colorSensor.getUserDefinedPort()).getInternalPortName();
+        String portName = this.brickConfiguration.getConfigurationComponent(colorSensor.getUserDefinedPort()).internalPortName;
         this.sb.append(portName).append(", \"").append(colorSensor.getMode()).append("\")");
         return null;
     }
 
     @Override
-    public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
+    public Void visitHTColorSensor(HTColorSensor htColorSensor) {
         this.sb.append("SensorHtColor(");
-        String portName = this.brickConfiguration.getConfigurationComponent(htColorSensor.getUserDefinedPort()).getInternalPortName();
+        String portName = this.brickConfiguration.getConfigurationComponent(htColorSensor.getUserDefinedPort()).internalPortName;
         this.sb.append(portName).append(", \"").append(htColorSensor.getMode()).append("\")");
         return null;
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        String portName = this.brickConfiguration.getConfigurationComponent(soundSensor.getUserDefinedPort()).getInternalPortName();
-        this.sb.append("Sensor(");
-        this.sb.append(portName);
-        this.sb.append(")");
+    public Void visitSoundSensor(SoundSensor soundSensor) {
+        String portName = this.brickConfiguration.getConfigurationComponent(soundSensor.getUserDefinedPort()).internalPortName;
+        this.sb.append("Sensor(").append(portName).append(")");
         return null;
     }
 
     @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
+    public Void visitEncoderSensor(EncoderSensor encoderSensor) {
         String userDefinedPort = encoderSensor.getUserDefinedPort();
         String mode = encoderSensor.getMode();
         switch ( mode ) {
             case SC.RESET:
-                this.sb.append("ResetTachoCount(OUT_" + userDefinedPort + ");");
+                this.sb.append("ResetTachoCount(OUT_").append(userDefinedPort).append(");");
                 break;
             case SC.ROTATION:
-                this.sb.append("MotorTachoCount(OUT_" + userDefinedPort + ") / 360.0");
+                this.sb.append("MotorTachoCount(OUT_").append(userDefinedPort).append(") / 360.0");
                 break;
             case SC.DEGREE:
-                this.sb.append("MotorTachoCount(OUT_" + userDefinedPort + ")");
+                this.sb.append("MotorTachoCount(OUT_").append(userDefinedPort).append(")");
                 break;
             case SC.DISTANCE:
-                this.sb.append("MotorTachoCount(OUT_" + userDefinedPort + ") * PI / 360.0 * WHEELDIAMETER");
+                this.sb.append("MotorTachoCount(OUT_").append(userDefinedPort).append(") * PI / 360.0 * WHEELDIAMETER");
                 break;
             default:
                 throw new DbcException("Invalide encoder sensor mode:" + mode + "!");
@@ -770,15 +728,15 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         String timerNumber = timerSensor.getUserDefinedPort();
         switch ( timerSensor.getMode() ) {
             case SC.DEFAULT:
             case SC.VALUE:
-                this.sb.append("(CurrentTick() - timer" + timerNumber + ")");
+                this.sb.append("(CurrentTick() - timer").append(timerNumber).append(")");
                 break;
             case SC.RESET:
-                this.sb.append("timer" + timerNumber + " = CurrentTick();");
+                this.sb.append("timer").append(timerNumber).append(" = CurrentTick();");
                 break;
             default:
                 throw new DbcException("Invalid Time Mode!");
@@ -787,22 +745,21 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        String portName = this.brickConfiguration.getConfigurationComponent(touchSensor.getUserDefinedPort()).getInternalPortName();
-        this.sb.append("Sensor(" + portName);
-        this.sb.append(")");
+    public Void visitTouchSensor(TouchSensor touchSensor) {
+        String portName = this.brickConfiguration.getConfigurationComponent(touchSensor.getUserDefinedPort()).internalPortName;
+        this.sb.append("Sensor(").append(portName).append(")");
         return null;
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String portName = this.brickConfiguration.getConfigurationComponent(ultrasonicSensor.getUserDefinedPort()).getInternalPortName();
-        this.sb.append("SensorUS(" + portName + ")");
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
+        String portName = this.brickConfiguration.getConfigurationComponent(ultrasonicSensor.getUserDefinedPort()).internalPortName;
+        this.sb.append("SensorUS(").append(portName).append(")");
         return null;
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
+    public Void visitMainTask(MainTask mainTask) {
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.SOUND) ) {
             this.sb.append("byte volume = 0x02;");
         }
@@ -811,7 +768,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             this.sb.append("long timer1;");
         }
         //this.sb.append(this.tmpArr);
-        mainTask.getVariables().accept(this);
+        mainTask.variables.accept(this);
         nlIndent();
         this.sb.append("task main() {");
         incrIndentation();
@@ -821,16 +778,15 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
+    public Void visitGetSubFunct(GetSubFunct getSubFunct) {
         return null;
-
     }
 
     @Override
-    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        BlocklyType arrayType = indexOfFunct.getParam().get(0).getVarType();
+    public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
+        BlocklyType arrayType = indexOfFunct.param.get(0).getVarType();
         String methodName = "ArrFindFirst";
-        if ( indexOfFunct.getLocation() == IndexLocation.LAST ) {
+        if ( indexOfFunct.location == IndexLocation.LAST ) {
             methodName = "ArrFindLast";
         }
         switch ( arrayType ) {
@@ -853,184 +809,171 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         }
 
         this.sb.append(methodName);
-        indexOfFunct.getParam().get(0).accept(this);
+        indexOfFunct.param.get(0).accept(this);
         this.sb.append(", ");
-        indexOfFunct.getParam().get(1).accept(this);
+        indexOfFunct.param.get(1).accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
+    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
+        if ( lengthOfIsEmptyFunct.functName == FunctionNames.LIST_IS_EMPTY ) {
             String methodName = "ArrayLen(";
             this.sb.append(methodName);
-            lengthOfIsEmptyFunct.getParam().get(0).accept(this);
+            lengthOfIsEmptyFunct.param.get(0).accept(this);
             this.sb.append(") == 0");
         } else {
             String methodName = "ArrayLen(";
             this.sb.append(methodName);
-            lengthOfIsEmptyFunct.getParam().get(0).accept(this);
+            lengthOfIsEmptyFunct.param.get(0).accept(this);
             this.sb.append(")");
         }
         return null;
     }
 
     @Override
-    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+    public Void visitListGetIndex(ListGetIndex listGetIndex) {
         ListElementOperations operation = (ListElementOperations) listGetIndex.getElementOperation();
         if ( !operation.equals(ListElementOperations.GET) ) {
-            throw new VisitorException("Unsupported get method: " + operation.toString());
+            throw new VisitorException("Unsupported get method: " + operation);
         }
-        IndexLocation location = (IndexLocation) listGetIndex.getLocation();
-        listGetIndex.getParam().get(0).accept(this);
+        IndexLocation location = (IndexLocation) listGetIndex.location;
+        listGetIndex.param.get(0).accept(this);
         this.sb.append("[");
         switch ( location ) {
             case FIRST:
-                this.sb.append("sanitiseFromStart(ArrayLen(");
-                listGetIndex.getParam().get(0).accept(this);
-                this.sb.append("), 0");
-                break;
-            case FROM_END:
-                this.sb.append("sanitiseFromEnd(ArrayLen(");
-                listGetIndex.getParam().get(0).accept(this);
-                this.sb.append("), -1 - ");
-                listGetIndex.getParam().get(1).accept(this);
-                break;
-            case FROM_START:
-                this.sb.append("sanitiseFromStart(ArrayLen(");
-                listGetIndex.getParam().get(0).accept(this);
-                this.sb.append("), ");
-                listGetIndex.getParam().get(1).accept(this);
-                break;
-            case LAST:
-                this.sb.append("sanitiseFromEnd(ArrayLen(");
-                listGetIndex.getParam().get(0).accept(this);
-                this.sb.append("), -1");
-                break;
             case RANDOM:
                 // provided for backwards compatibility,
                 // frontend does not have an option to choose this
                 // but old programs may contain this option
                 this.sb.append("sanitiseFromStart(ArrayLen(");
-                listGetIndex.getParam().get(0).accept(this);
+                listGetIndex.param.get(0).accept(this);
                 this.sb.append("), 0");
+                break;
+            case FROM_END:
+                this.sb.append("sanitiseFromEnd(ArrayLen(");
+                listGetIndex.param.get(0).accept(this);
+                this.sb.append("), -1 - ");
+                listGetIndex.param.get(1).accept(this);
+                break;
+            case FROM_START:
+                this.sb.append("sanitiseFromStart(ArrayLen(");
+                listGetIndex.param.get(0).accept(this);
+                this.sb.append("), ");
+                listGetIndex.param.get(1).accept(this);
+                break;
+            case LAST:
+                this.sb.append("sanitiseFromEnd(ArrayLen(");
+                listGetIndex.param.get(0).accept(this);
+                this.sb.append("), -1");
                 break;
             default:
                 break;
         }
-        this.sb.append(")");
-        this.sb.append("]");
+        this.sb.append(")").append("]");
         return null;
     }
 
     @Override
-    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        ListElementOperations operation = (ListElementOperations) listSetIndex.getElementOperation();
+    public Void visitListSetIndex(ListSetIndex listSetIndex) {
+        ListElementOperations operation = (ListElementOperations) listSetIndex.mode;
         if ( !operation.equals(ListElementOperations.SET) ) {
-            throw new VisitorException("Unsupported set method: " + operation.toString());
+            throw new VisitorException("Unsupported set method: " + operation);
         }
-        IndexLocation location = (IndexLocation) listSetIndex.getLocation();
-        listSetIndex.getParam().get(0).accept(this);
+        IndexLocation location = (IndexLocation) listSetIndex.location;
+        listSetIndex.param.get(0).accept(this);
         this.sb.append("[");
         switch ( location ) {
             case FIRST:
-                this.sb.append("sanitiseFromStart(ArrayLen(");
-                listSetIndex.getParam().get(0).accept(this);
-                this.sb.append("), 0");
-                break;
-            case FROM_END:
-                this.sb.append("sanitiseFromEnd(ArrayLen(");
-                listSetIndex.getParam().get(0).accept(this);
-                this.sb.append("), -1 - ");
-                listSetIndex.getParam().get(2).accept(this);
-                break;
-            case FROM_START:
-                this.sb.append("sanitiseFromStart(ArrayLen(");
-                listSetIndex.getParam().get(0).accept(this);
-                this.sb.append("), ");
-                listSetIndex.getParam().get(2).accept(this);
-                break;
-            case LAST:
-                this.sb.append("sanitiseFromEnd(ArrayLen(");
-                listSetIndex.getParam().get(0).accept(this);
-                this.sb.append("), -1");
-                break;
             case RANDOM:
                 // provided for backwards compatibility,
                 // frontend does not have an option to choose this
                 // but old programs may contain this option
                 this.sb.append("sanitiseFromStart(ArrayLen(");
-                listSetIndex.getParam().get(0).accept(this);
+                listSetIndex.param.get(0).accept(this);
                 this.sb.append("), 0");
+                break;
+            case FROM_END:
+                this.sb.append("sanitiseFromEnd(ArrayLen(");
+                listSetIndex.param.get(0).accept(this);
+                this.sb.append("), -1 - ");
+                listSetIndex.param.get(2).accept(this);
+                break;
+            case FROM_START:
+                this.sb.append("sanitiseFromStart(ArrayLen(");
+                listSetIndex.param.get(0).accept(this);
+                this.sb.append("), ");
+                listSetIndex.param.get(2).accept(this);
+                break;
+            case LAST:
+                this.sb.append("sanitiseFromEnd(ArrayLen(");
+                listSetIndex.param.get(0).accept(this);
+                this.sb.append("), -1");
                 break;
             default:
                 break;
         }
 
-        this.sb.append(")");
-        this.sb.append("]");
-        this.sb.append(" = ");
-        listSetIndex.getParam().get(1).accept(this);
+        this.sb.append(")").append("]").append(" = ");
+        listSetIndex.param.get(1).accept(this);
         this.sb.append(";");
         return null;
     }
 
     @Override
-    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
+    public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
         this.sb.append("MIN(MAX(");
-        mathConstrainFunct.getParam().get(0).accept(this);
+        mathConstrainFunct.param.get(0).accept(this);
         this.sb.append(", ");
-        mathConstrainFunct.getParam().get(1).accept(this);
+        mathConstrainFunct.param.get(1).accept(this);
         this.sb.append("), ");
-        mathConstrainFunct.getParam().get(2).accept(this);
+        mathConstrainFunct.param.get(2).accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        switch ( mathNumPropFunct.getFunctName() ) {
+    public Void visitMathNumPropFunct(MathNumPropFunct mathNumPropFunct) {
+        switch ( mathNumPropFunct.functName ) {
             case EVEN:
                 this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).accept(this);
+                mathNumPropFunct.param.get(0).accept(this);
                 this.sb.append(" % 2 == 0)");
                 break;
             case ODD:
                 this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).accept(this);
+                mathNumPropFunct.param.get(0).accept(this);
                 this.sb.append(" % 2 != 0)");
                 break;
             case PRIME:
-                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.PRIME));
-                this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.PRIME)).append("(");
+                mathNumPropFunct.param.get(0).accept(this);
                 this.sb.append(")");
                 break;
             // % in nxc % doesn't leave a a fractional residual, e.g. 5.2%1 = 0, so it is not possible to check the wholeness by "%1", that is why
             //an additional function is used
             case WHOLE:
-                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.WHOLE));
-                this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.WHOLE)).append("(");
+                mathNumPropFunct.param.get(0).accept(this);
                 this.sb.append(")");
                 break;
             case POSITIVE:
                 this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).accept(this);
+                mathNumPropFunct.param.get(0).accept(this);
                 this.sb.append(" > 0)");
                 break;
             case NEGATIVE:
                 this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).accept(this);
+                mathNumPropFunct.param.get(0).accept(this);
                 this.sb.append(" < 0)");
                 break;
             //it would work only for whole numbers, however, I think that it makes sense to talk about being divisible only for the whole numbers
             case DIVISIBLE_BY:
                 this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).accept(this);
+                mathNumPropFunct.param.get(0).accept(this);
                 this.sb.append(" % ");
-                mathNumPropFunct.getParam().get(1).accept(this);
+                mathNumPropFunct.param.get(1).accept(this);
                 this.sb.append(" == 0)");
                 break;
             default:
@@ -1040,8 +983,8 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        switch ( mathOnListFunct.getFunctName() ) {
+    public Void visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
+        switch ( mathOnListFunct.functName ) {
             case SUM:
                 this.sb.append("ArraySum(");
                 break;
@@ -1063,8 +1006,8 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             default:
                 break;
         }
-        mathOnListFunct.getParam().get(0).accept(this);
-        if ( mathOnListFunct.getFunctName() == FunctionNames.RANDOM ) {
+        mathOnListFunct.param.get(0).accept(this);
+        if ( mathOnListFunct.functName == FunctionNames.RANDOM ) {
             this.sb.append("[0]");
         } else {
             this.sb.append(")");
@@ -1073,25 +1016,25 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
+    public Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
         this.sb.append("Random(100) / 100");
         return null;
     }
 
     @Override
-    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
+    public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.sb.append("Random(");
-        mathRandomIntFunct.getParam().get(1).accept(this);
+        mathRandomIntFunct.param.get(1).accept(this);
         this.sb.append(" - ");
-        mathRandomIntFunct.getParam().get(0).accept(this);
+        mathRandomIntFunct.param.get(0).accept(this);
         this.sb.append(") + ");
-        mathRandomIntFunct.getParam().get(0).accept(this);
+        mathRandomIntFunct.param.get(0).accept(this);
         return null;
     }
 
     @Override
-    public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        switch ( mathSingleFunct.getFunctName() ) {
+    public Void visitMathSingleFunct(MathSingleFunct mathSingleFunct) {
+        switch ( mathSingleFunct.functName ) {
             case ROOT:
                 this.sb.append("sqrt(");
                 break;
@@ -1109,47 +1052,43 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             case ROUND:
             case ROUNDUP:
             case ROUNDDOWN:
-                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(mathSingleFunct.getFunctName()));
-                this.sb.append("(");
+                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(mathSingleFunct.functName)).append("(");
                 break;
             case EXP:
-                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.POWER));
-                this.sb.append("(M_E, ");
+                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.POWER)).append("(M_E, ");
                 break;
             case POW10:
-                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.POWER));
-                this.sb.append("(10, ");
+                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.POWER)).append("(10, ");
                 break;
             default:
                 break;
         }
-        mathSingleFunct.getParam().get(0).accept(this);
+        mathSingleFunct.param.get(0).accept(this);
         this.sb.append(")");
 
         return null;
     }
 
     @Override
-    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.POWER));
-        this.sb.append("(");
-        mathPowerFunct.getParam().get(0).accept(this);
+    public Void visitMathPowerFunct(MathPowerFunct mathPowerFunct) {
+        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.POWER)).append("(");
+        mathPowerFunct.param.get(0).accept(this);
         this.sb.append(", ");
-        mathPowerFunct.getParam().get(1).accept(this);
+        mathPowerFunct.param.get(1).accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
+    public Void visitTextJoinFunct(TextJoinFunct textJoinFunct) {
         // not supported by NXC
         return null;
     }
 
     @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
+    public Void visitBluetoothReceiveAction(BluetoothReceiveAction bluetoothReadAction) {
         String methodName;
-        switch ( bluetoothReadAction.getDataType() ) {
+        switch ( bluetoothReadAction.dataType ) {
             case "Boolean":
                 methodName = "BluetoothGetBoolean(";
                 break;
@@ -1159,25 +1098,23 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             default:
                 methodName = "BluetoothGetNumber(";
         }
-        this.sb.append(methodName);
-        this.sb.append(bluetoothReadAction.getChannel());
-        this.sb.append(")");
+        this.sb.append(methodName).append(bluetoothReadAction.channel).append(")");
         return null;
     }
 
     @Override
-    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
+    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction bluetoothCheckConnectAction) {
         this.sb.append("(BluetoothStatus(");
-        bluetoothCheckConnectAction.getConnection().accept(this);
+        bluetoothCheckConnectAction.connection.accept(this);
         this.sb.append(")==NO_ERR)");
         return null;
     }
 
     @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
+    public Void visitBluetoothSendAction(BluetoothSendAction bluetoothSendAction) {
         String methodName;
 
-        switch ( bluetoothSendAction.getDataType() ) {
+        switch ( bluetoothSendAction.dataType ) {
             case "Boolean":
                 methodName = "SendRemoteBool(";
                 break;
@@ -1189,11 +1126,9 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         }
 
         this.sb.append(methodName);
-        bluetoothSendAction.getConnection().accept(this);
-        this.sb.append(", ");
-        this.sb.append(bluetoothSendAction.getChannel());
-        this.sb.append(", ");
-        bluetoothSendAction.getMsg().accept(this);
+        bluetoothSendAction.connection.accept(this);
+        this.sb.append(", ").append(bluetoothSendAction.channel).append(", ");
+        bluetoothSendAction.msg.accept(this);
         this.sb.append(");");
         return null;
     }
@@ -1259,54 +1194,53 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             case T:
                 return "";
             case ARRAY:
-                return "int";
-            case ARRAY_NUMBER:
-                return "float";
-            case ARRAY_STRING:
-                return "string";
-            case ARRAY_BOOLEAN:
-                return "bool";
             case ARRAY_COLOUR:
-                return "int";
             case ARRAY_CONNECTION:
-                return "int";
-            case BOOLEAN:
-                return "bool";
-            case NUMBER:
-                return "float";
             case NUMBER_INT:
-                return "int";
-            case STRING:
-                return "string";
-            case VOID:
-                return "void";
             case COLOR:
-                return "int";
             case CONNECTION:
                 return "int";
+            case ARRAY_NUMBER:
+            case NUMBER:
+                return "float";
+            case ARRAY_STRING:
+            case STRING:
+                return "string";
+            case ARRAY_BOOLEAN:
+            case BOOLEAN:
+                return "bool";
+            case VOID:
+                return "void";
             default:
                 throw new IllegalArgumentException("unhandled type");
         }
     }
 
     private void generateSensors() {
-        Map<String, UsedSensor> usedSensorMap = new HashMap<>();
         for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
+            if ( usedSensor.getType().equals(SC.TIMER) ) {
+                if ( !usedSensor.getMode().equals(SC.RESET) ) {
+                    nlIndent();
+                    this.sb.append("timer1 = CurrentTick();");
+                }
+                continue;
+            }
             ConfigurationComponent configurationComponent = this.brickConfiguration.getConfigurationComponent(usedSensor.getPort());
-            String sensorType = configurationComponent.getComponentType();
+            String sensorType = configurationComponent.componentType;
             nlIndent();
             if ( sensorType.equals(SC.LIGHT) ) {
                 this.sb.append("SetSensorLight(");
             } else {
                 this.sb.append("SetSensor(");
             }
-            this.sb.append(configurationComponent.getInternalPortName()).append(", ");
+            this.sb.append(configurationComponent.internalPortName).append(", ");
 
             switch ( sensorType ) {
                 case SC.COLOR:
                     this.sb.append("SENSOR_COLORFULL);");
                     break;
                 case SC.HT_COLOR:
+                case SC.ULTRASONIC:
                     this.sb.append("SENSOR_LOWSPEED);");
                     break;
                 case SC.LIGHT:
@@ -1319,19 +1253,12 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 case SC.TOUCH:
                     this.sb.append("SENSOR_TOUCH);");
                     break;
-                case SC.ULTRASONIC:
-                    this.sb.append("SENSOR_LOWSPEED);");
-                    break;
                 case SC.SOUND:
                     this.sb.append("SENSOR_SOUND);");
                     break;
                 default:
                     break;
             }
-        }
-        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER) ) {
-            nlIndent();
-            this.sb.append("timer1 = CurrentTick();");
         }
     }
 
@@ -1356,32 +1283,32 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
+    public Void visitAssertStmt(AssertStmt assertStmt) {
         return null;
     }
 
     @Override
-    public Void visitDebugAction(DebugAction<Void> debugAction) {
+    public Void visitDebugAction(DebugAction debugAction) {
         return null;
     }
 
     @Override
-    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+    public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+    public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         throw new DbcException("Not supported!");
     }
 }

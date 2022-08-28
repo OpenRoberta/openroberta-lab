@@ -23,9 +23,8 @@ public class ShutdownHook extends Thread {
     public void run() {
         if ( this.embeddedDb ) {
             SessionFactoryWrapper sessionFactoryWrapper = this.injector.getInstance(SessionFactoryWrapper.class);
-            Session nativeSession = sessionFactoryWrapper.getNativeSession();
-            DbExecutor dbExecutor = DbExecutor.make(nativeSession);
-            nativeSession.beginTransaction();
+            Session hibernateSession = sessionFactoryWrapper.getHibernateSession();
+            DbExecutor dbExecutor = DbExecutor.make(hibernateSession);
             try {
                 dbExecutor.ddl("SHUTDOWN;");
             } finally {

@@ -33,7 +33,7 @@ void sensorsWaitUntil() {
 
 void setup()
 {
-    Serial.begin(9600); 
+    Serial.begin(9600);
     pinMode(_led_L, OUTPUT);
     ___numberVar = 0;
     ___booleanVar = true;

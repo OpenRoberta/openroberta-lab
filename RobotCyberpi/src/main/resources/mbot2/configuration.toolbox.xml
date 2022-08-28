@@ -1,0 +1,6 @@
+<toolbox_set id="toolbox-Configuration" style="display: none">
+        <category name="TOOLBOX_SENSOR" svg="true">
+            <block type="robBrick_mbuild_ultrasonic2"></block>
+            <block type="robBrick_mbuild_quadrgb"></block>
+        </category>
+    </toolbox_set>

@@ -11,9 +11,10 @@ define(["require", "exports", "jquery", "wrap", "log"], function (require, expor
      * Callback function, gets called when new notifications are available
      */
     var onNotificationsAvailable;
-    exports.onNotificationsAvailableCallback = function (callback) {
+    var onNotificationsAvailableCallback = function (callback) {
         onNotificationsAvailable = callback;
     };
+    exports.onNotificationsAvailableCallback = onNotificationsAvailableCallback;
     /**
      * counts the number of communication errors (server down, ...). If the number hits a warning level,
      * the user is informed.

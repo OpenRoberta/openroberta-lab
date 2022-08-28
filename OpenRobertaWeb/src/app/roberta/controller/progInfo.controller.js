@@ -1,6 +1,3 @@
-import * as MSG from 'message';
-import * as LOG from 'log';
-import * as UTIL from 'util';
 import * as GUISTATE_C from 'guiState.controller';
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
@@ -31,7 +28,7 @@ function initView() {
 function initEvents() {
     $('#infoButton').off('click touchend');
     $('#infoButton').onWrap('click touchend', function (event) {
-        toggleInfo();
+        toggleInfo($(this));
         return false;
     });
     $(window).on('resize', function (e) {
@@ -73,7 +70,7 @@ function initEvents() {
     });
 }
 
-function toggleInfo() {
+function toggleInfo($button) {
     Blockly.hideChaff();
     if ($('#infoButton').hasClass('rightActive')) {
         $('#blockly').closeRightView();
@@ -81,6 +78,6 @@ function toggleInfo() {
         $('#infoContent').html(blocklyWorkspace.description);
         $('.bootstrap-tagsinput input').attr('placeholder', Blockly.Msg.INFO_TAGS || 'Tags');
         $('#infoTags').tagsinput('add', blocklyWorkspace.tags);
-        $('#blockly').openRightView('info', INITIAL_WIDTH);
+        $button.openRightView($('#infoDiv'), INITIAL_WIDTH);
     }
 }

@@ -6,10 +6,6 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -17,42 +13,23 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-public class PlotPointAction<V> extends Action<V> {
-    private final String port;
-    private final Expr<V> value;
-    private final Expr<V> tickmark;
+@NepoBasic(name = "PLOT_POINT_ACTION", category = "ACTOR", blocklyNames = {"robactions_plot_point"})
+public final class PlotPointAction extends Action {
+    public final String port;
+    public final Expr value;
+    public final Expr tickmark;
 
-    private PlotPointAction(String port, Expr<V> value, Expr<V> tickmark, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("PLOT_POINT_ACTION"), properties, comment);
+    public PlotPointAction(String port, Expr value, Expr tickmark, BlocklyProperties properties) {
+        super(properties);
         this.port = port;
         this.value = value;
         this.tickmark = tickmark;
         this.setReadOnly();
-    }
-
-    /**
-     * Creates instance of {@link PlotPointAction}. This instance is read only and can not be modified.
-     *
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link PlotPointAction}
-     */
-    public static <V> PlotPointAction<V> make(String port, Expr<V> value, Expr<V> tickmark, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PlotPointAction<>(port, value, tickmark, properties, comment);
-    }
-
-    public String getPort() {
-        return this.port;
-    }
-
-    public Expr<V> getValue() {
-        return this.value;
-    }
-
-    public Expr<V> getTickmark() {
-        return this.tickmark;
     }
 
     @Override
@@ -60,27 +37,14 @@ public class PlotPointAction<V> extends Action<V> {
         return "PlotPointAction []";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
         String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.EMPTY_PORT);
-        Phrase<V> value = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
-        Phrase<V> tickmark = helper.extractValue(values, new ExprParam(BlocklyConstants.TICKMARK, BlocklyType.NUMBER_INT));
-        return PlotPointAction
-            .make(
-                Jaxb2Ast.sanitizePort(port),
-                Jaxb2Ast.convertPhraseToExpr(value),
-                Jaxb2Ast.convertPhraseToExpr(tickmark),
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block));
+        Phrase value = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
+        Phrase tickmark = helper.extractValue(values, new ExprParam(BlocklyConstants.TICKMARK, BlocklyType.NUMBER_INT));
+        return new PlotPointAction(Jaxb2Ast.sanitizePort(port), Jaxb2Ast.convertPhraseToExpr(value), Jaxb2Ast.convertPhraseToExpr(tickmark), Jaxb2Ast.extractBlocklyProperties(block));
 
     }
 
@@ -89,8 +53,8 @@ public class PlotPointAction<V> extends Action<V> {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.ACTORPORT, port);
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, getValue());
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.TICKMARK, getTickmark());
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, this.value);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.TICKMARK, this.tickmark);
         return jaxbDestination;
     }
 }

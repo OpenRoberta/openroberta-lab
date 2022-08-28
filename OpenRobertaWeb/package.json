@@ -20,7 +20,8 @@
   },
   "devDependencies": {
     "@types/bootstrap": "^3.3.28",
+    "@types/jquery.validation": "^1.16.6",
     "prettier": "2.4.1",
-    "typescript": "^3.9.2"
+    "typescript": "^4.7.3"
   }
 }

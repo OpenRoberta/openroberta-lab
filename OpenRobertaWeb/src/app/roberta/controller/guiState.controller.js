@@ -1,4 +1,3 @@
-import * as exports from 'exports';
 import * as UTIL from 'util';
 import * as MSG from 'message';
 import * as GUISTATE from 'guiState.model';
@@ -285,6 +284,7 @@ function setRobot(robot, result, opt_init) {
     $('#head-navi-icon-robot').removeClass('typcn-open');
     $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
     $('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
+    $('.simWindow').removeClass('simWindow-openedButHidden');
 
     checkSim();
     setProgramOwnerName(null);
@@ -628,7 +628,7 @@ function setView(view) {
         setRunEnabled(false);
         $('#runSourceCodeEditor').addClass('disabled');
     }
-    if ($('.rightMenuButton.rightActive')) {
+    if ($('.rightMenuButton.rightActive').length > 0) {
         $('.rightMenuButton.rightActive').clickWrap();
     }
     if (view === 'tabConfiguration') {
@@ -1078,9 +1078,7 @@ function checkSim() {
     if (hasMultiSim()) {
         $('#menuRunMulipleSim').parent().removeClass('unavailable');
         $('#menuRunMulipleSim').parent().addClass('available');
-        if (isUserLoggedIn()) {
-            $('#menuRunMulipleSim').parent().removeClass('disabled');
-        }
+        $('#menuRunMulipleSim').parent().removeClass('disabled');
     } else {
         $('#menuRunMulipleSim').parent().addClass('unavailable');
         $('#menuRunMulipleSim').parent().removeClass('available');

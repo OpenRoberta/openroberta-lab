@@ -4,7 +4,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.util.Clock;
+import de.fhg.iais.roberta.util.basic.Clock;
 
 /**
  * This class is responsible for the synchronisation between the one browser client and one robot. The synchronisation is based on a agreed upon token. This

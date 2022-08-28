@@ -1,0 +1,10 @@
+<block_set xmlns="http://www.w3.org/1999/xhtml" xmlversion="3.1">
+    <instance>
+        <block type="robControls_start" id="W%HF)6WVWx79S4wv3UV:" intask="true" deletable="false">
+            <field name="DEBUG">FALSE</field>
+            <data>
+                {"learningRate":0.03,"regularizationRate":0,"noise":0,"batchSize":10,"discretize":false,"percTrainData":50,"activationKey":"linear","activation":{},"regularization":null,"initUntil":null,"collectStats":false,"numHiddenLayers":0,"networkShape":[],"weights":[[["1"]],[[]]],"biases":[["0"],["0"]],"precision":"2","weightArcMaxSize":8,"weightSuppressMultOp":true,"inputs":["n1"],"outputs":["n2"]}
+            </data>
+        </block>
+    </instance>
+</block_set>

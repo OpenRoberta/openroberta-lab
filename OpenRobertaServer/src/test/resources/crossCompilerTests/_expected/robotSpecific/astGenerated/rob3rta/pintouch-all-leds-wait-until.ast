@@ -1,0 +1,15 @@
+
+(repeat [FOREVER_ARDU, BoolConst[value: true]]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [EAR, PRESSED, 2]]], BoolConst[value: true]]]
+)]MethodStmt [MethodCall [beleuchten, Var [farbe], ColorConst[hexValue: #FFFFFF], VOID]]MethodStmt [MethodCall [ausmachen, , , VOID]]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [EAR, PRESSED, 1]]], BoolConst[value: true]]]
+)]MethodStmt [MethodCall [beleuchten, Var [farbe], ColorConst[hexValue: #FF0088], VOID]]MethodStmt [MethodCall [ausmachen, , , VOID]]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [WHEEL, PRESSED, A]]], BoolConst[value: true]]]
+)]MethodStmt [MethodCall [beleuchten, Var [farbe], ColorConst[hexValue: #FF0000], VOID]]MethodStmt [MethodCall [ausmachen, , , VOID]]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [WHEEL, PRESSED, B]]], BoolConst[value: true]]]
+)]MethodStmt [MethodCall [beleuchten, Var [farbe], ColorConst[hexValue: #0000FF], VOID]]MethodStmt [MethodCall [ausmachen, , , VOID]]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [WHEEL, PRESSED, C]]], BoolConst[value: true]]]
+)]MethodStmt [MethodCall [beleuchten, Var [farbe], ColorConst[hexValue: #00FF00], VOID]]MethodStmt [MethodCall [ausmachen, , , VOID]]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [WHEEL, PRESSED, D]]], BoolConst[value: true]]]
+)]MethodStmt [MethodCall [beleuchten, Var [farbe], ColorConst[hexValue: #FFFF00], VOID]]MethodStmt [MethodCall [ausmachen, , , VOID]]
+)

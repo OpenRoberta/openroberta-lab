@@ -182,7 +182,12 @@ body.blocklyMinimalBody * {
 
 .googleLogo {
     background: url(../css/svg/Google_logo.svg) no-repeat;
-    background-size: 100% 100%;
+    background-size: contain;
+}
+
+.NRWMinLogo {
+    background: url(../css/img/AK_Schule.png) no-repeat;
+    background-size: contain;
 }
 
 .img-nepo {
@@ -314,7 +319,7 @@ body.blocklyMinimalBody * {
 }
 
 canvas.border {
-	border: 2px solid grey;
+    border: 2px solid grey;
 }
 
 #webotsDiv {
@@ -489,15 +494,18 @@ canvas.border {
     z-index: 9;
 }
 
-#variablesContent,
 #mbedContent,
 #valuesContent {
     background-color: #fff;
-    border: 2px solid #333;
-    padding: 12px;
-    padding-top: 40px;
+    border: 2px solid #33b8ca;
+    padding: 12px 14px 12px 12px;
     border-radius: 2px;
     display: inline-block;
+}
+
+#valuesContent {
+    min-width: 330px;
+    overflow-y: auto;
 }
 
 .customDropdown {
@@ -554,11 +562,11 @@ div.rightMenuButton:hover,
 }
 
 #tutorialButton.rightMenuButton, #infoButton.notEmpty {
-    background-color: #BACC1E;;
+    background-color: #BACC1E;
 }
 
 #tutorialButton.rightMenuButton:before, #infoButton.notEmpty:before {
-    border-right: 6px solid #BACC1E;;
+    border-right: 6px solid #BACC1E;
 }
 
 .menu-icons {
@@ -746,34 +754,34 @@ div.rightMenuButton:hover,
 }
 
 button#simCustomColorObject.typcn:before {
-	color: #FBED00;
+    color: #FBED00;
 }
 
 button#simCustomObstacle.typcn:before {
-	color: 009EE3;
+    color: #009EE3;
 }
 
 .huebee__container {
-  position: absolute;
-  left: 0;
-  top: 6px;
-  padding: 10px;
-  padding-top: 24px;
-  background: #e7e7e7;
-  border-radius: 2px;
-  box-shadow: none;
+    position: absolute;
+    left: 0;
+    top: 6px;
+    padding: 10px;
+    padding-top: 24px;
+    background: #e7e7e7;
+    border-radius: 2px;
+    box-shadow: none;
 }
 
 .huebee__cursor {
-  border: 5px solid #fff;
-  border-radius: 2px;
-  width: 30px;
-  height: 30px;
+    border: 5px solid #fff;
+    border-radius: 2px;
+    width: 30px;
+    height: 30px;
 }
 
 .huebee {
-  /* disable reveal/hide transition */
-  transition: none;
+    /* disable reveal/hide transition */
+    transition: none;
 }
 
 .huebee__close-button {
@@ -788,15 +796,16 @@ button#simCustomObstacle.typcn:before {
 }
 
 .huebee__close-button__x {
-  stroke-width: 2;
-  stroke: #bbb;
+    stroke-width: 2;
+    stroke: #bbb;
 }
+
 .huebee__close-button__x:hover, .huebee__close-button__x:focus {
-  stroke: #333;
+    stroke: #333;
 }
 
 .huebee__close-button:hover, .huebee__close-button:focus {
-  background: #e7e7e7;
+    background: #e7e7e7;
 }
 
 #codeButtons {
@@ -1023,7 +1032,7 @@ button#simCustomObstacle.typcn:before {
 }
 
 .dropdown-menu > li > a {
-	position: relative;
+    position: relative;
     padding-right: 70px;
 }
 
@@ -1151,24 +1160,41 @@ button#simCustomObstacle.typcn:before {
     clear: both;
 }
 
-.modal.simRobotModal {
+.simWindow {
+    position: absolute;
     left: 50px;
     top: 100px;
-    right: inherit;
-    bottom: inherit;
+    z-index: 99;
+    display: none;
 }
 
-.modal#simRobotModal button.close {
-    margin-right: -10px;
-    margin-top: -14px;
+.simWindow#simValuesWindow button.close {
+    top: 4px;
+    right: 14px;
+    color: #bbb;
+    position: absolute;
+}
+
+.simWindow#simValuesWindow button.close:hover {
+    top: 4px;
+    right: 14px;
+    color: #333;
+}
+
+.simWindow#simRobotWindow button.close {
+    top: 4px;
+    right: 24px;
     color: #f1f1f1;
+    position: absolute;
+    z-index: 99999;
 }
 
-.modal#simValuesModal button.close {
-    margin-right: -10px;
-    margin-top: -14px;
+.simWindow#simRobotWindow button.close:hover {
+    top: 4px;
+    right: 24px;
     color: #bbb;
 }
+
 
 #VariablesContent {
     height: 300px;
@@ -1178,37 +1204,20 @@ button#simCustomObstacle.typcn:before {
 
 #simValuesContent label {
     display: inline-block;
-    float: left;
-    clear: left;
     width: 150px;
-    text-align: right;
     margin-right: 6px;
+    margin-left: 10px;
 }
 
 #simValuesContent div > div {
     white-space: nowrap;
-    overflow: hidden;
-    min-width: 250px;
+    max-height: 70vh;
 }
 
 #simValuesContent span {
     display: inline-block;
-    float: left;
     padding: 0 6px;
     width: 60px;
-}
-
-
-.modal#simRobotModal button.close:hover {
-    margin-right: -10px;
-    margin-top: -14px;
-    color: #ffffff;
-}
-
-.modal#simValuesModal button.close:hover {
-    margin-right: -10px;
-    margin-top: -14px;
-    color: #333;
 }
 
 .bigNumber {
@@ -1217,17 +1226,12 @@ button#simCustomObstacle.typcn:before {
     font-weight: bold;
 }
 
-.simRobotModal .modal-header {
-    position: fixed;
-    right: 16;
-}
-
-.simRobotModal .modal-dialog {
+.simWindow .modal-dialog {
     width: inherit;
     margin: 0;
 }
 
-.simRobotModal text {
+.simWindow text {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -1354,6 +1358,10 @@ button#simCustomObstacle.typcn:before {
 .simbtn.btn.active,
 .open > .dropdown-toggle.simbtn.btn {
     background-color: #f29400;
+}
+
+#simEditButtons > .typcn-chart-line-outline {
+    fill: #BACC1E;
 }
 
 .simKey:hover {
@@ -2372,39 +2380,40 @@ input[type=range]:focus::-ms-fill-upper {
     background-color: #e7e7e7;
 }
 
-#simEditButtons >.btn-group > .dropdown-menu {
+#simEditButtons > .btn-group > .dropdown-menu {
     width: 48px;
     margin-top: 6px;
 }
 
 #simEditButtons > .btn-group > .dropdown-menu > li > a {
-    padding-left:5px;
-    padding-right:0;
+    padding-left: 5px;
+    padding-right: 0;
     text-align: center;
     height: 35px;
     font-size: 28px;
 }
 
-.simChangeObject.disabled { 
-	color: #bbb;
-	cursor: not-allowed;
+.simChangeObject.disabled {
+    color: #bbb;
+    cursor: not-allowed;
 }
 
 #simStop, #simControl.typcn-media-stop {
-    color: #E2001A;
+    color: #E2001A !important;
 }
 
 #simStop.disabled {
-	color: #F6B3B9;
+    color: #F6B3B9 !important;
     cursor: not-allowed;
 }
-#simControl.blue, #simControlStepOver.blue, #simControlStepInto.blue {
-	color: #1C5A94;
+
+#simButtons > .debug {
+    color: #1C5A94;
 }
 
 .typcn-media-play-outline.rotated:before {
-	display: inline-block;
-	transform: rotate(-90deg);
+    display: inline-block;
+    transform: rotate(-90deg);
 }
 
 @keyframes iais-loading-spin {
@@ -2489,7 +2498,7 @@ input[type=range]:focus::-ms-fill-upper {
         margin-bottom: 0;
     }
 
-    .modal.simRobotModal {
+    .simWindow {
         left: 6px;
         top: 60px;
     }
@@ -3232,4 +3241,97 @@ pre code {
 
 .port {
     cursor: default !important;
+}
+
+#valuesContent .panel-heading {
+    background-color: #dddddd;
+}
+
+#valuesContent .panel-group {
+    margin: 20px 0 0 0;
+}
+
+.panel-title > a:before {
+    background-size: 10px;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    content: "";
+    margin: 0 12px 0 -8px;
+    background-image: url('data:image/svg+xml,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><title>minus</title><path d="M24 14.667h-16c-1.472 0-2.667 1.195-2.667 2.667s1.195 2.667 2.667 2.667h16c1.472 0 2.667-1.195 2.667-2.667s-1.195-2.667-2.667-2.667z"></path> </svg>');
+}
+
+.panel-title > a.collapsed:before {
+    background-size: 10px;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    content: "";
+    margin: 0 12px 0 -8px;
+    background-image: url('data:image/svg+xml,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"> <title>plus</title><path d="M24 13.333h-5.333v-5.333c0-1.472-1.195-2.667-2.667-2.667s-2.667 1.195-2.667 2.667l0.095 5.333h-5.428c-1.472 0-2.667 1.195-2.667 2.667s1.195 2.667 2.667 2.667l5.428-0.095-0.095 5.428c0 1.472 1.195 2.667 2.667 2.667s2.667-1.195 2.667-2.667v-5.428l5.333 0.095c1.472 0 2.667-1.195 2.667-2.667s-1.195-2.667-2.667-2.667z"></path></svg>');
+}
+
+.panel-title > a {
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+
+#accordion .panel-body {
+    overflow: auto;
+    max-height: 50vh;
+    border: none;
+}
+
+/****************************/
+input,
+textarea {
+    border: 1px solid #eeeeee;
+    box-sizing: border-box;
+    margin: 0;
+    outline: none;
+    padding: 10px;
+}
+
+input[type="button"] {
+    -webkit-appearance: button;
+    cursor: pointer;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.input-group {
+    clear: both;
+    position: relative;
+}
+
+.input-group input[type='button'] {
+    background-color: #dddddd;
+    transition: all 300ms ease;
+}
+
+.input-group .button-minus,
+.input-group .button-plus {
+    font-weight: bold;
+    height: 32px;
+    width: 32px;
+    padding: 0;
+}
+
+.input-group .quantity-field {
+    position: relative;
+    height: 32px;
+    width: 32px;
+    text-align: center;
+    display: inline-block;
+    font-size: 14px;
+    resize: vertical;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
 }

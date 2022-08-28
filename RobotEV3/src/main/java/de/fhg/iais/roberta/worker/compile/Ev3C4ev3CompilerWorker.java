@@ -11,11 +11,11 @@ import de.fhg.iais.roberta.components.ev3c4ev3.C4Ev3SourceCompiler;
 import de.fhg.iais.roberta.components.ev3c4ev3.Uf2Builder;
 import de.fhg.iais.roberta.components.ev3c4ev3.Uf2FileContainer;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.worker.IWorker;
+import de.fhg.iais.roberta.util.basic.Pair;
+import de.fhg.iais.roberta.worker.ICompilerWorker;
 
-public class Ev3C4ev3CompilerWorker implements IWorker {
+public class Ev3C4ev3CompilerWorker implements ICompilerWorker {
 
     private static final Logger LOG = LoggerFactory.getLogger(Ev3C4ev3CompilerWorker.class);
 
@@ -25,7 +25,7 @@ public class Ev3C4ev3CompilerWorker implements IWorker {
         String robot = project.getRobot();
         String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         String programName = project.getProgramName();
-        C4Ev3SourceCompiler compiler = new C4Ev3SourceCompiler(compilerResourcesDir);
+        C4Ev3SourceCompiler compiler = new C4Ev3SourceCompiler(compilerResourcesDir, project.isNativeEditorCode());
         Uf2Builder uf2Builder = new Uf2Builder(compilerResourcesDir);
         Pair<Key, String> workflowResult = this.runBuild(project, compiler, uf2Builder);
         project.setResult(workflowResult.getFirst());

@@ -1,29 +1,24 @@
 package de.fhg.iais.roberta.syntax.lang.functions;
 
-import de.fhg.iais.roberta.syntax.BlockType;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlockDescriptor;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 
 /**
  * the top class of all functions. There are two ways for a client to find out which kind of function {@link #Function}-object is:<br>
  * - {@link #getKind()}<br>
  * - {@link #getAs(Class)}<br>
  */
-public abstract class Function<V> extends Phrase<V> {
+public abstract class Function extends Phrase {
 
     /**
-     * create a mutable function of the given {@link BlockType}
-     *
-     * @param kind the kind of the function,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment of the user for the specific block
+     * create a mutable function of the given {@link BlockDescriptor}
      */
-    public Function(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(kind, properties, comment);
+    public Function(BlocklyProperties properties) {
+        super(properties);
 
     }
 
@@ -54,7 +49,7 @@ public abstract class Function<V> extends Phrase<V> {
      * @return the BlocklyType
      */
     public BlocklyType getReturnType() {
-        return AnnotationHelper.getVarType(this.getClass());
+        return AnnotationHelper.getReturnType(this.getClass());
     }
 
 }

@@ -3750,7 +3750,7 @@ void SMAAMovc(bvec4 cond, inout vec4 variable, vec4 value) {
 }
 
 //-----------------------------------------------------------------------------
-// Corner Detection Functions
+// Types Detection Functions
 
 void SMAADetectHorizontalCornerPattern(sampler2D edgesTex, inout vec2 weights, vec4 texcoord, vec2 d) {
   vec2 leftRight = step(d.xy, d.yx);

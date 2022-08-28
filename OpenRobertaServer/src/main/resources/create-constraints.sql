@@ -1,5 +1,6 @@
 alter table USER add foreign key (USERGROUP_ID) references USERGROUP(ID) ON DELETE CASCADE;
 create unique index usergroupAccountIdx on USER(USERGROUP_ID, ACCOUNT);
+create index userEmailIdx on USER(EMAIL);
 commit;
 
 alter table LOST_PASSWORD               add foreign key (USER_ID) references USER(ID) ON DELETE CASCADE;

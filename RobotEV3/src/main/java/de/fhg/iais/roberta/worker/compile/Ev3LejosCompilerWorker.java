@@ -8,9 +8,9 @@ import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.components.ev3lejos.JavaSourceCompiler;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.worker.IWorker;
+import de.fhg.iais.roberta.worker.ICompilerWorker;
 
-public class Ev3LejosCompilerWorker implements IWorker {
+public class Ev3LejosCompilerWorker implements ICompilerWorker {
 
     private static final Logger LOG = LoggerFactory.getLogger(Ev3LejosCompilerWorker.class);
 
@@ -29,7 +29,7 @@ public class Ev3LejosCompilerWorker implements IWorker {
             project.setResult(Key.COMPILERWORKFLOW_SUCCESS);
             project.addResultParam("MESSAGE", "");
         } else {
-            Util.logCrosscompilerError(LOG, scp.getCompilerResponse(), crosscompilerSource);
+            Util.logCrosscompilerError(LOG, scp.getCompilerResponse(), crosscompilerSource, project.isNativeEditorCode());
             project.setResult(Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED);
             project.addResultParam("MESSAGE", scp.getCompilerResponse());
         }

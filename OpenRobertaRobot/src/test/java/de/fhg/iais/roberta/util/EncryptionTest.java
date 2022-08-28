@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.util;
 
+import de.fhg.iais.roberta.util.basic.Encryption;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 

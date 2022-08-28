@@ -50,15 +50,17 @@ import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectWorkflowRestController;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
-import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.ast.AstFactory;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
+import de.fhg.iais.roberta.util.visitor.StackmachinePrettyPrinter;
 
 public class ReuseIntegrationAsUnitTest {
 
@@ -100,7 +102,7 @@ public class ReuseIntegrationAsUnitTest {
     private static JSONObject progDeclsFromTestSpec;
     private static JSONObject robotsFromTestSpec;
 
-    IRobotFactory testFactory;
+    RobotFactory testFactory;
 
     private int errorCountRegeneration = 0;
     private int successCountRegeneration = 0;
@@ -111,6 +113,7 @@ public class ReuseIntegrationAsUnitTest {
 
     @BeforeClass
     public static void setupClass() throws IOException {
+        AstFactory.loadBlocks();
         Path path = Paths.get(TARGET_DIR);
         Files.createDirectories(path);
         JSONObject testSpecification = Util.loadYAML(TEST_SPEC_YML);
@@ -162,7 +165,8 @@ public class ReuseIntegrationAsUnitTest {
     @Ignore
     @Test
     public void testOneCommonProgrammAsUnitTest() throws Exception {
-        String programName = "functionWithWithoutParameter";
+        String programName = "mathAndLists";
+        String[] robotNames = {"ev3lejosv1"}; // set to null, if all robots should be tested; otherwise put the robots under test into the array
         {
             List<String> pluginDefines = new ArrayList<>(); // maybe used later to add properties
             testFactory = Util.configureRobotPlugin(ROBOT_NAME_FOR_COMMON_TESTS, "", "", pluginDefines);
@@ -171,7 +175,8 @@ public class ReuseIntegrationAsUnitTest {
             runGenerateAndRegenerateForOneCommonProgram(defaultConfigXml, template, programName);
         }
         {
-            for ( String robotName : ROBOTS_FOR_TARGET_LANGUAGE_GENERATION ) {
+            String[] robotsToTest = robotNames == null ? ROBOTS_FOR_TARGET_LANGUAGE_GENERATION : robotNames;
+            for ( String robotName : robotsToTest ) {
                 setupRobotFactoryForRobot(robotName);
                 JSONObject robotDeclFromTestSpec = robotsFromTestSpec.getJSONObject(robotName);
                 String robotDir = robotDeclFromTestSpec.getString("template");
@@ -220,7 +225,7 @@ public class ReuseIntegrationAsUnitTest {
             builder.setRobot(robotName).setProgramName("NEPOprog").setSSID("test").setPassword("test").setLanguage(Language.ENGLISH);
             Project project = builder.build();
             String msg = UnitTestHelper.executeWorkflow("getsimulationcode", testFactory, project);
-            String stackMachineCode = project.getCompiledHex();
+            String stackMachineCode = StackmachinePrettyPrinter.prettyPrint(new JSONObject(project.getCompiledHex()), true, true);
             codeGenerationOk = codeGenerationOk &&
                 compareExpectedToGenerated(
                     CROSS_COMPILER_TESTS + EXPECTED + COMMON + STACKMACHINE_CODE_GENERATED,
@@ -300,11 +305,11 @@ public class ReuseIntegrationAsUnitTest {
         checkAndShowTestResult();
     }
 
-    @Ignore
+    //@Ignore
     @Test
     public void testOneRobotSpecificProgramAsUnitTests() throws Exception {
-        String robotName = "calliope2017NoBlue";
-        String programName = "sensors_all_without_pins_and_callibot";
+        String robotName = "mbot2";
+        String programName = "sensors";
         LOG.info("========= testing program " + programName + " for robot " + robotName);
         final String resourceDirectory = setupRobotFactoryAndGetResourceDirForRobotSpecificTests(robotName);
         runRegenerateAndCodeGenerationForOneRobotSpecificProgram(resourceDirectory, programName + ".xml", robotName, Collections.emptyList());
@@ -397,9 +402,9 @@ public class ReuseIntegrationAsUnitTest {
             LOG.error("program XML has NOT version 3.1: " + programName);
             return false;
         }
-        Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst(testFactory);
-        ProgramAst<Void> generatedAst = transformer.blocks2Ast(blockSet);
-        List<Phrase<Void>> blocks = generatedAst.getTree().get(0);
+        Jaxb2ProgramAst transformer = new Jaxb2ProgramAst(testFactory);
+        ProgramAst generatedAst = transformer.blocks2Ast(blockSet);
+        List<Phrase> blocks = generatedAst.getTree().get(0);
         StringBuilder sb = new StringBuilder();
         for ( int i = 2; i < blocks.size(); i++ ) {
             sb.append(blocks.get(i).toString()).append("\n");
@@ -492,7 +497,7 @@ public class ReuseIntegrationAsUnitTest {
             stringBuilder.append(usedMethodsSorted);
 
             try {
-                ValidationFileAssert.assertThat(stringBuilder.toString()).isEqualToValidationFile(directory + COLLECTOR_RESULTS + robotName + "/" +  programName + ".txt");
+                ValidationFileAssert.assertThat(stringBuilder.toString()).isEqualToValidationFile(directory + COLLECTOR_RESULTS + robotName + "/" + programName + ".txt");
                 return true;
             } catch ( AssertionError e ) {
                 LOG.error("collector results doesn't match for " + programName + " with error" + e.getMessage(), e);

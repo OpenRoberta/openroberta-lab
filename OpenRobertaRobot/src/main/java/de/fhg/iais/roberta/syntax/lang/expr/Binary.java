@@ -7,35 +7,36 @@ import java.util.Locale;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.Sig;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.Assoc;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
 /**
  * This class represents blockly blocks defining binary operations in the AST<br>
  * The enumeration {@link Op} specifies the allowed binary operations.
  */
-public final class Binary<V> extends Expr<V> {
-    private final Op op;
-    private final Expr<V> left;
-    private final Expr<V> right;
-    private final String operationRange;
+@NepoBasic(name = "BINARY", category = "EXPR", blocklyNames = {"math_arithmetic", "math_change", "math_modulo", "robMath_change", "logic_compare", "logic_operation", "robText_append"})
+public final class Binary extends Expr {
+    public final Op op;
+    public final Expr left;
+    public final Expr right;
+    public final String operationRange;
 
-    private Binary(Op op, Expr<V> left, Expr<V> right, String operationRange, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("BINARY"), properties, comment);
+    public Binary(Op op, Expr left, Expr right, String operationRange, BlocklyProperties properties) {
+        super(properties);
         Assert.isTrue(op != null && left != null && right != null && left.isReadOnly() && right.isReadOnly());
         this.op = op;
         this.left = left;
@@ -44,59 +45,12 @@ public final class Binary<V> extends Expr<V> {
         this.setReadOnly();
     }
 
-    /**
-     * factory method: create an AST instance of {@link Binary}.
-     *
-     * @param op operator; must be <b>not</b> null,
-     * @param left expression on the left hand side; must be <b>not</b> null and <b>read only</b>,
-     * @param right expression on the right hand side; must be <b>not</b> null and <b>read only</b>,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object representing the binary expression
-     */
-    public static <V> Binary<V> make(Op op, Expr<V> left, Expr<V> right, String operationRange, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Binary<>(op, left, right, operationRange, properties, comment);
-    }
-
-    /**
-     * factory method: create an AST instance of {@link Binary}.<br>
-     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
-     *
-     * @param op operator; must be <b>not</b> null,
-     * @param left expression on the left hand side; must be <b>not</b> null and <b>read only</b>,
-     * @param right expression on the right hand side; must be <b>not</b> null and <b>read only</b>,
-     * @return read only object representing the binary expression
-     */
-    public static <V> Binary<V> make(Op op, Expr<V> left, Expr<V> right, String operationRange) {
-        return new Binary<>(op, left, right, operationRange, BlocklyBlockProperties.make("1", "1"), null);
-    }
-
-    /**
-     * @return the operation in the binary expression. See enum {@link Op} for all possible operations
-     */
-    public Op getOp() {
-        return this.op;
-    }
-
-    /**
-     * @return the expression on the left hand side. Returns subclass of {@link Expr}
-     */
-    public Expr<V> getLeft() {
-        return this.left;
-    }
 
     /**
      * @return the expression on the right hand side. Returns subclass of {@link Expr}
      */
-    public Expr<V> getRight() {
+    public Expr getRight() {
         return this.right;
-    }
-
-    /**
-     * @return the operationRange
-     */
-    public String getOperationRange() {
-        return this.operationRange;
     }
 
     @Override
@@ -123,35 +77,35 @@ public final class Binary<V> extends Expr<V> {
      * Operators for the binary expression.
      */
     public static enum Op {
-        ADD( 100, Assoc.LEFT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "+" ),
-        MINUS( 100, Assoc.LEFT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "-" ),
-        MULTIPLY( 200, Assoc.LEFT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "*" ),
-        DIVIDE( 200, Assoc.LEFT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "/" ),
-        MOD( 200, Assoc.NONE, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "%" ),
-        EQ( 80, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "==" ),
-        NEQ( 80, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "!=", "<>" ),
-        LT( 90, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER), "<" ),
-        LTE( 90, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER), "<=" ),
-        GT( 90, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER), ">" ),
-        GTE( 90, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER), ">=" ),
-        AND( 70, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.BOOLEAN, BlocklyType.BOOLEAN), "&&", "and" ),
-        OR( 60, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.BOOLEAN, BlocklyType.BOOLEAN), "||", "or" ),
-        MATH_CHANGE( 80, Assoc.NONE, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "+=" ),
-        TEXT_APPEND( 1, Assoc.LEFT, Sig.of(BlocklyType.STRING, BlocklyType.STRING, BlocklyType.STRING), "+=", "TEXTAPPEND" ),
-        IN( 1, Assoc.LEFT, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), ":", "in" ),
-        ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "=" ),
-        ADD_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "+=" ),
-        MINUS_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "-=" ),
-        MULTIPLY_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "*=" ),
-        DIVIDE_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "/=" ),
-        MOD_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "%=" );
+        ADD(100, Assoc.LEFT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "+"),
+        MINUS(100, Assoc.LEFT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "-"),
+        MULTIPLY(200, Assoc.LEFT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "*"),
+        DIVIDE(200, Assoc.LEFT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "/"),
+        MOD(200, Assoc.NONE, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "%"),
+        EQ(80, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "=="),
+        NEQ(80, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "!=", "<>"),
+        LT(90, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER), "<"),
+        LTE(90, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER), "<="),
+        GT(90, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER), ">"),
+        GTE(90, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER), ">="),
+        AND(70, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.BOOLEAN, BlocklyType.BOOLEAN), "&&", "and"),
+        OR(60, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.BOOLEAN, BlocklyType.BOOLEAN), "||", "or"),
+        MATH_CHANGE(80, Assoc.NONE, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "+="),
+        TEXT_APPEND(1, Assoc.LEFT, Sig.of(BlocklyType.STRING, BlocklyType.STRING, BlocklyType.STRING), "+=", "TEXTAPPEND"),
+        IN(1, Assoc.LEFT, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), ":", "in"),
+        ASSIGNMENT(1, Assoc.RIGHT, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "="),
+        ADD_ASSIGNMENT(1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "+="),
+        MINUS_ASSIGNMENT(1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "-="),
+        MULTIPLY_ASSIGNMENT(1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "*="),
+        DIVIDE_ASSIGNMENT(1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "/="),
+        MOD_ASSIGNMENT(1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "%=");
 
-        private final String[] values;
-        private final int precedence;
-        private final Assoc assoc;
-        private final Sig sig;
+        public final String[] values;
+        public final int precedence;
+        public final Assoc assoc;
+        public final Sig sig;
 
-        private Op(int precedence, Assoc assoc, Sig sig, String... values) {
+        Op(int precedence, Assoc assoc, Sig sig, String... values) {
             this.precedence = precedence;
             this.assoc = assoc;
             this.values = values;
@@ -207,48 +161,23 @@ public final class Binary<V> extends Expr<V> {
         }
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
 
         List<Value> values;
-        Phrase<V> leftt;
-        Phrase<V> rightt;
+        Phrase leftt;
+        Phrase rightt;
         switch ( block.getType() ) {
             case BlocklyConstants.TEXT_APPEND:
                 values = Jaxb2Ast.extractValues(block, (short) 2);
                 leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, BlocklyType.STRING));
                 rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.TEXT, BlocklyType.STRING));
-                return ExprStmt
-                    .make(
-                        Binary
-                            .make(
-                                Binary.Op.TEXT_APPEND,
-                                Jaxb2Ast.convertPhraseToExpr(leftt),
-                                Jaxb2Ast.convertPhraseToExpr(rightt),
-                                "",
-                                Jaxb2Ast.extractBlockProperties(block),
-                                Jaxb2Ast.extractComment(block)));
+                return new ExprStmt(new Binary(Op.TEXT_APPEND, Jaxb2Ast.convertPhraseToExpr(leftt), Jaxb2Ast.convertPhraseToExpr(rightt), "", Jaxb2Ast.extractBlocklyProperties(block)));
             case BlocklyConstants.ROB_MATH_CHANGE:
             case BlocklyConstants.MATH_CHANGE:
                 values = Jaxb2Ast.extractValues(block, (short) 2);
                 leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, BlocklyType.STRING));
                 rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.DELTA, BlocklyType.NUMBER_INT));
-                return ExprStmt
-                    .make(
-                        Binary
-                            .make(
-                                Binary.Op.MATH_CHANGE,
-                                Jaxb2Ast.convertPhraseToExpr(leftt),
-                                Jaxb2Ast.convertPhraseToExpr(rightt),
-                                "",
-                                Jaxb2Ast.extractBlockProperties(block),
-                                Jaxb2Ast.extractComment(block)));
+                return new ExprStmt(new Binary(Op.MATH_CHANGE, Jaxb2Ast.convertPhraseToExpr(leftt), Jaxb2Ast.convertPhraseToExpr(rightt), "", Jaxb2Ast.extractBlocklyProperties(block)));
 
             case BlocklyConstants.MATH_MODULO:
                 return helper
@@ -264,8 +193,8 @@ public final class Binary<V> extends Expr<V> {
                     ArrayList<ExprParam> exprParams = new ArrayList<>();
                     exprParams.add(new ExprParam(BlocklyConstants.A, BlocklyType.NUMBER_INT));
                     exprParams.add(new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT));
-                    List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-                    return MathPowerFunct.make(FunctionNames.POWER, params, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+                    List<Expr> params = helper.extractExprParameters(block, exprParams);
+                    return new MathPowerFunct(Jaxb2Ast.extractBlocklyProperties(block), FunctionNames.POWER, params);
                 }
             default:
                 return helper
@@ -287,25 +216,25 @@ public final class Binary<V> extends Expr<V> {
             mutation.setOperatorRange(this.operationRange);
             jaxbDestination.setMutation(mutation);
         }
-        switch ( getOp() ) {
+        switch ( this.op ) {
 
             case MATH_CHANGE:
-                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VAR, getLeft());
+                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VAR, this.left);
                 Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DELTA, getRight());
                 return jaxbDestination;
             case TEXT_APPEND:
-                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VAR, getLeft());
+                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VAR, this.left);
                 Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.TEXT, getRight());
                 return jaxbDestination;
 
             case MOD:
-                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DIVIDEND, getLeft());
+                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DIVIDEND, this.left);
                 Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DIVISOR, getRight());
                 return jaxbDestination;
 
             default:
-                Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, getOp().name());
-                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.A, getLeft());
+                Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, this.op.name());
+                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.A, this.left);
                 Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.B, getRight());
                 return jaxbDestination;
         }

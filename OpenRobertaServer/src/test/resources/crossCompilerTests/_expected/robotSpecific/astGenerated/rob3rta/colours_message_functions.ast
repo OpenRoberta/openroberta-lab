@@ -1,0 +1,9 @@
+
+(repeat [FOREVER_ARDU, BoolConst[value: true]]MethodStmt [MethodCall [messages, , , VOID]]MethodStmt [MethodCall [f3, Var [x], Var [x2], Var [x4], Var [n], Var [b], Var [c], VOID]]
+Var [n] := MethodExpr [MethodCall [function_return_numberVar, , , NUMBER]]
+
+Var [b] := MethodExpr [MethodCall [function_return_booleanVar, , , BOOLEAN]]
+
+Var [c] := MethodExpr [MethodCall [function_return_colourVar, , , COLOR]]
+
+)

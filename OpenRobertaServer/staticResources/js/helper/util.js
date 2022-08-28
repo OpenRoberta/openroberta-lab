@@ -1,8 +1,52 @@
 define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-validate", "bootstrap"], function (require, exports, MSG, LOG, $, Blockly) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.removeLinks = exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = void 0;
+    exports.toFixedPrecision = exports.closeSimRobotWindow = exports.openSimRobotWindow = exports.removeLinks = exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = exports.getTheStartBlock = exports.RGBAToHexA = exports.addVariableValue = exports.extendMouseEvent = exports.getWebAudio = exports.initMicrophone = exports.isEdge = exports.isIE = exports.checkInCircle = exports.getLinesFromRectangle = void 0;
     var ANIMATION_DURATION = 750;
+    function getLinesFromRectangle(myObj) {
+        return [
+            {
+                x1: myObj.x,
+                x2: myObj.x,
+                y1: myObj.y,
+                y2: myObj.y + myObj.h,
+            },
+            {
+                x1: myObj.x,
+                x2: myObj.x + myObj.w,
+                y1: myObj.y,
+                y2: myObj.y,
+            },
+            {
+                x1: myObj.x + myObj.w,
+                x2: myObj.x,
+                y1: myObj.y + myObj.h,
+                y2: myObj.y + myObj.h,
+            },
+            {
+                x1: myObj.x + myObj.w,
+                x2: myObj.x + myObj.w,
+                y1: myObj.y + myObj.h,
+                y2: myObj.y,
+            },
+        ];
+    }
+    exports.getLinesFromRectangle = getLinesFromRectangle;
+    /**
+     * @return the (unique) start block from the program. Must exist.
+     */
+    function getTheStartBlock() {
+        var startBlock = null;
+        for (var _i = 0, _a = Blockly.Workspace.getByContainer('blocklyDiv').getTopBlocks(); _i < _a.length; _i++) {
+            var block = _a[_i];
+            if (!block.isDeletable()) {
+                return block;
+            }
+        }
+        throw 'start block not found. That is impossible.';
+    }
+    exports.getTheStartBlock = getTheStartBlock;
     var ratioWorkspace = 1;
+    var simRobotWindowPositions = [];
     /**
      * Decode base64 string to array of bytes
      *
@@ -209,13 +253,13 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         $('#single-modal-form').onWrap('submit', function (e) {
             e.preventDefault();
             onSubmit();
-        });
+        }, 'sim start clicked');
         $('#single-modal').onWrap('hidden.bs.modal', function () {
             $('#single-modal-form').off('submit');
             $('#singleModalInput').val('');
             $('#single-modal-form').validate().resetForm();
             onHidden();
-        });
+        }, 'sim start clicked');
         $('#single-modal-form').removeData('validator');
         $('#single-modal-form').validate(validator);
         setFocusOnElement($('#singleModalInput'));
@@ -226,11 +270,11 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         $('#single-modal-list-form').onWrap('submit', function (e) {
             e.preventDefault();
             onSubmit();
-        });
+        }, 'sim start clicked');
         $('#single-modal-list').onWrap('hidden.bs.modal', function () {
             $('#single-modal-list-form').unbind('submit');
             onHidden();
-        });
+        }, 'sim start clicked');
         setFocusOnElement($('#singleModalListInput'));
         $('#single-modal-list').modal('show');
     }
@@ -276,7 +320,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
      *
      */
     function round(value, decimals) {
-        return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
+        return parseFloat(value.toFixed(decimals));
     }
     exports.round = round;
     /**
@@ -342,7 +386,9 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
                 downloadLink.onclick = destroyClickedElement;
                 downloadLink.style.display = 'none';
                 document.body.appendChild(downloadLink);
-                downloadLink.click();
+                setTimeout(function () {
+                    downloadLink.click();
+                }, 0);
             }
         }
         else {
@@ -352,7 +398,9 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
             downloadLink.style.display = 'none';
             document.body.appendChild(downloadLink);
             downloadLink.onclick = destroyClickedElement;
-            downloadLink.click();
+            setTimeout(function () {
+                downloadLink.click();
+            }, 0);
         }
     }
     exports.download = download;
@@ -445,6 +493,23 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
                 .on('mousemove touchmove', function (e) {
                 var pageX = e.pageX || e.originalEvent.touches[0].pageX;
                 var pageY = e.pageY || e.originalEvent.touches[0].pageY;
+                var newXPosition = pageX + pos_x - drg_w;
+                var newYPosition = pageY + pos_y - drg_h;
+                if (opt.constraint == 'window') {
+                    if (newXPosition >= $(window).width() - 19) {
+                        newXPosition = $(window).width() - 20;
+                    }
+                    else if (newXPosition <= 19 - $selected.width()) {
+                        newXPosition = 18 - $selected.width();
+                    }
+                    var headerSize = 92;
+                    if (newYPosition >= $(window).height() - 19) {
+                        newYPosition = $(window).height() - 20;
+                    }
+                    else if (newYPosition <= 19 - $selected.height() + headerSize) {
+                        newYPosition = 18 - $selected.height() + headerSize;
+                    }
+                }
                 // special case movable slider between workspace and right divs
                 if (opt.axis == 'x') {
                     var left = pageX + pos_x - drg_w;
@@ -466,8 +531,8 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
                 }
                 else {
                     $selected.offset({
-                        top: pageY + pos_y - drg_h,
-                        left: pageX + pos_x - drg_w,
+                        top: newYPosition,
+                        left: newXPosition,
                     });
                 }
                 $selected.css({
@@ -507,6 +572,21 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         $(this).trigger('classChange');
         return result;
     };
+    $.fn.toggleSimPopup = function (position) {
+        if ($(this).is(':hidden')) {
+            $(this).css({
+                top: position.top + 12,
+                left: position.left,
+            });
+        }
+        $(this).animate({
+            opacity: 'toggle',
+            top: 'toggle',
+        }, 300);
+        $(this).draggable({
+            constraint: 'window',
+        });
+    };
     $.fn.closeRightView = function (opt_callBack) {
         if ($('.fromRight.rightActive').hasClass('shifting')) {
             return;
@@ -527,7 +607,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
                 that.width($('#main-section').outerWidth() - now);
                 $('.rightMenuButton').css('right', now);
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
-                $(window).resize();
+                $(window).trigger('resize');
             },
             done: function () {
                 that.width($('#main-section').outerWidth());
@@ -537,84 +617,86 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
                 that.removeClass('rightActive');
                 $('.fromRight.rightActive').removeClass('rightActive');
                 $('#sliderDiv').hide();
-                $(window).resize();
+                $(window).trigger('resize');
                 if (typeof opt_callBack == 'function') {
                     opt_callBack();
                 }
+                $('.fromRight').trigger('closed');
             },
             always: function () {
                 $('.fromRight.shifting').removeClass('shifting');
             },
         });
     };
-    $.fn.openRightView = function (viewName, initialViewWidth, opt_callBack) {
+    $.fn.openRightView = function ($view, initialViewWidth, opt_callBack) {
         if ($('.fromRight.rightActive').hasClass('shifting')) {
             return;
         }
+        var $blockly = $('#blockly');
         Blockly.hideChaff();
         var width;
         var smallScreen;
-        var buttonName = viewName;
-        if (opt_callBack && typeof opt_callBack == 'string') {
-            buttonName = opt_callBack;
-        }
         if ($(window).width() < 768) {
             smallScreen = true;
-            width = this.width() - 52;
+            width = $blockly.width() - 52;
         }
         else {
             smallScreen = false;
-            width = this.width() * initialViewWidth;
+            width = $blockly.width() * initialViewWidth;
         }
-        if ($('#blockly').hasClass('rightActive')) {
+        if ($blockly.hasClass('rightActive')) {
             $('.fromRight.rightActive').removeClass('rightActive');
             $('.rightMenuButton.rightActive').removeClass('rightActive');
-            $('#' + viewName + 'Div, #' + buttonName + 'Button').addClass('rightActive');
-            $(window).resize();
+            $view.addClass('rightActive');
+            $(this).addClass('rightActive');
+            $(window).trigger('resize');
             if (smallScreen) {
                 $('.blocklyToolboxDiv').css('display', 'none');
             }
             if (typeof opt_callBack == 'function') {
                 opt_callBack();
             }
+            if (!$(this).attr('id').startsWith('sim')) {
+                closeSimRobotWindow();
+            }
+            $('.fromRight').trigger('closed');
             return;
         }
-        this.addClass('rightActive');
-        $('#' + viewName + 'Div').addClass('shifting');
-        $('#' + viewName + 'Div, #' + buttonName + 'Button').addClass('rightActive');
-        var that = this;
+        $blockly.addClass('rightActive');
+        $view.addClass('shifting rightActive');
+        $(this).addClass('rightActive');
         $('.fromRight.rightActive').animate({
             width: width,
         }, {
             duration: ANIMATION_DURATION,
             step: function (now, tween) {
-                that.width($('#main-section').outerWidth() - now);
+                $blockly.width($('#main-section').outerWidth() - now);
                 $('.rightMenuButton').css('right', now);
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
-                $(window).resize();
+                $(window).trigger('resize');
             },
             done: function () {
                 $('#sliderDiv').show();
-                that.width($('#main-section').outerWidth() - $('.fromRight.rightActive').width());
+                $blockly.width($('#main-section').outerWidth() - $('.fromRight.rightActive').width());
                 $('.rightMenuButton').css('right', $('.fromRight.rightActive').width());
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
-                $(window).resize();
+                $(window).trigger('resize');
                 if (smallScreen) {
                     $('.blocklyToolboxDiv').css('display', 'none');
                 }
                 $('#sliderDiv').css({
-                    left: that.width() - 7,
+                    left: $blockly.width() - 7,
                 });
                 if (typeof opt_callBack == 'function') {
                     opt_callBack();
                 }
             },
             always: function () {
-                $('#' + viewName + 'Div').removeClass('shifting');
+                $view.removeClass('shifting');
             },
         });
     };
-    $(window).resize(function () {
+    $(window).on('resize', function () {
         var parentWidth = $('#main-section').outerWidth();
         var height = Math.max($('#blockly').outerHeight(), $('#brickly').outerHeight());
         var rightWidth = (1 - ratioWorkspace) * parentWidth;
@@ -637,6 +719,19 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         if ($('#bricklyDiv')) {
             $('#bricklyDiv').width(parentWidth);
             $('#bricklyDiv').height(height);
+        }
+        for (var _i = 0, _a = $('.simWindow:visible'); _i < _a.length; _i++) {
+            var robotWindowElement = _a[_i];
+            if (robotWindowElement.offsetLeft >= $(window).width() - 20) {
+                $('#' + robotWindowElement.id).css({
+                    left: '' + $(window).width() - 20,
+                });
+            }
+            if (robotWindowElement.offsetTop >= $(window).height() - 20) {
+                $('#' + robotWindowElement.id).css({
+                    top: '' + $(window).height() - 20,
+                });
+            }
         }
         // here comes a fix for a strange browser behavior while zoom is not 100%. It is just in case (e.g. chrome 125% works fine, 110% not).
         // Seems that either the returned sizes from the browser sometimes include margins/borders and sometimes not or that the assigned sizes behave
@@ -719,4 +814,164 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         });
     }
     exports.removeLinks = removeLinks;
+    function checkInCircle(px, py, cx, cy, r) {
+        return (px - cx) * (px - cx) + (py - cy) * (py - cy) <= r * r;
+    }
+    exports.checkInCircle = checkInCircle;
+    /**
+     * open simRobotWindow if it was previously closed with
+     * closeSimRobotWindow() and the robot has not been changed
+     * @param duration
+     *            {Number} - duration (optional) how long the simRobotWindow should take to show
+     */
+    function openSimRobotWindow() {
+        for (var _i = 0, _a = $('.simWindow-openedButHidden'); _i < _a.length; _i++) {
+            var robotWindowElement = _a[_i];
+            var position = $(window).width() * simRobotWindowPositions[robotWindowElement.id];
+            $('#' + robotWindowElement.id).animate({
+                opacity: 'show',
+                left: '' + position,
+            }, ANIMATION_DURATION);
+        }
+        $('.simWindow').removeClass('simWindow-openedButHidden');
+    }
+    exports.openSimRobotWindow = openSimRobotWindow;
+    /**
+     * close SimRobotWindow and remember it
+     * closing SimRobotWindow using this method will show it again if opeSimRobotWindow() is called
+     * @param duration
+     *            {Number} - duration (optional) how long the simRobotWindow should take to hide
+     */
+    function closeSimRobotWindow() {
+        var SimWindows = $('.simWindow:visible');
+        for (var _i = 0, SimWindows_1 = SimWindows; _i < SimWindows_1.length; _i++) {
+            var robotWindowElement = SimWindows_1[_i];
+            var relativePosition;
+            if ($(window).width() !== 0) {
+                relativePosition = Math.abs((robotWindowElement.offsetLeft / $(window).width()) % 1);
+            }
+            else {
+                relativePosition = 0;
+            }
+            simRobotWindowPositions[robotWindowElement.id] = relativePosition;
+        }
+        SimWindows.addClass('simWindow-openedButHidden').animate({
+            opacity: 'hide',
+            left: '' + $(window).width(),
+        }, ANIMATION_DURATION);
+    }
+    exports.closeSimRobotWindow = closeSimRobotWindow;
+    function isIE() {
+        var ua = window.navigator.userAgent;
+        var ie = ua.indexOf('MSIE ');
+        var ie11 = ua.indexOf('Trident/');
+        if (ie > -1 || ie11 > -1) {
+            return true;
+        }
+        return false;
+    }
+    exports.isIE = isIE;
+    function isEdge() {
+        var ua = window.navigator.userAgent;
+        var edge = ua.indexOf('Edge');
+        return edge > -1;
+    }
+    exports.isEdge = isEdge;
+    function initMicrophone(robot) {
+        // TODO if (navigator.mediaDevices === undefined) {
+        //navigator.mediaDevices = {};
+        //}
+        navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator['webkitGetUserMedia'] || navigator['mozGetUserMedia'];
+        try {
+            // ask for an audio input
+            var mediaDevices = navigator.mediaDevices;
+            mediaDevices
+                .getUserMedia({
+                audio: {
+                    mandatory: {
+                        googEchoCancellation: 'false',
+                        googAutoGainControl: 'false',
+                        googNoiseSuppression: 'false',
+                        googHighpassFilter: 'false',
+                    },
+                    optional: [],
+                },
+            })
+                .then(function (stream) {
+                var mediaStreamSource = robot.webAudio.context.createMediaStreamSource(stream);
+                robot.sound = Volume.createAudioMeter(robot.webAudio.context);
+                mediaStreamSource.connect(robot.sound);
+            }, function () {
+                console.log('Sorry, but there is no microphone available on your system');
+            });
+        }
+        catch (e) {
+            console.log('Sorry, but there is no microphone available on your system');
+        }
+    }
+    exports.initMicrophone = initMicrophone;
+    var thisWebAudio;
+    function getWebAudio() {
+        if (!thisWebAudio) {
+            thisWebAudio = {};
+            var AudioContext = window.AudioContext || window['webkitAudioContext'] || false;
+            if (AudioContext) {
+                thisWebAudio.context = new AudioContext();
+            }
+            else {
+                thisWebAudio.context = null;
+                thisWebAudio.oscillator = null;
+                console.log('Sorry, but the Web Audio API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox');
+            }
+        }
+        return thisWebAudio;
+    }
+    exports.getWebAudio = getWebAudio;
+    function extendMouseEvent(e, scale, $layer) {
+        var X = e.clientX || e.originalEvent.touches[0].pageX;
+        var Y = e.clientY || e.originalEvent.touches[0].pageY;
+        var top = $layer.offset().top;
+        var left = $layer.offset().left;
+        e.startX = (X - left) / scale;
+        e.startY = (Y - top) / scale;
+    }
+    exports.extendMouseEvent = extendMouseEvent;
+    function toFixedPrecision(value, precision) {
+        var power = Math.pow(10, precision || 0);
+        return String(Math.round(value * power) / power);
+    }
+    exports.toFixedPrecision = toFixedPrecision;
+    function addVariableValue($elem, name, value) {
+        switch (typeof value) {
+            case 'number': {
+                $elem.append('<div><label>' + name + ' :  </label><span> ' + round(value, 2) + '</span></div>');
+                break;
+            }
+            case 'string':
+            case 'boolean': {
+                $elem.append('<div><label>' + name + ' :  </label><span> ' + value + '</span></div>');
+                break;
+            }
+            case 'object': {
+                for (var i = 0; i < value.length; i++) {
+                    addVariableValue($elem, name + ' [' + String(i) + ']', value[i]);
+                }
+                break;
+            }
+        }
+    }
+    exports.addVariableValue = addVariableValue;
+    function RGBAToHexA(rgba) {
+        var r = (+rgba[0]).toString(16), g = (+rgba[1]).toString(16), b = (+rgba[2]).toString(16), a = (+rgba[3]).toString(16);
+        if (r.length == 1)
+            r = '0' + r;
+        if (g.length == 1)
+            g = '0' + g;
+        if (b.length == 1)
+            b = '0' + b;
+        if (a.length == 1)
+            a = '0' + a;
+        return '#' + r + g + b + a;
+    }
+    exports.RGBAToHexA = RGBAToHexA;
 });

@@ -3,64 +3,38 @@ package de.fhg.iais.roberta.syntax.lang.expr;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.Assoc;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class represents all unary operations from Blockly into the AST (abstract syntax tree).<br>
  * <br>
  * Client must provide operation and expression over which operation is executed. <br>
  * <br>
- * To create an instance from this class use the method {@link #make(Op, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
+ * To create an instance from this class use the method {@link #make(Op, Expr, BlocklyProperties, BlocklyComment)}.<br>
  * <br>
  * The enumeration {@link Op} contains all allowed unary operations.
  */
-public class Unary<V> extends Expr<V> {
-    private final Op op;
-    private final Expr<V> expr;
+@NepoBasic(name = "UNARY", category = "EXPR", blocklyNames = {"logic_negate"})
+public final class Unary extends Expr {
+    public final Op op;
+    public final Expr expr;
 
-    private Unary(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("UNARY"), properties, comment);
+    public Unary(Op op, Expr expr, BlocklyProperties properties) {
+        super(properties);
         Assert.isTrue(op != null && expr != null && expr.isReadOnly());
         this.op = op;
         this.expr = expr;
         setReadOnly();
-    }
-
-    /**
-     * creates instance of {@link Unary}. This instance is read only and can not be modified.
-     *
-     * @param op operator; ; must be <b>not</b> null,
-     * @param expr expression over which the operation is performed; must be <b>not</b> null and <b>read only</b>,,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link Unary}
-     */
-    public static <V> Unary<V> make(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Unary<V>(op, expr, properties, comment);
-    }
-
-    /**
-     * @return the operation in the binary expression. See enum {@link Op} for all possible operations
-     */
-    public Op getOp() {
-        return this.op;
-    }
-
-    /**
-     * @return the expression on which the operation is performed. Returns subclass of {@link Expr}
-     */
-    public Expr<V> getExpr() {
-        return this.expr;
     }
 
     @Override
@@ -87,15 +61,15 @@ public class Unary<V> extends Expr<V> {
      * Operators for the unary expression.
      */
     public static enum Op {
-        PLUS( 10, Assoc.LEFT, "+" ),
-        NEG( 10, Assoc.LEFT, "-" ),
-        NOT( 300, Assoc.RIGHT, "!", "not" ),
-        POSTFIX_INCREMENTS( 1, Assoc.LEFT, "++" ),
-        PREFIX_INCREMENTS( 1, Assoc.RIGHT, "++" );
+        PLUS(10, Assoc.LEFT, "+"),
+        NEG(10, Assoc.LEFT, "-"),
+        NOT(300, Assoc.RIGHT, "!", "not"),
+        POSTFIX_INCREMENTS(1, Assoc.LEFT, "++"),
+        PREFIX_INCREMENTS(1, Assoc.RIGHT, "++");
 
-        private final String[] values;
-        private final int precedence;
-        private final Assoc assoc;
+        public final String[] values;
+        public final int precedence;
+        public final Assoc assoc;
 
         private Op(int precedence, Assoc assoc, String... values) {
             this.precedence = precedence;
@@ -150,7 +124,7 @@ public class Unary<V> extends Expr<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         return helper.blockToUnaryExpr(block, new ExprParam(BlocklyConstants.BOOL, BlocklyType.BOOLEAN), BlocklyConstants.NOT);
     }
 
@@ -159,10 +133,10 @@ public class Unary<V> extends Expr<V> {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         if ( getProperty().getBlockType().equals(BlocklyConstants.MATH_SINGLE) ) {
-            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, getOp().name());
-            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.NUM, getExpr());
+            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, this.op.name());
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.NUM, this.expr);
         } else {
-            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.BOOL, getExpr());
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.BOOL, this.expr);
         }
         return jaxbDestination;
     }

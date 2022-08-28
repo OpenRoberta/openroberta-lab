@@ -14,8 +14,8 @@ import java.util.stream.IntStream;
 import org.json.JSONObject;
 
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
-import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
 /**
  * Class to generate helper method definitions and respective method names for usage in code generation.

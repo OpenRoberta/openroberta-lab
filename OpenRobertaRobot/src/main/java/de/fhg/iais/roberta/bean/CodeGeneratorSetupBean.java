@@ -15,13 +15,14 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
- * Container for code generation related information and functionality. Creates the HelperMethodGenerator for use in the code generation visitors. TODO should
- * include more general information like global variables etc.
+ * Container for code generation related information and functionality. Creates the HelperMethodGenerator for use in the code generation visitors.
+ * TODO should include more general information like global variables etc.
  */
 public class CodeGeneratorSetupBean implements IProjectBean {
 
     private HelperMethodGenerator helperMethodGenerator;
-    private final Set<Enum<?>> usedMethods = new HashSet<>(); //All needed helper methods as a Set
+    private final Set<Enum<?>> usedMethods = new HashSet<>(); // All needed helper methods as a Set
+    private NNBean nnBean;
 
     public HelperMethodGenerator getHelperMethodGenerator() {
         return this.helperMethodGenerator;
@@ -29,6 +30,10 @@ public class CodeGeneratorSetupBean implements IProjectBean {
 
     public Set<Enum<?>> getUsedMethods() {
         return Collections.unmodifiableSet(this.usedMethods);
+    }
+
+    public NNBean getNNBean() {
+        return this.nnBean;
     }
 
     public static class Builder implements IBuilder<CodeGeneratorSetupBean> {
@@ -55,6 +60,11 @@ public class CodeGeneratorSetupBean implements IProjectBean {
 
         public Builder addAdditionalEnums(Collection<Class<? extends Enum<?>>> additionalEnums) {
             this.additionalEnums.addAll(additionalEnums);
+            return this;
+        }
+
+        public Builder setNNBean(NNBean nnBean) {
+            codeGeneratorBean.nnBean = nnBean;
             return this;
         }
 

@@ -1,4 +1,6 @@
-#include "bob3.h" 
+#include "bob3.h"
+#include <stdlib.h>
+#include <math.h>
 Bob3 rob;
 
 void math1();
@@ -52,12 +54,11 @@ void math2() {
     ___n = floor(___n);
     ___n = fmod(___n, ___n);
     ___n = _CLAMP(___n, ___n, ___n);
-    ___n = _randomIntegerInRange(___n, ___n);
+    ___n = randomNumber(___n, ___n);
     ___n = ((double) rand() / (RAND_MAX));
 }
 
-void setup()
-{
+void setup() {
     ___n = 0;
     ___booleanVar = true;
     ___colourVar = RGB(0xFF, 0xFF, 0xFF);

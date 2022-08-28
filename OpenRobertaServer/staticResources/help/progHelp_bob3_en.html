@@ -38,7 +38,7 @@
             <p>Option and input values:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-sorted-down">option, choose which LED you want to control</li>
+                <li class="typcn typcn-arrow-sorted-down">LED, choose which LED you want to control</li>
                 <li class="typcn typcn-arrow-left">colour, the colour you want the eye to display.</li>
             </ul>
         </div>
@@ -48,7 +48,7 @@
             <p>options:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-sorted-down">option, choose which LED you want to turn off.</li>
+                <li class="typcn typcn-arrow-sorted-down">LED, choose which LED you want to turn off.</li>
             </ul>
         </div>
         <div id="bob3Actions_set_led" class="help beginner">
@@ -58,8 +58,8 @@
             <p>Options:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-sorted-down">option, select here the LED you want to control.</li>
-                <li class="typcn typcn-arrow-sorted-down">Option, select whether you want to turn the LED on or off.
+                <li class="typcn typcn-arrow-sorted-down">LED, select here the LED you want to control.</li>
+                <li class="typcn typcn-arrow-sorted-down">status, select whether you want to turn the LED on or off.
                 </li>
             </ul>
         </div>
@@ -71,7 +71,7 @@
             <p>Input values:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-left">Number, the number you want to save.</li>
+                <li class="typcn typcn-arrow-left">number, the number you want to save.</li>
             </ul>
         </div>
         <div id="bob3Actions_recall" class="help expert">
@@ -81,23 +81,31 @@
             <p>Return values:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-right">Number, the number currently stored in the cache.</li>
+                <li class="typcn typcn-arrow-right">number, the number currently stored in the cache.</li>
             </ul>
         </div>
         <div id="robSensors_infrared_getSample" class="help beginner">
-            <h3 id="BlockdescriptionBOB3-»get...light%infraredsensor«">»get ... light % infrared sensor «</h3>
-            <p>With this block you can scan your robot's infrared sensor and measure either the ambient light or the
-                light reflected by your robot.</p>
+            <h3 id="BlockdescriptionBOB3-»get...infraredsensor«">»get ... infrared sensor «</h3>
+            <p>With this block you can query the infrared sensor of your robot and measure either the »ambient light« or
+                the light reflected by your robot. The values that this sensor delivers can be very different, this is
+                due to the lighting conditions of the environment. In natural sunlight there is much more light in the
+                infrared spectrum than for example in the light of a light emitting diode. Therefore, you must always
+                consider the ambient light when using this sensor. With natural sunlight, values of up to 1023 can be
+                achieved, whereas with light emitting diode illumination, values of up to 100 are usually achieved. For
+                this reason, the measurement of the reflected light is usually not useful in strong sunlight, because
+                the light emitted by the robots diode is overshadowed by the ambient light.</p>
             <p>Options:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-sorted-down">option, select the type of light you want to measure, either
-                    ambient or reflected light.</li>
+                <li class="typcn typcn-arrow-sorted-down">measuring method, select the type of light you want to
+                    measure.</li>
             </ul>
             <p class="auto-cursor-target"><span style="letter-spacing: 0.0px;">Return value:</span>
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-right">number, value of the measured light between 0 and 100.</li>
+                <li class="typcn typcn-arrow-right">number, value of the ambient light between 0 and 1023.</li>
+                <li class="typcn typcn-arrow-right">number, value of the reflected light, usually between 0 and 250,
+                    theoretically up to 1023.</li>
             </ul>
         </div>
         <div id="robSensors_pintouch_getSample" class="help beginner">
@@ -106,22 +114,25 @@
             <p>Options:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-sorted-down">option, select the side of the robot you want to query. Either
-                    left or right.</li>
-                <li class="typcn typcn-arrow-sorted-down">option, select the sensor you want to query. Either a single
+                <li class="typcn typcn-arrow-sorted-down">position, select the side of the robot you want to query.
+                    Either left or right.</li>
+                <li class="typcn typcn-arrow-sorted-down">sensor, select the sensor you want to query. Either a single
                     sensor on the selected site or all sensors on the site at once.</li>
             </ul>
             <p class="auto-cursor-target">Return value:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-right">boolean, either true or false, depending on whether the sensor is
-                    pressed or not</li>
+                    pressed or not.</li>
             </ul>
         </div>
         <div id="robSensors_temperature_getSample" class="help beginner">
             <h3 id="BlockdescriptionBOB3-»getvalue°temperaturesensor«">»get value ° temperature sensor «</h3>
             <p>With this block you can query the built-in temperature sensor of your robot and measure the ambient
-                temperature.</p>
+                temperature. Due to variations in the production process, there is a shift in the value of the
+                temperature from about 240 - 280 °C. Unfortunately, this value is not consistent between different
+                sensors and can therefore not be determined accurately. Therefore, only relative temperatures should be
+                used here, e.g. the temperature difference between two points in time. </p>
             <p>Return values:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">

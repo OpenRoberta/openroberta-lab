@@ -1,856 +1,129 @@
-{"ops": [
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": [
-      "8m4AeemL9A}w*4kMZuQ%",
-      "htq9iKW_CtEKmG-z5@dU"
-    ],
-    "value": "0",
-    "-": ["htq9iKW_CtEKmG-z5@dU"]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "r1",
-    "type": "NUMBER",
-    "-": ["8m4AeemL9A}w*4kMZuQ%"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": [
-      "T?zl?qW4vH~!_;mXub.S",
-      "EM!Yt+?9y0@nT,R|F*a0"
-    ],
-    "value": "0",
-    "-": ["T?zl?qW4vH~!_;mXub.S"]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "r2",
-    "type": "NUMBER",
-    "-": ["EM!Yt+?9y0@nT,R|F*a0"]
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "+": [
-      "3BnFl4f_8Uh=f`tmBF.%",
-      "Z4FaJtbSzsWtdMw.ZSIY"
-    ],
-    "value": true,
-    "-": ["3BnFl4f_8Uh=f`tmBF.%"]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "b1",
-    "type": "BOOLEAN",
-    "-": ["Z4FaJtbSzsWtdMw.ZSIY"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": [
-      "+R/NnB|N1r#_OFj*Dopa",
-      "2)3~tWuqBB6bndk{SO(3"
-    ],
-    "value": "0",
-    "-": ["2)3~tWuqBB6bndk{SO(3"]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "r3",
-    "type": "NUMBER",
-    "-": ["+R/NnB|N1r#_OFj*Dopa"]
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "+": [
-      "E60CIX%VWi:Eo}-@ZX+n",
-      "Bc!WHTgtHfj%xHw;UFyN"
-    ],
-    "value": true,
-    "-": ["Bc!WHTgtHfj%xHw;UFyN"]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "sim",
-    "type": "BOOLEAN",
-    "-": ["E60CIX%VWi:Eo}-@ZX+n"]
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": ["v4NgYk3qB.n6An@mKFtQ"],
-    "+": [
-      "/[)g;rM~|=Pn/xO10l!f",
-      "v4NgYk3qB.n6An@mKFtQ"
-    ],
-    "type": "start",
-    "target": "IfStatement"
-  },
-  {
-    "opc": "expr",
-    "name": "sim",
-    "expr": "Var",
-    "+": ["m.E94`h`1(O8}gID~.1A"],
-    "-": ["m.E94`h`1(O8}gID~.1A"]
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 17
-  },
-  {
-    "opc": "expr",
-    "expr": "createMathConstant",
-    "+": [
-      "eb!%kkm,[NdMc@GkwPcw",
-      "[,RM0IfD_+Yym{BA1%zJ"
-    ],
-    "value": "PI",
-    "-": ["eb!%kkm,[NdMc@GkwPcw"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["Da2H_5dm,zsomNn{[ctn"],
-    "value": "2",
-    "-": ["Da2H_5dm,zsomNn{[ctn"]
-  },
-  {
-    "op": "DIVIDE",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["[,RM0IfD_+Yym{BA1%zJ"]
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 18
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["Y?27UHaTyhsTMZ`i;6kK"],
-    "value": "90",
-    "-": ["Y?27UHaTyhsTMZ`i;6kK"]
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "-": ["/[)g;rM~|=Pn/xO10l!f"],
-    "target": "IfStatement"
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "r3",
-    "-": ["v4NgYk3qB.n6An@mKFtQ"]
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": ["SV*e?x,p;@WlRpudgX?3"],
-    "+": [
-      "[QRPII;hMFF?@F!Dr2^g",
-      "SV*e?x,p;@WlRpudgX?3"
-    ],
-    "type": "start",
-    "target": "Binary"
-  },
-  {
-    "opc": "expr",
-    "name": "b1",
-    "expr": "Var",
-    "+": ["xvht1UoE~3R}C%Fs:!%/"],
-    "-": ["xvht1UoE~3R}C%Fs:!%/"]
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 28
-  },
-  {
-    "opc": "expr",
-    "name": "r3",
-    "expr": "Var",
-    "+": [
-      "H=7UL=djVNuJgAs86?9J",
-      "WCrg)L?(yam=}@(f6h0^",
-      "uY9LQ{2B-|Y.QZA:UDlR"
-    ],
-    "-": ["H=7UL=djVNuJgAs86?9J"]
-  },
-  {
-    "op": "SIN",
-    "opc": "expr",
-    "expr": "SingleFunction",
-    "-": ["WCrg)L?(yam=}@(f6h0^"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["0%9+Wn0o[?QtQh|cD7Or"],
-    "value": "1",
-    "-": ["0%9+Wn0o[?QtQh|cD7Or"]
-  },
-  {
-    "op": "EQ",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["uY9LQ{2B-|Y.QZA:UDlR"]
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 29
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": false
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "-": ["[QRPII;hMFF?@F!Dr2^g"],
-    "target": "Binary"
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "b1",
-    "-": ["SV*e?x,p;@WlRpudgX?3"]
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": ["Zi8!KvP7`1aZr!+opPf?"],
-    "+": [
-      "Zi8!KvP7`1aZr!+opPf?",
-      "BC{Pp]VpES/!{cDPoB@V"
-    ],
-    "type": "start",
-    "target": "Binary"
-  },
-  {
-    "opc": "expr",
-    "name": "b1",
-    "expr": "Var",
-    "+": ["3g(cn|i=a/f8`WEEwE)g"],
-    "-": ["3g(cn|i=a/f8`WEEwE)g"]
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 39
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": [
-      "cdA?J8}yBK,hUoN1CQmR",
-      "#TY`Ddy8g`GbVo3)*dD-",
-      ";@QDC]X-EUt9!AH(}3Q%"
-    ],
-    "value": "0",
-    "-": [";@QDC]X-EUt9!AH(}3Q%"]
-  },
-  {
-    "op": "COS",
-    "opc": "expr",
-    "expr": "SingleFunction",
-    "-": ["cdA?J8}yBK,hUoN1CQmR"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["V4y=s#.:1+vtfZ9Uzw!]"],
-    "value": "1",
-    "-": ["V4y=s#.:1+vtfZ9Uzw!]"]
-  },
-  {
-    "op": "EQ",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["#TY`Ddy8g`GbVo3)*dD-"]
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 40
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": false
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "-": ["BC{Pp]VpES/!{cDPoB@V"],
-    "target": "Binary"
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "b1",
-    "-": ["Zi8!KvP7`1aZr!+opPf?"]
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": ["!6,6f4d!ig#C[.bBp3wx"],
-    "+": [
-      "!6,6f4d!ig#C[.bBp3wx",
-      "N{w+TQddcy6v:5sS(/gZ"
-    ],
-    "type": "start",
-    "target": "Binary"
-  },
-  {
-    "opc": "expr",
-    "name": "b1",
-    "expr": "Var",
-    "+": ["r:cB|2Kt4SSPHt{LMdba"],
-    "-": ["r:cB|2Kt4SSPHt{LMdba"]
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 50
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": [
-      "lY7gS;m5?j%v{E4=LU?D",
-      "Ai0l=J]xb[^[!WxZFLEm",
-      "siqq@T/cc/911ZG*A`S3"
-    ],
-    "value": "0",
-    "-": ["siqq@T/cc/911ZG*A`S3"]
-  },
-  {
-    "op": "TAN",
-    "opc": "expr",
-    "expr": "SingleFunction",
-    "-": ["Ai0l=J]xb[^[!WxZFLEm"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["I)qn~y[l2HtPCC6slLM4"],
-    "value": "0",
-    "-": ["I)qn~y[l2HtPCC6slLM4"]
-  },
-  {
-    "op": "EQ",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["lY7gS;m5?j%v{E4=LU?D"]
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 51
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": false
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "-": ["N{w+TQddcy6v:5sS(/gZ"],
-    "target": "Binary"
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "b1",
-    "-": ["!6,6f4d!ig#C[.bBp3wx"]
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": ["J2a3|@^Ytt.({c-5AeK="],
-    "+": [
-      "J2a3|@^Ytt.({c-5AeK=",
-      "q_Lq^(@Nh)sPIW9=NKnn"
-    ],
-    "type": "start",
-    "target": "Binary"
-  },
-  {
-    "opc": "expr",
-    "name": "b1",
-    "expr": "Var",
-    "+": ["zTc-Ze2VlS.AWM-8VFuP"],
-    "-": ["zTc-Ze2VlS.AWM-8VFuP"]
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 61
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": [
-      "2]7:~d7Xi:p^PclJL+v1",
-      "@XV2l8LOg~KyC|9g)oNO",
-      "GX!wLp,PGnUYcd[^bzE|"
-    ],
-    "value": "1",
-    "-": ["GX!wLp,PGnUYcd[^bzE|"]
-  },
-  {
-    "op": "ASIN",
-    "opc": "expr",
-    "expr": "SingleFunction",
-    "-": ["@XV2l8LOg~KyC|9g)oNO"]
-  },
-  {
-    "opc": "expr",
-    "name": "r3",
-    "expr": "Var",
-    "+": ["gAN^t-?_@MtbT.[F5-93"],
-    "-": ["gAN^t-?_@MtbT.[F5-93"]
-  },
-  {
-    "op": "EQ",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["2]7:~d7Xi:p^PclJL+v1"]
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 62
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": false
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "-": ["q_Lq^(@Nh)sPIW9=NKnn"],
-    "target": "Binary"
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "b1",
-    "-": ["J2a3|@^Ytt.({c-5AeK="]
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": ["?Y:cZn9.*-N](GncWtCY"],
-    "+": [
-      "h=;?C#4pLI,]k4*vcogm",
-      "?Y:cZn9.*-N](GncWtCY"
-    ],
-    "type": "start",
-    "target": "Binary"
-  },
-  {
-    "opc": "expr",
-    "name": "b1",
-    "expr": "Var",
-    "+": ["4E)T=grj,Qk^_6~h]@6M"],
-    "-": ["4E)T=grj,Qk^_6~h]@6M"]
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 72
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": [
-      "|E=dnSEusVK)ks-qO|]c",
-      "9p!A1W!OyH5Ob53QoV^+",
-      "9X{^l#Ckdj!x**5_bE^t"
-    ],
-    "value": "1",
-    "-": ["9X{^l#Ckdj!x**5_bE^t"]
-  },
-  {
-    "op": "ACOS",
-    "opc": "expr",
-    "expr": "SingleFunction",
-    "-": ["|E=dnSEusVK)ks-qO|]c"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["7bgX?1/%KH]vrXE#5`Ek"],
-    "value": "0",
-    "-": ["7bgX?1/%KH]vrXE#5`Ek"]
-  },
-  {
-    "op": "EQ",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["9p!A1W!OyH5Ob53QoV^+"]
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 73
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": false
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "-": ["h=;?C#4pLI,]k4*vcogm"],
-    "target": "Binary"
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "b1",
-    "-": ["?Y:cZn9.*-N](GncWtCY"]
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": ["Tu[Q7^wb`h*bv,wna+o]"],
-    "+": [
-      "Tu[Q7^wb`h*bv,wna+o]",
-      "aD}6%#%(,*iVykxb^5bt"
-    ],
-    "type": "start",
-    "target": "Binary"
-  },
-  {
-    "opc": "expr",
-    "name": "b1",
-    "expr": "Var",
-    "+": ["@nu=7|Ag3^zp6WVY.icC"],
-    "-": ["@nu=7|Ag3^zp6WVY.icC"]
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 83
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": [
-      "}A/T7{GCEI^U*5)p#as@",
-      "N-*l7DRagcFA{-ox~ajg",
-      "KwEWPZNupH?b?8xXjuTI"
-    ],
-    "value": "0",
-    "-": ["KwEWPZNupH?b?8xXjuTI"]
-  },
-  {
-    "op": "ATAN",
-    "opc": "expr",
-    "expr": "SingleFunction",
-    "-": ["N-*l7DRagcFA{-ox~ajg"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["!vu[k#Nv|?eRy!i/K=QC"],
-    "value": "0",
-    "-": ["!vu[k#Nv|?eRy!i/K=QC"]
-  },
-  {
-    "op": "EQ",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["}A/T7{GCEI^U*5)p#as@"]
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 84
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": false
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "-": ["aD}6%#%(,*iVykxb^5bt"],
-    "target": "Binary"
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "b1",
-    "-": ["Tu[Q7^wb`h*bv,wna+o]"]
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": ["fTLU]w^`V^vTX=Xa]j0."],
-    "+": [
-      ")=zbxEv^7!3G%1%bGV71",
-      "fTLU]w^`V^vTX=Xa]j0."
-    ],
-    "type": "start",
-    "target": "Binary"
-  },
-  {
-    "opc": "expr",
-    "name": "b1",
-    "expr": "Var",
-    "+": ["gRfCsBXbU;T3at#~Evt?"],
-    "-": ["gRfCsBXbU;T3at#~Evt?"]
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 101
-  },
-  {
-    "opc": "comment",
-    "+": ["p*a1DzyB:J%nf4fTB3)h"],
-    "type": "start",
-    "target": "Binary"
-  },
-  {
-    "opc": "expr",
-    "expr": "createMathConstant",
-    "+": [
-      "n_n/3:;kl{WSJI5df|{_",
-      "62xO7GLqXK3V6@p|fvxl"
-    ],
-    "value": "E",
-    "-": ["n_n/3:;kl{WSJI5df|{_"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["`:mxla3(H.0Tv,qd:[Yv"],
-    "value": "2.6",
-    "-": ["`:mxla3(H.0Tv,qd:[Yv"]
-  },
-  {
-    "op": "GT",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["62xO7GLqXK3V6@p|fvxl"]
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 98
-  },
-  {
-    "opc": "expr",
-    "expr": "createMathConstant",
-    "+": [
-      "|urw=(;j|J0B9**HEP?r",
-      "7;f~//.A{4zrPXFVy%i6"
-    ],
-    "value": "E",
-    "-": ["7;f~//.A{4zrPXFVy%i6"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["B(f4h.0=LwmE21((9br9"],
-    "value": "2.8",
-    "-": ["B(f4h.0=LwmE21((9br9"]
-  },
-  {
-    "op": "LT",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["|urw=(;j|J0B9**HEP?r"]
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 99
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": false
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "-": ["p*a1DzyB:J%nf4fTB3)h"],
-    "target": "Binary"
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 102
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": false
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "-": [")=zbxEv^7!3G%1%bGV71"],
-    "target": "Binary"
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "b1",
-    "-": ["fTLU]w^`V^vTX=Xa]j0."]
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": ["]|bJYNO^ZnXEs-`7xw0j"],
-    "+": [
-      "]|bJYNO^ZnXEs-`7xw0j",
-      "j@Rra/*L3z)`oR03^JT:"
-    ],
-    "type": "start",
-    "target": "Binary"
-  },
-  {
-    "opc": "expr",
-    "name": "b1",
-    "expr": "Var",
-    "+": [",/@qUbfJm]amc#3@Mfi^"],
-    "-": [",/@qUbfJm]amc#3@Mfi^"]
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 123
-  },
-  {
-    "opc": "comment",
-    "+": ["5?LId)Fy[/lx4we)74)v"],
-    "type": "start",
-    "target": "Binary"
-  },
-  {
-    "opc": "expr",
-    "expr": "createMathConstant",
-    "+": [
-      "%Ck3BKaT?:CM!Gi{tf.P",
-      "69E[Ug?{RHSoup+)a:c[",
-      "f!xsU6/[x.2*kk^rybJ7"
-    ],
-    "value": "SQRT2",
-    "-": ["f!xsU6/[x.2*kk^rybJ7"]
-  },
-  {
-    "opc": "expr",
-    "expr": "createMathConstant",
-    "+": ["qU#cuD*R+*+eJ9FM.buy"],
-    "value": "SQRT1_2",
-    "-": ["qU#cuD*R+*+eJ9FM.buy"]
-  },
-  {
-    "op": "MULTIPLY",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["69E[Ug?{RHSoup+)a:c["]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["TDblVmd)!j8MWk{*)A*7"],
-    "value": "0.999",
-    "-": ["TDblVmd)!j8MWk{*)A*7"]
-  },
-  {
-    "op": "GTE",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["%Ck3BKaT?:CM!Gi{tf.P"]
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 120
-  },
-  {
-    "opc": "expr",
-    "expr": "createMathConstant",
-    "+": [
-      "Gw~Wk6}xOIpK*E;c83/o",
-      "Wb5OqEBr`dL-fjv3|J~R",
-      "S^/DD(Bus;,pRrQab#Lz"
-    ],
-    "value": "SQRT2",
-    "-": ["S^/DD(Bus;,pRrQab#Lz"]
-  },
-  {
-    "opc": "expr",
-    "expr": "createMathConstant",
-    "+": ["W*JQ-/UB%Q|_]+Ovp7z!"],
-    "value": "SQRT1_2",
-    "-": ["W*JQ-/UB%Q|_]+Ovp7z!"]
-  },
-  {
-    "op": "MULTIPLY",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["Wb5OqEBr`dL-fjv3|J~R"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["JE|Wh5C7u^l8CjkLdk%x"],
-    "value": "1.001",
-    "-": ["JE|Wh5C7u^l8CjkLdk%x"]
-  },
-  {
-    "op": "LTE",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["Gw~Wk6}xOIpK*E;c83/o"]
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 121
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": false
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "-": ["5?LId)Fy[/lx4we)74)v"],
-    "target": "Binary"
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 124
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": false
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "-": ["j@Rra/*L3z)`oR03^JT:"],
-    "target": "Binary"
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "b1",
-    "-": ["]|bJYNO^ZnXEs-`7xw0j"]
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": ["yfzBOqQ[()ZLB`@HzEww"],
-    "+": ["yfzBOqQ[()ZLB`@HzEww"],
-    "value": "if b1 is true, the test succeeded, otherwise it failed",
-    "-": ["yfzBOqQ[()ZLB`@HzEww"]
-  },
-  {"opc": "stop"}
-]}
+   0:            expr            expr: NUM_CONST, value: 0,                                      > +: ["8m4AeemL9A}w*4kMZuQ%","htq9iKW_CtEKmG-z5@dU"], -: ["htq9iKW_CtEKmG-z5@dU"], 
+   1:            VarDeclaration  name: r1, type: NUMBER,                                         > -: ["8m4AeemL9A}w*4kMZuQ%"], 
+   2:            expr            expr: NUM_CONST, value: 0,                                      > +: ["T?zl?qW4vH~!_;mXub.S","EM!Yt+?9y0@nT,R|F*a0"], -: ["T?zl?qW4vH~!_;mXub.S"], 
+   3:            VarDeclaration  name: r2, type: NUMBER,                                         > -: ["EM!Yt+?9y0@nT,R|F*a0"], 
+   4:            expr            expr: BOOL_CONST, value: true,                                  > +: ["3BnFl4f_8Uh=f`tmBF.%","Z4FaJtbSzsWtdMw.ZSIY"], -: ["3BnFl4f_8Uh=f`tmBF.%"], 
+   5:            VarDeclaration  name: b1, type: BOOLEAN,                                        > -: ["Z4FaJtbSzsWtdMw.ZSIY"], 
+   6:            expr            expr: NUM_CONST, value: 0,                                      > +: ["+R/NnB|N1r#_OFj*Dopa","2)3~tWuqBB6bndk{SO(3"], -: ["2)3~tWuqBB6bndk{SO(3"], 
+   7:            VarDeclaration  name: r3, type: NUMBER,                                         > -: ["+R/NnB|N1r#_OFj*Dopa"], 
+   8:            expr            expr: BOOL_CONST, value: true,                                  > +: ["E60CIX%VWi:Eo}-@ZX+n","Bc!WHTgtHfj%xHw;UFyN"], -: ["Bc!WHTgtHfj%xHw;UFyN"], 
+   9:            VarDeclaration  name: sim, type: BOOLEAN,                                       > -: ["E60CIX%VWi:Eo}-@ZX+n"], 
+  10:            comment         n: 1, text: ternary, type: start,                               > +: ["/[)g;rM~|=Pn/xO10l!f","v4NgYk3qB.n6An@mKFtQ"], possibleDebugStop: ["v4NgYk3qB.n6An@mKFtQ"], 
+  11:            expr            expr: Var, name: sim,                                           > +: ["m.E94`h`1(O8}gID~.1A"], -: ["m.E94`h`1(O8}gID~.1A"], 
+  12:            jump            conditional: false, target: t_m_1,                              > 
+  13:            expr            expr: createMathConstant, value: PI,                            > +: ["eb!%kkm,[NdMc@GkwPcw","[,RM0IfD_+Yym{BA1%zJ"], -: ["eb!%kkm,[NdMc@GkwPcw"], 
+  14:            expr            expr: NUM_CONST, value: 2,                                      > +: ["Da2H_5dm,zsomNn{[ctn"], -: ["Da2H_5dm,zsomNn{[ctn"], 
+  15:            expr            expr: Binary, op: DIVIDE,                                       > -: ["[,RM0IfD_+Yym{BA1%zJ"], 
+  16:            jump            conditional: always, target: t_e_1,                             > 
+  17: t_m_1      comment         text: ternary,                                                  > 
+  18:            expr            expr: NUM_CONST, value: 90,                                     > +: ["Y?27UHaTyhsTMZ`i;6kK"], -: ["Y?27UHaTyhsTMZ`i;6kK"], 
+  19: t_e_1      comment         text: ternary, type: end,                                       > -: ["/[)g;rM~|=Pn/xO10l!f"], 
+  20:            AssignStmt      name: r3,                                                       > -: ["v4NgYk3qB.n6An@mKFtQ"], 
+  21:            comment         n: 2, text: Binary, type: start,                                > +: ["[QRPII;hMFF?@F!Dr2^g","SV*e?x,p;@WlRpudgX?3"], possibleDebugStop: ["SV*e?x,p;@WlRpudgX?3"], 
+  22:            expr            expr: Var, name: b1,                                            > +: ["xvht1UoE~3R}C%Fs:!%/"], -: ["xvht1UoE~3R}C%Fs:!%/"], 
+  23:            jump            conditional: false, target: b_m_2,                              > 
+  24:            expr            expr: Var, name: r3,                                            > +: ["H=7UL=djVNuJgAs86?9J","WCrg)L?(yam=}@(f6h0^","uY9LQ{2B-|Y.QZA:UDlR"], -: ["H=7UL=djVNuJgAs86?9J"], 
+  25:            expr            expr: SingleFunction, op: SIN,                                  > -: ["WCrg)L?(yam=}@(f6h0^"], 
+  26:            expr            expr: NUM_CONST, value: 1,                                      > +: ["0%9+Wn0o[?QtQh|cD7Or"], -: ["0%9+Wn0o[?QtQh|cD7Or"], 
+  27:            expr            expr: Binary, op: EQ,                                           > -: ["uY9LQ{2B-|Y.QZA:UDlR"], 
+  28:            jump            conditional: always, target: b_e_2,                             > 
+  29: b_m_2      expr            expr: BOOL_CONST, value: false,                                 > 
+  30: b_e_2      comment         text: Binary, type: end,                                        > -: ["[QRPII;hMFF?@F!Dr2^g"], 
+  31:            AssignStmt      name: b1,                                                       > -: ["SV*e?x,p;@WlRpudgX?3"], 
+  32:            comment         n: 3, text: Binary, type: start,                                > +: ["Zi8!KvP7`1aZr!+opPf?","BC{Pp]VpES/!{cDPoB@V"], possibleDebugStop: ["Zi8!KvP7`1aZr!+opPf?"], 
+  33:            expr            expr: Var, name: b1,                                            > +: ["3g(cn|i=a/f8`WEEwE)g"], -: ["3g(cn|i=a/f8`WEEwE)g"], 
+  34:            jump            conditional: false, target: b_m_3,                              > 
+  35:            expr            expr: NUM_CONST, value: 0,                                      > +: ["cdA?J8}yBK,hUoN1CQmR","#TY`Ddy8g`GbVo3)*dD-",";@QDC]X-EUt9!AH(}3Q%"], -: [";@QDC]X-EUt9!AH(}3Q%"], 
+  36:            expr            expr: SingleFunction, op: COS,                                  > -: ["cdA?J8}yBK,hUoN1CQmR"], 
+  37:            expr            expr: NUM_CONST, value: 1,                                      > +: ["V4y=s#.:1+vtfZ9Uzw!]"], -: ["V4y=s#.:1+vtfZ9Uzw!]"], 
+  38:            expr            expr: Binary, op: EQ,                                           > -: ["#TY`Ddy8g`GbVo3)*dD-"], 
+  39:            jump            conditional: always, target: b_e_3,                             > 
+  40: b_m_3      expr            expr: BOOL_CONST, value: false,                                 > 
+  41: b_e_3      comment         text: Binary, type: end,                                        > -: ["BC{Pp]VpES/!{cDPoB@V"], 
+  42:            AssignStmt      name: b1,                                                       > -: ["Zi8!KvP7`1aZr!+opPf?"], 
+  43:            comment         n: 4, text: Binary, type: start,                                > +: ["!6,6f4d!ig#C[.bBp3wx","N{w+TQddcy6v:5sS(/gZ"], possibleDebugStop: ["!6,6f4d!ig#C[.bBp3wx"], 
+  44:            expr            expr: Var, name: b1,                                            > +: ["r:cB|2Kt4SSPHt{LMdba"], -: ["r:cB|2Kt4SSPHt{LMdba"], 
+  45:            jump            conditional: false, target: b_m_4,                              > 
+  46:            expr            expr: NUM_CONST, value: 0,                                      > +: ["lY7gS;m5?j%v{E4=LU?D","Ai0l=J]xb[^[!WxZFLEm","siqq@T/cc/911ZG*A`S3"], -: ["siqq@T/cc/911ZG*A`S3"], 
+  47:            expr            expr: SingleFunction, op: TAN,                                  > -: ["Ai0l=J]xb[^[!WxZFLEm"], 
+  48:            expr            expr: NUM_CONST, value: 0,                                      > +: ["I)qn~y[l2HtPCC6slLM4"], -: ["I)qn~y[l2HtPCC6slLM4"], 
+  49:            expr            expr: Binary, op: EQ,                                           > -: ["lY7gS;m5?j%v{E4=LU?D"], 
+  50:            jump            conditional: always, target: b_e_4,                             > 
+  51: b_m_4      expr            expr: BOOL_CONST, value: false,                                 > 
+  52: b_e_4      comment         text: Binary, type: end,                                        > -: ["N{w+TQddcy6v:5sS(/gZ"], 
+  53:            AssignStmt      name: b1,                                                       > -: ["!6,6f4d!ig#C[.bBp3wx"], 
+  54:            comment         n: 5, text: Binary, type: start,                                > +: ["J2a3|@^Ytt.({c-5AeK=","q_Lq^(@Nh)sPIW9=NKnn"], possibleDebugStop: ["J2a3|@^Ytt.({c-5AeK="], 
+  55:            expr            expr: Var, name: b1,                                            > +: ["zTc-Ze2VlS.AWM-8VFuP"], -: ["zTc-Ze2VlS.AWM-8VFuP"], 
+  56:            jump            conditional: false, target: b_m_5,                              > 
+  57:            expr            expr: NUM_CONST, value: 1,                                      > +: ["2]7:~d7Xi:p^PclJL+v1","@XV2l8LOg~KyC|9g)oNO","GX!wLp,PGnUYcd[^bzE|"], -: ["GX!wLp,PGnUYcd[^bzE|"], 
+  58:            expr            expr: SingleFunction, op: ASIN,                                 > -: ["@XV2l8LOg~KyC|9g)oNO"], 
+  59:            expr            expr: Var, name: r3,                                            > +: ["gAN^t-?_@MtbT.[F5-93"], -: ["gAN^t-?_@MtbT.[F5-93"], 
+  60:            expr            expr: Binary, op: EQ,                                           > -: ["2]7:~d7Xi:p^PclJL+v1"], 
+  61:            jump            conditional: always, target: b_e_5,                             > 
+  62: b_m_5      expr            expr: BOOL_CONST, value: false,                                 > 
+  63: b_e_5      comment         text: Binary, type: end,                                        > -: ["q_Lq^(@Nh)sPIW9=NKnn"], 
+  64:            AssignStmt      name: b1,                                                       > -: ["J2a3|@^Ytt.({c-5AeK="], 
+  65:            comment         n: 6, text: Binary, type: start,                                > +: ["h=;?C#4pLI,]k4*vcogm","?Y:cZn9.*-N](GncWtCY"], possibleDebugStop: ["?Y:cZn9.*-N](GncWtCY"], 
+  66:            expr            expr: Var, name: b1,                                            > +: ["4E)T=grj,Qk^_6~h]@6M"], -: ["4E)T=grj,Qk^_6~h]@6M"], 
+  67:            jump            conditional: false, target: b_m_6,                              > 
+  68:            expr            expr: NUM_CONST, value: 1,                                      > +: ["|E=dnSEusVK)ks-qO|]c","9p!A1W!OyH5Ob53QoV^+","9X{^l#Ckdj!x**5_bE^t"], -: ["9X{^l#Ckdj!x**5_bE^t"], 
+  69:            expr            expr: SingleFunction, op: ACOS,                                 > -: ["|E=dnSEusVK)ks-qO|]c"], 
+  70:            expr            expr: NUM_CONST, value: 0,                                      > +: ["7bgX?1/%KH]vrXE#5`Ek"], -: ["7bgX?1/%KH]vrXE#5`Ek"], 
+  71:            expr            expr: Binary, op: EQ,                                           > -: ["9p!A1W!OyH5Ob53QoV^+"], 
+  72:            jump            conditional: always, target: b_e_6,                             > 
+  73: b_m_6      expr            expr: BOOL_CONST, value: false,                                 > 
+  74: b_e_6      comment         text: Binary, type: end,                                        > -: ["h=;?C#4pLI,]k4*vcogm"], 
+  75:            AssignStmt      name: b1,                                                       > -: ["?Y:cZn9.*-N](GncWtCY"], 
+  76:            comment         n: 7, text: Binary, type: start,                                > +: ["Tu[Q7^wb`h*bv,wna+o]","aD}6%#%(,*iVykxb^5bt"], possibleDebugStop: ["Tu[Q7^wb`h*bv,wna+o]"], 
+  77:            expr            expr: Var, name: b1,                                            > +: ["@nu=7|Ag3^zp6WVY.icC"], -: ["@nu=7|Ag3^zp6WVY.icC"], 
+  78:            jump            conditional: false, target: b_m_7,                              > 
+  79:            expr            expr: NUM_CONST, value: 0,                                      > +: ["}A/T7{GCEI^U*5)p#as@","N-*l7DRagcFA{-ox~ajg","KwEWPZNupH?b?8xXjuTI"], -: ["KwEWPZNupH?b?8xXjuTI"], 
+  80:            expr            expr: SingleFunction, op: ATAN,                                 > -: ["N-*l7DRagcFA{-ox~ajg"], 
+  81:            expr            expr: NUM_CONST, value: 0,                                      > +: ["!vu[k#Nv|?eRy!i/K=QC"], -: ["!vu[k#Nv|?eRy!i/K=QC"], 
+  82:            expr            expr: Binary, op: EQ,                                           > -: ["}A/T7{GCEI^U*5)p#as@"], 
+  83:            jump            conditional: always, target: b_e_7,                             > 
+  84: b_m_7      expr            expr: BOOL_CONST, value: false,                                 > 
+  85: b_e_7      comment         text: Binary, type: end,                                        > -: ["aD}6%#%(,*iVykxb^5bt"], 
+  86:            AssignStmt      name: b1,                                                       > -: ["Tu[Q7^wb`h*bv,wna+o]"], 
+  87:            comment         n: 8, text: Binary, type: start,                                > +: [")=zbxEv^7!3G%1%bGV71","fTLU]w^`V^vTX=Xa]j0."], possibleDebugStop: ["fTLU]w^`V^vTX=Xa]j0."], 
+  88:            expr            expr: Var, name: b1,                                            > +: ["gRfCsBXbU;T3at#~Evt?"], -: ["gRfCsBXbU;T3at#~Evt?"], 
+  89:            jump            conditional: false, target: b_m_8,                              > 
+  90:            comment         n: 9, text: Binary, type: start,                                > +: ["p*a1DzyB:J%nf4fTB3)h"], 
+  91:            expr            expr: createMathConstant, value: E,                             > +: ["n_n/3:;kl{WSJI5df|{_","62xO7GLqXK3V6@p|fvxl"], -: ["n_n/3:;kl{WSJI5df|{_"], 
+  92:            expr            expr: NUM_CONST, value: 2.6,                                    > +: ["`:mxla3(H.0Tv,qd:[Yv"], -: ["`:mxla3(H.0Tv,qd:[Yv"], 
+  93:            expr            expr: Binary, op: GT,                                           > -: ["62xO7GLqXK3V6@p|fvxl"], 
+  94:            jump            conditional: false, target: b_m_9,                              > 
+  95:            expr            expr: createMathConstant, value: E,                             > +: ["|urw=(;j|J0B9**HEP?r","7;f~//.A{4zrPXFVy%i6"], -: ["7;f~//.A{4zrPXFVy%i6"], 
+  96:            expr            expr: NUM_CONST, value: 2.8,                                    > +: ["B(f4h.0=LwmE21((9br9"], -: ["B(f4h.0=LwmE21((9br9"], 
+  97:            expr            expr: Binary, op: LT,                                           > -: ["|urw=(;j|J0B9**HEP?r"], 
+  98:            jump            conditional: always, target: b_e_9,                             > 
+  99: b_m_9      expr            expr: BOOL_CONST, value: false,                                 > 
+ 100: b_e_9      comment         text: Binary, type: end,                                        > -: ["p*a1DzyB:J%nf4fTB3)h"], 
+ 101:            jump            conditional: always, target: b_e_8,                             > 
+ 102: b_m_8      expr            expr: BOOL_CONST, value: false,                                 > 
+ 103: b_e_8      comment         text: Binary, type: end,                                        > -: [")=zbxEv^7!3G%1%bGV71"], 
+ 104:            AssignStmt      name: b1,                                                       > -: ["fTLU]w^`V^vTX=Xa]j0."], 
+ 105:            comment         n: 10, text: Binary, type: start,                               > +: ["]|bJYNO^ZnXEs-`7xw0j","j@Rra/*L3z)`oR03^JT:"], possibleDebugStop: ["]|bJYNO^ZnXEs-`7xw0j"], 
+ 106:            expr            expr: Var, name: b1,                                            > +: [",/@qUbfJm]amc#3@Mfi^"], -: [",/@qUbfJm]amc#3@Mfi^"], 
+ 107:            jump            conditional: false, target: b_m_10,                             > 
+ 108:            comment         n: 11, text: Binary, type: start,                               > +: ["5?LId)Fy[/lx4we)74)v"], 
+ 109:            expr            expr: createMathConstant, value: SQRT2,                         > +: ["%Ck3BKaT?:CM!Gi{tf.P","69E[Ug?{RHSoup+)a:c[","f!xsU6/[x.2*kk^rybJ7"], -: ["f!xsU6/[x.2*kk^rybJ7"], 
+ 110:            expr            expr: createMathConstant, value: SQRT1_2,                       > +: ["qU#cuD*R+*+eJ9FM.buy"], -: ["qU#cuD*R+*+eJ9FM.buy"], 
+ 111:            expr            expr: Binary, op: MULTIPLY,                                     > -: ["69E[Ug?{RHSoup+)a:c["], 
+ 112:            expr            expr: NUM_CONST, value: 0.999,                                  > +: ["TDblVmd)!j8MWk{*)A*7"], -: ["TDblVmd)!j8MWk{*)A*7"], 
+ 113:            expr            expr: Binary, op: GTE,                                          > -: ["%Ck3BKaT?:CM!Gi{tf.P"], 
+ 114:            jump            conditional: false, target: b_m_11,                             > 
+ 115:            expr            expr: createMathConstant, value: SQRT2,                         > +: ["Gw~Wk6}xOIpK*E;c83/o","Wb5OqEBr`dL-fjv3|J~R","S^/DD(Bus;,pRrQab#Lz"], -: ["S^/DD(Bus;,pRrQab#Lz"], 
+ 116:            expr            expr: createMathConstant, value: SQRT1_2,                       > +: ["W*JQ-/UB%Q|_]+Ovp7z!"], -: ["W*JQ-/UB%Q|_]+Ovp7z!"], 
+ 117:            expr            expr: Binary, op: MULTIPLY,                                     > -: ["Wb5OqEBr`dL-fjv3|J~R"], 
+ 118:            expr            expr: NUM_CONST, value: 1.001,                                  > +: ["JE|Wh5C7u^l8CjkLdk%x"], -: ["JE|Wh5C7u^l8CjkLdk%x"], 
+ 119:            expr            expr: Binary, op: LTE,                                          > -: ["Gw~Wk6}xOIpK*E;c83/o"], 
+ 120:            jump            conditional: always, target: b_e_11,                            > 
+ 121: b_m_11     expr            expr: BOOL_CONST, value: false,                                 > 
+ 122: b_e_11     comment         text: Binary, type: end,                                        > -: ["5?LId)Fy[/lx4we)74)v"], 
+ 123:            jump            conditional: always, target: b_e_10,                            > 
+ 124: b_m_10     expr            expr: BOOL_CONST, value: false,                                 > 
+ 125: b_e_10     comment         text: Binary, type: end,                                        > -: ["j@Rra/*L3z)`oR03^JT:"], 
+ 126:            AssignStmt      name: b1,                                                       > -: ["]|bJYNO^ZnXEs-`7xw0j"], 
+ 127:            comment         value: if b1 is true, the test succeeded, otherwise it failed,  > +: ["yfzBOqQ[()ZLB`@HzEww"], -: ["yfzBOqQ[()ZLB`@HzEww"], possibleDebugStop: ["yfzBOqQ[()ZLB`@HzEww"], 
+ 128:            stop                                                                            > 

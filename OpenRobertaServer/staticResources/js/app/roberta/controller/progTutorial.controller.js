@@ -22,7 +22,7 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
             startTutorial(event.target.id);
         });
         $('#tutorialButton').onWrap('click touchend', function () {
-            toggleTutorial();
+            toggleTutorial($(this));
             return false;
         });
     }
@@ -404,12 +404,12 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
             ;
         return answers;
     }
-    function toggleTutorial() {
+    function toggleTutorial($button) {
         if ($('#tutorialButton').hasClass('rightActive')) {
             $('#blockly').closeRightView();
         }
         else {
-            $('#blockly').openRightView('tutorial', INITIAL_WIDTH);
+            $button.openRightView($('#tutorialDiv'), INITIAL_WIDTH);
         }
     }
     function openTutorialView() {

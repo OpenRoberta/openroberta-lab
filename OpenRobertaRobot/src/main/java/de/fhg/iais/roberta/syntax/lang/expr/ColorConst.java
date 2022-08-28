@@ -1,45 +1,21 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
-import de.fhg.iais.roberta.syntax.BlockType;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.transformer.NepoField;
-import de.fhg.iais.roberta.transformer.NepoOp;
+import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
-/**
- * This class represents the <b>robColour_picker</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate color
- * constant.<br/>
- * <br>
- * The client must provide the value of the color. <br>
- * <br>
- * To create an instance from this class use the method {@link #make(String, BlocklyBlockProperties, BlocklyComment)}.<br>
- */
-@NepoOp(containerType = "COLOR_CONST", blocklyType = BlocklyType.COLOR)
-public class ColorConst<V> extends Expr<V> {
-    @NepoField(name = BlocklyConstants.COLOUR)
+@NepoExpr(category = "EXPR", blocklyNames = {"naoColour_picker", "robColour_picker", "mbedColour_picker"}, name = "COLOR_CONST", blocklyType = BlocklyType.COLOR)
+public final class ColorConst extends Expr {
+    @NepoField(name = "COLOUR")
     public final String hexValue;
 
-    public ColorConst(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, String hexValue) {
-        super(kind, properties, comment);
+    public ColorConst(BlocklyProperties properties, String hexValue) {
+        super(properties);
         Assert.isTrue(hexValue != null);
         this.hexValue = hexValue;
         setReadOnly();
-    }
-
-    /**
-     * creates instance of {@link ColorConst}. This instance is read only and cannot be modified.
-     *
-     * @param hexValue that the color constant will have; must be <b>non-empty</b> string,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link ColorConst}.
-     */
-    public static <V> ColorConst<V> make(String hexValue, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ColorConst<>(BlockTypeContainer.getByName("COLOR_CONST"), properties, comment, hexValue);
     }
 
     public String getBlueChannelHex() {
@@ -73,5 +49,4 @@ public class ColorConst<V> extends Expr<V> {
     public int getRedChannelInt() {
         return Integer.valueOf(this.hexValue.substring(1, 3), 16);
     }
-
 }

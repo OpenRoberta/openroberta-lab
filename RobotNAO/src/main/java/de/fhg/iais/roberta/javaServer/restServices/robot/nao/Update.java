@@ -20,7 +20,7 @@ import javax.ws.rs.core.Response;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 
 /*
  * REST service for fetching NAO python package with HAL
@@ -31,7 +31,7 @@ public class Update {
     private final String robotUpdateResourcesDir;
 
     @Inject
-    public Update(@Named("robotPluginMap") Map<String, IRobotFactory> robotPluginMap) {
+    public Update(@Named("robotPluginMap") Map<String, RobotFactory> robotPluginMap) {
         this.robotUpdateResourcesDir = robotPluginMap.get("nao").getPluginProperties().getUpdateDir();
     }
 

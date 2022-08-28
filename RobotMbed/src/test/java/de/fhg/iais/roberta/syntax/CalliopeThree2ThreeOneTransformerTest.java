@@ -6,8 +6,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.MbedThree2ThreeOneTransformerWorker;
 
@@ -113,10 +114,11 @@ public class CalliopeThree2ThreeOneTransformerTest {
             + "        </block>"
             + "    </instance>"
             + "</block_set>";
-    private static IRobotFactory testFactory;
+    private static RobotFactory testFactory;
 
     @BeforeClass
     public static void setupBefore() throws Exception {
+        AstFactory.loadBlocks();
         testFactory = Util.configureRobotPlugin("calliope2017NoBlue", "", "", Collections.emptyList());
     }
 
@@ -231,7 +233,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
                 + "DebugAction[value:SensorExpr[TemperatureSensor[_T,VALUE,- EMPTY_SLOT -]]],"
-                + "DebugAction[value:SensorExpr[GetSampleSensor[TemperatureSensor[_T,TEMPERATURE,- EMPTY_SLOT -]]]]]]]";
+                + "DebugAction[value:SensorExpr[GetSampleSensor[TemperatureSensor[_T,VALUE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=TEMPERATURE,isActor=true,userDefinedName=_T,portName=_T,componentProperties={}]"
@@ -372,7 +374,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[CompassSensor[_C,ANGLE,- EMPTY_SLOT -]]]],"
                 + "DebugAction[value:SensorExpr[GetSampleSensor[SoundSensor[_S,SOUND,- EMPTY_SLOT -]]]],"
                 + "DebugAction[value:SensorExpr[GetSampleSensor[TimerSensor[1,VALUE,- EMPTY_SLOT -]]]],"
-                + "DebugAction[value:SensorExpr[GetSampleSensor[TemperatureSensor[_T,TEMPERATURE,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[TemperatureSensor[_T,VALUE,- EMPTY_SLOT -]]]],"
                 + "DebugAction[value:SensorExpr[GetSampleSensor[LightSensor[_L,LIGHT_VALUE,- EMPTY_SLOT -]]]],"
                 + "DebugAction[value:SensorExpr[GetSampleSensor[PinGetValueSensor[S7,ANALOG,- EMPTY_SLOT -]]]],"
                 + "DebugAction[value:SensorExpr[GetSampleSensor[PinGetValueSensor[S6,DIGITAL,- EMPTY_SLOT -]]]],"

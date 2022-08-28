@@ -33,7 +33,7 @@ public class ConfigurationData {
 
     /**
      * Create new configuration data.
-     * 
+     *
      * @param configurationText the configuration text, never null
      */
     public ConfigurationData(String configurationText) {

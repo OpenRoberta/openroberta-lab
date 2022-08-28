@@ -4,10 +4,6 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -15,42 +11,21 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>naoActions_sayText</b> block from Blockly into the AST (abstract syntax tree). Objects from this class will generate code for
- * making the robot say the text.<br>
- * <br>
- * <br>
- */
-public class ForgetFace<V> extends Action<V> {
-    private final Expr<V> faceName;
+@NepoBasic(name = "FORGET_FACE", category = "ACTOR", blocklyNames = {"naoActions_forgetFace"})
+public final class ForgetFace extends Action {
+    public final Expr faceName;
 
-    private ForgetFace(Expr<V> faceName, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("FORGET_FACE"), properties, comment);
+    public ForgetFace(Expr faceName, BlocklyProperties properties) {
+        super(properties);
         Assert.isTrue(faceName != null);
         this.faceName = faceName;
         setReadOnly();
-    }
-
-    /**
-     * Creates instance of {@link DisplayTextAction}. This instance is read only and can not be modified.
-     *
-     * @param faceName {@link msg} that will be printed on the display of the brick; must be <b>not</b> null,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link DisplayTextAction}
-     */
-    private static <V> ForgetFace<V> make(Expr<V> faceName, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ForgetFace<>(faceName, properties, comment);
-    }
-
-    /**
-     * @return the message.
-     */
-    public Expr<V> getFaceName() {
-        return this.faceName;
     }
 
     @Override
@@ -58,17 +33,10 @@ public class ForgetFace<V> extends Action<V> {
         return "ForgetFace [" + this.faceName + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
-        Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.NAME, BlocklyType.STRING));
-        return ForgetFace.make(Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        Phrase msg = helper.extractValue(values, new ExprParam(BlocklyConstants.NAME, BlocklyType.STRING));
+        return new ForgetFace(Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

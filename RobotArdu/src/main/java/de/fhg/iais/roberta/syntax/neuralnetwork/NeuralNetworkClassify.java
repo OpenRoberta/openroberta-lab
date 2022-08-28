@@ -1,21 +1,19 @@
 package de.fhg.iais.roberta.syntax.neuralnetwork;
 
-import de.fhg.iais.roberta.syntax.BlockType;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
-import de.fhg.iais.roberta.transformer.NepoPhrase;
-import de.fhg.iais.roberta.transformer.NepoValue;
+import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
-@NepoPhrase(containerType = "NEURAL_NETWORK_CLASSIFY")
-public class NeuralNetworkClassify<V> extends Stmt<V> {
+@NepoPhrase(category = "STMT", blocklyNames = {"robActions_aifes_classify"}, name = "NEURAL_NETWORK_CLASSIFY")
+public final class NeuralNetworkClassify extends Stmt {
     @NepoValue(name = "NN_CLASS_PROBABILITIES", type = BlocklyType.ARRAY_NUMBER)
-    public final Expr<V> probabilities;
+    public final Expr probabilities;
 
-    public NeuralNetworkClassify(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> probabilities) {
-        super(kind, properties, comment);
+    public NeuralNetworkClassify(BlocklyProperties properties, Expr probabilities) {
+        super(properties);
         this.probabilities = probabilities;
         setReadOnly();
     }

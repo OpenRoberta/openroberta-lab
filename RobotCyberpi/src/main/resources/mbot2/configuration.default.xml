@@ -1,0 +1,93 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="mbot2" xmlversion="3.1" description="" tags="">
+    <instance x="255" y="163">
+        <block type="robConf_robot" id="robot" intask="true">
+            <field name="ROBOT">undefined</field>
+        </block>
+    </instance>
+    <instance x="584" y="221">
+        <block type="robConf_mbuild_port" id="14" intask="true" deletable="false">
+            <field name="NAME">_M</field>
+            <statement name="MBUILDSENSOR">
+                <block type="robBrick_mbuild_ultrasonic2" id="15" intask="true">
+                    <field name="NAME">U</field>
+                </block>
+                <block type="robBrick_mbuild_quadrgb" id="16" intask="true">
+                    <field name="NAME">Q</field>
+                </block>
+            </statement>
+        </block>
+    </instance>
+    <instance x="20" y="315">
+        <block type="robConf_accelerometer" id="13" intask="true" deletable="false">
+            <field name="NAME">_A</field>
+        </block>
+    </instance>
+    <instance x="120" y="357">
+        <block type="robConf_sound" id="11" intask="true" deletable="false">
+            <field name="NAME">_S</field>
+        </block>
+    </instance>
+    <instance x="585" y="357">
+        <block type="robConf_gyro" id="12" intask="true" deletable="false">
+            <field name="NAME">_G</field>
+        </block>
+    </instance>
+    <instance x="101" y="398">
+        <block type="robConf_light" id="10" intask="true" deletable="false">
+            <field name="NAME">_L</field>
+        </block>
+    </instance>
+    <instance x="741" y="389">
+        <block type="robConf_key" id="7" intask="true" deletable="false">
+            <field name="NAME">A</field>
+            <field name="PIN1">A</field>
+        </block>
+    </instance>
+    <instance x="122" y="437">
+        <block type="robConf_joystick" id="9" intask="true" deletable="false">
+            <field name="NAME">_J</field>
+        </block>
+    </instance>
+    <instance x="741" y="447">
+        <block type="robConf_key" id="8" intask="true" deletable="false">
+            <field name="NAME">B</field>
+            <field name="PIN1">B</field>
+        </block>
+    </instance>
+    <instance x="102" y="512">
+        <block type="robConf_rgbled" id="4" intask="true" deletable="false">
+            <field name="NAME">_R</field>
+        </block>
+    </instance>
+    <instance x="584" y="501">
+        <block type="robConf_buzzer" id="6" intask="true" deletable="false">
+            <field name="NAME">_B</field>
+        </block>
+    </instance>
+    <instance x="684" y="506">
+        <block type="robConf_encoder" id="3" intask="true" deletable="false">
+            <field name="NAME">R</field>
+            <field name="PORT1">EM2</field>
+        </block>
+    </instance>
+    <instance x="120" y="547">
+        <block type="robConf_lcd" id="5" intask="true" deletable="false">
+            <field name="NAME">_LCD</field>
+        </block>
+    </instance>
+    <instance x="475" y="577">
+        <block type="robConf_encoder" id="2" intask="true" deletable="false">
+            <field name="NAME">L</field>
+            <field name="PORT1">EM1</field>
+        </block>
+    </instance>
+    <instance x="654" y="576">
+        <block type="robConf_differentialdrive" id="1" intask="true" deletable="false">
+            <field name="NAME">_D</field>
+            <field name="BRICK_WHEEL_DIAMETER">6.5</field>
+            <field name="BRICK_TRACK_WIDTH">11.5</field>
+            <field name="MOTOR_L">EM1</field>
+            <field name="MOTOR_R">EM2</field>
+        </block>
+    </instance>
+</block_set>

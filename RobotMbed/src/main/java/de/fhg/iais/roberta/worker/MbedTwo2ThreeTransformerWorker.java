@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.visitor.MbedTwo2ThreeTransformerVisitor;
 public class MbedTwo2ThreeTransformerWorker extends Two2ThreeTransformerWorker {
 
     @Override
-    protected ITransformerVisitor<Void> getVisitor(Project project, NewUsedHardwareBean.Builder builder, ConfigurationAst configuration) {
+    protected ITransformerVisitor getVisitor(Project project, NewUsedHardwareBean.Builder builder, ConfigurationAst configuration) {
         return new MbedTwo2ThreeTransformerVisitor(
             new MbedTwo2ThreeTransformerHelper(project.getRobotFactory().getBlocklyDropdownFactory(), configuration),
             builder,

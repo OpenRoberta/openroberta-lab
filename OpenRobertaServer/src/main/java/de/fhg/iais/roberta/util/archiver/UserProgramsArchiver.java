@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.persistence.ProgramProcessor;
 import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -46,7 +46,7 @@ public class UserProgramsArchiver {
     }
 
     private String getDefualtConfig(Program program) {
-        IRobotFactory factory = userSession.getRobotFactoriesOfGroup(program.getRobot().getName()).get(0);
+        RobotFactory factory = userSession.getRobotFactoriesOfGroup(program.getRobot().getName()).get(0);
         return factory.getConfigurationDefault();
     }
 

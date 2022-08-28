@@ -21,20 +21,19 @@ public class UserDao extends AbstractDao<User> {
     }
 
     /**
-     * Persists a user in the database. Currently not used for user group members, because user group members can not be changed.
+     * Persists a new user in the database.
      *
-     * @param account
-     * @param password
-     * @param roleAsString
+     * @param userGroup null, if a regular user should be created
+     * @param account not null
+     * @param password not null
+     * @param roleAsString not null, String representation of a valid role
      * @return the created user object; returns <code>null</code> if creation is unsuccessful (e.g. user already exists)
-     * @throws Exception
      */
-    public User persistUser(UserGroup userGroup, String account, String password, String roleAsString) throws Exception {
+    public User persistNewUser(UserGroup userGroup, String account, String password, String roleAsString) throws Exception {
         Assert.notNull(account);
         Assert.notNull(password);
         Role role = Role.valueOf(roleAsString);
-        Assert.notNull(role);
-        User user = loadUser(null, account);
+        User user = loadUser(userGroup, account);
         if ( user == null ) {
             user = new User(userGroup, account);
             user.setPassword(password);
@@ -97,7 +96,7 @@ public class UserDao extends AbstractDao<User> {
 
     /**
      * load a list of users filtered by a tag (looked up in column "tag"), sorted by a column given
-     * 
+     *
      * @param tagFilter filter to restrict result list to users with this tag
      * @param sortBy sort column
      * @param offset the index in the result list for the first user returned to the caller

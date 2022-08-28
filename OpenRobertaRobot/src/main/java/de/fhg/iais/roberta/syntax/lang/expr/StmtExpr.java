@@ -1,40 +1,23 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 
 /**
  * Wraps subclasses of the class {@link Stmt} so they can be used as {@link Expr} in expressions.
  */
-public class StmtExpr<V> extends Expr<V> {
-    private final Stmt<V> stmt;
+public class StmtExpr extends Expr {
+    public final Stmt stmt;
 
-    private StmtExpr(Stmt<V> stmt) {
-        super(BlockTypeContainer.getByName("SENSOR_EXPR"), stmt.getProperty(), stmt.getComment());
+    public StmtExpr(Stmt stmt) {
+        super(stmt.getProperty());
         Assert.isTrue(stmt.isReadOnly());
         this.stmt = stmt;
         setReadOnly();
-    }
-
-    /**
-     * Create object of the class {@link StmtExpr}.
-     *
-     * @param stmt that we want to wrap,
-     * @return expression with wrapped sensor inside
-     */
-    public static <V> StmtExpr<V> make(Stmt<V> stmt) {
-        return new StmtExpr<>(stmt);
-    }
-
-    /**
-     * @return stmt that is wrapped in the expression
-     */
-    public Stmt<V> getStmt() {
-        return this.stmt;
     }
 
     @Override
@@ -59,7 +42,7 @@ public class StmtExpr<V> extends Expr<V> {
 
     @Override
     public Block astToBlock() {
-        Phrase<V> p = getStmt();
+        Phrase p = this.stmt;
         return p.astToBlock();
     }
 }

@@ -20,12 +20,14 @@ import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.MutableClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAst;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
@@ -54,9 +56,10 @@ public final class Project {
     private String password;
     private ILanguage language;
     private RobotCommunicator robotCommunicator;
-    private IRobotFactory robotFactory;
+    private RobotFactory robotFactory;
     private boolean withWrapping = true;
-    private ProgramAst<Void> program = null;
+    private boolean isNativeEditorCode = false;
+    private ProgramAst program = null;
     private ConfigurationAst configuration = null;
     private StringBuilder sourceCodeBuilder = new StringBuilder();
     private String compiledHex = "";
@@ -77,22 +80,22 @@ public final class Project {
         return writer.toString();
     }
 
-    private static BlockSet astToJaxb(ProgramAst<Void> program) {
+    private static BlockSet astToJaxb(ProgramAst program) {
         Assert.notNull(program);
-        List<List<Phrase<Void>>> astProgram = program.getTree();
+        List<List<Phrase>> astProgram = program.getTree();
         BlockSet blockSet = new BlockSet();
         blockSet.setDescription(program.getDescription());
         blockSet.setRobottype(program.getRobotType());
         blockSet.setTags(program.getTags());
         blockSet.setXmlversion(program.getXmlVersion());
 
-        for ( List<Phrase<Void>> tree : astProgram ) {
+        for ( List<Phrase> tree : astProgram ) {
             Instance instance = new Instance();
             blockSet.getInstance().add(instance);
-            for ( Phrase<Void> phrase : tree ) {
+            for ( Phrase phrase : tree ) {
                 if ( phrase.getKind().hasName("LOCATION") ) {
-                    instance.setX(((Location<Void>) phrase).getX());
-                    instance.setY(((Location<Void>) phrase).getY());
+                    instance.setX(((Location) phrase).x);
+                    instance.setY(((Location) phrase).y);
                 }
                 instance.getBlock().add(phrase.astToBlock());
             }
@@ -111,8 +114,8 @@ public final class Project {
         for ( ConfigurationComponent configComp : configurationComponents.values() ) {
             Instance instance = new Instance();
             blockSet.getInstance().add(instance);
-            instance.setX(String.valueOf(configComp.getX()));
-            instance.setY(String.valueOf(configComp.getY()));
+            instance.setX(String.valueOf(configComp.x));
+            instance.setY(String.valueOf(configComp.y));
             instance.getBlock().add(configComp.astToBlock());
         }
         return blockSet;
@@ -158,7 +161,7 @@ public final class Project {
         return this.robotCommunicator;
     }
 
-    public IRobotFactory getRobotFactory() {
+    public RobotFactory getRobotFactory() {
         return this.robotFactory;
     }
 
@@ -166,14 +169,18 @@ public final class Project {
         return this.withWrapping;
     }
 
+    public boolean isNativeEditorCode() {
+        return this.isNativeEditorCode;
+    }
+
     /**
      * @return the programTransformer
      */
-    public ProgramAst<Void> getProgramAst() {
+    public ProgramAst getProgramAst() {
         return this.program;
     }
 
-    public void setProgramAst(ProgramAst<Void> program) {
+    public void setProgramAst(ProgramAst program) {
         this.program = program;
     }
 
@@ -198,7 +205,12 @@ public final class Project {
 
     public <T extends IProjectBean> T getWorkerResult(Class<T> beanClass) {
         IProjectBean bean = this.workerResults.get(beanClass);
-        Assert.notNull(bean, "No worker result bean with " + beanClass.getSimpleName() + " available!");
+        // TODO: remove this hack after visitor rewrite!
+        if ( bean == null && beanClass.isAssignableFrom(NNBean.class) ) {
+            bean = new NNBean.Builder().build();
+        } else {
+            Assert.notNull(bean, "No worker result bean with " + beanClass.getSimpleName() + " available!");
+        }
         return beanClass.cast(bean);
     }
 
@@ -348,7 +360,7 @@ public final class Project {
             return this;
         }
 
-        public Builder setFactory(IRobotFactory factory) {
+        public Builder setFactory(RobotFactory factory) {
             this.project.robotFactory = factory;
             return this;
         }
@@ -377,15 +389,15 @@ public final class Project {
                 this.project.configurationJSON.put("TRACKWIDTH", configurationAst.getTrackWidth());
                 this.project.configurationJSON.put("WHEELDIAMETER", configurationAst.getWheelDiameter());
                 for ( ConfigurationComponent sensor : configurationAst.getSensors() ) {
-                    sensorsJSON.put(sensor.getUserDefinedPortName(), sensor.getComponentType());
+                    sensorsJSON.put(sensor.userDefinedPortName, sensor.componentType);
                 }
                 for ( ConfigurationComponent actuator : configurationAst.getActors() ) {
                     JSONObject propJSON = new JSONObject();
-                    propJSON.put("TYPE", actuator.getComponentType());
+                    propJSON.put("TYPE", actuator.componentType);
                     for ( String prop : actuator.getComponentProperties().keySet() ) {
                         propJSON.put(prop, actuator.getComponentProperties().get(prop));
                     }
-                    actuatorsJSON.put(actuator.getUserDefinedPortName(), propJSON);
+                    actuatorsJSON.put(actuator.userDefinedPortName, propJSON);
                 }
                 this.project.configurationJSON.put("SENSORS", sensorsJSON);
                 this.project.configurationJSON.put("ACTUATORS", actuatorsJSON);
@@ -395,7 +407,7 @@ public final class Project {
             return this;
         }
 
-        public Builder setProgramAst(ProgramAst<Void> programAst) {
+        public Builder setProgramAst(ProgramAst programAst) {
             this.project.program = programAst;
             return this;
         }
@@ -414,6 +426,7 @@ public final class Project {
             } else if ( this.programNativeSource != null ) { // Used to run native code directly
                 Assert.isNull(this.programXml, "Program XML should not be set when using native compile");
                 this.project.setSourceCode(this.programNativeSource);
+                this.project.isNativeEditorCode = true;
             } else { // STANDARD CASE - Used to follow the default generation, compilation, run from blockly
                 if ( this.project.configuration == null ) {
                     transformConfiguration();
@@ -439,7 +452,7 @@ public final class Project {
                     if ( xmlversion == null || xmlversion.isEmpty() ) {
                         blockSet.setXmlversion("2.0");
                     }
-                    Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst<>(this.project.robotFactory);
+                    Jaxb2ProgramAst transformer = new Jaxb2ProgramAst(this.project.robotFactory);
                     this.project.program = transformer.blocks2Ast(blockSet);
                 } catch ( JAXBException e ) {
                     LOG.error("Transformer failed", e);

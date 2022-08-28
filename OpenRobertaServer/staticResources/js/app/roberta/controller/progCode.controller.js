@@ -47,7 +47,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "program
     function initEvents() {
         $('#codeButton').off('click touchend');
         $('#codeButton').onWrap('click touchend', function (event) {
-            toggleCode();
+            toggleCode($(this));
             return false;
         });
         $('#codeDownload').onWrap('click', function (event) {
@@ -77,7 +77,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "program
             });
         }, 'code refresh clicked');
     }
-    function toggleCode() {
+    function toggleCode($button) {
         Blockly.hideChaff();
         if ($('#codeButton').hasClass('rightActive')) {
             $('#blockly').closeRightView();
@@ -96,7 +96,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "program
                     flask.updateCode(result.sourceCode);
                     // TODO change javaSource to source on server
                     GUISTATE_C.setProgramSource(result.sourceCode);
-                    $('#blockly').openRightView('code', INITIAL_WIDTH);
+                    $button.openRightView($('#codeDiv'), INITIAL_WIDTH);
                 }
                 else {
                     MSG.displayInformation(result, result.message, result.message, result.parameters);

@@ -1,0 +1,272 @@
+{
+  "ops": [
+    {
+      "opc": "expr",
+      "possibleDebugStop": [
+        "S?mDI74Mjw%]!:_Omz-r"
+      ],
+      "expr": "NUM_CONST",
+      "+": [
+        "XvTKrz)=*3.30M0M(]bJ",
+        "S?mDI74Mjw%]!:_Omz-r"
+      ],
+      "value": "30",
+      "-": [
+        "XvTKrz)=*3.30M0M(]bJ"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "+": [
+        "3@~XjQc|6O/Bl-`aBfYs"
+      ],
+      "value": "20",
+      "-": [
+        "3@~XjQc|6O/Bl-`aBfYs"
+      ]
+    },
+    {
+      "opc": "DriveAction",
+      "speedOnly": false,
+      "SetTime": false,
+      "name": "ev3",
+      "driveDirection": "FOREWARD"
+    },
+    {
+      "opc": "stopDrive",
+      "name": "ev3",
+      "-": [
+        "S?mDI74Mjw%]!:_Omz-r"
+      ]
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "3Pi1;1[7,ob{,)D~_,g)"
+      ],
+      "+": [
+        "3Pi1;1[7,ob{,)D~_,g)"
+      ],
+      "type": "start",
+      "target": "IfStatement"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "+": [
+        "/!E0Z99wMYw*?Dv1?7L0",
+        "uPly}T+)4%4n`x+{ij6x",
+        "eMy.fRia1loubi8jM!v{"
+      ],
+      "value": "1",
+      "-": [
+        "/!E0Z99wMYw*?Dv1?7L0"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "+": [
+        "rb5I)M2tO@iWhjVP`r3Y"
+      ],
+      "value": "2",
+      "-": [
+        "rb5I)M2tO@iWhjVP`r3Y"
+      ]
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary",
+      "-": [
+        "eMy.fRia1loubi8jM!v{"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "+": [
+        "3`Q6R3/REC13vG7rLq+t"
+      ],
+      "value": "3",
+      "-": [
+        "3`Q6R3/REC13vG7rLq+t"
+      ]
+    },
+    {
+      "op": "EQ",
+      "opc": "expr",
+      "expr": "Binary",
+      "-": [
+        "uPly}T+)4%4n`x+{ij6x"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 13
+    },
+    {
+      "opc": "stopDrive",
+      "possibleDebugStop": [
+        "KDVO[,,=t:/1Rjdjc]?d"
+      ],
+      "name": "ev3",
+      "+": [
+        "KDVO[,,=t:/1Rjdjc]?d"
+      ],
+      "-": [
+        "KDVO[,,=t:/1Rjdjc]?d"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 24
+    },
+    {
+      "opc": "comment",
+      "+": [
+        "XPAyFTI|b(syYe|A@+EH"
+      ],
+      "type": "start",
+      "target": "WaitStmt"
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "XPAyFTI|b(syYe|A@+EH"
+      ]
+    },
+    {
+      "GetSample": "touch",
+      "opc": "GetSample",
+      "port": "1",
+      "name": "ev3",
+      "+": [
+        "Q0I!%m@O2^FO]/g.,@-(",
+        ".d];U2l1D/)VHK*Laar,"
+      ],
+      "-": [
+        "Q0I!%m@O2^FO]/g.,@-("
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "+": [
+        "MU?Dc1l9-A=E5]X+2J4*"
+      ],
+      "value": true,
+      "-": [
+        "MU?Dc1l9-A=E5]X+2J4*"
+      ]
+    },
+    {
+      "op": "EQ",
+      "opc": "expr",
+      "expr": "Binary",
+      "-": [
+        ".d];U2l1D/)VHK*Laar,"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 20
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "-": [
+        "3Pi1;1[7,ob{,)D~_,g)",
+        "XPAyFTI|b(syYe|A@+EH"
+      ],
+      "target": 23
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 1
+    },
+    {
+      "opc": "WaitTimeSTMT"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 14
+    },
+    {
+      "opc": "comment",
+      "type": "end",
+      "-": [
+        "XPAyFTI|b(syYe|A@+EH"
+      ],
+      "target": "WaitStmt"
+    },
+    {
+      "opc": "comment",
+      "type": "end",
+      "-": [
+        "3Pi1;1[7,ob{,)D~_,g)"
+      ],
+      "target": "IfStatement"
+    },
+    {
+      "opc": "expr",
+      "possibleDebugStop": [
+        "b0F^5P=iw)L@iCN1VW,9"
+      ],
+      "expr": "NUM_CONST",
+      "+": [
+        "b0F^5P=iw)L@iCN1VW,9",
+        "q}o{(KOx3]UwLr2hpzYD"
+      ],
+      "value": "10",
+      "-": [
+        "q}o{(KOx3]UwLr2hpzYD"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "+": [
+        ")d`Ocp{^nTN+flcN}/(q"
+      ],
+      "value": "30",
+      "-": [
+        ")d`Ocp{^nTN+flcN}/(q"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "+": [
+        "[1B;RSHhht2gK@,+[(H]"
+      ],
+      "value": "20",
+      "-": [
+        "[1B;RSHhht2gK@,+[(H]"
+      ]
+    },
+    {
+      "opc": "CurveAction",
+      "speedOnly": false,
+      "SetTime": false,
+      "name": "ev3",
+      "driveDirection": "FOREWARD"
+    },
+    {
+      "opc": "stopDrive",
+      "name": "ev3",
+      "-": [
+        "b0F^5P=iw)L@iCN1VW,9"
+      ]
+    },
+    {
+      "opc": "stop"
+    }
+  ]
+}

@@ -93,7 +93,8 @@ def colours():
     h.say(str(0x993399))
     h.say(str(0x663366))
     h.say(str(0x330033))
-    h.say(str(int("{:02x}{:02x}{:02x}".format(min(max(100, 0), 255), min(max(120, 0), 255), min(max(140, 0), 255), 16))))
+    h.say(
+        str(int("{:02x}{:02x}{:02x}".format(min(max(100, 0), 255), min(max(120, 0), 255), min(max(140, 0), 255)), 16)))
 
 def function_parameters(___x, ___x2, ___x3, ___x4, ___x5, ___x6, ___x7, ___x8):
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList

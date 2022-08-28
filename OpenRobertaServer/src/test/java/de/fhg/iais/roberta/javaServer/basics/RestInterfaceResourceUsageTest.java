@@ -13,7 +13,7 @@
 //import org.junit.BeforeClass;
 //import org.junit.Test;
 //
-//import de.fhg.iais.roberta.factory.IRobotFactory;
+//import de.fhg.iais.roberta.factory.RobotFactory;
 //import de.fhg.iais.roberta.javaServer.restServices.all.ServerData;
 //import de.fhg.iais.roberta.javaServer.restServices.all.controller.Alive;
 //import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
@@ -82,13 +82,13 @@
 //        this.connectionUrl = "jdbc:hsqldb:mem:restTestInMemoryDb";
 //        this.robotCommunicator = new RobotCommunicator();
 //
-//        Map<String, IRobotFactory> robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
+//        Map<String, RobotFactory> robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
 //        this.sPid = HttpSessionState.initOnlyLegalForDebugging("pid", robotPlugins, serverProperties, 1);
 //        this.sMinscha = HttpSessionState.initOnlyLegalForDebugging("minscha", robotPlugins, serverProperties, 2);
 //
 //        this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.connectionUrl);
-//        Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
-//        this.memoryDbSetup = new DbSetup(nativeSession);
+//        Session hibernateSession = this.sessionFactoryWrapper.getHibernateSession();
+//        this.memoryDbSetup = new DbSetup(hibernateSession);
 //        this.memoryDbSetup.createEmptyDatabase();
 //
 //        this.restServerData = new ServerData(this.robotCommunicator);

@@ -1,102 +1,24 @@
 StmtTextComment[textComment: logik_boolean_op-- Start]
 
-Var [x] := StmtExpr [
-if BoolConst[value: true]
-,then
-exprStmt Binary [ADD, Var [x], NumConst[value: 1]]
-,else
-exprStmt Binary [ADD, Var [x], NumConst[value: 1000]]
-]
+Var [x] := TernaryExpr[condition: BoolConst[value: true], thenPart: Binary [ADD, Var [x], NumConst[value: 1]], elsePart: Binary [ADD, Var [x], NumConst[value: 1000]]]
 
 
-Var [x] := StmtExpr [
-if BoolConst[value: false]
-,then
-exprStmt Binary [ADD, Var [x], NumConst[value: 1000]]
-,else
-exprStmt Binary [ADD, Var [x], NumConst[value: 1]]
-]
+Var [x] := TernaryExpr[condition: BoolConst[value: false], thenPart: Binary [ADD, Var [x], NumConst[value: 1000]], elsePart: Binary [ADD, Var [x], NumConst[value: 1]]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 2], Var [x]], msg: pos-1]
 
-Var [x] := StmtExpr [
-if StmtExpr [
-if BoolConst[value: true]
-,then
-exprStmt BoolConst[value: true]
-,else
-exprStmt BoolConst[value: false]
-]
-,then
-exprStmt Binary [ADD, Var [x], NumConst[value: 1]]
-,else
-exprStmt Binary [ADD, Var [x], NumConst[value: 1000]]
-]
+Var [x] := TernaryExpr[condition: TernaryExpr[condition: BoolConst[value: true], thenPart: BoolConst[value: true], elsePart: BoolConst[value: false]], thenPart: Binary [ADD, Var [x], NumConst[value: 1]], elsePart: Binary [ADD, Var [x], NumConst[value: 1000]]]
 
 
-Var [x] := StmtExpr [
-if StmtExpr [
-if BoolConst[value: false]
-,then
-exprStmt BoolConst[value: false]
-,else
-exprStmt BoolConst[value: true]
-]
-,then
-exprStmt Binary [ADD, Var [x], NumConst[value: 1]]
-,else
-exprStmt Binary [ADD, Var [x], NumConst[value: 1000]]
-]
+Var [x] := TernaryExpr[condition: TernaryExpr[condition: BoolConst[value: false], thenPart: BoolConst[value: false], elsePart: BoolConst[value: true]], thenPart: Binary [ADD, Var [x], NumConst[value: 1]], elsePart: Binary [ADD, Var [x], NumConst[value: 1000]]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 4], Var [x]], msg: pos-2]
 
-Var [x] := StmtExpr [
-if StmtExpr [
-if StmtExpr [
-if BoolConst[value: true]
-,then
-exprStmt BoolConst[value: true]
-,else
-exprStmt BoolConst[value: false]
-]
-,then
-exprStmt BoolConst[value: true]
-,else
-exprStmt BoolConst[value: false]
-]
-,then
-exprStmt Binary [ADD, Var [x], NumConst[value: 1]]
-,else
-exprStmt Binary [ADD, Var [x], NumConst[value: 1000]]
-]
+Var [x] := TernaryExpr[condition: TernaryExpr[condition: TernaryExpr[condition: BoolConst[value: true], thenPart: BoolConst[value: true], elsePart: BoolConst[value: false]], thenPart: BoolConst[value: true], elsePart: BoolConst[value: false]], thenPart: Binary [ADD, Var [x], NumConst[value: 1]], elsePart: Binary [ADD, Var [x], NumConst[value: 1000]]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 5], Var [x]], msg: pos-3]
 
-Var [x] := StmtExpr [
-if StmtExpr [
-if StmtExpr [
-if Binary [EQ, NumConst[value: 1], NumConst[value: 2]]
-,then
-exprStmt BoolConst[value: true]
-,else
-exprStmt BoolConst[value: false]
-]
-,then
-exprStmt BoolConst[value: false]
-,else
-exprStmt BoolConst[value: true]
-]
-,then
-exprStmt Binary [ADD, Var [x], NumConst[value: 1]]
-,else
-exprStmt Binary [ADD, Var [x], NumConst[value: 1000]]
-]
+Var [x] := TernaryExpr[condition: TernaryExpr[condition: TernaryExpr[condition: Binary [EQ, NumConst[value: 1], NumConst[value: 2]], thenPart: BoolConst[value: true], elsePart: BoolConst[value: false]], thenPart: BoolConst[value: false], elsePart: BoolConst[value: true]], thenPart: Binary [ADD, Var [x], NumConst[value: 1]], elsePart: Binary [ADD, Var [x], NumConst[value: 1000]]]
 
-DebugAction[value: StmtExpr [
-if Binary [EQ, NumConst[value: 6], Var [x]]
-,then
-exprStmt StringConst[value: Logic Ternary Op Test: success]
-,else
-exprStmt StringConst[value: Logic Ternary Op Test: FAIL]
-]]
+DebugAction[value: TernaryExpr[condition: Binary [EQ, NumConst[value: 6], Var [x]], thenPart: StringConst[value: Logic Ternary Op Test: success], elsePart: StringConst[value: Logic Ternary Op Test: FAIL]]]
 StmtTextComment[textComment: Logic Ternary Op -- End]

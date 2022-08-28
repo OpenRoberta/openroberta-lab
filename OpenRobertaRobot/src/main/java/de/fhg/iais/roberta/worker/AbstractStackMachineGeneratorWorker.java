@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.visitor.C;
+import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 /**
@@ -16,10 +16,10 @@ public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
     @Override
     public final void execute(Project project) {
         UsedHardwareBean usedHardwareBean = project.getWorkerResult(UsedHardwareBean.class);
-        AbstractStackMachineVisitor<Void> visitor = this.getVisitor(project, usedHardwareBean);
+        AbstractStackMachineVisitor visitor = this.getVisitor(project, usedHardwareBean);
         visitor.generateCodeFromPhrases(project.getProgramAst().getTree());
         JSONObject generatedCode = new JSONObject();
-        generatedCode.put(C.OPS, visitor.getOpArray());
+        generatedCode.put(C.OPS, visitor.getCode());
         project.setSourceCode(generatedCode.toString(2));
         project.setCompiledHex(generatedCode.toString(2));
         project.setResult(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);
@@ -33,5 +33,5 @@ public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
      * @param usedHardwareBean the used hardware bean
      * @return the appropriate visitor for the current robot
      */
-    protected abstract AbstractStackMachineVisitor<Void> getVisitor(Project project, UsedHardwareBean usedHardwareBean);
+    protected abstract AbstractStackMachineVisitor getVisitor(Project project, UsedHardwareBean usedHardwareBean);
 }

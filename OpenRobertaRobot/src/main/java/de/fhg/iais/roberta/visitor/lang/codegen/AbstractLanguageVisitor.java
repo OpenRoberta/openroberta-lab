@@ -9,10 +9,13 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.apache.commons.text.StringEscapeUtils;
+import org.json.JSONArray;
 
 import com.google.common.collect.ClassToInstanceMap;
 
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -22,6 +25,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetBias;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetOutputNeuronVal;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetWeight;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
@@ -34,34 +40,35 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetBiasStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetInputNeuronVal;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetWeightStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
+import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.visitor.SourceBuilder;
 import de.fhg.iais.roberta.visitor.BaseVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implements ILanguageVisitor<Void> {
     //TODO find more simple way of handling the loops
-    private static final String INDENT = "    ";
     private int loopCounter = 0;
     protected LinkedList<Integer> currentLoop = new LinkedList<>();
 
-    protected StringBuilder sb = new StringBuilder();
-    protected final List<Phrase<Void>> programPhrases;
+    protected final List<Phrase> programPhrases;
 
-    private int indentation = 0;
-    private StringBuilder indent = new StringBuilder();
+    protected StringBuilder sb;
+    protected SourceBuilder src;
 
     private final ClassToInstanceMap<IProjectBean> beans;
 
     /**
      * initialize the common language code generator visitor.
      */
-    protected AbstractLanguageVisitor(List<List<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
+    protected AbstractLanguageVisitor(List<List<Phrase>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
         Assert.isTrue(!programPhrases.isEmpty());
         this.beans = beans;
 
@@ -81,28 +88,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     public void setStringBuilders(StringBuilder sourceCode, StringBuilder indentation) {
         this.sb = sourceCode;
-        this.indent = indentation;
-        for ( int i = 0; i < this.indentation; i++ ) {
-            this.indent.append(AbstractLanguageVisitor.INDENT);
-        }
-    }
-
-    /**
-     * Get the current indentation of the visitor. Meaningful for tests only.
-     *
-     * @return indentation value of the visitor.
-     */
-    public int getIndentation() {
-        return this.indentation;
-    }
-
-    /**
-     * Get the string builder of the visitor. Meaningful for tests only.
-     *
-     * @return (current state of) the string builder
-     */
-    public StringBuilder getSb() {
-        return this.sb;
+        this.src = new SourceBuilder(this.sb);
     }
 
     public void generateCode(boolean withWrapping) {
@@ -131,97 +117,260 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
             });
     }
 
+    /**
+     * generate code for the xNN neural networks in one of the 3 target languages "java" "python" "c++"
+     *
+     * @param targetLanguage
+     */
+    protected final void generateNNStuff(String targetLanguage) {
+        NNBean nnBean = this.getBean(CodeGeneratorSetupBean.class).getNNBean();
+        if ( nnBean != null && nnBean.hasAtLeastOneInputAndOutputNeuron() ) {
+            for ( String neuron : nnBean.getInputNeurons() ) {
+                mkDecl(targetLanguage, neuron);
+            }
+            for ( String neuron : nnBean.getOutputNeurons() ) {
+                mkDecl(targetLanguage, neuron);
+            }
+            final JSONArray weights = nnBean.getWeights();
+            final JSONArray biases = nnBean.getBiases();
+            for ( int layer = 0; layer < weights.length() - 1; layer++ ) {
+                JSONArray weightsForLayer = weights.getJSONArray(layer);
+                JSONArray biasesForLayer = biases.getJSONArray(layer + 1);
+                int numberOfNeurons = weightsForLayer.getJSONArray(0).length();
+                for ( int targetNum = 0; targetNum < numberOfNeurons; targetNum++ ) {
+                    String targetName = (layer == weights.length() - 2) ? nnBean.getOutputNeurons().get(targetNum) : ("h" + (layer + 1) + "n" + (targetNum + 1));
+                    mkDeclWithAssign(targetLanguage, "b_" + targetName);
+                    mkWeightTerm(targetLanguage, biasesForLayer.getString(targetNum));
+                    for ( int sourceNum = 0; sourceNum < weightsForLayer.length(); sourceNum++ ) {
+                        String sourceName = (layer == 0) ? nnBean.getInputNeurons().get(sourceNum) : ("h" + layer + "n" + (sourceNum + 1));
+                        mkDeclWithAssign(targetLanguage, "w_" + sourceName + "_" + targetName);
+                        mkWeightTerm(targetLanguage, weightsForLayer.getJSONArray(sourceNum).getString(targetNum));
+                    }
+                }
+            }
+            mkNnStepStart(targetLanguage);
+            for ( int layer = 0; layer < weights.length() - 1; layer++ ) {
+                final JSONArray weightsForLayer = weights.getJSONArray(layer);
+                final JSONArray biasesForLayer = biases.getJSONArray(layer + 1);
+                int numberOfNeurons = weightsForLayer.getJSONArray(0).length();
+                for ( int targetNum = 0; targetNum < numberOfNeurons; targetNum++ ) {
+                    String targetName;
+                    boolean optDeclNeeded;
+                    if ( layer == weights.length() - 2 ) {
+                        // output
+                        targetName = nnBean.getOutputNeurons().get(targetNum);
+                        optDeclNeeded = false;
+                    } else {
+                        // hidden
+                        targetName = "h" + (layer + 1) + "n" + (targetNum + 1);
+                        optDeclNeeded = true;
+                    }
+                    mkStepAssign(targetLanguage, optDeclNeeded, targetName);
+                    for ( int sourceNum = 0; sourceNum < weightsForLayer.length(); sourceNum++ ) {
+                        String sourceName;
+                        String sourcePrefix;
+                        if ( layer == 0 ) {
+                            // input
+                            sourceName = nnBean.getInputNeurons().get(sourceNum);
+                        } else {
+                            // hidden
+                            sourceName = "h" + layer + "n" + (sourceNum + 1);
+                        }
+                        src.add(" + ____", sourceName, " * ____w_", sourceName, "_", targetName);
+                    }
+                    mkStmtTerminator(targetLanguage);
+                }
+            }
+            mkNnStepEnd(targetLanguage);
+        }
+    }
+
+    private void mkStmtTerminator(String targetLanguage) {
+        if ( targetLanguage.equals("java") ) {
+            src.add(";");
+        } else if ( targetLanguage.equals("python") ) {
+            // no terminator at all
+        } else if ( targetLanguage.equals("c++") ) {
+            src.add(";");
+        } else {
+            Assert.fail("invalid target language for xNN: " + targetLanguage);
+        }
+    }
+
+    private void mkStepAssign(String targetLanguage, boolean optDeclNeeded, String targetName) {
+        if ( targetLanguage.equals("java") ) {
+            src.nlI().add(optDeclNeeded ? "float " : "", "____", targetName, " = ____b_", targetName);
+        } else if ( targetLanguage.equals("python") ) {
+            if ( !optDeclNeeded ) {
+                // global variable. Declare that
+                src.nlI().add("global ____").add(targetName);
+            }
+            src.nlI().add("____", targetName, " = ____b_", targetName);
+        } else if ( targetLanguage.equals("c++") ) {
+            src.nlI().add(optDeclNeeded ? "double " : "", "____", targetName, " = ____b_", targetName);
+        } else {
+            Assert.fail("invalid target language for xNN: " + targetLanguage);
+        }
+    }
+
+    private void mkNnStepStart(String targetLanguage) {
+        src.nlI().nlI();
+        if ( targetLanguage.equals("java") ) {
+            src.add("private void ____nnStep() {");
+        } else if ( targetLanguage.equals("python") ) {
+            src.nlI().add("def ____nnStep():");
+        } else if ( targetLanguage.equals("c++") ) {
+            src.nlI().add("void ____nnStep() {");
+        } else {
+            Assert.fail("invalid target language for xNN: " + targetLanguage);
+        }
+        src.INCR();
+    }
+
+    private void mkNnStepEnd(String targetLanguage) {
+        src.DECR().nlI();
+        if ( targetLanguage.equals("java") ) {
+            src.add("}").nlI();
+        } else if ( targetLanguage.equals("python") ) {
+            // no terminator at all
+        } else if ( targetLanguage.equals("c++") ) {
+            src.add("}").nlI();
+        } else {
+            Assert.fail("invalid target language for xNN: " + targetLanguage);
+        }
+    }
+
+
+    private void mkDecl(String targetLanguage, String neuron) {
+        if ( targetLanguage.equals("java") ) {
+            src.nlI().add("private float ____", neuron, ";");
+        } else if ( targetLanguage.equals("python") ) {
+            src.nlI().add("____", neuron, " = 0");
+        } else if ( targetLanguage.equals("c++") ) {
+            src.nlI().add("double ____", neuron, ";");
+        } else {
+            Assert.fail("invalid target language for xNN: " + targetLanguage);
+        }
+    }
+
+    private void mkDeclWithAssign(String targetLanguage, String neuron) {
+        if ( targetLanguage.equals("java") ) {
+            src.nlI().add("private float ____", neuron, " = ");
+        } else if ( targetLanguage.equals("python") ) {
+            src.nlI().add("____", neuron, " = ");
+        } else if ( targetLanguage.equals("c++") ) {
+            src.nlI().add("double ____", neuron, " = ");
+        } else {
+            Assert.fail("invalid target language for xNN: " + targetLanguage);
+        }
+    }
+
+    private void mkWeightTerm(String targetLanguage, String weight) {
+        char firstChar = weight.charAt(0);
+        if ( firstChar == '*' ) {
+            src.add(weight.substring(1));
+        } else if ( firstChar == '/' || firstChar == ':' ) {
+            src.add("1.0/").add(weight.substring(1));
+        } else {
+            src.add(weight);
+        }
+        if ( targetLanguage.equals("java") ) {
+            src.add(";");
+        } else if ( targetLanguage.equals("python") ) {
+            // no terminator at all
+        } else if ( targetLanguage.equals("c++") ) {
+            src.add(";");
+        } else {
+            Assert.fail("invalid target language for xNN: " + targetLanguage);
+        }
+    }
+
     @Override
-    public Void visitNumConst(NumConst<Void> numConst) {
-        this.sb.append(numConst.getValue());
+    public Void visitNumConst(NumConst numConst) {
+        this.sb.append(numConst.value);
         return null;
     }
 
     @Override
-    public Void visitBoolConst(BoolConst<Void> boolConst) {
-        this.sb.append(boolConst.getValue());
+    public Void visitBoolConst(BoolConst boolConst) {
+        this.sb.append(boolConst.value);
         return null;
     }
 
     @Override
-    public Void visitStringConst(StringConst<Void> stringConst) {
-        this.sb.append("\"").append(StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", ""))).append("\"");
+    public Void visitStringConst(StringConst stringConst) {
+        src.add("\"", StringEscapeUtils.escapeEcmaScript(stringConst.value.replaceAll("[<>\\$]", "")), "\"");
         return null;
     }
 
     @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
+    public Void visitColorConst(ColorConst colorConst) {
         throw new UnsupportedOperationException("should be overriden in a robot-specific class");
     }
 
     @Override
-    public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        rgbColor.getR().accept(this);
+    public Void visitRgbColor(RgbColor rgbColor) {
+        rgbColor.R.accept(this);
         this.sb.append(", ");
-        rgbColor.getG().accept(this);
+        rgbColor.G.accept(this);
         this.sb.append(", ");
-        rgbColor.getB().accept(this);
+        rgbColor.B.accept(this);
         this.sb.append(", ");
-        rgbColor.getA().accept(this);
+        rgbColor.A.accept(this);
         return null;
     }
 
     @Override
-    public Void visitVar(Var<Void> var) {
+    public Void visitVar(Var var) {
         this.sb.append(var.getCodeSafeName());
         return null;
     }
 
     @Override
-    public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
-        this.sb.append(var.getCodeSafeName());
-        if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(" = ");
-            if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
-                ExprList<Void> list = (ExprList<Void>) var.getValue();
+    public Void visitVarDeclaration(VarDeclaration var) {
+        src.add(getLanguageVarTypeFromBlocklyType(var.typeVar), " ", var.getCodeSafeName());
+        if ( !var.value.getKind().hasName("EMPTY_EXPR") ) {
+            src.add(" = ");
+            if ( var.value.getKind().hasName("EXPR_LIST") ) {
+                ExprList list = (ExprList) var.value;
                 if ( list.get().size() == 2 ) {
                     list.get().get(1).accept(this);
                 } else {
                     list.get().get(0).accept(this);
                 }
             } else {
-                var.getValue().accept(this);
+                var.value.accept(this);
             }
         }
         return null;
     }
 
     @Override
-    public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
-        this.sb.append("// " + stmtTextComment.getTextComment().replace("\n", " "));
+    public Void visitStmtTextComment(StmtTextComment stmtTextComment) {
+        src.add("// ", stmtTextComment.textComment.replace("\n", " "));
         return null;
     }
 
     @Override
-    public Void visitUnary(Unary<Void> unary) {
-        Unary.Op op = unary.getOp();
+    public Void visitUnary(Unary unary) {
+        Unary.Op op = unary.op;
         String sym = getUnaryOperatorSymbol(op);
         if ( op == Unary.Op.POSTFIX_INCREMENTS ) {
             generateExprCode(unary, this.sb);
-            this.sb.append(sym);
+            src.add(sym);
         } else {
-            this.sb.append(sym + whitespace());
+            src.add(sym, whitespace());
             generateExprCode(unary, this.sb);
         }
         return null;
     }
 
     @Override
-    public Void visitExprList(ExprList<Void> exprList) {
+    public Void visitExprList(ExprList exprList) {
         boolean first = true;
-        for ( Expr<Void> expr : exprList.get() ) {
+        for ( Expr expr : exprList.get() ) {
             if ( !expr.getKind().hasName("EMPTY_EXPR") ) {
-                if ( first ) {
-                    first = false;
-                } else {
-                    this.sb.append(", ");
-                }
+                first = src.addIf(first, ", ");
                 expr.accept(this);
             }
         }
@@ -229,47 +378,82 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     }
 
     @Override
-    public Void visitActionStmt(ActionStmt<Void> actionStmt) {
-        actionStmt.getAction().accept(this);
+    public Void visitActionStmt(ActionStmt actionStmt) {
+        actionStmt.action.accept(this);
         return null;
     }
 
     @Override
-    public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
-        assignStmt.getName().accept(this);
-        this.sb.append(" = ");
-        assignStmt.getExpr().accept(this);
+    public Void visitAssignStmt(AssignStmt assignStmt) {
+        assignStmt.name.accept(this);
+        src.add(" = ");
+        assignStmt.expr.accept(this);
         return null;
     }
 
     @Override
-    public Void visitIfStmt(IfStmt<Void> ifStmt) {
-        if ( ifStmt.isTernary() ) {
-            generateCodeFromTernary(ifStmt);
-        } else {
-            generateCodeFromIfElse(ifStmt);
-            generateCodeFromElse(ifStmt);
-        }
+    public Void visitIfStmt(IfStmt ifStmt) {
+        generateCodeFromIfElse(ifStmt);
+        generateCodeFromElse(ifStmt);
         return null;
     }
 
     @Override
-    public Void visitNNStepStmt(NNStepStmt<Void> nnStepStmt) {
-        this.sb.append("// NNstep not yet available for target code generation");
+    public Void visitTernaryExpr(TernaryExpr ternaryExpr) {
+        generateCodeFromTernary(ternaryExpr);
         return null;
     }
 
     @Override
-    public Void visitNNInputNeuronStmt(NNInputNeuronStmt<Void> nnInputNeuronStmt) {
+    public Void visitNNStepStmt(NNStepStmt nnStepStmt) {
+        this.src.add("____nnStep();");
         return null;
     }
 
     @Override
-    public Void visitNNOutputNeuronStmt(NNOutputNeuronStmt<Void> nnOutputNeuronStmt) {
+    public Void visitNNSetInputNeuronVal(NNSetInputNeuronVal setVal) {
+        src.add("____").add(setVal.name).add(" = ");
+        setVal.value.accept(this);
+        this.src.add(";");
         return null;
     }
+
     @Override
-    public Void visitStmtList(StmtList<Void> stmtList) {
+    public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal getVal) {
+        src.add("____").add(getVal.name);
+        return null;
+    }
+
+    @Override
+    public Void visitNNSetWeightStmt(NNSetWeightStmt chgStmt) {
+        this.src.add("____w_", chgStmt.from, "_", chgStmt.to, " = ");
+        chgStmt.value.accept(this);
+        this.src.add(";");
+        return null;
+    }
+
+    @Override
+    public Void visitNNSetBiasStmt(NNSetBiasStmt chgStmt) {
+        this.src.add("____b_", chgStmt.name, " = ");
+        chgStmt.value.accept(this);
+        this.src.add(";");
+        return null;
+    }
+
+    @Override
+    public Void visitNNGetWeight(NNGetWeight getVal) {
+        src.add("____w_", getVal.from, "_", getVal.to);
+        return null;
+    }
+
+    @Override
+    public Void visitNNGetBias(NNGetBias getVal) {
+        src.add("____b_", getVal.name);
+        return null;
+    }
+
+    @Override
+    public Void visitStmtList(StmtList stmtList) {
         stmtList.get().stream().forEach(stmt -> {
             nlIndent();
             stmt.accept(this);
@@ -278,65 +462,57 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     }
 
     @Override
-    public Void visitMethodCall(MethodCall<Void> methodCall) {
-        this.sb.append(methodCall.getMethodName() + "(");
+    public Void visitMethodCall(MethodCall methodCall) {
+        src.add(methodCall.getMethodName(), "(");
         methodCall.getParametersValues().accept(this);
-        this.sb.append(")");
+        src.add(")");
         return null;
     }
 
     @Override
-    public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
-        methodStmt.getMethod().accept(this);
+    public Void visitMethodStmt(MethodStmt methodStmt) {
+        methodStmt.method.accept(this);
         return null;
     }
 
     @Override
-    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        mathPowerFunct.getParam().get(0).accept(this);
+    public Void visitMathPowerFunct(MathPowerFunct mathPowerFunct) {
+        mathPowerFunct.param.get(0).accept(this);
         this.sb.append(", ");
-        mathPowerFunct.getParam().get(1).accept(this);
+        mathPowerFunct.param.get(1).accept(this);
         this.sb.append(")");
         return null;
     }
 
-    protected void generateExprCode(Unary<Void> unary, StringBuilder sb) {
-        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() || unary.getOp() == Unary.Op.NEG ) {
+    protected void generateExprCode(Unary unary, StringBuilder sb) {
+        if ( unary.expr.getPrecedence() < unary.getPrecedence() || unary.op == Unary.Op.NEG ) {
             sb.append("(");
-            unary.getExpr().accept(this);
+            unary.expr.accept(this);
             sb.append(")");
         } else {
-            unary.getExpr().accept(this);
+            unary.expr.accept(this);
         }
     }
 
     protected void incrIndentation() {
-        this.indentation += 1;
-        this.indent.append(AbstractLanguageVisitor.INDENT);
+        src.INCR();
     }
 
     protected void decrIndentation() {
-        this.indentation -= 1;
-        this.indent.delete(0, AbstractLanguageVisitor.INDENT.length());
+        src.DECR();
     }
 
     protected void indent() {
-        if ( this.indentation <= 0 ) {
-            return;
-        } else {
-            for ( int i = 0; i < this.indentation; i++ ) {
-                this.sb.append(AbstractLanguageVisitor.INDENT);
-            }
-        }
+        src.indent();
     }
 
     public void nlIndent() {
-        this.sb.append("\n").append(this.indent);
+        src.nlI();
     }
 
     protected boolean isInteger(String str) {
         try {
-            Integer.parseInt(str); //NOSONAR : her it is checked if the string is a parseable Integer. Result is NOT used.
+            Integer.parseInt(str); //NOSONAR : it is checked if the string is a parseable Integer. Result is NOT used.
             return true;
         } catch ( NumberFormatException e ) {
             return false;
@@ -360,15 +536,15 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
         return value.getClass().getSimpleName() + "." + value;
     }
 
-    protected boolean isMainBlock(Phrase<Void> phrase) {
-        return phrase.getKind().getName().equals("MAIN_TASK");
+    protected boolean isMainBlock(Phrase phrase) {
+        return phrase.hasName("MAIN_TASK");
     }
 
-    protected boolean parenthesesCheck(Binary<Void> binary) {
-        return binary.getOp() == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
+    protected boolean parenthesesCheck(Binary binary) {
+        return binary.op == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
     }
 
-    protected void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
+    protected void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr expr, Binary binary) {
         if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && !expr.getKind().hasName("BINARY") ) {
             // parentheses are omitted
             expr.accept(this);
@@ -381,11 +557,11 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     abstract protected String getLanguageVarTypeFromBlocklyType(BlocklyType type);
 
-    abstract protected void generateCodeFromTernary(IfStmt<Void> ifStmt);
+    abstract protected void generateCodeFromTernary(TernaryExpr ternaryExpr);
 
-    abstract protected void generateCodeFromIfElse(IfStmt<Void> ifStmt);
+    abstract protected void generateCodeFromIfElse(IfStmt ifStmt);
 
-    abstract protected void generateCodeFromElse(IfStmt<Void> ifStmt);
+    abstract protected void generateCodeFromElse(IfStmt ifStmt);
 
     abstract protected void generateProgramPrefix(boolean withWrapping);
 
@@ -396,7 +572,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     abstract protected String getUnaryOperatorSymbol(Unary.Op op);
 
     protected static <K, V> Map.Entry<K, V> entry(K key, V value) {
-        return new AbstractMap.SimpleEntry<>(key, value);
+        return new AbstractMap.SimpleEntry(key, value);
     }
 
     protected static <K, U> Collector<Map.Entry<K, U>, ?, Map<K, U>> entriesToMap() {

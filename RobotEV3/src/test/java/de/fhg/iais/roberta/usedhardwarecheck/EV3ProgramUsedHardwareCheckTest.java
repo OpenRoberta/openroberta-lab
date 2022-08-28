@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableClassToInstanceMap;
 import de.fhg.iais.roberta.Ev3LejosAstTest;
 import de.fhg.iais.roberta.bean.ErrorAndWarningBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -46,27 +47,29 @@ public class EV3ProgramUsedHardwareCheckTest extends Ev3LejosAstTest {
             new Object[] {"/ast/method_return_3.xml", "[]", "[]"},
             new Object[] {"/visitors/hardware_check7.xml", "[UsedSensor [3, COLOR, COLOUR], UsedSensor [3, COLOR, AMBIENTLIGHT], UsedSensor [4, COLOR, LIGHT]]", "[]"},
             new Object[] {"/visitors/hardware_check8.xml", "[]", "[UsedActor [D, MEDIUM]]"}
-            );
+        );
     }
 
     @Test
     public void testCollector() {
-        List<List<Phrase<Void>>> phrasesOfPhrases = UnitTestHelper.getProgramAst(testFactory, file);
+        List<List<Phrase>> phrasesOfPhrases = UnitTestHelper.getProgramAst(testFactory, file);
         UsedHardwareBean.Builder usedHardwareBuilder = new UsedHardwareBean.Builder();
         UsedMethodBean.Builder usedMethodBuilder = new UsedMethodBean.Builder();
         ErrorAndWarningBean.Builder errorAndWarningBuilder = new ErrorAndWarningBean.Builder();
+        NNBean.Builder nnBuilder = new NNBean.Builder();
 
-        ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder<?>> map = new ImmutableClassToInstanceMap.Builder<>();
+        ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder> map = new ImmutableClassToInstanceMap.Builder<>();
         map.put(UsedMethodBean.Builder.class, usedMethodBuilder);
         map.put(UsedHardwareBean.Builder.class, usedHardwareBuilder);
         map.put(ErrorAndWarningBean.Builder.class, errorAndWarningBuilder);
+        map.put(NNBean.Builder.class, nnBuilder);
 
         Ev3ValidatorAndCollectorVisitor checkVisitor =
             new Ev3ValidatorAndCollectorVisitor(
                 makeLargeLargeMediumTouchGyroColorUltrasonic(),
                 map.build());
-        for ( List<Phrase<Void>> phrases : phrasesOfPhrases ) {
-            for ( Phrase<Void> phrase : phrases ) {
+        for ( List<Phrase> phrases : phrasesOfPhrases ) {
+            for ( Phrase phrase : phrases ) {
                 phrase.accept(checkVisitor);
             }
         }

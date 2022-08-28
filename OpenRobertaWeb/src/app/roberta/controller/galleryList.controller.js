@@ -6,11 +6,7 @@
  *
  * @author Beate Jost <beate.jost@smail.inf.h-brs.de>
  */
-import * as require from 'require';
-
-import * as LOG from 'log';
 import * as UTIL from 'util';
-import * as COMM from 'comm';
 import * as MSG from 'message';
 import * as GUISTATE_C from 'guiState.controller';
 import * as PROGLIST from 'progList.model';
@@ -21,21 +17,7 @@ import * as $ from 'jquery';
 import 'bootstrap-table';
 import 'bootstrap-tagsinput';
 
-var BACKGROUND_COLORS = [
-    '#33B8CA',
-    '#EBC300',
-    '#39378B',
-    '#005A94',
-    '#179C7D',
-    '#F29400',
-    '#E2001A',
-    '#EB6A0A',
-    '#8FA402',
-    '#BACC1E',
-    '#9085BA',
-    '#FF69B4',
-    '#DF01D7',
-];
+var BACKGROUND_COLORS = ['#33B8CA', '#EBC300', '#005A94', '#179C7D', '#F29400', '#E2001A', '#EB6A0A', '#8FA402', '#BACC1E', '#9085BA', '#FF69B4', '#DF01D7'];
 var currentColorIndex;
 var currentViewMode = 'gallery';
 /**
@@ -214,11 +196,11 @@ function initGalleryListEvents() {
     $('#fieldOrderBy').change(function (e) {
         var fieldData = e.target.value.split(':');
         var row = parseInt(fieldData[0]);
-        console.log(row);
         $('#galleryTable').bootstrapTable('refreshOptions', {
             sortName: row,
             sortOrder: fieldData[1],
         });
+        configureTagsInput();
     });
     //        TODO reactivate this once the table-view is improved
     //        $('#toogleView').clickWrap(function (e) {
@@ -267,6 +249,7 @@ function updateLike(value, index, row) {
         field: 8,
         value: like,
     });
+    configureTagsInput();
 }
 
 var eventsLike = {

@@ -16,9 +16,7 @@ import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
@@ -30,7 +28,6 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
-import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixImageAction;
@@ -51,6 +48,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -62,9 +60,10 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.FlameSensor;
-import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.Joystick;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.MotorDuration;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
@@ -82,12 +81,12 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public MbotCppVisitor(List<List<Phrase<Void>>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
+    public MbotCppVisitor(List<List<Phrase>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, brickConfiguration, beans);
     }
 
     @Override
-    public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
+    public Void visitEmptyExpr(EmptyExpr emptyExpr) {
         switch ( emptyExpr.getDefVal() ) {
             case STRING:
                 this.sb.append("\"\"");
@@ -165,17 +164,17 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         this.sb.append("__meLEDMatrix_").append(clearDisplayAction.port).append(".clearScreen();");
         return null;
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public Void visitLightAction(LightAction lightAction) {
         this.sb.append("_meRgbLed.setColor(");
-        this.sb.append(lightAction.getPort());
-        if ( lightAction.getRgbLedColor().getClass().equals(Var.class) ) {
-            String tempVarName = "___" + ((Var<Void>) lightAction.getRgbLedColor()).getValue();
+        this.sb.append(lightAction.port);
+        if ( lightAction.rgbLedColor.getClass().equals(Var.class) ) {
+            String tempVarName = "___" + ((Var) lightAction.rgbLedColor).name;
             this.sb.append(", ");
             this.sb.append("RCHANNEL(");
             this.sb.append(tempVarName);
@@ -190,8 +189,8 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
             this.sb.append("_meRgbLed.show();");
             return null;
         }
-        if ( lightAction.getRgbLedColor().getClass().equals(ColorConst.class) ) {
-            ColorConst<Void> colorConst = (ColorConst<Void>) lightAction.getRgbLedColor();
+        if ( lightAction.rgbLedColor.getClass().equals(ColorConst.class) ) {
+            ColorConst colorConst = (ColorConst) lightAction.rgbLedColor;
             this.sb.append(", ");
             this.sb.append(colorConst.getRedChannelHex());
             this.sb.append(", ");
@@ -203,10 +202,10 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
             this.sb.append("_meRgbLed.show();");
             return null;
         }
-        Map<String, Expr<Void>> Channels = new HashMap<>();
-        Channels.put("red", ((RgbColor<Void>) lightAction.getRgbLedColor()).getR());
-        Channels.put("green", ((RgbColor<Void>) lightAction.getRgbLedColor()).getG());
-        Channels.put("blue", ((RgbColor<Void>) lightAction.getRgbLedColor()).getB());
+        Map<String, Expr> Channels = new HashMap<>();
+        Channels.put("red", ((RgbColor) lightAction.rgbLedColor).R);
+        Channels.put("green", ((RgbColor) lightAction.rgbLedColor).G);
+        Channels.put("blue", ((RgbColor) lightAction.rgbLedColor).B);
         Channels.forEach((k, v) -> {
             this.sb.append(", ");
             v.accept(this);
@@ -219,7 +218,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         this.sb.append("_meRgbLed.setColor(" + lightStatusAction.getUserDefinedPort());
         this.sb.append(", 0, 0, 0);");
         nlIndent();
@@ -228,36 +227,36 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         //8 - sound port
         this.sb.append("_meBuzzer.tone(8, ");
-        toneAction.getFrequency().accept(this);
+        toneAction.frequency.accept(this);
         this.sb.append(", ");
-        toneAction.getDuration().accept(this);
+        toneAction.duration.accept(this);
         this.sb.append(");");
         return null;
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         //8 - sound port
         this.sb.append("_meBuzzer.tone(8, ");
-        this.sb.append(playNoteAction.getFrequency());
+        this.sb.append(playNoteAction.frequency);
         this.sb.append(", ");
-        this.sb.append(playNoteAction.getDuration());
+        this.sb.append(playNoteAction.duration);
         this.sb.append(");");
         return null;
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        final MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
+        final MotorDuration duration = motorOnAction.param.getDuration();
         this.sb.append("_meDCmotor").append(motorOnAction.getUserDefinedPort()).append(".run(");
         if ( !Objects.equals(this.configuration.getFirstMotorPort(SC.RIGHT), motorOnAction.getUserDefinedPort()) ) {
             this.sb.append("-1*");
         }
         this.sb.append("(");
-        motorOnAction.getParam().getSpeed().accept(this);
+        motorOnAction.param.getSpeed().accept(this);
         this.sb.append(")*255/100);");
         if ( duration != null ) {
             nlIndent();
@@ -271,28 +270,28 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+    public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
         return null;
     }
 
     @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+    public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         return null;
     }
 
     @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         this.sb.append("_meDCmotor").append(motorStopAction.getUserDefinedPort()).append(".stop();");
         return null;
     }
 
     @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
-        final MotorDuration<Void> duration = driveAction.getParam().getDuration();
+    public Void visitDriveAction(DriveAction driveAction) {
+        final MotorDuration duration = driveAction.param.getDuration();
         this.sb.append("_meDrive.drive(");
-        driveAction.getParam().getSpeed().accept(this);
+        driveAction.param.getSpeed().accept(this);
         this.sb.append(", ");
-        this.sb.append(driveAction.getDirection() == DriveDirection.FOREWARD ? 1 : 0);
+        this.sb.append(driveAction.direction == DriveDirection.FOREWARD ? 1 : 0);
         if ( duration != null ) {
             this.sb.append(", ");
             duration.getValue().accept(this);
@@ -302,13 +301,13 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
-        final MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
+    public Void visitCurveAction(CurveAction curveAction) {
+        final MotorDuration duration = curveAction.paramLeft.getDuration();
         this.sb.append("_meDrive.steer(");
-        curveAction.getParamLeft().getSpeed().accept(this);
+        curveAction.paramLeft.getSpeed().accept(this);
         this.sb.append(", ");
-        curveAction.getParamRight().getSpeed().accept(this);
-        this.sb.append(", ").append(curveAction.getDirection() == DriveDirection.FOREWARD ? 1 : 0);
+        curveAction.paramRight.getSpeed().accept(this);
+        this.sb.append(", ").append(curveAction.direction == DriveDirection.FOREWARD ? 1 : 0);
         if ( duration != null ) {
             this.sb.append(", ");
             duration.getValue().accept(this);
@@ -318,11 +317,11 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
-        final MotorDuration<Void> duration = turnAction.getParam().getDuration();
+    public Void visitTurnAction(TurnAction turnAction) {
+        final MotorDuration duration = turnAction.param.getDuration();
         this.sb.append("_meDrive.turn(");
-        turnAction.getParam().getSpeed().accept(this);
-        this.sb.append(", ").append(turnAction.getDirection() == TurnDirection.LEFT ? 1 : 0);
+        turnAction.param.getSpeed().accept(this);
+        this.sb.append(", ").append(turnAction.direction == TurnDirection.LEFT ? 1 : 0);
         if ( duration != null ) {
             this.sb.append(", ");
             duration.getValue().accept(this);
@@ -332,7 +331,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+    public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         for ( final UsedActor actor : this.getBean(UsedHardwareBean.class).getUsedActors() ) {
             if ( actor.getType().equals(SC.DIFFERENTIAL_DRIVE) ) {
                 this.sb.append("_meDrive.stop();");
@@ -343,98 +342,96 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         this.sb.append("_meLight" + lightSensor.getUserDefinedPort() + ".read() * ANALOG2PERCENT");
         return null;
     }
 
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+    public Void visitKeysSensor(KeysSensor keysSensor) {
         this.sb.append("(analogRead(PORT_7) < 512)");
         return null;
     }
 
     @Override
-    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
+    public Void visitColorSensor(ColorSensor colorSensor) {
         return null;
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+    public Void visitSoundSensor(SoundSensor soundSensor) {
         this.sb.append("_meSoundSensor" + soundSensor.getUserDefinedPort() + ".strength()");
         return null;
     }
 
     @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
+    public Void visitEncoderSensor(EncoderSensor encoderSensor) {
         return null;
     }
 
     @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+    public Void visitCompassSensor(CompassSensor compassSensor) {
 
         return null;
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.sb.append("myGyro" + gyroSensor.getUserDefinedPort() + ".getGyro" + gyroSensor.getMode() + "()");
-        return null;
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
+        throw new DbcException("not implemented");
     }
 
     @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometer) {
+    public Void visitGyroReset(GyroReset gyroReset) {
+        throw new DbcException("not implemented");
+    }
+
+    @Override
+    public Void visitAccelerometerSensor(AccelerometerSensor accelerometer) {
         this.sb.append("myGyro" + accelerometer.getUserDefinedPort() + ".getAngle" + accelerometer.getMode().toString() + "()");
         return null;
     }
 
     @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         this.sb.append("!__meLineFollower" + infraredSensor.getUserDefinedPort() + ".readSensor" + infraredSensor.getSlot() + "()");
         return null;
     }
 
     @Override
-    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+    public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
         this.sb.append("_meTemp" + temperatureSensor.getUserDefinedPort() + ".getTemperature()");
         return null;
     }
 
     @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+    public Void visitTouchSensor(TouchSensor touchSensor) {
         this.sb.append("_meTouch" + touchSensor.getUserDefinedPort() + ".touched()");
         return null;
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         this.sb.append("_meUltraSensor" + ultrasonicSensor.getUserDefinedPort() + ".distanceCm()");
         return null;
     }
 
     @Override
-    public Void visitMotionSensor(MotionSensor<Void> motionSensor) {
+    public Void visitMotionSensor(MotionSensor motionSensor) {
         this.sb.append("_mePir" + motionSensor.getUserDefinedPort() + ".isHumanDetected()");
         return null;
     }
 
     @Override
-    public Void visitFlameSensor(FlameSensor<Void> _meFlameSensor) {
-        this.sb.append("_meFlameSensor" + _meFlameSensor.getPort() + ".readAnalog()");
+    public Void visitFlameSensor(FlameSensor _meFlameSensor) {
+        this.sb.append("_meFlameSensor" + _meFlameSensor.port + ".readAnalog()");
         return null;
     }
 
     @Override
-    public Void visitJoystick(Joystick<Void> joystick) {
-        this.sb.append("_meJoystick" + joystick.getUserDefinedPort() + ".read" + joystick.getAxis() + "()");
-        return null;
-    }
-
-    @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
+    public Void visitMainTask(MainTask mainTask) {
         predefineImages();
-        mainTask.getVariables().accept(this);
-        if ( !mainTask.getVariables().toString().equals("") ) {
+        mainTask.variables.accept(this);
+        if ( !mainTask.variables.toString().equals("") ) {
             nlIndent();
         }
         nlIndent();
@@ -457,7 +454,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         this.sb.append("{");
         incrIndentation();
         nlIndent();
-        this.sb.append("Serial.begin(9600); ");
+        this.sb.append("Serial.begin(9600);");
         //      TODO test the following lines when these sensors are available
         //        for ( final UsedSensor usedSensor : this.usedSensors ) {
         //            switch ( usedSensor.getType() ) {
@@ -642,6 +639,8 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
                     nlIndent();
                     this.sb.append("MeIR _meIr;");
                     break;
+                case SC.SERIAL:
+                    break;
                 default:
                     throw new DbcException("Actor is not supported! " + usedActor.getType());
             }
@@ -649,7 +648,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
+    public Void visitVoltageSensor(VoltageSensor voltageSensor) {
         //RatedVoltage: 5V
         //Signal type: Analog (range from 0 to 970)
         this.sb.append("_mePotentiometer" + voltageSensor.getUserDefinedPort() + ".read()*5/970");
@@ -657,63 +656,55 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
-    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        this.sb.append("Serial.println(");
-        serialWriteAction.getValue().accept(this);
-        this.sb.append(");");
-        return null;
-    }
-
-    @Override
-    public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
+    public Void visitSendIRAction(SendIRAction sendIRAction) {
         this.sb.append("_meIr.sendString(");
-        sendIRAction.getMessage().accept(this);
+        sendIRAction.message.accept(this);
         this.sb.append(");");
         return null;
     }
 
     @Override
-    public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
+    public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
         this.sb.append("_meIr.getString()");
         return null;
     }
 
     @Override
-    public Void visitLEDMatrixImageAction(LEDMatrixImageAction<Void> ledMatrixImageAction) {
+    public Void visitLEDMatrixImageAction(LEDMatrixImageAction ledMatrixImageAction) {
         String end = ");";
-        if ( ledMatrixImageAction.getDisplayImageMode().equals("IMAGE") ) {
-            this.sb.append("__meLEDMatrix_").append(ledMatrixImageAction.getPort()).append(".drawBitmap(0, 0, 16, ");
+        if ( ledMatrixImageAction.displayImageMode.equals("IMAGE") ) {
+            this.sb.append("__meLEDMatrix_").append(ledMatrixImageAction.port).append(".drawBitmap(0, 0, 16, ");
             this.sb.append("&");
-            ledMatrixImageAction.getValuesToDisplay().accept(this);
+            ledMatrixImageAction.valuesToDisplay.accept(this);
             this.sb.append("[0]");
             this.sb.append(end);
-        } else if ( ledMatrixImageAction.getDisplayImageMode().equals("ANIMATION") ) {
-            this.sb.append("drawAnimationLEDMatrix(&__meLEDMatrix_").append(ledMatrixImageAction.getPort()).append(", ");
-            ledMatrixImageAction.getValuesToDisplay().accept(this);
+        } else if ( ledMatrixImageAction.displayImageMode.equals("ANIMATION") ) {
+            this.sb.append("drawAnimationLEDMatrix(&__meLEDMatrix_").append(ledMatrixImageAction.port).append(", ");
+            ledMatrixImageAction.valuesToDisplay.accept(this);
             this.sb.append(", 200");
             this.sb.append(end);
         } else {
-            throw new DbcException("LEDMatrix display mode is not supported: " + ledMatrixImageAction.getDisplayImageMode());
+            throw new DbcException("LEDMatrix display mode is not supported: " + ledMatrixImageAction.displayImageMode);
         }
         return null;
     }
 
     @Override
-    public Void visitLEDMatrixTextAction(LEDMatrixTextAction<Void> ledMatrixTextAction) {
-        this.sb.append("drawStrLEDMatrix(&__meLEDMatrix_").append(ledMatrixTextAction.getPort()).append(", ");
-        if ( !ledMatrixTextAction.getMsg().getVarType().equals(BlocklyType.STRING) ) {
+    public Void visitLEDMatrixTextAction(LEDMatrixTextAction ledMatrixTextAction) {
+        this.sb.append("drawStrLEDMatrix(&__meLEDMatrix_").append(ledMatrixTextAction.port).append(", ");
+        if ( !ledMatrixTextAction.msg.getVarType().equals(BlocklyType.STRING) ) {
             this.sb.append("String(");
-            ledMatrixTextAction.getMsg().accept(this);
+            ledMatrixTextAction.msg.accept(this);
             this.sb.append(")");
         } else {
-            ledMatrixTextAction.getMsg().accept(this);
+            ledMatrixTextAction.msg.accept(this);
         }
         this.sb.append(", 100);");
         return null;
     }
 
     @Override
-    public Void visitLEDMatrixImage(LEDMatrixImage<Void> ledMatrixImage) {
+    public Void visitLEDMatrixImage(LEDMatrixImage ledMatrixImage) {
         Map<String, String[][]> usedIDImages = this.getBean(UsedHardwareBean.class).getUsedIDImages();
         this.sb.append("__ledMatrix").append(this.imageList.get(ledMatrixImage.getProperty().getBlocklyId()));
         return null;
@@ -739,31 +730,31 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
-    public Void visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<Void> ledMatrixImageShiftFunction) {
+    public Void visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction ledMatrixImageShiftFunction) {
         this.sb.append("(shiftLEDMatrix");
-        this.sb.append(capitalizeFirstLetter(ledMatrixImageShiftFunction.getShiftDirection().toString()));
+        this.sb.append(capitalizeFirstLetter(ledMatrixImageShiftFunction.shiftDirection.toString()));
         this.sb.append("Vec(");
-        ledMatrixImageShiftFunction.getImage().accept(this);
+        ledMatrixImageShiftFunction.image.accept(this);
 
         this.sb.append(", ");
-        ledMatrixImageShiftFunction.getPositions().accept(this);
+        ledMatrixImageShiftFunction.positions.accept(this);
         this.sb.append("))");
         return null;
     }
 
     @Override
-    public Void visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<Void> ledMatrixImageInverFunction) {
+    public Void visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction ledMatrixImageInverFunction) {
         this.sb.append("(invertLEDMatrixVec(");
-        ledMatrixImageInverFunction.getImage().accept(this);
+        ledMatrixImageInverFunction.image.accept(this);
 
         this.sb.append("))");
         return null;
     }
 
     @Override
-    public Void visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction<Void> ledMatrixSetBrightnessAction) {
-        this.sb.append("__meLEDMatrix_").append(ledMatrixSetBrightnessAction.getPort()).append(".setBrightness(");
-        ledMatrixSetBrightnessAction.getBrightness().accept(this);
+    public Void visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction ledMatrixSetBrightnessAction) {
+        this.sb.append("__meLEDMatrix_").append(ledMatrixSetBrightnessAction.port).append(".setBrightness(");
+        ledMatrixSetBrightnessAction.brightness.accept(this);
         this.sb.append(");");
         return null;
     }

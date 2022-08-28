@@ -8,8 +8,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.factory.EV3Factory;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -26,9 +25,9 @@ public class HttpSessionStateTest {
         OptionSpec<String> serverDefineOpt = parser.acceptsAll(Arrays.asList("d", "server-property")).withRequiredArg().ofType(String.class);
         List<String> serverDefines = serverDefineOpt.options();
 
-        Map<String, IRobotFactory> robotPluginMap = new HashMap<>();
-        robotPluginMap.put("ev3lejosv1", new EV3Factory(new PluginProperties("ev3lejosv1", "", "", Util.loadProperties("classpath:/ev3lejosv1.properties"))));
-        robotPluginMap.put("ev3lejosv0", new EV3Factory(new PluginProperties("ev3lejosv0", "", "", Util.loadProperties("classpath:/ev3lejosv0.properties"))));
+        Map<String, RobotFactory> robotPluginMap = new HashMap<>();
+        robotPluginMap.put("ev3lejosv1", new RobotFactory(new PluginProperties("ev3lejosv1", "", "", Util.loadProperties("classpath:/ev3lejosv1.properties"))));
+        robotPluginMap.put("ev3lejosv0", new RobotFactory(new PluginProperties("ev3lejosv0", "", "", Util.loadProperties("classpath:/ev3lejosv0.properties"))));
         robotPluginMap
             .put("calliope2017", new RobotFactory(new PluginProperties("calliope2017", "", "", Util.loadProperties("classpath:/calliope2017.properties"))));
         robotPluginMap
@@ -41,21 +40,21 @@ public class HttpSessionStateTest {
 
     @Test
     public void getRobotFactoriesOfGroup_ShouldReturnMembers_WhenGivenValidGroup() {
-        List<IRobotFactory> ev3Members = this.httpSessionState.getRobotFactoriesOfGroup("ev3");
+        List<RobotFactory> ev3Members = this.httpSessionState.getRobotFactoriesOfGroup("ev3");
         Assert.isTrue(ev3Members.stream().allMatch(factory -> factory.getGroup().equals("ev3")));
-        List<IRobotFactory> calliopeMembers = this.httpSessionState.getRobotFactoriesOfGroup("calliope");
+        List<RobotFactory> calliopeMembers = this.httpSessionState.getRobotFactoriesOfGroup("calliope");
         Assert.isTrue(calliopeMembers.stream().allMatch(factory -> factory.getGroup().equals("calliope")));
     }
 
     @Test
     public void getRobotFactoriesOfGroup_ShouldReturnListWithRobot_WhenGivenNoGroupRobot() {
-        List<IRobotFactory> mbotMembers = this.httpSessionState.getRobotFactoriesOfGroup("mbot");
+        List<RobotFactory> mbotMembers = this.httpSessionState.getRobotFactoriesOfGroup("mbot");
         Assert.isTrue(mbotMembers.stream().allMatch(factory -> factory.getGroup().equals("mbot")));
     }
 
     @Test
     public void getRobotFactoriesOfGroup_ShouldReturnEmptyList_WhenGivenInvalidGroup() {
-        List<IRobotFactory> imaginaryTestGroupMembers = this.httpSessionState.getRobotFactoriesOfGroup("imaginaryTestGroup");
+        List<RobotFactory> imaginaryTestGroupMembers = this.httpSessionState.getRobotFactoriesOfGroup("imaginaryTestGroup");
         Assert.isTrue(imaginaryTestGroupMembers.isEmpty());
     }
 }

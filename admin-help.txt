@@ -7,7 +7,7 @@ Option Parameter preceding the command are:
                                to values suitable for operating in the context of an openroberta-lab git repository.
                                If used, other options than this make little sense
 
-  -db-mode {server|embedded}   mode in which the data base shouls be accessed; default: embedded
+  -db-mode {server|embedded}   mode in which the database should be accessed; default: embedded
   -db-name <db-name>           database name; default: openroberta-db; with a database server use openroberta-db-<server-name>
   -db-parentdir <db-parentdir> database parent directory; default: db-embedded. Needed for creating an empty db.
   -java-lib-dir <dir>          directory with the installation dir (containing the jars); default: ./lib
@@ -30,6 +30,6 @@ command:
                           the command terminates when the server terminates. Maybe you have to suffix the command with `&` :-)
 
 examples:
-  ./admin.sh git-mode create-empty-db    call from the git root directory to create an embedded database in OpenRobertaServer
-  ./admin.sh git-mode sql-gui            call from the git root directory to run a sql client. EXCLUSIVE USE OF THE DATABASE!
+  ./admin.sh -git-mode create-empty-db   call from the git root directory to create an embedded database in OpenRobertaServer
+  ./admin.sh -git-mode sql-gui           call from the git root directory to run a sql client. EXCLUSIVE USE OF THE DATABASE!
   ./admin.sh start-server                call from the directory created by './ora.sh export' to start the server

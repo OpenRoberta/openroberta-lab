@@ -94,7 +94,7 @@ public class ClientConfiguration {
             String configurationName = request.getName();
             String ownerName = request.getOwner().trim();
             if ( !ownerName.isEmpty() ) {
-                User user = up.getUser(ownerName);
+                User user = up.getStandardUser(ownerName);
                 if ( user != null ) {
                     userId = user.getId();
                 }

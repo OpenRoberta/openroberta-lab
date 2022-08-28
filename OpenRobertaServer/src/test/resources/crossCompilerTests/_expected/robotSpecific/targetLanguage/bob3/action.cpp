@@ -1,4 +1,6 @@
-#include "bob3.h" 
+#include "bob3.h"
+#include <stdlib.h>
+#include <math.h>
 Bob3 rob;
 
 void action();
@@ -55,8 +57,7 @@ void action() {
     ___numberVar = recall();
 }
 
-void setup()
-{
+void setup() {
     ___numberVar = 0;
     ___booleanVar = true;
     ___colourVar = RGB(0xFF, 0xFF, 0xFF);

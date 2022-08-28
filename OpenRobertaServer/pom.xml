@@ -14,7 +14,7 @@
     <parent>
         <groupId>de.fhg.iais.openroberta</groupId>
         <artifactId>OpenRobertaParent</artifactId>
-        <version>4.2.9-SNAPSHOT</version>
+        <version>5.0.4</version>
     </parent>
     <artifactId>OpenRobertaServer</artifactId>
     <name>OpenRobertaServer</name>
@@ -79,6 +79,10 @@
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>RobotArdu</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.fhg.iais.openroberta</groupId>
+            <artifactId>RobotCyberpi</artifactId>
         </dependency>
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
@@ -181,6 +185,13 @@
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>de.fhg.iais.openroberta</groupId>
+                                    <artifactId>RobotCyberpi</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>de.fhg.iais.openroberta</groupId>
                                     <artifactId>RobotMbed</artifactId>
                                     <version>${project.version}</version>
                                     <type>jar</type>
@@ -196,13 +207,6 @@
                                 <artifactItem>
                                     <groupId>de.fhg.iais.openroberta</groupId>
                                     <artifactId>RobotWeDo</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>de.fhg.iais.openroberta</groupId>
-                                    <artifactId>RobotEdison</artifactId>
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>

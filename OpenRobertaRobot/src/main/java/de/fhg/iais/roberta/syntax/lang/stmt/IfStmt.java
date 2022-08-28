@@ -1,171 +1,43 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Repetitions;
-import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>if-else-elseif</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate if
- * statement.<br/>
- */
-public class IfStmt<V> extends Stmt<V> {
-    private final List<Expr<V>> expr;
-    private final List<StmtList<V>> thenList;
-    private final StmtList<V> elseList;
-    private final boolean ternary;
-    private final int _else;
-    private final int _elseIf;
+@NepoBasic(name = "IF_STMT", category = "STMT", blocklyNames = {"robControls_ifElse", "controls_if", "robControls_if"})
+public final class IfStmt extends Stmt {
+    public final List<Expr> expr;
+    public final List<StmtList> thenList;
+    public final StmtList elseList;
+    public final int _else;
+    public final int _elseIf;
 
-    private IfStmt(
-        List<Expr<V>> expr,
-        List<StmtList<V>> thenList,
-        StmtList<V> elseList,
-        boolean ternary,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment,
+    public IfStmt(
+        BlocklyProperties properties, List<Expr> expr,
+        List<StmtList> thenList,
+        StmtList elseList,
         int _else,
         int _elseIf) {
-        super(BlockTypeContainer.getByName("IF_STMT"), properties, comment);
+        super(properties);
         Assert.isTrue(expr.size() == thenList.size() && elseList.isReadOnly());
         this.expr = expr;
         this.thenList = thenList;
         this.elseList = elseList;
-        this.ternary = ternary;
         this._else = _else;
         this._elseIf = _elseIf;
         setReadOnly();
-    }
-
-    /**
-     * create <b>if-then-else</b> statement where we have one or more the one <b>if</b> and <b>then</b>.
-     *
-     * @param expr list of all expressions that should be evaluated in the <b>if</b> parts,
-     * @param thenList all statements that are in the <b>then</b> parts,
-     * @param elseList all statements that are in the <b>else</b> parts,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @param _else statement,
-     * @param _elseIf number of if statements
-     * @return read only object of class {@link IfStmt}
-     */
-    public static <V> IfStmt<V> make(
-        List<Expr<V>> expr,
-        List<StmtList<V>> thenList,
-        StmtList<V> elseList,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment,
-        int _else,
-        int _elseIf) {
-        return new IfStmt<V>(expr, thenList, elseList, false, properties, comment, _else, _elseIf);
-    }
-
-    /**
-     * create ternary operator
-     *
-     * @param expr expression that should be evaluated in the <b>if</b> part,
-     * @param thenList statement that is in the <b>then</b> part,
-     * @param elseList all statement that is in the <b>else</b> part,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @param _else statement,
-     * @param _elseIf number of if statements
-     * @return read only object of class {@link IfStmt}
-     */
-    public static <V> IfStmt<V> make(
-        Expr<V> expr,
-        StmtList<V> thenList,
-        StmtList<V> elseList,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment,
-        int _else,
-        int _elseIf) {
-        List<Expr<V>> exprsList = new ArrayList<Expr<V>>();
-        List<StmtList<V>> thensList = new ArrayList<StmtList<V>>();
-        exprsList.add(expr);
-        thensList.add(thenList);
-        return new IfStmt<V>(exprsList, thensList, elseList, true, properties, comment, _else, _elseIf);
-    }
-
-    /**
-     * create <b>if-then</b> statement where we have one or more the one <b>if</b> and <b>then</b>.
-     *
-     * @param expr list of all expressions that should be evaluated in the <b>if</b> parts,
-     * @param thenList all statements that are in the <b>then</b> parts,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @param _else statement,
-     * @param _elseIf number of if statements
-     * @return read only object of class {@link IfStmt}
-     */
-    public static <V> IfStmt<V> make(
-        List<Expr<V>> expr,
-        List<StmtList<V>> thenList,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment,
-        int _else,
-        int _elseIf) {
-        StmtList<V> elseList = StmtList.make();
-        elseList.setReadOnly();
-        return new IfStmt<V>(expr, thenList, elseList, false, properties, comment, _else, _elseIf);
-    }
-
-    /**
-     * @return <b>true</b> if the statement is ternary.
-     */
-    public boolean isTernary() {
-        return this.ternary;
-    }
-
-    /**
-     * @return list with all expressions that should be evaluated in the <b>if</b> part.
-     */
-    public final List<Expr<V>> getExpr() {
-        return this.expr;
-    }
-
-    /**
-     * @return list with all statements that are in <b>then</b> part.
-     */
-    public final List<StmtList<V>> getThenList() {
-        return this.thenList;
-    }
-
-    /**
-     * @return list with all statements that are in <b>else</b> part.
-     */
-    public final StmtList<V> getElseList() {
-        return this.elseList;
-    }
-
-    /**
-     * @return 1 if there is else statement
-     */
-    public int get_else() {
-        return this._else;
-    }
-
-    /**
-     * @return number of if statements
-     */
-    public int get_elseIf() {
-        return this._elseIf;
     }
 
     @Override
@@ -189,33 +61,10 @@ public class IfStmt<V> extends Stmt<V> {
         return sb.toString();
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
-        if ( block.getType().equals(BlocklyConstants.LOGIC_TERNARY) ) {
-            List<Value> values = block.getValue();
-            Assert.isTrue(values.size() <= 3, "Number of values is not less or equal to 3!");
-            Phrase<V> ifExpr = helper.extractValue(values, new ExprParam(BlocklyConstants.IF, BlocklyType.BOOLEAN));
-            Phrase<V> thenStmt = helper.extractValue(values, new ExprParam(BlocklyConstants.THEN, BlocklyType.ANY));
-            Phrase<V> elseStmt = helper.extractValue(values, new ExprParam(BlocklyConstants.ELSE, BlocklyType.ANY));
-            StmtList<V> thenList = StmtList.make();
-            thenList.addStmt(ExprStmt.make(Jaxb2Ast.convertPhraseToExpr(thenStmt)));
-            thenList.setReadOnly();
-            StmtList<V> elseList = StmtList.make();
-            elseList.addStmt(ExprStmt.make(Jaxb2Ast.convertPhraseToExpr(elseStmt)));
-            elseList.setReadOnly();
-            return IfStmt
-                .make(Jaxb2Ast.convertPhraseToExpr(ifExpr), thenList, elseList, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), 0, 0);
-        }
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         Mutation mutation = block.getMutation();
         int _else = Jaxb2Ast.getElse(mutation);
         int _elseIf = Jaxb2Ast.getElseIf(mutation);
-
         return helper.blocksToIfStmt(block, _else, _elseIf);
     }
 
@@ -226,17 +75,17 @@ public class IfStmt<V> extends Stmt<V> {
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
         if ( getProperty().getBlockType().equals(BlocklyConstants.LOGIC_TERNARY) ) {
-            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.IF, getExpr().get(0));
-            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.THEN, getThenList().get(0).get().get(0));
-            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ELSE, getElseList().get().get(0));
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.IF, this.expr.get(0));
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.THEN, this.thenList.get(0).get().get(0));
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ELSE, this.elseList.get().get(0));
             return jaxbDestination;
         }
-        int _else = get_else();
-        int _elseIf = get_elseIf();
+        int _else = this._else;
+        int _elseIf = this._elseIf;
 
-        StmtList<?> elseList = getElseList();
+        StmtList elseList = this.elseList;
         int expr = 0;
-        expr = getExpr().size();
+        expr = this.expr.size();
 
         if ( _else != 0 || _elseIf != 0 ) {
             mutation = new Mutation();
@@ -249,20 +98,20 @@ public class IfStmt<V> extends Stmt<V> {
             jaxbDestination.setMutation(mutation);
             Repetitions repetitions = new Repetitions();
             for ( int i = 0; i < expr; i++ ) {
-                Ast2Jaxb.addValue(repetitions, BlocklyConstants.IF + i, getExpr().get(i));
-                Ast2Jaxb.addStatement(repetitions, BlocklyConstants.DO + i, getThenList().get(i));
+                Ast2Jaxb.addValue(repetitions, BlocklyConstants.IF + i, this.expr.get(i));
+                Ast2Jaxb.addStatement(repetitions, BlocklyConstants.DO + i, this.thenList.get(i));
             }
             if ( !elseList.get().isEmpty() ) {
-                Ast2Jaxb.addStatement(repetitions, BlocklyConstants.ELSE, getElseList());
+                Ast2Jaxb.addStatement(repetitions, BlocklyConstants.ELSE, this.elseList);
             }
             jaxbDestination.setRepetitions(repetitions);
             return jaxbDestination;
         }
 
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.IF + "0", getExpr().get(0));
-        Ast2Jaxb.addStatement(jaxbDestination, BlocklyConstants.DO + "0", getThenList().get(0));
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.IF + "0", this.expr.get(0));
+        Ast2Jaxb.addStatement(jaxbDestination, BlocklyConstants.DO + "0", this.thenList.get(0));
         if ( !elseList.get().isEmpty() ) {
-            Ast2Jaxb.addStatement(jaxbDestination, BlocklyConstants.ELSE, getElseList());
+            Ast2Jaxb.addStatement(jaxbDestination, BlocklyConstants.ELSE, this.elseList);
         }
 
         return jaxbDestination;

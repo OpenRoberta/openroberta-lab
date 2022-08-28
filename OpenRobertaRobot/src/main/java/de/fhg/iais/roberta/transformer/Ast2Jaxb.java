@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Comment;
 import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
@@ -13,9 +12,8 @@ import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.blockly.generated.Warning;
-import de.fhg.iais.roberta.syntax.BlockType;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ShadowExpr;
@@ -23,7 +21,10 @@ import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfo.Severity;
+import de.fhg.iais.roberta.util.ast.BlockDescriptor;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
  * This class is a helper class containing helper methods for AST => JAXB transformation.
@@ -35,24 +36,23 @@ public final class Ast2Jaxb {
     /**
      * Sets the basic properties(<i>comments and visual state</i>) of a Blockly block. <br>
      * <br>
-     * <b>astSource</b> is representation of the block in the AST,<br>
-     * <b>jaxbDestination</b> is representation of the block with JAXB classes
+     * <b>phrase</b> is representation of the block in the AST,<br>
+     * <b>block</b> is representation of the block with JAXB classes
      *
-     * @param astSource block from which properties are extracted; must be <b>not</b> null,
-     * @param jaxbDestination to which properties are applied; must be <b>not</b> null,
+     * @param phrase from which properties are extracted; must be <b>not</b> null,
+     * @param block to which properties are applied; must be <b>not</b> null,
      */
-    public static void setBasicProperties(Phrase<?> astSource, Block jaxbDestination) {
-        Assert.notNull(astSource);
-        Assert.notNull(jaxbDestination);
-        if ( astSource.getProperty() == null ) {
+    public static void setBasicProperties(Phrase phrase, Block block) {
+        Assert.notNull(phrase);
+        Assert.notNull(block);
+        BlocklyProperties property = phrase.getProperty();
+        if ( property == null ) {
             return;
         }
-        String blockType;
-        blockType = astSource.getProperty().getBlockType();
-        setProperties(astSource, jaxbDestination, blockType);
-        addComment(astSource, jaxbDestination);
-        addError(astSource, jaxbDestination);
-        addWarning(astSource, jaxbDestination);
+        setProperties(phrase, block, property.getBlockType());
+        addError(phrase, block);
+        addWarning(phrase, block);
+        block.setComment(property.getComment());
     }
 
     /**
@@ -62,23 +62,44 @@ public final class Ast2Jaxb {
      *
      * @param block to which the statement will be added; must be <b>not</b> null,
      * @param name of the statement; must be <b>non-empty</b> string
-     * @param value is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
-     *        {@link BlockType#STMT_LIST}
+     * @param phrase is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
+     *     {@link BlockDescriptor#STMT_LIST}
      */
-    public static void addStatement(Block block, String name, Phrase<?> value) {
+    public static void addStatement(Block block, String name, Phrase phrase) {
         Assert.isTrue(!name.equals(""));
         Assert.notNull(block);
-        Assert.notNull(value);
-        Assert.isTrue(value.getKind().hasName("STMT_LIST"), "Phrase is not STMT_LIST");
-        if ( !((StmtList<?>) value).get().isEmpty() ) {
+        Assert.notNull(phrase);
+        Assert.isTrue(phrase.getKind().hasName("STMT_LIST"), "Phrase is not STMT_LIST");
+        if ( !((StmtList) phrase).get().isEmpty() ) {
             Statement statement = new Statement();
             statement.setName(name);
-            statement.getBlock().addAll(extractStmtList(value));
+            statement.getBlock().addAll(extractStmtList(phrase));
             block.getStatement().add(statement);
         }
     }
 
     /**
+     * Add's a statement {@link Statement} object to JAXB block representation of a configuration block {@link Block}.
+     * <p>
+     * This method does <b>not</b> add the statement object into {@link Repetitions} object.
+     *
+     * @param block to which the statement will be added; must be <b>not</b> null,
+     * @param name of the statement; must be <b>non-empty</b> string
+     * @param value is the List of ConfigurationComponents of the statement
+     */
+    public static void addConfigurationComponents(Block block, String name, List<ConfigurationComponent> values) {
+        Assert.isTrue(!name.equals(""));
+        Assert.notNull(block);
+        Assert.notNull(values);
+        Statement statement = new Statement();
+        statement.setName(name);
+        for ( ConfigurationComponent component : values ) {
+            statement.getBlock().add(component.astToBlock());
+        }
+        block.getStatement().add(statement);
+    }
+
+    /**
      * Add's a statement {@link Statement} object to JAXB block representation {@link Block}.
      * <p>
      * This method does <b>not</b> add the statement object into {@link Repetitions} object.
@@ -86,9 +107,9 @@ public final class Ast2Jaxb {
      * @param block to which the statement will be added; must be <b>not</b> null,
      * @param name of the statement; must be <b>non-empty</b> string
      * @param value is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
-     *        {@link BlockType#EXPR_LIST}
+     *     {@link BlockDescriptor#EXPR_LIST}
      */
-    public static void addStatement(Block block, String name, ExprList<?> exprList) {
+    public static void addStatement(Block block, String name, ExprList exprList) {
         Assert.isTrue(!name.equals(""));
         Assert.notNull(block);
         Assert.notNull(exprList);
@@ -107,14 +128,14 @@ public final class Ast2Jaxb {
      * @param repetitions object to which the statement will be added; must be <b>not</b> null
      * @param name of the statement; must be <b>non-empty</b> string
      * @param value is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
-     *        {@link BlockType#STMT_LIST}
+     *     {@link BlockDescriptor#STMT_LIST}
      */
-    public static void addStatement(Repetitions repetitions, String name, Phrase<?> value) {
+    public static void addStatement(Repetitions repetitions, String name, Phrase value) {
         Assert.isTrue(!name.equals(""));
         Assert.notNull(repetitions);
         Assert.notNull(value);
         Assert.isTrue(value.getKind().hasName("STMT_LIST"), "Phrase is not STMT_LIST");
-        if ( !((StmtList<?>) value).get().isEmpty() ) {
+        if ( !((StmtList) value).get().isEmpty() ) {
             Statement statement = new Statement();
             statement.setName(name);
             statement.getBlock().addAll(extractStmtList(value));
@@ -130,9 +151,9 @@ public final class Ast2Jaxb {
      * @param repetitions object to which the statement will be added; must be <b>not</b> null,
      * @param name of the statement; must be <b>non-empty</b> string
      * @param value is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
-     *        {@link BlockType#EXPR_LIST}
+     *     {@link BlockDescriptor#EXPR_LIST}
      */
-    public static void addStatement(Repetitions repetitions, String name, ExprList<?> exprList) {
+    public static void addStatement(Repetitions repetitions, String name, ExprList exprList) {
         Assert.isTrue(!name.equals(""));
         Assert.notNull(repetitions);
         Assert.notNull(exprList);
@@ -154,7 +175,7 @@ public final class Ast2Jaxb {
      * @param name of the value; must be <b>non-empty</b> string
      * @param value is the AST representation of the Blockly block where the value is stored; must be <b>not</b> null
      */
-    public static void addValue(Block block, String name, Phrase<?> value) {
+    public static void addValue(Block block, String name, Phrase value) {
         Assert.isTrue(!name.equals(""));
         Assert.notNull(block);
         Assert.notNull(value);
@@ -162,10 +183,10 @@ public final class Ast2Jaxb {
             Value blockValue = new Value();
             blockValue.setName(name);
             if ( value.getKind().hasName("SHADOW_EXPR") ) {
-                ShadowExpr<?> shadowExpr = (ShadowExpr<?>) value;
-                blockValue.setShadow(block2shadow(shadowExpr.getShadow().astToBlock()));
-                if ( shadowExpr.getBlock() != null ) {
-                    blockValue.setBlock(shadowExpr.getBlock().astToBlock());
+                ShadowExpr shadowExpr = (ShadowExpr) value;
+                blockValue.setShadow(block2shadow(shadowExpr.shadow.astToBlock()));
+                if ( shadowExpr.block != null ) {
+                    blockValue.setBlock(shadowExpr.block.astToBlock());
                 }
             } else {
                 blockValue.setBlock(value.astToBlock());
@@ -183,11 +204,11 @@ public final class Ast2Jaxb {
      * @param name of the value; must be <b>non-empty</b> string
      * @param value is the AST representation of the Blockly block where the value is stored; must be <b>not</b> null
      */
-    public static void addValue(Repetitions repetitions, String name, Phrase<?> value) {
+    public static void addValue(Repetitions repetitions, String name, Phrase value) {
         Assert.isTrue(!name.equals(""));
         Assert.notNull(repetitions);
         Assert.notNull(value);
-        if (value.equals(BlocklyConstants.EMPTY_PORT)) {
+        if ( value.equals(BlocklyConstants.EMPTY_PORT) ) {
             return;
         }
         if ( !value.getKind().hasName("EMPTY_EXPR") ) {
@@ -212,9 +233,9 @@ public final class Ast2Jaxb {
     public static void addField(Block block, String name, String value) {
         Assert.isTrue(!name.equals(""));
         Assert.notNull(block);
-        if (value.equals(BlocklyConstants.EMPTY_PORT)) {
+        if ( value.equals(BlocklyConstants.EMPTY_PORT) ) {
             // ignore
-        } else if (value.equals(BlocklyConstants.EMPTY_SLOT)) {
+        } else if ( value.equals(BlocklyConstants.EMPTY_SLOT) ) {
             Field field = new Field();
             field.setName(name);
             field.setValue("");
@@ -229,6 +250,7 @@ public final class Ast2Jaxb {
 
     /**
      * Add's a {@link Data} object to JAXB block representation
+     *
      * @param block to which the field will be added; must be <b>not</b> null,
      * @param value is the AST representation of the Blockly block where the value is stored
      */
@@ -239,7 +261,7 @@ public final class Ast2Jaxb {
         block.setData(data);
     }
 
-   /**
+    /**
      * Add's a {@link Mutation} object to JAXB block representation {@link Block}.
      *
      * @param block to which the mutation will be added; must be <b>not</b> null,
@@ -260,27 +282,27 @@ public final class Ast2Jaxb {
         return shadow;
     }
 
-    private static List<Block> extractStmtList(Phrase<?> phrase) {
+    private static List<Block> extractStmtList(Phrase phrase) {
         List<Block> result = new ArrayList<Block>();
         Assert.isTrue(phrase.getKind().hasName("STMT_LIST"), "Phrase is not StmtList!");
-        StmtList<?> stmtList = (StmtList<?>) phrase;
-        for ( Stmt<?> stmt : stmtList.get() ) {
+        StmtList stmtList = (StmtList) phrase;
+        for ( Stmt stmt : stmtList.get() ) {
             result.add(stmt.astToBlock());
         }
         return result;
     }
 
-    private static List<Block> extractExprList(Phrase<?> phrase) {
+    private static List<Block> extractExprList(Phrase phrase) {
         List<Block> result = new ArrayList<Block>();
         Assert.isTrue(phrase.getKind().hasName("EXPR_LIST"), "Phrase is not ExprList!");
-        ExprList<?> exprList = (ExprList<?>) phrase;
-        for ( Expr<?> expr : exprList.get() ) {
+        ExprList exprList = (ExprList) phrase;
+        for ( Expr expr : exprList.get() ) {
             result.add(expr.astToBlock());
         }
         return result;
     }
 
-    private static void setProperties(Phrase<?> astSource, Block block, String type) {
+    private static void setProperties(Phrase astSource, Block block, String type) {
         block.setType(type);
         block.setId(astSource.getProperty().getBlocklyId());
         setDisabled(astSource, block);
@@ -291,54 +313,43 @@ public final class Ast2Jaxb {
         setInTask(astSource, block);
     }
 
-    private static void setInline(Phrase<?> astObject, Block block) {
+    private static void setInline(Phrase astObject, Block block) {
         if ( astObject.getProperty().isInline() != null ) {
             block.setInline(astObject.getProperty().isInline());
         }
     }
 
-    private static void setCollapsed(Phrase<?> astObject, Block block) {
+    private static void setCollapsed(Phrase astObject, Block block) {
         if ( astObject.getProperty().isCollapsed() ) {
             block.setCollapsed(astObject.getProperty().isCollapsed());
         }
     }
 
-    private static void setDisabled(Phrase<?> astObject, Block block) {
+    private static void setDisabled(Phrase astObject, Block block) {
         if ( astObject.getProperty().isDisabled() ) {
             block.setDisabled(astObject.getProperty().isDisabled());
         }
     }
 
-    private static void setInTask(Phrase<?> astObject, Block block) {
+    private static void setInTask(Phrase astObject, Block block) {
         if ( astObject.getProperty().isInTask() != null ) {
             block.setIntask(astObject.getProperty().isInTask());
         }
     }
 
-    private static void setDeletable(Phrase<?> astObject, Block block) {
+    private static void setDeletable(Phrase astObject, Block block) {
         if ( astObject.getProperty().isDeletable() != null ) {
             block.setDeletable(astObject.getProperty().isDeletable());
         }
     }
 
-    private static void setMovable(Phrase<?> astObject, Block block) {
+    private static void setMovable(Phrase astObject, Block block) {
         if ( astObject.getProperty().isMovable() != null ) {
             block.setMovable(astObject.getProperty().isMovable());
         }
     }
 
-    private static void addComment(Phrase<?> astSource, Block block) {
-        if ( astSource.getComment() != null ) {
-            Comment comment = new Comment();
-            comment.setValue(astSource.getComment().getComment());
-            comment.setPinned(astSource.getComment().isPinned());
-            comment.setH(astSource.getComment().getHeight());
-            comment.setW(astSource.getComment().getWidth());
-            block.setComment(comment);
-        }
-    }
-
-    private static void addWarning(Phrase<?> astSource, Block block) {
+    private static void addWarning(Phrase astSource, Block block) {
         Warning warning = new Warning();
         for ( NepoInfo info : astSource.getInfos().getInfos() ) {
             if ( info.getSeverity() == Severity.WARNING ) {
@@ -351,7 +362,7 @@ public final class Ast2Jaxb {
         }
     }
 
-    public static void addError(Phrase<?> astSource, Block block) {
+    public static void addError(Phrase astSource, Block block) {
         de.fhg.iais.roberta.blockly.generated.Error error = new de.fhg.iais.roberta.blockly.generated.Error();
         for ( NepoInfo info : astSource.getInfos().getInfos() ) {
             if ( info.getSeverity() == Severity.ERROR ) {

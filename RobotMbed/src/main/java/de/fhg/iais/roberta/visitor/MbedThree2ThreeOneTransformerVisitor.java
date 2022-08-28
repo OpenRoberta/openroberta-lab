@@ -5,18 +5,16 @@ import java.util.Map;
 
 import de.fhg.iais.roberta.bean.NewUsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
-import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
@@ -24,9 +22,11 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.SC;
 
-public class MbedThree2ThreeOneTransformerVisitor extends BaseVisitor<Phrase<Void>> implements IMbedTransformerVisitor<Void> {
+public class MbedThree2ThreeOneTransformerVisitor extends BaseVisitor<Phrase> implements IMbedTransformerVisitor {
 
     private static final Map<String, String> NEW_NAMES = new HashMap<>();
     static {
@@ -52,19 +52,18 @@ public class MbedThree2ThreeOneTransformerVisitor extends BaseVisitor<Phrase<Voi
 
         // Rewrite previous configuration with updated names
         for ( ConfigurationComponent cc : configuration.getConfigurationComponentsValues() ) {
-            if ( NEW_NAMES.containsKey(cc.getComponentType()) ) {
+            if ( NEW_NAMES.containsKey(cc.componentType) ) {
                 builder
                     .addUsedConfigurationComponent(
                         new ConfigurationComponent(
-                            cc.getComponentType(),
+                            cc.componentType,
                             cc.isActor(),
-                            NEW_NAMES.get(cc.getComponentType()),
-                            NEW_NAMES.get(cc.getComponentType()),
+                            NEW_NAMES.get(cc.componentType),
+                            NEW_NAMES.get(cc.componentType),
                             cc.getComponentProperties(),
                             cc.getProperty(),
-                            cc.getComment(),
-                            cc.getX(),
-                            cc.getY()));
+                            cc.x,
+                            cc.y));
             } else {
                 builder.addUsedConfigurationComponent(cc);
             }
@@ -77,109 +76,84 @@ public class MbedThree2ThreeOneTransformerVisitor extends BaseVisitor<Phrase<Voi
     }
 
     @Override
-    public Phrase<Void> visitLedOnAction(LedOnAction<Phrase<Void>> ledOnAction) {
+    public Phrase visitLedOnAction(LedOnAction ledOnAction) {
         String newName = getNewName(ledOnAction.getUserDefinedPort());
 
-        return LedOnAction.make(ledOnAction.getProperty(), ledOnAction.getComment(), (Expr<Void>) ledOnAction.getLedColor().modify(this), newName, ledOnAction.hide);
+        return new LedOnAction(ledOnAction.getProperty(), (Expr) ledOnAction.ledColor.modify(this), newName, ledOnAction.hide);
     }
 
     @Override
-    public Phrase<Void> visitLightAction(LightAction<Phrase<Void>> lightAction) {
-        String newName = getNewName(lightAction.getPort());
+    public Phrase visitLightAction(LightAction lightAction) {
+        String newName = getNewName(lightAction.port);
 
-        return LightAction
-            .make(
-                newName,
-                lightAction.getColor(),
-                lightAction.getMode(),
-                (Expr<Void>) lightAction.getRgbLedColor().modify(this),
-                lightAction.getProperty(),
-                lightAction.getComment());
+        return new LightAction(newName, lightAction.color, lightAction.mode, (Expr) lightAction.rgbLedColor.modify(this), lightAction.getProperty());
     }
 
     @Override
-    public Phrase<Void> visitLightStatusAction(LightStatusAction<Phrase<Void>> lightStatusAction) {
+    public Phrase visitLightStatusAction(LightStatusAction lightStatusAction) {
         String newName = getNewName(lightStatusAction.getUserDefinedPort());
 
-        return LightStatusAction.make(newName, lightStatusAction.getStatus(), lightStatusAction.getProperty(), lightStatusAction.getComment());
+        return new LightStatusAction(newName, lightStatusAction.status, lightStatusAction.getProperty());
     }
 
     @Override
-    public Phrase<Void> visitPlayNoteAction(PlayNoteAction<Phrase<Void>> playNoteAction) {
-        String newName = getNewName(playNoteAction.getPort());
+    public Phrase visitPlayNoteAction(PlayNoteAction playNoteAction) {
+        String newName = getNewName(playNoteAction.port);
 
-        return PlayNoteAction
-            .make(newName, playNoteAction.getDuration(), playNoteAction.getFrequency(), playNoteAction.getProperty(), playNoteAction.getComment(),
-                playNoteAction.getHide());
+        return new PlayNoteAction(playNoteAction.getProperty(), playNoteAction.duration, playNoteAction.frequency, newName, playNoteAction.hide);
     }
 
     @Override
-    public Phrase<Void> visitToneAction(ToneAction<Phrase<Void>> toneAction) {
-        String newName = getNewName(toneAction.getPort());
-        return ToneAction
-            .make(
-                (Expr<Void>) toneAction.getFrequency().modify(this),
-                (Expr<Void>) toneAction.getDuration().modify(this),
-                newName,
-                toneAction.getProperty(),
-                toneAction.getComment(),
-                toneAction.getHide());
+    public Phrase visitToneAction(ToneAction toneAction) {
+        String newName = getNewName(toneAction.port);
+        return new ToneAction(toneAction.getProperty(), (Expr) toneAction.frequency.modify(this), (Expr) toneAction.duration.modify(this), newName, toneAction.hide);
     }
 
     @Override
-    public Phrase<Void> visitCompassSensor(CompassSensor<Phrase<Void>> compassSensor) {
-        return CompassSensor.make(getNewBean(compassSensor), compassSensor.getProperty(), compassSensor.getComment());
+    public Phrase visitCompassSensor(CompassSensor compassSensor) {
+        return new CompassSensor(compassSensor.getProperty(), getNewBean(compassSensor));
     }
 
     @Override
-    public Phrase<Void> visitTemperatureSensor(TemperatureSensor<Phrase<Void>> temperatureSensor) {
-        return TemperatureSensor.make(getNewBean(temperatureSensor), temperatureSensor.getProperty(), temperatureSensor.getComment());
+    public Phrase visitTemperatureSensor(TemperatureSensor temperatureSensor) {
+        return new TemperatureSensor(temperatureSensor.getProperty(), getNewBean(temperatureSensor));
     }
 
     @Override
-    public Phrase<Void> visitSoundSensor(SoundSensor<Phrase<Void>> soundSensor) {
-        return SoundSensor.make(getNewBean(soundSensor), soundSensor.getProperty(), soundSensor.getComment());
+    public Phrase visitSoundSensor(SoundSensor soundSensor) {
+        return new SoundSensor(soundSensor.getProperty(), getNewBean(soundSensor));
     }
 
     @Override
-    public Phrase<Void> visitLightSensor(LightSensor<Phrase<Void>> lightSensor) {
-        return LightSensor.make(getNewBean(lightSensor), lightSensor.getProperty(), lightSensor.getComment());
+    public Phrase visitLightSensor(LightSensor lightSensor) {
+        return new LightSensor(lightSensor.getProperty(), getNewBean(lightSensor));
     }
 
     @Override
-    public Phrase<Void> visitAccelerometerSensor(AccelerometerSensor<Phrase<Void>> accelerometerSensor) {
-        return AccelerometerSensor.make(getNewBean(accelerometerSensor), accelerometerSensor.getProperty(), accelerometerSensor.getComment());
+    public Phrase visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
+        return new AccelerometerSensor(accelerometerSensor.getProperty(), getNewBean(accelerometerSensor));
     }
 
     @Override
-    public Phrase<Void> visitGyroSensor(GyroSensor<Phrase<Void>> gyroSensor) {
-        return GyroSensor.make(getNewBean(gyroSensor), gyroSensor.getProperty(), gyroSensor.getComment());
+    public Phrase visitGyroSensor(GyroSensor gyroSensor) {
+        return new GyroSensor(gyroSensor.getProperty(), getNewBean(gyroSensor));
     }
 
     @Override
-    public Phrase<Void> visitGetSampleSensor(GetSampleSensor<Phrase<Void>> sensorGetSample) {
-        ExternalSensor<Phrase<Void>> sensor;
-        if ( sensorGetSample.getSensor() instanceof ExternalSensor ) {
-            sensor = (ExternalSensor<Phrase<Void>>) sensorGetSample.getSensor();
+    public Phrase visitGetSampleSensor(GetSampleSensor sensorGetSample) {
+        ExternalSensor sensor;
+        if ( sensorGetSample.sensor instanceof ExternalSensor ) {
+            sensor = (ExternalSensor) sensorGetSample.sensor;
         } else {
-            throw new DbcException("Could not get sensor info, because " + sensorGetSample.getSensor().getKind() + " is not of type ExternalSensor!");
+            throw new DbcException("Could not get sensor info, because " + sensorGetSample.sensor.getKind() + " is not of type ExternalSensor!");
         }
-        return GetSampleSensor
-            .make(
-                sensorGetSample.getSensorTypeAndMode(),
-                getNewBean(sensor).getPort(),
-                sensorGetSample.getSlot(),
-                sensorGetSample.getMutation(),
-                sensorGetSample.getHide(),
-                sensorGetSample.getProperty(),
-                sensorGetSample.getComment(),
-                getBlocklyDropdownFactory());
+        return new GetSampleSensor(sensorGetSample.sensorTypeAndMode, getNewBean(sensor).getPort(), sensorGetSample.slot, sensorGetSample.mutation, sensorGetSample.hide, sensorGetSample.getProperty(), getBlocklyDropdownFactory());
     }
 
     private String getNewName(String port) {
         ConfigurationComponent confComp = this.configuration.optConfigurationComponent(port);
         if ( confComp != null ) {
-            String newName = NEW_NAMES.get(confComp.getComponentType());
+            String newName = NEW_NAMES.get(confComp.componentType);
             if ( newName != null ) {
                 return newName;
             } else {
@@ -190,8 +164,8 @@ public class MbedThree2ThreeOneTransformerVisitor extends BaseVisitor<Phrase<Voi
         }
     }
 
-    private SensorMetaDataBean getNewBean(ExternalSensor<?> sensor) {
+    private ExternalSensorBean getNewBean(ExternalSensor sensor) {
         String newName = getNewName(sensor.getUserDefinedPort());
-        return new SensorMetaDataBean(newName, sensor.getMode(), sensor.getSlot(), sensor.getMutation());
+        return new ExternalSensorBean(newName, sensor.getMode(), sensor.getSlot(), sensor.getMutation());
     }
 }

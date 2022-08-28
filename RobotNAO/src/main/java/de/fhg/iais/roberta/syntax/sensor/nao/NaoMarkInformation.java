@@ -4,11 +4,6 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
@@ -16,33 +11,20 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>naoSensors_naoMark</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
- * detecting a NaoMark.<br/>
- * <br/>
- */
-public final class NaoMarkInformation<V> extends Sensor<V> {
+@NepoBasic(name = "NAO_MARK_INFORMATION", category = "SENSOR", blocklyNames = {"naoSensors_getMarkInformation"})
+public final class NaoMarkInformation extends Sensor {
 
-    private final Expr<V> naoMarkId;
+    public final Expr naoMarkId;
 
-    private NaoMarkInformation(Expr<V> naoMarkId, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("NAO_MARK_INFORMATION"), properties, comment);
+    public NaoMarkInformation(Expr naoMarkId, BlocklyProperties properties) {
+        super(properties);
         this.naoMarkId = naoMarkId;
         setReadOnly();
-    }
-
-    /**
-     * Creates instance of {@link NaoMarkInformation}. This instance is read only and can not be modified.
-     *
-     * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link NaoMarkInformation}
-     */
-    static <V> NaoMarkInformation<V> make(Expr<V> naoMarkId, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new NaoMarkInformation<>(naoMarkId, properties, comment);
     }
 
     @Override
@@ -50,21 +32,10 @@ public final class NaoMarkInformation<V> extends Sensor<V> {
         return "NaoMarkInformation [" + this.naoMarkId.toString() + "]";
     }
 
-    public Expr<V> getNaoMarkId() {
-        return this.naoMarkId;
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
-        Phrase<V> naoMarkId = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER));
-        return NaoMarkInformation.make(Jaxb2Ast.convertPhraseToExpr(naoMarkId), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        Phrase naoMarkId = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER));
+        return new NaoMarkInformation(Jaxb2Ast.convertPhraseToExpr(naoMarkId), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

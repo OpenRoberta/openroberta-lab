@@ -1,11 +1,12 @@
-import * as LOG from 'log';
 import * as GUISTATE_C from 'guiState.controller';
-import * as PG from 'neuralnetwork.playground';
+import * as NN_UI from 'neuralnetwork.ui';
 import * as $ from 'jquery';
-import * as Blockly from 'blockly';
+import * as UTIL from 'util';
 import 'jquery-validate';
-import { State } from 'neuralnetwork.state';
 
+/**
+ * initialize the callbacks needed by the NN tab. Called once at front end init time
+ */
 export function init() {
     $('#tabNN').onWrap(
         'show.bs.tab',
@@ -19,8 +20,7 @@ export function init() {
         'shown.bs.tab',
         function (e) {
             GUISTATE_C.setProgramSaved(false);
-            prepareNNfromNNstep();
-            PG.runPlayground();
+            mkNNfromNNStepDataAndRunNNEditor();
         },
         'shown tabNN'
     );
@@ -28,8 +28,7 @@ export function init() {
     $('#tabNN').onWrap(
         'hide.bs.tab',
         function (e) {
-            var nnstepBlock = getTheNNstepBlock();
-            nnstepBlock.data = PG.getStateAsJSONString();
+            saveNN2Blockly();
         },
         'hide tabNN'
     );
@@ -37,41 +36,35 @@ export function init() {
     $('#tabNN').onWrap('hidden.bs.tab', function (e) {}, 'hidden tabNN');
 }
 
-export function prepareNNfromNNstep() {
-    var inputNeurons = [];
-    var outputNeurons = [];
-    var state = new State();
-    var nnStepBlock = getTheNNstepBlock();
-    if (nnStepBlock) {
-        state = nnStepBlock.data === undefined || nnStepBlock.data === null ? new State() : JSON.parse(nnStepBlock.data);
-        extractInputOutputNeurons(inputNeurons, outputNeurons, nnStepBlock.getChildren());
-    }
-    PG.setPlayground(state, inputNeurons, outputNeurons);
+/**
+ * terminate the nn editor.  Called, when the NN editor or the program terminates. Cleanup:
+ * - save the NN to the program XML as data in the start block.
+ * - close the edit card
+ * - reset node selection (yellow node)
+ */
+export function saveNN2Blockly() {
+    NN_UI.saveNN2Blockly();
+    NN_UI.resetUiOnTerminate();
 }
 
-function getTheNNstepBlock() {
-    var nnstepBlock = null;
-    for (const block of Blockly.Workspace.getByContainer('blocklyDiv').getAllBlocks()) {
-        if (block.type === 'robActions_NNstep') {
-            if (nnstepBlock) {
-                LOG.error('more than one NNstep block makes no sense');
-            }
-            nnstepBlock = block;
-        }
+/**
+ * create the NN from the program XML. Called, when the simulation starts
+ */
+export function mkNNfromProgramStartBlock() {
+    var startBlock = UTIL.getTheStartBlock();
+    let nnStateAsJson;
+    try {
+        nnStateAsJson = JSON.parse(startBlock.data);
+    } catch (e) {
+        // nnStateAsJson remains null
     }
-    return nnstepBlock;
+    NN_UI.setupNN(nnStateAsJson);
 }
 
-function extractInputOutputNeurons(inputNeurons, outputNeurons, neurons) {
-    for (const block of neurons) {
-        if (block.type === 'robActions_inputneuron') {
-            inputNeurons.push(block.getFieldValue('NAME'));
-        } else if (block.type === 'robActions_outputneuron') {
-            outputNeurons.push(block.getFieldValue('NAME'));
-        }
-        var next = block.getChildren();
-        if (next) {
-            extractInputOutputNeurons(inputNeurons, outputNeurons, next);
-        }
-    }
+/**
+ * create the NN from the program XML and start the NN editor. Called, when the NN tab is opened
+ */
+export function mkNNfromNNStepDataAndRunNNEditor() {
+    mkNNfromProgramStartBlock();
+    NN_UI.runNNEditor();
 }

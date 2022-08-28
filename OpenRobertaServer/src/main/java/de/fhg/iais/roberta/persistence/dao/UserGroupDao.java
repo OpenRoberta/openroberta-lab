@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.bo.UserGroup;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
@@ -94,24 +94,13 @@ public class UserGroupDao extends AbstractDao<UserGroup> {
     }
 
     /**
-     * load a group from the database, identified by its owner and its name (both make up the "business" key of a group)<br>
-     * Asserts, that the groupName is not null.<br/>
-     * Asserts, that the groupOwner is not null.
+     * delete user group including its group members (cascading delete!)
      *
-     * @param groupName the name of the group, never null
-     * @param groupOwner the user who owns this group, never null
-     * @return The number of user groups that were deleted by this call.
+     * @return true, if the delete was successful; false otherwise
      */
-    public int delete(String groupName, User groupOwner) {
-        //Assert checks on not null happens in the load method, so they are not required here
-        UserGroup toBeDeleted = this.load(groupName, groupOwner);
-
-        if ( toBeDeleted == null ) {
-            return 0;
-        }
-
+    public void delete(UserGroup toBeDeleted) {
+        Assert.notNull(toBeDeleted);
         this.session.delete(toBeDeleted);
-        return 1;
     }
 
     /**
@@ -195,13 +184,5 @@ public class UserGroupDao extends AbstractDao<UserGroup> {
 
         group.rename(newGroupName);
         return Pair.of(Key.GROUP_RENAME_SUCCESS, group);
-    }
-
-    /**
-     * create a write lock for the table USERGROUP to avoid deadlocks. This is a no op if concurrency control is not 2PL, but MVCC
-     */
-    public void lockTable() {
-        this.session.createSqlQuery("lock table USERGROUP write").executeUpdate();
-        this.session.addToLog("lock", "is now aquired");
     }
 }

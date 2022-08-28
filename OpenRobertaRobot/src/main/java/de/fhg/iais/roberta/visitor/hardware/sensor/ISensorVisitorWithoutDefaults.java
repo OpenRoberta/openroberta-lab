@@ -7,6 +7,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
@@ -31,59 +32,61 @@ import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.visitor.hardware.IHardwareVisitor;
 
 public interface ISensorVisitorWithoutDefaults<V> extends IHardwareVisitor<V> {
-    V visitKeysSensor(KeysSensor<V> keysSensor);
+    V visitKeysSensor(KeysSensor keysSensor);
 
-    V visitColorSensor(ColorSensor<V> colorSensor);
+    V visitColorSensor(ColorSensor colorSensor);
 
-    V visitLightSensor(LightSensor<V> lightSensor);
+    V visitLightSensor(LightSensor lightSensor);
 
-    V visitSoundSensor(SoundSensor<V> soundSensor);
+    V visitSoundSensor(SoundSensor soundSensor);
 
-    V visitEncoderSensor(EncoderSensor<V> encoderSensor);
+    V visitEncoderSensor(EncoderSensor encoderSensor);
 
-    V visitGyroSensor(GyroSensor<V> gyroSensor);
+    V visitGyroSensor(GyroSensor gyroSensor);
 
-    V visitInfraredSensor(InfraredSensor<V> infraredSensor);
+    V visitGyroReset(GyroReset gyroReset);
 
-    V visitTimerSensor(TimerSensor<V> timerSensor);
+    V visitInfraredSensor(InfraredSensor infraredSensor);
 
-    V visitTouchSensor(TouchSensor<V> touchSensor);
+    V visitTimerSensor(TimerSensor timerSensor);
 
-    V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor);
+    V visitTouchSensor(TouchSensor touchSensor);
 
-    V visitCompassSensor(CompassSensor<V> compassSensor);
+    V visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor);
 
-    V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor);
+    V visitCompassSensor(CompassSensor compassSensor);
 
-    V visitVoltageSensor(VoltageSensor<V> voltageSensor);
+    V visitTemperatureSensor(TemperatureSensor temperatureSensor);
 
-    V visitAccelerometer(AccelerometerSensor<V> accelerometerSensor);
+    V visitVoltageSensor(VoltageSensor voltageSensor);
 
-    V visitPinTouchSensor(PinTouchSensor<V> pinTouchSensor);
+    V visitAccelerometer(AccelerometerSensor accelerometerSensor);
 
-    V visitGestureSensor(GestureSensor<V> gestureSensor);
+    V visitPinTouchSensor(PinTouchSensor pinTouchSensor);
 
-    V visitPinGetValueSensor(PinGetValueSensor<V> pinGetValueSensor);
+    V visitGestureSensor(GestureSensor gestureSensor);
 
-    V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample);
+    V visitPinGetValueSensor(PinGetValueSensor pinGetValueSensor);
 
-    V visitIRSeekerSensor(IRSeekerSensor<V> irSeekerSensor);
+    V visitGetSampleSensor(GetSampleSensor sensorGetSample);
 
-    V visitMoistureSensor(MoistureSensor<V> moistureSensor);
+    V visitIRSeekerSensor(IRSeekerSensor irSeekerSensor);
 
-    V visitHumiditySensor(HumiditySensor<V> humiditySensor);
+    V visitMoistureSensor(MoistureSensor moistureSensor);
 
-    V visitMotionSensor(MotionSensor<V> motionSensor);
+    V visitHumiditySensor(HumiditySensor humiditySensor);
 
-    V visitDropSensor(DropSensor<V> dropSensor);
+    V visitMotionSensor(MotionSensor motionSensor);
 
-    V visitPulseSensor(PulseSensor<V> pulseSensor);
+    V visitDropSensor(DropSensor dropSensor);
 
-    V visitRfidSensor(RfidSensor<V> rfidSensor);
+    V visitPulseSensor(PulseSensor pulseSensor);
 
-    V visitVemlLightSensor(VemlLightSensor<V> vemlLightSensor);
+    V visitRfidSensor(RfidSensor rfidSensor);
 
-    V visitParticleSensor(ParticleSensor<V> particleSensor);
+    V visitVemlLightSensor(VemlLightSensor vemlLightSensor);
 
-    V visitHTColorSensor(HTColorSensor<V> htColorSensor);
+    V visitParticleSensor(ParticleSensor particleSensor);
+
+    V visitHTColorSensor(HTColorSensor htColorSensor);
 }

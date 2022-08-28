@@ -5,6 +5,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.json.JSONObject;
 
+import de.fhg.iais.roberta.util.basic.Clock;
+
 public class AliveData {
     private static final AtomicLong clientCallsTotal = new AtomicLong(0);
     private static final AtomicLong clientCallsDelta = new AtomicLong(0);

@@ -27,7 +27,7 @@ import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
 import de.fhg.iais.roberta.generated.restEntities.EntityResponse;
 import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
@@ -61,7 +61,7 @@ import de.fhg.iais.roberta.persistence.dao.ConfigurationDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
@@ -239,9 +239,9 @@ public class ClientProgramController {
                 String programName = dataPart.getString("programName");
                 String ownerName = dataPart.getString("owner");
                 String author = dataPart.getString("author");
-                User owner = up.getUser(ownerName);
+                User owner = up.getStandardUser(ownerName);
                 int ownerID = owner.getId();
-                int authorId = up.getUser(author).getId();
+                int authorId = up.getStandardUser(author).getId();
                 JSONArray program = programProcessor.getProgramEntity(programName, ownerID, robot, authorId);
                 if ( program != null ) {
                     response.setProgram(program);
@@ -428,8 +428,8 @@ public class ClientProgramController {
                     Statistics.info("ProgramImport", "success", true);
                     return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
                 } else {
-                    List<IRobotFactory> members = httpSessionState.getRobotFactoriesOfGroup(robotType1);
-                    List<String> realNames = members.stream().map(IRobotFactory::getRealName).collect(Collectors.toList());
+                    List<RobotFactory> members = httpSessionState.getRobotFactoriesOfGroup(robotType1);
+                    List<String> realNames = members.stream().map(RobotFactory::getRealName).collect(Collectors.toList());
                     Statistics.info("ProgramImport", "success", false);
                     ImportErrorResponse error = ImportErrorResponse.make();
                     error.setRobotTypes(String.join(", ", realNames));
@@ -489,7 +489,6 @@ public class ClientProgramController {
         }
 
     }
-
 
 
     @POST
@@ -622,7 +621,7 @@ public class ClientProgramController {
                 return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_NOT_LOGGED_IN, httpSessionState, null);
             } else {
                 String programName = shareCreateRequest.getProgramName();
-                User galleryUser = userProcessor.getUser("Gallery");
+                User galleryUser = userProcessor.getStandardUser("Gallery");
                 // generating a unique name for the program owned by the gallery.
                 User user = userProcessor.getUser(userId);
                 String userAccount = user.getAccount();
@@ -707,7 +706,7 @@ public class ClientProgramController {
                 UtilForREST.addResultInfo(response, accessRightProcessor);
                 // if this program was shared from the gallery, we need to delete the copy of it as well
                 if ( owner.equals("Gallery") ) {
-                    int galleryId = userProcessor.getUser(owner).getId();
+                    int galleryId = userProcessor.getStandardUser(owner).getId();
                     programProcessor.deleteByName(programName, galleryId, robot, userId);
                     Statistics.info("ProgramShareDelete", "success", true);
                     UtilForREST.addResultInfo(response, programProcessor);
@@ -762,7 +761,7 @@ public class ClientProgramController {
     }
 
     // Transform programs with old xml versions to new xml versions
-    private static Pair<String, String> transformBetweenVersions(IRobotFactory robotFactory, String programText, String configText) {
+    private static Pair<String, String> transformBetweenVersions(RobotFactory robotFactory, String programText, String configText) {
         if ( robotFactory.hasWorkflow("transform") ) {
             if ( configText == null ) {
                 // programs that do not have any configuration modifications are saved into the database without an associated configuration

@@ -1,6 +1,6 @@
 Sensors: 
 []
 Actors: 
-[UsedActor [SERIAL, SERIAL]]
+[UsedActor [SERIAL, SERIAL], UsedActor [L, LED], UsedActor [S, SERVOMOTOR]]
 Methods: 
 []

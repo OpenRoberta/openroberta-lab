@@ -1,256 +1,165 @@
-define(["require", "exports", "simulation.robot.mbed"], function (require, exports, simulation_robot_mbed_1) {
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * Creates a new Microbit device for a simulation.
-     *
-     * This Microbit is a simple electrical board with some basic actors and
-     * sensors.
-     *
-     * @class
-     */
-    function Microbit(pose, configuration, num, robotBehaviour) {
-        simulation_robot_mbed_1.default.call(this, pose, num, robotBehaviour);
-        var that = this;
-        this.endless = true;
-        this.button = {
-            xA: -178,
-            yA: 15,
-            rA: 15,
-            colorA: '#F29400',
-            xB: 178,
-            yB: 15,
-            rB: 15,
-            colorB: '#F29400',
-            xReset: 0,
-            yReset: 175,
-            rReset: 10,
-            colorReset: '#ffffff',
-            rBoth: 15,
-            xBothA: 6,
-            yBothA: 215,
-            xBothB: -6,
-            yBothB: 215,
-            xBothLabel: 23,
-            yBothLabel: 215,
-            draw: function (canvas) {
-                canvas.beginPath();
-                canvas.save();
-                canvas.scale(1, -1);
-                canvas.translate(this.xBothLabel, -this.yBothLabel);
-                canvas.textAlign = 'left';
-                canvas.font = 'bold 14px Roboto';
-                canvas.textBaseline = 'middle';
-                canvas.fillStyle = 'black';
-                canvas.fillText('A + B', 0, 0);
-                canvas.restore();
-                canvas.globalAlpha = that.buttons.A && that.buttons.B ? 0.7 : 0.6;
-                canvas.fillStyle = this.colorA;
-                canvas.beginPath();
-                canvas.arc(this.xBothA, this.yBothA, this.rBoth, 0, Math.PI * 2);
-                canvas.fill();
-                canvas.fillStyle = this.colorB;
-                canvas.beginPath();
-                canvas.arc(this.xBothB, this.yBothB, this.rBoth, 0, Math.PI * 2);
-                canvas.fill();
-                canvas.globalAlpha = 1;
-            },
-        };
-        this.pin0 = {
-            x: -209.5,
-            y: -170,
-            wh: 40,
-            touched: false,
-            draw: function (canvas) {
-                if (this.touched) {
-                    canvas.fillStyle = 'green';
-                    canvas.beginPath();
-                    canvas.fillRect(this.x, this.y, this.wh, this.wh);
-                    canvas.fill();
-                    canvas.fillStyle = 'red';
-                    canvas.beginPath();
-                    canvas.arc(189.5, -112, 18, 0, Math.PI * 2);
-                    canvas.fill();
-                }
-                if (this.digitalIn !== undefined) {
-                    canvas.fillStyle = 'red';
-                    canvas.beginPath();
-                    canvas.save();
-                    canvas.scale(1, -1);
-                    canvas.save();
-                    canvas.translate(this.x + 4, -this.y - 10);
-                    canvas.rotate(Math.PI / 2);
-                    canvas.font = 'bold 50px Roboto';
-                    canvas.fillText('< ', 0, 0);
-                    canvas.restore();
-                    canvas.font = '10px Courier';
-                    canvas.fillText('\u2293', this.x - 2, -this.y + 16);
-                    canvas.fillText(this.digitalIn, this.x + 35, -this.y + 16);
-                    canvas.restore();
-                }
-                else if (this.analogIn !== undefined) {
-                    canvas.fillStyle = 'red';
-                    canvas.beginPath();
-                    canvas.save();
-                    canvas.scale(1, -1);
-                    canvas.save();
-                    canvas.translate(this.x + 4, -this.y - 10);
-                    canvas.rotate(Math.PI / 2);
-                    canvas.font = 'bold 50px Roboto';
-                    canvas.fillText('< ', 0, 0);
-                    canvas.restore();
-                    canvas.font = '10px Courier';
-                    canvas.fillText('\u223F', this.x - 2, -this.y + 16);
-                    canvas.fillText(this.analogIn, this.x + 35, -this.y + 16);
-                    canvas.restore();
-                }
-                else if (this.analogOut !== undefined) {
-                    canvas.fillStyle = 'green';
-                    canvas.beginPath();
-                    canvas.save();
-                    canvas.scale(1, -1);
-                    canvas.save();
-                    canvas.translate(this.x + 4, -this.y - 10);
-                    canvas.rotate(Math.PI / 2);
-                    canvas.font = 'bold 50px Roboto';
-                    canvas.fillText('> ', 0, 0);
-                    canvas.restore();
-                    canvas.font = '10px Courier';
-                    canvas.fillText('\u223F', this.x + 5, -this.y + 16);
-                    canvas.fillText(this.analogOut, this.x + 30, -this.y + 16);
-                    canvas.restore();
-                }
-                else if (this.digitalOut !== undefined) {
-                    canvas.fillStyle = 'green';
-                    canvas.beginPath();
-                    canvas.save();
-                    canvas.scale(1, -1);
-                    canvas.save();
-                    canvas.translate(this.x + 4, -this.y - 10);
-                    canvas.rotate(Math.PI / 2);
-                    canvas.font = 'bold 50px Roboto';
-                    canvas.fillText('> ', 0, 0);
-                    canvas.restore();
-                    canvas.font = '10px Courier';
-                    canvas.fillText('\u2293', this.x + 5, -this.y + 16);
-                    canvas.fillText(this.digitalOut, this.x + 30, -this.y + 16);
-                    canvas.restore();
-                }
-            },
-        };
-        this.pin1 = {
-            x: -120,
-            y: -170,
-            wh: 40,
-            touched: false,
-            draw: that.pin0.draw,
-        };
-        this.pin2 = {
-            x: -20,
-            y: -170,
-            wh: 40,
-            touched: false,
-            draw: that.pin0.draw,
-        };
-        this.time = 0;
-        this.timer = {
-            timer1: false,
-        };
-    }
-    Microbit.prototype = Object.create(simulation_robot_mbed_1.default.prototype);
-    Microbit.prototype.constructor = Microbit;
-    var isDownrobot = false;
-    var isDownObstacle = false;
-    var isDownRuler = false;
-    var startX;
-    var startY;
-    simulation_robot_mbed_1.default.prototype.handleMouse = function (e, offsetX, offsetY, scale, w, h) {
-        if (e.type !== 'touchend') {
-            w = w / scale;
-            h = h / scale;
-            var X = e.clientX || e.originalEvent.touches[0].pageX;
-            var Y = e.clientY || e.originalEvent.touches[0].pageY;
-            var top = $('#robotLayer').offset().top + $('#robotLayer').width() / 2;
-            var left = $('#robotLayer').offset().left + $('#robotLayer').height() / 2;
-            startX = parseInt(X - left, 10) / scale;
-            startY = parseInt(Y - top, 10) / scale;
-            var scsq = 1;
-            if (scale < 1)
-                scsq = scale * scale;
-            var dxA = startX - this.button.xA;
-            var dyA = startY + this.button.yA;
-            var A = dxA * dxA + dyA * dyA < (this.button.rA * this.button.rA) / scsq;
-            var dxB = startX - this.button.xB;
-            var dyB = startY + this.button.yB;
-            var B = dxB * dxB + dyB * dyB < (this.button.rB * this.button.rB) / scsq;
-            var dxReset = startX - this.button.xReset;
-            var dyReset = startY + this.button.yReset;
-            var Reset = dxReset * dxReset + dyReset * dyReset < (this.button.rReset * this.button.rReset) / scsq;
-            var dxBothA = startX - this.button.xBothA;
-            var dyBothA = startY + this.button.yBothA;
-            var dxBothB = startX - this.button.xBothB;
-            var dyBothB = startY + this.button.yBothB;
-            var bothA = Math.pow(dxBothA, 2) + Math.pow(dyBothA, 2) < Math.pow(this.button.rBoth, 2) / scsq;
-            var bothB = Math.pow(dxBothB, 2) + Math.pow(dyBothB, 2) < Math.pow(this.button.rBoth, 2) / scsq;
-            var bothButtons = bothA || bothB;
-            var Pin0 = startX > this.pin0.x && -startY > this.pin0.y && startX < this.pin0.x + this.pin0.wh && -startY < this.pin0.y + this.pin0.wh;
-            var Pin1 = startX > this.pin1.x && -startY > this.pin1.y && startX < this.pin1.x + this.pin1.wh && -startY < this.pin1.y + this.pin1.wh;
-            var Pin2 = startX > this.pin2.x && -startY > this.pin2.y && startX < this.pin2.x + this.pin2.wh && -startY < this.pin2.y + this.pin2.wh;
-            // special case, display (center: 0,0) represents light level
-            var dxDisplay = startX;
-            var dyDisplay = startY + 20;
-            var Display = dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight;
-        }
-        var lightSliderActive = $('#sliderLight').val() !== '100';
-        if (!lightSliderActive)
-            this.display.lightLevel = 100;
-        if (A || B || Reset || bothButtons || Display || Pin0 || Pin1 || Pin2) {
-            if (e.type === 'mousedown' || e.type === 'touchstart') {
-                if (A) {
-                    this.buttons.A = true;
-                }
-                else if (B) {
-                    this.buttons.B = true;
-                }
-                else if (Display && !lightSliderActive) {
-                    this.display.lightLevel = 150;
-                }
-                else if (bothButtons) {
-                    this.buttons.A = true;
-                    this.buttons.B = true;
-                }
-                else if (Reset) {
-                    this.buttons.Reset = true;
-                }
-                else if (Pin0) {
-                    this.pin0.touched = true;
-                }
-                else if (Pin1) {
-                    this.pin1.touched = true;
-                }
-                else if (Pin2) {
-                    this.pin2.touched = true;
-                }
-            }
-            else if (e.type === 'mousemove' && Display && !lightSliderActive) {
-                this.display.lightLevel = 50;
-            }
-            if (Display && !lightSliderActive) {
-                $('#robotLayer').css('cursor', 'crosshair');
-            }
-            else {
-                $('#robotLayer').css('cursor', 'pointer');
-            }
-        }
-        else {
-            $('#robotLayer').css('cursor', 'auto');
-        }
-        if (e.type === 'mouseup' || e.type === 'touchend') {
-            this.pin0.touched = false;
-            this.pin1.touched = false;
-            this.pin2.touched = false;
-            this.buttons.A = false;
-            this.buttons.B = false;
-        }
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
     };
-    exports.default = Microbit;
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+define(["require", "exports", "./robot.calliope", "./robot.sensors", "./robot.actuators"], function (require, exports, robot_calliope_1, robot_sensors_1, robot_actuators_1) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var RobotMicrobit = /** @class */ (function (_super) {
+        __extends(RobotMicrobit, _super);
+        function RobotMicrobit() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        RobotMicrobit.prototype.configure = function (configuration) {
+            // TODO touch pins and the gesture sensor to configuration
+            // TODO display to configuration
+            // TODO separate sensors and actuators in the configuration
+            $('#simRobotContent').append(this.topView);
+            $.validator.addClassRules('range', { required: true, number: true });
+            this.gestureSensor = new robot_sensors_1.GestureSensor();
+            var myButtons = [];
+            var myActuatorPins = [];
+            var mySensorPins = [
+                {
+                    x: 42,
+                    y: 772,
+                    r: 80,
+                    type: 'TOUCH',
+                    value: false,
+                    port: '0',
+                    name: '0',
+                    touchColors: ['#d4af38ff'],
+                    color: '#008000',
+                    typeValue: 0,
+                },
+                {
+                    x: 221,
+                    y: 772,
+                    r: 80,
+                    type: 'TOUCH',
+                    value: false,
+                    port: '1',
+                    name: '1',
+                    touchColors: ['#d4af39ff'],
+                    color: '#008000',
+                    typeValue: 0,
+                },
+                {
+                    x: 420,
+                    y: 772,
+                    r: 80,
+                    type: 'TOUCH',
+                    value: false,
+                    port: '2',
+                    name: '2',
+                    touchColors: ['#d4af3aff'],
+                    color: '#008000',
+                    typeValue: 0,
+                },
+            ];
+            var _loop_1 = function (component) {
+                var type = configuration['ACTUATORS'][component]['TYPE'];
+                var internal = component.substring(0, 1) === '_';
+                var myComponentName = internal ? type : component;
+                switch (type // sensors
+                ) {
+                    case 'COMPASS':
+                        this_1[myComponentName] = new robot_sensors_1.CompassSensor();
+                        break;
+                    case 'KEY':
+                        var port = configuration['ACTUATORS'][component]['PIN1'];
+                        var color = void 0;
+                        if (port === 'A') {
+                            color = ['#f29400ff'];
+                        }
+                        else if (port === 'B') {
+                            color = ['#f29500ff'];
+                        }
+                        myButtons.push({
+                            name: myComponentName,
+                            touchColors: color,
+                            value: false,
+                            port: port,
+                        });
+                        break;
+                    case 'LIGHT':
+                        this_1[myComponentName] = new robot_sensors_1.CalliopeLightSensor();
+                        break;
+                    case 'TEMPERATURE':
+                        this_1[myComponentName] = new robot_sensors_1.TemperatureSensor();
+                        break;
+                    case 'DIGITAL_PIN': {
+                        var myPin = mySensorPins.find(function (pin) { return pin.port === configuration['ACTUATORS'][component]['PIN1']; });
+                        myPin.name = myComponentName;
+                        myPin.type = 'DIGITAL_PIN';
+                        myPin.color = '#ff0000';
+                        break;
+                    }
+                    case 'ANALOG_PIN': {
+                        var myPin = mySensorPins.find(function (pin) { return pin.port === configuration['ACTUATORS'][component]['PIN1']; });
+                        myPin.name = myComponentName;
+                        myPin.type = 'ANALOG_PIN';
+                        myPin.color = '#ff0000';
+                        break;
+                    }
+                }
+                switch (type // actuators
+                ) {
+                    case 'BUZZER':
+                        this_1[myComponentName] = new robot_actuators_1.WebAudio();
+                        break;
+                    case 'RGBLED':
+                        this_1[myComponentName] = new robot_actuators_1.RGBLed({ x: 463, y: 643 });
+                        break;
+                    case 'ANALOG_INPUT': {
+                        var myPinIndex = mySensorPins.findIndex(function (pin) { return pin.port === configuration['ACTUATORS'][component]['PIN1']; });
+                        var myPin = mySensorPins.splice(myPinIndex, 1);
+                        myPin[0].name = myComponentName;
+                        myPin[0].type = 'ANALOG_INPUT';
+                        myActuatorPins.push(myPin[0]);
+                        break;
+                    }
+                    case 'DIGITAL_INPUT': {
+                        var myPinIndex = mySensorPins.findIndex(function (pin) { return pin.port === configuration['ACTUATORS'][component]['PIN1']; });
+                        var myPin = mySensorPins.splice(myPinIndex, 1);
+                        myPin[0].name = myComponentName;
+                        myPin[0].type = 'DIGITAL_INPUT';
+                        myActuatorPins.push(myPin[0]);
+                        break;
+                    }
+                }
+            };
+            var this_1 = this;
+            for (var component in configuration['ACTUATORS']) {
+                _loop_1(component);
+            }
+            if (myButtons.length > 0) {
+                this.buttons = new robot_sensors_1.TouchKeys(myButtons, this.id);
+                // for A + B (virtual) button
+                this.buttons.color2Keys['#f1940096'] = ['A', 'B'];
+                this.buttons.color2Keys['#f19400d4'] = ['A', 'B'];
+                this.buttons.color2Keys['#f2940099'] = ['A', 'B'];
+                this.buttons.color2Keys['#f29400ab'] = ['A', 'B'];
+            }
+            if (mySensorPins.length > 0) {
+                this.pinSensors = new robot_sensors_1.MicrobitPins(mySensorPins, this.id, { x: 18, y: 80 }, { x: 838, y: 738 });
+            }
+            if (myActuatorPins.length > 0) {
+                this.pinActuators = new robot_actuators_1.PinActuators(myActuatorPins, this.id, { x: 18, y: 80 });
+            }
+            this.display = this.display = new robot_actuators_1.MbedDisplay({ x: 340, y: 355 });
+        };
+        return RobotMicrobit;
+    }(robot_calliope_1.default));
+    exports.default = RobotMicrobit;
 });

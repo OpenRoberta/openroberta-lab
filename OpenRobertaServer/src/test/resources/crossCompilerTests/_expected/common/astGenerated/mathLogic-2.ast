@@ -1,11 +1,5 @@
 
-Var [r3] := StmtExpr [
-if Var [sim]
-,then
-exprStmt Binary [DIVIDE, MathConst[mathConst: PI], NumConst[value: 2]]
-,else
-exprStmt NumConst[value: 90]
-]
+Var [r3] := TernaryExpr[condition: Var [sim], thenPart: Binary [DIVIDE, MathConst[mathConst: PI], NumConst[value: 2]], elsePart: NumConst[value: 90]]
 
 
 Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathSingleFunct [SIN, [Var [r3]]]], NumConst[value: 1]]]

@@ -143,10 +143,4 @@ exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
 exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 14], Var [X]], msg: pos-15]
-DebugAction[value: StmtExpr [
-if Binary [EQ, NumConst[value: 14], Var [X]]
-,then
-exprStmt StringConst[value: Control Flow Test: success]
-,else
-exprStmt StringConst[value: Control Flow Test: FAIL]
-]]
+DebugAction[value: TernaryExpr[condition: Binary [EQ, NumConst[value: 14], Var [X]], thenPart: StringConst[value: Control Flow Test: success], elsePart: StringConst[value: Control Flow Test: FAIL]]]

@@ -1,4 +1,4 @@
-define(["require", "exports", "message", "comm", "wrap", "robot.controller", "socket.controller", "user.controller", "notification.controller", "userGroup.controller", "guiState.controller", "program.controller", "multSim.controller", "progRun.controller", "configuration.controller", "import.controller", "tour.controller", "sourceCodeEditor.controller", "jquery", "blockly", "progTutorial.controller", "slick"], function (require, exports, MSG, COMM, WRAP, ROBOT_C, SOCKET_C, USER_C, NOTIFICATION_C, USERGROUP_C, GUISTATE_C, PROGRAM_C, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C, TOUR_C, SOURCECODE_C, $, Blockly, TUTORIAL_C) {
+define(["require", "exports", "message", "comm", "wrap", "robot.controller", "socket.controller", "user.controller", "notification.controller", "userGroup.controller", "guiState.controller", "program.controller", "progRun.controller", "configuration.controller", "import.controller", "tour.controller", "sourceCodeEditor.controller", "jquery", "blockly", "progTutorial.controller", "slick"], function (require, exports, MSG, COMM, WRAP, ROBOT_C, SOCKET_C, USER_C, NOTIFICATION_C, USERGROUP_C, GUISTATE_C, PROGRAM_C, RUN_C, CONFIGURATION_C, IMPORT_C, TOUR_C, SOURCECODE_C, $, Blockly, TUTORIAL_C) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.init = void 0;
     var n = 0;
@@ -415,9 +415,6 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                     case 'menuToolboxExpert':
                         $('.levelTabs a[href="#expert"]').tabWrapShow();
                         break;
-                    case 'menuRunMulipleSim':
-                        MULT_SIM.showListProg();
-                        break;
                     case 'menuDefaultFirmware':
                         RUN_C.reset2DefaultFirmware();
                         break;
@@ -566,6 +563,15 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             }
             $('#tabConfiguration').clickWrap();
         }, 'tabConfiguration clicked');
+        $('#menuTabNN').onWrap('click', '', function (event) {
+            if ($('#tabNN').hasClass('tabClicked')) {
+                $('.scroller-right').clickWrap();
+            }
+            else if ($('#tabNN').hasClass('tabClicked')) {
+                $('.scroller-right').clickWrap();
+            }
+            $('#tabNN').clickWrap();
+        }, 'tabNN clicked');
         // Close submenu on mouseleave
         $('.navbar-fixed-top').on('mouseleave', function (event) {
             $('.navbar-fixed-top .dropdown').removeClass('open');

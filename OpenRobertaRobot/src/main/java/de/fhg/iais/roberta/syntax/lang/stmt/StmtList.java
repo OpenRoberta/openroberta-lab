@@ -5,26 +5,20 @@ import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
  * This class allows to create list of {@link Stmt} elements. Initially object from this class is writable. After adding all the elements to the list call
  * {@link #setReadOnly()}.
  */
-public class StmtList<V> extends Stmt<V> {
-    private final List<Stmt<V>> sl = new ArrayList<Stmt<V>>();
+@NepoBasic(name = "STMT_LIST", category = "STMT", blocklyNames = {})
+public final class StmtList extends Stmt {
+    public final List<Stmt> sl = new ArrayList<Stmt>();
 
     public StmtList() {
-        super(BlockTypeContainer.getByName("STMT_LIST"), BlocklyBlockProperties.make("1", "1"), null);
-    }
-
-    /**
-     * @return writable object of type {@link StmtList}.
-     */
-    public static <V> StmtList<V> make() {
-        return new StmtList<V>();
+        super(BlocklyProperties.make("STMT_LIST", "1"));
     }
 
     /**
@@ -32,7 +26,7 @@ public class StmtList<V> extends Stmt<V> {
      *
      * @param stmt
      */
-    public final void addStmt(Stmt<V> stmt) {
+    public final void addStmt(Stmt stmt) {
         Assert.isTrue(mayChange() && stmt != null && stmt.isReadOnly());
         this.sl.add(stmt);
     }
@@ -40,7 +34,7 @@ public class StmtList<V> extends Stmt<V> {
     /**
      * @return list with elements of type {@link Stmt}.
      */
-    public final List<Stmt<V>> get() {
+    public final List<Stmt> get() {
         Assert.isTrue(isReadOnly());
         return Collections.unmodifiableList(this.sl);
     }
@@ -48,7 +42,7 @@ public class StmtList<V> extends Stmt<V> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for ( Stmt<V> stmt : this.sl ) {
+        for ( Stmt stmt : this.sl ) {
             sb.append(stmt.toString());
         }
         return sb.toString();

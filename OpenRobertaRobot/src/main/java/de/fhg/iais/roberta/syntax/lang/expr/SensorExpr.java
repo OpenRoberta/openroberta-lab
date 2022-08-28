@@ -1,40 +1,25 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 
 /**
  * Wraps subclasses of the class {@link Sensor} so they can be used as {@link Expr} in expressions.
  */
-public class SensorExpr<V> extends Expr<V> {
-    private final Sensor<V> sensor;
+@NepoBasic(name = "SENSOR_EXPR", category = "EXPR", blocklyNames = {})
+public final class SensorExpr extends Expr {
+    public final Sensor sensor;
 
-    private SensorExpr(Sensor<V> sens) {
-        super(BlockTypeContainer.getByName("SENSOR_EXPR"), sens.getProperty(), sens.getComment());
+    public SensorExpr(Sensor sens) {
+        super(sens.getProperty());
         Assert.isTrue(sens.isReadOnly());
         this.sensor = sens;
         setReadOnly();
-    }
-
-    /**
-     * Create object of the class {@link SensorExpr}.
-     *
-     * @param sensor that we want to wrap,
-     * @return expression with wrapped sensor inside
-     */
-    public static <V> SensorExpr<V> make(Sensor<V> sens) {
-        return new SensorExpr<V>(sens);
-    }
-
-    /**
-     * @return sensor that is wrapped in the expression
-     */
-    public Sensor<V> getSens() {
-        return this.sensor;
     }
 
     @Override
@@ -59,7 +44,7 @@ public class SensorExpr<V> extends Expr<V> {
 
     @Override
     public Block astToBlock() {
-        Phrase<V> p = getSens();
+        Phrase p = this.sensor;
         return p.astToBlock();
     }
 }

@@ -8,12 +8,12 @@ import de.fhg.iais.roberta.visitor.hardware.IHardwareVisitor;
 
 public interface IMotorVisitor<V> extends IHardwareVisitor<V> {
 
-    V visitMotorGetPowerAction(MotorGetPowerAction<V> motorGetPowerAction);
+    V visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction);
 
-    V visitMotorOnAction(MotorOnAction<V> motorOnAction);
+    V visitMotorOnAction(MotorOnAction motorOnAction);
 
-    V visitMotorSetPowerAction(MotorSetPowerAction<V> motorSetPowerAction);
+    V visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction);
 
-    V visitMotorStopAction(MotorStopAction<V> motorStopAction);
+    V visitMotorStopAction(MotorStopAction motorStopAction);
 
 }

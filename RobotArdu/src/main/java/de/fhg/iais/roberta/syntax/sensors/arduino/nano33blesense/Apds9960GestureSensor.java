@@ -4,46 +4,31 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.lang.expr.Var;
-import de.fhg.iais.roberta.syntax.sensor.BuiltinSensor;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.sensor.InternalSensor;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-public class Apds9960GestureSensor<V> extends BuiltinSensor<V> {
+@NepoBasic(name = "APDS9960_GESTURE", category = "SENSOR", blocklyNames = {"robsensors_apds9960_gesture_getDataAvailableSample"})
+public final class Apds9960GestureSensor extends InternalSensor {
 
-    private final Var<V> gesture;
+    public final Expr gesture;
 
-    public Var<V> getGesture() {
-        return gesture;
-    }
-
-    private Apds9960GestureSensor(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> gesture) {
-        super(null, BlockTypeContainer.getByName("APDS9960_GESTURE"), properties, comment);
+    public Apds9960GestureSensor(BlocklyProperties properties, Expr gesture) {
+        super(properties, null);
         this.gesture = gesture;
         setReadOnly();
     }
 
-    public static <V> Apds9960GestureSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> gesture) {
-        return new Apds9960GestureSensor<>(properties, comment, gesture);
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
-        Var<V> gesture = helper.getVar(values, BlocklyConstants.VARIABLE_VALUE);
-        return Apds9960GestureSensor.make(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), gesture);
+        Expr gesture = helper.getVar(values, BlocklyConstants.VARIABLE_VALUE);
+        return new Apds9960GestureSensor(Jaxb2Ast.extractBlocklyProperties(block), gesture);
     }
 
     @Override

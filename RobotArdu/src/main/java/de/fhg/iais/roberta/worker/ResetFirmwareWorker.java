@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.PluginProperties;
 
@@ -17,7 +17,7 @@ public class ResetFirmwareWorker implements IWorker {
 
     @Override
     public void execute(Project project) {
-        IRobotFactory factory = project.getRobotFactory();
+        RobotFactory factory = project.getRobotFactory();
         PluginProperties properties = factory.getPluginProperties();
         final File source = new File(properties.getCompilerResourceDir() + "/" + project.getCompiledProgramPath() + "." + project.getBinaryFileExtension());
         final File dest = new File(properties.getTempDir() + project.getToken() + "/" + project.getProgramName() + "/target");

@@ -39,13 +39,7 @@ exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 StmtFlowCon[flow: BREAK]
 )StmtFlowCon[flow: BREAK]
 )
-DebugAction[value: StmtExpr [
-if Binary [EQ, NumConst[value: 24], Var [X]]
-,then
-exprStmt StringConst[value: Control Flow Nested Loops Test:success]
-,else
-exprStmt StringConst[value: ntrol Flow Nested Loops Test: FAIL]
-]]
+DebugAction[value: TernaryExpr[condition: Binary [EQ, NumConst[value: 24], Var [X]], thenPart: StringConst[value: Control Flow Nested Loops Test:success], elsePart: StringConst[value: ntrol Flow Nested Loops Test: FAIL]]]
 
 (repeat [FOREVER, BoolConst[value: true]]WaitStmt [
 (repeat [WAIT, BoolConst[value: true]]StmtFlowCon[flow: BREAK]

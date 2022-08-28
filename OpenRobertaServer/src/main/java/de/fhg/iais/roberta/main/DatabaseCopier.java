@@ -85,12 +85,11 @@ public class DatabaseCopier {
     @SuppressWarnings("unused")
     private void createDatabaseWithoutConstraints() {
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", DB_CONNECTION_COPY_CREATE);
-        Session nativeSession = sessionFactoryWrapper.getNativeSession();
-        DbSetup dbSetup = new DbSetup(nativeSession);
-        nativeSession.beginTransaction();
+        Session hibernateSession = sessionFactoryWrapper.getHibernateSession();
+        DbSetup dbSetup = new DbSetup(hibernateSession);
         dbSetup.sqlFile(null, null, DbSetup.DB_CREATE_TABLES_WITHOUT_CONSTRAINTS_SQL);
-        nativeSession.createSQLQuery("shutdown").executeUpdate();
-        nativeSession.close();
+        hibernateSession.createSQLQuery("shutdown").executeUpdate();
+        hibernateSession.close();
     }
 
     @SuppressWarnings("unused")

@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [2, COMPASS, CALIBRATE], UsedSensor [2, COMPASS, ANGLE], UsedSensor [2, COMPASS, COMPASS], UsedSensor [4, IRSEEKER, MODULATED], UsedSensor [4, IRSEEKER, UNMODULATED], UsedSensor [3, HT_COLOR, COLOUR], UsedSensor [3, HT_COLOR, LIGHT], UsedSensor [3, HT_COLOR, AMBIENTLIGHT], UsedSensor [3, HT_COLOR, RGB]]
+Actors: 
+[UsedActor [- EMPTY_PORT -, DISPLAY]]
+Methods: 
+[]

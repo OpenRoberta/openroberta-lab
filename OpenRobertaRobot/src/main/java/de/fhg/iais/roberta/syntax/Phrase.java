@@ -1,43 +1,58 @@
 package de.fhg.iais.roberta.syntax;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
+import de.fhg.iais.roberta.util.ast.AstFactory;
+import de.fhg.iais.roberta.util.ast.BlockDescriptor;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.ITransformerVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
 /**
- * the top class of all class used to represent the AST (abstract syntax tree) of a program. After construction an AST should be immutable. The logic to achieve
- * that is in this class. An object of a subclass of {@link Phrase} is initially writable, after the construction of the object has finished,
+ * the top class of all class used to represent the AST (abstract syntax tree) of a program. After construction an AST should be immutable.
+ * An object of a subclass of {@link Phrase} is initially writable, after the construction of the object has finished,
  * {@link #setReadOnly()} is called. This cannot be undone later. It is expected that all subclasses of {@link #Phrase} do the following:<br>
  * - if in construction phase, they should use {@link #mayChange()} to assert that.<br>
  * - if the construction has finished and {@link #setReadOnly()} has been called, they should use {@link #isReadOnly()} to assert their immutability.<br>
  * <br>
- * To find out which kind a {@link #Phrase}-object is use {@link #getKind()}
+ * To find out which kind a {@link #Phrase}-object is use {@link #getBlockDescriptor()}
  */
-abstract public class Phrase<V> {
+abstract public class Phrase {
+    private static final Logger LOG = LoggerFactory.getLogger(Phrase.class);
     private boolean readOnly = false;
-
-    private final BlocklyBlockProperties property;
-    private final BlocklyComment comment;
-    private final BlockType kind;
+    private final BlocklyProperties property;
+    private final BlockDescriptor blockDescriptor;
 
     private final NepoInfos infos = new NepoInfos(); // the content of the info object is MUTABLE !!!
 
     /**
-     * This constructor set the kind of the object used in the AST (abstract syntax tree). All possible kinds can be found in {@link BlockType}.
+     * This constructor set the kind of the object used in the AST (abstract syntax tree). All possible kinds can be found in {@link BlockDescriptor}.
      *
-     * @param kind of the the object used in AST,
      * @param comment that the user added to the block
      */
-    public Phrase(BlockType kind, BlocklyBlockProperties property, BlocklyComment comment) {
+    public Phrase(BlocklyProperties property) {
         Assert.isTrue(property != null, "block property is null!");
-        this.kind = kind;
+        this.blockDescriptor = AstFactory.getBlockDescriptor(this.getClass());
         this.property = property;
-        this.comment = comment;
+    }
+
+    /**
+     * only for ConfigurationsComponent and TODO: remove as fast as possible
+     *
+     * @param blockDescriptor
+     * @param property
+     * @param comment
+     */
+    public Phrase(BlockDescriptor blockDescriptor, BlocklyProperties property) {
+        Assert.isTrue(property != null, "block property is null!");
+        this.blockDescriptor = blockDescriptor;
+        this.property = property;
     }
 
     /**
@@ -62,21 +77,21 @@ abstract public class Phrase<V> {
     }
 
     /**
-     * @return the kind of the expression. See enum {@link BlockType} for all kinds possible<br>
+     * @return the block description of this phrase
      */
-    public final BlockType getKind() {
-        return this.kind;
-    }
-
-    public BlocklyBlockProperties getProperty() {
-        return this.property;
+    public final BlockDescriptor getKind() {
+        return this.blockDescriptor;
     }
 
     /**
-     * @return comment that the user added to the block
+     * @return true if name of this phrase (as found in its block descriptor) is equals to one of the names given as parameter
      */
-    public final BlocklyComment getComment() {
-        return this.comment;
+    public final boolean hasName(String... namesToCheck) {
+        return blockDescriptor.hasName(namesToCheck);
+    }
+
+    public BlocklyProperties getProperty() {
+        return this.property;
     }
 
     /**
@@ -98,7 +113,7 @@ abstract public class Phrase<V> {
      *
      * @param visitor to be used
      */
-    public final V accept(IVisitor<V> visitor) {
+    public final <V> V accept(IVisitor<V> visitor) {
         // LOG.info("{}", this);
         if ( getProperty().isDisabled() || (getProperty().isInTask() != null && getProperty().isInTask() == false) ) {
             return null;
@@ -113,18 +128,8 @@ abstract public class Phrase<V> {
      * @param visitor the modify visitor to use
      * @return a newly constructed phrase
      */
-    public final Phrase<Void> modify(ITransformerVisitor<?> visitor) {
-        // don't use accept, go over ALL blocks
-        @SuppressWarnings("unchecked")
-        V v = ((IVisitor<V>) visitor).visit(this);
-
-        if ( v instanceof Phrase ) {
-            @SuppressWarnings("unchecked")
-            Phrase<Void> voidPhrase = (Phrase<Void>) v;
-            return voidPhrase;
-        } else {
-            throw new DbcException("Template parameter of this phrase is not a Phrase!");
-        }
+    public final Phrase modify(ITransformerVisitor visitor) {
+        return visitor.visit(this);
     }
 
     /**

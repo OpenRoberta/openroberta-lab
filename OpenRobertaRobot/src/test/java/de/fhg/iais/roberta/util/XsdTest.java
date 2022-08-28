@@ -20,22 +20,22 @@ import de.fhg.iais.roberta.blockly.generated.Export;
 public class XsdTest {
     @Test
     public void test1() throws Exception {
-        Export jaxb = jaxb("/blockly.xsd", "n1.xml", Export.class);
+        Export jaxb = jaxb("/blockly.xsd", "/util/n1.xml", Export.class);
         Assert.assertNotNull(jaxb.getConfig());
         Assert.assertNotNull(jaxb.getProgram());
     }
 
     @Test(expected = SAXParseException.class)
     public void test2() throws Exception {
-        jaxb("/blockly.xsd", "n2.xml", Export.class);
+        jaxb("/blockly.xsd", "/util/n2.xml", Export.class);
     }
 
     @SuppressWarnings("unchecked")
     private <T> T jaxb(String xsdResourceName, String xmlResourceName, Class<T> clazz) throws Exception {
         SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         try (InputStream resourceXsd = XsdTest.class.getResourceAsStream(xsdResourceName);
-            InputStream resourceXml1 = XsdTest.class.getResourceAsStream(xmlResourceName);
-            InputStream resourceXml2 = XsdTest.class.getResourceAsStream(xmlResourceName)) //
+             InputStream resourceXml1 = XsdTest.class.getResourceAsStream(xmlResourceName);
+             InputStream resourceXml2 = XsdTest.class.getResourceAsStream(xmlResourceName)) //
         {
             Schema schema = sf.newSchema(new StreamSource(resourceXsd));
 

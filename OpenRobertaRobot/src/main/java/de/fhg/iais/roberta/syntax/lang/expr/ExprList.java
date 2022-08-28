@@ -5,44 +5,33 @@ import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 
-/**
- * This class allows to create list of {@link Expr} elements. Initially object from this class is writable. After adding all the elements to the list call
- * {@link #setReadOnly()}.
- */
-public class ExprList<V> extends Expr<V> {
-    private final List<Expr<V>> el = new ArrayList<Expr<V>>();
+@NepoBasic(name = "EXPR_LIST", category = "EXPR", blocklyNames = {})
+public final class ExprList extends Expr {
+    public final List<Expr> el = new ArrayList<Expr>();
 
-    private ExprList() {
-        super(BlockTypeContainer.getByName("EXPR_LIST"), BlocklyBlockProperties.make("1", "1", false, false, false, false, false, null, false, false), null);
+    public ExprList() {
+        super(new BlocklyProperties("1", "1", false, false, false, false, false, null, false, false, null));
     }
 
     /**
-     * @return writable object of type {@link ExprList}.
+     * Add new expression to the list.
      */
-    public static <V> ExprList<V> make() {
-        return new ExprList<V>();
-    }
-
-    /**
-     * Add new element to the list.
-     *
-     * @param expr
-     */
-    public final void addExpr(Expr<V> expr) {
+    public final void addExpr(Expr expr) {
         Assert.isTrue(mayChange() && expr != null && expr.isReadOnly());
         this.el.add(expr);
     }
 
     /**
-     * @return list with elements of type {@link Expr}.
+     * @return the expression list
      */
-    public final List<Expr<V>> get() {
+    public final List<Expr> get() {
         Assert.isTrue(isReadOnly());
         return Collections.unmodifiableList(this.el);
     }
@@ -66,7 +55,7 @@ public class ExprList<V> extends Expr<V> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
-        for ( Expr<?> expr : this.el ) {
+        for ( Expr expr : this.el ) {
             if ( first ) {
                 first = false;
             } else {

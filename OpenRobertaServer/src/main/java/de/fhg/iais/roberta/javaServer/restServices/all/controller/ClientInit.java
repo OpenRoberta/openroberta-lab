@@ -28,7 +28,7 @@ import org.slf4j.MDC;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.generated.restEntities.InitRequest;
 import de.fhg.iais.roberta.generated.restEntities.InitResponse;
 import de.fhg.iais.roberta.main.IIpToCountry;
@@ -36,7 +36,7 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
-import de.fhg.iais.roberta.util.Clock;
+import de.fhg.iais.roberta.util.basic.Clock;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
@@ -48,14 +48,14 @@ import eu.bitwalker.useragentutils.UserAgent;
 public class ClientInit {
     private static final Logger LOG = LoggerFactory.getLogger(ClientInit.class);
 
-    private final Map<String, IRobotFactory> robotPluginMap;
+    private final Map<String, RobotFactory> robotPluginMap;
     private final RobotCommunicator brickCommunicator;
     private final ServerProperties serverProperties;
     private final IIpToCountry ipToCountry;
 
     @Inject
     public ClientInit(
-        @Named("robotPluginMap") Map<String, IRobotFactory> robotPluginMap,
+        @Named("robotPluginMap") Map<String, RobotFactory> robotPluginMap,
         RobotCommunicator brickCommunicator,
         ServerProperties serverProperties,
         IIpToCountry ipToCountry) //

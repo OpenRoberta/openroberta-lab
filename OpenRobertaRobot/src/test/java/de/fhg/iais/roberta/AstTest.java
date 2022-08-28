@@ -5,17 +5,19 @@ import java.util.List;
 
 import org.junit.BeforeClass;
 
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.ast.AstFactory;
 
 public abstract class AstTest {
     private static final List<String> pluginDefines = new ArrayList<>();
     private static final List<String> pluginDefinesNewConf = new ArrayList<>();
-    protected static IRobotFactory testFactory;
-    protected static IRobotFactory testFactoryNewConf;
+    protected static RobotFactory testFactory;
+    protected static RobotFactory testFactoryNewConf;
 
     @BeforeClass
-    public static void setup() {
+    public static void setupForAllSubclasses() {
+        AstFactory.loadBlocks();
         String robotName = "test";
         String pwd = System.getProperty("user.dir");
         if ( pwd == null || pwd.isEmpty() || pwd.contains("OpenRobertaRobot") ) {

@@ -1,15 +1,16 @@
 package de.fhg.iais.roberta.visitor.validate;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
@@ -17,53 +18,64 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.visitor.EV3DevMethods;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDifferentialMotorVisitor;
 
 public abstract class DifferentialMotorValidatorAndCollectorVisitorEv3 extends MotorValidatorAndCollectorVisitor implements IDifferentialMotorVisitor<Void> {
 
     public DifferentialMotorValidatorAndCollectorVisitorEv3(
         ConfigurationAst robotConfiguration,
-        ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(robotConfiguration, beanBuilders);
     }
 
     @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
-        requiredComponentVisited(curveAction, curveAction.getParamLeft().getSpeed(), curveAction.getParamRight().getSpeed());
-        Optional.ofNullable(curveAction.getParamLeft().getDuration())
+    public Void visitCurveAction(CurveAction curveAction) {
+        if ( Objects.equals(robotConfiguration.getRobotName(), "ev3dev") ) {
+            /*
+             Only add the helper methods for "ev3dev". Following methods are needed for visitCurveAction:
+             -  EV3DevMethods.BUSY_WAIT, EV3DevMethods.CLAMP, EV3DevMethods.DRIVE_IN_CURVE, EV3DevMethods.SCALE_SPEED
+            */
+            usedMethodBuilder.addUsedMethod(EV3DevMethods.BUSY_WAIT);
+            usedMethodBuilder.addUsedMethod(EV3DevMethods.CLAMP);
+            usedMethodBuilder.addUsedMethod(EV3DevMethods.DRIVE_IN_CURVE);
+            usedMethodBuilder.addUsedMethod(EV3DevMethods.SCALE_SPEED);
+        }
+        requiredComponentVisited(curveAction, curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed());
+        Optional.ofNullable(curveAction.paramLeft.getDuration())
             .ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
-        Optional.ofNullable(curveAction.getParamRight().getDuration())
+        Optional.ofNullable(curveAction.paramRight.getDuration())
             .ifPresent(duration -> requiredComponentVisited(curveAction, duration.getValue()));
-        checkForZeroSpeedInCurve(curveAction.getParamLeft().getSpeed(), curveAction.getParamRight().getSpeed(), curveAction);
+        checkForZeroSpeedInCurve(curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed(), curveAction);
         checkLeftRightMotorPort(curveAction);
         addLeftAndRightMotorToUsedActors();
         return null;
     }
 
     @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
-        checkAndVisitMotionParam(turnAction, turnAction.getParam());
+    public Void visitTurnAction(TurnAction turnAction) {
+        checkAndVisitMotionParam(turnAction, turnAction.param);
         checkLeftRightMotorPort(turnAction);
         addLeftAndRightMotorToUsedActors();
         return null;
     }
 
     @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
-        checkAndVisitMotionParam(driveAction, driveAction.getParam());
+    public Void visitDriveAction(DriveAction driveAction) {
+        checkAndVisitMotionParam(driveAction, driveAction.param);
         checkLeftRightMotorPort(driveAction);
         addLeftAndRightMotorToUsedActors();
         return null;
     }
 
     @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+    public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         checkLeftRightMotorPort(stopAction);
         addLeftAndRightMotorToUsedActors();
         return null;
     }
 
-    private void checkLeftRightMotorPort(Phrase<Void> driveAction) {
+    private void checkLeftRightMotorPort(Phrase driveAction) {
         if ( hasTooManyMotors(driveAction) ) {
             return;
         }
@@ -75,7 +87,7 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitorEv3 extends M
         checkMotorRotationDirection(driveAction, leftMotor, rightMotor);
     }
 
-    protected boolean hasTooManyMotors(Phrase<Void> driveAction) {
+    protected boolean hasTooManyMotors(Phrase driveAction) {
         if ( this.robotConfiguration.getMotors(SC.RIGHT).size() > 1 ) {
             addErrorToPhrase(driveAction, "CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS");
             return true;
@@ -87,7 +99,7 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitorEv3 extends M
         return false;
     }
 
-    private void checkRightMotorPresenceAndRegulation(Phrase<Void> driveAction, ConfigurationComponent rightMotor) {
+    private void checkRightMotorPresenceAndRegulation(Phrase driveAction, ConfigurationComponent rightMotor) {
         if ( rightMotor == null ) {
             addErrorToPhrase(driveAction, "CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING");
         } else {
@@ -95,7 +107,7 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitorEv3 extends M
         }
     }
 
-    private void checkLeftMotorPresenceAndRegulation(Phrase<Void> driveAction, ConfigurationComponent leftMotor) {
+    private void checkLeftMotorPresenceAndRegulation(Phrase driveAction, ConfigurationComponent leftMotor) {
         if ( leftMotor == null ) {
             addErrorToPhrase(driveAction, "CONFIGURATION_ERROR_MOTOR_LEFT_MISSING");
         } else {
@@ -103,13 +115,13 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitorEv3 extends M
         }
     }
 
-    private void checkIfMotorRegulated(Phrase<Void> driveAction, ConfigurationComponent motor, String errorMsg) {
+    private void checkIfMotorRegulated(Phrase driveAction, ConfigurationComponent motor, String errorMsg) {
         if ( !motor.getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE) ) {
             addErrorToPhrase(driveAction, errorMsg);
         }
     }
 
-    private void checkMotorRotationDirection(Phrase<Void> driveAction, ConfigurationComponent leftMotor, ConfigurationComponent rightMotor) {
+    private void checkMotorRotationDirection(Phrase driveAction, ConfigurationComponent leftMotor, ConfigurationComponent rightMotor) {
         if ( (leftMotor == null) || (rightMotor == null) ) {
             return;
         }
@@ -120,10 +132,10 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitorEv3 extends M
         }
     }
 
-    private void checkForZeroSpeedInCurve(Expr<Void> speedLeft, Expr<Void> speedRight, Action<Void> action) {
+    private void checkForZeroSpeedInCurve(Expr speedLeft, Expr speedRight, Action action) {
         if ( speedLeft.getKind().hasName("NUM_CONST") && speedRight.getKind().hasName("NUM_CONST") ) {
-            double speedLeftNumConst = Double.parseDouble(((NumConst<Void>) speedLeft).getValue());
-            double speedRightNumConst = Double.parseDouble(((NumConst<Void>) speedRight).getValue());
+            double speedLeftNumConst = Double.parseDouble(((NumConst) speedLeft).value);
+            double speedRightNumConst = Double.parseDouble(((NumConst) speedRight).value);
 
             boolean bothMotorsHaveZeroSpeed = (Math.abs(speedLeftNumConst) < DOUBLE_EPS) && (Math.abs(speedRightNumConst) < DOUBLE_EPS);
             if ( bothMotorsHaveZeroSpeed ) {
@@ -134,10 +146,10 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitorEv3 extends M
 
     private void addLeftAndRightMotorToUsedActors() {
         Optional<String> optionalLeftPort = Optional.ofNullable(robotConfiguration.getFirstMotor(SC.LEFT))
-            .map(ConfigurationComponent::getUserDefinedPortName);
+            .map(configurationComponent1 -> configurationComponent1.userDefinedPortName);
 
         Optional<String> optionalRightPort = Optional.ofNullable(robotConfiguration.getFirstMotor(SC.RIGHT))
-            .map(ConfigurationComponent::getUserDefinedPortName);
+            .map(configurationComponent -> configurationComponent.userDefinedPortName);
 
         if ( optionalLeftPort.isPresent() && optionalRightPort.isPresent() ) {
             usedHardwareBuilder.addUsedActor(new UsedActor(optionalLeftPort.get(), SC.LARGE));

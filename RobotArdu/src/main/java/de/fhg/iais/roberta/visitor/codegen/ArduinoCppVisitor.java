@@ -11,12 +11,9 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
@@ -26,12 +23,14 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -46,6 +45,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
@@ -60,12 +61,12 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
      *
      * @param phrases to generate the code from
      */
-    public ArduinoCppVisitor(List<List<Phrase<Void>>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
+    public ArduinoCppVisitor(List<List<Phrase>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, brickConfiguration, beans);
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+    public Void visitShowTextAction(ShowTextAction showTextAction) {
         this.sb.append("_lcd_" + showTextAction.port + ".setCursor(");
         showTextAction.x.accept(this);
         this.sb.append(",");
@@ -83,7 +84,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         this.sb.append("_lcd_").append(clearDisplayAction.port);
         if ( clearDisplayAction.getProperty().getBlockType().contains("oledssd1306i2c") ) {
             this.sb.append(".clearDisplay();");
@@ -97,44 +98,44 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
 
     @SuppressWarnings("unchecked")
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
-        if ( !lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) ) {
-            this.sb.append("digitalWrite(_led_" + lightAction.getPort() + ", " + lightAction.getMode().getValues()[0] + ");");
+    public Void visitLightAction(LightAction lightAction) {
+        if ( !lightAction.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
+            this.sb.append("digitalWrite(_led_" + lightAction.port + ", " + lightAction.mode.getValues()[0] + ");");
         } else {
             Map<String, Object> channels = new LinkedHashMap<>();
             String redName;
             String greenName;
             String blueName;
             if ( this.configuration.getRobotName().equals("unowifirev2")
-                && ArduinoCppVisitor.isInternalRgbLed(this.configuration.getConfigurationComponent(lightAction.getPort())) ) {
+                && ArduinoCppVisitor.isInternalRgbLed(this.configuration.getConfigurationComponent(lightAction.port)) ) {
                 redName = "WiFiDrv::analogWrite(25";
                 greenName = "WiFiDrv::analogWrite(26";
                 blueName = "WiFiDrv::analogWrite(27";
             } else {
-                redName = "analogWrite(_led_red_" + lightAction.getPort();
-                greenName = "analogWrite(_led_green_" + lightAction.getPort();
-                blueName = "analogWrite(_led_blue_" + lightAction.getPort();
+                redName = "analogWrite(_led_red_" + lightAction.port;
+                greenName = "analogWrite(_led_green_" + lightAction.port;
+                blueName = "analogWrite(_led_blue_" + lightAction.port;
             }
-            if ( lightAction.getRgbLedColor().getClass().equals(ColorConst.class) ) {
-                String hexValue = ((ColorConst<Void>) lightAction.getRgbLedColor()).getHexValueAsString();
+            if ( lightAction.rgbLedColor.getClass().equals(ColorConst.class) ) {
+                String hexValue = ((ColorConst) lightAction.rgbLedColor).getHexValueAsString();
                 hexValue = hexValue.split("#")[1];
                 channels.put(redName, String.valueOf(Integer.decode("0x" + hexValue.substring(0, 2))));
                 channels.put(greenName, String.valueOf(Integer.decode("0x" + hexValue.substring(2, 4))));
                 channels.put(blueName, String.valueOf(Integer.decode("0x" + hexValue.substring(4, 6))));
-            } else if ( lightAction.getRgbLedColor().getClass().equals(Var.class) ) {
-                String tempVarName = "___" + ((Var<Void>) lightAction.getRgbLedColor()).getValue();
+            } else if ( lightAction.rgbLedColor.getClass().equals(Var.class) ) {
+                String tempVarName = "___" + ((Var) lightAction.rgbLedColor).name;
                 channels.put(redName, "RCHANNEL(" + tempVarName + ")");
                 channels.put(greenName, "GCHANNEL(" + tempVarName + ")");
                 channels.put(blueName, "BCHANNEL(" + tempVarName + ")");
             } else {
-                channels.put(redName, ((RgbColor<Void>) lightAction.getRgbLedColor()).getR());
-                channels.put(greenName, ((RgbColor<Void>) lightAction.getRgbLedColor()).getG());
-                channels.put(blueName, ((RgbColor<Void>) lightAction.getRgbLedColor()).getB());
+                channels.put(redName, ((RgbColor) lightAction.rgbLedColor).R);
+                channels.put(greenName, ((RgbColor) lightAction.rgbLedColor).G);
+                channels.put(blueName, ((RgbColor) lightAction.rgbLedColor).B);
             }
             channels.forEach((name, v) -> {
                 this.sb.append(name).append(", ");
-                if ( v instanceof Phrase<?> ) {
-                    ((Phrase<Void>) v).accept(this);
+                if ( v instanceof Phrase ) {
+                    ((Phrase) v).accept(this);
                 } else {
                     this.sb.append(v);
                 }
@@ -146,7 +147,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         String[] colors =
             {
                 "red",
@@ -161,11 +162,11 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        boolean step = motorOnAction.getParam().getDuration() != null;
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
+        boolean step = motorOnAction.param.getDuration() != null;
         if ( step ) {//step motor
             this.sb.append("_stepper_" + motorOnAction.getUserDefinedPort() + ".setSpeed(");
-            motorOnAction.getParam().getSpeed().accept(this);
+            motorOnAction.param.getSpeed().accept(this);
             this.sb.append(");");
             nlIndent();
             this.sb.append("_stepper_" + motorOnAction.getUserDefinedPort() + ".step(_SPU_" + motorOnAction.getUserDefinedPort() + "*(");
@@ -177,26 +178,26 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
             this.sb.append(");");
         } else {//servo motor
             this.sb.append("_servo_" + motorOnAction.getUserDefinedPort() + ".write(");
-            motorOnAction.getParam().getSpeed().accept(this);
+            motorOnAction.param.getSpeed().accept(this);
             this.sb.append(");");
         }
         return null;
     }
 
     @Override
-    public Void visitRelayAction(RelayAction<Void> relayAction) {
-        this.sb.append("digitalWrite(_relay_").append(relayAction.getPort()).append(", ").append(relayAction.getMode().getValues()[0]).append(");");
+    public Void visitRelayAction(RelayAction relayAction) {
+        this.sb.append("digitalWrite(_relay_").append(relayAction.port).append(", ").append(relayAction.mode.getValues()[0]).append(");");
         return null;
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor lightSensor) {
         this.sb.append("analogRead(_output_" + lightSensor.getUserDefinedPort() + ")/10.24");
         return null;
     }
 
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> button) {
+    public Void visitKeysSensor(KeysSensor button) {
         this.sb.append("digitalRead(_taster_" + button.getUserDefinedPort() + ")");
         return null;
     }
@@ -225,7 +226,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         this.sb
             .append("_getUltrasonicDistance(_trigger_")
             .append(ultrasonicSensor.getUserDefinedPort())
@@ -237,25 +238,25 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitMoistureSensor(MoistureSensor<Void> moistureSensor) {
+    public Void visitMoistureSensor(MoistureSensor moistureSensor) {
         this.sb.append("analogRead(_moisturePin_" + moistureSensor.getUserDefinedPort() + ")/10.24");
         return null;
     }
 
     @Override
-    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+    public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
         this.sb.append("map(analogRead(_TMP36_" + temperatureSensor.getUserDefinedPort() + "), 0, 410, -50, 150)");
         return null;
     }
 
     @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> potentiometer) {
+    public Void visitVoltageSensor(VoltageSensor potentiometer) {
         this.sb.append("((double)analogRead(_output_" + potentiometer.getUserDefinedPort() + "))*5/1024");
         return null;
     }
 
     @Override
-    public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
+    public Void visitHumiditySensor(HumiditySensor humiditySensor) {
         switch ( humiditySensor.getMode() ) {
             case SC.HUMIDITY:
                 this.sb.append("_dht_" + humiditySensor.getUserDefinedPort() + ".readHumidity()");
@@ -270,13 +271,13 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitDropSensor(DropSensor<Void> dropSensor) {
+    public Void visitDropSensor(DropSensor dropSensor) {
         this.sb.append("analogRead(_S_" + dropSensor.getUserDefinedPort() + ")/10.24");
         return null;
     }
 
     @Override
-    public Void visitPulseSensor(PulseSensor<Void> pulseSensor) {
+    public Void visitPulseSensor(PulseSensor pulseSensor) {
         this.sb.append("analogRead(_SensorPin_" + pulseSensor.getUserDefinedPort() + ")");
         return null;
     }
@@ -319,7 +320,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitRfidSensor(RfidSensor<Void> rfidSensor) {
+    public Void visitRfidSensor(RfidSensor rfidSensor) {
         if ( !this.configuration.getRobotName().equals("unowifirev2") ) { // TODO remove once rfid library is supported for unowifirev2
             switch ( rfidSensor.getMode() ) {
                 case SC.PRESENCE:
@@ -390,7 +391,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         switch ( infraredSensor.getMode() ) {
             case SC.PRESENCE:
                 this.sb.append("_getIRPresence(_irrecv_").append(infraredSensor.getUserDefinedPort()).append(")");
@@ -405,52 +406,56 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitMotionSensor(MotionSensor<Void> motionSensor) {
+    public Void visitMotionSensor(MotionSensor motionSensor) {
         this.sb.append("digitalRead(_output_" + motionSensor.getUserDefinedPort() + ")");
         return null;
     }
 
     @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
         this.sb.append("_imu_").append(accelerometerSensor.getUserDefinedPort()).append(".readFloatAccel").append(accelerometerSensor.getMode()).append("()");
         return null;
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
         this.sb.append("_imu_").append(gyroSensor.getUserDefinedPort()).append(".readFloatGyro").append(gyroSensor.getMode()).append("()");
         return null;
     }
 
+    public Void visitGyroReset(GyroReset gyroReset) {
+        throw new DbcException("GyroReset not implemented");
+    }
+
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         this.sb.append("_uBit.soundmotor.soundOn(");
-        this.sb.append(playNoteAction.getFrequency());
+        this.sb.append(playNoteAction.frequency);
         this.sb.append("); ").append("_uBit.sleep(");
-        this.sb.append(playNoteAction.getDuration());
+        this.sb.append(playNoteAction.duration);
         this.sb.append("); ").append("_uBit.soundmotor.soundOff();");
         return null;
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
+    public Void visitToneAction(ToneAction toneAction) {
         //9 - sound port
-        this.sb.append("tone(_buzzer_").append(toneAction.getPort()).append(", ");
-        toneAction.getFrequency().accept(this);
+        this.sb.append("tone(_buzzer_").append(toneAction.port).append(", ");
+        toneAction.frequency.accept(this);
         this.sb.append(", ");
-        toneAction.getDuration().accept(this);
+        toneAction.duration.accept(this);
         this.sb.append(");");
         nlIndent();
         this.sb.append("delay(");
-        toneAction.getDuration().accept(this);
+        toneAction.duration.accept(this);
         this.sb.append(");");
         return null;
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
+    public Void visitMainTask(MainTask mainTask) {
 
-        mainTask.getVariables().accept(this);
+        mainTask.variables.accept(this);
         nlIndent();
         generateConfigurationVariables();
         generateTimerVariables();
@@ -471,15 +476,15 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
             }
         }
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
-            if ( usedConfigurationBlock.getComponentType().equals(SC.ULTRASONIC) ) {
+            if ( usedConfigurationBlock.componentType.equals(SC.ULTRASONIC) ) {
                 createDistanceUltrasonicSensor();
                 nlIndent();
                 break;
             }
         }
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
-            if ( usedConfigurationBlock.getComponentType().equals(SC.RFID) && !this.configuration.getRobotName().equals("unowifirev2") ) { // TODO remove once rfid library is supported for unowifirev2
-                readRFIDData(usedConfigurationBlock.getUserDefinedPortName());
+            if ( usedConfigurationBlock.componentType.equals(SC.RFID) && !this.configuration.getRobotName().equals("unowifirev2") ) { // TODO remove once rfid library is supported for unowifirev2
+                readRFIDData(usedConfigurationBlock.userDefinedPortName);
                 nlIndent();
                 break;
             }
@@ -526,7 +531,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
         nlIndent();
         LinkedHashSet<String> headerFiles = new LinkedHashSet<>();
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
-            switch ( usedConfigurationBlock.getComponentType() ) {
+            switch ( usedConfigurationBlock.componentType ) {
                 case SC.HUMIDITY:
                     headerFiles.add("#include <DHT_sensor_library/DHT.h>");
                     break;
@@ -595,7 +600,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                     headerFiles.add("#include <Arduino_HTS221.h>");
                     break;
                 default:
-                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
+                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.componentType);
             }
         }
         for ( String header : headerFiles ) {
@@ -610,21 +615,21 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
 
     private void generateConfigurationSetup() {
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
-            switch ( usedConfigurationBlock.getComponentType() ) {
+            switch ( usedConfigurationBlock.componentType ) {
                 case SC.ROBOT:
                     break;
                 case SC.HUMIDITY:
-                    this.sb.append("_dht_" + usedConfigurationBlock.getUserDefinedPortName() + ".begin();");
+                    this.sb.append("_dht_" + usedConfigurationBlock.userDefinedPortName + ".begin();");
                     nlIndent();
                     break;
                 case SC.ULTRASONIC:
-                    this.sb.append("pinMode(_trigger_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
+                    this.sb.append("pinMode(_trigger_" + usedConfigurationBlock.userDefinedPortName + ", OUTPUT);");
                     nlIndent();
-                    this.sb.append("pinMode(_echo_" + usedConfigurationBlock.getUserDefinedPortName() + ", INPUT);");
+                    this.sb.append("pinMode(_echo_" + usedConfigurationBlock.userDefinedPortName + ", INPUT);");
                     nlIndent();
                     break;
                 case SC.MOTION:
-                    this.sb.append("pinMode(_output_" + usedConfigurationBlock.getUserDefinedPortName() + ", INPUT);");
+                    this.sb.append("pinMode(_output_" + usedConfigurationBlock.userDefinedPortName + ", INPUT);");
                     nlIndent();
                     break;
                 case SC.MOISTURE:
@@ -632,11 +637,11 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                 case SC.INFRARED:
                     this.sb.append("pinMode(13, OUTPUT);");
                     nlIndent();
-                    this.sb.append("_irrecv_" + usedConfigurationBlock.getUserDefinedPortName() + ".enableIRIn();");
+                    this.sb.append("_irrecv_" + usedConfigurationBlock.userDefinedPortName + ".enableIRIn();");
                     nlIndent();
                     break;
                 case SC.KEY:
-                    this.sb.append("pinMode(_taster_" + usedConfigurationBlock.getUserDefinedPortName() + ", INPUT);");
+                    this.sb.append("pinMode(_taster_" + usedConfigurationBlock.userDefinedPortName + ", INPUT);");
                     nlIndent();
                 case SC.LIGHT:
                     break;
@@ -652,29 +657,29 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                     if ( !this.configuration.getRobotName().equals("unowifirev2") ) { // TODO remove once rfid library is supported for unowifirev2
                         this.sb.append("SPI.begin();");
                         nlIndent();
-                        this.sb.append("_mfrc522_" + usedConfigurationBlock.getUserDefinedPortName() + ".PCD_Init();");
+                        this.sb.append("_mfrc522_" + usedConfigurationBlock.userDefinedPortName + ".PCD_Init();");
                         nlIndent();
                     }
                     break;
                 case SC.LCD:
-                    this.sb.append("_lcd_" + usedConfigurationBlock.getUserDefinedPortName() + ".begin(16, 2);");
+                    this.sb.append("_lcd_" + usedConfigurationBlock.userDefinedPortName + ".begin(16, 2);");
                     nlIndent();
                     break;
                 case SC.LCDI2C:
-                    this.sb.append("_lcd_" + usedConfigurationBlock.getUserDefinedPortName() + ".begin();");
+                    this.sb.append("_lcd_" + usedConfigurationBlock.userDefinedPortName + ".begin();");
                     nlIndent();
                     break;
                 case SC.OLEDSSD1306I2C:
-                    this.sb.append("_lcd_" + usedConfigurationBlock.getUserDefinedPortName() + ".begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);");
+                    this.sb.append("_lcd_" + usedConfigurationBlock.userDefinedPortName + ".begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);");
                     nlIndent();
-                    this.sb.append("_lcd_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".clearDisplay();");
+                    this.sb.append("_lcd_").append(usedConfigurationBlock.userDefinedPortName).append(".clearDisplay();");
                     nlIndent();
-                    this.sb.append("_lcd_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".setTextColor(SSD1306_WHITE);");
+                    this.sb.append("_lcd_").append(usedConfigurationBlock.userDefinedPortName).append(".setTextColor(SSD1306_WHITE);");
                     nlIndent();
                     break;
 
                 case SC.LED:
-                    this.sb.append("pinMode(_led_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
+                    this.sb.append("pinMode(_led_" + usedConfigurationBlock.userDefinedPortName + ", OUTPUT);");
                     nlIndent();
                     break;
                 case SC.RGBLED:
@@ -686,29 +691,29 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                         this.sb.append("WiFiDrv::pinMode(27, OUTPUT);");
                         nlIndent();
                     } else {
-                        this.sb.append("pinMode(_led_red_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
+                        this.sb.append("pinMode(_led_red_" + usedConfigurationBlock.userDefinedPortName + ", OUTPUT);");
                         nlIndent();
-                        this.sb.append("pinMode(_led_green_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
+                        this.sb.append("pinMode(_led_green_" + usedConfigurationBlock.userDefinedPortName + ", OUTPUT);");
                         nlIndent();
-                        this.sb.append("pinMode(_led_blue_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
+                        this.sb.append("pinMode(_led_blue_" + usedConfigurationBlock.userDefinedPortName + ", OUTPUT);");
                         nlIndent();
                     }
                     break;
                 case SC.BUZZER:
                     break;
                 case SC.RELAY:
-                    this.sb.append("pinMode(_relay_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
+                    this.sb.append("pinMode(_relay_" + usedConfigurationBlock.userDefinedPortName + ", OUTPUT);");
                     nlIndent();
                     break;
                 case SC.STEPMOTOR:
                     break;
                 case SC.SERVOMOTOR:
                     this.sb
-                        .append("_servo_" + usedConfigurationBlock.getUserDefinedPortName() + ".attach(" + usedConfigurationBlock.getProperty(SC.PULSE) + ");");
+                        .append("_servo_" + usedConfigurationBlock.userDefinedPortName + ".attach(" + usedConfigurationBlock.getProperty(SC.PULSE) + ");");
                     nlIndent();
                     break;
                 case SC.DIGITAL_PIN:
-                    this.sb.append("pinMode(_input_" + usedConfigurationBlock.getUserDefinedPortName() + ", INPUT");
+                    this.sb.append("pinMode(_input_" + usedConfigurationBlock.userDefinedPortName + ", INPUT");
                     if ( usedConfigurationBlock.getProperty("PIN_PULL").equals("PIN_PULL_UP") ) {
                         this.sb.append("_PULLUP");
                     }
@@ -716,17 +721,17 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                     nlIndent();
                     break;
                 case SC.ANALOG_PIN:
-                    this.sb.append("pinMode(_input_" + usedConfigurationBlock.getUserDefinedPortName() + ", INPUT);");
+                    this.sb.append("pinMode(_input_" + usedConfigurationBlock.userDefinedPortName + ", INPUT);");
                     nlIndent();
                     break;
                 case SC.ANALOG_INPUT:
                 case SC.DIGITAL_INPUT:
-                    this.sb.append("pinMode(_output_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
+                    this.sb.append("pinMode(_output_" + usedConfigurationBlock.userDefinedPortName + ", OUTPUT);");
                     nlIndent();
                     break;
                 case SC.GYRO:
                 case SC.ACCELEROMETER:
-                    this.sb.append("_imu_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".begin();");
+                    this.sb.append("_imu_").append(usedConfigurationBlock.userDefinedPortName).append(".begin();");
                     nlIndent();
                     break;
                 case SC.LSM9DS1:
@@ -746,15 +751,15 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                     nlIndent();
                     break;
                 default:
-                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
+                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.componentType);
             }
         }
     }
 
     private void generateConfigurationVariables() {
         for ( ConfigurationComponent cc : this.configuration.getConfigurationComponentsValues() ) {
-            String blockName = cc.getUserDefinedPortName();
-            switch ( cc.getComponentType() ) {
+            String blockName = cc.userDefinedPortName;
+            switch ( cc.componentType ) {
                 case SC.ROBOT:
                     break;
                 case SC.HUMIDITY:
@@ -926,22 +931,22 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                 case SC.HTS221:
                     break;
                 default:
-                    throw new DbcException("Configuration block is not supported: " + cc.getComponentType());
+                    throw new DbcException("Configuration block is not supported: " + cc.componentType);
             }
         }
     }
 
     @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
-        switch ( pinWriteValueAction.getMode() ) {
+    public Void visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
+        switch ( pinWriteValueAction.pinValue ) {
             case SC.ANALOG:
-                this.sb.append("analogWrite(_output_").append(pinWriteValueAction.getPort()).append(", (int)");
-                pinWriteValueAction.getValue().accept(this);
+                this.sb.append("analogWrite(_output_").append(pinWriteValueAction.port).append(", (int)");
+                pinWriteValueAction.value.accept(this);
                 this.sb.append(");");
                 break;
             case SC.DIGITAL:
-                this.sb.append("digitalWrite(_output_").append(pinWriteValueAction.getPort()).append(", (int)");
-                pinWriteValueAction.getValue().accept(this);
+                this.sb.append("digitalWrite(_output_").append(pinWriteValueAction.port).append(", (int)");
+                pinWriteValueAction.value.accept(this);
                 this.sb.append(");");
                 break;
             default:
@@ -951,7 +956,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
+    public Void visitPinGetValueSensor(PinGetValueSensor pinGetValueSensor) {
         switch ( pinGetValueSensor.getMode() ) {
             case SC.ANALOG:
                 this.sb.append("analogRead(_input_").append(pinGetValueSensor.getUserDefinedPort()).append(")");

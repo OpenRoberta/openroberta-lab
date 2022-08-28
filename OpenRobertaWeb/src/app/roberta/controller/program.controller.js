@@ -1,4 +1,3 @@
-import * as COMM from 'comm';
 import * as MSG from 'message';
 import * as LOG from 'log';
 import * as UTIL from 'util';
@@ -117,6 +116,7 @@ function initEvents() {
     });
     $('#tabProgram').onWrap('hide.bs.tab', function (e) {
         Blockly.hideChaff();
+        seen = false;
     });
     $('#tabProgram').onWrap('hidden.bs.tab', function (e) {
         blocklyWorkspace.setVisible(false);

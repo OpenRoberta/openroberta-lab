@@ -10,7 +10,7 @@ import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientConfiguration;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientPing;
@@ -30,13 +30,13 @@ import de.fhg.iais.roberta.util.UtilForREST;
 public class RobertaGuiceModule extends AbstractModule {
     private static final Logger LOG = LoggerFactory.getLogger(RobertaGuiceModule.class);
     private final ServerProperties serverProperties;
-    private final Map<String, IRobotFactory> robotPluginMap;
+    private final Map<String, RobotFactory> robotPluginMap;
     private final RobotCommunicator robotCommunicator;
     private final IIpToCountry ipToCountry;
 
     public RobertaGuiceModule(
         ServerProperties serverProperties,
-        Map<String, IRobotFactory> robotPluginMap,
+        Map<String, RobotFactory> robotPluginMap,
         RobotCommunicator robotCommunicator,
         IIpToCountry ipToCountry) {
         this.serverProperties = serverProperties;
@@ -66,7 +66,7 @@ public class RobertaGuiceModule extends AbstractModule {
 
         requestStaticInjection(UtilForREST.class);
 
-        bind(new TypeLiteral<Map<String, IRobotFactory>>() {
+        bind(new TypeLiteral<Map<String, RobotFactory>>() {
         }).annotatedWith(Names.named("robotPluginMap")).toInstance(this.robotPluginMap);
         bind(String.class).annotatedWith(Names.named("hibernate.config.xml")).toInstance("/hibernate-cfg.xml");
 

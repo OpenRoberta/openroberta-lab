@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.ProcessBuilder.Redirect;
-import java.lang.reflect.Constructor;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,7 +35,8 @@ import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -107,7 +107,7 @@ public class Util {
      * @param pluginDefines modifications of the plugin's properties as a list of "<pluginName>:<key>=<value>"
      * @return the factory for this plugin
      */
-    public static IRobotFactory configureRobotPlugin(String robotName, String resourceDir, String tempDir, List<String> pluginDefines) {
+    public static RobotFactory configureRobotPlugin(String robotName, String resourceDir, String tempDir, List<String> pluginDefines) {
         Properties basicPluginProperties = Util.loadProperties("classpath:/" + robotName + ".properties");
         if ( basicPluginProperties == null ) {
             throw new DbcException("robot plugin " + robotName + " has no property file " + robotName + ".properties -  Server does NOT start");
@@ -127,24 +127,15 @@ public class Util {
                 }
             }
         }
-        String pluginFactory = basicPluginProperties.getProperty("robot.plugin.factory");
-        if ( pluginFactory == null ) {
-            throw new DbcException("robot plugin " + robotName + " has no factory. Check the properties - Server does NOT start");
-        } else {
-            try {
-                PluginProperties pluginProperties = new PluginProperties(robotName, resourceDir, tempDir, basicPluginProperties);
-                @SuppressWarnings("unchecked")
-                Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) Util.class.getClassLoader().loadClass(pluginFactory);
-                Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(PluginProperties.class);
-                IRobotFactory factory = factoryConstructor.newInstance(pluginProperties);
-                return factory;
-            } catch ( Exception e ) {
-                throw new DbcException(
-                    " factory for robot plugin "
-                        + robotName
-                        + " could not be build. Plugin-jar not on the classpath? Invalid properties? Problems with validators? Server does NOT start",
-                    e);
-            }
+        try {
+            PluginProperties pluginProperties = new PluginProperties(robotName, resourceDir, tempDir, basicPluginProperties);
+            return new RobotFactory(pluginProperties);
+        } catch ( Exception e ) {
+            throw new DbcException(
+                " factory for robot plugin "
+                    + robotName
+                    + " could not be build. Plugin-jar not on the classpath? Invalid properties? Problems with validators? Server does NOT start",
+                e);
         }
     }
 
@@ -487,7 +478,7 @@ public class Util {
      * @param crosscompilerSourceForDebuggingOnly for logging if the crosscompiler fails. Allows debugging of erros in the code generators
      * @return true, when the crosscompiler succeeds; false, otherwise
      */
-    public static Pair<Boolean, String> runCrossCompiler(String[] executableWithParameters, String crosscompilerSourceForDebuggingOnly) {
+    public static Pair<Boolean, String> runCrossCompiler(String[] executableWithParameters, String crosscompilerSourceForDebuggingOnly, boolean isNativeEditorCode) {
         int ecode = -1;
         String crosscompilerResponse;
         try {
@@ -502,44 +493,53 @@ public class Util {
             crosscompilerResponse = sj.toString();
             ecode = p.waitFor();
             p.destroy();
+            if ( ecode != 0 ) {
+                Util.logCrosscompilerError(LOG, crosscompilerResponse, crosscompilerSourceForDebuggingOnly, isNativeEditorCode);
+                crosscompilerResponse = ""; // already logged above
+            }
+            return Pair.of(ecode == 0, crosscompilerResponse);
         } catch ( Exception e ) {
             crosscompilerResponse = "exception when calling the cross compiler";
             LOG.error(crosscompilerResponse, e);
-            ecode = -1;
+            return Pair.of(false, crosscompilerResponse);
         }
-        if ( ecode != 0 ) {
-            Util.logCrosscompilerError(LOG, crosscompilerResponse, crosscompilerSourceForDebuggingOnly);
-        }
-        return Pair.of(ecode == 0, crosscompilerResponse);
     }
 
     /**
-     * log that the cross compiler returned with an error - the error message<br>
-     * - the program, that was erroreneous
+     * log that the cross compiler returned with an error, but only if the source is not from the source code editor
      *
      * @param reporterLogger the logger for the class, to which the error was returned
      * @param crosscompilerResponse the response of the crosscompiler
      * @param crosscompilerSourceForDebuggingOnly the program, that produced the error
+     * @param isNativeEditorCode flag to distinguish error source. True: Source code editor, False: NEPO generated
      */
-    public static void logCrosscompilerError(Logger reporterLogger, String crosscompilerResponse, String crosscompilerSourceForDebuggingOnly) {
-        reporterLogger.info("crosscompilation of program failed. Messages logged to logger 'crosscompiler_error'");
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n***** cross compilation failed with response:\n").append(crosscompilerResponse);
-        sb.append("\n***** for program:\n").append(crosscompilerSourceForDebuggingOnly).append("\n*****");
-        LoggerFactory.getLogger("crosscompiler_error").info(sb.toString());
-
+    public static void logCrosscompilerError(
+        Logger reporterLogger,
+        String crosscompilerResponse,
+        String crosscompilerSourceForDebuggingOnly,
+        boolean isNativeEditorCode) //
+    {
+        if ( !isNativeEditorCode ) {
+            reporterLogger.error("crosscompilation of NEPO generated program failed. Messages are logged to logger 'crosscompiler_error'");
+            StringBuilder sb = new StringBuilder();
+            sb.append("\n***** cross compilation failed with response:\n").append(crosscompilerResponse);
+            sb.append("\n***** for program:\n").append(crosscompilerSourceForDebuggingOnly).append("\n*****");
+            LoggerFactory.getLogger("crosscompiler_error").info(sb.toString());
+        }
     }
 
     /**
      * transform the binary to a <b>base64 encoded hexadecimal</b> string
      *
      * @param path path to the file, which contains the binary generated by a crosscompiler
+     * @param optPrefix prefix to be prepended to the binary generated by a crosscompiler
      * @return the encoded binary
      */
-    public static final String getBase64EncodedHex(String path) {
+    public static final String getBase64EncodedHex(String path, String optPrefix) {
         try {
             String compiledHex = FileUtils.readFileToString(new File(path), "UTF-8");
             final Base64.Encoder urec = Base64.getEncoder();
+            compiledHex = optPrefix + compiledHex;
             compiledHex = urec.encodeToString(compiledHex.getBytes());
             return compiledHex;
         } catch ( IOException e ) {

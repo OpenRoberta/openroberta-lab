@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.worker.AbstractValidatorAndCollectorWorker;
 
 public class Ev3SimValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
     @Override
-    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         return new Ev3SimValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 }

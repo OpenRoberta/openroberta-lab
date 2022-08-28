@@ -469,13 +469,6 @@
                     <field name="VAR">W</field>
                 </block>
             </instance>
-            <instance x="221" y="125">
-                <block type="robConf_motor" id="2" intask="true">
-                    <field name="NAME">M</field>
-                    <field name="VAR">W</field>
-                    <field name="CONNECTOR">1</field>
-                </block>
-            </instance>
             <instance x="372" y="131">
                 <block type="robConf_gyro" id="f+fi:U5b8C-LJ-96G8r7" intask="true">
                     <field name="NAME">T2</field>

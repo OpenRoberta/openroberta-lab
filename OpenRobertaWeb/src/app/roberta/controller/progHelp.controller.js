@@ -1,6 +1,3 @@
-import * as MSG from 'message';
-import * as LOG from 'log';
-import * as UTIL from 'util';
 import * as GUISTATE_C from 'guiState.controller';
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
@@ -49,13 +46,13 @@ function initEvents() {
     $('#helpButton').off('click touchend');
     $('#helpButton').onWrap('click touchend', function (event) {
         if ($('#helpButton').is(':visible')) {
-            toggleHelp();
+            toggleHelp($(this));
         }
         return false;
     });
 }
 
-function toggleHelp() {
+function toggleHelp($button) {
     Blockly.hideChaff();
     if ($('#helpButton').hasClass('rightActive')) {
         $('#blockly').closeRightView();
@@ -71,7 +68,7 @@ function toggleHelp() {
         if (currentHelp != GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase()) {
             init();
         }
-        $('#blockly').openRightView('help', INITIAL_WIDTH, function () {
+        $button.openRightView($('#helpDiv'), INITIAL_WIDTH, function () {
             if (Blockly.selected) {
                 var block = Blockly.selected.type;
                 $('#' + block).addClass('selectedHelp');

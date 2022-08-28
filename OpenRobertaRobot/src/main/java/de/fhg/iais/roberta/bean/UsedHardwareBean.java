@@ -22,8 +22,8 @@ public class UsedHardwareBean implements IProjectBean {
 
     private List<String> globalVariables = new ArrayList<>();
     private List<String> declaredVariables = new ArrayList<>();
-    private List<VarDeclaration<Void>> visitedVars = new ArrayList<>();
-    private List<Method<Void>> userDefinedMethods = new ArrayList<>();
+    private List<VarDeclaration> visitedVars = new ArrayList<>();
+    private List<Method> userDefinedMethods = new ArrayList<>();
     private Set<String> markedVariablesAsGlobal = new HashSet<>();
     private boolean isProgramEmpty = false;
     private boolean isListsUsed = false;
@@ -35,11 +35,11 @@ public class UsedHardwareBean implements IProjectBean {
     private Set<String> usedImages = new HashSet<>();
     private Map<String, String[][]> usedIDImages = new HashMap<>();
 
-    public List<VarDeclaration<Void>> getVisitedVars() {
+    public List<VarDeclaration> getVisitedVars() {
         return this.visitedVars;
     }
 
-    public List<Method<Void>> getUserDefinedMethods() {
+    public List<Method> getUserDefinedMethods() {
         return this.userDefinedMethods;
     }
 
@@ -96,12 +96,12 @@ public class UsedHardwareBean implements IProjectBean {
             return this;
         }
 
-        public Builder addVisitedVariable(VarDeclaration<Void> visitedVariable) {
+        public Builder addVisitedVariable(VarDeclaration visitedVariable) {
             this.usedHardwareBean.visitedVars.add(visitedVariable);
             return this;
         }
 
-        public Builder addUserDefinedMethod(Method<Void> userDefinedMethod) {
+        public Builder addUserDefinedMethod(Method userDefinedMethod) {
             this.usedHardwareBean.userDefinedMethods.add(userDefinedMethod);
             return this;
         }

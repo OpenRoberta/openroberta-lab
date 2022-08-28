@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.javaServer.basics.TestConfiguration;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
@@ -44,7 +44,7 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
-import de.fhg.iais.roberta.util.Clock;
+import de.fhg.iais.roberta.util.basic.Clock;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util;
@@ -81,7 +81,7 @@ public class PerformanceUserIT {
 
     private String theProgramOfAllUserLol;
     private ExecutorService executorService;
-    private Map<String, IRobotFactory> robotPlugins = new HashMap<>();
+    private Map<String, RobotFactory> robotPlugins = new HashMap<>();
 
     @Before
     public void setupTest() throws Exception {
@@ -108,7 +108,7 @@ public class PerformanceUserIT {
     @After
     public void showResourceUsage() throws Exception {
         Thread.sleep(20000);
-        LOG.info("state of the db sessions:\n" + DbSession.getFullInfo());
+        LOG.info("state of the db sessions:\n" + DbSession.getInfoAboutOpenDbDessions());
         DbSession dbSession = newDbSession();
         BigInteger users = (BigInteger) dbSession.createSqlQuery("select count(*) from USER").uniqueResult();
         BigInteger programs = (BigInteger) dbSession.createSqlQuery("select count(*) from PROGRAM").uniqueResult();
@@ -130,7 +130,8 @@ public class PerformanceUserIT {
         boolean success = true;
         int terminatedWorkflows = 0;
         int nextFreeUserNumber = baseNumber + MAX_PARALLEL_USERS + 1;
-        start: while ( terminatedWorkflows < MAX_TOTAL_USERS ) {
+        start:
+        while ( terminatedWorkflows < MAX_TOTAL_USERS ) {
             for ( int i = 0; i < MAX_PARALLEL_USERS; i++ ) {
                 if ( futures[i].isDone() ) {
                     success = success && futures[i].get();
@@ -251,7 +252,7 @@ public class PerformanceUserIT {
                     } catch ( InterruptedException e ) {
                         // do nothing. Ok in this debug setting
                     }
-                    LOG.info(DbSession.getFullInfo());
+                    LOG.info(DbSession.getInfoAboutOpenDbDessions());
                 }
             }
         };

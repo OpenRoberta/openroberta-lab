@@ -34,7 +34,7 @@ public class SeleniumHelper {
         List<String> addr = Arrays.asList("server.ip=localhost", "server.port=1998");
         this.serverStarter = new ServerStarter("classpath:/openRoberta.propertiesxxx", addr);
         this.server = this.serverStarter.start(EMPTY_STRING_LIST);
-        Session session = this.serverStarter.getInjectorForTests().getInstance(SessionFactoryWrapper.class).getNativeSession();
+        Session session = this.serverStarter.getInjectorForTests().getInstance(SessionFactoryWrapper.class).getHibernateSession();
         new DbSetup(session).createEmptyDatabase();
         this.driver = SeleniumHelper.runBrowser(this.browserVisibility);
         this.port = this.server.getURI().getPort();
@@ -67,7 +67,7 @@ public class SeleniumHelper {
     }
 
     private void awaitTextReadyInElementReady() {
-        for ( int second = 0;; second++ ) {
+        for ( int second = 0; ; second++ ) {
             if ( second >= 60 ) {
                 Assert.fail("timeout");
             }

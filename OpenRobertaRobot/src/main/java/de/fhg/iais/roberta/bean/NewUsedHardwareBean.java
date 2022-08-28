@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 
 public class NewUsedHardwareBean implements IProjectBean {
     private final List<ConfigurationComponent> usedConfigurationComponents = new ArrayList<>();

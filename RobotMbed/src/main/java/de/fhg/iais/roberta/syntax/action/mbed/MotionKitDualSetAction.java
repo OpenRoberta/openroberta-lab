@@ -5,37 +5,23 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.syntax.BlockType;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents the <b>mbedActions_motionkit_dual_set</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate
- * code for setting the motor speed and type of movement connected on given port and turn the motor on.<br/>
- * <br/>
- */
-public final class MotionKitDualSetAction<V> extends Action<V> {
-    private final String directionLeft;
-    private final String directionRight;
+@NepoBasic(name = "MOTIONKIT_DUAL_SET_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_motionkit_dual_set"})
+public final class MotionKitDualSetAction extends Action {
+    public final String directionLeft;
+    public final String directionRight;
 
-    /**
-     * This constructor set the kind of the action object used in the AST (abstract syntax tree). All possible kinds can be found in {@link BlockType}.
-     *
-     * @param directionLeft the desired direction of the left motor
-     * @param directionRight the desired direction of the right motor
-     * @param properties of the block,
-     * @param comment of the user for the specific block
-     */
-    private MotionKitDualSetAction(String directionLeft, String directionRight, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("MOTIONKIT_DUAL_SET_ACTION"), properties, comment);
+    public MotionKitDualSetAction(BlocklyProperties properties, String directionLeft, String directionRight) {
+        super(properties);
         Assert.notNull(directionLeft);
         Assert.notNull(directionRight);
         this.directionLeft = directionLeft;
@@ -43,37 +29,17 @@ public final class MotionKitDualSetAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> MotionKitDualSetAction<V> make(String directionLeft, String directionRight, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MotionKitDualSetAction<>(directionLeft, directionRight, properties, comment);
-    }
-
-    public String getDirectionLeft() {
-        return this.directionLeft;
-    }
-
-    public String getDirectionRight() {
-        return this.directionRight;
-    }
-
     @Override
     public String toString() {
         return "MotionKitDualSetAction [" + this.directionLeft + ", " + this.directionRight + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         String directionL = Jaxb2Ast.extractField(fields, BlocklyConstants.DIRECTION_LEFT);
         String directionR = Jaxb2Ast.extractField(fields, BlocklyConstants.DIRECTION_RIGHT);
-        return MotionKitDualSetAction
-            .make(factory.getMode(directionL), factory.getMode(directionR), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new MotionKitDualSetAction(Jaxb2Ast.extractBlocklyProperties(block), factory.getMode(directionL), factory.getMode(directionR));
     }
 
     @Override

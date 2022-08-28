@@ -15,11 +15,7 @@ import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.syntax.BlockType;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
@@ -46,12 +42,16 @@ import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.ast.AstFactory;
+import de.fhg.iais.roberta.util.ast.BlockDescriptor;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-public class Jaxb2ProgramAst<V> {
-    private final IRobotFactory robotFactory;
+public class Jaxb2ProgramAst {
+    private final RobotFactory robotFactory;
     private int variableCounter = 0;
 
-    public Jaxb2ProgramAst(IRobotFactory factory) {
+    public Jaxb2ProgramAst(RobotFactory factory) {
         this.robotFactory = factory;
     }
 
@@ -59,7 +59,7 @@ public class Jaxb2ProgramAst<V> {
         return this.robotFactory.getBlocklyDropdownFactory();
     }
 
-    public IRobotFactory getRobotFactory() {
+    public RobotFactory getRobotFactory() {
         return this.robotFactory;
     }
 
@@ -82,19 +82,19 @@ public class Jaxb2ProgramAst<V> {
      *
      * @param set the BlockSet to transform
      */
-    public ProgramAst<V> blocks2Ast(BlockSet set) {
-        ProgramAst.Builder<V> builder =
-                new ProgramAst.Builder<V>()
-                        .setRobotType(set.getRobottype())
-                        .setXmlVersion(set.getXmlversion())
-                        .setDescription(set.getDescription())
-                        .setTags(set.getTags());
+    public ProgramAst blocks2Ast(BlockSet set) {
+        ProgramAst.Builder builder =
+            new ProgramAst.Builder()
+                .setRobotType(set.getRobottype())
+                .setXmlVersion(set.getXmlversion())
+                .setDescription(set.getDescription())
+                .setTags(set.getTags());
 
         List<Instance> instances = set.getInstance();
         for ( Instance instance : instances ) {
             List<Block> blocks = instance.getBlock();
-            Location<V> location = Location.make(instance.getX(), instance.getY());
-            List<Phrase<V>> range = new ArrayList<>();
+            Location location = new Location(instance.getX(), instance.getY());
+            List<Phrase> range = new ArrayList();
             range.add(location);
             for ( Block block : blocks ) {
                 range.add(blockToAST(block));
@@ -110,14 +110,14 @@ public class Jaxb2ProgramAst<V> {
      * @param block to be transformed
      * @return corresponding AST object
      */
-    private Phrase<V> blockToAST(Block block) {
+    private Phrase blockToAST(Block block) {
         if ( block == null ) {
             throw new DbcException("Invalid null block");
         }
         String type = block.getType().trim().toLowerCase();
-        BlockType matchingBlockType = BlockTypeContainer.getByBlocklyName(type);
-        Assert.notNull(matchingBlockType, "Invalid Block: " + block.getType());
-        String className = matchingBlockType.getAstClass().getName();
+        BlockDescriptor matchingBlockDescriptor = AstFactory.getByBlocklyName(type);
+        Assert.notNull(matchingBlockDescriptor, "Invalid Block: " + block.getType());
+        String className = matchingBlockDescriptor.getAstClass().getName();
         try {
             Class<?> astClass = Class.forName(className);
             if ( AnnotationHelper.isNepoAnnotatedClass(astClass) ) {
@@ -130,16 +130,16 @@ public class Jaxb2ProgramAst<V> {
         }
     }
 
-    private Phrase<V> block2phraseWithOldJaxbToAst(Block block, Class<?> astClass) {
+    private Phrase block2phraseWithOldJaxbToAst(Block block, Class<?> astClass) {
         java.lang.reflect.Method method = null;
         try {
             method = astClass.getMethod("jaxbToAst", Block.class);
         } catch ( NoSuchMethodException | SecurityException e ) {
         }
-        if (method != null) {
+        if ( method != null ) {
             try {
-                return (Phrase<V>) method.invoke(null, block);
-            } catch (IllegalAccessException |InvocationTargetException e) {
+                return (Phrase) method.invoke(null, block);
+            } catch ( IllegalAccessException | InvocationTargetException e ) {
                 throw new DbcException("Could not invoke the static method jaxbToAst(Block) for AST class " + astClass.getSimpleName(), e);
             }
         }
@@ -147,10 +147,10 @@ public class Jaxb2ProgramAst<V> {
             method = astClass.getMethod("jaxbToAst", Block.class, Jaxb2ProgramAst.class);
         } catch ( NoSuchMethodException | SecurityException e ) {
         }
-        if (method != null) {
+        if ( method != null ) {
             try {
-                return (Phrase<V>) method.invoke(null, block, this);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+                return (Phrase) method.invoke(null, block, this);
+            } catch ( IllegalAccessException | InvocationTargetException e ) {
                 throw new DbcException("Could not invoke the static method jaxbToAst(Block,Jaxb2ProgramAst) for AST class " + astClass.getSimpleName(), e);
             }
         }
@@ -166,11 +166,11 @@ public class Jaxb2ProgramAst<V> {
      * @param operationType performed on the exprParam
      * @return AST unary expression object
      */
-    public Phrase<V> blockToUnaryExpr(Block block, ExprParam exprParam, String operationType) {
+    public Phrase blockToUnaryExpr(Block block, ExprParam exprParam, String operationType) {
         String op = Jaxb2Ast.getOperation(block, operationType);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
-        Phrase<V> expr = extractValue(values, exprParam);
-        return Unary.make(Unary.Op.get(op), Jaxb2Ast.convertPhraseToExpr(expr), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        Phrase expr = extractValue(values, exprParam);
+        return new Unary(Unary.Op.get(op), Jaxb2Ast.convertPhraseToExpr(expr), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     /**
@@ -184,23 +184,16 @@ public class Jaxb2ProgramAst<V> {
      * @param operationType of the expression
      * @return AST binary expression object
      */
-    public Binary<V> blockToBinaryExpr(Block block, ExprParam leftExpr, ExprParam rightExpr, String operationType) {
+    public Binary blockToBinaryExpr(Block block, ExprParam leftExpr, ExprParam rightExpr, String operationType) {
         String op = Jaxb2Ast.getOperation(block, operationType);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
-        Phrase<V> left = extractValue(values, leftExpr);
-        Phrase<V> right = extractValue(values, rightExpr);
+        Phrase left = extractValue(values, leftExpr);
+        Phrase right = extractValue(values, rightExpr);
         String operationRange = "";
         if ( block.getMutation() != null && block.getMutation().getOperatorRange() != null ) {
             operationRange = block.getMutation().getOperatorRange();
         }
-        return Binary
-            .make(
-                Binary.Op.get(op),
-                Jaxb2Ast.convertPhraseToExpr(left),
-                Jaxb2Ast.convertPhraseToExpr(right),
-                operationRange,
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block));
+        return new Binary(Binary.Op.get(op), Jaxb2Ast.convertPhraseToExpr(left), Jaxb2Ast.convertPhraseToExpr(right), operationRange, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     /**
@@ -213,8 +206,8 @@ public class Jaxb2ProgramAst<V> {
      * @param exprParams that are extracted from the block
      * @return list of parameters represented with the {@link Expr} class.
      */
-    public List<Expr<V>> extractExprParameters(Block block, List<ExprParam> exprParams) {
-        List<Expr<V>> params = new ArrayList<>();
+    public List<Expr> extractExprParameters(Block block, List<ExprParam> exprParams) {
+        List<Expr> params = new ArrayList();
         List<Value> values = Jaxb2Ast.extractValues(block, (short) exprParams.size());
         for ( ExprParam exprParam : exprParams ) {
             params.add(Jaxb2Ast.convertPhraseToExpr(extractValue(values, exprParam)));
@@ -232,13 +225,13 @@ public class Jaxb2ProgramAst<V> {
      * @param _elseIf number of else if's
      * @return if statement object from the AST representation
      */
-    public Phrase<V> blocksToIfStmt(Block block, int _else, int _elseIf) {
-        List<Expr<V>> exprsList = new ArrayList<>();
-        List<StmtList<V>> thenList = new ArrayList<>();
-        StmtList<V> elseList = null;
+    public Phrase blocksToIfStmt(Block block, int _else, int _elseIf) {
+        List<Expr> exprsList = new ArrayList();
+        List<StmtList> thenList = new ArrayList();
+        StmtList elseList = null;
 
-        List<Value> values = new ArrayList<>();
-        List<Statement> statements = new ArrayList<>();
+        List<Value> values = new ArrayList();
+        List<Statement> statements = new ArrayList();
 
         if ( _else + _elseIf != 0 ) {
             List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();
@@ -253,16 +246,18 @@ public class Jaxb2ProgramAst<V> {
             if ( _else != 0 && i == _elseIf + _else ) {
                 elseList = extractStatement(statements, BlocklyConstants.ELSE);
             } else {
-                Phrase<V> p = extractValue(values, new ExprParam(BlocklyConstants.IF + i, BlocklyType.BOOLEAN));
+                Phrase p = extractValue(values, new ExprParam(BlocklyConstants.IF + i, BlocklyType.BOOLEAN));
                 exprsList.add(Jaxb2Ast.convertPhraseToExpr(p));
                 thenList.add(extractStatement(statements, BlocklyConstants.DO + i));
             }
         }
 
         if ( _else != 0 ) {
-            return IfStmt.make(exprsList, thenList, elseList, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), _else, _elseIf);
+            return new IfStmt(Jaxb2Ast.extractBlocklyProperties(block), exprsList, thenList, elseList, _else, _elseIf);
         }
-        return IfStmt.make(exprsList, thenList, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), _else, _elseIf);
+        StmtList elseList1 = new StmtList();
+        elseList1.setReadOnly();
+        return new IfStmt(Jaxb2Ast.extractBlocklyProperties(block), exprsList, thenList, elseList1, _else, _elseIf);
     }
 
     /**
@@ -272,7 +267,7 @@ public class Jaxb2ProgramAst<V> {
      * @param defVal if the expression is missing
      * @return list of expressions
      */
-    public ExprList<V> blockToExprList(Block block, BlocklyType defVal) {
+    public ExprList blockToExprList(Block block, BlocklyType defVal) {
         int items = 0;
         if ( block.getMutation().getItems() != null ) {
             items = block.getMutation().getItems().intValue();
@@ -290,10 +285,10 @@ public class Jaxb2ProgramAst<V> {
      * @param arguments to be transformed
      * @return list of AST expressions
      */
-    public static <V> ExprList<V> argumentsToExprList(List<Arg> arguments) {
-        ExprList<V> parameters = ExprList.make();
+    public static  ExprList argumentsToExprList(List<Arg> arguments) {
+        ExprList parameters = new ExprList();
         for ( Arg arg : arguments ) {
-            Var<V> parametar = Var.make(BlocklyType.get(arg.getType()), arg.getName(), BlocklyBlockProperties.make("1", "1"), null);
+            Var parametar = new Var(BlocklyType.get(arg.getType()), arg.getName(), BlocklyProperties.make("PARAMETER", "1"));
             parameters.addExpr(parametar);
         }
         parameters.setReadOnly();
@@ -307,8 +302,8 @@ public class Jaxb2ProgramAst<V> {
      * @param nItems that should be converted
      * @param name of the values
      */
-    public ExprList<V> valuesToExprList(List<Value> values, BlocklyType[] parametersTypes, int nItems, String name) {
-        ExprList<V> exprList = ExprList.make();
+    public ExprList valuesToExprList(List<Value> values, BlocklyType[] parametersTypes, int nItems, String name) {
+        ExprList exprList = new ExprList();
         for ( int i = 0; i < nItems; i++ ) {
             exprList.addExpr(Jaxb2Ast.convertPhraseToExpr(extractValue(values, new ExprParam(name + i, parametersTypes[i]))));
         }
@@ -323,13 +318,13 @@ public class Jaxb2ProgramAst<V> {
      * @param param with name of the value and default value if the value is missing (see. {@link ExprParam})
      * @return AST object or {@link EmptyExpr} if the value is missing
      */
-    public Phrase<V> extractValue(List<Value> values, ExprParam param) {
+    public Phrase extractValue(List<Value> values, ExprParam param) {
         for ( Value value : values ) {
             if ( value.getName().equals(param.getName()) ) {
                 return extractBlock(value);
             }
         }
-        return EmptyExpr.make(param.getDefaultValue());
+        return new EmptyExpr(param.getDefaultValue());
     }
 
     /**
@@ -338,8 +333,8 @@ public class Jaxb2ProgramAst<V> {
      * @param statements as source
      * @param stmtName to be extracted
      */
-    public StmtList<V> extractStatement(List<Statement> statements, String stmtName) {
-        StmtList<V> stmtList = StmtList.make();
+    public StmtList extractStatement(List<Statement> statements, String stmtName) {
+        StmtList stmtList = new StmtList();
         for ( Statement statement : statements ) {
             if ( statement.getName().equals(stmtName) ) {
                 return blocksToStmtList(statement.getBlock());
@@ -355,24 +350,24 @@ public class Jaxb2ProgramAst<V> {
      * @param statements as source
      * @param stmtName of statement to be extracted
      */
-    public ExprList<V> statementsToMethodParameterDeclaration(List<Statement> statements, String stmtName) {
+    public ExprList statementsToMethodParameterDeclaration(List<Statement> statements, String stmtName) {
         for ( Statement statement : statements ) {
             if ( statement.getName().equals(stmtName) ) {
                 return blocksToMethodParameterDeclaration(statement.getBlock());
             }
         }
         // Parameter list is empty
-        ExprList<V> exprList = ExprList.make();
+        ExprList exprList = new ExprList();
         exprList.setReadOnly();
         return exprList;
     }
 
-    private ExprList<V> blocksToMethodParameterDeclaration(List<Block> exprBolcks) {
-        ExprList<V> exprList = ExprList.make();
+    private ExprList blocksToMethodParameterDeclaration(List<Block> exprBolcks) {
+        ExprList exprList = new ExprList();
         for ( Block exb : exprBolcks ) {
-            Phrase<V> p = blockToAST(exb);
-            if (p instanceof VarDeclaration) {
-                exprList.addExpr((VarDeclaration<V>)p);
+            Phrase p = blockToAST(exb);
+            if ( p instanceof VarDeclaration ) {
+                exprList.addExpr((VarDeclaration) p);
             } else {
                 throw new DbcException("invalid delaration of parameters of a function");
             }
@@ -382,50 +377,44 @@ public class Jaxb2ProgramAst<V> {
     }
 
     /**
-     * get from a value list (a XML substructure) the phrase matching<br>
-     * - a variable - a given name
+     * get from a value list (a XML substructure) the phrase matching a variable.<br>
+     * Returning null is dangerous. Currently it is needed for the checking of empty fields of nano33ble
      *
      * @param values
-     * @param name
-     * @return the Var<V> phrase; throw exception, if not found
+     * @param name name of the variable
+     * @return the Var phrase; return null, if not found
      */
-    public Var<V> getVar(List<Value> values, String name) {
-        Phrase<V> p = extractValue(values, new ExprParam(name, BlocklyType.NUMBER));
+    public Expr getVar(List<Value> values, String name) {
+        Phrase p = extractValue(values, new ExprParam(name, BlocklyType.NUMBER));
         if ( p instanceof Var ) {
-            return (Var<V>) p;
+            return (Var) p;
         } else {
-            throw new DbcException("only variables allowed for field " + name);
+            return new EmptyExpr(BlocklyType.NUMBER);
         }
     }
 
-    public Phrase<V> extractRepeatStatement(Block block, Phrase<V> expr, String mode, String location, int mutation) {
+    public Phrase extractRepeatStatement(Block block, Phrase expr, String mode, String location, int mutation) {
         List<Statement> statements = Jaxb2Ast.extractStatements(block, (short) mutation);
-        StmtList<V> stmtList = extractStatement(statements, location);
-        return RepeatStmt
-                .make(
-                        RepeatStmt.Mode.get(mode),
-                        Jaxb2Ast.convertPhraseToExpr(expr),
-                        stmtList,
-                        Jaxb2Ast.extractBlockProperties(block),
-                        Jaxb2Ast.extractComment(block));
+        StmtList stmtList = extractStatement(statements, location);
+        return new RepeatStmt(RepeatStmt.Mode.get(mode), Jaxb2Ast.convertPhraseToExpr(expr), stmtList, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
-    private Phrase<V> extractBlock(Value value) {
+    private Phrase extractBlock(Value value) {
         Shadow shadow = value.getShadow();
         Block block = value.getBlock();
         if ( shadow != null ) {
             Block shadowBlock = Jaxb2Ast.shadow2block(shadow);
             if ( block != null ) {
-                return ShadowExpr.make(Jaxb2Ast.convertPhraseToExpr(blockToAST(shadowBlock)), Jaxb2Ast.convertPhraseToExpr(blockToAST(block)));
+                return new ShadowExpr(Jaxb2Ast.convertPhraseToExpr(blockToAST(shadowBlock)), Jaxb2Ast.convertPhraseToExpr(blockToAST(block)));
             }
-            return ShadowExpr.make(Jaxb2Ast.convertPhraseToExpr(blockToAST(shadowBlock)));
+            return new ShadowExpr(Jaxb2Ast.convertPhraseToExpr(blockToAST(shadowBlock)), null);
         } else {
             return blockToAST(block);
         }
     }
 
-    private StmtList<V> blocksToStmtList(List<Block> statementBolcks) {
-        StmtList<V> stmtList = StmtList.make();
+    private StmtList blocksToStmtList(List<Block> statementBolcks) {
+        StmtList stmtList = new StmtList();
         for ( Block sb : statementBolcks ) {
             convertPhraseToStmt(stmtList, sb);
         }
@@ -433,24 +422,24 @@ public class Jaxb2ProgramAst<V> {
         return stmtList;
     }
 
-    private void convertPhraseToStmt(StmtList<V> stmtList, Block sb) {
-        Phrase<V> p;
+    private void convertPhraseToStmt(StmtList stmtList, Block sb) {
+        Phrase p;
 
         p = blockToAST(sb);
 
-        Stmt<V> stmt;
+        Stmt stmt;
         if ( p.getKind().getCategory() == Category.EXPR ) {
-            stmt = ExprStmt.make((Expr<V>) p);
+            stmt = new ExprStmt((Expr) p);
         } else if ( p.getKind().getCategory() == Category.ACTOR ) {
-            stmt = ActionStmt.make((Action<V>) p);
+            stmt = new ActionStmt((Action) p);
         } else if ( p.getKind().getCategory() == Category.SENSOR ) {
-            stmt = SensorStmt.make((Sensor<V>) p);
+            stmt = new SensorStmt((Sensor) p);
         } else if ( p.getKind().getCategory() == Category.FUNCTION ) {
-            stmt = FunctionStmt.make((Function<V>) p);
+            stmt = new FunctionStmt((Function) p);
         } else if ( p.getKind().getCategory() == Category.METHOD ) {
-            stmt = MethodStmt.make((Method<V>) p);
+            stmt = new MethodStmt((Method) p);
         } else {
-            stmt = (Stmt<V>) p;
+            stmt = (Stmt) p;
         }
         stmtList.addStmt(stmt);
     }

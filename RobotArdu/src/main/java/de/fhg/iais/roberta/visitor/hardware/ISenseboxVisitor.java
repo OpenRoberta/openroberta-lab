@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -25,54 +26,55 @@ import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IPinVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.ISerialVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISimpleSoundVisitor;
 
-public interface ISenseboxVisitor<V> extends IDisplayVisitor<V>, ISimpleSoundVisitor<V>, ILightVisitor<V>, ISerialVisitor<V>, IPinVisitor<V>, INeuralNetworkVisitor<V>, INano33BleSensorVisitor<V>, IHardwareVisitor<V> {
+public interface ISenseboxVisitor<V> extends IDisplayVisitor<V>, ISimpleSoundVisitor<V>, ILightVisitor<V>, IPinVisitor<V>, INeuralNetworkVisitor<V>, IHardwareVisitor<V> {
 
-    default V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
-        return sensorGetSample.getSensor().accept(this);
+    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
+        return sensorGetSample.sensor.accept(this);
     }
 
-    V visitAccelerometerSensor(AccelerometerSensor<V> accelerometerSensor);
+    V visitAccelerometerSensor(AccelerometerSensor accelerometerSensor);
 
-    V visitCompassSensor(CompassSensor<V> compassSensor);
+    V visitCompassSensor(CompassSensor compassSensor);
 
-    V visitEnvironmentalSensor(EnvironmentalSensor<V> environmentalSensor);
+    V visitEnvironmentalSensor(EnvironmentalSensor environmentalSensor);
 
-    V visitGpsSensor(GpsSensor<V> gpsSensor);
+    V visitGpsSensor(GpsSensor gpsSensor);
 
-    V visitGyroSensor(GyroSensor<V> gyroSensor);
+    V visitGyroSensor(GyroSensor gyroSensor);
 
-    V visitHumiditySensor(HumiditySensor<V> humiditySensor);
+    V visitGyroReset(GyroReset gyroReset);
 
-    V visitKeysSensor(KeysSensor<V> keysSensor);
+    V visitHumiditySensor(HumiditySensor humiditySensor);
 
-    V visitMotorOnAction(MotorOnAction<V> motorOnAction);
+    V visitKeysSensor(KeysSensor keysSensor);
 
-    V visitParticleSensor(ParticleSensor<V> particleSensor);
+    V visitMotorOnAction(MotorOnAction motorOnAction);
 
-    V visitPinGetValueSensor(PinGetValueSensor<V> pinGetValueSensor);
+    V visitParticleSensor(ParticleSensor particleSensor);
 
-    V visitPlotClearAction(PlotClearAction<V> plotClearAction);
+    V visitPinGetValueSensor(PinGetValueSensor pinGetValueSensor);
 
-    V visitPlotPointAction(PlotPointAction<V> plotPointAction);
+    V visitPlotClearAction(PlotClearAction plotClearAction);
 
-    V visitRelayAction(RelayAction<V> relayAction);
+    V visitPlotPointAction(PlotPointAction plotPointAction);
 
-    V visitSendDataAction(SendDataAction<V> sendDataAction);
+    V visitRelayAction(RelayAction relayAction);
 
-    V visitSoundSensor(SoundSensor<V> soundSensor);
+    V visitSendDataAction(SendDataAction sendDataAction);
 
-    V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor);
+    V visitSoundSensor(SoundSensor soundSensor);
 
-    V visitTimerSensor(TimerSensor<V> timerSensor);
+    V visitTemperatureSensor(TemperatureSensor temperatureSensor);
 
-    V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor);
+    V visitTimerSensor(TimerSensor timerSensor);
 
-    V visitVemlLightSensor(VemlLightSensor<V> vemlLightSensor);
+    V visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor);
 
-    V visitLightSensor(LightSensor<V> lightSensor);
+    V visitVemlLightSensor(VemlLightSensor vemlLightSensor);
 
-    V visitVoltageSensor(VoltageSensor<V> voltageSensor);
+    V visitLightSensor(LightSensor lightSensor);
+
+    V visitVoltageSensor(VoltageSensor voltageSensor);
 }

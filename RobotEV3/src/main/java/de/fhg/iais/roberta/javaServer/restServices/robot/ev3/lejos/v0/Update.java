@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.AliveData;
 
 /**
@@ -31,7 +31,7 @@ public class Update {
     private final String robotUpdateResourcesDir;
 
     @Inject
-    public Update(@Named("robotPluginMap") Map<String, IRobotFactory> robotPluginMap) {
+    public Update(@Named("robotPluginMap") Map<String, RobotFactory> robotPluginMap) {
         this.robotUpdateResourcesDir = robotPluginMap.get("ev3lejosv0").getPluginProperties().getUpdateDir();
     }
 

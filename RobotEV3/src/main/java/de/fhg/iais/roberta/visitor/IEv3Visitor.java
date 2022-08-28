@@ -5,6 +5,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
@@ -19,33 +20,35 @@ import de.fhg.iais.roberta.visitor.hardware.actor.IBluetoothVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISpeechVisitor;
 
 public interface IEv3Visitor<V> extends IActors4AutonomousDriveRobots<V>, IBluetoothVisitor<V>, ISpeechVisitor<V> {
-    V visitShowPictureAction(ShowPictureAction<V> showPictureAction);
+    V visitShowPictureAction(ShowPictureAction showPictureAction);
 
-    V visitKeysSensor(KeysSensor<V> keysSensor);
+    V visitKeysSensor(KeysSensor keysSensor);
 
-    V visitColorSensor(ColorSensor<V> colorSensor);
+    V visitColorSensor(ColorSensor colorSensor);
 
-    V visitSoundSensor(SoundSensor<V> soundSensor);
+    V visitSoundSensor(SoundSensor soundSensor);
 
-    V visitEncoderSensor(EncoderSensor<V> encoderSensor);
+    V visitEncoderSensor(EncoderSensor encoderSensor);
 
-    V visitGyroSensor(GyroSensor<V> gyroSensor);
+    V visitGyroSensor(GyroSensor gyroSensor);
 
-    V visitInfraredSensor(InfraredSensor<V> infraredSensor);
+    V visitGyroReset(GyroReset gyroReset);
 
-    V visitTimerSensor(TimerSensor<V> timerSensor);
+    V visitInfraredSensor(InfraredSensor infraredSensor);
 
-    V visitTouchSensor(TouchSensor<V> touchSensor);
+    V visitTimerSensor(TimerSensor timerSensor);
 
-    V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor);
+    V visitTouchSensor(TouchSensor touchSensor);
 
-    V visitCompassSensor(CompassSensor<V> compassSensor);
+    V visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor);
 
-    V visitIRSeekerSensor(IRSeekerSensor<V> irSeekerSensor);
+    V visitCompassSensor(CompassSensor compassSensor);
 
-    V visitHTColorSensor(HTColorSensor<V> htColorSensor);
+    V visitIRSeekerSensor(IRSeekerSensor irSeekerSensor);
 
-    default V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
-        return sensorGetSample.getSensor().accept(this);
+    V visitHTColorSensor(HTColorSensor htColorSensor);
+
+    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
+        return sensorGetSample.sensor.accept(this);
     }
 }

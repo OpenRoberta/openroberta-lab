@@ -4,58 +4,35 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.lang.expr.Var;
-import de.fhg.iais.roberta.syntax.sensor.BuiltinSensor;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.sensor.InternalSensor;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-public class Apds9960ColorSensor<V> extends BuiltinSensor<V> {
+@NepoBasic(name = "APDS9960_COLOR", category = "SENSOR", blocklyNames = {"robsensors_apds9960_color_getDataAvailableSample"})
+public final class Apds9960ColorSensor extends InternalSensor {
 
-    private final Var<V> r, g, b;
+    public final Expr r, g, b;
 
-    public Var<V> getR() {
-        return r;
-    }
-
-    public Var<V> getG() {
-        return g;
-    }
-
-    public Var<V> getB() {
-        return b;
-    }
-
-    private Apds9960ColorSensor(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> r, Var<V> g, Var<V> b) {
-        super(null, BlockTypeContainer.getByName("APDS9960_COLOR"), properties, comment);
+    public Apds9960ColorSensor(BlocklyProperties properties, Expr r, Expr g, Expr b) {
+        super(properties, null);
         this.r = r;
         this.g = g;
         this.b = b;
         setReadOnly();
     }
 
-    public static <V> Apds9960ColorSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> r, Var<V> g, Var<V> b) {
-        return new Apds9960ColorSensor<>(properties, comment, r, g, b);
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 3);
-        Var<V> r = helper.getVar(values, BlocklyConstants.VARIABLE_R);
-        Var<V> g = helper.getVar(values, BlocklyConstants.VARIABLE_G);
-        Var<V> b = helper.getVar(values, BlocklyConstants.VARIABLE_B);
-        return Apds9960ColorSensor.make(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), r, g, b);
+        Expr r = helper.getVar(values, BlocklyConstants.VARIABLE_R);
+        Expr g = helper.getVar(values, BlocklyConstants.VARIABLE_G);
+        Expr b = helper.getVar(values, BlocklyConstants.VARIABLE_B);
+        return new Apds9960ColorSensor(Jaxb2Ast.extractBlocklyProperties(block), r, g, b);
     }
 
     @Override

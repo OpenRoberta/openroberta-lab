@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DcMotorSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
@@ -47,105 +48,103 @@ import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IPinVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.ISerialVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISimpleSoundVisitor;
-import de.poulter.roberta.syntax.action.mbed.DcMotorSetAction;
 
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
 public interface IMbedVisitorWithoutDefault<V>
-    extends IDisplayVisitor<V>, ILightVisitor<V>, ISimpleSoundVisitor<V>, IMotorVisitor<V>, ISerialVisitor<V>, IPinVisitor<V> {
+        extends IDisplayVisitor<V>, ILightVisitor<V>, ISimpleSoundVisitor<V>, IMotorVisitor<V>, IPinVisitor<V> {
 
-    V visitDisplayTextAction(DisplayTextAction<V> displayTextAction);
+    V visitDisplayTextAction(DisplayTextAction displayTextAction);
 
-    V visitPredefinedImage(PredefinedImage<V> predefinedImage);
+    V visitPredefinedImage(PredefinedImage predefinedImage);
 
-    V visitDisplayImageAction(DisplayImageAction<V> displayImageAction);
+    V visitDisplayImageAction(DisplayImageAction displayImageAction);
 
-    V visitImageShiftFunction(ImageShiftFunction<V> imageShiftFunction);
+    V visitImageShiftFunction(ImageShiftFunction imageShiftFunction);
 
-    V visitImageInvertFunction(ImageInvertFunction<V> imageInvertFunction);
+    V visitImageInvertFunction(ImageInvertFunction imageInvertFunction);
 
-    V visitImage(Image<V> image);
+    V visitImage(Image image);
 
-    V visitLedOnAction(LedOnAction<V> ledOnAction);
+    V visitLedOnAction(LedOnAction ledOnAction);
 
-    V visitRadioSendAction(RadioSendAction<V> radioSendAction);
+    V visitRadioSendAction(RadioSendAction radioSendAction);
 
-    V visitRadioReceiveAction(RadioReceiveAction<V> radioReceiveAction);
+    V visitRadioReceiveAction(RadioReceiveAction radioReceiveAction);
 
-    V visitPinSetPullAction(PinSetPullAction<V> pinSetPullAction);
+    V visitPinSetPullAction(PinSetPullAction pinSetPullAction);
 
-    V visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<V> displaySetBrightnessAction);
+    V visitDisplaySetBrightnessAction(DisplaySetBrightnessAction displaySetBrightnessAction);
 
-    V visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<V> displayGetBrightnessAction);
+    V visitDisplayGetBrightnessAction(DisplayGetBrightnessAction displayGetBrightnessAction);
 
-    V visitDisplaySetPixelAction(DisplaySetPixelAction<V> displaySetPixelAction);
+    V visitDisplaySetPixelAction(DisplaySetPixelAction displaySetPixelAction);
 
-    V visitDisplayGetPixelAction(DisplayGetPixelAction<V> displayGetPixelAction);
+    V visitDisplayGetPixelAction(DisplayGetPixelAction displayGetPixelAction);
 
-    V visitRadioSetChannelAction(RadioSetChannelAction<V> radioSetChannelAction);
-
-    @Deprecated
-    V visitSingleMotorOnAction(SingleMotorOnAction<V> singleMotorOnAction);
+    V visitRadioSetChannelAction(RadioSetChannelAction radioSetChannelAction);
 
     @Deprecated
-    V visitSingleMotorStopAction(SingleMotorStopAction<V> singleMotorStopAction);
+    V visitSingleMotorOnAction(SingleMotorOnAction singleMotorOnAction);
 
-    V visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<V> fourDigitDisplayShowAction);
+    @Deprecated
+    V visitSingleMotorStopAction(SingleMotorStopAction singleMotorStopAction);
 
-    V visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<V> fourDigitDisplayClearAction);
+    V visitFourDigitDisplayShowAction(FourDigitDisplayShowAction fourDigitDisplayShowAction);
 
-    V visitBothMotorsOnAction(BothMotorsOnAction<V> bothMotorsOnAction);
+    V visitFourDigitDisplayClearAction(FourDigitDisplayClearAction fourDigitDisplayClearAction);
 
-    V visitBothMotorsStopAction(BothMotorsStopAction<V> bothMotorsStopAction);
+    V visitBothMotorsOnAction(BothMotorsOnAction bothMotorsOnAction);
 
-    V visitRadioRssiSensor(RadioRssiSensor<V> radioRssiSensor);
+    V visitBothMotorsStopAction(BothMotorsStopAction bothMotorsStopAction);
 
-    V visitLedBarSetAction(LedBarSetAction<V> ledBarSetAction);
+    V visitRadioRssiSensor(RadioRssiSensor radioRssiSensor);
 
-    V visitSwitchLedMatrixAction(SwitchLedMatrixAction<V> switchLedMatrixAction);
+    V visitLedBarSetAction(LedBarSetAction ledBarSetAction);
 
-    V visitServoSetAction(ServoSetAction<V> servoSetAction);
+    V visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction);
 
-    V visitMotionKitSingleSetAction(MotionKitSingleSetAction<V> motionKitSingleSetAction);
+    V visitServoSetAction(ServoSetAction servoSetAction);
 
-    V visitMotionKitDualSetAction(MotionKitDualSetAction<V> motionKitDualSetAction);
+    V visitMotionKitSingleSetAction(MotionKitSingleSetAction motionKitSingleSetAction);
+
+    V visitMotionKitDualSetAction(MotionKitDualSetAction motionKitDualSetAction);
 
 
 
-    V visitKeysSensor(KeysSensor<V> keysSensor);
+    V visitKeysSensor(KeysSensor keysSensor);
 
-    V visitColorSensor(ColorSensor<V> colorSensor);
+    V visitColorSensor(ColorSensor colorSensor);
 
-    V visitLightSensor(LightSensor<V> lightSensor);
+    V visitLightSensor(LightSensor lightSensor);
 
-    V visitSoundSensor(SoundSensor<V> soundSensor);
+    V visitSoundSensor(SoundSensor soundSensor);
 
-    V visitGyroSensor(GyroSensor<V> gyroSensor);
+    V visitGyroSensor(GyroSensor gyroSensor);
 
-    V visitTimerSensor(TimerSensor<V> timerSensor);
+    V visitTimerSensor(TimerSensor timerSensor);
 
-    V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor);
+    V visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor);
 
-    V visitCompassSensor(CompassSensor<V> compassSensor);
+    V visitCompassSensor(CompassSensor compassSensor);
 
-    V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor);
+    V visitTemperatureSensor(TemperatureSensor temperatureSensor);
 
-    V visitAccelerometerSensor(AccelerometerSensor<V> accelerometerSensor);
+    V visitAccelerometerSensor(AccelerometerSensor accelerometerSensor);
 
-    V visitPinTouchSensor(PinTouchSensor<V> pinTouchSensor);
+    V visitPinTouchSensor(PinTouchSensor pinTouchSensor);
 
-    V visitGestureSensor(GestureSensor<V> gestureSensor);
+    V visitGestureSensor(GestureSensor gestureSensor);
 
-    V visitPinGetValueSensor(PinGetValueSensor<V> pinGetValueSensor);
+    V visitPinGetValueSensor(PinGetValueSensor pinGetValueSensor);
 
-    V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample);
+    V visitGetSampleSensor(GetSampleSensor sensorGetSample);
 
-    V visitHumiditySensor(HumiditySensor<V> humiditySensor);
+    V visitHumiditySensor(HumiditySensor humiditySensor);
 
-    V visitInfraredSensor(InfraredSensor<V> infraredSensor);
+    V visitInfraredSensor(InfraredSensor infraredSensor);
 
-    V visitDcMotorSetAction(DcMotorSetAction<V> dcMotorSetAction);
+    V visitDcMotorSetAction(DcMotorSetAction dcMotorSetAction);
 }

@@ -115,8 +115,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 1
   },
   {
     "opc": "expr",
@@ -126,7 +127,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 30
+    "target": "b_m_1"
   },
   {
     "opc": "expr",
@@ -146,17 +147,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 31
+    "target": "b_e_1"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_1",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_1",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -164,8 +167,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 2
   },
   {
     "opc": "expr",
@@ -175,7 +179,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 39
+    "target": "b_m_2"
   },
   {
     "opc": "expr",
@@ -190,17 +194,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 40
+    "target": "b_e_2"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_2",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_2",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -208,8 +214,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 3
   },
   {
     "opc": "expr",
@@ -219,7 +226,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 48
+    "target": "b_m_3"
   },
   {
     "opc": "expr",
@@ -234,17 +241,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 49
+    "target": "b_e_3"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_3",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_3",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -252,8 +261,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 4
   },
   {
     "opc": "expr",
@@ -263,7 +273,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 57
+    "target": "b_m_4"
   },
   {
     "opc": "expr",
@@ -278,17 +288,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 58
+    "target": "b_e_4"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_4",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_4",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -296,8 +308,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 5
   },
   {
     "opc": "expr",
@@ -307,7 +320,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 66
+    "target": "b_m_5"
   },
   {
     "opc": "expr",
@@ -322,17 +335,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 67
+    "target": "b_e_5"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_5",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_5",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -340,8 +355,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 6
   },
   {
     "opc": "expr",
@@ -351,7 +367,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 76
+    "target": "b_m_6"
   },
   {
     "opc": "expr",
@@ -371,17 +387,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 77
+    "target": "b_e_6"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_6",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_6",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -389,8 +407,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 7
   },
   {
     "opc": "expr",
@@ -400,7 +419,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 86
+    "target": "b_m_7"
   },
   {
     "opc": "expr",
@@ -420,17 +439,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 87
+    "target": "b_e_7"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_7",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_7",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -438,8 +459,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 8
   },
   {
     "opc": "expr",
@@ -449,7 +471,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 97
+    "target": "b_m_8"
   },
   {
     "opc": "expr",
@@ -474,17 +496,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 98
+    "target": "b_e_8"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_8",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_8",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -506,8 +530,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 9
   },
   {
     "opc": "expr",
@@ -517,7 +542,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 109
+    "target": "b_m_9"
   },
   {
     "opc": "expr",
@@ -532,17 +557,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 110
+    "target": "b_e_9"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_9",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_9",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -564,8 +591,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 10
   },
   {
     "opc": "expr",
@@ -575,7 +603,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 122
+    "target": "b_m_10"
   },
   {
     "opc": "expr",
@@ -595,17 +623,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 123
+    "target": "b_e_10"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_10",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_10",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -613,8 +643,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 11
   },
   {
     "opc": "expr",
@@ -624,7 +655,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 133
+    "target": "b_m_11"
   },
   {
     "opc": "expr",
@@ -649,17 +680,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 134
+    "target": "b_e_11"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_11",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_11",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -667,8 +700,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 12
   },
   {
     "opc": "expr",
@@ -678,7 +712,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 144
+    "target": "b_m_12"
   },
   {
     "opc": "expr",
@@ -703,17 +737,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 145
+    "target": "b_e_12"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_12",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_12",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -721,8 +757,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 13
   },
   {
     "opc": "expr",
@@ -732,7 +769,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 155
+    "target": "b_m_13"
   },
   {
     "opc": "expr",
@@ -757,17 +794,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 156
+    "target": "b_e_13"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_13",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_13",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -775,8 +814,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 14
   },
   {
     "opc": "expr",
@@ -786,7 +826,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 165
+    "target": "b_m_14"
   },
   {
     "opc": "expr",
@@ -806,17 +846,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 166
+    "target": "b_e_14"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_14",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_14",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -824,8 +866,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 15
   },
   {
     "opc": "expr",
@@ -835,7 +878,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 175
+    "target": "b_m_15"
   },
   {
     "opc": "expr",
@@ -855,17 +898,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 176
+    "target": "b_e_15"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_15",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_15",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -882,13 +927,15 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 16
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 17
   },
   {
     "opc": "expr",
@@ -898,7 +945,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 188
+    "target": "b_m_17"
   },
   {
     "opc": "expr",
@@ -918,22 +965,24 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 189
+    "target": "b_e_17"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_17",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_17",
+    "type": "end"
   },
   {
     "opc": "jump",
     "conditional": false,
-    "target": 195
+    "target": "b_m_16"
   },
   {
     "opc": "expr",
@@ -953,17 +1002,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 196
+    "target": "b_e_16"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_16",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_16",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -971,8 +1022,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 18
   },
   {
     "opc": "expr",
@@ -982,7 +1034,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 207
+    "target": "b_m_18"
   },
   {
     "opc": "expr",
@@ -1012,17 +1064,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 208
+    "target": "b_e_18"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_18",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_18",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -1030,8 +1084,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 19
   },
   {
     "opc": "expr",
@@ -1041,7 +1096,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 236
+    "target": "b_m_19"
   },
   {
     "opc": "expr",
@@ -1153,17 +1208,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 237
+    "target": "b_e_19"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_19",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_19",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",
@@ -1171,8 +1228,9 @@
   },
   {
     "opc": "comment",
+    "text": "Binary",
     "type": "start",
-    "target": "Binary"
+    "n": 20
   },
   {
     "opc": "expr",
@@ -1182,7 +1240,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 250
+    "target": "b_m_20"
   },
   {
     "opc": "expr",
@@ -1220,17 +1278,19 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 251
+    "target": "b_e_20"
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
+    "label": "b_m_20",
     "value": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "Binary"
+    "text": "Binary",
+    "label": "b_e_20",
+    "type": "end"
   },
   {
     "opc": "AssignStmt",

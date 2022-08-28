@@ -6,8 +6,8 @@ import de.fhg.iais.roberta.visitor.hardware.IHardwareVisitor;
 
 public interface IDisplayVisitor<V> extends IHardwareVisitor<V> {
 
-    V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction);
+    V visitClearDisplayAction(ClearDisplayAction clearDisplayAction);
 
-    V visitShowTextAction(ShowTextAction<V> showTextAction);
+    V visitShowTextAction(ShowTextAction showTextAction);
 
 }

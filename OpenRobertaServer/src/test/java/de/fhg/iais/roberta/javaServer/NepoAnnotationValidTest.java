@@ -12,9 +12,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.ast.AstFactory;
 
 @RunWith(Parameterized.class)
 public class NepoAnnotationValidTest {
@@ -32,7 +32,7 @@ public class NepoAnnotationValidTest {
         // Initialise all Robot Factories, so all AST classes are in BlockTypeContainer
         robots.keySet().forEach(robotName -> Util.configureRobotPlugin(robotName, "", "", new ArrayList<>()));
 
-        return BlockTypeContainer.getAstClasses()
+        return AstFactory.getAstClasses()
             .stream()
             .filter(AnnotationHelper::isNepoAnnotatedClass)
             .sorted(Comparator.comparing(Class::getSimpleName))

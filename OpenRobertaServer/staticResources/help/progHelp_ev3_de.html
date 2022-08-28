@@ -38,7 +38,7 @@
                 <li class="typcn typcn-arrow-sorted-down">Motor Port, wähle den Motor Port aus, an dem der Motor
                     angeschlossen ist.</li>
                 <li class="typcn typcn-arrow-left">Tempo, Wert zwischen -100 und 100. Wenn die Zahl negativ ist, dreht
-                    sich der Motor rückwärts.</li>
+                    sich der Motor rückwärts. Der Wert wird intern auf den Bereich zwischen -100 und 100 begrenzt.</li>
             </ul><br>
         </div>
         <div id="robActions_motor_on_for" class="help expert">
@@ -54,7 +54,7 @@
                 <li class="typcn typcn-arrow-sorted-down">Motor Port, wähle den Motorport aus, an dem der Motor
                     angeschlossen ist.</li>
                 <li class="typcn typcn-arrow-left">Tempo, Wert zwischen -100 und 100. Wenn die Zahl negativ ist, dreht
-                    sich der Motor rückwärts.</li>
+                    sich der Motor rückwärts. Der Wert wird intern auf den Bereich zwischen -100 und 100 begrenzt.</li>
                 <li class="typcn typcn-arrow-sorted-down">Umdrehungen oder Grad. 1 Umdrehung entspricht 360 Grad.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Anzahl der Umdrehungen bzw. Winkelgrade. Es sind nur positive
                     Zahlen zugelassen.</li>
@@ -92,10 +92,10 @@
             <p>Einstellmöglichkeiten und Eingabewert:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-sorted-down">Motor, wähle den Motor Port aus, für den dasTempo eingestellt
+                <li class="typcn typcn-arrow-sorted-down">Motor, wähle den Motor Port aus, für den das Tempo eingestellt
                     werden soll.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100. Wenn die Zahl negativ ist, dreht
-                    sich der Motor rückwärts.</li>
+                    sich der Motor rückwärts. Der Wert wird intern auf den Bereich zwischen -100 und 100 begrenzt.</li>
             </ul><br>
         </div>
         <div id="robActions_motor_stop" class="help expert">
@@ -129,7 +129,8 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Richtung, wähle die gewünschte Fahrrichtung aus.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100. Wenn die Zahl negativ ist, drehen
-                    sich die Motoren rückwärts.</li>
+                    sich die Motoren rückwärts. Der Wert wird intern auf den Bereich zwischen -100 und 100 begrenzt.
+                </li>
             </ul><br>
         </div>
         <div id="robActions_motorDiff_on_for" class="help beginner">
@@ -146,7 +147,8 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Fahrtrichtung, wähle die gewünschte Richtung.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100. Wenn die Zahl negativ ist, drehen
-                    sich die Motoren rückwärts.</li>
+                    sich die Motoren rückwärts. Der Wert wird intern auf den Bereich zwischen -100 und 100 begrenzt.
+                </li>
                 <li class="typcn typcn-arrow-left">Zahl, Länge für die Strecke in cm.</li>
             </ul><br>
         </div>
@@ -166,8 +168,9 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Drehrichtung, wähle die gewünschte Drehrichtung aus.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100. Wenn die Zahl negativ ist, drehen
-                    sich die Motoren rückwärts.</li>
+                <li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100. Wenn die Zahl negativ ist, dreht
+                    sich der Roboter in die entgegengesetzte Richtung. Der Wert wird intern auf den Bereich zwischen
+                    -100 und 100 begrenzt.</li>
             </ul><br>
             <div class="confluence-information-macro confluence-information-macro-note">
                 <div class="confluence-information-macro-body">
@@ -191,8 +194,9 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Drehrichtung, wähle die gewünschte Drehrichtung aus.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100. Wenn die Zahl negativ ist, drehen
-                    sich die Motoren rückwärts.</li>
+                <li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100. Wenn die Zahl negativ ist, dreht
+                    sich der Roboter in die entgegengesetzte Richtung. Der Wert wird intern auf den Bereich zwischen
+                    -100 und 100 begrenzt.</li>
                 <li class="typcn typcn-arrow-left">Gradzahl, um die der Roboter sich drehen soll. Negative Zahlen sind
                     nicht zugelassen.</li>
             </ul><br>
@@ -209,9 +213,11 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Drehrichtung, wähle die gewünschte Drehrichtung aus.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100 für den linken Motor. Wenn die Zahl
-                    negativ ist, dreht sich der Motor rückwärts.</li>
+                    negativ ist, dreht sich der Motor rückwärts. Der Wert wird intern auf den Bereich zwischen -100 und
+                    100 begrenzt.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100 für den rechten Motor. Wenn die Zahl
-                    negativ ist, dreht sich der Motor rückwärts.</li>
+                    negativ ist, dreht sich der Motor rückwärts. Der Wert wird intern auf den Bereich zwischen -100 und
+                    100 begrenzt.</li>
             </ul><br>
         </div>
         <div id="robActions_motorDiff_curve_for" class="help beginner">
@@ -227,9 +233,11 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-sorted-down">Richtung, wähle die gewünschte Fahrtrichtung aus.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100 für den linken Motor. Wenn die Zahl
-                    negativ ist, dreht sich der Motor rückwärts.</li>
+                    negativ ist, dreht sich der Motor rückwärts. Der Wert wird intern auf den Bereich zwischen -100 und
+                    100 begrenzt.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100 für den rechten Motor. Wenn die Zahl
-                    negativ ist, dreht sich der Motor rückwärts.</li>
+                    negativ ist, dreht sich der Motor rückwärts. Der Wert wird intern auf den Bereich zwischen -100 und
+                    100 begrenzt.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Strecke in Zentimetern, die zurückgelegt werden soll.</li>
             </ul><br>
         </div>
@@ -239,16 +247,17 @@
                 Dabei kannst du zusätzlich noch bestimmen, in welcher Spalte und in welcher Zeile der Text auf dem
                 EV3-Bildschirm erscheinen soll.</p>
             <p>Das Display eines EV3 ist für Texte in mehreren Zeilen (von links nach rechts) und Spalten (von oben nach
-                unten) eingeteilt. Je nach System (lejos oder EV3dev) stehen unterschiedlich viele Zeilen und Spalten
-                zur Verfügung. Die Zählung beginnt jeweils bei 0.</p>
+                unten) eingeteilt.</p>
             <p>Wenn zuvor schon etwas auf dem Display angezeigt war, werden nur die Stellen überschrieben, in die der
                 Text geschrieben wird.</p>
             <p>Eingabewerte:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-left">Text, der im Display erscheinen soll.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Spaltenummer, in der der Text beginnen soll.</li>
-                <li class="typcn typcn-arrow-left">Zahl, Zeilennummer, in der der Text beginnen soll.</li>
+                <li class="typcn typcn-arrow-left">Zahl, Spaltenummer, in der der Text beginnen soll zwischen 0 und 17.
+                </li>
+                <li class="typcn typcn-arrow-left">Zahl, Zeilennummer, in der der Text beginnen soll zwischen 0 und 7.
+                </li>
             </ul><br>
         </div>
         <div id="robActions_display_picture_new" class="help expert">
@@ -320,7 +329,8 @@
             <p>Eingabewert:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-left">Zahl für die Lautstärke.</li>
+                <li class="typcn typcn-arrow-left">Zahl für die Lautstärke. Der Wert wird intern auf den Bereich
+                    zwischen 0 und 100 begrenzt.</li>
             </ul><br>
         </div>
         <div id="robActions_play_getVolume" class="help expert">
@@ -370,9 +380,11 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-left">Zeichenkette, der Text, den dein Roboter sagen soll.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Sprechgeschwindigkeit in Prozent, also meine Zahl zwischen 1
-                    und 100. Je höher die Zahl ist, desto schneller spricht der Roboter.</li>
+                    und 100. Je höher die Zahl ist, desto schneller spricht der Roboter. Der Wert wird intern auf den
+                    Bereich zwischen 0 und 100 begrenzt.</li>
                 <li class="typcn typcn-arrow-left">Zahl, Stimmlage des Roboters in Prozent. Zahl zwischen 1 und 100. Je
-                    höher die Zahl, desto höher ist auch die Stimmlage des Roboters.</li>
+                    höher die Zahl, desto höher ist auch die Stimmlage des Roboters. Der Wert wird intern auf den
+                    Bereich zwischen 0 und 100 begrenzt.</li>
             </ul><br>
         </div>
         <div id="robActions_brickLight_on" class="help beginner">
@@ -454,7 +466,8 @@
                 Datentyp »Zahl«. Die Zahlenwerte liegen je nach gewählter Messmethode zwischen 0 und 255. Mit diesen
                 verschiedenen Einstellung kann dieser Block je nach Anforderung eingestellt werden.</p>
             <p>Im Modus »Farbe« sendet der Farbsensor Licht aus und erkennt, welche Grundfarbe unter dem Sensor erkannt
-                wurde. Die Grundfarbwerte sind BLACK, WHITE, GREY, RED, GREEN, BLUE, YELLOW, BROWN.</p>
+                wurde. Die Grundfarbwerte sind BLACK, WHITE, RED, GREEN, BLUE, YELLOW, BROWN. Die Farbe GREY teugt an,
+                dass die gemessene Farbe keiner der Standardfarben entspricht.</p>
             <p>Im Modus »Licht« sendet der Farbsensor mittels seiner roten LED Licht aus und misst die reflektierte
                 Lichtstärke auf einer Skala von 0 bis 100.</p>
             <p>Im Modus »RGB« sendet der Farbsensor rotes, grünes und blaues Licht aus und misst das reflektierte Licht
@@ -1586,7 +1599,7 @@
             <p>Option:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbeaus, die du verwenden möchtest.</li>
+                <li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbe aus, die du verwenden möchtest.</li>
             </ul>
             <p class="auto-cursor-target">Rückgabewert:
             </p>
@@ -1600,7 +1613,7 @@
             <p>Option:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbeaus, die du verwenden möchtest.</li>
+                <li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbe aus, die du verwenden möchtest.</li>
             </ul>
             <p class="auto-cursor-target">Rückgabewert:
             </p>
@@ -1615,7 +1628,7 @@
             <p>Option:
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
-                <li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbeaus, die du verwenden möchtest.</li>
+                <li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbe aus, die du verwenden möchtest.</li>
             </ul>
             <p class="auto-cursor-target">Rückgabewert:
             </p>

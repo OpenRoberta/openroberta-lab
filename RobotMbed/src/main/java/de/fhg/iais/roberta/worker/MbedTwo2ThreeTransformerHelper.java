@@ -7,12 +7,12 @@ import java.util.Map;
 import org.apache.commons.lang3.tuple.Triple;
 
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 public final class MbedTwo2ThreeTransformerHelper {
 
@@ -317,8 +317,8 @@ public final class MbedTwo2ThreeTransformerHelper {
         int mX = Integer.MIN_VALUE;
         int mY = Integer.MAX_VALUE;
         for ( ConfigurationComponent confComp : defaultConf.getConfigurationComponentsValues() ) {
-            mX = Math.max(mX, confComp.getX());
-            mY = Math.min(mY, confComp.getY());
+            mX = Math.max(mX, confComp.x);
+            mY = Math.min(mY, confComp.y);
             // Register the default components for any of the ports
             String pin1 = confComp.getOptProperty("PIN1");
             if ( pin1 == null ) {
@@ -356,7 +356,7 @@ public final class MbedTwo2ThreeTransformerHelper {
 
         if ( confComp == null ) { // Otherwise generate a new one
             confComp = createComponent(confBlocklyName, port);
-            if ( confComp.getComponentType().equals("CALLIBOT") ) {
+            if ( confComp.componentType.equals("CALLIBOT") ) {
                 // Register Callibot as a default component, as it should be found regardless of the port
                 this.createdComps.put(Pair.of(confBlocklyName, "default"), confComp);
             } else {
@@ -364,10 +364,10 @@ public final class MbedTwo2ThreeTransformerHelper {
             }
         }
         String name;
-        if ( confComp.getComponentType().equals("CALLIBOT") ) {
+        if ( confComp.componentType.equals("CALLIBOT") ) {
             name = CALLIBOT.get(Pair.of(progBlockType, port));
         } else {
-            name = confComp.getUserDefinedPortName();
+            name = confComp.userDefinedPortName;
         }
         return Pair.of(confComp, name);
     }
@@ -431,7 +431,7 @@ public final class MbedTwo2ThreeTransformerHelper {
             name = getName(port, confBlocklyName);
             properties = Collections.singletonMap("PIN1", port);
         }
-        BlocklyBlockProperties blocklyProperties = BlocklyBlockProperties.make(confBlocklyName, name, false, false, false, true, true, true, false, false);
-        return new ConfigurationComponent(confType, true, name, name, properties, blocklyProperties, null, xPos, yPos);
+        BlocklyProperties blocklyProperties = new BlocklyProperties(confBlocklyName, name, false, false, false, true, true, true, false, false, null);
+        return new ConfigurationComponent(confType, true, name, name, properties, blocklyProperties, xPos, yPos);
     }
 }

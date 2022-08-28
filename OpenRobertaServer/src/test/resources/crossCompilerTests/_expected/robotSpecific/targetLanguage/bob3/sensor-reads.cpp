@@ -1,4 +1,6 @@
-#include "bob3.h" 
+#include "bob3.h"
+#include <stdlib.h>
+#include <math.h>
 Bob3 rob;
 
 void sensorsWaitUntil();
@@ -100,8 +102,7 @@ void sensors() {
     __time_1 = millis();
 }
 
-void setup()
-{
+void setup() {
     ___b = true;
     ___c = 0;
     

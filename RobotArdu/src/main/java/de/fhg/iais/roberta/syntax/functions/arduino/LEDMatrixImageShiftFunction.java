@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.syntax.functions.arduino;
 
-import java.awt.Image;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -8,40 +7,33 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.general.IDirection;
-import de.fhg.iais.roberta.mode.general.Direction;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.functions.Function;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.Assoc;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-/**
- * This class represents <b>mbedImage_shift</b> blocks from Blockly into the AST (abstract syntax tree).<br>
- * <br>
- * The user must provide name of the function and list of parameters. <br>
- * To create an instance from this class use the method {@link #make(Image, Direction, BlocklyBlockProperties, BlocklyComment)}.<br>
- */
-public class LEDMatrixImageShiftFunction<V> extends Function<V> {
-    private final Expr<V> image;
-    private final Expr<V> positions;
-    private final IDirection shiftDirection;
+@NepoBasic(name = "LED_MATRIX_IMAGE_SHIFT", category = "FUNCTION", blocklyNames = {"mBotImage_shift"})
+public final class LEDMatrixImageShiftFunction extends Function {
+    public final Expr image;
+    public final Expr positions;
+    public final IDirection shiftDirection;
 
-    private LEDMatrixImageShiftFunction(
-        Expr<V> image,
-        Expr<V> positions,
+    public LEDMatrixImageShiftFunction(
+        Expr image,
+        Expr positions,
         IDirection shiftDirection,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LED_MATRIX_IMAGE_SHIFT"), properties, comment);
+        BlocklyProperties properties)
+    {
+        super(properties);
         Assert.notNull(image);
         Assert.notNull(positions);
         Assert.notNull(shiftDirection);
@@ -49,43 +41,6 @@ public class LEDMatrixImageShiftFunction<V> extends Function<V> {
         this.shiftDirection = shiftDirection;
         this.positions = positions;
         setReadOnly();
-    }
-
-    /**
-     * Creates instance of {@link LEDMatrixImageShiftFunction}. This instance is read only and can not be modified.
-     *
-     * @param image to be shifted; must be <b>not</b> null,
-     * @param positions to be shifted; must be <b>not</b> null,
-     * @param shiftDirection direction of shifting {@link Direction}; must be <b>not</b> null,,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment that user has added to the block,
-     * @return read only object of class {@link LEDMatrixImageShiftFunction}
-     */
-    public static <V> LEDMatrixImageShiftFunction<V> make(
-        Expr<V> image,
-        Expr<V> positions,
-        IDirection shiftDirection,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new LEDMatrixImageShiftFunction<>(image, positions, shiftDirection, properties, comment);
-    }
-
-    /**
-     * @return image to be shifted
-     */
-    public Expr<V> getImage() {
-        return this.image;
-    }
-
-    /**
-     * @return direction of shifting {@link IDirection}
-     */
-    public IDirection getShiftDirection() {
-        return this.shiftDirection;
-    }
-
-    public Expr<V> getPositions() {
-        return this.positions;
     }
 
     @Override
@@ -108,27 +63,14 @@ public class LEDMatrixImageShiftFunction<V> extends Function<V> {
         return "ImageShiftFunction [" + this.image + ", " + this.positions + ", " + this.shiftDirection + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
         IDirection shiftingDirection = factory.getDirection(Jaxb2Ast.extractField(fields, BlocklyConstants.OP));
-        Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.A, BlocklyType.PREDEFINED_IMAGE));
-        Phrase<V> numberOfPositions = helper.extractValue(values, new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT));
-        return LEDMatrixImageShiftFunction
-            .make(
-                Jaxb2Ast.convertPhraseToExpr(image),
-                Jaxb2Ast.convertPhraseToExpr(numberOfPositions),
-                shiftingDirection,
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block));
+        Phrase image = helper.extractValue(values, new ExprParam(BlocklyConstants.A, BlocklyType.PREDEFINED_IMAGE));
+        Phrase numberOfPositions = helper.extractValue(values, new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT));
+        return new LEDMatrixImageShiftFunction(Jaxb2Ast.convertPhraseToExpr(image), Jaxb2Ast.convertPhraseToExpr(numberOfPositions), shiftingDirection, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

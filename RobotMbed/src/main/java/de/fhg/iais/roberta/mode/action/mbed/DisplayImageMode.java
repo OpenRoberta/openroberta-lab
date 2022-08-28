@@ -9,7 +9,7 @@ public enum DisplayImageMode {
 
     private final String[] values;
 
-    private DisplayImageMode(String... values) {
+    DisplayImageMode(String... values) {
         this.values = values;
     }
 

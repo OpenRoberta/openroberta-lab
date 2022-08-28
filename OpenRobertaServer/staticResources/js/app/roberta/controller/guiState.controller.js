@@ -278,6 +278,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         $('#head-navi-icon-robot').removeClass('typcn-open');
         $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
         $('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
+        $('.simWindow').removeClass('simWindow-openedButHidden');
         checkSim();
         setProgramOwnerName(null);
         setProgramAuthorName(null);
@@ -617,7 +618,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             setRunEnabled(false);
             $('#runSourceCodeEditor').addClass('disabled');
         }
-        if ($('.rightMenuButton.rightActive')) {
+        if ($('.rightMenuButton.rightActive').length > 0) {
             $('.rightMenuButton.rightActive').clickWrap();
         }
         if (view === 'tabConfiguration') {
@@ -1073,9 +1074,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         if (hasMultiSim()) {
             $('#menuRunMulipleSim').parent().removeClass('unavailable');
             $('#menuRunMulipleSim').parent().addClass('available');
-            if (isUserLoggedIn()) {
-                $('#menuRunMulipleSim').parent().removeClass('disabled');
-            }
+            $('#menuRunMulipleSim').parent().removeClass('disabled');
         }
         else {
             $('#menuRunMulipleSim').parent().addClass('unavailable');

@@ -1,4 +1,6 @@
-#include "bob3.h" 
+#include "bob3.h"
+#include <stdlib.h>
+#include <math.h>
 Bob3 rob;
 
 void control();
@@ -66,8 +68,7 @@ void logic() {
     ___b = ( ( ___b ) ? ( ___b ) : ( ___b) );
 }
 
-void setup()
-{
+void setup() {
     ___n = 0;
     ___b = true;
     ___c = RGB(0xFF, 0xFF, 0xFF);

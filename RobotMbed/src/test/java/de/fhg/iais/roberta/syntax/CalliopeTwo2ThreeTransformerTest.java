@@ -7,14 +7,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.MbedTwo2ThreeTransformerWorker;
 
 public class CalliopeTwo2ThreeTransformerTest {
 
-    private static IRobotFactory testFactory;
+    private static RobotFactory testFactory;
 
     private static final String OLD_CONFIGURATION_XML =
         "<block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" robottype=\"calliope\" xmlversion=\"2.0\">"
@@ -25,6 +26,7 @@ public class CalliopeTwo2ThreeTransformerTest {
 
     @BeforeClass
     public static void setupBefore() throws Exception {
+        AstFactory.loadBlocks();
         testFactory = Util.configureRobotPlugin("calliope2017NoBlue", "", "", Collections.emptyList());
     }
 
@@ -163,7 +165,7 @@ public class CalliopeTwo2ThreeTransformerTest {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
                 + "DebugAction[value:SensorExpr[TemperatureSensor[_T,VALUE,- EMPTY_SLOT -]]],"
-                + "DebugAction[value:SensorExpr[GetSampleSensor[TemperatureSensor[_T,TEMPERATURE,- EMPTY_SLOT -]]]]]]]";
+                + "DebugAction[value:SensorExpr[GetSampleSensor[TemperatureSensor[_T,VALUE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=TEMPERATURE,isActor=true,userDefinedName=_T,portName=_T,componentProperties={}]"
@@ -389,15 +391,15 @@ public class CalliopeTwo2ThreeTransformerTest {
     @Test
     public void executeTransformer_ShouldReturnTransformedServo_WhenGivenOldServo() {
         String expectedProgramAst =
-            "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "ServoSetAction[P1,NumConst[value:90]],"
-                + "ServoSetAction[P2,NumConst[value:90]],"
-                + "ServoSetAction[A1,NumConst[value:90]],"
-                + "ServoSetAction[C04,NumConst[value:90]],"
-                + "ServoSetAction[C05,NumConst[value:90]],"
-                + "ServoSetAction[C06,NumConst[value:90]],"
-                + "ServoSetAction[C16,NumConst[value:90]],"
-                + "ServoSetAction[C17,NumConst[value:90]]]]]";
+            "BlockAST[project=[[Location[x=512,y=50],MainTask[]," +
+                "ServoSetAction[port:P1,value:NumConst[value:90]]," +
+                "ServoSetAction[port:P2,value:NumConst[value:90]]," +
+                "ServoSetAction[port:A1,value:NumConst[value:90]]," +
+                "ServoSetAction[port:C04,value:NumConst[value:90]]," +
+                "ServoSetAction[port:C05,value:NumConst[value:90]]," +
+                "ServoSetAction[port:C06,value:NumConst[value:90]]," +
+                "ServoSetAction[port:C16,value:NumConst[value:90]]," +
+                "ServoSetAction[port:C17,value:NumConst[value:90]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=C06,portName=C06,componentProperties={PIN1=C06}]",
@@ -578,7 +580,7 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedFourdigitdisplay_WhenGivenOldFourdigitdisplay() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "FourDigitDisplayShowAction[NumConst[value:1234],NumConst[value:0],BoolConst[value:true]],"
+                + "FourDigitDisplayShowAction[value:NumConst[value:1234],position:NumConst[value:0],colon:BoolConst[value:true]],"
                 + "FourDigitDisplayClearAction[]]]]";
         String[] expectedToBeInConfigAst =
             {
@@ -624,8 +626,8 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedMotors_WhenGivenOldMotors() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "BothMotorsOnAction[Port_A,NumConst[value:30],Port_B,NumConst[value:10]],"
-                + "BothMotorsOnAction[CalliBot_links,NumConst[value:30],CalliBot_rechts,NumConst[value:10]],"
+                + "BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:10],portA:Port_A,portB:Port_B],"
+                + "BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:10],portA:CalliBot_links,portB:CalliBot_rechts],"
                 + "SingleMotorStopAction[]]]]";
         String[] expectedToBeInConfigAst =
             {
@@ -687,8 +689,8 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedMotors_WhenGivenOldMotorDouble() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "BothMotorsOnAction[Port_A,NumConst[value:30],Port_B,NumConst[value:30]],"
-                + "BothMotorsOnAction[CalliBot_links,NumConst[value:30],CalliBot_rechts,NumConst[value:30]],"
+                + "BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:30],portA:Port_A,portB:Port_B],"
+                + "BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:30],portA:CalliBot_links,portB:CalliBot_rechts],"
                 + "SingleMotorStopAction[],"
                 + "SingleMotorStopAction[]]]]";
         String[] expectedToBeInConfigAst =

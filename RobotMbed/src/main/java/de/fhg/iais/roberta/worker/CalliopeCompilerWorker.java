@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.worker;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -14,10 +14,10 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.bean.CompilerSetupBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.basic.Pair;
 
-public class CalliopeCompilerWorker implements IWorker {
+public class CalliopeCompilerWorker implements ICompilerWorker {
     private static final Logger LOG = LoggerFactory.getLogger(CalliopeCompilerWorker.class);
 
     @Override
@@ -32,7 +32,7 @@ public class CalliopeCompilerWorker implements IWorker {
         if ( workflowResult.getFirst() == Key.COMPILERWORKFLOW_SUCCESS ) {
             LOG.info("compile {} program {} successful", robot, programName);
         } else {
-            LOG.error("compile {} program {} failed with {}", robot, programName, workflowResult);
+            LOG.error("compile of program {} for robot {} failed with message: {}", programName, robot, workflowResult);
         }
     }
 
@@ -63,7 +63,7 @@ public class CalliopeCompilerWorker implements IWorker {
                 bluetoothParam
             };
 
-        Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource);
+        Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource, project.isNativeEditorCode());
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         if ( result.getFirst() ) {
             try {
@@ -72,7 +72,7 @@ public class CalliopeCompilerWorker implements IWorker {
                         FileUtils
                             .readFileToString(
                                 new File(pathToSrcFile + "/target/" + project.getProgramName() + "." + project.getBinaryFileExtension()),
-                                Charset.forName("utf-8")));
+                                StandardCharsets.UTF_8));
                 resultKey = Key.COMPILERWORKFLOW_SUCCESS;
             } catch ( IOException e ) {
                 LOG.error("compilation of Calliope program successful, but reading the binary failed", e);

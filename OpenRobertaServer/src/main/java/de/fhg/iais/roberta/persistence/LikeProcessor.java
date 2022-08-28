@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.util.basic.Pair;
 
 public class LikeProcessor extends AbstractProcessor {
     public LikeProcessor(DbSession dbSession, HttpSessionState httpSessionState) {

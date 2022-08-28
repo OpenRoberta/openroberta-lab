@@ -1,21 +1,7 @@
 define(["require", "exports", "util", "message", "guiState.controller", "progList.model", "program.model", "program.controller", "blockly", "jquery", "bootstrap-table", "bootstrap-tagsinput"], function (require, exports, UTIL, MSG, GUISTATE_C, PROGLIST, PROGRAM, PROGRAM_C, Blockly, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.formatTags = exports.formatDate = exports.formatAuthor = exports.formatProgramDescription = exports.formatProgramName = exports.formatRobot = exports.titleLikes = exports.titleNumberOfViews = exports.rowAttributes = exports.rowStyle = exports.init = void 0;
-    var BACKGROUND_COLORS = [
-        '#33B8CA',
-        '#EBC300',
-        '#39378B',
-        '#005A94',
-        '#179C7D',
-        '#F29400',
-        '#E2001A',
-        '#EB6A0A',
-        '#8FA402',
-        '#BACC1E',
-        '#9085BA',
-        '#FF69B4',
-        '#DF01D7',
-    ];
+    var BACKGROUND_COLORS = ['#33B8CA', '#EBC300', '#005A94', '#179C7D', '#F29400', '#E2001A', '#EB6A0A', '#8FA402', '#BACC1E', '#9085BA', '#FF69B4', '#DF01D7'];
     var currentColorIndex;
     var currentViewMode = 'gallery';
     /**
@@ -158,11 +144,11 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
         $('#fieldOrderBy').change(function (e) {
             var fieldData = e.target.value.split(':');
             var row = parseInt(fieldData[0]);
-            console.log(row);
             $('#galleryTable').bootstrapTable('refreshOptions', {
                 sortName: row,
                 sortOrder: fieldData[1],
             });
+            configureTagsInput();
         });
         //        TODO reactivate this once the table-view is improved
         //        $('#toogleView').clickWrap(function (e) {
@@ -208,6 +194,7 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
             field: 8,
             value: like,
         });
+        configureTagsInput();
     }
     var eventsLike = {
         'click .like': function (e, value, row, index) {

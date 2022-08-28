@@ -63,6 +63,7 @@ public class RobotDownloadProgram {
                     break;
                 case "Nao":
                 case "ev3dev":
+                case "mbot2":
                     fileName = programName + ".py";
                     filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/source";
                     break;
@@ -77,9 +78,11 @@ public class RobotDownloadProgram {
                 case "mbot":
                 case "unowifirev2":
                 case "bob3":
+                case "rob3rta":
                     fileName = programName + ".hex";
                     filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
+                case "festobionicflower":
                 case "festobionic":
                     fileName = programName + ".zip";
                     filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";

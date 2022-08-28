@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DcMotorSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
@@ -31,229 +32,158 @@ import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 
-import de.poulter.roberta.syntax.action.mbed.DcMotorSetAction;
-
-public interface IMbedTransformerVisitor<V> extends ITransformerVisitor<V>, IMbedVisitor<Phrase<V>> {
+public interface IMbedTransformerVisitor extends ITransformerVisitor, IMbedVisitor<Phrase> {
 
     @Override
-    default Phrase<V> visitDisplayTextAction(DisplayTextAction<Phrase<V>> displayTextAction) {
-        return DisplayTextAction
-            .make(
-                displayTextAction.getMode(),
-                (Expr<V>) displayTextAction.getMsg().modify(this),
-                displayTextAction.getProperty(),
-                displayTextAction.getComment());
+    default Phrase visitDisplayTextAction(DisplayTextAction displayTextAction) {
+        return new DisplayTextAction(displayTextAction.getProperty(), displayTextAction.mode, (Expr) displayTextAction.msg.modify(this));
     }
 
     @Override
-    default Phrase<V> visitPredefinedImage(PredefinedImage<Phrase<V>> predefinedImage) {
-        return PredefinedImage.make(predefinedImage.getImageName(), predefinedImage.getProperty(), predefinedImage.getComment());
+    default Phrase visitPredefinedImage(PredefinedImage predefinedImage) {
+        return new PredefinedImage(predefinedImage.getProperty(), predefinedImage.getImageNameString());
     }
 
     @Override
-    default Phrase<V> visitDisplayImageAction(DisplayImageAction<Phrase<V>> displayImageAction) {
-        return DisplayImageAction
-            .make(
-                displayImageAction.getDisplayImageMode(),
-                (Expr<V>) displayImageAction.getValuesToDisplay().modify(this),
-                displayImageAction.getProperty(),
-                displayImageAction.getComment());
+    default Phrase visitDisplayImageAction(DisplayImageAction displayImageAction) {
+        return new DisplayImageAction(displayImageAction.getProperty(), displayImageAction.displayImageMode, (Expr) displayImageAction.getValuesToDisplay().modify(this));
     }
 
     @Override
-    default Phrase<V> visitImageShiftFunction(ImageShiftFunction<Phrase<V>> imageShiftFunction) {
-        return ImageShiftFunction
-            .make(
-                (Expr<V>) imageShiftFunction.getImage().modify(this),
-                (Expr<V>) imageShiftFunction.getPositions().modify(this),
-                imageShiftFunction.getShiftDirection(),
-                imageShiftFunction.getProperty(),
-                imageShiftFunction.getComment());
+    default Phrase visitImageShiftFunction(ImageShiftFunction imageShiftFunction) {
+        return new ImageShiftFunction((Expr) imageShiftFunction.image.modify(this), (Expr) imageShiftFunction.positions.modify(this), imageShiftFunction.shiftDirection, imageShiftFunction.getProperty());
     }
 
     @Override
-    default Phrase<V> visitImageInvertFunction(ImageInvertFunction<Phrase<V>> imageInvertFunction) {
-        return ImageInvertFunction
-            .make((Expr<V>) imageInvertFunction.getImage().modify(this), imageInvertFunction.getProperty(), imageInvertFunction.getComment());
+    default Phrase visitImageInvertFunction(ImageInvertFunction imageInvertFunction) {
+        return new ImageInvertFunction(imageInvertFunction.getProperty(), (Expr) imageInvertFunction.image.modify(this));
     }
 
     @Override
-    default Phrase<V> visitImage(Image<Phrase<V>> image) {
-        return Image.make(image.getImage(), image.getProperty(), image.getComment());
+    default Phrase visitImage(Image image) {
+        return new Image(image.image, image.getProperty());
     }
 
     @Override
-    default Phrase<V> visitLedOnAction(LedOnAction<Phrase<V>> ledOnAction) {
-        return LedOnAction.make(ledOnAction.getProperty(), ledOnAction.getComment(), (Expr<V>) ledOnAction.getLedColor().modify(this), ledOnAction.getUserDefinedPort(), ledOnAction.hide);
+    default Phrase visitLedOnAction(LedOnAction ledOnAction) {
+        return new LedOnAction(ledOnAction.getProperty(), (Expr) ledOnAction.ledColor.modify(this), ledOnAction.getUserDefinedPort(), ledOnAction.hide);
     }
 
     @Override
-    default Phrase<V> visitRadioSendAction(RadioSendAction<Phrase<V>> radioSendAction) {
-        return RadioSendAction
-            .make(
-                (Expr<V>) radioSendAction.getMsg().modify(this),
-                radioSendAction.getType(),
-                radioSendAction.getPower(),
-                radioSendAction.getProperty(),
-                radioSendAction.getComment());
+    default Phrase visitRadioSendAction(RadioSendAction radioSendAction) {
+        return new RadioSendAction(radioSendAction.getProperty(), (Expr) radioSendAction.message.modify(this), radioSendAction.type, radioSendAction.power);
     }
 
     @Override
-    default Phrase<V> visitRadioReceiveAction(RadioReceiveAction<Phrase<V>> radioReceiveAction) {
-        return RadioReceiveAction.make(radioReceiveAction.getType(), radioReceiveAction.getProperty(), radioReceiveAction.getComment());
+    default Phrase visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
+        return new RadioReceiveAction(radioReceiveAction.getProperty(), radioReceiveAction.type);
     }
 
     @Override
-    default Phrase<V> visitPinSetPullAction(PinSetPullAction<Phrase<V>> pinSetPullAction) {
-        return PinSetPullAction.make(pinSetPullAction.getMode(), pinSetPullAction.getPort(), pinSetPullAction.getProperty(), pinSetPullAction.getComment());
+    default Phrase visitPinSetPullAction(PinSetPullAction pinSetPullAction) {
+        return new PinSetPullAction(pinSetPullAction.getProperty(), pinSetPullAction.pinPull, pinSetPullAction.port);
     }
 
     @Override
-    default Phrase<V> visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Phrase<V>> displaySetBrightnessAction) {
-        return DisplaySetBrightnessAction
-            .make(
-                (Expr<V>) displaySetBrightnessAction.getBrightness().modify(this),
-                displaySetBrightnessAction.getProperty(),
-                displaySetBrightnessAction.getComment());
+    default Phrase visitDisplaySetBrightnessAction(DisplaySetBrightnessAction displaySetBrightnessAction) {
+        return new DisplaySetBrightnessAction(displaySetBrightnessAction.getProperty(), (Expr) displaySetBrightnessAction.brightness.modify(this));
     }
 
     @Override
-    default Phrase<V> visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<Phrase<V>> displayGetBrightnessAction) {
-        return DisplayGetBrightnessAction.make(displayGetBrightnessAction.getProperty(), displayGetBrightnessAction.getComment());
+    default Phrase visitDisplayGetBrightnessAction(DisplayGetBrightnessAction displayGetBrightnessAction) {
+        return new DisplayGetBrightnessAction(displayGetBrightnessAction.getProperty());
     }
 
     @Override
-    default Phrase<V> visitDisplaySetPixelAction(DisplaySetPixelAction<Phrase<V>> displaySetPixelAction) {
-        return DisplaySetPixelAction
-            .make(
-                (Expr<V>) displaySetPixelAction.getX().modify(this),
-                (Expr<V>) displaySetPixelAction.getY().modify(this),
-                (Expr<V>) displaySetPixelAction.getBrightness().modify(this),
-                displaySetPixelAction.getProperty(),
-                displaySetPixelAction.getComment());
+    default Phrase visitDisplaySetPixelAction(DisplaySetPixelAction displaySetPixelAction) {
+        return new DisplaySetPixelAction(displaySetPixelAction.getProperty(), (Expr) displaySetPixelAction.x.modify(this), (Expr) displaySetPixelAction.y.modify(this), (Expr) displaySetPixelAction.brightness.modify(this));
     }
 
     @Override
-    default Phrase<V> visitDisplayGetPixelAction(DisplayGetPixelAction<Phrase<V>> displayGetPixelAction) {
-        return DisplayGetPixelAction
-            .make(
-                (Expr<V>) displayGetPixelAction.getX().modify(this),
-                (Expr<V>) displayGetPixelAction.getY().modify(this),
-                displayGetPixelAction.getProperty(),
-                displayGetPixelAction.getComment());
+    default Phrase visitDisplayGetPixelAction(DisplayGetPixelAction displayGetPixelAction) {
+        return new DisplayGetPixelAction(displayGetPixelAction.getProperty(), (Expr) displayGetPixelAction.x.modify(this), (Expr) displayGetPixelAction.y.modify(this));
     }
 
     @Override
-    default Phrase<V> visitRadioSetChannelAction(RadioSetChannelAction<Phrase<V>> radioSetChannelAction) {
-        return RadioSetChannelAction
-            .make((Expr<V>) radioSetChannelAction.getChannel().modify(this), radioSetChannelAction.getProperty(), radioSetChannelAction.getComment());
+    default Phrase visitRadioSetChannelAction(RadioSetChannelAction radioSetChannelAction) {
+        return new RadioSetChannelAction(radioSetChannelAction.getProperty(), (Expr) radioSetChannelAction.channel.modify(this));
     }
 
     @Override
-    default Phrase<V> visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<Phrase<V>> fourDigitDisplayShowAction) {
-        return FourDigitDisplayShowAction
-            .make(
-                (Expr<V>) fourDigitDisplayShowAction.getValue().modify(this),
-                (Expr<V>) fourDigitDisplayShowAction.getPosition().modify(this),
-                (Expr<V>) fourDigitDisplayShowAction.getColon().modify(this),
-                fourDigitDisplayShowAction.getProperty(),
-                fourDigitDisplayShowAction.getComment());
+    default Phrase visitFourDigitDisplayShowAction(FourDigitDisplayShowAction fourDigitDisplayShowAction) {
+        return new FourDigitDisplayShowAction(fourDigitDisplayShowAction.getProperty(), (Expr) fourDigitDisplayShowAction.value.modify(this), (Expr) fourDigitDisplayShowAction.position.modify(this), (Expr) fourDigitDisplayShowAction.colon.modify(this));
     }
 
     @Override
-    default Phrase<V> visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<Phrase<V>> fourDigitDisplayClearAction) {
-        return FourDigitDisplayClearAction.make(fourDigitDisplayClearAction.getProperty(), fourDigitDisplayClearAction.getComment());
+    default Phrase visitFourDigitDisplayClearAction(FourDigitDisplayClearAction fourDigitDisplayClearAction) {
+        return new FourDigitDisplayClearAction(fourDigitDisplayClearAction.getProperty());
     }
 
     @Override
-    default Phrase<V> visitBothMotorsOnAction(BothMotorsOnAction<Phrase<V>> bothMotorsOnAction) {
-        return BothMotorsOnAction
-            .make(
-                bothMotorsOnAction.getPortA(),
-                bothMotorsOnAction.getPortB(),
-                (Expr<V>) bothMotorsOnAction.getSpeedA().modify(this),
-                (Expr<V>) bothMotorsOnAction.getSpeedB().modify(this),
-                bothMotorsOnAction.getProperty(),
-                bothMotorsOnAction.getComment());
+    default Phrase visitBothMotorsOnAction(BothMotorsOnAction bothMotorsOnAction) {
+        return new BothMotorsOnAction(bothMotorsOnAction.getProperty(), (Expr) bothMotorsOnAction.speedA.modify(this), (Expr) bothMotorsOnAction.speedB.modify(this), bothMotorsOnAction.portA, bothMotorsOnAction.portB);
     }
 
     @Override
-    default Phrase<V> visitBothMotorsStopAction(BothMotorsStopAction<Phrase<V>> bothMotorsStopAction) {
-        return BothMotorsStopAction.make(bothMotorsStopAction.getProperty(), bothMotorsStopAction.getComment());
+    default Phrase visitBothMotorsStopAction(BothMotorsStopAction bothMotorsStopAction) {
+        return new BothMotorsStopAction(bothMotorsStopAction.getProperty());
     }
 
     @Override
-    default Phrase<V> visitRadioRssiSensor(RadioRssiSensor<Phrase<V>> radioRssiSensor) {
-        return RadioRssiSensor.make(radioRssiSensor.getSensorMetaDataBean(), radioRssiSensor.getProperty(), radioRssiSensor.getComment());
+    default Phrase visitRadioRssiSensor(RadioRssiSensor radioRssiSensor) {
+        return RadioRssiSensor.make(radioRssiSensor.getSensorMetaDataBean(), radioRssiSensor.getProperty());
     }
 
     @Override
-    default Phrase<V> visitLedBarSetAction(LedBarSetAction<Phrase<V>> ledBarSetAction) {
-        return LedBarSetAction
-            .make(
-                (Expr<V>) ledBarSetAction.getX().modify(this),
-                (Expr<V>) ledBarSetAction.getBrightness().modify(this),
-                ledBarSetAction.getProperty(),
-                ledBarSetAction.getComment());
+    default Phrase visitLedBarSetAction(LedBarSetAction ledBarSetAction) {
+        return new LedBarSetAction(ledBarSetAction.getProperty(), (Expr) ledBarSetAction.x.modify(this), (Expr) ledBarSetAction.brightness.modify(this));
     }
 
     @Override
-    default Phrase<V> visitSwitchLedMatrixAction(SwitchLedMatrixAction<Phrase<V>> switchLedMatrixAction) {
-        return SwitchLedMatrixAction.make(switchLedMatrixAction.isActivated(), switchLedMatrixAction.getProperty(), switchLedMatrixAction.getComment());
+    default Phrase visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction) {
+        return new SwitchLedMatrixAction(switchLedMatrixAction.getProperty(), switchLedMatrixAction.activated);
     }
 
     @Override
-    default Phrase<V> visitServoSetAction(ServoSetAction<Phrase<V>> servoSetAction) {
-        return ServoSetAction
-            .make(servoSetAction.getUserDefinedPort(), (Expr<V>) servoSetAction.getValue().modify(this), servoSetAction.getProperty(), servoSetAction.getComment());
+    default Phrase visitServoSetAction(ServoSetAction servoSetAction) {
+        return new ServoSetAction(servoSetAction.getProperty(), servoSetAction.getUserDefinedPort(), (Expr) servoSetAction.value.modify(this));
     }
 
     @Override
-    default Phrase<V> visitMotionKitSingleSetAction(MotionKitSingleSetAction<Phrase<V>> motionKitSingleSetAction) {
-        return MotionKitSingleSetAction
-            .make(
-                motionKitSingleSetAction.getPort(),
-                motionKitSingleSetAction.getDirection(),
-                motionKitSingleSetAction.getProperty(),
-                motionKitSingleSetAction.getComment());
+    default Phrase visitMotionKitSingleSetAction(MotionKitSingleSetAction motionKitSingleSetAction) {
+        return new MotionKitSingleSetAction(motionKitSingleSetAction.getProperty(), motionKitSingleSetAction.port, motionKitSingleSetAction.direction);
     }
 
     @Override
-    default Phrase<V> visitMotionKitDualSetAction(MotionKitDualSetAction<Phrase<V>> motionKitDualSetAction) {
-        return MotionKitDualSetAction
-            .make(
-                motionKitDualSetAction.getDirectionLeft(),
-                motionKitDualSetAction.getDirectionRight(),
-                motionKitDualSetAction.getProperty(),
-                motionKitDualSetAction.getComment());
+    default Phrase visitMotionKitDualSetAction(MotionKitDualSetAction motionKitDualSetAction) {
+        return new MotionKitDualSetAction(motionKitDualSetAction.getProperty(), motionKitDualSetAction.directionLeft, motionKitDualSetAction.directionRight);
     }
 
     // unrelated defaults
 
     @Override
-    default Phrase<V> visitVolumeAction(VolumeAction<Phrase<V>> volumeAction) {
+    default Phrase visitVolumeAction(VolumeAction volumeAction) {
         return IMbedVisitor.super.visitVolumeAction(volumeAction);
     }
 
     @Override
-    default Phrase<V> visitShowTextAction(ShowTextAction<Phrase<V>> showTextAction) {
+    default Phrase visitShowTextAction(ShowTextAction showTextAction) {
         return IMbedVisitor.super.visitShowTextAction(showTextAction);
     }
 
     @Override
-    default Phrase<V> visitPlayFileAction(PlayFileAction<Phrase<V>> playFileAction) {
+    default Phrase visitPlayFileAction(PlayFileAction playFileAction) {
         return IMbedVisitor.super.visitPlayFileAction(playFileAction);
     }
     
     @Override
-    default Phrase<V> visitDcMotorSetAction(DcMotorSetAction<Phrase<V>> dcMotorSetAction) {
-        return DcMotorSetAction.make(
-            dcMotorSetAction.getActorPort(),
-            (Expr<V>) dcMotorSetAction.getMotor().modify(this),
-            dcMotorSetAction.getDirection(),
-            (Expr<V>) dcMotorSetAction.getSpeed().modify(this),
+    default Phrase visitDcMotorSetAction(DcMotorSetAction dcMotorSetAction) {
+        return new DcMotorSetAction(
             dcMotorSetAction.getProperty(),
-            dcMotorSetAction.getComment()
+            dcMotorSetAction.actorPort,
+            (Expr) dcMotorSetAction.motor.modify(this),
+            dcMotorSetAction.direction,
+            (Expr) dcMotorSetAction.speed.modify(this)
         );
     }
 }

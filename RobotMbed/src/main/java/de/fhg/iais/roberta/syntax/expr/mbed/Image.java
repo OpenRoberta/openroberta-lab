@@ -5,50 +5,28 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.syntax.Assoc;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 /**
- * This class represents the <b>mbedImage_image</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate image.<br/>
- * <br>
+ * This class represents the <b>mbedImage_image</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate an image.<br/>
  * The client must provide the value for every pixel of the display (5x5). <br>
- * <br>
- * To create an instance from this class use the method {@link #make(String..., BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class Image<V> extends Expr<V> {
-    private final String[][] image;
+@NepoBasic(name = "IMAGE", category = "EXPR", blocklyNames = {"mbedImage_image"})
+public final class Image extends Expr {
+    public final String[][] image;
 
-    private Image(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("IMAGE"), properties, comment);
+    public Image(String[][] image, BlocklyProperties properties) {
+        super(properties);
         this.image = image;
         setReadOnly();
-    }
-
-    /**
-     * creates instance of {@link Image}. This instance is read only and can not be modified.
-     *
-     * @param image ,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link Image}
-     */
-    public static <V> Image<V> make(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Image<>(image, properties, comment);
-    }
-
-    /**
-     * @return get the string representation of the image.
-     */
-    public String[][] getImage() {
-        return this.image;
     }
 
     @Override
@@ -81,14 +59,7 @@ public class Image<V> extends Expr<V> {
             + "]";
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 25);
         String[][] image = new String[5][5];
         for ( int i = 0; i < 5; i++ ) {
@@ -96,7 +67,7 @@ public class Image<V> extends Expr<V> {
                 image[i][j] = Jaxb2Ast.extractField(fields, "P" + j + i);
             }
         }
-        return Image.make(image, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new Image(image, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

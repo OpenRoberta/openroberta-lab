@@ -191,6 +191,8 @@ function translate($domElement) {
             $('#simRobot').attr('data-original-title', value);
         } else if (lkey == 'Blockly.Msg.MENU_SIM_VALUES_TOOLTIP') {
             $('#simValues').attr('data-original-title', value);
+        } else if (lkey == 'Blockly.Msg.MENU_SIM_TRAIL_TOOLTIP') {
+            $('#simTrail').attr('data-original-title', value);
         } else if (lkey == 'Blockly.Msg.MENU_SIM_IMPORT_TOOLTIP') {
             $('#simImport').attr('data-original-title', value);
         } else if (lkey == 'Blockly.Msg.MENU_SIM_POSE_TOOLTIP') {

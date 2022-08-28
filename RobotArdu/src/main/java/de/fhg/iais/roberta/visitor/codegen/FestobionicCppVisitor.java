@@ -12,14 +12,13 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IFestobionicVisitor;
 
@@ -43,32 +42,27 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
      *
      * @param phrases to generate the code from
      */
-    public FestobionicCppVisitor(List<List<Phrase<Void>>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
+    public FestobionicCppVisitor(List<List<Phrase>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, brickConfiguration, beans);
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
-        this.sb.append("digitalWrite(_led_").append(lightAction.getPort()).append(", ").append(lightAction.getMode().getValues()[0]).append(");");
+    public Void visitLightAction(LightAction lightAction) {
+        this.sb.append("digitalWrite(_led_").append(lightAction.port).append(", ").append(lightAction.mode.getValues()[0]).append(");");
         return null;
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        throw new DbcException("Not supported!");
-    }
-
-    @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         this.sb.append("_servo_").append(motorOnAction.getUserDefinedPort()).append(".write(");
-        motorOnAction.getParam().getSpeed().accept(this);
+        motorOnAction.param.getSpeed().accept(this);
         this.sb.append(");");
         return null;
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
-        mainTask.getVariables().accept(this);
+    public Void visitMainTask(MainTask mainTask) {
+        mainTask.variables.accept(this);
         nlIndent();
         generateConfigurationVariables();
         generateTimerVariables();
@@ -92,7 +86,7 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
 
         nlIndent();
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.SERIAL) ) {
-            this.sb.append("Serial.begin(9600); ");
+            this.sb.append("Serial.begin(9600);");
             nlIndent();
         }
         generateConfigurationSetup();
@@ -127,14 +121,14 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
         nlIndent();
         Set<String> headerFiles = new LinkedHashSet<>();
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
-            switch ( usedConfigurationBlock.getComponentType() ) {
+            switch ( usedConfigurationBlock.componentType ) {
                 case SC.SERVOMOTOR:
                     headerFiles.add("#include <ESP32Servo/src/ESP32Servo.h>");
                     break;
                 case SC.LED:
                     break;
                 default:
-                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
+                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.componentType);
             }
         }
         for ( String header : headerFiles ) {
@@ -147,30 +141,30 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
 
     private void generateConfigurationSetup() {
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
-            switch ( usedConfigurationBlock.getComponentType() ) {
+            switch ( usedConfigurationBlock.componentType ) {
                 case SC.LED:
-                    this.sb.append("pinMode(_led_").append(usedConfigurationBlock.getUserDefinedPortName()).append(", OUTPUT);");
+                    this.sb.append("pinMode(_led_").append(usedConfigurationBlock.userDefinedPortName).append(", OUTPUT);");
                     nlIndent();
                     break;
                 case SC.SERVOMOTOR:
                     this.sb
                         .append("_servo_")
-                        .append(usedConfigurationBlock.getUserDefinedPortName())
+                        .append(usedConfigurationBlock.userDefinedPortName)
                         .append(".attach(")
                         .append(PIN_MAPPING.get(usedConfigurationBlock.getProperty(SC.PULSE)))
                         .append(");");
                     nlIndent();
                     break;
                 default:
-                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
+                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.componentType);
             }
         }
     }
 
     private void generateConfigurationVariables() {
         for ( ConfigurationComponent cc : this.configuration.getConfigurationComponentsValues() ) {
-            String blockName = cc.getUserDefinedPortName();
-            switch ( cc.getComponentType() ) {
+            String blockName = cc.userDefinedPortName;
+            switch ( cc.componentType ) {
                 case SC.LED:
                     this.sb.append("int _led_").append(blockName).append(" = ").append(cc.getProperty("INPUT")).append(";");
                     nlIndent();
@@ -180,7 +174,7 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
                     nlIndent();
                     break;
                 default:
-                    throw new DbcException("Configuration block is not supported: " + cc.getComponentType());
+                    throw new DbcException("Configuration block is not supported: " + cc.componentType);
             }
         }
     }

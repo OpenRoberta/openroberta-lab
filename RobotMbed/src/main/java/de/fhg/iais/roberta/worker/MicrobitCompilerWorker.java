@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.worker;
 
 import java.lang.ProcessBuilder.Redirect;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -11,7 +12,7 @@ import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
 
-public class MicrobitCompilerWorker implements IWorker {
+public class MicrobitCompilerWorker implements ICompilerWorker {
 
     private static final Logger LOG = LoggerFactory.getLogger(MicrobitCompilerWorker.class);
 
@@ -41,7 +42,7 @@ public class MicrobitCompilerWorker implements IWorker {
         if ( project.getCompiledHex() != null ) {
             return Key.COMPILERWORKFLOW_SUCCESS;
         } else {
-            Util.logCrosscompilerError(LOG, "no binary returned", sourceCode);
+            Util.logCrosscompilerError(LOG, "no binary returned", sourceCode, project.isNativeEditorCode());
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
     }
@@ -53,7 +54,7 @@ public class MicrobitCompilerWorker implements IWorker {
             procBuilder.redirectInput(Redirect.INHERIT);
             procBuilder.redirectOutput(Redirect.PIPE);
             Process p = procBuilder.start();
-            String compiledHex = IOUtils.toString(p.getInputStream(), "US-ASCII");
+            String compiledHex = IOUtils.toString(p.getInputStream(), StandardCharsets.US_ASCII);
             p.waitFor();
             p.destroy();
             return compiledHex;

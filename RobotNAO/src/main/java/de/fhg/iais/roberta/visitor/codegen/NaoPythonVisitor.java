@@ -1,11 +1,6 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.collect.ClassToInstanceMap;
-
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.UsedSensor;
@@ -14,39 +9,10 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
-import de.fhg.iais.roberta.syntax.BlockType;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.SC;
-import de.fhg.iais.roberta.syntax.action.nao.Animation;
-import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
-import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
-import de.fhg.iais.roberta.syntax.action.nao.ForgetFace;
-import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
-import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
-import de.fhg.iais.roberta.syntax.action.nao.Hand;
-import de.fhg.iais.roberta.syntax.action.nao.LearnFace;
-import de.fhg.iais.roberta.syntax.action.nao.LedOff;
-import de.fhg.iais.roberta.syntax.action.nao.LedReset;
-import de.fhg.iais.roberta.syntax.action.nao.MoveJoint;
-import de.fhg.iais.roberta.syntax.action.nao.PlayFile;
-import de.fhg.iais.roberta.syntax.action.nao.PointLookAt;
-import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
-import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
-import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
-import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
-import de.fhg.iais.roberta.syntax.action.nao.SetLeds;
-import de.fhg.iais.roberta.syntax.action.nao.SetMode;
-import de.fhg.iais.roberta.syntax.action.nao.SetStiffness;
-import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
-import de.fhg.iais.roberta.syntax.action.nao.Stop;
-import de.fhg.iais.roberta.syntax.action.nao.TakePicture;
-import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
-import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
-import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
-import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
+import de.fhg.iais.roberta.syntax.action.nao.*;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -57,28 +23,18 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
-import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectFaceSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectMarkSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
-import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrentSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
-import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
+import de.fhg.iais.roberta.syntax.lang.stmt.*;
+import de.fhg.iais.roberta.syntax.sensor.generic.*;
+import de.fhg.iais.roberta.syntax.sensor.nao.*;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.INaoVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
@@ -93,29 +49,29 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
      *
      * @param programPhrases to generate the code from
      */
-    public NaoPythonVisitor(List<List<Phrase<Void>>> programPhrases, ILanguage language, ClassToInstanceMap<IProjectBean> beans) {
+    public NaoPythonVisitor(List<List<Phrase>> programPhrases, ILanguage language, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
 
         this.language = language;
     }
 
     @Override
-    public Void visitRgbColor(RgbColor<Void> rgbColor) {
+    public Void visitRgbColor(RgbColor rgbColor) {
         this.sb.append("int(\"{:02x}{:02x}{:02x}\".format(min(max(");
-        rgbColor.getR().accept(this);
+        rgbColor.R.accept(this);
         this.sb.append(", 0), 255), min(max(");
-        rgbColor.getG().accept(this);
+        rgbColor.G.accept(this);
         this.sb.append(", 0), 255), min(max(");
-        rgbColor.getB().accept(this);
-        this.sb.append(", 0), 255), 16))");
+        rgbColor.B.accept(this);
+        this.sb.append(", 0), 255)), 16)");
         return null;
     }
 
     @Override
-    public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
+    public Void visitWaitStmt(WaitStmt waitStmt) {
         this.sb.append("while True:");
         incrIndentation();
-        visitStmtList(waitStmt.getStatements());
+        visitStmtList(waitStmt.statements);
         nlIndent();
         this.sb.append("h.wait(15)");
         decrIndentation();
@@ -123,30 +79,30 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+    public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         this.sb.append("h.wait(");
-        waitTimeStmt.getTime().accept(this);
+        waitTimeStmt.time.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
-        StmtList<Void> variables = mainTask.getVariables();
+    public Void visitMainTask(MainTask mainTask) {
+        StmtList variables = mainTask.variables;
         variables.accept(this);
         generateUserDefinedMethods();
         nlIndent();
         nlIndent();
         this.sb.append("def run():");
         incrIndentation();
-        if ( mainTask.getDebug().equals("TRUE") ) {
+        if ( mainTask.debug.equals("TRUE") ) {
             nlIndent();
             this.sb.append("h.setAutonomousLife('ON')");
         } else {
             nlIndent();
             this.sb.append("h.setAutonomousLife('OFF')");
         }
-        List<Stmt<Void>> variableList = variables.get();
+        List<Stmt> variableList = variables.get();
         if ( !variableList.isEmpty() ) {
             nlIndent();
             // insert global statement for all variables
@@ -158,9 +114,9 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
             // in visitMethodVoid, visitMethodReturn
             this.sb.append("global ");
             boolean first = true;
-            for ( Stmt<Void> s : variables.get() ) {
-                ExprStmt<Void> es = (ExprStmt<Void>) s;
-                VarDeclaration<Void> vd = (VarDeclaration<Void>) es.getExpr();
+            for ( Stmt s : variables.get() ) {
+                ExprStmt es = (ExprStmt) s;
+                VarDeclaration vd = (VarDeclaration) es.expr;
                 if ( first ) {
                     first = false;
                 } else {
@@ -173,9 +129,9 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitSetMode(SetMode<Void> setMode) {
+    public Void visitSetMode(SetMode setMode) {
         this.sb.append("h.mode(");
-        switch ( setMode.getModus() ) {
+        switch ( setMode.modus ) {
             case ACTIVE:
                 this.sb.append("1)");
                 break;
@@ -190,9 +146,9 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitApplyPosture(ApplyPosture<Void> applyPosture) {
+    public Void visitApplyPosture(ApplyPosture applyPosture) {
         this.sb.append("h.applyPosture(");
-        switch ( applyPosture.getPosture() ) {
+        switch ( applyPosture.posture ) {
             case STAND:
                 this.sb.append("\"Stand\")");
                 break;
@@ -225,9 +181,9 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitSetStiffness(SetStiffness<Void> setStiffness) {
+    public Void visitSetStiffness(SetStiffness setStiffness) {
         this.sb.append("h.stiffness(");
-        switch ( setStiffness.getBodyPart() ) {
+        switch ( setStiffness.bodyPart ) {
             case BODY:
                 this.sb.append("\"Body\"");
                 break;
@@ -254,7 +210,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 break;
         }
 
-        switch ( setStiffness.getOnOff() ) {
+        switch ( setStiffness.onOff ) {
             case ON:
                 this.sb.append(", 1)");
                 break;
@@ -266,15 +222,15 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitAutonomous(Autonomous<Void> autonomous) {
-        this.sb.append("h.setAutonomousLife(" + getEnumCode(autonomous.getOnOff()).toUpperCase() + ")");
+    public Void visitAutonomous(Autonomous autonomous) {
+        this.sb.append("h.setAutonomousLife(" + getEnumCode(autonomous.onOff).toUpperCase() + ")");
         return null;
     }
 
     @Override
-    public Void visitHand(Hand<Void> hand) {
+    public Void visitHand(Hand hand) {
         this.sb.append("h.hand(");
-        switch ( hand.getTurnDirection() ) {
+        switch ( hand.turnDirection ) {
             case LEFT:
                 this.sb.append("\"LHand\"");
                 break;
@@ -283,7 +239,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 break;
         }
 
-        switch ( hand.getModus() ) {
+        switch ( hand.modus ) {
             case ACTIVE:
                 this.sb.append(", 1)");
                 break;
@@ -300,9 +256,9 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitMoveJoint(MoveJoint<Void> moveJoint) {
+    public Void visitMoveJoint(MoveJoint moveJoint) {
         this.sb.append("h.moveJoint(");
-        switch ( moveJoint.getJoint() ) {
+        switch ( moveJoint.joint ) {
             case HEADYAW:
                 this.sb.append("\"HeadYaw\"");
                 break;
@@ -385,9 +341,9 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 break;
         }
         this.sb.append(", ");
-        moveJoint.getDegrees().accept(this);
+        moveJoint.degrees.accept(this);
         this.sb.append(", ");
-        switch ( moveJoint.getRelativeAbsolute() ) {
+        switch ( moveJoint.relativeAbsolute ) {
             case ABSOLUTE:
                 this.sb.append("1)");
                 break;
@@ -399,50 +355,50 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitWalkDistance(WalkDistance<Void> walkDistance) {
+    public Void visitWalkDistance(WalkDistance walkDistance) {
         this.sb.append("h.walk(");
-        if ( walkDistance.getWalkDirection() == DriveDirection.BACKWARD ) {
+        if ( walkDistance.walkDirection == DriveDirection.BACKWARD ) {
             this.sb.append("-");
         }
-        walkDistance.getDistanceToWalk().accept(this);
+        walkDistance.distanceToWalk.accept(this);
         this.sb.append(", 0, 0)");
         return null;
     }
 
     @Override
-    public Void visitTurnDegrees(TurnDegrees<Void> turnDegrees) {
+    public Void visitTurnDegrees(TurnDegrees turnDegrees) {
         this.sb.append("h.walk(0, 0,");
-        if ( turnDegrees.getTurnDirection() == TurnDirection.RIGHT ) {
+        if ( turnDegrees.turnDirection == TurnDirection.RIGHT ) {
             this.sb.append("-");
         }
-        turnDegrees.getDegreesToTurn().accept(this);
+        turnDegrees.degreesToTurn.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitWalkTo(WalkTo<Void> walkTo) {
+    public Void visitWalkTo(WalkTo walkTo) {
         this.sb.append("h.walk(");
-        walkTo.getWalkToX().accept(this);
+        walkTo.walkToX.accept(this);
         this.sb.append(",");
-        walkTo.getWalkToY().accept(this);
+        walkTo.walkToY.accept(this);
         this.sb.append(",");
-        walkTo.getWalkToTheta().accept(this);
+        walkTo.walkToTheta.accept(this);
         this.sb.append(")");
 
         return null;
     }
 
     @Override
-    public Void visitStop(Stop<Void> stop) {
+    public Void visitStop(Stop stop) {
         this.sb.append("h.stop()");
 
         return null;
     }
 
     @Override
-    public Void visitAnimation(Animation<Void> animation) {
-        switch ( animation.getMove() ) {
+    public Void visitAnimation(Animation animation) {
+        switch ( animation.move ) {
             case TAICHI:
                 this.sb.append("h.taiChi()");
                 break;
@@ -460,31 +416,31 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitPointLookAt(PointLookAt<Void> pointLookAt) {
-        this.sb.append("h.pointLookAt(" + getEnumCode(pointLookAt.getPointLook()));
-        this.sb.append(", " + pointLookAt.getFrame().getValues()[0] + ", ");
+    public Void visitPointLookAt(PointLookAt pointLookAt) {
+        this.sb.append("h.pointLookAt(" + getEnumCode(pointLookAt.pointLook));
+        this.sb.append(", " + pointLookAt.frame.getValues()[0] + ", ");
 
-        pointLookAt.getPointX().accept(this);
+        pointLookAt.pointX.accept(this);
         this.sb.append(", ");
-        pointLookAt.getPointY().accept(this);
+        pointLookAt.pointY.accept(this);
         this.sb.append(", ");
-        pointLookAt.getPointZ().accept(this);
+        pointLookAt.pointZ.accept(this);
         this.sb.append(", ");
-        pointLookAt.getSpeed().accept(this);
+        pointLookAt.speed.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitSetVolume(SetVolume<Void> setVolume) {
+    public Void visitSetVolume(SetVolume setVolume) {
         this.sb.append("h.setVolume(");
-        setVolume.getVolume().accept(this);
+        setVolume.volume.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitGetVolume(GetVolume<Void> getVolume) {
+    public Void visitGetVolume(GetVolume getVolume) {
         this.sb.append("h.getVolume()");
         return null;
     }
@@ -539,52 +495,63 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+    public Void visitSetLanguageAction(SetLanguageAction setLanguageAction) {
         this.sb.append("h.setLanguage(\"");
-        this.sb.append(getLanguageString(setLanguageAction.getLanguage()));
+        this.sb.append(getLanguageString(setLanguageAction.language));
         this.sb.append("\")");
         return null;
     }
 
     @Override
-    public Void visitGetLanguage(GetLanguage<Void> getLanguage) {
+    public Void visitGetLanguage(GetLanguage getLanguage) {
         this.sb.append("h.getLanguage()");
         return null;
     }
 
     @Override
-    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
+    public Void visitSayTextAction(SayTextAction sayTextAction) {
         this.sb.append("h.say(");
-        if ( !sayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
+        if ( !sayTextAction.msg.getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
-            sayTextAction.getMsg().accept(this);
+            sayTextAction.msg.accept(this);
             this.sb.append(")");
         } else {
-            sayTextAction.getMsg().accept(this);
-        }
-        BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
-        if ( !(sayTextAction.getSpeed().getKind().equals(emptyBlock) && sayTextAction.getPitch().getKind().equals(emptyBlock)) ) {
-            this.sb.append(",");
-            sayTextAction.getSpeed().accept(this);
-            this.sb.append(",");
-            sayTextAction.getPitch().accept(this);
+            sayTextAction.msg.accept(this);
         }
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitPlayFile(PlayFile<Void> playFile) {
+    public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction sayTextAction) {
+        this.sb.append("h.say(");
+        if ( !sayTextAction.msg.getKind().hasName("STRING_CONST") ) {
+            this.sb.append("str(");
+            sayTextAction.msg.accept(this);
+            this.sb.append(")");
+        } else {
+            sayTextAction.msg.accept(this);
+        }
+        this.sb.append(",");
+        sayTextAction.speed.accept(this);
+        this.sb.append(",");
+        sayTextAction.pitch.accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitPlayFile(PlayFile playFile) {
         this.sb.append("h.playFile(");
-        playFile.getMsg().accept(this);
+        playFile.msg.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitSetLeds(SetLeds<Void> setLeds) {
+    public Void visitSetLeds(SetLeds setLeds) {
         this.sb.append("h.setLeds(");
-        switch ( setLeds.getLed() ) {
+        switch ( setLeds.led ) {
             case ALL:
                 this.sb.append("\"AllLeds\", ");
                 break;
@@ -619,15 +586,15 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 this.sb.append("\"RightFootLeds\", ");
                 break;
         }
-        setLeds.getColor().accept(this);
+        setLeds.Color.accept(this);
         this.sb.append(", 0.1)");
         return null;
     }
 
     @Override
-    public Void visitSetIntensity(SetIntensity<Void> setIntensity) {
+    public Void visitSetIntensity(SetIntensity setIntensity) {
         this.sb.append("h.setIntensity(");
-        switch ( setIntensity.getLed() ) {
+        switch ( setIntensity.led ) {
             case ALL:
                 this.sb.append("\"AllLeds\", ");
                 break;
@@ -662,21 +629,21 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 this.sb.append("\"RightFootLeds\", ");
                 break;
         }
-        setIntensity.getIntensity().accept(this);
+        setIntensity.Intensity.accept(this);
         this.sb.append(")");
         return null;
     }
 
     /*@Override
-    public Void visitLedColor(LedColor<Void> ledColor) {
+    public Void visitLedColor(LedColor ledColor) {
         this.sb.append(ledColor.getRedChannel() + ", " + ledColor.getGreenChannel() + ", " + ledColor.getBlueChannel() + ", 255");
         return null;
     }*/
 
     @Override
-    public Void visitLedOff(LedOff<Void> ledOff) {
+    public Void visitLedOff(LedOff ledOff) {
         this.sb.append("h.ledOff(");
-        switch ( ledOff.getLed() ) {
+        switch ( ledOff.led ) {
             case ALL:
                 this.sb.append("\"AllLeds\"");
                 break;
@@ -716,9 +683,9 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitLedReset(LedReset<Void> ledReset) {
+    public Void visitLedReset(LedReset ledReset) {
         this.sb.append("h.ledReset(");
-        switch ( ledReset.getLed() ) {
+        switch ( ledReset.led ) {
             case ALL:
                 this.sb.append("\"AllLeds\"");
                 break;
@@ -758,23 +725,23 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitRandomEyesDuration(RandomEyesDuration<Void> randomEyesDuration) {
+    public Void visitRandomEyesDuration(RandomEyesDuration randomEyesDuration) {
         this.sb.append("h.randomEyes(");
-        randomEyesDuration.getDuration().accept(this);
+        randomEyesDuration.duration.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitRastaDuration(RastaDuration<Void> rastaDuration) {
+    public Void visitRastaDuration(RastaDuration rastaDuration) {
         this.sb.append("h.rasta(");
-        rastaDuration.getDuration().accept(this);
+        rastaDuration.duration.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+    public Void visitTouchSensor(TouchSensor touchSensor) {
         this.sb.append("h.touchsensors(");
         this.sb.append(getEnumCode(touchSensor.getUserDefinedPort()));
         this.sb.append(", ");
@@ -784,13 +751,13 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> sonar) {
+    public Void visitUltrasonicSensor(UltrasonicSensor sonar) {
         this.sb.append("h.ultrasonic()");
         return null;
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyrometer) {
+    public Void visitGyroSensor(GyroSensor gyrometer) {
         this.sb.append("h.gyrometer(");
         this.sb.append(getEnumCode(gyrometer.getSlot()));
         this.sb.append(")");
@@ -798,7 +765,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometer) {
+    public Void visitAccelerometerSensor(AccelerometerSensor accelerometer) {
         this.sb.append("h.accelerometer(");
         this.sb.append(getEnumCode(accelerometer.getUserDefinedPort()));
         this.sb.append(")");
@@ -806,7 +773,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitFsrSensor(FsrSensor<Void> fsr) {
+    public Void visitFsrSensor(FsrSensor fsr) {
         this.sb.append("h.fsr(");
         this.sb.append(getEnumCode(fsr.getUserDefinedPort()));
         this.sb.append(")");
@@ -814,7 +781,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitDetectMarkSensor(DetectMarkSensor<Void> detectedMark) {
+    public Void visitDetectMarkSensor(DetectMarkSensor detectedMark) {
         this.sb.append("h.getDetectedMark");
         if ( detectedMark.getMode().equals(SC.IDALL) ) {
             this.sb.append("s");
@@ -824,22 +791,22 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitTakePicture(TakePicture<Void> takePicture) {
+    public Void visitTakePicture(TakePicture takePicture) {
         this.sb.append("h.takePicture(");
-        if ( takePicture.getCamera() == Camera.TOP ) {
+        if ( takePicture.camera == Camera.TOP ) {
             this.sb.append("\"Top\", ");
-        } else if ( takePicture.getCamera() == Camera.BOTTOM ) {
+        } else if ( takePicture.camera == Camera.BOTTOM ) {
             this.sb.append("\"Bottom\", ");
         }
-        takePicture.getPictureName().accept(this);
+        takePicture.pictureName.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitRecordVideo(RecordVideo<Void> recordVideo) {
+    public Void visitRecordVideo(RecordVideo recordVideo) {
         this.sb.append("h.recordVideo(");
-        switch ( recordVideo.getResolution() ) {
+        switch ( recordVideo.resolution ) {
             case LOW:
                 this.sb.append("0, ");
                 break;
@@ -850,7 +817,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 this.sb.append("2, ");
                 break;
         }
-        switch ( recordVideo.getCamera() ) {
+        switch ( recordVideo.camera ) {
             case TOP:
                 this.sb.append("\"Top\", ");
                 break;
@@ -858,31 +825,31 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 this.sb.append("\"Bottom\", ");
                 break;
         }
-        recordVideo.getDuration().accept(this);
+        recordVideo.duration.accept(this);
         this.sb.append(", ");
-        recordVideo.getVideoName().accept(this);
+        recordVideo.videoName.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitLearnFace(LearnFace<Void> learnFace) {
+    public Void visitLearnFace(LearnFace learnFace) {
         this.sb.append("faceRecognitionModule.learnFace(");
-        learnFace.getFaceName().accept(this);
+        learnFace.faceName.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitForgetFace(ForgetFace<Void> forgetFace) {
+    public Void visitForgetFace(ForgetFace forgetFace) {
         this.sb.append("faceRecognitionModule.forgetFace(");
-        forgetFace.getFaceName().accept(this);
+        forgetFace.faceName.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitDetectFaceSensor(DetectFaceSensor<Void> detectFace) {
+    public Void visitDetectFaceSensor(DetectFaceSensor detectFace) {
         this.sb.append("faceRecognitionModule.detectFace");
         if ( detectFace.getMode().equals(SC.NAMEALL) ) {
             this.sb.append("s");
@@ -892,12 +859,12 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
-        return sensorGetSample.getSensor().accept(this);
+    public Void visitGetSampleSensor(GetSampleSensor sensorGetSample) {
+        return sensorGetSample.sensor.accept(this);
     }
 
     @Override
-    public Void visitElectricCurrentSensor(ElectricCurrentSensor<Void> electricCurrent) {
+    public Void visitElectricCurrentSensor(ElectricCurrentSensor electricCurrent) {
         String side_axis = electricCurrent.getSlot().toString().toLowerCase();
         String[] slots = side_axis.split("_");
 
@@ -1013,18 +980,18 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitConnectConst(ConnectConst<Void> connectConst) {
+    public Void visitConnectConst(ConnectConst connectConst) {
         return null;
     }
 
     @Override
-    public Void visitWalkAsync(WalkAsync<Void> walkAsync) {
+    public Void visitWalkAsync(WalkAsync walkAsync) {
         this.sb.append("h.walkAsync(");
-        walkAsync.getXSpeed().accept(this);
+        walkAsync.XSpeed.accept(this);
         this.sb.append(", ");
-        walkAsync.getYSpeed().accept(this);
+        walkAsync.YSpeed.accept(this);
         this.sb.append(", ");
-        walkAsync.getZSpeed().accept(this);
+        walkAsync.ZSpeed.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -1109,7 +1076,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
+    public Void visitRecognizeWord(RecognizeWord recognizeWord) {
         this.sb.append("speechRecognitionModule.recognizeWordFromDictionary(");
         recognizeWord.vocabulary.accept(this);
         this.sb.append(")");
@@ -1117,49 +1084,49 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitNaoMarkInformation(NaoMarkInformation<Void> naoMarkInformation) {
+    public Void visitNaoMarkInformation(NaoMarkInformation naoMarkInformation) {
         this.sb.append("h.getNaoMarkInformation(");
-        naoMarkInformation.getNaoMarkId().accept(this);
+        naoMarkInformation.naoMarkId.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitDetectedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
+    public Void visitDetectedFaceInformation(DetectedFaceInformation detectedFaceInformation) {
         this.sb.append("faceRecognitionModule.getFaceInformation(");
-        detectedFaceInformation.getFaceName().accept(this);
+        detectedFaceInformation.faceName.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
+    public Void visitColorConst(ColorConst colorConst) {
         this.sb.append(colorConst.getHexIntAsString());
         return null;
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+    public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+    public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         throw new DbcException("Not supported!");
     }
 
     @Override
-    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         throw new DbcException("Not supported!");
     }
 }

@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.Export;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectWorkflowRestController;
@@ -87,7 +87,7 @@ public class CompilerWorkflowRobotSpecificIT {
 
     private static RobotCommunicator robotCommunicator;
     private static ServerProperties serverProperties;
-    private static Map<String, IRobotFactory> pluginMap;
+    private static Map<String, RobotFactory> pluginMap;
     private static HttpSessionState httpSessionState;
 
     private static final List<String> results = new ArrayList<>();
@@ -226,7 +226,7 @@ public class CompilerWorkflowRobotSpecificIT {
             int index = resource.lastIndexOf(".xml");
             Assert.assertTrue(index > 0);
             String programName = resource.substring(0, index);
-            if ( excludedPrograms.contains(programName)) {
+            if ( excludedPrograms.contains(programName) ) {
                 result = true;
             } else if ( CROSSCOMPILER_CALL ) {
                 String xmlText = Util.readResourceContent(pathToResource);

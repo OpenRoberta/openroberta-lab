@@ -10,24 +10,24 @@ import com.google.common.collect.ImmutableClassToInstanceMap.Builder;
 import de.fhg.iais.roberta.bean.ErrorAndWarningBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.IProjectBean.IBuilder;
+import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 
 /**
- * Uses the {@link AbstractProgramValidatorVisitor} to visit the current AST and validate the hardware. May also annotate the AST to add information about
+ * Uses the {@link AbstractProgramValidatorVisitor} to visit the current AST and validate it. May also annotate the AST to add information about
  * inconsistencies in it.
  */
 public abstract class AbstractValidatorAndCollectorWorker implements IWorker {
 
     @Override
     public void execute(Project project) {
-        Builder<IProjectBean.IBuilder<?>> mapBuilder = new ImmutableClassToInstanceMap.Builder<>();
+        Builder<IProjectBean.IBuilder> mapBuilder = new ImmutableClassToInstanceMap.Builder();
 
         UsedMethodBean.Builder usedMethodBeanBuilder = new UsedMethodBean.Builder();
         mapBuilder.put(UsedMethodBean.Builder.class, usedMethodBeanBuilder);
@@ -38,16 +38,19 @@ public abstract class AbstractValidatorAndCollectorWorker implements IWorker {
         ErrorAndWarningBean.Builder errorAndWarningBeanBuilder = new ErrorAndWarningBean.Builder();
         mapBuilder.put(ErrorAndWarningBean.Builder.class, errorAndWarningBeanBuilder);
 
-        ImmutableClassToInstanceMap<IBuilder<?>> map = mapBuilder.build();
+        NNBean.Builder nnBeanBuilder = new NNBean.Builder();
+        mapBuilder.put(NNBean.Builder.class, nnBeanBuilder);
 
-        CommonNepoValidatorAndCollectorVisitor visitor = this.getVisitor(project, mapBuilder.build());
-        List<List<Phrase<Void>>> tree = project.getProgramAst().getTree();
+        ImmutableClassToInstanceMap<IBuilder> map = mapBuilder.build();
+
+        CommonNepoValidatorAndCollectorVisitor visitor = this.getVisitor(project, map);
+        List<List<Phrase>> tree = project.getProgramAst().getTree();
         // workaround: because methods in the tree may use global variables before the main task is
         // reached within the tree, the variables may not exist yet and show up as not declared
         collectGlobalVariables(tree, visitor);
-        for ( List<Phrase<Void>> phrases : tree ) {
-            for ( Phrase<Void> phrase : phrases ) {
-                if ( phrase.getKind().getName().equals("MAIN_TASK") ) {
+        for ( List<Phrase> phrases : tree ) {
+            for ( Phrase phrase : phrases ) {
+                if ( phrase.hasName("MAIN_TASK") ) {
                     usedHardwareBeanBuilder.setProgramEmpty(phrases.size() == 2);
                 } else {
                     phrase.accept(visitor);
@@ -58,6 +61,7 @@ public abstract class AbstractValidatorAndCollectorWorker implements IWorker {
 
         project.addWorkerResult(map.get(UsedMethodBean.Builder.class).build());
         project.addWorkerResult(map.get(UsedHardwareBean.Builder.class).build());
+        project.addWorkerResult(map.get(NNBean.Builder.class).build());
 
         ErrorAndWarningBean errorAndWarningBean = errorAndWarningBeanBuilder.build();
         int errorCounter = errorAndWarningBean.getErrorCount();
@@ -75,12 +79,12 @@ public abstract class AbstractValidatorAndCollectorWorker implements IWorker {
      * @param beanBuilders a map of available bean builders, may be empty
      * @return the appropriate visitor for the current robot
      */
-    protected abstract CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders);
+    protected abstract CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders);
 
-    private void collectGlobalVariables(Iterable<List<Phrase<Void>>> phrasesSet, IVisitor<Void> visitor) {
-        for ( List<Phrase<Void>> phrases : phrasesSet ) {
-            Phrase<Void> phrase = phrases.get(1);
-            if ( phrase.getKind().getName().equals("MAIN_TASK") ) {
+    private void collectGlobalVariables(Iterable<List<Phrase>> phrasesSet, IVisitor<Void> visitor) {
+        for ( List<Phrase> phrases : phrasesSet ) {
+            Phrase phrase = phrases.get(1);
+            if ( phrase.hasName("MAIN_TASK") ) {
                 phrase.accept(visitor);
             }
         }

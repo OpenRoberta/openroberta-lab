@@ -1,39 +1,31 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.functions.Function;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 
 /**
  * Wraps subclasses of the class {@link Function} so they can be used as {@link Expr} in expressions.
  */
-public class FunctionExpr<V> extends Expr<V> {
-    private final Function<V> function;
+@NepoBasic(name = "FUNCTION_EXPR", category = "EXPR", blocklyNames = {})
+public final class FunctionExpr extends Expr {
+    public final Function function;
 
-    private FunctionExpr(Function<V> function) {
-        super(BlockTypeContainer.getByName("FUNCTION_EXPR"), function.getProperty(), function.getComment());
+    public FunctionExpr(Function function) {
+        super(function.getProperty());
         Assert.isTrue(function.isReadOnly());
         this.function = function;
         setReadOnly();
     }
 
     /**
-     * Create object of the class {@link FunctionExpr}.
-     *
-     * @param function that we want to wrap,
-     * @return expression with wrapped function inside
-     */
-    public static <V> FunctionExpr<V> make(Function<V> function) {
-        return new FunctionExpr<V>(function);
-    }
-
-    /**
      * @return function that is wrapped in the expression
      */
-    public Function<V> getFunction() {
+    public Function getFunction() {
         return this.function;
     }
 
@@ -59,7 +51,7 @@ public class FunctionExpr<V> extends Expr<V> {
 
     @Override
     public Block astToBlock() {
-        Phrase<V> p = this.getFunction();
+        Phrase p = this.getFunction();
         return p.astToBlock();
     }
 }

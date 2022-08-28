@@ -78,11 +78,11 @@ define(["require", "exports"], function (require, exports) {
         Object.defineProperty(WireDrawer.prototype, "path", {
             get: function () {
                 var moveto = this.head.position;
-                var path = "M " + moveto.x + " " + moveto.y;
+                var path = "M ".concat(moveto.x, " ").concat(moveto.y);
                 var current = this.head.next;
                 while (current !== null) {
                     var lineto = current.position;
-                    path = path + " L " + lineto.x + " " + lineto.y;
+                    path = "".concat(path, " L ").concat(lineto.x, " ").concat(lineto.y);
                     current = current.next;
                 }
                 return path;

@@ -1,14 +1,11 @@
 package de.fhg.iais.roberta.factory;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.Constructor;
 import java.util.Locale;
-import java.util.Map;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.bean.WaitUntilSensorBean;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
@@ -22,6 +19,7 @@ import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.inter.mode.general.IDirection;
 import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
 import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
+import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.general.IWorkingState;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -36,49 +34,23 @@ import de.fhg.iais.roberta.mode.general.Direction;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.WorkingState;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
-import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.ast.AstFactory;
+import de.fhg.iais.roberta.util.ast.BlockDescriptor;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class BlocklyDropdownFactory {
     private static final Logger LOG = LoggerFactory.getLogger(BlocklyDropdownFactory.class);
-    private final JSONObject robotDescription;
-
-    private final Map<String, WaitUntilSensorBean> waMap;
-    private final Map<String, String> modes;
-    private final Map<String, String> configurationComponentTypes;
-
-    public BlocklyDropdownFactory(PluginProperties pluginProperties) {
-        String robotDescriptor = pluginProperties.getStringProperty("robot.descriptor");
-        this.robotDescription = new JSONObject();
-        Util.loadYAMLRecursive("", this.robotDescription, robotDescriptor, false);
-        BlocklyDropdownFactoryHelper.loadBlocks(this.robotDescription);
-        this.waMap = BlocklyDropdownFactoryHelper.getWaitUntils(this.robotDescription);
-        this.modes = BlocklyDropdownFactoryHelper.getModes(this.robotDescription);
-        this.configurationComponentTypes = BlocklyDropdownFactoryHelper.getConfigurationComponents(this.robotDescription);
-
-    }
 
     public String getConfigurationComponentTypeByBlocklyName(String blocklyName) {
-        Assert.nonEmptyString(blocklyName, "Invalid blockly name");
-        String configurationComponentType = this.configurationComponentTypes.get(blocklyName);
-        Assert.notNull(configurationComponentType, "No associated component type for %s in the properties", blocklyName);
-        return configurationComponentType;
+        return AstFactory.getConfigurationComponentTypeByBlocklyName(blocklyName);
     }
 
     public String getMode(String mode) {
-        Assert.nonEmptyString(mode, "Invalid mode");
-
-        final String sUpper = mode.trim().toUpperCase(Locale.GERMAN);
-        String internalMode = this.modes.get(sUpper);
-        Assert.notNull(internalMode, "Undefined mode %s", mode);
-        return internalMode;
+        return AstFactory.validateAndGetMode(mode);
     }
 
     /**
@@ -89,7 +61,7 @@ public class BlocklyDropdownFactory {
      * @return index location from the enum {@link IIndexLocation}
      */
     public IIndexLocation getIndexLocation(String indexLocation) {
-        return BlocklyDropdownFactoryHelper.getModeValue(indexLocation, IndexLocation.class);
+        return getModeValue(indexLocation, IndexLocation.class);
     }
 
     /**
@@ -100,7 +72,7 @@ public class BlocklyDropdownFactory {
      * @return direction location from the enum {@link IDirection}
      */
     public IDirection getDirection(String direction) {
-        return BlocklyDropdownFactoryHelper.getModeValue(direction, Direction.class);
+        return getModeValue(direction, Direction.class);
     }
 
     /**
@@ -111,7 +83,7 @@ public class BlocklyDropdownFactory {
      * @return operation from the enum {@link IListElementOperations}
      */
     public IListElementOperations getListElementOpertaion(String operation) {
-        return BlocklyDropdownFactoryHelper.getModeValue(operation, ListElementOperations.class);
+        return getModeValue(operation, ListElementOperations.class);
     }
 
     /**
@@ -122,7 +94,7 @@ public class BlocklyDropdownFactory {
      * @return mode from the enum {@link LightMode}
      */
     public ILightMode getBlinkMode(String mode) {
-        return BlocklyDropdownFactoryHelper.getModeValue(mode, LightMode.class);
+        return getModeValue(mode, LightMode.class);
     }
 
     /**
@@ -133,11 +105,11 @@ public class BlocklyDropdownFactory {
      * @return mode from the enum {@link ILightMode}
      */
     public IBrickLedColor getBrickLedColor(String mode) {
-        return BlocklyDropdownFactoryHelper.getModeValue(mode, BrickLedColor.class);
+        return getModeValue(mode, BrickLedColor.class);
     }
 
     public IWorkingState getWorkingState(String mode) {
-        return BlocklyDropdownFactoryHelper.getModeValue(mode, WorkingState.class);
+        return getModeValue(mode, WorkingState.class);
     }
 
     /**
@@ -148,7 +120,7 @@ public class BlocklyDropdownFactory {
      * @return turn direction from the enum {@link ITurnDirection}
      */
     public ITurnDirection getTurnDirection(String direction) {
-        return BlocklyDropdownFactoryHelper.getModeValue(direction, TurnDirection.class);
+        return getModeValue(direction, TurnDirection.class);
     }
 
     /**
@@ -159,7 +131,7 @@ public class BlocklyDropdownFactory {
      * @return motor move mode from the enum {@link IMotorMoveMode}
      */
     public IMotorMoveMode getMotorMoveMode(String mode) {
-        return BlocklyDropdownFactoryHelper.getModeValue(mode, MotorMoveMode.class);
+        return getModeValue(mode, MotorMoveMode.class);
     }
 
     /**
@@ -170,7 +142,7 @@ public class BlocklyDropdownFactory {
      * @return name of the stopping mode from the enum {@link IMotorStopMode}
      */
     public IMotorStopMode getMotorStopMode(String mode) {
-        return BlocklyDropdownFactoryHelper.getModeValue(mode, MotorStopMode.class);
+        return getModeValue(mode, MotorStopMode.class);
     }
 
     /**
@@ -181,7 +153,7 @@ public class BlocklyDropdownFactory {
      * @return the motor side from the enum {@link IMotorSide}
      */
     public IMotorSide getMotorSide(String motorSide) {
-        return BlocklyDropdownFactoryHelper.getModeValue(motorSide, MotorSide.class);
+        return getModeValue(motorSide, MotorSide.class);
     }
 
     /**
@@ -192,7 +164,7 @@ public class BlocklyDropdownFactory {
      * @return the drive direction from the enum {@link IDriveDirection}
      */
     public IDriveDirection getDriveDirection(String driveDirection) {
-        return BlocklyDropdownFactoryHelper.getModeValue(driveDirection, DriveDirection.class);
+        return getModeValue(driveDirection, DriveDirection.class);
     }
 
     /**
@@ -202,11 +174,11 @@ public class BlocklyDropdownFactory {
      * @return the drelay mode from the enum {@link IRelayMode}
      */
     public IRelayMode getRelayMode(String relayMode) {
-        return BlocklyDropdownFactoryHelper.getModeValue(relayMode, RelayMode.class);
+        return getModeValue(relayMode, RelayMode.class);
     }
 
     public ILanguage getLanguageMode(String mode) {
-        return BlocklyDropdownFactoryHelper.getModeValue(mode, Language.class);
+        return getModeValue(mode, Language.class);
     }
 
     /**
@@ -215,28 +187,43 @@ public class BlocklyDropdownFactory {
      * comment of the block @return returns instance of the specific sensor {@link Sensor} @throws
      */
     @SuppressWarnings("unchecked")
-    public Sensor<?> createSensor(
+    public Sensor createSensor(
         String sensorKey,
         String port,
         String slot,
         Mutation mutation,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
+        BlocklyProperties properties) {
 
-        WaitUntilSensorBean waBean = this.waMap.get(sensorKey);
-        String implementingClass = waBean.getImplementingClass();
-
+        BlockDescriptor blockDescriptor = AstFactory.getBlockDescriptorByBlocklyFieldName(sensorKey);
         try {
-            Class<Sensor<?>> sensorClass = (Class<Sensor<?>>) BlocklyDropdownFactory.class.getClassLoader().loadClass(implementingClass);
-            String mode = waBean.getMode();
-            SensorMetaDataBean sensorMetaDataBean = new SensorMetaDataBean(Jaxb2Ast.sanitizePort(port), getMode(mode), Jaxb2Ast.sanitizeSlot(slot), mutation);
-            Method makeMethod = sensorClass.getDeclaredMethod("make", SensorMetaDataBean.class, BlocklyBlockProperties.class, BlocklyComment.class);
-            return (Sensor<?>) makeMethod.invoke(null, sensorMetaDataBean, properties, comment);
+            Class<Sensor> sensorClass = (Class<Sensor>) blockDescriptor.getAstClass();
+            String mode = blockDescriptor.getSensorModeFromBlocklyField(sensorKey);
+            ExternalSensorBean externalSensorBean = new ExternalSensorBean(Jaxb2Ast.sanitizePort(port), getMode(mode), Jaxb2Ast.sanitizeSlot(slot), mutation);
+            Constructor<Sensor> constructor = sensorClass.getDeclaredConstructor(BlocklyProperties.class, ExternalSensorBean.class);
+            return (Sensor) constructor.newInstance(properties, externalSensorBean);
         } catch ( Exception e ) {
             LOG.error("Sensor " + sensorKey + " could not be created", e);
             throw new DbcException("Sensor " + sensorKey + " could not be created", e);
         }
 
+    }
+
+    private static <E extends IMode> E getModeValue(String modeName, Class<E> modes) {
+        if ( modeName == null ) {
+            throw new DbcException("Invalid " + modes.getName() + ": " + modeName);
+        }
+        final String sUpper = modeName.trim().toUpperCase(Locale.GERMAN);
+        for ( final E mode : modes.getEnumConstants() ) {
+            if ( mode.toString().equals(sUpper) ) {
+                return mode;
+            }
+            for ( final String value : mode.getValues() ) {
+                if ( sUpper.equals(value.toUpperCase()) ) {
+                    return mode;
+                }
+            }
+        }
+        throw new DbcException("Invalid " + modes.getName() + ": " + modeName);
     }
 
 }

@@ -1,0 +1,180 @@
+{
+  "ops": [
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "OhkCX`k6-m=#kS@@r%JT"
+      ],
+      "+": [
+        "OhkCX`k6-m=#kS@@r%JT"
+      ],
+      "type": "start",
+      "target": "IfStatement"
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "+": [
+        "*`rDAON04jqiWy(Vzwko"
+      ],
+      "value": true,
+      "-": [
+        "*`rDAON04jqiWy(Vzwko"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 8
+    },
+    {
+      "opc": "expr",
+      "possibleDebugStop": [
+        "qwlc`ZC6#dHx,byia5P*"
+      ],
+      "expr": "NUM_CONST",
+      "+": [
+        "TxqDP)I.OB^jocNtRYbW",
+        "qwlc`ZC6#dHx,byia5P*"
+      ],
+      "value": "30",
+      "-": [
+        "TxqDP)I.OB^jocNtRYbW"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "+": [
+        "=Bz0aLigL}Jp7@q5jk[v"
+      ],
+      "value": "5",
+      "-": [
+        "=Bz0aLigL}Jp7@q5jk[v"
+      ]
+    },
+    {
+      "opc": "DriveAction",
+      "speedOnly": false,
+      "SetTime": false,
+      "name": "ev3",
+      "driveDirection": "FOREWARD"
+    },
+    {
+      "opc": "stopDrive",
+      "name": "ev3",
+      "-": [
+        "qwlc`ZC6#dHx,byia5P*"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 13
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "[m!q4SH5Yj3RT+(.FP5;"
+      ],
+      "+": [
+        "[m!q4SH5Yj3RT+(.FP5;"
+      ],
+      "type": "start",
+      "target": "IfStatement"
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "+": [
+        "^jV--9jR5{hGbn+i0#^s"
+      ],
+      "value": false,
+      "-": [
+        "^jV--9jR5{hGbn+i0#^s"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 13
+    },
+    {
+      "opc": "stopDrive",
+      "possibleDebugStop": [
+        "yG~?+l=_z?X^Y|TA[WoX"
+      ],
+      "name": "ev3",
+      "+": [
+        "yG~?+l=_z?X^Y|TA[WoX"
+      ],
+      "-": [
+        "yG~?+l=_z?X^Y|TA[WoX"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 13
+    },
+    {
+      "opc": "comment",
+      "type": "end",
+      "-": [
+        "[m!q4SH5Yj3RT+(.FP5;"
+      ],
+      "target": "IfStatement"
+    },
+    {
+      "opc": "expr",
+      "possibleDebugStop": [
+        "PQDu9O]6cs-TP@b9PjU:"
+      ],
+      "expr": "NUM_CONST",
+      "+": [
+        "IYg^}PTRqQV?r1}y#m2l",
+        "PQDu9O]6cs-TP@b9PjU:"
+      ],
+      "value": "30",
+      "-": [
+        "IYg^}PTRqQV?r1}y#m2l"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "+": [
+        "boXxEWvCgROCqrRigoA:"
+      ],
+      "value": "20",
+      "-": [
+        "boXxEWvCgROCqrRigoA:"
+      ]
+    },
+    {
+      "opc": "TurnAction",
+      "speedOnly": false,
+      "turnDirection": "right",
+      "SetTime": false,
+      "name": "ev3"
+    },
+    {
+      "opc": "stopDrive",
+      "name": "ev3",
+      "-": [
+        "PQDu9O]6cs-TP@b9PjU:"
+      ]
+    },
+    {
+      "opc": "comment",
+      "type": "end",
+      "-": [
+        "OhkCX`k6-m=#kS@@r%JT"
+      ],
+      "target": "IfStatement"
+    },
+    {
+      "opc": "stop"
+    }
+  ]
+}

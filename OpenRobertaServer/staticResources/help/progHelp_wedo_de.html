@@ -35,7 +35,8 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100 (positive Zahlen drehen im
-                    Uhrzeigersinn, negative Zahlen drehen gegen den Uhrzeigersinn)</li>
+                    Uhrzeigersinn, negative Zahlen drehen gegen den Uhrzeigersinn). Dieser Wert wird intern auf den
+                    Bereich zwischen -100 und 100 begrenzt.</li>
                 <li class="typcn typcn-arrow-left">Zahl, gewünschte Dauer in Millisekunden (ms)</li>
             </ul>
         </div>
@@ -51,7 +52,8 @@
             </p>
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100 (positive Zahlen drehen im
-                    Uhrzeigersinn, negative Zahlen drehen gegen den Uhrzeigersinn)</li>
+                    Uhrzeigersinn, negative Zahlen drehen gegen den Uhrzeigersinn). Dieser Wert wird intern auf den
+                    Bereich zwischen -100 und 100 begrenzt.</li>
             </ul>
         </div>
         <div id="robActions_motor_stop" class="help expert">
@@ -707,8 +709,7 @@
             </ul><br>
         </div>
         <div id="math_random_float" class="help expert">
-            <h3 style="text-align: left;" id="ProgrammierBlöckeWeDo-»Zufallszahl«[Experten-Block]">»Zufallszahl« <span
-                    class="typcn typcn-star"></span></h3>
+            <h3 style="text-align: left;" id="ProgrammierBlöckeWeDo-»Zufallszahl«">»Zufallszahl« </h3>
             <p style="text-align: left;">Mit dem Block »Zufallszahl« wird eine Zufallszahl zwischen 0,0 und 1,0
                 bestimmt.</p>
             <p style="text-align: left;">Rückgabewert:
@@ -716,6 +717,45 @@
             <ul style="margin-top: 0; margin-bottom: 10px">
                 <li class="typcn typcn-arrow-right">Zahl, eine positive Zufallszahl kleiner oder gleich 1.</li>
             </ul>
+        </div>
+        <div id="math_cast_toString"
+            class="help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino">
+            <h3 id="ProgrammierBlöckeWeDo-»wandle...uminZeichenkette«[Experten-Block]">»wandle ... um in Zeichenkette«
+                <span class="typcn typcn-star"></span></h3>
+            <p><span style="letter-spacing: -0.006em;">Dieser Block wandelt eine Zahl in eine Zeichenkette um, die diese
+                    Zahl enthält. Als </span><span style="letter-spacing: -0.084px;">Beispiel</span><span
+                    style="letter-spacing: -0.006em;"> wird die Zahl 123 in die Zeichenkette »123« umgewandelt.</span>
+            </p>
+            <p><span style="letter-spacing: -0.006em;">Optionen und Eingabewerte:</span>
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Zahl, die Zahl die in eine Zeichenkette umgewandelt werden soll.</li>
+            </ul><br>
+            <p><span style="letter-spacing: -0.006em;">Rückgabewerte:</span>
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Zeichenkette, die Zeichenkette bestehend aus der gewählten Zahl.
+                </li>
+            </ul><br>
+        </div>
+        <div id="math_cast_toChar"
+            class="help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino">
+            <h3 id="ProgrammierBlöckeWeDo-»wandle...uminZeichen«[Experten-Block]">»wandle ... um in Zeichen« <span
+                    class="typcn typcn-star"></span></h3>
+            <p><span style="letter-spacing: -0.006em;">Dieser Block wandelt eine einzelne Zahl den dazugehörigen
+                    ASCII-Buchstaben um. Falls es zu dieser Zahl kein dazugehöriges ASCII-Zeichen gibt, wird eine leere
+                    Zeichenkette weitergegeben. So wird z.B. die Zahl 97 in den Buchstaben »a« umgewandelt.</span></p>
+            <p><span style="letter-spacing: -0.006em;">Optionen und Eingabewerte:</span>
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Zahl, der ASCII-Code, der in das dazugehörige Zeichen umgewandelt
+                    werden soll. Zahl zwischen 0 und 255.</li>
+            </ul><br>
+            <p><span style="letter-spacing: -0.006em;">Rückgabewerte:</span>
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Zeichen, das Zeichen das dem gewählten ASCII-Code entspricht.</li>
+            </ul><br>
         </div>
         <div id="text" class="help beginner notBob3">
             <h3 style="text-align: left;" id="ProgrammierBlöckeWeDo-»Text«">»Text«</h3>
@@ -773,6 +813,51 @@
                 <li class="typcn typcn-arrow-left">Text, Zeichenkette, an die Text angehängt werden soll</li>
                 <li class="typcn typcn-arrow-left">Text, Zeichenkette, die an einen Text angehängt werden soll</li>
             </ul>
+        </div>
+        <div id="text_cast_string_toNumber"
+            class="help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino">
+            <h3 id="ProgrammierBlöckeWeDo-»wandle...uminZahl«[Experten-Block]">»wandle ... um in Zahl« <span
+                    class="typcn typcn-star"></span></h3>
+            <p><span style="letter-spacing: -0.006em;">Dieser Block wandelt eine Zeichenkette in eine Zahl um, falls
+                    dies möglich ist. Wenn eine Zeichenkette also nur Zahlen enthält, kann dieser Block die Zeichenkette
+                    in eine Zahl umwandeln. Wenn der Block keine Zahlen enthält, gibt dieser Block »NaN« in der
+                    Simulation des Open Roberta Labs weiter, kann aber auch ein anderes Verhalten aufweisen, welches von
+                    der verwendeten Programmiersprache des Roboters abhängt. </span><span
+                    style="letter-spacing: -0.006em;">Falls die Zeichenkette zwar mit Zahlen beginnt, aber danach
+                    weitere Zeichen enthält, die keine Zahlen sind, gibt dieser Block nur die Zahlen weiter und stoppt,
+                    sobald das erste Zeichen in der Zeichenkette steht. Also als Beispiel macht dieser Block aus der
+                    Zeichenkette »52abcd« die Zahl 52.</span></p>
+            <p><span style="letter-spacing: -0.006em;">Optionen und Eingabewerte:</span>
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Zeichenkette, die nur aus Zahlen besteht und in eine Zahl umgewandelt
+                    werden soll.</li>
+            </ul><br>
+            <p><span style="letter-spacing: -0.006em;">Rückgabewerte:</span>
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Zahl, die zahl aus der die Zeichenkette bestand.</li>
+            </ul><br>
+        </div>
+        <div id="text_cast_char_toNumber"
+            class="help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino">
+            <h3 id="ProgrammierBlöckeWeDo-»wandleZeichen...anPosition...inZahl«[Experten-Block]">»wandle Zeichen ... an
+                Position ... in Zahl« <span class="typcn typcn-star"></span></h3>
+            <p><span style="letter-spacing: -0.006em;">Dieser Block wandelt einen Buchstaben oder ein Zeichen aus einer
+                    Zeichenkette in die dazugehörige ASCII-Nummer um. Jedes Zeichen hat dabei eine dazugehörige Nummer
+                    in der ASCII-Tabelle. So wird z.B. ein kleines »a« in die Zahl 97 umgewandelt.</span></p>
+            <p><span style="letter-spacing: -0.006em;">Optionen und Eingabewerte:</span>
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-left">Zeichenkette, aus dieser wird ein einzelnes Zeichen ausgewählt.</li>
+                <li class="typcn typcn-arrow-left">Zahl, die Stelle des Zeichens das umgewandelt werden soll. Beachte
+                    das die Nummerierung bei 0 anfängt.</li>
+            </ul><br>
+            <p>Rückgabewerte:
+            </p>
+            <ul style="margin-top: 0; margin-bottom: 10px">
+                <li class="typcn typcn-arrow-right">Zahl, der ASCII-Code des ausgewählten Zeichens.</li>
+            </ul><br>
         </div>
         <div id="robLists_create_with" class="help expert notWedo notBob3">
             <h3 id="ProgrammierBlöckeWeDo-»ErzeugeListe«[Experten-Block]">»Erzeuge Liste« <span

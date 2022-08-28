@@ -40,110 +40,87 @@
     "type": "COLOR"
   },
   {
-    "opc": "comment",
-    "type": "start",
-    "target": "createMethodCall"
+    "opc": "returnAddress",
+    "target": "rtn_1"
   },
   {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": 11
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 13
+    "opc": "call",
+    "target": "mthd_s_action"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodCall"
+    "text": "call",
+    "label": "rtn_1",
+    "type": "end"
   },
   {"opc": "stop"},
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "label": "mthd_s_action",
+    "type": "start"
+  },
+  {
+    "opc": "returnAddress",
+    "target": "rtn_3"
+  },
+  {
+    "opc": "call",
+    "target": "mthd_s_move"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodCall"
+    "text": "call",
+    "label": "rtn_3",
+    "type": "end"
   },
   {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": 17
+    "opc": "returnAddress",
+    "target": "rtn_4"
   },
   {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 32
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "target": "createMethodCall"
+    "opc": "call",
+    "target": "mthd_s_display"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodCall"
+    "text": "call",
+    "label": "rtn_4",
+    "type": "end"
   },
   {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": 21
+    "opc": "returnAddress",
+    "target": "rtn_5"
   },
   {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 42
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "target": "createMethodCall"
+    "opc": "call",
+    "target": "mthd_s_sounds"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodCall"
+    "text": "call",
+    "label": "rtn_5",
+    "type": "end"
   },
   {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": 25
+    "opc": "returnAddress",
+    "target": "rtn_6"
   },
   {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 54
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "target": "createMethodCall"
+    "opc": "call",
+    "target": "mthd_s_lights"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodCall"
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": 29
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 75
+    "text": "call",
+    "label": "rtn_6",
+    "type": "end"
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodCall"
+    "text": "createMethodVoid",
+    "label": "mthd_e_2",
+    "type": "start"
   },
   {
     "opc": "return",
@@ -151,13 +128,14 @@
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "type": "end"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "label": "mthd_s_move",
+    "type": "start"
   },
   {
     "opc": "expr",
@@ -197,18 +175,25 @@
     "name": "W"
   },
   {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_7",
+    "type": "start"
+  },
+  {
     "opc": "return",
     "values": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "type": "end"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "label": "mthd_s_display",
+    "type": "start"
   },
   {
     "opc": "expr",
@@ -236,18 +221,25 @@
   {"opc": "ShowTextAction"},
   {"opc": "ClearDisplay"},
   {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_8",
+    "type": "start"
+  },
+  {
     "opc": "return",
     "values": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "type": "end"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "label": "mthd_s_sounds",
+    "type": "start"
   },
   {
     "opc": "expr",
@@ -334,18 +326,25 @@
     "name": "W"
   },
   {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_9",
+    "type": "start"
+  },
+  {
     "opc": "return",
     "values": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "type": "end"
   },
   {
     "opc": "comment",
-    "type": "start",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "label": "mthd_s_lights",
+    "type": "start"
   },
   {
     "opc": "expr",
@@ -361,12 +360,18 @@
     "name": "W"
   },
   {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_10",
+    "type": "start"
+  },
+  {
     "opc": "return",
     "values": false
   },
   {
     "opc": "comment",
-    "type": "end",
-    "target": "createMethodVoid"
+    "text": "createMethodVoid",
+    "type": "end"
   }
 ]}

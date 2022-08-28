@@ -1,4 +1,3 @@
-import * as exports from 'exports';
 import * as $ from 'jquery';
 import * as WRAP from 'wrap';
 import * as LOG from 'log';
@@ -23,7 +22,7 @@ export const onNotificationsAvailableCallback = function (callback) {
  * counts the number of communication errors (server down, ...). If the number hits a warning level,
  * the user is informed.
  */
-export const errorNum = 0;
+export let errorNum = 0;
 
 /**
  * the error fn.

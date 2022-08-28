@@ -9,27 +9,27 @@ import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkTrain;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public interface INeuralNetworkVisitor<V> {
-    default V visitNeuralNetworkSetup(NeuralNetworkSetup<V> nn) {
+    default V visitNeuralNetworkSetup(NeuralNetworkSetup nn) {
         throw new DbcException("Not supported!");
     }
 
-    default V visitNeuralNetworkInitRawData(NeuralNetworkInitRawData<V> nn) {
+    default V visitNeuralNetworkInitRawData(NeuralNetworkInitRawData nn) {
         throw new DbcException("Not supported!");
     }
 
-    default V visitNeuralNetworkAddRawData(NeuralNetworkAddRawData<V> nn) {
+    default V visitNeuralNetworkAddRawData(NeuralNetworkAddRawData nn) {
         throw new DbcException("Not supported!");
     }
 
-    default V visitNeuralNetworkAddTrainingsData(NeuralNetworkAddTrainingsData<V> nn) {
+    default V visitNeuralNetworkAddTrainingsData(NeuralNetworkAddTrainingsData nn) {
         throw new DbcException("Not supported!");
     }
 
-    default V visitNeuralNetworkTrain(NeuralNetworkTrain<V> nn) {
+    default V visitNeuralNetworkTrain(NeuralNetworkTrain nn) {
         throw new DbcException("Not supported!");
     }
 
-    default V visitNeuralNetworkClassify(NeuralNetworkClassify<V> nn) {
+    default V visitNeuralNetworkClassify(NeuralNetworkClassify nn) {
         throw new DbcException("Not supported!");
     }
 }

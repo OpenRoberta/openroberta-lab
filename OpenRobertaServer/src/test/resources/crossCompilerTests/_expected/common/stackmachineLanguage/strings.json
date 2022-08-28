@@ -1,684 +1,95 @@
-{"ops": [
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": [
-      "guZrGw3AA(^o?MC*]+55",
-      "j_wvuh6{w:O|a]hJBe/}"
-    ],
-    "value": "start:",
-    "-": ["j_wvuh6{w:O|a]hJBe/}"]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "text",
-    "type": "STRING",
-    "-": ["guZrGw3AA(^o?MC*]+55"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": [
-      "J^.(Y~~8CfH2];Af;eO0",
-      "n?C*L4%#L;x!!!SLfObY"
-    ],
-    "value": " eight",
-    "-": ["n?C*L4%#L;x!!!SLfObY"]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "eight",
-    "type": "STRING",
-    "-": ["J^.(Y~~8CfH2];Af;eO0"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": [
-      "F]ENk()%+Ge6b=%FJA_Q",
-      "!U@ThMe}?(%j;Rnjl!ez"
-    ],
-    "value": "0",
-    "-": ["!U@ThMe}?(%j;Rnjl!ez"]
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "number",
-    "type": "NUMBER",
-    "-": ["F]ENk()%+Ge6b=%FJA_Q"]
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": [".hJO{w6(^~mQEq}.8J=n"],
-    "+": [".hJO{w6(^~mQEq}.8J=n"],
-    "value": "String Concat -- Start --",
-    "-": [".hJO{w6(^~mQEq}.8J=n"]
-  },
-  {
-    "opc": "expr",
-    "name": "text",
-    "expr": "Var",
-    "+": [
-      "zp.xQg`T|d-1L9`K@Hvk",
-      "b]BaF)E^xx2E7vyDI|AQ"
-    ],
-    "-": ["zp.xQg`T|d-1L9`K@Hvk"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": ["=vs.PddhQzRg~/WY7%ZQ"],
-    "value": " one",
-    "-": ["=vs.PddhQzRg~/WY7%ZQ"]
-  },
-  {
-    "opc": "textAppend",
-    "name": "text",
-    "-": ["b]BaF)E^xx2E7vyDI|AQ"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["Y:~qM@xwRSA?nc)Yi4tm"],
-    "expr": "STRING_CONST",
-    "+": [
-      "8{2T].P0:~K{hbfRu(wy",
-      "+10`^de2_UnO^6zcZFJ/",
-      "Y:~qM@xwRSA?nc)Yi4tm"
-    ],
-    "value": "start: one",
-    "-": ["+10`^de2_UnO^6zcZFJ/"]
-  },
-  {
-    "opc": "expr",
-    "name": "text",
-    "expr": "Var",
-    "+": ["wRJ*x@i,I+N-#p=E8koF"],
-    "-": ["wRJ*x@i,I+N-#p=E8koF"]
-  },
-  {
-    "op": "EQ",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["8{2T].P0:~K{hbfRu(wy"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": ["+10`^de2_UnO^6zcZFJ/"],
-    "value": "start: one",
-    "-": ["+10`^de2_UnO^6zcZFJ/"]
-  },
-  {
-    "opc": "expr",
-    "name": "text",
-    "expr": "Var",
-    "+": ["wRJ*x@i,I+N-#p=E8koF"],
-    "-": ["wRJ*x@i,I+N-#p=E8koF"]
-  },
-  {
-    "msg": "POS-1",
-    "op": "EQ",
-    "opc": "AssertAction",
-    "-": ["Y:~qM@xwRSA?nc)Yi4tm"]
-  },
-  {
-    "opc": "expr",
-    "name": "text",
-    "expr": "Var",
-    "+": [
-      "Y*-zG4*`J/:{Fgl[;ITR",
-      "F:4{Eww{D[(|T;8w6bRz"
-    ],
-    "-": ["Y*-zG4*`J/:{Fgl[;ITR"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": [
-      ":eO|d!KE:(f{B]Zv2pv;",
-      "B~KOv;!::P~(ULJ]v{oU"
-    ],
-    "value": " two",
-    "-": [":eO|d!KE:(f{B]Zv2pv;"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": ["R-iu.oWZO({)O8QBy2K|"],
-    "value": " three",
-    "-": ["R-iu.oWZO({)O8QBy2K|"]
-  },
-  {
-    "NUMBER": 2,
-    "opc": "createTextJoin",
-    "-": ["B~KOv;!::P~(ULJ]v{oU"]
-  },
-  {
-    "opc": "textAppend",
-    "name": "text",
-    "-": ["F:4{Eww{D[(|T;8w6bRz"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["uTg{LhzwpmJ7l84dGf8u"],
-    "expr": "STRING_CONST",
-    "+": [
-      "V4LxTw-Op4PbVz8+C^6;",
-      "uTg{LhzwpmJ7l84dGf8u",
-      "z*-|@YjX2G}aoXR-X;x0"
-    ],
-    "value": "start: one two three",
-    "-": ["z*-|@YjX2G}aoXR-X;x0"]
-  },
-  {
-    "opc": "expr",
-    "name": "text",
-    "expr": "Var",
-    "+": ["E/D6HJc6W+S0q)1O(]5e"],
-    "-": ["E/D6HJc6W+S0q)1O(]5e"]
-  },
-  {
-    "op": "EQ",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["V4LxTw-Op4PbVz8+C^6;"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": ["z*-|@YjX2G}aoXR-X;x0"],
-    "value": "start: one two three",
-    "-": ["z*-|@YjX2G}aoXR-X;x0"]
-  },
-  {
-    "opc": "expr",
-    "name": "text",
-    "expr": "Var",
-    "+": ["E/D6HJc6W+S0q)1O(]5e"],
-    "-": ["E/D6HJc6W+S0q)1O(]5e"]
-  },
-  {
-    "msg": "POS-2",
-    "op": "EQ",
-    "opc": "AssertAction",
-    "-": ["uTg{LhzwpmJ7l84dGf8u"]
-  },
-  {
-    "opc": "expr",
-    "name": "text",
-    "expr": "Var",
-    "+": [
-      "#xzQ5Uz9R:|R-a0jj~0#",
-      "^](L3jto=6E`CQer`3fV"
-    ],
-    "-": ["#xzQ5Uz9R:|R-a0jj~0#"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": [
-      "h`L^FCcAPp[0-:MEZB_u",
-      "Q}v6*@A0H#P,jc[0cf~P"
-    ],
-    "value": "4",
-    "-": ["h`L^FCcAPp[0-:MEZB_u"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["mXRuxv8:mn^5(8#i{af("],
-    "value": "5",
-    "-": ["mXRuxv8:mn^5(8#i{af("]
-  },
-  {
-    "NUMBER": 2,
-    "opc": "createTextJoin",
-    "-": ["Q}v6*@A0H#P,jc[0cf~P"]
-  },
-  {
-    "opc": "textAppend",
-    "name": "text",
-    "-": ["^](L3jto=6E`CQer`3fV"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["u+~U_!{QHZ[/|Aal[A_0"],
-    "expr": "STRING_CONST",
-    "+": [
-      ")!-,c}gLC~Q%?Se@XPVx",
-      "u+~U_!{QHZ[/|Aal[A_0",
-      "-C,{K97LAv-Z~okR(TiV"
-    ],
-    "value": "start: one two three45",
-    "-": ["-C,{K97LAv-Z~okR(TiV"]
-  },
-  {
-    "opc": "expr",
-    "name": "text",
-    "expr": "Var",
-    "+": ["A?v-wt_Bqa6+J1dw%6h|"],
-    "-": ["A?v-wt_Bqa6+J1dw%6h|"]
-  },
-  {
-    "op": "EQ",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": [")!-,c}gLC~Q%?Se@XPVx"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": ["-C,{K97LAv-Z~okR(TiV"],
-    "value": "start: one two three45",
-    "-": ["-C,{K97LAv-Z~okR(TiV"]
-  },
-  {
-    "opc": "expr",
-    "name": "text",
-    "expr": "Var",
-    "+": ["A?v-wt_Bqa6+J1dw%6h|"],
-    "-": ["A?v-wt_Bqa6+J1dw%6h|"]
-  },
-  {
-    "msg": "POS-3",
-    "op": "EQ",
-    "opc": "AssertAction",
-    "-": ["u+~U_!{QHZ[/|Aal[A_0"]
-  },
-  {
-    "opc": "expr",
-    "name": "text",
-    "expr": "Var",
-    "+": [
-      "N7Rdqx71taq-0,1%AM7]",
-      "z8;pTg;[B;1I3NIzniXN"
-    ],
-    "-": ["z8;pTg;[B;1I3NIzniXN"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": [
-      "aRCDtTzBei!T,cU?%lM4",
-      "BqdZ].1JQcuKrZo6lQzg"
-    ],
-    "value": "6",
-    "-": ["aRCDtTzBei!T,cU?%lM4"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": ["4~QTqcY`l%r=1Q^Prbh^"],
-    "value": " seven",
-    "-": ["4~QTqcY`l%r=1Q^Prbh^"]
-  },
-  {
-    "NUMBER": 2,
-    "opc": "createTextJoin",
-    "-": ["BqdZ].1JQcuKrZo6lQzg"]
-  },
-  {
-    "opc": "textAppend",
-    "name": "text",
-    "-": ["N7Rdqx71taq-0,1%AM7]"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["-:/]DM6=vz7Y_2*uXeUv"],
-    "expr": "STRING_CONST",
-    "+": [
-      "efqm(tGr%i^^w,~LQs5Y",
-      "-:/]DM6=vz7Y_2*uXeUv",
-      "]?V{*aKZ;bbJYd|mypUK"
-    ],
-    "value": "start: one two three456 seven",
-    "-": ["]?V{*aKZ;bbJYd|mypUK"]
-  },
-  {
-    "opc": "expr",
-    "name": "text",
-    "expr": "Var",
-    "+": ["6jQ,xk3Q5Gz_j?Yp/1oc"],
-    "-": ["6jQ,xk3Q5Gz_j?Yp/1oc"]
-  },
-  {
-    "op": "EQ",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["efqm(tGr%i^^w,~LQs5Y"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": ["]?V{*aKZ;bbJYd|mypUK"],
-    "value": "start: one two three456 seven",
-    "-": ["]?V{*aKZ;bbJYd|mypUK"]
-  },
-  {
-    "opc": "expr",
-    "name": "text",
-    "expr": "Var",
-    "+": ["6jQ,xk3Q5Gz_j?Yp/1oc"],
-    "-": ["6jQ,xk3Q5Gz_j?Yp/1oc"]
-  },
-  {
-    "msg": "POS-4",
-    "op": "EQ",
-    "opc": "AssertAction",
-    "-": ["-:/]DM6=vz7Y_2*uXeUv"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["Hu|[pSCcB-A![kK*N4C0"],
-    "name": "text",
-    "expr": "Var",
-    "+": [
-      "]f:o+lSRqkxOt61UBsfu",
-      "Af01bySGkKQYIk{RII@:",
-      "Hu|[pSCcB-A![kK*N4C0",
-      "[h{Y83?C*-32(:FtxA]U"
-    ],
-    "-": ["]f:o+lSRqkxOt61UBsfu"]
-  },
-  {
-    "opc": "expr",
-    "name": "eight",
-    "expr": "Var",
-    "+": ["G3.:m)!G}*tKqTu2|8]p"],
-    "-": ["G3.:m)!G}*tKqTu2|8]p"]
-  },
-  {
-    "NUMBER": 2,
-    "opc": "createTextJoin",
-    "-": ["Af01bySGkKQYIk{RII@:"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": ["JM5y{:_(xcXvoU`N[CiM"],
-    "value": " nine",
-    "-": ["JM5y{:_(xcXvoU`N[CiM"]
-  },
-  {
-    "NUMBER": 2,
-    "opc": "createTextJoin",
-    "-": ["[h{Y83?C*-32(:FtxA]U"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "text",
-    "-": ["Hu|[pSCcB-A![kK*N4C0"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["p;/5X7o[:To[.j5|mUz+"],
-    "expr": "STRING_CONST",
-    "+": [
-      "et3a1Gdu~:7!~PjbL^0{",
-      "46S%kx=UOQ8[3C8VVfus",
-      "p;/5X7o[:To[.j5|mUz+"
-    ],
-    "value": "start: one two three456 seven eight nine",
-    "-": ["46S%kx=UOQ8[3C8VVfus"]
-  },
-  {
-    "opc": "expr",
-    "name": "text",
-    "expr": "Var",
-    "+": ["]g|y`-|}#[7uj*r3rjyK"],
-    "-": ["]g|y`-|}#[7uj*r3rjyK"]
-  },
-  {
-    "op": "EQ",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["et3a1Gdu~:7!~PjbL^0{"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": ["46S%kx=UOQ8[3C8VVfus"],
-    "value": "start: one two three456 seven eight nine",
-    "-": ["46S%kx=UOQ8[3C8VVfus"]
-  },
-  {
-    "opc": "expr",
-    "name": "text",
-    "expr": "Var",
-    "+": ["]g|y`-|}#[7uj*r3rjyK"],
-    "-": ["]g|y`-|}#[7uj*r3rjyK"]
-  },
-  {
-    "msg": "POS-5",
-    "op": "EQ",
-    "opc": "AssertAction",
-    "-": ["p;/5X7o[:To[.j5|mUz+"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["Ph(tHBX:YLDk@X#JGp?#"],
-    "name": "text",
-    "expr": "Var",
-    "+": [
-      "Ph(tHBX:YLDk@X#JGp?#",
-      "S{-qW*QXA,-1rdwN#%r4",
-      "D%JL+N~ZeOxYIsbyshd^",
-      "#Pu?E)(m-|uJlVP)ws-{"
-    ],
-    "-": ["D%JL+N~ZeOxYIsbyshd^"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": ["^l7F;5p+;[Jvv/Q:dM:l"],
-    "value": "ten",
-    "-": ["^l7F;5p+;[Jvv/Q:dM:l"]
-  },
-  {
-    "NUMBER": 2,
-    "opc": "createTextJoin",
-    "-": ["#Pu?E)(m-|uJlVP)ws-{"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": [
-      "T0YVmQrGue];Y-873%S:",
-      "*sHpJ{Nh|=#6p|^KLG%("
-    ],
-    "value": " eleven",
-    "-": ["T0YVmQrGue];Y-873%S:"]
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": ["%NP58mc/TBUG)/jQryry"],
-    "value": " twelve",
-    "-": ["%NP58mc/TBUG)/jQryry"]
-  },
-  {
-    "NUMBER": 2,
-    "opc": "createTextJoin",
-    "-": ["*sHpJ{Nh|=#6p|^KLG%("]
-  },
-  {
-    "NUMBER": 2,
-    "opc": "createTextJoin",
-    "-": ["S{-qW*QXA,-1rdwN#%r4"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "text",
-    "-": ["Ph(tHBX:YLDk@X#JGp?#"]
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": ["=!PJFM4xx1fNBM1Wiv9P"],
-    "+": [
-      "4zKE#JLZ@)EJTc6Xf[wk",
-      "=!PJFM4xx1fNBM1Wiv9P"
-    ],
-    "type": "start",
-    "target": "IfStatement"
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": [
-      "Q!g{v%|ISrSJ7`q]yWv6",
-      "9Nm,|r:{0HZRg8:fdsQq"
-    ],
-    "value": "start: one two three456 seven eight nine ten eleven twelve",
-    "-": ["9Nm,|r:{0HZRg8:fdsQq"]
-  },
-  {
-    "opc": "expr",
-    "name": "text",
-    "expr": "Var",
-    "+": [";`Ib;(a7;%_e]!q3u,-;"],
-    "-": [";`Ib;(a7;%_e]!q3u,-;"]
-  },
-  {
-    "op": "EQ",
-    "opc": "expr",
-    "expr": "Binary",
-    "-": ["Q!g{v%|ISrSJ7`q]yWv6"]
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 76
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": ["9s+4GX_/{!SrUCtzKyJ/"],
-    "value": "String Concat SUCCESS",
-    "-": ["9s+4GX_/{!SrUCtzKyJ/"]
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 77
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "+": ["4Q-{s(R;s,B);{Zt1}w!"],
-    "value": "String Concat FAIL",
-    "-": ["4Q-{s(R;s,B);{Zt1}w!"]
-  },
-  {
-    "opc": "comment",
-    "type": "end",
-    "-": ["4zKE#JLZ@)EJTc6Xf[wk"],
-    "target": "IfStatement"
-  },
-  {
-    "opc": "DebugAction",
-    "-": ["=!PJFM4xx1fNBM1Wiv9P"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["0ef)N0a,^sPSAgW@mZZ;"],
-    "name": "text",
-    "expr": "Var",
-    "+": [
-      "Z#Af+IU95s8lqf@;s],H",
-      "m(8.=R6nh{(9]-|{CM.w",
-      "0ef)N0a,^sPSAgW@mZZ;"
-    ],
-    "-": ["m(8.=R6nh{(9]-|{CM.w"]
-  },
-  {
-    "opc": "expr",
-    "expr": "textStringCastNumberFunct",
-    "-": ["Z#Af+IU95s8lqf@;s],H"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "number",
-    "-": ["0ef)N0a,^sPSAgW@mZZ;"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["R7FSi24ba;XHJ/{AwlS["],
-    "name": "text",
-    "expr": "Var",
-    "+": [
-      "R7FSi24ba;XHJ/{AwlS[",
-      "14@%qBe_?}5?EM/:C5.[",
-      "83iFwnFV}xh+Hv1JGB,A"
-    ],
-    "-": ["83iFwnFV}xh+Hv1JGB,A"]
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "+": ["-ft5*(5~j,YsIoT+8!oS"],
-    "value": "0",
-    "-": ["-ft5*(5~j,YsIoT+8!oS"]
-  },
-  {
-    "opc": "expr",
-    "expr": "textCharCastNumberFunct",
-    "-": ["14@%qBe_?}5?EM/:C5.["]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "number",
-    "-": ["R7FSi24ba;XHJ/{AwlS["]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": ["uB-sf~OJvB]K2^uB2!0Q"],
-    "expr": "NUM_CONST",
-    "+": [
-      "uB-sf~OJvB]K2^uB2!0Q",
-      "[)obmr=oFWhzw[zBaEF?",
-      "U6N}R_YkC,4{^@PvH`8c"
-    ],
-    "value": "10",
-    "-": ["U6N}R_YkC,4{^@PvH`8c"]
-  },
-  {
-    "opc": "expr",
-    "expr": "mathCastStringFunct",
-    "-": ["[)obmr=oFWhzw[zBaEF?"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "text",
-    "-": ["uB-sf~OJvB]K2^uB2!0Q"]
-  },
-  {
-    "opc": "expr",
-    "possibleDebugStop": [":%!QXs*=2T6VNBtr,^c4"],
-    "expr": "NUM_CONST",
-    "+": [
-      "NBbQbU+|n2y.Cn6i4vCc",
-      ":%!QXs*=2T6VNBtr,^c4",
-      "cLF598ewc^n`j-Ztlr#;"
-    ],
-    "value": "30",
-    "-": ["cLF598ewc^n`j-Ztlr#;"]
-  },
-  {
-    "opc": "expr",
-    "expr": "mathCastCharFunct",
-    "-": ["NBbQbU+|n2y.Cn6i4vCc"]
-  },
-  {
-    "opc": "AssignStmt",
-    "name": "text",
-    "-": [":%!QXs*=2T6VNBtr,^c4"]
-  },
-  {
-    "opc": "comment",
-    "possibleDebugStop": [".#P4~av!?:AcCaBg}t^u"],
-    "+": [".#P4~av!?:AcCaBg}t^u"],
-    "value": "String Concat -- End --",
-    "-": [".#P4~av!?:AcCaBg}t^u"]
-  },
-  {"opc": "stop"}
-]}
+   0:            expr            expr: STRING_CONST, value: start:,                                                      > +: ["guZrGw3AA(^o?MC*]+55","j_wvuh6{w:O|a]hJBe/}"], -: ["j_wvuh6{w:O|a]hJBe/}"], 
+   1:            VarDeclaration  name: text, type: STRING,                                                               > -: ["guZrGw3AA(^o?MC*]+55"], 
+   2:            expr            expr: STRING_CONST, value:  eight,                                                      > +: ["J^.(Y~~8CfH2];Af;eO0","n?C*L4%#L;x!!!SLfObY"], -: ["n?C*L4%#L;x!!!SLfObY"], 
+   3:            VarDeclaration  name: eight, type: STRING,                                                              > -: ["J^.(Y~~8CfH2];Af;eO0"], 
+   4:            expr            expr: NUM_CONST, value: 0,                                                              > +: ["F]ENk()%+Ge6b=%FJA_Q","!U@ThMe}?(%j;Rnjl!ez"], -: ["!U@ThMe}?(%j;Rnjl!ez"], 
+   5:            VarDeclaration  name: number, type: NUMBER,                                                             > -: ["F]ENk()%+Ge6b=%FJA_Q"], 
+   6:            comment         value: String Concat -- Start --,                                                       > +: [".hJO{w6(^~mQEq}.8J=n"], -: [".hJO{w6(^~mQEq}.8J=n"], possibleDebugStop: [".hJO{w6(^~mQEq}.8J=n"], 
+   7:            expr            expr: Var, name: text,                                                                  > +: ["zp.xQg`T|d-1L9`K@Hvk","b]BaF)E^xx2E7vyDI|AQ"], -: ["zp.xQg`T|d-1L9`K@Hvk"], 
+   8:            expr            expr: STRING_CONST, value:  one,                                                        > +: ["=vs.PddhQzRg~/WY7%ZQ"], -: ["=vs.PddhQzRg~/WY7%ZQ"], 
+   9:            textAppend      name: text,                                                                             > -: ["b]BaF)E^xx2E7vyDI|AQ"], 
+  10:            expr            expr: STRING_CONST, value: start: one,                                                  > +: ["8{2T].P0:~K{hbfRu(wy","+10`^de2_UnO^6zcZFJ/","Y:~qM@xwRSA?nc)Yi4tm"], -: ["+10`^de2_UnO^6zcZFJ/"], possibleDebugStop: ["Y:~qM@xwRSA?nc)Yi4tm"], 
+  11:            expr            expr: Var, name: text,                                                                  > +: ["wRJ*x@i,I+N-#p=E8koF"], -: ["wRJ*x@i,I+N-#p=E8koF"], 
+  12:            expr            expr: Binary, op: EQ,                                                                   > -: ["8{2T].P0:~K{hbfRu(wy"], 
+  13:            expr            expr: STRING_CONST, value: start: one,                                                  > +: ["+10`^de2_UnO^6zcZFJ/"], -: ["+10`^de2_UnO^6zcZFJ/"], 
+  14:            expr            expr: Var, name: text,                                                                  > +: ["wRJ*x@i,I+N-#p=E8koF"], -: ["wRJ*x@i,I+N-#p=E8koF"], 
+  15:            AssertAction    msg: POS-1, op: EQ,                                                                     > -: ["Y:~qM@xwRSA?nc)Yi4tm"], 
+  16:            expr            expr: Var, name: text,                                                                  > +: ["Y*-zG4*`J/:{Fgl[;ITR","F:4{Eww{D[(|T;8w6bRz"], -: ["Y*-zG4*`J/:{Fgl[;ITR"], 
+  17:            expr            expr: STRING_CONST, value:  two,                                                        > +: [":eO|d!KE:(f{B]Zv2pv;","B~KOv;!::P~(ULJ]v{oU"], -: [":eO|d!KE:(f{B]Zv2pv;"], 
+  18:            expr            expr: STRING_CONST, value:  three,                                                      > +: ["R-iu.oWZO({)O8QBy2K|"], -: ["R-iu.oWZO({)O8QBy2K|"], 
+  19:            createTextJoin  NUMBER: 2,                                                                              > -: ["B~KOv;!::P~(ULJ]v{oU"], 
+  20:            textAppend      name: text,                                                                             > -: ["F:4{Eww{D[(|T;8w6bRz"], 
+  21:            expr            expr: STRING_CONST, value: start: one two three,                                        > +: ["V4LxTw-Op4PbVz8+C^6;","uTg{LhzwpmJ7l84dGf8u","z*-|@YjX2G}aoXR-X;x0"], -: ["z*-|@YjX2G}aoXR-X;x0"], possibleDebugStop: ["uTg{LhzwpmJ7l84dGf8u"], 
+  22:            expr            expr: Var, name: text,                                                                  > +: ["E/D6HJc6W+S0q)1O(]5e"], -: ["E/D6HJc6W+S0q)1O(]5e"], 
+  23:            expr            expr: Binary, op: EQ,                                                                   > -: ["V4LxTw-Op4PbVz8+C^6;"], 
+  24:            expr            expr: STRING_CONST, value: start: one two three,                                        > +: ["z*-|@YjX2G}aoXR-X;x0"], -: ["z*-|@YjX2G}aoXR-X;x0"], 
+  25:            expr            expr: Var, name: text,                                                                  > +: ["E/D6HJc6W+S0q)1O(]5e"], -: ["E/D6HJc6W+S0q)1O(]5e"], 
+  26:            AssertAction    msg: POS-2, op: EQ,                                                                     > -: ["uTg{LhzwpmJ7l84dGf8u"], 
+  27:            expr            expr: Var, name: text,                                                                  > +: ["#xzQ5Uz9R:|R-a0jj~0#","^](L3jto=6E`CQer`3fV"], -: ["#xzQ5Uz9R:|R-a0jj~0#"], 
+  28:            expr            expr: NUM_CONST, value: 4,                                                              > +: ["h`L^FCcAPp[0-:MEZB_u","Q}v6*@A0H#P,jc[0cf~P"], -: ["h`L^FCcAPp[0-:MEZB_u"], 
+  29:            expr            expr: NUM_CONST, value: 5,                                                              > +: ["mXRuxv8:mn^5(8#i{af("], -: ["mXRuxv8:mn^5(8#i{af("], 
+  30:            createTextJoin  NUMBER: 2,                                                                              > -: ["Q}v6*@A0H#P,jc[0cf~P"], 
+  31:            textAppend      name: text,                                                                             > -: ["^](L3jto=6E`CQer`3fV"], 
+  32:            expr            expr: STRING_CONST, value: start: one two three45,                                      > +: [")!-,c}gLC~Q%?Se@XPVx","u+~U_!{QHZ[/|Aal[A_0","-C,{K97LAv-Z~okR(TiV"], -: ["-C,{K97LAv-Z~okR(TiV"], possibleDebugStop: ["u+~U_!{QHZ[/|Aal[A_0"], 
+  33:            expr            expr: Var, name: text,                                                                  > +: ["A?v-wt_Bqa6+J1dw%6h|"], -: ["A?v-wt_Bqa6+J1dw%6h|"], 
+  34:            expr            expr: Binary, op: EQ,                                                                   > -: [")!-,c}gLC~Q%?Se@XPVx"], 
+  35:            expr            expr: STRING_CONST, value: start: one two three45,                                      > +: ["-C,{K97LAv-Z~okR(TiV"], -: ["-C,{K97LAv-Z~okR(TiV"], 
+  36:            expr            expr: Var, name: text,                                                                  > +: ["A?v-wt_Bqa6+J1dw%6h|"], -: ["A?v-wt_Bqa6+J1dw%6h|"], 
+  37:            AssertAction    msg: POS-3, op: EQ,                                                                     > -: ["u+~U_!{QHZ[/|Aal[A_0"], 
+  38:            expr            expr: Var, name: text,                                                                  > +: ["N7Rdqx71taq-0,1%AM7]","z8;pTg;[B;1I3NIzniXN"], -: ["z8;pTg;[B;1I3NIzniXN"], 
+  39:            expr            expr: NUM_CONST, value: 6,                                                              > +: ["aRCDtTzBei!T,cU?%lM4","BqdZ].1JQcuKrZo6lQzg"], -: ["aRCDtTzBei!T,cU?%lM4"], 
+  40:            expr            expr: STRING_CONST, value:  seven,                                                      > +: ["4~QTqcY`l%r=1Q^Prbh^"], -: ["4~QTqcY`l%r=1Q^Prbh^"], 
+  41:            createTextJoin  NUMBER: 2,                                                                              > -: ["BqdZ].1JQcuKrZo6lQzg"], 
+  42:            textAppend      name: text,                                                                             > -: ["N7Rdqx71taq-0,1%AM7]"], 
+  43:            expr            expr: STRING_CONST, value: start: one two three456 seven,                               > +: ["efqm(tGr%i^^w,~LQs5Y","-:/]DM6=vz7Y_2*uXeUv","]?V{*aKZ;bbJYd|mypUK"], -: ["]?V{*aKZ;bbJYd|mypUK"], possibleDebugStop: ["-:/]DM6=vz7Y_2*uXeUv"], 
+  44:            expr            expr: Var, name: text,                                                                  > +: ["6jQ,xk3Q5Gz_j?Yp/1oc"], -: ["6jQ,xk3Q5Gz_j?Yp/1oc"], 
+  45:            expr            expr: Binary, op: EQ,                                                                   > -: ["efqm(tGr%i^^w,~LQs5Y"], 
+  46:            expr            expr: STRING_CONST, value: start: one two three456 seven,                               > +: ["]?V{*aKZ;bbJYd|mypUK"], -: ["]?V{*aKZ;bbJYd|mypUK"], 
+  47:            expr            expr: Var, name: text,                                                                  > +: ["6jQ,xk3Q5Gz_j?Yp/1oc"], -: ["6jQ,xk3Q5Gz_j?Yp/1oc"], 
+  48:            AssertAction    msg: POS-4, op: EQ,                                                                     > -: ["-:/]DM6=vz7Y_2*uXeUv"], 
+  49:            expr            expr: Var, name: text,                                                                  > +: ["]f:o+lSRqkxOt61UBsfu","Af01bySGkKQYIk{RII@:","Hu|[pSCcB-A![kK*N4C0","[h{Y83?C*-32(:FtxA]U"], -: ["]f:o+lSRqkxOt61UBsfu"], possibleDebugStop: ["Hu|[pSCcB-A![kK*N4C0"], 
+  50:            expr            expr: Var, name: eight,                                                                 > +: ["G3.:m)!G}*tKqTu2|8]p"], -: ["G3.:m)!G}*tKqTu2|8]p"], 
+  51:            createTextJoin  NUMBER: 2,                                                                              > -: ["Af01bySGkKQYIk{RII@:"], 
+  52:            expr            expr: STRING_CONST, value:  nine,                                                       > +: ["JM5y{:_(xcXvoU`N[CiM"], -: ["JM5y{:_(xcXvoU`N[CiM"], 
+  53:            createTextJoin  NUMBER: 2,                                                                              > -: ["[h{Y83?C*-32(:FtxA]U"], 
+  54:            AssignStmt      name: text,                                                                             > -: ["Hu|[pSCcB-A![kK*N4C0"], 
+  55:            expr            expr: STRING_CONST, value: start: one two three456 seven eight nine,                    > +: ["et3a1Gdu~:7!~PjbL^0{","46S%kx=UOQ8[3C8VVfus","p;/5X7o[:To[.j5|mUz+"], -: ["46S%kx=UOQ8[3C8VVfus"], possibleDebugStop: ["p;/5X7o[:To[.j5|mUz+"], 
+  56:            expr            expr: Var, name: text,                                                                  > +: ["]g|y`-|}#[7uj*r3rjyK"], -: ["]g|y`-|}#[7uj*r3rjyK"], 
+  57:            expr            expr: Binary, op: EQ,                                                                   > -: ["et3a1Gdu~:7!~PjbL^0{"], 
+  58:            expr            expr: STRING_CONST, value: start: one two three456 seven eight nine,                    > +: ["46S%kx=UOQ8[3C8VVfus"], -: ["46S%kx=UOQ8[3C8VVfus"], 
+  59:            expr            expr: Var, name: text,                                                                  > +: ["]g|y`-|}#[7uj*r3rjyK"], -: ["]g|y`-|}#[7uj*r3rjyK"], 
+  60:            AssertAction    msg: POS-5, op: EQ,                                                                     > -: ["p;/5X7o[:To[.j5|mUz+"], 
+  61:            expr            expr: Var, name: text,                                                                  > +: ["Ph(tHBX:YLDk@X#JGp?#","S{-qW*QXA,-1rdwN#%r4","D%JL+N~ZeOxYIsbyshd^","#Pu?E)(m-|uJlVP)ws-{"], -: ["D%JL+N~ZeOxYIsbyshd^"], possibleDebugStop: ["Ph(tHBX:YLDk@X#JGp?#"], 
+  62:            expr            expr: STRING_CONST, value: ten,                                                         > +: ["^l7F;5p+;[Jvv/Q:dM:l"], -: ["^l7F;5p+;[Jvv/Q:dM:l"], 
+  63:            createTextJoin  NUMBER: 2,                                                                              > -: ["#Pu?E)(m-|uJlVP)ws-{"], 
+  64:            expr            expr: STRING_CONST, value:  eleven,                                                     > +: ["T0YVmQrGue];Y-873%S:","*sHpJ{Nh|=#6p|^KLG%("], -: ["T0YVmQrGue];Y-873%S:"], 
+  65:            expr            expr: STRING_CONST, value:  twelve,                                                     > +: ["%NP58mc/TBUG)/jQryry"], -: ["%NP58mc/TBUG)/jQryry"], 
+  66:            createTextJoin  NUMBER: 2,                                                                              > -: ["*sHpJ{Nh|=#6p|^KLG%("], 
+  67:            createTextJoin  NUMBER: 2,                                                                              > -: ["S{-qW*QXA,-1rdwN#%r4"], 
+  68:            AssignStmt      name: text,                                                                             > -: ["Ph(tHBX:YLDk@X#JGp?#"], 
+  69:            comment         n: 1, text: ternary, type: start,                                                       > +: ["4zKE#JLZ@)EJTc6Xf[wk","=!PJFM4xx1fNBM1Wiv9P"], possibleDebugStop: ["=!PJFM4xx1fNBM1Wiv9P"], 
+  70:            expr            expr: STRING_CONST, value: start: one two three456 seven eight nine ten eleven twelve,  > +: ["Q!g{v%|ISrSJ7`q]yWv6","9Nm,|r:{0HZRg8:fdsQq"], -: ["9Nm,|r:{0HZRg8:fdsQq"], 
+  71:            expr            expr: Var, name: text,                                                                  > +: [";`Ib;(a7;%_e]!q3u,-;"], -: [";`Ib;(a7;%_e]!q3u,-;"], 
+  72:            expr            expr: Binary, op: EQ,                                                                   > -: ["Q!g{v%|ISrSJ7`q]yWv6"], 
+  73:            jump            conditional: false, target: t_m_1,                                                      > 
+  74:            expr            expr: STRING_CONST, value: String Concat SUCCESS,                                       > +: ["9s+4GX_/{!SrUCtzKyJ/"], -: ["9s+4GX_/{!SrUCtzKyJ/"], 
+  75:            jump            conditional: always, target: t_e_1,                                                     > 
+  76: t_m_1      comment         text: ternary,                                                                          > 
+  77:            expr            expr: STRING_CONST, value: String Concat FAIL,                                          > +: ["4Q-{s(R;s,B);{Zt1}w!"], -: ["4Q-{s(R;s,B);{Zt1}w!"], 
+  78: t_e_1      comment         text: ternary, type: end,                                                               > -: ["4zKE#JLZ@)EJTc6Xf[wk"], 
+  79:            DebugAction                                                                                             > -: ["=!PJFM4xx1fNBM1Wiv9P"], 
+  80:            expr            expr: Var, name: text,                                                                  > +: ["Z#Af+IU95s8lqf@;s],H","m(8.=R6nh{(9]-|{CM.w","0ef)N0a,^sPSAgW@mZZ;"], -: ["m(8.=R6nh{(9]-|{CM.w"], possibleDebugStop: ["0ef)N0a,^sPSAgW@mZZ;"], 
+  81:            expr            expr: textStringCastNumberFunct,                                                        > -: ["Z#Af+IU95s8lqf@;s],H"], 
+  82:            AssignStmt      name: number,                                                                           > -: ["0ef)N0a,^sPSAgW@mZZ;"], 
+  83:            expr            expr: Var, name: text,                                                                  > +: ["R7FSi24ba;XHJ/{AwlS[","14@%qBe_?}5?EM/:C5.[","83iFwnFV}xh+Hv1JGB,A"], -: ["83iFwnFV}xh+Hv1JGB,A"], possibleDebugStop: ["R7FSi24ba;XHJ/{AwlS["], 
+  84:            expr            expr: NUM_CONST, value: 0,                                                              > +: ["-ft5*(5~j,YsIoT+8!oS"], -: ["-ft5*(5~j,YsIoT+8!oS"], 
+  85:            expr            expr: textCharCastNumberFunct,                                                          > -: ["14@%qBe_?}5?EM/:C5.["], 
+  86:            AssignStmt      name: number,                                                                           > -: ["R7FSi24ba;XHJ/{AwlS["], 
+  87:            expr            expr: NUM_CONST, value: 10,                                                             > +: ["uB-sf~OJvB]K2^uB2!0Q","[)obmr=oFWhzw[zBaEF?","U6N}R_YkC,4{^@PvH`8c"], -: ["U6N}R_YkC,4{^@PvH`8c"], possibleDebugStop: ["uB-sf~OJvB]K2^uB2!0Q"], 
+  88:            expr            expr: mathCastStringFunct,                                                              > -: ["[)obmr=oFWhzw[zBaEF?"], 
+  89:            AssignStmt      name: text,                                                                             > -: ["uB-sf~OJvB]K2^uB2!0Q"], 
+  90:            expr            expr: NUM_CONST, value: 30,                                                             > +: ["NBbQbU+|n2y.Cn6i4vCc",":%!QXs*=2T6VNBtr,^c4","cLF598ewc^n`j-Ztlr#;"], -: ["cLF598ewc^n`j-Ztlr#;"], possibleDebugStop: [":%!QXs*=2T6VNBtr,^c4"], 
+  91:            expr            expr: mathCastCharFunct,                                                                > -: ["NBbQbU+|n2y.Cn6i4vCc"], 
+  92:            AssignStmt      name: text,                                                                             > -: [":%!QXs*=2T6VNBtr,^c4"], 
+  93:            comment         value: String Concat -- End --,                                                         > +: [".#P4~av!?:AcCaBg}t^u"], -: [".#P4~av!?:AcCaBg}t^u"], possibleDebugStop: [".#P4~av!?:AcCaBg}t^u"], 
+  94:            stop                                                                                                    > 

@@ -372,5 +372,32 @@ define(["require", "exports"], function (require, exports) {
             width: '398px',
             height: '303px',
         },
+        mbot2: {
+            ports: [
+                // ports
+                { name: 'EM1', position: { x: 140, y: 340 } },
+                { name: 'EM2', position: { x: 185, y: 340 } },
+                { name: 'A', position: { x: 212, y: 262 } },
+                { name: 'B', position: { x: 212, y: 306 } },
+                { name: 'mbuild_port', position: { x: 250, y: 69 } },
+                { name: 'S1', position: { x: 7, y: 110 } },
+                { name: 'S2', position: { x: 7, y: 138 } },
+                { name: 'S3', position: { x: 250, y: 138 } },
+                { name: 'S4', position: { x: 250, y: 110 } },
+                { name: 'M1', position: { x: 60, y: 340 } },
+                { name: 'M2', position: { x: 80, y: 340 } },
+                //build in
+                { name: 'joystick', position: { x: 35, y: 285 } },
+                { name: 'buzzer', position: { x: 235, y: 340 } },
+                { name: 'accelerometer', position: { x: 108, y: 238 } },
+                { name: 'rgbled', position: { x: 116, y: 340 } },
+                { name: 'light', position: { x: 49, y: 246 } },
+                { name: 'sound', position: { x: 66, y: 246 } },
+                { name: 'gyro', position: { x: 158, y: 238 } },
+                { name: 'lcd', position: { x: 128, y: 288 } },
+            ],
+            width: '263px',
+            height: '343px',
+        },
     };
 });

@@ -6,10 +6,10 @@ import java.util.List;
 
 import de.fhg.iais.roberta.bean.NewUsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.ITransformerVisitor;
@@ -39,12 +39,12 @@ public abstract class AbstractTransformerWorker implements IWorker {
         this.newXmlVersion = newXmlVersion;
     }
 
-    private static List<List<Phrase<Void>>> deepCopyAst(List<List<Phrase<Void>>> tree, ITransformerVisitor<Void> visitor) {
-        List<List<Phrase<Void>>> newTree = new ArrayList<>(tree.size());
-        for ( List<Phrase<Void>> phrases : tree ) {
-            List<Phrase<Void>> newPhrases = new ArrayList<>(phrases.size());
-            for ( Phrase<Void> phrase : phrases ) {
-                Phrase<Void> newPhrase = phrase.modify(visitor);
+    private static List<List<Phrase>> deepCopyAst(List<List<Phrase>> tree, ITransformerVisitor visitor) {
+        List<List<Phrase>> newTree = new ArrayList<>(tree.size());
+        for ( List<Phrase> phrases : tree ) {
+            List<Phrase> newPhrases = new ArrayList<>(phrases.size());
+            for ( Phrase phrase : phrases ) {
+                Phrase newPhrase = phrase.modify(visitor);
                 newPhrases.add(newPhrase);
             }
             newTree.add(newPhrases);
@@ -62,10 +62,10 @@ public abstract class AbstractTransformerWorker implements IWorker {
         NewUsedHardwareBean.Builder usedHardwareBeanBuilder = new NewUsedHardwareBean.Builder();
 
         // TODO usedHardwareBeanBuilder should probably be extracted into its own collect visitor, combined for now so only 1 visitor needs to run
-        ITransformerVisitor<Void> visitor = getVisitor(project, usedHardwareBeanBuilder, project.getConfigurationAst());
+        ITransformerVisitor visitor = getVisitor(project, usedHardwareBeanBuilder, project.getConfigurationAst());
 
         // Most of the time no transformation other than the version is necessary
-        List<List<Phrase<Void>>> lists;
+        List<List<Phrase>> lists;
         if ( visitor != null ) {
             lists = deepCopyAst(project.getProgramAst().getTree(), visitor);
             this.wasTransformed = true;
@@ -79,8 +79,8 @@ public abstract class AbstractTransformerWorker implements IWorker {
         }
     }
 
-    private void updateProgram(Project project, List<List<Phrase<Void>>> lists) {
-        ProgramAst.Builder<Void> progBuilder = new ProgramAst.Builder<>();
+    private void updateProgram(Project project, List<List<Phrase>> lists) {
+        ProgramAst.Builder progBuilder = new ProgramAst.Builder();
         progBuilder.setXmlVersion(this.newXmlVersion);
         progBuilder.setTags(project.getProgramAst().getTags());
         progBuilder.setRobotType(project.getProgramAst().getRobotType());
@@ -118,5 +118,5 @@ public abstract class AbstractTransformerWorker implements IWorker {
      * @param configuration the configuration
      * @return the appropriate visitor for the current robot, null if no transform is needed
      */
-    protected abstract ITransformerVisitor<Void> getVisitor(Project project, NewUsedHardwareBean.Builder builder, ConfigurationAst configuration);
+    protected abstract ITransformerVisitor getVisitor(Project project, NewUsedHardwareBean.Builder builder, ConfigurationAst configuration);
 }

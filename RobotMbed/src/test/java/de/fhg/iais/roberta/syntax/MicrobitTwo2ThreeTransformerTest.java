@@ -8,8 +8,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.MbedTwo2ThreeTransformerWorker;
 
@@ -21,10 +22,11 @@ public class MicrobitTwo2ThreeTransformerTest {
             + "        <block id=\"1\" type=\"mbedBrick_microbit-Brick\" />"
             + "    </instance>"
             + "</block_set>";
-    private static IRobotFactory testFactory;
+    private static RobotFactory testFactory;
 
     @BeforeClass
     public static void setupBefore() throws Exception {
+        AstFactory.loadBlocks();
         List<String> pluginDefines = new ArrayList<>();
         testFactory = Util.configureRobotPlugin("microbit", "", "", pluginDefines);
     }
@@ -100,7 +102,7 @@ public class MicrobitTwo2ThreeTransformerTest {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
                 + "DebugAction[value:SensorExpr[TemperatureSensor[_T,VALUE,- EMPTY_SLOT -]]],"
-                + "DebugAction[value:SensorExpr[GetSampleSensor[TemperatureSensor[_T,TEMPERATURE,- EMPTY_SLOT -]]]]]]]";
+                + "DebugAction[value:SensorExpr[GetSampleSensor[TemperatureSensor[_T,VALUE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=TEMPERATURE,isActor=true,userDefinedName=_T,portName=_T,componentProperties={}]"

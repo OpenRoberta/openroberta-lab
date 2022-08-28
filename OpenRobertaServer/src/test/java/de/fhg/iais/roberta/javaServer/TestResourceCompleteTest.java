@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.Util;
 
 @RunWith(Parameterized.class)
@@ -90,11 +90,11 @@ public class TestResourceCompleteTest {
             .collect(Collectors.toList());
     }
 
-    private static Stream<List<String>> generateTestDateForEachToolbox(IRobotFactory robotFactory) {
+    private static Stream<List<String>> generateTestDateForEachToolbox(RobotFactory robotFactory) {
         return Stream.of(generateTestDataForRobotFactory(robotFactory, true), generateTestDataForRobotFactory(robotFactory, false)).flatMap(Collection::stream);
     }
 
-    private static List<List<String>> generateTestDataForRobotFactory(IRobotFactory robotFactory, boolean beginner) {
+    private static List<List<String>> generateTestDataForRobotFactory(RobotFactory robotFactory, boolean beginner) {
         Set<String> blocks = parseBlockTypes(beginner ? robotFactory.getProgramToolboxBeginner() : robotFactory.getProgramToolboxExpert());
 
         String robotName = robotFactory.getGroup();

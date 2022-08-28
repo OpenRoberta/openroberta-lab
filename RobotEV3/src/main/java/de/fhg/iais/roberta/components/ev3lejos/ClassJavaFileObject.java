@@ -38,6 +38,7 @@ public class ClassJavaFileObject extends SimpleJavaFileObject {
      */
     @Override
     public OutputStream openOutputStream() throws IOException {
+        System.out.println();
         return this.bos;
     }
 

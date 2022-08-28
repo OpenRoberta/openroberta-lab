@@ -6,16 +6,12 @@ import javax.annotation.Nonnull;
 
 import de.fhg.iais.roberta.blockly.generated.Arg;
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Comment;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
@@ -23,16 +19,15 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.functions.Function;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
-import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 public class Jaxb2Ast {
     private Jaxb2Ast() {
@@ -159,7 +154,7 @@ public class Jaxb2Ast {
 
     /**
      * Extract field from list of {@link Field}. If the field with the given name is not found or it is empty, it returns the default Value.<br>
-      *
+     *
      * @param fields list as a source
      * @param name of the field to be extracted
      * @param defaultValue if the field does not existent
@@ -221,36 +216,12 @@ public class Jaxb2Ast {
     }
 
     /**
-     * Extracts the comment from {@link Block}
+     * Extracts the blockly properties of the {@link Block}.
      *
-     * @param block as source
+     * @param block the blockly block
      */
-    public static BlocklyComment extractComment(Block block) {
-        if ( block.getComment() != null ) {
-            Comment comment = block.getComment();
-            return BlocklyComment.make(comment.getValue(), comment.isPinned(), comment.getH(), comment.getW());
-        }
-        return null;
-    }
-
-    /**
-     * Extracts the visual state of the {@link Block}.
-     *
-     * @param block as a source
-     */
-    public static BlocklyBlockProperties extractBlockProperties(Block block) {
-        return BlocklyBlockProperties
-            .make(
-                block.getType(),
-                block.getId(),
-                isDisabled(block),
-                isCollapsed(block),
-                isInline(block),
-                isDeletable(block),
-                isMovable(block),
-                isInTask(block),
-                isShadow(block),
-                isErrorAttribute(block));
+    public static BlocklyProperties extractBlocklyProperties(Block block) {
+        return new BlocklyProperties(block.getType(), block.getId(), isDisabled(block), isCollapsed(block), isInline(block), isDeletable(block), isMovable(block), isInTask(block), isShadow(block), isErrorAttribute(block), block.getComment());
     }
 
     public static int getElseIf(Mutation mutation) {
@@ -322,20 +293,18 @@ public class Jaxb2Ast {
      *
      * @param p to be converted to expression
      */
-    public static <V> Expr<V> convertPhraseToExpr(Phrase<V> p) {
-        Expr<V> expr;
+    public static Expr convertPhraseToExpr(Phrase p) {
+        Expr expr;
         if ( p.getKind().getCategory() == Category.SENSOR ) {
-            expr = SensorExpr.make((Sensor<V>) p);
+            expr = new SensorExpr((Sensor) p);
         } else if ( p.getKind().getCategory() == Category.ACTOR ) {
-            expr = ActionExpr.make((Action<V>) p);
+            expr = new ActionExpr((Action) p);
         } else if ( p.getKind().getCategory() == Category.FUNCTION ) {
-            expr = FunctionExpr.make((Function<V>) p);
+            expr = new FunctionExpr((Function) p);
         } else if ( p.getKind().getCategory() == Category.METHOD ) {
-            expr = MethodExpr.make((Method<V>) p);
-        } else if ( p.getKind().hasName("IF_STMT") && ((IfStmt<V>) p).isTernary() ) {
-            expr = StmtExpr.make((Stmt<V>) p);
+            expr = new MethodExpr((Method) p);
         } else {
-            expr = (Expr<V>) p;
+            expr = (Expr) p;
         }
         return expr;
     }
@@ -346,11 +315,11 @@ public class Jaxb2Ast {
      * @param block from which variable is extracted
      * @return AST object representing variable
      */
-    public static <V> Phrase<V> extractVar(Block block) {
+    public static Phrase extractVar(Block block) {
         String typeVar = block.getMutation() != null ? block.getMutation().getDatatype() : BlocklyConstants.NUMBER;
         List<Field> fields = extractFields(block, (short) 1);
         String field = extractField(fields, BlocklyConstants.VAR);
-        return Var.make(BlocklyType.get(typeVar), field, extractBlockProperties(block), extractComment(block));
+        return new Var(BlocklyType.get(typeVar), field, extractBlocklyProperties(block));
     }
 
     public static Block shadow2block(Shadow shadow) {

@@ -5,53 +5,31 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-public final class FlameSensor<V> extends Sensor<V> {
+@NepoBasic(name = "FLAMESENSOR_GET_SAMPLE", category = "SENSOR", blocklyNames = {"robSensors_flame_getSample"})
+public final class FlameSensor extends Sensor {
 
-    private final String port;
+    public final String port;
 
-    private FlameSensor(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("FLAMESENSOR_GET_SAMPLE"), properties, comment);
+    public FlameSensor(String port, BlocklyProperties properties) {
+        super(properties);
         this.port = port;
         setReadOnly();
     }
 
-    /**
-     * Creates instance of {@link FlameSensor}. This instance is read only and can not be modified.
-     *
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link FlameSensor}
-     */
-    static <V> FlameSensor<V> make(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new FlameSensor<>(port, properties, comment);
-    }
-
-    public String getPort() {
-        return this.port;
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
+    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         final BlocklyDropdownFactory factory = helper.getDropdownFactory();
         final List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         final String port = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
-        return FlameSensor.make(Jaxb2Ast.sanitizePort(port), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return new FlameSensor(Jaxb2Ast.sanitizePort(port), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override

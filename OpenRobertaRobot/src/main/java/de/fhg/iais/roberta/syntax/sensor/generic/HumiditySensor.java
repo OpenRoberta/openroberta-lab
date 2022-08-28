@@ -1,43 +1,18 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
-import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
-import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
-import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.forClass.F2M;
+import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
-public class HumiditySensor<V> extends ExternalSensor<V> {
+@NepoExpr(name = "HUMIDITY_SENSING", category = "SENSOR", blocklyNames = {"robSensors_humidity_getSample"},
+    sampleValues = {@F2M(field = "HUMIDITY_TEMPERATURE", mode = "TEMPERATURE"), @F2M(field = "HUMIDITY_HUMIDITY", mode = "HUMIDITY")})
+public final class HumiditySensor extends ExternalSensor {
 
-    public HumiditySensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(sensorMetaDataBean, BlockTypeContainer.getByName("HUMIDITY_SENSING"), properties, comment);
+    public HumiditySensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
+        super(properties, externalSensorBean);
         setReadOnly();
-    }
-
-    /**
-     * Create object of the class {@link HumiditySensor}.
-     *
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of {@link HumiditySensor}
-     */
-    public static <V> HumiditySensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new HumiditySensor<>(sensorMetaDataBean, properties, comment);
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
-        SensorMetaDataBean sensorData = extractPortAndModeAndSlot(block, helper);
-        return HumiditySensor.make(sensorData, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
 }

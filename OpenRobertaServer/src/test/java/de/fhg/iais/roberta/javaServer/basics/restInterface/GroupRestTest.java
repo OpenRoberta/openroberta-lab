@@ -1,9 +1,9 @@
 package de.fhg.iais.roberta.javaServer.basics.restInterface;
 
-import de.fhg.iais.roberta.persistence.bo.User;
-import de.fhg.iais.roberta.persistence.dao.UserDao;
-import de.fhg.iais.roberta.persistence.dao.UserGroupDao;
-import de.fhg.iais.roberta.util.Key;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,10 +11,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import de.fhg.iais.roberta.persistence.bo.User;
+import de.fhg.iais.roberta.persistence.dao.UserDao;
+import de.fhg.iais.roberta.persistence.dao.UserGroupDao;
+import de.fhg.iais.roberta.util.Key;
 
 public class GroupRestTest extends AbstractRestInterfaceTest {
 
@@ -854,7 +854,7 @@ public class GroupRestTest extends AbstractRestInterfaceTest {
     //deleteGroup tests
 
     private void deleteNonExistentUserGroup() throws Exception {
-        restGroups(this.sPid, "{'cmd': 'deleteUserGroups'; 'groupNames':['DoesntExist','DoesntExistAlso']}", "error", Key.GROUP_DELETE_ERROR);
+        restGroups(this.sPid, "{'cmd': 'deleteUserGroups'; 'groupNames':['DoesntExist','DoesntExistAlso']}", "error", Key.GROUP_DELETE_ERROR_GROUP_DOES_NOT_EXISTS);
         UserGroupDao groupDao = new UserGroupDao(newDbSession());
         Assert.assertEquals(2, groupDao.getNumberOfGroupsOfOwner(userPid));
     }
@@ -864,7 +864,7 @@ public class GroupRestTest extends AbstractRestInterfaceTest {
     }
 
     private void deleteGroupAsNotTheOwner() throws Exception {
-        restGroups(this.sMinscha, "{'cmd': 'deleteUserGroups'; 'groupNames':['PidsGroup','PidsGroup2']}", "error", Key.GROUP_DELETE_ERROR);
+        restGroups(this.sMinscha, "{'cmd': 'deleteUserGroups'; 'groupNames':['PidsGroup','PidsGroup2']}", "error", Key.GROUP_DELETE_ERROR_GROUP_DOES_NOT_EXISTS);
         UserGroupDao groupDao = new UserGroupDao(newDbSession());
         Assert.assertEquals(2, groupDao.getNumberOfGroupsOfOwner(userPid));
     }

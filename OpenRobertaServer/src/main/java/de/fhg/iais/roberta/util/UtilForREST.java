@@ -76,7 +76,7 @@ public class UtilForREST {
         new ClientLogger().log(loggerForRequest, fullRequest.getLog());
         return httpSessionState;
     }
-    
+
     /**
      * all REST services, excluded is only the /init request, have to call this method. It processes the init-token, which protects user and server against a
      * frontend session not backed up by a backend session (occurs only when the server is restarted)<br>
