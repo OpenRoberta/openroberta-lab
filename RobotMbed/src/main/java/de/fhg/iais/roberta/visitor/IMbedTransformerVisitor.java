@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DcMotorSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
@@ -173,5 +174,16 @@ public interface IMbedTransformerVisitor extends ITransformerVisitor, IMbedVisit
     @Override
     default Phrase visitPlayFileAction(PlayFileAction playFileAction) {
         return IMbedVisitor.super.visitPlayFileAction(playFileAction);
+    }
+    
+    @Override
+    default Phrase visitDcMotorSetAction(DcMotorSetAction dcMotorSetAction) {
+        return new DcMotorSetAction(
+            dcMotorSetAction.getProperty(),
+            dcMotorSetAction.actorPort,
+            (Expr) dcMotorSetAction.motor.modify(this),
+            dcMotorSetAction.direction,
+            (Expr) dcMotorSetAction.speed.modify(this)
+        );
     }
 }

@@ -1,0 +1,126 @@
+include: "classpath:/robotCommon.yml"
+block:
+  DISPLAY_TEXT_ACTION :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction
+      type: [mbedActions_display_text]
+  DISPLAY_IMAGE_ACTION :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction
+      type: [mbedActions_display_image]
+  LED_ON_ACTION :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.LedOnAction
+      type: [mbedActions_leds_on]
+  RADIO_SEND_ACTION :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction
+      type: [mbedCommunication_sendBlock]
+  RADIO_RECEIVE_ACTION :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction
+      type: [mbedCommunication_receiveBlock]
+  RADIO_SET_CHANNEL_ACTION :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction
+      type: [mbedCommunication_setChannel]
+  IMAGE_SHIFT :
+      category: FUNCTION
+      implementor: de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction
+      type: [mbedImage_shift]
+  IMAGE_INVERT :
+      category: FUNCTION
+      implementor: de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction
+      type: [mbedImage_invert]
+  PREDEFINED_IMAGE :
+      category: EXPR
+      implementor: de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage
+      type: [mbedImage_get_image]
+  IMAGE :
+      category: EXPR
+      implementor: de.fhg.iais.roberta.syntax.expr.mbed.Image
+      type: [mbedImage_image]
+  RADIO_RSSI :
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor
+      type: [mbedSensors_getRssi,robsensors_rssi_getsample]
+  DISPLAY_SET_BRIGHTNESS :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction
+      type: [mbedActions_display_setBrightness]
+  DISPLAY_GET_BRIGHTNESS :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction
+      type: [mbedActions_display_getBrightness]
+  DISPLAY_SET_PIXEL :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction
+      type: [mbedActions_display_setPixel]
+  DISPLAY_GET_PIXEL :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction
+      type: [mbedActions_display_getPixel]
+  SINGLE_MOTOR_ON_ACTION :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction
+      type: [mbedActions_single_motor_on]
+  SINGLE_MOTOR_STOP_ACTION :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction
+      type: [mbedActions_single_motor_stop]
+  BOTH_MOTORS_ON_ACTION :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction
+      type: [mbedActions_motors_on]
+  BOTH_MOTORS_STOP_ACTION :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction
+      type: [mbedActions_motors_stop]
+  FOURDIGITDISPLAY_SHOW_ACTION :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction
+      type: [mbedActions_fourDigitDisplay_show]
+  FOURDIGITDISPLAY_CLEAR_ACTION :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction
+      type: [mbedActions_fourDigitDisplay_clear]
+  LEDBAR_SET_ACTION :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction
+      type: [mbedActions_ledBar_set]
+  PIN_SET_PULL :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction
+      type: [mbedActions_pin_set_pull]
+  SWITCH_LED_MATRIX:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction
+    type: [mbedActions_switch_led_matrix]
+  SERVO_SET_ACTION:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction
+    type: [mbedActions_servo_set]
+  MOTIONKIT_SINGLE_SET_ACTION:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.action.mbed.MotionKitSingleSetAction
+    type: [mbedActions_motionkit_single_set]
+  MOTIONKIT_DUAL_SET_ACTION:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.action.mbed.MotionKitDualSetAction
+    type: [mbedActions_motionkit_dual_set]
+  DC_MOTOR_SET_ACTION:
+    category: ACTOR
+    implementor: import de.fhg.iais.roberta.syntax.action.mbed.DcMotorSetAction
+    type: [mbedActions_dcmotor_set]
+
+mode:
+  motionkit: [FOREWARD, BACKWARD, 'OFF']
+
+configuration:
+  LEDBAR: [robConf_ledbar]
+  FOURDIGITDISPLAY: [robConf_fourdigitdisplay]
+  DCMOTOR: [robConf_dcmotor]
+  CALLIBOT: [robConf_callibot]
+  COLOUR: [robConf_colourtcs3472]
+  ROBOT: [robConf_robot]
+

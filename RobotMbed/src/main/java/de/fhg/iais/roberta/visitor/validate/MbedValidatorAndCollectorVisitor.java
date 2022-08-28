@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DcMotorSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
@@ -584,7 +585,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         }
         return null;
     }
-
+    
     private Boolean isMotionKitPinsOverlapping() {
         Map<String, ConfigurationComponent> usedConfig = robotConfiguration.getConfigurationComponents();
         if ( robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT) != null || robotConfiguration.isComponentTypePresent("LEDBAR") ||
@@ -604,5 +605,15 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
             }
         }
         return false;
+    }
+
+    @Override
+    public Void visitDcMotorSetAction(DcMotorSetAction dcMotorSetAction) {
+        checkActorByTypeExists(dcMotorSetAction, "DCMOTOR");
+       
+        requiredComponentVisited(dcMotorSetAction, dcMotorSetAction.speed);
+        usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DCMOTOR));
+
+        return null;
     }
 }

@@ -1,0 +1,443 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+	<program>
+		<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+			robottype="calliope" xmlversion="3.1" description="" tags="">
+			<instance x="384" y="50">
+				<block type="robControls_start" id="+X3l0c2IU_Eox5hCeaE-"
+					intask="true" deletable="false">
+					<mutation declare="true"></mutation>
+					<field name="DEBUG"></field>
+					<statement name="ST">
+						<block type="robGlobalVariables_declare"
+							id="5+([O]RBQV5jDz@Hq:aH" intask="true" deletable="false"
+							movable="false">
+							<mutation next="true" declaration_type="Number"></mutation>
+							<field name="VAR">speed</field>
+							<field name="TYPE">Number</field>
+							<value name="VALUE">
+								<block type="math_number" id="cO]PEElQ}o*~Tp7LTw`r"
+									intask="true">
+									<field name="NUM">9.5</field>
+								</block>
+							</value>
+						</block>
+						<block type="robGlobalVariables_declare"
+							id="eFnQwSn8P8@um91a[@]*" intask="true" deletable="false"
+							movable="false">
+							<mutation next="false" declaration_type="Number"></mutation>
+							<field name="VAR">motor2</field>
+							<field name="TYPE">Number</field>
+							<value name="VALUE">
+								<block type="math_number" id="R9|weP#Cm!:~,6M!c(90"
+									intask="true">
+									<field name="NUM">4</field>
+								</block>
+							</value>
+						</block>
+					</statement>
+				</block>
+				<block type="mbedActions_dcmotor_set"
+					id="c={16nC5i:y)gk]8gwIo" intask="true">
+					<field name="ACTORPORT">DCM0</field>
+					<field name="DIRECTION">Backward</field>
+					<value name="MOTOR">
+						<block type="math_number" id="o`51Qcshi8E,QZw:Q-g%"
+							intask="true">
+							<field name="NUM">1</field>
+						</block>
+					</value>
+					<value name="SPEED">
+						<block type="math_number" id="h[J3^#:GjT{do:!RrdLn"
+							intask="true">
+							<field name="NUM">50</field>
+						</block>
+					</value>
+				</block>
+				<block type="mbedActions_dcmotor_set"
+					id="VLpKuNLK_k/Gwd!+@l?1" intask="true">
+					<field name="ACTORPORT">DCM0</field>
+					<field name="DIRECTION">Backward</field>
+					<value name="MOTOR">
+						<block type="math_number" id="8wU3tCLZpgJy-?IfdvjH"
+							intask="true">
+							<field name="NUM">1</field>
+						</block>
+					</value>
+					<value name="SPEED">
+						<block type="math_number" id="[Z:kP5;ajpx4{)|04#2-"
+							intask="true">
+							<field name="NUM">120</field>
+						</block>
+					</value>
+				</block>
+				<block type="mbedActions_dcmotor_set"
+					id="+700#T=zg@HK0?U5Ulk!" intask="true">
+					<field name="ACTORPORT">DCM0</field>
+					<field name="DIRECTION">Backward</field>
+					<value name="MOTOR">
+						<block type="math_number" id="R+kq*1osZ!i6rRe7DRgR"
+							intask="true">
+							<field name="NUM">1</field>
+						</block>
+					</value>
+					<value name="SPEED">
+						<block type="math_number" id="sZTwEJ;T5%:l!J,W^hx@"
+							intask="true">
+							<field name="NUM">-50</field>
+						</block>
+					</value>
+				</block>
+				<block type="mbedActions_dcmotor_set"
+					id="gRq;F|FLL[n9QG+6OMWi" intask="true">
+					<field name="ACTORPORT">DCM0</field>
+					<field name="DIRECTION">Stop</field>
+					<value name="MOTOR">
+						<block type="math_number" id="/Y[5K}1N8[A1y_=|4d-:"
+							intask="true">
+							<field name="NUM">2</field>
+						</block>
+					</value>
+					<value name="SPEED">
+						<block type="math_number" id="qT..]neI0M*P9!mEzSa`"
+							intask="true">
+							<field name="NUM">75</field>
+						</block>
+					</value>
+				</block>
+				<block type="mbedActions_dcmotor_set"
+					id=":2S%~lwA4%!YaldSqlKw" intask="true">
+					<field name="ACTORPORT">DCM0</field>
+					<field name="DIRECTION">Forward</field>
+					<value name="MOTOR">
+						<block type="math_number" id="C`_8{FEYQV8BqXF9MHsG"
+							intask="true">
+							<field name="NUM">3</field>
+						</block>
+					</value>
+					<value name="SPEED">
+						<block type="math_number" id="Oj_rTIP9FNktpIIX^}uN"
+							intask="true">
+							<field name="NUM">100</field>
+						</block>
+					</value>
+				</block>
+				<block type="mbedActions_dcmotor_set"
+					id="o}jgYGw8}7RCaR9e9myK" intask="true">
+					<field name="ACTORPORT">DCM0</field>
+					<field name="DIRECTION">Numeric</field>
+					<value name="MOTOR">
+						<block type="math_number" id="9:YEF/@6*+Z4ai/n2hbt"
+							intask="true">
+							<field name="NUM">3</field>
+						</block>
+					</value>
+					<value name="SPEED">
+						<block type="math_number" id="6@!mQ;J!RTNm?Ul~C?SD"
+							intask="true">
+							<field name="NUM">-100</field>
+						</block>
+					</value>
+				</block>
+				<block type="mbedActions_dcmotor_set"
+					id="UpD~CeI]^:?o~_D]ng]k" intask="true">
+					<field name="ACTORPORT">DCM0</field>
+					<field name="DIRECTION">Numeric</field>
+					<value name="MOTOR">
+						<block type="math_number" id="*2=RvzsjtjN!0=9oh1]w"
+							intask="true">
+							<field name="NUM">3</field>
+						</block>
+					</value>
+					<value name="SPEED">
+						<block type="math_number" id="RX;CBd*QUG0Gt3h?r4Oj"
+							intask="true">
+							<field name="NUM">0</field>
+						</block>
+					</value>
+				</block>
+				<block type="mbedActions_dcmotor_set"
+					id="7k(EI,6%/-3~;|7v?}}/" intask="true">
+					<field name="ACTORPORT">DCM0</field>
+					<field name="DIRECTION">Numeric</field>
+					<value name="MOTOR">
+						<block type="math_number" id="m0m{smWEWRHY;c(62QRK"
+							intask="true">
+							<field name="NUM">3</field>
+						</block>
+					</value>
+					<value name="SPEED">
+						<block type="math_number" id="_ZT`dD/+q)!JT8~ibCc^"
+							intask="true">
+							<field name="NUM">80</field>
+						</block>
+					</value>
+				</block>
+				<block type="mbedActions_dcmotor_set"
+					id="3^VTiiiF/P[2CQhiW7c9" intask="true">
+					<field name="ACTORPORT">DCM0</field>
+					<field name="DIRECTION">Numeric</field>
+					<value name="MOTOR">
+						<block type="math_number" id="[0ylanl=BN0T-9S:oCKv"
+							intask="true">
+							<field name="NUM">1</field>
+						</block>
+					</value>
+					<value name="SPEED">
+						<block type="math_number" id="?r(Cs5M/d!+TFeJIRFDP"
+							intask="true">
+							<field name="NUM">200</field>
+						</block>
+					</value>
+				</block>
+				<block type="mbedActions_dcmotor_set"
+					id="=j,;x]P:^FR4yE*iti#9" intask="true">
+					<field name="ACTORPORT">DCM0</field>
+					<field name="DIRECTION">Numeric</field>
+					<value name="MOTOR">
+						<block type="math_arithmetic" id="Hhr]_d`?Hw8mGu-^RKb:"
+							intask="true">
+							<field name="OP">ADD</field>
+							<value name="A">
+								<block type="variables_get" id="kGkdiM#+GTrJgWYdDz[o"
+									intask="true">
+									<mutation datatype="Number"></mutation>
+									<field name="VAR">motor2</field>
+								</block>
+							</value>
+							<value name="B">
+								<block type="math_number" id="H[T=;Wy(fY(iIR_cHJAC"
+									intask="true">
+									<field name="NUM">1</field>
+								</block>
+							</value>
+						</block>
+					</value>
+					<value name="SPEED">
+						<block type="variables_get" id="U29vvC?fdO`l{8S_BEl`"
+							intask="true">
+							<mutation datatype="Number"></mutation>
+							<field name="VAR">speed</field>
+						</block>
+					</value>
+				</block>
+				<block type="robControls_wait_time" id="%lHiYSo7lby^MI,}P]VK"
+					intask="true">
+					<value name="WAIT">
+						<block type="math_number" id="(V7,KtJ4`gD2*=u+Emmn"
+							intask="true">
+							<field name="NUM">500</field>
+						</block>
+					</value>
+				</block>
+				<block type="mbedActions_dcmotor_set"
+					id="/=@MlC#HGD.sv(u*Dok[" intask="true">
+					<field name="ACTORPORT">DCM1</field>
+					<field name="DIRECTION">Backward</field>
+					<value name="MOTOR">
+						<block type="math_number" id="WokrcV;VXc^fg:~`;~V7"
+							intask="true">
+							<field name="NUM">2</field>
+						</block>
+					</value>
+					<value name="SPEED">
+						<block type="math_number" id="~;-h1432}g.Q1Xb|LbnH"
+							intask="true">
+							<field name="NUM">50</field>
+						</block>
+					</value>
+				</block>
+				<block type="mbedActions_dcmotor_set"
+					id="yo1whMz@p;lxE=9*EMm*" intask="true">
+					<field name="ACTORPORT">DCM1</field>
+					<field name="DIRECTION">Stop</field>
+					<value name="MOTOR">
+						<block type="math_number" id="Vt]].w-aljb[mh=A[QRL"
+							intask="true">
+							<field name="NUM">2</field>
+						</block>
+					</value>
+					<value name="SPEED">
+						<block type="math_number" id="MZ`mFsXf`m%{M4w`6.J6"
+							intask="true">
+							<field name="NUM">75</field>
+						</block>
+					</value>
+				</block>
+				<block type="mbedActions_dcmotor_set"
+					id="f]jZ)O+)KPEP;_lz4upt" intask="true">
+					<field name="ACTORPORT">DCM1</field>
+					<field name="DIRECTION">Forward</field>
+					<value name="MOTOR">
+						<block type="math_number" id="[KfscgWE;(p+Z1!v55?h"
+							intask="true">
+							<field name="NUM">2</field>
+						</block>
+					</value>
+					<value name="SPEED">
+						<block type="math_number" id="d.*!k2+d82u~O/N|tIpS"
+							intask="true">
+							<field name="NUM">75</field>
+						</block>
+					</value>
+				</block>
+				<block type="robControls_wait_time" id="wJSGLg#sf0HFnHB502TU"
+					intask="true">
+					<value name="WAIT">
+						<block type="math_number" id="@E%c;i_vcZ%TQQN*j2Wj"
+							intask="true">
+							<field name="NUM">500</field>
+						</block>
+					</value>
+				</block>
+				<block type="mbedActions_dcmotor_set"
+					id="{2F0.q%AHh6uBr%D,o#R" intask="true">
+					<field name="ACTORPORT">DCM2</field>
+					<field name="DIRECTION">Backward</field>
+					<value name="MOTOR">
+						<block type="math_number" id="l!ShKFW*|IXw!Hlp0jUb"
+							intask="true">
+							<field name="NUM">3</field>
+						</block>
+					</value>
+					<value name="SPEED">
+						<block type="math_number" id="Crh9~#S@*C|`3|zBDS5q"
+							intask="true">
+							<field name="NUM">50</field>
+						</block>
+					</value>
+				</block>
+				<block type="mbedActions_dcmotor_set"
+					id=".AVV37Op?PK:Q)_53u{k" intask="true">
+					<field name="ACTORPORT">DCM2</field>
+					<field name="DIRECTION">Stop</field>
+					<value name="MOTOR">
+						<block type="math_number" id="!]DW?`_xc4ueJ6WW@s;]"
+							intask="true">
+							<field name="NUM">3</field>
+						</block>
+					</value>
+					<value name="SPEED">
+						<block type="math_number" id="Dm7`tf^@Fk]Q0(V%!p;/"
+							intask="true">
+							<field name="NUM">80</field>
+						</block>
+					</value>
+				</block>
+				<block type="mbedActions_dcmotor_set"
+					id="YhrYB-uIwsroY,Rsk{?m" intask="true">
+					<field name="ACTORPORT">DCM2</field>
+					<field name="DIRECTION">Forward</field>
+					<value name="MOTOR">
+						<block type="math_number" id="VY6rZB4P73fyh.Q-+J]A"
+							intask="true">
+							<field name="NUM">3</field>
+						</block>
+					</value>
+					<value name="SPEED">
+						<block type="math_number" id="[^TPRx[]0q3B_,2O)c=("
+							intask="true">
+							<field name="NUM">80</field>
+						</block>
+					</value>
+				</block>
+			</instance>
+		</block_set>
+	</program>
+	<config>
+		<block_set robottype="calliope" xmlversion="3.1"
+			description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+			<instance x="-34" y="270">
+				<block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e"
+					intask="true" deletable="false">
+					<field name="NAME">A</field>
+					<field name="PIN1">A</field>
+				</block>
+			</instance>
+			<instance x="-34" y="120">
+				<block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp"
+					intask="true" deletable="false">
+					<field name="NAME">B</field>
+					<field name="PIN1">B</field>
+				</block>
+			</instance>
+			<instance x="80" y="268">
+				<block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{"
+					intask="true" deletable="false">
+					<field name="NAME">_A</field>
+				</block>
+			</instance>
+			<instance x="-34" y="450">
+				<block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR,"
+					intask="true" deletable="false">
+					<field name="NAME">_B</field>
+				</block>
+			</instance>
+			<instance x="80" y="239">
+				<block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY="
+					intask="true" deletable="false">
+					<field name="NAME">_C</field>
+				</block>
+			</instance>
+			<instance x="80" y="211">
+				<block type="robConf_gyro" id="lIT?C5y|(7FWCQIUn~pc"
+					intask="true" deletable="false">
+					<field name="NAME">_G</field>
+				</block>
+			</instance>
+			<instance x="197" y="190">
+				<block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?"
+					intask="true" deletable="false">
+					<field name="NAME">_L</field>
+				</block>
+			</instance>
+			<instance x="250" y="250">
+				<block type="robConf_robot" id="robot" intask="false"
+					deletable="false">
+					<field name="NAME">undefined</field>
+				</block>
+			</instance>
+			<instance x="-34" y="422">
+				<block type="robConf_rgbled" id="lgi%C3,J!smR:eP0aal_"
+					intask="true" deletable="false">
+					<field name="NAME">_R</field>
+				</block>
+			</instance>
+			<instance x="197" y="162">
+				<block type="robConf_sound" id="e:4V0FcDx%9,.7xO,Ns@"
+					intask="true" deletable="false">
+					<field name="NAME">_S</field>
+				</block>
+			</instance>
+			<instance x="80" y="378">
+				<block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C"
+					intask="true" deletable="false">
+					<field name="NAME">_T</field>
+				</block>
+			</instance>
+			<instance x="864" y="217">
+				<block type="robConf_dcmotor" id="}W+8x_A|]Wx[Qh-B}i~]"
+					intask="true">
+					<field name="NAME">DCM2</field>
+					<field name="I2CADDRESS">0x62</field>
+					<field name="PLUG">4</field>
+				</block>
+			</instance>
+			<instance x="866" y="135">
+				<block type="robConf_dcmotor" id="[JGXt3RT7X33l[l),vzs"
+					intask="true">
+					<field name="NAME">DCM1</field>
+					<field name="I2CADDRESS">0x61</field>
+					<field name="PLUG">4</field>
+				</block>
+			</instance>
+			<instance x="867" y="53">
+				<block type="robConf_dcmotor" id="!*slpTvVZXfPfPgjKYXf"
+					intask="true">
+					<field name="NAME">DCM0</field>
+					<field name="I2CADDRESS">0x60</field>
+					<field name="PLUG">4</field>
+				</block>
+			</instance>
+		</block_set>
+	</config>
+</export>

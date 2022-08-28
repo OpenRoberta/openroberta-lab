@@ -125,4 +125,10 @@ public final class CalliopeSimValidatorAndCollectorVisitor extends MbedValidator
         addWarningToPhrase(motionKitDualSetAction, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitMotionKitDualSetAction(motionKitDualSetAction);
     }
+    
+    @Override
+    public Void visitDcMotorSetAction(DcMotorSetAction dcMotorSetAction) {
+        addWarningToPhrase(dcMotorSetAction, "SIM_BLOCK_NOT_SUPPORTED");
+        return super.visitDcMotorSetAction(dcMotorSetAction);
+    }
 }

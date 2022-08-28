@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DcMotorSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
@@ -144,4 +145,6 @@ public interface IMbedVisitorWithoutDefault<V>
     V visitHumiditySensor(HumiditySensor humiditySensor);
 
     V visitInfraredSensor(InfraredSensor infraredSensor);
+
+    V visitDcMotorSetAction(DcMotorSetAction dcMotorSetAction);
 }

@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.visitor;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DcMotorSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
@@ -305,6 +306,10 @@ public interface IMbedVisitor<V>
 
     @Override
     default V visitPlayFileAction(PlayFileAction playFileAction) {
+        throw new DbcException("Block is not implemented!");
+    }
+    
+    default V visitDcMotorSetAction(DcMotorSetAction dcMotorSetAction) {
         throw new DbcException("Block is not implemented!");
     }
 

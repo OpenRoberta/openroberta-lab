@@ -36,6 +36,7 @@ public final class MbedTwo2ThreeTransformerHelper {
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("COMPASS_SENSING", "DEFAULT", ""), "robConf_compass");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("FOURDIGITDISPLAY_SHOW_ACTION", "", "5"), "robConf_fourdigitdisplay");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("FOURDIGITDISPLAY_CLEAR_ACTION", "", "5"), "robConf_fourdigitdisplay");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("DC_MOTOR_SET_ACTION", "LINE", "4"), "robConf_dcmotor");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("GYRO_SENSING", "ANGLE", "X"), "robConf_gyro");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("GYRO_SENSING", "ANGLE", "Y"), "robConf_gyro");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("HUMIDITY_SENSING", "HUMIDITY", "5"), "robConf_humidity");
@@ -266,6 +267,7 @@ public final class MbedTwo2ThreeTransformerHelper {
         CALLIOPE_XML_NAME_TO_FRONTEND_NAME.put(Pair.of("robConf_digitalout", "4"), "A0");
         CALLIOPE_XML_NAME_TO_FRONTEND_NAME.put(Pair.of("robConf_digitalout", "5"), "A1");
         CALLIOPE_XML_NAME_TO_FRONTEND_NAME.put(Pair.of("robConf_fourdigitdisplay", "5"), "A1");
+        CALLIOPE_XML_NAME_TO_FRONTEND_NAME.put(Pair.of("robConf_dcmotor", "4"), "A0");
         CALLIOPE_XML_NAME_TO_FRONTEND_NAME.put(Pair.of("robConf_humidity", "5"), "A1");
         CALLIOPE_XML_NAME_TO_FRONTEND_NAME.put(Pair.of("robConf_ledbar", "5"), "A1");
         CALLIOPE_XML_NAME_TO_FRONTEND_NAME.put(Pair.of("robConf_motor", "A"), "Port_A");
