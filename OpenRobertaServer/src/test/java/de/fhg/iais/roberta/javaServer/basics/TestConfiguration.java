@@ -20,7 +20,7 @@ public class TestConfiguration {
     private final DbSetup memoryDbSetup;
 
     private TestConfiguration() {
-        this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", CONNECTION_URL);
+        this.sessionFactoryWrapper = new SessionFactoryWrapper("/hibernate-cfg.xml", CONNECTION_URL);
         Session hibernateSession = this.sessionFactoryWrapper.getHibernateSession();
         this.memoryDbSetup = new DbSetup(hibernateSession);
         this.memoryDbSetup.createEmptyDatabase();
@@ -46,7 +46,7 @@ public class TestConfiguration {
             session.flush();
             LOG.info("deleted " + counter + " rows in tables " + toDelete + ".");
         } finally {
-            if ( !session.getTransaction().wasCommitted() ) {
+            if ( session.getTransaction().isActive() ) {
                 session.getTransaction().commit();
             }
             session.close();

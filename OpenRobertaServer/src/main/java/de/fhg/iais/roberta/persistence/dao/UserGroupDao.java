@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 
 import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.bo.User;
@@ -83,8 +83,8 @@ public class UserGroupDao extends AbstractDao<UserGroup> {
         Assert.notNull(groupOwner);
 
         Query hql = this.session.createQuery("from UserGroup where name=:groupName and owner=:groupOwner");
-        hql.setString("groupName", groupName);
-        hql.setEntity("groupOwner", groupOwner);
+        hql.setParameter("groupName", groupName);
+        hql.setParameter("groupOwner", groupOwner);
 
         @SuppressWarnings("unchecked")
         List<UserGroup> il = hql.list();
@@ -114,7 +114,7 @@ public class UserGroupDao extends AbstractDao<UserGroup> {
         Assert.notNull(groupOwner);
 
         Query hql = this.session.createQuery("from UserGroup g where owner=:owner order by g.name asc");
-        hql.setEntity("owner", groupOwner);
+        hql.setParameter("owner", groupOwner);
         @SuppressWarnings("unchecked")
         List<UserGroup> il = hql.list();
 
@@ -132,7 +132,7 @@ public class UserGroupDao extends AbstractDao<UserGroup> {
         Assert.notNull(groupOwner);
 
         Query hql = this.session.createQuery("select count(id) from UserGroup g where owner=:owner");
-        hql.setEntity("owner", groupOwner);
+        hql.setParameter("owner", groupOwner);
 
         @SuppressWarnings("unchecked")
         Iterator<Long> resultIterator = hql.iterate();
@@ -151,7 +151,7 @@ public class UserGroupDao extends AbstractDao<UserGroup> {
         Assert.notNull(program);
 
         Query hql = this.session.createQuery("select g from UserGroup as g join g.programs as p with p.id = :programId order by g.name asc");
-        hql.setInteger("programId", program.getId());
+        hql.setParameter("programId", program.getId());
         @SuppressWarnings("unchecked")
         List<UserGroup> il = hql.list();
 

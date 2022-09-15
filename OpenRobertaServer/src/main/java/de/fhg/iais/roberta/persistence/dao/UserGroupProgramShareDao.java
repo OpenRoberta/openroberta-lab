@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.persistence.dao;
 import java.util.Collections;
 import java.util.List;
 
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 
 import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.bo.Relation;
@@ -66,8 +66,8 @@ public class UserGroupProgramShareDao extends AbstractDao<UserGroupProgramShare>
         Assert.notNull(program);
 
         Query hql = this.session.createQuery("from UserGroupProgramShare where userGroup=:userGroup and program=:program");
-        hql.setEntity("userGroup", userGroup);
-        hql.setEntity("program", program);
+        hql.setParameter("userGroup", userGroup);
+        hql.setParameter("program", program);
         @SuppressWarnings("unchecked")
         List<UserGroupProgramShare> il = hql.list();
         Assert.isTrue(il.size() <= 1);
@@ -85,7 +85,7 @@ public class UserGroupProgramShareDao extends AbstractDao<UserGroupProgramShare>
 
         Query hql = this.session.createQuery("from UserGroupProgramShare where program=:program");
 
-        hql.setEntity("program", program);
+        hql.setParameter("program", program);
         @SuppressWarnings("unchecked")
         List<UserGroupProgramShare> il = hql.list();
         return Collections.unmodifiableList(il);
@@ -104,11 +104,11 @@ public class UserGroupProgramShareDao extends AbstractDao<UserGroupProgramShare>
 
         if ( robot != null ) {
             hql = this.session.createQuery("from UserGroupProgramShare where userGroup=:userGroup and program.robot=:robot");
-            hql.setEntity("robot", robot);
+            hql.setParameter("robot", robot);
         } else {
             hql = this.session.createQuery("from UserGroupProgramShare where userGroup=:userGroup");
         }
-        hql.setEntity("userGroup", userGroup);
+        hql.setParameter("userGroup", userGroup);
 
         @SuppressWarnings("unchecked")
         List<UserGroupProgramShare> il = hql.list();

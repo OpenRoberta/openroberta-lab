@@ -32,11 +32,6 @@
         <source.level>1.8</source.level>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
-
-        <guice.version>4.2.0</guice.version>
-        <jersey.version>1.19.4</jersey.version>
-        <jetty.version>9.4.15.v20190215</jetty.version>
-        <hibernate.version>4.3.11.Final</hibernate.version>
     </properties>
 
     <modules>
@@ -160,52 +155,52 @@
             <dependency>
                 <groupId>com.google.inject</groupId>
                 <artifactId>guice</artifactId>
-                <version>${guice.version}</version>
+                <version>4.2.0</version>
             </dependency>
             <dependency>
                 <groupId>com.google.inject.extensions</groupId>
                 <artifactId>guice-servlet</artifactId>
-                <version>${guice.version}</version>
+                <version>4.2.0</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-servlet</artifactId>
-                <version>${jetty.version}</version>
+                <version>9.4.15.v20190215</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty.websocket</groupId>
                 <artifactId>websocket-server</artifactId>
-                <version>${jetty.version}</version>
+                <version>9.4.15.v20190215</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-servlet</artifactId>
-                <version>${jersey.version}</version>
+                <version>1.19.4</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-json</artifactId>
-                <version>${jersey.version}</version>
+                <version>1.19.4</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-server</artifactId>
-                <version>${jersey.version}</version>
+                <version>1.19.4</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.jersey.contribs</groupId>
                 <artifactId>jersey-guice</artifactId>
-                <version>${jersey.version}</version>
+                <version>1.19.4</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
-                <version>${hibernate.version}</version>
+                <version>5.4.24.Final</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-c3p0</artifactId>
-                <version>${hibernate.version}</version>
+                <version>5.4.24.Final</version>
             </dependency>
             <dependency>
                 <groupId>org.hsqldb</groupId>
@@ -260,7 +255,7 @@
             <dependency>
                 <groupId>org.yaml</groupId>
                 <artifactId>snakeyaml</artifactId>
-                <version>1.26</version>
+                <version>1.31</version>
             </dependency>
             <dependency>
                 <groupId>org.antlr</groupId>

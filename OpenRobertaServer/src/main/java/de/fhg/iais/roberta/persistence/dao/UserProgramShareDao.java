@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.persistence.dao;
 import java.util.Collections;
 import java.util.List;
 
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 
 import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.bo.Relation;
@@ -76,8 +76,8 @@ public class UserProgramShareDao extends AbstractDao<UserProgramShare> {
         Assert.notNull(program);
 
         Query hql = this.session.createQuery("from UserProgramShare where user=:user and program=:program");
-        hql.setEntity("user", user);
-        hql.setEntity("program", program);
+        hql.setParameter("user", user);
+        hql.setParameter("program", program);
         @SuppressWarnings("unchecked")
         List<UserProgramShare> il = hql.list();
         Assert.isTrue(il.size() <= 1);
@@ -94,7 +94,7 @@ public class UserProgramShareDao extends AbstractDao<UserProgramShare> {
 
         Query hql = this.session.createQuery("from UserProgramShare where program=:program");
 
-        hql.setEntity("program", program);
+        hql.setParameter("program", program);
         @SuppressWarnings("unchecked")
         List<UserProgramShare> il = hql.list();
         return Collections.unmodifiableList(il);
@@ -113,8 +113,8 @@ public class UserProgramShareDao extends AbstractDao<UserProgramShare> {
 
         Query hql = this.session.createQuery("from UserProgramShare where user=:user and program.robot.id=:robotId");
 
-        hql.setEntity("user", user);
-        hql.setInteger("robotId", robotId);
+        hql.setParameter("user", user);
+        hql.setParameter("robotId", robotId);
         @SuppressWarnings("unchecked")
         List<UserProgramShare> il = hql.list();
         return Collections.unmodifiableList(il);
@@ -136,10 +136,10 @@ public class UserProgramShareDao extends AbstractDao<UserProgramShare> {
                 .createQuery(
                     "from UserProgramShare where user.id=:userId and program.name=:programName and program.owner.id=:ownerId and program.author.account=:authorName");
 
-        hql.setInteger("userId", userId);
-        hql.setString("programName", programName);
-        hql.setInteger("ownerId", ownerId);
-        hql.setString("authorName", authorName);
+        hql.setParameter("userId", userId);
+        hql.setParameter("programName", programName);
+        hql.setParameter("ownerId", ownerId);
+        hql.setParameter("authorName", authorName);
         @SuppressWarnings("unchecked")
         List<UserProgramShare> il = hql.list();
         Assert.isTrue(il.size() <= 1);

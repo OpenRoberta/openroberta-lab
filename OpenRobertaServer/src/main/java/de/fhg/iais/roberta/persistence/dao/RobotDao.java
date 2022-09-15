@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.persistence.dao;
 
 import java.util.List;
 
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 
 import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.util.DbSession;
@@ -22,7 +22,7 @@ public class RobotDao extends AbstractDao<Robot> {
     public Robot loadRobot(String name) {
         Assert.notNull(name);
         Query hql = this.session.createQuery("from Robot where name=:name");
-        hql.setString("name", name);
+        hql.setParameter("name", name);
 
         @SuppressWarnings("unchecked")
         List<Robot> il = hql.list();

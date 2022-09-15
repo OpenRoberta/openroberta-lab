@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.persistence.dao;
 
 import java.util.List;
 
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 
 import de.fhg.iais.roberta.persistence.bo.Role;
 import de.fhg.iais.roberta.persistence.bo.User;
@@ -50,11 +50,11 @@ public class UserDao extends AbstractDao<User> {
         Query hql;
         if ( group == null ) {
             hql = this.session.createQuery("from User where userGroup is null and account=:account");
-            hql.setString("account", account);
+            hql.setParameter("account", account);
         } else {
             hql = this.session.createQuery("from User where userGroup=:userGroup and account=:account");
-            hql.setEntity("userGroup", group);
-            hql.setString("account", account);
+            hql.setParameter("userGroup", group);
+            hql.setParameter("account", account);
         }
         return getOneOrNoUser(hql);
     }
@@ -63,7 +63,7 @@ public class UserDao extends AbstractDao<User> {
     public List<User> loadUsersOfGroup(UserGroup group) {
         Assert.notNull(group);
         Query hql = this.session.createQuery("from User where userGroup=:group");
-        hql.setEntity("group", group);
+        hql.setParameter("group", group);
         return hql.list();
     }
 
@@ -72,8 +72,8 @@ public class UserDao extends AbstractDao<User> {
         Assert.notNull(groupOwner);
 
         Query hql = this.session.createQuery("from User where userGroup.owner=:owner and account=:account");
-        hql.setEntity("owner", groupOwner);
-        hql.setString("account", account);
+        hql.setParameter("owner", groupOwner);
+        hql.setParameter("account", account);
 
         return getOneOrNoUser(hql);
     }
@@ -81,7 +81,7 @@ public class UserDao extends AbstractDao<User> {
     public User loadUser(int id) {
         Assert.notNull(id);
         Query hql = this.session.createQuery("from User where id=:id");
-        hql.setInteger("id", id);
+        hql.setParameter("id", id);
 
         return getOneOrNoUser(hql);
     }
@@ -89,7 +89,7 @@ public class UserDao extends AbstractDao<User> {
     public User loadUserByEmail(String email) {
         Assert.notNull(email);
         Query hql = this.session.createQuery("from User where email=:email");
-        hql.setString("email", email);
+        hql.setParameter("email", email);
 
         return getOneOrNoUser(hql);
     }
@@ -107,7 +107,7 @@ public class UserDao extends AbstractDao<User> {
         Query hql = this.session.createQuery("from User where tags=:tag order by " + sortBy);
         hql.setFirstResult(offset);
         hql.setMaxResults(10);
-        hql.setString("tag", tagFilter);
+        hql.setParameter("tag", tagFilter);
         @SuppressWarnings("unchecked")
         List<User> il = hql.list();
         if ( il.size() == 0 ) {

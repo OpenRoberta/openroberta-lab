@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.persistence.dao;
 
 import java.util.List;
 
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 
 import de.fhg.iais.roberta.persistence.bo.PendingEmailConfirmations;
 import de.fhg.iais.roberta.persistence.util.DbSession;
@@ -47,7 +47,7 @@ public class PendingEmailConfirmationsDao extends AbstractDao<PendingEmailConfir
     public PendingEmailConfirmations loadConfirmationByUser(int userId) {
         Assert.notNull(userId);
         Query hql = this.session.createQuery("from PendingEmailConfirmations where userID=:userId");
-        hql.setInteger("userId", userId);
+        hql.setParameter("userId", userId);
 
         @SuppressWarnings("unchecked")
         List<PendingEmailConfirmations> il = hql.list();
@@ -68,7 +68,7 @@ public class PendingEmailConfirmationsDao extends AbstractDao<PendingEmailConfir
     public PendingEmailConfirmations loadConfirmationByUrl(String urlPostfix) {
         Assert.notNull(urlPostfix);
         Query hql = this.session.createQuery("from PendingEmailConfirmations where urlPostfix=:urlPostfix");
-        hql.setString("urlPostfix", urlPostfix);
+        hql.setParameter("urlPostfix", urlPostfix);
 
         @SuppressWarnings("unchecked")
         List<PendingEmailConfirmations> il = hql.list();

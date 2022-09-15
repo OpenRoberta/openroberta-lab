@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.persistence.dao;
 
 import java.util.List;
 
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 
 import de.fhg.iais.roberta.persistence.bo.LostPassword;
 import de.fhg.iais.roberta.persistence.util.DbSession;
@@ -47,7 +47,7 @@ public class LostPasswordDao extends AbstractDao<LostPassword> {
     public LostPassword loadLostPassword(int userId) {
         Assert.notNull(userId);
         Query hql = this.session.createQuery("from LostPassword where userID=:userId");
-        hql.setInteger("userId", userId);
+        hql.setParameter("userId", userId);
 
         @SuppressWarnings("unchecked")
         List<LostPassword> il = hql.list();
@@ -68,7 +68,7 @@ public class LostPasswordDao extends AbstractDao<LostPassword> {
     public LostPassword loadLostPassword(String urlPostfix) {
         Assert.notNull(urlPostfix);
         Query hql = this.session.createQuery("from LostPassword where urlPostfix=:urlPostfix");
-        hql.setString("urlPostfix", urlPostfix);
+        hql.setParameter("urlPostfix", urlPostfix);
 
         @SuppressWarnings("unchecked")
         List<LostPassword> il = hql.list();

@@ -8,10 +8,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,7 +104,7 @@ public class DbSession {
         if ( this.session != null ) {
             addTransaction("commit + close"); // for analyzing db session usage.
             Transaction transaction = this.session.getTransaction();
-            if ( !transaction.wasCommitted() ) {
+            if ( transaction.isActive() ) {
                 transaction.commit();
             }
             this.session.close();
@@ -197,7 +197,7 @@ public class DbSession {
      * @param query the SQL query
      * @return the Query object
      */
-    public SQLQuery createSqlQuery(String query) {
+    public NativeQuery createSqlQuery(String query) {
         addToLog("sql", query); // for analyzing db session usage.
         return this.session.createSQLQuery(query);
     }

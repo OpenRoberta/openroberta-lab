@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -143,10 +143,10 @@ public class ProgramDao extends AbstractDao<Program> {
     public Program load(String name, User owner, Robot robot, User author) {
         checkProgramValidity(name, owner, robot, author, null);
         Query hql = this.session.createQuery("from Program where name=:name and owner=:owner and robot=:robot and author=:author");
-        hql.setString("name", name);
-        hql.setEntity("owner", owner);
-        hql.setEntity("robot", robot);
-        hql.setEntity("author", author);
+        hql.setParameter("name", name);
+        hql.setParameter("owner", owner);
+        hql.setParameter("robot", robot);
+        hql.setParameter("author", author);
         @SuppressWarnings("unchecked")
         List<Program> il = hql.list();
         Assert.isTrue(il.size() <= 1);
@@ -167,11 +167,11 @@ public class ProgramDao extends AbstractDao<Program> {
             this.session
                 .createQuery(
                     "from UserProgramShare where user=:user and program.name=:name and program.robot=:robot and program.owner=:owner and program.author=:author and relation IN (:relation)");
-        hql.setString("name", name);
-        hql.setEntity("user", user);
-        hql.setEntity("robot", robot);
-        hql.setEntity("owner", owner);
-        hql.setEntity("author", author);
+        hql.setParameter("name", name);
+        hql.setParameter("user", user);
+        hql.setParameter("robot", robot);
+        hql.setParameter("owner", owner);
+        hql.setParameter("author", author);
         hql.setParameterList("relation", Arrays.asList(Relation.WRITE, Relation.X_WRITE));
         @SuppressWarnings("unchecked")
         List<UserProgramShare> il = hql.list();
@@ -185,10 +185,10 @@ public class ProgramDao extends AbstractDao<Program> {
                 this.session
                     .createQuery(
                         "from UserGroupProgramShare where userGroup=:userGroup and program.name=:name and program.robot=:robot and program.owner=:owner and relation IN (:relation)");
-            hql.setEntity("userGroup", user.getUserGroup());
-            hql.setString("name", name);
-            hql.setEntity("robot", robot);
-            hql.setEntity("owner", owner);
+            hql.setParameter("userGroup", user.getUserGroup());
+            hql.setParameter("name", name);
+            hql.setParameter("robot", robot);
+            hql.setParameter("owner", owner);
             hql.setParameterList("relation", Arrays.asList(Relation.WRITE, Relation.X_WRITE));
             @SuppressWarnings("unchecked")
             List<UserGroupProgramShare> ugList = hql.list();
@@ -231,8 +231,8 @@ public class ProgramDao extends AbstractDao<Program> {
      */
     public List<Program> loadAll(User owner, Robot robot) {
         Query hql = this.session.createQuery("from Program where owner=:owner and robot=:robot");
-        hql.setEntity("owner", owner);
-        hql.setEntity("robot", robot);
+        hql.setParameter("owner", owner);
+        hql.setParameter("robot", robot);
         @SuppressWarnings("unchecked")
         List<Program> il = hql.list();
         return Collections.unmodifiableList(il);
@@ -245,7 +245,7 @@ public class ProgramDao extends AbstractDao<Program> {
      */
     public List<Program> loadAll(User owner) {
         Query hql = this.session.createQuery("from Program where owner=:owner");
-        hql.setEntity("owner", owner);
+        hql.setParameter("owner", owner);
         @SuppressWarnings("unchecked")
         List<Program> il = hql.list();
         return Collections.unmodifiableList(il);
@@ -281,11 +281,11 @@ public class ProgramDao extends AbstractDao<Program> {
                 " and r.NAME = :robotGroup ";
         }
 
-        SQLQuery query = this.session.createSqlQuery(galleryProgramSql);
-        query.setInteger("userId", userId);
-        query.setInteger("galleryId", galleryId);
+        NativeQuery query = this.session.createSqlQuery(galleryProgramSql);
+        query.setParameter("userId", userId);
+        query.setParameter("galleryId", galleryId);
         if ( !robotGroup.isEmpty() ) {
-            query.setString("robotGroup", robotGroup);
+            query.setParameter("robotGroup", robotGroup);
         }
 
         @SuppressWarnings("unchecked")

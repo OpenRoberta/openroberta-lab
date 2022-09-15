@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.persistence.dao;
 import java.util.Collections;
 import java.util.List;
 
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 
 import de.fhg.iais.roberta.persistence.bo.Like;
 import de.fhg.iais.roberta.persistence.bo.Program;
@@ -55,8 +55,8 @@ public class LikeDao extends AbstractDao<Like> {
         Assert.notNull(user);
         Assert.notNull(program);
         Query hql = this.session.createQuery("from Like where user=:user and program=:program");
-        hql.setEntity("user", user);
-        hql.setEntity("program", program);
+        hql.setParameter("user", user);
+        hql.setParameter("program", program);
 
         @SuppressWarnings("unchecked")
         List<Like> il = hql.list();
@@ -77,7 +77,7 @@ public class LikeDao extends AbstractDao<Like> {
     public List<Like> loadLikesByProgram(Program program) {
         Assert.notNull(program);
         Query hql = this.session.createQuery("from Like where program=:program");
-        hql.setEntity("program", program);
+        hql.setParameter("program", program);
 
         @SuppressWarnings("unchecked")
         List<Like> il = hql.list();
@@ -87,7 +87,7 @@ public class LikeDao extends AbstractDao<Like> {
     public List<Like> loadLikesByUser(User user) {
         Assert.notNull(user);
         Query hql = this.session.createQuery("from Like where user=:user");
-        hql.setEntity("ussss", user);
+        hql.setParameter("ussss", user);
 
         @SuppressWarnings("unchecked")
         List<Like> il = hql.list();

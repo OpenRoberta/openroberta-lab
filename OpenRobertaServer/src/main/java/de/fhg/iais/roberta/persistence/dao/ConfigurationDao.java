@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.persistence.dao;
 import java.util.Collections;
 import java.util.List;
 
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 
 import de.fhg.iais.roberta.persistence.bo.Configuration;
 import de.fhg.iais.roberta.persistence.bo.ConfigurationData;
@@ -93,13 +93,13 @@ public class ConfigurationDao extends AbstractDao<Program> {
         Query hql;
         if ( user != null ) {
             hql = this.session.createQuery("from Configuration where name=:name and (owner is null or owner=:owner) and robot=:robot");
-            hql.setString("name", name);
-            hql.setEntity("owner", user);
-            hql.setEntity("robot", robot);
+            hql.setParameter("name", name);
+            hql.setParameter("owner", user);
+            hql.setParameter("robot", robot);
         } else {
             hql = this.session.createQuery("from Configuration where name=:name and owner is null and robot=:robot");
-            hql.setString("name", name);
-            hql.setEntity("robot", robot);
+            hql.setParameter("name", name);
+            hql.setParameter("robot", robot);
         }
         @SuppressWarnings("unchecked")
         List<Configuration> il = hql.list();
@@ -116,7 +116,7 @@ public class ConfigurationDao extends AbstractDao<Program> {
     public ConfigurationData load(String configHash) {
         Assert.notNull(configHash);
         Query hql = this.session.createQuery("from ConfigurationData where configurationHash=:configurationHash");
-        hql.setString("configurationHash", configHash);
+        hql.setParameter("configurationHash", configHash);
         @SuppressWarnings("unchecked")
         List<ConfigurationData> il = hql.list();
         Assert.isTrue(il.size() <= 1);
@@ -141,8 +141,8 @@ public class ConfigurationDao extends AbstractDao<Program> {
      */
     public List<Configuration> loadAll(User owner, Robot robot) {
         Query hql = this.session.createQuery("from Configuration where owner=:owner and robot=:robot");
-        hql.setEntity("owner", owner);
-        hql.setEntity("robot", robot);
+        hql.setParameter("owner", owner);
+        hql.setParameter("robot", robot);
         @SuppressWarnings("unchecked")
         List<Configuration> il = hql.list();
         return Collections.unmodifiableList(il);

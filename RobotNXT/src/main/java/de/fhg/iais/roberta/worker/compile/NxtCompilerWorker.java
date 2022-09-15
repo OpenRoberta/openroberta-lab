@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.basic.Pair;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.worker.ICompilerWorker;
 
 public class NxtCompilerWorker implements ICompilerWorker {
@@ -49,11 +50,15 @@ public class NxtCompilerWorker implements ICompilerWorker {
         Path path = Paths.get(compilerResourcesDir);
         Path base = Paths.get("");
 
-        String nbcCompilerFileName = compilerResourcesDir + "/windows/nbc.exe";
-        if ( SystemUtils.IS_OS_LINUX ) {
+        String nbcCompilerFileName;
+        if ( SystemUtils.IS_OS_WINDOWS ) {
+            nbcCompilerFileName = compilerResourcesDir + "/windows/nbc.exe";
+        } else if ( SystemUtils.IS_OS_LINUX ) {
             nbcCompilerFileName = "nbc";
         } else if ( SystemUtils.IS_OS_MAC ) {
             nbcCompilerFileName = compilerResourcesDir + "/osx/nbc";
+        } else {
+            throw new DbcException("invalid operating system");
         }
 
         String[] executableWithParameters =
