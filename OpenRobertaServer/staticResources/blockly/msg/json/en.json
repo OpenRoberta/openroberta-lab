@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2022-08-13 07:42:03.804210",
+		"lastupdated": "2022-09-16 09:34:55.597745",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -469,7 +469,6 @@
 	"SET": "set",
 	"BRICK_WHEEL_DIAMETER": "wheel diameter",
 	"BRICK_TRACK_WIDTH": "track width",
-	"WEIGHT_KG": "weight kg",
 	"ACTION_MOTOR": "motor",
 	"MOTOR": "motor",
 	"MOTOR_MIDDLE": "middle",
@@ -489,7 +488,6 @@
 	"MOTOR_FOREWARD": "forwards",
 	"MOTOR_BACKWARD": "backwards",
 	"MOTOR_DRIVE": "drive",
-	"MOTOR_DRIVE_TO": "drive to",
 	"MOTOR_RIGHT": "right",
 	"MOTOR_LEFT": "left",
 	"MOTOR_TURN": "turn",
@@ -553,7 +551,6 @@
 	"SENSOR_ENCODER": "encoder",
 	"SENSOR_GYRO": "gyroscope",
 	"SENSOR_GYRO_WEDO": "tilt sensor",
-	"SENSOR_ODOMETRY": "odometry",
 	"SENSOR_LSM9DS1": "LSM9DS1",
 	"SENSOR_APDS9960": "APDS9960",
 	"SENSOR_LPS22HB": "LPS22HB",
@@ -1457,7 +1454,6 @@
 	"ACTION_LCDI2C": "LCD 1602 I²C",
 	"ACTION_LCD_MBOT2_BRUSH": "set display brush",
 	"ACTION_OLEDSSD1306I2C": "OLED SSD1306 I²C",
-	"ACTION_OMNIDRIVE": "omnidrive",
 	"ACTION_LED": "LED",
 	"ACTION_RGBLED_MBOT2": "RGB LEDs",
 	"ACTION_PLAY": "play",
@@ -1468,7 +1464,6 @@
 	"ACTION_SERVO_ARDUINO": "servo motor SG90",
 	"ACTION_DIFFERENTIALDRIVE": "differential drive",
 	"DIFFERENTIALDRIVE_TOOLTIP": "Represents two motors on a common axis controlled independetly.",
-	"ACTION_OMNIDRIVE": "omnidrive",
 	"MOISTURE_TOOLTIP": "Represents a moisture sensor.",
 	"POTENTIOMETER_TOOLTIP": "Represents a potentiometer.",
 	"TEMPERATURE_TOOLTIP": "Represents a temperature sensor.",
