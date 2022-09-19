@@ -67,6 +67,10 @@
     </category>
     <category name="TOOLBOX_SENSOR" svg="true">
         <block type="robSensors_out_getSample"/>
+        <block type="robSensors_out_getSample">
+            <mutation mode="DIGITAL"/>
+            <field name="MODE">DIGITAL</field>
+        </block>
         <block type="robSensors_timer_getSample"/>
         <block type="robSensors_timer_reset"/>
         <block type="robSensors_key_getSample"/>
