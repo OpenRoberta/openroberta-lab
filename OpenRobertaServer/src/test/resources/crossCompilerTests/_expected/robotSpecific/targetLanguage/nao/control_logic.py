@@ -19,7 +19,7 @@ ___numberList = [0, 0]
 ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___colourList = [0xff0000, 0xff0000]
-def control():
+def ____control():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     if ___booleanVar:
         pass
@@ -58,7 +58,7 @@ def control():
             break
         h.wait(15)
 
-def logic():
+def ____logic():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     h.say(str(___numberVar == ___numberVar))
     h.say(str(___numberVar != ___numberVar))
@@ -79,8 +79,8 @@ def logic():
 def run():
     h.setAutonomousLife('ON')
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
-    control()
-    logic()
+    ____control()
+    ____logic()
 
 def main():
     try:

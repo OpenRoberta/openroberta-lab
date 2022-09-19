@@ -24,62 +24,62 @@ import lejos.remote.nxt.NXTConnection;
 
 public class NEPOprog {
     private static Configuration brickConfiguration;
-    
+
     private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
     private Hal hal = new Hal(brickConfiguration, usedSensors);
-    
-    private void number() {
+
+    private void ____number() {
         ___n1 = ___n2 + ___n3;
     }
-    
-    private void breakFunct() {
+
+    private void ____breakFunct() {
         if (5 == ___n1) return ;
         ___n1 = ___n1 + 1000;
     }
-    
-    private boolean retBool() {
+
+    private boolean ____retBool() {
         ___n1 = ___n1;
         return ___b;
     }
-    
-    private float retNumber() {
+
+    private float ____retNumber() {
         ___n1 = ___n1;
         return ___n1;
     }
-    
-    private float retNumber2(float ___x) {
+
+    private float ____retNumber2(float ___x) {
         ___x = ___x / ((float) 2);
         return ___x;
     }
-    
+
     public static void main(String[] args) {
         try {
              brickConfiguration = new EV3Configuration.Builder()
                 .setWheelDiameter(5.6)
                 .setTrackWidth(18.0)
                 .build();
-            
+
             new NEPOprog().run();
         } catch ( Exception e ) {
             Hal.displayExceptionWaitForKeyPress(e);
         }
     }
-    
+
     float ___n1 = 0;
     boolean ___b = false;
     float ___n2 = 1;
     float ___n3 = 4;
-    
+
     public void run() throws Exception {
         // Basic Functions START
-        number();
-        breakFunct();
+        ____number();
+        ____breakFunct();
         if (!(5 == ___n1)) {
             System.out.println("Assertion failed: " + "pos-1" + 5 + "EQ" + ___n1);
         }
-        ___n1 = retNumber();
-        ___b = retBool();
-        ___n1 = retNumber2(10);
+        ___n1 = ____retNumber();
+        ___b = ____retBool();
+        ___n1 = ____retNumber2(10);
         // Basic Functions END
     }
 }

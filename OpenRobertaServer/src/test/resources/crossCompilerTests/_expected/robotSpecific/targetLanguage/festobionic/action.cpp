@@ -6,7 +6,7 @@
 #include <NEPODefs.h>
 #include <ESP32Servo/src/ESP32Servo.h>
 
-void action();
+void ____action();
 
 double ___numberVar;
 bool ___booleanVar;
@@ -17,7 +17,7 @@ std::list<String> ___stringList;
 int _led_L = LED_BUILTIN;
 Servo _servo_S;
 
-void action() {
+void ____action() {
     Serial.println(___stringVar);
     digitalWrite(_led_L, HIGH);
     digitalWrite(_led_L, LOW);
@@ -39,5 +39,5 @@ void setup()
 
 void loop()
 {
-    action();
+    ____action();
 }

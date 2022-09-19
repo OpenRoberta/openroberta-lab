@@ -12,8 +12,8 @@ MeLightSensor _meLight4(PORT_4);
 MeLEDMatrix __meLEDMatrix_1(1);
 
 
-void control();
-void logic();
+void ____control();
+void ____logic();
 const std::vector<uint8_t> __ledMatrix0 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
 const std::vector<uint8_t> __ledMatrix1 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
 const std::vector<uint8_t> __ledMatrix2 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
@@ -32,7 +32,7 @@ std::list<std::vector<uint8_t>> ___imageList;
 
 unsigned long __time_1 = millis();
 
-void control() {
+void ____control() {
     if ( ___boolVar ) {
     }
     if ( ___boolVar ) {
@@ -111,7 +111,7 @@ void control() {
     }
 }
 
-void logic() {
+void ____logic() {
     drawStrLEDMatrix(&__meLEDMatrix_1, String(___numVar == ___numVar), 100);
     drawStrLEDMatrix(&__meLEDMatrix_1, String(___numVar != ___numVar), 100);
     drawStrLEDMatrix(&__meLEDMatrix_1, String(___numVar < ___numVar), 100);
@@ -142,6 +142,6 @@ void setup()
 
 void loop()
 {
-    control();
-    logic();
+    ____control();
+    ____logic();
 }

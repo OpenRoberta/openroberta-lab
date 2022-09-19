@@ -7,9 +7,9 @@
 #include <stdlib.h>
 MicroBit _uBit;
 
-void sensors();
+void ____sensors();
 
-void sensorsWaitUntil();
+void ____sensorsWaitUntil();
 
 
 
@@ -17,12 +17,12 @@ int main()
 {
     _uBit.init();
     
-    sensors();
-    sensorsWaitUntil();
+    ____sensors();
+    ____sensorsWaitUntil();
     release_fiber();
 }
 
-void sensors() {
+void ____sensors() {
     _uBit.display.scroll(ManagedString(_uBit.io.P0.getAnalogValue()));
     _uBit.display.scroll(ManagedString(_uBit.io.P1.getAnalogValue()));
     _uBit.display.scroll(ManagedString(_uBit.io.P2.getAnalogValue()));
@@ -66,7 +66,7 @@ void sensors() {
     _uBit.display.scroll(ManagedString(_uBit.io.P19.readPulseLow()));
 }
 
-void sensorsWaitUntil() {
+void ____sensorsWaitUntil() {
     while (true) {
         if ( _uBit.io.P0.getAnalogValue() < 30 ) {
             break;

@@ -35,7 +35,7 @@ ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___colourList = ['white', 'white']
 ___connectionList = [___connectionVar, ___connectionVar]
-def sensors():
+def ____sensors():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     hal.drawText(str(hal.isPressed('1')), ___numberVar, ___numberVar)
     hal.drawText(str(hal.getUltraSonicSensorDistance('4')), ___numberVar, ___numberVar)
@@ -69,7 +69,7 @@ def sensors():
     hal.resetTimer(4)
     hal.resetTimer(5)
 
-def waitUntil():
+def ____waitUntil():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     while True:
         if hal.isPressed('1') == True:
@@ -158,7 +158,7 @@ def waitUntil():
 
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
-    sensors()
+    ____sensors()
 
 def main():
     try:

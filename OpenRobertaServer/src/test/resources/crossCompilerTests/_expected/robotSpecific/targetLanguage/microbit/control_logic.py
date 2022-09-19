@@ -15,7 +15,7 @@ ___numberList = [0, 0]
 ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___imageList = [microbit.Image.HEART, microbit.Image.HEART]
-def control():
+def ____control():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     if ___booleanVar:
         pass
@@ -57,7 +57,7 @@ def control():
         if ___booleanVar:
             break
 
-def logic():
+def ____logic():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     microbit.display.scroll(str(___numberVar == ___numberVar))
     microbit.display.scroll(str(___numberVar != ___numberVar))
@@ -74,8 +74,8 @@ def logic():
 
 def run():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
-    control()
-    logic()
+    ____control()
+    ____logic()
 
 def main():
     try:

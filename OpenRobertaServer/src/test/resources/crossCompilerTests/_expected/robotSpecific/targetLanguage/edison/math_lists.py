@@ -12,7 +12,7 @@ ___numberVar = 0
 ___booleanVar = True
 ___numberList = Ed.List(3, [0,0,0])
 
-def math():
+def ____math():
     global ___numberVar, ___booleanVar, ___numberList
     ___numberVar = 0
     ___numberVar = ___numberVar + ___numberVar
@@ -39,14 +39,14 @@ def math():
     ___numberVar = sum(___numberList) / len(___numberList)
     ___numberVar = ___numberVar % ___numberVar
 
-def lists():
+def ____lists():
     global ___numberVar, ___booleanVar, ___numberList
     ___numberVar = len( ___numberList)
     ___numberVar = ___numberList[___numberVar]
     ___numberList[___numberVar] = ___numberVar
 
-math()
-lists()
+____math()
+____lists()
 
 
 def _abs(num):

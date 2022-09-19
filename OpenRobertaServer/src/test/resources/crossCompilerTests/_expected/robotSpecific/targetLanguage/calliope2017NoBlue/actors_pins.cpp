@@ -7,7 +7,7 @@
 #include <stdlib.h>
 MicroBit _uBit;
 
-void pin();
+void ____pin();
 
 
 double ___numberVar;
@@ -17,11 +17,11 @@ int main()
     _uBit.init();
     ___numberVar = 0;
     
-    pin();
+    ____pin();
     release_fiber();
 }
 
-void pin() {
+void ____pin() {
     _uBit.io.P0.setAnalogValue(___numberVar);
     _uBit.io.P1.setAnalogValue(___numberVar);
     _uBit.io.P2.setAnalogValue(___numberVar);

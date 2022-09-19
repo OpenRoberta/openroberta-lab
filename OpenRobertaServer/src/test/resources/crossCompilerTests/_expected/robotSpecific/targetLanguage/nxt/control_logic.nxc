@@ -12,8 +12,8 @@
 #include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources
 
 
-void control();
-void logic();
+void ____control();
+void ____logic();
 
 float ___numberVar;
 bool ___booleanVar;
@@ -41,11 +41,11 @@ task main() {
     ___colourList = _____colourList;
     int _____connectionList[] = {NULL, NULL, NULL};
     ___connectionList = _____connectionList;
-    control();
-    logic();
+    ____control();
+    ____logic();
 }
 
-void control() {
+void ____control() {
     if ( ___booleanVar ) {
     } else if ( ___booleanVar ) {
     }
@@ -102,7 +102,7 @@ void control() {
     }
 }
 
-void logic() {
+void ____logic() {
     BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___numberVar == ___numberVar);
     BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___numberVar != ___numberVar);
     BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___numberVar < ___numberVar);

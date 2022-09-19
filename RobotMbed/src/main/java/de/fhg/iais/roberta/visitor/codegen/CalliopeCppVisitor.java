@@ -1222,7 +1222,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         for ( final Method phrase : this.getBean(UsedHardwareBean.class).getUserDefinedMethods() ) {
             nlIndent();
             this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()));
-            this.sb.append(" " + phrase.getMethodName() + "(");
+            this.sb.append(" " + phrase.getCodeSafeMethodName() + "(");
             phrase.getParameters().accept(this);
             this.sb.append(");");
             nlIndent();

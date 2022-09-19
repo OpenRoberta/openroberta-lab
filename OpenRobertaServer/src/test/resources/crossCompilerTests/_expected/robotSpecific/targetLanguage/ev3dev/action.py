@@ -42,15 +42,15 @@ ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___colourList = ['white', 'white']
 ___connectionList = [___connectionVar, ___connectionVar]
-def action():
+def ____action():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
-    move()
-    drive()
-    display()
-    sounds()
-    lights()
+    ____move()
+    ____drive()
+    ____display()
+    ____sounds()
+    ____lights()
 
-def move():
+def ____move():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     hal.turnOnRegulatedMotor('A', ___numberVar)
     hal.turnOnRegulatedMotor('B', ___numberVar)
@@ -79,7 +79,7 @@ def move():
     hal.stopMotor('D', 'float')
     hal.stopMotor('D', 'nonfloat')
 
-def drive():
+def ____drive():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     hal.driveDistance('C', 'B', False, 'foreward', ___numberVar, ___numberVar)
     hal.driveDistance('C', 'B', False, 'backward', ___numberVar, ___numberVar)
@@ -95,7 +95,7 @@ def drive():
     _driveInCurve('foreward', 'C', ___numberVar, 'B', ___numberVar)
     _driveInCurve('backward', 'C', ___numberVar, 'B', ___numberVar)
 
-def display():
+def ____display():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     hal.drawText(str(___stringVar), ___numberVar, ___numberVar)
     hal.drawPicture(predefinedImages['OLDGLASSES'], 0, 0)
@@ -105,7 +105,7 @@ def display():
     hal.drawPicture(predefinedImages['TACHO'], 0, 0)
     hal.clearDisplay()
 
-def sounds():
+def ____sounds():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     hal.playTone(___numberVar, ___numberVar)
     hal.playTone(float(261.626), float(2000))
@@ -136,7 +136,7 @@ def sounds():
     hal.sayText(str(___stringVar))
     hal.sayText(str(___stringVar),___numberVar,___numberVar)
 
-def lights():
+def ____lights():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     hal.ledOn('green', 'on')
     hal.ledOn('green', 'flash')
@@ -152,7 +152,7 @@ def lights():
 
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
-    action()
+    ____action()
 
 def main():
     try:

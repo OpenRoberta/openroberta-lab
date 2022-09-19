@@ -30,14 +30,14 @@ ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___colourList = ['white', 'white']
 ___connectionList = [___connectionVar, ___connectionVar]
-def text():
+def ____text():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     hal.drawText("", ___numberVar, ___numberVar)
-    # 
+    #
     hal.drawText(str("".join(str(arg) for arg in [___stringVar, ___stringVar])), ___numberVar, ___numberVar)
     ___stringVar += str(___stringVar)
 
-def colours():
+def ____colours():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     hal.drawText(str('black'), ___numberVar, ___numberVar)
     hal.drawText(str('blue'), ___numberVar, ___numberVar)
@@ -48,73 +48,73 @@ def colours():
     hal.drawText(str('yellow'), ___numberVar, ___numberVar)
     hal.drawText(str('white'), ___numberVar, ___numberVar)
 
-def messages():
+def ____messages():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     hal.drawText(str(hal.establishConnectionTo(str(___stringVar))), ___numberVar, ___numberVar)
     hal.sendMessage(___connectionVar, str(___stringVar))
     hal.drawText(str(hal.readMessage(___connectionVar)), ___numberVar, ___numberVar)
     hal.drawText(str(hal.waitForConnection()), ___numberVar, ___numberVar)
 
-def function_parameter(___x, ___x2, ___x3, ___x4, ___x5, ___x6, ___x7, ___x8, ___x9, ___x10):
+def ____function_parameter(___x, ___x2, ___x3, ___x4, ___x5, ___x6, ___x7, ___x8, ___x9, ___x10):
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     if ___booleanVar: return None
 
-def function_return_numberVar():
+def ____function_return_numberVar():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     return ___numberVar
 
-def function_return_booleanVar():
+def ____function_return_booleanVar():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     return ___booleanVar
 
-def function_return_stringVar():
+def ____function_return_stringVar():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     return ___stringVar
 
-def function_return_colourVar():
+def ____function_return_colourVar():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     return ___colourVar
 
-def function_return_connectionVar():
+def ____function_return_connectionVar():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     return ___connectionVar
 
-def function_return_numberList():
+def ____function_return_numberList():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     return ___numberList
 
-def function_return_booleanList():
+def ____function_return_booleanList():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     return ___booleanList
 
-def function_return_stringList():
+def ____function_return_stringList():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     return ___stringList
 
-def function_return_colourList():
+def ____function_return_colourList():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     return ___colourList
 
-def function_return_connectionList():
+def ____function_return_connectionList():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     return ___connectionList
 
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
-    text()
-    colours()
-    messages()
-    function_parameter(___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList)
-    hal.drawText(str(function_return_numberVar()), ___numberVar, ___numberVar)
-    hal.drawText(str(function_return_booleanVar()), ___numberVar, ___numberVar)
-    hal.drawText(str(function_return_stringVar()), ___numberVar, ___numberVar)
-    hal.drawText(str(function_return_colourVar()), ___numberVar, ___numberVar)
-    hal.drawText(str(function_return_connectionVar()), ___numberVar, ___numberVar)
-    hal.drawText(str(function_return_numberList()), ___numberVar, ___numberVar)
-    hal.drawText(str(function_return_booleanList()), ___numberVar, ___numberVar)
-    hal.drawText(str(function_return_stringList()), ___numberVar, ___numberVar)
-    hal.drawText(str(function_return_colourList()), ___numberVar, ___numberVar)
-    hal.drawText(str(function_return_connectionList()), ___numberVar, ___numberVar)
+    ____text()
+    ____colours()
+    ____messages()
+    ____function_parameter(___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList)
+    hal.drawText(str(____function_return_numberVar()), ___numberVar, ___numberVar)
+    hal.drawText(str(____function_return_booleanVar()), ___numberVar, ___numberVar)
+    hal.drawText(str(____function_return_stringVar()), ___numberVar, ___numberVar)
+    hal.drawText(str(____function_return_colourVar()), ___numberVar, ___numberVar)
+    hal.drawText(str(____function_return_connectionVar()), ___numberVar, ___numberVar)
+    hal.drawText(str(____function_return_numberList()), ___numberVar, ___numberVar)
+    hal.drawText(str(____function_return_booleanList()), ___numberVar, ___numberVar)
+    hal.drawText(str(____function_return_stringList()), ___numberVar, ___numberVar)
+    hal.drawText(str(____function_return_colourList()), ___numberVar, ___numberVar)
+    hal.drawText(str(____function_return_connectionList()), ___numberVar, ___numberVar)
 
 def main():
     try:

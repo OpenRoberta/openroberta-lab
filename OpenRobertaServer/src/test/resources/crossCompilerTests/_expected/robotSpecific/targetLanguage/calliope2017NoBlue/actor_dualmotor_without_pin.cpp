@@ -7,9 +7,9 @@
 #include <stdlib.h>
 MicroBit _uBit;
 
-void move();
+void ____move();
 
-void action();
+void ____action();
 
 
 double ___n;
@@ -18,12 +18,12 @@ int main()
 {
     _uBit.init();
     ___n = 0;
-    
-    action();
+
+    ____action();
     release_fiber();
 }
 
-void move() {
+void ____move() {
     _uBit.soundmotor.motorAOn(___n);
     _uBit.soundmotor.motorBOn(___n);
     _uBit.soundmotor.motorAOn(___n);
@@ -58,6 +58,6 @@ void move() {
     _uBit.io.P0.setServoValue(___n);
 }
 
-void action() {
-    move();
+void ____action() {
+    ____move();
 }

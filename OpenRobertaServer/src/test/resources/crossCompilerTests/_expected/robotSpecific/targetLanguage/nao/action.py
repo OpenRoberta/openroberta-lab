@@ -18,16 +18,16 @@ ___numberList = [0, 0]
 ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___colourList = [0xff0000, 0xff0000]
-def action():
+def ____action():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
-    move()
-    walk()
-    animation()
-    sounds()
-    vision()
-    lights()
+    ____move()
+    ____walk()
+    ____animation()
+    ____sounds()
+    ____vision()
+    ____lights()
 
-def move():
+def ____move():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     h.applyPosture("Rest")
     h.applyPosture("Crouch")
@@ -111,7 +111,7 @@ def move():
     h.stiffness("RLeg", 1)
     h.stiffness("RLeg", 2)
 
-def walk():
+def ____walk():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     h.walk(___numberVar, 0, 0)
     h.walk(-___numberVar, 0, 0)
@@ -121,7 +121,7 @@ def walk():
     h.walkAsync(___numberVar, ___numberVar, ___numberVar)
     h.stop()
 
-def animation():
+def ____animation():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     h.taiChi()
     h.wave()
@@ -136,7 +136,7 @@ def animation():
     h.pointLookAt('look', 1, ___numberVar, ___numberVar, ___numberVar, ___numberVar)
     h.pointLookAt('look', 2, ___numberVar, ___numberVar, ___numberVar, ___numberVar)
 
-def sounds():
+def ____sounds():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     h.say(str(___stringVar))
     h.say(str(___stringVar),___numberVar,___numberVar)
@@ -163,7 +163,7 @@ def sounds():
     h.say(str(h.getVolume()))
     h.setVolume(___numberVar)
 
-def vision():
+def ____vision():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     h.say(str(faceRecognitionModule.learnFace(___stringVar)))
     faceRecognitionModule.forgetFace(___stringVar)
@@ -176,7 +176,7 @@ def vision():
     h.recordVideo(2, "Top", ___numberVar, ___stringVar)
     h.recordVideo(2, "Bottom", ___numberVar, ___stringVar)
 
-def lights():
+def ____lights():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     h.setLeds("FaceLeds", 0xff0000, 0.1)
     h.setLeds("LeftFaceLeds", 0xffff00, 0.1)
@@ -218,7 +218,7 @@ def lights():
 def run():
     h.setAutonomousLife('ON')
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
-    action()
+    ____action()
 
 def main():
     try:

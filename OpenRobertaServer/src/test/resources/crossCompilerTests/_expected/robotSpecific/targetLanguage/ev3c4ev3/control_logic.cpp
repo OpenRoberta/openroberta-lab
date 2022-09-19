@@ -8,8 +8,8 @@
 #include "NEPODefs.h"
 
 
-void control();
-void logic();
+void ____control();
+void ____logic();
 
 double ___numberVar = 0;
 bool ___booleanVar = true;
@@ -22,7 +22,7 @@ std::list<std::string> ___stringList = ((std::list<std::string>){"", ""});
 std::list<Color> ___colourList = ((std::list<Color>){White, White});
 std::list<BluetoothConnectionHandle> ___connectionList = ((std::list<BluetoothConnectionHandle>){___connectionVar, ___connectionVar});
 
-void control() {
+void ____control() {
     if ( ___booleanVar ) {
     } else if ( ___booleanVar ) {
     }
@@ -81,7 +81,7 @@ void control() {
     }
 }
 
-void logic() {
+void ____logic() {
     DrawString(ToString(___numberVar == ___numberVar), ___numberVar, ___numberVar);
     DrawString(ToString(___numberVar != ___numberVar), ___numberVar, ___numberVar);
     DrawString(ToString(___numberVar < ___numberVar), ___numberVar, ___numberVar);
@@ -103,8 +103,8 @@ int main () {
     startLoggingThread(OUT_BC);
     
     
-    control();
-    logic();
+    ____control();
+    ____logic();
     
     NEPOFreeEV3();
     return 0;

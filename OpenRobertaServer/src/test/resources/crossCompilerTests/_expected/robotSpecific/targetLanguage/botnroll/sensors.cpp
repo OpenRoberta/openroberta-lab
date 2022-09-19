@@ -10,8 +10,8 @@ BnrRoberta bnr(one, brm);
 #define MODULE_ADDRESS 0x2C 
 byte colorsLeft[3]={0,0,0}; 
 byte colorsRight[3]={0,0,0};
-void sensors();
-void waitUntil();
+void ____sensors();
+void ____waitUntil();
 
 double ___numberVar;
 bool ___booleanVar;
@@ -23,7 +23,7 @@ std::list<String> ___stringList;
 std::list<unsigned int> ___colourList;
 unsigned long __time_1 = millis();
 
-void sensors() {
+void ____sensors() {
     one.lcd1(bnr.infraredSensorObstacle(1));
     one.lcd1(bnr.infraredSensorObstacle(2));
     one.lcd1(bnr.infraredSensorObstacle(3));
@@ -58,7 +58,7 @@ void sensors() {
     one.lcd1(one.readBattery());
 }
 
-void waitUntil() {
+void ____waitUntil() {
     while (true) {
         if ( bnr.infraredSensorObstacle(1) == true ) {
             break;
@@ -260,6 +260,6 @@ void setup()
 
 void loop()
 {
-    sensors();
-    waitUntil();
+    ____sensors();
+    ____waitUntil();
 }

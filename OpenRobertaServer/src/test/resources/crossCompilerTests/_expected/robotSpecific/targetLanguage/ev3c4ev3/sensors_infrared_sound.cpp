@@ -8,8 +8,8 @@
 #include "NEPODefs.h"
 
 
-void sensors();
-void waitUntil();
+void ____sensors();
+void ____waitUntil();
 
 double ___numberVar = 0;
 bool ___booleanVar = true;
@@ -22,13 +22,13 @@ std::list<std::string> ___stringList = ((std::list<std::string>){"", ""});
 std::list<Color> ___colourList = ((std::list<Color>){White, White});
 std::list<BluetoothConnectionHandle> ___connectionList = ((std::list<BluetoothConnectionHandle>){___connectionVar, ___connectionVar});
 
-void sensors() {
+void ____sensors() {
     DrawString(ToString(ReadEV3IrSensorProximity(IN_4)), ___numberVar, ___numberVar);
     DrawString(ToString(_ReadIRSeekAllChannels(IN_4)), ___numberVar, ___numberVar);
     DrawString(ToString(ReadNXTSoundSensor(IN_2, DB)), ___numberVar, ___numberVar);
 }
 
-void waitUntil() {
+void ____waitUntil() {
     while ( true ) {
         if ( ReadEV3IrSensorProximity(IN_4) < 30 ) {
             break;
@@ -42,7 +42,7 @@ int main () {
     startLoggingThread(0);
     
     
-    sensors();
+    ____sensors();
     
     NEPOFreeEV3();
     return 0;

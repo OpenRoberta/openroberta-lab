@@ -17,14 +17,14 @@ ___numberList = [0, 0]
 ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___imageList = [microbit.Image.HEART, microbit.Image.HEART]
-def text():
+def ____text():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     microbit.display.scroll("")
-    # 
+    #
     microbit.display.scroll(str("".join(str(arg) for arg in [___numberVar, ___booleanVar, ___stringVar])))
     ___stringVar += str(___stringVar)
 
-def images():
+def ____images():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     microbit.display.show(microbit.Image('00000:00000:00000:00000:00000'))
     microbit.display.show(___imageVar.invert())
@@ -34,7 +34,7 @@ def images():
     microbit.display.show(___imageVar.shift_left(___numberVar))
     microbit.display.show(microbit.Image.HEART)
 
-def messages():
+def ____messages():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     radio.config(power=0)
     radio.send(str(___numberVar))
@@ -89,56 +89,56 @@ def messages():
     microbit.display.scroll(str(radio.receive()))
     radio.config(group=___numberVar)
 
-def function_parameter(___x, ___x2, ___x3, ___x4, ___x5, ___x6, ___x7, ___x8):
+def ____function_parameter(___x, ___x2, ___x3, ___x4, ___x5, ___x6, ___x7, ___x8):
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     if ___booleanVar: return None
 
-def function_return_numberVar():
+def ____function_return_numberVar():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     return ___numberVar
 
-def function_return_booleanVar():
+def ____function_return_booleanVar():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     return ___booleanVar
 
-def function_return_stringVar():
+def ____function_return_stringVar():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     return ___stringVar
 
-def function_return_imageVar():
+def ____function_return_imageVar():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     return ___imageVar
 
-def function_return_numberList():
+def ____function_return_numberList():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     return ___numberList
 
-def function_return_booleanList():
+def ____function_return_booleanList():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     return ___booleanList
 
-def function_return_stringList():
+def ____function_return_stringList():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     return ___stringList
 
-def function_return_imageList():
+def ____function_return_imageList():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     return ___imageList
 
 def run():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
-    text()
-    images()
-    messages()
-    function_parameter(___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList)
-    microbit.display.scroll(str(function_return_numberVar()))
-    microbit.display.scroll(str(function_return_booleanVar()))
-    microbit.display.scroll(str(function_return_stringVar()))
-    microbit.display.show(function_return_imageVar())
-    ___numberList = function_return_numberList()
-    ___booleanList = function_return_booleanList()
-    ___stringList = function_return_stringList()
-    microbit.display.show(function_return_imageList())
+    ____text()
+    ____images()
+    ____messages()
+    ____function_parameter(___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList)
+    microbit.display.scroll(str(____function_return_numberVar()))
+    microbit.display.scroll(str(____function_return_booleanVar()))
+    microbit.display.scroll(str(____function_return_stringVar()))
+    microbit.display.show(____function_return_imageVar())
+    ___numberList = ____function_return_numberList()
+    ___booleanList = ____function_return_booleanList()
+    ___stringList = ____function_return_stringList()
+    microbit.display.show(____function_return_imageList())
 
 def main():
     try:

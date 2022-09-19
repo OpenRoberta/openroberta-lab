@@ -15,7 +15,7 @@ ___numberList = [0, 0]
 ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___imageList = [microbit.Image.HEART, microbit.Image.HEART]
-def sensorsWaitUntil():
+def ____sensorsWaitUntil():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     while True:
         if microbit.button_a.is_pressed() == True:
@@ -84,7 +84,7 @@ def sensorsWaitUntil():
         if microbit.accelerometer.get_z() > 30:
             break
 
-def sensors():
+def ____sensors():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     microbit.display.scroll(str(microbit.button_a.is_pressed()))
     microbit.display.scroll(str(microbit.button_b.is_pressed()))
@@ -124,8 +124,8 @@ def sensors():
 
 def run():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
-    sensors()
-    sensorsWaitUntil()
+    ____sensors()
+    ____sensorsWaitUntil()
 
 def main():
     try:

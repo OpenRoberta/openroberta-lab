@@ -4,8 +4,8 @@
 #define _ROB3RTA_
 Robot rob;
 
-void math1();
-void math2();
+void ____math1();
+void ____math2();
 
 inline bool _isPrime(double d);
 
@@ -13,7 +13,7 @@ double ___n;
 bool ___booleanVar;
 unsigned int ___colourVar;
 
-void math1() {
+void ____math1() {
     ___n = 0;
     ___n = ___n + ___n;
     ___n = ___n - ___n;
@@ -41,7 +41,7 @@ void math1() {
     ___n = M_INFINITY;
 }
 
-void math2() {
+void ____math2() {
     ___booleanVar = (fmod(___n, 2) == 0);
     ___booleanVar = (fmod(___n, 2) != 0);
     ___booleanVar = _isPrime(___n);
@@ -68,8 +68,8 @@ void setup() {
 
 void loop()
 {
-    math1();
-    math2();
+    ____math1();
+    ____math2();
 }
 inline bool _isPrime(double d) {
     if (!(d == floor(d))) {

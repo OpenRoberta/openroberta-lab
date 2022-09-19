@@ -7,7 +7,7 @@
 #include <stdlib.h>
 MicroBit _uBit;
 
-void sounds();
+void ____sounds();
 
 
 double ___n;
@@ -17,11 +17,11 @@ int main()
     _uBit.init();
     ___n = 0;
     
-    sounds();
+    ____sounds();
     release_fiber();
 }
 
-void sounds() {
+void ____sounds() {
     _uBit.soundmotor.soundOn(___n); _uBit.sleep(___n); _uBit.soundmotor.soundOff();
     _uBit.soundmotor.soundOn(261.626); _uBit.sleep(2000); _uBit.soundmotor.soundOff();
     _uBit.soundmotor.soundOn(293.665); _uBit.sleep(1000); _uBit.soundmotor.soundOff();

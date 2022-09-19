@@ -4,13 +4,13 @@
 #define _ROB3RTA_
 Robot rob;
 
-void action();
+void ____action();
 
 double ___numberVar;
 bool ___booleanVar;
 unsigned int ___colourVar;
 
-void action() {
+void ____action() {
     rob.setLed(EYE_2, RGB(0x00, 0x00, 0x00));
     rob.setLed(EYE_2, RGB(0x00, 0x00, 0xff));
     rob.setLed(EYE_2, RGB(0x22, 0x88, 0x22));
@@ -67,5 +67,5 @@ void setup() {
 
 void loop()
 {
-    action();
+    ____action();
 }

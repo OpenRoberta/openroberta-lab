@@ -9,8 +9,8 @@
 #include <Arduino_LPS22HB.h>
 #include <NEPODefs.h>
 
-void sensorsWaitUntil();
-void sensors();
+void ____sensorsWaitUntil();
+void ____sensors();
 
 int _input_S3 = 5;
 int _output_B = 4;
@@ -39,7 +39,7 @@ double _getUltrasonicDistance(int trigger, int echo)
 }
 
 
-void sensorsWaitUntil() {
+void ____sensorsWaitUntil() {
     while (true) {
         if ( analogRead(_input_S2) == 50 ) {
             break;
@@ -114,7 +114,7 @@ void sensorsWaitUntil() {
     }
 }
 
-void sensors() {
+void ____sensors() {
     Serial.println(analogRead(_input_S2));
     Serial.println(digitalRead(_input_S));
     Serial.println(digitalRead(_input_S3));
@@ -149,6 +149,6 @@ void setup()
 
 void loop()
 {
-    sensors();
-    sensorsWaitUntil();
+    ____sensors();
+    ____sensorsWaitUntil();
 }

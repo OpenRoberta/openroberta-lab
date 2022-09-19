@@ -30,7 +30,7 @@ ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___colourList = ['white', 'white']
 ___connectionList = [___connectionVar, ___connectionVar]
-def control():
+def ____control():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     if ___booleanVar:
         pass
@@ -76,7 +76,7 @@ def control():
             break
         hal.waitFor(15)
 
-def logic():
+def ____logic():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     hal.drawText(str(___numberVar == ___numberVar), ___numberVar, ___numberVar)
     hal.drawText(str(___numberVar != ___numberVar), ___numberVar, ___numberVar)
@@ -94,8 +94,8 @@ def logic():
 
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
-    control()
-    logic()
+    ____control()
+    ____logic()
 
 def main():
     try:

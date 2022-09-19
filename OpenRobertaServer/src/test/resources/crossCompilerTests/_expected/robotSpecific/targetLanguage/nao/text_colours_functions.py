@@ -15,14 +15,14 @@ ___numberList = [0, 0]
 ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___colourList = [0xff0000, 0xff0000]
-def text():
+def ____text():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     h.say("")
-    # 
+    #
     h.say(str("".join(str(arg) for arg in [___stringVar, ___stringVar])))
     ___stringVar += str(___stringVar)
 
-def colours():
+def ____colours():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     h.say(str(0xffffff))
     h.say(str(0xcccccc))
@@ -93,42 +93,41 @@ def colours():
     h.say(str(0x993399))
     h.say(str(0x663366))
     h.say(str(0x330033))
-    h.say(
-        str(int("{:02x}{:02x}{:02x}".format(min(max(100, 0), 255), min(max(120, 0), 255), min(max(140, 0), 255)), 16)))
+    h.say(str(int("{:02x}{:02x}{:02x}".format(min(max(100, 0), 255), min(max(120, 0), 255), min(max(140, 0), 255)), 16)))
 
-def function_parameters(___x, ___x2, ___x3, ___x4, ___x5, ___x6, ___x7, ___x8):
+def ____function_parameters(___x, ___x2, ___x3, ___x4, ___x5, ___x6, ___x7, ___x8):
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     if ___booleanVar: return None
 
-def function_return_numberVar():
+def ____function_return_numberVar():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     return ___numberVar
 
-def function_return_booleanVar():
+def ____function_return_booleanVar():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     return ___booleanVar
 
-def function_return_stringVar():
+def ____function_return_stringVar():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     return ___stringVar
 
-def function_return_colourVar():
+def ____function_return_colourVar():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     return ___colourVar
 
-def function_return_numberList():
+def ____function_return_numberList():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     return ___numberList
 
-def function_return_booleanList():
+def ____function_return_booleanList():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     return ___booleanList
 
-def function_return_stringList():
+def ____function_return_stringList():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     return ___stringList
 
-def function_return_colourList():
+def ____function_return_colourList():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     return ___colourList
 
@@ -136,17 +135,17 @@ def function_return_colourList():
 def run():
     h.setAutonomousLife('ON')
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
-    text()
-    colours()
-    function_parameters(___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList)
-    h.say(str(function_return_numberVar()))
-    h.say(str(function_return_booleanVar()))
-    h.say(str(function_return_stringVar()))
-    h.say(str(function_return_colourVar()))
-    h.say(str(function_return_numberList()))
-    h.say(str(function_return_booleanList()))
-    h.say(str(function_return_stringList()))
-    h.say(str(function_return_colourList()))
+    ____text()
+    ____colours()
+    ____function_parameters(___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList)
+    h.say(str(____function_return_numberVar()))
+    h.say(str(____function_return_booleanVar()))
+    h.say(str(____function_return_stringVar()))
+    h.say(str(____function_return_colourVar()))
+    h.say(str(____function_return_numberList()))
+    h.say(str(____function_return_booleanList()))
+    h.say(str(____function_return_stringList()))
+    h.say(str(____function_return_colourList()))
 
 def main():
     try:

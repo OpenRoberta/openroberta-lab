@@ -686,7 +686,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMethodVoid(MethodVoid methodVoid) {
         nlIndent();
-        this.sb.append("def ").append(methodVoid.getMethodName()).append('(');
+        this.sb.append("def ").append(methodVoid.getCodeSafeMethodName()).append('(');
         List<String> paramList = new ArrayList<>();
         for ( Expr l : methodVoid.getParameters().get() ) {
             paramList.add(((VarDeclaration) l).getCodeSafeName());
@@ -712,7 +712,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMethodReturn(MethodReturn methodReturn) {
         nlIndent();
-        this.sb.append("def ").append(methodReturn.getMethodName()).append('(');
+        this.sb.append("def ").append(methodReturn.getCodeSafeMethodName()).append('(');
         List<String> paramList = new ArrayList<>();
         for ( Expr l : methodReturn.getParameters().get() ) {
             paramList.add(((VarDeclaration) l).getCodeSafeName());

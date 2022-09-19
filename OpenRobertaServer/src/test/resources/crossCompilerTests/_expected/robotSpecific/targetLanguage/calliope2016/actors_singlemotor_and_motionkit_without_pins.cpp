@@ -7,7 +7,7 @@
 #include <stdlib.h>
 MicroBit _uBit;
 
-void move();
+void ____move();
 
 
 double ___n;
@@ -17,11 +17,11 @@ int main()
     _uBit.init();
     ___n = 0;
     
-    move();
+    ____move();
     release_fiber();
 }
 
-void move() {
+void ____move() {
     _uBit.soundmotor.motorOn(___n);
     _uBit.soundmotor.motorOn(___n);
     _uBit.soundmotor.motorCoast();

@@ -31,7 +31,7 @@ ___numberList = [0, 0, 0]
 ___booleanList = [True, True, True]
 ___stringList = ["", "", ""]
 ___colorList = [(204, 0, 0), (204, 0, 0), (204, 0, 0)]
-def colours():
+def ____colours():
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList
     cyberpi.display.set_brush((204, 0, 0)[0], (204, 0, 0)[1], (204, 0, 0)[2])
     cyberpi.led.on((255, 102, 0)[0], (255, 102, 0)[1], (255, 102, 0)[2], 1)
@@ -119,64 +119,64 @@ def colours():
     cyberpi.console.println((102, 51, 102))
     cyberpi.console.println((51, 0, 51))
 
-def function_returnNumberVar():
+def ____function_returnNumberVar():
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList
     return ___numberVar
 
-def text():
+def ____text():
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList
     cyberpi.console.println("")
-    # 
+    #
     cyberpi.console.println("".join(str(arg) for arg in [___stringVar, ___stringVar]))
     ___stringVar += str(___stringVar)
     cyberpi.console.println(float(___stringVar))
     cyberpi.console.println(ord(___stringVar[0]))
 
-def function_returnBooleanVar():
+def ____function_returnBooleanVar():
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList
     return ___booleanVar
 
-def function_returnStringVar():
+def ____function_returnStringVar():
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList
     return ___stringVar
 
-def function_colorVar():
+def ____function_colorVar():
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList
     return ___colorVar
 
-def function_parameters(___x, ___x2, ___x3, ___x4, ___x5, ___x6, ___x7, ___x8):
+def ____function_parameters(___x, ___x2, ___x3, ___x4, ___x5, ___x6, ___x7, ___x8):
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList
     if ___booleanVar: return None
 
-def function_returnNumberList():
+def ____function_returnNumberList():
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList
     return ___numberList
 
-def function_returnBooleanList():
+def ____function_returnBooleanList():
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList
     return ___booleanList
 
-def function_returnStringList():
+def ____function_returnStringList():
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList
     return ___stringList
 
-def function_returnColorList():
+def ____function_returnColorList():
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList
     return ___colorList
 
 def run():
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList
-    colours()
-    text()
-    function_parameters(___numberVar, ___booleanVar, ___stringVar, ___colorVar, ___numberList, ___booleanList, ___stringList, ___colorList)
-    cyberpi.console.println(function_returnNumberVar())
-    cyberpi.console.println(function_returnBooleanVar())
-    cyberpi.console.println(function_returnStringVar())
-    cyberpi.console.println(function_colorVar())
-    cyberpi.console.println(function_returnNumberList())
-    cyberpi.console.println(function_returnBooleanList())
-    cyberpi.console.println(function_returnStringList())
-    cyberpi.console.println(function_returnColorList())
+    ____colours()
+    ____text()
+    ____function_parameters(___numberVar, ___booleanVar, ___stringVar, ___colorVar, ___numberList, ___booleanList, ___stringList, ___colorList)
+    cyberpi.console.println(____function_returnNumberVar())
+    cyberpi.console.println(____function_returnBooleanVar())
+    cyberpi.console.println(____function_returnStringVar())
+    cyberpi.console.println(____function_colorVar())
+    cyberpi.console.println(____function_returnNumberList())
+    cyberpi.console.println(____function_returnBooleanList())
+    cyberpi.console.println(____function_returnStringList())
+    cyberpi.console.println(____function_returnColorList())
 
 def main():
     try:

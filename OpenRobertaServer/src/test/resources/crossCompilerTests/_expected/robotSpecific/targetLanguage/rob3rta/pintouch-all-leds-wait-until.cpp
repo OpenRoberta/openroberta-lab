@@ -4,11 +4,11 @@
 #define _ROB3RTA_
 Robot rob;
 
-void beleuchten(unsigned int ___farbe);
-void ausmachen();
+void ____beleuchten(unsigned int ___farbe);
+void ____ausmachen();
 
 
-void beleuchten(unsigned int ___farbe) {
+void ____beleuchten(unsigned int ___farbe) {
     rob.setLed(LED_4, ON);
     rob.setLed(LED_3, ON);
     rob.setLed(EYE_2, ___farbe);
@@ -16,7 +16,7 @@ void beleuchten(unsigned int ___farbe) {
     delay(1000);
 }
 
-void ausmachen() {
+void ____ausmachen() {
     rob.setLed(LED_4, OFF);
     rob.setLed(LED_3, OFF);
     rob.setLed(EYE_2, OFF);
@@ -36,46 +36,46 @@ void loop()
         }
         delay(1);
     }
-    beleuchten(RGB(0xFF, 0xFF, 0xFF));
-    ausmachen();
+    ____beleuchten(RGB(0xFF, 0xFF, 0xFF));
+    ____ausmachen();
     while (true) {
         if ( ( rob.getTouch(EAR_1) == true ) == true ) {
             break;
         }
         delay(1);
     }
-    beleuchten(RGB(0xFF, 0x00, 0x88));
-    ausmachen();
+    ____beleuchten(RGB(0xFF, 0x00, 0x88));
+    ____ausmachen();
     while (true) {
         if ( ( rob.getTouch(WHEEL_A) == true ) == true ) {
             break;
         }
         delay(1);
     }
-    beleuchten(RGB(0xFF, 0x00, 0x00));
-    ausmachen();
+    ____beleuchten(RGB(0xFF, 0x00, 0x00));
+    ____ausmachen();
     while (true) {
         if ( ( rob.getTouch(WHEEL_B) == true ) == true ) {
             break;
         }
         delay(1);
     }
-    beleuchten(RGB(0x00, 0x00, 0xFF));
-    ausmachen();
+    ____beleuchten(RGB(0x00, 0x00, 0xFF));
+    ____ausmachen();
     while (true) {
         if ( ( rob.getTouch(WHEEL_C) == true ) == true ) {
             break;
         }
         delay(1);
     }
-    beleuchten(RGB(0x00, 0xFF, 0x00));
-    ausmachen();
+    ____beleuchten(RGB(0x00, 0xFF, 0x00));
+    ____ausmachen();
     while (true) {
         if ( ( rob.getTouch(WHEEL_D) == true ) == true ) {
             break;
         }
         delay(1);
     }
-    beleuchten(RGB(0xFF, 0xFF, 0x00));
-    ausmachen();
+    ____beleuchten(RGB(0xFF, 0xFF, 0x00));
+    ____ausmachen();
 }

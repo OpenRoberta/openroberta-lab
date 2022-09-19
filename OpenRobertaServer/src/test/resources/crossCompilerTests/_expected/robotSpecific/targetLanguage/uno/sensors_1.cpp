@@ -7,8 +7,8 @@
 #include <MFRC522/src/MFRC522.h>
 #include <NEPODefs.h>
 
-void sensors();
-void sensorsWaitUntil();
+void ____sensors();
+void ____sensorsWaitUntil();
 
 double ___numberVar;
 bool ___booleanVar;
@@ -84,7 +84,7 @@ String _readRFIDData(MFRC522 &mfrc522) {
 }
 
 
-void sensors() {
+void ____sensors() {
     Serial.println(analogRead(_input_S2));
     Serial.println(digitalRead(_input_S));
     Serial.println(digitalRead(_input_S_UP));
@@ -104,7 +104,7 @@ void sensors() {
     Serial.println(_mfrc522_R.PICC_IsNewCardPresent());
 }
 
-void sensorsWaitUntil() {
+void ____sensorsWaitUntil() {
     while (true) {
         if ( analogRead(_input_S2) == 50 ) {
             break;
@@ -242,6 +242,6 @@ void setup()
 
 void loop()
 {
-    sensors();
-    sensorsWaitUntil();
+    ____sensors();
+    ____sensorsWaitUntil();
 }

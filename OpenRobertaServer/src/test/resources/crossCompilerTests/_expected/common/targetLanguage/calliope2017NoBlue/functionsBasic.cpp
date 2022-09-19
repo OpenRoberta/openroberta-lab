@@ -7,15 +7,15 @@
 #include <stdlib.h>
 MicroBit _uBit;
 
-void number();
+void ____number();
 
-void breakFunct();
+void ____breakFunct();
 
-bool retBool();
+bool ____retBool();
 
-double retNumber();
+double ____retNumber();
 
-double retNumber2(double ___x);
+double ____retNumber2(double ___x);
 
 
 double ___n1;
@@ -32,36 +32,36 @@ int main()
     ___n3 = 4;
     
     // Basic Functions START
-    number();
-    breakFunct();
+    ____number();
+    ____breakFunct();
     assertNepo((5 == ___n1), "pos-1", 5, "EQ", ___n1);
-    ___n1 = retNumber();
-    ___b = retBool();
-    ___n1 = retNumber2(10);
+    ___n1 = ____retNumber();
+    ___b = ____retBool();
+    ___n1 = ____retNumber2(10);
     // Basic Functions END
     release_fiber();
 }
 
-void number() {
+void ____number() {
     ___n1 = ___n2 + ___n3;
 }
 
-void breakFunct() {
+void ____breakFunct() {
     if (5 == ___n1) return ;
     ___n1 = ___n1 + 1000;
 }
 
-bool retBool() {
+bool ____retBool() {
     ___n1 = ___n1;
     return ___b;
 }
 
-double retNumber() {
+double ____retNumber() {
     ___n1 = ___n1;
     return ___n1;
 }
 
-double retNumber2(double ___x) {
+double ____retNumber2(double ___x) {
     ___x = ___x / ((float) 2);
     return ___x;
 }

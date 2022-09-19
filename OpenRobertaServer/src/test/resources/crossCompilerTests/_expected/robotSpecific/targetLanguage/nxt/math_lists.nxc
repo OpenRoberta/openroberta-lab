@@ -12,8 +12,8 @@
 #include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources
 
 
-void math();
-void lists();
+void ____math();
+void ____lists();
 
 float MathAcos(float val);
 float MathAsin(float val);
@@ -58,11 +58,11 @@ task main() {
     ___colourList = _____colourList;
     int _____connectionList[] = {NULL, NULL, NULL};
     ___connectionList = _____connectionList;
-    math();
-    lists();
+    ____math();
+    ____lists();
 }
 
-void math() {
+void ____math() {
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, 0);
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, (___numberVar + ___numberVar));
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, (___numberVar - ___numberVar));
@@ -106,7 +106,7 @@ void math() {
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, Random(100) / 100);
 }
 
-void lists() {
+void ____lists() {
     BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___numberList));
     BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___stringList));
     BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___booleanList));

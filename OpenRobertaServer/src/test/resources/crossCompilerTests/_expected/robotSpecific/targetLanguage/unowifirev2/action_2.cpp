@@ -6,12 +6,12 @@
 #include <LiquidCrystal/src/LiquidCrystal.h>
 #include <NEPODefs.h>
 
-void action();
-void display();
-void lights();
-void move();
-void sounds();
-void pin();
+void ____action();
+void ____display();
+void ____lights();
+void ____move();
+void ____sounds();
+void ____pin();
 
 double ___numberVar;
 bool ___booleanVar;
@@ -23,30 +23,30 @@ std::list<String> ___stringList;
 std::list<unsigned int> ___colourList;
 LiquidCrystal _lcd_L2(0, 1, 2, 3, 4, 5);
 
-void action() {
-    move();
-    display();
-    sounds();
-    lights();
+void ____action() {
+    ____move();
+    ____display();
+    ____sounds();
+    ____lights();
 }
 
-void display() {
+void ____display() {
     _lcd_L2.setCursor(___numberVar,___numberVar);
     _lcd_L2.print(___stringVar);
     
     _lcd_L2.clear();
 }
 
-void lights() {
+void ____lights() {
 }
 
-void move() {
+void ____move() {
 }
 
-void sounds() {
+void ____sounds() {
 }
 
-void pin() {
+void ____pin() {
 }
 
 void setup()
@@ -64,5 +64,5 @@ void setup()
 
 void loop()
 {
-    action();
+    ____action();
 }

@@ -40,14 +40,14 @@ def _RGBAsString(rgb):
     return min(color_diffs)[1]
 
 
-def action():
-    drive()
-    move()
-    display()
-    lights()
-    sounds()
+def ____action():
+    ____drive()
+    ____move()
+    ____display()
+    ____lights()
+    ____sounds()
 
-def move():
+def ____move():
     mbot2.EM_set_speed(30, "EM1")
     mbot2.EM_turn((5) * 360, 30, "EM1")
     mbot2.EM_stop("EM1")
@@ -57,7 +57,7 @@ def move():
     mbot2.EM_turn((5), 30, "EM2")
     mbot2.EM_turn((5), 30, "EM1")
 
-def drive():
+def ____drive():
     _diffDriveFor(30, 30, 10)
     _diffDriveFor(-(30), -(30), 10)
     mbot2.drive_speed(30, -(30))
@@ -72,14 +72,14 @@ def drive():
     mbot2.drive_speed(10, -(30))
     mbot2.drive_speed(-(10),30)
 
-def display():
+def ____display():
     cyberpi.display.show_label("Hallo", 16, int(8 * 0 + 5), int(17 * 0))
     cyberpi.console.println("Hallo")
     cyberpi.display.set_brush((204, 0, 0)[0], (204, 0, 0)[1], (204, 0, 0)[2])
     cyberpi.console.clear()
     print("Hallo")
 
-def sounds():
+def ____sounds():
     cyberpi.audio.play_tone(int(300), 100 * 0.001)
     cyberpi.audio.set_vol(cyberpi.audio.get_vol())
     cyberpi.audio.play_tone(int(138.591), 2000 * 0.001)
@@ -89,7 +89,7 @@ def sounds():
     cyberpi.audio.play_tone(int(554.365), 125 * 0.001)
     cyberpi.audio.play_record()
 
-def lights():
+def ____lights():
     cyberpi.led.on((204, 0, 0)[0], (204, 0, 0)[1], (204, 0, 0)[2], 1)
     cyberpi.led.off(1)
     cyberpi.led.on((204, 0, 0)[0], (204, 0, 0)[1], (204, 0, 0)[2], 2)
@@ -116,7 +116,7 @@ def lights():
     mbuild.quad_rgb_sensor.off_led(1)
 
 def run():
-    action()
+    ____action()
 
 def main():
     try:

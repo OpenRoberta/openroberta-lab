@@ -24,26 +24,26 @@ ___n1 = 0
 ___b = False
 ___n2 = 1
 ___n3 = 4
-def number():
+def ____number():
     global ___n1, ___b, ___n2, ___n3
     ___n1 = ___n2 + ___n3
 
-def breakFunct():
+def ____breakFunct():
     global ___n1, ___b, ___n2, ___n3
     if 5 == ___n1: return None
     ___n1 = ___n1 + 1000
 
-def retBool():
+def ____retBool():
     global ___n1, ___b, ___n2, ___n3
     ___n1 = ___n1
     return ___b
 
-def retNumber():
+def ____retNumber():
     global ___n1, ___b, ___n2, ___n3
     ___n1 = ___n1
     return ___n1
 
-def retNumber2(___x):
+def ____retNumber2(___x):
     global ___n1, ___b, ___n2, ___n3
     ___x = ___x / float(2)
     return ___x
@@ -51,13 +51,13 @@ def retNumber2(___x):
 def run():
     global ___n1, ___b, ___n2, ___n3
     # Basic Functions START
-    number()
-    breakFunct()
+    ____number()
+    ____breakFunct()
     if not 5 == ___n1:
         print("Assertion failed: ", "pos-1", 5, "EQ", ___n1)
-    ___n1 = retNumber()
-    ___b = retBool()
-    ___n1 = retNumber2(10)
+    ___n1 = ____retNumber()
+    ___b = ____retBool()
+    ___n1 = ____retNumber2(10)
     # Basic Functions END
 
 def main():

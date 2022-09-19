@@ -47,6 +47,11 @@ public final class MethodCall extends Method {
     }
 
     @Override
+    public String getCodeSafeMethodName() {
+        return CODE_SAFE_PREFIX + this.oraMethodName;
+    }
+
+    @Override
     public ExprList getParameters() {
         return this.oraParameters;
     }
@@ -65,7 +70,7 @@ public final class MethodCall extends Method {
         return "MethodCall [" + this.oraMethodName + ", " + this.oraParameters + ", " + this.oraParametersValues + ", " + this.oraReturnType + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyType outputType = block.getMutation().getOutputType() == null ? BlocklyType.VOID : BlocklyType.get(block.getMutation().getOutputType());
         String methodName = block.getMutation().getName();
         List<Arg> arguments = block.getMutation().getArg();

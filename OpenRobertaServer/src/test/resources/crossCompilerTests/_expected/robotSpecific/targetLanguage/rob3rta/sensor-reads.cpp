@@ -4,14 +4,14 @@
 #define _ROB3RTA_
 Robot rob;
 
-void sensorsWaitUntil();
-void sensors();
+void ____sensorsWaitUntil();
+void ____sensors();
 
 bool ___b;
 double ___c;
 unsigned long __time_1 = millis();
 
-void sensorsWaitUntil() {
+void ____sensorsWaitUntil() {
     while (true) {
         if ( ( rob.getTouch(EAR_2) == true ) == true ) {
             break;
@@ -74,7 +74,7 @@ void sensorsWaitUntil() {
     }
 }
 
-void sensors() {
+void ____sensors() {
     ___b = ( rob.getTouch(EAR_2) == true );
     ___b = ( rob.getTouch(EAR_1) == true );
     ___b = ( rob.getTouch(WHEEL_A) == true );
@@ -100,6 +100,6 @@ void loop()
     rob.setLed(EYE_2, RGB(0x33, 0xff, 0xff));
     rob.setLed(EYE_1, RGB(0xFF, 0x00, 0x00));
     delay(1000);
-    sensors();
-    sensorsWaitUntil();
+    ____sensors();
+    ____sensorsWaitUntil();
 }

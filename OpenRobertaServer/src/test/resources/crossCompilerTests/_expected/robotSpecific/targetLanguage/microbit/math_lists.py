@@ -15,7 +15,7 @@ ___numberList = [0, 0]
 ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___imageList = [microbit.Image.HEART, microbit.Image.HEART]
-def math2():
+def ____math2():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     microbit.display.scroll(str(0))
     microbit.display.scroll(str(___numberVar + ___numberVar))
@@ -64,7 +64,7 @@ def math2():
     microbit.display.scroll(str(random.randint(___numberVar, ___numberVar)))
     microbit.display.scroll(str(random.random()))
 
-def lists():
+def ____lists():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     ___numberList = []
     ___numberList = [___numberVar, ___numberVar, ___numberVar]
@@ -104,8 +104,8 @@ def lists():
 
 def run():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
-    math2()
-    lists()
+    ____math2()
+    ____lists()
 
 def main():
     try:

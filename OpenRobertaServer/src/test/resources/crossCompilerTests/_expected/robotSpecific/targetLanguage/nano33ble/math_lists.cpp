@@ -5,8 +5,8 @@
 
 #include <NEPODefs.h>
 
-void math();
-void lists();
+void ____math();
+void ____lists();
 
 inline bool _isPrime(double d);
 
@@ -20,7 +20,7 @@ std::list<String> ___stringList;
 std::list<unsigned int> ___colourList;
 int _led_L = 13;
 
-void math() {
+void ____math() {
     Serial.println(0);
     Serial.println(___numberVar + ___numberVar);
     Serial.println(___numberVar - ___numberVar);
@@ -70,7 +70,7 @@ void math() {
     Serial.println(((double) rand() / (RAND_MAX)));
 }
 
-void lists() {
+void ____lists() {
     ___numberList = {};
     ___numberList = {0, 0, 0};
     Serial.println(((int) ___numberList.size()));
@@ -124,8 +124,8 @@ void setup()
 
 void loop()
 {
-    math();
-    lists();
+    ____math();
+    ____lists();
 }
 inline bool _isPrime(double d) {
     if (!(d == floor(d))) {

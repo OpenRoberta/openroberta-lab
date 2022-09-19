@@ -30,7 +30,7 @@ ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___colourList = ['white', 'white']
 ___connectionList = [___connectionVar, ___connectionVar]
-def math():
+def ____math():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     hal.drawText(str(0), ___numberVar, ___numberVar)
     hal.drawText(str(___numberVar + ___numberVar), ___numberVar, ___numberVar)
@@ -80,7 +80,7 @@ def math():
     hal.drawText(str(_randInt(___numberVar, ___numberVar)), ___numberVar, ___numberVar)
     hal.drawText(str(_randDouble()), ___numberVar, ___numberVar)
 
-def lists():
+def ____lists():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     ___numberList = []
     ___numberList = [0, 0, 0]
@@ -121,8 +121,8 @@ def lists():
 
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
-    math()
-    lists()
+    ____math()
+    ____lists()
 
 def main():
     try:

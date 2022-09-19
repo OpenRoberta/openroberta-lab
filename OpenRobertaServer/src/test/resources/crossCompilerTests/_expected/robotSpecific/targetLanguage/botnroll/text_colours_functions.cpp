@@ -10,17 +10,17 @@ BnrRoberta bnr(one, brm);
 #define MODULE_ADDRESS 0x2C 
 byte colorsLeft[3]={0,0,0}; 
 byte colorsRight[3]={0,0,0};
-void text();
-void colour();
-void function_parameter(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::list<double> ___x5, std::list<bool> ___x6, std::list<String> ___x7, std::list<unsigned int> ___x8);
-double function_return_numberVar();
-bool function_return_booleanVar();
-String function_return_stringVar();
-unsigned int function_return_colourVar();
-std::list<double> function_return_numberList();
-std::list<bool> function_return_booleanList();
-std::list<String> function_return_stringList();
-std::list<unsigned int> function_return_colourList();
+void ____text();
+void ____colour();
+void ____function_parameter(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::list<double> ___x5, std::list<bool> ___x6, std::list<String> ___x7, std::list<unsigned int> ___x8);
+double ____function_return_numberVar();
+bool ____function_return_booleanVar();
+String ____function_return_stringVar();
+unsigned int ____function_return_colourVar();
+std::list<double> ____function_return_numberList();
+std::list<bool> ____function_return_booleanList();
+std::list<String> ____function_return_stringList();
+std::list<unsigned int> ____function_return_colourList();
 
 double ___numberVar;
 bool ___booleanVar;
@@ -31,13 +31,13 @@ std::list<bool> ___booleanList;
 std::list<String> ___stringList;
 std::list<unsigned int> ___colourList;
 
-void text() {
+void ____text() {
     one.lcd1("");
     // 
     ___stringVar += ___stringVar;
 }
 
-void colour() {
+void ____colour() {
     one.lcd1(RGB(0x00, 0x00, 0x00));
     one.lcd1(RGB(0x00, 0x57, 0xa6));
     one.lcd1(RGB(0x00, 0x64, 0x2e));
@@ -48,39 +48,39 @@ void colour() {
     one.lcd1(RGB(0xFF, 0xFF, 0xFF));
 }
 
-void function_parameter(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::list<double> ___x5, std::list<bool> ___x6, std::list<String> ___x7, std::list<unsigned int> ___x8) {
+void ____function_parameter(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::list<double> ___x5, std::list<bool> ___x6, std::list<String> ___x7, std::list<unsigned int> ___x8) {
     if (___booleanVar) return ;
 }
 
-double function_return_numberVar() {
+double ____function_return_numberVar() {
     return ___numberVar;
 }
 
-bool function_return_booleanVar() {
+bool ____function_return_booleanVar() {
     return ___booleanVar;
 }
 
-String function_return_stringVar() {
+String ____function_return_stringVar() {
     return ___stringVar;
 }
 
-unsigned int function_return_colourVar() {
+unsigned int ____function_return_colourVar() {
     return ___colourVar;
 }
 
-std::list<double> function_return_numberList() {
+std::list<double> ____function_return_numberList() {
     return ___numberList;
 }
 
-std::list<bool> function_return_booleanList() {
+std::list<bool> ____function_return_booleanList() {
     return ___booleanList;
 }
 
-std::list<String> function_return_stringList() {
+std::list<String> ____function_return_stringList() {
     return ___stringList;
 }
 
-std::list<unsigned int> function_return_colourList() {
+std::list<unsigned int> ____function_return_colourList() {
     return ___colourList;
 }
 
@@ -107,13 +107,13 @@ void setup()
 
 void loop()
 {
-    text();
-    colour();
-    function_parameter(___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList);
-    one.lcd1(function_return_numberVar());
-    one.lcd1(function_return_booleanVar());
+    ____text();
+    ____colour();
+    ____function_parameter(___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList);
+    one.lcd1(____function_return_numberVar());
+    one.lcd1(____function_return_booleanVar());
     
-    one.lcd1(function_return_colourVar());
+    one.lcd1(____function_return_colourVar());
     
     
     

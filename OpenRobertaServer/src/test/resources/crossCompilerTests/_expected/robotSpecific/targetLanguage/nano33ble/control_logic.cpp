@@ -5,8 +5,8 @@
 
 #include <NEPODefs.h>
 
-void control();
-void logic();
+void ____control();
+void ____logic();
 
 double ___numberVar;
 bool ___booleanVar;
@@ -18,7 +18,7 @@ std::list<String> ___stringList;
 std::list<unsigned int> ___colourList;
 int _led_L = 13;
 
-void control() {
+void ____control() {
     if ( ___booleanVar ) {
     } else if ( ___booleanVar ) {
     }
@@ -78,7 +78,7 @@ void control() {
     }
 }
 
-void logic() {
+void ____logic() {
     Serial.println(___numberVar == ___numberVar);
     Serial.println(___numberVar != ___numberVar);
     Serial.println(___numberVar < ___numberVar);
@@ -110,6 +110,6 @@ void setup()
 
 void loop()
 {
-    control();
-    logic();
+    ____control();
+    ____logic();
 }

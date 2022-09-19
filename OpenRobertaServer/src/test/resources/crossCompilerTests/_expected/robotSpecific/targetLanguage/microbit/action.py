@@ -16,13 +16,13 @@ ___numberList = [0, 0]
 ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___imageList = [microbit.Image.HEART, microbit.Image.HEART]
-def action():
+def ____action():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
-    display()
-    pin()
-    play()
+    ____display()
+    ____pin()
+    ____play()
 
-def display():
+def ____display():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     microbit.display.scroll(str(___numberVar))
     microbit.display.scroll(str(___booleanVar))
@@ -39,7 +39,7 @@ def display():
     print(___booleanVar)
     print(___stringVar)
 
-def play():
+def ____play():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     music.pitch(300, 100)
     music.pitch(400, 50)
@@ -47,14 +47,14 @@ def play():
     music.pitch(146, 1000)
     music.pitch(164, 500)
 
-def pin():
+def ____pin():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
     microbit.pin1.write_analog(___numberVar);
     microbit.pin2.write_digital(___numberVar);
 
 def run():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___imageList
-    action()
+    ____action()
 
 def main():
     try:

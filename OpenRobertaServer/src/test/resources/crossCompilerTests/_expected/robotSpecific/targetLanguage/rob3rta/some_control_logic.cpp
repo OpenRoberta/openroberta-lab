@@ -4,14 +4,14 @@
 #define _ROB3RTA_
 Robot rob;
 
-void control();
-void logic();
+void ____control();
+void ____logic();
 
 double ___n;
 bool ___b;
 unsigned int ___c;
 
-void control() {
+void ____control() {
     if ( ___b ) {
     } else if ( ___b ) {
     }
@@ -53,7 +53,7 @@ void control() {
     }
 }
 
-void logic() {
+void ____logic() {
     ___b = ___n == ___n;
     ___b = ___n != ___n;
     ___b = ___n < ___n;
@@ -78,6 +78,6 @@ void setup() {
 
 void loop()
 {
-    control();
-    logic();
+    ____control();
+    ____logic();
 }

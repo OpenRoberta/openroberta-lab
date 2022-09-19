@@ -25,7 +25,7 @@ ___numberList = [0, 0]
 ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___colourList = [0xff0000, 0xff0000]
-def sensors():
+def ____sensors():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     h.say(str(h.touchsensors('head', 'front')))
     h.say(str(h.touchsensors('head', 'middle')))
@@ -76,7 +76,7 @@ def sensors():
     h.say(str(h.getElectricCurrent('RAnklePitch')))
     h.say(str(h.getElectricCurrent('RAnkleRoll')))
 
-def sensorsWaitUntil():
+def ____sensorsWaitUntil():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     while True:
         if h.touchsensors('head', 'front') == True:
@@ -255,8 +255,8 @@ def sensorsWaitUntil():
 def run():
     h.setAutonomousLife('ON')
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
-    sensors()
-    sensorsWaitUntil()
+    ____sensors()
+    ____sensorsWaitUntil()
 
 def main():
     try:

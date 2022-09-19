@@ -9,8 +9,8 @@
 #include <Arduino_APDS9960.h>
 #include <NEPODefs.h>
 
-void getAllRawData();
-void printClassWithHighestProbability();
+void ____getAllRawData();
+void ____printClassWithHighestProbability();
 
 
 double ___classes;
@@ -27,7 +27,7 @@ int _taster_record = 2;
 int _led_L = LED_BUILTIN;
 int rAsInt, gAsInt, bAsInt;
 
-void getAllRawData() {
+void ____getAllRawData() {
     // visitNeuralNetworkInitRawData
     while (true) {
         if ( digitalRead(_taster_record) ) {
@@ -52,7 +52,7 @@ void getAllRawData() {
     }
 }
 
-void printClassWithHighestProbability() {
+void ____printClassWithHighestProbability() {
     ___mostLikelyClass = 0;
     ___pOfMostLikelyClass = 0;
     for ( double ___i : ___probabilities ) {
@@ -91,7 +91,7 @@ void loop()
     // visitNeuralNetworkSetup
     for (int ___classNumber = 0; ___classNumber < ___classes; ___classNumber += 1) {
         for (int ___datasets = 1; ___datasets < 10; ___datasets += 1) {
-            getAllRawData();
+            ____getAllRawData();
             // visitNeuralNetworkAddTrainingsData
             delay(1);
         }
@@ -99,9 +99,9 @@ void loop()
     }
     // visitNeuralNetworkTrain
     while ( true ) {
-        getAllRawData();
+        ____getAllRawData();
         // visitNeuralNetworkClassify
-        printClassWithHighestProbability();
+        ____printClassWithHighestProbability();
         delay(1);
     }
 }

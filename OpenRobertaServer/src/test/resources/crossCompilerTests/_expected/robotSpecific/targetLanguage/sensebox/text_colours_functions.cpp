@@ -8,17 +8,17 @@
 
 
 
-void text();
-void colour();
-void parameters(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::list<double> ___x5, std::list<bool> ___x6, std::list<String> ___x7, std::list<unsigned int> ___x8);
-double function_return_numberVar();
-bool function_return_booleanVar();
-String function_return_stringVar();
-unsigned int function_return_colourVar();
-std::list<double> function_return_numberList();
-std::list<bool> function_return_booleanList();
-std::list<String> function_return_stringList();
-std::list<unsigned int> function_return_colourList();
+void ____text();
+void ____colour();
+void ____parameters(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::list<double> ___x5, std::list<bool> ___x6, std::list<String> ___x7, std::list<unsigned int> ___x8);
+double ____function_return_numberVar();
+bool ____function_return_booleanVar();
+String ____function_return_stringVar();
+unsigned int ____function_return_colourVar();
+std::list<double> ____function_return_numberList();
+std::list<bool> ____function_return_booleanList();
+std::list<String> ____function_return_stringList();
+std::list<unsigned int> ____function_return_colourList();
 
 
 double ___numVar;
@@ -31,47 +31,47 @@ std::list<String> ___stringList;
 std::list<unsigned int> ___colourList;
 
 
-void text() {
+void ____text() {
     // 
     ___stringVar += ___stringVar;
 }
 
-void colour() {
+void ____colour() {
     Serial.println(RGB(___numVar, ___numVar, ___numVar));
 }
 
-void parameters(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::list<double> ___x5, std::list<bool> ___x6, std::list<String> ___x7, std::list<unsigned int> ___x8) {
+void ____parameters(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::list<double> ___x5, std::list<bool> ___x6, std::list<String> ___x7, std::list<unsigned int> ___x8) {
 }
 
-double function_return_numberVar() {
+double ____function_return_numberVar() {
     return ___numVar;
 }
 
-bool function_return_booleanVar() {
+bool ____function_return_booleanVar() {
     return ___boolVar;
 }
 
-String function_return_stringVar() {
+String ____function_return_stringVar() {
     return ___stringVar;
 }
 
-unsigned int function_return_colourVar() {
+unsigned int ____function_return_colourVar() {
     return ___colourVar;
 }
 
-std::list<double> function_return_numberList() {
+std::list<double> ____function_return_numberList() {
     return ___numList;
 }
 
-std::list<bool> function_return_booleanList() {
+std::list<bool> ____function_return_booleanList() {
     return ___boolList;
 }
 
-std::list<String> function_return_stringList() {
+std::list<String> ____function_return_stringList() {
     return ___stringList;
 }
 
-std::list<unsigned int> function_return_colourList() {
+std::list<unsigned int> ____function_return_colourList() {
     return ___colourList;
 }
 
@@ -91,15 +91,15 @@ void setup()
 
 void loop()
 {
-    text();
-    colour();
-    parameters(___numVar, ___boolVar, ___stringVar, ___colourVar, ___numList, ___boolList, ___stringList, ___colourList);
-    Serial.println(function_return_numberVar());
-    Serial.println(function_return_booleanVar());
-    Serial.println(function_return_stringVar());
-    Serial.println(function_return_colourVar());
-    ___numList = function_return_numberList();
-    ___boolList = function_return_booleanList();
-    ___stringList = function_return_stringList();
-    ___colourList = function_return_colourList();
+    ____text();
+    ____colour();
+    ____parameters(___numVar, ___boolVar, ___stringVar, ___colourVar, ___numList, ___boolList, ___stringList, ___colourList);
+    Serial.println(____function_return_numberVar());
+    Serial.println(____function_return_booleanVar());
+    Serial.println(____function_return_stringVar());
+    Serial.println(____function_return_colourVar());
+    ___numList = ____function_return_numberList();
+    ___boolList = ____function_return_booleanList();
+    ___stringList = ____function_return_stringList();
+    ___colourList = ____function_return_colourList();
 }

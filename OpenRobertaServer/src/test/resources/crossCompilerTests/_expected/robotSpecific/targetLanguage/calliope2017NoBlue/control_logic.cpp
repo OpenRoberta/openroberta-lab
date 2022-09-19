@@ -7,9 +7,9 @@
 #include <stdlib.h>
 MicroBit _uBit;
 
-void control();
+void ____control();
 
-void logic();
+void ____logic();
 
 
 double ___numberVar;
@@ -37,12 +37,12 @@ int main()
     ___colourList = {MicroBitColor(255, 0, 0, 255), MicroBitColor(255, 0, 0, 255)};
     ___imageList = {MicroBitImage("0,255,0,255,0\n255,255,255,255,255\n255,255,255,255,255\n0,255,255,255,0\n0,0,255,0,0\n"), MicroBitImage("0,255,0,255,0\n255,255,255,255,255\n255,255,255,255,255\n0,255,255,255,0\n0,0,255,0,0\n")};
     
-    control();
-    logic();
+    ____control();
+    ____logic();
     release_fiber();
 }
 
-void control() {
+void ____control() {
     if ( ___booleanVar ) {
     } else if ( ___booleanVar ) {
     }
@@ -105,7 +105,7 @@ void control() {
     }
 }
 
-void logic() {
+void ____logic() {
     _uBit.display.scroll(ManagedString(___numberVar == ___numberVar));
     _uBit.display.scroll(ManagedString(!( ___numberVar == ___numberVar )));
     _uBit.display.scroll(ManagedString(___numberVar < ___numberVar));

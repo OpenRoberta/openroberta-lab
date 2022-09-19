@@ -8,8 +8,8 @@
 
 
 
-void control();
-void logic();
+void ____control();
+void ____logic();
 
 
 double ___numVar;
@@ -22,7 +22,7 @@ std::list<String> ___stringList;
 std::list<unsigned int> ___colourList;
 
 
-void control() {
+void ____control() {
     if ( ___boolVar ) {
     }
     if ( ___boolVar ) {
@@ -83,7 +83,7 @@ void control() {
     delay(___numVar);
 }
 
-void logic() {
+void ____logic() {
     Serial.println(___numVar == ___numVar);
     Serial.println(___numVar != ___numVar);
     Serial.println(___numVar < ___numVar);
@@ -113,6 +113,6 @@ void setup()
 
 void loop()
 {
-    control();
-    logic();
+    ____control();
+    ____logic();
 }

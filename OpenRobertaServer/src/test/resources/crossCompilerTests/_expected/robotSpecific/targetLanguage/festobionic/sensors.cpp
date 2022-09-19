@@ -5,8 +5,8 @@
 
 #include <NEPODefs.h>
 
-void sensors();
-void sensorsWaitUntil();
+void ____sensors();
+void ____sensorsWaitUntil();
 
 double ___numberVar;
 bool ___booleanVar;
@@ -17,12 +17,12 @@ std::list<String> ___stringList;
 int _led_L = LED_BUILTIN;
 unsigned long __time_1 = millis();
 
-void sensors() {
+void ____sensors() {
     Serial.println((int) (millis() - __time_1));
     __time_1 = millis();
 }
 
-void sensorsWaitUntil() {
+void ____sensorsWaitUntil() {
     while (true) {
         if ( (int) (millis() - __time_1) > 500 ) {
             break;
@@ -45,6 +45,6 @@ void setup()
 
 void loop()
 {
-    sensors();
-    sensorsWaitUntil();
+    ____sensors();
+    ____sensorsWaitUntil();
 }

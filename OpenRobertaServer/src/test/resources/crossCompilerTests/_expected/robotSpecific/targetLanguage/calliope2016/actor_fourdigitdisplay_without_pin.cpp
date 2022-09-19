@@ -9,9 +9,9 @@
 MicroBit _uBit;
 FourDigitDisplay _fdd(MICROBIT_PIN_P2, MICROBIT_PIN_P8);
 
-void display();
+void ____display();
 
-void action();
+void ____action();
 
 
 double ___n;
@@ -39,11 +39,11 @@ int main()
     ___cl = {MicroBitColor(255, 0, 0, 255), MicroBitColor(255, 0, 0, 255)};
     ___il = {MicroBitImage("0,255,0,255,0\n255,255,255,255,255\n255,255,255,255,255\n0,255,255,255,0\n0,0,255,0,0\n"), MicroBitImage("0,255,0,255,0\n255,255,255,255,255\n255,255,255,255,255\n0,255,255,255,0\n0,0,255,0,0\n")};
     _uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);
-    action();
+    ____action();
     release_fiber();
 }
 
-void display() {
+void ____display() {
     _uBit.display.scroll(ManagedString(___n));
     _uBit.display.scroll(ManagedString(___b));
     _uBit.display.scroll(___s);
@@ -70,6 +70,6 @@ void display() {
     _fdd.clear();
 }
 
-void action() {
-    display();
+void ____action() {
+    ____display();
 }

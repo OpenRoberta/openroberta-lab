@@ -4,8 +4,8 @@
 
 #include <NEPODefs.h>
 
-void sensors();
-void sensorsWaitUntil();
+void ____sensors();
+void ____sensorsWaitUntil();
 
 double ___numberVar;
 bool ___booleanVar;
@@ -17,11 +17,11 @@ std::list<String> ___stringList;
 std::list<unsigned int> ___colourList;
 int _moisturePin_M = A0;
 
-void sensors() {
+void ____sensors() {
     Serial.println(analogRead(_moisturePin_M)/10.24);
 }
 
-void sensorsWaitUntil() {
+void ____sensorsWaitUntil() {
     while (true) {
         if ( analogRead(_moisturePin_M)/10.24 < 30 ) {
             break;
@@ -45,6 +45,6 @@ void setup()
 
 void loop()
 {
-    sensors();
-    sensorsWaitUntil();
+    ____sensors();
+    ____sensorsWaitUntil();
 }

@@ -12,37 +12,37 @@ ___numberVar = 0
 ___booleanVar = True
 ___numberList = Ed.List(3, [0,0,0])
 
-def text():
+def ____text():
     global ___numberVar, ___booleanVar, ___numberList
-    # 
+    #
 
-def messages():
+def ____messages():
     global ___numberVar, ___booleanVar, ___numberList
     _irSend(___numberVar)
     _irSend(_irSeek(0))
 
-def function_parameters(___x, ___x2, ___x3):
+def ____function_parameters(___x, ___x2, ___x3):
     global ___numberVar, ___booleanVar, ___numberList
     if ___booleanVar: return
 
-def function_return_numberVar():
+def ____function_return_numberVar():
     global ___numberVar, ___booleanVar, ___numberList
     return ___numberVar
 
-def function_return_booleanVar():
+def ____function_return_booleanVar():
     global ___numberVar, ___booleanVar, ___numberList
     return ___booleanVar
 
-def function_return_numberList():
+def ____function_return_numberList():
     global ___numberVar, ___booleanVar, ___numberList
     return ___numberList
 
-text()
-messages()
-function_parameters(___numberVar, ___booleanVar, ___numberList)
-___numberVar = function_return_numberVar()
-___booleanVar = function_return_booleanVar()
-___numberList = function_return_numberList()
+____text()
+____messages()
+____function_parameters(___numberVar, ___booleanVar, ___numberList)
+___numberVar = ____function_return_numberVar()
+___booleanVar = ____function_return_booleanVar()
+___numberList = ____function_return_numberList()
 
 
 def _irSeek(mode):

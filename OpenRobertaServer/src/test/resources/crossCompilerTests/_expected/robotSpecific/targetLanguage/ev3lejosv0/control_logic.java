@@ -24,11 +24,11 @@ import lejos.remote.nxt.NXTConnection;
 
 public class NEPOprog {
     private static Configuration brickConfiguration;
-    
+
     private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
     private Hal hal = new Hal(brickConfiguration, usedSensors);
-    
-    private void control() {
+
+    private void ____control() {
         if ( ___booleanVar ) {
         } else if ( ___booleanVar ) {
         }
@@ -84,8 +84,8 @@ public class NEPOprog {
             hal.waitFor(15);
         }
     }
-    
-    private void logic() {
+
+    private void ____logic() {
         hal.drawText(String.valueOf(___numberVar == ___numberVar), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf(___numberVar != ___numberVar), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf(___numberVar < ___numberVar), ___numberVar, ___numberVar);
@@ -100,20 +100,20 @@ public class NEPOprog {
         hal.drawText(String.valueOf(null), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf(( ( ___booleanVar ) ? ___numberVar : ___numberVar )), ___numberVar, ___numberVar);
     }
-    
+
     public static void main(String[] args) {
         try {
              brickConfiguration = new EV3Configuration.Builder()
                 .setWheelDiameter(5.6)
                 .setTrackWidth(18.0)
                 .build();
-            
+
             new NEPOprog().run();
         } catch ( Exception e ) {
             Hal.displayExceptionWaitForKeyPress(e);
         }
     }
-    
+
     float ___numberVar = 0;
     boolean ___booleanVar = true;
     String ___stringVar = "";
@@ -124,12 +124,12 @@ public class NEPOprog {
     ArrayList<String> ___stringList = new ArrayList<>(Arrays.<String>asList("", ""));
     ArrayList<PickColor> ___colourList = new ArrayList<>(Arrays.<PickColor>asList(PickColor.WHITE, PickColor.WHITE));
     ArrayList<NXTConnection> ___connectionList = new ArrayList<>(Arrays.<NXTConnection>asList(___connectionVar, ___connectionVar));
-    
+
     public void run() throws Exception {
         hal.startLogging();
-        control();
-        logic();
+        ____control();
+        ____logic();
         hal.closeResources();
-        
+
     }
 }

@@ -7,12 +7,12 @@
 #include <Stepper/src/Stepper.h>
 #include <NEPODefs.h>
 
-void action();
-void display();
-void lights();
-void move();
-void sounds();
-void pin();
+void ____action();
+void ____display();
+void ____lights();
+void ____move();
+void ____sounds();
+void ____pin();
 
 double ___numberVar;
 bool ___booleanVar;
@@ -35,14 +35,14 @@ int _led_L = LED_BUILTIN;
 int _SPU_S2 = 2048;
 Stepper _stepper_S2(_SPU_S2, 1, 4, 2, 5);
 
-void action() {
-    move();
-    display();
-    sounds();
-    lights();
+void ____action() {
+    ____move();
+    ____display();
+    ____sounds();
+    ____lights();
 }
 
-void display() {
+void ____display() {
     Serial.println(___stringVar);
     _lcd_L3.setCursor(___numberVar,___numberVar);
     _lcd_L3.print(___stringVar);
@@ -50,7 +50,7 @@ void display() {
     _lcd_L3.clear();
 }
 
-void lights() {
+void ____lights() {
     digitalWrite(_led_L, HIGH);
     digitalWrite(_led_L, LOW);
     analogWrite(_led_red_R2, RCHANNEL(___colourVar));
@@ -63,7 +63,7 @@ void lights() {
     
 }
 
-void move() {
+void ____move() {
     _servo_S.write(___numberVar);
     _stepper_S2.setSpeed(___numberVar);
     _stepper_S2.step(_SPU_S2*(___numberVar));
@@ -71,12 +71,12 @@ void move() {
     digitalWrite(_relay_R, HIGH);
 }
 
-void sounds() {
+void ____sounds() {
     tone(_buzzer_S3, ___numberVar, ___numberVar);
     delay(___numberVar);
 }
 
-void pin() {
+void ____pin() {
     digitalWrite(_output_A, (int)___numberVar);
     analogWrite(_output_A2, (int)___numberVar);
 }
@@ -105,5 +105,5 @@ void setup()
 
 void loop()
 {
-    action();
+    ____action();
 }

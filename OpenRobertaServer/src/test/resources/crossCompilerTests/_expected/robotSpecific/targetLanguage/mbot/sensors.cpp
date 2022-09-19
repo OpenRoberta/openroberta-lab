@@ -12,8 +12,8 @@ MeLightSensor _meLight4(PORT_4);
 MeLEDMatrix __meLEDMatrix_1(1);
 
 
-void sensors();
-void waitUntil();
+void ____sensors();
+void ____waitUntil();
 const std::vector<uint8_t> __ledMatrix0 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
 const std::vector<uint8_t> __ledMatrix1 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
 const std::vector<uint8_t> __ledMatrix2 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
@@ -32,7 +32,7 @@ std::list<std::vector<uint8_t>> ___imageList;
 
 unsigned long __time_1 = millis();
 
-void sensors() {
+void ____sensors() {
     drawStrLEDMatrix(&__meLEDMatrix_1, String((analogRead(PORT_7) < 512)), 100);
     drawStrLEDMatrix(&__meLEDMatrix_1, String(_meUltraSensor3.distanceCm()), 100);
     drawStrLEDMatrix(&__meLEDMatrix_1, String(!__meLineFollower2.readSensor1()), 100);
@@ -43,7 +43,7 @@ void sensors() {
     __time_1 = millis();
 }
 
-void waitUntil() {
+void ____waitUntil() {
     while (true) {
         if ( (analogRead(PORT_7) < 512) == true ) {
             break;
@@ -93,5 +93,5 @@ void setup()
 
 void loop()
 {
-    sensors();
+    ____sensors();
 }

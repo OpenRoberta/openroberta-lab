@@ -15,7 +15,7 @@ ___numberList = [0, 0]
 ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___colourList = [0xff0000, 0xff0000]
-def math2():
+def ____math2():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     h.say(str(0))
     h.say(str(___numberVar + ___numberVar))
@@ -65,7 +65,7 @@ def math2():
     h.say(str(random.randint(___numberVar, ___numberVar)))
     h.say(str(random.random()))
 
-def lists():
+def ____lists():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     ___numberList = []
     ___numberList = [0, 0]
@@ -108,8 +108,8 @@ def lists():
 def run():
     h.setAutonomousLife('ON')
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
-    math2()
-    lists()
+    ____math2()
+    ____lists()
 
 def main():
     try:

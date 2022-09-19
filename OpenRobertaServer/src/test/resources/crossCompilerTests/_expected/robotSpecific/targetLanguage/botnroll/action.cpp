@@ -10,12 +10,12 @@ BnrRoberta bnr(one, brm);
 #define MODULE_ADDRESS 0x2C 
 byte colorsLeft[3]={0,0,0}; 
 byte colorsRight[3]={0,0,0};
-void action();
-void drive();
-void move();
-void display();
-void sounds();
-void lights();
+void ____action();
+void ____drive();
+void ____move();
+void ____display();
+void ____sounds();
+void ____lights();
 
 double ___numberVar;
 bool ___booleanVar;
@@ -26,15 +26,15 @@ std::list<bool> ___booleanList;
 std::list<String> ___stringList;
 std::list<unsigned int> ___colourList;
 
-void action() {
-    drive();
-    move();
-    display();
-    sounds();
-    lights();
+void ____action() {
+    ____drive();
+    ____move();
+    ____display();
+    ____sounds();
+    ____lights();
 }
 
-void drive() {
+void ____drive() {
     bnr.moveTimePID(___numberVar, ___numberVar, ___numberVar);
     bnr.moveTimePID(-___numberVar, -___numberVar, ___numberVar);
     one.stop();
@@ -50,7 +50,7 @@ void drive() {
     one.movePID(-___numberVar, -___numberVar);
 }
 
-void move() {
+void ____move() {
     bnr.move1mTime(1, ___numberVar, bnr.sonar());
     bnr.move1mTime(2, ___numberVar, ___numberVar);
     one.move1m(1, ___numberVar);
@@ -59,12 +59,12 @@ void move() {
     one.servo2(___numberVar);
 }
 
-void display() {
+void ____display() {
     one.lcd1(___stringVar.c_str());
     bnr.lcdClear();
 }
 
-void sounds() {
+void ____sounds() {
     tone(9, ___numberVar, ___numberVar);
     tone(9, 261.626, 2000);
     tone(9, 293.665, 1000);
@@ -73,7 +73,7 @@ void sounds() {
     tone(9, 391.995, 125);
 }
 
-void lights() {
+void ____lights() {
     one.led(HIGH);
     one.led(LOW);
 }
@@ -102,5 +102,5 @@ void setup()
 
 void loop()
 {
-    action();
+    ____action();
 }

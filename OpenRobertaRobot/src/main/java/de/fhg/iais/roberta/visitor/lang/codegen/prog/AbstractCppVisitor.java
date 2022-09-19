@@ -645,7 +645,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     public Void visitMethodVoid(MethodVoid methodVoid) {
         nlIndent();
         this.sb.append("void ");
-        this.sb.append(methodVoid.getMethodName()).append("(");
+        this.sb.append(methodVoid.getCodeSafeMethodName()).append("(");
         methodVoid.getParameters().accept(this);
         this.sb.append(") {");
         incrIndentation();
@@ -660,7 +660,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     public Void visitMethodReturn(MethodReturn methodReturn) {
         nlIndent();
         this.sb.append(getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
-        this.sb.append(" ").append(methodReturn.getMethodName()).append("(");
+        this.sb.append(" ").append(methodReturn.getCodeSafeMethodName()).append("(");
         methodReturn.getParameters().accept(this);
         this.sb.append(") {");
         incrIndentation();
@@ -898,7 +898,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         for ( Method phrase : this.getBean(UsedHardwareBean.class).getUserDefinedMethods() ) {
             nlIndent();
             this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()) + " ");
-            this.sb.append(phrase.getMethodName() + "(");
+            this.sb.append(phrase.getCodeSafeMethodName() + "(");
             phrase.getParameters().accept(this);
             this.sb.append(");");
         }

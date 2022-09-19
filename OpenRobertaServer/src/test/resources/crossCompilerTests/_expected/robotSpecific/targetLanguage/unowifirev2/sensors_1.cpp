@@ -7,8 +7,8 @@
 #include <IRremote/src/IRremote.h>
 #include <NEPODefs.h>
 
-void sensors();
-void sensorsWaitUntil();
+void ____sensors();
+void ____sensorsWaitUntil();
 
 double ___numberVar;
 bool ___booleanVar;
@@ -48,7 +48,7 @@ double _getUltrasonicDistance(int trigger, int echo)
 }
 
 
-void sensors() {
+void ____sensors() {
     Serial.println(analogRead(_input_S2));
     Serial.println(digitalRead(_input_S));
     Serial.println(digitalRead(_input_S3));
@@ -73,7 +73,7 @@ void sensors() {
     Serial.println(_imu_A.readFloatAccelX());
 }
 
-void sensorsWaitUntil() {
+void ____sensorsWaitUntil() {
     while (true) {
         if ( analogRead(_input_S2) == 50 ) {
             break;
@@ -227,6 +227,6 @@ void setup()
 
 void loop()
 {
-    sensors();
-    sensorsWaitUntil();
+    ____sensors();
+    ____sensorsWaitUntil();
 }

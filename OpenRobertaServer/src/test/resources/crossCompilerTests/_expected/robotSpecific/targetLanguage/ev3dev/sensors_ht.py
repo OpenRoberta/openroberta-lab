@@ -33,9 +33,9 @@ ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___colourList = ['white', 'white']
 ___connectionList = [___connectionVar, ___connectionVar]
-def sensors():
+def ____sensors():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
-    
+
     hal.drawText(str(hal.getHiTecCompassSensorValue('2', 'angle')), ___numberVar, ___numberVar)
     hal.drawText(str(hal.getHiTecCompassSensorValue('2', 'compass')), ___numberVar, ___numberVar)
     hal.drawText(str(hal.getHiTecIRSeekerSensorValue('4', 'AC')), ___numberVar, ___numberVar)
@@ -45,7 +45,7 @@ def sensors():
     hal.drawText(str(hal.getHiTecColorSensorV2Ambient('3')), ___numberVar, ___numberVar)
     hal.drawText(str(hal.getHiTecColorSensorV2Rgb('3')), ___numberVar, ___numberVar)
 
-def waitUntil():
+def ____waitUntil():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     while True:
         if hal.getHiTecCompassSensorValue('2', 'angle') < 30:
@@ -78,7 +78,7 @@ def waitUntil():
 
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
-    sensors()
+    ____sensors()
 
 def main():
     try:

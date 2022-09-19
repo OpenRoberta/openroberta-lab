@@ -24,11 +24,11 @@ import lejos.remote.nxt.NXTConnection;
 
 public class NEPOprog {
     private static Configuration brickConfiguration;
-    
+
     private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH), new UsedSensor(SensorPort.S4, SensorType.ULTRASONIC, UltrasonicSensorMode.DISTANCE), new UsedSensor(SensorPort.S4, SensorType.ULTRASONIC, UltrasonicSensorMode.PRESENCE), new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.COLOUR), new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.RED), new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.AMBIENTLIGHT), new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.RGB), new UsedSensor(SensorPort.S2, SensorType.GYRO, GyroSensorMode.ANGLE), new UsedSensor(SensorPort.S2, SensorType.GYRO, GyroSensorMode.RATE)));
     private Hal hal = new Hal(brickConfiguration, usedSensors);
-    
-    private void sensors() {
+
+    private void ____sensors() {
         hal.drawText(String.valueOf(hal.isPressed(SensorPort.S1)), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf(hal.getUltraSonicSensorDistance(SensorPort.S4)), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf(hal.getUltraSonicSensorPresence(SensorPort.S4)), ___numberVar, ___numberVar);
@@ -61,8 +61,8 @@ public class NEPOprog {
         hal.resetTimer(4);
         hal.resetTimer(5);
     }
-    
-    private void waitUntil() {
+
+    private void ____waitUntil() {
         while ( true ) {
             if ( hal.isPressed(SensorPort.S1) == true ) {
                 break;
@@ -190,10 +190,10 @@ public class NEPOprog {
             hal.waitFor(15);
         }
     }
-    
+
     public static void main(String[] args) {
         try {
-             brickConfiguration = new EV3Configuration.Builder()
+            brickConfiguration = new EV3Configuration.Builder()
                 .setWheelDiameter(5.6)
                 .setTrackWidth(18.0)
                 .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
@@ -202,13 +202,13 @@ public class NEPOprog {
                 .addSensor(SensorPort.S3, new Sensor(SensorType.COLOR))
                 .addSensor(SensorPort.S4, new Sensor(SensorType.ULTRASONIC))
                 .build();
-            
+
             new NEPOprog().run();
         } catch ( Exception e ) {
             Hal.displayExceptionWaitForKeyPress(e);
         }
     }
-    
+
     float ___numberVar = 0;
     boolean ___booleanVar = true;
     String ___stringVar = "";
@@ -219,11 +219,11 @@ public class NEPOprog {
     ArrayList<String> ___stringList = new ArrayList<>(Arrays.<String>asList("", ""));
     ArrayList<PickColor> ___colourList = new ArrayList<>(Arrays.<PickColor>asList(PickColor.WHITE, PickColor.WHITE));
     ArrayList<NXTConnection> ___connectionList = new ArrayList<>(Arrays.<NXTConnection>asList(___connectionVar, ___connectionVar));
-    
+
     public void run() throws Exception {
         hal.startLogging();
-        sensors();
+        ____sensors();
         hal.closeResources();
-        
+
     }
 }

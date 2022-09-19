@@ -12,15 +12,15 @@
 #include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources
 
 
-void text();
-void colours();
-void messages();
-void function_variables(float ___x, bool ___x2, string ___x3, int ___x4, int ___x5, float ___x6[], bool ___x7[], string ___x8[], int ___x9[], int ___x10[]);
-float function_return_numberVar();
-bool function_return_booleanVar();
-string function_return_stringVar();
-int function_return_colourVar();
-int function_return_connectionVar();
+void ____text();
+void ____colours();
+void ____messages();
+void ____function_variables(float ___x, bool ___x2, string ___x3, int ___x4, int ___x5, float ___x6[], bool ___x7[], string ___x8[], int ___x9[], int ___x10[]);
+float ____function_return_numberVar();
+bool ____function_return_booleanVar();
+string ____function_return_stringVar();
+int ____function_return_colourVar();
+int ____function_return_connectionVar();
 
 float ___numberVar;
 bool ___booleanVar;
@@ -48,20 +48,20 @@ task main() {
     ___colourList = _____colourList;
     int _____connectionList[] = {NULL, NULL, NULL};
     ___connectionList = _____connectionList;
-    text();
-    colours();
-    messages();
-    function_variables(___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList);
-    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, function_return_stringVar());
+    ____text();
+    ____colours();
+    ____messages();
+    ____function_variables(___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList);
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ____function_return_stringVar());
 }
 
-void text() {
+void ____text() {
     TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, "");
-    // 
+    //
     ___stringVar += ___stringVar;
 }
 
-void colours() {
+void ____colours() {
     ColorOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, INPUT_BLACKCOLOR);
     ColorOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, INPUT_BLUECOLOR);
     ColorOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, INPUT_GREENCOLOR);
@@ -77,7 +77,7 @@ void colours() {
     ColorOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, INPUT_WHITECOLOR);
 }
 
-void messages() {
+void ____messages() {
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, 0);
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, 1);
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, 2);
@@ -148,26 +148,26 @@ void messages() {
     BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, (BluetoothStatus(3)==NO_ERR));
 }
 
-void function_variables(float ___x, bool ___x2, string ___x3, int ___x4, int ___x5, float ___x6[], bool ___x7[], string ___x8[], int ___x9[], int ___x10[]) {
+void ____function_variables(float ___x, bool ___x2, string ___x3, int ___x4, int ___x5, float ___x6[], bool ___x7[], string ___x8[], int ___x9[], int ___x10[]) {
     if (___booleanVar) return ;
 }
 
-float function_return_numberVar() {
+float ____function_return_numberVar() {
     return ___numberVar;
 }
 
-bool function_return_booleanVar() {
+bool ____function_return_booleanVar() {
     return ___booleanVar;
 }
 
-string function_return_stringVar() {
+string ____function_return_stringVar() {
     return ___stringVar;
 }
 
-int function_return_colourVar() {
+int ____function_return_colourVar() {
     return ___colourVar;
 }
 
-int function_return_connectionVar() {
+int ____function_return_connectionVar() {
     return ___connectionVar;
 }

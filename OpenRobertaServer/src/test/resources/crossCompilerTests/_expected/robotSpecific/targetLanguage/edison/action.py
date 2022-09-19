@@ -12,7 +12,7 @@ ___n = 1000
 ___b = True
 ___nl = Ed.List(3, [0,0,0])
 
-def drive():
+def ____drive():
     global ___n, ___b, ___nl
     _diffDrive(Ed.FORWARD, ___n, ___n)
     _diffDrive(Ed.BACKWARD, ___n, ___n)
@@ -28,7 +28,7 @@ def drive():
     _diffCurve(Ed.FORWARD, ___n, ___n, Ed.DISTANCE_UNLIMITED)
     _diffCurve(Ed.BACKWARD, ___n, ___n, Ed.DISTANCE_UNLIMITED)
 
-def sounds():
+def ____sounds():
     global ___n, ___b, ___nl
     Ed.PlayTone(8000000/1000, ___n)
     Ed.TimeWait(___n, Ed.TIME_MILLISECONDS)
@@ -43,26 +43,26 @@ def sounds():
     Ed.PlayTone(4000000/391, 125)
     Ed.TimeWait(125, Ed.TIME_MILLISECONDS)
 
-def lights():
+def ____lights():
     global ___n, ___b, ___nl
     Ed.LeftLed(Ed.ON)
     Ed.RightLed(Ed.OFF)
 
-def action():
+def ____action():
     global ___n, ___b, ___nl
-    move()
-    drive()
-    sounds()
-    lights()
+    ____move()
+    ____drive()
+    ____sounds()
+    ____lights()
 
-def move():
+def ____move():
     global ___n, ___b, ___nl
     _motorOn(0, ___n, Ed.DISTANCE_UNLIMITED)
     _motorOn(1, ___n, Ed.DISTANCE_UNLIMITED)
     Ed.DriveLeftMotor(Ed.STOP, Ed.SPEED_1, 1)
     Ed.DriveRightMotor(Ed.STOP, Ed.SPEED_1, 1)
 
-action()
+____action()
 ___soundfile1 = Ed.TuneString(7,"c8e8g8z")
 Ed.PlayTune(___soundfile1)
 while (Ed.ReadMusicEnd() == Ed.MUSIC_NOT_FINISHED):
@@ -74,16 +74,16 @@ while (Ed.ReadMusicEnd() == Ed.MUSIC_NOT_FINISHED):
 
 
 def _diffCurve(direction, leftSpeed, rightSpeed, distance):
-    if (leftSpeed < 0): 
+    if (leftSpeed < 0):
         _leftSpeed = _shorten(-leftSpeed)
         _reverseLeft = True
-    else: 
+    else:
         _leftSpeed = _shorten(leftSpeed)
         _reverseLeft = False
-    if (rightSpeed < 0): 
+    if (rightSpeed < 0):
         _rightSpeed = _shorten(-rightSpeed)
         _reverseRight = True
-    else: 
+    else:
         _rightSpeed = _shorten(rightSpeed)
         _reverseRight = False
     if (_leftSpeed > _rightSpeed):

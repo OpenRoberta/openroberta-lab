@@ -12,7 +12,7 @@ ___numberVar = 0
 ___booleanVar = True
 ___numberList = Ed.List(3, [0,0,0])
 
-def control():
+def ____control():
     global ___numberVar, ___booleanVar, ___numberList
     if ___booleanVar:
         pass
@@ -42,7 +42,7 @@ def control():
             break
         pass
 
-def logic():
+def ____logic():
     global ___numberVar, ___booleanVar, ___numberList
     ___booleanVar = ___numberVar == ___numberVar
     ___booleanVar = ___numberVar != ___numberVar
@@ -54,6 +54,6 @@ def logic():
     ___booleanVar = True
     ___booleanVar = False
 
-control()
-logic()
+____control()
+____logic()
 

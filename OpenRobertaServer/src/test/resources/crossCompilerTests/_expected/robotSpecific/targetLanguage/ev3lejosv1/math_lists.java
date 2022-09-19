@@ -24,11 +24,11 @@ import lejos.remote.nxt.NXTConnection;
 
 public class NEPOprog {
     private static Configuration brickConfiguration;
-    
+
     private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
     private Hal hal = new Hal(brickConfiguration, usedSensors);
-    
-    private void math() {
+
+    private void ____math() {
         hal.drawText(String.valueOf(0), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf(___numberVar + ___numberVar), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf(___numberVar - ___numberVar), ___numberVar, ___numberVar);
@@ -77,8 +77,8 @@ public class NEPOprog {
         hal.drawText(String.valueOf(( Math.round(Math.random() * (___numberVar - ___numberVar)) + ___numberVar )), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf((float) Math.random()), ___numberVar, ___numberVar);
     }
-    
-    private void lists() {
+
+    private void ____lists() {
         ___numberList = new ArrayList<>();
         ___numberList = new ArrayList<>(Arrays.asList((float) 0, (float) 0, (float) 0));
         ___numberList = new ArrayList<>(Collections.nCopies( (int) ___numberVar,  (float) ___numberVar));
@@ -116,20 +116,20 @@ public class NEPOprog {
         hal.drawText(String.valueOf(new ArrayList<>(___numberList.subList((___numberList.size() - 1) - (int) ___numberVar, (___numberList.size() - 1) - (int) ___numberVar))), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf(new ArrayList<>(___numberList.subList((___numberList.size() - 1) - (int) ___numberVar, ___numberList.size()))), ___numberVar, ___numberVar);
     }
-    
+
     public static void main(String[] args) {
         try {
-             brickConfiguration = new EV3Configuration.Builder()
+            brickConfiguration = new EV3Configuration.Builder()
                 .setWheelDiameter(5.6)
                 .setTrackWidth(18.0)
                 .build();
-            
+
             new NEPOprog().run();
         } catch ( Exception e ) {
             Hal.displayExceptionWaitForKeyPress(e);
         }
     }
-    
+
     float ___numberVar = 0;
     boolean ___booleanVar = true;
     String ___stringVar = "";
@@ -140,13 +140,13 @@ public class NEPOprog {
     ArrayList<String> ___stringList = new ArrayList<>(Arrays.<String>asList("", ""));
     ArrayList<PickColor> ___colourList = new ArrayList<>(Arrays.<PickColor>asList(PickColor.WHITE, PickColor.WHITE));
     ArrayList<NXTConnection> ___connectionList = new ArrayList<>(Arrays.<NXTConnection>asList(___connectionVar, ___connectionVar));
-    
+
     public void run() throws Exception {
         hal.startLogging();
-        math();
-        lists();
+        ____math();
+        ____lists();
         hal.closeResources();
-        
+
     }
 
     private float _average(List<Float> list) {
@@ -156,7 +156,7 @@ public class NEPOprog {
         }
         return sum / list.size();
     }
-    
+
     private float _median(List<Float> list) {
         List<Float> sortedList = new ArrayList<>(list);
         Collections.sort(sortedList);
@@ -168,7 +168,7 @@ public class NEPOprog {
             return sortedList.get((listLen - 1) / 2);
         }
     }
-    
+
     private boolean _isPrime(int n) {
         if (n == 2) return true;
         if (n % 2 == 0 || n == 1) return false;
@@ -177,7 +177,7 @@ public class NEPOprog {
         }
         return true;
     }
-    
+
     private float _standardDeviation(List<Float> list) {
         float sum = 0.0f; // TODO reuse _average?
         for ( Float f : list ) {
@@ -190,7 +190,7 @@ public class NEPOprog {
         }
         return (float) Math.sqrt(standardDev / list.size());
     }
-    
+
     private float _sum(List<Float> list) {
         float sum = 0.0f;
         for ( Float f : list ) {

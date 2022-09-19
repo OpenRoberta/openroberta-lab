@@ -11,7 +11,7 @@
 
 
 
-void sensors();
+void ____sensors();
 
 
 double ___numVar;
@@ -26,7 +26,7 @@ Ultrasonic _hcsr04_U(1, 2);
 Bsec _iaqSensor_E;
 
 
-void sensors() {
+void ____sensors() {
     Serial.println(_hcsr04_U.getDistance());
     Serial.println(_readIaq(_iaqSensor_E, _iaqSensor_E.temperature));
     Serial.println(_readIaq(_iaqSensor_E, _iaqSensor_E.humidity));
@@ -68,5 +68,5 @@ void setup()
 
 void loop()
 {
-    sensors();
+    ____sensors();
 }

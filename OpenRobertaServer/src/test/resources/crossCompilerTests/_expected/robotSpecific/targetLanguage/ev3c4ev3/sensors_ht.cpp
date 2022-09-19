@@ -8,8 +8,8 @@
 #include "NEPODefs.h"
 
 
-void sensors();
-void waitUntil();
+void ____sensors();
+void ____waitUntil();
 
 double ___numberVar = 0;
 bool ___booleanVar = true;
@@ -22,7 +22,7 @@ std::list<std::string> ___stringList = ((std::list<std::string>){"", ""});
 std::list<Color> ___colourList = ((std::list<Color>){White, White});
 std::list<BluetoothConnectionHandle> ___connectionList = ((std::list<BluetoothConnectionHandle>){___connectionVar, ___connectionVar});
 
-void sensors() {
+void ____sensors() {
     
     StartHTCompassCalibration(IN_2);Wait(40000);StopHTCompassCalibration(IN_2);
     
@@ -36,7 +36,7 @@ void sensors() {
     DrawString(ToString(NEPOReadHTColorSensorV2RGB(IN_3)), ___numberVar, ___numberVar);
 }
 
-void waitUntil() {
+void ____waitUntil() {
     while ( true ) {
         if ( ReadHTCompassSensor(IN_2, HTCompassAngle) < 30 ) {
             break;
@@ -80,7 +80,7 @@ int main () {
     startLoggingThread(0);
     
     
-    sensors();
+    ____sensors();
     
     NEPOFreeEV3();
     return 0;

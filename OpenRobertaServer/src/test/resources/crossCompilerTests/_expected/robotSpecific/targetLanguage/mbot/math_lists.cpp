@@ -9,8 +9,8 @@
 MeLEDMatrix __meLEDMatrix_1(1);
 
 
-void math();
-void lists();
+void ____math();
+void ____lists();
 
 inline bool _isPrime(double d);
 const std::vector<uint8_t> __ledMatrix0 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
@@ -30,7 +30,7 @@ std::list<unsigned int> ___colourList;
 std::list<std::vector<uint8_t>> ___imageList;
 
 
-void math() {
+void ____math() {
     drawStrLEDMatrix(&__meLEDMatrix_1, String(___numVar + ___numVar), 100);
     drawStrLEDMatrix(&__meLEDMatrix_1, String(___numVar - ___numVar), 100);
     drawStrLEDMatrix(&__meLEDMatrix_1, String(___numVar * ___numVar), 100);
@@ -79,7 +79,7 @@ void math() {
     drawStrLEDMatrix(&__meLEDMatrix_1, String(((double) rand() / (RAND_MAX))), 100);
 }
 
-void lists() {
+void ____lists() {
     ___numList = {};
     ___numList = {0, 0, 0};
     ___numList = _createListRepeat(___numVar, (double) ___numVar);
@@ -135,8 +135,8 @@ void setup()
 
 void loop()
 {
-    math();
-    lists();
+    ____math();
+    ____lists();
 }
 inline bool _isPrime(double d) {
     if (!(d == floor(d))) {

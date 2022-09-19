@@ -13,9 +13,9 @@ char _buf[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 std::list<double> _TCS3472_rgb;
 MicroBitColor _TCS3472_color;
 char _TCS3472_time = 0xff;
-void sensors();
+void ____sensors();
 
-void sensorsWaitUntil();
+void ____sensorsWaitUntil();
 
 
 bool isGestureShake();
@@ -32,12 +32,12 @@ int main()
     ___numberList = {0, 0};
     
     _uBit.accelerometer.updateSample();
-    sensors();
-    sensorsWaitUntil();
+    ____sensors();
+    ____sensorsWaitUntil();
     release_fiber();
 }
 
-void sensors() {
+void ____sensors() {
     _uBit.display.scroll(ManagedString(_uBit.buttonA.isPressed()));
     _uBit.display.scroll(ManagedString(_uBit.buttonB.isPressed()));
     _uBit.display.scroll(ManagedString(_uBit.io.P0.isTouched()));
@@ -67,7 +67,7 @@ void sensors() {
     _uBit.display.scroll(ManagedString(_sht31.readTemperature()));
 }
 
-void sensorsWaitUntil() {
+void ____sensorsWaitUntil() {
     while (true) {
         if ( _uBit.buttonA.isPressed() == true ) {
             break;

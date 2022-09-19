@@ -463,7 +463,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     @Override
     public Void visitMethodCall(MethodCall methodCall) {
-        src.add(methodCall.getMethodName(), "(");
+        src.add(methodCall.getCodeSafeMethodName(), "(");
         methodCall.getParametersValues().accept(this);
         src.add(")");
         return null;

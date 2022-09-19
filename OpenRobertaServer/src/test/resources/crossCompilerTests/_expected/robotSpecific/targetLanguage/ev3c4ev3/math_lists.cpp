@@ -8,8 +8,8 @@
 #include "NEPODefs.h"
 
 
-void math();
-void lists();
+void ____math();
+void ____lists();
 
 inline bool _isPrime(double d);
 
@@ -24,7 +24,7 @@ std::list<std::string> ___stringList = ((std::list<std::string>){"", ""});
 std::list<Color> ___colourList = ((std::list<Color>){White, White});
 std::list<BluetoothConnectionHandle> ___connectionList = ((std::list<BluetoothConnectionHandle>){___connectionVar, ___connectionVar});
 
-void math() {
+void ____math() {
     DrawString(ToString(0), ___numberVar, ___numberVar);
     DrawString(ToString(___numberVar + ___numberVar), ___numberVar, ___numberVar);
     DrawString(ToString(___numberVar - ___numberVar), ___numberVar, ___numberVar);
@@ -74,7 +74,7 @@ void math() {
     DrawString(ToString(((double) rand() / (RAND_MAX))), ___numberVar, ___numberVar);
 }
 
-void lists() {
+void ____lists() {
     ___numberList = ((std::list<double>){});
     ___numberList = ((std::list<double>){0, 0, 0});
     ___numberList = _createListRepeat(___numberVar, (double) ___numberVar);
@@ -120,8 +120,8 @@ int main () {
     srand (time(NULL));
     
     
-    math();
-    lists();
+    ____math();
+    ____lists();
     
     NEPOFreeEV3();
     return 0;

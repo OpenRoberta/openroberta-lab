@@ -11,7 +11,7 @@ ___stringList = ["", "", ""]
 ___colorList = [(204, 0, 0), (204, 0, 0), (204, 0, 0)]
 ___numberVar = 0
 ___stringVar = ""
-def control():
+def ____control():
     global ___booleanVarFalse, ___booleanVar, ___numberList, ___booleanList, ___stringList, ___colorList, ___numberVar, ___stringVar
     if ___booleanVarFalse:
         pass
@@ -40,7 +40,7 @@ def control():
             break
     time.sleep(___numberVar/1000)
 
-def logic():
+def ____logic():
     global ___booleanVarFalse, ___booleanVar, ___numberList, ___booleanList, ___stringList, ___colorList, ___numberVar, ___stringVar
     cyberpi.console.println(___numberVar == ___numberVar)
     cyberpi.console.println(___numberVar != ___numberVar)
@@ -58,8 +58,8 @@ def logic():
 
 def run():
     global ___booleanVarFalse, ___booleanVar, ___numberList, ___booleanList, ___stringList, ___colorList, ___numberVar, ___stringVar
-    control()
-    logic()
+    ____control()
+    ____logic()
 
 def main():
     try:

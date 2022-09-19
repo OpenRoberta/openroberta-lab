@@ -11,21 +11,21 @@ MeRGBLed _meRgbLed(7, 2);
 MeIR _meIr;
 
 
-void text();
-void images();
-void colour();
-void messages();
-void doSomething(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::vector<uint8_t> ___x5, std::list<double> ___x6, std::list<bool> ___x7, std::list<String> ___x8, std::list<unsigned int> ___x9, std::list<std::vector<uint8_t>> ___x10);
-double function_return_numberVar();
-bool function_return_booleanVar();
-String function_return_stringVar();
-unsigned int function_return_colourVar();
-std::vector<uint8_t> function_return_imageVar();
-std::list<double> function_return_numberList();
-std::list<bool> function_return_booleanList();
-std::list<String> function_return_stringList();
-std::list<unsigned int> function_return_colourList();
-std::list<std::vector<uint8_t>> function_return_imageList();
+void ____text();
+void ____images();
+void ____colour();
+void ____messages();
+void ____doSomething(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::vector<uint8_t> ___x5, std::list<double> ___x6, std::list<bool> ___x7, std::list<String> ___x8, std::list<unsigned int> ___x9, std::list<std::vector<uint8_t>> ___x10);
+double ____function_return_numberVar();
+bool ____function_return_booleanVar();
+String ____function_return_stringVar();
+unsigned int ____function_return_colourVar();
+std::vector<uint8_t> ____function_return_imageVar();
+std::list<double> ____function_return_numberList();
+std::list<bool> ____function_return_booleanList();
+std::list<String> ____function_return_stringList();
+std::list<unsigned int> ____function_return_colourList();
+std::list<std::vector<uint8_t>> ____function_return_imageList();
 const std::vector<uint8_t> __ledMatrix0 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
 const std::vector<uint8_t> __ledMatrix1 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
 const std::vector<uint8_t> __ledMatrix2 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
@@ -44,12 +44,12 @@ std::list<unsigned int> ___colourList;
 std::list<std::vector<uint8_t>> ___imageList;
 
 
-void text() {
+void ____text() {
     drawStrLEDMatrix(&__meLEDMatrix_1, "", 100);
     ___stringVar += ___stringVar;
 }
 
-void images() {
+void ____images() {
     ___imageVar = __ledMatrix1;
     ___imageVar = (shiftLEDMatrixUpVec(___imageVar, ___numVar));
     ___imageVar = (shiftLEDMatrixDownVec(___imageVar, ___numVar));
@@ -58,7 +58,7 @@ void images() {
     ___imageVar = (invertLEDMatrixVec(___imageVar));
 }
 
-void colour() {
+void ____colour() {
     ___colourVar = RGB(0x00, 0x00, 0x00);
     ___colourVar = RGB(0x33, 0x33, 0x33);
     ___colourVar = RGB(0x66, 0x66, 0x66);
@@ -131,52 +131,52 @@ void colour() {
     ___colourVar = RGB(___numVar, ___numVar, ___numVar);
 }
 
-void messages() {
+void ____messages() {
     _meIr.sendString(___stringVar);
     drawStrLEDMatrix(&__meLEDMatrix_1, String(_meIr.getString()), 100);
 }
 
-void doSomething(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::vector<uint8_t> ___x5, std::list<double> ___x6, std::list<bool> ___x7, std::list<String> ___x8, std::list<unsigned int> ___x9, std::list<std::vector<uint8_t>> ___x10) {
+void ____doSomething(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::vector<uint8_t> ___x5, std::list<double> ___x6, std::list<bool> ___x7, std::list<String> ___x8, std::list<unsigned int> ___x9, std::list<std::vector<uint8_t>> ___x10) {
     if (___boolVar) return ;
 }
 
-double function_return_numberVar() {
+double ____function_return_numberVar() {
     return ___numVar;
 }
 
-bool function_return_booleanVar() {
+bool ____function_return_booleanVar() {
     return ___boolVar;
 }
 
-String function_return_stringVar() {
+String ____function_return_stringVar() {
     return ___stringVar;
 }
 
-unsigned int function_return_colourVar() {
+unsigned int ____function_return_colourVar() {
     return ___colourVar;
 }
 
-std::vector<uint8_t> function_return_imageVar() {
+std::vector<uint8_t> ____function_return_imageVar() {
     return ___imageVar;
 }
 
-std::list<double> function_return_numberList() {
+std::list<double> ____function_return_numberList() {
     return ___numList;
 }
 
-std::list<bool> function_return_booleanList() {
+std::list<bool> ____function_return_booleanList() {
     return ___boolList;
 }
 
-std::list<String> function_return_stringList() {
+std::list<String> ____function_return_stringList() {
     return ___stringList;
 }
 
-std::list<unsigned int> function_return_colourList() {
+std::list<unsigned int> ____function_return_colourList() {
     return ___colourList;
 }
 
-std::list<std::vector<uint8_t>> function_return_imageList() {
+std::list<std::vector<uint8_t>> ____function_return_imageList() {
     return ___imageList;
 }
 
@@ -197,20 +197,20 @@ void setup()
 
 void loop()
 {
-    text();
-    colour();
-    images();
-    messages();
-    doSomething(___numVar, ___boolVar, ___stringVar, ___colourVar, ___imageVar, ___numList, ___boolList, ___stringList, ___colourList, ___imageList);
-    drawStrLEDMatrix(&__meLEDMatrix_1, String(function_return_numberVar()), 100);
-    drawStrLEDMatrix(&__meLEDMatrix_1, String(function_return_booleanVar()), 100);
-    drawStrLEDMatrix(&__meLEDMatrix_1, String(function_return_stringVar()), 100);
+    ____text();
+    ____colour();
+    ____images();
+    ____messages();
+    ____doSomething(___numVar, ___boolVar, ___stringVar, ___colourVar, ___imageVar, ___numList, ___boolList, ___stringList, ___colourList, ___imageList);
+    drawStrLEDMatrix(&__meLEDMatrix_1, String(____function_return_numberVar()), 100);
+    drawStrLEDMatrix(&__meLEDMatrix_1, String(____function_return_booleanVar()), 100);
+    drawStrLEDMatrix(&__meLEDMatrix_1, String(____function_return_stringVar()), 100);
     _meRgbLed.setColor(2, 0x00, 0xcc, 0xcc);
     _meRgbLed.show();
-    __meLEDMatrix_1.drawBitmap(0, 0, 16, &function_return_imageVar()[0]);
-    ___numList = function_return_numberList();
-    ___boolList = function_return_booleanList();
-    ___stringList = function_return_stringList();
-    ___colourList = function_return_colourList();
-    ___imageList = function_return_imageList();
+    __meLEDMatrix_1.drawBitmap(0, 0, 16, &____function_return_imageVar()[0]);
+    ___numList = ____function_return_numberList();
+    ___boolList = ____function_return_booleanList();
+    ___stringList = ____function_return_stringList();
+    ___colourList = ____function_return_colourList();
+    ___imageList = ____function_return_imageList();
 }

@@ -12,8 +12,8 @@
 #include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources
 
 
-void sensors();
-void waitUntil();
+void ____sensors();
+void ____waitUntil();
 
 float ___numberVar;
 bool ___booleanVar;
@@ -48,11 +48,11 @@ task main() {
     SetSensor(S4, SENSOR_LOWSPEED);
     SetSensor(S4, SENSOR_LOWSPEED);
     SetSensor(S4, SENSOR_LOWSPEED);
-    sensors();
-    waitUntil();
+    ____sensors();
+    ____waitUntil();
 }
 
-void sensors() {
+void ____sensors() {
     ColorOut(0, (MAXLINES - 1) * MAXLINES, SensorColor(S3, "COLOUR"));
     ColorOut(0, (MAXLINES - 1) * MAXLINES, SensorColor(S3, "LIGHT"));
     ColorOut(0, (MAXLINES - 1) * MAXLINES, SensorColor(S3, "AMBIENTLIGHT"));
@@ -62,7 +62,7 @@ void sensors() {
     ___numberList = SensorHtColor(S4, "RGB");
 }
 
-void waitUntil() {
+void ____waitUntil() {
     while (true) {
         if ( SensorColor(S3, "COLOUR") == INPUT_REDCOLOR ) {
             break;

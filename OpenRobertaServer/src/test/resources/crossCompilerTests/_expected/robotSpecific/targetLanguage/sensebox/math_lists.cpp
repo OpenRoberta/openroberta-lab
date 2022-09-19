@@ -8,8 +8,8 @@
 
 
 
-void math();
-void lists();
+void ____math();
+void ____lists();
 
 inline bool _isPrime(double d);
 
@@ -24,7 +24,7 @@ std::list<String> ___stringList;
 std::list<unsigned int> ___colourList;
 
 
-void math() {
+void ____math() {
     Serial.println(___numVar + ___numVar);
     Serial.println(___numVar - ___numVar);
     Serial.println(___numVar * ___numVar);
@@ -73,7 +73,7 @@ void math() {
     Serial.println(((double) rand() / (RAND_MAX)));
 }
 
-void lists() {
+void ____lists() {
     ___numList = {};
     ___numList = {0, 0, 0};
     ___numList = _createListRepeat(___numVar, (double) ___numVar);
@@ -128,8 +128,8 @@ void setup()
 
 void loop()
 {
-    math();
-    lists();
+    ____math();
+    ____lists();
 }
 inline bool _isPrime(double d) {
     if (!(d == floor(d))) {

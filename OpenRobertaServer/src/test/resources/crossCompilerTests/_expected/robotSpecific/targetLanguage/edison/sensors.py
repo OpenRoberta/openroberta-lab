@@ -12,7 +12,7 @@ ___numberVar = 0
 ___booleanVar = True
 ___numberList = Ed.List(3, [0,0,0])
 
-def sensors():
+def ____sensors():
     global ___numberVar, ___booleanVar, ___numberList
     ___booleanVar = (Ed.ReadKeypad() == Ed.KEYPAD_TRIANGLE)
     ___booleanVar = (Ed.ReadKeypad() == Ed.KEYPAD_ROUND)
@@ -31,7 +31,7 @@ def sensors():
     Ed.ReadRemote()
     Ed.ReadIRData()
 
-def sensorWaitUntil():
+def ____sensorWaitUntil():
     global ___numberVar, ___booleanVar, ___numberList
     while True:
         if ((Ed.ReadKeypad() == Ed.KEYPAD_TRIANGLE)) == True:
@@ -78,8 +78,8 @@ def sensorWaitUntil():
             break
         pass
 
-sensors()
-sensorWaitUntil()
+____sensors()
+____sensorWaitUntil()
 
 
 def _irSeek(mode):

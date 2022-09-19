@@ -3,14 +3,14 @@
 #include <math.h>
 Bob3 rob;
 
-void sensorsWaitUntil();
-void sensors();
+void ____sensorsWaitUntil();
+void ____sensors();
 
 bool ___b;
 double ___c;
 unsigned long __time_1 = millis();
 
-void sensorsWaitUntil() {
+void ____sensorsWaitUntil() {
     while (true) {
         if ( ( rob.getArm(2) == 1 ) == true ) {
             break;
@@ -85,7 +85,7 @@ void sensorsWaitUntil() {
     }
 }
 
-void sensors() {
+void ____sensors() {
     ___b = ( rob.getArm(2) == 1 );
     ___b = ( rob.getArm(2) == 2 );
     ___b = ( rob.getArm(2) == 3 );
@@ -113,6 +113,6 @@ void loop()
     rob.setLed(EYE_2, RGB(0x00, 0x00, 0xff));
     rob.setLed(EYE_1, RGB(0xFF, 0x00, 0x00));
     delay(1000);
-    sensors();
-    sensorsWaitUntil();
+    ____sensors();
+    ____sensorsWaitUntil();
 }

@@ -12,12 +12,12 @@
 #include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources
 
 
-void action();
-void move();
-void drive();
-void display();
-void sounds();
-void lights();
+void ____action();
+void ____move();
+void ____drive();
+void ____display();
+void ____sounds();
+void ____lights();
 byte volume = 0x02;
 float ___numberVar;
 bool ___booleanVar;
@@ -49,18 +49,18 @@ task main() {
     SetSensor(S2, SENSOR_COLORFULL);
     SetSensor(S3, SENSOR_COLORFULL);
     SetSensor(S4, SENSOR_COLORFULL);
-    action();
+    ____action();
 }
 
-void action() {
-    move();
-    drive();
-    display();
-    sounds();
-    lights();
+void ____action() {
+    ____move();
+    ____drive();
+    ____display();
+    ____sounds();
+    ____lights();
 }
 
-void move() {
+void ____move() {
     OnFwd(OUT_A, MIN(MAX(___numberVar, -100), 100));
     OnFwdRegEx(OUT_B, MIN(MAX(___numberVar, -100), 100), OUT_REGMODE_SPEED, RESET_NONE);
     OnFwdRegEx(OUT_C, MIN(MAX(___numberVar, -100), 100), OUT_REGMODE_SPEED, RESET_NONE);
@@ -79,7 +79,7 @@ void move() {
     Off(OUT_C);
 }
 
-void drive() {
+void ____drive() {
     RotateMotorEx(OUT_BC, MIN(MAX(___numberVar, -100), 100), (___numberVar * 360 / (PI * WHEELDIAMETER)), 0, true, true);
     Wait(1);
     RotateMotorEx(OUT_BC, -1 * MIN(MAX(___numberVar, -100), 100), (___numberVar * 360 / (PI * WHEELDIAMETER)), 0, true, true);
@@ -99,12 +99,12 @@ void drive() {
     SteerDrive(OUT_C, OUT_B, MIN(MAX(___numberVar, -100), 100), MIN(MAX(___numberVar, -100), 100), false);
 }
 
-void display() {
+void ____display() {
     TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___stringVar);
     ClearScreen();
 }
 
-void sounds() {
+void ____sounds() {
     PlayToneEx(___numberVar, ___numberVar, volume, false);
     Wait(___numberVar);
     PlayToneEx(261.626, 2000, volume, false);
@@ -121,7 +121,7 @@ void sounds() {
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, volume * 100 / 4);
 }
 
-void lights() {
+void ____lights() {
     SetSensorColorRed(1);
     SetSensorColorRed(2);
     SetSensorColorRed(3);

@@ -23,7 +23,7 @@ ___numVar = 0
 ___colourVar = (204, 0, 0)
 ___numList = []
 ___booleanVar = True
-def sensors():
+def ____sensors():
     global _timer1, _timer2, _timer3, _timer4, _timer5, ___numVar, ___colourVar, ___numList, ___booleanVar
     ___numVar = mbuild.ultrasonic2.get(2)
     ___numVar = mbuild.ultrasonic2.get(1)
@@ -77,7 +77,7 @@ def sensors():
     mbot2.EM_reset_angle("EM1") 
     mbot2.EM_reset_angle("EM2") 
 
-def wait_until():
+def ____wait_until():
     global _timer1, _timer2, _timer3, _timer4, _timer5, ___numVar, ___colourVar, ___numList, ___booleanVar
     while True:
         if cyberpi.controller.is_press("A") == True:
@@ -121,8 +121,8 @@ def wait_until():
 
 def run():
     global _timer1, _timer2, _timer3, _timer4, _timer5, ___numVar, ___colourVar, ___numList, ___booleanVar
-    sensors()
-    wait_until()
+    ____sensors()
+    ____wait_until()
 
 def main():
     try:

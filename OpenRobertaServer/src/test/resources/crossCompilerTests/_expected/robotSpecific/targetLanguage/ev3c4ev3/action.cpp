@@ -8,12 +8,12 @@
 #include "NEPODefs.h"
 
 
-void action();
-void move();
-void drive();
-void display();
-void sounds();
-void lights();
+void ____action();
+void ____move();
+void ____drive();
+void ____display();
+void ____sounds();
+void ____lights();
 
 double ___numberVar = 0;
 bool ___booleanVar = true;
@@ -26,15 +26,15 @@ std::list<std::string> ___stringList = ((std::list<std::string>){"", ""});
 std::list<Color> ___colourList = ((std::list<Color>){White, White});
 std::list<BluetoothConnectionHandle> ___connectionList = ((std::list<BluetoothConnectionHandle>){___connectionVar, ___connectionVar});
 
-void action() {
-    move();
-    drive();
-    display();
-    sounds();
-    lights();
+void ____action() {
+    ____move();
+    ____drive();
+    ____display();
+    ____sounds();
+    ____lights();
 }
 
-void move() {
+void ____move() {
     OnFwdReg(OUT_A, Speed(___numberVar));
     OnFwdReg(OUT_B, Speed(___numberVar));
     OnFwdReg(OUT_C, Speed(___numberVar));
@@ -63,7 +63,7 @@ void move() {
     Off(OUT_D);
 }
 
-void drive() {
+void ____drive() {
     RotateMotorForAngle(OUT_BC, Speed(___numberVar), (___numberVar * 360) / (M_PI * WHEEL_DIAMETER));
     RotateMotorForAngle(OUT_BC, -Speed(___numberVar), (___numberVar * 360) / (M_PI * WHEEL_DIAMETER));
     OnFwdSync(OUT_BC, Speed(___numberVar));
@@ -79,7 +79,7 @@ void drive() {
     SteerDrive(OUT_C, OUT_B, -Speed(___numberVar), -Speed(___numberVar));
 }
 
-void display() {
+void ____display() {
     DrawString(ToString(___stringVar), ___numberVar, ___numberVar);
     LcdPicture(LCD_COLOR_BLACK, 0, 0, OLDGLASSES);
     LcdPicture(LCD_COLOR_BLACK, 0, 0, EYESOPEN);
@@ -89,7 +89,7 @@ void display() {
     LcdClean();
 }
 
-void sounds() {
+void ____sounds() {
     NEPOPlayTone(___numberVar, ___numberVar);
     NEPOPlayTone(261.626, 2000);
     NEPOPlayTone(293.665, 1000);
@@ -120,7 +120,7 @@ void sounds() {
     Say(ToString(___stringVar), ___numberVar, ___numberVar);
 }
 
-void lights() {
+void ____lights() {
     SetLedPattern(LED_GREEN);
     SetLedPattern(LED_GREEN_FLASH);
     SetLedPattern(LED_GREEN_PULSE);
@@ -140,7 +140,7 @@ int main () {
     SetLanguage("en");startLoggingThread(OUT_ABCD);
     
     
-    action();
+    ____action();
     
     NEPOFreeEV3();
     return 0;

@@ -496,7 +496,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     public Void visitMethodVoid(MethodVoid methodVoid) {
         nlIndent();
         this.sb.append("private void ");
-        this.sb.append(methodVoid.getMethodName()).append("(");
+        this.sb.append(methodVoid.getCodeSafeMethodName()).append("(");
         methodVoid.getParameters().accept(this);
         this.sb.append(") {");
         incrIndentation();
@@ -511,7 +511,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     public Void visitMethodReturn(MethodReturn methodReturn) {
         nlIndent();
         this.sb.append("private ").append(getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
-        this.sb.append(" ").append(methodReturn.getMethodName()).append("(");
+        this.sb.append(" ").append(methodReturn.getCodeSafeMethodName()).append("(");
         methodReturn.getParameters().accept(this);
         this.sb.append(") {");
         incrIndentation();

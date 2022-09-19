@@ -11,8 +11,8 @@
 
 
 
-void sensors();
-void sensorsWaitUntil();
+void ____sensors();
+void ____sensorsWaitUntil();
 
 
 double ___numVar;
@@ -63,7 +63,7 @@ int _input_S2 = 4;
 unsigned long __time_1 = millis();
 
 
-void sensors() {
+void ____sensors() {
     Serial.println(analogRead(_input_S3));
     Serial.println(digitalRead(_input_S2));
     Serial.println(digitalRead(_button_B3));
@@ -91,7 +91,7 @@ void sensors() {
     __time_1 = millis();
 }
 
-void sensorsWaitUntil() {
+void ____sensorsWaitUntil() {
     while (true) {
         if ( digitalRead(_button_B3) == true ) {
             break;
@@ -309,6 +309,6 @@ void setup()
 
 void loop()
 {
-    sensors();
-    sensorsWaitUntil();
+    ____sensors();
+    ____sensorsWaitUntil();
 }

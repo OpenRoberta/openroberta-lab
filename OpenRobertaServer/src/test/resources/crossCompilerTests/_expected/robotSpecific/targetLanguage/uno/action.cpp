@@ -8,12 +8,12 @@
 #include <Stepper/src/Stepper.h>
 #include <NEPODefs.h>
 
-void action();
-void move();
-void display();
-void sounds();
-void lights();
-void pin();
+void ____action();
+void ____move();
+void ____display();
+void ____sounds();
+void ____lights();
+void ____pin();
 
 double ___n;
 bool ___b;
@@ -41,15 +41,15 @@ Adafruit_SSD1306 _lcd_O(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 int _SPU_S2 = 2048;
 Stepper _stepper_S2(_SPU_S2, 1, 4, 2, 12);
 
-void action() {
-    move();
-    display();
-    sounds();
-    lights();
-    pin();
+void ____action() {
+    ____move();
+    ____display();
+    ____sounds();
+    ____lights();
+    ____pin();
 }
 
-void move() {
+void ____move() {
     _servo_S.write(___n);
     _stepper_S2.setSpeed(___n);
     _stepper_S2.step(_SPU_S2*(___n));
@@ -57,7 +57,7 @@ void move() {
     digitalWrite(_relay_R, HIGH);
 }
 
-void display() {
+void ____display() {
     Serial.println(___s);
     _lcd_L3.setCursor(___n,___n);
     _lcd_L3.print(___s);
@@ -70,12 +70,12 @@ void display() {
     _lcd_O.display();
 }
 
-void sounds() {
+void ____sounds() {
     tone(_buzzer_S3, ___n, ___n);
     delay(___n);
 }
 
-void lights() {
+void ____lights() {
     digitalWrite(_led_L, HIGH);
     digitalWrite(_led_L, LOW);
     analogWrite(_led_red_R2, RCHANNEL(___c));
@@ -88,7 +88,7 @@ void lights() {
     
 }
 
-void pin() {
+void ____pin() {
     digitalWrite(_output_A, (int)___n);
     analogWrite(_output_A2, (int)___n);
 }
@@ -120,5 +120,5 @@ void setup()
 
 void loop()
 {
-    action();
+    ____action();
 }

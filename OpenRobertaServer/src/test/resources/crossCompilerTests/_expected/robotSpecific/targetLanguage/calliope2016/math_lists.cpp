@@ -7,9 +7,9 @@
 #include <stdlib.h>
 MicroBit _uBit;
 
-void math();
+void ____math();
 
-void lists();
+void ____lists();
 
 
 inline bool _isPrime(double d);
@@ -39,12 +39,12 @@ int main()
     ___colourList = {MicroBitColor(255, 0, 0, 255), MicroBitColor(255, 0, 0, 255)};
     ___imageList = {MicroBitImage("0,255,0,255,0\n255,255,255,255,255\n255,255,255,255,255\n0,255,255,255,0\n0,0,255,0,0\n"), MicroBitImage("0,255,0,255,0\n255,255,255,255,255\n255,255,255,255,255\n0,255,255,255,0\n0,0,255,0,0\n")};
     
-    math();
-    lists();
+    ____math();
+    ____lists();
     release_fiber();
 }
 
-void math() {
+void ____math() {
     _uBit.display.scroll(ManagedString(0));
     _uBit.display.scroll(ManagedString(___numberVar + ___numberVar));
     _uBit.display.scroll(ManagedString(___numberVar - ___numberVar));
@@ -93,7 +93,7 @@ void math() {
     
 }
 
-void lists() {
+void ____lists() {
     ___numberList = {};
     ___numberList = {0, 0, 0};
     _uBit.display.scroll(ManagedString(((int) ___numberList.size())));

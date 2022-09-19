@@ -10,8 +10,8 @@ BnrRoberta bnr(one, brm);
 #define MODULE_ADDRESS 0x2C 
 byte colorsLeft[3]={0,0,0}; 
 byte colorsRight[3]={0,0,0};
-void control();
-void logic();
+void ____control();
+void ____logic();
 
 double ___numberVar;
 bool ___booleanVar;
@@ -22,7 +22,7 @@ std::list<bool> ___booleanList;
 std::list<String> ___stringList;
 std::list<unsigned int> ___colourList;
 
-void control() {
+void ____control() {
     if ( ___booleanVar ) {
     } else if ( ___booleanVar ) {
     }
@@ -82,7 +82,7 @@ void control() {
     }
 }
 
-void logic() {
+void ____logic() {
     one.lcd1(___numberVar == ___numberVar);
     one.lcd1(___numberVar != ___numberVar);
     one.lcd1(___numberVar < ___numberVar);
@@ -121,6 +121,6 @@ void setup()
 
 void loop()
 {
-    control();
-    logic();
+    ____control();
+    ____logic();
 }

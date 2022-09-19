@@ -5,17 +5,17 @@
 
 #include <NEPODefs.h>
 
-void text();
-void colours();
-void function_parameter(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::list<double> ___x5, std::list<bool> ___x6, std::list<String> ___x7, std::list<unsigned int> ___x8);
-double function_return_numberVar();
-bool function_return_booleanVar();
-String function_return_stringVar();
-unsigned int function_return_colourVar();
-std::list<double> function_return_numberList();
-std::list<bool> function_return_booleanList();
-std::list<String> function_return_stringList();
-std::list<unsigned int> function_return_colourList();
+void ____text();
+void ____colours();
+void ____function_parameter(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::list<double> ___x5, std::list<bool> ___x6, std::list<String> ___x7, std::list<unsigned int> ___x8);
+double ____function_return_numberVar();
+bool ____function_return_booleanVar();
+String ____function_return_stringVar();
+unsigned int ____function_return_colourVar();
+std::list<double> ____function_return_numberList();
+std::list<bool> ____function_return_booleanList();
+std::list<String> ____function_return_stringList();
+std::list<unsigned int> ____function_return_colourList();
 
 double ___numberVar;
 bool ___booleanVar;
@@ -30,13 +30,13 @@ int _led_red_R = 5;
 int _led_green_R = 6;
 int _led_blue_R = 3;
 
-void text() {
+void ____text() {
     Serial.println("");
     // 
     ___stringVar += ___stringVar;
 }
 
-void colours() {
+void ____colours() {
     analogWrite(_led_red_R, 204);
     analogWrite(_led_green_R, 0);
     analogWrite(_led_blue_R, 0);
@@ -75,39 +75,39 @@ void colours() {
     
 }
 
-void function_parameter(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::list<double> ___x5, std::list<bool> ___x6, std::list<String> ___x7, std::list<unsigned int> ___x8) {
+void ____function_parameter(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::list<double> ___x5, std::list<bool> ___x6, std::list<String> ___x7, std::list<unsigned int> ___x8) {
     if (___booleanVar) return ;
 }
 
-double function_return_numberVar() {
+double ____function_return_numberVar() {
     return ___numberVar;
 }
 
-bool function_return_booleanVar() {
+bool ____function_return_booleanVar() {
     return ___booleanVar;
 }
 
-String function_return_stringVar() {
+String ____function_return_stringVar() {
     return ___stringVar;
 }
 
-unsigned int function_return_colourVar() {
+unsigned int ____function_return_colourVar() {
     return ___colourVar;
 }
 
-std::list<double> function_return_numberList() {
+std::list<double> ____function_return_numberList() {
     return ___numberList;
 }
 
-std::list<bool> function_return_booleanList() {
+std::list<bool> ____function_return_booleanList() {
     return ___booleanList;
 }
 
-std::list<String> function_return_stringList() {
+std::list<String> ____function_return_stringList() {
     return ___stringList;
 }
 
-std::list<unsigned int> function_return_colourList() {
+std::list<unsigned int> ____function_return_colourList() {
     return ___colourList;
 }
 
@@ -130,15 +130,15 @@ void setup()
 
 void loop()
 {
-    text();
-    colours();
-    function_parameter(___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList);
-    Serial.println(function_return_numberVar());
-    Serial.println(function_return_booleanVar());
-    Serial.println(function_return_stringVar());
-    Serial.println(function_return_colourVar());
-    ___numberList = function_return_numberList();
-    ___booleanList = function_return_booleanList();
-    ___stringList = function_return_stringList();
-    ___colourList = function_return_colourList();
+    ____text();
+    ____colours();
+    ____function_parameter(___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList);
+    Serial.println(____function_return_numberVar());
+    Serial.println(____function_return_booleanVar());
+    Serial.println(____function_return_stringVar());
+    Serial.println(____function_return_colourVar());
+    ___numberList = ____function_return_numberList();
+    ___booleanList = ____function_return_booleanList();
+    ___stringList = ____function_return_stringList();
+    ___colourList = ____function_return_colourList();
 }

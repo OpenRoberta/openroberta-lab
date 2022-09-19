@@ -13,7 +13,7 @@
 
 
 
-void action();
+void ____action();
 
 
 double ___n;
@@ -39,7 +39,7 @@ Adafruit_SSD1306 _display_myDisplay(OLED_RESET);
 Plot _plot_myDisplay(&_display_myDisplay);
 
 
-void action() {
+void ____action() {
     Serial.println(___n);
     Serial.println(___b);
     Serial.println(___s);
@@ -139,5 +139,5 @@ void setup()
 
 void loop()
 {
-    action();
+    ____action();
 }

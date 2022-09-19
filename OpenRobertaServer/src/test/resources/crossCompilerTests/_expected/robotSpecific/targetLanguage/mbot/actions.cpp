@@ -14,12 +14,12 @@ MeBuzzer _meBuzzer;
 MeRGBLed _meRgbLed(7, 2);
 
 
-void actions();
-void drive();
-void move();
-void display();
-void sounds();
-void light();
+void ____actions();
+void ____drive();
+void ____move();
+void ____display();
+void ____sounds();
+void ____light();
 const std::vector<uint8_t> __ledMatrix0 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
 const std::vector<uint8_t> __ledMatrix1 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
 const std::vector<uint8_t> __ledMatrix2 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
@@ -37,15 +37,15 @@ std::list<unsigned int> ___colourList;
 std::list<std::vector<uint8_t>> ___imageList;
 
 
-void actions() {
-    drive();
-    move();
-    display();
-    sounds();
-    light();
+void ____actions() {
+    ____drive();
+    ____move();
+    ____display();
+    ____sounds();
+    ____light();
 }
 
-void drive() {
+void ____drive() {
     _meDrive.drive(___numVar, 1, ___numVar);
     _meDrive.drive(___numVar, 0, ___numVar);
     _meDrive.drive(___numVar, 1);
@@ -61,7 +61,7 @@ void drive() {
     _meDrive.stop();
 }
 
-void move() {
+void ____move() {
     _meDCmotor1.run(-1*(___numVar)*255/100);
     delay(___numVar);
     _meDCmotor1.stop();
@@ -74,7 +74,7 @@ void move() {
     _meDCmotor2.stop();
 }
 
-void display() {
+void ____display() {
     Serial.println(___numVar);
     Serial.println(___boolVar);
     Serial.println(___stringVar);
@@ -88,7 +88,7 @@ void display() {
     __meLEDMatrix_1.setBrightness(___numVar);
 }
 
-void sounds() {
+void ____sounds() {
     _meBuzzer.tone(8, ___numVar, ___numVar);
     _meBuzzer.tone(8, 261.626, 2000);
     _meBuzzer.tone(8, 293.665, 1000);
@@ -97,7 +97,7 @@ void sounds() {
     _meBuzzer.tone(8, 391.995, 125);
 }
 
-void light() {
+void ____light() {
     _meRgbLed.setColor(2, RCHANNEL(___colourVar), GCHANNEL(___colourVar), BCHANNEL(___colourVar));
     _meRgbLed.show();
     _meRgbLed.setColor(1, RCHANNEL(___colourVar), GCHANNEL(___colourVar), BCHANNEL(___colourVar));
@@ -125,5 +125,5 @@ void setup()
 
 void loop()
 {
-    actions();
+    ____actions();
 }

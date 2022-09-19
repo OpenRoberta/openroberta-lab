@@ -36,7 +36,7 @@ ___numberList = [0, 0, 0]
 ___booleanList = [True, True, True]
 ___stringList = ["", "", ""]
 ___colorList = [(204, 0, 0), (204, 0, 0), (204, 0, 0)]
-def lists():
+def ____lists():
     global ___numberVar, ___booleanVar, ___stringVar, ___colorVar, ___numberList, ___booleanList, ___stringList, ___colorList
     ___numberList = []
     ___booleanList = []
@@ -81,7 +81,7 @@ def lists():
     cyberpi.console.println(___numberList[0:-1 -___numberVar])
     cyberpi.console.println(___numberList[0:])
 
-def math():
+def ____math():
     global ___numberVar, ___booleanVar, ___stringVar, ___colorVar, ___numberList, ___booleanList, ___stringList, ___colorList
     cyberpi.console.println(0)
     cyberpi.console.println(___numberVar + ___numberVar)
@@ -136,8 +136,8 @@ def math():
 
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colorVar, ___numberList, ___booleanList, ___stringList, ___colorList
-    math()
-    lists()
+    ____math()
+    ____lists()
 
 def main():
     try:

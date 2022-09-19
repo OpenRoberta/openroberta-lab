@@ -12,8 +12,8 @@
 #include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources
 
 
-void sensors();
-void waitUntil();
+void ____sensors();
+void ____waitUntil();
 
 long timer1;
 float ___numberVar;
@@ -48,11 +48,11 @@ task main() {
     SetSensorLight(S3, false);
     SetSensor(S4, SENSOR_LOWSPEED);
     timer1 = CurrentTick();
-    sensors();
-    waitUntil();
+    ____sensors();
+    ____waitUntil();
 }
 
-void sensors() {
+void ____sensors() {
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, Sensor(S1));
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, Sensor(S2));
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, _readLightSensor(S3, 1));
@@ -77,7 +77,7 @@ void sensors() {
     timer1 = CurrentTick();
 }
 
-void waitUntil() {
+void ____waitUntil() {
     while (true) {
         if ( Sensor(S1) == true ) {
             break;

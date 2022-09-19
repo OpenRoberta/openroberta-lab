@@ -10,8 +10,8 @@ BnrRoberta bnr(one, brm);
 #define MODULE_ADDRESS 0x2C 
 byte colorsLeft[3]={0,0,0}; 
 byte colorsRight[3]={0,0,0};
-void math();
-void lists();
+void ____math();
+void ____lists();
 
 inline bool _isPrime(double d);
 
@@ -24,7 +24,7 @@ std::list<bool> ___booleanList;
 std::list<String> ___stringList;
 std::list<unsigned int> ___colourList;
 
-void math() {
+void ____math() {
     one.lcd1(0);
     one.lcd1(___numberVar + ___numberVar);
     one.lcd1(___numberVar - ___numberVar);
@@ -74,7 +74,7 @@ void math() {
     one.lcd1(((double) rand() / (RAND_MAX)));
 }
 
-void lists() {
+void ____lists() {
     ___numberList = {};
     ___numberList = {0, 0};
     ___numberList = _createListRepeat(___numberVar, (double) ___numberVar);
@@ -122,8 +122,8 @@ void setup()
 
 void loop()
 {
-    math();
-    lists();
+    ____math();
+    ____lists();
 }
 inline bool _isPrime(double d) {
     if (!(d == floor(d))) {

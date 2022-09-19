@@ -32,13 +32,13 @@ ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___colourList = ['white', 'white']
 ___connectionList = [___connectionVar, ___connectionVar]
-def sensors():
+def ____sensors():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     hal.drawText(str(hal.getInfraredSensorDistance('4')), ___numberVar, ___numberVar)
     hal.drawText(str(hal.getInfraredSensorSeek('4')), ___numberVar, ___numberVar)
     hal.drawText(str(hal.getSoundLevel('2')), ___numberVar, ___numberVar)
 
-def waitUntil():
+def ____waitUntil():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     while True:
         if hal.getInfraredSensorDistance('4') < 30:
@@ -47,7 +47,7 @@ def waitUntil():
 
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
-    sensors()
+    ____sensors()
 
 def main():
     try:
