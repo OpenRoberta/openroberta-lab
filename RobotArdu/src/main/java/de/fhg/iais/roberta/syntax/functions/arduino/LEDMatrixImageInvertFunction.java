@@ -2,16 +2,16 @@ package de.fhg.iais.roberta.syntax.functions.arduino;
 
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.functions.Function;
-import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
-import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
-@NepoPhrase(name = "LED_MATRIX_IMAGE_INVERT", category = "FUNCTION", blocklyNames = {"mBotImage_invert"})
+@NepoExpr(name = "LED_MATRIX_IMAGE_INVERT", category = "FUNCTION", blocklyNames = {"mBotImage_invert"}, blocklyType = BlocklyType.IMAGE)
 public final class LEDMatrixImageInvertFunction extends Function {
-    @NepoValue(name = "VAR", type = BlocklyType.PREDEFINED_IMAGE)
+    @NepoValue(name = "VAR", type = BlocklyType.IMAGE)
     public final Expr image;
 
     public LEDMatrixImageInvertFunction(BlocklyProperties properties, Expr image) {

@@ -151,7 +151,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitDisplayImageAction(DisplayImageAction displayImageAction) {
-        requiredComponentVisited(displayImageAction, displayImageAction.getValuesToDisplay());
+        requiredComponentVisited(displayImageAction, displayImageAction.valuesToDisplay);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DISPLAY));
         return null;
     }

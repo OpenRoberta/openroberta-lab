@@ -2,11 +2,11 @@
 (repeat [FOREVER_ARDU, BoolConst[value: true]]
 if SensorExpr [TouchSensor [T, PRESSED, - EMPTY_SLOT -]]
 ,then
-AktionStmt [LedOnAction [ ColorConst[hexValue: #cc0000] ]]
+AktionStmt [LedOnAction[side: Left, ledColor: ColorConst[hexValue: #cc0000]]]
 
 if SensorExpr [TouchSensor [T2, PRESSED, - EMPTY_SLOT -]]
 ,then
-AktionStmt [LedOnAction [ ColorConst[hexValue: #33ff33] ]]
+AktionStmt [LedOnAction[side: Left, ledColor: ColorConst[hexValue: #33ff33]]]
 
 AktionStmt [StepMotorAction[stepMotorPos: Binary [DIVIDE, SensorExpr [LightSensor [L, VALUE, - EMPTY_SLOT -]], NumConst[value: 800]]]]
 )

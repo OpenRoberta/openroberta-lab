@@ -135,7 +135,7 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
 
     @Override
     public Void visitDisplayImageAction(DisplayImageAction displayImageAction) {
-        displayImageAction.getValuesToDisplay().accept(this);
+        displayImageAction.valuesToDisplay.accept(this);
         JSONObject o = makeNode(C.SHOW_IMAGE_ACTION).put(C.MODE, displayImageAction.displayImageMode.toString().toLowerCase());
         return add(o);
     }

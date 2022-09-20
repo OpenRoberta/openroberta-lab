@@ -560,7 +560,7 @@ public class CalliopeTwo2ThreeTransformerTest {
 
     @Test
     public void executeTransformer_ShouldReturnTransformedLedbar_WhenGivenOldLedbar() {
-        String expectedProgramAst = "BlockAST[project=[[Location[x=512,y=50],MainTask[]," + "LedBarSetAction[NumConst[value:0],NumConst[value:5]]]]]";
+        String expectedProgramAst = "BlockAST[project=[[Location[x=512,y=50],MainTask[]," + "LedBarSetAction[x:NumConst[value:0],brightness:NumConst[value:5]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=LEDBAR,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]"
@@ -628,7 +628,7 @@ public class CalliopeTwo2ThreeTransformerTest {
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
                 + "BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:10],portA:Port_A,portB:Port_B],"
                 + "BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:10],portA:CalliBot_links,portB:CalliBot_rechts],"
-                + "SingleMotorStopAction[]]]]";
+                + "BothMotorsStopAction[]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=Port_B,portName=Port_B,componentProperties={PIN1=B}]",
@@ -691,8 +691,8 @@ public class CalliopeTwo2ThreeTransformerTest {
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
                 + "BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:30],portA:Port_A,portB:Port_B],"
                 + "BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:30],portA:CalliBot_links,portB:CalliBot_rechts],"
-                + "SingleMotorStopAction[],"
-                + "SingleMotorStopAction[]]]]";
+                + "BothMotorsStopAction[],"
+                + "BothMotorsStopAction[]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=Port_B,portName=Port_B,componentProperties={PIN1=B}]",

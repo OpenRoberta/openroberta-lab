@@ -176,10 +176,10 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
                 break;
         }
         switch ( hand.modus ) {
-            case ACTIVE:
+            case "OPEN":
                 this.sb.append("1)");
                 break;
-            case REST:
+            case "CLOSE":
                 this.sb.append("0)");
                 break;
         }
@@ -190,97 +190,99 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     public Void visitMoveJoint(MoveJoint moveJoint) {
         this.sb.append("move_joint(robot, ");
         switch ( moveJoint.joint ) {
-            case HEADYAW:
+            case "HEADYAW":
                 this.sb.append("\"HeadYaw\"");
                 break;
-            case HEADPITCH:
+            case "HEADPITCH":
                 this.sb.append("\"HeadPitch\"");
                 break;
-            case LSHOULDERPITCH:
+            case "LSHOULDERPITCH":
                 this.sb.append("\"LShoulderPitch\"");
                 break;
-            case LSHOULDERROLL:
+            case "LSHOULDERROLL":
                 this.sb.append("\"LShoulderRoll\"");
                 break;
-            case LELBOWYAW:
+            case "LELBOWYAW":
                 this.sb.append("\"LElbowYaw\"");
                 break;
-            case LELBOWROLL:
+            case "LELBOWROLL":
                 this.sb.append("\"LElbowRoll\"");
                 break;
-            case LWRISTYAW:
+            case "LWRISTYAW":
                 this.sb.append("\"LWristYaw\"");
                 break;
-            case LHAND:
+            case "LHAND":
                 this.sb.append("\"LHand\"");
                 break;
-            case LHIPYAWPITCH:
+            case "LHIPYAWPITCH":
                 this.sb.append("\"LHipYawPitch\"");
                 break;
-            case LHIPROLL:
+            case "LHIPROLL":
                 this.sb.append("\"LHipRoll\"");
                 break;
-            case LHIPPITCH:
+            case "LHIPPITCH":
                 this.sb.append("\"LHipPitch\"");
                 break;
-            case LKNEEPITCH:
+            case "LKNEEPITCH":
                 this.sb.append("\"LKneePitch\"");
                 break;
-            case LANKLEPITCH:
+            case "LANKLEPITCH":
                 this.sb.append("\"LAnklePitch\"");
                 break;
-            case RANKLEROLL:
+            case "RANKLEROLL":
                 this.sb.append("\"RAnkleRoll\"");
                 break;
-            case RHIPYAWPITCH:
+            case "RHIPYAWPITCH":
                 this.sb.append("\"RHipYawPitch\"");
                 break;
-            case RHIPROLL:
+            case "RHIPROLL":
                 this.sb.append("\"RHipRoll\"");
                 break;
-            case RHIPPITCH:
+            case "RHIPPITCH":
                 this.sb.append("\"RHipPitch\"");
                 break;
-            case RKNEEPITCH:
+            case "RKNEEPITCH":
                 this.sb.append("\"RKneePitch\"");
                 break;
-            case RANKLEPITCH:
+            case "RANKLEPITCH":
                 this.sb.append("\"RAnklePitch\"");
                 break;
-            case RSHOULDERPITCH:
+            case "RSHOULDERPITCH":
                 this.sb.append("\"RShoulderPitch\"");
                 break;
-            case RSHOULDERROLL:
+            case "RSHOULDERROLL":
                 this.sb.append("\"RShoulderRoll\"");
                 break;
-            case RELBOWYAW:
+            case "RELBOWYAW":
                 this.sb.append("\"RElbowYaw\"");
                 break;
-            case RELBOWROLL:
+            case "RELBOWROLL":
                 this.sb.append("\"RElbowRoll\"");
                 break;
-            case RWRISTYAW:
+            case "RWRISTYAW":
                 this.sb.append("\"RWristYaw\"");
                 break;
-            case RHAND:
+            case "RHAND":
                 this.sb.append("\"RHand\"");
                 break;
-            case LANKLEROLL:
+            case "LANKLEROLL":
                 this.sb.append("\"LAnkleRoll\"");
                 break;
             default:
-                break;
+                throw new DbcException("Invalid MoveJoint JOINT...");
         }
         this.sb.append(", ");
         moveJoint.degrees.accept(this);
         this.sb.append(", ");
         switch ( moveJoint.relativeAbsolute ) {
-            case ABSOLUTE:
+            case "ABSOLUTE":
                 this.sb.append("JointMovement.ABSOLUTE");
                 break;
-            case RELATIVE:
+            case "RELATIVE":
                 this.sb.append("JointMovement.RELATIVE");
                 break;
+            default:
+                throw new DbcException("Invalid MoveJoint MODE...");
         }
         this.sb.append(")");
         return null;

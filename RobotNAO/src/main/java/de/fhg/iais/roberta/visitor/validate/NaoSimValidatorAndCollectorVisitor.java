@@ -1,10 +1,41 @@
 package de.fhg.iais.roberta.visitor.validate;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
 import com.google.common.collect.ClassToInstanceMap;
+
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.mode.action.nao.Move;
-import de.fhg.iais.roberta.syntax.action.nao.*;
+import de.fhg.iais.roberta.syntax.action.nao.Animation;
+import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
+import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
+import de.fhg.iais.roberta.syntax.action.nao.ForgetFace;
+import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
+import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
+import de.fhg.iais.roberta.syntax.action.nao.Hand;
+import de.fhg.iais.roberta.syntax.action.nao.LearnFace;
+import de.fhg.iais.roberta.syntax.action.nao.LedOff;
+import de.fhg.iais.roberta.syntax.action.nao.LedReset;
+import de.fhg.iais.roberta.syntax.action.nao.MoveJoint;
+import de.fhg.iais.roberta.syntax.action.nao.PlayFile;
+import de.fhg.iais.roberta.syntax.action.nao.PointLookAt;
+import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
+import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
+import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
+import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
+import de.fhg.iais.roberta.syntax.action.nao.SetLeds;
+import de.fhg.iais.roberta.syntax.action.nao.SetMode;
+import de.fhg.iais.roberta.syntax.action.nao.SetStiffness;
+import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
+import de.fhg.iais.roberta.syntax.action.nao.Stop;
+import de.fhg.iais.roberta.syntax.action.nao.TakePicture;
+import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
+import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
+import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
+import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
@@ -12,14 +43,20 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
-import de.fhg.iais.roberta.syntax.sensor.generic.*;
-import de.fhg.iais.roberta.syntax.sensor.nao.*;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectFaceSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectMarkSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
+import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrentSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
+import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.visitor.INaoVisitor;
 import de.fhg.iais.roberta.visitor.NaoSimMethods;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class NaoSimValidatorAndCollectorVisitor extends NaoValidatorAndCollectorVisitor implements INaoVisitor<Void> {
 
@@ -152,10 +189,10 @@ public class NaoSimValidatorAndCollectorVisitor extends NaoValidatorAndCollector
     @Override
     public Void visitApplyPosture(ApplyPosture applyPosture) {
         switch ( applyPosture.posture ) {
-            case SITRELAX:
-            case SIT:
-            case LYINGBELLY:
-            case LYINGBACK:
+            case "SITRELAX":
+            case "SIT":
+            case "LYINGBELLY":
+            case "LYINGBACK":
                 addWarningToPhrase(applyPosture, "SIM_BLOCK_NOT_SUPPORTED");
                 break;
             default:
@@ -193,7 +230,7 @@ public class NaoSimValidatorAndCollectorVisitor extends NaoValidatorAndCollector
     @Override
     public Void visitAnimation(Animation animation) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.ANIMATION);
-        if ( animation.move == Move.BLINK ) {
+        if ( Objects.equals(animation.move, "BLINK") ) {
             usedMethodBuilder.addUsedMethod(NaoSimMethods.SET_LED);
         }
         return super.visitAnimation(animation);

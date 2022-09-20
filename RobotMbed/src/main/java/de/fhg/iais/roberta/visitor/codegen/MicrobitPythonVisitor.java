@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -9,7 +10,6 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
-import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
@@ -153,7 +153,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     private void appendTextDisplayType(DisplayTextAction displayTextAction) {
-        if ( displayTextAction.mode == DisplayTextMode.TEXT ) {
+        if ( Objects.equals(displayTextAction.mode, "TEXT") ) {
             this.sb.append("scroll(");
         } else {
             this.sb.append("show(");
@@ -163,7 +163,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     @Override
     public Void visitDisplayImageAction(DisplayImageAction displayImageAction) {
         this.sb.append("microbit.display.show(");
-        displayImageAction.getValuesToDisplay().accept(this);
+        displayImageAction.valuesToDisplay.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -341,13 +341,13 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
         switch ( radioReceiveAction.type ) {
-            case NUMBER:
+            case "Number":
                 this.sb.append("((lambda x: 0 if x is None else float(x))(radio.receive()))");
                 break;
-            case BOOLEAN:
+            case "Boolean":
                 this.sb.append("('True' == radio.receive())");
                 break;
-            case STRING:
+            case "String":
                 this.sb.append("radio.receive()");
                 break;
             default:

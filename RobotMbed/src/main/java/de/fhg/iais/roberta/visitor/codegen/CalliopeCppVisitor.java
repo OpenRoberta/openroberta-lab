@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.commons.text.WordUtils;
@@ -16,7 +17,6 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
-import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
@@ -793,17 +793,17 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitDisplayImageAction(DisplayImageAction displayImageAction) {
         String end = ");";
-        if ( displayImageAction.displayImageMode.name().equals("ANIMATION") ) {
+        if ( displayImageAction.displayImageMode.equals("ANIMATION") ) {
             try {
-                Expr values = displayImageAction.getValuesToDisplay();
+                Expr values = displayImageAction.valuesToDisplay;
                 int valuesSize = ((ListCreate) values).exprList.get().size();
                 this.sb.append("std::array<MicroBitImage, " + valuesSize + "> _animation = _convertToArray<MicroBitImage, " + valuesSize + ">(");
-                displayImageAction.getValuesToDisplay().accept(this);
+                displayImageAction.valuesToDisplay.accept(this);
                 this.sb.append(");");
                 nlIndent();
             } catch ( Exception e ) {
                 this.sb.append("for (MicroBitImage& image : ");
-                displayImageAction.getValuesToDisplay().accept(this);
+                displayImageAction.valuesToDisplay.accept(this);
                 this.sb.append(") {");
                 this.sb.append("_uBit.display.print(image, 0, 0, 255, 200);");
                 this.sb.append("_uBit.display.clear();");
@@ -812,13 +812,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             }
         }
         this.sb.append("_uBit.display.");
-        if ( displayImageAction.displayImageMode.name().equals("ANIMATION") ) {
+        if ( displayImageAction.displayImageMode.equals("ANIMATION") ) {
             this.sb.append("animateImages(_animation, 200);");
             return null;
         } else {
             this.sb.append("print(");
         }
-        displayImageAction.getValuesToDisplay().accept(this);
+        displayImageAction.valuesToDisplay.accept(this);
         this.sb.append(end);
         return null;
     }
@@ -925,17 +925,17 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         this.sb.append("_uBit.radio.setTransmitPower(" + radioSendAction.power + ");");
         nlIndent();
         switch ( radioSendAction.type ) {
-            case NUMBER:
+            case "Number":
                 this.sb.append("_uBit.radio.datagram.send(ManagedString((int)(");
                 radioSendAction.message.accept(this);
                 this.sb.append("))");
                 break;
-            case BOOLEAN:
+            case "Boolean":
                 this.sb.append("_uBit.radio.datagram.send(ManagedString((int)(");
                 radioSendAction.message.accept(this);
                 this.sb.append(")?true:false)");
                 break;
-            case STRING:
+            case "String":
                 this.sb.append("_uBit.radio.datagram.send(ManagedString((");
                 radioSendAction.message.accept(this);
                 this.sb.append("))");
@@ -951,11 +951,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
         switch ( radioReceiveAction.type ) {
-            case BOOLEAN:
-            case NUMBER:
+            case "Boolean":
+            case "Number":
                 this.sb.append("atoi((char*)_uBit.radio.datagram.recv().getBytes())");
                 break;
-            case STRING:
+            case "String":
                 this.sb.append("ManagedString(_uBit.radio.datagram.recv())");
                 break;
             default:
@@ -1149,7 +1149,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     private void appendTextDisplayType(DisplayTextAction displayTextAction) {
-        if ( displayTextAction.mode == DisplayTextMode.TEXT ) {
+        if ( Objects.equals(displayTextAction.mode, "TEXT") ) {
             this.sb.append("scroll(");
         } else {
             this.sb.append("print(");
@@ -1355,7 +1355,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction) {
-        if ( switchLedMatrixAction.activated ) {
+        if ( switchLedMatrixAction.activated.equals("ON") ) {
             this.sb.append("_uBit.display.enable();");
         } else {
             this.sb.append("_uBit.display.disable();");

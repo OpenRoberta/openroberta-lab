@@ -1,6 +1,11 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.collect.ClassToInstanceMap;
+
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.UsedSensor;
@@ -8,9 +13,34 @@ import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.mode.action.nao.Camera;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.nao.*;
+import de.fhg.iais.roberta.syntax.action.nao.Animation;
+import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
+import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
+import de.fhg.iais.roberta.syntax.action.nao.ForgetFace;
+import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
+import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
+import de.fhg.iais.roberta.syntax.action.nao.Hand;
+import de.fhg.iais.roberta.syntax.action.nao.LearnFace;
+import de.fhg.iais.roberta.syntax.action.nao.LedOff;
+import de.fhg.iais.roberta.syntax.action.nao.LedReset;
+import de.fhg.iais.roberta.syntax.action.nao.MoveJoint;
+import de.fhg.iais.roberta.syntax.action.nao.PlayFile;
+import de.fhg.iais.roberta.syntax.action.nao.PointLookAt;
+import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
+import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
+import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
+import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
+import de.fhg.iais.roberta.syntax.action.nao.SetLeds;
+import de.fhg.iais.roberta.syntax.action.nao.SetMode;
+import de.fhg.iais.roberta.syntax.action.nao.SetStiffness;
+import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
+import de.fhg.iais.roberta.syntax.action.nao.Stop;
+import de.fhg.iais.roberta.syntax.action.nao.TakePicture;
+import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
+import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
+import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
+import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
@@ -23,18 +53,30 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
-import de.fhg.iais.roberta.syntax.lang.stmt.*;
-import de.fhg.iais.roberta.syntax.sensor.generic.*;
-import de.fhg.iais.roberta.syntax.sensor.nao.*;
+import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
+import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectFaceSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectMarkSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
+import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrentSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
+import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.INaoVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.List;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
@@ -132,15 +174,17 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     public Void visitSetMode(SetMode setMode) {
         this.sb.append("h.mode(");
         switch ( setMode.modus ) {
-            case ACTIVE:
+            case "OPEN":
                 this.sb.append("1)");
                 break;
-            case REST:
+            case "CLOSE":
                 this.sb.append("2)");
                 break;
-            case SIT:
+            case "SIT":
                 this.sb.append("3)");
                 break;
+            default:
+                throw new DbcException("Invalid SetMode DIRECTION: " + setMode.modus);
         }
         return null;
     }
@@ -149,33 +193,35 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     public Void visitApplyPosture(ApplyPosture applyPosture) {
         this.sb.append("h.applyPosture(");
         switch ( applyPosture.posture ) {
-            case STAND:
+            case "STAND":
                 this.sb.append("\"Stand\")");
                 break;
-            case STANDINIT:
+            case "STANDINIT":
                 this.sb.append("\"StandInit\")");
                 break;
-            case STANDZERO:
+            case "STANDZERO":
                 this.sb.append("\"StandZero\")");
                 break;
-            case SITRELAX:
+            case "SITRELAX":
                 this.sb.append("\"SitRelax\")");
                 break;
-            case SIT:
+            case "SIT":
                 this.sb.append("\"Sit\")");
                 break;
-            case LYINGBELLY:
+            case "LYINGBELLY":
                 this.sb.append("\"LyingBelly\")");
                 break;
-            case LYINGBACK:
+            case "LYINGBACK":
                 this.sb.append("\"LyingBack\")");
                 break;
-            case CROUCH:
+            case "CROUCH":
                 this.sb.append("\"Crouch\")");
                 break;
-            case REST:
+            case "REST":
                 this.sb.append("\"Rest\")");
                 break;
+            default:
+                throw new DbcException("Invalid ApplyPosture DIRECTION: " + applyPosture.posture);
         }
         return null;
     }
@@ -184,30 +230,32 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     public Void visitSetStiffness(SetStiffness setStiffness) {
         this.sb.append("h.stiffness(");
         switch ( setStiffness.bodyPart ) {
-            case BODY:
+            case "BODY":
                 this.sb.append("\"Body\"");
                 break;
-            case HEAD:
+            case "HEAD":
                 this.sb.append("\"Head\"");
                 break;
-            case ARMS:
+            case "ARMS":
                 this.sb.append("\"Arms\"");
                 break;
-            case LEFTARM:
+            case "LEFTARM":
                 this.sb.append("\"LArm\"");
                 break;
-            case RIGHTARM:
+            case "RIGHTARM":
                 this.sb.append("\"RArm\"");
                 break;
-            case LEGS:
+            case "LEGS":
                 this.sb.append("\"Legs\"");
                 break;
-            case LEFTLEG:
+            case "LEFTLEG":
                 this.sb.append("\"LLeg\"");
                 break;
-            case RIHTLEG:
+            case "RIHTLEG":
                 this.sb.append("\"RLeg\"");
                 break;
+            default:
+                throw new DbcException("Invalid SetStiffness PART: " + setStiffness.bodyPart);
         }
 
         switch ( setStiffness.onOff ) {
@@ -217,6 +265,8 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
             case OFF:
                 this.sb.append(", 2)");
                 break;
+            default:
+                throw new DbcException("Invalid SetStiffness MODE: " + setStiffness.onOff);
         }
         return null;
     }
@@ -237,20 +287,22 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
             case RIGHT:
                 this.sb.append("\"RHand\"");
                 break;
+            default:
+                throw new DbcException("Invalid Hand SIDE: " + hand.turnDirection);
         }
 
         switch ( hand.modus ) {
-            case ACTIVE:
+            case "OPEN":
                 this.sb.append(", 1)");
                 break;
-            case REST:
+            case "CLOSE":
                 this.sb.append(", 2)");
                 break;
-            case SIT:
+            case "SIT":
                 this.sb.append(", 3)");
                 break;
             default:
-                break;
+                throw new DbcException("Invalid Hand MODE: " + hand.modus);
         }
         return null;
     }
@@ -259,97 +311,99 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     public Void visitMoveJoint(MoveJoint moveJoint) {
         this.sb.append("h.moveJoint(");
         switch ( moveJoint.joint ) {
-            case HEADYAW:
+            case "HEADYAW":
                 this.sb.append("\"HeadYaw\"");
                 break;
-            case HEADPITCH:
+            case "HEADPITCH":
                 this.sb.append("\"HeadPitch\"");
                 break;
-            case LSHOULDERPITCH:
+            case "LSHOULDERPITCH":
                 this.sb.append("\"LShoulderPitch\"");
                 break;
-            case LSHOULDERROLL:
+            case "LSHOULDERROLL":
                 this.sb.append("\"LShoulderRoll\"");
                 break;
-            case LELBOWYAW:
+            case "LELBOWYAW":
                 this.sb.append("\"LElbowYaw\"");
                 break;
-            case LELBOWROLL:
+            case "LELBOWROLL":
                 this.sb.append("\"LElbowRoll\"");
                 break;
-            case LWRISTYAW:
+            case "LWRISTYAW":
                 this.sb.append("\"LWristYaw\"");
                 break;
-            case LHAND:
+            case "LHAND":
                 this.sb.append("\"LHand\"");
                 break;
-            case LHIPYAWPITCH:
+            case "LHIPYAWPITCH":
                 this.sb.append("\"LHipYawPitch\"");
                 break;
-            case LHIPROLL:
+            case "LHIPROLL":
                 this.sb.append("\"LHipRoll\"");
                 break;
-            case LHIPPITCH:
+            case "LHIPPITCH":
                 this.sb.append("\"LHipPitch\"");
                 break;
-            case LKNEEPITCH:
+            case "LKNEEPITCH":
                 this.sb.append("\"LKneePitch\"");
                 break;
-            case LANKLEPITCH:
+            case "LANKLEPITCH":
                 this.sb.append("\"LAnklePitch\"");
                 break;
-            case RANKLEROLL:
+            case "RANKLEROLL":
                 this.sb.append("\"RAnkleRoll\"");
                 break;
-            case RHIPYAWPITCH:
+            case "RHIPYAWPITCH":
                 this.sb.append("\"RHipYawPitch\"");
                 break;
-            case RHIPROLL:
+            case "RHIPROLL":
                 this.sb.append("\"RHipRoll\"");
                 break;
-            case RHIPPITCH:
+            case "RHIPPITCH":
                 this.sb.append("\"RHipPitch\"");
                 break;
-            case RKNEEPITCH:
+            case "RKNEEPITCH":
                 this.sb.append("\"RKneePitch\"");
                 break;
-            case RANKLEPITCH:
+            case "RANKLEPITCH":
                 this.sb.append("\"RAnklePitch\"");
                 break;
-            case RSHOULDERPITCH:
+            case "RSHOULDERPITCH":
                 this.sb.append("\"RShoulderPitch\"");
                 break;
-            case RSHOULDERROLL:
+            case "RSHOULDERROLL":
                 this.sb.append("\"RShoulderRoll\"");
                 break;
-            case RELBOWYAW:
+            case "RELBOWYAW":
                 this.sb.append("\"RElbowYaw\"");
                 break;
-            case RELBOWROLL:
+            case "RELBOWROLL":
                 this.sb.append("\"RElbowRoll\"");
                 break;
-            case RWRISTYAW:
+            case "RWRISTYAW":
                 this.sb.append("\"RWristYaw\"");
                 break;
-            case RHAND:
+            case "RHAND":
                 this.sb.append("\"RHand\"");
                 break;
-            case LANKLEROLL:
+            case "LANKLEROLL":
                 this.sb.append("\"LAnkleRoll\"");
                 break;
             default:
-                break;
+                throw new DbcException("Invalid MoveJoint JOINT: " + moveJoint.joint);
         }
         this.sb.append(", ");
         moveJoint.degrees.accept(this);
         this.sb.append(", ");
         switch ( moveJoint.relativeAbsolute ) {
-            case ABSOLUTE:
+            case "ABSOLUTE":
                 this.sb.append("1)");
                 break;
-            case RELATIVE:
+            case "RELATIVE":
                 this.sb.append("2)");
                 break;
+            default:
+                throw new DbcException("Invalid MoveJoint MODE: " + moveJoint.relativeAbsolute);
         }
         return null;
     }
@@ -399,26 +453,37 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitAnimation(Animation animation) {
         switch ( animation.move ) {
-            case TAICHI:
+            case "TAICHI":
                 this.sb.append("h.taiChi()");
                 break;
-            case BLINK:
+            case "BLINK":
                 this.sb.append("h.blink()");
                 break;
-            case WAVE:
+            case "WAVE":
                 this.sb.append("h.wave()");
                 break;
-            case WIPEFOREHEAD:
+            case "WIPEFOREHEAD":
                 this.sb.append("h.wipeForehead()");
                 break;
+            default:
+                throw new DbcException("Invalid Animation MOVE: " + animation.move);
         }
         return null;
     }
 
     @Override
     public Void visitPointLookAt(PointLookAt pointLookAt) {
-        this.sb.append("h.pointLookAt(" + getEnumCode(pointLookAt.pointLook));
-        this.sb.append(", " + pointLookAt.frame.getValues()[0] + ", ");
+        switch ( pointLookAt.pointLook ) {
+            case "0":
+                this.sb.append("h.pointLookAt('point'");
+                break;
+            case "1":
+                this.sb.append("h.pointLookAt('look'");
+                break;
+            default:
+                throw new DbcException("Invalid PointLookAt MODE: " + pointLookAt.pointLook);
+        }
+        this.sb.append(", " + pointLookAt.frame + ", ");
 
         pointLookAt.pointX.accept(this);
         this.sb.append(", ");
@@ -552,39 +617,41 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     public Void visitSetLeds(SetLeds setLeds) {
         this.sb.append("h.setLeds(");
         switch ( setLeds.led ) {
-            case ALL:
+            case "ALL":
                 this.sb.append("\"AllLeds\", ");
                 break;
-            case CHEST:
+            case "CHEST":
                 this.sb.append("\"ChestLeds\", ");
                 break;
-            case EARS:
+            case "EARS":
                 this.sb.append("\"EarLeds\", ");
                 break;
-            case EYES:
+            case "EYES":
                 this.sb.append("\"FaceLeds\", ");
                 break;
-            case HEAD:
+            case "HEAD":
                 this.sb.append("\"BrainLeds\", ");
                 break;
-            case LEFTEAR:
+            case "LEFTEAR":
                 this.sb.append("\"LeftEarLeds\", ");
                 break;
-            case LEFTEYE:
+            case "LEFTEYE":
                 this.sb.append("\"LeftFaceLeds\", ");
                 break;
-            case LEFTFOOT:
+            case "LEFTFOOT":
                 this.sb.append("\"LeftFootLeds\", ");
                 break;
-            case RIGHTEAR:
+            case "RIGHTEAR":
                 this.sb.append("\"RightEarLeds\", ");
                 break;
-            case RIGHTEYE:
+            case "RIGHTEYE":
                 this.sb.append("\"RightFaceLeds\", ");
                 break;
-            case RIGHTFOOT:
+            case "RIGHTFOOT":
                 this.sb.append("\"RightFootLeds\", ");
                 break;
+            default:
+                throw new DbcException("Invalid SetLeds LED: " + setLeds.led);
         }
         setLeds.Color.accept(this);
         this.sb.append(", 0.1)");
@@ -595,39 +662,41 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     public Void visitSetIntensity(SetIntensity setIntensity) {
         this.sb.append("h.setIntensity(");
         switch ( setIntensity.led ) {
-            case ALL:
+            case "ALL":
                 this.sb.append("\"AllLeds\", ");
                 break;
-            case CHEST:
+            case "CHEST":
                 this.sb.append("\"ChestLeds\", ");
                 break;
-            case EARS:
+            case "EARS":
                 this.sb.append("\"EarLeds\", ");
                 break;
-            case EYES:
+            case "EYES":
                 this.sb.append("\"FaceLeds\", ");
                 break;
-            case HEAD:
+            case "HEAD":
                 this.sb.append("\"BrainLeds\", ");
                 break;
-            case LEFTEAR:
+            case "LEFTEAR":
                 this.sb.append("\"LeftEarLeds\", ");
                 break;
-            case LEFTEYE:
+            case "LEFTEYE":
                 this.sb.append("\"LeftFaceLeds\", ");
                 break;
-            case LEFTFOOT:
+            case "LEFTFOOT":
                 this.sb.append("\"LeftFootLeds\", ");
                 break;
-            case RIGHTEAR:
+            case "RIGHTEAR":
                 this.sb.append("\"RightEarLeds\", ");
                 break;
-            case RIGHTEYE:
+            case "RIGHTEYE":
                 this.sb.append("\"RightFaceLeds\", ");
                 break;
-            case RIGHTFOOT:
+            case "RIGHTFOOT":
                 this.sb.append("\"RightFootLeds\", ");
                 break;
+            default:
+                throw new DbcException("Invalid SetIntensity LED: " + setIntensity.led);
         }
         setIntensity.Intensity.accept(this);
         this.sb.append(")");
@@ -644,39 +713,41 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     public Void visitLedOff(LedOff ledOff) {
         this.sb.append("h.ledOff(");
         switch ( ledOff.led ) {
-            case ALL:
+            case "ALL":
                 this.sb.append("\"AllLeds\"");
                 break;
-            case CHEST:
+            case "CHEST":
                 this.sb.append("\"ChestLeds\"");
                 break;
-            case EARS:
+            case "EARS":
                 this.sb.append("\"EarLeds\"");
                 break;
-            case EYES:
+            case "EYES":
                 this.sb.append("\"FaceLeds\"");
                 break;
-            case HEAD:
+            case "HEAD":
                 this.sb.append("\"BrainLeds\"");
                 break;
-            case LEFTEAR:
+            case "LEFTEAR":
                 this.sb.append("\"LeftEarLeds\"");
                 break;
-            case LEFTEYE:
+            case "LEFTEYE":
                 this.sb.append("\"LeftFaceLeds\"");
                 break;
-            case LEFTFOOT:
+            case "LEFTFOOT":
                 this.sb.append("\"LeftFootLeds\"");
                 break;
-            case RIGHTEAR:
+            case "RIGHTEAR":
                 this.sb.append("\"RightEarLeds\"");
                 break;
-            case RIGHTEYE:
+            case "RIGHTEYE":
                 this.sb.append("\"RightFaceLeds\"");
                 break;
-            case RIGHTFOOT:
+            case "RIGHTFOOT":
                 this.sb.append("\"RightFootLeds\"");
                 break;
+            default:
+                throw new DbcException("Invalid LedOff LED: " + ledOff.led);
         }
         this.sb.append(")");
         return null;
@@ -686,39 +757,41 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     public Void visitLedReset(LedReset ledReset) {
         this.sb.append("h.ledReset(");
         switch ( ledReset.led ) {
-            case ALL:
+            case "ALL":
                 this.sb.append("\"AllLeds\"");
                 break;
-            case CHEST:
+            case "CHEST":
                 this.sb.append("\"ChestLeds\"");
                 break;
-            case EARS:
+            case "EARS":
                 this.sb.append("\"EarLeds\"");
                 break;
-            case EYES:
+            case "EYES":
                 this.sb.append("\"FaceLeds\"");
                 break;
-            case HEAD:
+            case "HEAD":
                 this.sb.append("\"BrainLeds\"");
                 break;
-            case LEFTEAR:
+            case "LEFTEAR":
                 this.sb.append("\"LeftEarLeds\"");
                 break;
-            case LEFTEYE:
+            case "LEFTEYE":
                 this.sb.append("\"LeftFaceLeds\"");
                 break;
-            case LEFTFOOT:
+            case "LEFTFOOT":
                 this.sb.append("\"LeftFootLeds\"");
                 break;
-            case RIGHTEAR:
+            case "RIGHTEAR":
                 this.sb.append("\"RightEarLeds\"");
                 break;
-            case RIGHTEYE:
+            case "RIGHTEYE":
                 this.sb.append("\"RightFaceLeds\"");
                 break;
-            case RIGHTFOOT:
+            case "RIGHTFOOT":
                 this.sb.append("\"RightFootLeds\"");
                 break;
+            default:
+                throw new DbcException("Invalid LedReset LED:" + ledReset.led);
         }
         this.sb.append(")");
         return null;
@@ -793,10 +866,15 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitTakePicture(TakePicture takePicture) {
         this.sb.append("h.takePicture(");
-        if ( takePicture.camera == Camera.TOP ) {
-            this.sb.append("\"Top\", ");
-        } else if ( takePicture.camera == Camera.BOTTOM ) {
-            this.sb.append("\"Bottom\", ");
+        switch ( takePicture.camera ) {
+            case "0":
+                this.sb.append("\"Top\", ");
+                break;
+            case "1":
+                this.sb.append("\"Bottom\", ");
+                break;
+            default:
+                throw new DbcException("Invalid TakePicture MODE: " + takePicture.camera);
         }
         takePicture.pictureName.accept(this);
         this.sb.append(")");
@@ -805,25 +883,16 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
 
     @Override
     public Void visitRecordVideo(RecordVideo recordVideo) {
-        this.sb.append("h.recordVideo(");
-        switch ( recordVideo.resolution ) {
-            case LOW:
-                this.sb.append("0, ");
-                break;
-            case MED:
-                this.sb.append("1, ");
-                break;
-            case HIGH:
-                this.sb.append("2, ");
-                break;
-        }
+        this.sb.append("h.recordVideo(").append(recordVideo.resolution).append(", ");
         switch ( recordVideo.camera ) {
-            case TOP:
+            case "0":
                 this.sb.append("\"Top\", ");
                 break;
-            case BOTTOM:
+            case "1":
                 this.sb.append("\"Bottom\", ");
                 break;
+            default:
+                throw new DbcException("Invalid RecordVideo CAMERA: " + recordVideo.camera);
         }
         recordVideo.duration.accept(this);
         this.sb.append(", ");

@@ -465,7 +465,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitRelayAction() {
         configurationComponents.add(new ConfigurationComponent(SC.RELAY, true, "P1", "P1", new HashMap<>()));
 
-        RelayAction relayAction = new RelayAction("P1", RelayMode.DEFAULT, bp);
+        RelayAction relayAction = new RelayAction(bp, "P1", RelayMode.DEFAULT);
         phrases.add(relayAction);
 
         executeWorkflow();
@@ -474,7 +474,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitRelayAction_noPort() {
-        RelayAction relayAction = new RelayAction("P1", RelayMode.DEFAULT, bp);
+        RelayAction relayAction = new RelayAction(bp, "P1", RelayMode.DEFAULT);
         phrases.add(relayAction);
 
         executeWorkflow();

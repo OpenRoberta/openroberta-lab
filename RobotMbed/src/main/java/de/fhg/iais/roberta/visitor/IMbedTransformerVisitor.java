@@ -45,12 +45,12 @@ public interface IMbedTransformerVisitor extends ITransformerVisitor, IMbedVisit
 
     @Override
     default Phrase visitDisplayImageAction(DisplayImageAction displayImageAction) {
-        return new DisplayImageAction(displayImageAction.getProperty(), displayImageAction.displayImageMode, (Expr) displayImageAction.getValuesToDisplay().modify(this));
+        return new DisplayImageAction(displayImageAction.getProperty(), displayImageAction.mutation, displayImageAction.displayImageMode, (Expr) displayImageAction.valuesToDisplay.modify(this));
     }
 
     @Override
     default Phrase visitImageShiftFunction(ImageShiftFunction imageShiftFunction) {
-        return new ImageShiftFunction((Expr) imageShiftFunction.image.modify(this), (Expr) imageShiftFunction.positions.modify(this), imageShiftFunction.shiftDirection, imageShiftFunction.getProperty());
+        return new ImageShiftFunction(imageShiftFunction.getProperty(), imageShiftFunction.shiftDirection, (Expr) imageShiftFunction.image.modify(this), (Expr) imageShiftFunction.positions.modify(this));
     }
 
     @Override
@@ -70,12 +70,12 @@ public interface IMbedTransformerVisitor extends ITransformerVisitor, IMbedVisit
 
     @Override
     default Phrase visitRadioSendAction(RadioSendAction radioSendAction) {
-        return new RadioSendAction(radioSendAction.getProperty(), (Expr) radioSendAction.message.modify(this), radioSendAction.type, radioSendAction.power);
+        return new RadioSendAction(radioSendAction.getProperty(), radioSendAction.mutation, radioSendAction.type, radioSendAction.power, (Expr) radioSendAction.message.modify(this));
     }
 
     @Override
     default Phrase visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
-        return new RadioReceiveAction(radioReceiveAction.getProperty(), radioReceiveAction.type);
+        return new RadioReceiveAction(radioReceiveAction.getProperty(), radioReceiveAction.mutation, radioReceiveAction.type);
     }
 
     @Override
@@ -130,7 +130,7 @@ public interface IMbedTransformerVisitor extends ITransformerVisitor, IMbedVisit
 
     @Override
     default Phrase visitRadioRssiSensor(RadioRssiSensor radioRssiSensor) {
-        return RadioRssiSensor.make(radioRssiSensor.getSensorMetaDataBean(), radioRssiSensor.getProperty());
+        return new RadioRssiSensor(radioRssiSensor.getProperty(), radioRssiSensor.getSensorMetaDataBean());
     }
 
     @Override

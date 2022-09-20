@@ -16,7 +16,7 @@ MotorStop [port=M, mode=FLOAT]
 MotorStop [port=M3, mode=FLOAT]
 ServoSetAction[port: S, value: NumConst[value: 90]]
 ServoSetAction[port: S5, value: NumConst[value: 45]]
-SingleMotorStopAction []
+BothMotorsStopAction[]
 
 Var [line] := SensorExpr [InfraredSensor [I, LINE, - EMPTY_SLOT -]]
 

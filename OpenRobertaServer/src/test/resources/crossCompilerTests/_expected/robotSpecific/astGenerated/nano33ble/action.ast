@@ -8,6 +8,6 @@ AktionStmt [ShowTextAction[msg: StringConst[value: Hallo], x: NumConst[value: 0]
 AktionStmt [ClearDisplayAction[port: O]]
 AktionStmt [PinWriteValueAction [ANALOG, Aa, NumConst[value: 1]]]
 AktionStmt [PinWriteValueAction [DIGITAL, Ad, NumConst[value: 1]]]
-AktionStmt [RelayAction [rel, OFF]]
+AktionStmt [RelayAction[port: rel, mode: OFF]]
 AktionStmt [SerialWriteAction[value: StringConst[value: Hallo]]]
 )

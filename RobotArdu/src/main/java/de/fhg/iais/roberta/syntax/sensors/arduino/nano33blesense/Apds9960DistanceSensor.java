@@ -7,8 +7,9 @@ import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
-@NepoExpr(name = "APDS9960_DISTANCE", category = "SENSOR", blocklyNames = {"robsensors_apds9960_distance_getDataAvailableSample"})
+@NepoExpr(name = "APDS9960_DISTANCE", category = "SENSOR", blocklyNames = {"robsensors_apds9960_distance_getDataAvailableSample"}, blocklyType = BlocklyType.BOOLEAN)
 public final class Apds9960DistanceSensor extends InternalSensor {
+
     @NepoValue(name = "VARIABLE_VALUE", type = BlocklyType.NUMBER)
     public final Expr distance;
 
@@ -17,5 +18,4 @@ public final class Apds9960DistanceSensor extends InternalSensor {
         this.distance = distance;
         setReadOnly();
     }
-
 }
