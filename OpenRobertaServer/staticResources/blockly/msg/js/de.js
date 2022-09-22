@@ -1096,7 +1096,7 @@ Blockly.Msg.ORA_ACCESS_RIGHT_DELETED = "Das Programm wird nun nicht mehr mit »$
 Blockly.Msg.ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE = "Du kannst Programme nur teilen oder in die Gallerie hochladen, wenn dein Benutzerkonto verifiziert wurde.<br><a href='https://www.roberta-home.de/index.php?id=138' target='_blank'>Mehr Infos ...</a>";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND = "Der Server konnte die Roboterkonfiguration nicht finden.";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED = "Die Roboterkonfiguration konnte nicht in die entsprechende Programmiersprache übertragen werden.";
-Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED = "Das Programm kann nicht auf dem Roboter oder in der Simulation ausgeführt werden. Das Program kann nicht übersetzt werden. Die Fehlermeldung ist: <span style='background-color:#ddd;font-family:courier;'>{MESSAGE}</span>";
+Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED = "Das Programm kann nicht auf dem Roboter oder in der Simulation ausgeführt werden. Das Program kann nicht übersetzt werden. Die Fehlermeldung ist: <br><span style='background-color:#ddd;font-family:courier;'>{MESSAGE}</span>";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED = "Das Programm konnte nicht generiert werden.";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED_WITH_PARAMETERS = "Das Programm konnte nicht generiert werden. Es gibt Fehler in den block {BLOCK} mit dem pin {PIN}";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_NOT_FOUND = "Das Programm »$« konnte in der Datenbank nicht gefunden werden.";

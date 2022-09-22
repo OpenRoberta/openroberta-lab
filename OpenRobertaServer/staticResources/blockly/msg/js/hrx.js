@@ -1096,7 +1096,7 @@ Blockly.Msg.ORA_ACCESS_RIGHT_DELETED = "The shared right for user »$« is delet
 Blockly.Msg.ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE = "Your are not allowed to share. Please activate your account! <br><a href='https://www.roberta-home.de/index.php?id=138&L=1' target='_blank'>Further information ...</a>";  // untranslated
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND = "The robot configuration could not be found on the server.";  // untranslated
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED = "The robot configuration could not be transformed into the robots programming language.";  // untranslated
-Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED = "Your program has errors so it cannot be compiled. The compiler messages are: <span style='background-color:#ddd;font-family:courier;'>{MESSAGE}</span>";  // untranslated
+Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED = "Your program has errors so it cannot be compiled. The compiler messages are: <br><span style='background-color:#ddd;font-family:courier;'>{MESSAGE}</span>";  // untranslated
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED = "The program could not be generated.";  // untranslated
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED_WITH_PARAMETERS = "The program could not be generated. Pin {PIN} is incorrect in block {BLOCK}";  // untranslated
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_NOT_FOUND = "The program »$« could not be found in the database.";  // untranslated

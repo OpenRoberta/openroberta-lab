@@ -492,7 +492,6 @@ public class Util {
             p.destroy();
             if ( ecode != 0 ) {
                 Util.logCrosscompilerError(LOG, crosscompilerResponse, crosscompilerSourceForDebuggingOnly, isNativeEditorCode);
-                crosscompilerResponse = ""; // already logged above
             }
             return Pair.of(ecode == 0, crosscompilerResponse);
         } catch ( Exception e ) {

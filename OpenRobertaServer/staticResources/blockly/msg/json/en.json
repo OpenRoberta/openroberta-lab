@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2022-09-22 12:51:10.072832",
+		"lastupdated": "2022-09-22 22:58:03.257930",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -839,7 +839,7 @@
 	"ORA_COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED": "The program could not be transformed into the robots programming language.",
 	"ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED": "The robot configuration could not be transformed into the robots programming language.",
 	"ORA_COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED": "The program could not be saved because of an internal error.",
-	"ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED": "Your program has errors so it cannot be compiled. The compiler messages are: <span style='background-color:#ddd;font-family:courier;'>{MESSAGE}</span>",
+	"ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED": "Your program has errors so it cannot be compiled. The compiler messages are: <br><span style='background-color:#ddd;font-family:courier;'>{MESSAGE}</span>",
 	"ORA_COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED": "The program could not be generated.",
 	"ORA_COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED_WITH_PARAMETERS": "The program could not be generated. Pin {PIN} is incorrect in block {BLOCK}",
 	"ORA_COMPILERWORKFLOW_SUCCESS": "The program build succeeded",
