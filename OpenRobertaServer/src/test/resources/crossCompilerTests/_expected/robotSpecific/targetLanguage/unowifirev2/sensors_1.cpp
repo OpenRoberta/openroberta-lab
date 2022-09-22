@@ -37,6 +37,28 @@ int _TMP36_T2 = A1;
 int _input_S2 = A0;
 int _S_T3 = A4;
 unsigned long __time_1 = millis();
+
+bool _getIRPresence(IRrecv &irrecv) {
+    decode_results results;
+    if (irrecv.decode(&results)) {
+        irrecv.resume();
+        return true;
+    } else {
+        return false;
+    }
+}
+
+long int  _getIRValue(IRrecv &irrecv) {
+    decode_results results;
+    if (irrecv.decode(&results)) {
+        long int tmpValue = results.value;
+        irrecv.resume();
+        return tmpValue;
+    } else {
+        return 0;
+    }
+}
+
 double _getUltrasonicDistance(int trigger, int echo)
 {
     digitalWrite(trigger, LOW);
@@ -57,20 +79,20 @@ void ____sensors() {
     Serial.println(digitalRead(_taster_T));
     Serial.println(digitalRead(_output_B));
     Serial.println(analogRead(_output_L2)/10.24);
-    
+    Serial.println(_getIRValue(_irrecv_I));
     Serial.println(_dht_L3.readHumidity());
     Serial.println(analogRead(_S_T3)/10.24);
     Serial.println(analogRead(_SensorPin_P));
     Serial.println(((double)analogRead(_output_P2))*5/1024);
     Serial.println(_getUltrasonicDistance(_trigger_U, _echo_U));
+    Serial.println(_imu_G.readFloatGyroX());
+    Serial.println(_imu_G.readFloatGyroX());
+    Serial.println(_imu_G.readFloatGyroX());
+    Serial.println(_imu_A.readFloatAccelX());
+    Serial.println(_imu_A.readFloatAccelX());
+    Serial.println(_imu_A.readFloatAccelX());
+    Serial.println(map(analogRead(_TMP36_T2), 0, 410, -50, 150));
     
-    
-    Serial.println(_imu_G.readFloatGyroX());
-    Serial.println(_imu_G.readFloatGyroX());
-    Serial.println(_imu_G.readFloatGyroX());
-    Serial.println(_imu_A.readFloatAccelX());
-    Serial.println(_imu_A.readFloatAccelX());
-    Serial.println(_imu_A.readFloatAccelX());
 }
 
 void ____sensorsWaitUntil() {
@@ -128,8 +150,18 @@ void ____sensorsWaitUntil() {
         }
         delay(1);
     }
-    
-    
+    while (true) {
+        if ( _getIRValue(_irrecv_I) < 30 ) {
+            break;
+        }
+        delay(1);
+    }
+    while (true) {
+        if ( _getIRPresence(_irrecv_I) == true ) {
+            break;
+        }
+        delay(1);
+    }
     while (true) {
         if ( _dht_L3.readHumidity() < 30 ) {
             break;
@@ -194,6 +226,12 @@ void ____sensorsWaitUntil() {
     }
     while (true) {
         if ( _imu_A.readFloatAccelZ() < 30 ) {
+            break;
+        }
+        delay(1);
+    }
+    while (true) {
+        if ( map(analogRead(_TMP36_T2), 0, 410, -50, 150) < 20 ) {
             break;
         }
         delay(1);

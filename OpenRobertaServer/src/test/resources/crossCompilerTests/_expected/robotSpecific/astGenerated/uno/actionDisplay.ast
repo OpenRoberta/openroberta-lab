@@ -1,0 +1,5 @@
+
+(repeat [FOREVER_ARDU, BoolConst[value: true]]
+AktionStmt [ShowTextAction[msg: Var [s], x: NumConst[value: 0], y: NumConst[value: 0], port: lcd1602]]
+AktionStmt [ClearDisplayAction[port: lcd1602]]
+)

@@ -6,63 +6,21 @@
 #include <LiquidCrystal/src/LiquidCrystal.h>
 #include <NEPODefs.h>
 
-void ____action();
-void ____display();
-void ____lights();
-void ____move();
-void ____sounds();
-void ____pin();
 
 double ___numberVar;
-bool ___booleanVar;
 String ___stringVar;
-unsigned int ___colourVar;
-std::list<double> ___numberList;
-std::list<bool> ___booleanList;
-std::list<String> ___stringList;
-std::list<unsigned int> ___colourList;
 LiquidCrystal _lcd_L2(0, 1, 2, 3, 4, 5);
-
-void ____action() {
-    ____move();
-    ____display();
-    ____sounds();
-    ____lights();
-}
-
-void ____display() {
-    _lcd_L2.setCursor(___numberVar,___numberVar);
-    _lcd_L2.print(___stringVar);
-    
-    _lcd_L2.clear();
-}
-
-void ____lights() {
-}
-
-void ____move() {
-}
-
-void ____sounds() {
-}
-
-void ____pin() {
-}
-
 void setup()
 {
     _lcd_L2.begin(16, 2);
     ___numberVar = 0;
-    ___booleanVar = true;
-    ___stringVar = "";
-    ___colourVar = RGB(0xFF, 0xFF, 0xFF);
-    ___numberList = {0, 0};
-    ___booleanList = {true, true};
-    ___stringList = {"", ""};
-    ___colourList = {RGB(0xFF, 0xFF, 0xFF), RGB(0xFF, 0xFF, 0xFF)};
+    ___stringVar = "M\u00FCnchen";
 }
 
 void loop()
 {
-    ____action();
+    _lcd_L2.setCursor(___numberVar,___numberVar);
+    _lcd_L2.print(___stringVar);
+    
+    _lcd_L2.clear();
 }

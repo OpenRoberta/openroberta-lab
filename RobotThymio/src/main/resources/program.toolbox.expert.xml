@@ -349,7 +349,7 @@
                 </value>
             </block>
             <block type='robActions_led_proxv'>
-                <value name='LED1'>
+                <value name="LED1">
                     <block type='math_integer'>
                         <field name='NUM'>0</field>
                     </block>

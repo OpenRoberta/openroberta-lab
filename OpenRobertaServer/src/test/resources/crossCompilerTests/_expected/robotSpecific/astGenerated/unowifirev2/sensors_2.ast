@@ -1,3 +1,6 @@
 
-(repeat [FOREVER_ARDU, BoolConst[value: true]]MethodStmt [MethodCall [sensors, , , VOID]]MethodStmt [MethodCall [sensorsWaitUntil, , , VOID]]
+(repeat [FOREVER_ARDU, BoolConst[value: true]]
+AktionStmt [SerialWriteAction[value: SensorExpr [MoistureSensor [M, VALUE, - EMPTY_SLOT -]]]]WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [MoistureSensor [M, VALUE, - EMPTY_SLOT -]]], NumConst[value: 30]]]
+)]
 )

@@ -9,6 +9,9 @@ var _C[1]            # helper variable to store results from the right side of a
 var _state = 0       # current state of the program flow
 var _time            # current elapsed time
 var _timer = 0       # overall elapsed time from timer 1
+
+var ___x = 0
+
 timer.period[0] = 10 # ms time between state executions
 
 onevent timer0
@@ -17,7 +20,7 @@ onevent timer0
         _timer = 0
         _state = 1
     elseif _state == 1 then
-        _A = button.right
+        _A = button.forward
         _B[0] = _A
         _A = 1
         _C[0] = _A
@@ -29,7 +32,7 @@ onevent timer0
         if _A == 1 then
             _state = 2
         else
-            _A = (1500 - prox.ground.reflected[1]) / 1000
+            _A = (1500 - prox.ground.reflected[0]) / 1000
             _B[0] = _A
             _A = 1
             _C[0] = _A
@@ -41,7 +44,7 @@ onevent timer0
             if _A == 1 then
                 _state = 3
             else
-                _A = prox.ground.reflected[1] / 45
+                _A = prox.ground.reflected[0] / 45
                 _B[0] = _A
                 _A = 50
                 _C[0] = _A
@@ -53,7 +56,7 @@ onevent timer0
                 if _A == 1 then
                     _state = 4
                 else
-                    _A = prox.ground.ambiant[1] / 2
+                    _A = prox.ground.ambiant[0] / 2
                     _B[0] = _A
                     _A = 30
                     _C[0] = _A
@@ -65,7 +68,7 @@ onevent timer0
                     if _A == 1 then
                         _state = 5
                     else
-                        _A = (100 - prox.horizontal[1] / 45)
+                        _A = (100 - prox.horizontal[0] / 45)
                         _B[0] = _A
                         _A = 50
                         _C[0] = _A
@@ -77,11 +80,11 @@ onevent timer0
                         if _A == 1 then
                             _state = 6
                         else
-                            _A = (29 + acc[1]) / 32
+                            _A = mic.intensity * 100 / 255
                             _B[0] = _A
-                            _A = 1
+                            _A = 50
                             _C[0] = _A
-                            if _B[0] == _C[0] then
+                            if _B[0] > _C[0] then
                                 _A = 1
                             else
                                 _A = 0
@@ -89,9 +92,9 @@ onevent timer0
                             if _A == 1 then
                                 _state = 7
                             else
-                                _A = mic.intensity * 100 / 255
+                                _A = _timer
                                 _B[0] = _A
-                                _A = 50
+                                _A = 500
                                 _C[0] = _A
                                 if _B[0] > _C[0] then
                                     _A = 1
@@ -101,11 +104,11 @@ onevent timer0
                                 if _A == 1 then
                                     _state = 8
                                 else
-                                    _A = _timer
+                                    _A = acc[0]
                                     _B[0] = _A
-                                    _A = 500
+                                    _A = 30
                                     _C[0] = _A
-                                    if _B[0] > _C[0] then
+                                    if _B[0] < _C[0] then
                                         _A = 1
                                     else
                                         _A = 0
@@ -113,9 +116,9 @@ onevent timer0
                                     if _A == 1 then
                                         _state = 9
                                     else
-                                        _A = acc[0]
+                                        _A = temperature / 10
                                         _B[0] = _A
-                                        _A = 30
+                                        _A = 20
                                         _C[0] = _A
                                         if _B[0] < _C[0] then
                                             _A = 1
@@ -125,11 +128,11 @@ onevent timer0
                                         if _A == 1 then
                                             _state = 10
                                         else
-                                            _A = temperature / 10
+                                            _A = 0
                                             _B[0] = _A
-                                            _A = 20
+                                            _A = 1
                                             _C[0] = _A
-                                            if _B[0] < _C[0] then
+                                            if _B[0] == 1 or _C[0] == 1 then
                                                 _A = 1
                                             else
                                                 _A = 0
@@ -137,30 +140,17 @@ onevent timer0
                                             if _A == 1 then
                                                 _state = 11
                                             else
-                                                _A = 0
+                                                _A = (29 + acc[1]) / 32
                                                 _B[0] = _A
                                                 _A = 1
                                                 _C[0] = _A
-                                                if _B[0] == 1 and _C[0] == 1 then
+                                                if _B[0] == _C[0] then
                                                     _A = 1
                                                 else
                                                     _A = 0
                                                 end
                                                 if _A == 1 then
                                                     _state = 12
-                                                else
-                                                    _A = button.forward
-                                                    _B[0] = _A
-                                                    _A = 1
-                                                    _C[0] = _A
-                                                    if _B[0] == _C[0] then
-                                                        _A = 1
-                                                    else
-                                                        _A = 0
-                                                    end
-                                                    if _A == 1 then
-                                                        _state = 13
-                                                    end
                                                 end
                                             end
                                         end
@@ -173,33 +163,41 @@ onevent timer0
             end
         end
     elseif _state == 2 then
-        _state = 14
+        button.right___x = _A
+        _state = 13
     elseif _state == 3 then
-        _state = 14
+        (1500 - prox.ground.reflected[1]) / 1000___x = _A
+        _state = 13
     elseif _state == 4 then
-        _state = 14
+        prox.ground.reflected[1] / 45___x = _A
+        _state = 13
     elseif _state == 5 then
-        _state = 14
+        prox.ground.ambiant[1] / 2___x = _A
+        _state = 13
     elseif _state == 6 then
-        _state = 14
+        (100 - prox.horizontal[1] / 45)___x = _A
+        _state = 13
     elseif _state == 7 then
-        _state = 14
+        mic.intensity * 100 / 255___x = _A
+        _state = 13
     elseif _state == 8 then
-        _state = 14
+        _timer___x = _A
+        _state = 13
     elseif _state == 9 then
-        _state = 14
+        acc[0]___x = _A
+        _state = 13
     elseif _state == 10 then
-        _state = 14
+        temperature / 10___x = _A
+        _state = 13
     elseif _state == 11 then
-        _state = 14
-    elseif _state == 12 then
-        _state = 14
-    elseif _state == 13 then
-        _state = 14
-    elseif _state == 14 then
         _A = 1
         call sound.record(_A)
         call sound.record(-1)
+        _state = 13
+    elseif _state == 12 then
+        (29 + acc[1]) / 32___x = _A
+        _state = 13
+    elseif _state == 13 then
         callsub thymio_close
     end
 

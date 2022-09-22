@@ -305,7 +305,7 @@ public class ReuseIntegrationAsUnitTest {
         checkAndShowTestResult();
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void testOneRobotSpecificProgramAsUnitTests() throws Exception {
         String robotName = "mbot2";

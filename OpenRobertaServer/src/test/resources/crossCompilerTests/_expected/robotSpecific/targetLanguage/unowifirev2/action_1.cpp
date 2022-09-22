@@ -5,14 +5,15 @@
 #include <Servo/src/Servo.h>
 #include <LiquidCrystal_I2C/LiquidCrystal_I2C.h>
 #include <Stepper/src/Stepper.h>
+#include <Adafruit_SSD1306.h>
 #include <NEPODefs.h>
 
-void ____action();
 void ____display();
-void ____lights();
-void ____move();
+void ____action();
 void ____sounds();
 void ____pin();
+void ____move();
+void ____lights();
 
 double ___numberVar;
 bool ___booleanVar;
@@ -34,13 +35,11 @@ LiquidCrystal_I2C _lcd_L3(0x27, 16, 2);
 int _led_L = LED_BUILTIN;
 int _SPU_S2 = 2048;
 Stepper _stepper_S2(_SPU_S2, 1, 4, 2, 5);
-
-void ____action() {
-    ____move();
-    ____display();
-    ____sounds();
-    ____lights();
-}
+#define SCREEN_ADDRESS 0x3D
+#define OLED_RESET 4
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+Adafruit_SSD1306 _lcd_O(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 void ____display() {
     Serial.println(___stringVar);
@@ -48,6 +47,37 @@ void ____display() {
     _lcd_L3.print(___stringVar);
     
     _lcd_L3.clear();
+    _lcd_O.setCursor(0,1);
+    _lcd_O.print("Hallo");
+    _lcd_O.display();
+    _lcd_O.clearDisplay();
+    _lcd_O.display();
+}
+
+void ____action() {
+    ____move();
+    ____display();
+    ____sounds();
+    ____lights();
+    ____pin();
+}
+
+void ____sounds() {
+    tone(_buzzer_S3, ___numberVar, ___numberVar);
+    delay(___numberVar);
+}
+
+void ____pin() {
+    digitalWrite(_output_A, (int)___numberVar);
+    analogWrite(_output_A2, (int)___numberVar);
+}
+
+void ____move() {
+    _servo_S.write(___numberVar);
+    _stepper_S2.setSpeed(___numberVar);
+    _stepper_S2.step(_SPU_S2*(___numberVar));
+    digitalWrite(_relay_R, LOW);
+    digitalWrite(_relay_R, HIGH);
 }
 
 void ____lights() {
@@ -63,24 +93,6 @@ void ____lights() {
     
 }
 
-void ____move() {
-    _servo_S.write(___numberVar);
-    _stepper_S2.setSpeed(___numberVar);
-    _stepper_S2.step(_SPU_S2*(___numberVar));
-    digitalWrite(_relay_R, LOW);
-    digitalWrite(_relay_R, HIGH);
-}
-
-void ____sounds() {
-    tone(_buzzer_S3, ___numberVar, ___numberVar);
-    delay(___numberVar);
-}
-
-void ____pin() {
-    digitalWrite(_output_A, (int)___numberVar);
-    analogWrite(_output_A2, (int)___numberVar);
-}
-
 void setup()
 {
     Serial.begin(9600);
@@ -93,6 +105,9 @@ void setup()
     _servo_S.attach(10);
     _lcd_L3.begin();
     pinMode(_led_L, OUTPUT);
+    _lcd_O.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
+    _lcd_O.clearDisplay();
+    _lcd_O.setTextColor(SSD1306_WHITE);
     ___numberVar = 0;
     ___booleanVar = true;
     ___stringVar = "";

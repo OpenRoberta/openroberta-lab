@@ -1,28 +1,46 @@
 TimerSensor [1, RESET, NO_SLOT]
 WaitStmt [
-(repeat [WAIT, Binary [EQ, SensorExpr [KeysSensor [RIGHT, PRESSED, - EMPTY_SLOT -]], NumConst[value: 1]]]
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [FORWARD, PRESSED, - EMPTY_SLOT -]]], NumConst[value: 1]]]
+Var [x] := SensorExpr [KeysSensor [RIGHT, PRESSED, - EMPTY_SLOT -]]
+
 )
-(repeat [WAIT, Binary [EQ, SensorExpr [InfraredSensor [- EMPTY_PORT -, LINE, 1]], NumConst[value: 1]]]
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [InfraredSensor [- EMPTY_PORT -, LINE, 0]]], NumConst[value: 1]]]
+Var [x] := SensorExpr [InfraredSensor [- EMPTY_PORT -, LINE, 1]]
+
 )
-(repeat [WAIT, Binary [GT, SensorExpr [InfraredSensor [- EMPTY_PORT -, LIGHT, 1]], NumConst[value: 50]]]
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [InfraredSensor [- EMPTY_PORT -, LIGHT, 0]]], NumConst[value: 50]]]
+Var [x] := SensorExpr [InfraredSensor [- EMPTY_PORT -, LIGHT, 1]]
+
 )
-(repeat [WAIT, Binary [GT, SensorExpr [InfraredSensor [- EMPTY_PORT -, AMBIENTLIGHT, 1]], NumConst[value: 30]]]
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [InfraredSensor [- EMPTY_PORT -, AMBIENTLIGHT, 0]]], NumConst[value: 30]]]
+Var [x] := SensorExpr [InfraredSensor [- EMPTY_PORT -, AMBIENTLIGHT, 1]]
+
 )
-(repeat [WAIT, Binary [LT, SensorExpr [InfraredSensor [- EMPTY_PORT -, DISTANCE, 1]], NumConst[value: 50]]]
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [InfraredSensor [- EMPTY_PORT -, DISTANCE, 0]]], NumConst[value: 50]]]
+Var [x] := SensorExpr [InfraredSensor [- EMPTY_PORT -, DISTANCE, 1]]
+
 )
-(repeat [WAIT, Binary [EQ, SensorExpr [TapSensor [- EMPTY_PORT -, VALUE, - EMPTY_SLOT -]], NumConst[value: 1]]]
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [SoundSensor [- EMPTY_PORT -, SOUND, - EMPTY_SLOT -]]], NumConst[value: 50]]]
+Var [x] := SensorExpr [SoundSensor [- EMPTY_PORT -, SOUND, - EMPTY_SLOT -]]
+
 )
-(repeat [WAIT, Binary [GT, SensorExpr [SoundSensor [- EMPTY_PORT -, SOUND, - EMPTY_SLOT -]], NumConst[value: 50]]]
-)
-(repeat [WAIT, Binary [GT, SensorExpr [TimerSensor [1, VALUE, - EMPTY_SLOT -]], NumConst[value: 500]]]
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [TimerSensor [1, VALUE, - EMPTY_SLOT -]]], NumConst[value: 500]]]
+Var [x] := SensorExpr [TimerSensor [1, VALUE, - EMPTY_SLOT -]]
+
 )
 (repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [AccelerometerSensor [- EMPTY_PORT -, DEFAULT, 0]]], NumConst[value: 30]]]
+Var [x] := SensorExpr [AccelerometerSensor [- EMPTY_PORT -, VALUE, 0]]
+
 )
-(repeat [WAIT, Binary [LT, SensorExpr [TemperatureSensor [- EMPTY_PORT -, VALUE, - EMPTY_SLOT -]], NumConst[value: 20]]]
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [TemperatureSensor [- EMPTY_PORT -, VALUE, - EMPTY_SLOT -]]], NumConst[value: 20]]]
+Var [x] := SensorExpr [TemperatureSensor [- EMPTY_PORT -, VALUE, - EMPTY_SLOT -]]
+
 )
-(repeat [WAIT, Binary [AND, BoolConst[value: false], BoolConst[value: true]]]
+(repeat [WAIT, Binary [OR, BoolConst[value: false], BoolConst[value: true]]]
+AktionStmt [RecordStartAction[filename: NumConst[value: 1]]]
+AktionStmt [RecordStopAction[]]
 )
-(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [FORWARD, PRESSED, - EMPTY_SLOT -]]], NumConst[value: 1]]]
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [TapSensor [- EMPTY_PORT -, VALUE, - EMPTY_SLOT -]]], NumConst[value: 1]]]
+Var [x] := SensorExpr [TapSensor [- EMPTY_PORT -, VALUE, - EMPTY_SLOT -]]
+
 )]
-RecordStartAction[filename: NumConst[value: 1]]
-RecordStopAction[]
