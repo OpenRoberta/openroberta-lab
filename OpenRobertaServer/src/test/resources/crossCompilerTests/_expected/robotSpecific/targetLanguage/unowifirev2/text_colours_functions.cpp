@@ -28,6 +28,7 @@ int _led_L = 13;
 int _led_red_R = 5;
 int _led_green_R = 6;
 int _led_blue_R = 3;
+int _v_colour_temp;
 
 void ____text() {
     Serial.println("");

@@ -26,8 +26,11 @@ import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
@@ -124,6 +127,24 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                 channels.put(blueName, String.valueOf(Integer.decode("0x" + hexValue.substring(4, 6))));
             } else if ( lightAction.rgbLedColor.getClass().equals(Var.class) ) {
                 String tempVarName = "___" + ((Var) lightAction.rgbLedColor).name;
+                channels.put(redName, "RCHANNEL(" + tempVarName + ")");
+                channels.put(greenName, "GCHANNEL(" + tempVarName + ")");
+                channels.put(blueName, "BCHANNEL(" + tempVarName + ")");
+            } else if ( lightAction.rgbLedColor.getClass().equals(MethodExpr.class) ) {
+                String tempVarName = "_v_colour_temp";
+                this.sb.append(tempVarName).append(" = ");
+                visitMethodCall((MethodCall) ((MethodExpr) lightAction.rgbLedColor).method);
+                this.sb.append(";");
+                nlIndent();
+                channels.put(redName, "RCHANNEL(" + tempVarName + ")");
+                channels.put(greenName, "GCHANNEL(" + tempVarName + ")");
+                channels.put(blueName, "BCHANNEL(" + tempVarName + ")");
+            } else if ( lightAction.rgbLedColor.getClass().equals(FunctionExpr.class) ) {
+                String tempVarName = "_v_colour_temp";
+                this.sb.append(tempVarName).append(" = ");
+                ((FunctionExpr) lightAction.rgbLedColor).function.accept(this);
+                this.sb.append(";");
+                nlIndent();
                 channels.put(redName, "RCHANNEL(" + tempVarName + ")");
                 channels.put(greenName, "GCHANNEL(" + tempVarName + ")");
                 channels.put(blueName, "BCHANNEL(" + tempVarName + ")");
@@ -814,13 +835,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                     nlIndent();
                     break;
                 case SC.LIGHT:
-                    this.sb.append("int _output_" + blockName + " = ").append(cc.getProperty("OUTPUT")).append(";");
-                    nlIndent();
-                    break;
                 case SC.MOTION:
-                    this.sb.append("int _output_" + blockName + " = ").append(cc.getProperty("OUTPUT")).append(";");
-                    nlIndent();
-                    break;
                 case SC.POTENTIOMETER:
                     this.sb.append("int _output_" + blockName + " = ").append(cc.getProperty("OUTPUT")).append(";");
                     nlIndent();
@@ -904,6 +919,8 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                     this.sb.append("int _led_green_" + blockName + " = ").append(cc.getProperty(SC.GREEN)).append(";");
                     nlIndent();
                     this.sb.append("int _led_blue_" + blockName + " = ").append(cc.getProperty(SC.BLUE)).append(";");
+                    nlIndent();
+                    this.sb.append("int _v_colour_temp;");
                     nlIndent();
                     break;
                 case SC.BUZZER:

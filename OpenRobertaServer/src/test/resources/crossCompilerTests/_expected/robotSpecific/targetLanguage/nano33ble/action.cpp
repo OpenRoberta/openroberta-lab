@@ -23,6 +23,7 @@ Adafruit_SSD1306 _lcd_O(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 int _led_red_R = 5;
 int _led_green_R = 1;
 int _led_blue_R = 0;
+int _v_colour_temp;
 float xAsFloat, yAsFloat, zAsFloat;
 int _buzzer_S = 7;
 int _relay_rel = 6;
