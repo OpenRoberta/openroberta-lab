@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [internal, RGBLED], UsedActor [internal, STEPMOTOR]]
+Methods: 
+[]

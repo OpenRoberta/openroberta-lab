@@ -1,0 +1,12 @@
+
+(repeat [FOREVER_ARDU, BoolConst[value: true]]MethodStmt [MethodCall [text, , , VOID]]MethodStmt [MethodCall [colours, , , VOID]]MethodStmt [MethodCall [function_parameter, Var [x], Var [x2], Var [x3], Var [x5], Var [x6], Var [x7], Var [numberVar], Var [booleanVar], Var [stringVar], Var [numberList], Var [booleanList], Var [stringList], VOID]]
+AktionStmt [SerialWriteAction[value: MethodExpr [MethodCall [function_return_numberVar, , , NUMBER]]]]
+AktionStmt [SerialWriteAction[value: MethodExpr [MethodCall [function_return_booleanVar, , , BOOLEAN]]]]
+AktionStmt [SerialWriteAction[value: MethodExpr [MethodCall [function_return_stringVar, , , STRING]]]]
+Var [numberList] := MethodExpr [MethodCall [function_return_numberList, , , ARRAY_NUMBER]]
+
+Var [booleanList] := MethodExpr [MethodCall [function_return_booleanList, , , ARRAY_BOOLEAN]]
+
+Var [stringList] := MethodExpr [MethodCall [function_return_stringList, , , ARRAY_STRING]]
+
+)

@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [1, TIMER, VALUE], UsedSensor [1, TIMER, RESET]]
+Actors: 
+[UsedActor [SERIAL, SERIAL]]
+Methods: 
+[]

@@ -1,0 +1,6 @@
+
+(repeat [FOREVER_ARDU, BoolConst[value: true]]
+AktionStmt [LedOnAction [ ColorConst[hexValue: #cc0000] ]]
+AktionStmt [LedOffAction [ ]]
+AktionStmt [StepMotorAction[stepMotorPos: NumConst[value: 0]]]
+)

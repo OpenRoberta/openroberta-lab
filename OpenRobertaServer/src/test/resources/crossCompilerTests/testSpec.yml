@@ -59,6 +59,10 @@ robots:
     template: ardu
     dir: festobionic
     suffix: ".cpp"
+  festobionicflower:
+    template: ardu
+    dir: festobionicflower
+    suffix: ".cpp"
   microbit:
     template: microbit
     dir: microbit
@@ -257,6 +261,7 @@ progs:
       bob3: "no strings"
       rob3rta: "no strings"
       festobionic: "Comparison of string and char not possible"
+      festobionicflower: "Comparison of string and char not possible"
       edison: "no strings"
       wedo: "Comparison of string and char not possible"
       thymio: "no strings"

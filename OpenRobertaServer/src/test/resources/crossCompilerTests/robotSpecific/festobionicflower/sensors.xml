@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="festobionic" xmlversion="3.1" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="festobionicflower" xmlversion="3.1" description="" tags="">
             <instance x="-2172" y="-664">
                 <block type="robControls_start_ardu" id="D})/z!#B6yD@Yfz-dXMy" intask="true" deletable="false">
                     <mutation declare="true"></mutation>
@@ -164,11 +164,15 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="festobionic" xmlversion="3.1" description="" tags="">
-            <instance x="375" y="-176">
-                <block type="robConf_led" id="1" intask="true">
-                    <field name="NAME">L</field>
-                    <field name="INPUT">LED_BUILTIN</field>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="festobionicflower" xmlversion="3.1" description="" tags="">
+            <instance x="138" y="80">
+                <block type="robConf_rgbled" id="%=kg52SHeud7*/CEei@q" intask="true" deletable="false">
+                    <field name="NAME">R</field>
+                </block>
+            </instance>
+            <instance x="138" y="120">
+                <block type="robConf_stepmotor" id="h9!lF~R^P?Y!c|wi(YD@" intask="true" deletable="false">
+                    <field name="NAME">S</field>
                 </block>
             </instance>
         </block_set>

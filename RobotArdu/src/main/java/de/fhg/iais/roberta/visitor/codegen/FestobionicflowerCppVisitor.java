@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.visitor.hardware.IFestobionicflowerVisitor;
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a StringBuilder.
  * <b>This representation is correct C code for Arduino.</b> <br>
  */
-public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppVisitor implements IFestobionicflowerVisitor {
+public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppVisitor implements IFestobionicflowerVisitor<Void> {
 
     /**
      * Initialize the C++ code generator visitor.
@@ -52,6 +52,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
         if ( (this.configuration.getConfigurationComponents().isEmpty() || this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER)) && numberConf == 0 ) {
             nlIndent();
         }
+        generateConfigurationInitialisationMethods();
         generateUserDefinedMethods();
         if ( numberConf != 0 ) {
             nlIndent();
@@ -317,8 +318,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
         }
     }
 
-    @Override
-    protected void generateUserDefinedMethods() {
+    protected void generateConfigurationInitialisationMethods() {
         for ( ConfigurationComponent cc : this.configuration.getConfigurationComponentsValues() ) {
             String blockName = cc.userDefinedPortName;
             switch ( cc.componentType ) {
