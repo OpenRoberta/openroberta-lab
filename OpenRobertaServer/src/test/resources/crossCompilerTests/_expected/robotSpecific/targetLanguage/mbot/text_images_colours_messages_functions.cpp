@@ -8,6 +8,7 @@
 
 MeLEDMatrix __meLEDMatrix_1(1);
 MeRGBLed _meRgbLed(7, 2);
+int _v_colour_temp;
 MeIR _meIr;
 
 

@@ -30,8 +30,11 @@ import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
@@ -264,6 +267,42 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     .append("));");
             } else if ( lightAction.rgbLedColor.getClass().equals(Var.class) ) {
                 String tempVarName = "___" + ((Var) lightAction.rgbLedColor).name;
+                this.sb
+                    .append("_rgbled_")
+                    .append(lightAction.port)
+                    .append(".setPixelColor(0, _rgbled_")
+                    .append(lightAction.port)
+                    .append(".Color(RCHANNEL(")
+                    .append(tempVarName)
+                    .append("), GCHANNEL(")
+                    .append(tempVarName)
+                    .append("), BCHANNEL(")
+                    .append(tempVarName)
+                    .append(")));");
+            } else if ( lightAction.rgbLedColor.getClass().equals(MethodExpr.class) ) {
+                String tempVarName = "_v_colour_temp";
+                this.sb.append(tempVarName).append(" = ");
+                visitMethodCall((MethodCall) ((MethodExpr) lightAction.rgbLedColor).method);
+                this.sb.append(";");
+                nlIndent();
+                this.sb
+                    .append("_rgbled_")
+                    .append(lightAction.port)
+                    .append(".setPixelColor(0, _rgbled_")
+                    .append(lightAction.port)
+                    .append(".Color(RCHANNEL(")
+                    .append(tempVarName)
+                    .append("), GCHANNEL(")
+                    .append(tempVarName)
+                    .append("), BCHANNEL(")
+                    .append(tempVarName)
+                    .append(")));");
+            } else if ( lightAction.rgbLedColor.getClass().equals(FunctionExpr.class) ) {
+                String tempVarName = "_v_colour_temp";
+                this.sb.append(tempVarName).append(" = ");
+                ((FunctionExpr) lightAction.rgbLedColor).function.accept(this);
+                this.sb.append(";");
+                nlIndent();
                 this.sb
                     .append("_rgbled_")
                     .append(lightAction.port)
@@ -879,6 +918,8 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                                 .append(cc.getOptProperty("INPUT") == null ? cc.getProperty("RED") : cc.getProperty("INPUT"))
                                 .append(", NEO_RGB + NEO_KHZ800);");
                             this.nlIndent();
+                            this.sb.append("int _v_colour_temp;");
+                            nlIndent();
                             break;
                         }
                     }

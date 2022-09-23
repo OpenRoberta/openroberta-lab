@@ -12,6 +12,7 @@ MeDCMotor _meDCmotor2(M2);
 MeLEDMatrix __meLEDMatrix_1(1);
 MeBuzzer _meBuzzer;
 MeRGBLed _meRgbLed(7, 2);
+int _v_colour_temp;
 
 
 void ____actions();

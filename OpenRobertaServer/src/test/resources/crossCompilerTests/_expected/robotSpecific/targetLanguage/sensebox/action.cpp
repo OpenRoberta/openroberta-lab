@@ -25,6 +25,7 @@ std::list<bool> ___bl;
 std::list<String> ___sl;
 std::list<unsigned int> ___cl;
 Adafruit_NeoPixel _rgbled_R2 = Adafruit_NeoPixel(1, 1, NEO_RGB + NEO_KHZ800);
+int _v_colour_temp;
 char* _ID1 = "";
 int _output_A = 4;
 int _led_G = 8;

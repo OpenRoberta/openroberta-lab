@@ -42,8 +42,11 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -172,26 +175,13 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitLightAction(LightAction lightAction) {
-        this.sb.append("_meRgbLed.setColor(");
-        this.sb.append(lightAction.port);
         if ( lightAction.rgbLedColor.getClass().equals(Var.class) ) {
             String tempVarName = "___" + ((Var) lightAction.rgbLedColor).name;
-            this.sb.append(", ");
-            this.sb.append("RCHANNEL(");
-            this.sb.append(tempVarName);
-            this.sb.append("), ");
-            this.sb.append("GCHANNEL(");
-            this.sb.append(tempVarName);
-            this.sb.append("), ");
-            this.sb.append("BCHANNEL(");
-            this.sb.append(tempVarName);
-            this.sb.append("));");
-            nlIndent();
-            this.sb.append("_meRgbLed.show();");
-            return null;
-        }
-        if ( lightAction.rgbLedColor.getClass().equals(ColorConst.class) ) {
+            generateCodeForRgbLed(lightAction, tempVarName);
+        } else if ( lightAction.rgbLedColor.getClass().equals(ColorConst.class) ) {
             ColorConst colorConst = (ColorConst) lightAction.rgbLedColor;
+            this.sb.append("_meRgbLed.setColor(");
+            this.sb.append(lightAction.port);
             this.sb.append(", ");
             this.sb.append(colorConst.getRedChannelHex());
             this.sb.append(", ");
@@ -201,21 +191,53 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
             this.sb.append(");");
             nlIndent();
             this.sb.append("_meRgbLed.show();");
-            return null;
+        } else if ( lightAction.rgbLedColor.getClass().equals(MethodExpr.class) ) {
+            String tempVarName = "_v_colour_temp";
+            this.sb.append(tempVarName).append(" = ");
+            visitMethodCall((MethodCall) ((MethodExpr) lightAction.rgbLedColor).method);
+            this.sb.append(";");
+            nlIndent();
+            generateCodeForRgbLed(lightAction, tempVarName);
+        } else if ( lightAction.rgbLedColor.getClass().equals(FunctionExpr.class) ) {
+            String tempVarName = "_v_colour_temp";
+            this.sb.append(tempVarName).append(" = ");
+            ((FunctionExpr) lightAction.rgbLedColor).function.accept(this);
+            this.sb.append(";");
+            nlIndent();
+            generateCodeForRgbLed(lightAction, tempVarName);
+        } else {
+            Map<String, Expr> Channels = new HashMap<>();
+            this.sb.append("_meRgbLed.setColor(");
+            this.sb.append(lightAction.port);
+            Channels.put("red", ((RgbColor) lightAction.rgbLedColor).R);
+            Channels.put("green", ((RgbColor) lightAction.rgbLedColor).G);
+            Channels.put("blue", ((RgbColor) lightAction.rgbLedColor).B);
+            Channels.forEach((k, v) -> {
+                this.sb.append(", ");
+                v.accept(this);
+            });
+            this.sb.append(");");
+            nlIndent();
+            this.sb.append("_meRgbLed.show();");
         }
-        Map<String, Expr> Channels = new HashMap<>();
-        Channels.put("red", ((RgbColor) lightAction.rgbLedColor).R);
-        Channels.put("green", ((RgbColor) lightAction.rgbLedColor).G);
-        Channels.put("blue", ((RgbColor) lightAction.rgbLedColor).B);
-        Channels.forEach((k, v) -> {
-            this.sb.append(", ");
-            v.accept(this);
-        });
-        this.sb.append(");");
+        return null;
+    }
+
+    private void generateCodeForRgbLed(LightAction lightAction, String tempVarName) {
+        this.sb.append("_meRgbLed.setColor(");
+        this.sb.append(lightAction.port);
+        this.sb.append(", ");
+        this.sb.append("RCHANNEL(");
+        this.sb.append(tempVarName);
+        this.sb.append("), ");
+        this.sb.append("GCHANNEL(");
+        this.sb.append(tempVarName);
+        this.sb.append("), ");
+        this.sb.append("BCHANNEL(");
+        this.sb.append(tempVarName);
+        this.sb.append("));");
         nlIndent();
         this.sb.append("_meRgbLed.show();");
-        return null;
-
     }
 
     @Override
@@ -618,6 +640,8 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
                 case SC.LED_ON_BOARD:
                     nlIndent();
                     this.sb.append("MeRGBLed _meRgbLed(7, 2);");
+                    nlIndent();
+                    this.sb.append("int _v_colour_temp;");
                     break;
                 case SC.GEARED_MOTOR:
                     nlIndent();

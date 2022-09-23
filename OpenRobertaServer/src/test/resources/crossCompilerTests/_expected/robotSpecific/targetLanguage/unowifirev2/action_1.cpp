@@ -25,6 +25,7 @@ std::list<unsigned int> ___colourList;
 int _led_red_R2 = 6;
 int _led_green_R2 = 7;
 int _led_blue_R2 = 8;
+int _v_colour_temp;
 int _buzzer_S3 = 11;
 int _output_A = 0;
 int _output_A2 = 5;
