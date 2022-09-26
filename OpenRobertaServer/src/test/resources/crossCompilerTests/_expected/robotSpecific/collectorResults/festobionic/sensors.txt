@@ -1,5 +1,5 @@
 Sensors: 
-[UsedSensor [1, TIMER, VALUE], UsedSensor [1, TIMER, RESET]]
+[UsedSensor [1, TIMER, VALUE], UsedSensor [1, TIMER, DEFAULT]]
 Actors: 
 [UsedActor [SERIAL, SERIAL]]
 Methods: 

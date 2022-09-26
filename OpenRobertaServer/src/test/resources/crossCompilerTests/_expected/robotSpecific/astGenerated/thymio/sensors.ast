@@ -1,4 +1,4 @@
-TimerSensor [1, RESET, NO_SLOT]
+TimerReset [1, DEFAULT, - EMPTY_SLOT -]
 WaitStmt [
 (repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [FORWARD, PRESSED, - EMPTY_SLOT -]]], NumConst[value: 1]]]
 Var [x] := SensorExpr [KeysSensor [RIGHT, PRESSED, - EMPTY_SLOT -]]

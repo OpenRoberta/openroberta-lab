@@ -67,6 +67,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.basic.C;
@@ -1121,6 +1122,11 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
         return null;
     }
 

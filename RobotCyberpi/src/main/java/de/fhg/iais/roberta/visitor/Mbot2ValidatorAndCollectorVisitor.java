@@ -27,19 +27,22 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
+import de.fhg.iais.roberta.syntax.action.sound.GetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbot2.GyroResetAxis;
@@ -103,6 +106,17 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
             addErrorToPhrase(encoderSensor, "CONFIGURATION_ERROR_MOTOR_MISSING");
         } else {
             usedHardwareBuilder.addUsedActor(new UsedActor(encoderSensor.getUserDefinedPort(), configurationComponent.componentType));
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitEncoderReset(EncoderReset encoderReset) {
+        ConfigurationComponent configurationComponent = this.robotConfiguration.optConfigurationComponent(encoderReset.getUserDefinedPort());
+        if ( configurationComponent == null ) {
+            addErrorToPhrase(encoderReset, "CONFIGURATION_ERROR_MOTOR_MISSING");
+        } else {
+            usedHardwareBuilder.addUsedActor(new UsedActor(encoderReset.getUserDefinedPort(), configurationComponent.componentType));
         }
         return null;
     }
@@ -281,10 +295,14 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction volumeAction) {
-        if ( volumeAction.mode == VolumeAction.Mode.SET ) {
-            requiredComponentVisited(volumeAction, volumeAction.volume);
-        }
+    public Void visitGetVolumeAction(GetVolumeAction getVolumeAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.SOUND));
+        return null;
+    }
+
+    @Override
+    public Void visitSetVolumeAction(SetVolumeAction setVolumeAction) {
+        requiredComponentVisited(setVolumeAction, setVolumeAction.volume);
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.SOUND));
         return null;
     }
@@ -292,6 +310,12 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(timerSensor.getUserDefinedPort(), SC.TIMER, timerSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(timerReset.getUserDefinedPort(), SC.TIMER, timerReset.getMode()));
         return null;
     }
 

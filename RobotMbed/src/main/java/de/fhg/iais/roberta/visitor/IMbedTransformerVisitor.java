@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -22,8 +23,9 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
+import de.fhg.iais.roberta.syntax.action.sound.GetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
@@ -161,8 +163,13 @@ public interface IMbedTransformerVisitor extends ITransformerVisitor, IMbedVisit
     // unrelated defaults
 
     @Override
-    default Phrase visitVolumeAction(VolumeAction volumeAction) {
-        return IMbedVisitor.super.visitVolumeAction(volumeAction);
+    default Phrase visitGetVolumeAction(GetVolumeAction getVolumeAction) {
+        return IMbedVisitor.super.visitGetVolumeAction(getVolumeAction);
+    }
+
+    @Override
+    default Phrase visitSetVolumeAction(SetVolumeAction setVolumeAction) {
+        return IMbedVisitor.super.visitSetVolumeAction(setVolumeAction);
     }
 
     @Override
@@ -173,5 +180,10 @@ public interface IMbedTransformerVisitor extends ITransformerVisitor, IMbedVisit
     @Override
     default Phrase visitPlayFileAction(PlayFileAction playFileAction) {
         return IMbedVisitor.super.visitPlayFileAction(playFileAction);
+    }
+
+    @Override
+    default Phrase visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
+        return ITransformerVisitor.super.visitPinWriteValueAction(pinWriteValueAction);
     }
 }

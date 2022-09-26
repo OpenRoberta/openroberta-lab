@@ -45,6 +45,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
@@ -307,6 +308,12 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(timerSensor.getUserDefinedPort(), SC.TIMER, timerSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(timerReset.getUserDefinedPort(), SC.TIMER, timerReset.getMode()));
         return null;
     }
 

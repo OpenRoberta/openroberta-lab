@@ -25,10 +25,11 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
+import de.fhg.iais.roberta.syntax.action.sound.GetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
@@ -112,8 +113,10 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassCalibrate;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
@@ -134,6 +137,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -237,8 +241,13 @@ public interface ITransformerVisitor extends ISensorVisitor<Phrase>, IAllActorsV
     }
 
     @Override
-    default Phrase visitVolumeAction(VolumeAction volumeAction) {
-        return new VolumeAction(volumeAction.mode, (Expr) volumeAction.volume.modify(this), BlocklyConstants.EMPTY_PORT, null, volumeAction.getProperty());
+    default Phrase visitGetVolumeAction(GetVolumeAction getVolumeAction) {
+        return new GetVolumeAction(getVolumeAction.getProperty(), BlocklyConstants.EMPTY_PORT, null);
+    }
+
+    @Override
+    default Phrase visitSetVolumeAction(SetVolumeAction setVolumeAction) {
+        return new SetVolumeAction(setVolumeAction.getProperty(), BlocklyConstants.EMPTY_PORT, (Expr) setVolumeAction.volume.modify(this), null);
     }
 
     @Override
@@ -248,7 +257,7 @@ public interface ITransformerVisitor extends ISensorVisitor<Phrase>, IAllActorsV
 
     @Override
     default Phrase visitSetLanguageAction(SetLanguageAction setLanguageAction) {
-        return new SetLanguageAction(setLanguageAction.language, setLanguageAction.getProperty());
+        return new SetLanguageAction(setLanguageAction.getProperty(), setLanguageAction.language);
     }
 
     @Override
@@ -268,7 +277,7 @@ public interface ITransformerVisitor extends ISensorVisitor<Phrase>, IAllActorsV
 
     @Override
     default Phrase visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
-        return new PinWriteValueAction(pinWriteValueAction.pinValue, pinWriteValueAction.port, (Expr) pinWriteValueAction.value.modify(this), true, pinWriteValueAction.getProperty());
+        return new PinWriteValueAction(pinWriteValueAction.getProperty(), pinWriteValueAction.mutation, pinWriteValueAction.pinValue, pinWriteValueAction.port, (Expr) pinWriteValueAction.value.modify(this));
     }
 
     @Override
@@ -691,7 +700,7 @@ public interface ITransformerVisitor extends ISensorVisitor<Phrase>, IAllActorsV
 
     @Override
     default Phrase visitBluetoothReceiveAction(BluetoothReceiveAction bluetoothReceiveAction) {
-        return new BluetoothReceiveAction(bluetoothReceiveAction.dataValue, (Expr) bluetoothReceiveAction.connection.modify(this), bluetoothReceiveAction.channel, bluetoothReceiveAction.dataType, bluetoothReceiveAction.getProperty());
+        return new BluetoothReceiveAction(bluetoothReceiveAction.getProperty(), bluetoothReceiveAction.mutation, bluetoothReceiveAction.dataType, bluetoothReceiveAction.protocol, bluetoothReceiveAction.channel, bluetoothReceiveAction.dataValue, (Expr) bluetoothReceiveAction.connection.modify(this));
     }
 
     @Override
@@ -701,7 +710,7 @@ public interface ITransformerVisitor extends ISensorVisitor<Phrase>, IAllActorsV
 
     @Override
     default Phrase visitBluetoothSendAction(BluetoothSendAction bluetoothSendAction) {
-        return new BluetoothSendAction(bluetoothSendAction.dataValue, (Expr) bluetoothSendAction.connection.modify(this), (Expr) bluetoothSendAction.msg.modify(this), bluetoothSendAction.channel, bluetoothSendAction.dataType, bluetoothSendAction.getProperty());
+        return new BluetoothSendAction(bluetoothSendAction.getProperty(), bluetoothSendAction.mutation, bluetoothSendAction.dataType, bluetoothSendAction.protocol, bluetoothSendAction.channel, bluetoothSendAction.dataValue, (Expr) bluetoothSendAction.msg.modify(this), (Expr) bluetoothSendAction.connection.modify(this));
     }
 
     @Override
@@ -740,6 +749,11 @@ public interface ITransformerVisitor extends ISensorVisitor<Phrase>, IAllActorsV
     }
 
     @Override
+    default Phrase visitEncoderReset(EncoderReset encoderReset) {
+        return new EncoderReset(encoderReset.getProperty(), new ExternalSensorBean(encoderReset.getUserDefinedPort(), encoderReset.getMode(), encoderReset.getSlot(), encoderReset.getMutation()));
+    }
+
+    @Override
     default Phrase visitGyroSensor(GyroSensor gyroSensor) {
         return new GyroSensor(gyroSensor.getProperty(), new ExternalSensorBean(gyroSensor.getUserDefinedPort(), gyroSensor.getMode(), gyroSensor.getSlot(), gyroSensor.getMutation()));
     }
@@ -761,6 +775,11 @@ public interface ITransformerVisitor extends ISensorVisitor<Phrase>, IAllActorsV
     }
 
     @Override
+    default Phrase visitTimerReset(TimerReset timerReset) {
+        return new TimerReset(timerReset.getProperty(), new ExternalSensorBean(timerReset.getUserDefinedPort(), timerReset.getMode(), timerReset.getSlot(), timerReset.getMutation()));
+    }
+
+    @Override
     default Phrase visitTouchSensor(TouchSensor touchSensor) {
         return new TouchSensor(touchSensor.getProperty(), new ExternalSensorBean(touchSensor.getUserDefinedPort(), touchSensor.getMode(), touchSensor.getSlot(), touchSensor.getMutation()));
     }
@@ -773,6 +792,11 @@ public interface ITransformerVisitor extends ISensorVisitor<Phrase>, IAllActorsV
     @Override
     default Phrase visitCompassSensor(CompassSensor compassSensor) {
         return new CompassSensor(compassSensor.getProperty(), new ExternalSensorBean(compassSensor.getUserDefinedPort(), compassSensor.getMode(), compassSensor.getSlot(), compassSensor.getMutation()));
+    }
+
+    @Override
+    default Phrase visitCompassCalibrate(CompassCalibrate compassCalibrate) {
+        return new CompassCalibrate(compassCalibrate.getProperty(), new ExternalSensorBean(compassCalibrate.getUserDefinedPort(), compassCalibrate.getMode(), compassCalibrate.getSlot(), compassCalibrate.getMutation()));
     }
 
     @Override

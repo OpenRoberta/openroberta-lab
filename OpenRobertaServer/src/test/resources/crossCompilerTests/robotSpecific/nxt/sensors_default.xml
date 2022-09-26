@@ -314,12 +314,15 @@
                         </block>
                         <block type="robSensors_encoder_reset" id="k[X/do:Wpi:@v]g%{_wC" intask="true">
                             <field name="SENSORPORT">A</field>
+                            <field name="SLOT"/>
                         </block>
                         <block type="robSensors_encoder_reset" id="^aJ0{|VF#uS#~!nLh-!/" intask="true">
                             <field name="SENSORPORT">B</field>
+                            <field name="SLOT"/>
                         </block>
                         <block type="robSensors_encoder_reset" id="9`wOd2nqvx#PT9(l5i2F" intask="true">
                             <field name="SENSORPORT">C</field>
+                            <field name="SLOT"/>
                         </block>
                         <block type="robActions_display_text" id="_xPYRuxei/]K5E^THvrT" inline="true" intask="true">
                             <value name="OUT">
@@ -609,6 +612,7 @@
                         </block>
                         <block type="robSensors_timer_reset" id="[%A@K3[NZ[*Cb3f3|OFh" intask="true">
                             <field name="SENSORPORT">1</field>
+                            <field name="SLOT"/>
                         </block>
                     </statement>
                 </block>

@@ -795,6 +795,7 @@
                         </block>
                         <block type="robSensors_timer_reset" id="1#OOLh5Mf{aHkh%KuJ9{" intask="true">
                             <field name="SENSORPORT">1</field>
+                            <field name="SLOT"/>
                         </block>
                     </statement>
                 </block>

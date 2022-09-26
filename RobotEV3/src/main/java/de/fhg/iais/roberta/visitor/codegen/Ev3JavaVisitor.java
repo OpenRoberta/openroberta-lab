@@ -43,10 +43,11 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
+import de.fhg.iais.roberta.syntax.action.sound.GetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
@@ -65,7 +66,9 @@ import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassCalibrate;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
@@ -74,6 +77,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -222,19 +226,16 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction volumeAction) {
-        switch ( volumeAction.mode ) {
-            case SET:
-                this.sb.append("hal.setVolume(");
-                volumeAction.volume.accept(this);
-                this.sb.append(");");
-                break;
-            case GET:
-                this.sb.append("hal.getVolume()");
-                break;
-            default:
-                throw new DbcException("Invalid volume action mode!");
-        }
+    public Void visitGetVolumeAction(GetVolumeAction getVolumeAction) {
+        this.sb.append("hal.getVolume()");
+        return null;
+    }
+
+    @Override
+    public Void visitSetVolumeAction(SetVolumeAction setVolumeAction) {
+        this.sb.append("hal.setVolume(");
+        setVolumeAction.volume.accept(this);
+        this.sb.append(");");
         return null;
     }
 
@@ -549,13 +550,17 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     public Void visitEncoderSensor(EncoderSensor encoderSensor) {
         String encoderMotorPort = encoderSensor.getUserDefinedPort();
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(encoderMotorPort);
-        if ( encoderSensor.getMode().equals(SC.RESET) ) {
-            String methodName = isRegulated ? "hal.resetRegulatedMotorTacho(" : "hal.resetUnregulatedMotorTacho(";
-            this.sb.append(methodName + "ActorPort." + encoderMotorPort + ");");
-        } else {
-            String methodName = isRegulated ? "hal.getRegulatedMotorTachoValue(" : "hal.getUnregulatedMotorTachoValue(";
-            this.sb.append(methodName + "ActorPort." + encoderMotorPort + ", MotorTachoMode." + encoderSensor.getMode() + ")");
-        }
+        String methodName = isRegulated ? "hal.getRegulatedMotorTachoValue(" : "hal.getUnregulatedMotorTachoValue(";
+        this.sb.append(methodName).append("ActorPort.").append(encoderMotorPort).append(", MotorTachoMode.").append(encoderSensor.getMode()).append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitEncoderReset(EncoderReset encoderReset) {
+        String encoderMotorPort = encoderReset.getUserDefinedPort();
+        boolean isRegulated = this.brickConfiguration.isMotorRegulated(encoderMotorPort);
+        String methodName = isRegulated ? "hal.resetRegulatedMotorTacho(" : "hal.resetUnregulatedMotorTacho(";
+        this.sb.append(methodName).append("ActorPort.").append(encoderMotorPort).append(");");
         return null;
     }
 
@@ -601,17 +606,14 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
         String timerNumber = timerSensor.getUserDefinedPort();
-        switch ( timerSensor.getMode() ) {
-            case SC.DEFAULT:
-            case SC.VALUE:
-                this.sb.append("hal.getTimerValue(" + timerNumber + ")");
-                break;
-            case SC.RESET:
-                this.sb.append("hal.resetTimer(" + timerNumber + ");");
-                break;
-            default:
-                throw new DbcException("Invalid Time Mode!");
-        }
+        this.sb.append("hal.getTimerValue(").append(timerNumber).append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        String timerNumber = timerReset.getUserDefinedPort();
+        this.sb.append("hal.resetTimer(").append(timerNumber).append(");");
         return null;
     }
 
@@ -642,22 +644,26 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     public Void visitCompassSensor(CompassSensor compassSensor) {
         String compassSensorPort = "SensorPort.S" + compassSensor.getUserDefinedPort();
         switch ( compassSensor.getMode() ) {
-            case SC.CALIBRATE:
-                this.sb.append("hal.hiTecCompassStartCalibration(" + compassSensorPort + ");");
-                nlIndent();
-                this.sb.append("hal.waitFor(40000);");
-                nlIndent();
-                this.sb.append("hal.hiTecCompassStopCalibration(" + compassSensorPort + ");");
-                break;
             case SC.ANGLE:
-                this.sb.append("hal.getHiTecCompassAngle(" + compassSensorPort + ")");
+                this.sb.append("hal.getHiTecCompassAngle(").append(compassSensorPort).append(")");
                 break;
             case SC.COMPASS:
-                this.sb.append("hal.getHiTecCompassCompass(" + compassSensorPort + ")");
+                this.sb.append("hal.getHiTecCompassCompass(").append(compassSensorPort).append(")");
                 break;
             default:
                 throw new DbcException("Invalid Compass Mode!");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitCompassCalibrate(CompassCalibrate compassCalibrate) {
+        String compassSensorPort = "SensorPort.S" + compassCalibrate.getUserDefinedPort();
+        this.sb.append("hal.hiTecCompassStartCalibration(").append(compassSensorPort).append(");");
+        nlIndent();
+        this.sb.append("hal.waitFor(40000);");
+        nlIndent();
+        this.sb.append("hal.hiTecCompassStopCalibration(").append(compassSensorPort).append(");");
         return null;
     }
 

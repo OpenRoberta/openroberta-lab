@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 
@@ -99,6 +100,11 @@ public class TestLoopCounterVisitor extends CommonNepoValidatorAndCollectorVisit
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
         return null;
     }
 }

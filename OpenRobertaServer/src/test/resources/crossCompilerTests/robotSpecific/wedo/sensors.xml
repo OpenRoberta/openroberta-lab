@@ -152,6 +152,7 @@
                         </block>
                         <block type="robSensors_timer_reset" id="X(8fAsL(tuf4cZ(pKC3p" intask="true">
                             <field name="SENSORPORT">1</field>
+                            <field name="SLOT"/>
                         </block>
                     </statement>
                 </block>

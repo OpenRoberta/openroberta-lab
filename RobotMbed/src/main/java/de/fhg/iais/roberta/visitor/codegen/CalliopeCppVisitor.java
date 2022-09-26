@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
+import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
@@ -93,6 +93,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
@@ -582,17 +583,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
-        switch ( timerSensor.getMode() ) {
-            case SC.DEFAULT:
-            case SC.VALUE:
-                this.sb.append("( _uBit.systemTime() - _initTime )");
-                break;
-            case SC.RESET:
-                this.sb.append("_initTime = _uBit.systemTime();");
-                break;
-            default:
-                throw new DbcException("Invalid Time Mode!");
-        }
+        this.sb.append("( _uBit.systemTime() - _initTime )");
+        return null;
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        this.sb.append("_initTime = _uBit.systemTime();");
         return null;
     }
 
@@ -629,13 +626,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction pinWriteValueSensor) {
-        String port = pinWriteValueSensor.port;
+    public Void visitMbedPinWriteValueAction(MbedPinWriteValueAction mbedPinWriteValueAction) {
+        String port = mbedPinWriteValueAction.port;
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
-        String valueType = pinWriteValueSensor.pinValue.equals(SC.DIGITAL) ? "DigitalValue(" : "AnalogValue(";
+        String valueType = mbedPinWriteValueAction.pinValue.equals(SC.DIGITAL) ? "DigitalValue(" : "AnalogValue(";
         this.sb.append("_uBit.io.").append(PIN_MAP.get(pin1)).append(".set").append(valueType);
-        pinWriteValueSensor.value.accept(this);
+        mbedPinWriteValueAction.value.accept(this);
         this.sb.append(");");
         return null;
     }

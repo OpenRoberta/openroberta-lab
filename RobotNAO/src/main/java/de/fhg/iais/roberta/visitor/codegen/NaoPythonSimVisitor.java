@@ -62,6 +62,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -708,6 +709,11 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
         throw new DbcException("Not supported!");
     }
 

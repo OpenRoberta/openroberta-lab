@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
@@ -65,6 +66,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
@@ -363,8 +365,13 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
-        ConfigurationComponent configurationComponent = checkActorByPortExists(pinWriteValueAction, pinWriteValueAction.port);
-        requiredComponentVisited(pinWriteValueAction, pinWriteValueAction.value);
+        throw new DbcException("Mbed devices should use MbedPinWriteValueAction!");
+    }
+
+    @Override
+    public Void visitMbedPinWriteValueAction(MbedPinWriteValueAction mbedPinWriteValueAction) {
+        ConfigurationComponent configurationComponent = checkActorByPortExists(mbedPinWriteValueAction, mbedPinWriteValueAction.port);
+        requiredComponentVisited(mbedPinWriteValueAction, mbedPinWriteValueAction.value);
         if ( configurationComponent != null ) {
             usedHardwareBuilder.addUsedActor(new UsedActor(configurationComponent.userDefinedPortName, configurationComponent.componentType));
         }
@@ -456,6 +463,12 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(timerSensor.getUserDefinedPort(), SC.TIMER, timerSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(timerReset.getUserDefinedPort(), SC.TIMER, timerReset.getMode()));
         return null;
     }
 

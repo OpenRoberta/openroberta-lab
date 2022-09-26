@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
+import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -23,8 +25,9 @@ import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
+import de.fhg.iais.roberta.syntax.action.sound.GetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
@@ -42,7 +45,7 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
 public interface IMbedVisitor<V>
-        extends IDisplayVisitor<V>, ILightVisitor<V>, ISoundVisitor<V>, IMotorVisitor<V>, ISensorVisitor<V>, IPinVisitor<V> {
+    extends IDisplayVisitor<V>, ILightVisitor<V>, ISoundVisitor<V>, IMotorVisitor<V>, ISensorVisitor<V>, IPinVisitor<V> {
 
     /**
      * visit a {@link DisplayTextAction}.
@@ -182,8 +185,8 @@ public interface IMbedVisitor<V>
     /**
      * visit a {@link SingleMotorOnAction}.
      *
-     * @deprecated should only be used by {@link MbedTwo2ThreeTransformerVisitor} to generate a MotorOnAction
      * @param singleMotorOnAction phrase to be visited
+     * @deprecated should only be used by {@link MbedTwo2ThreeTransformerVisitor} to generate a MotorOnAction
      */
     @Deprecated
     // needed for transformator
@@ -194,8 +197,8 @@ public interface IMbedVisitor<V>
     /**
      * visit a {@link SingleMotorStopAction}.
      *
-     * @deprecated should only be used by {@link MbedTwo2ThreeTransformerVisitor} to generate a MotorStopAction
      * @param singleMotorStopAction phrase to be visited
+     * @deprecated should only be used by {@link MbedTwo2ThreeTransformerVisitor} to generate a MotorStopAction
      */
     @Deprecated
     // needed for transformator
@@ -299,7 +302,12 @@ public interface IMbedVisitor<V>
     }
 
     @Override
-    default V visitVolumeAction(VolumeAction volumeAction) {
+    default V visitGetVolumeAction(GetVolumeAction getVolumeAction) {
+        throw new DbcException("Block is not implemented!");
+    }
+
+    @Override
+    default V visitSetVolumeAction(SetVolumeAction setVolumeAction) {
         throw new DbcException("Block is not implemented!");
     }
 
@@ -308,4 +316,12 @@ public interface IMbedVisitor<V>
         throw new DbcException("Block is not implemented!");
     }
 
+    @Override
+    default V visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
+        throw new DbcException("Mbed devices should use MbedPinWriteValueAction!");
+    }
+
+    default V visitMbedPinWriteValueAction(MbedPinWriteValueAction mbedPinWriteValueAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 }

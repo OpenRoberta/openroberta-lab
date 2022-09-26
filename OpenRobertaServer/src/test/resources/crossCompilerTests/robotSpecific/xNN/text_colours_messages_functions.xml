@@ -705,6 +705,7 @@
                             <mutation datatype="String"></mutation>
                             <field name="TYPE">String</field>
                             <field name="PROTOCOL">BLUETOOTH</field>
+                            <field name="CHANNEL">-1</field>
                             <data>ev3</data>
                             <value name="sendData">
                                 <block type="variables_get" id="Th7KDRRF4xO!8kxr`29f" intask="true">
@@ -725,6 +726,7 @@
                                     <mutation datatype="String"></mutation>
                                     <field name="TYPE">String</field>
                                     <field name="PROTOCOL">BLUETOOTH</field>
+                                    <field name="CHANNEL">-1</field>
                                     <data>ev3</data>
                                     <value name="CONNECTION">
                                         <block type="variables_get" id="2eU8?%5`+ewLF5wBeL{0" intask="true">
@@ -995,16 +997,16 @@
                     <field name="WHEEL_DIAMETER">5.6</field>
                     <field name="TRACK_WIDTH">18</field>
                     <value name="S1">
-                        <block type="robBrick_touch" id="2" intask="true" />
+                        <block type="robBrick_touch" id="2" intask="true"/>
                     </value>
                     <value name="S2">
-                        <block type="robBrick_gyro" id="3" intask="true" />
+                        <block type="robBrick_gyro" id="3" intask="true"/>
                     </value>
                     <value name="S3">
-                        <block type="robBrick_colour" id="4" intask="true" />
+                        <block type="robBrick_colour" id="4" intask="true"/>
                     </value>
                     <value name="S4">
-                        <block type="robBrick_ultrasonic" id="5" intask="true" />
+                        <block type="robBrick_ultrasonic" id="5" intask="true"/>
                     </value>
                     <value name="MB">
                         <block type="robBrick_motor_big" id="6" intask="true">

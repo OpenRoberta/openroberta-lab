@@ -22,10 +22,11 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
+import de.fhg.iais.roberta.syntax.action.sound.GetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.thymio.LedButtonOnAction;
 import de.fhg.iais.roberta.syntax.action.thymio.LedCircleOnAction;
 import de.fhg.iais.roberta.syntax.action.thymio.LedProxHOnAction;
@@ -39,13 +40,13 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.thymio.TapSensor;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
-import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor implements IThymioVisitor<Void> {
@@ -292,12 +293,14 @@ public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
         String port = timerSensor.getUserDefinedPort();
-        JSONObject o;
-        if ( timerSensor.getMode().equals(SC.DEFAULT) || timerSensor.getMode().equals(SC.VALUE) ) {
-            o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port);
-        } else {
-            o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, port);
-        }
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port);
+        return add(o);
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        String port = timerReset.getUserDefinedPort();
+        JSONObject o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, port);
         return add(o);
     }
 
@@ -325,7 +328,12 @@ public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction volumeAction) {
+    public Void visitGetVolumeAction(GetVolumeAction getVolumeAction) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    public Void visitSetVolumeAction(SetVolumeAction setVolumeAction) {
         throw new DbcException("Not supported!");
     }
 }

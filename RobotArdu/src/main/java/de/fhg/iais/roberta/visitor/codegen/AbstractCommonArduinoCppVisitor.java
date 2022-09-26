@@ -11,7 +11,6 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -30,8 +29,10 @@ import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
 public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor {
@@ -224,17 +225,14 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
         String timerNumber = timerSensor.getUserDefinedPort();
-        switch ( timerSensor.getMode() ) {
-            case SC.DEFAULT:
-            case SC.VALUE:
-                this.sb.append("(int) (millis() - __time_").append(timerNumber).append(")");
-                break;
-            case SC.RESET:
-                this.sb.append("__time_").append(timerNumber).append(" = millis();");
-                break;
-            default:
-                throw new DbcException("Invalid Time Mode!");
-        }
+        this.sb.append("(int) (millis() - __time_").append(timerNumber).append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        String timerNumber = timerReset.getUserDefinedPort();
+        this.sb.append("__time_").append(timerNumber).append(" = millis();");
         return null;
     }
 

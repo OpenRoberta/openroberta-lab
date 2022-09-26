@@ -61,6 +61,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
@@ -734,6 +735,11 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
+        throw new UnsupportedOperationException("should be overriden in a robot-specific class");
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
         throw new UnsupportedOperationException("should be overriden in a robot-specific class");
     }
 

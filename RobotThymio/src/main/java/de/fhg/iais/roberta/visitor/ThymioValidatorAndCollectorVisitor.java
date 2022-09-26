@@ -23,10 +23,11 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
+import de.fhg.iais.roberta.syntax.action.sound.GetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.thymio.LedButtonOnAction;
 import de.fhg.iais.roberta.syntax.action.thymio.LedCircleOnAction;
 import de.fhg.iais.roberta.syntax.action.thymio.LedProxHOnAction;
@@ -58,6 +59,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.thymio.TapSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -324,6 +326,12 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     }
 
     @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(timerReset.getMode(), SC.TIMER, timerReset.getMode()));
+        return null;
+    }
+
+    @Override
     public Void visitToneAction(ToneAction toneAction) {
         requiredComponentVisited(toneAction, toneAction.duration, toneAction.frequency);
         usedHardwareBuilder.addUsedActor(new UsedActor(toneAction.port, SC.BUZZER));
@@ -345,7 +353,12 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction volumeAction) {
+    public Void visitGetVolumeAction(GetVolumeAction getVolumeAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitSetVolumeAction(SetVolumeAction setVolumeAction) {
         return null;
     }
 

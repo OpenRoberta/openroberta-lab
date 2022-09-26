@@ -4,7 +4,7 @@ import de.fhg.iais.roberta.bean.NewUsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
+import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
@@ -104,13 +104,13 @@ public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase> impleme
     }
 
     @Override
-    public Phrase visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
+    public Phrase visitMbedPinWriteValueAction(MbedPinWriteValueAction mbedPinWriteValueAction) {
         Pair<ConfigurationComponent, String> compAndName =
-            this.helper.getComponentAndName(pinWriteValueAction.getKind().getName(), pinWriteValueAction.pinValue, pinWriteValueAction.port);
+            this.helper.getComponentAndName(mbedPinWriteValueAction.getKind().getName(), mbedPinWriteValueAction.pinValue, mbedPinWriteValueAction.port);
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-        return new PinWriteValueAction(pinWriteValueAction.pinValue, compAndName.getSecond(), (Expr) pinWriteValueAction.value.modify(this), pinWriteValueAction.actorPortAndMode, pinWriteValueAction.getProperty());
+        return new MbedPinWriteValueAction(mbedPinWriteValueAction.getProperty(), mbedPinWriteValueAction.mutation, mbedPinWriteValueAction.pinValue, compAndName.getSecond(), (Expr) mbedPinWriteValueAction.value.modify(this));
     }
 
     @Override

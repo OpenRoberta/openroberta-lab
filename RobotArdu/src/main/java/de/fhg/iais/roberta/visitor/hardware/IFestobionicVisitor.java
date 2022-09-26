@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
@@ -74,6 +75,11 @@ public interface IFestobionicVisitor<V> extends IMotorVisitor<V>, ILightVisitor<
 
     @Override
     default V visitEncoderSensor(EncoderSensor encoderSensor) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    default V visitEncoderReset(EncoderReset encoderReset) {
         throw new DbcException("Not supported!");
     }
 
@@ -173,14 +179,14 @@ public interface IFestobionicVisitor<V> extends IMotorVisitor<V>, ILightVisitor<
     }
 
     default V visitLedOffAction(LedOffAction ledOffAction) {
-    	throw new DbcException("Not supported!");
+        throw new DbcException("Not supported!");
     }
 
     default V visitLedOnAction(LedOnAction ledOnAction) {
-    	throw new DbcException("Not supported!");
+        throw new DbcException("Not supported!");
     }
-	
+
     default V visitStepMotorAction(StepMotorAction stepMotorAction) {
-    	throw new DbcException("Not supported!");
+        throw new DbcException("Not supported!");
     }
 }
