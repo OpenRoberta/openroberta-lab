@@ -410,6 +410,7 @@
                         </block>
                         <block type="robSensors_timer_reset" id="44GBNN|9Dh2kgapWxRxy" intask="true">
                             <field name="SENSORPORT">1</field>
+                            <field name="SLOT"/>
                         </block>
                     </statement>
                 </block>

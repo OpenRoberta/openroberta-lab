@@ -16,10 +16,11 @@ import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.sound.GetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
@@ -27,7 +28,9 @@ import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassCalibrate;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
@@ -36,6 +39,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -94,11 +98,17 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
     @Override
     public Void visitCompassSensor(CompassSensor compassSensor) {
         checkSensorPort(compassSensor);
-        //TODO There should exist a constant with value ev3dev
-        if ( this.robotConfiguration.getRobotName().equals("ev3dev") && (compassSensor.getMode().equals(SC.CALIBRATE)) ) {
-            addWarningToPhrase(compassSensor, "BLOCK_NOT_SUPPORTED");
-        }
         usedHardwareBuilder.addUsedSensor(new UsedSensor(compassSensor.getUserDefinedPort(), SC.COMPASS, compassSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitCompassCalibrate(CompassCalibrate compassCalibrate) {
+        checkSensorPort(compassCalibrate);
+        if ( this.robotConfiguration.getRobotName().equals("ev3dev") ) {
+            addWarningToPhrase(compassCalibrate, "BLOCK_NOT_SUPPORTED");
+        }
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(compassCalibrate.getUserDefinedPort(), SC.COMPASS, SC.CALIBRATE));
         return null;
     }
 
@@ -109,6 +119,17 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
             addErrorToPhrase(encoderSensor, "CONFIGURATION_ERROR_MOTOR_MISSING");
         } else {
             usedHardwareBuilder.addUsedActor(new UsedActor(encoderSensor.getUserDefinedPort(), configurationComponent.componentType));
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitEncoderReset(EncoderReset encoderReset) {
+        ConfigurationComponent configurationComponent = this.robotConfiguration.optConfigurationComponent(encoderReset.getUserDefinedPort());
+        if ( configurationComponent == null ) {
+            addErrorToPhrase(encoderReset, "CONFIGURATION_ERROR_MOTOR_MISSING");
+        } else {
+            usedHardwareBuilder.addUsedActor(new UsedActor(encoderReset.getUserDefinedPort(), configurationComponent.componentType));
         }
         return null;
     }
@@ -240,6 +261,12 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
     }
 
     @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(timerReset.getUserDefinedPort(), SC.TIMER, timerReset.getMode()));
+        return null;
+    }
+
+    @Override
     public Void visitToneAction(ToneAction toneAction) {
         requiredComponentVisited(toneAction, toneAction.duration, toneAction.frequency);
 
@@ -268,10 +295,14 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction volumeAction) {
-        if ( volumeAction.mode == VolumeAction.Mode.SET ) {
-            requiredComponentVisited(volumeAction, volumeAction.volume);
-        }
+    public Void visitGetVolumeAction(GetVolumeAction getVolumeAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.SOUND));
+        return null;
+    }
+
+    @Override
+    public Void visitSetVolumeAction(SetVolumeAction setVolumeAction) {
+        requiredComponentVisited(setVolumeAction, setVolumeAction.volume);
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.SOUND));
         return null;
     }
@@ -319,6 +350,7 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
                     }
                     break;
                 case "COMPASS_SENSING":
+                case "COMPASS_CALIBRATE":
                     if ( !type.equals("COMPASS") ) {
                         addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
                     }

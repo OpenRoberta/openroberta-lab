@@ -33,10 +33,11 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
+import de.fhg.iais.roberta.syntax.action.sound.GetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -47,12 +48,14 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbot2.GyroResetAxis;
@@ -467,18 +470,21 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     @Override
     public Void visitEncoderSensor(EncoderSensor encoderSensor) {
         String port = getPortFromConfig(encoderSensor.getUserDefinedPort());
-        if ( encoderSensor.getSensorMetaDataBean().getMode().equals("RESET") ) {
-            this.sb.append("mbot2.EM_reset_angle(\"").append(port).append("\") ");
+        if ( encoderSensor.getMode().equals("ROTATION") ) {
+            this.sb.append("(mbot2.EM_get_angle(\"")
+                .append(port)
+                .append("\")")
+                .append(" / 360)");
         } else {
-            if ( encoderSensor.getSensorMetaDataBean().getMode().equals("ROTATION") ) {
-                this.sb.append("(mbot2.EM_get_angle(\"")
-                    .append(port)
-                    .append("\")")
-                    .append(" / 360)");
-            } else {
-                this.sb.append("mbot2.EM_get_angle(\"").append(port).append("\")");
-            }
+            this.sb.append("mbot2.EM_get_angle(\"").append(port).append("\")");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitEncoderReset(EncoderReset encoderReset) {
+        String port = getPortFromConfig(encoderReset.getUserDefinedPort());
+        this.sb.append("mbot2.EM_reset_angle(\"").append(port).append("\") ");
         return null;
     }
 
@@ -717,14 +723,16 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction volumeAction) {
-        if ( volumeAction.mode.name().equals("GET") ) {
-            this.sb.append("cyberpi.audio.get_vol()");
-        } else {
-            this.sb.append("cyberpi.audio.set_vol(");
-            volumeAction.volume.accept(this);
-            this.sb.append(")");
-        }
+    public Void visitGetVolumeAction(GetVolumeAction getVolumeAction) {
+        this.sb.append("cyberpi.audio.get_vol()");
+        return null;
+    }
+
+    @Override
+    public Void visitSetVolumeAction(SetVolumeAction setVolumeAction) {
+        this.sb.append("cyberpi.audio.set_vol(");
+        setVolumeAction.volume.accept(this);
+        this.sb.append(")");
         return null;
     }
 
@@ -735,17 +743,13 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
-        switch ( timerSensor.getMode() ) {
-            case SC.DEFAULT:
-            case SC.VALUE:
-                this.sb.append("((cyberpi.timer.get() - _timer").append(timerSensor.getUserDefinedPort()).append(")*1000)");
-                break;
-            case SC.RESET:
-                this.sb.append("_timer").append(timerSensor.getUserDefinedPort()).append(" = cyberpi.timer.get()");
-                break;
-            default:
-                throw new DbcException("Invalid Time Mode!");
-        }
+        this.sb.append("((cyberpi.timer.get() - _timer").append(timerSensor.getUserDefinedPort()).append(")*1000)");
+        return null;
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        this.sb.append("_timer").append(timerReset.getUserDefinedPort()).append(" = cyberpi.timer.get()");
         return null;
     }
 

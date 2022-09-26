@@ -41,6 +41,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -299,6 +300,12 @@ public class NaoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
         addWarningToPhrase(timerSensor, "BLOCK_NOT_SUPPORTED");
+        return null;
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        addWarningToPhrase(timerReset, "BLOCK_NOT_SUPPORTED");
         return null;
     }
 

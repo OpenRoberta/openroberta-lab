@@ -190,6 +190,7 @@
                         </block>
                         <block type="robSensors_timer_reset" id="GST-EJUG|nfw!uu1|ZRg" intask="true">
                             <field name="SENSORPORT">1</field>
+                            <field name="SLOT"/>
                         </block>
                         <block type="robActions_serial_print" id="E(_vyO*R~RPeJsT)|rIs" intask="true">
                             <value name="OUT">

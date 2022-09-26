@@ -11,22 +11,22 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
-@NepoPhrase(name = "PIN_WRITE_VALUE", category = "ACTOR", blocklyNames = {"robActions_write_pin"})
-public final class PinWriteValueAction extends Action {
+@NepoPhrase(name = "PIN_WRITE_VALUE_MBED", category = "ACTOR", blocklyNames = {"mbedActions_write_to_pin"})
+public final class MbedPinWriteValueAction extends Action {
 
     @NepoMutation
     public final Mutation mutation;
 
-    @NepoField(name = "MODE")
+    @NepoField(name = "VALUETYPE")
     public final String pinValue;
 
-    @NepoField(name = "ACTORPORT")
+    @NepoField(name = "PIN")
     public final String port;
 
     @NepoValue(name = "VALUE", type = BlocklyType.NUMBER_INT)
     public final Expr value;
 
-    public PinWriteValueAction(BlocklyProperties properties, Mutation mutation, String pinValue, String port, Expr value) {
+    public MbedPinWriteValueAction(BlocklyProperties properties, Mutation mutation, String pinValue, String port, Expr value) {
         super(properties);
         Assert.notNull(pinValue);
         Assert.notNull(port);

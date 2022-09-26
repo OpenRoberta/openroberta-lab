@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -181,18 +182,13 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
-        JSONObject o;
-        switch ( timerSensor.getMode() ) {
-            case "DEFAULT":
-            case "VALUE":
-                o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, timerSensor.getUserDefinedPort());
-                break;
-            case "RESET":
-                o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, timerSensor.getUserDefinedPort());
-                break;
-            default:
-                throw new DbcException("Invalid Timer Mode " + timerSensor.getMode());
-        }
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, timerSensor.getUserDefinedPort());
+        return add(o);
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        JSONObject o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, timerReset.getUserDefinedPort());
         return add(o);
     }
 

@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.general.IDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
+import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
@@ -58,12 +58,12 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.IMbedVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
@@ -198,13 +198,13 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
     }
 
     @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
-        pinWriteValueAction.value.accept(this);
-        String port = pinWriteValueAction.port;
+    public Void visitMbedPinWriteValueAction(MbedPinWriteValueAction mbedPinWriteValueAction) {
+        mbedPinWriteValueAction.value.accept(this);
+        String port = mbedPinWriteValueAction.port;
         ConfigurationComponent cc = this.configuration.optConfigurationComponent(port);
         String pin1 = (cc == null) ? "0" : cc.getProperty("PIN1");
 
-        String mode = pinWriteValueAction.pinValue;
+        String mode = mbedPinWriteValueAction.pinValue;
         JSONObject o = makeNode(C.WRITE_PIN_ACTION).put(C.PIN, pin1).put(C.MODE, mode.toLowerCase());
         return add(o);
     }
@@ -258,12 +258,14 @@ public class MbedStackMachineVisitor extends AbstractStackMachineVisitor impleme
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
         String port = timerSensor.getUserDefinedPort();
-        JSONObject o;
-        if ( timerSensor.getMode().equals(SC.DEFAULT) || timerSensor.getMode().equals(SC.VALUE) ) {
-            o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port).put(C.NAME, "calliope");
-        } else {
-            o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "calliope");
-        }
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port).put(C.NAME, "calliope");
+        return add(o);
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        String port = timerReset.getUserDefinedPort();
+        JSONObject o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "calliope");
         return add(o);
     }
 

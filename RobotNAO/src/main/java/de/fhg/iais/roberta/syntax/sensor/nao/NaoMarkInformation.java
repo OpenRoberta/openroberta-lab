@@ -14,7 +14,7 @@ public final class NaoMarkInformation extends Sensor {
     @NepoField(name = "MODE")
     public final String mode;
 
-    @NepoValue(name = "VALUE", type = BlocklyType.STRING)
+    @NepoValue(name = "VALUE", type = BlocklyType.NUMBER)
     public final Expr naoMarkId;
 
     public NaoMarkInformation(BlocklyProperties properties, String mode, Expr naoMarkId) {

@@ -45,10 +45,11 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
+import de.fhg.iais.roberta.syntax.action.sound.GetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
@@ -72,7 +73,9 @@ import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassCalibrate;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
@@ -81,6 +84,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -884,12 +888,16 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
             case SC.DISTANCE:
                 generateGetEncoderInDistance(port);
                 break;
-            case SC.RESET:
-                generateResetEncoder(port);
-                break;
             default:
                 throw new DbcException("Unknown encoder mode");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitEncoderReset(EncoderReset encoderReset) {
+        String port = encoderReset.getUserDefinedPort();
+        this.sb.append("ResetRotationCount(").append(Ev3C4ev3Visitor.getPrefixedOutputPort(port)).append(");");
         return null;
     }
 
@@ -909,33 +917,18 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.sb.append(" * M_PI * WHEEL_DIAMETER)");
     }
 
-    private void generateResetEncoder(String port) {
-        this.sb.append("ResetRotationCount(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ");");
-    }
-
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
         String timerNumber = timerSensor.getUserDefinedPort();
-        switch ( timerSensor.getMode() ) {
-            case SC.DEFAULT:
-            case SC.VALUE:
-                generateGetTimer(timerNumber);
-                break;
-            case SC.RESET:
-                generateResetTimer(timerNumber);
-                break;
-            default:
-                throw new DbcException("Unknown timer mode");
-        }
+        this.sb.append("GetTimerValue(").append(timerNumber).append(")");
         return null;
     }
 
-    private void generateGetTimer(String timerNumber) {
-        this.sb.append("GetTimerValue(" + timerNumber + ")");
-    }
-
-    private void generateResetTimer(String timerNumber) {
-        this.sb.append("ResetTimer(" + timerNumber + ");");
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        String timerNumber = timerReset.getUserDefinedPort();
+        this.sb.append("ResetTimer(").append(timerNumber).append(");");
+        return null;
     }
 
     @Override
@@ -1077,27 +1070,20 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitCompassSensor(CompassSensor compassSensor) {
-        if ( compassSensor.getMode().equals(SC.CALIBRATE) ) {
-            visitCalibrateCompass(compassSensor);
-        } else {
-            visitReadCompass(compassSensor);
-        }
-
+        String mode = getCompassSensorReadModeConstant(compassSensor.getMode());
+        this.sb.append("ReadHTCompassSensor(").append(Ev3C4ev3Visitor.getPrefixedInputPort(compassSensor.getUserDefinedPort())).append(", ").append(mode).append(")");
         return null;
     }
 
-    private void visitCalibrateCompass(CompassSensor compassSensor) {
-        String port = Ev3C4ev3Visitor.getPrefixedInputPort(compassSensor.getUserDefinedPort());
+    @Override
+    public Void visitCompassCalibrate(CompassCalibrate compassCalibrate) {
+        String port = Ev3C4ev3Visitor.getPrefixedInputPort(compassCalibrate.getUserDefinedPort());
         nlIndent();
-        this.sb.append("StartHTCompassCalibration(" + port + ");");
+        this.sb.append("StartHTCompassCalibration(").append(port).append(");");
         this.sb.append("Wait(40000);");
-        this.sb.append("StopHTCompassCalibration(" + port + ");");
+        this.sb.append("StopHTCompassCalibration(").append(port).append(");");
         nlIndent();
-    }
-
-    private void visitReadCompass(CompassSensor compassSensor) {
-        String mode = getCompassSensorReadModeConstant(compassSensor.getMode());
-        this.sb.append("ReadHTCompassSensor(" + Ev3C4ev3Visitor.getPrefixedInputPort(compassSensor.getUserDefinedPort()) + ", " + mode + ")");
+        return null;
     }
 
     private String getCompassSensorReadModeConstant(String mode) {
@@ -1217,28 +1203,17 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction volumeAction) {
-        switch ( volumeAction.mode ) {
-            case SET:
-                generateSetVolume(volumeAction);
-                break;
-            case GET:
-                generateGetVolume();
-                break;
-            default:
-                throw new DbcException("Unknown volume action mode");
-        }
+    public Void visitGetVolumeAction(GetVolumeAction getVolumeAction) {
+        this.sb.append("GetVolume()");
         return null;
     }
 
-    private void generateSetVolume(VolumeAction volumeAction) {
+    @Override
+    public Void visitSetVolumeAction(SetVolumeAction setVolumeAction) {
         this.sb.append("SetVolume(");
-        volumeAction.volume.accept(this);
+        setVolumeAction.volume.accept(this);
         this.sb.append(");");
-    }
-
-    private void generateGetVolume() {
-        this.sb.append("GetVolume()");
+        return null;
     }
 
     @Override

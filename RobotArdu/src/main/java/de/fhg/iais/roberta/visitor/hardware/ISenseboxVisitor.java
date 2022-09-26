@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.ParticleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
@@ -69,6 +70,8 @@ public interface ISenseboxVisitor<V> extends IDisplayVisitor<V>, ISimpleSoundVis
     V visitTemperatureSensor(TemperatureSensor temperatureSensor);
 
     V visitTimerSensor(TimerSensor timerSensor);
+
+    V visitTimerReset(TimerReset timerReset);
 
     V visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor);
 

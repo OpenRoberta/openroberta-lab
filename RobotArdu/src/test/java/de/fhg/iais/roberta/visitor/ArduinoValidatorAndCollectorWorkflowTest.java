@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.LightMode;
@@ -507,7 +508,8 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitPinWriteValueAction() {
         configurationComponents.add(new ConfigurationComponent(SC.DIGITAL_PIN, true, "P1", "P1", new HashMap<>()));
 
-        PinWriteValueAction pinWriteValueAction = new PinWriteValueAction("1", "P1", new NumConst(null, "1"), true, bp);
+        Mutation mutation = new Mutation();
+        PinWriteValueAction pinWriteValueAction = new PinWriteValueAction(bp, mutation, "1", "P1", new NumConst(null, "1"));
         phrases.add(pinWriteValueAction);
 
         executeWorkflow();
@@ -516,7 +518,8 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitPinWriteValueAction_noPort() {
-        PinWriteValueAction pinWriteValueAction = new PinWriteValueAction("1", "P1", new NumConst(null, "1"), true, bp);
+        Mutation mutation = new Mutation();
+        PinWriteValueAction pinWriteValueAction = new PinWriteValueAction(bp, mutation, "1", "P1", new NumConst(null, "1"));
         phrases.add(pinWriteValueAction);
 
         executeWorkflow();

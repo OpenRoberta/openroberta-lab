@@ -24,15 +24,17 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
+import de.fhg.iais.roberta.syntax.action.sound.GetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
@@ -43,6 +45,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -147,14 +150,17 @@ public class NxtStackMachineVisitor extends AbstractStackMachineVisitor implemen
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction volumeAction) {
+    public Void visitGetVolumeAction(GetVolumeAction getVolumeAction) {
         JSONObject o;
-        if ( volumeAction.mode == VolumeAction.Mode.GET ) {
-            o = makeNode(C.GET_VOLUME);
-        } else {
-            volumeAction.volume.accept(this);
-            o = makeNode(C.SET_VOLUME_ACTION);
-        }
+        o = makeNode(C.GET_VOLUME);
+        return add(o);
+    }
+
+    @Override
+    public Void visitSetVolumeAction(SetVolumeAction setVolumeAction) {
+        JSONObject o;
+        setVolumeAction.volume.accept(this);
+        o = makeNode(C.SET_VOLUME_ACTION);
         return add(o);
     }
 
@@ -305,12 +311,14 @@ public class NxtStackMachineVisitor extends AbstractStackMachineVisitor implemen
     public Void visitEncoderSensor(EncoderSensor encoderSensor) {
         String mode = encoderSensor.getMode().toLowerCase();
         String port = encoderSensor.getUserDefinedPort().toLowerCase();
-        JSONObject o;
-        if ( mode.equals(C.RESET) ) {
-            o = makeNode(C.ENCODER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
-        } else {
-            o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ENCODER_SENSOR_SAMPLE).put(C.PORT, port).put(C.MODE, mode).put(C.NAME, "ev3");
-        }
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ENCODER_SENSOR_SAMPLE).put(C.PORT, port).put(C.MODE, mode).put(C.NAME, "ev3");
+        return add(o);
+    }
+
+    @Override
+    public Void visitEncoderReset(EncoderReset encoderReset) {
+        String port = encoderReset.getUserDefinedPort().toLowerCase();
+        JSONObject o = makeNode(C.ENCODER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
         return add(o);
     }
 
@@ -339,12 +347,14 @@ public class NxtStackMachineVisitor extends AbstractStackMachineVisitor implemen
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
         String port = timerSensor.getUserDefinedPort();
-        JSONObject o;
-        if ( timerSensor.getMode().equals(SC.DEFAULT) || timerSensor.getMode().equals(SC.VALUE) ) {
-            o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port).put(C.NAME, "ev3");
-        } else {
-            o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
-        }
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port).put(C.NAME, "ev3");
+        return add(o);
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        String port = timerReset.getUserDefinedPort();
+        JSONObject o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
         return add(o);
     }
 

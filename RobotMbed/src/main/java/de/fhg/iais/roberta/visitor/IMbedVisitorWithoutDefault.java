@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.visitor;
 
+import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -40,6 +41,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
@@ -53,7 +55,7 @@ import de.fhg.iais.roberta.visitor.hardware.actor.ISimpleSoundVisitor;
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
 public interface IMbedVisitorWithoutDefault<V>
-        extends IDisplayVisitor<V>, ILightVisitor<V>, ISimpleSoundVisitor<V>, IMotorVisitor<V>, IPinVisitor<V> {
+    extends IDisplayVisitor<V>, ILightVisitor<V>, ISimpleSoundVisitor<V>, IMotorVisitor<V>, IPinVisitor<V> {
 
     V visitDisplayTextAction(DisplayTextAction displayTextAction);
 
@@ -112,7 +114,6 @@ public interface IMbedVisitorWithoutDefault<V>
     V visitMotionKitDualSetAction(MotionKitDualSetAction motionKitDualSetAction);
 
 
-
     V visitKeysSensor(KeysSensor keysSensor);
 
     V visitColorSensor(ColorSensor colorSensor);
@@ -124,6 +125,8 @@ public interface IMbedVisitorWithoutDefault<V>
     V visitGyroSensor(GyroSensor gyroSensor);
 
     V visitTimerSensor(TimerSensor timerSensor);
+
+    V visitTimerReset(TimerReset timerReset);
 
     V visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor);
 
@@ -144,4 +147,6 @@ public interface IMbedVisitorWithoutDefault<V>
     V visitHumiditySensor(HumiditySensor humiditySensor);
 
     V visitInfraredSensor(InfraredSensor infraredSensor);
+
+    V visitMbedPinWriteValueAction(MbedPinWriteValueAction mbedPinWriteValueAction);
 }

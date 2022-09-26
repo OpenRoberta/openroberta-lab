@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
+import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
@@ -46,6 +46,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
@@ -192,19 +193,13 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
-        switch ( timerSensor.getMode() ) {
-            case SC.DEFAULT:
-            case SC.VALUE:
-                this.sb.append("( microbit.running_time() - timer1 )");
-                break;
-            case SC.RESET:
-                this.sb.append("timer1 = microbit.running_time()");
-                break;
-            default:
-                throw new DbcException("Invalid Time Mode!");
+        this.sb.append("( microbit.running_time() - timer1 )");
+        return null;
+    }
 
-        }
-
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        this.sb.append("timer1 = microbit.running_time()");
         return null;
     }
 
@@ -365,14 +360,14 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
-        String port = pinWriteValueAction.port;
+    public Void visitMbedPinWriteValueAction(MbedPinWriteValueAction mbedPinWriteValueAction) {
+        String port = mbedPinWriteValueAction.port;
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
-        this.sb.append("microbit.pin" + pin1);
-        String valueType = pinWriteValueAction.pinValue.equals(SC.DIGITAL) ? "digital(" : "analog(";
+        this.sb.append("microbit.pin").append(pin1);
+        String valueType = mbedPinWriteValueAction.pinValue.equals(SC.DIGITAL) ? "digital(" : "analog(";
         this.sb.append(".write_").append(valueType);
-        pinWriteValueAction.value.accept(this);
+        mbedPinWriteValueAction.value.accept(this);
         this.sb.append(");");
         return null;
     }

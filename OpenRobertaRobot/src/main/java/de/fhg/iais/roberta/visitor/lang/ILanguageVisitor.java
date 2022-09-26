@@ -74,6 +74,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
@@ -263,6 +264,8 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct);
 
     V visitTimerSensor(TimerSensor timerSensor);
+
+    V visitTimerReset(TimerReset timerReset);
 
     V visitUnary(Unary unary);
 

@@ -2,8 +2,10 @@ package de.fhg.iais.roberta.visitor.hardware.sensor;
 
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassCalibrate;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
@@ -24,6 +26,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -54,6 +57,10 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
         throw new DbcException("EncoderSensor not implemented!");
     }
 
+    default V visitEncoderReset(EncoderReset encoderReset) {
+        throw new DbcException("EncoderReset not implemented!");
+    }
+
     default V visitGyroSensor(GyroSensor gyroSensor) {
         throw new DbcException("GyroSensor not implemented!");
     }
@@ -70,6 +77,10 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
         throw new DbcException("TimerSensor not implemented!");
     }
 
+    default V visitTimerReset(TimerReset timerReset) {
+        throw new DbcException("TimerReset not implemented!");
+    }
+
     default V visitTouchSensor(TouchSensor touchSensor) {
         throw new DbcException("TouchSensor not implemented!");
     }
@@ -80,6 +91,10 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
 
     default V visitCompassSensor(CompassSensor compassSensor) {
         throw new DbcException("CompassSensor not implemented!");
+    }
+
+    default V visitCompassCalibrate(CompassCalibrate compassCalibrate) {
+        throw new DbcException("CompassCalibrate not implemented!");
     }
 
     default V visitTemperatureSensor(TemperatureSensor temperatureSensor) {

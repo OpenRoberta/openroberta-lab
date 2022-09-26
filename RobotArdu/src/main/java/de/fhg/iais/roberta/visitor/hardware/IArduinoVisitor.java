@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
@@ -65,6 +66,8 @@ public interface IArduinoVisitor<V>
     V visitTemperatureSensor(TemperatureSensor temperatureSensor);
 
     V visitTimerSensor(TimerSensor timerSensor);
+
+    V visitTimerReset(TimerReset timerReset);
 
     V visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor);
 

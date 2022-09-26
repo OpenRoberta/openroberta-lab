@@ -360,15 +360,19 @@
                 </block>
                 <block type="robSensors_compass_calibrate" id="IZ~gWZ%/B?%)v:L1_~Ti" intask="false">
                     <field name="SENSORPORT">1</field>
+                    <field name="SLOT"/>
                 </block>
                 <block type="robSensors_compass_calibrate" id="D@#8u5*iGi{UE(@I5#-l" intask="false">
                     <field name="SENSORPORT">2</field>
+                    <field name="SLOT"/>
                 </block>
                 <block type="robSensors_compass_calibrate" id="CVX=4n.LA:]vX/V9?5Kl" intask="false">
                     <field name="SENSORPORT">3</field>
+                    <field name="SLOT"/>
                 </block>
                 <block type="robSensors_compass_calibrate" id="~%;G-Eh50y({EF7{pi,G" intask="false">
                     <field name="SENSORPORT">4</field>
+                    <field name="SLOT"/>
                 </block>
                 <block type="robActions_display_text" id="g`a_`V1JLKA)=a%U.AqX" inline="true" intask="false">
                     <value name="OUT">

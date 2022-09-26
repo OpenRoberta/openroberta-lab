@@ -33,10 +33,11 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
+import de.fhg.iais.roberta.syntax.action.sound.GetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
@@ -50,7 +51,9 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassCalibrate;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
@@ -59,6 +62,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -126,19 +130,16 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction volumeAction) {
-        switch ( volumeAction.mode ) {
-            case SET:
-                this.sb.append("hal.setVolume(");
-                volumeAction.volume.accept(this);
-                this.sb.append(")");
-                break;
-            case GET:
-                this.sb.append("hal.getVolume()");
-                break;
-            default:
-                throw new DbcException("Invalid volume action mode!");
-        }
+    public Void visitGetVolumeAction(GetVolumeAction getVolumeAction) {
+        this.sb.append("hal.getVolume()");
+        return null;
+    }
+
+    @Override
+    public Void visitSetVolumeAction(SetVolumeAction setVolumeAction) {
+        this.sb.append("hal.setVolume(");
+        setVolumeAction.volume.accept(this);
+        this.sb.append(")");
         return null;
     }
 
@@ -467,12 +468,15 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitEncoderSensor(EncoderSensor encoderSensor) {
-        String encoderSensorPort = encoderSensor.getUserDefinedPort().toString();
-        if ( encoderSensor.getMode().equals(SC.RESET) ) {
-            this.sb.append("hal.resetMotorTacho('" + encoderSensorPort + "')");
-        } else {
-            this.sb.append("hal.getMotorTachoValue('" + encoderSensorPort + "', " + getEnumCode(encoderSensor.getMode()) + ")");
-        }
+        String encoderSensorPort = encoderSensor.getUserDefinedPort();
+        this.sb.append("hal.getMotorTachoValue('").append(encoderSensorPort).append("', ").append(getEnumCode(encoderSensor.getMode())).append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitEncoderReset(EncoderReset encoderReset) {
+        String encoderSensorPort = encoderReset.getUserDefinedPort();
+        this.sb.append("hal.resetMotorTacho('").append(encoderSensorPort).append("')");
         return null;
     }
 
@@ -493,17 +497,14 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitCompassSensor(CompassSensor compassSensor) {
         String compassSensorPort = compassSensor.getUserDefinedPort();
-        switch ( compassSensor.getMode() ) {
-            case SC.CALIBRATE:
-                // Calibration is not supported by ev3dev hitechnic sensor for now
-                break;
-            case SC.ANGLE:
-            case SC.COMPASS:
-                this.sb.append("hal.getHiTecCompassSensorValue('" + compassSensorPort + "', " + getEnumCode(compassSensor.getMode()) + ")");
-                break;
-            default:
-                throw new DbcException("Invalid Compass Mode!");
-        }
+        this.sb.append("hal.getHiTecCompassSensorValue('").append(compassSensorPort).append("', ").append(getEnumCode(compassSensor.getMode())).append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitCompassCalibrate(CompassCalibrate compassCalibrate) {
+        // Calibration is not supported by ev3dev hitechnic sensor for now
+        // TODO: Should a DbcException be thrown here?
         return null;
     }
 
@@ -543,17 +544,14 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
         String timerNumber = timerSensor.getUserDefinedPort();
-        switch ( timerSensor.getMode() ) {
-            case SC.DEFAULT:
-            case SC.VALUE:
-                this.sb.append("hal.getTimerValue(" + timerNumber + ")");
-                break;
-            case SC.RESET:
-                this.sb.append("hal.resetTimer(" + timerNumber + ")");
-                break;
-            default:
-                throw new DbcException("Invalid Time Mode!");
-        }
+        this.sb.append("hal.getTimerValue(").append(timerNumber).append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        String timerNumber = timerReset.getUserDefinedPort();
+        this.sb.append("hal.resetTimer(").append(timerNumber).append(")");
         return null;
     }
 

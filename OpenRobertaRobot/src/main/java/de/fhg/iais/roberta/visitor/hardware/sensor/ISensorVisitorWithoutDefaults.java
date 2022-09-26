@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
@@ -24,6 +25,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -42,6 +44,8 @@ public interface ISensorVisitorWithoutDefaults<V> extends IHardwareVisitor<V> {
 
     V visitEncoderSensor(EncoderSensor encoderSensor);
 
+    V visitEncoderReset(EncoderReset encoderReset);
+
     V visitGyroSensor(GyroSensor gyroSensor);
 
     V visitGyroReset(GyroReset gyroReset);
@@ -49,6 +53,8 @@ public interface ISensorVisitorWithoutDefaults<V> extends IHardwareVisitor<V> {
     V visitInfraredSensor(InfraredSensor infraredSensor);
 
     V visitTimerSensor(TimerSensor timerSensor);
+
+    V visitTimerReset(TimerReset timerReset);
 
     V visitTouchSensor(TouchSensor touchSensor);
 

@@ -100,6 +100,7 @@
                 </block>
                 <block type="robSensors_timer_reset" id="xEI:.!_D=0uA{f{t`3`g" intask="true">
                     <field name="SENSORPORT">1</field>
+                    <field name="SLOT"/>
                 </block>
                 <block type="robControls_wait_time" id="*BdbSz@R?|])B0jc2=@r" intask="true">
                     <value name="WAIT">
