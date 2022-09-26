@@ -251,7 +251,6 @@ progs:
       uno: "Comparison of string and char not possible"
       nano33ble: "Comparison of string and char not possible"
       mega: "Comparison of string and char not possible"
-      nano: "Comparison of string and char not possible"
       botnroll: "Comparison of string and char not possible"
       unowifirev2: "Comparison of string and char not possible"
       sensebox: "Comparison of string and char not possible"

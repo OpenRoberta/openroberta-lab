@@ -5,7 +5,6 @@
 #include <Servo/src/Servo.h>
 #include <LiquidCrystal_I2C/LiquidCrystal_I2C.h>
 #include <Stepper/src/Stepper.h>
-#include <Adafruit_SSD1306.h>
 #include <NEPODefs.h>
 
 void ____display();
@@ -28,18 +27,13 @@ int _led_green_R2 = 7;
 int _led_blue_R2 = 8;
 int _buzzer_S3 = 11;
 int _output_A = 0;
-int _output_A2 = 3;
+int _output_A2 = 5;
 int _relay_R = 9;
 Servo _servo_S;
 LiquidCrystal_I2C _lcd_L3(0x27, 16, 2);
 int _led_L = LED_BUILTIN;
 int _SPU_S2 = 2048;
-Stepper _stepper_S2(_SPU_S2, 1, 4, 2, 5);
-#define SCREEN_ADDRESS 0x3D
-#define OLED_RESET 4
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 64
-Adafruit_SSD1306 _lcd_O(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+Stepper _stepper_S2(_SPU_S2, 1, 3, 2, 4);
 
 void ____display() {
     Serial.println(___stringVar);
@@ -47,11 +41,8 @@ void ____display() {
     _lcd_L3.print(___stringVar);
     
     _lcd_L3.clear();
-    _lcd_O.setCursor(0,1);
-    _lcd_O.print("Hallo");
-    _lcd_O.display();
-    _lcd_O.clearDisplay();
-    _lcd_O.display();
+    
+    
 }
 
 void ____action() {
@@ -105,9 +96,6 @@ void setup()
     _servo_S.attach(10);
     _lcd_L3.begin();
     pinMode(_led_L, OUTPUT);
-    _lcd_O.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
-    _lcd_O.clearDisplay();
-    _lcd_O.setTextColor(SSD1306_WHITE);
     ___numberVar = 0;
     ___booleanVar = true;
     ___stringVar = "";
