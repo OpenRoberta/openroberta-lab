@@ -28,12 +28,12 @@ public final class NeuralNetworkInitRawData extends Stmt {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         return new NeuralNetworkInitRawData(Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         return jaxbDestination;

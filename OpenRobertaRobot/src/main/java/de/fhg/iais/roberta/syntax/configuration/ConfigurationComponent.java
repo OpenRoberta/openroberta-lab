@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.SC;
 
 /**
- * Representation of old/new configuration blocks in the AST. May have subclasses which override {@link ConfigurationComponent#astToBlock()} in order to
+ * Representation of old/new configuration blocks in the AST. May have subclasses which override {@link ConfigurationComponent#ast2xml()} in order to
  * implement changed behaviour, these must follow the naming structure defined in {@link Jaxb2ConfigurationAst#BRICK_BLOCK_PATTERN} as implemented over in
  * {@link Jaxb2ConfigurationAst#instance2NewConfigComp(Instance, BlocklyDropdownFactory)}
  * TODO: this subclassing should be removed and the class declared final
@@ -74,7 +74,7 @@ public class ConfigurationComponent extends Phrase {
         String userDefinedPortName,
         Map<String, String> componentProperties,
         BlocklyProperties properties,
-        
+
         int x,
         int y) {
         super(new BlockDescriptor(name, Category.CONFIGURATION_BLOCK, ConfigurationComponent.class, new String[0], Collections.emptyMap()), properties);
@@ -152,7 +152,7 @@ public class ConfigurationComponent extends Phrase {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block destination = new Block();
         Ast2Jaxb.setBasicProperties(this, destination);
         Ast2Jaxb.addField(destination, "NAME", this.userDefinedPortName);

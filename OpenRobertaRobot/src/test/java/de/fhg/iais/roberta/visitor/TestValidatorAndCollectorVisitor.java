@@ -4,7 +4,7 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.syntax.SimplePhrase;
+import de.fhg.iais.roberta.syntax.TestSimplePhrase;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.visitor.validate.AbstractValidatorAndCollectorVisitor;
 
@@ -22,7 +22,7 @@ public class TestValidatorAndCollectorVisitor extends AbstractValidatorAndCollec
         super(mainVisitor, robotConfiguration, beanBuilders);
     }
 
-    public Void visitSimplePhrase(SimplePhrase simplePhrase) {
+    public Void visitTestSimplePhrase(TestSimplePhrase simplePhrase) {
         return null;
     }
 

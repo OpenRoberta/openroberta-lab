@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.transformer;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,11 +41,11 @@ import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 public class Jaxb2ProgramAst {
@@ -82,7 +83,7 @@ public class Jaxb2ProgramAst {
      *
      * @param set the BlockSet to transform
      */
-    public ProgramAst blocks2Ast(BlockSet set) {
+    public ProgramAst blocks2ast(BlockSet set) {
         ProgramAst.Builder builder =
             new ProgramAst.Builder()
                 .setRobotType(set.getRobottype())
@@ -97,7 +98,7 @@ public class Jaxb2ProgramAst {
             List<Phrase> range = new ArrayList();
             range.add(location);
             for ( Block block : blocks ) {
-                range.add(blockToAST(block));
+                range.add(block2ast(block));
             }
             builder.addToTree(range);
         }
@@ -110,7 +111,7 @@ public class Jaxb2ProgramAst {
      * @param block to be transformed
      * @return corresponding AST object
      */
-    private Phrase blockToAST(Block block) {
+    private Phrase block2ast(Block block) {
         if ( block == null ) {
             throw new DbcException("Invalid null block");
         }
@@ -120,41 +121,44 @@ public class Jaxb2ProgramAst {
         String className = matchingBlockDescriptor.getAstClass().getName();
         try {
             Class<?> astClass = Class.forName(className);
+            if ( !Modifier.isFinal(astClass.getModifiers()) ) {
+                throw new DbcException("class " + astClass.getSimpleName() + " is not final. Transformation xml -> ast will fail");
+            }
             if ( AnnotationHelper.isNepoAnnotatedClass(astClass) ) {
                 return AnnotationHelper.block2astByAnnotation(block, astClass, this);
             } else {
-                return block2phraseWithOldJaxbToAst(block, astClass);
+                return block2phraseWithoutAnnotation(block, astClass);
             }
         } catch ( ClassNotFoundException cnfe ) {
-            throw new DbcException("Could not load AST class " + className + " . Inspect the block declation YML files of the plugin used");
+            throw new DbcException("Could not load AST class " + className);
         }
     }
 
-    private Phrase block2phraseWithOldJaxbToAst(Block block, Class<?> astClass) {
+    private Phrase block2phraseWithoutAnnotation(Block block, Class<?> astClass) {
         java.lang.reflect.Method method = null;
         try {
-            method = astClass.getMethod("jaxbToAst", Block.class);
+            method = astClass.getMethod("xml2ast", Block.class);
         } catch ( NoSuchMethodException | SecurityException e ) {
         }
         if ( method != null ) {
             try {
                 return (Phrase) method.invoke(null, block);
             } catch ( IllegalAccessException | InvocationTargetException e ) {
-                throw new DbcException("Could not invoke the static method jaxbToAst(Block) for AST class " + astClass.getSimpleName(), e);
+                throw new DbcException("not annotated xml -> ast: static method xml2ast(Block) not found for AST class " + astClass.getSimpleName(), e);
             }
         }
         try {
-            method = astClass.getMethod("jaxbToAst", Block.class, Jaxb2ProgramAst.class);
+            method = astClass.getMethod("xml2ast", Block.class, Jaxb2ProgramAst.class);
         } catch ( NoSuchMethodException | SecurityException e ) {
         }
         if ( method != null ) {
             try {
                 return (Phrase) method.invoke(null, block, this);
             } catch ( IllegalAccessException | InvocationTargetException e ) {
-                throw new DbcException("Could not invoke the static method jaxbToAst(Block,Jaxb2ProgramAst) for AST class " + astClass.getSimpleName(), e);
+                throw new DbcException("not annotated xml -> ast: static method xml2ast(Block,Jaxb2ProgramAst) fails for AST class " + astClass.getSimpleName(), e);
             }
         }
-        throw new DbcException("Could not find one of the two static method jaxbToAst for AST class " + astClass.getSimpleName());
+        throw new DbcException("Could not find one of the two static method xml2ast for AST class " + astClass.getSimpleName());
     }
 
     /**
@@ -285,7 +289,7 @@ public class Jaxb2ProgramAst {
      * @param arguments to be transformed
      * @return list of AST expressions
      */
-    public static  ExprList argumentsToExprList(List<Arg> arguments) {
+    public static ExprList argumentsToExprList(List<Arg> arguments) {
         ExprList parameters = new ExprList();
         for ( Arg arg : arguments ) {
             Var parametar = new Var(BlocklyType.get(arg.getType()), arg.getName(), BlocklyProperties.make("PARAMETER", "1"));
@@ -365,7 +369,7 @@ public class Jaxb2ProgramAst {
     private ExprList blocksToMethodParameterDeclaration(List<Block> exprBolcks) {
         ExprList exprList = new ExprList();
         for ( Block exb : exprBolcks ) {
-            Phrase p = blockToAST(exb);
+            Phrase p = block2ast(exb);
             if ( p instanceof VarDeclaration ) {
                 exprList.addExpr((VarDeclaration) p);
             } else {
@@ -405,11 +409,11 @@ public class Jaxb2ProgramAst {
         if ( shadow != null ) {
             Block shadowBlock = Jaxb2Ast.shadow2block(shadow);
             if ( block != null ) {
-                return new ShadowExpr(Jaxb2Ast.convertPhraseToExpr(blockToAST(shadowBlock)), Jaxb2Ast.convertPhraseToExpr(blockToAST(block)));
+                return new ShadowExpr(Jaxb2Ast.convertPhraseToExpr(block2ast(shadowBlock)), Jaxb2Ast.convertPhraseToExpr(block2ast(block)));
             }
-            return new ShadowExpr(Jaxb2Ast.convertPhraseToExpr(blockToAST(shadowBlock)), null);
+            return new ShadowExpr(Jaxb2Ast.convertPhraseToExpr(block2ast(shadowBlock)), null);
         } else {
-            return blockToAST(block);
+            return block2ast(block);
         }
     }
 
@@ -425,7 +429,7 @@ public class Jaxb2ProgramAst {
     private void convertPhraseToStmt(StmtList stmtList, Block sb) {
         Phrase p;
 
-        p = blockToAST(sb);
+        p = block2ast(sb);
 
         Stmt stmt;
         if ( p.getKind().getCategory() == Category.EXPR ) {

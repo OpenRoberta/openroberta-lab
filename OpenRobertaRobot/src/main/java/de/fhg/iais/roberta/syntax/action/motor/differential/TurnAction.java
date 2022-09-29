@@ -51,7 +51,7 @@ public final class TurnAction extends Action {
         return "TurnAction [direction=" + this.direction + ", param=" + this.param + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields;
         String mode;
         List<Value> values;
@@ -81,7 +81,7 @@ public final class TurnAction extends Action {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 

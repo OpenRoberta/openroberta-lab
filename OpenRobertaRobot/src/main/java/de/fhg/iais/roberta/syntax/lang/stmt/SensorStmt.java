@@ -25,8 +25,8 @@ public final class SensorStmt extends Stmt {
     }
 
     @Override
-    public Block astToBlock() {
-        return this.sensor.astToBlock();
+    public Block ast2xml() {
+        return this.sensor.ast2xml();
     }
 
 }

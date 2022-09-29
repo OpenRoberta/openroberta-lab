@@ -38,7 +38,7 @@ public final class Location extends Task {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         return null;
     }
 

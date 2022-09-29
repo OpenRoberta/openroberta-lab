@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
  * <b>This Nepo class annotation can be used to parse complete xml blocks as exported from blockly to AST classes.</b><br>
  * It is used for all blocks, which cannot be annotated with Nepo field annotations (if they are bad designed, no time to refactor, ...)
  * <br><br>
- * Each class annotated by {@link NepoPhrase} must have public static methods jaxbToAst and astToBlock for transformation between
+ * Each class annotated by {@link NepoBasic} must have public static methods xml2ast and public method ast2xml for transformation between
  * blockly blocks and AST objects and the backtransformation
  */
 @Documented
@@ -42,7 +42,7 @@ public @interface NepoBasic {
      * This list defines the association between the field name as used in blockly
      * - implicitly to the sensor (as this sample value is defined in this AST class, which relates to a sensor)
      * - explicitly from the blockly field value to the sensor's mode (you'll see, that the sensor's mode usually
-     *   is a suffix of the blockly field value)
+     * is a suffix of the blockly field value)
      */
     F2M[] sampleValues() default {};
 

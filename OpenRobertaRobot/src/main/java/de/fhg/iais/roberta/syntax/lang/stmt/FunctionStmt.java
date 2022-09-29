@@ -25,7 +25,7 @@ public final class FunctionStmt extends Stmt {
     }
 
     @Override
-    public Block astToBlock() {
-        return this.function.astToBlock();
+    public Block ast2xml() {
+        return this.function.ast2xml();
     }
 }

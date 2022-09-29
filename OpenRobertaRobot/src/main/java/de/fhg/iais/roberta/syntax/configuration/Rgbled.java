@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 @NepoConfiguration(name = "RGBLED", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robConf_rgbled"})
-public class Rgbled extends ConfigurationComponent {
+public final class Rgbled extends ConfigurationComponent {
     private Rgbled() {
         super(null, true, null, null, null);
         throw new DbcException("should NEVER be called");

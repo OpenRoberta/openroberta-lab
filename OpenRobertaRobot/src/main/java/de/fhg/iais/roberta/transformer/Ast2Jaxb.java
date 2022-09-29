@@ -94,7 +94,7 @@ public final class Ast2Jaxb {
         Statement statement = new Statement();
         statement.setName(name);
         for ( ConfigurationComponent component : values ) {
-            statement.getBlock().add(component.astToBlock());
+            statement.getBlock().add(component.ast2xml());
         }
         block.getStatement().add(statement);
     }
@@ -184,12 +184,12 @@ public final class Ast2Jaxb {
             blockValue.setName(name);
             if ( value.getKind().hasName("SHADOW_EXPR") ) {
                 ShadowExpr shadowExpr = (ShadowExpr) value;
-                blockValue.setShadow(block2shadow(shadowExpr.shadow.astToBlock()));
+                blockValue.setShadow(block2shadow(shadowExpr.shadow.ast2xml()));
                 if ( shadowExpr.block != null ) {
-                    blockValue.setBlock(shadowExpr.block.astToBlock());
+                    blockValue.setBlock(shadowExpr.block.ast2xml());
                 }
             } else {
-                blockValue.setBlock(value.astToBlock());
+                blockValue.setBlock(value.ast2xml());
             }
 
             block.getValue().add(blockValue);
@@ -214,7 +214,7 @@ public final class Ast2Jaxb {
         if ( !value.getKind().hasName("EMPTY_EXPR") ) {
             Value blockValue = new Value();
             blockValue.setName(name);
-            blockValue.setBlock(value.astToBlock());
+            blockValue.setBlock(value.ast2xml());
             repetitions.getValueAndStatement().add(blockValue);
         }
     }
@@ -287,7 +287,7 @@ public final class Ast2Jaxb {
         Assert.isTrue(phrase.getKind().hasName("STMT_LIST"), "Phrase is not StmtList!");
         StmtList stmtList = (StmtList) phrase;
         for ( Stmt stmt : stmtList.get() ) {
-            result.add(stmt.astToBlock());
+            result.add(stmt.ast2xml());
         }
         return result;
     }
@@ -297,7 +297,7 @@ public final class Ast2Jaxb {
         Assert.isTrue(phrase.getKind().hasName("EXPR_LIST"), "Phrase is not ExprList!");
         ExprList exprList = (ExprList) phrase;
         for ( Expr expr : exprList.get() ) {
-            result.add(expr.astToBlock());
+            result.add(expr.ast2xml());
         }
         return result;
     }

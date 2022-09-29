@@ -27,7 +27,7 @@ public final class ActionStmt extends Stmt {
     }
 
     @Override
-    public Block astToBlock() {
-        return this.action.astToBlock();
+    public Block ast2xml() {
+        return this.action.ast2xml();
     }
 }

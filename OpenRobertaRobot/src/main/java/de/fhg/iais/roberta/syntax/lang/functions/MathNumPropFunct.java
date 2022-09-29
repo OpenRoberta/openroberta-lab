@@ -52,7 +52,7 @@ public final class MathNumPropFunct extends Function {
         return "MathNumPropFunct [" + this.functName + ", " + this.param + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         boolean divisorInput = block.getMutation().isDivisorInput();
         String op = Jaxb2Ast.extractOperation(block, BlocklyConstants.PROPERTY);
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
@@ -67,7 +67,7 @@ public final class MathNumPropFunct extends Function {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 

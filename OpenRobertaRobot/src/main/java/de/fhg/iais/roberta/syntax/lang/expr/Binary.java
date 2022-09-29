@@ -161,7 +161,7 @@ public final class Binary extends Expr {
         }
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
 
         List<Value> values;
         Phrase leftt;
@@ -208,7 +208,7 @@ public final class Binary extends Expr {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         if ( !this.operationRange.equals("") ) {

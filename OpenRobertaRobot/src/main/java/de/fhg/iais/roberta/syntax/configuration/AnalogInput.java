@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 @NepoConfiguration(name = "ANALOG_INPUT", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robConf_analogin"})
-public class AnalogInput extends ConfigurationComponent {
+public final class AnalogInput extends ConfigurationComponent {
     private AnalogInput() {
         super(null, true, null, null, null);
         throw new DbcException("should NEVER be called");

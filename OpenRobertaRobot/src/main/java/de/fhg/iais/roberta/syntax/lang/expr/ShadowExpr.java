@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 
-public class ShadowExpr extends Expr {
+public final class ShadowExpr extends Expr {
     public final Expr shadow;
     public final Expr block;
 
@@ -34,7 +34,7 @@ public class ShadowExpr extends Expr {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         return null;
     }
 

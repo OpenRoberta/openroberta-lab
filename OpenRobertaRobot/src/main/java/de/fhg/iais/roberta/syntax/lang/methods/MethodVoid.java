@@ -37,7 +37,7 @@ public final class MethodVoid extends Method {
         return "MethodVoid [" + this.methodName + ", " + this.parameters + ", " + this.body + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         String name = Jaxb2Ast.extractField(fields, BlocklyConstants.NAME);
 
@@ -49,7 +49,7 @@ public final class MethodVoid extends Method {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         boolean declare = !this.parameters.get().isEmpty();
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);

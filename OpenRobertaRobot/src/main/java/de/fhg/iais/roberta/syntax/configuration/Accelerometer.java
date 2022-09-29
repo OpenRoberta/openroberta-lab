@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 @NepoConfiguration(name = "ACCELEROMETER", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robBrick_accelerometer", "robConf_accelerometer"})
-public class Accelerometer extends ConfigurationComponent {
+public final class Accelerometer extends ConfigurationComponent {
     private Accelerometer() {
         super(null, true, null, null, null);
         throw new DbcException("should NEVER be called");

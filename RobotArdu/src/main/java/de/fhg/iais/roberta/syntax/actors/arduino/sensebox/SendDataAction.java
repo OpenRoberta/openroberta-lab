@@ -38,7 +38,7 @@ public final class SendDataAction extends Action {
         return "DataSendAction []";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         ExprList exprList = helper.blockToExprList(block, BlocklyType.NUMBER);
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 999);
         List<Pair<String, Expr>> id2Phenomena = new ArrayList<>();
@@ -50,7 +50,7 @@ public final class SendDataAction extends Action {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         int numOfStrings = this.id2Phenomena.size();

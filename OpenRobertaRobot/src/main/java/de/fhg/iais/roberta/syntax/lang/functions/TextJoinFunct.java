@@ -47,14 +47,14 @@ public final class TextJoinFunct extends Function {
         return BlocklyType.STRING;
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         ExprList exprList = helper.blockToExprList(block, BlocklyType.STRING);
         return new TextJoinFunct(exprList, Jaxb2Ast.extractBlocklyProperties(block));
 
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 

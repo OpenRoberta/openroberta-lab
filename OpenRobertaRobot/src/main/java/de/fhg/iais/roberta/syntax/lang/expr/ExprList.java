@@ -67,7 +67,7 @@ public final class ExprList extends Expr {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         return null;
     }
 

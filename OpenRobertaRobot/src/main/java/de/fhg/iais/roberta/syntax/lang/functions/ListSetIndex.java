@@ -58,7 +58,7 @@ public final class ListSetIndex extends Function {
         return "ListSetIndex [" + this.mode + ", " + this.location + ", " + this.param + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         String op = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
@@ -74,7 +74,7 @@ public final class ListSetIndex extends Function {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 

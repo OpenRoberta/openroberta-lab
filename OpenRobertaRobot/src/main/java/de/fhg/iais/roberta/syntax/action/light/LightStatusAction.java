@@ -39,7 +39,7 @@ public final class LightStatusAction extends Action implements WithUserDefinedPo
         return this.userDefinedPort;
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         Status status = LightStatusAction.Status.RESET;
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
@@ -53,7 +53,7 @@ public final class LightStatusAction extends Action implements WithUserDefinedPo
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         if ( !this.userDefinedPort.toString().equals("0") ) {

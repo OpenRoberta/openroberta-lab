@@ -97,7 +97,7 @@ public final class Project {
                     instance.setX(((Location) phrase).x);
                     instance.setY(((Location) phrase).y);
                 }
-                instance.getBlock().add(phrase.astToBlock());
+                instance.getBlock().add(phrase.ast2xml());
             }
         }
         return blockSet;
@@ -116,7 +116,7 @@ public final class Project {
             blockSet.getInstance().add(instance);
             instance.setX(String.valueOf(configComp.x));
             instance.setY(String.valueOf(configComp.y));
-            instance.getBlock().add(configComp.astToBlock());
+            instance.getBlock().add(configComp.ast2xml());
         }
         return blockSet;
     }
@@ -453,7 +453,7 @@ public final class Project {
                         blockSet.setXmlversion("2.0");
                     }
                     Jaxb2ProgramAst transformer = new Jaxb2ProgramAst(this.project.robotFactory);
-                    this.project.program = transformer.blocks2Ast(blockSet);
+                    this.project.program = transformer.blocks2ast(blockSet);
                 } catch ( JAXBException e ) {
                     LOG.error("Transformer failed", e);
                     this.project.result = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;

@@ -49,7 +49,7 @@ public final class StmtList extends Stmt {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         return null;
     }
 }

@@ -60,7 +60,7 @@ public final class GetSubFunct extends Function {
         return "GetSubFunct [" + this.functName + ", " + this.strParam + ", " + this.param + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         List<IMode> strParams = new ArrayList<IMode>();
@@ -79,7 +79,7 @@ public final class GetSubFunct extends Function {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();

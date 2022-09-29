@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 @NepoConfiguration(name = "COMPASS", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robBrick_compass", "robConf_compass"})
-public class Compass extends ConfigurationComponent {
+public final class Compass extends ConfigurationComponent {
     private Compass() {
         super(null, true, null, null, null);
         throw new DbcException("should NEVER be called");

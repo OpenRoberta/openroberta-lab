@@ -46,7 +46,7 @@ public final class AssignStmt extends Stmt {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         Phrase p = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.CAPTURED_TYPE));
         Expr exprr = Jaxb2Ast.convertPhraseToExpr(p);
@@ -54,7 +54,7 @@ public final class AssignStmt extends Stmt {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         String varType = this.name.getVarType().getBlocklyName();

@@ -50,8 +50,8 @@ public final class FunctionExpr extends Expr {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Phrase p = this.getFunction();
-        return p.astToBlock();
+        return p.ast2xml();
     }
 }

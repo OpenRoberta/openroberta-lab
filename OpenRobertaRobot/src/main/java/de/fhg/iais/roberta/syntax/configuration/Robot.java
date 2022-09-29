@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 @NepoConfiguration(name = "ROBOT", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robConf_robot"})
-public class Robot extends ConfigurationComponent {
+public final class Robot extends ConfigurationComponent {
     private Robot() {
         super(null, true, null, null, null);
         throw new DbcException("should NEVER be called");

@@ -42,7 +42,7 @@ public final class VolumeAction extends Action {
         return "VolumeAction [" + this.mode + ", " + this.volume + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         Phrase expr;
         Mode mode;
         if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_PLAY_SET_VOLUME) ) {
@@ -64,7 +64,7 @@ public final class VolumeAction extends Action {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 

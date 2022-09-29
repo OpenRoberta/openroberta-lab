@@ -48,7 +48,7 @@ public final class TextPrintFunct extends Function {
         return "TextPrintFunct [" + this.param + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.TEXT, BlocklyType.STRING));
         List<Expr> params = helper.extractExprParameters(block, exprParams);
@@ -56,7 +56,7 @@ public final class TextPrintFunct extends Function {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.TEXT, this.param.get(0));

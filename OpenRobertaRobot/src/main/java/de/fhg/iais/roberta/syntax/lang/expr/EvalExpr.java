@@ -89,7 +89,7 @@ public final class EvalExpr extends Expr {
      * @param comment added from the user,
      * @return read only object representing the binary expression
      */
-    public static  EvalExpr make(String expr, String type, BlocklyProperties properties) throws Exception {
+    public static EvalExpr make(String expr, String type, BlocklyProperties properties) throws Exception {
         final List<NepoInfo> annotations = new ArrayList<>();
         Expr astOfExpr = EvalExpr.expr2AST(expr, annotations);
         astOfExpr.setReadOnly();
@@ -122,7 +122,7 @@ public final class EvalExpr extends Expr {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Mutation mutation = new Mutation();
         mutation.setType(this.type);
@@ -134,7 +134,7 @@ public final class EvalExpr extends Expr {
     }
 
     @SuppressWarnings("unchecked")
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) throws Exception {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) throws Exception {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         String expr = Jaxb2Ast.extractField(fields, "EXPRESSION");
         String type = Jaxb2Ast.extractField(fields, "TYPE");
@@ -145,7 +145,7 @@ public final class EvalExpr extends Expr {
     /**
      * Function to create an abstract syntax tree from an expression, that has been submitted as a string
      */
-    private static  Expr expr2AST(String expr, List<NepoInfo> annotations) throws Exception {
+    private static Expr expr2AST(String expr, List<NepoInfo> annotations) throws Exception {
         ExprlyParser parser = EvalExpr.mkParser(expr);
         EvalExprErrorListener err = new EvalExprErrorListener();
         parser.removeErrorListeners();

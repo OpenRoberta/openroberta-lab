@@ -48,7 +48,7 @@ public final class MainTask extends Task {
         return "MainTask [" + this.variables + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         String debug = null;
         List<Field> fields = block.getField();
         if ( !fields.isEmpty() ) {
@@ -65,7 +65,7 @@ public final class MainTask extends Task {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         boolean declare = !this.variables.get().isEmpty();
 
         Block jaxbDestination = new Block();

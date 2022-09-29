@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 @NepoConfiguration(name = "GPS", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robConf_gps"})
-public class Gps extends ConfigurationComponent {
+public final class Gps extends ConfigurationComponent {
     private Gps() {
         super(null, true, null, null, null);
         throw new DbcException("should NEVER be called");

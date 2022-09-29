@@ -36,7 +36,7 @@ public final class MotorStopAction extends MoveAction {
         }
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.MOTORPORT);
@@ -49,7 +49,7 @@ public final class MotorStopAction extends MoveAction {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 

@@ -68,7 +68,7 @@ public final class LEDMatrixImage extends Expr {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) (X * Y));
         String[][] image = new String[X][Y];
         for ( int i = 0; i < X; i++ ) {
@@ -80,7 +80,7 @@ public final class LEDMatrixImage extends Expr {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         for ( int i = 0; i < X; i++ ) {

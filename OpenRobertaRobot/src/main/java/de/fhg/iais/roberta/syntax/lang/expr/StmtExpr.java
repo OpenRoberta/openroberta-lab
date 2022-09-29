@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 /**
  * Wraps subclasses of the class {@link Stmt} so they can be used as {@link Expr} in expressions.
  */
-public class StmtExpr extends Expr {
+public final class StmtExpr extends Expr {
     public final Stmt stmt;
 
     public StmtExpr(Stmt stmt) {
@@ -41,8 +41,8 @@ public class StmtExpr extends Expr {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Phrase p = this.stmt;
-        return p.astToBlock();
+        return p.ast2xml();
     }
 }

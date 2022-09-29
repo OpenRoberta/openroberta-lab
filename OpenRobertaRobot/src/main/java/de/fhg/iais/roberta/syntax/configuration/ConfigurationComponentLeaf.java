@@ -4,7 +4,7 @@ import java.util.Map;
 
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
-public class ConfigurationComponentLeaf extends ConfigurationComponent {
+public final class ConfigurationComponentLeaf extends ConfigurationComponent {
 
     public ConfigurationComponentLeaf(
         String componentType,
@@ -13,7 +13,7 @@ public class ConfigurationComponentLeaf extends ConfigurationComponent {
         String userDefinedName,
         Map<String, String> componentProperties,
         BlocklyProperties properties,
-        
+
         int x,
         int y) {
         super(componentType, isActor, internalPortName, userDefinedName, componentProperties, properties, x, y);

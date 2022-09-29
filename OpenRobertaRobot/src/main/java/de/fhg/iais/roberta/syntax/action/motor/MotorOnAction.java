@@ -35,7 +35,7 @@ public final class MotorOnAction extends MoveAction {
         setReadOnly();
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         String port;
         List<Field> fields;
         List<Value> values;
@@ -92,7 +92,7 @@ public final class MotorOnAction extends MoveAction {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 

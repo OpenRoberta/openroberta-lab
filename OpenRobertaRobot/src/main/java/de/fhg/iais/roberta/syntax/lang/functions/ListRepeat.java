@@ -66,7 +66,7 @@ public final class ListRepeat extends Function {
         return "ListRepeat [" + this.typeVar + ", " + this.param + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         String filename = Jaxb2Ast.extractField(fields, BlocklyConstants.LIST_TYPE);
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
@@ -77,7 +77,7 @@ public final class ListRepeat extends Function {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
 
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);

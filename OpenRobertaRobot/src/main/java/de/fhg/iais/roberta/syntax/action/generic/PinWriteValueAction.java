@@ -49,7 +49,7 @@ public final class PinWriteValueAction extends Action {
         return "PinWriteValueAction [" + this.pinValue + ", " + this.port + ", " + this.value + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
@@ -69,7 +69,7 @@ public final class PinWriteValueAction extends Action {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
 
         Mutation mutation = new Mutation();

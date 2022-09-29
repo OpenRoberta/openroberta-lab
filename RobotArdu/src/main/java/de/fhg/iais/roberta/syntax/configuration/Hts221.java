@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 @NepoConfiguration(name = "HTS221", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robConf_hts221"})
-public class Hts221 extends ConfigurationComponent {
+public final class Hts221 extends ConfigurationComponent {
     private Hts221() {
         super(null, true, null, null, null);
         throw new DbcException("should NEVER be called");

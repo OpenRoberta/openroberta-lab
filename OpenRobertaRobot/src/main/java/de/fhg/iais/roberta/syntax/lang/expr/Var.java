@@ -58,12 +58,12 @@ public final class Var extends Expr {
         return "Var [" + this.name + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         return Jaxb2Ast.extractVar(block);
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
 
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);

@@ -15,15 +15,13 @@ public class BaseVisitor<V> implements IVisitor<V> {
      * @return output of delegated visit-method
      */
     public V visit(Phrase visitable) {
-        String className = visitable.getClass().getSimpleName();
-        String methodName = String.format("visit%s", className);
         try {
-            Method m = getClass().getMethod(methodName, visitable.getClass());
+            Method m = getVisitMethodFor(visitable.getClass());
             @SuppressWarnings("unchecked")
             V result = (V) m.invoke(this, new Object[] {visitable});
             return result;
         } catch ( NoSuchMethodException e ) {
-            throw new DbcException(String.format("visit Method \"%s\" not found on \"%s\" (Block \"%s\" is probably not supported)", methodName, this.getClass().getSimpleName(), className), e);
+            throw new DbcException(String.format("visit Method not found for phrase \"%s\"", visitable.getClass()), e);
         } catch ( IllegalAccessException e ) {
             throw new DbcException(e);
         } catch ( InvocationTargetException e ) {
@@ -32,7 +30,17 @@ public class BaseVisitor<V> implements IVisitor<V> {
             if ( cause instanceof RuntimeException ) {
                 throw (RuntimeException) cause;
             }
-            throw new DbcException(String.format("unexpected exception was throw inside a visit method %s#%s", className, methodName), e);
+            throw new DbcException(String.format("visit method for phrase \"%s\" threw exception", visitable.getClass()), e);
+        }
+    }
+
+    private Method getVisitMethodFor(Class<?> clazz) throws NoSuchMethodException {
+        Method m = null;
+        try {
+            return getClass().getMethod("visit", clazz);
+        } catch ( NoSuchMethodException e ) {
+            String methodName = "visit" + clazz.getSimpleName();
+            return getClass().getMethod("visit" + clazz.getSimpleName(), clazz);
         }
     }
 

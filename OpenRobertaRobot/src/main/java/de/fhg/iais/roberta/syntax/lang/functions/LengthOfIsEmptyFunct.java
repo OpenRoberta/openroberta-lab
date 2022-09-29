@@ -51,7 +51,7 @@ public final class LengthOfIsEmptyFunct extends Function {
         return "LengthOfFunct [" + this.functName + ", " + this.param + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
         List<Expr> params = helper.extractExprParameters(block, exprParams);
@@ -59,7 +59,7 @@ public final class LengthOfIsEmptyFunct extends Function {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 

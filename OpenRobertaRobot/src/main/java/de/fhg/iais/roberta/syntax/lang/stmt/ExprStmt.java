@@ -28,7 +28,7 @@ public final class ExprStmt extends Stmt {
     }
 
     @Override
-    public Block astToBlock() {
-        return this.expr.astToBlock();
+    public Block ast2xml() {
+        return this.expr.ast2xml();
     }
 }

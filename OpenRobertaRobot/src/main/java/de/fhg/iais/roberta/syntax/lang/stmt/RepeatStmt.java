@@ -56,7 +56,7 @@ public final class RepeatStmt extends Stmt {
     }
 
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         Phrase exprr;
         List<Value> values;
         List<Field> fields;
@@ -144,7 +144,7 @@ public final class RepeatStmt extends Stmt {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         NepoInfos infos = this.expr.getInfos();

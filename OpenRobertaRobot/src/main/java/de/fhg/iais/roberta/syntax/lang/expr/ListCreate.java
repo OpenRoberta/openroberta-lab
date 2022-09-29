@@ -56,14 +56,14 @@ public final class ListCreate extends Expr {
         return "ListCreate [" + this.typeVar + ", " + this.exprList + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         String filename = Jaxb2Ast.extractField(fields, BlocklyConstants.LIST_TYPE);
         return new ListCreate(BlocklyType.get(filename), helper.blockToExprList(block, BlocklyType.ARRAY), Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
 
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);

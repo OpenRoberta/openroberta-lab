@@ -403,7 +403,7 @@ public class ReuseIntegrationAsUnitTest {
             return false;
         }
         Jaxb2ProgramAst transformer = new Jaxb2ProgramAst(testFactory);
-        ProgramAst generatedAst = transformer.blocks2Ast(blockSet);
+        ProgramAst generatedAst = transformer.blocks2ast(blockSet);
         List<Phrase> blocks = generatedAst.getTree().get(0);
         StringBuilder sb = new StringBuilder();
         for ( int i = 2; i < blocks.size(); i++ ) {

@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
-public class ConfigurationComponentNode extends ConfigurationComponent {
+public final class ConfigurationComponentNode extends ConfigurationComponent {
     private final LinkedHashMap<String, List<ConfigurationComponent>> subComponents;
 
     public ConfigurationComponentNode(
@@ -18,7 +18,7 @@ public class ConfigurationComponentNode extends ConfigurationComponent {
         String userDefinedName,
         Map<String, String> componentProperties,
         BlocklyProperties properties,
-        
+
         int x,
         int y,
         LinkedHashMap<String, List<ConfigurationComponent>> subComponents) {
@@ -32,7 +32,7 @@ public class ConfigurationComponentNode extends ConfigurationComponent {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block destination = new Block();
         Ast2Jaxb.setBasicProperties(this, destination);
         Ast2Jaxb.addField(destination, "NAME", this.userDefinedPortName);

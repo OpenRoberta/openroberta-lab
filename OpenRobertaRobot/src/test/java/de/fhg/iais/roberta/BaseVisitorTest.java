@@ -9,8 +9,8 @@ import org.junit.Test;
 import de.fhg.iais.roberta.syntax.Actor;
 import de.fhg.iais.roberta.syntax.OtherSensor;
 import de.fhg.iais.roberta.syntax.Sensor;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.ast.AstFactory;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.VisitorForBaseVisitorTest;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
@@ -46,8 +46,8 @@ public class BaseVisitorTest {
         Assertions.assertThatThrownBy(() -> visitor.visit(otherSensor))
             .isInstanceOf(DbcException.class)
             .hasCauseInstanceOf(NoSuchMethodException.class)
-            .hasMessageContaining("not supported")
-            .hasMessageContaining("visitOtherSensor");
+            .hasMessageContaining("not found for phrase")
+            .hasMessageContaining("OtherSensor");
     }
 
     @Test
@@ -56,8 +56,8 @@ public class BaseVisitorTest {
         Assertions.assertThatThrownBy(() -> visitor.visit(actor))
             .isInstanceOf(DbcException.class)
             .hasCauseInstanceOf(NoSuchMethodException.class)
-            .hasMessageContaining("not supported")
-            .hasMessageContaining("visitActor");
+            .hasMessageContaining("not found for phrase")
+            .hasMessageContaining("Actor");
     }
 
     @Test

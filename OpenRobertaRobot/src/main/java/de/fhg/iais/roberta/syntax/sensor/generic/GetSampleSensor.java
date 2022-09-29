@@ -37,7 +37,7 @@ public final class GetSampleSensor extends Sensor {
         Mutation mutation,
         List<Hide> hide,
         BlocklyProperties properties,
-        
+
         BlocklyDropdownFactory factory) //
     {
         super(properties);
@@ -57,7 +57,7 @@ public final class GetSampleSensor extends Sensor {
         return "GetSampleSensor [" + this.sensor + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         String mutationInput = block.getMutation().getInput();
         String modeName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORTYPE, mutationInput);
@@ -75,7 +75,7 @@ public final class GetSampleSensor extends Sensor {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this.sensor, jaxbDestination);
         if ( this.mutation != null ) {

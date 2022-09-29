@@ -17,14 +17,14 @@ public final class WedoConfigurationComponent extends ConfigurationComponent {
         String userDefinedName,
         Map<String, String> componentProperties,
         BlocklyProperties properties,
-        
+
         int x,
         int y) {
         super(componentType, isActor, portName, userDefinedName, componentProperties, properties, x, y);
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block destination = new Block();
         Ast2Jaxb.setBasicProperties(this, destination);
         Ast2Jaxb.addField(destination, "VAR", this.userDefinedPortName);

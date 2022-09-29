@@ -61,7 +61,7 @@ public final class IfStmt extends Stmt {
         return sb.toString();
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         Mutation mutation = block.getMutation();
         int _else = Jaxb2Ast.getElse(mutation);
         int _elseIf = Jaxb2Ast.getElseIf(mutation);
@@ -69,7 +69,7 @@ public final class IfStmt extends Stmt {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Mutation mutation;
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);

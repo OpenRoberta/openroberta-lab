@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 @NepoConfiguration(name = "CALLIBOT", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robConf_callibot"})
-public class Callibot extends ConfigurationComponent {
+public final class Callibot extends ConfigurationComponent {
     private Callibot() {
         super(null, true, null, null, null);
         throw new DbcException("should NEVER be called");

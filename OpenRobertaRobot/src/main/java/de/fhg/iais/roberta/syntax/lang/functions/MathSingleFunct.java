@@ -51,7 +51,7 @@ public final class MathSingleFunct extends Function {
         return "MathSingleFunct [" + this.functName + ", " + this.param + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         if ( Jaxb2Ast.getOperation(block, BlocklyConstants.OP).equals(BlocklyConstants.NEG) ) {
             return helper.blockToUnaryExpr(block, new ExprParam(BlocklyConstants.NUM, BlocklyType.NUMBER_INT), BlocklyConstants.OP);
         }
@@ -63,7 +63,7 @@ public final class MathSingleFunct extends Function {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 

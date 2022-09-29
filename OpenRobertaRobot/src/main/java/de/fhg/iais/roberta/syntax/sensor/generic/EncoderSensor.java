@@ -24,7 +24,7 @@ public final class EncoderSensor extends ExternalSensor {
         setReadOnly();
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         ExternalSensorBean sensorData;
         if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_ENCODER_RESET) ) {
@@ -39,7 +39,7 @@ public final class EncoderSensor extends ExternalSensor {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         if ( getMode().toString().equals("RESET") ) {
             Block jaxbDestination = new Block();
             Ast2Jaxb.setBasicProperties(this, jaxbDestination);
@@ -47,7 +47,7 @@ public final class EncoderSensor extends ExternalSensor {
             Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
             return jaxbDestination;
         } else {
-            return super.astToBlock();
+            return super.ast2xml();
         }
 
     }

@@ -24,7 +24,7 @@ public final class CompassSensor extends ExternalSensor {
         setReadOnly();
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         ExternalSensorBean externalSensorBean;
         if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_COMPASS_CALIBRATE) ) {
@@ -39,8 +39,8 @@ public final class CompassSensor extends ExternalSensor {
     }
 
     @Override
-    public Block astToBlock() {
-        Block jaxbDestination = super.astToBlock();
+    public Block ast2xml() {
+        Block jaxbDestination = super.ast2xml();
         if ( getMode().toString().equals("CALIBRATE") ) {
             jaxbDestination = new Block();
             Ast2Jaxb.setBasicProperties(this, jaxbDestination);

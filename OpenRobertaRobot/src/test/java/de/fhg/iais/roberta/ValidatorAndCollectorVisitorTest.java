@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.SimplePhrase;
+import de.fhg.iais.roberta.syntax.TestSimplePhrase;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
@@ -59,9 +59,9 @@ public class ValidatorAndCollectorVisitorTest {
 
     @Test
     public void requiredComponentVisitedVarArgsWithoutEmptyExpression() {
-        Phrase phrase = new SimplePhrase();
-        SimplePhrase childPhrase1 = new SimplePhrase();
-        SimplePhrase childPhrase2 = new SimplePhrase();
+        Phrase phrase = new TestSimplePhrase();
+        TestSimplePhrase childPhrase1 = new TestSimplePhrase();
+        TestSimplePhrase childPhrase2 = new TestSimplePhrase();
 
         delegatedValidatorAndCollectorVisitor.requiredComponentVisited(phrase, childPhrase1, childPhrase2);
 
@@ -75,14 +75,14 @@ public class ValidatorAndCollectorVisitorTest {
         assertThat(infos.getInfos()).isEmpty();
         assertThat(infos.getErrorCount()).isEqualTo(0);
 
-        verify(mainValidatorAndCollectorVisitor).visitSimplePhrase(childPhrase1);
-        verify(mainValidatorAndCollectorVisitor).visitSimplePhrase(childPhrase2);
+        verify(mainValidatorAndCollectorVisitor).visitTestSimplePhrase(childPhrase1);
+        verify(mainValidatorAndCollectorVisitor).visitTestSimplePhrase(childPhrase2);
     }
 
 
     @Test
     public void requiredComponentVisitedVarArgs() {
-        Phrase phrase = new SimplePhrase();
+        Phrase phrase = new TestSimplePhrase();
         Phrase emptyExpression = new EmptyExpr(BlocklyType.ANY);
 
         delegatedValidatorAndCollectorVisitor.requiredComponentVisited(phrase, emptyExpression);
@@ -104,9 +104,9 @@ public class ValidatorAndCollectorVisitorTest {
 
     @Test
     public void requiredComponentVisitedListWithoutEmptyExpression() {
-        Phrase phrase = new SimplePhrase();
-        SimplePhrase childPhrase1 = new SimplePhrase();
-        SimplePhrase childPhrase2 = new SimplePhrase();
+        Phrase phrase = new TestSimplePhrase();
+        TestSimplePhrase childPhrase1 = new TestSimplePhrase();
+        TestSimplePhrase childPhrase2 = new TestSimplePhrase();
 
         delegatedValidatorAndCollectorVisitor.requiredComponentVisited(phrase, Arrays.asList(childPhrase1, childPhrase2));
 
@@ -120,13 +120,13 @@ public class ValidatorAndCollectorVisitorTest {
         assertThat(infos.getInfos()).isEmpty();
         assertThat(infos.getErrorCount()).isEqualTo(0);
 
-        verify(mainValidatorAndCollectorVisitor).visitSimplePhrase(childPhrase1);
-        verify(mainValidatorAndCollectorVisitor).visitSimplePhrase(childPhrase2);
+        verify(mainValidatorAndCollectorVisitor).visitTestSimplePhrase(childPhrase1);
+        verify(mainValidatorAndCollectorVisitor).visitTestSimplePhrase(childPhrase2);
     }
 
     @Test
     public void requiredComponentVisitedList() {
-        Phrase phrase = new SimplePhrase();
+        Phrase phrase = new TestSimplePhrase();
         Phrase emptyExpression = new EmptyExpr(BlocklyType.ANY);
 
         delegatedValidatorAndCollectorVisitor.requiredComponentVisited(phrase, Arrays.asList(emptyExpression));
@@ -149,7 +149,7 @@ public class ValidatorAndCollectorVisitorTest {
 
     @Test
     public void addErrorToPhrase() {
-        Phrase phrase = new SimplePhrase();
+        Phrase phrase = new TestSimplePhrase();
 
         String errorMessage = "WHATEVER";
         delegatedValidatorAndCollectorVisitor.addErrorToPhrase(phrase, errorMessage);
@@ -171,7 +171,7 @@ public class ValidatorAndCollectorVisitorTest {
 
     @Test
     public void addWarningToPhrase() {
-        Phrase phrase = new SimplePhrase();
+        Phrase phrase = new TestSimplePhrase();
 
         String warningMessage = "WHATEVER";
         delegatedValidatorAndCollectorVisitor.addWarningToPhrase(phrase, warningMessage);

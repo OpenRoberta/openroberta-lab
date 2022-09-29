@@ -48,7 +48,7 @@ public final class MathRandomIntFunct extends Function {
         return "MathRandomIntFunct [" + this.param + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.FROM, BlocklyType.NUMBER_INT));
         exprParams.add(new ExprParam(BlocklyConstants.TO, BlocklyType.NUMBER_INT));
@@ -57,7 +57,7 @@ public final class MathRandomIntFunct extends Function {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 

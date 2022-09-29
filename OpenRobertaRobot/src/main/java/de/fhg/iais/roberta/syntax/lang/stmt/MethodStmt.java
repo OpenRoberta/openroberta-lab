@@ -22,7 +22,7 @@ public final class MethodStmt extends Stmt {
     }
 
     @Override
-    public Block astToBlock() {
-        return this.method.astToBlock();
+    public Block ast2xml() {
+        return this.method.ast2xml();
     }
 }

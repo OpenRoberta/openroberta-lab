@@ -133,13 +133,13 @@ abstract public class Phrase {
     }
 
     /**
-     * converts the AST representation of this block to a JAXB (~~XML) representation<br>
+     * converts the AST representation of this block to a XML representation<br>
      * <b>This is the default implementation of annotated AST classes</b>
      *
-     * @return the JAXB (~~XML) representation
+     * @return the XML representation, usable by blockly
      */
-    public Block astToBlock() {
-        return AnnotationHelper.astToBlock(this);
+    public Block ast2xml() {
+        return AnnotationHelper.ast2xml(this);
     }
 
     /**

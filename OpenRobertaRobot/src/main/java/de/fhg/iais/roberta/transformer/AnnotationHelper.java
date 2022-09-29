@@ -34,14 +34,13 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 
 public class AnnotationHelper {
-
     private static List<Class<? extends Annotation>> NEPO_FIELD_ANNOTATIONS =
         Arrays.asList(NepoValue.class, NepoField.class, NepoData.class, NepoHide.class, NepoMutation.class);
 
     private static final String externalSensorClassName = ExternalSensor.class.getName();
 
     /**
-     * check whether the class is annotated with a @NepoPhrase or @NepoOp or @NepoExternalSensor annotation
+     * check whether the class is final AND annotated with a @NepoPhrase or @NepoOp or @NepoExternalSensor annotation
      *
      * @param clazz
      * @return true, if annotated
@@ -169,14 +168,10 @@ public class AnnotationHelper {
      *
      * @return the JAXB (~~XML) representation
      */
-    public static Block astToBlock(Phrase phrase) {
+    public static Block ast2xml(Phrase phrase) {
         Class<?> clazz = phrase.getClass();
-        if ( !isNepoAnnotatedClass(clazz) ) {
-            throw new DbcException("the default implementation of astToBlock() fails with the NOT annotated class " + clazz.getSimpleName());
-        }
-
         if ( isExternalSensorSubClass(clazz) ) {
-            return phrase.astToBlock();
+            return phrase.ast2xml();
         } else {
             Block jaxbDestination = new Block();
             Ast2Jaxb.setBasicProperties(phrase, jaxbDestination);

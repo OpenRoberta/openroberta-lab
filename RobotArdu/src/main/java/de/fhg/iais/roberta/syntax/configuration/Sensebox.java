@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 @NepoConfiguration(name = "SENSEBOX", category = "CONFIGURATION_BLOCK",
     blocklyNames = {"robBrick_senseBox-Brick"})
-public class Sensebox extends ConfigurationComponent {
+public final class Sensebox extends ConfigurationComponent {
     private Sensebox() {
         super(null, true, null, null, null);
         throw new DbcException("should NEVER be called");

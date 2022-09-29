@@ -14,7 +14,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void senseBoxBrick_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void senseBoxBrick_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robBrick_senseBox-Brick.xml");
     }
 
@@ -26,7 +26,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void accelerometer_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void accelerometer_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_accelerometer.xml");
     }
 
@@ -38,7 +38,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void analogin_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void analogin_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_analogin.xml");
     }
 
@@ -50,7 +50,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void analogout_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void analogout_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_analogout.xml");
     }
 
@@ -62,7 +62,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void buzzer_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void buzzer_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_buzzer.xml");
     }
 
@@ -74,7 +74,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void digitalin_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void digitalin_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_digitalin.xml");
     }
 
@@ -86,7 +86,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void digitalout_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void digitalout_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_digitalout.xml");
     }
 
@@ -98,7 +98,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void gps_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void gps_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_gps.xml");
     }
 
@@ -110,7 +110,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void humidity_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void humidity_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_humidity.xml");
     }
 
@@ -122,7 +122,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void key_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void key_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_key.xml");
     }
 
@@ -134,7 +134,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void lcdi2c_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void lcdi2c_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_lcdi2c.xml");
     }
 
@@ -146,7 +146,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void led_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void led_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_led.xml");
     }
 
@@ -158,7 +158,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void light_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void light_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_light.xml");
     }
 
@@ -170,7 +170,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void lightveml_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void lightveml_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_lightveml.xml");
     }
 
@@ -182,7 +182,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void particle_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void particle_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_particle.xml");
     }
 
@@ -194,7 +194,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void potentiometer_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void potentiometer_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_potentiometer.xml");
     }
 
@@ -206,7 +206,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void rgbled_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void rgbled_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_rgbled.xml");
     }
 
@@ -218,7 +218,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void sdcard_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void sdcard_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_sdcard.xml");
     }
 
@@ -230,7 +230,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void sound_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void sound_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_sound.xml");
     }
 
@@ -242,7 +242,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void temperature_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void temperature_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_temperature.xml");
     }
 
@@ -254,7 +254,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void ultrasonic_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void ultrasonic_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_ultrasonic.xml");
     }
 
@@ -266,7 +266,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void wireless_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void wireless_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_wireless.xml");
     }
 
@@ -278,7 +278,7 @@ public class SenseboxConfigCompTest extends AstTest {
     }
 
     @Test
-    public void environmental_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+    public void environmental_ast2xml_xml2ast_ast2xml_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_environmental.xml");
     }
 }

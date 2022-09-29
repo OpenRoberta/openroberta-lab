@@ -51,7 +51,7 @@ public final class EmptyExpr extends Expr {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         return null;
     }
 

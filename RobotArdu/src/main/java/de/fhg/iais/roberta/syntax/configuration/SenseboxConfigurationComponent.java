@@ -20,14 +20,14 @@ public final class SenseboxConfigurationComponent extends ConfigurationComponent
         String userDefinedName,
         Map<String, String> componentProperties,
         BlocklyProperties properties,
-        
+
         int x,
         int y) {
         super(componentType, isActor, portName, userDefinedName, componentProperties, properties, x, y);
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block destination = new Block();
         Ast2Jaxb.setBasicProperties(this, destination);
         Mutation mutation = new Mutation();

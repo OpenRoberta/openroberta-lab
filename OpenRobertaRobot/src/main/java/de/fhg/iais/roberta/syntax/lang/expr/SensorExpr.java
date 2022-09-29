@@ -43,8 +43,8 @@ public final class SensorExpr extends Expr {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Phrase p = this.sensor;
-        return p.astToBlock();
+        return p.ast2xml();
     }
 }

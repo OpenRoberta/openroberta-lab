@@ -44,7 +44,7 @@ public final class WaitStmt extends Stmt {
         return "WaitStmt [" + this.statements + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         List<Value> values;
         StmtList statement;
         StmtList list = new StmtList();
@@ -71,7 +71,7 @@ public final class WaitStmt extends Stmt {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Mutation mutation;
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);

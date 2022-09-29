@@ -284,7 +284,7 @@ public class AnnotationHelperTest {
     public void astToBlock_all() throws Exception {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldMutationData.xml");
         Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseWithAll.class, jaxb2ProgramAst);
-        Block resultBlock = AnnotationHelper.astToBlock(resultPhrase);
+        Block resultBlock = AnnotationHelper.ast2xml(resultPhrase);
 
         XmlAssert.assertThat(blockToXml(resultBlock))
             .and(loadXml("/annotation/testPhrase_fieldMutationData.xml"))
@@ -296,7 +296,7 @@ public class AnnotationHelperTest {
     public void astToBlock_fieldAndValue() throws Exception {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldAndValue.xml");
         Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhrase.class, jaxb2ProgramAst);
-        Block resultBlock = AnnotationHelper.astToBlock(resultPhrase);
+        Block resultBlock = AnnotationHelper.ast2xml(resultPhrase);
 
         XmlAssert.assertThat(blockToXml(resultBlock))
             .and(loadXml("/annotation/testPhrase_fieldAndValue.xml"))
@@ -308,7 +308,7 @@ public class AnnotationHelperTest {
     public void astToBlock_fieldDefault() throws Exception {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldDefault.xml");
         Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseField.class, jaxb2ProgramAst);
-        Block resultBlock = AnnotationHelper.astToBlock(resultPhrase);
+        Block resultBlock = AnnotationHelper.ast2xml(resultPhrase);
 
         XmlAssert.assertThat(blockToXml(resultBlock))
             .and(loadXml("/annotation/testPhrase_fieldDefault.xml"))
@@ -327,7 +327,7 @@ public class AnnotationHelperTest {
     public void astToBlock_fieldBoolean() throws Exception {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldBoolean.xml");
         Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldBoolean.class, jaxb2ProgramAst);
-        Block resultBlock = AnnotationHelper.astToBlock(resultPhrase);
+        Block resultBlock = AnnotationHelper.ast2xml(resultPhrase);
 
         XmlAssert.assertThat(blockToXml(resultBlock))
             .and(loadXml("/annotation/testPhrase_fieldBoolean.xml"))
@@ -339,7 +339,7 @@ public class AnnotationHelperTest {
     public void astToBlock_fieldDouble() throws Exception {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldDouble.xml");
         Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldDouble.class, jaxb2ProgramAst);
-        Block resultBlock = AnnotationHelper.astToBlock(resultPhrase);
+        Block resultBlock = AnnotationHelper.ast2xml(resultPhrase);
 
         XmlAssert.assertThat(blockToXml(resultBlock))
             .and(loadXml("/annotation/testPhrase_fieldDouble.xml"))
@@ -351,7 +351,7 @@ public class AnnotationHelperTest {
     public void astToBlock_fieldEnum() throws Exception {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_fieldEnum.xml");
         Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseFieldEnum.class, jaxb2ProgramAst);
-        Block resultBlock = AnnotationHelper.astToBlock(resultPhrase);
+        Block resultBlock = AnnotationHelper.ast2xml(resultPhrase);
 
         XmlAssert.assertThat(blockToXml(resultBlock))
             .and(loadXml("/annotation/testPhrase_fieldEnum.xml"))
@@ -363,7 +363,7 @@ public class AnnotationHelperTest {
     public void astToBlock_propertiesComment() throws Exception {
         List<Block> blocks = loadBlocksFromFile("/annotation/testPhrase_blockPropertiesAndComment.xml");
         Phrase resultPhrase = AnnotationHelper.block2astByAnnotation(blocks.get(0), TestPhraseField.class, jaxb2ProgramAst);
-        Block resultBlock = AnnotationHelper.astToBlock(resultPhrase);
+        Block resultBlock = AnnotationHelper.ast2xml(resultPhrase);
 
         XmlAssert.assertThat(blockToXml(resultBlock))
             .and(loadXml("/annotation/testPhrase_blockPropertiesAndComment.xml"))

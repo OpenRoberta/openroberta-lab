@@ -40,7 +40,7 @@ public final class BluetoothReceiveAction extends Action {
         setReadOnly();
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         Phrase bluetoothRecieveConnection = helper.extractValue(values, new ExprParam(BlocklyConstants.CONNECTION, BlocklyType.NULL));
@@ -58,7 +58,7 @@ public final class BluetoothReceiveAction extends Action {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Mutation mutation = new Mutation();
         mutation.setDatatype(this.dataType);

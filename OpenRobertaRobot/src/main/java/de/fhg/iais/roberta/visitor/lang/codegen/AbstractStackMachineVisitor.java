@@ -691,7 +691,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                 addDebugStatement(repeatStmt);
 
                 repeatStmt.expr.accept(this);
-                // no difference between WHILE and UNTIL because a NOT gets injected into UNTIL by jaxbToAST
+                // no difference between WHILE and UNTIL because a NOT gets injected into UNTIL by xml2ast
                 JSONObject jumpOverWhile = makeNode(C.JUMP).put(C.CONDITIONAL, false).put(C.TARGET, "r_e_" + uniqueCompoundNumber);
                 addHighlightingToJump(jumpOverWhile);
                 add(jumpOverWhile);

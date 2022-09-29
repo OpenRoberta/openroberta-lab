@@ -50,8 +50,8 @@ public final class MethodExpr extends Expr {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Phrase p = getMethod();
-        return p.astToBlock();
+        return p.ast2xml();
     }
 }

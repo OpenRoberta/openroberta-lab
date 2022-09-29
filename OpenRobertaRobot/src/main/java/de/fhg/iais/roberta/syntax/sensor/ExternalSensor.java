@@ -70,7 +70,7 @@ public abstract class ExternalSensor extends Sensor implements WithUserDefinedPo
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         if ( !this.getMode().equals(BlocklyConstants.DEFAULT) ) {

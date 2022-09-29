@@ -325,7 +325,7 @@ public class Administration {
     private String xml2Ast2xml(String updatedProgram) throws Exception, JAXBException {
         BlockSet program = JaxbHelper.xml2BlockSet(updatedProgram);
         Jaxb2ProgramAst transformer = new Jaxb2ProgramAst(null);
-        BlockSet blockSet = astToJaxb(transformer.blocks2Ast(program).getTree());
+        BlockSet blockSet = astToJaxb(transformer.blocks2ast(program).getTree());
         return jaxbToXml(blockSet);
     }
 
@@ -373,7 +373,7 @@ public class Administration {
                     instance.setX(((Location) phrase).x);
                     instance.setY(((Location) phrase).y);
                 }
-                instance.getBlock().add(phrase.astToBlock());
+                instance.getBlock().add(phrase.ast2xml());
             }
         }
         blockSet.getInstance().add(instance);

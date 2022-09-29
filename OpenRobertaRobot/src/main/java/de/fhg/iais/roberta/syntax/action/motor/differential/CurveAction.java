@@ -53,7 +53,7 @@ public final class CurveAction extends Action {
         return "CurveAction [" + this.direction + ", " + this.paramLeft + this.paramRight + "]";
     }
 
-    public static  Phrase jaxbToAst(Block block, Jaxb2ProgramAst helper) {
+    public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
         List<Field> fields;
         String mode;
         List<Value> values;
@@ -90,7 +90,7 @@ public final class CurveAction extends Action {
     }
 
     @Override
-    public Block astToBlock() {
+    public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
