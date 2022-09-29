@@ -143,7 +143,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                 left = motors[C.MOTOR_LEFT];
                 right = motors[C.MOTOR_RIGHT];
                 // diff drive action
-                if (left && right) {
+                if (left != null && right != null) {
                     // turn action
                     if (motors[C.ANGLE]) {
                         this.angle = Math.abs(motors[C.ANGLE]);
@@ -181,7 +181,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                     }
                 }
             }
-            if (left !== undefined) {
+            if (left != null) {
                 if (left > 100) {
                     left = 100;
                 }
@@ -190,7 +190,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                 }
                 this.left.speed = left * this.MAXPOWER;
             }
-            if (right !== undefined) {
+            if (right != null) {
                 if (right > 100) {
                     right = 100;
                 }

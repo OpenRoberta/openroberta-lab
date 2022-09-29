@@ -165,7 +165,7 @@ export abstract class ChassisDiffDrive implements IUpdateAction, ISensor, IDrawa
             left = motors[C.MOTOR_LEFT];
             right = motors[C.MOTOR_RIGHT];
             // diff drive action
-            if (left && right) {
+            if (left != null && right != null) {
                 // turn action
                 if (motors[C.ANGLE]) {
                     this.angle = Math.abs(motors[C.ANGLE]);
@@ -202,7 +202,7 @@ export abstract class ChassisDiffDrive implements IUpdateAction, ISensor, IDrawa
                 }
             }
         }
-        if (left !== undefined) {
+        if (left != null) {
             if (left > 100) {
                 left = 100;
             } else if (left < -100) {
@@ -210,7 +210,7 @@ export abstract class ChassisDiffDrive implements IUpdateAction, ISensor, IDrawa
             }
             this.left.speed = left * this.MAXPOWER;
         }
-        if (right !== undefined) {
+        if (right != null) {
             if (right > 100) {
                 right = 100;
             } else if (right < -100) {
