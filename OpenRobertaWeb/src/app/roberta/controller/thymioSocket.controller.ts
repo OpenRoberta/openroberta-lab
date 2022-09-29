@@ -89,8 +89,10 @@ export async function uploadProgram(generatedCode: string): Promise<any> {
     GUISTATE.robot.time = startTime - Date.now();
     if (selectedNode && selectedNode.status === THYMIO_M.NodeStatus.ready) {
         try {
+            await selectedNode.lock();
             await selectedNode.sendAsebaProgram(generatedCode);
             await selectedNode.runProgram();
+            await selectedNode.unlock();
             return 'done';
         } catch (e) {
             throw e;

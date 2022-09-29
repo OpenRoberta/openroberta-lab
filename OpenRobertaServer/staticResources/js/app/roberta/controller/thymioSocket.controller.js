@@ -140,23 +140,29 @@ define(["require", "exports", "thymio", "guiState.controller", "guiState.model"]
                 switch (_a.label) {
                     case 0:
                         GUISTATE.robot.time = startTime - Date.now();
-                        if (!(exports.selectedNode && exports.selectedNode.status === THYMIO_M.NodeStatus.ready)) return [3 /*break*/, 6];
+                        if (!(exports.selectedNode && exports.selectedNode.status === THYMIO_M.NodeStatus.ready)) return [3 /*break*/, 8];
                         _a.label = 1;
                     case 1:
-                        _a.trys.push([1, 4, , 5]);
-                        return [4 /*yield*/, exports.selectedNode.sendAsebaProgram(generatedCode)];
+                        _a.trys.push([1, 6, , 7]);
+                        return [4 /*yield*/, exports.selectedNode.lock()];
                     case 2:
                         _a.sent();
-                        return [4 /*yield*/, exports.selectedNode.runProgram()];
+                        return [4 /*yield*/, exports.selectedNode.sendAsebaProgram(generatedCode)];
                     case 3:
                         _a.sent();
-                        return [2 /*return*/, 'done'];
+                        return [4 /*yield*/, exports.selectedNode.runProgram()];
                     case 4:
+                        _a.sent();
+                        return [4 /*yield*/, exports.selectedNode.unlock()];
+                    case 5:
+                        _a.sent();
+                        return [2 /*return*/, 'done'];
+                    case 6:
                         e_3 = _a.sent();
                         throw e_3;
-                    case 5: return [3 /*break*/, 7];
-                    case 6: throw new Error('Exception on upload program');
-                    case 7: return [2 /*return*/];
+                    case 7: return [3 /*break*/, 9];
+                    case 8: throw new Error('Exception on upload program');
+                    case 9: return [2 /*return*/];
                 }
             });
         });

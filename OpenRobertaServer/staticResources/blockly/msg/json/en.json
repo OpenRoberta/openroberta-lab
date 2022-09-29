@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2022-09-22 22:58:03.257930",
+		"lastupdated": "2022-09-29 13:55:04.548175",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1431,6 +1431,7 @@
 	"SENSOR_RSSI": "signal strength",
 	"SENSOR_RSSI_VALUE_GETSAMPLE_TOOLTIP": "Gets the signal strength from the last received message.",
 	"SENSOR_ACCELEROMETER_GETSAMPLE_TOOLTIP": "Returns the acceleration value on the given axis in g",
+	"SENSOR_ACCELEROMETER_VALUE_GETSAMPLE_TOOLTIP": "Returns the acceleration value on the given axis in the range from [-32, 32]",
 	"SENSOR_ACCELEROMETER_X_GETSAMPLE_TOOLTIP_ARDUINO": "Returns the acceleration value on the X axis in g. Can be in range from -4 g to 4 g.",
 	"SENSOR_ACCELEROMETER_Y_GETSAMPLE_TOOLTIP_ARDUINO": "Returns the acceleration value on the Y axis in g. Can be in range from -4 g to 4 g.",
 	"SENSOR_ACCELEROMETER_Z_GETSAMPLE_TOOLTIP_ARDUINO": "Returns the acceleration value on the Z axis in g. Can be in range from -4 g to 4 g.",
@@ -1897,5 +1898,7 @@
 	"SOUND_TARGET_FRIENDLY": "target friendly",
 	"SOUND_TARGET_DETECTED": "target detected",
 	"CIRCLE": "circle",
-	"SENSOR_IRHORIZONTAL_GETSAMPLE_TOOLTIP": "Gets the current reading from the infrared sensor."
+	"SENSOR_IRHORIZONTAL_GETSAMPLE_TOOLTIP": "Gets the current reading from the infrared sensor.",
+	"FORWARD": "forward",
+	"BACKWARD": "backward"
 }

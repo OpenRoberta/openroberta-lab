@@ -1897,7 +1897,7 @@ export class ThymioRGBLeds implements IUpdateAction, IDrawable, IReset {
             $('#stopOn' + this.myRobotId).css({ 'stop-color': 'rgb(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ')', 'stop-opacity': 1 });
             $('#stopOff' + this.myRobotId).css({ 'stop-color': 'rgb(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ')', 'stop-opacity': 0 });
         } else {
-            $('#stopOn' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 1 });
+            $('#stopOn' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
             $('#stopOff' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
         }
     }
@@ -2061,6 +2061,7 @@ export class ThymioProxHLeds implements IUpdateAction, IDrawable, IReset {
 
     reset(): void {
         this.values = [0, 0, 0, 0, 0, 0, 0, 0];
+        this.change();
     }
 
     change(): void {
@@ -2118,6 +2119,7 @@ export class ThymioTemperatureLeds implements IUpdateAction, IDrawable, IReset {
 
     reset(): void {
         this.values = [0, 0];
+        this.change();
     }
 
     change(): void {
@@ -2166,6 +2168,7 @@ export class ThymioSoundLed implements IUpdateAction, IDrawable, IReset {
 
     reset(): void {
         this.value = 0;
+        this.change();
     }
 
     change(): void {

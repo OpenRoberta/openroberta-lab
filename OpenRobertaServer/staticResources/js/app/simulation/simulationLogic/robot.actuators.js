@@ -1801,7 +1801,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                 $('#stopOff' + this.myRobotId).css({ 'stop-color': 'rgb(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ')', 'stop-opacity': 0 });
             }
             else {
-                $('#stopOn' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 1 });
+                $('#stopOn' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
                 $('#stopOff' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
             }
         };
@@ -1950,6 +1950,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
         };
         ThymioProxHLeds.prototype.reset = function () {
             this.values = [0, 0, 0, 0, 0, 0, 0, 0];
+            this.change();
         };
         ThymioProxHLeds.prototype.change = function () {
             for (var i = 0; i < 8; i++) {
@@ -2002,6 +2003,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
         };
         ThymioTemperatureLeds.prototype.reset = function () {
             this.values = [0, 0];
+            this.change();
         };
         ThymioTemperatureLeds.prototype.change = function () {
             $('#tLed0-' + this.myRobotId).css({ 'fill': 'rgba(255, 0, 0,' + this.values[1] / 100 });
@@ -2045,6 +2047,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
         };
         ThymioSoundLed.prototype.reset = function () {
             this.value = 0;
+            this.change();
         };
         ThymioSoundLed.prototype.change = function () {
             $('#mLed0-' + this.myRobotId).css({ 'fill': 'rgba(0, 0, 255,' + this.value / 100 });
