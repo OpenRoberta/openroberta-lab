@@ -158,8 +158,9 @@ onevent timer0
     elseif _state == 20 then
         _time = 0
         _A = 1
-        call sound.replay(_A)
         call sound.duration(_A, ___duration_)
+        ___duration_=___duration_ * 10
+        call sound.replay(_A)
         _state = 21
     elseif _state == 21 then
         if _time == ___duration_ then

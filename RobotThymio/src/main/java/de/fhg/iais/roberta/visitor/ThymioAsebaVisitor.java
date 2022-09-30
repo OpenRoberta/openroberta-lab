@@ -300,9 +300,11 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
         this.sb.append("_time = 0");
         nlIndent();
         playRecordingAction.filename.accept(this);
-        this.sb.append("call sound.replay(_A)");
-        nlIndent();
         this.sb.append("call sound.duration(_A, ___duration_)");
+        nlIndent();
+        this.sb.append("___duration_=___duration_ * 10");
+        nlIndent();
+        this.sb.append("call sound.replay(_A)");
         nlIndent();
         this.stateCounter++;
         this.sb.append("_state = ").append(this.stateCounter);
