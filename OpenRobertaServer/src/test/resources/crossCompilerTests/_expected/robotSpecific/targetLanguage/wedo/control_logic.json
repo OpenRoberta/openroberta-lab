@@ -1025,7 +1025,7 @@
   {"opc": "ShowTextAction"},
   {
     "opc": "expr",
-    "expr": "C.NULL_CONST"
+    "expr": "null"
   },
   {"opc": "ShowTextAction"},
   {

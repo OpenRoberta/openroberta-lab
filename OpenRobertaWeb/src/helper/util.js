@@ -1013,9 +1013,17 @@ export function addVariableValue($elem, name, value) {
             break;
         }
         case 'object': {
-            for (var i = 0; i < value.length; i++) {
-                addVariableValue($elem, name + ' [' + String(i) + ']', value[i]);
+            if (value === null) {
+                $elem.append('<div><label>' + name + ' :  </label><span> null </span></div>');
+            } else {
+                for (var i = 0; i < value.length; i++) {
+                    addVariableValue($elem, name + ' [' + String(i) + ']', value[i]);
+                }
             }
+            break;
+        }
+        default: {
+            U.warn('unexpected variable type received');
             break;
         }
     }

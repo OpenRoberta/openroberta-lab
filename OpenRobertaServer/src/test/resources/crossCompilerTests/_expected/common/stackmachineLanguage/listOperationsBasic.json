@@ -56,7 +56,7 @@
   55:            expr            expr: list_operation, op: list_find_item, position: first,  > -: [":X-5ugpt{m;X`:v|IR!l"], 
   56:            AssignStmt      name: item,                                                 > -: ["AS*Ivq+=eNG82T!kDFy7"], 
   57:            expr            expr: Var, name: initialEmptyBoolean,                       > +: [")buVYIKxov7Uy)pwpcjL","]?TKf+I%.aOO*I!{Q^F=","HRLB?kmw=~2AVi3ZP-/o"], -: ["HRLB?kmw=~2AVi3ZP-/o"], possibleDebugStop: ["]?TKf+I%.aOO*I!{Q^F="], 
-  58:            expr            expr: C.NULL_CONST,                                         > +: ["Zq)aK`-pzb9sR_XYZmzF"], -: ["Zq)aK`-pzb9sR_XYZmzF"], 
+  58:            expr            expr: null,                                                 > +: ["Zq)aK`-pzb9sR_XYZmzF"], -: ["Zq)aK`-pzb9sR_XYZmzF"],
   59:            expr            expr: list_operation, op: list_find_item, position: first,  > -: [")buVYIKxov7Uy)pwpcjL"], 
   60:            AssignStmt      name: item,                                                 > -: ["]?TKf+I%.aOO*I!{Q^F="], 
   61:            expr            expr: Var, name: initialEmptyBoolean,                       > +: ["m?zcv(G3?L5+=sG@sx=d","*5^o6X^7x*qlL%YPhoOY"], -: ["*5^o6X^7x*qlL%YPhoOY"], possibleDebugStop: ["m?zcv(G3?L5+=sG@sx=d"], 

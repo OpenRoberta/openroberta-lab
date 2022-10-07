@@ -216,7 +216,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     public final Void visitNullConst(NullConst nullConst) {
-        JSONObject o = makeNode(C.EXPR).put(C.EXPR, "C." + nullConst.getKind().getName());
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.NULL_CONST);
         return add(o);
     }
 
