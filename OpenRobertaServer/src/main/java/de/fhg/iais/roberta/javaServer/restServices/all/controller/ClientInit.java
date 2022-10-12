@@ -36,12 +36,12 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
-import de.fhg.iais.roberta.util.basic.Clock;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.UtilForREST;
+import de.fhg.iais.roberta.util.basic.Clock;
 import eu.bitwalker.useragentutils.UserAgent;
 
 @Path("/init")
@@ -101,6 +101,7 @@ public class ClientInit {
                     robotDescription.put("infoDE", robotInfoDE);
                     robotDescription.put("infoEN", robotInfoEN);
                     robotDescription.put("beta", httpSessionState.getRobotFactory(robot).isBeta());
+                    robotDescription.put("stopButton", httpSessionState.getRobotFactory(robot).hasStopButton());
                     robotDescription.put("group", httpSessionState.getRobotFactory(robot).getGroup());
                 }
                 robots.put("" + i, robotDescription);

@@ -13,6 +13,15 @@ import * as GUISTATE_C from 'guiState.controller';
 import * as GUISTATE from 'guiState.model';
 
 const URL = 'ws://localhost:8597';
+// provide a stop program (see https://github.com/Mobsya/vpl-web/blob/master/thymio/index.js#L197) instead of using a stop function of TDM
+const STOP_PROGRAM = 'motor.left.target = 0\n' +
+    'motor.right.target = 0\n' +
+    'call sound.system(-1)\n' +
+    'call leds.circle(32,32,32,32,32,32,32,32)\n' +
+    'timer.period[0] = 100\n' +
+    'onevent timer0\n' +
+    'call leds.circle(0,0,0,0,0,0,0,0)\n';
+
 export var selectedNode: THYMIO_M.Node = undefined;
 var startTime: number = undefined;
 
@@ -100,4 +109,8 @@ export async function uploadProgram(generatedCode: string): Promise<any> {
     } else {
         throw new Error('Exception on upload program');
     }
+}
+
+export async function stopProgram(): Promise<any> {
+    return uploadProgram(STOP_PROGRAM);
 }

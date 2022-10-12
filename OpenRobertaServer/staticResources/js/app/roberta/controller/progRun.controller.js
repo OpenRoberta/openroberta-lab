@@ -40,6 +40,11 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
             stopBrick();
             return false;
         });
+        Blockly.bindEvent_(blocklyWorkspace.robControls.stopProgram, 'mousedown', null, function (e) {
+            LOG.info('stopProgram from blockly button');
+            stopProgram();
+            return false;
+        });
         if (GUISTATE_C.getConnection() !== 'autoConnection' && GUISTATE_C.getConnection() !== 'jsPlay') {
             GUISTATE_C.setRunEnabled(false);
         }
@@ -353,6 +358,15 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
         if (interpreter !== null) {
             interpreter.terminate();
         }
+    }
+    function stopProgram() {
+        THYMIO_C.stopProgram().then(function (ok) {
+            if (ok == 'done') {
+                MSG.displayInformation(result, 'MESSAGE_EDIT_START', result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+            }
+        }, function (err) {
+            MSG.displayInformation({ rc: 'error' }, null, err, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+        });
     }
     function runForWebviewConnection(result) {
         MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());

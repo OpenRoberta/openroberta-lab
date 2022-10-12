@@ -36,8 +36,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 define(["require", "exports", "thymio", "guiState.controller", "guiState.model"], function (require, exports, THYMIO_M, GUISTATE_C, GUISTATE) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.uploadProgram = exports.init = exports.selectedNode = void 0;
+    exports.stopProgram = exports.uploadProgram = exports.init = exports.selectedNode = void 0;
     var URL = 'ws://localhost:8597';
+    // provide a stop program (see https://github.com/Mobsya/vpl-web/blob/master/thymio/index.js#L197) instead of using a stop function of TDM
+    var STOP_PROGRAM = 'motor.left.target = 0\n' +
+        'motor.right.target = 0\n' +
+        'call sound.system(-1)\n' +
+        'call leds.circle(32,32,32,32,32,32,32,32)\n' +
+        'timer.period[0] = 100\n' +
+        'onevent timer0\n' +
+        'call leds.circle(0,0,0,0,0,0,0,0)\n';
     exports.selectedNode = undefined;
     var startTime = undefined;
     function init() {
@@ -168,4 +176,12 @@ define(["require", "exports", "thymio", "guiState.controller", "guiState.model"]
         });
     }
     exports.uploadProgram = uploadProgram;
+    function stopProgram() {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, uploadProgram(STOP_PROGRAM)];
+            });
+        });
+    }
+    exports.stopProgram = stopProgram;
 });

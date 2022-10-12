@@ -408,6 +408,12 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             $('#menuTabNNctxt').hide();
             $('#nn').hide();
         }
+        if (getHasRobotStopButton(robot)) {
+            GUISTATE.gui.blocklyWorkspace.robControls.showStopProgram();
+        }
+        else {
+            GUISTATE.gui.blocklyWorkspace.robControls.hideStopProgram();
+        }
         UTIL.clearTabAlert('tabConfiguration'); // also clear tab alert when switching robots
     }
     exports.setRobot = setRobot;
@@ -477,10 +483,12 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         GUISTATE.gui.runEnabled = running;
         if (running) {
             GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+            GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.enable('stopProgram');
             $('.menuRunProg, #runSourceCodeEditor').removeClass('disabled');
         }
         else {
             GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+            GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.disable('stopProgram');
             $('.menuRunProg, #runSourceCodeEditor').addClass('disabled');
         }
     }
@@ -537,6 +545,17 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         return false;
     }
     exports.getIsRobotBeta = getIsRobotBeta;
+    function getHasRobotStopButton(robotName) {
+        for (var robot in getRobots()) {
+            if (!getRobots().hasOwnProperty(robot)) {
+                continue;
+            }
+            if (getRobots()[robot].name == robotName && getRobots()[robot].stopButton == true) {
+                return true;
+            }
+        }
+        return false;
+    }
     function getRobotInfoDE(robotName) {
         for (var robot in getRobots()) {
             if (!getRobots().hasOwnProperty(robot)) {

@@ -419,6 +419,11 @@ function setRobot(robot, result, opt_init) {
         $('#menuTabNNctxt').hide();
         $('#nn').hide();
     }
+    if (getHasRobotStopButton(robot)) {
+        GUISTATE.gui.blocklyWorkspace.robControls.showStopProgram();
+    } else {
+        GUISTATE.gui.blocklyWorkspace.robControls.hideStopProgram();
+    }
 
     UTIL.clearTabAlert('tabConfiguration'); // also clear tab alert when switching robots
 }
@@ -488,9 +493,11 @@ function setRunEnabled(running) {
     GUISTATE.gui.runEnabled = running;
     if (running) {
         GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+        GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.enable('stopProgram');
         $('.menuRunProg, #runSourceCodeEditor').removeClass('disabled');
     } else {
         GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+        GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.disable('stopProgram');
         $('.menuRunProg, #runSourceCodeEditor').addClass('disabled');
     }
 }
@@ -541,6 +548,18 @@ function getIsRobotBeta(robotName) {
             continue;
         }
         if (getRobots()[robot].name == robotName && getRobots()[robot].beta == true) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function getHasRobotStopButton(robotName) {
+    for (var robot in getRobots()) {
+        if (!getRobots().hasOwnProperty(robot)) {
+            continue;
+        }
+        if (getRobots()[robot].name == robotName && getRobots()[robot].stopButton == true) {
             return true;
         }
     }

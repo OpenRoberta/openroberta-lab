@@ -129,6 +129,10 @@ public class RobotFactory {
         return this.pluginProperties.getStringProperty("robot.beta") != null;
     }
 
+    public final Boolean hasStopButton() {
+        return this.pluginProperties.getStringProperty("robot.stopButton") != null;
+    }
+
     public final String getConnectionType() {
         return this.pluginProperties.getStringProperty("robot.connection");
     }
