@@ -101,7 +101,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
         rgbColor.G.accept(this);
         this.sb.append(", 0), 255), min(max(");
         rgbColor.B.accept(this);
-        this.sb.append(", 0), 255), 16))");
+        this.sb.append(", 0), 255)), 16)");
         return null;
     }
 
