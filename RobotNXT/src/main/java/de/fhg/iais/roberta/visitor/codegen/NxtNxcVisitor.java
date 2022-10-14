@@ -652,7 +652,8 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         } else {
             this.sb.append("SetSensorColorNone(");
         }
-        this.sb.append(lightAction.port).append(");");
+        String port = this.brickConfiguration.getConfigurationComponent(lightAction.port).internalPortName;
+        this.sb.append(port).append(");");
         return null;
     }
 

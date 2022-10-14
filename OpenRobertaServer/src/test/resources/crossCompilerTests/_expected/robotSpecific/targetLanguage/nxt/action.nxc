@@ -122,28 +122,28 @@ void ____sounds() {
 }
 
 void ____lights() {
-    SetSensorColorRed(1);
-    SetSensorColorRed(2);
-    SetSensorColorRed(3);
-    SetSensorColorRed(4);
-    SetSensorColorNone(1);
-    SetSensorColorNone(2);
-    SetSensorColorNone(3);
-    SetSensorColorNone(4);
-    SetSensorColorGreen(1);
-    SetSensorColorGreen(2);
-    SetSensorColorGreen(3);
-    SetSensorColorGreen(4);
-    SetSensorColorNone(1);
-    SetSensorColorNone(2);
-    SetSensorColorNone(3);
-    SetSensorColorNone(4);
-    SetSensorColorBlue(1);
-    SetSensorColorBlue(2);
-    SetSensorColorBlue(3);
-    SetSensorColorBlue(4);
-    SetSensorColorNone(1);
-    SetSensorColorNone(2);
-    SetSensorColorNone(3);
-    SetSensorColorNone(4);
+    SetSensorColorRed(S1);
+    SetSensorColorRed(S2);
+    SetSensorColorRed(S3);
+    SetSensorColorRed(S4);
+    SetSensorColorNone(S1);
+    SetSensorColorNone(S2);
+    SetSensorColorNone(S3);
+    SetSensorColorNone(S4);
+    SetSensorColorGreen(S1);
+    SetSensorColorGreen(S2);
+    SetSensorColorGreen(S3);
+    SetSensorColorGreen(S4);
+    SetSensorColorNone(S1);
+    SetSensorColorNone(S2);
+    SetSensorColorNone(S3);
+    SetSensorColorNone(S4);
+    SetSensorColorBlue(S1);
+    SetSensorColorBlue(S2);
+    SetSensorColorBlue(S3);
+    SetSensorColorBlue(S4);
+    SetSensorColorNone(S1);
+    SetSensorColorNone(S2);
+    SetSensorColorNone(S3);
+    SetSensorColorNone(S4);
 }
