@@ -35,8 +35,8 @@ public class RobotCommunicator {
     /**
      * check the new registration ticket. only used by brickWantsTokenToBeApproved(), extracted for testing
      *
-     * @throws assertions for various types of issues
      * @return true if the ticket has been accepted
+     * @throws assertions for various types of issues
      */
     public boolean addNewRegistration(RobotCommunicationData newRobotCommunicationData) {
         String token = newRobotCommunicationData.getToken();
@@ -215,15 +215,17 @@ public class RobotCommunicator {
 
     }
 
-    // TODO: when can this fail?
     private boolean checkRobotMatchesClient(String robot, RobotCommunicationData state) {
-        //TODO: it is a hot fix for the release on 6.7.17, later we need to change the state robot name from ardu to botnroll
+        // this is a hot fix for the release on 6.7.17, later we need to change the state robot name from ardu to botnroll
         if ( robot.equals("botnroll") || robot.equals("arduino") ) {
             robot = "ardu";
         }
-
-        //TODO: this re-writes for old robots, that do not know, that there are V1 and V0 of lejos. 20.02.2019, Artem Vinokurov.
+        // this re-writes for old ev3 robots (V0) the robot name usable for V0 and V1
         if ( robot.equals("ev3lejosv0") ) {
+            robot = "lejos";
+        }
+        // until we remove the xNN plugin (this will happen, if sometimes in the future we implemment a new start page), we have to treat the "robot" xNN as lejos
+        if ( robot.equalsIgnoreCase("xNN") ) {
             robot = "lejos";
         }
 
