@@ -4,6 +4,7 @@ package de.fhg.iais.roberta.util.syntax;
  * This class contains all Blockly name constants that are used in the XML representation of the block.
  */
 public final class BlocklyConstants {
+    
     private BlocklyConstants() {
         // no objects :-)
     }

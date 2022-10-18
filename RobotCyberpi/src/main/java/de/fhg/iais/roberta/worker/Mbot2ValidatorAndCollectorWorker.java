@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisit
 
 public class Mbot2ValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
 
-    private static final List<String> NON_BLOCKING_PROPERTIES = Collections.unmodifiableList(Arrays.asList("MOTOR_L", "MOTOR_R", "BRICK_WHEEL_DIAMETER", "BRICK_TRACK_WIDTH"));
+    private static final List<String> NON_BLOCKING_PROPERTIES = Collections.unmodifiableList(Arrays.asList("NAME", "MOTOR_L", "MOTOR_R", "BRICK_WHEEL_DIAMETER", "BRICK_TRACK_WIDTH"));
 
     @Override
     protected CommonNepoValidatorAndCollectorVisitor getVisitor(

@@ -1,6 +1,12 @@
 package de.fhg.iais.roberta.visitor.validate;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 import com.google.common.collect.ClassToInstanceMap;
+
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
@@ -15,10 +21,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDifferentialMotorVisitor;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public abstract class DifferentialMotorValidatorAndCollectorVisitor extends MotorValidatorAndCollectorVisitor implements IDifferentialMotorVisitor<Void> {
 
@@ -38,7 +40,7 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitor extends Moto
     @Override
     public Void visitCurveAction(CurveAction curveAction) {
         requiredComponentVisited(curveAction, curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed());
-        if (curveAction.paramLeft.getDuration() != null) {
+        if ( curveAction.paramLeft.getDuration() != null ) {
             requiredComponentVisited(curveAction, curveAction.paramLeft.getDuration().getValue());
         }
 
@@ -72,9 +74,11 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitor extends Moto
         if ( differentialDrive == null ) {
             addErrorToPhrase(motionAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
             return false;
-        } else if ( differentialDrive.getOptProperty("MOTOR_L").equals(differentialDrive.getOptProperty("MOTOR_R")) ) {
-            addErrorToPhrase(motionAction, "CONFIGURATION_ERROR_OVERLAPPING_PORTS");
-            return false;
+        } else {
+            if ( Objects.equals(differentialDrive.getOptProperty("MOTOR_L"), differentialDrive.getOptProperty("MOTOR_R")) ) {
+                addErrorToPhrase(motionAction, "CONFIGURATION_ERROR_OVERLAPPING_PORTS");
+                return false;
+            }
         }
         return true;
     }

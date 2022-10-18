@@ -1,0 +1,9 @@
+WaitStmt [
+(repeat [WAIT, SensorExpr [TouchSensor [B, PRESSED, - EMPTY_SLOT -]]]
+)
+(repeat [WAIT, SensorExpr [KeysSensor [rechts, PRESSED, - EMPTY_SLOT -]]]
+)]
+
+(repeat [FOR_EACH, Binary [IN, VarDeclaration [COLOR, Element, EmptyExpr [defVal=COLOR], false, false], Var [Element2]]]
+AktionStmt [LedOnAction[colour: Var [Element]]]WaitTimeStmt[time: NumConst[value: 500]]
+)

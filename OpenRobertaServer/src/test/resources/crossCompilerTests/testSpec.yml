@@ -109,6 +109,10 @@ robots:
     dir: wedo
     suffix: ".json"
     eval: false
+  spike:
+    template: spike
+    dir: spike
+    suffix: ".py"
 
 progs:
   assign:

@@ -1593,7 +1593,7 @@ table [data-toggle="collapse"].collapsed:after {
 
 .robot-label {
     display: block;
-    white-space: nowrap;
+    line-height: 16px;
 }
 
 .robot-icon {

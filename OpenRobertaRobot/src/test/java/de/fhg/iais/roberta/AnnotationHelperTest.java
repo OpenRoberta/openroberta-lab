@@ -418,7 +418,7 @@ public class AnnotationHelperTest {
     public void checkNepoAnnotatedClass_fieldNotPublic() {
         Assertions.assertThatThrownBy(() -> AnnotationHelper.checkNepoAnnotatedClass(TestPhraseFieldNotPublic.class))
             .isInstanceOf(NepoAnnotationException.class)
-            .hasMessageContaining("Wrong usage at TestPhraseFieldNotPublic#message: Field should be public");
+            .hasMessageContaining("Excepted a constructor with the following parameter types [class de.fhg.iais.roberta.util.ast.BlocklyProperties] on TestPhraseFieldNotPublic");
     }
 
     @Test

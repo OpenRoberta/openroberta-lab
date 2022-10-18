@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [1, TIMER, DEFAULT], UsedSensor [F, COLOR, DEFAULT], UsedSensor [U, ULTRASONIC, DISTANCE], UsedSensor [B, TOUCH, PRESSED], UsedSensor [B, TOUCH, FORCE], UsedSensor [1, TIMER, VALUE]]
+Actors: 
+[UsedActor [, HUB]]
+Methods: 
+[GETSAMPLEULTRASONIC, SETSTATUSLIGHT]

@@ -1,0 +1,8 @@
+StmtTextComment[textComment: display]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: Hallo]]
+DisplayTextAction[displayTextMode: CHARACTER, textToDisplay: StringConst[value: Hallo]]
+DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: PredefinedImage[imageName: HEART]]
+WaitTimeStmt[time: NumConst[value: 500]]
+DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: Image [[1, , , , 5]:[, 2, , 6, ]:[#, #, #, #, #]:[, 7, , 3, ]:[8, , , , 4]]]
+WaitTimeStmt[time: NumConst[value: 1000]]
+DisplayClearAction[]

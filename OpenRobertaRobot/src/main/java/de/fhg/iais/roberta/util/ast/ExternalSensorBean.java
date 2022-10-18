@@ -4,13 +4,14 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class ExternalSensorBean {
     private final String port;
     private final String mode;
     private final String slot;
     private final Mutation mutation;
-    private final List<Hide> hide;
+    private final Hide hide;
 
     public ExternalSensorBean(String port, String mode, String slot, Mutation mutation) {
         this.port = port;
@@ -25,8 +26,10 @@ public class ExternalSensorBean {
         this.mode = mode;
         this.slot = slot;
         this.mutation = mutation;
-        if ( hide.size() > 0 ) {
-            this.hide = hide;
+        if ( hide.size() == 1 ) {
+            this.hide = hide.get(0);
+        } else if ( hide.size() > 1 ) {
+            throw new DbcException("more than 1 hide element");
         } else {
             this.hide = null;
         }
@@ -48,7 +51,7 @@ public class ExternalSensorBean {
         return this.mutation;
     }
 
-    public List<Hide> getHide() {
+    public Hide getHide() {
         return this.hide;
     }
 

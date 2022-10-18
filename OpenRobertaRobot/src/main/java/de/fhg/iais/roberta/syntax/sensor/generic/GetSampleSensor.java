@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 /**
@@ -27,7 +28,7 @@ public final class GetSampleSensor extends Sensor {
     public final String slot;
     public final String sensorTypeAndMode;
     public final Mutation mutation;
-    public final List<Hide> hide;
+    public final Hide hide;
 
     @SuppressWarnings("unchecked")
     public GetSampleSensor(
@@ -35,7 +36,7 @@ public final class GetSampleSensor extends Sensor {
         String port,
         String slot,
         Mutation mutation,
-        List<Hide> hide,
+        Hide hide,
         BlocklyProperties properties,
 
         BlocklyDropdownFactory factory) //
@@ -71,7 +72,7 @@ public final class GetSampleSensor extends Sensor {
         } else {
             slotName = Jaxb2Ast.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
         }
-        return new GetSampleSensor(modeName, portName, slotName, block.getMutation(), block.getHide(), Jaxb2Ast.extractBlocklyProperties(block), helper.getDropdownFactory());
+        return new GetSampleSensor(modeName, portName, slotName, block.getMutation(), JaxbHelper.getHideFromBlock(block), Jaxb2Ast.extractBlocklyProperties(block), helper.getDropdownFactory());
     }
 
     @Override
@@ -81,8 +82,8 @@ public final class GetSampleSensor extends Sensor {
         if ( this.mutation != null ) {
             jaxbDestination.setMutation(mutation);
         }
-        if ( this.hide != null && this.hide.size() > 0 ) {
-            jaxbDestination.getHide().addAll(hide);
+        if ( this.hide != null ) {
+            jaxbDestination.getHide().add(hide);
         }
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SENSORTYPE, this.sensorTypeAndMode);
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SENSORPORT, this.sensorPort);

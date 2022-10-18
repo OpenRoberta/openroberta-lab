@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
@@ -29,14 +30,14 @@ public final class CurveAction extends Action {
     public final MotionParam paramLeft;
     public final MotionParam paramRight;
     public final String port;
-    public final List<Hide> hide;
+    public final Hide hide;
 
     public CurveAction(
         IDriveDirection direction,
         MotionParam paramLeft,
         MotionParam paramRight,
         String port,
-        List<Hide> hide,
+        Hide hide,
         BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(direction != null && paramLeft != null && paramRight != null);
@@ -83,7 +84,7 @@ public final class CurveAction extends Action {
 
         if ( fields.stream().anyMatch(field -> field.getName().equals(BlocklyConstants.ACTORPORT)) ) {
             String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT);
-            return new CurveAction(factory.getDriveDirection(mode), mpLeft, mpRight, port, block.getHide(), Jaxb2Ast.extractBlocklyProperties(block));
+            return new CurveAction(factory.getDriveDirection(mode), mpLeft, mpRight, port, JaxbHelper.getHideFromBlock(block), Jaxb2Ast.extractBlocklyProperties(block));
         }
 
         return new CurveAction(factory.getDriveDirection(mode), mpLeft, mpRight, BlocklyConstants.EMPTY_PORT, null, Jaxb2Ast.extractBlocklyProperties(block));
@@ -107,7 +108,7 @@ public final class CurveAction extends Action {
         }
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.ACTORPORT, port);
         if ( this.hide != null ) {
-            jaxbDestination.getHide().addAll(hide);
+            jaxbDestination.getHide().add(hide);
         }
         return jaxbDestination;
     }

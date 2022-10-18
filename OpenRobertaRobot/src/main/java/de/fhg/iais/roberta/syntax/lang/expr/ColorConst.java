@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
-@NepoExpr(category = "EXPR", blocklyNames = {"naoColour_picker", "robColour_picker", "mbedColour_picker"}, name = "COLOR_CONST", blocklyType = BlocklyType.COLOR)
+@NepoExpr(category = "EXPR", blocklyNames = {"naoColour_picker", "robColour_picker", "mbedColour_picker", "colour_picker_spike"}, name = "COLOR_CONST", blocklyType = BlocklyType.COLOR)
 public final class ColorConst extends Expr {
     @NepoField(name = "COLOUR")
     public final String hexValue;

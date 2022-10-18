@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -19,7 +20,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
+import de.fhg.iais.roberta.blockly.generated.Hide;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class JaxbHelper {
     private static final Logger LOG = LoggerFactory.getLogger(JaxbHelper.class);
@@ -100,4 +104,16 @@ public class JaxbHelper {
     public static BlockSet path2BlockSet(String pathToblocklyXml) throws Exception {
         return xml2BlockSet(IOUtils.toString(JaxbHelper.class.getResourceAsStream(pathToblocklyXml), "UTF-8"));
     }
+
+    public static Hide getHideFromBlock(Block block) {
+        List<Hide> hide = block.getHide();
+        if ( hide == null || hide.size() == 0 ) {
+            return null;
+        } else if ( hide.size() == 1 ) {
+            return hide.get(0);
+        } else {
+            throw new DbcException("more than 1 hide element");
+        }
+    }
+
 }

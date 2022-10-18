@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
@@ -34,9 +35,9 @@ public final class TurnAction extends Action {
     public final ITurnDirection direction;
     public final MotionParam param;
     public final String port;
-    public final List<Hide> hide;
+    public final Hide hide;
 
-    public TurnAction(ITurnDirection direction, MotionParam param, String port, List<Hide> hide, BlocklyProperties properties) {
+    public TurnAction(ITurnDirection direction, MotionParam param, String port, Hide hide, BlocklyProperties properties) {
         super(properties);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
@@ -74,7 +75,7 @@ public final class TurnAction extends Action {
 
         if ( fields.stream().anyMatch(field -> field.getName().equals(BlocklyConstants.ACTORPORT)) ) {
             String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT);
-            return new TurnAction(factory.getTurnDirection(mode), mp, port, block.getHide(), Jaxb2Ast.extractBlocklyProperties(block));
+            return new TurnAction(factory.getTurnDirection(mode), mp, port, JaxbHelper.getHideFromBlock(block), Jaxb2Ast.extractBlocklyProperties(block));
         }
 
         return new TurnAction(factory.getTurnDirection(mode), mp, BlocklyConstants.EMPTY_PORT, null, Jaxb2Ast.extractBlocklyProperties(block));
@@ -94,7 +95,7 @@ public final class TurnAction extends Action {
 
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.ACTORPORT, port);
         if ( this.hide != null ) {
-            jaxbDestination.getHide().addAll(hide);
+            jaxbDestination.getHide().add(hide);
         }
         return jaxbDestination;
     }

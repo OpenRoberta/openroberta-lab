@@ -1,0 +1,362 @@
+<toolbox_set id="toolboxBeginner" style="display: none">
+    <category name="TOOLBOX_ACTION" svg="true">
+        <category name="TOOLBOX_DRIVE" svg="true">
+            <block type="actions_motorDiff_on_for">
+                <value name="POWER">
+                    <block type="math_number">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+                <value name="DISTANCE">
+                    <block type="math_number">
+                        <field name="NUM">10</field>
+                    </block>
+                </value>
+            </block>
+            <block type="actions_motorDiff_on">
+                <value name="POWER">
+                    <block type="math_number">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+            </block>
+            <block type="actions_motorDiff_stop"></block>
+            <block type="actions_motorDiff_turn_for">
+                <value name="POWER">
+                    <block type="math_number">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+                <value name="DEGREES">
+                    <block type="math_number">
+                        <field name="NUM">20</field>
+                    </block>
+                </value>
+            </block>
+            <block type="actions_motorDiff_turn">
+                <value name="POWER">
+                    <block type="math_number">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+            </block>
+            <block type="actions_motorDiff_curve_for">
+                <value name="POWER_LEFT">
+                    <block type="math_number">
+                        <field name="NUM">10</field>
+                    </block>
+                </value>
+                <value name="POWER_RIGHT">
+                    <block type="math_number">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+                <value name="DISTANCE">
+                    <block type="math_number">
+                        <field name="NUM">20</field>
+                    </block>
+                </value>
+            </block>
+            <block type="actions_motorDiff_curve">
+                <value name="POWER_LEFT">
+                    <block type="math_number">
+                        <field name="NUM">10</field>
+                    </block>
+                </value>
+                <value name="POWER_RIGHT">
+                    <block type="math_number">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+            </block>
+        </category>
+        <category name="TOOLBOX_MOVE" svg="true">
+            <block type="actions_motor_on_for">
+                <value name="POWER">
+                    <block type="math_number">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+                <value name="VALUE">
+                    <block type="math_number">
+                        <field name="NUM">1</field>
+                    </block>
+                </value>
+            </block>
+            <block type="actions_motor_on">
+                <value name="POWER">
+                    <block type="math_number">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+            </block>
+            <block type="actions_motor_stop"></block>
+        </category>
+        <category name='TOOLBOX_DISPLAY' svg='true'>
+            <block type="actions_display_text">
+                <value name="TEXT">
+                    <block type="text">
+                        <field name="TEXT">Hallo</field>
+                    </block>
+                </value>
+            </block>
+            <block type="actions_display_image">
+                <value name="VALUE">
+                    <block type="image_image"/>
+                </value>
+            </block>
+            <block type="actions_display_image">
+                <value name="VALUE">
+                    <block type="image_get_image"/>
+                </value>
+            </block>
+            <block type="actions_display_clear"></block>
+        </category>
+        <category name="TOOLBOX_SOUND" svg="true">
+            <block type="actions_play_note"></block>
+            <block type="actions_play_tone">
+                <value name="FREQUENCY">
+                    <block type="math_number">
+                        <field name="NUM">400</field>
+                    </block>
+                </value>
+                <value name="DURATION">
+                    <block type="math_number">
+                        <field name="NUM">100</field>
+                    </block>
+                </value>
+            </block>
+        </category>
+        <category name="TOOLBOX_LIGHT" svg="true">
+            <block type='actions_brickLed_on'>
+                <value name='COLOUR'>
+                    <block type='colour_picker_spike'>
+
+                    </block>
+                </value>
+            </block>
+            <block type='actions_brickLed_off'></block>
+        </category>
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type="robSensors_touch_getSample"/>
+        <block type="robSensors_colour_getSample"/>
+        <block type="robSensors_ultrasonic_getSample"/>
+        <block type="robSensors_key_getSample"/>
+        <block type="robSensors_timer_getSample"/>
+        <block type="robSensors_timer_reset"/>
+        <block type="robSensors_gesture_getSample"/>
+        <block type="robSensors_gyro_getSample"/>
+    </category>
+    <category name="TOOLBOX_CONTROL" svg="true">
+        <category name="TOOLBOX_DECISION" svg="true">
+            <block type="robControls_if"/>
+            <block type="robControls_ifElse"/>
+        </category>
+        <category name="TOOLBOX_LOOP" svg="true">
+            <block type="robControls_loopForever"/>
+            <block type="controls_repeat_ext">
+                <value name="TIMES">
+                    <block type="math_number">
+                        <field name="NUM">10</field>
+                    </block>
+                </value>
+            </block>
+            <block type="controls_whileUntil"/>
+            <block type="robControls_for">
+                <value name="FROM">
+                    <block type="math_number">
+                        <field name="NUM">1</field>
+                    </block>
+                </value>
+                <value name="TO">
+                    <block type="math_number">
+                        <field name="NUM">10</field>
+                    </block>
+                </value>
+                <value name="BY">
+                    <block type="math_number">
+                        <field name="NUM">1</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robControls_forEach"/>
+            <block type="controls_flow_statements"/>
+        </category>
+        <category name="TOOLBOX_WAIT" svg="true">
+            <block type="robControls_wait"/>
+            <block type="robControls_wait_time">
+                <value name="WAIT">
+                    <block type="math_number">
+                        <field name="NUM">500</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robControls_wait_for">
+                <value name="WAIT0">
+                    <block type="logic_compare">
+                        <value name="A">
+                            <block type="robSensors_getSample"/>
+                        </value>
+                        <value name="B">
+                            <block type="logic_boolean"/>
+                        </value>
+                    </block>
+                </value>
+            </block>
+        </category>
+    </category>
+    <category name="TOOLBOX_LOGIC" svg="true">
+        <block type="logic_compare"/>
+        <block type="logic_operation"/>
+        <block type="logic_negate"/>
+        <block type="logic_boolean"/>
+        <block type="logic_null"/>
+        <block type="logic_ternary"/>
+    </category>
+    <category name="TOOLBOX_MATH" svg="true">
+        <block type="math_number"/>
+        <block type="math_arithmetic"/>
+        <block type="math_single"/>
+        <block type="math_trig"/>
+        <block type="math_constant"/>
+        <block type="math_number_property"/>
+        <block type="robMath_change">
+            <value name="DELTA">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+        </block>
+        <block type="math_round"/>
+        <block type="math_on_list"/>
+        <block type="math_modulo"/>
+        <block type="math_constrain">
+            <value name="LOW">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+            <value name="HIGH">
+                <block type="math_number">
+                    <field name="NUM">100</field>
+                </block>
+            </value>
+        </block>
+        <block type="math_random_int">
+            <value name="FROM">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+            <value name="TO">
+                <block type="math_number">
+                    <field name="NUM">100</field>
+                </block>
+            </value>
+        </block>
+        <block type="math_random_float"/>
+        <block type="math_cast_toString"/>
+        <block type="math_cast_toChar"/>
+    </category>
+    <category name="TOOLBOX_TEXT" svg="true">
+        <block type="text"/>
+        <block type="text_comment"/>
+        <block type="robText_join"/>
+        <block type="robText_append"/>
+        <block type="text_cast_string_toNumber"/>
+        <block type="text_cast_char_toNumber"/>
+    </category>
+    <category name="TOOLBOX_LIST" svg="true">
+        <block type="robLists_create_with">
+            <mutation items="0" list_type="Number"/>
+        </block>
+        <block type="robLists_create_with">
+            <mutation items="3" list_type="Number"/>
+            <value name="ADD0">
+                <block type="math_number"/>
+            </value>
+            <value name="ADD1">
+                <block type="math_number"/>
+            </value>
+            <value name="ADD2">
+                <block type="math_number"/>
+            </value>
+        </block>
+        <block type="robLists_repeat">
+            <value name="NUM">
+                <block type="math_number">
+                    <field name="NUM">5</field>
+                </block>
+            </value>
+        </block>
+        <block type="robLists_length"/>
+        <block type="robLists_isEmpty"/>
+        <block type="robLists_indexOf"/>
+        <block type="robLists_getIndex"/>
+        <block type="robLists_setIndex"/>
+        <block type="robLists_getSublist"/>
+    </category>
+    <category name='TOOLBOX_COLOUR' svg='true'>
+        <block type='colour_picker_spike'>
+            <field name='COLOUR'>#EBC300</field>
+        </block>
+        <block type='colour_picker_spike'>
+            <field name='COLOUR'>#E701A7</field>
+        </block>
+        <block type='colour_picker_spike'>
+            <field name='COLOUR'>#571CC1</field>
+        </block>
+        <block type='colour_picker_spike'>
+            <field name='COLOUR'>#3590F5</field>
+        </block>
+        <block type='colour_picker_spike'>
+            <field name='COLOUR'>#E701A7</field>
+        </block>
+        <block type='colour_picker_spike'>
+            <field name='COLOUR'>#77E7FF</field>
+        </block>
+        <block type='colour_picker_spike'>
+            <field name='COLOUR'>#0FCB54</field>
+        </block>
+        <block type='colour_picker_spike'>
+            <field name='COLOUR'>#0BA845</field>
+        </block>
+        <block type='colour_picker_spike'>
+            <field name='COLOUR'>#F7F700</field>
+        </block>
+        <block type='colour_picker_spike'>
+            <field name='COLOUR'>#FAAC01</field>
+        </block>
+        <block type='colour_picker_spike'>
+            <field name='COLOUR'>#FA010C</field>
+        </block>
+        <block type='colour_picker_spike'>
+            <field name='COLOUR'>#000000</field>
+        </block>
+        <block type='colour_picker_spike'>
+            <field name='COLOUR'>#FFFFFF</field>
+        </block>
+    </category>
+    <category name="TOOLBOX_IMAGE" svg="true">
+        <block type="image_image"/>
+        <block type="image_get_image">
+            <field name="IMAGE">HEART</field>
+        </block>
+        <block type="image_get_image">
+            <field name="IMAGE">SMILE</field>
+        </block>
+        <block type="image_get_image">
+            <field name="IMAGE">STICKFIGURE</field>
+        </block>
+        <block type="image_get_image">
+            <field name="IMAGE">GIRAFFE</field>
+        </block>
+        <block type="image_get_image">
+            <field name="IMAGE">UMBRELLA</field>
+        </block>
+    </category>
+    <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true">
+    </category>
+    <category name="TOOLBOX_PROCEDURE" custom="PROCEDURE" svg="true"/>
+</toolbox_set>

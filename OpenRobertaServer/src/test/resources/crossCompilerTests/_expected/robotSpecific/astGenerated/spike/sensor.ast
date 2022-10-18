@@ -1,0 +1,74 @@
+StmtTextComment[textComment: sensors]
+TimerReset [1, DEFAULT, - EMPTY_SLOT -]
+DebugAction[value: SensorExpr [ColorSensor [F, COLOUR, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [ColorSensor [F, LIGHT, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [ColorSensor [F, REDCHANNEL, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [ColorSensor [F, GREENCHANNEL, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [ColorSensor [F, BLUECHANNEL, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [UltrasonicSensor [U, DISTANCE, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [TouchSensor [B, PRESSED, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [TouchSensor [B, FORCE, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [KeysSensor [links, PRESSED, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [KeysSensor [links, PRESSED, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [GestureSensor [- EMPTY_PORT -, FRONT, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [GestureSensor [- EMPTY_PORT -, BACK, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [GestureSensor [- EMPTY_PORT -, UP, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [GestureSensor [- EMPTY_PORT -, DOWN, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [GestureSensor [- EMPTY_PORT -, LEFT, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [GestureSensor [- EMPTY_PORT -, RIGHT, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [GestureSensor [- EMPTY_PORT -, TAPPED, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [GestureSensor [- EMPTY_PORT -, SHAKE, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [GestureSensor [- EMPTY_PORT -, FREEFALL, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [GyroSensor [_K, ANGLE, X]]]
+DebugAction[value: SensorExpr [GyroSensor [_K, ANGLE, Y]]]
+DebugAction[value: SensorExpr [GyroSensor [_K, ANGLE, Z]]]
+DebugAction[value: SensorExpr [ColorSensor [F, AMBIENTLIGHT, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [TimerSensor [1, VALUE, - EMPTY_SLOT -]]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [TouchSensor [B, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [TouchSensor [B, FORCE, - EMPTY_SLOT -]]], NumConst[value: 30]]]
+)
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [ColorSensor [F, COLOUR, - EMPTY_SLOT -]]], ColorConst[hexValue: #E701A7]]]
+)
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [ColorSensor [F, LIGHT, - EMPTY_SLOT -]]], NumConst[value: 50]]]
+)
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [ColorSensor [F, REDCHANNEL, - EMPTY_SLOT -]]], NumConst[value: 30]]]
+)
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [ColorSensor [F, GREENCHANNEL, - EMPTY_SLOT -]]], NumConst[value: 30]]]
+)
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [ColorSensor [F, BLUECHANNEL, - EMPTY_SLOT -]]], NumConst[value: 30]]]
+)
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [UltrasonicSensor [U, DISTANCE, - EMPTY_SLOT -]]], NumConst[value: 30]]]
+)
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [links, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, FRONT, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, BACK, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, UP, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, DOWN, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, LEFT, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, RIGHT, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, TAPPED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, SHAKE, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, FREEFALL, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [GyroSensor [_K, ANGLE, X]]], NumConst[value: 90]]]
+)
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [GyroSensor [_K, ANGLE, Y]]], NumConst[value: 90]]]
+)
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [GyroSensor [_K, ANGLE, Z]]], NumConst[value: 90]]]
+)
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [ColorSensor [F, AMBIENTLIGHT, - EMPTY_SLOT -]]], NumConst[value: 50]]]
+)
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [TimerSensor [1, VALUE, - EMPTY_SLOT -]]], NumConst[value: 500]]]
+)]
+LedOnAction[colour: ColorConst[hexValue: #E701A7]]

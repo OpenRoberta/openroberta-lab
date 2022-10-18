@@ -47,6 +47,7 @@
         <module>RobotCyberpi</module>
         <module>RobotThymio</module>
         <module>RobotRobotino</module>
+        <module>RobotSpike</module>
     </modules>
     <repositories>
         <repository>
@@ -139,6 +140,11 @@
             <dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>RobotRobotino</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.fhg.iais.openroberta</groupId>
+                <artifactId>RobotSpike</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -267,7 +273,7 @@
             <dependency>
                 <groupId>org.yaml</groupId>
                 <artifactId>snakeyaml</artifactId>
-                <version>1.32</version>
+                <version>1.31</version>
             </dependency>
             <dependency>
                 <groupId>org.antlr</groupId>

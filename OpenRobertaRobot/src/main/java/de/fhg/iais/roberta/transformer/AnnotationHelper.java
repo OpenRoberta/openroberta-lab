@@ -81,7 +81,7 @@ public class AnnotationHelper {
         if ( isExternalSensorSubClass(astClass) ) {
             constructorParameters.add(extractNepoExternalSensorParameters(block, helper));
         } else {
-            for ( Field field : astClass.getDeclaredFields() ) {
+            for ( Field field : astClass.getFields() ) {
                 for ( Annotation anno : field.getAnnotations() ) {
                     if ( anno instanceof NepoValue ) {
                         constructorParameters.add(extractNepoValueConstructorParameters(block, (NepoValue) anno, field, helper, astClass));
@@ -175,7 +175,7 @@ public class AnnotationHelper {
         } else {
             Block jaxbDestination = new Block();
             Ast2Jaxb.setBasicProperties(phrase, jaxbDestination);
-            for ( Field field : clazz.getDeclaredFields() ) {
+            for ( Field field : clazz.getFields() ) {
                 for ( Annotation anno : field.getAnnotations() ) {
                     try {
                         if ( anno instanceof NepoField ) {
@@ -223,7 +223,7 @@ public class AnnotationHelper {
         StringBuilder sb = new StringBuilder();
         sb.append(clazz.getSimpleName()).append("[");
         boolean first = true;
-        for ( Field field : clazz.getDeclaredFields() ) {
+        for ( Field field : clazz.getFields() ) {
             for ( Annotation anno : field.getAnnotations() ) {
                 if ( anno instanceof NepoField || anno instanceof NepoValue ) {
                     if ( first ) {
@@ -312,7 +312,7 @@ public class AnnotationHelper {
         if ( isExternalSensorSubClass(nepoAnnotatedClass) ) {
             constructorParameterTypes.add(ExternalSensorBean.class);
         } else {
-            for ( Field field : nepoAnnotatedClass.getDeclaredFields() ) {
+            for ( Field field : nepoAnnotatedClass.getFields() ) {
                 checkFieldModifier(nepoAnnotatedClass, field);
                 Optional.ofNullable(checkAndCollectFieldTypes(nepoAnnotatedClass, field))
                     .ifPresent(constructorParameterTypes::add);

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2023-02-07 11:39:35.715040",
+		"lastupdated": "2023-02-07 15:30:10.289782",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -397,7 +397,7 @@
 	"DISPLAY_TEXT_TOOLTIP": "Displays a text on the screen.",
 	"DISPLAY_PRINTLN_TOOLTIP": "Displays a text on the screen in a new line.",
 	"DISPLAY_CLEAR_TOOLTIP": "Clears the display.",
-	"PLAY_TONE_TOOLTIP": "Plays a tone. Use frequency and duration to determin the tone pitch and duration.",
+	"PLAY_TONE_TOOLTIP": "Plays a tone. Use frequency and duration to determine the tone pitch and duration.",
 	"PLAY_FILE_TOOLTIP": "Plays a sound file.",
 	"PLAY_SETVOLUME_TOOLTIP": "Sets volume.",
 	"PLAY_GETVOLUME_TOOLTIP": "Gets current volume.",
@@ -1935,5 +1935,11 @@
 	"MATH_THYMIO_TRIG_TOOLTIP": "All trigonometric functions map the angles [-pi, pi] radians to [-32768, 32767]. The resultant sin and cos values are similarly mapped, namely [-1.0, 1.0] to [-32768, 32767].",
 	"SENSOR_OPTICAL": "optical sensor",
 	"MODE_OPENING": "light",
-	"MODE_CLOSING": "dark"
+	"MODE_CLOSING": "dark",
+	"MOTOR_TOOLTIP_SPIKE": "Represents a middle or large angular motor.",
+	"MODE_TAPPED": "tapped",
+	"ACTION_DISPLAY": "display",
+	"DISPLAY_TOOLTIP": "Represents a screen.",
+	"DISPLAY_TOOLTIP_SPIKE": "Represents a screen with a 5 x 5 LED matrix.",
+	"MODE_FORCE": "force"
 }

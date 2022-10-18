@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [B, MOTOR], UsedActor [A, MOTOR]]
+Methods: 
+[]

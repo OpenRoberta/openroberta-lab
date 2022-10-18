@@ -43,7 +43,7 @@ public abstract class ExternalSensor extends Sensor implements WithUserDefinedPo
         return externalSensorBean.getMutation();
     }
 
-    public List<Hide> getHide() {
+    public Hide getHide() {
         return externalSensorBean.getHide();
     }
 
@@ -79,9 +79,9 @@ public abstract class ExternalSensor extends Sensor implements WithUserDefinedPo
         if ( getMutation() != null ) {
             jaxbDestination.setMutation(getMutation());
         }
-        List<Hide> hide = getHide();
+        Hide hide = getHide();
         if ( hide != null ) {
-            jaxbDestination.getHide().addAll(hide);
+            jaxbDestination.getHide().add(hide);
         }
         String portValue = this.getUserDefinedPort();
         if ( portValue.equals(BlocklyConstants.EMPTY_PORT) ) {
