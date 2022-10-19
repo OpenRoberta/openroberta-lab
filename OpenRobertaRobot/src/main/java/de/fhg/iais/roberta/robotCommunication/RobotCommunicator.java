@@ -216,17 +216,17 @@ public class RobotCommunicator {
     }
 
     private boolean checkRobotMatchesClient(String robot, RobotCommunicationData state) {
-        // this is a hot fix for the release on 6.7.17, later we need to change the state robot name from ardu to botnroll
+        // fix for the release on 6.7.17
         if ( robot.equals("botnroll") || robot.equals("arduino") ) {
             robot = "ardu";
         }
-        // this re-writes for old ev3 robots (V0) the robot name usable for V0 and V1
+        // the old ev3 robots (ev3lejosv0) use a deprecated robot name "lejos", the new ev3 robots (ev3lejosv1) use "ev3"
         if ( robot.equals("ev3lejosv0") ) {
             robot = "lejos";
         }
-        // until we remove the xNN plugin (this will happen, if sometimes in the future we implemment a new start page), we have to treat the "robot" xNN as lejos
+        // until we remove the xNN plugin (this will happen, if sometimes in the future we implement a new start page), we have to treat the "robot" xNN as ev3
         if ( robot.equalsIgnoreCase("xNN") ) {
-            robot = "lejos";
+            robot = "ev3";
         }
 
         LOG.info("client:" + robot + ", robot: " + state.getRobot() + ", firmware: " + state.getFirmwareName());
