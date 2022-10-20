@@ -582,8 +582,8 @@ function programToBlocklyWorkspace(xml, opt_fromShowSource) {
     var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
     var language = GUISTATE_C.getLanguage();
-    if ($('#codeDiv').hasClass('rightActive') && !opt_fromShowSource) {
-        PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function (result) {
+    if ($('#codeDiv').hasClass('rightActive') && opt_fromShowSource) {
+        PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, SSID, password, function (result) {
             PROGCODE_C.setCode(result.sourceCode);
         });
     }

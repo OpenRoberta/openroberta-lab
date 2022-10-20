@@ -516,8 +516,8 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
         var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
         var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
         var language = GUISTATE_C.getLanguage();
-        if ($('#codeDiv').hasClass('rightActive') && !opt_fromShowSource) {
-            PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function (result) {
+        if ($('#codeDiv').hasClass('rightActive') && opt_fromShowSource) {
+            PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, exports.SSID, exports.password, function (result) {
                 PROGCODE_C.setCode(result.sourceCode);
             });
         }
