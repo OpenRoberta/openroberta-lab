@@ -139,6 +139,7 @@ public class Administration {
         DbSetup dbSetup = new DbSetup(hibernateSession);
         dbSetup.createEmptyDatabase();
         hibernateSession.getTransaction().commit();
+        hibernateSession.beginTransaction();
         hibernateSession.createSQLQuery("shutdown").executeUpdate();
         hibernateSession.close();
     }
@@ -277,7 +278,7 @@ public class Administration {
         // seek all unused configurations and destroy them
         String deleteUnusedConfigurationsSQL = "DELETE FROM ConfigurationData WHERE configurationHash NOT IN (SELECT configurationHash FROM Configuration)";
         session.createQuery(deleteUnusedConfigurationsSQL).executeUpdate();
-        session.commit();
+        session.commit(); // implicitly a new transaction is started
         session.createSqlQuery("shutdown").executeUpdate();
     }
 
@@ -315,7 +316,7 @@ public class Administration {
         LOG.info("Total programs processed: " + totalProcessed);
         LOG.info("Total programs descriptions: " + totalDescriptions);
         LOG.info("Total programs different: " + totalDifferent);
-        session.commit();
+        session.commit(); // implicitly a new transaction is started
         session.createSqlQuery("shutdown").executeUpdate();
     }
 
