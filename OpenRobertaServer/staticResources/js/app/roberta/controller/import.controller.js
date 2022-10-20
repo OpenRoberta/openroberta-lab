@@ -1,4 +1,4 @@
-define(["require", "exports", "message", "log", "util", "guiState.controller", "program.controller", "configuration.controller", "program.model", "robot.controller", "blockly", "jquery", "jquery-validate"], function (require, exports, MSG, LOG, UTIL, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, PROGRAM, ROBOT_C, Blockly, $) {
+define(["require", "exports", "message", "log", "util", "guiState.controller", "program.controller", "nn.controller", "configuration.controller", "program.model", "robot.controller", "blockly", "jquery", "jquery-validate"], function (require, exports, MSG, LOG, UTIL, GUISTATE_C, PROGRAM_C, NN_C, CONFIGURATION_C, PROGRAM, ROBOT_C, Blockly, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.importNepoCodeToCompile = exports.importSourceCodeToCompile = exports.loadProgramFromXML = exports.openProgramFromXML = exports.importSourceCode = exports.importXml = exports.init = void 0;
     function init(callback) {
@@ -50,6 +50,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
         }
         PROGRAM.loadProgramFromXML(name, xml, function (result) {
             if (result.rc == 'ok') {
+                NN_C.programWasReplaced(); // remember, that NN save must NOT be executed after import
                 // save the old program and configuration that it can be restored
                 var dom = Blockly.Xml.workspaceToDom(GUISTATE_C.getBlocklyWorkspace());
                 var xmlProgOld = Blockly.Xml.domToText(dom);

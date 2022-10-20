@@ -1,9 +1,9 @@
-import * as COMM from 'comm';
 import * as MSG from 'message';
 import * as LOG from 'log';
 import * as UTIL from 'util';
 import * as GUISTATE_C from 'guiState.controller';
 import * as PROGRAM_C from 'program.controller';
+import * as NN_C from 'nn.controller';
 import * as CONFIGURATION_C from 'configuration.controller';
 import * as PROGRAM from 'program.model';
 import * as ROBOT_C from 'robot.controller';
@@ -64,6 +64,7 @@ function loadProgramFromXML(name, xml) {
     }
     PROGRAM.loadProgramFromXML(name, xml, function (result) {
         if (result.rc == 'ok') {
+            NN_C.programWasReplaced(); // remember, that NN save must NOT be executed after import
             // save the old program and configuration that it can be restored
             var dom = Blockly.Xml.workspaceToDom(GUISTATE_C.getBlocklyWorkspace());
             var xmlProgOld = Blockly.Xml.domToText(dom);

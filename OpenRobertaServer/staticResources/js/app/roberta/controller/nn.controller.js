@@ -1,6 +1,6 @@
 define(["require", "exports", "guiState.controller", "neuralnetwork.ui", "jquery", "util", "jquery-validate"], function (require, exports, GUISTATE_C, NN_UI, $, UTIL) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.mkNNfromNNStepDataAndRunNNEditor = exports.mkNNfromProgramStartBlock = exports.saveNN2Blockly = exports.init = void 0;
+    exports.mkNNfromNNStepDataAndRunNNEditor = exports.mkNNfromProgramStartBlock = exports.saveNN2Blockly = exports.programWasReplaced = exports.init = void 0;
     /**
      * initialize the callbacks needed by the NN tab. Called once at front end init time
      */
@@ -18,6 +18,14 @@ define(["require", "exports", "guiState.controller", "neuralnetwork.ui", "jquery
         $('#tabNN').onWrap('hidden.bs.tab', function (e) { }, 'hidden tabNN');
     }
     exports.init = init;
+    /**
+     * notify, that a new program was imported into the program tab. In this case -if the simulation tab is open- at simulation close time the NN must
+     * not be written back to the blockly XML.
+     */
+    function programWasReplaced() {
+        NN_UI.programWasReplaced();
+    }
+    exports.programWasReplaced = programWasReplaced;
     /**
      * terminate the nn editor.  Called, when the NN editor or the program terminates. Cleanup:
      * - save the NN to the program XML as data in the start block.

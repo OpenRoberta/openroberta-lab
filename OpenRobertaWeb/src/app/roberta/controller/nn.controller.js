@@ -37,6 +37,14 @@ export function init() {
 }
 
 /**
+ * notify, that a new program was imported into the program tab. In this case -if the simulation tab is open- at simulation close time the NN must
+ * not be written back to the blockly XML.
+ */
+export function programWasReplaced() {
+    NN_UI.programWasReplaced();
+}
+
+/**
  * terminate the nn editor.  Called, when the NN editor or the program terminates. Cleanup:
  * - save the NN to the program XML as data in the start block.
  * - close the edit card

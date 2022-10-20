@@ -41,7 +41,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", "./neuralnetwork.uistate", "log", "./neuralnetwork.msg", "util"], function (require, exports, H, neuralnetwork_nn_1, neuralnetwork_uistate_1, LOG, MSG, UTIL) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.getNetwork = exports.saveNN2Blockly = exports.resetUiOnTerminate = exports.runNNEditor = exports.setupNN = void 0;
+    exports.getNetwork = exports.saveNN2Blockly = exports.programWasReplaced = exports.resetUiOnTerminate = exports.runNNEditor = exports.setupNN = void 0;
     var NodeType;
     (function (NodeType) {
         NodeType[NodeType["INPUT"] = 0] = "INPUT";
@@ -59,11 +59,13 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     var focusNode = null;
     var state = null;
     var network = null;
+    var rememberProgramWasReplaced = false;
     var heightOfWholeNNDiv = 0;
     var widthOfWholeNNDiv = 0;
     var inputNeuronNameEditingMode = false;
     var outputNeuronNameEditingMode = false;
     function setupNN(stateFromStartBlock) {
+        rememberProgramWasReplaced = false;
         state = new neuralnetwork_uistate_1.State(stateFromStartBlock);
         makeNetworkFromState();
     }
@@ -258,14 +260,14 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             var nodeGroup = container.append('g').attr({
                 class: nodeClass,
                 id: "".concat(nodeId),
-                transform: "translate(".concat(x, ",").concat(y, ")")
+                transform: "translate(".concat(x, ",").concat(y, ")"),
             });
             var mainRectAngle = nodeGroup.append('rect').attr({
                 x: 0,
                 y: 0,
                 width: nodeSize,
                 height: nodeSize,
-                'marker-start': 'url(#markerArrow)'
+                'marker-start': 'url(#markerArrow)',
             });
             if (focusNode !== undefined && focusNode != null && focusNode.id === node.id) {
                 mainRectAngle.attr('style', 'outline: medium solid #fbdc00;');
@@ -299,7 +301,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 x: 10,
                 y: 0.66 * nodeSize,
                 'text-anchor': 'start',
-                cursor: 'default'
+                cursor: 'default',
             });
             labelForId.append('tspan').text(nodeId);
             if (nodeType !== NodeType.INPUT) {
@@ -310,12 +312,12 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 .insert('div', ':first-child')
                 .attr({
                 id: "canvas-".concat(nodeId),
-                class: 'canvas'
+                class: 'canvas',
             })
                 .style({
                 position: 'absolute',
                 left: "".concat(x + 3, "px"),
-                top: "".concat(y + 3, "px")
+                top: "".concat(y + 3, "px"),
             });
         }
         var valShiftToRight = true;
@@ -326,19 +328,19 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             var datum = {
                 source: {
                     y: source.cx + nodeSize / 2 + 2,
-                    x: source.cy
+                    x: source.cy,
                 },
                 target: {
                     y: dest.cx - nodeSize / 2,
-                    x: dest.cy + ((index - (length - 1) / 2) / length) * 12
-                }
+                    x: dest.cy + ((index - (length - 1) / 2) / length) * 12,
+                },
             };
             var diagonal = D3.svg.diagonal().projection(function (d) { return [d.y, d.x]; });
             line.attr({
                 'marker-start': 'url(#markerArrow)',
                 class: 'link',
                 id: link.source.id + '-' + link.dest.id,
-                d: diagonal(datum, 0)
+                d: diagonal(datum, 0),
             });
             // Show the value of the link depending on focus-style
             if (focusStyle === FocusStyle.SHOW_ALL || (focusStyle === FocusStyle.CLICK_NODE && (link.source === focusNode || link.dest === focusNode))) {
@@ -531,7 +533,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                     x: -biasSize - 2,
                     y: nodeSize - biasSize + 3,
                     width: biasSize,
-                    height: biasSize
+                    height: biasSize,
                 });
                 biasRect.attr('class', 'nn-bias-click');
                 if (focusStyle !== FocusStyle.CLICK_NODE || focusNode === node) {
@@ -550,7 +552,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 class: 'nn-showval',
                 id: 'val-' + id,
                 x: x,
-                y: y
+                y: y,
             })
                 .text(valueToShow);
             drawValuesBox(text, valueForColor);
@@ -619,7 +621,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         editCard.style({
             left: "".concat(xPos, "px"),
             top: "".concat(yPos, "px"),
-            display: 'block'
+            display: 'block',
         });
         var name = nodeOrLink instanceof neuralnetwork_nn_1.Link ? 'NN_WEIGHT' : 'NN_BIAS';
         editCard.select('.nn-type').text(MSG.get(name));
@@ -662,7 +664,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     }
     function runNameCard(node, coordinates) {
         if (node.inputLinks.length !== 0 && node.outputs.length !== 0) {
-            return; // only input and output neurons can change its name
+            return; // only input and output neurons can change their name
         }
         var nameCard = D3.select('#nn-nameCard');
         var finishedButton = D3.select('#nn-name-finished');
@@ -710,7 +712,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         nameCard.style({
             left: "".concat(xPos, "px"),
             top: "".concat(yPos, "px"),
-            display: 'block'
+            display: 'block',
         });
         var name = 'POPUP_NAME';
         nameCard.select('.nn-type').text(MSG.get(name));
@@ -728,7 +730,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                 container.select("#".concat(baseName)).style({
                     'stroke-dashoffset': 0,
                     'stroke-width': linkWidthScale(Math.abs(link.weight.get())),
-                    stroke: colorScale(link.weight.get())
+                    stroke: colorScale(link.weight.get()),
                 });
                 var val = container.select("#val-".concat(baseName));
                 if (!val.empty()) {
@@ -823,9 +825,20 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         }
     }
     /**
-     * extract data from the network and put it into the state and store the state in the NNStep block
+     * remember, that a new program was imported into the program tab. In this case -if the simulation tab is open- at simulation close time the NN must
+     * not be written back to the blockly XML.
+     */
+    function programWasReplaced() {
+        rememberProgramWasReplaced = true;
+    }
+    exports.programWasReplaced = programWasReplaced;
+    /**
+     * extract data from the network and put it into the state and store the state in the start block
      */
     function saveNN2Blockly() {
+        if (rememberProgramWasReplaced) {
+            return; // program was imported. Old NN should NOT be saved
+        }
         var startBlock = UTIL.getTheStartBlock();
         try {
             state.weights = network.getWeightArray();

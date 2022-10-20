@@ -1,4 +1,4 @@
-define(["require", "exports", "message", "log", "util", "guiState.controller", "robot.controller", "program.model", "user.model", "configuration.controller", "progCode.controller", "blockly", "jquery", "jquery-validate"], function (require, exports, MSG, LOG, UTIL, GUISTATE_C, ROBOT_C, PROGRAM, USER, CONFIGURATION_C, PROGCODE_C, Blockly, $) {
+define(["require", "exports", "message", "log", "util", "guiState.controller", "robot.controller", "nn.controller", "program.model", "user.model", "configuration.controller", "progCode.controller", "blockly", "jquery", "jquery-validate"], function (require, exports, MSG, LOG, UTIL, GUISTATE_C, ROBOT_C, NN_C, PROGRAM, USER, CONFIGURATION_C, PROGCODE_C, Blockly, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.programToBlocklyWorkspace = exports.loadExternalToolbox = exports.loadToolbox = exports.resetView = exports.reloadView = exports.reloadProgram = exports.getBlocklyWorkspace = exports.exportAllXml = exports.exportXml = exports.linkProgram = exports.newProgram = exports.initProgramEnvironment = exports.showSaveAsModal = exports.initProgramForms = exports.loadFromGallery = exports.saveToServer = exports.init = exports.password = exports.SSID = void 0;
     var $formSingleModal;
@@ -333,6 +333,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
             result.lastChanged = '';
             GUISTATE_C.setProgram(result);
             initProgramEnvironment();
+            NN_C.programWasReplaced();
             LOG.info('ProgramNew');
         }
         if (further || GUISTATE_C.isProgramSaved()) {
