@@ -216,8 +216,10 @@ export class State {
      * for early error detection: assert, that a value given (for a binding) is valid
      */
     private checkValidValue(value) {
-        if (value === undefined || value === null) {
-            U.dbcException('bindVar value invalid');
+        if (value === undefined) {
+            U.dbcException('variable value invalid');
+        } else if (value === null) {
+            U.warn('variable value "null" received...');
         }
     }
 

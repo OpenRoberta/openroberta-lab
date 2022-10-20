@@ -77,6 +77,11 @@ export function info(s: any) {
     infoResult = infoResult + s + '\n';
 }
 
+export function warn(s: any) {
+    console.warn(s);
+    infoResult = infoResult + s + '\n';
+}
+
 export function getInfoResult() {
     return infoResult;
 }

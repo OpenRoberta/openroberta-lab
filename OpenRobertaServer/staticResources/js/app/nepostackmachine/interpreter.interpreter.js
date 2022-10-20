@@ -944,6 +944,10 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     this.state.push(this.evalBinary(subOp, left, right));
                     break;
                 }
+                case C.NULL_CONST: {
+                    this.state.push(null);
+                    break;
+                }
                 default:
                     U.dbcException('invalid expr op: ' + kind);
             }
