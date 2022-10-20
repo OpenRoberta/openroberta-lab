@@ -50,12 +50,12 @@ export function setupNN(stateFromStartBlock: any) {
 export async function runNNEditor() {
     D3 = await import('d3');
     D3.select('#goto-sim').on('click', () => {
-        $.when($('#tabProgram').trigger('click')).done(function () {
+        $.when($('#tabProgram').trigger('click')).done(function() {
             $('#simButton').trigger('click');
         });
     });
 
-    D3.select('#nn-focus').on('change', function () {
+    D3.select('#nn-focus').on('change', function() {
         focusStyle = FocusStyle[(this as HTMLSelectElement).value];
         if (focusStyle === undefined || focusStyle === null) {
             focusStyle = FocusStyle.SHOW_ALL;
@@ -87,14 +87,14 @@ export async function runNNEditor() {
         reconstructNNIncludingUI();
     });
 
-    let activationDropdown = D3.select('#nn-activations').on('change', function () {
+    let activationDropdown = D3.select('#nn-activations').on('change', function() {
         state.activationKey = this.value;
         state.activation = H.activations[this.value];
         drawNetworkUI(network);
     });
     activationDropdown.property('value', getKeyFromValue(H.activations, state.activation));
 
-    D3.select('#nn-show-precision').on('change', function () {
+    D3.select('#nn-show-precision').on('change', function() {
         state.precision = this.value;
         drawNetworkUI(network);
     });
@@ -245,6 +245,7 @@ function drawNetworkUI(network: Network): void {
     function drawNode(node: Node, nodeType: NodeType, cx: number, cy: number, container: D3Selection) {
         if (node.id === '') {
         }
+
         let nodeId = node.id;
         let x = cx - nodeSize / 2;
         let y = cy - nodeSize / 2;
@@ -265,17 +266,18 @@ function drawNetworkUI(network: Network): void {
         if (focusNode !== undefined && focusNode != null && focusNode.id === node.id) {
             mainRectAngle.attr('style', 'outline: medium solid #fbdc00;');
         }
+        let theWholeNNSvgNode = D3.select('#nn-svg').node();
         nodeGroup
-            .on('dblclick', function () {
-                runNameCard(node, D3.mouse(container.node()));
+            .on('dblclick', function() {
+                runNameCard(node, D3.mouse(theWholeNNSvgNode));
             })
-            .on('click', function () {
+            .on('click', function() {
                 if ((D3.event as any).shiftKey) {
-                    runNameCard(node, D3.mouse(container.node()));
+                    runNameCard(node, D3.mouse(theWholeNNSvgNode));
                 } else if (inputNeuronNameEditingMode && node.inputLinks.length === 0) {
-                    runNameCard(node, D3.mouse(container.node()));
+                    runNameCard(node, D3.mouse(theWholeNNSvgNode));
                 } else if (outputNeuronNameEditingMode && node.outputs.length === 0) {
-                    runNameCard(node, D3.mouse(container.node()));
+                    runNameCard(node, D3.mouse(theWholeNNSvgNode));
                 } else if (node.inputLinks.length > 0) {
                     if (focusNode == node) {
                         focusNode = null;
@@ -369,7 +371,7 @@ function drawNetworkUI(network: Network): void {
                 .append('path')
                 .attr('d', diagonal(datum, 0))
                 .attr('class', cssForPath)
-                .on('click', function () {
+                .on('click', function() {
                     runEditCard(link, D3.mouse(this));
                 });
         }
@@ -534,7 +536,7 @@ function drawNetworkUI(network: Network): void {
             );
             biasRect.attr('class', 'nn-bias-click');
             if (focusStyle !== FocusStyle.CLICK_NODE || focusNode === node) {
-                biasRect.on('click', function () {
+                biasRect.on('click', function() {
                     (D3.event as any).stopPropagation();
                     runEditCard(node, D3.mouse(container.node()));
                 });
@@ -549,7 +551,7 @@ function drawNetworkUI(network: Network): void {
             });
             biasRect.attr('class', 'nn-bias-click');
             if (focusStyle !== FocusStyle.CLICK_NODE || focusNode === node) {
-                biasRect.on('click', function () {
+                biasRect.on('click', function() {
                     (D3.event as any).stopPropagation();
                     runEditCard(node, D3.mouse(container.node()));
                 });
@@ -832,8 +834,8 @@ function nodeOrLink2Value(nodeOrLink: Node | Link): string {
     return nodeOrLink instanceof Link
         ? nodeOrLink.weight.getWithPrecision('*', state.weightSuppressMultOp)
         : nodeOrLink instanceof Node
-        ? nodeOrLink.bias.getWithPrecision('*', state.weightSuppressMultOp)
-        : '';
+            ? nodeOrLink.bias.getWithPrecision('*', state.weightSuppressMultOp)
+            : '';
 }
 
 function value2NodeOrLink(nodeOrLink: Node | Link, value: string) {

@@ -272,19 +272,20 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             if (focusNode !== undefined && focusNode != null && focusNode.id === node.id) {
                 mainRectAngle.attr('style', 'outline: medium solid #fbdc00;');
             }
+            var theWholeNNSvgNode = D3.select('#nn-svg').node();
             nodeGroup
                 .on('dblclick', function () {
-                runNameCard(node, D3.mouse(container.node()));
+                runNameCard(node, D3.mouse(theWholeNNSvgNode));
             })
                 .on('click', function () {
                 if (D3.event.shiftKey) {
-                    runNameCard(node, D3.mouse(container.node()));
+                    runNameCard(node, D3.mouse(theWholeNNSvgNode));
                 }
                 else if (inputNeuronNameEditingMode && node.inputLinks.length === 0) {
-                    runNameCard(node, D3.mouse(container.node()));
+                    runNameCard(node, D3.mouse(theWholeNNSvgNode));
                 }
                 else if (outputNeuronNameEditingMode && node.outputs.length === 0) {
-                    runNameCard(node, D3.mouse(container.node()));
+                    runNameCard(node, D3.mouse(theWholeNNSvgNode));
                 }
                 else if (node.inputLinks.length > 0) {
                     if (focusNode == node) {
