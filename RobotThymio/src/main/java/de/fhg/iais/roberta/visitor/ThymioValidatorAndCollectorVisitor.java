@@ -52,6 +52,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -480,5 +481,10 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
 
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
         throw new DbcException("Block not supported by Aseba!");
+    }
+
+    public Void visitAssertStmt(AssertStmt assertStmt) {
+        addErrorToPhrase(assertStmt, "BLOCK_NOT_SUPPORTED");
+        return null;
     }
 }

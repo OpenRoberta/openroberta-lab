@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2022-10-13 08:16:15.868667",
+		"lastupdated": "2022-10-20 14:26:41.943525",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1900,5 +1900,6 @@
 	"CIRCLE": "circle",
 	"SENSOR_IRHORIZONTAL_GETSAMPLE_TOOLTIP": "Gets the current reading from the infrared sensor.",
 	"FORWARD": "forward",
-	"BACKWARD": "backward"
+	"BACKWARD": "backward",
+	"MATH_THYMIO_TRIG_TOOLTIP": "All trigonometric functions map the angles [-pi, pi] radians to [-32768, 32767]. The resultant sin and cos values are similarly mapped, namely [-1.0, 1.0] to [-32768, 32767]."
 }

@@ -12,7 +12,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             GUISTATE.gui.webview = opt_data || false;
             if (GUISTATE.gui.webview) {
                 $('.logo').css({
-                    right: '32px'
+                    right: '32px',
                 });
             }
             GUISTATE.gui.view = 'tabProgram';
@@ -388,7 +388,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
                 WEBVIEW_C.jsToAppInterface({
                     target: 'internal',
                     type: 'setRobot',
-                    robot: robotGroup
+                    robot: robotGroup,
                 });
             }
         }
@@ -409,10 +409,10 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             $('#nn').hide();
         }
         if (getHasRobotStopButton(robot)) {
-            GUISTATE.gui.blocklyWorkspace.robControls.showStopProgram();
+            GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.showStopProgram();
         }
         else {
-            GUISTATE.gui.blocklyWorkspace.robControls.hideStopProgram();
+            GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.hideStopProgram();
         }
         UTIL.clearTabAlert('tabConfiguration'); // also clear tab alert when switching robots
     }

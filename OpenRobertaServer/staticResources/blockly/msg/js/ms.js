@@ -688,6 +688,7 @@ Blockly.Msg.MATH_SINGLE_TOOLTIP_POW10 = "Kembalikan 10 kepada kuasa nombor.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_ROOT = "Kembalikan punca kuasa nombor.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_SQUARE = "Return the number multiplied by itself.";  // untranslated
 Blockly.Msg.MATH_SUBTRACTION_SYMBOL = "-";
+Blockly.Msg.MATH_THYMIO_TRIG_TOOLTIP = "All trigonometric functions map the angles [-pi, pi] radians to [-32768, 32767]. The resultant sin and cos values are similarly mapped, namely [-1.0, 1.0] to [-32768, 32767].";  // untranslated
 Blockly.Msg.MATH_TRIG_ACOS = "acos";
 Blockly.Msg.MATH_TRIG_ASIN = "asin";
 Blockly.Msg.MATH_TRIG_ATAN = "atan";

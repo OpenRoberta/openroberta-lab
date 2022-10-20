@@ -10,7 +10,6 @@ import * as $ from 'jquery';
 import * as Blockly from 'blockly';
 import * as THYMIO_C from 'thymioSocket.controller';
 
-
 var LONG = 300000; // Ping time 5min
 var SHORT = 3000; // Ping time 3sec
 /**
@@ -18,11 +17,11 @@ var SHORT = 3000; // Ping time 3sec
  */
 function init(language, opt_data) {
     var ready = $.Deferred();
-    $.when(GUISTATE.init()).then(function() {
+    $.when(GUISTATE.init()).then(function () {
         GUISTATE.gui.webview = opt_data || false;
         if (GUISTATE.gui.webview) {
             $('.logo').css({
-                right: '32px'
+                right: '32px',
             });
         }
 
@@ -55,11 +54,11 @@ function init(language, opt_data) {
         if (GUISTATE.server.theme !== 'default') {
             var themePath = '../theme/' + GUISTATE.server.theme + '.json';
             $.getJSON(themePath)
-                .done(function(data) {
+                .done(function (data) {
                     // store new theme properties (only colors so far)
                     GUISTATE.server.theme = data;
                 })
-                .fail(function(e, r) {
+                .fail(function (e, r) {
                     // this should not happen
                     console.error('"' + themePath + '" is not a valid json file! The reason is probably a', r);
                     GUISTATE.server.theme = 'default';
@@ -399,7 +398,7 @@ function setRobot(robot, result, opt_init) {
             WEBVIEW_C.jsToAppInterface({
                 target: 'internal',
                 type: 'setRobot',
-                robot: robotGroup
+                robot: robotGroup,
             });
         }
     }
@@ -420,9 +419,9 @@ function setRobot(robot, result, opt_init) {
         $('#nn').hide();
     }
     if (getHasRobotStopButton(robot)) {
-        GUISTATE.gui.blocklyWorkspace.robControls.showStopProgram();
+        GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.showStopProgram();
     } else {
-        GUISTATE.gui.blocklyWorkspace.robControls.hideStopProgram();
+        GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.hideStopProgram();
     }
 
     UTIL.clearTabAlert('tabConfiguration'); // also clear tab alert when switching robots
@@ -1393,5 +1392,5 @@ export {
     setWebview,
     updateMenuStatus,
     updateTutorialMenu,
-    getLegalTextsMap
+    getLegalTextsMap,
 };

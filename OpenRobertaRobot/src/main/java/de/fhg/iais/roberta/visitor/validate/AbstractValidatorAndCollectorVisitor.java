@@ -11,9 +11,14 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
+import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
@@ -160,7 +165,20 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      * @param message
      */
     public void addErrorToPhrase(final Phrase phrase, final String message) {
-        phrase.addInfo(NepoInfo.error(message));
+        NepoInfo info = NepoInfo.error(message);
+        if ( phrase instanceof SensorExpr ) {
+            ((SensorExpr) phrase).sensor.addInfo(info);
+        } else if ( phrase instanceof ActionExpr ) {
+            ((ActionExpr) phrase).action.addInfo(info);
+        } else if ( phrase instanceof MethodExpr ) {
+            ((MethodExpr) phrase).method.addInfo(info);
+        } else if ( phrase instanceof FunctionExpr ) {
+            ((FunctionExpr) phrase).function.addInfo(info);
+        } else if ( phrase instanceof StmtExpr ) {
+            ((StmtExpr) phrase).stmt.addInfo(info);
+        } else {
+            phrase.addInfo(info);
+        }
         errorAndWarningBuilder.addError(message);
     }
 
@@ -171,7 +189,20 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      * @param message
      */
     public void addWarningToPhrase(final Phrase phrase, final String message) {
-        phrase.addInfo(NepoInfo.warning(message));
+        NepoInfo info = NepoInfo.warning(message);
+        if ( phrase instanceof SensorExpr ) {
+            ((SensorExpr) phrase).sensor.addInfo(info);
+        } else if ( phrase instanceof ActionExpr ) {
+            ((ActionExpr) phrase).action.addInfo(info);
+        } else if ( phrase instanceof MethodExpr ) {
+            ((MethodExpr) phrase).method.addInfo(info);
+        } else if ( phrase instanceof FunctionExpr ) {
+            ((FunctionExpr) phrase).function.addInfo(info);
+        } else if ( phrase instanceof StmtExpr ) {
+            ((StmtExpr) phrase).stmt.addInfo(info);
+        } else {
+            phrase.addInfo(info);
+        }
         errorAndWarningBuilder.addWarning(message);
     }
 }

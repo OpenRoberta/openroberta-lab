@@ -688,6 +688,7 @@ Blockly.Msg.MATH_SINGLE_TOOLTIP_POW10 = "Vráť 10 umocnené číslom.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_ROOT = "Vráť druhú odmocninu čísla.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_SQUARE = "Return the number multiplied by itself.";  // untranslated
 Blockly.Msg.MATH_SUBTRACTION_SYMBOL = "-";  // untranslated
+Blockly.Msg.MATH_THYMIO_TRIG_TOOLTIP = "All trigonometric functions map the angles [-pi, pi] radians to [-32768, 32767]. The resultant sin and cos values are similarly mapped, namely [-1.0, 1.0] to [-32768, 32767].";  // untranslated
 Blockly.Msg.MATH_TRIG_ACOS = "arccos";
 Blockly.Msg.MATH_TRIG_ASIN = "arcsin";
 Blockly.Msg.MATH_TRIG_ATAN = "arctan";

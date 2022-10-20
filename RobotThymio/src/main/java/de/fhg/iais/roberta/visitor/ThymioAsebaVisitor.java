@@ -69,7 +69,7 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
 
     @Override
     public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
-        this.sb.append("acc[").append(accelerometerSensor.getSlot()).append("]");
+        this.sb.append("_A = acc[").append(accelerometerSensor.getSlot()).append("]");
         return null;
     }
 
@@ -81,7 +81,6 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
     @Override
     public Void visitColorConst(ColorConst colorConst) {
         this.sb.append("___color_ = [").append(colorConst.getRedChannelInt()).append(", ").append(colorConst.getGreenChannelInt()).append(", ").append(colorConst.getBlueChannelInt()).append("]");
-        nlIndent();
         return null;
     }
 
@@ -112,6 +111,7 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
     @Override
     public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         String mode = infraredSensor.getMode().toLowerCase();
+        this.sb.append("_A = ");
         switch ( mode ) {
             case C.DISTANCE:
                 this.sb.append("(100 - prox.").append("horizontal").append("[").append(infraredSensor.getSlot()).append("] / 45)");
@@ -133,20 +133,21 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
 
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
-        this.sb.append("button.").append(keysSensor.getUserDefinedPort().toLowerCase());
+        this.sb.append("_A = button.").append(keysSensor.getUserDefinedPort().toLowerCase());
         return null;
     }
 
     @Override
     public Void visitLightAction(LightAction lightAction) {
         lightAction.rgbLedColor.accept(this);
+        nlIndent();
         this.sb.append("call leds.").append(lightAction.port.toLowerCase()).append("(___color_[0] / _RGB_DIV, ___color_[1] / _RGB_DIV, ___color_[2] / _RGB_DIV)");
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor lightSensor) {
-        this.sb.append("prox.ground.ambiant").append("[").append(lightSensor.getSlot()).append("]");
+        this.sb.append("_A = prox.ground.ambiant").append("[").append(lightSensor.getSlot()).append("]");
         return null;
     }
 
@@ -199,9 +200,11 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
             this.sb.append("_time = 0");
             nlIndent();
             motorOnAction.param.getSpeed().accept(this);
+            nlIndent();
             this.sb.append("motor.").append(motorSide).append(".target = _M_MAX * _A");
             nlIndent();
             motorOnAction.getDurationValue().accept(this);
+            nlIndent();
             this.sb.append("___duration_ = _A / timer.period[0]");
             nlIndent();
             this.stateCounter++;
@@ -218,6 +221,7 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
             addCheckTimeState();
         } else {
             motorOnAction.param.getSpeed().accept(this);
+            nlIndent();
             this.sb.append("motor.").append(motorSide).append(".target = _M_MAX * _A");
         }
         return null;
@@ -302,6 +306,7 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
         this.sb.append("_time = 0");
         nlIndent();
         playRecordingAction.filename.accept(this);
+        nlIndent();
         this.sb.append("call sound.duration(_A, ___duration_)");
         nlIndent();
         this.sb.append("___duration_=___duration_ * 10");
@@ -324,15 +329,19 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
     @Override
     public Void visitLedButtonOnAction(LedButtonOnAction ledButtonOnAction) {
         ledButtonOnAction.led1.accept(this);
+        nlIndent();
         this.sb.append("___led_[0] = _A / _LED_DIV");
         nlIndent();
         ledButtonOnAction.led2.accept(this);
+        nlIndent();
         this.sb.append("___led_[1] = _A / _LED_DIV");
         nlIndent();
         ledButtonOnAction.led3.accept(this);
+        nlIndent();
         this.sb.append("___led_[2] = _A / _LED_DIV");
         nlIndent();
         ledButtonOnAction.led4.accept(this);
+        nlIndent();
         this.sb.append("___led_[3] = _A / _LED_DIV");
         nlIndent();
         this.sb.append("call leds.buttons(___led_[0], ___led_[1], ___led_[2], ___led_[3])");
@@ -342,14 +351,16 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
     @Override
     public Void visitRgbColor(RgbColor rgbColor) {
         rgbColor.R.accept(this);
+        nlIndent();
         this.sb.append("___color_[0] = _A");
         nlIndent();
         rgbColor.G.accept(this);
+        nlIndent();
         this.sb.append("___color_[1] = _A");
         nlIndent();
         rgbColor.B.accept(this);
+        nlIndent();
         this.sb.append("___color_[2] = _A");
-        this.nlIndent();
         return null;
     }
 
@@ -360,19 +371,19 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
 
     @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
-        this.sb.append("mic.intensity * 100 / 255");
+        this.sb.append("_A = mic.intensity * 100 / 255");
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
-        this.sb.append("temperature / 10");
+        this.sb.append("_A = temperature / 10");
         return null;
     }
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
-        this.sb.append("_timer");
+        this.sb.append("_A = _timer");
         return null;
     }
 
@@ -387,9 +398,11 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
         this.sb.append("_time = 0");
         nlIndent();
         toneAction.duration.accept(this);
+        nlIndent();
         this.sb.append("___duration_ = _A");
         nlIndent();
         toneAction.frequency.accept(this);
+        nlIndent();
         this.sb.append("call sound.freq(_A, ___duration_ / 16)");
         nlIndent();
         this.sb.append("___duration_ /= timer.period[0]");
@@ -420,11 +433,13 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
             this.sb.append("_time = 0");
             nlIndent();
             speed.accept(this);
+            nlIndent();
             this.sb.append("motor.left.target = _M_MAX * ").append(multLeft).append("_A");
             nlIndent();
             this.sb.append("motor.right.target = _M_MAX * ").append(multRight).append("_A");
             nlIndent();
             duration.getValue().accept(this);
+            nlIndent();
             this.sb.append("___duration_ = _A / timer.period[0]");
             nlIndent();
             this.stateCounter++;
@@ -441,6 +456,7 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
             addCheckTimeState();
         } else {
             speed.accept(this);
+            nlIndent();
             this.sb.append("motor.left.target = _M_MAX * ").append(multLeft).append("_A");
             nlIndent();
             this.sb.append("motor.right.target = _M_MAX * ").append(multRight).append("_A");
@@ -452,12 +468,15 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
             this.sb.append("_time = 0");
             nlIndent();
             speedLeft.accept(this);
+            nlIndent();
             this.sb.append("motor.left.target = _M_MAX * ").append(multLeft).append("_A");
             nlIndent();
             speedRight.accept(this);
+            nlIndent();
             this.sb.append("motor.right.target = _M_MAX * ").append(multRight).append("_A");
             nlIndent();
             duration.getValue().accept(this);
+            nlIndent();
             this.sb.append("___duration_ = _A / timer.period[0]");
             nlIndent();
             this.stateCounter++;
@@ -474,9 +493,11 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
             addCheckTimeState();
         } else {
             speedLeft.accept(this);
+            nlIndent();
             this.sb.append("motor.left.target = _M_MAX * ").append(multLeft).append("_A");
             nlIndent();
             speedRight.accept(this);
+            nlIndent();
             this.sb.append("motor.right.target = _M_MAX * ").append(multRight).append("_A");
         }
     }
@@ -496,6 +517,7 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
         this.sb.append("_time = 0");
         nlIndent();
         waitTimeStmt.time.accept(this);
+        nlIndent();
         this.sb.append("___duration_ = _A / timer.period[0]");
         nlIndent();
         this.stateCounter++;
@@ -514,27 +536,35 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
     @Override
     public Void visitLedCircleOnAction(LedCircleOnAction ledCircleOnAction) {
         ledCircleOnAction.led1.accept(this);
+        nlIndent();
         this.sb.append("___led_[0] = _A / _LED_DIV");
         nlIndent();
         ledCircleOnAction.led2.accept(this);
+        nlIndent();
         this.sb.append("___led_[1] = _A / _LED_DIV");
         nlIndent();
         ledCircleOnAction.led3.accept(this);
+        nlIndent();
         this.sb.append("___led_[2] = _A / _LED_DIV");
         nlIndent();
         ledCircleOnAction.led4.accept(this);
+        nlIndent();
         this.sb.append("___led_[3] = _A / _LED_DIV");
         nlIndent();
         ledCircleOnAction.led5.accept(this);
+        nlIndent();
         this.sb.append("___led_[4] = _A / _LED_DIV");
         nlIndent();
         ledCircleOnAction.led6.accept(this);
+        nlIndent();
         this.sb.append("___led_[5] = _A / _LED_DIV");
         nlIndent();
         ledCircleOnAction.led7.accept(this);
+        nlIndent();
         this.sb.append("___led_[6] = _A / _LED_DIV");
         nlIndent();
         ledCircleOnAction.led8.accept(this);
+        nlIndent();
         this.sb.append("___led_[7] = _A / _LED_DIV");
         nlIndent();
         this.sb.append("call leds.circle(___led_[0], ___led_[1], ___led_[2], ___led_[3], ___led_[4], ___led_[5], ___led_[6], ___led_[7])");
@@ -544,6 +574,7 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
     @Override
     public Void visitLedSoundOnAction(LedSoundOnAction ledSoundOnAction) {
         ledSoundOnAction.led1.accept(this);
+        nlIndent();
         this.sb.append("___led_[0] = _A / _LED_DIV");
         nlIndent();
         this.sb.append("call leds.sound(___led_[0])");
@@ -553,9 +584,11 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
     @Override
     public Void visitLedTemperatureOnAction(LedTemperatureOnAction ledTemperatureOnAction) {
         ledTemperatureOnAction.led1.accept(this);
+        nlIndent();
         this.sb.append("___led_[0] = _A / _LED_DIV");
         nlIndent();
         ledTemperatureOnAction.led2.accept(this);
+        nlIndent();
         this.sb.append("___led_[1] = _A / _LED_DIV");
         nlIndent();
         this.sb.append("call leds.temperature(___led_[0], ___led_[1])");
@@ -565,27 +598,35 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
     @Override
     public Void visitLedProxHOnAction(LedProxHOnAction ledProxHOnAction) {
         ledProxHOnAction.led1.accept(this);
+        nlIndent();
         this.sb.append("___led_[0] = _A / _LED_DIV");
         nlIndent();
         ledProxHOnAction.led2.accept(this);
+        nlIndent();
         this.sb.append("___led_[1] = _A / _LED_DIV");
         nlIndent();
         ledProxHOnAction.led3.accept(this);
+        nlIndent();
         this.sb.append("___led_[2] = _A / _LED_DIV");
         nlIndent();
         ledProxHOnAction.led4.accept(this);
+        nlIndent();
         this.sb.append("___led_[3] = _A / _LED_DIV");
         nlIndent();
         ledProxHOnAction.led5.accept(this);
+        nlIndent();
         this.sb.append("___led_[4] = _A / _LED_DIV");
         nlIndent();
         ledProxHOnAction.led6.accept(this);
+        nlIndent();
         this.sb.append("___led_[5] = _A / _LED_DIV");
         nlIndent();
         ledProxHOnAction.led7.accept(this);
+        nlIndent();
         this.sb.append("___led_[6] = _A / _LED_DIV");
         nlIndent();
         ledProxHOnAction.led8.accept(this);
+        nlIndent();
         this.sb.append("___led_[7] = _A / _LED_DIV");
         nlIndent();
         this.sb.append("call leds.prox.h(___led_[0], ___led_[1], ___led_[2], ___led_[3], ___led_[4], ___led_[5], ___led_[6], ___led_[7])");
@@ -595,9 +636,11 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
     @Override
     public Void visitLedProxVOnAction(LedProxVOnAction ledProxVOnAction) {
         ledProxVOnAction.led1.accept(this);
+        nlIndent();
         this.sb.append("___led_[0] = _A / _LED_DIV");
         nlIndent();
         ledProxVOnAction.led2.accept(this);
+        nlIndent();
         this.sb.append("___led_[1] = _A / _LED_DIV");
         nlIndent();
         this.sb.append("call leds.prox.v(___led_[0], ___led_[1])");
@@ -612,13 +655,14 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
 
     @Override
     public Void visitTapSensor(TapSensor tapSensor) {
-        this.sb.append("(29 + acc[1]) / 32");
+        this.sb.append("_A = (29 + acc[1]) / 32");
         return null;
     }
 
     @Override
     public Void visitRecordStartAction(RecordStartAction recordStartAction) {
         recordStartAction.filename.accept(this);
+        nlIndent();
         this.sb.append("call sound.record(_A)");
         return null;
     }
@@ -634,18 +678,6 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
         if ( !withWrapping ) {
             return;
         }
-       /* this.sb.append("<!DOCTYPE aesl-source>");
-        nlIndent();
-        this.sb.append("<network>");
-        nlIndent();
-        this.sb.append("<constant value=\"5\" name=\"_M_MAX\"/>");
-        nlIndent();
-        this.sb.append("<constant value=\"8\" name=\"_RGB_DIV\"/>");
-        nlIndent();
-        this.sb.append("<constant value=\"3\" name=\"_LED_DIV\"/>");
-        nlIndent();
-        this.sb.append("<node><![CDATA[");
-        nlIndent();*/
         this.sb.append("# This file is automatically generated by the Open Roberta Lab.");
         nlIndent();
         this.sb.append("const _M_MAX = 5");

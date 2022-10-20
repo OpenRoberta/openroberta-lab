@@ -163,31 +163,40 @@ onevent timer0
             end
         end
     elseif _state == 2 then
-        button.right___x = _A
+        _A = button.right
+        ___x = _A
         _state = 13
     elseif _state == 3 then
-        (1500 - prox.ground.reflected[1]) / 1000___x = _A
+        _A = (1500 - prox.ground.reflected[1]) / 1000
+        ___x = _A
         _state = 13
     elseif _state == 4 then
-        prox.ground.reflected[1] / 45___x = _A
+        _A = prox.ground.reflected[1] / 45
+        ___x = _A
         _state = 13
     elseif _state == 5 then
-        prox.ground.ambiant[1] / 2___x = _A
+        _A = prox.ground.ambiant[1] / 2
+        ___x = _A
         _state = 13
     elseif _state == 6 then
-        (100 - prox.horizontal[1] / 45)___x = _A
+        _A = (100 - prox.horizontal[1] / 45)
+        ___x = _A
         _state = 13
     elseif _state == 7 then
-        mic.intensity * 100 / 255___x = _A
+        _A = mic.intensity * 100 / 255
+        ___x = _A
         _state = 13
     elseif _state == 8 then
-        _timer___x = _A
+        _A = _timer
+        ___x = _A
         _state = 13
     elseif _state == 9 then
-        acc[0]___x = _A
+        _A = acc[0]
+        ___x = _A
         _state = 13
     elseif _state == 10 then
-        temperature / 10___x = _A
+        _A = temperature / 10
+        ___x = _A
         _state = 13
     elseif _state == 11 then
         _A = 1
@@ -195,7 +204,8 @@ onevent timer0
         call sound.record(-1)
         _state = 13
     elseif _state == 12 then
-        (29 + acc[1]) / 32___x = _A
+        _A = (29 + acc[1]) / 32
+        ___x = _A
         _state = 13
     elseif _state == 13 then
         callsub thymio_close

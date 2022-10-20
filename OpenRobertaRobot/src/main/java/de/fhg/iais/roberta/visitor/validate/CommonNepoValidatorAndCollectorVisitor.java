@@ -89,7 +89,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public final Void visitAssertStmt(AssertStmt assertStmt) {
+    public Void visitAssertStmt(AssertStmt assertStmt) {
         requiredComponentVisited(assertStmt, assertStmt.asserts);
         return null;
     }

@@ -184,18 +184,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitAssertStmt(AssertStmt assertStmt) {
-        this.sb.append("if not ");
-        assertStmt.asserts.accept(this);
-        this.sb.append(":");
-        incrIndentation();
-        nlIndent();
-        this.sb.append("print(\"Assertion failed: \", \"").append(assertStmt.msg).append("\", ");
-        ((Binary) assertStmt.asserts).left.accept(this);
-        this.sb.append(", \"").append(((Binary) assertStmt.asserts).op.toString()).append("\", ");
-        ((Binary) assertStmt.asserts).getRight().accept(this);
-        this.sb.append(")");
-        decrIndentation();
-        return null;
+        throw new DbcException("Block not supported");
     }
 
     @Override
@@ -218,13 +207,16 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     public Void visitAssignStmt(AssignStmt assignStmt) {
         if ( assignStmt.name.getVarType() == BlocklyType.COLOR ) {
             assignStmt.expr.accept(this);
+            nlIndent();
             this.sb.append(((Var) assignStmt.name).getCodeSafeName()).append(" = ___color_");
         } else if ( assignStmt.name.getVarType() == BlocklyType.NUMBER ) {
             assignStmt.expr.accept(this);
+            nlIndent();
             this.sb.append(((Var) assignStmt.name).getCodeSafeName()).append(" = _A");
         } else if ( assignStmt.name.getVarType() == BlocklyType.ARRAY_NUMBER ) {
             this.sb.append(((Var) assignStmt.name).getCodeSafeName()).append(" = ");
             assignStmt.expr.accept(this);
+            nlIndent();
         } else if ( assignStmt.name.getVarType() == BlocklyType.ARRAY_COLOUR ) {
             if ( assignStmt.expr.getClass().equals(Var.class) ) {
                 this.sb.append(((Var) assignStmt.name).getCodeSafeName()).append("_r = ").append(((Var) assignStmt.expr).getCodeSafeName()).append("_r");
@@ -258,7 +250,6 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
             case ASSIGNMENT: {
                 visitBinaryBothSides(binary);
                 this.sb.append("_A = _B[").append(this.nestedBinaryCounter).append("] ").append(getBinaryOperatorSymbol(binary.op)).append(" _C[").append(this.nestedBinaryCounter).append("]");
-                nlIndent();
                 break;
             }
             case MATH_CHANGE:
@@ -277,7 +268,6 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
                     this.sb.append("_A");
                 }
                 this.sb.append(" = _B[").append(this.nestedBinaryCounter).append("]");
-                nlIndent();
                 break;
             }
             case EQ:
@@ -300,7 +290,6 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
                 decrIndentation();
                 nlIndent();
                 this.sb.append("end");
-                nlIndent();
                 break;
             }
             case AND:
@@ -319,7 +308,6 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
                 decrIndentation();
                 nlIndent();
                 this.sb.append("end");
-                nlIndent();
                 break;
             }
             default:
@@ -330,26 +318,17 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     }
 
     private void visitBinaryBothSides(Binary binary) {
-        if ( binary.left.getKind().hasName("SENSOR_EXPR") ) {
-            this.sb.append("_A = ");
-            binary.left.accept(this);
-            nlIndent();
-        } else if ( binary.left.getKind().hasName("VAR") ) {
+        if ( binary.left.getKind().hasName("VAR") ) {
             this.sb.append("_A = ");
             this.sb.append(((Var) binary.left).getCodeSafeName());
-            nlIndent();
         } else {
             binary.left.accept(this);
         }
+        nlIndent();
         this.sb.append("_B[").append(this.nestedBinaryCounter).append("] = _A");
         nlIndent();
-        if ( binary.right.getKind().hasName("SENSOR_EXPR") ) {
-            this.sb.append("_A = ");
-            binary.right.accept(this);
-            nlIndent();
-        } else {
-            binary.right.accept(this);
-        }
+        binary.right.accept(this);
+        nlIndent();
         this.sb.append("_C[").append(this.nestedBinaryCounter).append("] = _A");
         nlIndent();
     }
@@ -358,10 +337,8 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     public Void visitVar(Var var) {
         if ( var.getVarType() == (BlocklyType.NUMBER) ) {
             this.sb.append("_A = ").append(var.getCodeSafeName());
-            nlIndent();
         } else if ( var.getVarType() == (BlocklyType.COLOR) ) {
             this.sb.append("___color_ = ").append(var.getCodeSafeName());
-            nlIndent();
         } else {
             this.sb.append(var.getCodeSafeName());
         }
@@ -373,7 +350,6 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     public Void visitBoolConst(BoolConst boolConst) {
         String value = boolConst.value ? "1" : "0";
         this.sb.append("_A = ").append(value);
-        nlIndent();
         return null;
     }
 
@@ -627,6 +603,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitListGetIndex(ListGetIndex listGetIndex) {
         listGetIndex.param.get(1).accept(this);
+        nlIndent();
         if ( listGetIndex.param.get(0).getVarType().toString().equals("ARRAY_COLOUR") ) {
             this.sb.append("___color_[0] = ");
             listGetIndex.param.get(0).accept(this);
@@ -677,8 +654,10 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitListSetIndex(ListSetIndex listSetIndex) {
         listSetIndex.param.get(1).accept(this);
+        nlIndent();
         if ( listSetIndex.param.get(0).getVarType().toString().equals("ARRAY_COLOUR") ) {
             listSetIndex.param.get(2).accept(this);
+            nlIndent();
             listSetIndex.param.get(0).accept(this);
             this.sb.append("_r[_A] = ___color_[0]");
             nlIndent();
@@ -693,8 +672,9 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
             this.sb.append("_B[").append(this.nestedBinaryCounter).append("] = _A");
             nlIndent();
             listSetIndex.param.get(2).accept(this);
+            nlIndent();
             listSetIndex.param.get(0).accept(this);
-            this.sb.append("[_A] = B[").append(this.nestedBinaryCounter).append("]");
+            this.sb.append("[_A] = _B[").append(this.nestedBinaryCounter).append("]");
             this.nestedBinaryCounterMinus();
             nlIndent();
         }
@@ -742,6 +722,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     public Void visitMathNumPropFunct(MathNumPropFunct mathNumPropFunct) {
         if ( mathNumPropFunct.functName != FunctionNames.DIVISIBLE_BY ) {
             mathNumPropFunct.param.get(0).accept(this);
+            nlIndent();
         }
         switch ( mathNumPropFunct.functName ) {
             case EVEN:
@@ -822,7 +803,6 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
                 decrIndentation();
                 nlIndent();
                 this.sb.append("end");
-                nlIndent();
                 this.nestedBinaryCounterMinus();
                 break;
             case PRIME:
@@ -847,9 +827,11 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.nestedBinaryCounterPlus();
         mathRandomIntFunct.param.get(0).accept(this);
+        nlIndent();
         this.sb.append("_B[").append(this.nestedBinaryCounter).append("] = _A");
         nlIndent();
         mathRandomIntFunct.param.get(1).accept(this);
+        nlIndent();
         this.sb.append("_C[").append(this.nestedBinaryCounter).append("] = _A");
         nlIndent();
         this.sb.append("call math.rand(_A)");
@@ -891,33 +873,23 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitMathSingleFunct(MathSingleFunct mathSingleFunct) {
-        if ( mathSingleFunct.param.get(0).getKind().hasName("SENSOR_EXPR") ) {
-            this.sb.append("_A = ");
-            mathSingleFunct.param.get(0).accept(this);
-            nlIndent();
-        } else {
-            mathSingleFunct.param.get(0).accept(this);
-        }
+        mathSingleFunct.param.get(0).accept(this);
+        nlIndent();
         switch ( mathSingleFunct.functName ) {
             case ROOT:
                 this.sb.append("call math.sqrt(_A, _A)");
-                nlIndent();
                 break;
             case SIN:
                 this.sb.append("call math.sin(_A, _A)");
-                nlIndent();
                 break;
             case COS:
                 this.sb.append("call math.cos(_A, _A)");
-                nlIndent();
                 break;
             case SQUARE:
                 this.sb.append("call math.mul(_A, _A, _A)");
-                nlIndent();
                 break;
             case ABS:
                 this.sb.append("_A = abs(_A)");
-                nlIndent();
                 break;
             default:
                 throw new DbcException("Statement not supported by Aseba!");
@@ -992,7 +964,6 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitNumConst(NumConst numConst) {
         this.sb.append("_A = " + numConst.value);
-        nlIndent();
         return null;
     }
 
@@ -1327,19 +1298,23 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
 
     protected void generateCodeFromStmtCondition(String stmtType, Expr expr) {
         expr.accept(this);
+        nlIndent();
         this.sb.append(stmtType).append(whitespace()).append("_A == 1 then");
     }
 
     protected void generateCodeFromStmtConditionFor(String stmtType, Expr expr) {
         ExprList expressions = (ExprList) expr;
         expressions.get().get(1).accept(this);
+        nlIndent();
         this.sb.append(((Var) expressions.get().get(0)).getCodeSafeName()).append(" = _A");
         nlIndent();
         this.nestedBinaryCounterPlus();
         expressions.get().get(2).accept(this);
+        nlIndent();
         this.sb.append("_B[").append(this.nestedBinaryCounter).append("] = _A");
         nlIndent();
         expressions.get().get(3).accept(this);
+        nlIndent();
         this.sb.append("_C[").append(this.nestedBinaryCounter).append("] = _A");
         nlIndent();
         this.stateCounter++;

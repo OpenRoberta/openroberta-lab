@@ -688,6 +688,7 @@ Blockly.Msg.MATH_SINGLE_TOOLTIP_POW10 = "Rechnet 10 hoch Eingabewert.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_ROOT = "Ist die Quadratwurzel eines Wertes.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_SQUARE = "Ist die Zahl multipliziert mit sich selbst.";
 Blockly.Msg.MATH_SUBTRACTION_SYMBOL = "-";  // untranslated
+Blockly.Msg.MATH_THYMIO_TRIG_TOOLTIP = "In allen trigonomischen Funktionen werden die Winkel [-pi, pi] in radiant auf [-32768, 32767] abgebildet. Die Ergebnisse werden entsprechend von [-1.0, 1.0] auf [-32768, 32767] abgebildet.";
 Blockly.Msg.MATH_TRIG_ACOS = "acos";  // untranslated
 Blockly.Msg.MATH_TRIG_ASIN = "asin";  // untranslated
 Blockly.Msg.MATH_TRIG_ATAN = "atan";  // untranslated
