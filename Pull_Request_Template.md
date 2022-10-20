@@ -1,8 +1,11 @@
 # Description
 
-Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.
+Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required
+for this change.
 
-Fixes # (issue)
+Please *never* include a issue number (as #NUMBER) taken from our github issue tracker in the pull request. If the pull request is changed again and again, this
+floods the issue with irrelevant commit numbers. Of course the *pure* NUMBER can be used for documentation purposes. If the pull request is accepted, the issue
+number will be added during that step.
 
 ## Type of change
 
@@ -15,9 +18,11 @@ Please delete options that are not relevant.
 
 # How Has This Been Tested?
 
-Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test configuration
+Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test
+configuration
 
 **Test Configuration**:
+
 * Firmware version:
 * Hardware:
 * Toolchain:
