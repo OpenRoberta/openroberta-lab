@@ -275,7 +275,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
             src.add(weight);
         }
         if ( targetLanguage.equals("java") ) {
-            src.add(";");
+            src.add("f;"); // otherwise the init value is double. Possible conversion loss #1396
         } else if ( targetLanguage.equals("python") ) {
             // no terminator at all
         } else if ( targetLanguage.equals("c++") ) {

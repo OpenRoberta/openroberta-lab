@@ -31,11 +31,11 @@ do
   case "$1" in
     -git-mode)         DB_MODE='embedded'
                        DB_NAME='openroberta-db'
-				               DB_PARENTDIR='./OpenRobertaServer/db-embedded'
-				               JAVA_LIB_DIR='./OpenRobertaServer/target/resources'
-				               ADMIN_DIR='./admin' # this directory is .gitignore-d
-				               STATIC_RESOURCES='./OpenRobertaServer/staticResources'
-				               shift ;;
+                       DB_PARENTDIR='./OpenRobertaServer/db-embedded'
+                       JAVA_LIB_DIR='./OpenRobertaServer/target/resources'
+                       ADMIN_DIR='./admin' # this directory is .gitignore-d
+                       STATIC_RESOURCES='./OpenRobertaServer/staticResources'
+                       shift ;;
     -db-mode)          DB_MODE=$2
                        shift; shift ;;
     -db-name)          DB_NAME=$2
