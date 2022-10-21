@@ -3,31 +3,31 @@ THIS SCRIPT EXECUTES DANGEROUS COMMANDS. It expects, that 'mvn clean install -Ds
 Syntax: ./admin.sh <option-parameters> <command>
 
 Option Parameter preceding the command are:
-  -git-mode                    set -db-mode, -db-parentdir, -db-name, -db-parentdir, -javalib-dir, -admin-dir
+  -git-mode                    set -db-mode, -db-parentdir, -db-name, -db-parentdir, -javalib-dir, -admin-dir, -static-resources
                                to values suitable for operating in the context of an openroberta-lab git repository.
-                               If used, other options than this make little sense
 
   -db-mode {server|embedded}   mode in which the database should be accessed; default: embedded
   -db-name <db-name>           database name; default: openroberta-db; with a database server use openroberta-db-<server-name>
   -db-parentdir <db-parentdir> database parent directory; default: db-embedded. Needed for creating an empty db.
   -java-lib-dir <dir>          directory with the installation dir (containing the jars); default: ./lib
   -admin-dir <dir>             directory for log, database backups, ...; default: ./admin
+  -static-resources <dir>      directory with static resources (html, js, jpg, ...); default: ./staticResources
   -Xmx                         heap memory, e.g. -Xmx4G; default is the java default
   -rdbg                        enable remote debug using port 8000; default: no remote debug
   -q                           quiet mode, default: verbose
   -h | -help | --help          show help message and quit
 
 command:
-  sql-gui                 start a sql client with graphical user interface
-  sql-client              read SELECT commands from the terminal and execute them
-  sql-exec <SQL>          execute a single <SQL> command
-  create-empty-db         create an empty database at <db-parentdir>/<db-name>
-  version                 print the server version (is suffixed with -SNAPSHOT if it is a snapshot) and terminate
+  sql-gui                      start a sql client with graphical user interface
+  sql-client                   read SELECT commands from the terminal and execute them
+  sql-exec <SQL>               execute a single <SQL> command
+  create-empty-db              create an empty database at <db-parentdir>/<db-name>
+  version                      print the server version (is suffixed with -SNAPSHOT if it is a snapshot) and terminate
 
-  start-server            start the database server and the jetty server with a data base in embedded mode. mvn must have run!
-                          Use -d <key>=<value> to define any number of parameters for the server,
-                          e.g. -d robot.crosscompiler.resourcebase=... for crosscompiler resources
-                          the command terminates when the server terminates. Maybe you have to suffix the command with `&` :-)
+  start-server                 start the database server and the jetty server with a data base in embedded mode. mvn must have run!
+                               Use -d <key>=<value> to define any number of parameters for the server,
+                               e.g. -d robot.crosscompiler.resourcebase=... for crosscompiler resources
+                               the command terminates when the server terminates. Maybe you have to suffix the command with `&` :-)
 
 examples:
   ./admin.sh -git-mode create-empty-db   call from the git root directory to create an embedded database in OpenRobertaServer

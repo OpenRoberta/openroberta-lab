@@ -21,6 +21,7 @@ DB_NAME='openroberta-db'
 DB_PARENTDIR='db-embedded'
 JAVA_LIB_DIR='./lib'
 ADMIN_DIR='./admin'
+STATIC_RESOURCES='./staticResources'
 XMX=''
 RDBG=''
 QUIET='no'
@@ -28,31 +29,34 @@ QUIET='no'
 while true
 do
   case "$1" in
-    -git-mode)     DB_MODE='embedded'
-                   DB_NAME='openroberta-db'
-				           DB_PARENTDIR='./OpenRobertaServer/db-embedded'
-				           JAVA_LIB_DIR='./OpenRobertaServer/target/resources'
-				           ADMIN_DIR='./admin' # this directory is .gitignore-d
-				           shift ;;
-    -db-mode)      DB_MODE=$2
-                   shift; shift ;;
-    -db-name)      DB_NAME=$2
-                   shift; shift ;;
-    -db-parentdir) DB_PARENTDIR=$2
-                   shift; shift ;;
-    -java-lib-dir) JAVA_LIB_DIR=$2
-                   shift; shift ;;
-    -admin-dir)    ADMIN_DIR=$2
-                   shift; shift ;;
-    -Xmx*)         XMX=$1
-                   shift ;;
-    -rdbg)         RDBG='-agentlib:jdwp=transport=dt_socket,server=y,address=0.0.0.0:2000,suspend=y'
-                   shift ;;
-    -q)            QUIET='yes'
-                   shift ;;
-    -h|-help|--help) cat admin-help.txt
-                   exit 0 ;;
-    *)             break ;;
+    -git-mode)         DB_MODE='embedded'
+                       DB_NAME='openroberta-db'
+				               DB_PARENTDIR='./OpenRobertaServer/db-embedded'
+				               JAVA_LIB_DIR='./OpenRobertaServer/target/resources'
+				               ADMIN_DIR='./admin' # this directory is .gitignore-d
+				               STATIC_RESOURCES='./OpenRobertaServer/staticResources'
+				               shift ;;
+    -db-mode)          DB_MODE=$2
+                       shift; shift ;;
+    -db-name)          DB_NAME=$2
+                       shift; shift ;;
+    -db-parentdir)     DB_PARENTDIR=$2
+                       shift; shift ;;
+    -java-lib-dir)     JAVA_LIB_DIR=$2
+                       shift; shift ;;
+    -admin-dir)        ADMIN_DIR=$2
+                       shift; shift ;;
+    -static-resources) STATIC_RESOURCES=$2
+                       shift; shift ;;
+    -Xmx*)             XMX=$1
+                       shift ;;
+    -rdbg)             RDBG='-agentlib:jdwp=transport=dt_socket,server=y,address=0.0.0.0:2000,suspend=y'
+                       shift ;;
+    -q)                QUIET='yes'
+                       shift ;;
+    -h|-help|--help)   cat admin-help.txt
+                       exit 0 ;;
+    *)                 break ;;
   esac
 done
 
@@ -127,7 +131,7 @@ case "$CMD" in
                    esac
                      
                    java $RDBG $XMX -cp ${JAVA_LIB_DIR}/\* de.fhg.iais.roberta.main.ServerStarter \
-                        -d server.staticresources.dir=./staticResources \
+                        -d server.staticresources.dir="$STATIC_RESOURCES" \
                         -d database.mode="$DB_MODE" \
                         -d database.parentdir=$DB_PARENTDIR \
                         -d database.name=$DB_NAME \
