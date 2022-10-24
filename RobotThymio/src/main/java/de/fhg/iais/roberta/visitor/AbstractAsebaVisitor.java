@@ -1105,6 +1105,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     public Void visitUnary(Unary unary) {
         this.unarySyms.add(unary.op);
         unary.expr.accept(this);
+        nlIndent();
         int lastIndex = this.unarySyms.size() - 1;
         switch ( this.unarySyms.get(lastIndex) ) {
             case PLUS:
@@ -1123,7 +1124,6 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
 
         }
         this.unarySyms.remove(lastIndex);
-        nlIndent();
         return null;
     }
 
