@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBException;
@@ -550,13 +551,25 @@ public class ReuseIntegrationAsUnitTest {
         return thisUnitTestIsOk;
     }
 
+    private static final Pattern BACKSLASH_R = Pattern.compile("\\r");
+    private static final Pattern BACKSLASH_N_PLUS_LINEEND = Pattern.compile("\\n+$");
+    private static final Pattern BACKSLASH_N = Pattern.compile("\\n");
+    private static final Pattern BACKSLASH_S_PLUS = Pattern.compile("\\s+");
+
+    private static String replace(String source) {
+        String target = BACKSLASH_R.matcher(source).replaceAll("");
+        target = BACKSLASH_N_PLUS_LINEEND.matcher(target).replaceAll("");
+        target = BACKSLASH_N.matcher(target).replaceAll("<NL>");
+        target = BACKSLASH_S_PLUS.matcher(target).replaceAll("");
+        return target;
+    }
+
     private static boolean compareExpectedToGenerated(String resourceBase, String programName, String generated, String extension) {
         if ( COMPARE_EXPECTED_AND_ACTUAL ) {
-            String expectedProgramSource;
             try {
-                expectedProgramSource = Util.readResourceContent(resourceBase + programName + "." + extension);
-                expectedProgramSource = expectedProgramSource.replaceAll("\\s+", ""); // TODO: python indentation is lost - refactor this
-                boolean equals = generated.replaceAll("\\s+", "").equals(expectedProgramSource);
+                String expected = replace(Util.readResourceContent(resourceBase + programName + "." + extension));
+                generated = replace(generated);
+                boolean equals = generated.equals(expected);
                 if ( !equals ) {
                     LOG.error("generated and expected differ for " + programName + "." + extension);
                 }

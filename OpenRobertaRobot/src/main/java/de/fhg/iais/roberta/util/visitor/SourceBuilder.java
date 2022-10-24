@@ -35,6 +35,11 @@ public class SourceBuilder {
     }
 
     public SourceBuilder nlI() {
+        // removes trailing whitespace, e.g. \n  \n -> \n\n
+        int last = this.sb.length() - 1;
+        while ( this.sb.charAt(last) == ' ' ) {
+            this.sb.deleteCharAt(last--);
+        }
         this.sb.append("\n");
         indent();
         return this;
