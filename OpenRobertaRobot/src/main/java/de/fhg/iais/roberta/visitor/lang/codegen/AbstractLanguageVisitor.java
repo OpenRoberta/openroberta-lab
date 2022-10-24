@@ -266,6 +266,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     }
 
     private void mkWeightTerm(String targetLanguage, String weight) {
+        weight = weight.replaceAll(",", ".");
         char firstChar = weight.charAt(0);
         if ( firstChar == '*' ) {
             src.add(weight.substring(1));
