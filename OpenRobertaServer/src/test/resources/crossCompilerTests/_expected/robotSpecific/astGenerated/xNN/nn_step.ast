@@ -7,10 +7,10 @@ Var [x] := NNGetOutputNeuronVal[name: o1]
 
 Var [x] := NNGetOutputNeuronVal[name: o2]
 
-NNSetWeightStmt[from: i1, to: h1n1, value: NumConst[value: 5]]
-NNSetWeightStmt[from: h1n1, to: o1, value: NumConst[value: 5]]
-NNSetBiasStmt[name: h1n1, value: NumConst[value: 5]]
-NNSetBiasStmt[name: o1, value: NumConst[value: 5]]
+NNSetWeightStmt[from: i1, to: h1n1, value: NumConst[value: 555.5]]
+NNSetWeightStmt[from: h1n1, to: o1, value: NumConst[value: 555.5]]
+NNSetBiasStmt[name: h1n1, value: NumConst[value: 555.5]]
+NNSetBiasStmt[name: o1, value: NumConst[value: 555.5]]
 
 Var [x] := NNGetWeight[from: i1, to: h1n3]
 

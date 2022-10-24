@@ -271,7 +271,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
         if ( firstChar == '*' ) {
             src.add(weight.substring(1));
         } else if ( firstChar == '/' || firstChar == ':' ) {
-            src.add("1.0/").add(weight.substring(1));
+            src.add("1/").add(weight.substring(1));
         } else {
             src.add(weight);
         }
