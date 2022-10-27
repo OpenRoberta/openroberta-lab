@@ -1,5 +1,5 @@
 NNSetInputNeuronVal[name: i1, value: NumConst[value: 5]]
-NNSetInputNeuronVal[name: i2, value: NumConst[value: 5]]
+NNSetInputNeuronVal[name: i2, value: TernaryExpr[condition: SensorExpr [TouchSensor [1, PRESSED, - EMPTY_SLOT -]], thenPart: NumConst[value: 1], elsePart: NumConst[value: 2]]]
 NNStepStmt[]
 
 Var [x] := NNGetOutputNeuronVal[name: o1]
@@ -8,9 +8,9 @@ Var [x] := NNGetOutputNeuronVal[name: o1]
 Var [x] := NNGetOutputNeuronVal[name: o2]
 
 NNSetWeightStmt[from: i1, to: h1n1, value: NumConst[value: 555.5]]
-NNSetWeightStmt[from: h1n1, to: o1, value: NumConst[value: 555.5]]
-NNSetBiasStmt[name: h1n1, value: NumConst[value: 555.5]]
-NNSetBiasStmt[name: o1, value: NumConst[value: 555.5]]
+NNSetWeightStmt[from: h1n1, to: o1, value: SensorExpr [UltrasonicSensor [4, DISTANCE, - EMPTY_SLOT -]]]
+NNSetBiasStmt[name: h1n1, value: SensorExpr [ColorSensor [3, LIGHT, - EMPTY_SLOT -]]]
+NNSetBiasStmt[name: o1, value: SensorExpr [GyroSensor [2, ANGLE, - EMPTY_SLOT -]]]
 
 Var [x] := NNGetWeight[from: i1, to: h1n3]
 

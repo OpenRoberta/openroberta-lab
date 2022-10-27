@@ -1,5 +1,5 @@
 Sensors: 
-[]
+[UsedSensor [1, TOUCH, PRESSED], UsedSensor [4, ULTRASONIC, DISTANCE], UsedSensor [3, COLOR, LIGHT], UsedSensor [2, GYRO, ANGLE]]
 Actors: 
 []
 Methods: 

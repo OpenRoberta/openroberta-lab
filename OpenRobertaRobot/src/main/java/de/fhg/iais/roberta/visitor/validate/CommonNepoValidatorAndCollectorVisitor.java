@@ -373,6 +373,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitNNSetInputNeuronVal(NNSetInputNeuronVal get) {
         checkNeuronName(get, true, false, false, get.name);
+        requiredComponentVisited(get, get.value);
         return null;
     }
 
