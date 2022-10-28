@@ -494,7 +494,7 @@ function openTutorialView() {
         }
         waitForClose();
     } else {
-        toggleTutorial();
+        toggleTutorial($('#tutorialButton'));
     }
 }
 

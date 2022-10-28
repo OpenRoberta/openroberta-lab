@@ -428,7 +428,7 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
             waitForClose();
         }
         else {
-            toggleTutorial();
+            toggleTutorial($('#tutorialButton'));
         }
     }
     function closeTutorialView() {
