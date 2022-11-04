@@ -1,11 +1,11 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
-import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.LedOffAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.LedOnAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.StepMotorAction;
+import de.fhg.iais.roberta.syntax.actor.motor.MotorGetPowerAction;
+import de.fhg.iais.roberta.syntax.actor.motor.MotorSetPowerAction;
+import de.fhg.iais.roberta.syntax.actor.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;

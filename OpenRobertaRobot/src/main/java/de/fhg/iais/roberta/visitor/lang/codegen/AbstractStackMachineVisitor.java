@@ -22,7 +22,7 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
+import de.fhg.iais.roberta.syntax.actor.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;

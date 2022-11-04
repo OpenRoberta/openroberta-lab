@@ -1,10 +1,10 @@
 package de.fhg.iais.roberta.visitor;
 
-import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
-import de.fhg.iais.roberta.syntax.action.sound.GetVolumeAction;
-import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
+import de.fhg.iais.roberta.syntax.actor.motor.MotorGetPowerAction;
+import de.fhg.iais.roberta.syntax.actor.motor.MotorSetPowerAction;
+import de.fhg.iais.roberta.syntax.actor.sound.GetVolumeAction;
+import de.fhg.iais.roberta.syntax.actor.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.actor.sound.SetVolumeAction;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;

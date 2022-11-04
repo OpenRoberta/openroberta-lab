@@ -1,16 +1,16 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
-import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixImageAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixSetBrightnessAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixTextAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ReceiveIRAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.SendIRAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.LEDMatrixImageAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.LEDMatrixSetBrightnessAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.LEDMatrixTextAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.mbot.ReceiveIRAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.mbot.SendIRAction;
+import de.fhg.iais.roberta.syntax.actor.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.configuration.Joystick;
-import de.fhg.iais.roberta.syntax.expressions.arduino.LEDMatrixImage;
-import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageInvertFunction;
-import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageShiftFunction;
-import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.FlameSensor;
+import de.fhg.iais.roberta.syntax.expression.arduino.LEDMatrixImage;
+import de.fhg.iais.roberta.syntax.function.arduino.LEDMatrixImageInvertFunction;
+import de.fhg.iais.roberta.syntax.function.arduino.LEDMatrixImageShiftFunction;
+import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.FlameSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDifferentialMotorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;

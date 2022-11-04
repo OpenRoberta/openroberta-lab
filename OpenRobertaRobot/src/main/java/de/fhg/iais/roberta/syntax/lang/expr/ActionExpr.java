@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.syntax.actor.Action;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;

@@ -4,8 +4,8 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
+import de.fhg.iais.roberta.syntax.actor.motor.differential.MotorDriveStopAction;
+import de.fhg.iais.roberta.syntax.actor.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.actor.robotino.OmnidriveAction;
 import de.fhg.iais.roberta.syntax.actor.robotino.OmnidriveDistanceAction;
 import de.fhg.iais.roberta.syntax.actor.robotino.OmnidrivePositionAction;

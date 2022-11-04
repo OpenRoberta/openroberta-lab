@@ -4,8 +4,8 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.bob3.ReceiveIRAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.bob3.SendIRAction;
 
 public class Rob3rtaSimValidatorAndCollectorVisitor extends Rob3rtaValidatorAndCollectorVisitor {
     public Rob3rtaSimValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {

@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.syntax.actor.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;

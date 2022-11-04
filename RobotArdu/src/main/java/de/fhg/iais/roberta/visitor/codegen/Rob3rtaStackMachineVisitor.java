@@ -8,12 +8,12 @@ import org.json.JSONObject;
 
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.LedOffAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.LedOnAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.bob3.BodyLEDAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.bob3.RecallAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.bob3.RememberAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.bob3.SendIRAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;

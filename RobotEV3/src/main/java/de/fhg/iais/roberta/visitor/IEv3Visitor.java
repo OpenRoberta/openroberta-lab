@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.visitor;
 
-import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
+import de.fhg.iais.roberta.syntax.actor.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassCalibrate;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;

@@ -1,9 +1,9 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
+import de.fhg.iais.roberta.syntax.actor.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.actor.motor.MotorGetPowerAction;
+import de.fhg.iais.roberta.syntax.actor.motor.MotorSetPowerAction;
+import de.fhg.iais.roberta.syntax.actor.motor.MotorStopAction;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDifferentialMotorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;

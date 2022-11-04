@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
-import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.RelayAction;
+import de.fhg.iais.roberta.syntax.actor.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;

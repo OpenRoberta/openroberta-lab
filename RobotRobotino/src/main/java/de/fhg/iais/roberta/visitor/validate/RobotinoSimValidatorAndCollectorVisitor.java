@@ -4,7 +4,7 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
+import de.fhg.iais.roberta.syntax.actor.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.sensor.robotino.ColourBlob;
 
 public class RobotinoSimValidatorAndCollectorVisitor extends AbstractRobotinoValidatorAndCollectorVisitor {

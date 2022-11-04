@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.actor.robotino;
 
 import de.fhg.iais.roberta.blockly.generated.Hide;
-import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.syntax.actor.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;

@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.visitor.hardware.actor;
 
-import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
-import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
+import de.fhg.iais.roberta.syntax.actor.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.actor.sound.ToneAction;
 import de.fhg.iais.roberta.visitor.hardware.IHardwareVisitor;
 
 public interface ISimpleSoundVisitor<V> extends IHardwareVisitor<V> {

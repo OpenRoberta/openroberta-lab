@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.syntax.actor.Action;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;

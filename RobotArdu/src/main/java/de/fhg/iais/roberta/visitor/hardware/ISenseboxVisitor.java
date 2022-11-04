@@ -1,10 +1,12 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
-import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.RelayAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.sensebox.PlotClearAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.sensebox.PlotPointAction;
+import de.fhg.iais.roberta.syntax.actor.arduino.sensebox.SendDataAction;
+import de.fhg.iais.roberta.syntax.actor.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.sensor.arduino.sensebox.EnvironmentalSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
@@ -22,8 +24,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
-import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor;
-import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IPinVisitor;

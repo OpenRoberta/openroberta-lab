@@ -1,16 +1,16 @@
 package de.fhg.iais.roberta.visitor;
 
-import de.fhg.iais.roberta.syntax.action.light.LedsOffAction;
-import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationReceiveAction;
-import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationSendAction;
-import de.fhg.iais.roberta.syntax.action.mbot2.DisplaySetColourAction;
-import de.fhg.iais.roberta.syntax.action.mbot2.LedBrightnessAction;
-import de.fhg.iais.roberta.syntax.action.mbot2.LedOnActionWithIndex;
-import de.fhg.iais.roberta.syntax.action.mbot2.PlayRecordingAction;
-import de.fhg.iais.roberta.syntax.action.mbot2.PrintlnAction;
-import de.fhg.iais.roberta.syntax.action.mbot2.QuadRGBLightOffAction;
-import de.fhg.iais.roberta.syntax.action.mbot2.QuadRGBLightOnAction;
-import de.fhg.iais.roberta.syntax.action.mbot2.Ultrasonic2LEDAction;
+import de.fhg.iais.roberta.syntax.actor.light.LedsOffAction;
+import de.fhg.iais.roberta.syntax.actor.mbot2.CommunicationReceiveAction;
+import de.fhg.iais.roberta.syntax.actor.mbot2.CommunicationSendAction;
+import de.fhg.iais.roberta.syntax.actor.mbot2.DisplaySetColourAction;
+import de.fhg.iais.roberta.syntax.actor.mbot2.LedBrightnessAction;
+import de.fhg.iais.roberta.syntax.actor.mbot2.LedOnActionWithIndex;
+import de.fhg.iais.roberta.syntax.actor.mbot2.PlayRecordingAction;
+import de.fhg.iais.roberta.syntax.actor.mbot2.PrintlnAction;
+import de.fhg.iais.roberta.syntax.actor.mbot2.QuadRGBLightOffAction;
+import de.fhg.iais.roberta.syntax.actor.mbot2.QuadRGBLightOnAction;
+import de.fhg.iais.roberta.syntax.actor.mbot2.Ultrasonic2LEDAction;
 import de.fhg.iais.roberta.syntax.sensor.mbot2.GyroResetAxis;
 import de.fhg.iais.roberta.syntax.sensor.mbot2.Joystick;
 import de.fhg.iais.roberta.syntax.sensor.mbot2.QuadRGBSensor;
@@ -48,8 +48,8 @@ public interface IMbot2Visitor<V> extends IActors4AutonomousDriveRobots<V>, ISen
     V visitPrintlnAction(PrintlnAction printlnAction);
 
     V visitLedOnActionWithIndex(LedOnActionWithIndex ledOnActionWithIndex);
-    
+
     V visitCommunicationSendAction(CommunicationSendAction communicationSendAction);
-    
+
     V visitCommunicationReceiveAction(CommunicationReceiveAction communicationReceiveAction);
 }

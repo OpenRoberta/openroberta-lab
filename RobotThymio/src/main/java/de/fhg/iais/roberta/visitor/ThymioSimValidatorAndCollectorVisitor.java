@@ -4,11 +4,11 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.thymio.LedProxVOnAction;
-import de.fhg.iais.roberta.syntax.action.thymio.PlayRecordingAction;
-import de.fhg.iais.roberta.syntax.action.thymio.RecordStartAction;
-import de.fhg.iais.roberta.syntax.action.thymio.RecordStopAction;
+import de.fhg.iais.roberta.syntax.actor.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.actor.thymio.LedProxVOnAction;
+import de.fhg.iais.roberta.syntax.actor.thymio.PlayRecordingAction;
+import de.fhg.iais.roberta.syntax.actor.thymio.RecordStartAction;
+import de.fhg.iais.roberta.syntax.actor.thymio.RecordStopAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;

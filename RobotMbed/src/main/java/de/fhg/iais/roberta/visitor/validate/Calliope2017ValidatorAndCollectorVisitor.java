@@ -3,9 +3,9 @@ package de.fhg.iais.roberta.visitor.validate;
 import com.google.common.collect.ClassToInstanceMap;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
-import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
-import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
+import de.fhg.iais.roberta.syntax.actor.mbed.RadioReceiveAction;
+import de.fhg.iais.roberta.syntax.actor.mbed.RadioSendAction;
+import de.fhg.iais.roberta.syntax.actor.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 
 /**

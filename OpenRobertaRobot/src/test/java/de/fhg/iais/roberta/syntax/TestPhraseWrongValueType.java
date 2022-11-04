@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.syntax;
 
-import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.syntax.actor.Action;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
