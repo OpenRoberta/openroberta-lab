@@ -7,12 +7,11 @@ import de.fhg.iais.roberta.persistence.bo.LostPassword;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.dao.LostPasswordDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
-import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
 
 public class LostPasswordProcessor extends AbstractProcessor {
-    public LostPasswordProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
-        super(dbSession, httpSessionState.getUserId());
+    public LostPasswordProcessor(DbSession dbSession, int userId) {
+        super(dbSession, userId);
     }
 
     public LostPassword createLostPassword(User user) throws Exception {

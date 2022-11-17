@@ -41,5 +41,5 @@ The base-dir of the docker setup on LINUX systems is usually '/data/openroberta-
              In '{base-dir}/config.sh' {server-name} can be added to the variables SERVERS, AUTODEPLOY and DATABASES.
              Needs root privileges. Must be executed on a test machine from an UP-TO-DATE git repository. 
   update-docker-setup [{base-dir}]
-             expects the test server setup in {base-dir}. Copies all resources from the git-dir 'Docker/openroberta/conf'
+             expects the test server setup in {base-dir}. Copies all resources from the git-dir 'Docker/openroberta/conf' and 'Docker/openroberta/scripts'
              into {base-dir}/conf. Needs root privileges. Must be executed on a test machine from an UP-TO-DATE git repository. 

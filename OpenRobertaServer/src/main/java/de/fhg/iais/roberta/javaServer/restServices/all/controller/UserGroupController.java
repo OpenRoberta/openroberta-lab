@@ -74,8 +74,8 @@ public class UserGroupController {
             UserGroupResponse response = UserGroupResponse.make();
             UserGroupRequest request = UserGroupRequest.make(fullRequest.getData());
 
-            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
-            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState, this.isPublicServer);
+            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState.getUserId());
+            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState.getUserId(), this.isPublicServer);
 
             User loggedInUser = httpSessionState.isUserLoggedIn() ? userProcessor.getUser(httpSessionState.getUserId()) : null;
             if ( loggedInUser == null ) {
@@ -126,8 +126,8 @@ public class UserGroupController {
         try {
             UserGroupListResponse response = UserGroupListResponse.make();
 
-            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
-            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState, this.isPublicServer);
+            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState.getUserId());
+            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState.getUserId(), this.isPublicServer);
 
             User loggedInUser = httpSessionState.isUserLoggedIn() ? userProcessor.getUser(httpSessionState.getUserId()) : null;
             if ( loggedInUser == null ) {
@@ -181,8 +181,8 @@ public class UserGroupController {
             UserGroupResponse response = UserGroupResponse.make();
             ChangeUserGroupRequest request = ChangeUserGroupRequest.make(fullRequest.getData());
 
-            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
-            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState, this.isPublicServer);
+            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState.getUserId());
+            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState.getUserId(), this.isPublicServer);
 
             User loggedInUser = httpSessionState.isUserLoggedIn() ? userProcessor.getUser(httpSessionState.getUserId()) : null;
             if ( loggedInUser == null ) {
@@ -233,8 +233,8 @@ public class UserGroupController {
             BaseResponse response = BaseResponse.make();
             UserGroupsRequest request = UserGroupsRequest.make(fullRequest.getData());
 
-            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
-            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState, this.isPublicServer);
+            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState.getUserId());
+            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState.getUserId(), this.isPublicServer);
 
             User loggedInUser = httpSessionState.isUserLoggedIn() ? userProcessor.getUser(httpSessionState.getUserId()) : null;
             if ( loggedInUser == null ) {
@@ -281,8 +281,8 @@ public class UserGroupController {
             UserGroupResponse response = UserGroupResponse.make();
             ChangeUserGroupRequest request = ChangeUserGroupRequest.make(fullRequest.getData());
 
-            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
-            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState, this.isPublicServer);
+            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState.getUserId());
+            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState.getUserId(), this.isPublicServer);
 
             User loggedInUser = httpSessionState.isUserLoggedIn() ? userProcessor.getUser(httpSessionState.getUserId()) : null;
             if ( loggedInUser == null ) {
@@ -330,8 +330,8 @@ public class UserGroupController {
             BaseResponse response = BaseResponse.make();
             UpdateUserGroupMemberAccountRequest request = UpdateUserGroupMemberAccountRequest.make(fullRequest.getData());
 
-            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
-            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState, this.isPublicServer);
+            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState.getUserId());
+            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState.getUserId(), this.isPublicServer);
 
             User loggedInUser = httpSessionState.isUserLoggedIn() ? userProcessor.getUser(httpSessionState.getUserId()) : null;
             if ( loggedInUser == null ) {
@@ -399,8 +399,8 @@ public class UserGroupController {
             BaseResponse response = BaseResponse.make();
             UserGroupMembersRequest request = UserGroupMembersRequest.make(fullRequest.getData());
 
-            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
-            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState, this.isPublicServer);
+            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState.getUserId());
+            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState.getUserId(), this.isPublicServer);
 
             User loggedInUser = httpSessionState.isUserLoggedIn() ? userProcessor.getUser(httpSessionState.getUserId()) : null;
             if ( loggedInUser == null ) {
@@ -453,8 +453,8 @@ public class UserGroupController {
             BaseResponse response = BaseResponse.make();
             UserGroupMembersRequest request = UserGroupMembersRequest.make(fullRequest.getData());
 
-            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
-            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState, this.isPublicServer);
+            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState.getUserId());
+            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState.getUserId(), this.isPublicServer);
 
             User loggedInUser = httpSessionState.isUserLoggedIn() ? userProcessor.getUser(httpSessionState.getUserId()) : null;
             if ( loggedInUser == null ) {

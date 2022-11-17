@@ -23,15 +23,14 @@ import de.fhg.iais.roberta.persistence.dao.UserGroupDao;
 import de.fhg.iais.roberta.persistence.dao.UserGroupProgramShareDao;
 import de.fhg.iais.roberta.persistence.dao.UserProgramShareDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
-import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
 
 public class ProgramShareProcessor extends AbstractProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(ProgramShareProcessor.class);
     private static final String ENTITY_ALL = "ALL";
 
-    public ProgramShareProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
-        super(dbSession, httpSessionState.getUserId());
+    public ProgramShareProcessor(DbSession dbSession, int userId) {
+        super(dbSession, userId);
     }
 
     /**

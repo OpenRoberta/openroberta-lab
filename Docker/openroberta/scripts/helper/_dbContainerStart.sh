@@ -5,7 +5,7 @@ do
     isServerNameValid ${DATABASE_NAME}
 done
 
-IMAGE="openroberta/db_server_${ARCH}:2.4.0"
+IMAGE="openroberta/db_server_${ARCH}:${HSQL_DB_SERVER_VERSION}"
 CONTAINER=db-server
 
 DOCKERRM=$(docker rm ${CONTAINER} 2>/dev/null)

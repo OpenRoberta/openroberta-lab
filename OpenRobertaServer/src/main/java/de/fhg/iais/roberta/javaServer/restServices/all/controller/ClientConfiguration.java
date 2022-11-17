@@ -56,7 +56,7 @@ public class ClientConfiguration {
             response.setCmd(cmd);
             boolean mayExist = cmd.equals("saveC");
 
-            ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, httpSessionState);
+            ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, userId);
             String configurationName = request.getName();
             String configurationXml = request.getConfiguration();
             cp.updateConfiguration(configurationName, userId, robotName, configurationXml, mayExist);
@@ -88,8 +88,8 @@ public class ClientConfiguration {
             String cmd = "loadC";
             LOG.info("command is: " + cmd);
             response.setCmd(cmd);
-            ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, httpSessionState);
-            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
+            ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, userId);
+            UserProcessor up = new UserProcessor(dbSession, userId);
 
             String configurationName = request.getName();
             String ownerName = request.getOwner().trim();
@@ -130,7 +130,7 @@ public class ClientConfiguration {
             String cmd = "deleteC";
             LOG.info("command is: " + cmd);
             response.setCmd(cmd);
-            ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, httpSessionState);
+            ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, userId);
 
             String configurationName = request.getName();
             cp.deleteByName(configurationName, userId, robotName);
@@ -161,7 +161,7 @@ public class ClientConfiguration {
             String cmd = "loadCN";
             LOG.info("command is: " + cmd);
             response.setCmd(cmd);
-            ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, httpSessionState);
+            ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, userId);
 
             JSONArray configurationInfo = cp.getConfigurationInfo(userId, robotName);
             response.setConfigurationNames(configurationInfo);

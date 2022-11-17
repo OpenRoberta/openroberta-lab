@@ -13,7 +13,6 @@ import de.fhg.iais.roberta.persistence.bo.UserGroup;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.dao.UserGroupDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
-import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -34,8 +33,8 @@ public class UserGroupProcessor extends AbstractProcessor {
 
     private final boolean isPublicServer;
 
-    public UserGroupProcessor(DbSession dbSession, HttpSessionState httpSessionState, boolean isPublicServer) {
-        super(dbSession, httpSessionState.getUserId());
+    public UserGroupProcessor(DbSession dbSession, int userId, boolean isPublicServer) {
+        super(dbSession, userId);
         this.isPublicServer = isPublicServer;
 
         this.userGroupDao = new UserGroupDao(this.dbSession);

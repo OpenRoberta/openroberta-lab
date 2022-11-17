@@ -31,16 +31,15 @@ import de.fhg.iais.roberta.persistence.dao.UserGroupDao;
 import de.fhg.iais.roberta.persistence.dao.UserGroupProgramShareDao;
 import de.fhg.iais.roberta.persistence.dao.UserProgramShareDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
-import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.basic.Pair;
 
 public class ProgramProcessor extends AbstractProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(ProgramProcessor.class);
 
-    public ProgramProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
-        super(dbSession, httpSessionState.getUserId());
+    public ProgramProcessor(DbSession dbSession, int userId) {
+        super(dbSession, userId);
     }
 
     public Program getProgramAndLockTable(String programName, String ownerName, String robotName, String authorName) {
@@ -208,12 +207,14 @@ public class ProgramProcessor extends AbstractProcessor {
         if ( configName != null ) {
             Configuration config = configDao.load(configName, program.getOwner(), program.getRobot());
             if ( config == null ) {
-                setStatus(ProcessorStatus.FAILED, Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND, new HashMap<>());
+                // an named configuration could not be loaded. It is better to use the default configuration instead of throwing an error
+                LOG.error("for program " + program.getName() + " the named configuration could not be found");
                 return null;
             } else {
                 ConfigurationData configData = configDao.load(config.getConfigurationHash());
                 if ( configData == null ) {
-                    setStatus(ProcessorStatus.FAILED, Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND, new HashMap<>());
+                    // an named configuration could not be loaded. It is better to use the default configuration instead of throwing an error
+                    LOG.error("for program " + program.getName() + " the hash of the named configuration could not be found");
                     return null;
                 } else {
                     return configData.getConfigurationText();
@@ -222,7 +223,8 @@ public class ProgramProcessor extends AbstractProcessor {
         } else if ( configHash != null ) {
             ConfigurationData configData = configDao.load(configHash);
             if ( configData == null ) {
-                setStatus(ProcessorStatus.FAILED, Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND, new HashMap<>());
+                // an anonymous configuration could not be loaded. It is better to use the default configuration instead of throwing an error
+                LOG.error("for program " + program.getName() + " the anonymous configuration could not be found");
                 return null;
             } else {
                 return configData.getConfigurationText();

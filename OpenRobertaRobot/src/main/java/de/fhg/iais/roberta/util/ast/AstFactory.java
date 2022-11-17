@@ -31,6 +31,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * This container holds a lot of maps and sets extracted from annotations of AST classes (starting with @Nepo...). These classes refer both to programs and configurations,
  * though the majority refers to program.
  * A robot adds new data to this container, when it has classes in the package "de.fhg.iais.roberta.syntax" or below.
+ * TODO: all methods are static. Consider to refactor this class together with {@link de.fhg.iais.roberta.factory.BlocklyDropdownFactory}
  */
 public class AstFactory {
     private static final Logger LOG = LoggerFactory.getLogger(AstFactory.class);

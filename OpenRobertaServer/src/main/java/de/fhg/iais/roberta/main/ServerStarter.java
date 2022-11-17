@@ -228,9 +228,9 @@ public class ServerStarter {
 
         try {
             server.start();
-            ServerStarter.LOG.info("server started at " + serverMessage);
+            LOG.info("server started at " + serverMessage);
         } catch ( Exception e ) {
-            ServerStarter.LOG.error("Could not start the server at " + serverMessage, e);
+            LOG.error("Could not start the server at " + serverMessage, e);
             System.exit(20);
         }
         this.injector = robertaGuiceServletConfig.getCreatedInjector();
@@ -408,13 +408,12 @@ public class ServerStarter {
         try {
             DbSession session = this.injector.getInstance(SessionFactoryWrapper.class).getSession();
             List<?> numberOfProgramsInList = session.createSqlQuery("select count(*) from PROGRAM").list();
-            ServerStarter.LOG.info("Number of programs stored in the database: " + numberOfProgramsInList);
+            LOG.info("Number of programs stored in the database: " + numberOfProgramsInList);
             session.close();
         } catch ( Exception e ) {
-            ServerStarter.LOG.error("Server could not connect to the database (exit 20)", e);
+            LOG.error("Server could not connect to the database (exit 20)", e);
             System.exit(20);
         }
-
     }
 
     /**

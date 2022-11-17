@@ -113,6 +113,7 @@ isDirectoryValid ${DB_ADMIN_DIR}
 
 isDefined DATABASE_SERVER_PORT
 isDefined DOCKER_NETWORK_NAME
+isDefined HSQL_DB_SERVER_VERSION
 
 case $(uname -m) in # get the architecture
   x*)   ARCH=x64 ;;

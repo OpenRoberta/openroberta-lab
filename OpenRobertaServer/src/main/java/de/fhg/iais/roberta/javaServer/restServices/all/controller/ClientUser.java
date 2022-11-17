@@ -141,7 +141,7 @@ public class ClientUser {
                 ClientUser.LOG.error("Invalid command: " + cmd);
                 return UtilForREST.makeBaseResponseForError(Key.COMMAND_INVALID, httpSessionState, this.brickCommunicator);
             } else {
-                UserProcessor up = new UserProcessor(dbSession, httpSessionState);
+                UserProcessor up = new UserProcessor(dbSession, httpSessionState.getUserId());
                 String userAccountName = request.getAccountName();
                 String password = request.getPassword();
 
@@ -152,7 +152,7 @@ public class ClientUser {
                 User user;
 
                 if ( userGroupOwnerAccount != null && userGroupName != null ) {
-                    UserGroupProcessor ugp = new UserGroupProcessor(dbSession, httpSessionState, this.isPublicServer);
+                    UserGroupProcessor ugp = new UserGroupProcessor(dbSession, httpSessionState.getUserId(), this.isPublicServer);
 
                     User userGroupOwner = up.getStandardUser(userGroupOwnerAccount);
                     if ( userGroupOwner == null ) {
@@ -252,7 +252,7 @@ public class ClientUser {
             response.setCmd(cmd);
 
             if ( httpSessionState.isUserLoggedIn() ) {
-                UserProcessor up = new UserProcessor(dbSession, httpSessionState);
+                UserProcessor up = new UserProcessor(dbSession, httpSessionState.getUserId());
                 User user = up.getUser(httpSessionState.getUserId());
                 UtilForREST.addResultInfo(response, up);
                 if ( user != null ) {
@@ -353,7 +353,7 @@ public class ClientUser {
             }
             // --- avoid possible deadlocks (See doc at the beginning of this class)
 
-            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
+            UserProcessor up = new UserProcessor(dbSession, httpSessionState.getUserId());
             String password = request.getPassword();
             String email = request.getUserEmail();
             email = email == null ? "" : email.trim();
@@ -363,7 +363,7 @@ public class ClientUser {
             boolean isYoungerThen14 = request.getIsYoungerThen14();
             User newUser = up.createUser(account, password, userName, role, email, null, isYoungerThen14);
             if ( up.succeeded() && newUser != null && this.isPublicServer && !email.equals("") ) {
-                PendingEmailConfirmationsProcessor pendingConfirmationProcessor = new PendingEmailConfirmationsProcessor(dbSession, httpSessionState);
+                PendingEmailConfirmationsProcessor pendingConfirmationProcessor = new PendingEmailConfirmationsProcessor(dbSession, httpSessionState.getUserId());
                 String lang = request.getLanguage();
                 PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(newUser);
                 sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang, isYoungerThen14);
@@ -398,8 +398,8 @@ public class ClientUser {
             String cmd = "updateUser";
             ClientUser.LOG.info("command is: " + cmd);
             response.setCmd(cmd);
-            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
-            PendingEmailConfirmationsProcessor pendingConfirmationProcessor = new PendingEmailConfirmationsProcessor(dbSession, httpSessionState);
+            UserProcessor up = new UserProcessor(dbSession, httpSessionState.getUserId());
+            PendingEmailConfirmationsProcessor pendingConfirmationProcessor = new PendingEmailConfirmationsProcessor(dbSession, httpSessionState.getUserId());
             String account = request.getAccountName();
             String userName = request.getUserName();
             String email = request.getUserEmail();
@@ -459,7 +459,7 @@ public class ClientUser {
             String cmd = "changePassword";
             ClientUser.LOG.info("command is: " + cmd);
             response.setCmd(cmd);
-            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
+            UserProcessor up = new UserProcessor(dbSession, httpSessionState.getUserId());
 
             String account = request.getAccountName();
             String oldPassword = request.getOldPassword();
@@ -498,8 +498,8 @@ public class ClientUser {
             String cmd = "passwordRecovery";
             ClientUser.LOG.info("command is: " + cmd);
             response.setCmd(cmd);
-            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
-            LostPasswordProcessor lostPasswordProcessor = new LostPasswordProcessor(dbSession, httpSessionState);
+            UserProcessor up = new UserProcessor(dbSession, httpSessionState.getUserId());
+            LostPasswordProcessor lostPasswordProcessor = new LostPasswordProcessor(dbSession, httpSessionState.getUserId());
 
             String lostEmail = request.getLostEmail();
             String lang = request.getLanguage();
@@ -552,8 +552,8 @@ public class ClientUser {
             String cmd = "isResetPasswordLinkExpired";
             ClientUser.LOG.info("command is: " + cmd);
             response.setCmd(cmd);
-            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
-            LostPasswordProcessor lostPasswordProcessor = new LostPasswordProcessor(dbSession, httpSessionState);
+            UserProcessor up = new UserProcessor(dbSession, httpSessionState.getUserId());
+            LostPasswordProcessor lostPasswordProcessor = new LostPasswordProcessor(dbSession, httpSessionState.getUserId());
 
             String resetPasswordLink = request.getResetPasswordLink();
             LostPassword lostPassword = lostPasswordProcessor.loadLostPassword(resetPasswordLink);
@@ -600,8 +600,8 @@ public class ClientUser {
             String cmd = "resetPassword";
             ClientUser.LOG.info("command is: " + cmd);
             response.setCmd(cmd);
-            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
-            LostPasswordProcessor lostPasswordProcessor = new LostPasswordProcessor(dbSession, httpSessionState);
+            UserProcessor up = new UserProcessor(dbSession, httpSessionState.getUserId());
+            LostPasswordProcessor lostPasswordProcessor = new LostPasswordProcessor(dbSession, httpSessionState.getUserId());
 
             String resetPasswordLink = request.getResetPasswordLink();
             String newPassword = request.getNewPassword();
@@ -640,8 +640,8 @@ public class ClientUser {
             String cmd = "activateUser";
             ClientUser.LOG.info("command is: " + cmd);
             response.setCmd(cmd);
-            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
-            PendingEmailConfirmationsProcessor pendingConfirmationProcessor = new PendingEmailConfirmationsProcessor(dbSession, httpSessionState);
+            UserProcessor up = new UserProcessor(dbSession, httpSessionState.getUserId());
+            PendingEmailConfirmationsProcessor pendingConfirmationProcessor = new PendingEmailConfirmationsProcessor(dbSession, httpSessionState.getUserId());
 
             String userActivationLink = request.getUserActivationLink();
             PendingEmailConfirmations confirmation = pendingConfirmationProcessor.loadConfirmation(userActivationLink);
@@ -679,8 +679,8 @@ public class ClientUser {
             String cmd = "resendActivation";
             ClientUser.LOG.info("command is: " + cmd);
             response.setCmd(cmd);
-            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
-            PendingEmailConfirmationsProcessor pendingConfirmationProcessor = new PendingEmailConfirmationsProcessor(dbSession, httpSessionState);
+            UserProcessor up = new UserProcessor(dbSession, httpSessionState.getUserId());
+            PendingEmailConfirmationsProcessor pendingConfirmationProcessor = new PendingEmailConfirmationsProcessor(dbSession, httpSessionState.getUserId());
 
             String account = request.getAccountName();
             String lang = request.getLanguage();
@@ -720,7 +720,7 @@ public class ClientUser {
             String cmd = "deleteUser";
             ClientUser.LOG.info("command is: " + cmd);
             response.setCmd(cmd);
-            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
+            UserProcessor up = new UserProcessor(dbSession, httpSessionState.getUserId());
 
             String account = request.getAccountName();
             String password = request.getPassword();

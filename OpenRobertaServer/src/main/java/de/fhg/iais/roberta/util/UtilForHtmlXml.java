@@ -14,12 +14,70 @@ import org.slf4j.LoggerFactory;
 
 public class UtilForHtmlXml {
     private static final Logger LOG = LoggerFactory.getLogger(UtilForHtmlXml.class);
+    private static final Pattern GET_DESCRIPTION = Pattern.compile("description=\".*?\"");
+
+    private static final HtmlChangeListener<List<String>> HTML_CHANGE_LISTENER = new HtmlChangeListener<List<String>>() {
+        @Override
+        public void discardedTag(List<String> arg0, String tagName) {
+            UtilForHtmlXml.LOG.debug("Discarding tag: " + tagName);
+        }
+
+        @Override
+        public void discardedAttributes(List<String> arg0, String arg1, String... attributes) {
+            UtilForHtmlXml.LOG.debug("Discarding attribute of: " + arg1);
+        }
+    };
+
+    private static final String[] TAG_WHITE_LIST =
+        {
+            "b",
+            "i",
+            "u",
+            "strike",
+            "blockquote",
+            "span",
+            "em",
+            "div",
+            "font",
+            "pre",
+            "br",
+            "ul",
+            "ol",
+            "li",
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "p",
+            "strong",
+            "font"
+        };
+    private static final String[] ATTRIBUTE_WHITE_LIST =
+        {
+            "size",
+            "class",
+            "id",
+            "style",
+            "color",
+            "align",
+            "font"
+        };
+
+    private static final PolicyFactory SANITIZER =
+        new HtmlPolicyBuilder()
+            .allowElements(TAG_WHITE_LIST)
+            .allowWithoutAttributes("span")
+            .allowAttributes(ATTRIBUTE_WHITE_LIST)
+            .onElements(TAG_WHITE_LIST)
+            .toFactory();
 
     public static String checkProgramTextForXSS(String programText) {
         if ( programText == null ) {
             return programText;
         }
-        Matcher matcher = Pattern.compile("description=\".*?\"").matcher(programText);
+        Matcher matcher = GET_DESCRIPTION.matcher(programText);
         String description;
         try {
             matcher.find();
@@ -47,67 +105,9 @@ public class UtilForHtmlXml {
      * @return output XML code without unwanted tags in description attribute
      */
     public static String removeUnwantedDescriptionHTMLTags(String input) {
-        String[] tagWhiteList =
-            {
-                "b",
-                "i",
-                "u",
-                "strike",
-                "blockquote",
-                "span",
-                "em",
-                "div",
-                "font",
-                "pre",
-                "br",
-                "ul",
-                "ol",
-                "li",
-                "h1",
-                "h2",
-                "h3",
-                "h4",
-                "h5",
-                "h6",
-                "p",
-                "strong",
-                "font"
-            };
-        String[] attributeWhiteList =
-            {
-                "size",
-                "class",
-                "id",
-                "style",
-                "color",
-                "align",
-                "font"
-            };
-
         input = StringEscapeUtils.unescapeXml(input);
-
-        HtmlChangeListener<List<String>> htmlChangeListener = new HtmlChangeListener<List<String>>() {
-            @Override
-            public void discardedTag(List<String> arg0, String tagName) {
-                UtilForHtmlXml.LOG.debug("Discarding tag: " + tagName);
-            }
-
-            @Override
-            public void discardedAttributes(List<String> arg0, String arg1, String... attributes) {
-                UtilForHtmlXml.LOG.debug("Discarding attribute: " + arg1);
-            }
-        };
-
         List<String> results = new ArrayList<>();
-
-        PolicyFactory policy =
-            new HtmlPolicyBuilder()
-                .allowElements(tagWhiteList)
-                .allowWithoutAttributes("span")
-                .allowAttributes(attributeWhiteList)
-                .onElements(tagWhiteList)
-                .toFactory();
-        String safeHTML = policy.sanitize(input, htmlChangeListener, results);
+        String safeHTML = SANITIZER.sanitize(input, HTML_CHANGE_LISTENER, results);
         return StringEscapeUtils.escapeXml11(safeHTML);
     }
 }

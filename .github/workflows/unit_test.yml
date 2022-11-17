@@ -14,14 +14,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout branch ${{ github.ref }} of repo ${{ github.repository }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Java JDK
-        uses: actions/setup-java@v2.1.0
+        uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'adopt'
       - name: Cache local maven repository
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}

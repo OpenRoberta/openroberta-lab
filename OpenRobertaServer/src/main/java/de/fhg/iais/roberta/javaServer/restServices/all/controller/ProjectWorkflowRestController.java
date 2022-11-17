@@ -337,7 +337,7 @@ public class ProjectWorkflowRestController {
         } else {
             progXml = wfRequest.getProgXML();
             if ( wfRequest.getConfigurationName() != null ) {
-                ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, httpSessionState);
+                ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, httpSessionState.getUserId());
                 confXml =
                     cp.getConfigurationText(wfRequest.getConfigurationName(), httpSessionState.getUserId(), httpSessionState.getRobotFactory().getGroup());
                 if ( !cp.succeeded() ) {

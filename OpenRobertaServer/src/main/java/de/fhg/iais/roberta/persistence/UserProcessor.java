@@ -13,7 +13,6 @@ import de.fhg.iais.roberta.persistence.bo.UserGroup;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.dao.UserGroupDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
-import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -23,8 +22,8 @@ public class UserProcessor extends AbstractProcessor {
     private static final String ILLEGAL_USER_NAME_CHARACTER_PATTERN_DEFINITION = "[^a-zA-Z0-9=+!?.,%#+&^@_\\- ]";
     public static Pattern ILLEGAL_USER_NAME_CHARACTER_PATTERN = Pattern.compile(ILLEGAL_USER_NAME_CHARACTER_PATTERN_DEFINITION, Pattern.CASE_INSENSITIVE);
 
-    public UserProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
-        super(dbSession, httpSessionState.getUserId());
+    public UserProcessor(DbSession dbSession, int userId) {
+        super(dbSession, userId);
     }
 
     public User getStandardUser(String account) {

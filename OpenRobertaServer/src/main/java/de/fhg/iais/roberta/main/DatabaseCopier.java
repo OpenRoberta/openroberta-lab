@@ -25,10 +25,10 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
  * <code>DB_CONNECTION_COPY_CREATE</code> and executes the DDL SQL commands for table creation found in
  * <code>DbSetup.DB_CREATE_TABLES_WITHOUT_CONSTRAINTS_SQL</code>. Then it closes the created database
  * <li>now start the hsqldb target server like<br>
- * <code>java -Xmx8G -cp [[path-to-hsqldb-2.4.0.jar]] org.hsqldb.Server --port 9002 --database.0 file:db-copy/openroberta-db-copy --dbname.0 openroberta-db-copy &</code><br>
+ * <code>java -Xmx8G -cp [[path-to-hsqldb.jar]] org.hsqldb.Server --port 9002 --database.0 file:db-copy/openroberta-db-copy --dbname.0 openroberta-db-copy &</code><br>
  * this server will later store the database copy in directory <code>db-copy</code>. It listens on the (non default port) 9002
  * <li>now <b>either</b> start the hsqldb source server like<br>
- * <code>java -Xmx8G -cp [[path-to-hsqldb-2.4.0.jar]] org.hsqldb.Server --database.0 file:[[db-3.0.4]]/openroberta-db --dbname.0 openroberta-db &</code><br>
+ * <code>java -Xmx8G -cp [[path-to-hsqldb.jar]] org.hsqldb.Server --database.0 file:[[db-3.0.4]]/openroberta-db --dbname.0 openroberta-db &</code><br>
  * this server will later generate the data from directory <code>db-3.0.4</code>. It listens on the default port 9001
  * <li><b>or</b> connect to a remote hsqldb source server by a ssh statement like<br>
  * <code>ssh rbudde@test.open-roberta.org -L9001:localhost:9001</code><br>
@@ -46,7 +46,7 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
  * <li>edit main(...) to run only <code>copier.shutdownCopy()</code>. This will run a <code>shutdown compact</code> command. This may take 10 minutes (Jan 2019
  * :-). The hsqldb <i>target</i> server will terminate. Have a look at the logging.
  * <li>a SQL client with a GUI is started by<br>
- * <code>java -Xmx4G -cp [[path-to-hsqldb-2.4.0.jar]] org.hsqldb.util.DatabaseManagerSwing</code>
+ * <code>java -Xmx4G -cp [[path-to-hsqldb.jar]] org.hsqldb.util.DatabaseManagerSwing</code>
  * </ul>
  *
  * @author rbudde
@@ -70,6 +70,7 @@ public class DatabaseCopier {
 
     public static void main(String[] args) throws Exception {
         p("usage: java -cp OpenRobertaServer/target/resources/\\* de.fhg.iais.roberta.main.DatabaseCopier DBUSER DBPASSWORD");
+        System.exit(12);
         if ( args == null || args.length != 2 ) {
             p("invalid parameter. Exit 12");
             System.exit(12);

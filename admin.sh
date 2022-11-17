@@ -107,7 +107,7 @@ case "$CMD" in
   sql-client)      echo 'command line sql client. Type commands, exit with an empty line'
                    java $RDBG $XMX  -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration sql-client "$DB_URI"
                    RC=$? ;;
-  sql-gui)         hsqldbJar="$JAVA_LIB_DIR/hsqldb-2.4.0.jar"
+  sql-gui)         hsqldbJar="$JAVA_LIB_DIR/hsqldb-2.7.1.jar"
                    java $RDBG $XMX -jar "${hsqldbJar}" --driver org.hsqldb.jdbc.JDBCDriver --url "$DB_URI" --user orA --password Pid
                    RC=$? ;;                   
   sql-exec)        SQL="$1";

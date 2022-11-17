@@ -14,13 +14,12 @@ import de.fhg.iais.roberta.persistence.dao.ConfigurationDao;
 import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
-import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
 
 public class ConfigurationProcessor extends AbstractProcessor {
-    public ConfigurationProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
-        super(dbSession, httpSessionState.getUserId());
+    public ConfigurationProcessor(DbSession dbSession, int userId) {
+        super(dbSession, userId);
     }
 
     public String getConfigurationText(String configurationName, int userId, String robotName) {

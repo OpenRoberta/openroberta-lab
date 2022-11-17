@@ -7,13 +7,12 @@ import de.fhg.iais.roberta.persistence.bo.PendingEmailConfirmations;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.dao.PendingEmailConfirmationsDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
-import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class PendingEmailConfirmationsProcessor extends AbstractProcessor {
-    public PendingEmailConfirmationsProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
-        super(dbSession, httpSessionState.getUserId());
+    public PendingEmailConfirmationsProcessor(DbSession dbSession, int userId) {
+        super(dbSession, userId);
     }
 
     public PendingEmailConfirmations createEmailConfirmation(User user) throws Exception {

@@ -1,0 +1,12 @@
+<program>
+    <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1"
+               description="&lt;script&gt;alert(123);&lt;/script&gt;<script>alert(123)</script>"
+               tags="">
+        <instance x="273" y="50">
+            <block type="robControls_start" id="oRi##Q9QRkakEjtV9U)f" intask="true" deletable="false">
+                <mutation declare="false"></mutation>
+                <field name="DEBUG">FALSE</field>
+            </block>
+        </instance>
+    </block_set>
+</program>

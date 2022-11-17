@@ -42,13 +42,13 @@ public class Program implements WithSurrogateId {
     private String programText;
 
     /**
-     * the name of the attached configuration. If null, configHash must be not null. If not null, configHash must be null.
+     * the name of the attached configuration. If not null, configHash must be null. TODO: check: If both are null, the default config is used.
      */
     @Column(name = "CONFIG_NAME")
     private String configName;
 
     /**
-     * the hash of the attached configuration. If null, configName must be not null. If not null, configName must be null.
+     * the hash of the attached configuration. If not null, configName must be null. TODO: check: If both are null, the default config is used.
      */
     @Column(name = "CONFIG_HASH")
     private String configHash;
