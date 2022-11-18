@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
@@ -97,9 +98,13 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public final Void visitAssignStmt(AssignStmt assignStmt) {
         requiredComponentVisited(assignStmt, assignStmt.expr);
+        UsedHardwareBean.Builder builder = this.getBuilder(UsedHardwareBean.Builder.class);
         String variableName = assignStmt.name.name;
-        if ( this.getBuilder(UsedHardwareBean.Builder.class).containsGlobalVariable(variableName) ) {
+        if ( builder.containsGlobalVariable(variableName) ) {
             this.getBuilder(UsedHardwareBean.Builder.class).addMarkedVariableAsGlobal(variableName);
+        }
+        if ( !builder.containsInScopeVariable(variableName) ) {
+            addErrorToPhrase(assignStmt, "PROCEDURES_VARIABLES_OUT_OF_SCOPE_ERROR");
         }
         return null;
     }
@@ -342,6 +347,9 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         this.getBuilder(UsedHardwareBean.Builder.class).addUserDefinedMethod(methodReturn);
         requiredComponentVisited(methodReturn, methodReturn.getParameters(), methodReturn.body);
         requiredComponentVisited(methodReturn, methodReturn.returnValue);
+        for ( Expr param : methodReturn.getParameters().get() ) {
+            this.getBuilder(UsedHardwareBean.Builder.class).removeInScopeVariable(((VarDeclaration) param).name);
+        }
         return null;
     }
 
@@ -356,6 +364,9 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         this.getBuilder(UsedHardwareBean.Builder.class).addUserDefinedMethod(methodVoid);
         requiredComponentVisited(methodVoid, methodVoid.getParameters());
         requiredComponentVisited(methodVoid, methodVoid.body);
+        for ( Expr param : methodVoid.getParameters().get() ) {
+            this.getBuilder(UsedHardwareBean.Builder.class).removeInScopeVariable(((VarDeclaration) param).name);
+        }
         return null;
     }
 
@@ -452,14 +463,16 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitRepeatStmt(RepeatStmt repeatStmt) {
+        String varName = "";
         if ( repeatStmt.expr.getKind().hasName("EXPR_LIST") ) {
             ExprList exprList = (ExprList) repeatStmt.expr;
-            String varName = ((Var) exprList.get().get(0)).name;
+            varName = ((Var) exprList.get().get(0)).name;
             this.getBuilder(UsedHardwareBean.Builder.class).addDeclaredVariable(varName);
-            requiredComponentVisited(repeatStmt, exprList);
-        } else {
-            requiredComponentVisited(repeatStmt, repeatStmt.expr);
+            this.getBuilder(UsedHardwareBean.Builder.class).addInScopeVariable(varName);
+        } else if ( repeatStmt.mode == RepeatStmt.Mode.FOR_EACH ) {
+            varName = ((VarDeclaration) ((Binary) repeatStmt.expr).left).name;
         }
+        requiredComponentVisited(repeatStmt, repeatStmt.expr);
 
         if ( repeatStmt.mode != RepeatStmt.Mode.WAIT ) {
             increaseLoopCounter();
@@ -467,6 +480,9 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
             this.currentLoop--;
         } else {
             requiredComponentVisited(repeatStmt, repeatStmt.list);
+        }
+        if ( !varName.isEmpty() ) {
+            this.getBuilder(UsedHardwareBean.Builder.class).removeInScopeVariable(varName);
         }
         return null;
     }
@@ -535,6 +551,10 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitVar(Var var) {
+        String variableName = var.name;
+        if ( !(this.getBuilder(UsedHardwareBean.Builder.class).containsInScopeVariable(variableName)) ) {
+            addErrorToPhrase(var, "PROCEDURES_VARIABLES_OUT_OF_SCOPE_ERROR");
+        }
         return null;
     }
 
@@ -560,6 +580,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         }
         this.getBuilder(UsedHardwareBean.Builder.class).addGlobalVariable(var.name);
         this.getBuilder(UsedHardwareBean.Builder.class).addDeclaredVariable(var.name);
+        this.getBuilder(UsedHardwareBean.Builder.class).addInScopeVariable(var.name);
         return null;
     }
 
