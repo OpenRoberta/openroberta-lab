@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.syntax.lang.methods.Method;
 //TODO move unrelated data to specific beans. Refactor fields from Mbed into usedActors/Sensors
 public class UsedHardwareBean implements IProjectBean {
 
+    private List<String> inScopeVariables = new ArrayList<>();
     private List<String> globalVariables = new ArrayList<>();
     private List<String> declaredVariables = new ArrayList<>();
     private List<VarDeclaration> visitedVars = new ArrayList<>();
@@ -105,6 +106,11 @@ public class UsedHardwareBean implements IProjectBean {
             return this;
         }
 
+        public Builder addInScopeVariable(String inScopeVariable) {
+            this.usedHardwareBean.inScopeVariables.add(inScopeVariable);
+            return this;
+        }
+
         public Builder addUserDefinedMethod(Method userDefinedMethod) {
             this.usedHardwareBean.userDefinedMethods.add(userDefinedMethod);
             return this;
@@ -148,6 +154,14 @@ public class UsedHardwareBean implements IProjectBean {
         public Builder putLoopLabel(int loop, boolean isInWait) {
             this.usedHardwareBean.loopsLabelContainer.put(loop, isInWait);
             return this;
+        }
+
+        public boolean containsInScopeVariable(String variableName) {
+            return this.usedHardwareBean.inScopeVariables.contains(variableName);
+        }
+
+        public boolean removeInScopeVariable(String inScopeVariable) {
+            return this.usedHardwareBean.inScopeVariables.remove(inScopeVariable);
         }
 
         @Deprecated
