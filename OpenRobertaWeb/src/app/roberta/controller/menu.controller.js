@@ -26,6 +26,7 @@ const QUERY_ASSIGNMENT = '=';
 const LOAD_SYSTEM_CALL = 'loadSystem';
 const TUTORIAL = 'tutorial';
 const KIOSK = 'kiosk';
+const EXAMPLE_VIEW = 'exampleView';
 
 function cleanUri() {
     var uri = window.location.toString();
@@ -92,6 +93,10 @@ function handleQuery() {
             GUISTATE_C.setStartWithoutPopup();
             TUTORIAL_C.loadFromTutorial(tutorial);
         }
+    }
+    let exampleView = getUrlParameter(EXAMPLE_VIEW);
+    if (exampleView) {
+        $('#menuListExamples').clickWrap();
     }
 }
 

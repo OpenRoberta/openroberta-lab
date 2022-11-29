@@ -8,6 +8,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
     var LOAD_SYSTEM_CALL = 'loadSystem';
     var TUTORIAL = 'tutorial';
     var KIOSK = 'kiosk';
+    var EXAMPLE_VIEW = 'exampleView';
     function cleanUri() {
         var uri = window.location.toString();
         var clean_uri = uri.substring(0, uri.lastIndexOf('/'));
@@ -72,6 +73,10 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                 GUISTATE_C.setStartWithoutPopup();
                 TUTORIAL_C.loadFromTutorial(tutorial);
             }
+        }
+        var exampleView = getUrlParameter(EXAMPLE_VIEW);
+        if (exampleView) {
+            $('#menuListExamples').clickWrap();
         }
     }
     function init() {
