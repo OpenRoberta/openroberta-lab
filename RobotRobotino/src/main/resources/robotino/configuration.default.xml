@@ -1,59 +1,64 @@
 <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="robotino" xmlversion="3.1" description="" tags="">
-    <instance x="100" y="30">
+    <instance x="80" y="180">
+        <block type="robConf_infrared" id="MUj7v^54V8kK#0)V?6,i" intask="true" deletable="false">
+            <field name="NAME">_I</field>
+        </block>
+    </instance>
+    <instance x="245" y="175">
+        <block type="robConf_robot" id="robot" intask="true">
+            <field name="ROBOT">undefined</field>
+        </block>
+    </instance>
+    <instance x="80" y="221">
+        <block type="robConf_camera" id="KqMg3pZC0;P,U6g*@7Vl" intask="true" deletable="false">
+            <field name="NAME">_C</field>
+        </block>
+    </instance>
+    <instance x="80" y="270">
+        <block type="robConf_optical" id="4" intask="true">
+            <field name="NAME">right</field>
+            <field name="BK">DI1</field>
+            <field name="WH">DI2</field>
+        </block>
+    </instance>
+    <instance x="710" y="277">
+        <block type="robConf_touch" id="13" intask="true" deletable="false">
+            <field name="NAME">_T</field>
+        </block>
+    </instance>
+    <instance x="710" y="368">
+        <block type="robConf_odometry" id="D/}0Ep-xy}jG-aZbeLf" intask="true" deletable="false">
+            <field name="NAME">_OD</field>
+        </block>
+    </instance>
+    <instance x="80" y="412">
+        <block type="robConf_optical" id="5" intask="true">
+            <field name="NAME">left</field>
+            <field name="BK">DI3</field>
+            <field name="WH">DI4</field>
+        </block>
+    </instance>
+    <instance x="710" y="401">
         <block type="robConf_encoder" id="2" intask="true" deletable="false">
             <field name="NAME">M1</field>
             <field name="PORT1">M1</field>
         </block>
     </instance>
-    <instance x="300" y="60">
-        <block type="robConf_omnidrive" id="1" intask="true" deletable="false">
-            <field name="NAME">_O</field>
-        </block>
-    </instance>
-    <instance x="100" y="90">
+    <instance x="710" y="464">
         <block type="robConf_encoder" id="3" intask="true" deletable="false">
             <field name="NAME">M2</field>
             <field name="PORT1">M2</field>
         </block>
     </instance>
-    <instance x="100" y="150">
+    <instance x="710" y="525">
         <block type="robConf_encoder" id="-A8c2T}AQh_]-XaJ![i#" intask="true" deletable="false">
             <field name="NAME">M3</field>
             <field name="PORT1">M3</field>
         </block>
     </instance>
-    <instance x="100" y="220">
-        <block type="robConf_touch" id="13" intask="true" deletable="false">
-            <field name="NAME">_T</field>
-        </block>
-    </instance>
-    <instance x="250" y="220">
-        <block type="robConf_odometry" id="D/}0Ep-xy}jG-aZbeLf" intask="true" deletable="false">
-            <field name="NAME">_OD</field>
-        </block>
-    </instance>
-    <instance x="100" y="270">
-        <block type="robConf_infrared" id="MUj7v^54V8kK#0)V?6,i" intask="true" deletable="false">
-            <field name="NAME">_I</field>
-        </block>
-    </instance>
-    <instance x="100" y="320">
-        <block type="robConf_camera" id="KqMg3pZC0;P,U6g*@7Vl" intask="true" deletable="false">
-            <field name="NAME">_C</field>
-        </block>
-    </instance>
-    <instance x='100' y='370'>
-        <block type='robConf_optical' id='4' intask='true'>
-            <field name='NAME'>right</field>
-            <field name='BK'>DI1</field>
-            <field name='WH'>DI2</field>
-        </block>
-    </instance>
-    <instance x='300' y='370'>
-        <block type='robConf_optical' id='5' intask='true'>
-            <field name='NAME'>left</field>
-            <field name='BK'>DI3</field>
-            <field name='WH'>DI4</field>
+    <instance x="710" y="591">
+        <block type="robConf_omnidrive" id="1" intask="true" deletable="false">
+            <field name="NAME">_O</field>
         </block>
     </instance>
 </block_set>

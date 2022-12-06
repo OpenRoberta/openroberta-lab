@@ -419,4 +419,38 @@ export const ROBOTS = {
         width: '263px',
         height: '343px',
     },
+    robotino: {
+        ports: [
+            // ports
+            { name: 'DI1', position: { x: 174.75, y: 202.425 } },
+            { name: 'DI2', position: { x: 171.45, y: 202.895 } },
+            { name: 'DI3', position: { x: 168.15, y: 203.365 } },
+            { name: 'DI4', position: { x: 164.85, y: 203.835 } },
+            { name: 'DI5', position: { x: 161.55, y: 204.305 } },
+            { name: 'DI6', position: { x: 158.25, y: 204.775 } },
+            { name: 'DI7', position: { x: 154.95, y: 205.245 } },
+            { name: 'DI8', position: { x: 151.65, y: 205.725 } },
+
+            { name: 'AI1', position: { x: 98.55, y: 214.65 } },
+            { name: 'AI2', position: { x: 95.25, y: 215.2 } },
+            { name: 'AI3', position: { x: 91.95, y: 215.75 } },
+            { name: 'AI4', position: { x: 88.65, y: 216.3 } },
+            { name: 'AI5', position: { x: 85.35, y: 216.85 } },
+            { name: 'AI6', position: { x: 82.05, y: 217.4 } },
+            { name: 'AI7', position: { x: 78.75, y: 217.95 } },
+            { name: 'AI8', position: { x: 75.6, y: 218.475 } },
+
+            { name: 'M1', position: { x: 129, y: 146.625 } },
+            { name: 'M2', position: { x: 238.5, y: 340.125 } },
+            { name: 'M3', position: { x: 349.5, y: 146.625 } },
+
+            //build in
+            { name: 'camera', position: { x: 209.625, y: 153.075 } },
+            { name: 'odometry', position: { x: 238.5, y: 207.375 } },
+            { name: 'infrared', position: { x: 110.25, y: 59.25 } },
+            { name: 'touch', position: { x: 372.825, y: 59.25 } },
+        ],
+        width: '483.12px',
+        height: '424.125px',
+    },
 };
