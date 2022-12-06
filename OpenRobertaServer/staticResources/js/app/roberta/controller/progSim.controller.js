@@ -564,6 +564,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
                                 programName: item[0],
                                 robot: robotType_1,
                                 creator: item[1],
+                                owner: item[3],
                                 date: item[4],
                                 num: 0,
                             });
@@ -602,6 +603,10 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
                         field: 'creator',
                         title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>" + (Blockly.Msg.DATATABLE_CREATED_BY || 'Erzeugt von') + '</span>',
                         sortable: true,
+                    },
+                    {
+                        field: 'owner',
+                        visible: false,
                     },
                     {
                         field: 'date',
