@@ -2,12 +2,10 @@ import * as UTIL from 'util';
 import * as LOG from 'log';
 import * as MSG from 'message';
 import * as GUISTATE_C from 'guiState.controller';
-import * as GUISTATE from 'guiState.model';
 import * as ROBOT from 'robot.model';
 import * as PROGRAM_C from 'program.controller';
 import * as CONFIGURATION_C from 'configuration.controller';
 import * as WEBVIEW_C from 'webview.controller';
-import * as SOCKET_C from 'socket.controller';
 import * as CODEEDITOR_C from 'sourceCodeEditor.controller';
 import * as PROGCODE_C from 'progCode.controller';
 import * as $ from 'jquery';
@@ -371,6 +369,7 @@ function switchRobot(robot, opt_continue, opt_callback) {
         further = true;
     } else {
         further = opt_continue || false;
+        Blockly.clipboardXml_ = null;
     }
     if (further || (GUISTATE_C.isProgramSaved() && GUISTATE_C.isConfigurationSaved())) {
         if (robot === GUISTATE_C.getRobot()) {

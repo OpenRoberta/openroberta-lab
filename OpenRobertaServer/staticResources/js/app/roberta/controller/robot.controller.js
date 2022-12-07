@@ -313,6 +313,7 @@ define(["require", "exports", "util", "log", "message", "guiState.controller", "
         }
         else {
             further = opt_continue || false;
+            Blockly.clipboardXml_ = null;
         }
         if (further || (GUISTATE_C.isProgramSaved() && GUISTATE_C.isConfigurationSaved())) {
             if (robot === GUISTATE_C.getRobot()) {
