@@ -108,16 +108,16 @@ public class UpdateUserGroupMemberAccountRequest extends BaseRequest {
     private UpdateUserGroupMemberAccountRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "UpdateUserGroupMemberAccountRequest-object is already immutable: " + toString();
+            _message = "UpdateUserGroupMemberAccountRequest-object is already immutable: " + this;
         }
         if ( groupName == null ) {
-            _message = "required property groupName of UpdateUserGroupMemberAccountRequest-object is not set: " + toString();
+            _message = "required property groupName of UpdateUserGroupMemberAccountRequest-object is not set: " + this;
         }
         if ( currentGroupMemberAccount == null ) {
-            _message = "required property currentGroupMemberAccount of UpdateUserGroupMemberAccountRequest-object is not set: " + toString();
+            _message = "required property currentGroupMemberAccount of UpdateUserGroupMemberAccountRequest-object is not set: " + this;
         }
         if ( newGroupMemberAccount == null ) {
-            _message = "required property newGroupMemberAccount of UpdateUserGroupMemberAccountRequest-object is not set: " + toString();
+            _message = "required property newGroupMemberAccount of UpdateUserGroupMemberAccountRequest-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -131,7 +131,7 @@ public class UpdateUserGroupMemberAccountRequest extends BaseRequest {
      */
     public String getGroupName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no groupName from an object under construction: " + toString());
+            throw new RuntimeException("no groupName from an object under construction: " + this);
         }
         return this.groupName;
     }
@@ -141,7 +141,7 @@ public class UpdateUserGroupMemberAccountRequest extends BaseRequest {
      */
     public UpdateUserGroupMemberAccountRequest setGroupName(String groupName) {
         if ( this.immutable ) {
-            throw new RuntimeException("groupName assigned to an immutable object: " + toString());
+            throw new RuntimeException("groupName assigned to an immutable object: " + this);
         }
         this.groupName = groupName;
         return this;
@@ -152,7 +152,7 @@ public class UpdateUserGroupMemberAccountRequest extends BaseRequest {
      */
     public String getCurrentGroupMemberAccount() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no currentGroupMemberAccount from an object under construction: " + toString());
+            throw new RuntimeException("no currentGroupMemberAccount from an object under construction: " + this);
         }
         return this.currentGroupMemberAccount;
     }
@@ -162,7 +162,7 @@ public class UpdateUserGroupMemberAccountRequest extends BaseRequest {
      */
     public UpdateUserGroupMemberAccountRequest setCurrentGroupMemberAccount(String currentGroupMemberAccount) {
         if ( this.immutable ) {
-            throw new RuntimeException("currentGroupMemberAccount assigned to an immutable object: " + toString());
+            throw new RuntimeException("currentGroupMemberAccount assigned to an immutable object: " + this);
         }
         this.currentGroupMemberAccount = currentGroupMemberAccount;
         return this;
@@ -173,7 +173,7 @@ public class UpdateUserGroupMemberAccountRequest extends BaseRequest {
      */
     public String getNewGroupMemberAccount() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no newGroupMemberAccount from an object under construction: " + toString());
+            throw new RuntimeException("no newGroupMemberAccount from an object under construction: " + this);
         }
         return this.newGroupMemberAccount;
     }
@@ -183,7 +183,7 @@ public class UpdateUserGroupMemberAccountRequest extends BaseRequest {
      */
     public UpdateUserGroupMemberAccountRequest setNewGroupMemberAccount(String newGroupMemberAccount) {
         if ( this.immutable ) {
-            throw new RuntimeException("newGroupMemberAccount assigned to an immutable object: " + toString());
+            throw new RuntimeException("newGroupMemberAccount assigned to an immutable object: " + this);
         }
         this.newGroupMemberAccount = newGroupMemberAccount;
         return this;
@@ -195,7 +195,7 @@ public class UpdateUserGroupMemberAccountRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

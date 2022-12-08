@@ -184,22 +184,22 @@ public class ProjectNativeResponse extends BaseResponse {
     private ProjectNativeResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ProjectNativeResponse-object is already immutable: " + toString();
+            _message = "ProjectNativeResponse-object is already immutable: " + this;
         }
         if ( rc == null ) {
-            _message = "required property rc of ProjectNativeResponse-object is not set: " + toString();
+            _message = "required property rc of ProjectNativeResponse-object is not set: " + this;
         }
         if ( initToken == null ) {
-            _message = "required property initToken of ProjectNativeResponse-object is not set: " + toString();
+            _message = "required property initToken of ProjectNativeResponse-object is not set: " + this;
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of ProjectNativeResponse-object is not set: " + toString();
+            _message = "required property serverTime of ProjectNativeResponse-object is not set: " + this;
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of ProjectNativeResponse-object is not set: " + toString();
+            _message = "required property serverVersion of ProjectNativeResponse-object is not set: " + this;
         }
         if ( compiledCode == null ) {
-            _message = "required property compiledCode of ProjectNativeResponse-object is not set: " + toString();
+            _message = "required property compiledCode of ProjectNativeResponse-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -213,7 +213,7 @@ public class ProjectNativeResponse extends BaseResponse {
      */
     public String getProgramName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no programName from an object under construction: " + toString());
+            throw new RuntimeException("no programName from an object under construction: " + this);
         }
         return this.programName;
     }
@@ -232,7 +232,7 @@ public class ProjectNativeResponse extends BaseResponse {
      */
     public ProjectNativeResponse setProgramName(String programName) {
         if ( this.immutable ) {
-            throw new RuntimeException("programName assigned to an immutable object: " + toString());
+            throw new RuntimeException("programName assigned to an immutable object: " + this);
         }
         this.programName = programName;
         return this;
@@ -243,7 +243,7 @@ public class ProjectNativeResponse extends BaseResponse {
      */
     public Map<String, JSONObject> getConfAnnos() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no confAnnos from an object under construction: " + toString());
+            throw new RuntimeException("no confAnnos from an object under construction: " + this);
         }
         return this.confAnnos;
     }
@@ -262,7 +262,7 @@ public class ProjectNativeResponse extends BaseResponse {
      */
     public ProjectNativeResponse setConfAnnos(Map<String, JSONObject> confAnnos) {
         if ( this.immutable ) {
-            throw new RuntimeException("confAnnos assigned to an immutable object: " + toString());
+            throw new RuntimeException("confAnnos assigned to an immutable object: " + this);
         }
         if ( this.confAnnos == null ) {
             this.confAnnos = new HashMap<String, JSONObject>();
@@ -280,7 +280,7 @@ public class ProjectNativeResponse extends BaseResponse {
      */
     public ProjectNativeResponse putConfAnnos(String key, JSONObject value) {
         if ( this.immutable ) {
-            throw new RuntimeException("confAnnos assigned to an immutable object: " + toString());
+            throw new RuntimeException("confAnnos assigned to an immutable object: " + this);
         }
         if ( this.confAnnos == null ) {
             this.confAnnos = new HashMap<String, JSONObject>();
@@ -294,7 +294,7 @@ public class ProjectNativeResponse extends BaseResponse {
      */
     public String getCompiledCode() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no compiledCode from an object under construction: " + toString());
+            throw new RuntimeException("no compiledCode from an object under construction: " + this);
         }
         return this.compiledCode;
     }
@@ -304,7 +304,7 @@ public class ProjectNativeResponse extends BaseResponse {
      */
     public ProjectNativeResponse setCompiledCode(String compiledCode) {
         if ( this.immutable ) {
-            throw new RuntimeException("compiledCode assigned to an immutable object: " + toString());
+            throw new RuntimeException("compiledCode assigned to an immutable object: " + this);
         }
         this.compiledCode = compiledCode;
         return this;
@@ -316,7 +316,7 @@ public class ProjectNativeResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

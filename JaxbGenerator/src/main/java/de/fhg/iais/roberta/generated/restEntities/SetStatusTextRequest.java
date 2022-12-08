@@ -105,16 +105,16 @@ public class SetStatusTextRequest extends BaseRequest {
     private SetStatusTextRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "SetStatusTextRequest-object is already immutable: " + toString();
+            _message = "SetStatusTextRequest-object is already immutable: " + this;
         }
         if ( english == null ) {
-            _message = "required property english of SetStatusTextRequest-object is not set: " + toString();
+            _message = "required property english of SetStatusTextRequest-object is not set: " + this;
         }
         if ( german == null ) {
-            _message = "required property german of SetStatusTextRequest-object is not set: " + toString();
+            _message = "required property german of SetStatusTextRequest-object is not set: " + this;
         }
         if ( !timestampDefined ) {
-            _message = "required property timestamp of SetStatusTextRequest-object is not set: " + toString();
+            _message = "required property timestamp of SetStatusTextRequest-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -128,7 +128,7 @@ public class SetStatusTextRequest extends BaseRequest {
      */
     public String getEnglish() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no english from an object under construction: " + toString());
+            throw new RuntimeException("no english from an object under construction: " + this);
         }
         return this.english;
     }
@@ -138,7 +138,7 @@ public class SetStatusTextRequest extends BaseRequest {
      */
     public SetStatusTextRequest setEnglish(String english) {
         if ( this.immutable ) {
-            throw new RuntimeException("english assigned to an immutable object: " + toString());
+            throw new RuntimeException("english assigned to an immutable object: " + this);
         }
         this.english = english;
         return this;
@@ -149,7 +149,7 @@ public class SetStatusTextRequest extends BaseRequest {
      */
     public String getGerman() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no german from an object under construction: " + toString());
+            throw new RuntimeException("no german from an object under construction: " + this);
         }
         return this.german;
     }
@@ -159,7 +159,7 @@ public class SetStatusTextRequest extends BaseRequest {
      */
     public SetStatusTextRequest setGerman(String german) {
         if ( this.immutable ) {
-            throw new RuntimeException("german assigned to an immutable object: " + toString());
+            throw new RuntimeException("german assigned to an immutable object: " + this);
         }
         this.german = german;
         return this;
@@ -170,7 +170,7 @@ public class SetStatusTextRequest extends BaseRequest {
      */
     public long getTimestamp() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no timestamp from an object under construction: " + toString());
+            throw new RuntimeException("no timestamp from an object under construction: " + this);
         }
         return this.timestamp;
     }
@@ -180,7 +180,7 @@ public class SetStatusTextRequest extends BaseRequest {
      */
     public SetStatusTextRequest setTimestamp(long timestamp) {
         if ( this.immutable ) {
-            throw new RuntimeException("timestamp assigned to an immutable object: " + toString());
+            throw new RuntimeException("timestamp assigned to an immutable object: " + this);
         }
         this.timestamp = timestamp;
         this.timestampDefined = true;
@@ -193,7 +193,7 @@ public class SetStatusTextRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

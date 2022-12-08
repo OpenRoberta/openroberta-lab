@@ -518,7 +518,7 @@ export class SimulationRoberta implements Simulation {
             return new SIM_I.Interpreter(src, new ROBOT_B.RobotSimBehaviour(), this.callbackOnTermination.bind(this), this.breakpoints, x['savedName']);
         });
         this.updateDebugMode(this.debugMode);
-        let programNames = programs.map((x) => x['savedName']);
+        let programNames = programs.map((x) => x['programName']);
         this.scene.init(this.robotType, refresh, this.interpreters, configurations, programNames, callbackOnLoaded);
         return;
     }

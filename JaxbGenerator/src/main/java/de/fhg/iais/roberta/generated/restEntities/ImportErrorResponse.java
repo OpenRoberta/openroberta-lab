@@ -162,22 +162,22 @@ public class ImportErrorResponse extends BaseResponse {
     private ImportErrorResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ImportErrorResponse-object is already immutable: " + toString();
+            _message = "ImportErrorResponse-object is already immutable: " + this;
         }
         if ( rc == null ) {
-            _message = "required property rc of ImportErrorResponse-object is not set: " + toString();
+            _message = "required property rc of ImportErrorResponse-object is not set: " + this;
         }
         if ( initToken == null ) {
-            _message = "required property initToken of ImportErrorResponse-object is not set: " + toString();
+            _message = "required property initToken of ImportErrorResponse-object is not set: " + this;
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of ImportErrorResponse-object is not set: " + toString();
+            _message = "required property serverTime of ImportErrorResponse-object is not set: " + this;
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of ImportErrorResponse-object is not set: " + toString();
+            _message = "required property serverVersion of ImportErrorResponse-object is not set: " + this;
         }
         if ( robotTypes == null ) {
-            _message = "required property robotTypes of ImportErrorResponse-object is not set: " + toString();
+            _message = "required property robotTypes of ImportErrorResponse-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -191,7 +191,7 @@ public class ImportErrorResponse extends BaseResponse {
      */
     public String getRobotTypes() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no robotTypes from an object under construction: " + toString());
+            throw new RuntimeException("no robotTypes from an object under construction: " + this);
         }
         return this.robotTypes;
     }
@@ -201,7 +201,7 @@ public class ImportErrorResponse extends BaseResponse {
      */
     public ImportErrorResponse setRobotTypes(String robotTypes) {
         if ( this.immutable ) {
-            throw new RuntimeException("robotTypes assigned to an immutable object: " + toString());
+            throw new RuntimeException("robotTypes assigned to an immutable object: " + this);
         }
         this.robotTypes = robotTypes;
         return this;
@@ -213,7 +213,7 @@ public class ImportErrorResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

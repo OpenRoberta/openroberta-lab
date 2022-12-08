@@ -198,6 +198,7 @@ public class ClientProgramController {
                     }
                     response.setConfigName(configName); // may be null, if an anonymous configuration is used
                     response.setConfXML(configXML); // may be null, if the default configuration is used
+                    response.setProgramName((program.getName()));
                     response.setLastChanged(program.getLastChanged().getTime());
                     // count the views if the program is from the gallery!
                     if ( ownerName.equals("Gallery") ) {

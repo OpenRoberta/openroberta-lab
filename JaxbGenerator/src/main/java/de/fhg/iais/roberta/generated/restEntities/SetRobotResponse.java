@@ -248,58 +248,58 @@ public class SetRobotResponse extends BaseResponse {
     private SetRobotResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "SetRobotResponse-object is already immutable: " + toString();
+            _message = "SetRobotResponse-object is already immutable: " + this;
         }
         if ( rc == null ) {
-            _message = "required property rc of SetRobotResponse-object is not set: " + toString();
+            _message = "required property rc of SetRobotResponse-object is not set: " + this;
         }
         if ( initToken == null ) {
-            _message = "required property initToken of SetRobotResponse-object is not set: " + toString();
+            _message = "required property initToken of SetRobotResponse-object is not set: " + this;
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of SetRobotResponse-object is not set: " + toString();
+            _message = "required property serverTime of SetRobotResponse-object is not set: " + this;
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of SetRobotResponse-object is not set: " + toString();
+            _message = "required property serverVersion of SetRobotResponse-object is not set: " + this;
         }
         if ( robot == null ) {
-            _message = "required property robot of SetRobotResponse-object is not set: " + toString();
+            _message = "required property robot of SetRobotResponse-object is not set: " + this;
         }
         if ( program == null ) {
-            _message = "required property program of SetRobotResponse-object is not set: " + toString();
+            _message = "required property program of SetRobotResponse-object is not set: " + this;
         }
         if ( configuration == null ) {
-            _message = "required property configuration of SetRobotResponse-object is not set: " + toString();
+            _message = "required property configuration of SetRobotResponse-object is not set: " + this;
         }
         if ( !simDefined ) {
-            _message = "required property sim of SetRobotResponse-object is not set: " + toString();
+            _message = "required property sim of SetRobotResponse-object is not set: " + this;
         }
         if ( !multipleSimDefined ) {
-            _message = "required property multipleSim of SetRobotResponse-object is not set: " + toString();
+            _message = "required property multipleSim of SetRobotResponse-object is not set: " + this;
         }
         if ( !nnDefined ) {
-            _message = "required property nn of SetRobotResponse-object is not set: " + toString();
+            _message = "required property nn of SetRobotResponse-object is not set: " + this;
         }
         if ( !webotsSimDefined ) {
-            _message = "required property webotsSim of SetRobotResponse-object is not set: " + toString();
+            _message = "required property webotsSim of SetRobotResponse-object is not set: " + this;
         }
         if ( connection == null ) {
-            _message = "required property connection of SetRobotResponse-object is not set: " + toString();
+            _message = "required property connection of SetRobotResponse-object is not set: " + this;
         }
         if ( vendor == null ) {
-            _message = "required property vendor of SetRobotResponse-object is not set: " + toString();
+            _message = "required property vendor of SetRobotResponse-object is not set: " + this;
         }
         if ( !configurationUsedDefined ) {
-            _message = "required property configurationUsed of SetRobotResponse-object is not set: " + toString();
+            _message = "required property configurationUsed of SetRobotResponse-object is not set: " + this;
         }
         if ( sourceCodeFileExtension == null ) {
-            _message = "required property sourceCodeFileExtension of SetRobotResponse-object is not set: " + toString();
+            _message = "required property sourceCodeFileExtension of SetRobotResponse-object is not set: " + this;
         }
         if ( binaryFileExtension == null ) {
-            _message = "required property binaryFileExtension of SetRobotResponse-object is not set: " + toString();
+            _message = "required property binaryFileExtension of SetRobotResponse-object is not set: " + this;
         }
         if ( !hasWlanDefined ) {
-            _message = "required property hasWlan of SetRobotResponse-object is not set: " + toString();
+            _message = "required property hasWlan of SetRobotResponse-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -313,7 +313,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public String getRobot() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no robot from an object under construction: " + toString());
+            throw new RuntimeException("no robot from an object under construction: " + this);
         }
         return this.robot;
     }
@@ -323,7 +323,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public SetRobotResponse setRobot(String robot) {
         if ( this.immutable ) {
-            throw new RuntimeException("robot assigned to an immutable object: " + toString());
+            throw new RuntimeException("robot assigned to an immutable object: " + this);
         }
         this.robot = robot;
         return this;
@@ -334,7 +334,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public JSONObject getProgram() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no program from an object under construction: " + toString());
+            throw new RuntimeException("no program from an object under construction: " + this);
         }
         return this.program;
     }
@@ -344,7 +344,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public SetRobotResponse setProgram(JSONObject program) {
         if ( this.immutable ) {
-            throw new RuntimeException("program assigned to an immutable object: " + toString());
+            throw new RuntimeException("program assigned to an immutable object: " + this);
         }
         this.program = program;
         return this;
@@ -355,7 +355,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public JSONObject getConfiguration() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no configuration from an object under construction: " + toString());
+            throw new RuntimeException("no configuration from an object under construction: " + this);
         }
         return this.configuration;
     }
@@ -365,7 +365,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public SetRobotResponse setConfiguration(JSONObject configuration) {
         if ( this.immutable ) {
-            throw new RuntimeException("configuration assigned to an immutable object: " + toString());
+            throw new RuntimeException("configuration assigned to an immutable object: " + this);
         }
         this.configuration = configuration;
         return this;
@@ -376,7 +376,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public boolean getSim() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no sim from an object under construction: " + toString());
+            throw new RuntimeException("no sim from an object under construction: " + this);
         }
         return this.sim;
     }
@@ -386,7 +386,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public SetRobotResponse setSim(boolean sim) {
         if ( this.immutable ) {
-            throw new RuntimeException("sim assigned to an immutable object: " + toString());
+            throw new RuntimeException("sim assigned to an immutable object: " + this);
         }
         this.sim = sim;
         this.simDefined = true;
@@ -398,7 +398,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public boolean getMultipleSim() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no multipleSim from an object under construction: " + toString());
+            throw new RuntimeException("no multipleSim from an object under construction: " + this);
         }
         return this.multipleSim;
     }
@@ -408,7 +408,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public SetRobotResponse setMultipleSim(boolean multipleSim) {
         if ( this.immutable ) {
-            throw new RuntimeException("multipleSim assigned to an immutable object: " + toString());
+            throw new RuntimeException("multipleSim assigned to an immutable object: " + this);
         }
         this.multipleSim = multipleSim;
         this.multipleSimDefined = true;
@@ -420,7 +420,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public boolean getNn() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no nn from an object under construction: " + toString());
+            throw new RuntimeException("no nn from an object under construction: " + this);
         }
         return this.nn;
     }
@@ -430,7 +430,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public SetRobotResponse setNn(boolean nn) {
         if ( this.immutable ) {
-            throw new RuntimeException("nn assigned to an immutable object: " + toString());
+            throw new RuntimeException("nn assigned to an immutable object: " + this);
         }
         this.nn = nn;
         this.nnDefined = true;
@@ -442,7 +442,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public boolean getWebotsSim() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no webotsSim from an object under construction: " + toString());
+            throw new RuntimeException("no webotsSim from an object under construction: " + this);
         }
         return this.webotsSim;
     }
@@ -452,7 +452,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public SetRobotResponse setWebotsSim(boolean webotsSim) {
         if ( this.immutable ) {
-            throw new RuntimeException("webotsSim assigned to an immutable object: " + toString());
+            throw new RuntimeException("webotsSim assigned to an immutable object: " + this);
         }
         this.webotsSim = webotsSim;
         this.webotsSimDefined = true;
@@ -464,7 +464,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public String getWebotsUrl() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no webotsUrl from an object under construction: " + toString());
+            throw new RuntimeException("no webotsUrl from an object under construction: " + this);
         }
         return this.webotsUrl;
     }
@@ -483,7 +483,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public SetRobotResponse setWebotsUrl(String webotsUrl) {
         if ( this.immutable ) {
-            throw new RuntimeException("webotsUrl assigned to an immutable object: " + toString());
+            throw new RuntimeException("webotsUrl assigned to an immutable object: " + this);
         }
         this.webotsUrl = webotsUrl;
         return this;
@@ -494,7 +494,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public String getConnection() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no connection from an object under construction: " + toString());
+            throw new RuntimeException("no connection from an object under construction: " + this);
         }
         return this.connection;
     }
@@ -504,7 +504,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public SetRobotResponse setConnection(String connection) {
         if ( this.immutable ) {
-            throw new RuntimeException("connection assigned to an immutable object: " + toString());
+            throw new RuntimeException("connection assigned to an immutable object: " + this);
         }
         this.connection = connection;
         return this;
@@ -515,7 +515,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public String getVendor() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no vendor from an object under construction: " + toString());
+            throw new RuntimeException("no vendor from an object under construction: " + this);
         }
         return this.vendor;
     }
@@ -525,7 +525,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public SetRobotResponse setVendor(String vendor) {
         if ( this.immutable ) {
-            throw new RuntimeException("vendor assigned to an immutable object: " + toString());
+            throw new RuntimeException("vendor assigned to an immutable object: " + this);
         }
         this.vendor = vendor;
         return this;
@@ -536,7 +536,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public boolean getConfigurationUsed() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no configurationUsed from an object under construction: " + toString());
+            throw new RuntimeException("no configurationUsed from an object under construction: " + this);
         }
         return this.configurationUsed;
     }
@@ -546,7 +546,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public SetRobotResponse setConfigurationUsed(boolean configurationUsed) {
         if ( this.immutable ) {
-            throw new RuntimeException("configurationUsed assigned to an immutable object: " + toString());
+            throw new RuntimeException("configurationUsed assigned to an immutable object: " + this);
         }
         this.configurationUsed = configurationUsed;
         this.configurationUsedDefined = true;
@@ -558,7 +558,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public String getCommandLine() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no commandLine from an object under construction: " + toString());
+            throw new RuntimeException("no commandLine from an object under construction: " + this);
         }
         return this.commandLine;
     }
@@ -577,7 +577,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public SetRobotResponse setCommandLine(String commandLine) {
         if ( this.immutable ) {
-            throw new RuntimeException("commandLine assigned to an immutable object: " + toString());
+            throw new RuntimeException("commandLine assigned to an immutable object: " + this);
         }
         this.commandLine = commandLine;
         return this;
@@ -588,7 +588,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public String getSignature() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no signature from an object under construction: " + toString());
+            throw new RuntimeException("no signature from an object under construction: " + this);
         }
         return this.signature;
     }
@@ -607,7 +607,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public SetRobotResponse setSignature(String signature) {
         if ( this.immutable ) {
-            throw new RuntimeException("signature assigned to an immutable object: " + toString());
+            throw new RuntimeException("signature assigned to an immutable object: " + this);
         }
         this.signature = signature;
         return this;
@@ -618,7 +618,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public String getSourceCodeFileExtension() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no sourceCodeFileExtension from an object under construction: " + toString());
+            throw new RuntimeException("no sourceCodeFileExtension from an object under construction: " + this);
         }
         return this.sourceCodeFileExtension;
     }
@@ -628,7 +628,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public SetRobotResponse setSourceCodeFileExtension(String sourceCodeFileExtension) {
         if ( this.immutable ) {
-            throw new RuntimeException("sourceCodeFileExtension assigned to an immutable object: " + toString());
+            throw new RuntimeException("sourceCodeFileExtension assigned to an immutable object: " + this);
         }
         this.sourceCodeFileExtension = sourceCodeFileExtension;
         return this;
@@ -639,7 +639,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public String getBinaryFileExtension() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no binaryFileExtension from an object under construction: " + toString());
+            throw new RuntimeException("no binaryFileExtension from an object under construction: " + this);
         }
         return this.binaryFileExtension;
     }
@@ -649,7 +649,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public SetRobotResponse setBinaryFileExtension(String binaryFileExtension) {
         if ( this.immutable ) {
-            throw new RuntimeException("binaryFileExtension assigned to an immutable object: " + toString());
+            throw new RuntimeException("binaryFileExtension assigned to an immutable object: " + this);
         }
         this.binaryFileExtension = binaryFileExtension;
         return this;
@@ -660,7 +660,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public boolean getHasWlan() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no hasWlan from an object under construction: " + toString());
+            throw new RuntimeException("no hasWlan from an object under construction: " + this);
         }
         return this.hasWlan;
     }
@@ -670,7 +670,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public SetRobotResponse setHasWlan(boolean hasWlan) {
         if ( this.immutable ) {
-            throw new RuntimeException("hasWlan assigned to an immutable object: " + toString());
+            throw new RuntimeException("hasWlan assigned to an immutable object: " + this);
         }
         this.hasWlan = hasWlan;
         this.hasWlanDefined = true;
@@ -682,7 +682,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public String getFirmwareDefault() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no firmwareDefault from an object under construction: " + toString());
+            throw new RuntimeException("no firmwareDefault from an object under construction: " + this);
         }
         return this.firmwareDefault;
     }
@@ -701,7 +701,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public SetRobotResponse setFirmwareDefault(String firmwareDefault) {
         if ( this.immutable ) {
-            throw new RuntimeException("firmwareDefault assigned to an immutable object: " + toString());
+            throw new RuntimeException("firmwareDefault assigned to an immutable object: " + this);
         }
         this.firmwareDefault = firmwareDefault;
         return this;
@@ -713,7 +713,7 @@ public class SetRobotResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

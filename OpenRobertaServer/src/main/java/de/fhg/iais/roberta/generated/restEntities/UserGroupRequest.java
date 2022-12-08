@@ -96,10 +96,10 @@ public class UserGroupRequest extends BaseRequest {
     private UserGroupRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "UserGroupRequest-object is already immutable: " + toString();
+            _message = "UserGroupRequest-object is already immutable: " + this;
         }
         if ( groupName == null ) {
-            _message = "required property groupName of UserGroupRequest-object is not set: " + toString();
+            _message = "required property groupName of UserGroupRequest-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -113,7 +113,7 @@ public class UserGroupRequest extends BaseRequest {
      */
     public String getGroupName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no groupName from an object under construction: " + toString());
+            throw new RuntimeException("no groupName from an object under construction: " + this);
         }
         return this.groupName;
     }
@@ -123,7 +123,7 @@ public class UserGroupRequest extends BaseRequest {
      */
     public UserGroupRequest setGroupName(String groupName) {
         if ( this.immutable ) {
-            throw new RuntimeException("groupName assigned to an immutable object: " + toString());
+            throw new RuntimeException("groupName assigned to an immutable object: " + this);
         }
         this.groupName = groupName;
         return this;
@@ -135,7 +135,7 @@ public class UserGroupRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

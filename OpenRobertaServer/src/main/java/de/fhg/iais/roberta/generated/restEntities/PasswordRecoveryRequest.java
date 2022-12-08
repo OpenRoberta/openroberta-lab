@@ -100,13 +100,13 @@ public class PasswordRecoveryRequest extends BaseRequest {
     private PasswordRecoveryRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "PasswordRecoveryRequest-object is already immutable: " + toString();
+            _message = "PasswordRecoveryRequest-object is already immutable: " + this;
         }
         if ( lostEmail == null ) {
-            _message = "required property lostEmail of PasswordRecoveryRequest-object is not set: " + toString();
+            _message = "required property lostEmail of PasswordRecoveryRequest-object is not set: " + this;
         }
         if ( language == null ) {
-            _message = "required property language of PasswordRecoveryRequest-object is not set: " + toString();
+            _message = "required property language of PasswordRecoveryRequest-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -120,7 +120,7 @@ public class PasswordRecoveryRequest extends BaseRequest {
      */
     public String getLostEmail() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no lostEmail from an object under construction: " + toString());
+            throw new RuntimeException("no lostEmail from an object under construction: " + this);
         }
         return this.lostEmail;
     }
@@ -130,7 +130,7 @@ public class PasswordRecoveryRequest extends BaseRequest {
      */
     public PasswordRecoveryRequest setLostEmail(String lostEmail) {
         if ( this.immutable ) {
-            throw new RuntimeException("lostEmail assigned to an immutable object: " + toString());
+            throw new RuntimeException("lostEmail assigned to an immutable object: " + this);
         }
         this.lostEmail = lostEmail;
         return this;
@@ -141,7 +141,7 @@ public class PasswordRecoveryRequest extends BaseRequest {
      */
     public String getLanguage() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no language from an object under construction: " + toString());
+            throw new RuntimeException("no language from an object under construction: " + this);
         }
         return this.language;
     }
@@ -151,7 +151,7 @@ public class PasswordRecoveryRequest extends BaseRequest {
      */
     public PasswordRecoveryRequest setLanguage(String language) {
         if ( this.immutable ) {
-            throw new RuntimeException("language assigned to an immutable object: " + toString());
+            throw new RuntimeException("language assigned to an immutable object: " + this);
         }
         this.language = language;
         return this;
@@ -163,7 +163,7 @@ public class PasswordRecoveryRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

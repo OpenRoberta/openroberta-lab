@@ -96,6 +96,7 @@ public class ProjectWorkflowRestController {
             response.setProgXML(project.getAnnotatedProgramAsXml());
             response.setConfAnnos(project.getConfAnnotationList());
             response.setConfiguration(project.getConfigurationJSON());
+            response.setProgramName(project.getProgramName());
             addProjectResultToResponse(response, project);
             Statistics.info("SimulationRun", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);

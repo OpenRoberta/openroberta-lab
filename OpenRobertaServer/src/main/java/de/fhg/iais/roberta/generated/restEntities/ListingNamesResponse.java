@@ -163,22 +163,22 @@ public class ListingNamesResponse extends BaseResponse {
     private ListingNamesResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ListingNamesResponse-object is already immutable: " + toString();
+            _message = "ListingNamesResponse-object is already immutable: " + this;
         }
         if ( rc == null ) {
-            _message = "required property rc of ListingNamesResponse-object is not set: " + toString();
+            _message = "required property rc of ListingNamesResponse-object is not set: " + this;
         }
         if ( initToken == null ) {
-            _message = "required property initToken of ListingNamesResponse-object is not set: " + toString();
+            _message = "required property initToken of ListingNamesResponse-object is not set: " + this;
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of ListingNamesResponse-object is not set: " + toString();
+            _message = "required property serverTime of ListingNamesResponse-object is not set: " + this;
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of ListingNamesResponse-object is not set: " + toString();
+            _message = "required property serverVersion of ListingNamesResponse-object is not set: " + this;
         }
         if ( programNames == null ) {
-            _message = "required property programNames of ListingNamesResponse-object is not set: " + toString();
+            _message = "required property programNames of ListingNamesResponse-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -192,7 +192,7 @@ public class ListingNamesResponse extends BaseResponse {
      */
     public JSONArray getProgramNames() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no programNames from an object under construction: " + toString());
+            throw new RuntimeException("no programNames from an object under construction: " + this);
         }
         return this.programNames;
     }
@@ -202,7 +202,7 @@ public class ListingNamesResponse extends BaseResponse {
      */
     public ListingNamesResponse setProgramNames(JSONArray programNames) {
         if ( this.immutable ) {
-            throw new RuntimeException("programNames assigned to an immutable object: " + toString());
+            throw new RuntimeException("programNames assigned to an immutable object: " + this);
         }
         this.programNames = programNames;
         return this;
@@ -214,7 +214,7 @@ public class ListingNamesResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

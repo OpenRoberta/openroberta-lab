@@ -108,13 +108,13 @@ public class LoginRequest extends BaseRequest {
     private LoginRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "LoginRequest-object is already immutable: " + toString();
+            _message = "LoginRequest-object is already immutable: " + this;
         }
         if ( accountName == null ) {
-            _message = "required property accountName of LoginRequest-object is not set: " + toString();
+            _message = "required property accountName of LoginRequest-object is not set: " + this;
         }
         if ( password == null ) {
-            _message = "required property password of LoginRequest-object is not set: " + toString();
+            _message = "required property password of LoginRequest-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -128,7 +128,7 @@ public class LoginRequest extends BaseRequest {
      */
     public String getAccountName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no accountName from an object under construction: " + toString());
+            throw new RuntimeException("no accountName from an object under construction: " + this);
         }
         return this.accountName;
     }
@@ -138,7 +138,7 @@ public class LoginRequest extends BaseRequest {
      */
     public LoginRequest setAccountName(String accountName) {
         if ( this.immutable ) {
-            throw new RuntimeException("accountName assigned to an immutable object: " + toString());
+            throw new RuntimeException("accountName assigned to an immutable object: " + this);
         }
         this.accountName = accountName;
         return this;
@@ -149,7 +149,7 @@ public class LoginRequest extends BaseRequest {
      */
     public String getPassword() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no password from an object under construction: " + toString());
+            throw new RuntimeException("no password from an object under construction: " + this);
         }
         return this.password;
     }
@@ -159,7 +159,7 @@ public class LoginRequest extends BaseRequest {
      */
     public LoginRequest setPassword(String password) {
         if ( this.immutable ) {
-            throw new RuntimeException("password assigned to an immutable object: " + toString());
+            throw new RuntimeException("password assigned to an immutable object: " + this);
         }
         this.password = password;
         return this;
@@ -170,7 +170,7 @@ public class LoginRequest extends BaseRequest {
      */
     public String getUserGroupOwner() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no userGroupOwner from an object under construction: " + toString());
+            throw new RuntimeException("no userGroupOwner from an object under construction: " + this);
         }
         return this.userGroupOwner;
     }
@@ -189,7 +189,7 @@ public class LoginRequest extends BaseRequest {
      */
     public LoginRequest setUserGroupOwner(String userGroupOwner) {
         if ( this.immutable ) {
-            throw new RuntimeException("userGroupOwner assigned to an immutable object: " + toString());
+            throw new RuntimeException("userGroupOwner assigned to an immutable object: " + this);
         }
         this.userGroupOwner = userGroupOwner;
         return this;
@@ -200,7 +200,7 @@ public class LoginRequest extends BaseRequest {
      */
     public String getUserGroupName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no userGroupName from an object under construction: " + toString());
+            throw new RuntimeException("no userGroupName from an object under construction: " + this);
         }
         return this.userGroupName;
     }
@@ -219,7 +219,7 @@ public class LoginRequest extends BaseRequest {
      */
     public LoginRequest setUserGroupName(String userGroupName) {
         if ( this.immutable ) {
-            throw new RuntimeException("userGroupName assigned to an immutable object: " + toString());
+            throw new RuntimeException("userGroupName assigned to an immutable object: " + this);
         }
         this.userGroupName = userGroupName;
         return this;
@@ -231,7 +231,7 @@ public class LoginRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

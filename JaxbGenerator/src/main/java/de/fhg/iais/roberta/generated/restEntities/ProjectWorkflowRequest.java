@@ -133,13 +133,13 @@ public class ProjectWorkflowRequest extends BaseRequest {
     private ProjectWorkflowRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ProjectWorkflowRequest-object is already immutable: " + toString();
+            _message = "ProjectWorkflowRequest-object is already immutable: " + this;
         }
         if ( programName == null ) {
-            _message = "required property programName of ProjectWorkflowRequest-object is not set: " + toString();
+            _message = "required property programName of ProjectWorkflowRequest-object is not set: " + this;
         }
         if ( progXML == null ) {
-            _message = "required property progXML of ProjectWorkflowRequest-object is not set: " + toString();
+            _message = "required property progXML of ProjectWorkflowRequest-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -153,7 +153,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
      */
     public String getProgramName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no programName from an object under construction: " + toString());
+            throw new RuntimeException("no programName from an object under construction: " + this);
         }
         return this.programName;
     }
@@ -163,7 +163,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
      */
     public ProjectWorkflowRequest setProgramName(String programName) {
         if ( this.immutable ) {
-            throw new RuntimeException("programName assigned to an immutable object: " + toString());
+            throw new RuntimeException("programName assigned to an immutable object: " + this);
         }
         this.programName = programName;
         return this;
@@ -174,7 +174,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
      */
     public String getConfigurationName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no configurationName from an object under construction: " + toString());
+            throw new RuntimeException("no configurationName from an object under construction: " + this);
         }
         return this.configurationName;
     }
@@ -193,7 +193,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
      */
     public ProjectWorkflowRequest setConfigurationName(String configurationName) {
         if ( this.immutable ) {
-            throw new RuntimeException("configurationName assigned to an immutable object: " + toString());
+            throw new RuntimeException("configurationName assigned to an immutable object: " + this);
         }
         this.configurationName = configurationName;
         return this;
@@ -204,7 +204,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
      */
     public String getProgXML() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no progXML from an object under construction: " + toString());
+            throw new RuntimeException("no progXML from an object under construction: " + this);
         }
         return this.progXML;
     }
@@ -214,7 +214,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
      */
     public ProjectWorkflowRequest setProgXML(String progXML) {
         if ( this.immutable ) {
-            throw new RuntimeException("progXML assigned to an immutable object: " + toString());
+            throw new RuntimeException("progXML assigned to an immutable object: " + this);
         }
         this.progXML = progXML;
         return this;
@@ -225,7 +225,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
      */
     public String getConfXML() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no confXML from an object under construction: " + toString());
+            throw new RuntimeException("no confXML from an object under construction: " + this);
         }
         return this.confXML;
     }
@@ -244,7 +244,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
      */
     public ProjectWorkflowRequest setConfXML(String confXML) {
         if ( this.immutable ) {
-            throw new RuntimeException("confXML assigned to an immutable object: " + toString());
+            throw new RuntimeException("confXML assigned to an immutable object: " + this);
         }
         this.confXML = confXML;
         return this;
@@ -255,7 +255,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
      */
     public String getSSID() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no SSID from an object under construction: " + toString());
+            throw new RuntimeException("no SSID from an object under construction: " + this);
         }
         return this.SSID;
     }
@@ -274,7 +274,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
      */
     public ProjectWorkflowRequest setSSID(String SSID) {
         if ( this.immutable ) {
-            throw new RuntimeException("SSID assigned to an immutable object: " + toString());
+            throw new RuntimeException("SSID assigned to an immutable object: " + this);
         }
         this.SSID = SSID;
         return this;
@@ -285,7 +285,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
      */
     public String getPassword() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no password from an object under construction: " + toString());
+            throw new RuntimeException("no password from an object under construction: " + this);
         }
         return this.password;
     }
@@ -304,7 +304,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
      */
     public ProjectWorkflowRequest setPassword(String password) {
         if ( this.immutable ) {
-            throw new RuntimeException("password assigned to an immutable object: " + toString());
+            throw new RuntimeException("password assigned to an immutable object: " + this);
         }
         this.password = password;
         return this;
@@ -315,7 +315,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
      */
     public String getLanguage() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no language from an object under construction: " + toString());
+            throw new RuntimeException("no language from an object under construction: " + this);
         }
         return this.language;
     }
@@ -334,7 +334,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
      */
     public ProjectWorkflowRequest setLanguage(String language) {
         if ( this.immutable ) {
-            throw new RuntimeException("language assigned to an immutable object: " + toString());
+            throw new RuntimeException("language assigned to an immutable object: " + this);
         }
         this.language = language;
         return this;
@@ -345,7 +345,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
      */
     public String getRobot() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no robot from an object under construction: " + toString());
+            throw new RuntimeException("no robot from an object under construction: " + this);
         }
         return this.robot;
     }
@@ -364,7 +364,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
      */
     public ProjectWorkflowRequest setRobot(String robot) {
         if ( this.immutable ) {
-            throw new RuntimeException("robot assigned to an immutable object: " + toString());
+            throw new RuntimeException("robot assigned to an immutable object: " + this);
         }
         this.robot = robot;
         return this;
@@ -376,7 +376,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

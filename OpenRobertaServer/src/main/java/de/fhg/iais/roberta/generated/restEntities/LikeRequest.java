@@ -109,19 +109,19 @@ public class LikeRequest extends BaseRequest {
     private LikeRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "LikeRequest-object is already immutable: " + toString();
+            _message = "LikeRequest-object is already immutable: " + this;
         }
         if ( programName == null ) {
-            _message = "required property programName of LikeRequest-object is not set: " + toString();
+            _message = "required property programName of LikeRequest-object is not set: " + this;
         }
         if ( robotName == null ) {
-            _message = "required property robotName of LikeRequest-object is not set: " + toString();
+            _message = "required property robotName of LikeRequest-object is not set: " + this;
         }
         if ( author == null ) {
-            _message = "required property author of LikeRequest-object is not set: " + toString();
+            _message = "required property author of LikeRequest-object is not set: " + this;
         }
         if ( !likeDefined ) {
-            _message = "required property like of LikeRequest-object is not set: " + toString();
+            _message = "required property like of LikeRequest-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -135,7 +135,7 @@ public class LikeRequest extends BaseRequest {
      */
     public String getProgramName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no programName from an object under construction: " + toString());
+            throw new RuntimeException("no programName from an object under construction: " + this);
         }
         return this.programName;
     }
@@ -145,7 +145,7 @@ public class LikeRequest extends BaseRequest {
      */
     public LikeRequest setProgramName(String programName) {
         if ( this.immutable ) {
-            throw new RuntimeException("programName assigned to an immutable object: " + toString());
+            throw new RuntimeException("programName assigned to an immutable object: " + this);
         }
         this.programName = programName;
         return this;
@@ -156,7 +156,7 @@ public class LikeRequest extends BaseRequest {
      */
     public String getRobotName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no robotName from an object under construction: " + toString());
+            throw new RuntimeException("no robotName from an object under construction: " + this);
         }
         return this.robotName;
     }
@@ -166,7 +166,7 @@ public class LikeRequest extends BaseRequest {
      */
     public LikeRequest setRobotName(String robotName) {
         if ( this.immutable ) {
-            throw new RuntimeException("robotName assigned to an immutable object: " + toString());
+            throw new RuntimeException("robotName assigned to an immutable object: " + this);
         }
         this.robotName = robotName;
         return this;
@@ -177,7 +177,7 @@ public class LikeRequest extends BaseRequest {
      */
     public String getAuthor() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no author from an object under construction: " + toString());
+            throw new RuntimeException("no author from an object under construction: " + this);
         }
         return this.author;
     }
@@ -187,7 +187,7 @@ public class LikeRequest extends BaseRequest {
      */
     public LikeRequest setAuthor(String author) {
         if ( this.immutable ) {
-            throw new RuntimeException("author assigned to an immutable object: " + toString());
+            throw new RuntimeException("author assigned to an immutable object: " + this);
         }
         this.author = author;
         return this;
@@ -198,7 +198,7 @@ public class LikeRequest extends BaseRequest {
      */
     public boolean getLike() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no like from an object under construction: " + toString());
+            throw new RuntimeException("no like from an object under construction: " + this);
         }
         return this.like;
     }
@@ -208,7 +208,7 @@ public class LikeRequest extends BaseRequest {
      */
     public LikeRequest setLike(boolean like) {
         if ( this.immutable ) {
-            throw new RuntimeException("like assigned to an immutable object: " + toString());
+            throw new RuntimeException("like assigned to an immutable object: " + this);
         }
         this.like = like;
         this.likeDefined = true;
@@ -221,7 +221,7 @@ public class LikeRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

@@ -173,28 +173,28 @@ public class PingResponse extends BaseResponse {
     private PingResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "PingResponse-object is already immutable: " + toString();
+            _message = "PingResponse-object is already immutable: " + this;
         }
         if ( rc == null ) {
-            _message = "required property rc of PingResponse-object is not set: " + toString();
+            _message = "required property rc of PingResponse-object is not set: " + this;
         }
         if ( initToken == null ) {
-            _message = "required property initToken of PingResponse-object is not set: " + toString();
+            _message = "required property initToken of PingResponse-object is not set: " + this;
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of PingResponse-object is not set: " + toString();
+            _message = "required property serverTime of PingResponse-object is not set: " + this;
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of PingResponse-object is not set: " + toString();
+            _message = "required property serverVersion of PingResponse-object is not set: " + this;
         }
         if ( version == null ) {
-            _message = "required property version of PingResponse-object is not set: " + toString();
+            _message = "required property version of PingResponse-object is not set: " + this;
         }
         if ( !dateDefined ) {
-            _message = "required property date of PingResponse-object is not set: " + toString();
+            _message = "required property date of PingResponse-object is not set: " + this;
         }
         if ( dateAsString == null ) {
-            _message = "required property dateAsString of PingResponse-object is not set: " + toString();
+            _message = "required property dateAsString of PingResponse-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -208,7 +208,7 @@ public class PingResponse extends BaseResponse {
      */
     public String getVersion() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no version from an object under construction: " + toString());
+            throw new RuntimeException("no version from an object under construction: " + this);
         }
         return this.version;
     }
@@ -218,7 +218,7 @@ public class PingResponse extends BaseResponse {
      */
     public PingResponse setVersion(String version) {
         if ( this.immutable ) {
-            throw new RuntimeException("version assigned to an immutable object: " + toString());
+            throw new RuntimeException("version assigned to an immutable object: " + this);
         }
         this.version = version;
         return this;
@@ -229,7 +229,7 @@ public class PingResponse extends BaseResponse {
      */
     public long getDate() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no date from an object under construction: " + toString());
+            throw new RuntimeException("no date from an object under construction: " + this);
         }
         return this.date;
     }
@@ -239,7 +239,7 @@ public class PingResponse extends BaseResponse {
      */
     public PingResponse setDate(long date) {
         if ( this.immutable ) {
-            throw new RuntimeException("date assigned to an immutable object: " + toString());
+            throw new RuntimeException("date assigned to an immutable object: " + this);
         }
         this.date = date;
         this.dateDefined = true;
@@ -251,7 +251,7 @@ public class PingResponse extends BaseResponse {
      */
     public String getDateAsString() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no dateAsString from an object under construction: " + toString());
+            throw new RuntimeException("no dateAsString from an object under construction: " + this);
         }
         return this.dateAsString;
     }
@@ -261,7 +261,7 @@ public class PingResponse extends BaseResponse {
      */
     public PingResponse setDateAsString(String dateAsString) {
         if ( this.immutable ) {
-            throw new RuntimeException("dateAsString assigned to an immutable object: " + toString());
+            throw new RuntimeException("dateAsString assigned to an immutable object: " + this);
         }
         this.dateAsString = dateAsString;
         return this;
@@ -273,7 +273,7 @@ public class PingResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

@@ -100,13 +100,13 @@ public class DeleteRequest extends BaseRequest {
     private DeleteRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "DeleteRequest-object is already immutable: " + toString();
+            _message = "DeleteRequest-object is already immutable: " + this;
         }
         if ( programName == null ) {
-            _message = "required property programName of DeleteRequest-object is not set: " + toString();
+            _message = "required property programName of DeleteRequest-object is not set: " + this;
         }
         if ( author == null ) {
-            _message = "required property author of DeleteRequest-object is not set: " + toString();
+            _message = "required property author of DeleteRequest-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -120,7 +120,7 @@ public class DeleteRequest extends BaseRequest {
      */
     public String getProgramName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no programName from an object under construction: " + toString());
+            throw new RuntimeException("no programName from an object under construction: " + this);
         }
         return this.programName;
     }
@@ -130,7 +130,7 @@ public class DeleteRequest extends BaseRequest {
      */
     public DeleteRequest setProgramName(String programName) {
         if ( this.immutable ) {
-            throw new RuntimeException("programName assigned to an immutable object: " + toString());
+            throw new RuntimeException("programName assigned to an immutable object: " + this);
         }
         this.programName = programName;
         return this;
@@ -141,7 +141,7 @@ public class DeleteRequest extends BaseRequest {
      */
     public String getAuthor() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no author from an object under construction: " + toString());
+            throw new RuntimeException("no author from an object under construction: " + this);
         }
         return this.author;
     }
@@ -151,7 +151,7 @@ public class DeleteRequest extends BaseRequest {
      */
     public DeleteRequest setAuthor(String author) {
         if ( this.immutable ) {
-            throw new RuntimeException("author assigned to an immutable object: " + toString());
+            throw new RuntimeException("author assigned to an immutable object: " + this);
         }
         this.author = author;
         return this;
@@ -163,7 +163,7 @@ public class DeleteRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

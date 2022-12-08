@@ -9,138 +9,349 @@
       "name": "InitRequest",
       "description": "full request for the /init REST request with logging and request data, but no initToken",
       "properties": [
-        { "name": "log", "type": "String[]" },
-        { "name": "data", "type": "JSONObject" }
+        {
+          "name": "log",
+          "type": "String[]"
+        },
+        {
+          "name": "data",
+          "type": "JSONObject"
+        }
       ]
     },
     {
       "name": "FullRestRequest",
       "description": "full request for the /init call with initToken, logging and request data",
       "properties": [
-        { "name": "initToken", "type": "String" },
-        { "name": "log", "type": "String[]" },
-        { "name": "data", "type": "JSONObject" }
+        {
+          "name": "initToken",
+          "type": "String"
+        },
+        {
+          "name": "log",
+          "type": "String[]"
+        },
+        {
+          "name": "data",
+          "type": "JSONObject"
+        }
       ]
     },
     {
-	    "name": "BaseRequest",
+      "name": "BaseRequest",
       "description": "basic request",
       "properties": [
-        { "name": "cmd", "type": "String", "description": "the cmd of this request, obsolete: now part of the REST-URL", "required": false }
+        {
+          "name": "cmd",
+          "type": "String",
+          "description": "the cmd of this request, obsolete: now part of the REST-URL",
+          "required": false
+        }
       ]
     },
     {
-	    "name": "BaseResponse",
+      "name": "BaseResponse",
       "description": "basic response with too many properties :-<, also used to return errors",
       "properties": [
-        { "name": "cmd", "type": "String", "description": "the cmd this object is response for", "required": false },
-        { "name": "rc", "type": "String", "description": "ok or error" },
-        { "name": "message", "type": "String", "description": "description of the result, same as cause", "required": false },
-        { "name": "cause", "type": "String", "description": "description of the result, same as message", "required": false },
-        { "name": "parameters", "type": "JSONObject", "description": "parameters for the description of the result", "required": false },
-        { "name": "initToken", "type": "String", "description": "the unique token identifying the front-end session" },
-        { "name": "server.time", "type": "long", "description": "date and time of the server since the epoch" },
-        { "name": "server.version", "type": "String", "description": "version number of the server" },
-        { "name": "robot.wait", "type": "long", "description": "time since the last approval request", "required": false },
-        { "name": "robot.battery", "type": "String", "description": "battery level", "required": false },
-        { "name": "robot.name", "type": "String", "description": "robot's name", "required": false },
-        { "name": "robot.version", "type": "String", "description": "robot's software version", "required": false },
-        { "name": "robot.firmwareName", "type": "String", "description": "robot's firmware name", "required": false },
-        { "name": "robot.sensorvalues", "type": "JSONObject", "description": "map with sensor values", "required": false },
-        { "name": "robot.nepoexitvalue", "type": "int", "description": "exit value if robot program has terminated", "required": false },
-        { "name": "robot.state", "type": "String", "description": "state: busy, disconnected or wait", "required": false },
-        { "name": "notifications.available", "type": "boolean", "description": "if new notifications are available", "required": false }
-	    ]
+        {
+          "name": "cmd",
+          "type": "String",
+          "description": "the cmd this object is response for",
+          "required": false
+        },
+        {
+          "name": "rc",
+          "type": "String",
+          "description": "ok or error"
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": "description of the result, same as cause",
+          "required": false
+        },
+        {
+          "name": "cause",
+          "type": "String",
+          "description": "description of the result, same as message",
+          "required": false
+        },
+        {
+          "name": "parameters",
+          "type": "JSONObject",
+          "description": "parameters for the description of the result",
+          "required": false
+        },
+        {
+          "name": "initToken",
+          "type": "String",
+          "description": "the unique token identifying the front-end session"
+        },
+        {
+          "name": "server.time",
+          "type": "long",
+          "description": "date and time of the server since the epoch"
+        },
+        {
+          "name": "server.version",
+          "type": "String",
+          "description": "version number of the server"
+        },
+        {
+          "name": "robot.wait",
+          "type": "long",
+          "description": "time since the last approval request",
+          "required": false
+        },
+        {
+          "name": "robot.battery",
+          "type": "String",
+          "description": "battery level",
+          "required": false
+        },
+        {
+          "name": "robot.name",
+          "type": "String",
+          "description": "robot's name",
+          "required": false
+        },
+        {
+          "name": "robot.version",
+          "type": "String",
+          "description": "robot's software version",
+          "required": false
+        },
+        {
+          "name": "robot.firmwareName",
+          "type": "String",
+          "description": "robot's firmware name",
+          "required": false
+        },
+        {
+          "name": "robot.sensorvalues",
+          "type": "JSONObject",
+          "description": "map with sensor values",
+          "required": false
+        },
+        {
+          "name": "robot.nepoexitvalue",
+          "type": "int",
+          "description": "exit value if robot program has terminated",
+          "required": false
+        },
+        {
+          "name": "robot.state",
+          "type": "String",
+          "description": "state: busy, disconnected or wait",
+          "required": false
+        },
+        {
+          "name": "notifications.available",
+          "type": "boolean",
+          "description": "if new notifications are available",
+          "required": false
+        }
+      ]
     },
     {
       "name": "InitResponse",
       "extends": "BaseResponse",
       "description": "response for the /init REST request",
       "properties": [
-        { "name": "server", "type": "JSONObject" }
+        {
+          "name": "server",
+          "type": "JSONObject"
+        }
       ]
     },
     {
-	    "name": "RobotInfo",
+      "name": "RobotInfo",
       "description": "for future use! Replaces the bad dottet names. Data about the state of the robot",
       "properties": [
-        { "name": "wait", "type": "long", "description": "time since the last approval request" },
-        { "name": "battery", "type": "String", "description": "battery level" },
-        { "name": "name", "type": "String", "description": "robot's name" },
-        { "name": "version", "type": "String", "description": "robot's software version" },
-        { "name": "firmwareName", "type": "String", "description": "robot's firmware name" },
-        { "name": "sensorvalues", "type": "JSONObject", "description": "map with sensor values" },
-        { "name": "nepoexitvalue", "type": "int", "description": "exit value if robot program has terminated" }
-	    ]
+        {
+          "name": "wait",
+          "type": "long",
+          "description": "time since the last approval request"
+        },
+        {
+          "name": "battery",
+          "type": "String",
+          "description": "battery level"
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "description": "robot's name"
+        },
+        {
+          "name": "version",
+          "type": "String",
+          "description": "robot's software version"
+        },
+        {
+          "name": "firmwareName",
+          "type": "String",
+          "description": "robot's firmware name"
+        },
+        {
+          "name": "sensorvalues",
+          "type": "JSONObject",
+          "description": "map with sensor values"
+        },
+        {
+          "name": "nepoexitvalue",
+          "type": "int",
+          "description": "exit value if robot program has terminated"
+        }
+      ]
     },
     {
       "name": "SaveRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /save REST request",
+      "description": "the request description for the /save REST request",
       "properties": [
-        { "name": "timestamp", "type": "Long", "required": false },
-        { "name": "programName", "type": "String" },
-        { "name": "progXML", "type": "String" },
-        { "name": "configName", "type": "String", "required": false },
-        { "name": "confXML", "type": "String", "required": false },
-        { "name": "ownerAccount", "type": "String", "required": false }
+        {
+          "name": "timestamp",
+          "type": "Long",
+          "required": false
+        },
+        {
+          "name": "programName",
+          "type": "String"
+        },
+        {
+          "name": "progXML",
+          "type": "String"
+        },
+        {
+          "name": "configName",
+          "type": "String",
+          "required": false
+        },
+        {
+          "name": "confXML",
+          "type": "String",
+          "required": false
+        },
+        {
+          "name": "ownerAccount",
+          "type": "String",
+          "required": false
+        }
       ]
     },
     {
       "name": "ShareCreateRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /share/create REST request",
+      "description": "the request description for the /share/create REST request",
       "properties": [
-        { "name": "programName", "type": "String" }
+        {
+          "name": "programName",
+          "type": "String"
+        }
       ]
     },
     {
-	    "name": "SaveResponse",
-	    "extends": "BaseResponse",
+      "name": "SaveResponse",
+      "extends": "BaseResponse",
       "description": "the response for the /save request",
       "properties": [
-         { "name": "lastChanged", "type": "long", "description": "server timestamp of the last change" }
-	    ]
+        {
+          "name": "lastChanged",
+          "type": "long",
+          "description": "server timestamp of the last change"
+        }
+      ]
     },
     {
       "name": "ShareDeleteRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /share/delete REST request",
+      "description": "the request description for the /share/delete REST request",
       "properties": [
-        { "name": "programName", "type": "String" },
-        { "name": "owner", "type": "String" },
-        { "name": "author", "type": "String" }
+        {
+          "name": "programName",
+          "type": "String"
+        },
+        {
+          "name": "owner",
+          "type": "String"
+        },
+        {
+          "name": "author",
+          "type": "String"
+        }
       ]
     },
     {
       "name": "ListingRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /listing REST request",
+      "description": "the request description for the /listing REST request",
       "properties": [
-        { "name": "programName", "type": "String" },
-        { "name": "owner", "type": "String" },
-        { "name": "author", "type": "String" },
-        { "name": "configName", "type": "String" }
+        {
+          "name": "programName",
+          "type": "String"
+        },
+        {
+          "name": "owner",
+          "type": "String"
+        },
+        {
+          "name": "author",
+          "type": "String"
+        },
+        {
+          "name": "configName",
+          "type": "String"
+        }
       ]
     },
     {
-	    "name": "ListingResponse",
-	    "extends": "BaseResponse",
+      "name": "ListingResponse",
+      "extends": "BaseResponse",
       "description": "the response for the /listing request",
       "properties": [
-         { "name": "progXML", "type": "String", "description": "the program blockly XML" },
-         { "name": "configName", "type": "String", "description": "the configuration name", "required": false },
-         { "name": "confXML", "type": "String", "description": "the configuration blockly XML", "required": false },
-         { "name": "lastChanged", "type": "long", "description": "server timestamp of the last change of the program" }
-	    ]
+        {
+          "name": "programName",
+          "type": "String",
+          "required": false
+        },
+        {
+          "name": "progXML",
+          "type": "String",
+          "description": "the program blockly XML"
+        },
+        {
+          "name": "configName",
+          "type": "String",
+          "description": "the configuration name",
+          "required": false
+        },
+        {
+          "name": "confXML",
+          "type": "String",
+          "description": "the configuration blockly XML",
+          "required": false
+        },
+        {
+          "name": "lastChanged",
+          "type": "long",
+          "description": "server timestamp of the last change of the program"
+        }
+      ]
     },
     {
       "name": "ImportRequest",
       "extends": "BaseRequest",
       "description": "the request description for the /import REST request",
       "properties": [
-        { "name": "programName", "type": "String" },
-        { "name": "progXML", "type": "String" }
+        {
+          "name": "programName",
+          "type": "String"
+        },
+        {
+          "name": "progXML",
+          "type": "String"
+        }
       ]
     },
     {
@@ -148,9 +359,18 @@
       "extends": "BaseResponse",
       "description": "the response for the /import request",
       "properties": [
-        { "name": "programName", "type": "String" },
-        { "name": "progXML", "type": "String" },
-        { "name": "confXML", "type": "String" }
+        {
+          "name": "programName",
+          "type": "String"
+        },
+        {
+          "name": "progXML",
+          "type": "String"
+        },
+        {
+          "name": "confXML",
+          "type": "String"
+        }
       ]
     },
     {
@@ -158,7 +378,10 @@
       "extends": "BaseResponse",
       "description": "the response for the /import request, if the robot types do not match",
       "properties": [
-        { "name": "robotTypes", "type": "String" }
+        {
+          "name": "robotTypes",
+          "type": "String"
+        }
       ]
     },
     {
@@ -166,8 +389,14 @@
       "extends": "BaseRequest",
       "description": "the request description for the /share REST request",
       "properties": [
-        { "name": "programName", "type": "String" },
-        { "name": "shareData", "type": "JSONObject" }
+        {
+          "name": "programName",
+          "type": "String"
+        },
+        {
+          "name": "shareData",
+          "type": "JSONObject"
+        }
       ]
     },
     {
@@ -175,7 +404,11 @@
       "extends": "BaseResponse",
       "description": "the response for the /share request",
       "properties": [
-         { "name": "sharedWith", "type": "JSONArray", "description": "listing of the share objects for a given program" }
+        {
+          "name": "sharedWith",
+          "type": "JSONArray",
+          "description": "listing of the share objects for a given program"
+        }
       ]
     },
     {
@@ -183,94 +416,197 @@
       "extends": "BaseRequest",
       "description": "the request description for the /like REST request",
       "properties": [
-        { "name": "programName", "type": "String" },
-        { "name": "robotName", "type": "String" },
-        { "name": "author", "type": "String" },
-        { "name": "like", "type": "boolean" }
+        {
+          "name": "programName",
+          "type": "String"
+        },
+        {
+          "name": "robotName",
+          "type": "String"
+        },
+        {
+          "name": "author",
+          "type": "String"
+        },
+        {
+          "name": "like",
+          "type": "boolean"
+        }
       ]
     },
     {
       "name": "EntityRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /entity REST request, TODO: remove this duplication of ListingRequest",
+      "description": "the request description for the /entity REST request, TODO: remove this duplication of ListingRequest",
       "properties": [
-        { "name": "programName", "type": "String" },
-        { "name": "owner", "type": "String" },
-        { "name": "author", "type": "String" },
-        { "name": "configName", "type": "String" }
+        {
+          "name": "programName",
+          "type": "String"
+        },
+        {
+          "name": "owner",
+          "type": "String"
+        },
+        {
+          "name": "author",
+          "type": "String"
+        },
+        {
+          "name": "configName",
+          "type": "String"
+        }
       ]
     },
     {
-	    "name": "EntityResponse",
-	    "extends": "BaseResponse",
+      "name": "EntityResponse",
+      "extends": "BaseResponse",
       "description": "the response for the /program/entity request",
       "properties": [
-         { "name": "program", "type": "JSONArray", "description": "program description for table view" }
-	    ]
+        {
+          "name": "program",
+          "type": "JSONArray",
+          "description": "program description for table view"
+        }
+      ]
     },
     {
-	    "name": "ListingNamesResponse",
-	    "extends": "BaseResponse",
+      "name": "ListingNamesResponse",
+      "extends": "BaseResponse",
       "description": "the response for the /program/listing/names request",
       "properties": [
-         { "name": "programNames", "type": "JSONArray", "description": "listing of the names of the programs of a user (maybe the gallery) for the robot selected" }
-	    ]
+        {
+          "name": "programNames",
+          "type": "JSONArray",
+          "description": "listing of the names of the programs of a user (maybe the gallery) for the robot selected"
+        }
+      ]
     },
     {
       "name": "DeleteRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /program/delete REST request",
+      "description": "the request description for the /program/delete REST request",
       "properties": [
-        { "name": "programName", "type": "String" },
-        { "name": "author", "type": "String" }
+        {
+          "name": "programName",
+          "type": "String"
+        },
+        {
+          "name": "author",
+          "type": "String"
+        }
       ]
     },
     {
       "name": "SetTokenRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /setToken REST request",
+      "description": "the request description for the /setToken REST request",
       "properties": [
-        { "name": "token", "type": "String" }
+        {
+          "name": "token",
+          "type": "String"
+        }
       ]
     },
     {
       "name": "SetTokenResponse",
       "extends": "BaseResponse",
-    	"description": "the response for the /setToken REST request",
+      "description": "the response for the /setToken REST request",
       "properties": [
-        { "name": "update", "type": "int", "description": "result of a version compare, encoding as with the usual compare" }
+        {
+          "name": "update",
+          "type": "int",
+          "description": "result of a version compare, encoding as with the usual compare"
+        }
       ]
     },
     {
       "name": "SetRobotRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /setRobot REST request",
+      "description": "the request description for the /setRobot REST request",
       "properties": [
-        { "name": "robot", "type": "String" }
+        {
+          "name": "robot",
+          "type": "String"
+        }
       ]
     },
     {
       "name": "SetRobotResponse",
       "extends": "BaseResponse",
-    	"description": "the response for the /setRobot REST request",
+      "description": "the response for the /setRobot REST request",
       "properties": [
-        { "name": "robot", "type": "String" },
-        { "name": "program", "type": "JSONObject" },
-        { "name": "configuration", "type": "JSONObject" },
-        { "name": "sim", "type": "boolean" },
-        { "name": "multipleSim", "type": "boolean" },
-        { "name": "nn", "type": "boolean" },
-        { "name": "webotsSim", "type": "boolean"},
-        { "name": "webotsUrl", "type": "String", "required": false},
-        { "name": "connection", "type": "String" },
-        { "name": "vendor", "type": "String" },
-        { "name": "configurationUsed", "type": "boolean" },
-        { "name": "commandLine", "type": "String", "required": false },
-        { "name": "signature", "type": "String", "required": false },
-        { "name": "sourceCodeFileExtension", "type": "String" },
-        { "name": "binaryFileExtension", "type": "String" },
-        { "name": "hasWlan", "type": "boolean" },
-        { "name": "firmwareDefault", "type": "String", "required": false }
+        {
+          "name": "robot",
+          "type": "String"
+        },
+        {
+          "name": "program",
+          "type": "JSONObject"
+        },
+        {
+          "name": "configuration",
+          "type": "JSONObject"
+        },
+        {
+          "name": "sim",
+          "type": "boolean"
+        },
+        {
+          "name": "multipleSim",
+          "type": "boolean"
+        },
+        {
+          "name": "nn",
+          "type": "boolean"
+        },
+        {
+          "name": "webotsSim",
+          "type": "boolean"
+        },
+        {
+          "name": "webotsUrl",
+          "type": "String",
+          "required": false
+        },
+        {
+          "name": "connection",
+          "type": "String"
+        },
+        {
+          "name": "vendor",
+          "type": "String"
+        },
+        {
+          "name": "configurationUsed",
+          "type": "boolean"
+        },
+        {
+          "name": "commandLine",
+          "type": "String",
+          "required": false
+        },
+        {
+          "name": "signature",
+          "type": "String",
+          "required": false
+        },
+        {
+          "name": "sourceCodeFileExtension",
+          "type": "String"
+        },
+        {
+          "name": "binaryFileExtension",
+          "type": "String"
+        },
+        {
+          "name": "hasWlan",
+          "type": "boolean"
+        },
+        {
+          "name": "firmwareDefault",
+          "type": "String",
+          "required": false
+        }
       ]
     },
     {
@@ -278,17 +614,30 @@
       "extends": "BaseRequest",
       "description": "the request description for the /saveC and /saveAsC REST request",
       "properties": [
-        { "name": "name", "type": "String" },
-        { "name": "configuration", "type": "String" }
+        {
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "name": "configuration",
+          "type": "String"
+        }
       ]
     },
     {
       "name": "ConfRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /loadC REST request",
+      "description": "the request description for the /loadC REST request",
       "properties": [
-        { "name": "name", "type": "String" },
-        { "name": "owner", "type": "String", "required": false }
+        {
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "name": "owner",
+          "type": "String",
+          "required": false
+        }
       ]
     },
     {
@@ -296,8 +645,18 @@
       "extends": "BaseResponse",
       "description": "the response for the /loadC REST request",
       "properties": [
-        { "name": "confXML", "type": "String", "description": "configuration XML", "required": false },
-        { "name": "configurationNames", "type": "JSONArray", "description": "list of configuration names", "required": false }
+        {
+          "name": "confXML",
+          "type": "String",
+          "description": "configuration XML",
+          "required": false
+        },
+        {
+          "name": "configurationNames",
+          "type": "JSONArray",
+          "description": "list of configuration names",
+          "required": false
+        }
       ]
     },
     {
@@ -305,20 +664,46 @@
       "extends": "BaseResponse",
       "description": "the response for the /ping REST request. TODO: refactor! Duplicate names!",
       "properties": [
-        { "name": "version", "type": "String", "description": "the same as server.version" },
-        { "name": "date", "type": "long", "description": "the same as server.time" },
-        { "name": "dateAsString", "type": "String", "description": "date as string, but why?" }
+        {
+          "name": "version",
+          "type": "String",
+          "description": "the same as server.version"
+        },
+        {
+          "name": "date",
+          "type": "long",
+          "description": "the same as server.time"
+        },
+        {
+          "name": "dateAsString",
+          "type": "String",
+          "description": "date as string, but why?"
+        }
       ]
     },
     {
       "name": "LoginRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /login REST request",
+      "description": "the request description for the /login REST request",
       "properties": [
-        { "name": "accountName", "type": "String" },
-        { "name": "password", "type": "String" },
-        { "name": "userGroupOwner", "type": "String", "required": false },
-        { "name": "userGroupName", "type": "String", "required": false }
+        {
+          "name": "accountName",
+          "type": "String"
+        },
+        {
+          "name": "password",
+          "type": "String"
+        },
+        {
+          "name": "userGroupOwner",
+          "type": "String",
+          "required": false
+        },
+        {
+          "name": "userGroupName",
+          "type": "String",
+          "required": false
+        }
       ]
     },
     {
@@ -326,13 +711,40 @@
       "extends": "BaseResponse",
       "description": "the response for the /login REST request",
       "properties": [
-        { "name": "userId", "type": "int", "description": "the technical database key of the user" },
-        { "name": "userRole", "type": "String", "description": "the role (toString() of enum Role)" },
-        { "name": "userAccountName", "type": "String", "description": "the account name" },
-        { "name": "userName", "type": "String", "description": "the user name", "required": false },
-        { "name": "isAccountActivated", "type": "boolean", "description": "is account activated?" },
-        { "name": "userGroupOwner", "type": "String" },
-        { "name": "userGroupName", "type": "String" }
+        {
+          "name": "userId",
+          "type": "int",
+          "description": "the technical database key of the user"
+        },
+        {
+          "name": "userRole",
+          "type": "String",
+          "description": "the role (toString() of enum Role)"
+        },
+        {
+          "name": "userAccountName",
+          "type": "String",
+          "description": "the account name"
+        },
+        {
+          "name": "userName",
+          "type": "String",
+          "description": "the user name",
+          "required": false
+        },
+        {
+          "name": "isAccountActivated",
+          "type": "boolean",
+          "description": "is account activated?"
+        },
+        {
+          "name": "userGroupOwner",
+          "type": "String"
+        },
+        {
+          "name": "userGroupName",
+          "type": "String"
+        }
       ]
     },
     {
@@ -340,53 +752,119 @@
       "extends": "BaseResponse",
       "description": "the response for the /getUser REST request",
       "properties": [
-        { "name": "userId", "type": "int", "description": "the technical database key of the user" },
-        { "name": "userAccountName", "type": "String", "description": "the account name" },
-        { "name": "userName", "type": "String", "description": "the user name", "required": false },
-        { "name": "userEmail", "type": "String", "description": "the email address" },
-        { "name": "isYoungerThen14", "type": "boolean", "description": "is user younger as 14 years?" }
+        {
+          "name": "userId",
+          "type": "int",
+          "description": "the technical database key of the user"
+        },
+        {
+          "name": "userAccountName",
+          "type": "String",
+          "description": "the account name"
+        },
+        {
+          "name": "userName",
+          "type": "String",
+          "description": "the user name",
+          "required": false
+        },
+        {
+          "name": "userEmail",
+          "type": "String",
+          "description": "the email address"
+        },
+        {
+          "name": "isYoungerThen14",
+          "type": "boolean",
+          "description": "is user younger as 14 years?"
+        }
       ]
     },
     {
       "name": "UserRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /createUser and /updateUser REST request",
+      "description": "the request description for the /createUser and /updateUser REST request",
       "properties": [
-        { "name": "accountName", "type": "String" },
-        { "name": "password", "type": "String", "required": false },
-        { "name": "userEmail", "type": "String" },
-        { "name": "userName", "type": "String" },
-        { "name": "role", "type": "String" },
-        { "name": "language", "type": "String" },
-        { "name": "isYoungerThen14", "type": "boolean" }
+        {
+          "name": "accountName",
+          "type": "String"
+        },
+        {
+          "name": "password",
+          "type": "String",
+          "required": false
+        },
+        {
+          "name": "userEmail",
+          "type": "String"
+        },
+        {
+          "name": "userName",
+          "type": "String"
+        },
+        {
+          "name": "role",
+          "type": "String"
+        },
+        {
+          "name": "language",
+          "type": "String"
+        },
+        {
+          "name": "isYoungerThen14",
+          "type": "boolean"
+        }
       ]
     },
     {
       "name": "ChangePasswordRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /changePassword REST request",
+      "description": "the request description for the /changePassword REST request",
       "properties": [
-        { "name": "accountName", "type": "String" },
-        { "name": "oldPassword", "type": "String" },
-        { "name": "newPassword", "type": "String", "required": false }
+        {
+          "name": "accountName",
+          "type": "String"
+        },
+        {
+          "name": "oldPassword",
+          "type": "String"
+        },
+        {
+          "name": "newPassword",
+          "type": "String",
+          "required": false
+        }
       ]
     },
     {
       "name": "DeleteUserRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /deleteUser REST request",
+      "description": "the request description for the /deleteUser REST request",
       "properties": [
-        { "name": "accountName", "type": "String" },
-        { "name": "password", "type": "String" }
+        {
+          "name": "accountName",
+          "type": "String"
+        },
+        {
+          "name": "password",
+          "type": "String"
+        }
       ]
     },
     {
       "name": "ResetPasswordRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /resetPassword REST request",
+      "description": "the request description for the /resetPassword REST request",
       "properties": [
-        { "name": "resetPasswordLink", "type": "String" },
-        { "name": "newPassword", "type": "String", "required": false }
+        {
+          "name": "resetPasswordLink",
+          "type": "String"
+        },
+        {
+          "name": "newPassword",
+          "type": "String",
+          "required": false
+        }
       ]
     },
     {
@@ -394,118 +872,242 @@
       "extends": "BaseResponse",
       "description": "the response for the /isResetPasswordLinkExpired REST request",
       "properties": [
-        { "name": "resetPasswordLinkExpired", "type": "boolean", "description": "is the link expired?" }
+        {
+          "name": "resetPasswordLinkExpired",
+          "type": "boolean",
+          "description": "is the link expired?"
+        }
       ]
     },
     {
       "name": "PasswordRecoveryRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /resetPassword REST request",
+      "description": "the request description for the /resetPassword REST request",
       "properties": [
-        { "name": "lostEmail", "type": "String" },
-        { "name": "language", "type": "String" }
+        {
+          "name": "lostEmail",
+          "type": "String"
+        },
+        {
+          "name": "language",
+          "type": "String"
+        }
       ]
     },
     {
       "name": "ResendActivationRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /resendActivation REST request",
+      "description": "the request description for the /resendActivation REST request",
       "properties": [
-        { "name": "accountName", "type": "String" },
-        { "name": "language", "type": "String" }
+        {
+          "name": "accountName",
+          "type": "String"
+        },
+        {
+          "name": "language",
+          "type": "String"
+        }
       ]
     },
     {
       "name": "ActivateUserRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /activateUser REST request",
+      "description": "the request description for the /activateUser REST request",
       "properties": [
-        { "name": "userActivationLink", "type": "String" }
+        {
+          "name": "userActivationLink",
+          "type": "String"
+        }
       ]
     },
     {
       "name": "GetStatusTextResponse",
       "extends": "BaseResponse",
-    	"description": "the response for the /getStatusText REST request",
+      "description": "the response for the /getStatusText REST request",
       "properties": [
-        { "name": "statustext", "type": "JSONArray" }
+        {
+          "name": "statustext",
+          "type": "JSONArray"
+        }
       ]
     },
     {
       "name": "SetStatusTextRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /setStatusText REST request",
+      "description": "the request description for the /setStatusText REST request",
       "properties": [
-        { "name": "english", "type": "String" },
-        { "name": "german", "type": "String" },
-        { "name": "timestamp", "type": "long" }
+        {
+          "name": "english",
+          "type": "String"
+        },
+        {
+          "name": "german",
+          "type": "String"
+        },
+        {
+          "name": "timestamp",
+          "type": "long"
+        }
       ]
     },
     {
       "name": "ProjectWorkflowRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /projectWorkflow/* REST request",
+      "description": "the request description for the /projectWorkflow/* REST request",
       "properties": [
-        { "name": "programName", "type": "String" },
-        { "name": "configurationName", "type": "String", "required": false },
-        { "name": "progXML", "type": "String" },
-        { "name": "confXML", "type": "String", "required": false },
-        { "name": "SSID", "type": "String", "required": false },
-        { "name": "password", "type": "String", "required": false },
-        { "name": "language", "type": "String", "required": false },
-        { "name": "robot", "type": "String", "required": false }
+        {
+          "name": "programName",
+          "type": "String"
+        },
+        {
+          "name": "configurationName",
+          "type": "String",
+          "required": false
+        },
+        {
+          "name": "progXML",
+          "type": "String"
+        },
+        {
+          "name": "confXML",
+          "type": "String",
+          "required": false
+        },
+        {
+          "name": "SSID",
+          "type": "String",
+          "required": false
+        },
+        {
+          "name": "password",
+          "type": "String",
+          "required": false
+        },
+        {
+          "name": "language",
+          "type": "String",
+          "required": false
+        },
+        {
+          "name": "robot",
+          "type": "String",
+          "required": false
+        }
       ]
     },
     {
       "name": "ProjectWorkflowResetRequest",
       "extends": "BaseRequest",
-    	"description": "DEPRECATED: remove after 4.0.0 deplyoment",
+      "description": "DEPRECATED: remove after 4.0.0 deplyoment",
       "properties": [
-        { "name": "robot", "type": "String", "required": false }
+        {
+          "name": "robot",
+          "type": "String",
+          "required": false
+        }
       ]
     },
     {
       "name": "ProjectSourceResponse",
       "extends": "BaseResponse",
-    	"description": "the response for the /projectWorkflow/source REST request",
+      "description": "the response for the /projectWorkflow/source REST request",
       "properties": [
-        { "name": "sourceCode", "type": "String" },
-        { "name": "progXML", "type": "String" },
-        { "name": "confAnnos", "type": "String->JSONObject" }
+        {
+          "name": "sourceCode",
+          "type": "String"
+        },
+        {
+          "name": "progXML",
+          "type": "String"
+        },
+        {
+          "name": "confAnnos",
+          "type": "String->JSONObject"
+        }
       ]
     },
     {
       "name": "ProjectSourceSimulationResponse",
       "extends": "BaseResponse",
-    	"description": "the response for the /projectWorkflow/sourceSimulation REST request",
+      "description": "the response for the /projectWorkflow/sourceSimulation REST request",
       "properties": [
-        { "name": "javaScriptProgram", "type": "String" },
-        { "name": "fileExtension", "type": "String" },
-        { "name": "progXML", "type": "String" },
-        { "name": "confAnnos", "type": "String->JSONObject" },
-        { "name": "configuration", "type": "JSONObject" }
+        {
+          "name": "programName",
+          "type": "String",
+          "required": false
+        },
+        {
+          "name": "javaScriptProgram",
+          "type": "String"
+        },
+        {
+          "name": "fileExtension",
+          "type": "String"
+        },
+        {
+          "name": "progXML",
+          "type": "String"
+        },
+        {
+          "name": "confAnnos",
+          "type": "String->JSONObject"
+        },
+        {
+          "name": "configuration",
+          "type": "JSONObject"
+        }
       ]
     },
     {
       "name": "ProjectNepoResponse",
       "extends": "BaseResponse",
-    	"description": "the response for the /projectWorkflow/run and ../compileProgram REST request",
+      "description": "the response for the /projectWorkflow/run and ../compileProgram REST request",
       "properties": [
-        { "name": "programName", "type": "String", "required": false },
-        { "name": "progXML", "type": "String", "required": false },
-        { "name": "confAnnos", "type": "String->JSONObject", "required": false },
-        { "name": "compiledCode", "type": "String" },
-        { "name": "configuration", "type": "JSONObject", "required": false }
+        {
+          "name": "programName",
+          "type": "String",
+          "required": false
+        },
+        {
+          "name": "progXML",
+          "type": "String",
+          "required": false
+        },
+        {
+          "name": "confAnnos",
+          "type": "String->JSONObject",
+          "required": false
+        },
+        {
+          "name": "compiledCode",
+          "type": "String"
+        },
+        {
+          "name": "configuration",
+          "type": "JSONObject",
+          "required": false
+        }
       ]
     },
     {
       "name": "ProjectNativeResponse",
       "extends": "BaseResponse",
-    	"description": "the response for the /projectWorkflow/runNative, ../compileNative and ../reset REST request",
+      "description": "the response for the /projectWorkflow/runNative, ../compileNative and ../reset REST request",
       "properties": [
-        { "name": "programName", "type": "String", "required": false },
-        { "name": "confAnnos", "type": "String->JSONObject", "required": false },
-        { "name": "compiledCode", "type": "String" }
+        {
+          "name": "programName",
+          "type": "String",
+          "required": false
+        },
+        {
+          "name": "confAnnos",
+          "type": "String->JSONObject",
+          "required": false
+        },
+        {
+          "name": "compiledCode",
+          "type": "String"
+        }
       ]
     },
     {
@@ -513,7 +1115,10 @@
       "extends": "BaseRequest",
       "description": "the request description for the /program/userGroupMembers/names REST request, response is: ListingNamesResponse",
       "properties": [
-        { "name": "groupName", "type": "String" }
+        {
+          "name": "groupName",
+          "type": "String"
+        }
       ]
     },
     {
@@ -521,23 +1126,32 @@
       "extends": "BaseRequest",
       "description": "the request description for the /userGroup/getUserGroup REST request, returns UserGroupResponse",
       "properties": [
-        { "name": "groupName", "type": "String" }
+        {
+          "name": "groupName",
+          "type": "String"
+        }
       ]
     },
     {
       "name": "UserGroupResponse",
       "extends": "BaseResponse",
-    	"description": "the response for the /userGroup/getUserGroup REST request",
+      "description": "the response for the /userGroup/getUserGroup REST request",
       "properties": [
-        { "name": "userGroup", "type": "JSONObject" }
+        {
+          "name": "userGroup",
+          "type": "JSONObject"
+        }
       ]
     },
     {
       "name": "UserGroupListResponse",
       "extends": "BaseResponse",
-    	"description": "the response for the /userGroup/getUserGroupList REST request",
+      "description": "the response for the /userGroup/getUserGroupList REST request",
       "properties": [
-        { "name": "userGroups", "type": "JSONArray" }
+        {
+          "name": "userGroups",
+          "type": "JSONArray"
+        }
       ]
     },
     {
@@ -545,8 +1159,14 @@
       "extends": "BaseRequest",
       "description": "the request description for the /userGroup/createUserGroup and /userGroup/addGroupMembers REST request, returns UserGroupResponse",
       "properties": [
-        { "name": "groupName", "type": "String" },
-        { "name": "groupMemberNames", "type": "String[]" }
+        {
+          "name": "groupName",
+          "type": "String"
+        },
+        {
+          "name": "groupMemberNames",
+          "type": "String[]"
+        }
       ]
     },
     {
@@ -554,9 +1174,18 @@
       "extends": "BaseRequest",
       "description": "the request description for the /userGroup/updateMemberAccount REST request, returns BaseResponse",
       "properties": [
-        { "name": "groupName", "type": "String" },
-        { "name": "currentGroupMemberAccount", "type": "String" },
-        { "name": "newGroupMemberAccount", "type": "String" }
+        {
+          "name": "groupName",
+          "type": "String"
+        },
+        {
+          "name": "currentGroupMemberAccount",
+          "type": "String"
+        },
+        {
+          "name": "newGroupMemberAccount",
+          "type": "String"
+        }
       ]
     },
     {
@@ -564,7 +1193,10 @@
       "extends": "BaseRequest",
       "description": "the request description for the /userGroup/deleteUserGroups REST request",
       "properties": [
-        { "name": "groupNames", "type": "String[]" }
+        {
+          "name": "groupNames",
+          "type": "String[]"
+        }
       ]
     },
     {
@@ -572,8 +1204,14 @@
       "extends": "BaseRequest",
       "description": "the request description for the /userGroup/deleteGroupMembers and /userGroup/setUserGroupMembersDefaultPasswords REST request",
       "properties": [
-        { "name": "groupName", "type": "String" },
-        { "name": "groupMemberAccounts", "type": "String[]" }
+        {
+          "name": "groupName",
+          "type": "String"
+        },
+        {
+          "name": "groupMemberAccounts",
+          "type": "String[]"
+        }
       ]
     },
     {
@@ -581,7 +1219,10 @@
       "extends": "BaseResponse",
       "description": "the response for the /notifications/getNotifications REST request",
       "properties": [
-        { "name": "notifications", "type": "JSONArray"}
+        {
+          "name": "notifications",
+          "type": "JSONArray"
+        }
       ]
     }
   ]

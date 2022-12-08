@@ -108,19 +108,19 @@ public class ListingRequest extends BaseRequest {
     private ListingRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ListingRequest-object is already immutable: " + toString();
+            _message = "ListingRequest-object is already immutable: " + this;
         }
         if ( programName == null ) {
-            _message = "required property programName of ListingRequest-object is not set: " + toString();
+            _message = "required property programName of ListingRequest-object is not set: " + this;
         }
         if ( owner == null ) {
-            _message = "required property owner of ListingRequest-object is not set: " + toString();
+            _message = "required property owner of ListingRequest-object is not set: " + this;
         }
         if ( author == null ) {
-            _message = "required property author of ListingRequest-object is not set: " + toString();
+            _message = "required property author of ListingRequest-object is not set: " + this;
         }
         if ( configName == null ) {
-            _message = "required property configName of ListingRequest-object is not set: " + toString();
+            _message = "required property configName of ListingRequest-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -134,7 +134,7 @@ public class ListingRequest extends BaseRequest {
      */
     public String getProgramName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no programName from an object under construction: " + toString());
+            throw new RuntimeException("no programName from an object under construction: " + this);
         }
         return this.programName;
     }
@@ -144,7 +144,7 @@ public class ListingRequest extends BaseRequest {
      */
     public ListingRequest setProgramName(String programName) {
         if ( this.immutable ) {
-            throw new RuntimeException("programName assigned to an immutable object: " + toString());
+            throw new RuntimeException("programName assigned to an immutable object: " + this);
         }
         this.programName = programName;
         return this;
@@ -155,7 +155,7 @@ public class ListingRequest extends BaseRequest {
      */
     public String getOwner() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no owner from an object under construction: " + toString());
+            throw new RuntimeException("no owner from an object under construction: " + this);
         }
         return this.owner;
     }
@@ -165,7 +165,7 @@ public class ListingRequest extends BaseRequest {
      */
     public ListingRequest setOwner(String owner) {
         if ( this.immutable ) {
-            throw new RuntimeException("owner assigned to an immutable object: " + toString());
+            throw new RuntimeException("owner assigned to an immutable object: " + this);
         }
         this.owner = owner;
         return this;
@@ -176,7 +176,7 @@ public class ListingRequest extends BaseRequest {
      */
     public String getAuthor() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no author from an object under construction: " + toString());
+            throw new RuntimeException("no author from an object under construction: " + this);
         }
         return this.author;
     }
@@ -186,7 +186,7 @@ public class ListingRequest extends BaseRequest {
      */
     public ListingRequest setAuthor(String author) {
         if ( this.immutable ) {
-            throw new RuntimeException("author assigned to an immutable object: " + toString());
+            throw new RuntimeException("author assigned to an immutable object: " + this);
         }
         this.author = author;
         return this;
@@ -197,7 +197,7 @@ public class ListingRequest extends BaseRequest {
      */
     public String getConfigName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no configName from an object under construction: " + toString());
+            throw new RuntimeException("no configName from an object under construction: " + this);
         }
         return this.configName;
     }
@@ -207,7 +207,7 @@ public class ListingRequest extends BaseRequest {
      */
     public ListingRequest setConfigName(String configName) {
         if ( this.immutable ) {
-            throw new RuntimeException("configName assigned to an immutable object: " + toString());
+            throw new RuntimeException("configName assigned to an immutable object: " + this);
         }
         this.configName = configName;
         return this;
@@ -219,7 +219,7 @@ public class ListingRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

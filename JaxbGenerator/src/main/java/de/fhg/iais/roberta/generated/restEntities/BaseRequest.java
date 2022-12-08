@@ -94,7 +94,7 @@ public class BaseRequest {
     private BaseRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "BaseRequest-object is already immutable: " + toString();
+            _message = "BaseRequest-object is already immutable: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -108,7 +108,7 @@ public class BaseRequest {
      */
     public String getCmd() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no cmd from an object under construction: " + toString());
+            throw new RuntimeException("no cmd from an object under construction: " + this);
         }
         return this.cmd;
     }
@@ -127,7 +127,7 @@ public class BaseRequest {
      */
     public BaseRequest setCmd(String cmd) {
         if ( this.immutable ) {
-            throw new RuntimeException("cmd assigned to an immutable object: " + toString());
+            throw new RuntimeException("cmd assigned to an immutable object: " + this);
         }
         this.cmd = cmd;
         return this;
@@ -139,7 +139,7 @@ public class BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

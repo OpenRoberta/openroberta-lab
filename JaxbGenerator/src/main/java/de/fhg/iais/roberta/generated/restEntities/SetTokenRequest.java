@@ -96,10 +96,10 @@ public class SetTokenRequest extends BaseRequest {
     private SetTokenRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "SetTokenRequest-object is already immutable: " + toString();
+            _message = "SetTokenRequest-object is already immutable: " + this;
         }
         if ( token == null ) {
-            _message = "required property token of SetTokenRequest-object is not set: " + toString();
+            _message = "required property token of SetTokenRequest-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -113,7 +113,7 @@ public class SetTokenRequest extends BaseRequest {
      */
     public String getToken() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no token from an object under construction: " + toString());
+            throw new RuntimeException("no token from an object under construction: " + this);
         }
         return this.token;
     }
@@ -123,7 +123,7 @@ public class SetTokenRequest extends BaseRequest {
      */
     public SetTokenRequest setToken(String token) {
         if ( this.immutable ) {
-            throw new RuntimeException("token assigned to an immutable object: " + toString());
+            throw new RuntimeException("token assigned to an immutable object: " + this);
         }
         this.token = token;
         return this;
@@ -135,7 +135,7 @@ public class SetTokenRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

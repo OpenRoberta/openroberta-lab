@@ -194,37 +194,37 @@ public class LoginResponse extends BaseResponse {
     private LoginResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "LoginResponse-object is already immutable: " + toString();
+            _message = "LoginResponse-object is already immutable: " + this;
         }
         if ( rc == null ) {
-            _message = "required property rc of LoginResponse-object is not set: " + toString();
+            _message = "required property rc of LoginResponse-object is not set: " + this;
         }
         if ( initToken == null ) {
-            _message = "required property initToken of LoginResponse-object is not set: " + toString();
+            _message = "required property initToken of LoginResponse-object is not set: " + this;
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of LoginResponse-object is not set: " + toString();
+            _message = "required property serverTime of LoginResponse-object is not set: " + this;
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of LoginResponse-object is not set: " + toString();
+            _message = "required property serverVersion of LoginResponse-object is not set: " + this;
         }
         if ( !userIdDefined ) {
-            _message = "required property userId of LoginResponse-object is not set: " + toString();
+            _message = "required property userId of LoginResponse-object is not set: " + this;
         }
         if ( userRole == null ) {
-            _message = "required property userRole of LoginResponse-object is not set: " + toString();
+            _message = "required property userRole of LoginResponse-object is not set: " + this;
         }
         if ( userAccountName == null ) {
-            _message = "required property userAccountName of LoginResponse-object is not set: " + toString();
+            _message = "required property userAccountName of LoginResponse-object is not set: " + this;
         }
         if ( !isAccountActivatedDefined ) {
-            _message = "required property isAccountActivated of LoginResponse-object is not set: " + toString();
+            _message = "required property isAccountActivated of LoginResponse-object is not set: " + this;
         }
         if ( userGroupOwner == null ) {
-            _message = "required property userGroupOwner of LoginResponse-object is not set: " + toString();
+            _message = "required property userGroupOwner of LoginResponse-object is not set: " + this;
         }
         if ( userGroupName == null ) {
-            _message = "required property userGroupName of LoginResponse-object is not set: " + toString();
+            _message = "required property userGroupName of LoginResponse-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -238,7 +238,7 @@ public class LoginResponse extends BaseResponse {
      */
     public int getUserId() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no userId from an object under construction: " + toString());
+            throw new RuntimeException("no userId from an object under construction: " + this);
         }
         return this.userId;
     }
@@ -248,7 +248,7 @@ public class LoginResponse extends BaseResponse {
      */
     public LoginResponse setUserId(int userId) {
         if ( this.immutable ) {
-            throw new RuntimeException("userId assigned to an immutable object: " + toString());
+            throw new RuntimeException("userId assigned to an immutable object: " + this);
         }
         this.userId = userId;
         this.userIdDefined = true;
@@ -260,7 +260,7 @@ public class LoginResponse extends BaseResponse {
      */
     public String getUserRole() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no userRole from an object under construction: " + toString());
+            throw new RuntimeException("no userRole from an object under construction: " + this);
         }
         return this.userRole;
     }
@@ -270,7 +270,7 @@ public class LoginResponse extends BaseResponse {
      */
     public LoginResponse setUserRole(String userRole) {
         if ( this.immutable ) {
-            throw new RuntimeException("userRole assigned to an immutable object: " + toString());
+            throw new RuntimeException("userRole assigned to an immutable object: " + this);
         }
         this.userRole = userRole;
         return this;
@@ -281,7 +281,7 @@ public class LoginResponse extends BaseResponse {
      */
     public String getUserAccountName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no userAccountName from an object under construction: " + toString());
+            throw new RuntimeException("no userAccountName from an object under construction: " + this);
         }
         return this.userAccountName;
     }
@@ -291,7 +291,7 @@ public class LoginResponse extends BaseResponse {
      */
     public LoginResponse setUserAccountName(String userAccountName) {
         if ( this.immutable ) {
-            throw new RuntimeException("userAccountName assigned to an immutable object: " + toString());
+            throw new RuntimeException("userAccountName assigned to an immutable object: " + this);
         }
         this.userAccountName = userAccountName;
         return this;
@@ -302,7 +302,7 @@ public class LoginResponse extends BaseResponse {
      */
     public String getUserName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no userName from an object under construction: " + toString());
+            throw new RuntimeException("no userName from an object under construction: " + this);
         }
         return this.userName;
     }
@@ -321,7 +321,7 @@ public class LoginResponse extends BaseResponse {
      */
     public LoginResponse setUserName(String userName) {
         if ( this.immutable ) {
-            throw new RuntimeException("userName assigned to an immutable object: " + toString());
+            throw new RuntimeException("userName assigned to an immutable object: " + this);
         }
         this.userName = userName;
         return this;
@@ -332,7 +332,7 @@ public class LoginResponse extends BaseResponse {
      */
     public boolean getIsAccountActivated() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no isAccountActivated from an object under construction: " + toString());
+            throw new RuntimeException("no isAccountActivated from an object under construction: " + this);
         }
         return this.isAccountActivated;
     }
@@ -342,7 +342,7 @@ public class LoginResponse extends BaseResponse {
      */
     public LoginResponse setIsAccountActivated(boolean isAccountActivated) {
         if ( this.immutable ) {
-            throw new RuntimeException("isAccountActivated assigned to an immutable object: " + toString());
+            throw new RuntimeException("isAccountActivated assigned to an immutable object: " + this);
         }
         this.isAccountActivated = isAccountActivated;
         this.isAccountActivatedDefined = true;
@@ -354,7 +354,7 @@ public class LoginResponse extends BaseResponse {
      */
     public String getUserGroupOwner() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no userGroupOwner from an object under construction: " + toString());
+            throw new RuntimeException("no userGroupOwner from an object under construction: " + this);
         }
         return this.userGroupOwner;
     }
@@ -364,7 +364,7 @@ public class LoginResponse extends BaseResponse {
      */
     public LoginResponse setUserGroupOwner(String userGroupOwner) {
         if ( this.immutable ) {
-            throw new RuntimeException("userGroupOwner assigned to an immutable object: " + toString());
+            throw new RuntimeException("userGroupOwner assigned to an immutable object: " + this);
         }
         this.userGroupOwner = userGroupOwner;
         return this;
@@ -375,7 +375,7 @@ public class LoginResponse extends BaseResponse {
      */
     public String getUserGroupName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no userGroupName from an object under construction: " + toString());
+            throw new RuntimeException("no userGroupName from an object under construction: " + this);
         }
         return this.userGroupName;
     }
@@ -385,7 +385,7 @@ public class LoginResponse extends BaseResponse {
      */
     public LoginResponse setUserGroupName(String userGroupName) {
         if ( this.immutable ) {
-            throw new RuntimeException("userGroupName assigned to an immutable object: " + toString());
+            throw new RuntimeException("userGroupName assigned to an immutable object: " + this);
         }
         this.userGroupName = userGroupName;
         return this;
@@ -397,7 +397,7 @@ public class LoginResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

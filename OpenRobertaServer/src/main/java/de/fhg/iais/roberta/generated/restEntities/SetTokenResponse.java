@@ -163,22 +163,22 @@ public class SetTokenResponse extends BaseResponse {
     private SetTokenResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "SetTokenResponse-object is already immutable: " + toString();
+            _message = "SetTokenResponse-object is already immutable: " + this;
         }
         if ( rc == null ) {
-            _message = "required property rc of SetTokenResponse-object is not set: " + toString();
+            _message = "required property rc of SetTokenResponse-object is not set: " + this;
         }
         if ( initToken == null ) {
-            _message = "required property initToken of SetTokenResponse-object is not set: " + toString();
+            _message = "required property initToken of SetTokenResponse-object is not set: " + this;
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of SetTokenResponse-object is not set: " + toString();
+            _message = "required property serverTime of SetTokenResponse-object is not set: " + this;
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of SetTokenResponse-object is not set: " + toString();
+            _message = "required property serverVersion of SetTokenResponse-object is not set: " + this;
         }
         if ( !updateDefined ) {
-            _message = "required property update of SetTokenResponse-object is not set: " + toString();
+            _message = "required property update of SetTokenResponse-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -192,7 +192,7 @@ public class SetTokenResponse extends BaseResponse {
      */
     public int getUpdate() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no update from an object under construction: " + toString());
+            throw new RuntimeException("no update from an object under construction: " + this);
         }
         return this.update;
     }
@@ -202,7 +202,7 @@ public class SetTokenResponse extends BaseResponse {
      */
     public SetTokenResponse setUpdate(int update) {
         if ( this.immutable ) {
-            throw new RuntimeException("update assigned to an immutable object: " + toString());
+            throw new RuntimeException("update assigned to an immutable object: " + this);
         }
         this.update = update;
         this.updateDefined = true;
@@ -215,7 +215,7 @@ public class SetTokenResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

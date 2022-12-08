@@ -14,6 +14,7 @@ import org.json.JSONObject;
  * Datum: 2020-06-15
  */
 public class ListingResponse extends BaseResponse {
+    protected String programName;
     protected String progXML;
     protected String configName;
     protected String confXML;
@@ -60,6 +61,7 @@ public class ListingResponse extends BaseResponse {
         int robotNepoexitvalue,
         String robotState,
         boolean notificationsAvailable,
+        String programName,
         String progXML,
         String configName,
         String confXML,
@@ -82,6 +84,7 @@ public class ListingResponse extends BaseResponse {
         entity.setRobotNepoexitvalue(robotNepoexitvalue);
         entity.setRobotState(robotState);
         entity.setNotificationsAvailable(notificationsAvailable);
+        entity.setProgramName(programName);
         entity.setProgXML(progXML);
         entity.setConfigName(configName);
         entity.setConfXML(confXML);
@@ -140,6 +143,8 @@ public class ListingResponse extends BaseResponse {
                     setRobotState(jsonO.optString(key));
                 } else if ( "notifications.available".equals(key) ) {
                     setNotificationsAvailable(jsonO.optBoolean(key));
+                } else if ( "programName".equals(key) ) {
+                    setProgramName(jsonO.optString(key));
                 } else if ( "progXML".equals(key) ) {
                     setProgXML(jsonO.getString(key));
                 } else if ( "configName".equals(key) ) {
@@ -178,25 +183,25 @@ public class ListingResponse extends BaseResponse {
     private ListingResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ListingResponse-object is already immutable: " + toString();
+            _message = "ListingResponse-object is already immutable: " + this;
         }
         if ( rc == null ) {
-            _message = "required property rc of ListingResponse-object is not set: " + toString();
+            _message = "required property rc of ListingResponse-object is not set: " + this;
         }
         if ( initToken == null ) {
-            _message = "required property initToken of ListingResponse-object is not set: " + toString();
+            _message = "required property initToken of ListingResponse-object is not set: " + this;
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of ListingResponse-object is not set: " + toString();
+            _message = "required property serverTime of ListingResponse-object is not set: " + this;
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of ListingResponse-object is not set: " + toString();
+            _message = "required property serverVersion of ListingResponse-object is not set: " + this;
         }
         if ( progXML == null ) {
-            _message = "required property progXML of ListingResponse-object is not set: " + toString();
+            _message = "required property progXML of ListingResponse-object is not set: " + this;
         }
         if ( !lastChangedDefined ) {
-            _message = "required property lastChanged of ListingResponse-object is not set: " + toString();
+            _message = "required property lastChanged of ListingResponse-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -206,11 +211,41 @@ public class ListingResponse extends BaseResponse {
     }
 
     /**
+     * GET programName. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getProgramName() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no programName from an object under construction: " + this);
+        }
+        return this.programName;
+    }
+
+    /**
+     * is the property defined? The property maybe undefined as it is not a required property
+     *
+     * @return true if the property is defined (has been set)
+     */
+    public boolean programNameDefined() {
+        return this.programName != null;
+    }
+
+    /**
+     * SET programName. Object must be mutable.
+     */
+    public ListingResponse setProgramName(String programName) {
+        if ( this.immutable ) {
+            throw new RuntimeException("programName assigned to an immutable object: " + this);
+        }
+        this.programName = programName;
+        return this;
+    }
+
+    /**
      * GET progXML. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getProgXML() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no progXML from an object under construction: " + toString());
+            throw new RuntimeException("no progXML from an object under construction: " + this);
         }
         return this.progXML;
     }
@@ -220,7 +255,7 @@ public class ListingResponse extends BaseResponse {
      */
     public ListingResponse setProgXML(String progXML) {
         if ( this.immutable ) {
-            throw new RuntimeException("progXML assigned to an immutable object: " + toString());
+            throw new RuntimeException("progXML assigned to an immutable object: " + this);
         }
         this.progXML = progXML;
         return this;
@@ -231,7 +266,7 @@ public class ListingResponse extends BaseResponse {
      */
     public String getConfigName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no configName from an object under construction: " + toString());
+            throw new RuntimeException("no configName from an object under construction: " + this);
         }
         return this.configName;
     }
@@ -250,7 +285,7 @@ public class ListingResponse extends BaseResponse {
      */
     public ListingResponse setConfigName(String configName) {
         if ( this.immutable ) {
-            throw new RuntimeException("configName assigned to an immutable object: " + toString());
+            throw new RuntimeException("configName assigned to an immutable object: " + this);
         }
         this.configName = configName;
         return this;
@@ -261,7 +296,7 @@ public class ListingResponse extends BaseResponse {
      */
     public String getConfXML() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no confXML from an object under construction: " + toString());
+            throw new RuntimeException("no confXML from an object under construction: " + this);
         }
         return this.confXML;
     }
@@ -280,7 +315,7 @@ public class ListingResponse extends BaseResponse {
      */
     public ListingResponse setConfXML(String confXML) {
         if ( this.immutable ) {
-            throw new RuntimeException("confXML assigned to an immutable object: " + toString());
+            throw new RuntimeException("confXML assigned to an immutable object: " + this);
         }
         this.confXML = confXML;
         return this;
@@ -291,7 +326,7 @@ public class ListingResponse extends BaseResponse {
      */
     public long getLastChanged() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no lastChanged from an object under construction: " + toString());
+            throw new RuntimeException("no lastChanged from an object under construction: " + this);
         }
         return this.lastChanged;
     }
@@ -301,7 +336,7 @@ public class ListingResponse extends BaseResponse {
      */
     public ListingResponse setLastChanged(long lastChanged) {
         if ( this.immutable ) {
-            throw new RuntimeException("lastChanged assigned to an immutable object: " + toString());
+            throw new RuntimeException("lastChanged assigned to an immutable object: " + this);
         }
         this.lastChanged = lastChanged;
         this.lastChangedDefined = true;
@@ -314,7 +349,7 @@ public class ListingResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {
@@ -362,6 +397,9 @@ public class ListingResponse extends BaseResponse {
             if ( this.notificationsAvailableDefined ) {
                 jsonO.put("notifications.available", this.notificationsAvailable);
             }
+            if ( this.programName != null ) {
+                jsonO.put("programName", this.programName);
+            }
             jsonO.put("progXML", this.progXML);
             if ( this.configName != null ) {
                 jsonO.put("configName", this.configName);
@@ -378,7 +416,7 @@ public class ListingResponse extends BaseResponse {
 
     @Override
     public String toString() {
-        return "ListingResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", progXML=" + this.progXML + ", configName=" + this.configName + ", confXML=" + this.confXML + ", lastChanged=" + this.lastChanged + " ]";
+        return "ListingResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", programName=" + this.programName + ", progXML=" + this.progXML + ", configName=" + this.configName + ", confXML=" + this.confXML + ", lastChanged=" + this.lastChanged + " ]";
     }
 
     @Override

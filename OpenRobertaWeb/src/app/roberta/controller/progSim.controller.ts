@@ -525,7 +525,7 @@ class ProgSimMultiController extends ProgSimController {
                     Promise.all(loadedPrograms).then(
                         (values) => {
                             if (C.extractedPrograms.length >= 1) {
-                                C.toggleSim($('#simButton'));
+                                C.toggleMultiSim($('#simButton'), C.getSortedExtractedPrograms());
                             }
                         },
                         (values) => {
@@ -544,6 +544,18 @@ class ProgSimMultiController extends ProgSimController {
             let myheight = Math.min($(window).height() - 200, 532);
             $('#showMultipleSimPrograms .fixed-table-body').height(myheight);
         });
+    }
+
+    private getSortedExtractedPrograms():any[] {
+        let mySortedExtractedPrograms = [];
+        let C = this;
+        this.selectedPrograms.forEach((selected) => {
+            let myProgram = C.extractedPrograms.find((element) => element.programName == selected.programName);
+            for (let i = 0; i < selected.times; i++) {
+                mySortedExtractedPrograms.push(myProgram);
+            }
+        });
+        return mySortedExtractedPrograms;
     }
 
     private async loadProgramms(): Promise<any[]> {
@@ -577,7 +589,6 @@ class ProgSimMultiController extends ProgSimController {
     private loadStackMachineCode(item, resolve, reject, result) {
         let C = this;
         if (result.rc === 'ok') {
-            result.savedName = item.programName;
             let loadResult = result;
             let xmlTextProgram = result.progXML;
             let isNamedConfig = result.configName !== GUISTATE_C.getRobotGroup().toUpperCase() + 'basis' && result.configName !== '';
@@ -591,15 +602,13 @@ class ProgSimMultiController extends ProgSimController {
                         : undefined
                     : undefined;
             let language = GUISTATE_C.getLanguage();
-            PROGRAM_M.runInSim(result.savedName, configName, xmlTextProgram, xmlConfigText, language, function (result) {
+            PROGRAM_M.runInSim(result.programName, configName, xmlTextProgram, xmlConfigText, language, function (result) {
                 if (result.rc === 'ok') {
                     let combinedResult = loadResult;
                     for (let resultProp in result) {
                         combinedResult[resultProp] = result[resultProp];
                     }
-                    for (let i = 0; i < item.times; i++) {
-                        C.extractedPrograms.push(combinedResult);
-                    }
+                    C.extractedPrograms.push(combinedResult);
                     resolve('ok');
                 } else {
                     reject({ message: result.message, name: item.programName });
@@ -775,7 +784,7 @@ class ProgSimMultiController extends ProgSimController {
                     C.loadProgramms().then((loadedPrograms) => {
                         Promise.all(loadedPrograms).then(
                             (values) => {
-                                SIM.run(C.extractedPrograms, function () {
+                                SIM.run(C.getSortedExtractedPrograms(), function () {
                                     $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
                                     $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
                                 });
@@ -799,7 +808,7 @@ class ProgSimMultiController extends ProgSimController {
         );
     }
 
-    override toggleSim($button: JQuery) {
+    toggleMultiSim($button: JQuery, mySortedExtractedPrograms: any[]) {
         if ($('.fromRight.rightActive').hasClass('shifting')) {
             return;
         }
@@ -809,7 +818,7 @@ class ProgSimMultiController extends ProgSimController {
         this.removeControl();
         this.addControlEvents();
         this.addConfigEvents();
-        C.SIM.init(C.extractedPrograms, true, null, GUISTATE_C.getRobotGroup());
+        C.SIM.init(mySortedExtractedPrograms, true, null, GUISTATE_C.getRobotGroup());
         $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
         if (TOUR_C.getInstance() && TOUR_C.getInstance().trigger) {
             TOUR_C.getInstance().trigger('startSim');

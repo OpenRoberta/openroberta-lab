@@ -96,10 +96,10 @@ public class ActivateUserRequest extends BaseRequest {
     private ActivateUserRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ActivateUserRequest-object is already immutable: " + toString();
+            _message = "ActivateUserRequest-object is already immutable: " + this;
         }
         if ( userActivationLink == null ) {
-            _message = "required property userActivationLink of ActivateUserRequest-object is not set: " + toString();
+            _message = "required property userActivationLink of ActivateUserRequest-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -113,7 +113,7 @@ public class ActivateUserRequest extends BaseRequest {
      */
     public String getUserActivationLink() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no userActivationLink from an object under construction: " + toString());
+            throw new RuntimeException("no userActivationLink from an object under construction: " + this);
         }
         return this.userActivationLink;
     }
@@ -123,7 +123,7 @@ public class ActivateUserRequest extends BaseRequest {
      */
     public ActivateUserRequest setUserActivationLink(String userActivationLink) {
         if ( this.immutable ) {
-            throw new RuntimeException("userActivationLink assigned to an immutable object: " + toString());
+            throw new RuntimeException("userActivationLink assigned to an immutable object: " + this);
         }
         this.userActivationLink = userActivationLink;
         return this;
@@ -135,7 +135,7 @@ public class ActivateUserRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

@@ -129,25 +129,25 @@ public class UserRequest extends BaseRequest {
     private UserRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "UserRequest-object is already immutable: " + toString();
+            _message = "UserRequest-object is already immutable: " + this;
         }
         if ( accountName == null ) {
-            _message = "required property accountName of UserRequest-object is not set: " + toString();
+            _message = "required property accountName of UserRequest-object is not set: " + this;
         }
         if ( userEmail == null ) {
-            _message = "required property userEmail of UserRequest-object is not set: " + toString();
+            _message = "required property userEmail of UserRequest-object is not set: " + this;
         }
         if ( userName == null ) {
-            _message = "required property userName of UserRequest-object is not set: " + toString();
+            _message = "required property userName of UserRequest-object is not set: " + this;
         }
         if ( role == null ) {
-            _message = "required property role of UserRequest-object is not set: " + toString();
+            _message = "required property role of UserRequest-object is not set: " + this;
         }
         if ( language == null ) {
-            _message = "required property language of UserRequest-object is not set: " + toString();
+            _message = "required property language of UserRequest-object is not set: " + this;
         }
         if ( !isYoungerThen14Defined ) {
-            _message = "required property isYoungerThen14 of UserRequest-object is not set: " + toString();
+            _message = "required property isYoungerThen14 of UserRequest-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -161,7 +161,7 @@ public class UserRequest extends BaseRequest {
      */
     public String getAccountName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no accountName from an object under construction: " + toString());
+            throw new RuntimeException("no accountName from an object under construction: " + this);
         }
         return this.accountName;
     }
@@ -171,7 +171,7 @@ public class UserRequest extends BaseRequest {
      */
     public UserRequest setAccountName(String accountName) {
         if ( this.immutable ) {
-            throw new RuntimeException("accountName assigned to an immutable object: " + toString());
+            throw new RuntimeException("accountName assigned to an immutable object: " + this);
         }
         this.accountName = accountName;
         return this;
@@ -182,7 +182,7 @@ public class UserRequest extends BaseRequest {
      */
     public String getPassword() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no password from an object under construction: " + toString());
+            throw new RuntimeException("no password from an object under construction: " + this);
         }
         return this.password;
     }
@@ -201,7 +201,7 @@ public class UserRequest extends BaseRequest {
      */
     public UserRequest setPassword(String password) {
         if ( this.immutable ) {
-            throw new RuntimeException("password assigned to an immutable object: " + toString());
+            throw new RuntimeException("password assigned to an immutable object: " + this);
         }
         this.password = password;
         return this;
@@ -212,7 +212,7 @@ public class UserRequest extends BaseRequest {
      */
     public String getUserEmail() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no userEmail from an object under construction: " + toString());
+            throw new RuntimeException("no userEmail from an object under construction: " + this);
         }
         return this.userEmail;
     }
@@ -222,7 +222,7 @@ public class UserRequest extends BaseRequest {
      */
     public UserRequest setUserEmail(String userEmail) {
         if ( this.immutable ) {
-            throw new RuntimeException("userEmail assigned to an immutable object: " + toString());
+            throw new RuntimeException("userEmail assigned to an immutable object: " + this);
         }
         this.userEmail = userEmail;
         return this;
@@ -233,7 +233,7 @@ public class UserRequest extends BaseRequest {
      */
     public String getUserName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no userName from an object under construction: " + toString());
+            throw new RuntimeException("no userName from an object under construction: " + this);
         }
         return this.userName;
     }
@@ -243,7 +243,7 @@ public class UserRequest extends BaseRequest {
      */
     public UserRequest setUserName(String userName) {
         if ( this.immutable ) {
-            throw new RuntimeException("userName assigned to an immutable object: " + toString());
+            throw new RuntimeException("userName assigned to an immutable object: " + this);
         }
         this.userName = userName;
         return this;
@@ -254,7 +254,7 @@ public class UserRequest extends BaseRequest {
      */
     public String getRole() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no role from an object under construction: " + toString());
+            throw new RuntimeException("no role from an object under construction: " + this);
         }
         return this.role;
     }
@@ -264,7 +264,7 @@ public class UserRequest extends BaseRequest {
      */
     public UserRequest setRole(String role) {
         if ( this.immutable ) {
-            throw new RuntimeException("role assigned to an immutable object: " + toString());
+            throw new RuntimeException("role assigned to an immutable object: " + this);
         }
         this.role = role;
         return this;
@@ -275,7 +275,7 @@ public class UserRequest extends BaseRequest {
      */
     public String getLanguage() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no language from an object under construction: " + toString());
+            throw new RuntimeException("no language from an object under construction: " + this);
         }
         return this.language;
     }
@@ -285,7 +285,7 @@ public class UserRequest extends BaseRequest {
      */
     public UserRequest setLanguage(String language) {
         if ( this.immutable ) {
-            throw new RuntimeException("language assigned to an immutable object: " + toString());
+            throw new RuntimeException("language assigned to an immutable object: " + this);
         }
         this.language = language;
         return this;
@@ -296,7 +296,7 @@ public class UserRequest extends BaseRequest {
      */
     public boolean getIsYoungerThen14() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no isYoungerThen14 from an object under construction: " + toString());
+            throw new RuntimeException("no isYoungerThen14 from an object under construction: " + this);
         }
         return this.isYoungerThen14;
     }
@@ -306,7 +306,7 @@ public class UserRequest extends BaseRequest {
      */
     public UserRequest setIsYoungerThen14(boolean isYoungerThen14) {
         if ( this.immutable ) {
-            throw new RuntimeException("isYoungerThen14 assigned to an immutable object: " + toString());
+            throw new RuntimeException("isYoungerThen14 assigned to an immutable object: " + this);
         }
         this.isYoungerThen14 = isYoungerThen14;
         this.isYoungerThen14Defined = true;
@@ -319,7 +319,7 @@ public class UserRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

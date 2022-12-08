@@ -500,7 +500,7 @@ define(["require", "exports", "interpreter.constants", "util", "interpreter.inte
                 return new SIM_I.Interpreter(src, new ROBOT_B.RobotSimBehaviour(), _this.callbackOnTermination.bind(_this), _this.breakpoints, x['savedName']);
             });
             this.updateDebugMode(this.debugMode);
-            var programNames = programs.map(function (x) { return x['savedName']; });
+            var programNames = programs.map(function (x) { return x['programName']; });
             this.scene.init(this.robotType, refresh, this.interpreters, configurations, programNames, callbackOnLoaded);
             return;
         };

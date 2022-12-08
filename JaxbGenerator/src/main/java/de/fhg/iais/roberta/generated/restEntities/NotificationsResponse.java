@@ -163,22 +163,22 @@ public class NotificationsResponse extends BaseResponse {
     private NotificationsResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "NotificationsResponse-object is already immutable: " + toString();
+            _message = "NotificationsResponse-object is already immutable: " + this;
         }
         if ( rc == null ) {
-            _message = "required property rc of NotificationsResponse-object is not set: " + toString();
+            _message = "required property rc of NotificationsResponse-object is not set: " + this;
         }
         if ( initToken == null ) {
-            _message = "required property initToken of NotificationsResponse-object is not set: " + toString();
+            _message = "required property initToken of NotificationsResponse-object is not set: " + this;
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of NotificationsResponse-object is not set: " + toString();
+            _message = "required property serverTime of NotificationsResponse-object is not set: " + this;
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of NotificationsResponse-object is not set: " + toString();
+            _message = "required property serverVersion of NotificationsResponse-object is not set: " + this;
         }
         if ( notifications == null ) {
-            _message = "required property notifications of NotificationsResponse-object is not set: " + toString();
+            _message = "required property notifications of NotificationsResponse-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -192,7 +192,7 @@ public class NotificationsResponse extends BaseResponse {
      */
     public JSONArray getNotifications() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no notifications from an object under construction: " + toString());
+            throw new RuntimeException("no notifications from an object under construction: " + this);
         }
         return this.notifications;
     }
@@ -202,7 +202,7 @@ public class NotificationsResponse extends BaseResponse {
      */
     public NotificationsResponse setNotifications(JSONArray notifications) {
         if ( this.immutable ) {
-            throw new RuntimeException("notifications assigned to an immutable object: " + toString());
+            throw new RuntimeException("notifications assigned to an immutable object: " + this);
         }
         this.notifications = notifications;
         return this;
@@ -214,7 +214,7 @@ public class NotificationsResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

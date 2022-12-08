@@ -184,31 +184,31 @@ public class GetUserResponse extends BaseResponse {
     private GetUserResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "GetUserResponse-object is already immutable: " + toString();
+            _message = "GetUserResponse-object is already immutable: " + this;
         }
         if ( rc == null ) {
-            _message = "required property rc of GetUserResponse-object is not set: " + toString();
+            _message = "required property rc of GetUserResponse-object is not set: " + this;
         }
         if ( initToken == null ) {
-            _message = "required property initToken of GetUserResponse-object is not set: " + toString();
+            _message = "required property initToken of GetUserResponse-object is not set: " + this;
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of GetUserResponse-object is not set: " + toString();
+            _message = "required property serverTime of GetUserResponse-object is not set: " + this;
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of GetUserResponse-object is not set: " + toString();
+            _message = "required property serverVersion of GetUserResponse-object is not set: " + this;
         }
         if ( !userIdDefined ) {
-            _message = "required property userId of GetUserResponse-object is not set: " + toString();
+            _message = "required property userId of GetUserResponse-object is not set: " + this;
         }
         if ( userAccountName == null ) {
-            _message = "required property userAccountName of GetUserResponse-object is not set: " + toString();
+            _message = "required property userAccountName of GetUserResponse-object is not set: " + this;
         }
         if ( userEmail == null ) {
-            _message = "required property userEmail of GetUserResponse-object is not set: " + toString();
+            _message = "required property userEmail of GetUserResponse-object is not set: " + this;
         }
         if ( !isYoungerThen14Defined ) {
-            _message = "required property isYoungerThen14 of GetUserResponse-object is not set: " + toString();
+            _message = "required property isYoungerThen14 of GetUserResponse-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -222,7 +222,7 @@ public class GetUserResponse extends BaseResponse {
      */
     public int getUserId() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no userId from an object under construction: " + toString());
+            throw new RuntimeException("no userId from an object under construction: " + this);
         }
         return this.userId;
     }
@@ -232,7 +232,7 @@ public class GetUserResponse extends BaseResponse {
      */
     public GetUserResponse setUserId(int userId) {
         if ( this.immutable ) {
-            throw new RuntimeException("userId assigned to an immutable object: " + toString());
+            throw new RuntimeException("userId assigned to an immutable object: " + this);
         }
         this.userId = userId;
         this.userIdDefined = true;
@@ -244,7 +244,7 @@ public class GetUserResponse extends BaseResponse {
      */
     public String getUserAccountName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no userAccountName from an object under construction: " + toString());
+            throw new RuntimeException("no userAccountName from an object under construction: " + this);
         }
         return this.userAccountName;
     }
@@ -254,7 +254,7 @@ public class GetUserResponse extends BaseResponse {
      */
     public GetUserResponse setUserAccountName(String userAccountName) {
         if ( this.immutable ) {
-            throw new RuntimeException("userAccountName assigned to an immutable object: " + toString());
+            throw new RuntimeException("userAccountName assigned to an immutable object: " + this);
         }
         this.userAccountName = userAccountName;
         return this;
@@ -265,7 +265,7 @@ public class GetUserResponse extends BaseResponse {
      */
     public String getUserName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no userName from an object under construction: " + toString());
+            throw new RuntimeException("no userName from an object under construction: " + this);
         }
         return this.userName;
     }
@@ -284,7 +284,7 @@ public class GetUserResponse extends BaseResponse {
      */
     public GetUserResponse setUserName(String userName) {
         if ( this.immutable ) {
-            throw new RuntimeException("userName assigned to an immutable object: " + toString());
+            throw new RuntimeException("userName assigned to an immutable object: " + this);
         }
         this.userName = userName;
         return this;
@@ -295,7 +295,7 @@ public class GetUserResponse extends BaseResponse {
      */
     public String getUserEmail() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no userEmail from an object under construction: " + toString());
+            throw new RuntimeException("no userEmail from an object under construction: " + this);
         }
         return this.userEmail;
     }
@@ -305,7 +305,7 @@ public class GetUserResponse extends BaseResponse {
      */
     public GetUserResponse setUserEmail(String userEmail) {
         if ( this.immutable ) {
-            throw new RuntimeException("userEmail assigned to an immutable object: " + toString());
+            throw new RuntimeException("userEmail assigned to an immutable object: " + this);
         }
         this.userEmail = userEmail;
         return this;
@@ -316,7 +316,7 @@ public class GetUserResponse extends BaseResponse {
      */
     public boolean getIsYoungerThen14() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no isYoungerThen14 from an object under construction: " + toString());
+            throw new RuntimeException("no isYoungerThen14 from an object under construction: " + this);
         }
         return this.isYoungerThen14;
     }
@@ -326,7 +326,7 @@ public class GetUserResponse extends BaseResponse {
      */
     public GetUserResponse setIsYoungerThen14(boolean isYoungerThen14) {
         if ( this.immutable ) {
-            throw new RuntimeException("isYoungerThen14 assigned to an immutable object: " + toString());
+            throw new RuntimeException("isYoungerThen14 assigned to an immutable object: " + this);
         }
         this.isYoungerThen14 = isYoungerThen14;
         this.isYoungerThen14Defined = true;
@@ -339,7 +339,7 @@ public class GetUserResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

@@ -100,13 +100,13 @@ public class ImportRequest extends BaseRequest {
     private ImportRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ImportRequest-object is already immutable: " + toString();
+            _message = "ImportRequest-object is already immutable: " + this;
         }
         if ( programName == null ) {
-            _message = "required property programName of ImportRequest-object is not set: " + toString();
+            _message = "required property programName of ImportRequest-object is not set: " + this;
         }
         if ( progXML == null ) {
-            _message = "required property progXML of ImportRequest-object is not set: " + toString();
+            _message = "required property progXML of ImportRequest-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -120,7 +120,7 @@ public class ImportRequest extends BaseRequest {
      */
     public String getProgramName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no programName from an object under construction: " + toString());
+            throw new RuntimeException("no programName from an object under construction: " + this);
         }
         return this.programName;
     }
@@ -130,7 +130,7 @@ public class ImportRequest extends BaseRequest {
      */
     public ImportRequest setProgramName(String programName) {
         if ( this.immutable ) {
-            throw new RuntimeException("programName assigned to an immutable object: " + toString());
+            throw new RuntimeException("programName assigned to an immutable object: " + this);
         }
         this.programName = programName;
         return this;
@@ -141,7 +141,7 @@ public class ImportRequest extends BaseRequest {
      */
     public String getProgXML() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no progXML from an object under construction: " + toString());
+            throw new RuntimeException("no progXML from an object under construction: " + this);
         }
         return this.progXML;
     }
@@ -151,7 +151,7 @@ public class ImportRequest extends BaseRequest {
      */
     public ImportRequest setProgXML(String progXML) {
         if ( this.immutable ) {
-            throw new RuntimeException("progXML assigned to an immutable object: " + toString());
+            throw new RuntimeException("progXML assigned to an immutable object: " + this);
         }
         this.progXML = progXML;
         return this;
@@ -163,7 +163,7 @@ public class ImportRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

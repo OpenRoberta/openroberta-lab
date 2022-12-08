@@ -100,13 +100,13 @@ public class ShareRequest extends BaseRequest {
     private ShareRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ShareRequest-object is already immutable: " + toString();
+            _message = "ShareRequest-object is already immutable: " + this;
         }
         if ( programName == null ) {
-            _message = "required property programName of ShareRequest-object is not set: " + toString();
+            _message = "required property programName of ShareRequest-object is not set: " + this;
         }
         if ( shareData == null ) {
-            _message = "required property shareData of ShareRequest-object is not set: " + toString();
+            _message = "required property shareData of ShareRequest-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -120,7 +120,7 @@ public class ShareRequest extends BaseRequest {
      */
     public String getProgramName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no programName from an object under construction: " + toString());
+            throw new RuntimeException("no programName from an object under construction: " + this);
         }
         return this.programName;
     }
@@ -130,7 +130,7 @@ public class ShareRequest extends BaseRequest {
      */
     public ShareRequest setProgramName(String programName) {
         if ( this.immutable ) {
-            throw new RuntimeException("programName assigned to an immutable object: " + toString());
+            throw new RuntimeException("programName assigned to an immutable object: " + this);
         }
         this.programName = programName;
         return this;
@@ -141,7 +141,7 @@ public class ShareRequest extends BaseRequest {
      */
     public JSONObject getShareData() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no shareData from an object under construction: " + toString());
+            throw new RuntimeException("no shareData from an object under construction: " + this);
         }
         return this.shareData;
     }
@@ -151,7 +151,7 @@ public class ShareRequest extends BaseRequest {
      */
     public ShareRequest setShareData(JSONObject shareData) {
         if ( this.immutable ) {
-            throw new RuntimeException("shareData assigned to an immutable object: " + toString());
+            throw new RuntimeException("shareData assigned to an immutable object: " + this);
         }
         this.shareData = shareData;
         return this;
@@ -163,7 +163,7 @@ public class ShareRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

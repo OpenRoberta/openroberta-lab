@@ -162,22 +162,22 @@ public class InitResponse extends BaseResponse {
     private InitResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "InitResponse-object is already immutable: " + toString();
+            _message = "InitResponse-object is already immutable: " + this;
         }
         if ( rc == null ) {
-            _message = "required property rc of InitResponse-object is not set: " + toString();
+            _message = "required property rc of InitResponse-object is not set: " + this;
         }
         if ( initToken == null ) {
-            _message = "required property initToken of InitResponse-object is not set: " + toString();
+            _message = "required property initToken of InitResponse-object is not set: " + this;
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of InitResponse-object is not set: " + toString();
+            _message = "required property serverTime of InitResponse-object is not set: " + this;
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of InitResponse-object is not set: " + toString();
+            _message = "required property serverVersion of InitResponse-object is not set: " + this;
         }
         if ( server == null ) {
-            _message = "required property server of InitResponse-object is not set: " + toString();
+            _message = "required property server of InitResponse-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -191,7 +191,7 @@ public class InitResponse extends BaseResponse {
      */
     public JSONObject getServer() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no server from an object under construction: " + toString());
+            throw new RuntimeException("no server from an object under construction: " + this);
         }
         return this.server;
     }
@@ -201,7 +201,7 @@ public class InitResponse extends BaseResponse {
      */
     public InitResponse setServer(JSONObject server) {
         if ( this.immutable ) {
-            throw new RuntimeException("server assigned to an immutable object: " + toString());
+            throw new RuntimeException("server assigned to an immutable object: " + this);
         }
         this.server = server;
         return this;
@@ -213,7 +213,7 @@ public class InitResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

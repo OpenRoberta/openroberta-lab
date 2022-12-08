@@ -163,22 +163,22 @@ public class EntityResponse extends BaseResponse {
     private EntityResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "EntityResponse-object is already immutable: " + toString();
+            _message = "EntityResponse-object is already immutable: " + this;
         }
         if ( rc == null ) {
-            _message = "required property rc of EntityResponse-object is not set: " + toString();
+            _message = "required property rc of EntityResponse-object is not set: " + this;
         }
         if ( initToken == null ) {
-            _message = "required property initToken of EntityResponse-object is not set: " + toString();
+            _message = "required property initToken of EntityResponse-object is not set: " + this;
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of EntityResponse-object is not set: " + toString();
+            _message = "required property serverTime of EntityResponse-object is not set: " + this;
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of EntityResponse-object is not set: " + toString();
+            _message = "required property serverVersion of EntityResponse-object is not set: " + this;
         }
         if ( program == null ) {
-            _message = "required property program of EntityResponse-object is not set: " + toString();
+            _message = "required property program of EntityResponse-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -192,7 +192,7 @@ public class EntityResponse extends BaseResponse {
      */
     public JSONArray getProgram() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no program from an object under construction: " + toString());
+            throw new RuntimeException("no program from an object under construction: " + this);
         }
         return this.program;
     }
@@ -202,7 +202,7 @@ public class EntityResponse extends BaseResponse {
      */
     public EntityResponse setProgram(JSONArray program) {
         if ( this.immutable ) {
-            throw new RuntimeException("program assigned to an immutable object: " + toString());
+            throw new RuntimeException("program assigned to an immutable object: " + this);
         }
         this.program = program;
         return this;
@@ -214,7 +214,7 @@ public class EntityResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

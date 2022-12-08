@@ -184,28 +184,28 @@ public class ProjectSourceResponse extends BaseResponse {
     private ProjectSourceResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ProjectSourceResponse-object is already immutable: " + toString();
+            _message = "ProjectSourceResponse-object is already immutable: " + this;
         }
         if ( rc == null ) {
-            _message = "required property rc of ProjectSourceResponse-object is not set: " + toString();
+            _message = "required property rc of ProjectSourceResponse-object is not set: " + this;
         }
         if ( initToken == null ) {
-            _message = "required property initToken of ProjectSourceResponse-object is not set: " + toString();
+            _message = "required property initToken of ProjectSourceResponse-object is not set: " + this;
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of ProjectSourceResponse-object is not set: " + toString();
+            _message = "required property serverTime of ProjectSourceResponse-object is not set: " + this;
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of ProjectSourceResponse-object is not set: " + toString();
+            _message = "required property serverVersion of ProjectSourceResponse-object is not set: " + this;
         }
         if ( sourceCode == null ) {
-            _message = "required property sourceCode of ProjectSourceResponse-object is not set: " + toString();
+            _message = "required property sourceCode of ProjectSourceResponse-object is not set: " + this;
         }
         if ( progXML == null ) {
-            _message = "required property progXML of ProjectSourceResponse-object is not set: " + toString();
+            _message = "required property progXML of ProjectSourceResponse-object is not set: " + this;
         }
         if ( confAnnos == null ) {
-            _message = "required property confAnnos of ProjectSourceResponse-object is not set: " + toString();
+            _message = "required property confAnnos of ProjectSourceResponse-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -219,7 +219,7 @@ public class ProjectSourceResponse extends BaseResponse {
      */
     public String getSourceCode() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no sourceCode from an object under construction: " + toString());
+            throw new RuntimeException("no sourceCode from an object under construction: " + this);
         }
         return this.sourceCode;
     }
@@ -229,7 +229,7 @@ public class ProjectSourceResponse extends BaseResponse {
      */
     public ProjectSourceResponse setSourceCode(String sourceCode) {
         if ( this.immutable ) {
-            throw new RuntimeException("sourceCode assigned to an immutable object: " + toString());
+            throw new RuntimeException("sourceCode assigned to an immutable object: " + this);
         }
         this.sourceCode = sourceCode;
         return this;
@@ -240,7 +240,7 @@ public class ProjectSourceResponse extends BaseResponse {
      */
     public String getProgXML() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no progXML from an object under construction: " + toString());
+            throw new RuntimeException("no progXML from an object under construction: " + this);
         }
         return this.progXML;
     }
@@ -250,7 +250,7 @@ public class ProjectSourceResponse extends BaseResponse {
      */
     public ProjectSourceResponse setProgXML(String progXML) {
         if ( this.immutable ) {
-            throw new RuntimeException("progXML assigned to an immutable object: " + toString());
+            throw new RuntimeException("progXML assigned to an immutable object: " + this);
         }
         this.progXML = progXML;
         return this;
@@ -261,7 +261,7 @@ public class ProjectSourceResponse extends BaseResponse {
      */
     public Map<String, JSONObject> getConfAnnos() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no confAnnos from an object under construction: " + toString());
+            throw new RuntimeException("no confAnnos from an object under construction: " + this);
         }
         return this.confAnnos;
     }
@@ -271,7 +271,7 @@ public class ProjectSourceResponse extends BaseResponse {
      */
     public ProjectSourceResponse setConfAnnos(Map<String, JSONObject> confAnnos) {
         if ( this.immutable ) {
-            throw new RuntimeException("confAnnos assigned to an immutable object: " + toString());
+            throw new RuntimeException("confAnnos assigned to an immutable object: " + this);
         }
         if ( this.confAnnos == null ) {
             this.confAnnos = new HashMap<String, JSONObject>();
@@ -289,7 +289,7 @@ public class ProjectSourceResponse extends BaseResponse {
      */
     public ProjectSourceResponse putConfAnnos(String key, JSONObject value) {
         if ( this.immutable ) {
-            throw new RuntimeException("confAnnos assigned to an immutable object: " + toString());
+            throw new RuntimeException("confAnnos assigned to an immutable object: " + this);
         }
         if ( this.confAnnos == null ) {
             this.confAnnos = new HashMap<String, JSONObject>();
@@ -304,7 +304,7 @@ public class ProjectSourceResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

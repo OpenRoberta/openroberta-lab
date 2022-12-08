@@ -168,19 +168,19 @@ public class ConfResponse extends BaseResponse {
     private ConfResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ConfResponse-object is already immutable: " + toString();
+            _message = "ConfResponse-object is already immutable: " + this;
         }
         if ( rc == null ) {
-            _message = "required property rc of ConfResponse-object is not set: " + toString();
+            _message = "required property rc of ConfResponse-object is not set: " + this;
         }
         if ( initToken == null ) {
-            _message = "required property initToken of ConfResponse-object is not set: " + toString();
+            _message = "required property initToken of ConfResponse-object is not set: " + this;
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of ConfResponse-object is not set: " + toString();
+            _message = "required property serverTime of ConfResponse-object is not set: " + this;
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of ConfResponse-object is not set: " + toString();
+            _message = "required property serverVersion of ConfResponse-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -194,7 +194,7 @@ public class ConfResponse extends BaseResponse {
      */
     public String getConfXML() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no confXML from an object under construction: " + toString());
+            throw new RuntimeException("no confXML from an object under construction: " + this);
         }
         return this.confXML;
     }
@@ -213,7 +213,7 @@ public class ConfResponse extends BaseResponse {
      */
     public ConfResponse setConfXML(String confXML) {
         if ( this.immutable ) {
-            throw new RuntimeException("confXML assigned to an immutable object: " + toString());
+            throw new RuntimeException("confXML assigned to an immutable object: " + this);
         }
         this.confXML = confXML;
         return this;
@@ -224,7 +224,7 @@ public class ConfResponse extends BaseResponse {
      */
     public JSONArray getConfigurationNames() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no configurationNames from an object under construction: " + toString());
+            throw new RuntimeException("no configurationNames from an object under construction: " + this);
         }
         return this.configurationNames;
     }
@@ -243,7 +243,7 @@ public class ConfResponse extends BaseResponse {
      */
     public ConfResponse setConfigurationNames(JSONArray configurationNames) {
         if ( this.immutable ) {
-            throw new RuntimeException("configurationNames assigned to an immutable object: " + toString());
+            throw new RuntimeException("configurationNames assigned to an immutable object: " + this);
         }
         this.configurationNames = configurationNames;
         return this;
@@ -255,7 +255,7 @@ public class ConfResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

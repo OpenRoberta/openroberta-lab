@@ -96,7 +96,7 @@ public class ProjectWorkflowResetRequest extends BaseRequest {
     private ProjectWorkflowResetRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ProjectWorkflowResetRequest-object is already immutable: " + toString();
+            _message = "ProjectWorkflowResetRequest-object is already immutable: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -110,7 +110,7 @@ public class ProjectWorkflowResetRequest extends BaseRequest {
      */
     public String getRobot() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no robot from an object under construction: " + toString());
+            throw new RuntimeException("no robot from an object under construction: " + this);
         }
         return this.robot;
     }
@@ -129,7 +129,7 @@ public class ProjectWorkflowResetRequest extends BaseRequest {
      */
     public ProjectWorkflowResetRequest setRobot(String robot) {
         if ( this.immutable ) {
-            throw new RuntimeException("robot assigned to an immutable object: " + toString());
+            throw new RuntimeException("robot assigned to an immutable object: " + this);
         }
         this.robot = robot;
         return this;
@@ -141,7 +141,7 @@ public class ProjectWorkflowResetRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

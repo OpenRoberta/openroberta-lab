@@ -163,22 +163,22 @@ public class SaveResponse extends BaseResponse {
     private SaveResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "SaveResponse-object is already immutable: " + toString();
+            _message = "SaveResponse-object is already immutable: " + this;
         }
         if ( rc == null ) {
-            _message = "required property rc of SaveResponse-object is not set: " + toString();
+            _message = "required property rc of SaveResponse-object is not set: " + this;
         }
         if ( initToken == null ) {
-            _message = "required property initToken of SaveResponse-object is not set: " + toString();
+            _message = "required property initToken of SaveResponse-object is not set: " + this;
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of SaveResponse-object is not set: " + toString();
+            _message = "required property serverTime of SaveResponse-object is not set: " + this;
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of SaveResponse-object is not set: " + toString();
+            _message = "required property serverVersion of SaveResponse-object is not set: " + this;
         }
         if ( !lastChangedDefined ) {
-            _message = "required property lastChanged of SaveResponse-object is not set: " + toString();
+            _message = "required property lastChanged of SaveResponse-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -192,7 +192,7 @@ public class SaveResponse extends BaseResponse {
      */
     public long getLastChanged() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no lastChanged from an object under construction: " + toString());
+            throw new RuntimeException("no lastChanged from an object under construction: " + this);
         }
         return this.lastChanged;
     }
@@ -202,7 +202,7 @@ public class SaveResponse extends BaseResponse {
      */
     public SaveResponse setLastChanged(long lastChanged) {
         if ( this.immutable ) {
-            throw new RuntimeException("lastChanged assigned to an immutable object: " + toString());
+            throw new RuntimeException("lastChanged assigned to an immutable object: " + this);
         }
         this.lastChanged = lastChanged;
         this.lastChangedDefined = true;
@@ -215,7 +215,7 @@ public class SaveResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

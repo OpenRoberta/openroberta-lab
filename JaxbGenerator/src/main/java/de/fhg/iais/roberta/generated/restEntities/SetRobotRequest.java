@@ -96,10 +96,10 @@ public class SetRobotRequest extends BaseRequest {
     private SetRobotRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "SetRobotRequest-object is already immutable: " + toString();
+            _message = "SetRobotRequest-object is already immutable: " + this;
         }
         if ( robot == null ) {
-            _message = "required property robot of SetRobotRequest-object is not set: " + toString();
+            _message = "required property robot of SetRobotRequest-object is not set: " + this;
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -113,7 +113,7 @@ public class SetRobotRequest extends BaseRequest {
      */
     public String getRobot() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no robot from an object under construction: " + toString());
+            throw new RuntimeException("no robot from an object under construction: " + this);
         }
         return this.robot;
     }
@@ -123,7 +123,7 @@ public class SetRobotRequest extends BaseRequest {
      */
     public SetRobotRequest setRobot(String robot) {
         if ( this.immutable ) {
-            throw new RuntimeException("robot assigned to an immutable object: " + toString());
+            throw new RuntimeException("robot assigned to an immutable object: " + this);
         }
         this.robot = robot;
         return this;
@@ -135,7 +135,7 @@ public class SetRobotRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + toString());
+            throw new RuntimeException("no JSON from an object under construction: " + this);
         }
         JSONObject jsonO = new JSONObject();
         try {

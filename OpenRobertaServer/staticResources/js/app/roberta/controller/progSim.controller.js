@@ -457,7 +457,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
                 C.loadProgramms().then(function (loadedPrograms) {
                     Promise.all(loadedPrograms).then(function (values) {
                         if (C.extractedPrograms.length >= 1) {
-                            C.toggleSim($('#simButton'));
+                            C.toggleMultiSim($('#simButton'), C.getSortedExtractedPrograms());
                         }
                     }, function (values) {
                         $('#blockly').closeRightView(function () {
@@ -472,6 +472,17 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
                 var myheight = Math.min($(window).height() - 200, 532);
                 $('#showMultipleSimPrograms .fixed-table-body').height(myheight);
             });
+        };
+        ProgSimMultiController.prototype.getSortedExtractedPrograms = function () {
+            var mySortedExtractedPrograms = [];
+            var C = this;
+            this.selectedPrograms.forEach(function (selected) {
+                var myProgram = C.extractedPrograms.find(function (element) { return element.programName == selected.programName; });
+                for (var i = 0; i < selected.times; i++) {
+                    mySortedExtractedPrograms.push(myProgram);
+                }
+            });
+            return mySortedExtractedPrograms;
         };
         ProgSimMultiController.prototype.loadProgramms = function () {
             return __awaiter(this, void 0, void 0, function () {
@@ -509,7 +520,6 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
         ProgSimMultiController.prototype.loadStackMachineCode = function (item, resolve, reject, result) {
             var C = this;
             if (result.rc === 'ok') {
-                result.savedName = item.programName;
                 var loadResult_1 = result;
                 var xmlTextProgram = result.progXML;
                 var isNamedConfig = result.configName !== GUISTATE_C.getRobotGroup().toUpperCase() + 'basis' && result.configName !== '';
@@ -522,15 +532,13 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
                             : undefined
                     : undefined;
                 var language = GUISTATE_C.getLanguage();
-                PROGRAM_M.runInSim(result.savedName, configName, xmlTextProgram, xmlConfigText, language, function (result) {
+                PROGRAM_M.runInSim(result.programName, configName, xmlTextProgram, xmlConfigText, language, function (result) {
                     if (result.rc === 'ok') {
                         var combinedResult = loadResult_1;
                         for (var resultProp in result) {
                             combinedResult[resultProp] = result[resultProp];
                         }
-                        for (var i = 0; i < item.times; i++) {
-                            C.extractedPrograms.push(combinedResult);
-                        }
+                        C.extractedPrograms.push(combinedResult);
                         resolve('ok');
                     }
                     else {
@@ -652,7 +660,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
                     $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
                     C.loadProgramms().then(function (loadedPrograms) {
                         Promise.all(loadedPrograms).then(function (values) {
-                            SIM.run(C.extractedPrograms, function () {
+                            SIM.run(C.getSortedExtractedPrograms(), function () {
                                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
                                 $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
                             });
@@ -672,7 +680,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
                 return false;
             }, 'sim control clicked');
         };
-        ProgSimMultiController.prototype.toggleSim = function ($button) {
+        ProgSimMultiController.prototype.toggleMultiSim = function ($button, mySortedExtractedPrograms) {
             if ($('.fromRight.rightActive').hasClass('shifting')) {
                 return;
             }
@@ -682,7 +690,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
             this.removeControl();
             this.addControlEvents();
             this.addConfigEvents();
-            C.SIM.init(C.extractedPrograms, true, null, GUISTATE_C.getRobotGroup());
+            C.SIM.init(mySortedExtractedPrograms, true, null, GUISTATE_C.getRobotGroup());
             $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
             if (TOUR_C.getInstance() && TOUR_C.getInstance().trigger) {
                 TOUR_C.getInstance().trigger('startSim');
