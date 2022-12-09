@@ -437,6 +437,18 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             }
         };
         SimulationScene.prototype.showFullyLoadedSim = function (callbackOnLoaded) {
+            this.obstacleList.forEach(function (obstacle) {
+                obstacle.removeMouseEvents();
+                obstacle.addMouseEvents();
+            });
+            this.markerList.forEach(function (marker) {
+                marker.removeMouseEvents();
+                marker.addMouseEvents();
+            });
+            this.colorAreaList.forEach(function (colorArea) {
+                colorArea.removeMouseEvents();
+                colorArea.addMouseEvents();
+            });
             $('#canvasDiv').fadeIn('slow');
             $('#simDiv>.pace').fadeOut('fast');
             typeof callbackOnLoaded === 'function' && callbackOnLoaded();
@@ -659,9 +671,6 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
                     myObstacle.img = null;
                 }
             }
-            var configData = this.sim.getConfigData();
-            this.obstacleList = [];
-            this.colorAreaList = [];
             if (num < 0) {
                 this.currentBackground++;
                 this.currentBackground %= this.imgBackgroundList.length;
@@ -680,7 +689,6 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             this.ground.h = this.imgBackgroundList[this.currentBackground].height;
             this.resetAllCanvas(this.imgBackgroundList[this.currentBackground]);
             this.resizeAll(true);
-            this.sim.setNewConfig(configData);
         };
         SimulationScene.prototype.update = function (dt, interpreterRunning) {
             var _this = this;

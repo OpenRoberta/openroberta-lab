@@ -472,6 +472,18 @@ export class SimulationScene {
     }
 
     private showFullyLoadedSim(callbackOnLoaded: () => void) {
+        this.obstacleList.forEach((obstacle) => {
+            obstacle.removeMouseEvents();
+            obstacle.addMouseEvents();
+        });
+        this.markerList.forEach((marker) => {
+            marker.removeMouseEvents();
+            marker.addMouseEvents();
+        });
+        this.colorAreaList.forEach((colorArea) => {
+            colorArea.removeMouseEvents();
+            colorArea.addMouseEvents();
+        });
         $('#canvasDiv').fadeIn('slow');
         $('#simDiv>.pace').fadeOut('fast');
         typeof callbackOnLoaded === 'function' && callbackOnLoaded();
@@ -700,9 +712,6 @@ export class SimulationScene {
                 (myObstacle as RectangleSimulationObject).img = null;
             }
         }
-        let configData = this.sim.getConfigData();
-        this.obstacleList = [];
-        this.colorAreaList = [];
         if (num < 0) {
             this.currentBackground++;
             this.currentBackground %= this.imgBackgroundList.length;
@@ -720,7 +729,6 @@ export class SimulationScene {
         this.ground.h = this.imgBackgroundList[this.currentBackground].height;
         this.resetAllCanvas(this.imgBackgroundList[this.currentBackground]);
         this.resizeAll(true);
-        this.sim.setNewConfig(configData);
     }
 
     update(dt: number, interpreterRunning: boolean) {
