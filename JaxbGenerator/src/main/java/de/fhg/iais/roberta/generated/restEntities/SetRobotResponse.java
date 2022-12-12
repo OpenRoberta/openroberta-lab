@@ -21,6 +21,8 @@ public class SetRobotResponse extends BaseResponse {
     protected boolean simDefined = false;
     protected boolean multipleSim;
     protected boolean multipleSimDefined = false;
+    protected boolean markerSim;
+    protected boolean markerSimDefined = false;
     protected boolean nn;
     protected boolean nnDefined = false;
     protected boolean webotsSim;
@@ -83,6 +85,7 @@ public class SetRobotResponse extends BaseResponse {
         JSONObject configuration,
         boolean sim,
         boolean multipleSim,
+        boolean markerSim,
         boolean nn,
         boolean webotsSim,
         String webotsUrl,
@@ -118,6 +121,7 @@ public class SetRobotResponse extends BaseResponse {
         entity.setConfiguration(configuration);
         entity.setSim(sim);
         entity.setMultipleSim(multipleSim);
+        entity.setMarkerSim(markerSim);
         entity.setNn(nn);
         entity.setWebotsSim(webotsSim);
         entity.setWebotsUrl(webotsUrl);
@@ -139,6 +143,432 @@ public class SetRobotResponse extends BaseResponse {
      */
     public static SetRobotResponse make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();
+    }
+
+    /**
+     * is the property defined? The property maybe undefined as it is not a required property
+     *
+     * @return true if the property is defined (has been set)
+     */
+    public boolean commandLineDefined() {
+        return this.commandLine != null;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        throw new RuntimeException("no equals from transport beans!");
+    }
+
+    /**
+     * is the property defined? The property maybe undefined as it is not a required property
+     *
+     * @return true if the property is defined (has been set)
+     */
+    public boolean firmwareDefaultDefined() {
+        return this.firmwareDefault != null;
+    }
+
+    /**
+     * GET binaryFileExtension. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getBinaryFileExtension() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no binaryFileExtension from an object under construction: " + toString());
+        }
+        return this.binaryFileExtension;
+    }
+
+    /**
+     * SET binaryFileExtension. Object must be mutable.
+     */
+    public SetRobotResponse setBinaryFileExtension(String binaryFileExtension) {
+        if ( this.immutable ) {
+            throw new RuntimeException("binaryFileExtension assigned to an immutable object: " + toString());
+        }
+        this.binaryFileExtension = binaryFileExtension;
+        return this;
+    }
+
+    /**
+     * GET commandLine. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getCommandLine() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no commandLine from an object under construction: " + toString());
+        }
+        return this.commandLine;
+    }
+
+    /**
+     * SET commandLine. Object must be mutable.
+     */
+    public SetRobotResponse setCommandLine(String commandLine) {
+        if ( this.immutable ) {
+            throw new RuntimeException("commandLine assigned to an immutable object: " + toString());
+        }
+        this.commandLine = commandLine;
+        return this;
+    }
+
+    /**
+     * GET configuration. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public JSONObject getConfiguration() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no configuration from an object under construction: " + toString());
+        }
+        return this.configuration;
+    }
+
+    /**
+     * SET configuration. Object must be mutable.
+     */
+    public SetRobotResponse setConfiguration(JSONObject configuration) {
+        if ( this.immutable ) {
+            throw new RuntimeException("configuration assigned to an immutable object: " + toString());
+        }
+        this.configuration = configuration;
+        return this;
+    }
+
+    /**
+     * GET configurationUsed. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public boolean getConfigurationUsed() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no configurationUsed from an object under construction: " + toString());
+        }
+        return this.configurationUsed;
+    }
+
+    /**
+     * SET configurationUsed. Object must be mutable.
+     */
+    public SetRobotResponse setConfigurationUsed(boolean configurationUsed) {
+        if ( this.immutable ) {
+            throw new RuntimeException("configurationUsed assigned to an immutable object: " + toString());
+        }
+        this.configurationUsed = configurationUsed;
+        this.configurationUsedDefined = true;
+        return this;
+    }
+
+    /**
+     * GET connection. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getConnection() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no connection from an object under construction: " + toString());
+        }
+        return this.connection;
+    }
+
+    /**
+     * SET connection. Object must be mutable.
+     */
+    public SetRobotResponse setConnection(String connection) {
+        if ( this.immutable ) {
+            throw new RuntimeException("connection assigned to an immutable object: " + toString());
+        }
+        this.connection = connection;
+        return this;
+    }
+
+    /**
+     * GET firmwareDefault. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getFirmwareDefault() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no firmwareDefault from an object under construction: " + toString());
+        }
+        return this.firmwareDefault;
+    }
+
+    /**
+     * SET firmwareDefault. Object must be mutable.
+     */
+    public SetRobotResponse setFirmwareDefault(String firmwareDefault) {
+        if ( this.immutable ) {
+            throw new RuntimeException("firmwareDefault assigned to an immutable object: " + toString());
+        }
+        this.firmwareDefault = firmwareDefault;
+        return this;
+    }
+
+    /**
+     * GET hasWlan. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public boolean getHasWlan() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no hasWlan from an object under construction: " + toString());
+        }
+        return this.hasWlan;
+    }
+
+    /**
+     * SET hasWlan. Object must be mutable.
+     */
+    public SetRobotResponse setHasWlan(boolean hasWlan) {
+        if ( this.immutable ) {
+            throw new RuntimeException("hasWlan assigned to an immutable object: " + toString());
+        }
+        this.hasWlan = hasWlan;
+        this.hasWlanDefined = true;
+        return this;
+    }
+
+    /**
+     * GET markerSim. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public boolean getMarkerSim() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no markerSim from an object under construction: " + toString());
+        }
+        return this.markerSim;
+    }
+
+    /**
+     * SET markerSim. Object must be mutable.
+     */
+    public SetRobotResponse setMarkerSim(boolean markerSim) {
+        if ( this.immutable ) {
+            throw new RuntimeException("markerSim assigned to an immutable object: " + toString());
+        }
+        this.markerSim = markerSim;
+        this.markerSimDefined = true;
+        return this;
+    }
+
+    /**
+     * GET multipleSim. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public boolean getMultipleSim() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no multipleSim from an object under construction: " + toString());
+        }
+        return this.multipleSim;
+    }
+
+    /**
+     * SET multipleSim. Object must be mutable.
+     */
+    public SetRobotResponse setMultipleSim(boolean multipleSim) {
+        if ( this.immutable ) {
+            throw new RuntimeException("multipleSim assigned to an immutable object: " + toString());
+        }
+        this.multipleSim = multipleSim;
+        this.multipleSimDefined = true;
+        return this;
+    }
+
+    /**
+     * GET nn. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public boolean getNn() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no nn from an object under construction: " + toString());
+        }
+        return this.nn;
+    }
+
+    /**
+     * SET nn. Object must be mutable.
+     */
+    public SetRobotResponse setNn(boolean nn) {
+        if ( this.immutable ) {
+            throw new RuntimeException("nn assigned to an immutable object: " + toString());
+        }
+        this.nn = nn;
+        this.nnDefined = true;
+        return this;
+    }
+
+    /**
+     * GET program. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public JSONObject getProgram() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no program from an object under construction: " + toString());
+        }
+        return this.program;
+    }
+
+    /**
+     * SET program. Object must be mutable.
+     */
+    public SetRobotResponse setProgram(JSONObject program) {
+        if ( this.immutable ) {
+            throw new RuntimeException("program assigned to an immutable object: " + toString());
+        }
+        this.program = program;
+        return this;
+    }
+
+    /**
+     * GET robot. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getRobot() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no robot from an object under construction: " + toString());
+        }
+        return this.robot;
+    }
+
+    /**
+     * SET robot. Object must be mutable.
+     */
+    public SetRobotResponse setRobot(String robot) {
+        if ( this.immutable ) {
+            throw new RuntimeException("robot assigned to an immutable object: " + toString());
+        }
+        this.robot = robot;
+        return this;
+    }
+
+    /**
+     * GET signature. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getSignature() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no signature from an object under construction: " + toString());
+        }
+        return this.signature;
+    }
+
+    /**
+     * SET signature. Object must be mutable.
+     */
+    public SetRobotResponse setSignature(String signature) {
+        if ( this.immutable ) {
+            throw new RuntimeException("signature assigned to an immutable object: " + toString());
+        }
+        this.signature = signature;
+        return this;
+    }
+
+    /**
+     * GET sim. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public boolean getSim() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no sim from an object under construction: " + toString());
+        }
+        return this.sim;
+    }
+
+    /**
+     * SET sim. Object must be mutable.
+     */
+    public SetRobotResponse setSim(boolean sim) {
+        if ( this.immutable ) {
+            throw new RuntimeException("sim assigned to an immutable object: " + toString());
+        }
+        this.sim = sim;
+        this.simDefined = true;
+        return this;
+    }
+
+    /**
+     * GET sourceCodeFileExtension. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getSourceCodeFileExtension() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no sourceCodeFileExtension from an object under construction: " + toString());
+        }
+        return this.sourceCodeFileExtension;
+    }
+
+    /**
+     * SET sourceCodeFileExtension. Object must be mutable.
+     */
+    public SetRobotResponse setSourceCodeFileExtension(String sourceCodeFileExtension) {
+        if ( this.immutable ) {
+            throw new RuntimeException("sourceCodeFileExtension assigned to an immutable object: " + toString());
+        }
+        this.sourceCodeFileExtension = sourceCodeFileExtension;
+        return this;
+    }
+
+    /**
+     * GET vendor. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getVendor() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no vendor from an object under construction: " + toString());
+        }
+        return this.vendor;
+    }
+
+    /**
+     * SET vendor. Object must be mutable.
+     */
+    public SetRobotResponse setVendor(String vendor) {
+        if ( this.immutable ) {
+            throw new RuntimeException("vendor assigned to an immutable object: " + toString());
+        }
+        this.vendor = vendor;
+        return this;
+    }
+
+    /**
+     * GET webotsSim. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public boolean getWebotsSim() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no webotsSim from an object under construction: " + toString());
+        }
+        return this.webotsSim;
+    }
+
+    /**
+     * SET webotsSim. Object must be mutable.
+     */
+    public SetRobotResponse setWebotsSim(boolean webotsSim) {
+        if ( this.immutable ) {
+            throw new RuntimeException("webotsSim assigned to an immutable object: " + toString());
+        }
+        this.webotsSim = webotsSim;
+        this.webotsSimDefined = true;
+        return this;
+    }
+
+    /**
+     * GET webotsUrl. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getWebotsUrl() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no webotsUrl from an object under construction: " + toString());
+        }
+        return this.webotsUrl;
+    }
+
+    /**
+     * SET webotsUrl. Object must be mutable.
+     */
+    public SetRobotResponse setWebotsUrl(String webotsUrl) {
+        if ( this.immutable ) {
+            throw new RuntimeException("webotsUrl assigned to an immutable object: " + toString());
+        }
+        this.webotsUrl = webotsUrl;
+        return this;
+    }
+
+    @Override
+    public int hashCode() {
+        throw new RuntimeException("no hashCode from transport beans!");
+    }
+
+    /**
+     * moves a bean from state "under construction" to state "immutable".<br>
+     * Checks whether all required fields are set. All lists are made immutable.<br>
+     * Throws a runtime exception if inconsistencies are detected.
+     */
+    public SetRobotResponse immutable() {
+        if ( this.immutable ) {
+            return this;
+        }
+        this.immutable = true;
+        return validate();
     }
 
     /**
@@ -194,6 +624,8 @@ public class SetRobotResponse extends BaseResponse {
                     setSim(jsonO.getBoolean(key));
                 } else if ( "multipleSim".equals(key) ) {
                     setMultipleSim(jsonO.getBoolean(key));
+                } else if ( "markerSim".equals(key) ) {
+                    setMarkerSim(jsonO.getBoolean(key));
                 } else if ( "nn".equals(key) ) {
                     setNn(jsonO.getBoolean(key));
                 } else if ( "webotsSim".equals(key) ) {
@@ -229,371 +661,6 @@ public class SetRobotResponse extends BaseResponse {
     }
 
     /**
-     * moves a bean from state "under construction" to state "immutable".<br>
-     * Checks whether all required fields are set. All lists are made immutable.<br>
-     * Throws a runtime exception if inconsistencies are detected.
-     */
-    public SetRobotResponse immutable() {
-        if ( this.immutable ) {
-            return this;
-        }
-        this.immutable = true;
-        return validate();
-    }
-
-    /**
-     * Checks whether all required fields are set.<br>
-     * Throws a runtime exception if inconsistencies are detected.
-     */
-    private SetRobotResponse validate() {
-        String _message = null;
-        if ( !this.immutable ) {
-            _message = "SetRobotResponse-object is already immutable: " + this;
-        }
-        if ( rc == null ) {
-            _message = "required property rc of SetRobotResponse-object is not set: " + this;
-        }
-        if ( initToken == null ) {
-            _message = "required property initToken of SetRobotResponse-object is not set: " + this;
-        }
-        if ( !serverTimeDefined ) {
-            _message = "required property serverTime of SetRobotResponse-object is not set: " + this;
-        }
-        if ( serverVersion == null ) {
-            _message = "required property serverVersion of SetRobotResponse-object is not set: " + this;
-        }
-        if ( robot == null ) {
-            _message = "required property robot of SetRobotResponse-object is not set: " + this;
-        }
-        if ( program == null ) {
-            _message = "required property program of SetRobotResponse-object is not set: " + this;
-        }
-        if ( configuration == null ) {
-            _message = "required property configuration of SetRobotResponse-object is not set: " + this;
-        }
-        if ( !simDefined ) {
-            _message = "required property sim of SetRobotResponse-object is not set: " + this;
-        }
-        if ( !multipleSimDefined ) {
-            _message = "required property multipleSim of SetRobotResponse-object is not set: " + this;
-        }
-        if ( !nnDefined ) {
-            _message = "required property nn of SetRobotResponse-object is not set: " + this;
-        }
-        if ( !webotsSimDefined ) {
-            _message = "required property webotsSim of SetRobotResponse-object is not set: " + this;
-        }
-        if ( connection == null ) {
-            _message = "required property connection of SetRobotResponse-object is not set: " + this;
-        }
-        if ( vendor == null ) {
-            _message = "required property vendor of SetRobotResponse-object is not set: " + this;
-        }
-        if ( !configurationUsedDefined ) {
-            _message = "required property configurationUsed of SetRobotResponse-object is not set: " + this;
-        }
-        if ( sourceCodeFileExtension == null ) {
-            _message = "required property sourceCodeFileExtension of SetRobotResponse-object is not set: " + this;
-        }
-        if ( binaryFileExtension == null ) {
-            _message = "required property binaryFileExtension of SetRobotResponse-object is not set: " + this;
-        }
-        if ( !hasWlanDefined ) {
-            _message = "required property hasWlan of SetRobotResponse-object is not set: " + this;
-        }
-        if ( _message != null ) {
-            this.immutable = false;
-            throw new RuntimeException(_message);
-        }
-        return this;
-    }
-
-    /**
-     * GET robot. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public String getRobot() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no robot from an object under construction: " + this);
-        }
-        return this.robot;
-    }
-
-    /**
-     * SET robot. Object must be mutable.
-     */
-    public SetRobotResponse setRobot(String robot) {
-        if ( this.immutable ) {
-            throw new RuntimeException("robot assigned to an immutable object: " + this);
-        }
-        this.robot = robot;
-        return this;
-    }
-
-    /**
-     * GET program. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public JSONObject getProgram() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no program from an object under construction: " + this);
-        }
-        return this.program;
-    }
-
-    /**
-     * SET program. Object must be mutable.
-     */
-    public SetRobotResponse setProgram(JSONObject program) {
-        if ( this.immutable ) {
-            throw new RuntimeException("program assigned to an immutable object: " + this);
-        }
-        this.program = program;
-        return this;
-    }
-
-    /**
-     * GET configuration. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public JSONObject getConfiguration() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no configuration from an object under construction: " + this);
-        }
-        return this.configuration;
-    }
-
-    /**
-     * SET configuration. Object must be mutable.
-     */
-    public SetRobotResponse setConfiguration(JSONObject configuration) {
-        if ( this.immutable ) {
-            throw new RuntimeException("configuration assigned to an immutable object: " + this);
-        }
-        this.configuration = configuration;
-        return this;
-    }
-
-    /**
-     * GET sim. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public boolean getSim() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no sim from an object under construction: " + this);
-        }
-        return this.sim;
-    }
-
-    /**
-     * SET sim. Object must be mutable.
-     */
-    public SetRobotResponse setSim(boolean sim) {
-        if ( this.immutable ) {
-            throw new RuntimeException("sim assigned to an immutable object: " + this);
-        }
-        this.sim = sim;
-        this.simDefined = true;
-        return this;
-    }
-
-    /**
-     * GET multipleSim. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public boolean getMultipleSim() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no multipleSim from an object under construction: " + this);
-        }
-        return this.multipleSim;
-    }
-
-    /**
-     * SET multipleSim. Object must be mutable.
-     */
-    public SetRobotResponse setMultipleSim(boolean multipleSim) {
-        if ( this.immutable ) {
-            throw new RuntimeException("multipleSim assigned to an immutable object: " + this);
-        }
-        this.multipleSim = multipleSim;
-        this.multipleSimDefined = true;
-        return this;
-    }
-
-    /**
-     * GET nn. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public boolean getNn() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no nn from an object under construction: " + this);
-        }
-        return this.nn;
-    }
-
-    /**
-     * SET nn. Object must be mutable.
-     */
-    public SetRobotResponse setNn(boolean nn) {
-        if ( this.immutable ) {
-            throw new RuntimeException("nn assigned to an immutable object: " + this);
-        }
-        this.nn = nn;
-        this.nnDefined = true;
-        return this;
-    }
-
-    /**
-     * GET webotsSim. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public boolean getWebotsSim() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no webotsSim from an object under construction: " + this);
-        }
-        return this.webotsSim;
-    }
-
-    /**
-     * SET webotsSim. Object must be mutable.
-     */
-    public SetRobotResponse setWebotsSim(boolean webotsSim) {
-        if ( this.immutable ) {
-            throw new RuntimeException("webotsSim assigned to an immutable object: " + this);
-        }
-        this.webotsSim = webotsSim;
-        this.webotsSimDefined = true;
-        return this;
-    }
-
-    /**
-     * GET webotsUrl. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public String getWebotsUrl() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no webotsUrl from an object under construction: " + this);
-        }
-        return this.webotsUrl;
-    }
-
-    /**
-     * is the property defined? The property maybe undefined as it is not a required property
-     *
-     * @return true if the property is defined (has been set)
-     */
-    public boolean webotsUrlDefined() {
-        return this.webotsUrl != null;
-    }
-
-    /**
-     * SET webotsUrl. Object must be mutable.
-     */
-    public SetRobotResponse setWebotsUrl(String webotsUrl) {
-        if ( this.immutable ) {
-            throw new RuntimeException("webotsUrl assigned to an immutable object: " + this);
-        }
-        this.webotsUrl = webotsUrl;
-        return this;
-    }
-
-    /**
-     * GET connection. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public String getConnection() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no connection from an object under construction: " + this);
-        }
-        return this.connection;
-    }
-
-    /**
-     * SET connection. Object must be mutable.
-     */
-    public SetRobotResponse setConnection(String connection) {
-        if ( this.immutable ) {
-            throw new RuntimeException("connection assigned to an immutable object: " + this);
-        }
-        this.connection = connection;
-        return this;
-    }
-
-    /**
-     * GET vendor. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public String getVendor() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no vendor from an object under construction: " + this);
-        }
-        return this.vendor;
-    }
-
-    /**
-     * SET vendor. Object must be mutable.
-     */
-    public SetRobotResponse setVendor(String vendor) {
-        if ( this.immutable ) {
-            throw new RuntimeException("vendor assigned to an immutable object: " + this);
-        }
-        this.vendor = vendor;
-        return this;
-    }
-
-    /**
-     * GET configurationUsed. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public boolean getConfigurationUsed() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no configurationUsed from an object under construction: " + this);
-        }
-        return this.configurationUsed;
-    }
-
-    /**
-     * SET configurationUsed. Object must be mutable.
-     */
-    public SetRobotResponse setConfigurationUsed(boolean configurationUsed) {
-        if ( this.immutable ) {
-            throw new RuntimeException("configurationUsed assigned to an immutable object: " + this);
-        }
-        this.configurationUsed = configurationUsed;
-        this.configurationUsedDefined = true;
-        return this;
-    }
-
-    /**
-     * GET commandLine. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public String getCommandLine() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no commandLine from an object under construction: " + this);
-        }
-        return this.commandLine;
-    }
-
-    /**
-     * is the property defined? The property maybe undefined as it is not a required property
-     *
-     * @return true if the property is defined (has been set)
-     */
-    public boolean commandLineDefined() {
-        return this.commandLine != null;
-    }
-
-    /**
-     * SET commandLine. Object must be mutable.
-     */
-    public SetRobotResponse setCommandLine(String commandLine) {
-        if ( this.immutable ) {
-            throw new RuntimeException("commandLine assigned to an immutable object: " + this);
-        }
-        this.commandLine = commandLine;
-        return this;
-    }
-
-    /**
-     * GET signature. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public String getSignature() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no signature from an object under construction: " + this);
-        }
-        return this.signature;
-    }
-
-    /**
      * is the property defined? The property maybe undefined as it is not a required property
      *
      * @return true if the property is defined (has been set)
@@ -603,117 +670,12 @@ public class SetRobotResponse extends BaseResponse {
     }
 
     /**
-     * SET signature. Object must be mutable.
-     */
-    public SetRobotResponse setSignature(String signature) {
-        if ( this.immutable ) {
-            throw new RuntimeException("signature assigned to an immutable object: " + this);
-        }
-        this.signature = signature;
-        return this;
-    }
-
-    /**
-     * GET sourceCodeFileExtension. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public String getSourceCodeFileExtension() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no sourceCodeFileExtension from an object under construction: " + this);
-        }
-        return this.sourceCodeFileExtension;
-    }
-
-    /**
-     * SET sourceCodeFileExtension. Object must be mutable.
-     */
-    public SetRobotResponse setSourceCodeFileExtension(String sourceCodeFileExtension) {
-        if ( this.immutable ) {
-            throw new RuntimeException("sourceCodeFileExtension assigned to an immutable object: " + this);
-        }
-        this.sourceCodeFileExtension = sourceCodeFileExtension;
-        return this;
-    }
-
-    /**
-     * GET binaryFileExtension. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public String getBinaryFileExtension() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no binaryFileExtension from an object under construction: " + this);
-        }
-        return this.binaryFileExtension;
-    }
-
-    /**
-     * SET binaryFileExtension. Object must be mutable.
-     */
-    public SetRobotResponse setBinaryFileExtension(String binaryFileExtension) {
-        if ( this.immutable ) {
-            throw new RuntimeException("binaryFileExtension assigned to an immutable object: " + this);
-        }
-        this.binaryFileExtension = binaryFileExtension;
-        return this;
-    }
-
-    /**
-     * GET hasWlan. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public boolean getHasWlan() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no hasWlan from an object under construction: " + this);
-        }
-        return this.hasWlan;
-    }
-
-    /**
-     * SET hasWlan. Object must be mutable.
-     */
-    public SetRobotResponse setHasWlan(boolean hasWlan) {
-        if ( this.immutable ) {
-            throw new RuntimeException("hasWlan assigned to an immutable object: " + this);
-        }
-        this.hasWlan = hasWlan;
-        this.hasWlanDefined = true;
-        return this;
-    }
-
-    /**
-     * GET firmwareDefault. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public String getFirmwareDefault() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no firmwareDefault from an object under construction: " + this);
-        }
-        return this.firmwareDefault;
-    }
-
-    /**
-     * is the property defined? The property maybe undefined as it is not a required property
-     *
-     * @return true if the property is defined (has been set)
-     */
-    public boolean firmwareDefaultDefined() {
-        return this.firmwareDefault != null;
-    }
-
-    /**
-     * SET firmwareDefault. Object must be mutable.
-     */
-    public SetRobotResponse setFirmwareDefault(String firmwareDefault) {
-        if ( this.immutable ) {
-            throw new RuntimeException("firmwareDefault assigned to an immutable object: " + this);
-        }
-        this.firmwareDefault = firmwareDefault;
-        return this;
-    }
-
-    /**
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {
@@ -766,6 +728,7 @@ public class SetRobotResponse extends BaseResponse {
             jsonO.put("configuration", this.configuration);
             jsonO.put("sim", this.sim);
             jsonO.put("multipleSim", this.multipleSim);
+            jsonO.put("markerSim", this.markerSim);
             jsonO.put("nn", this.nn);
             jsonO.put("webotsSim", this.webotsSim);
             if ( this.webotsUrl != null ) {
@@ -794,17 +757,86 @@ public class SetRobotResponse extends BaseResponse {
 
     @Override
     public String toString() {
-        return "SetRobotResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", robot=" + this.robot + ", program=" + this.program + ", configuration=" + this.configuration + ", sim=" + this.sim + ", multipleSim=" + this.multipleSim + ", nn=" + this.nn + ", webotsSim=" + this.webotsSim + ", webotsUrl=" + this.webotsUrl + ", connection=" + this.connection + ", vendor=" + this.vendor + ", configurationUsed=" + this.configurationUsed + ", commandLine=" + this.commandLine + ", signature=" + this.signature + ", sourceCodeFileExtension=" + this.sourceCodeFileExtension + ", binaryFileExtension=" + this.binaryFileExtension + ", hasWlan=" + this.hasWlan + ", firmwareDefault=" + this.firmwareDefault + " ]";
+        return "SetRobotResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", robot=" + this.robot + ", program=" + this.program + ", configuration=" + this.configuration + ", sim=" + this.sim + ", multipleSim=" + this.multipleSim + ", markerSim=" + this.markerSim + ", nn=" + this.nn + ", webotsSim=" + this.webotsSim + ", webotsUrl=" + this.webotsUrl + ", connection=" + this.connection + ", vendor=" + this.vendor + ", configurationUsed=" + this.configurationUsed + ", commandLine=" + this.commandLine + ", signature=" + this.signature + ", sourceCodeFileExtension=" + this.sourceCodeFileExtension + ", binaryFileExtension=" + this.binaryFileExtension + ", hasWlan=" + this.hasWlan + ", firmwareDefault=" + this.firmwareDefault + " ]";
     }
 
-    @Override
-    public int hashCode() {
-        throw new RuntimeException("no hashCode from transport beans!");
+    /**
+     * is the property defined? The property maybe undefined as it is not a required property
+     *
+     * @return true if the property is defined (has been set)
+     */
+    public boolean webotsUrlDefined() {
+        return this.webotsUrl != null;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        throw new RuntimeException("no equals from transport beans!");
+    /**
+     * Checks whether all required fields are set.<br>
+     * Throws a runtime exception if inconsistencies are detected.
+     */
+    private SetRobotResponse validate() {
+        String _message = null;
+        if ( !this.immutable ) {
+            _message = "SetRobotResponse-object is already immutable: " + toString();
+        }
+        if ( rc == null ) {
+            _message = "required property rc of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( initToken == null ) {
+            _message = "required property initToken of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( !serverTimeDefined ) {
+            _message = "required property serverTime of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( serverVersion == null ) {
+            _message = "required property serverVersion of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( robot == null ) {
+            _message = "required property robot of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( program == null ) {
+            _message = "required property program of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( configuration == null ) {
+            _message = "required property configuration of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( !simDefined ) {
+            _message = "required property sim of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( !multipleSimDefined ) {
+            _message = "required property multipleSim of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( !markerSimDefined ) {
+            _message = "required property markerSim of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( !nnDefined ) {
+            _message = "required property nn of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( !webotsSimDefined ) {
+            _message = "required property webotsSim of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( connection == null ) {
+            _message = "required property connection of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( vendor == null ) {
+            _message = "required property vendor of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( !configurationUsedDefined ) {
+            _message = "required property configurationUsed of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( sourceCodeFileExtension == null ) {
+            _message = "required property sourceCodeFileExtension of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( binaryFileExtension == null ) {
+            _message = "required property binaryFileExtension of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( !hasWlanDefined ) {
+            _message = "required property hasWlan of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( _message != null ) {
+            this.immutable = false;
+            throw new RuntimeException(_message);
+        }
+        return this;
     }
 
 }

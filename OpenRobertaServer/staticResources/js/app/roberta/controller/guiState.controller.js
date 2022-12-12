@@ -1087,6 +1087,12 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
     exports.setConfiguration = setConfiguration;
     function checkSim() {
         if (hasSim()) {
+            if (hasMarkerSim()) {
+                $('#simMarkerObject').parent().css('display', 'block');
+            }
+            else {
+                $('#simMarkerObject').parent().css('display', 'none');
+            }
             $('#menuRunSim').parent().removeClass('disabled');
             $('#simButton, #simDebugButton').show();
         }
@@ -1117,6 +1123,9 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         return GUISTATE.gui.multipleSim == true;
     }
     exports.hasMultiSim = hasMultiSim;
+    function hasMarkerSim() {
+        return GUISTATE.gui.markerSim == true;
+    }
     function hasNN() {
         return GUISTATE.gui.nn == true;
     }

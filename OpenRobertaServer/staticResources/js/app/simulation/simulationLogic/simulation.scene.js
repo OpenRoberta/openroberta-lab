@@ -373,6 +373,7 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
                     _this.robotClass = result.robotClass;
                     _this.initViews();
                     if (switchRobot) {
+                        scene.imgBackgroundList = [];
                         scene.currentBackground = 0;
                         if (scene.obstacleList.length > 0) {
                             scene.obstacleList = [];
@@ -493,7 +494,14 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
                 ending = '.svg';
             }
             if (this.robots[0].mobile) {
-                myImgList = this.robots[0].imgList.map(function (word) { return "".concat(word).concat(ending); });
+                myImgList = this.robots[0].imgList.map(function (word) {
+                    if (word.endsWith('jpg')) {
+                        return word;
+                    }
+                    else {
+                        return "".concat(word).concat(ending);
+                    }
+                });
             }
             else {
                 myImgList = [this.robotType + 'Background' + ending];
@@ -627,7 +635,7 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             this.drawColorAreas();
             this.drawObstacles();
             this.drawMarkers();
-            if (this.currentBackground == 2) {
+            if (this.currentBackground == 2 && this.imgBackgroundList[2].currentSrc.includes('robertaBackground')) {
                 this.redrawRuler = true;
             }
         };
@@ -664,8 +672,9 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             });
         };
         SimulationScene.prototype.stepBackground = function (num) {
-            if (this.currentBackground == 2) {
-                this.ruler.removeMouseEvents();
+            var workingScene = this.currentBackground == 2 && this.imgBackgroundList[2].currentSrc.includes('robertaBackground');
+            this.ruler.removeMouseEvents();
+            if (workingScene) {
                 var myObstacle = this.obstacleList.find(function (obstacle) { return obstacle.myId === 0; });
                 if (myObstacle) {
                     myObstacle.img = null;
@@ -678,17 +687,29 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             else {
                 this.currentBackground = num;
             }
-            if (this.currentBackground == 2) {
-                this.ruler.addMouseEvents();
-                var myObstacle = this.obstacleList.find(function (obstacle) { return obstacle.myId === 0; });
-                if (myObstacle) {
-                    myObstacle.img = this.images['roadWorks'];
-                }
-            }
+            workingScene = this.currentBackground == 2 && this.imgBackgroundList[2].currentSrc.includes('robertaBackground');
+            var configData = this.sim.getConfigData();
+            this.obstacleList = [];
+            this.colorAreaList = [];
+            this.markerList = [];
             this.ground.w = this.imgBackgroundList[this.currentBackground].width;
             this.ground.h = this.imgBackgroundList[this.currentBackground].height;
             this.resetAllCanvas(this.imgBackgroundList[this.currentBackground]);
             this.resizeAll(true);
+            this.sim.setNewConfig(configData);
+            if (workingScene) {
+                this.ruler.addMouseEvents();
+                var myObstacle = this.obstacleList.find(function (obstacle) {
+                    if (obstacle.type === simulation_objects_1.SimObjectType.Obstacle) {
+                        obstacle.h = 100;
+                        obstacle.w = 100;
+                        return true;
+                    }
+                });
+                if (myObstacle) {
+                    myObstacle.img = this.images['roadWorks'];
+                }
+            }
         };
         SimulationScene.prototype.update = function (dt, interpreterRunning) {
             var _this = this;

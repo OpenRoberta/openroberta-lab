@@ -2285,7 +2285,7 @@ export class CameraSensor implements ISensor, IUpdateAction, IDrawable, ILabel, 
                 let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
                 let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
                 if (data) {
-                    for (let i = data.height - 1; i >= 0; i--) {
+                    for (let i = data.height - 1; i > 0; i--) {
                         let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.y - this.ry) * (i + this.bB.y - this.ry);
                         let xi = Math.round(-Math.sqrt(a) - (this.bB.x - this.rx));
                         let myIndex = (xi + i * data.width) * 4 - 4;
@@ -2320,7 +2320,7 @@ export class CameraSensor implements ISensor, IUpdateAction, IDrawable, ILabel, 
                 let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w + 1, this.bB.h + 1);
                 let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w + 1, this.bB.h + 1);
                 if (data) {
-                    for (let i = 0; i < data.width; i++) {
+                    for (let i = 0; i < data.width - 1; i++) {
                         let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.x - this.rx) * (i + this.bB.x - this.rx);
                         let yi = Math.round(-Math.sqrt(a) - this.bB.y + this.ry);
                         let myIndex = (i + yi * data.width) * 4;

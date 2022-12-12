@@ -184,6 +184,9 @@ define(["require", "exports", "interpreter.constants", "util", "interpreter.inte
         SimulationRoberta.prototype.deleteAllObstacle = function () {
             this.scene.obstacleList = [];
         };
+        SimulationRoberta.prototype.deleteAllMarker = function () {
+            this.scene.markerList = [];
+        };
         SimulationRoberta.prototype.deleteSelectedObject = function () {
             this.scene.deleteSelectedObject();
         };

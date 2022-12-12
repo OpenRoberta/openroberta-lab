@@ -95,6 +95,10 @@ public class RobotFactory {
         return this.pluginProperties.getStringProperty("robot.multisim") != null && this.pluginProperties.getStringProperty("robot.multisim").equals("true");
     }
 
+    public boolean hasMarkerSim() {
+        return this.pluginProperties.getStringProperty("robot.markersim") != null && this.pluginProperties.getStringProperty("robot.markersim").equals("true");
+    }
+
     public final Boolean hasNN() {
         return this.pluginProperties.getStringProperty("robot.nn") != null && this.pluginProperties.getStringProperty("robot.nn").equals("true");
     }

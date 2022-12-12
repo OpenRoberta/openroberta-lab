@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 1800 1800"
+   height="1800"
+   width="1800"
+   sodipodi:docname="maze.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1848"
+     inkscape:window-height="1016"
+     id="namedview1115"
+     showgrid="false"
+     inkscape:zoom="0.5"
+     inkscape:cx="605.36328"
+     inkscape:cy="660"
+     inkscape:window-x="72"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg8" />
+  <defs
+     id="defs2" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer2">
+    <rect
+       width="100%"
+       height="100%"
+       fill="white"
+       id="rect1095" />
+    <path
+       id="path794"
+       d="M 225,0 V 1800"
+       style="fill:none;stroke:#dddddd;stroke-width:5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1">/&gt;
+        </path>
+    <path
+       id="path794-3"
+       d="M 450,0 V 1800"
+       style="fill:none;stroke:#dddddd;stroke-width:5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="path794-6"
+       d="M 675,0 V 1800"
+       style="fill:none;stroke:#dddddd;stroke-width:5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="path794-7"
+       d="M 900,0 V 1800"
+       style="fill:none;stroke:#dddddd;stroke-width:5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="path794-5"
+       d="M 1125,0 V 1800"
+       style="fill:none;stroke:#dddddd;stroke-width:5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="path794-5-3"
+       d="M 1350,0 V 1800"
+       style="fill:none;stroke:#dddddd;stroke-width:5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="path794-5-5"
+       d="M 1575,0 V 1800"
+       style="fill:none;stroke:#dddddd;stroke-width:5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  </g>
+  <g
+     id="g870">
+    <g
+       transform="rotate(90,900,900)"
+       id="g879">
+      <path
+         id="path856"
+         d="M 225,0 V 1800"
+         style="fill:none;stroke:#dddddd;stroke-width:5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         id="path858"
+         d="M 459,0 V 1800"
+         style="fill:none;stroke:#dddddd;stroke-width:5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         id="path860"
+         d="M 675,0 V 1800"
+         style="fill:none;stroke:#dddddd;stroke-width:5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         id="path862"
+         d="M 900,0 V 1800"
+         style="fill:none;stroke:#dddddd;stroke-width:5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         id="path864"
+         d="M 1125,0 V 1800"
+         style="fill:none;stroke:#dddddd;stroke-width:5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         id="path866"
+         d="M 1350,0 V 1800"
+         style="fill:none;stroke:#dddddd;stroke-width:5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         id="path868"
+         d="M 1575,0 V 1800"
+         style="fill:none;stroke:#dddddd;stroke-width:5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    </g>
+  </g>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#dcdce6;fill-opacity:1;stroke:none;"
+     x="1460"
+     y="1760"
+     id="text1119"><tspan
+       sodipodi:role="line"
+       id="tspan1117"
+       x="1460"
+       y="1746"
+       style="fill:#dcdce6;fill-opacity:1;">maze template</tspan></text>
+</svg>

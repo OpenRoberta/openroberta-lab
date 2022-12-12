@@ -181,6 +181,15 @@ class ProgSimController {
             'sim add marker clicked'
         );
 
+        $('#simMarkerDeleteAll').onWrap(
+            'click.sim',
+            function (e) {
+                (SIM as SimulationRoberta).deleteAllMarker && (SIM as SimulationRoberta).deleteAllMarker();
+                return false;
+            },
+            'sim delete all marker clicked'
+        );
+
         $('#simAddObstacleRectangle').onWrap(
             'click.sim',
             function () {
@@ -546,7 +555,7 @@ class ProgSimMultiController extends ProgSimController {
         });
     }
 
-    private getSortedExtractedPrograms():any[] {
+    private getSortedExtractedPrograms(): any[] {
         let mySortedExtractedPrograms = [];
         let C = this;
         this.selectedPrograms.forEach((selected) => {

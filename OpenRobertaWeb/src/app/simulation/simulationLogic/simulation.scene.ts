@@ -389,6 +389,7 @@ export class SimulationScene {
                 this.robotClass = result.robotClass;
                 this.initViews();
                 if (switchRobot) {
+                    scene.imgBackgroundList = [];
                     scene.currentBackground = 0;
                     if (scene.obstacleList.length > 0) {
                         scene.obstacleList = [];
@@ -530,7 +531,13 @@ export class SimulationScene {
             ending = '.svg';
         }
         if (this.robots[0].mobile) {
-            myImgList = this.robots[0].imgList.map((word) => `${word}${ending}`);
+            myImgList = this.robots[0].imgList.map((word) => {
+                if (word.endsWith('jpg')) {
+                    return word;
+                } else {
+                    return `${word}${ending}`;
+                }
+            });
         } else {
             myImgList = [this.robotType + 'Background' + ending];
         }
@@ -666,7 +673,7 @@ export class SimulationScene {
         this.drawColorAreas();
         this.drawObstacles();
         this.drawMarkers();
-        if (this.currentBackground == 2) {
+        if (this.currentBackground == 2 && this.imgBackgroundList[2].currentSrc.includes('robertaBackground')) {
             this.redrawRuler = true;
         }
     }
@@ -705,8 +712,9 @@ export class SimulationScene {
     }
 
     stepBackground(num: number) {
-        if (this.currentBackground == 2) {
-            this.ruler.removeMouseEvents();
+        let workingScene = this.currentBackground == 2 && this.imgBackgroundList[2].currentSrc.includes('robertaBackground');
+        this.ruler.removeMouseEvents();
+        if (workingScene) {
             let myObstacle: BaseSimulationObject = this.obstacleList.find((obstacle) => obstacle.myId === 0);
             if (myObstacle) {
                 (myObstacle as RectangleSimulationObject).img = null;
@@ -718,17 +726,29 @@ export class SimulationScene {
         } else {
             this.currentBackground = num;
         }
-        if (this.currentBackground == 2) {
-            this.ruler.addMouseEvents();
-            let myObstacle: BaseSimulationObject = this.obstacleList.find((obstacle) => obstacle.myId === 0);
-            if (myObstacle) {
-                (myObstacle as RectangleSimulationObject).img = this.images['roadWorks'];
-            }
-        }
+        workingScene = this.currentBackground == 2 && this.imgBackgroundList[2].currentSrc.includes('robertaBackground');
+        let configData = this.sim.getConfigData();
+        this.obstacleList = [];
+        this.colorAreaList = [];
+        this.markerList = [];
         this.ground.w = this.imgBackgroundList[this.currentBackground].width;
         this.ground.h = this.imgBackgroundList[this.currentBackground].height;
         this.resetAllCanvas(this.imgBackgroundList[this.currentBackground]);
         this.resizeAll(true);
+        this.sim.setNewConfig(configData);
+        if (workingScene) {
+            this.ruler.addMouseEvents();
+            let myObstacle: BaseSimulationObject = this.obstacleList.find((obstacle) => {
+                if ((obstacle as RectangleSimulationObject).type === SimObjectType.Obstacle) {
+                    (obstacle as RectangleSimulationObject).h = 100;
+                    (obstacle as RectangleSimulationObject).w = 100;
+                    return true;
+                }
+            });
+            if (myObstacle) {
+                (myObstacle as RectangleSimulationObject).img = this.images['roadWorks'];
+            }
+        }
     }
 
     update(dt: number, interpreterRunning: boolean) {

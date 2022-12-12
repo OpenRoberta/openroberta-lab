@@ -1810,7 +1810,7 @@ define(["require", "exports", "robot.base.mobile", "interpreter.constants", "sim
                     var data = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
                     var dataD = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
                     if (data) {
-                        for (var i = data.height - 1; i >= 0; i--) {
+                        for (var i = data.height - 1; i > 0; i--) {
                             var a = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.y - this.ry) * (i + this.bB.y - this.ry);
                             var xi = Math.round(-Math.sqrt(a) - (this.bB.x - this.rx));
                             var myIndex = (xi + i * data.width) * 4 - 4;
@@ -1846,7 +1846,7 @@ define(["require", "exports", "robot.base.mobile", "interpreter.constants", "sim
                     var data = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w + 1, this.bB.h + 1);
                     var dataD = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w + 1, this.bB.h + 1);
                     if (data) {
-                        for (var i = 0; i < data.width; i++) {
+                        for (var i = 0; i < data.width - 1; i++) {
                             var a = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.x - this.rx) * (i + this.bB.x - this.rx);
                             var yi = Math.round(-Math.sqrt(a) - this.bB.y + this.ry);
                             var myIndex = (i + yi * data.width) * 4;

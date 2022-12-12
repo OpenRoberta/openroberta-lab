@@ -12,7 +12,7 @@ export default class RobotRobotino extends RobotBaseMobile {
     webAudio: WebAudio = new WebAudio();
     override timer: Timer = new Timer(5);
     buttons: Keys;
-    override readonly imgList = ['square', 'blank'];
+    override readonly imgList = ['square', 'roboLab.jpg', 'maze'];
     private infraredSensor: RobotinoInfraredSensor;
     private robotinoTouchSensor: RobotinoTouchSensor;
     private odometrySensor: OdometrySensor;

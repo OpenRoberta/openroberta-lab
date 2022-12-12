@@ -192,6 +192,7 @@ public class ClientAdmin {
                     response.setConfiguration(configuration);
                     response.setSim(robotFactory.hasSim());
                     response.setMultipleSim(robotFactory.hasMultipleSim());
+                    response.setMarkerSim(robotFactory.hasMarkerSim());
                     response.setNn(robotFactory.hasNN());
                     response.setWebotsSim(robotFactory.hasWebotsSim());
                     response.setWebotsUrl(robotFactory.getWebotsUrl());

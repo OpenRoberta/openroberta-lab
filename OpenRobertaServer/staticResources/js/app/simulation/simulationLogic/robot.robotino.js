@@ -23,7 +23,7 @@ define(["require", "exports", "robot.base.mobile", "robot.sensors", "./robot.act
             _this.tts = new robot_actuators_1.TTS();
             _this.webAudio = new robot_actuators_1.WebAudio();
             _this.timer = new robot_sensors_1.Timer(5);
-            _this.imgList = ['square', 'blank'];
+            _this.imgList = ['square', 'roboLab.jpg', 'maze'];
             _this.mouse = {
                 x: 0,
                 y: 0,

@@ -556,6 +556,10 @@
           "type": "boolean"
         },
         {
+          "name": "markerSim",
+          "type": "boolean"
+        },
+        {
           "name": "nn",
           "type": "boolean"
         },

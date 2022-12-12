@@ -158,6 +158,10 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
                 SIM.addMarker && SIM.addMarker(id);
                 return false;
             }, 'sim add marker clicked');
+            $('#simMarkerDeleteAll').onWrap('click.sim', function (e) {
+                SIM.deleteAllMarker && SIM.deleteAllMarker();
+                return false;
+            }, 'sim delete all marker clicked');
             $('#simAddObstacleRectangle').onWrap('click.sim', function () {
                 SIM.addObstacle && SIM.addObstacle(simulation_objects_1.SimObjectShape.Rectangle);
                 return false;

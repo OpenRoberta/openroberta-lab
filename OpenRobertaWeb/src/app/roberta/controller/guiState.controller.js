@@ -1093,6 +1093,11 @@ function setConfiguration(result) {
 
 function checkSim() {
     if (hasSim()) {
+        if (hasMarkerSim()) {
+            $('#simMarkerObject').parent().css('display', 'block');
+        } else {
+            $('#simMarkerObject').parent().css('display', 'none');
+        }
         $('#menuRunSim').parent().removeClass('disabled');
         $('#simButton, #simDebugButton').show();
     } else {
@@ -1119,6 +1124,10 @@ function hasSim() {
 
 function hasMultiSim() {
     return GUISTATE.gui.multipleSim == true;
+}
+
+function hasMarkerSim() {
+    return GUISTATE.gui.markerSim == true;
 }
 
 function hasNN() {

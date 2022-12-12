@@ -198,6 +198,10 @@ export class SimulationRoberta implements Simulation {
         this.scene.obstacleList = [];
     }
 
+    deleteAllMarker() {
+        this.scene.markerList = [];
+    }
+
     deleteSelectedObject() {
         this.scene.deleteSelectedObject();
     }
