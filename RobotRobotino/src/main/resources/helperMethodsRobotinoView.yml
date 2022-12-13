@@ -173,12 +173,12 @@ GETMARKERINFO:
     def getMarkerInformation(RV, id):
         RV.writeFloat(3,id)
         time.sleep(0.001)
-        value = RV.readFloatVector(4) 
+        value = RV.readFloatVector(4)
         if not value[0]:
             value = [False, -1,-1,-1,-1,-1,-1]
         else:
             for i in range (1,4):
-                value[i] = value[i] * 100  
+                value[i] = value[i] * 100
         return value[1:4]
 
 GETCOLOURBLOB:
