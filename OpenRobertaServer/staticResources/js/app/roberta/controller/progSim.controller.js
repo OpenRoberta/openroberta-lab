@@ -507,7 +507,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
                         }
                         else {
                             myPromises.push(new Promise(function (resolve, reject) {
-                                PROGRAM_M.loadProgramFromListing(item.programName, GUISTATE_C.getUserAccountName(), item.creator, function (result) {
+                                PROGRAM_M.loadProgramFromListing(item.programName, item.owner, item.creator, function (result) {
                                     C.loadStackMachineCode(item, resolve, reject, result);
                                 });
                             }));

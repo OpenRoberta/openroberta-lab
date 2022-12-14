@@ -36,6 +36,7 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
         exports.gui.vendor = '';
         exports.gui.sim = false;
         exports.gui.multipleSim = false;
+        exports.gui.markerSim = false;
         exports.gui.nn = false;
         exports.gui.webotsSim = false;
         exports.gui.webotsUrl = '';
@@ -47,7 +48,7 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
             LOCAL: 'local',
             WEBVIEW: 'webview',
             JSPLAY: 'jsPlay',
-            TDM: 'tdm' // Thymio Device Manager, only for Thymio
+            TDM: 'tdm', // Thymio Device Manager, only for Thymio
         };
         exports.gui.runEnabled = false;
         exports.user.id = -1;
@@ -85,7 +86,7 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
             COMM.setInitToken(undefined);
             return COMM.json('/init', {
                 cmd: 'init',
-                screenSize: [window.screen.availWidth, window.screen.availHeight]
+                screenSize: [window.screen.availWidth, window.screen.availHeight],
             }, function (result) {
                 if (result.rc === 'ok') {
                     COMM.setInitToken(result.initToken);

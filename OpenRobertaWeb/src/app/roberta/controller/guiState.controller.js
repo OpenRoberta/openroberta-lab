@@ -256,6 +256,7 @@ function setRobot(robot, result, opt_init) {
     GUISTATE.gui.configuration = result.configuration;
     GUISTATE.gui.sim = result.sim;
     GUISTATE.gui.multipleSim = result.multipleSim;
+    GUISTATE.gui.markerSim = result.markerSim;
     GUISTATE.gui.nn = result.nn;
     GUISTATE.gui.webotsSim = result.webotsSim;
     GUISTATE.gui.webotsUrl = result.webotsUrl;
@@ -1094,7 +1095,7 @@ function setConfiguration(result) {
 function checkSim() {
     if (hasSim()) {
         if (hasMarkerSim()) {
-            $('#simMarkerObject').parent().css('display', 'block');
+            $('#simMarkerObject').parent().css('display', 'inline-block');
         } else {
             $('#simMarkerObject').parent().css('display', 'none');
         }
@@ -1378,6 +1379,7 @@ export {
     checkSim,
     hasSim,
     hasMultiSim,
+    hasMarkerSim,
     hasNN,
     hasWebotsSim,
     getWebotsUrl,
