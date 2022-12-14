@@ -491,6 +491,11 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
         RobotinoChassis.prototype.updateAction = function (myRobot, dt, interpreterRunning) {
             var robot = myRobot;
             var omniDrive = myRobot.interpreter.getRobotBehaviour().getActionState('omniDrive', true);
+            function constrain(speed) {
+                var cSpeed = speed > 100 ? 100 : speed;
+                cSpeed = speed < -100 ? -100 : cSpeed;
+                return cSpeed;
+            }
             if (omniDrive) {
                 if (omniDrive.reset) {
                     switch (omniDrive.reset) {
@@ -516,13 +521,13 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                 this.yVel = 0;
                 this.thetaVel = 0;
                 if (omniDrive[C.X + C.SPEED] !== undefined) {
-                    this.xVel = omniDrive[C.X + C.SPEED] * this.MAXPOWER;
+                    this.xVel = constrain(omniDrive[C.X + C.SPEED]) * this.MAXPOWER;
                 }
                 if (omniDrive[C.Y + C.SPEED] !== undefined) {
-                    this.yVel = omniDrive[C.Y + C.SPEED] * this.MAXPOWER;
+                    this.yVel = constrain(omniDrive[C.Y + C.SPEED]) * this.MAXPOWER;
                 }
                 if (omniDrive[C.ANGLE + C.SPEED] !== undefined) {
-                    this.thetaVel = omniDrive[C.ANGLE + C.SPEED] * this.MAXROTATION;
+                    this.thetaVel = constrain(omniDrive[C.ANGLE + C.SPEED]) * this.MAXROTATION;
                 }
                 if (omniDrive[C.DISTANCE] !== undefined) {
                     this.distance = Math.abs(omniDrive[C.DISTANCE]) * 3;
@@ -533,7 +538,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                 if (omniDrive[C.X] !== undefined && omniDrive[C.Y] !== undefined && omniDrive[C.POWER] !== undefined) {
                     var x = omniDrive[C.X] * 3 * Math.cos(this.origin.theta) + omniDrive[C.Y] * 3 * Math.sin(this.origin.theta) + this.origin.x;
                     var y = omniDrive[C.X] * 3 * Math.sin(this.origin.theta) - omniDrive[C.Y] * 3 * Math.cos(this.origin.theta) + this.origin.y;
-                    var power = omniDrive[C.POWER] * this.MAXPOWER;
+                    var power = constrain(omniDrive[C.POWER]) * this.MAXPOWER;
                     this.distance = Math.sqrt((x - robot.pose.x) * (x - robot.pose.x) + (y - robot.pose.y) * (y - robot.pose.y));
                     var q = power / this.distance;
                     var mX_1 = Math.cos(robot.pose.theta) * (x - robot.pose.x) + Math.sin(robot.pose.theta) * (y - robot.pose.y);

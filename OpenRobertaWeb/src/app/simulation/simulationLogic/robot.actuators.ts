@@ -529,6 +529,11 @@ export class RobotinoChassis extends ChassisMobile {
     updateAction(myRobot: RobotBase, dt: number, interpreterRunning: boolean): void {
         let robot: RobotBaseMobile = myRobot as RobotBaseMobile;
         const omniDrive = myRobot.interpreter.getRobotBehaviour().getActionState('omniDrive', true);
+        function constrain(speed): number {
+            let cSpeed = speed > 100 ? 100 : speed;
+            cSpeed = speed < -100 ? -100 : cSpeed;
+            return cSpeed;
+        }
         if (omniDrive) {
             if (omniDrive.reset) {
                 switch (omniDrive.reset) {
@@ -554,13 +559,13 @@ export class RobotinoChassis extends ChassisMobile {
             this.yVel = 0;
             this.thetaVel = 0;
             if (omniDrive[C.X + C.SPEED] !== undefined) {
-                this.xVel = omniDrive[C.X + C.SPEED] * this.MAXPOWER;
+                this.xVel = constrain(omniDrive[C.X + C.SPEED]) * this.MAXPOWER;
             }
             if (omniDrive[C.Y + C.SPEED] !== undefined) {
-                this.yVel = omniDrive[C.Y + C.SPEED] * this.MAXPOWER;
+                this.yVel = constrain(omniDrive[C.Y + C.SPEED]) * this.MAXPOWER;
             }
             if (omniDrive[C.ANGLE + C.SPEED] !== undefined) {
-                this.thetaVel = omniDrive[C.ANGLE + C.SPEED] * this.MAXROTATION;
+                this.thetaVel = constrain(omniDrive[C.ANGLE + C.SPEED]) * this.MAXROTATION;
             }
             if (omniDrive[C.DISTANCE] !== undefined) {
                 this.distance = Math.abs(omniDrive[C.DISTANCE]) * 3;
@@ -571,7 +576,7 @@ export class RobotinoChassis extends ChassisMobile {
             if (omniDrive[C.X] !== undefined && omniDrive[C.Y] !== undefined && omniDrive[C.POWER] !== undefined) {
                 let x = omniDrive[C.X] * 3 * Math.cos(this.origin.theta) + omniDrive[C.Y] * 3 * Math.sin(this.origin.theta) + this.origin.x;
                 let y = omniDrive[C.X] * 3 * Math.sin(this.origin.theta) - omniDrive[C.Y] * 3 * Math.cos(this.origin.theta) + this.origin.y;
-                let power = omniDrive[C.POWER] * this.MAXPOWER;
+                let power = constrain(omniDrive[C.POWER]) * this.MAXPOWER;
                 this.distance = Math.sqrt((x - robot.pose.x) * (x - robot.pose.x) + (y - robot.pose.y) * (y - robot.pose.y));
                 let q = power / this.distance;
                 let mX = Math.cos(robot.pose.theta) * (x - robot.pose.x) + Math.sin(robot.pose.theta) * (y - robot.pose.y);
