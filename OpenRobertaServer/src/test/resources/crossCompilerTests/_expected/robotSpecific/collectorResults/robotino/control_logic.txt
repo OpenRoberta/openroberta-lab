@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [_T, TOUCH, PRESSED]]
+Actors: 
+[]
+Methods: 
+[ISBUMPED]

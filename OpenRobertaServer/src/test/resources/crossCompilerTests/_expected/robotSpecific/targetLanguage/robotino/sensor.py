@@ -23,6 +23,17 @@ def getCameraLine(RV):
     else:
         return -1
 
+def getColourBlob(RV, inputs):
+    RV.writeFloatVector(6, inputs)
+    time.sleep(0.001)
+    value = RV.readFloatVector(6)
+    if value[3] <= 0:
+        value = [-1,-1,0,0]
+    else:
+        value[0] = (value[0]/640) -0.5
+        value[1] = (value[1]/480) -0.5
+    return value
+
 def getDigitalPin(pos):
     DIGITALPIN_URL = "http://" + ROBOTINOIP + "/data/digitalinputarray"
     r = requests.get(url = DIGITALPIN_URL, params = PARAMS)
@@ -143,7 +154,7 @@ def run(RV):
     ___Element18 = ((time.time() - _timer3)/1000)
     ___Element19 = ((time.time() - _timer4)/1000)
     ___Element20 = ((time.time() - _timer5)/1000)
-    ___Element2 = [0, 0, 0]
+    ___Element2 = getColourBlob(RV, [40, 56, 42, 100, 53, 100])
 
     resetOdometry(0, RV.readFloatVector(1)[1], RV.readFloatVector(1)[2])
     resetOdometry(RV.readFloatVector(1)[0], 0, RV.readFloatVector(1)[2])

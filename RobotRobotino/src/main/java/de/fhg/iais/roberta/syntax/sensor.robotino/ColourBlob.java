@@ -1,9 +1,11 @@
 package de.fhg.iais.roberta.syntax.sensor.robotino;
 
+import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
+import de.fhg.iais.roberta.transformer.forField.NepoHide;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
@@ -29,6 +31,8 @@ public final class ColourBlob extends Sensor implements WithUserDefinedPort {
     public final Expr minVal;
     @NepoValue(name = "MAX_VAL", type = BlocklyType.NUMBER)
     public final Expr maxVal;
+    @NepoHide
+    public final Hide hide;
 
     public ColourBlob(
         BlocklyProperties properties,
@@ -39,7 +43,8 @@ public final class ColourBlob extends Sensor implements WithUserDefinedPort {
         Expr minSat,
         Expr maxSat,
         Expr minVal,
-        Expr maxVal) {
+        Expr maxVal,
+        Hide hide) {
         super(properties);
         this.mode = mode;
         this.port = port;
@@ -49,6 +54,7 @@ public final class ColourBlob extends Sensor implements WithUserDefinedPort {
         this.maxSat = maxSat;
         this.minVal = minVal;
         this.maxVal = maxVal;
+        this.hide = hide;
         setReadOnly();
     }
 

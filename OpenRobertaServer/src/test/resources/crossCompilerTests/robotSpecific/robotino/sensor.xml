@@ -237,22 +237,38 @@
                             <field name="VAR">Element2</field>
                             <field name="TYPE">Array_Number</field>
                             <value name="VALUE">
-                                <block type="robLists_create_with" id="AR(?l8@{(QJ?[^~@HtyH" intask="true">
-                                    <mutation items="3" list_type="Number"></mutation>
-                                    <field name="LIST_TYPE">Number</field>
-                                    <value name="ADD0">
-                                        <block type="math_number" id="O4fW!6sXidGO^6s=7WNc" intask="true">
-                                            <field name="NUM">0</field>
+                                <block type="robSensors_get_colourBlob" id=";_JNS;xeK3)ez?b^)Wx|" intask="true">
+                                    <field name="MODE">INFO</field>
+                                    <field name="SENSORPORT">_C</field>
+                                    <hide name="SENSORPORT" value="_C"></hide>
+                                    <value name="MIN_HUE">
+                                        <block type="math_number" id="i2H*r=Jp`[eKQHZ={32:" intask="true">
+                                            <field name="NUM">40</field>
                                         </block>
                                     </value>
-                                    <value name="ADD1">
-                                        <block type="math_number" id="/QSJFQZ_2^vYT*_98V+L" intask="true">
-                                            <field name="NUM">0</field>
+                                    <value name="MAX_HUE">
+                                        <block type="math_number" id="-Z[s_z(8}IaG/,-KGlx]" intask="true">
+                                            <field name="NUM">56</field>
                                         </block>
                                     </value>
-                                    <value name="ADD2">
-                                        <block type="math_number" id="vI2l@jX^ww`~uP??fi~q" intask="true">
-                                            <field name="NUM">0</field>
+                                    <value name="MIN_SAT">
+                                        <block type="math_number" id="GY{`hN!L%w+|q9JMW-W5" intask="true">
+                                            <field name="NUM">42</field>
+                                        </block>
+                                    </value>
+                                    <value name="MAX_SAT">
+                                        <block type="math_number" id="~IJJAc8awI|1dk0nU8d}" intask="true">
+                                            <field name="NUM">100</field>
+                                        </block>
+                                    </value>
+                                    <value name="MIN_VAL">
+                                        <block type="math_number" id="%bO^YW0((h:9vHqn^Qy4" intask="true">
+                                            <field name="NUM">53</field>
+                                        </block>
+                                    </value>
+                                    <value name="MAX_VAL">
+                                        <block type="math_number" id="R14FLm=%7?*,`(p1/,`;" intask="true">
+                                            <field name="NUM">100</field>
                                         </block>
                                     </value>
                                 </block>

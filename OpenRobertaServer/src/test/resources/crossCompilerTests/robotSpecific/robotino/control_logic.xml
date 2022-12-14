@@ -1,0 +1,468 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="robotino" xmlversion="3.1" description="" tags="">
+            <instance x="-198" y="-44">
+                <block type="robControls_start" id="[*|]d]@ps:E6x,{#,uhJ" intask="true" deletable="false">
+                    <mutation declare="true"></mutation>
+                    <field name="DEBUG">TRUE</field>
+                    <statement name="ST">
+                        <block type="robGlobalVariables_declare" id="M^h22Tlt3{R!3R-D,,{}" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Boolean"></mutation>
+                            <field name="VAR">booleanFalse</field>
+                            <field name="TYPE">Boolean</field>
+                            <value name="VALUE">
+                                <block type="logic_boolean" id="cj69B{ctsAZgGH!BcE]j" intask="true">
+                                    <field name="BOOL">FALSE</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="66u#_CpmN9B8OQq;FAk}" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Boolean"></mutation>
+                            <field name="VAR">booleanTrue</field>
+                            <field name="TYPE">Boolean</field>
+                            <value name="VALUE">
+                                <block type="logic_boolean" id="wkLATjU{CLBXHb5J}(T:" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="%66md~meX5SZ:*5FV1#F" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Number"></mutation>
+                            <field name="VAR">number</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="math_number" id="VemqhMs;NO@p4GOvhC.o" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="9R@=zJ)MX9Kb)S,BEcsW" intask="true" deletable="false" movable="false">
+                            <mutation next="false" declaration_type="Array_Number"></mutation>
+                            <field name="VAR">numberList</field>
+                            <field name="TYPE">Array_Number</field>
+                            <value name="VALUE">
+                                <block type="robLists_create_with" id="mu+gKj0^q(Byz2s6(N=U" intask="true">
+                                    <mutation items="3" list_type="Number"></mutation>
+                                    <field name="LIST_TYPE">Number</field>
+                                    <value name="ADD0">
+                                        <block type="math_number" id="6-B}6(Syn]rWn|KbY(,Q" intask="true">
+                                            <field name="NUM">0</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="math_number" id="7Kp7y%Xz0]2w[-x)kLNi" intask="true">
+                                            <field name="NUM">0</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD2">
+                                        <block type="math_number" id="`{Q0qKlUZUWr+1{9)-iP" intask="true">
+                                            <field name="NUM">0</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="robProcedures_callnoreturn" id="zD3r,suTDn)kr9@FQeJD" intask="true">
+                    <mutation name="control"></mutation>
+                </block>
+                <block type="robProcedures_callnoreturn" id="8p@d[qgm5D6stYyhZ4Z," intask="true">
+                    <mutation name="logic"></mutation>
+                </block>
+            </instance>
+            <instance x="346" y="202">
+                <block type="robProcedures_defnoreturn" id="|bIdM_V`GXeWhLBjobeZ" intask="true">
+                    <mutation declare="false"></mutation>
+                    <field name="NAME">logic</field>
+                    <statement name="STACK">
+                        <block type="robControls_if" id="V}7PudnrX3[G!`/B66(B" intask="true">
+                            <value name="IF0">
+                                <block type="logic_compare" id="DiM+x}[q|?b@x!G/Z*BB" intask="true">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                        <block type="variables_get" id=",M?S7h:)+*dYL73Yw))k" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">number</field>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="variables_get" id="g%rd`c{tTiWP-P/*x,q6" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">number</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_if" id="*heJ!ppI#%^gDcJw(hgL" intask="true">
+                            <value name="IF0">
+                                <block type="logic_compare" id="%JV?SUYaMtGT*{_H1B^f" intask="true">
+                                    <field name="OP">NEQ</field>
+                                    <value name="A">
+                                        <block type="variables_get" id="~pbM6L(+jv~%iE]O95QU" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">number</field>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="variables_get" id="w,}U*PM[ui1d}rp2%|gd" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">number</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_if" id=",)^gL||hW?j{+{qt_.KR" intask="true">
+                            <value name="IF0">
+                                <block type="logic_compare" id="OZi)%c9^(^^8V4Gbh((N" intask="true">
+                                    <field name="OP">LT</field>
+                                    <value name="A">
+                                        <block type="variables_get" id="9Q0YX[s)QwttP}Z1)Tm8" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">number</field>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="variables_get" id="h*[qgPu.7{0VyKY(xh#}" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">number</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_if" id="3+^o:P;pcKMi)%.;JShr" intask="true">
+                            <value name="IF0">
+                                <block type="logic_compare" id="cxl[4~J)e|Ca1|yrN+Uf" intask="true">
+                                    <field name="OP">LTE</field>
+                                    <value name="A">
+                                        <block type="variables_get" id="w58:6}/ZejH_R.qpY7R:" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">number</field>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="variables_get" id="JXWUJrh698f:S3)X=?J:" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">number</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_if" id="F9!LGa3P|m%=Q#rn~S.a" intask="true">
+                            <value name="IF0">
+                                <block type="logic_compare" id="8dw-u0aWWkS!pkka.b8h" intask="true">
+                                    <field name="OP">GT</field>
+                                    <value name="A">
+                                        <block type="variables_get" id="y=-8n)H62UTrWRK7+HnG" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">number</field>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="variables_get" id="kMpYZ+,gzRK7F7?BP+z," intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">number</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_if" id="v9zChd9(%q1pp!aIT+gf" intask="true">
+                            <value name="IF0">
+                                <block type="logic_compare" id="Ev.PP5;Gg~Irn*ALd*Kq" intask="true">
+                                    <field name="OP">GTE</field>
+                                    <value name="A">
+                                        <block type="variables_get" id="4p+.;Eh:u:GY]d7%^!Y9" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">number</field>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="variables_get" id="VW+9IbMo)4!liM9o,Gvp" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">number</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_if" id="A4qvIqU*JccFc0%-Oy?+" intask="true">
+                            <value name="IF0">
+                                <block type="logic_negate" id="^3px:]hBn]LH9gZt%L7O" intask="true">
+                                    <value name="BOOL">
+                                        <block type="variables_get" id="XDx{,oKo=O/CA2JP,f_y" intask="true">
+                                            <mutation datatype="Boolean"></mutation>
+                                            <field name="VAR">booleanFalse</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_if" id="w;rrnU2c?F70{qpR,OJ#" intask="true">
+                            <value name="IF0">
+                                <block type="logic_boolean" id="b35?p8x.((2[x0C_E7dC" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_if" id="fe=fBZrCw%cTsV1+ilAN" intask="true">
+                            <value name="IF0">
+                                <block type="logic_boolean" id=")euS`}33^~C%L:DPp+Xl" intask="true">
+                                    <field name="BOOL">FALSE</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_if" id="{DSqC%]!3G]8*.uhNYRK" intask="true">
+                            <value name="IF0">
+                                <block type="logic_compare" id="c*:UcU6Z`8@._B(ub:As" intask="true">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                        <block type="logic_null" id="s?;zu!!BrdaEZyMn#l1`" intask="true"></block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="variables_get" id="*OmYim;M)@VJEPLx9!a3" intask="true">
+                                            <mutation datatype="Array_Number"></mutation>
+                                            <field name="VAR">numberList</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_if" id="cnjEY,:++w~Gs|%Ks?np" intask="true">
+                            <value name="IF0">
+                                <block type="logic_ternary" id=".C*_[H}`Wk4YE_z5zKkI" intask="true">
+                                    <value name="IF">
+                                        <block type="variables_get" id="ZIo^oZ-{.8xvo3PQ^!uv" intask="true">
+                                            <mutation datatype="Boolean"></mutation>
+                                            <field name="VAR">booleanFalse</field>
+                                        </block>
+                                    </value>
+                                    <value name="THEN">
+                                        <block type="variables_get" id=",WyemAzhEN6A*6EDO6vQ" intask="true">
+                                            <mutation datatype="Boolean"></mutation>
+                                            <field name="VAR">booleanFalse</field>
+                                        </block>
+                                    </value>
+                                    <value name="ELSE">
+                                        <block type="variables_get" id="NLumn~oc2OJ,t3Q;3b%S" intask="true">
+                                            <mutation datatype="Boolean"></mutation>
+                                            <field name="VAR">booleanTrue</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="-196" y="274">
+                <block type="robProcedures_defnoreturn" id="lo,MvnH)DAf_PYN?4]Uq" intask="true">
+                    <mutation declare="false"></mutation>
+                    <field name="NAME">control</field>
+                    <statement name="STACK">
+                        <block type="robControls_if" id="cBwF8+BNH/_4PmmLE!w5" intask="true">
+                            <value name="IF0">
+                                <block type="variables_get" id="E=A|z=8Px%0.hS8%8x9^" intask="true">
+                                    <mutation datatype="Boolean"></mutation>
+                                    <field name="VAR">booleanFalse</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_ifElse" id="m--|ZhcbfEOPwYdSV]8F" intask="true">
+                            <mutation else="1"></mutation>
+                            <repetitions>
+                                <value name="IF0">
+                                    <block type="variables_get" id="1Z%;/5D1=w=MV9VgnI|6" intask="true">
+                                        <mutation datatype="Boolean"></mutation>
+                                        <field name="VAR">booleanTrue</field>
+                                    </block>
+                                </value>
+                            </repetitions>
+                        </block>
+                        <block type="robControls_loopForever" id="-@2@TzONP(D5|KgfV5c@" intask="true"></block>
+                        <block type="controls_repeat_ext" id="T-fRH##aAn{|IaIbo23#" intask="true">
+                            <value name="TIMES">
+                                <block type="variables_get" id="Iu45x--?S2eW06GbQR_*" intask="true">
+                                    <mutation datatype="Number"></mutation>
+                                    <field name="VAR">number</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="controls_whileUntil" id="a(CVOLo;gC;:=v-zfz7E" intask="true">
+                            <field name="MODE">UNTIL</field>
+                            <value name="BOOL">
+                                <block type="variables_get" id="QeO6+}+;//qHVJj-;S@(" intask="true">
+                                    <mutation datatype="Boolean"></mutation>
+                                    <field name="VAR">booleanFalse</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_for" id="7UqC6G4Twg}h(4@nJfj." intask="true">
+                            <field name="VAR">i</field>
+                            <value name="FROM">
+                                <block type="math_number" id="#5jq[4G8DJu{G|yA_wKh" intask="true">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                            <value name="TO">
+                                <block type="math_number" id="Q`sQ6;K[ct2(-a-1V.J2" intask="true">
+                                    <field name="NUM">10</field>
+                                </block>
+                            </value>
+                            <value name="BY">
+                                <block type="math_number" id="UUUq;s0Hle0OmZ4n^owi" intask="true">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                            <statement name="DO">
+                                <block type="controls_flow_statements" id="vAi9g}WR?{@=j2mr~uRO" intask="true">
+                                    <field name="FLOW">BREAK</field>
+                                </block>
+                            </statement>
+                        </block>
+                        <block type="robControls_forEach" id="jBEbDv[!Mr(QaQ+4O)J." intask="true">
+                            <mutation list_type="Number"></mutation>
+                            <field name="TYPE">Number</field>
+                            <field name="VAR">Element</field>
+                            <value name="LIST">
+                                <block type="variables_get" id="xn+TB5vE0+gVnpTk,d}T" intask="true">
+                                    <mutation datatype="Array_Number"></mutation>
+                                    <field name="VAR">numberList</field>
+                                </block>
+                            </value>
+                            <statement name="DO">
+                                <block type="controls_flow_statements" id="}!(X1-WaN{3(uUHPT^Dh" intask="true">
+                                    <field name="FLOW">CONTINUE</field>
+                                </block>
+                            </statement>
+                        </block>
+                        <block type="robControls_wait" id="{n+knF?Q%.`3ru)Xj}rK" intask="true">
+                            <value name="WAIT0">
+                                <block type="variables_get" id="}oAEK~4cVZvSM8R,({{," intask="true">
+                                    <mutation datatype="Boolean"></mutation>
+                                    <field name="VAR">booleanTrue</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_wait_time" id="Y7}v/0Kbyl02(l`#b`gN" intask="true">
+                            <value name="WAIT">
+                                <block type="math_number" id="2N@D(t__YvQSQU{~ew!s" intask="true">
+                                    <field name="NUM">500</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_wait_for" id="z{9Ev8a/ns7HOs}z@{ou" intask="true">
+                            <value name="WAIT0">
+                                <block type="logic_compare" id="9Bl/}6Z5K(#l90AfNWWA" intask="true">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                        <block type="robSensors_getSample" id="kM!=K|ZlpSJQN:fJ3|pc" intask="true">
+                                            <mutation input="TOUCH_PRESSED"></mutation>
+                                            <field name="SENSORTYPE">TOUCH_PRESSED</field>
+                                            <field name="SLOT"></field>
+                                            <field name="SENSORPORT">_T</field>
+                                            <hide name="SENSORPORT" value="_T"></hide>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="logic_boolean" id="-Gpp732gt_ok!d~RY^a3" intask="true">
+                                            <field name="BOOL">TRUE</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set robottype="robotino" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="116" y="670">
+                <block type="robConf_digitalin" id=";W]Md]W99gka0760@k(?" intask="true">
+                    <field name="NAME">A</field>
+                    <field name="INPUT">DQ1</field>
+                </block>
+            </instance>
+            <instance x="80" y="221">
+                <block type="robConf_camera" id="KqMg3pZC0;P,U6g*@7Vl" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="710" y="401">
+                <block type="robConf_encoder" id="2" intask="true" deletable="false">
+                    <field name="NAME">M1</field>
+                    <field name="PORT1">M1</field>
+                </block>
+            </instance>
+            <instance x="710" y="464">
+                <block type="robConf_encoder" id="3" intask="true" deletable="false">
+                    <field name="NAME">M2</field>
+                    <field name="PORT1">M2</field>
+                </block>
+            </instance>
+            <instance x="710" y="525">
+                <block type="robConf_encoder" id="-A8c2T}AQh_]-XaJ![i#" intask="true" deletable="false">
+                    <field name="NAME">M3</field>
+                    <field name="PORT1">M3</field>
+                </block>
+            </instance>
+            <instance x="80" y="180">
+                <block type="robConf_infrared" id="MUj7v^54V8kK#0)V?6,i" intask="true" deletable="false">
+                    <field name="NAME">_I</field>
+                </block>
+            </instance>
+            <instance x="80" y="270">
+                <block type="robConf_optical" id="4" intask="true">
+                    <field name="NAME">right</field>
+                    <field name="BK">DI1</field>
+                    <field name="WH">DI2</field>
+                </block>
+            </instance>
+            <instance x="245" y="175">
+                <block type="robConf_robot" id="robot" intask="true">
+                    <field name="NAME">undefined</field>
+                </block>
+            </instance>
+            <instance x="710" y="591">
+                <block type="robConf_omnidrive" id="1" intask="true" deletable="false">
+                    <field name="NAME">_O</field>
+                </block>
+            </instance>
+            <instance x="242" y="626">
+                <block type="robConf_analogout" id="?swdJ)8GGvUo@SuDSU`l" intask="true">
+                    <field name="NAME">S</field>
+                    <field name="OUTPUT">AI1</field>
+                </block>
+            </instance>
+            <instance x="710" y="277">
+                <block type="robConf_touch" id="13" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="710" y="368">
+                <block type="robConf_odometry" id="D/}0Ep-xy}jG-aZbeLf" intask="true" deletable="false">
+                    <field name="NAME">_OD</field>
+                </block>
+            </instance>
+            <instance x="80" y="412">
+                <block type="robConf_optical" id="5" intask="true">
+                    <field name="NAME">left</field>
+                    <field name="BK">DI3</field>
+                    <field name="WH">DI4</field>
+                </block>
+            </instance>
+            <instance x="256" y="862">
+                <block type="robConf_digitalout" id=";.-iq|D~rA/3xEv-Eo~Q" intask="true">
+                    <field name="NAME">S2</field>
+                    <field name="OUTPUT">DI6</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>
