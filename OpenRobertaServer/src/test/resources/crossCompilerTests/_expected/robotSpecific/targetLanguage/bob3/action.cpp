@@ -61,7 +61,7 @@ void setup() {
     ___numberVar = 0;
     ___booleanVar = true;
     ___colourVar = RGB(0xFF, 0xFF, 0xFF);
-    
+
 }
 
 void loop()

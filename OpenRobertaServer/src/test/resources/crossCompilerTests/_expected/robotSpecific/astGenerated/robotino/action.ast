@@ -1,0 +1,8 @@
+OmnidriveDistanceAction[xVel: NumConst[value: 30], yVel: NumConst[value: 0], distance: NumConst[value: 30], port: _O]
+WaitTimeStmt[time: NumConst[value: 500]]
+TurnAction [direction=RIGHT, param=MotionParam [speed=NumConst[value: 30], duration=MotorDuration [type=DEGREE, value=NumConst[value: 20]]]]
+OmnidrivePositionAction[x: NumConst[value: 10], y: NumConst[value: 10], power: NumConst[value: 30], port: _O]
+OmnidriveAction[xVel: NumConst[value: 30], yVel: NumConst[value: 0], thetaVel: NumConst[value: 0], port: _O]
+MotorDriveStopAction[port: - EMPTY_PORT -]
+SerialWriteAction[value: StringConst[value: Hallo]]
+PinWriteValueAction[pinValue: DIGITAL, port: A, value: BoolConst[value: true]]
