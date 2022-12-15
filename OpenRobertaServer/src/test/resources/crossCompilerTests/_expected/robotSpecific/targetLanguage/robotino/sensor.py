@@ -156,9 +156,9 @@ def run(RV):
     ___Element20 = ((time.time() - _timer5)/1000)
     ___Element2 = getColourBlob(RV, [40, 56, 42, 100, 53, 100])
 
-    resetOdometry(0, RV.readFloatVector(1)[1], RV.readFloatVector(1)[2])
-    resetOdometry(RV.readFloatVector(1)[0], 0, RV.readFloatVector(1)[2])
-    resetOdometry(RV.readFloatVector(1)[0], RV.readFloatVector(1)[1], 0)
+    resetOdometry(RV, 0, RV.readFloatVector(1)[1], RV.readFloatVector(1)[2])
+    resetOdometry(RV, RV.readFloatVector(1)[0], 0, RV.readFloatVector(1)[2])
+    resetOdometry(RV, RV.readFloatVector(1)[0], RV.readFloatVector(1)[1], 0)
     resetOdometry(RV, 0, 0, 0)
     ___Element2 = getMarkers(RV)
     time.sleep(500/1000)
