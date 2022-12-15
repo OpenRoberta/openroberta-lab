@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [_C, CAMERA, LINE], UsedSensor [right, OPTICAL_SENSOR, OPENING], UsedSensor [left, OPTICAL_SENSOR, OPENING], UsedSensor [left, OPTICAL_SENSOR, CLOSING], UsedSensor [right, OPTICAL_SENSOR, CLOSING], UsedSensor [S, ANALOG_INPUT, ANALOG], UsedSensor [S2, DIGITAL_INPUT, DIGITAL], UsedSensor [_OD, ODOMETRY, X], UsedSensor [_OD, ODOMETRY, Y], UsedSensor [_OD, ODOMETRY, THETA], UsedSensor [1, INFRARED, DISTANCE], UsedSensor [_T, TOUCH, PRESSED], UsedSensor [1, TIMER, VALUE], UsedSensor [2, TIMER, VALUE], UsedSensor [3, TIMER, VALUE], UsedSensor [4, TIMER, VALUE], UsedSensor [5, TIMER, VALUE], UsedSensor [_C, CAMERA, INFO], UsedSensor [_OD, ODOMETRY, ALL], UsedSensor [- EMPTY_PORT -, CAMERA, IDALL], UsedSensor [, CAMERA, marker], UsedSensor [_C, CAMERA, THRESHOLD]]
+Actors: 
+[]
+Methods: 
+[GETANALOGPIN, GETCAMERALINE, GETCOLOURBLOB, GETDIGITALPIN, GETDISTANCE, GETMARKERINFO, GETMARKERS, GETODOMETRY, ISBUMPED, RESETODOMETRY]

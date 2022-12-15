@@ -1,0 +1,183 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="robotino" xmlversion="3.1" description="" tags="">
+            <instance x="-101" y="15">
+                <block type="robControls_start" id="[*|]d]@ps:E6x,{#,uhJ" intask="true" deletable="false">
+                    <mutation declare="true"></mutation>
+                    <field name="DEBUG">TRUE</field>
+                    <statement name="ST">
+                        <block type="robGlobalVariables_declare" id="5[vU~0JG-./*Ekyh?O:w" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Number"></mutation>
+                            <field name="VAR">Element</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="robSensors_timer_getSample" id="*X|ng-,w)}{MeB{,?d!C" intask="true">
+                                    <mutation mode="VALUE"></mutation>
+                                    <field name="MODE">VALUE</field>
+                                    <field name="SENSORPORT">1</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id=":ywm?c|wlO1f},Pv|;~1" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Number"></mutation>
+                            <field name="VAR">Element2</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="robSensors_timer_getSample" id="`9mIkl?xv!S6:Es:^:%1" intask="true">
+                                    <mutation mode="VALUE"></mutation>
+                                    <field name="MODE">VALUE</field>
+                                    <field name="SENSORPORT">1</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="DtrDa9[#)fx1,J.F:bDj" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Number"></mutation>
+                            <field name="VAR">Element3</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="robSensors_timer_getSample" id="]ORN{Czhau*_DRgSBGT_" intask="true">
+                                    <mutation mode="VALUE"></mutation>
+                                    <field name="MODE">VALUE</field>
+                                    <field name="SENSORPORT">1</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="G0~?JDsvQ++.jBrMf|Bk" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Number"></mutation>
+                            <field name="VAR">Element4</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="robSensors_timer_getSample" id="axKC[d{(/)CP9cOk0{2V" intask="true">
+                                    <mutation mode="VALUE"></mutation>
+                                    <field name="MODE">VALUE</field>
+                                    <field name="SENSORPORT">1</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="is?1/[x*PDsFX`FJtmf|" intask="true" deletable="false" movable="false">
+                            <mutation next="false" declaration_type="Number"></mutation>
+                            <field name="VAR">Element5</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="robSensors_timer_getSample" id="QB5#KWM`FS9Vsiz|7GK;" intask="true">
+                                    <mutation mode="VALUE"></mutation>
+                                    <field name="MODE">VALUE</field>
+                                    <field name="SENSORPORT">1</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="robSensors_timer_reset" id="9tyy4DOO1uxWME(6Cp7K" intask="true">
+                    <field name="SENSORPORT">1</field>
+                    <field name="SLOT"/>
+                </block>
+                <block type="robSensors_timer_reset" id="ZGKBjiPPd)%m^M:zqMy{" intask="true">
+                    <field name="SENSORPORT">2</field>
+                    <field name="SLOT"/>
+                </block>
+                <block type="robSensors_timer_reset" id="Vv;MGgofp/=`p1unx/?I" intask="true">
+                    <field name="SENSORPORT">3</field>
+                    <field name="SLOT"/>
+                </block>
+                <block type="robSensors_timer_reset" id="*.pYvEw|E9{vMbLF;~kh" intask="true">
+                    <field name="SENSORPORT">4</field>
+                    <field name="SLOT"/>
+                </block>
+                <block type="robSensors_timer_reset" id="(NvG}|acSZ+1I|]+Ty!v" intask="true">
+                    <field name="SENSORPORT">5</field>
+                    <field name="SLOT"/>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set robottype="robotino" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="116" y="670">
+                <block type="robConf_digitalin" id=";W]Md]W99gka0760@k(?" intask="true">
+                    <field name="NAME">A</field>
+                    <field name="INPUT">DQ1</field>
+                </block>
+            </instance>
+            <instance x="80" y="221">
+                <block type="robConf_camera" id="KqMg3pZC0;P,U6g*@7Vl" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="710" y="401">
+                <block type="robConf_encoder" id="2" intask="true" deletable="false">
+                    <field name="NAME">M1</field>
+                    <field name="PORT1">M1</field>
+                </block>
+            </instance>
+            <instance x="710" y="464">
+                <block type="robConf_encoder" id="3" intask="true" deletable="false">
+                    <field name="NAME">M2</field>
+                    <field name="PORT1">M2</field>
+                </block>
+            </instance>
+            <instance x="710" y="525">
+                <block type="robConf_encoder" id="-A8c2T}AQh_]-XaJ![i#" intask="true" deletable="false">
+                    <field name="NAME">M3</field>
+                    <field name="PORT1">M3</field>
+                </block>
+            </instance>
+            <instance x="80" y="180">
+                <block type="robConf_infrared" id="MUj7v^54V8kK#0)V?6,i" intask="true" deletable="false">
+                    <field name="NAME">_I</field>
+                </block>
+            </instance>
+            <instance x="80" y="270">
+                <block type="robConf_optical" id="4" intask="true">
+                    <field name="NAME">right</field>
+                    <field name="BK">DI1</field>
+                    <field name="WH">DI2</field>
+                </block>
+            </instance>
+            <instance x="245" y="175">
+                <block type="robConf_robot" id="robot" intask="true">
+                    <field name="NAME">undefined</field>
+                </block>
+            </instance>
+            <instance x="710" y="591">
+                <block type="robConf_omnidrive" id="1" intask="true" deletable="false">
+                    <field name="NAME">_O</field>
+                </block>
+            </instance>
+            <instance x="242" y="626">
+                <block type="robConf_analogout" id="?swdJ)8GGvUo@SuDSU`l" intask="true">
+                    <field name="NAME">S</field>
+                    <field name="OUTPUT">AI1</field>
+                </block>
+            </instance>
+            <instance x="710" y="277">
+                <block type="robConf_touch" id="13" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="710" y="368">
+                <block type="robConf_odometry" id="D/}0Ep-xy}jG-aZbeLf" intask="true" deletable="false">
+                    <field name="NAME">_OD</field>
+                </block>
+            </instance>
+            <instance x="80" y="412">
+                <block type="robConf_optical" id="5" intask="true">
+                    <field name="NAME">left</field>
+                    <field name="BK">DI3</field>
+                    <field name="WH">DI4</field>
+                </block>
+            </instance>
+            <instance x="256" y="862">
+                <block type="robConf_digitalout" id=";.-iq|D~rA/3xEv-Eo~Q" intask="true">
+                    <field name="NAME">S2</field>
+                    <field name="OUTPUT">DI6</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

@@ -91,6 +91,10 @@ robots:
     template: sensebox
     dir: sensebox
     suffix: ".ino"
+  robotino:
+    template: robotino
+    dir: robotino
+    suffix: ".py"
   thymio:
     template: thymio
     dir: thymio

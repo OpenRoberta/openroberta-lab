@@ -454,7 +454,7 @@ public final class RobotinoViewPythonVisitor extends AbstractPythonVisitor imple
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETODOMETRY));
         if ( odometrySensor.getSlot().equals("THETA") ) {
             this.sb.append("('rot')")
-                .append(" * 180 / math.pi)");
+                .append(" * (180 / math.pi)");
         } else {
             this.sb.append("('")
                 .append(odometrySensor.getSlot().toLowerCase())
@@ -471,13 +471,13 @@ public final class RobotinoViewPythonVisitor extends AbstractPythonVisitor imple
                 this.sb.append("(RV, 0, 0, 0)");
                 break;
             case "X":
-                this.sb.append("(0, RV.readFloatVector(1)[1], RV.readFloatVector(1)[2])");
+                this.sb.append("(RV, 0, RV.readFloatVector(1)[1], RV.readFloatVector(1)[2])");
                 break;
             case "Y":
-                this.sb.append("(RV.readFloatVector(1)[0], 0, RV.readFloatVector(1)[2])");
+                this.sb.append("(RV, RV.readFloatVector(1)[0], 0, RV.readFloatVector(1)[2])");
                 break;
             case "THETA":
-                this.sb.append("(RV.readFloatVector(1)[0], RV.readFloatVector(1)[1], 0)");
+                this.sb.append("(RV, RV.readFloatVector(1)[0], RV.readFloatVector(1)[1], 0)");
                 break;
             default:
                 throw new DbcException("Invalid Odometry Mode!");

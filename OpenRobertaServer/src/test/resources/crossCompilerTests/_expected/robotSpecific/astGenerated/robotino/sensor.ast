@@ -1,0 +1,12 @@
+OdometrySensorReset[port: _OD, slot: X]
+OdometrySensorReset[port: _OD, slot: Y]
+OdometrySensorReset[port: _OD, slot: THETA]
+OdometrySensorReset[port: _OD, slot: ALL]
+
+Var [Element2] := SensorExpr [DetectMarkSensor [- EMPTY_PORT -, IDALL, - EMPTY_SLOT -]]
+
+WaitTimeStmt[time: NumConst[value: 500]]
+
+Var [Element2] := SensorExpr [MarkerInformation[mode: INFO, port: _C, markerId: NumConst[value: 0]]]
+
+CameraThreshold[mode: THRESHOLD, port: _C, threshold: NumConst[value: 100]]

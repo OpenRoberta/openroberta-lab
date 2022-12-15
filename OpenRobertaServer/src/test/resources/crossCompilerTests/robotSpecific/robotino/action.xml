@@ -1,0 +1,191 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="robotino" xmlversion="3.1" description="" tags="">
+            <instance x="317" y="118">
+                <block type="robControls_start" id="[*|]d]@ps:E6x,{#,uhJ" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG">TRUE</field>
+                </block>
+                <block type="robActions_motorOmni_curve_for" id="fm[w7Jr4o[Tl2:IOP0yq" intask="true">
+                    <field name="ACTORPORT">_O</field>
+                    <hide name="ACTORPORT" value="_O"></hide>
+                    <value name="X">
+                        <block type="math_number" id="`S^U~7w,ILG+LM`z1e6]" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="Y">
+                        <block type="math_number" id="OzjBTDV74cflES%n,=[8" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                    <value name="DISTANCE">
+                        <block type="math_number" id="ec,Tp?MGG/k(I`DnTkm^" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id=",GKX50SdpR]+VPU|{[y(" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="w.*!8g*2t!X}DK^4z02." intask="true">
+                            <field name="NUM">500</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_motorDiff_turn_for" id="{;T]K4y)]Uv/H`~DE]zM" intask="true">
+                    <field name="DIRECTION">RIGHT</field>
+                    <value name="POWER">
+                        <block type="math_number" id="Sn]QqX?BQ`-[x.#9PqPX" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="DEGREE">
+                        <block type="math_number" id=")RFtT#|O`Gq#a*`sQxTu" intask="true">
+                            <field name="NUM">20</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_motorOmni_position" id="B~OPK1Umdo75XE_hKnUQ" intask="true">
+                    <field name="ACTORPORT">_O</field>
+                    <hide name="ACTORPORT" value="_O"></hide>
+                    <value name="X">
+                        <block type="math_number" id="w)Ig@aQacSV]`xXNokxY" intask="true">
+                            <field name="NUM">10</field>
+                        </block>
+                    </value>
+                    <value name="Y">
+                        <block type="math_number" id=";^Ip]_.;EH^r^1@zG5nO" intask="true">
+                            <field name="NUM">10</field>
+                        </block>
+                    </value>
+                    <value name="POWER">
+                        <block type="math_number" id="q0#bs]f=mW0[!nxC,qK}" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_motorOmni_curve" id="e+#^S;7i:AeB:KIQG?35" intask="true">
+                    <field name="ACTORPORT">_O</field>
+                    <hide name="ACTORPORT" value="_O"></hide>
+                    <value name="X">
+                        <block type="math_number" id=",Hk6#uP.yRL^I@tGOdK9" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="Y">
+                        <block type="math_number" id="@3G@;x%mNx!6bDxG|VdS" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                    <value name="THETA">
+                        <block type="math_number" id="CUvZF]@3MZ[Gl(s~[Nx9" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_motorDiff_stop" id="aZd@F-K)kShW4zHHYbCv" intask="true"></block>
+                <block type="robActions_serial_print" id="[y65+TBJ9[x./4gfW)`v" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="%czKpR2{7+uk+6g:1fNj" intask="true">
+                            <field name="TEXT">Hallo</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_write_pin" id="xe}aVfXdOpvk94D^|T2}" intask="true">
+                    <mutation protocol="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="ACTORPORT">A</field>
+                    <value name="VALUE">
+                        <block type="logic_boolean" id="*T_8Q3Jwgc2pNFNA-E/4" intask="true">
+                            <field name="BOOL">TRUE</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="robotino" xmlversion="3.1" description="" tags="">
+            <instance x="80" y="180">
+                <block type="robConf_infrared" id="MUj7v^54V8kK#0)V?6,i" intask="true" deletable="false">
+                    <field name="NAME">_I</field>
+                </block>
+            </instance>
+            <instance x="245" y="175">
+                <block type="robConf_robot" id="robot" intask="true">
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
+            <instance x="80" y="221">
+                <block type="robConf_camera" id="KqMg3pZC0;P,U6g*@7Vl" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="80" y="270">
+                <block type="robConf_optical" id="4" intask="true">
+                    <field name="NAME">right</field>
+                    <field name="BK">DI1</field>
+                    <field name="WH">DI2</field>
+                </block>
+            </instance>
+            <instance x="710" y="277">
+                <block type="robConf_touch" id="13" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="710" y="368">
+                <block type="robConf_odometry" id="D/}0Ep-xy}jG-aZbeLf" intask="true" deletable="false">
+                    <field name="NAME">_OD</field>
+                </block>
+            </instance>
+            <instance x="80" y="412">
+                <block type="robConf_optical" id="5" intask="true">
+                    <field name="NAME">left</field>
+                    <field name="BK">DI3</field>
+                    <field name="WH">DI4</field>
+                </block>
+            </instance>
+            <instance x="710" y="401">
+                <block type="robConf_encoder" id="2" intask="true" deletable="false">
+                    <field name="NAME">M1</field>
+                    <field name="PORT1">M1</field>
+                </block>
+            </instance>
+            <instance x="710" y="464">
+                <block type="robConf_encoder" id="3" intask="true" deletable="false">
+                    <field name="NAME">M2</field>
+                    <field name="PORT1">M2</field>
+                </block>
+            </instance>
+            <instance x="710" y="525">
+                <block type="robConf_encoder" id="-A8c2T}AQh_]-XaJ![i#" intask="true" deletable="false">
+                    <field name="NAME">M3</field>
+                    <field name="PORT1">M3</field>
+                </block>
+            </instance>
+            <instance x="710" y="591">
+                <block type="robConf_omnidrive" id="1" intask="true" deletable="false">
+                    <field name="NAME">_O</field>
+                </block>
+            </instance>
+            <instance x="242" y="626">
+                <block type="robConf_analogout" id="?swdJ)8GGvUo@SuDSU`l" intask="true">
+                    <field name="NAME">S</field>
+                    <field name="OUTPUT">AI1</field>
+                </block>
+            </instance>
+            <instance x="116" y="670">
+                <block type="robConf_digitalin" id=";W]Md]W99gka0760@k(?" intask="true">
+                    <field name="NAME">A</field>
+                    <field name="INPUT">DQ1</field>
+                </block>
+            </instance>
+            <instance x="256" y="862">
+                <block type="robConf_digitalout" id=";.-iq|D~rA/3xEv-Eo~Q" error_attribute="true" intask="true">
+                    <field name="NAME">S2</field>
+                    <field name="OUTPUT">DI6</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>
