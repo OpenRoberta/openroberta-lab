@@ -22,7 +22,7 @@ int main()
     _TCS3472_init(_buf, &_i2c, TCS3472_INTEGRATIONTIME_2_4MS, TCS3472_GAIN_1X);
     _TCS3472_time = TCS3472_INTEGRATIONTIME_2_4MS;
     ___colourVar = MicroBitColor(255, 0, 0, 255);
-    
+
     ____sensors();
     release_fiber();
 }

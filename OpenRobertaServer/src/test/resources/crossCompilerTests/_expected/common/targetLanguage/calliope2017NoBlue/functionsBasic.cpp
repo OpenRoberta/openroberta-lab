@@ -30,7 +30,7 @@ int main()
     ___b = false;
     ___n2 = 1;
     ___n3 = 4;
-    
+
     // Basic Functions START
     ____number();
     ____breakFunct();

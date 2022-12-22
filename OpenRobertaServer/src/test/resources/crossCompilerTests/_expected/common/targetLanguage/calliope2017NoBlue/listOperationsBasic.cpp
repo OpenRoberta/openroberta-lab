@@ -27,7 +27,7 @@ int main()
     ___bool = true;
     ___string = ManagedString("c");
     ___item = 0;
-    
+
     // Basis List Operations START
     if ( ___initialEmptyNumbers.empty() ) {
         ___initialEmptyNumbers = {1, 2};

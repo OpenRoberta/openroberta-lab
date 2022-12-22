@@ -18,7 +18,7 @@ int main()
     ___n = 0;
     ___b = true;
     ___s = ManagedString("");
-    
+
     _uBit.radio.enable();
     _uBit.radio.setTransmitPower(0);
     _uBit.radio.datagram.send(ManagedString((int)(___n)));

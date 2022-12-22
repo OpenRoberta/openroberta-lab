@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [- EMPTY_PORT -, ACCELEROMETER, UP], UsedSensor [- EMPTY_PORT -, ACCELEROMETER, DOWN], UsedSensor [A, ACCELEROMETER, FACE_DOWN], UsedSensor [A, ACCELEROMETER, FACE_UP], UsedSensor [- EMPTY_PORT -, ACCELEROMETER, SHAKE], UsedSensor [- EMPTY_PORT -, ACCELEROMETER, FREEFALL], UsedSensor [C, COMPASS, ANGLE], UsedSensor [M, SOUND, SOUND], UsedSensor [1, TIMER, VALUE], UsedSensor [T, TEMPERATURE, VALUE], UsedSensor [L, LIGHT, LIGHT_VALUE], UsedSensor [G, ACCELEROMETER, ANGLE], UsedSensor [Acc, ACCELEROMETER, DEFAULT], UsedSensor [L2, HUMIDITY, HUMIDITY], UsedSensor [L2, HUMIDITY, TEMPERATURE]]
+Actors: 
+[UsedActor [, KEY], UsedActor [0, PIN_VALUE], UsedActor [2, PIN_VALUE]]
+Methods: 
+[IS_GESTURE_SHAKE]

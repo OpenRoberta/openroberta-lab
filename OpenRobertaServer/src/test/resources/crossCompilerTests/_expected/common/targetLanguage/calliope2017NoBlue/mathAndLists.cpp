@@ -23,7 +23,7 @@ int main()
     ___item3 = 0;
     ___l2 = {};
     ___b = true;
-    
+
     ___x = _getListSum(___l1);
     ___x = _getListMin(___l1);
     ___x = _getListMax(___l1);

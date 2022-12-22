@@ -1,0 +1,128 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+            <instance x="-29" y="452">
+                <block type="robControls_start" id="%NONZ_rrr[%uqiwDg*7g" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG"></field>
+                </block>
+                <block type="mbedActions_leds_on" id="Rjumz|%an8l.V1Y-HfUg" intask="true">
+                    <field name="ACTORPORT">R</field>
+                    <value name="COLOR">
+                        <block type="mbedColour_picker" id="T2s!PPf_4WV18RFp6wbC" intask="true">
+                            <field name="COLOUR">#ff0000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_leds_off" id="ekF%7#1^3ujh]eMSYq}{" intask="true">
+                    <field name="ACTORPORT">R</field>
+                </block>
+                <block type="mbedActions_leds_off" id="%IlzNw{b)yeZ]rST?g~n" intask="true">
+                    <field name="ACTORPORT">R2</field>
+                </block>
+                <block type="mbedActions_leds_off" id="M-4eZYx/1fUc,YaQZoQ8" intask="true">
+                    <field name="ACTORPORT">R3</field>
+                </block>
+                <block type="mbedActions_leds_off" id="~/msbCSCE)EM%~fMZ#I8" intask="true">
+                    <field name="ACTORPORT">R4</field>
+                </block>
+                <block type="mbedActions_leds_off" id="E*PZc,wy-8vvWkg`fMIJ" intask="true">
+                    <field name="ACTORPORT">R5</field>
+                </block>
+                <block type="robActions_brickLight_on" id="0.,D0=b@H6g;7{]5-MS_" intask="true">
+                    <field name="ACTORPORT">L</field>
+                    <field name="SWITCH_BLINK">ON</field>
+                </block>
+                <block type="robActions_brickLight_on" id="LU3G)P9#m.77As7?gk_F" intask="true">
+                    <field name="ACTORPORT">L2</field>
+                    <field name="SWITCH_BLINK">ON</field>
+                </block>
+                <block type="robActions_brickLight_on" id="tn.):+K)?gcURR~1[#Wh" intask="true">
+                    <field name="ACTORPORT">L3</field>
+                    <field name="SWITCH_BLINK">ON</field>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set robottype="calliope" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="-35" y="-435">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="-35" y="-585">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="79" y="-437">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="742" y="-659">
+                <block type="robConf_callibot" id="A`]]^h1xvKyMp3aTtCT." intask="true">
+                    <field name="NAME">C</field>
+                    <field name="MOTOR_L">M</field>
+                    <field name="MOTOR_R">M3</field>
+                    <field name="RGBLED_LF">R</field>
+                    <field name="RGBLED_RF">R2</field>
+                    <field name="RGBLED_LR">R3</field>
+                    <field name="RGBLED_RR">R4</field>
+                    <field name="RGBLED_A">R5</field>
+                    <field name="LED_L">L</field>
+                    <field name="LED_R">L2</field>
+                    <field name="LED_B">L3</field>
+                    <field name="INFRARED_L">I</field>
+                    <field name="INFRARED_R">I2</field>
+                    <field name="ULTRASONIC">U</field>
+                    <field name="SERVO_S1">S</field>
+                    <field name="SERVO_S2">S5</field>
+                </block>
+            </instance>
+            <instance x="-35" y="-255">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+            <instance x="79" y="-466">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="79" y="-494">
+                <block type="robConf_gyro" id="lIT?C5y|(7FWCQIUn~pc" intask="true" deletable="false">
+                    <field name="NAME">_G</field>
+                </block>
+            </instance>
+            <instance x="196" y="-515">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="249" y="-455">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="NAME">undefined</field>
+                </block>
+            </instance>
+            <instance x="-35" y="-283">
+                <block type="robConf_rgbled" id="lgi%C3,J!smR:eP0aal_" intask="true" deletable="false">
+                    <field name="NAME">_R</field>
+                </block>
+            </instance>
+            <instance x="196" y="-543">
+                <block type="robConf_sound" id="e:4V0FcDx%9,.7xO,Ns@" intask="true" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="79" y="-327">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

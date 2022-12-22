@@ -14,7 +14,7 @@ int main()
 {
     _uBit.init();
     ___ergebnis = 0;
-    
+
     // Grundrechenarten Basics  --START--
     ___ergebnis = 2 + ( ( 3 * 4 ) / ((float) 5) );
     assertNepo((4.4 == ___ergebnis), "POS-1", 4.4, "EQ", ___ergebnis);

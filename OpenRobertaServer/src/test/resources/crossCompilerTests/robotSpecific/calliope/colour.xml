@@ -1,0 +1,211 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+            <instance x="305" y="8">
+                <block type="robControls_start" id="r!]l%tIxih`5Q5!rmm8n" intask="true" deletable="false">
+                    <mutation declare="true"></mutation>
+                    <field name="DEBUG"></field>
+                    <statement name="ST">
+                        <block type="robGlobalVariables_declare" id="fhPNiTeiZm6mVPnTW%+?" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Array_Image"></mutation>
+                            <field name="VAR">Element</field>
+                            <field name="TYPE">Array_Image</field>
+                            <value name="VALUE">
+                                <block type="robLists_create_with" id="|F!yD%]-3;E/([gw6]J8" intask="true">
+                                    <mutation items="3" list_type="Image"></mutation>
+                                    <field name="LIST_TYPE">Image</field>
+                                    <value name="ADD0">
+                                        <block type="mbedImage_get_image" id="2=eLUFzw^)bW?YGy_+N{" intask="true">
+                                            <field name="IMAGE">HEART</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="mbedImage_get_image" id="GWnsrhqD;r-p1N_5Wmtu" intask="true">
+                                            <field name="IMAGE">HEART</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD2">
+                                        <block type="mbedImage_get_image" id="FhfDv{3nNcZuPp-AndR2" intask="true">
+                                            <field name="IMAGE">HEART</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="+Pe/7@;cqU6On1(:tKdo" intask="true" deletable="false" movable="false">
+                            <mutation next="false" declaration_type="Colour"></mutation>
+                            <field name="VAR">Element2</field>
+                            <field name="TYPE">Colour</field>
+                            <value name="VALUE">
+                                <block type="mbedColour_picker" id="BWnb*DH*2LUpa6Fs*I)I" intask="true">
+                                    <field name="COLOUR">#ff0000</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="mbedActions_leds_on" id="BtV0M7oR!k-dNYX{=jVy" intask="true">
+                    <field name="ACTORPORT">_R</field>
+                    <hide name="ACTORPORT" value="_R"></hide>
+                    <value name="COLOR">
+                        <block type="mbedColour_picker" id="`p:rbcu5m5OVXAc8;Lo%" intask="true">
+                            <field name="COLOUR">#999999</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_leds_on" id="t0iJ4(.*]@C4z[KAjJbJ" intask="true">
+                    <field name="ACTORPORT">_R</field>
+                    <hide name="ACTORPORT" value="_R"></hide>
+                    <value name="COLOR">
+                        <block type="mbedColour_picker" id="Cxwo6Uh26*E|9F[Glnnd" intask="true">
+                            <field name="COLOUR">#cc0000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_leds_on" id="/HizZDX9f]H9~stNqxBg" intask="true">
+                    <field name="ACTORPORT">_R</field>
+                    <hide name="ACTORPORT" value="_R"></hide>
+                    <value name="COLOR">
+                        <block type="mbedColour_picker" id="~7hiUOtr8[2?BDkl?[t5" intask="true">
+                            <field name="COLOUR">#ff6600</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_leds_on" id="_7*(UUfJ,QXmO996#nYt" intask="true">
+                    <field name="ACTORPORT">_R</field>
+                    <hide name="ACTORPORT" value="_R"></hide>
+                    <value name="COLOR">
+                        <block type="mbedColour_picker" id="Yvru!0IhE;q0Mw(ivTzs" intask="true">
+                            <field name="COLOUR">#ffcc33</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_leds_on" id="s=He#qh__-IG}#`+S[Bp" intask="true">
+                    <field name="ACTORPORT">_R</field>
+                    <hide name="ACTORPORT" value="_R"></hide>
+                    <value name="COLOR">
+                        <block type="mbedColour_picker" id="jo0Cx2Y!XqacL=:arz|W" intask="true">
+                            <field name="COLOUR">#33cc00</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_leds_on" id="Jjw,l_t[ff[|n}C}gtfz" intask="true">
+                    <field name="ACTORPORT">_R</field>
+                    <hide name="ACTORPORT" value="_R"></hide>
+                    <value name="COLOR">
+                        <block type="mbedColour_picker" id="PD^F?y,^7e@JWRP6UUa*" intask="true">
+                            <field name="COLOUR">#00cccc</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_leds_on" id="6A^X?eIYnoi`v32(C*bp" intask="true">
+                    <field name="ACTORPORT">_R</field>
+                    <hide name="ACTORPORT" value="_R"></hide>
+                    <value name="COLOR">
+                        <block type="mbedColour_picker" id="!8LvfsCH60X;Jf2XLAZP" intask="true">
+                            <field name="COLOUR">#3366ff</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_leds_on" id="=1l{D/IneCYl,;+ajW7]" intask="true">
+                    <field name="ACTORPORT">_R</field>
+                    <hide name="ACTORPORT" value="_R"></hide>
+                    <value name="COLOR">
+                        <block type="mbedColour_picker" id="2?vAyh~ef#cHBx!,V`y?" intask="true">
+                            <field name="COLOUR">#cc33cc</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_leds_on" id="#s}+uEspe/8_?#-/OY9N" intask="true">
+                    <field name="ACTORPORT">_R</field>
+                    <hide name="ACTORPORT" value="_R"></hide>
+                    <value name="COLOR">
+                        <block type="mbedColour_rgb" id="etdWer%8FYh@v{r3iAK2" intask="true">
+                            <value name="RED">
+                                <block type="math_number" id="0};d4b8S88k{6UP5,83c" intask="true">
+                                    <field name="NUM">255</field>
+                                </block>
+                            </value>
+                            <value name="GREEN">
+                                <block type="math_number" id="AWj{QUNE+~x4g[y5=8PH" intask="true">
+                                    <field name="NUM">20</field>
+                                </block>
+                            </value>
+                            <value name="BLUE">
+                                <block type="math_number" id="^u##Vh*z(r(d89{l?8I/" intask="true">
+                                    <field name="NUM">150</field>
+                                </block>
+                            </value>
+                            <value name="WHITE">
+                                <block type="math_number" id="}:Wm;Nxb-#VPXNV2A;pY" intask="true">
+                                    <field name="NUM">255</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+            <instance x="-34" y="120">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="197" y="162">
+                <block type="robConf_sound" id="e:4V0FcDx%9,.7xO,Ns@" intask="true" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="197" y="190">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="80" y="211">
+                <block type="robConf_gyro" id="lIT?C5y|(7FWCQIUn~pc" intask="true" deletable="false">
+                    <field name="NAME">_G</field>
+                </block>
+            </instance>
+            <instance x="80" y="239">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="250" y="250">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
+            <instance x="-34" y="270">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="80" y="268">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="80" y="378">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="-34" y="422">
+                <block type="robConf_rgbled" id="lgi%C3,J!smR:eP0aal_" intask="true" deletable="false">
+                    <field name="NAME">_R</field>
+                </block>
+            </instance>
+            <instance x="-34" y="450">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

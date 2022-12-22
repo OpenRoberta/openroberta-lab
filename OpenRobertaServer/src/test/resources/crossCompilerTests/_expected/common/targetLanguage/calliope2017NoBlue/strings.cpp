@@ -19,7 +19,7 @@ int main()
     ___text = ManagedString("start:");
     ___eight = ManagedString(" eight");
     ___number = 0;
-    
+
     // String Concat -- Start --
     ___text = ___text + ManagedString(ManagedString(" one"));
     assertNepo((ManagedString("start: one") == ___text), "POS-1", ManagedString("start: one"), "EQ", ___text);

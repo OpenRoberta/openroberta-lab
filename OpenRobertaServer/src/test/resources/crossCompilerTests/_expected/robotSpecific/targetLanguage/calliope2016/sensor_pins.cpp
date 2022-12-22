@@ -16,7 +16,7 @@ void ____sensorsWaitUntil();
 int main()
 {
     _uBit.init();
-    
+
     ____sensors();
     ____sensorsWaitUntil();
     release_fiber();

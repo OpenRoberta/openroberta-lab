@@ -1,0 +1,182 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+            <instance x="54" y="193">
+                <block type="robControls_start" id="%NONZ_rrr[%uqiwDg*7g" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG"></field>
+                </block>
+                <block type="mbedActions_motors_on" id="hD?hNxL)NBiaVT;GQSDr" intask="true">
+                    <field name="A">M</field>
+                    <field name="B">M3</field>
+                    <value name="POWER_A">
+                        <block type="math_number" id="+smEf]*}!x]eE_%D6%*+" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="POWER_B">
+                        <block type="math_number" id="GEICx8(w).4hUnP?!pK_" intask="true">
+                            <field name="NUM">10</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_motors_on" id="_xL|5lqOY+]u+2)/5Q?=" intask="true">
+                    <field name="A">M3</field>
+                    <field name="B">M</field>
+                    <value name="POWER_A">
+                        <block type="math_number" id="_fJ89pygiD=7`k2I0Im5" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="POWER_B">
+                        <block type="math_number" id="KP:#t]~4S_.+vTXFX;Y%" intask="true">
+                            <field name="NUM">10</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_motors_on" id="te@yz^|-0*ukdY?EM@4u" intask="true">
+                    <field name="A">M</field>
+                    <field name="B">M3</field>
+                    <value name="POWER_A">
+                        <block type="math_number" id="t17r,rMG(m~eK7UnE;cM" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="POWER_B">
+                        <block type="math_number" id="c4g]KQSOy7amWp1,hny/" intask="true">
+                            <field name="NUM">10</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_motors_on" id="iGIC;qc`paFy0f}MT,HS" intask="true">
+                    <field name="A">M3</field>
+                    <field name="B">M</field>
+                    <value name="POWER_A">
+                        <block type="math_number" id="N#E[r,0F/:GT=,lg6aDm" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="POWER_B">
+                        <block type="math_number" id=")j`fD!?.U!T)r4_U]jJ+" intask="true">
+                            <field name="NUM">10</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_motor_on" id="i7-lh7A1jZ+%=EbM6][m" intask="true">
+                    <field name="MOTORPORT">M</field>
+                    <value name="POWER">
+                        <block type="math_number" id="`kyIC[,=Ez[-jN|,8x@U" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_motor_stop" id="{i1G8R!G82PIjF5Xjot`" intask="true">
+                    <field name="MOTORPORT">M</field>
+                    <field name="MODE">FLOAT</field>
+                </block>
+                <block type="mbedActions_motor_stop" id="]mGaYjvCMq|m~tNj|r6z" intask="true">
+                    <field name="MOTORPORT">M3</field>
+                    <field name="MODE">FLOAT</field>
+                </block>
+                <block type="mbedActions_servo_set" id="mepin`f?|2?+`VNNSOB]" intask="true">
+                    <field name="PIN_PORT">S</field>
+                    <value name="VALUE">
+                        <block type="math_number" id="{!dD}~kzz}G7Xl5@#=,{" intask="true">
+                            <field name="NUM">90</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_servo_set" id="5?xHeK:.#(tU16NZxJwG" intask="true">
+                    <field name="PIN_PORT">S5</field>
+                    <value name="VALUE">
+                        <block type="math_number" id="@mV=Uy,MTkOk18Bd9n39" intask="true">
+                            <field name="NUM">45</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_motors_stop" id="QcTur;l2djqjDX#gu95#" intask="true"></block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set robottype="calliope" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="-35" y="-435">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="-35" y="-585">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="79" y="-437">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="742" y="-659">
+                <block type="robConf_callibot" id="A`]]^h1xvKyMp3aTtCT." intask="true">
+                    <field name="NAME">C</field>
+                    <field name="MOTOR_L">M</field>
+                    <field name="MOTOR_R">M3</field>
+                    <field name="RGBLED_LF">R</field>
+                    <field name="RGBLED_RF">R2</field>
+                    <field name="RGBLED_LR">R3</field>
+                    <field name="RGBLED_RR">R4</field>
+                    <field name="RGBLED_A">R5</field>
+                    <field name="LED_L">L</field>
+                    <field name="LED_R">L2</field>
+                    <field name="LED_B">L3</field>
+                    <field name="INFRARED_L">I</field>
+                    <field name="INFRARED_R">I2</field>
+                    <field name="ULTRASONIC">U</field>
+                    <field name="SERVO_S1">S</field>
+                    <field name="SERVO_S2">S5</field>
+                </block>
+            </instance>
+            <instance x="-35" y="-255">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+            <instance x="79" y="-466">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="79" y="-494">
+                <block type="robConf_gyro" id="lIT?C5y|(7FWCQIUn~pc" intask="true" deletable="false">
+                    <field name="NAME">_G</field>
+                </block>
+            </instance>
+            <instance x="196" y="-515">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="249" y="-455">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="NAME">undefined</field>
+                </block>
+            </instance>
+            <instance x="-35" y="-283">
+                <block type="robConf_rgbled" id="lgi%C3,J!smR:eP0aal_" intask="true" deletable="false">
+                    <field name="NAME">_R</field>
+                </block>
+            </instance>
+            <instance x="196" y="-543">
+                <block type="robConf_sound" id="e:4V0FcDx%9,.7xO,Ns@" intask="true" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="79" y="-327">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

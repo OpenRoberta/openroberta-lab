@@ -1,0 +1,178 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+            <instance x="301" y="123">
+                <block type="robControls_start" id="nAnfRq~@ucILpc`NWhy#" intask="true" deletable="false">
+                    <mutation declare="true"></mutation>
+                    <field name="DEBUG"></field>
+                    <statement name="ST">
+                        <block type="robGlobalVariables_declare" id="+{nw),7Pbetv3mN6EWsk" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Array_String"></mutation>
+                            <field name="VAR">Element</field>
+                            <field name="TYPE">Array_String</field>
+                            <value name="VALUE">
+                                <block type="robLists_create_with" id="H|(LI7!,WWC})T/[={]Z" intask="true">
+                                    <mutation items="3" list_type="String"></mutation>
+                                    <field name="LIST_TYPE">String</field>
+                                    <value name="ADD0">
+                                        <block type="text" id="%PinJUfLn#l`(uQg0s[/" intask="true">
+                                            <field name="TEXT"></field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="text" id="x-oCo/q@5+(V5ap(ox.q" intask="true">
+                                            <field name="TEXT"></field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD2">
+                                        <block type="text" id="v(QTtmd@v/r}Q7lHAaE?" intask="true">
+                                            <field name="TEXT"></field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="?u?f%]qF,mM]avu7b-?J" intask="true" deletable="false" movable="false">
+                            <mutation next="false" declaration_type="String"></mutation>
+                            <field name="VAR">Element2</field>
+                            <field name="TYPE">String</field>
+                            <value name="VALUE">
+                                <block type="text" id="f/?{xJK67SaB??y4tl9}" intask="true">
+                                    <field name="TEXT"></field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="mbedActions_display_text" id="z@r4L^/u5N+he.B}%Wiv" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="j33z={2x}k3MLfAE:w*F" intask="true">
+                            <field name="TEXT">test</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="text_comment" id="mgN#tqld!DAoEn@np@k{" intask="true">
+                    <field name="TEXT">test</field>
+                </block>
+                <block type="mbedActions_display_text" id="3g?:mZI4PFq|{x@6Zi8]" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robText_join" id="c}|!SoH}7cP/:Y*sx5gb" intask="true">
+                            <mutation items="2"></mutation>
+                            <value name="ADD0">
+                                <block type="text" id="GTvl7OgX2zZMwh9|BYlb" intask="true">
+                                    <field name="TEXT">test</field>
+                                </block>
+                            </value>
+                            <value name="ADD1">
+                                <block type="text" id="a!YE{uiD|{=i%Q/~nW6w" intask="true">
+                                    <field name="TEXT">test</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="h%~*,1BMgR|wY{?Ilcjx" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="8*CynT1M+*l7TDLN:k(," intask="true">
+                            <field name="TEXT">Hallo</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robText_append" id="LeBm3}suz#K#(CN4#.#}" intask="true">
+                    <value name="VAR">
+                        <block type="variables_get" id="k27p[LC]WbS!R]Fd6cQ4" intask="true">
+                            <mutation datatype="String"></mutation>
+                            <field name="VAR">Element2</field>
+                        </block>
+                    </value>
+                    <value name="TEXT">
+                        <block type="text" id="iYz!G;e4~nT;WE3-TuB#" intask="true">
+                            <field name="TEXT">test</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="A`|OBRbOqFWYp%9[fvRA" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text_cast_char_toNumber" id="J-vl_b6C(Beg=GBU*jSt" intask="true">
+                            <value name="VALUE">
+                                <block type="text" id="+kKHk/JIDfWaqs7F!,HT" intask="true">
+                                    <field name="TEXT">test</field>
+                                </block>
+                            </value>
+                            <value name="AT">
+                                <block type="math_number" id="ZG@Qeply1WB[l92SZ,t3" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set robottype="calliope" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="-34" y="270">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="-34" y="120">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="80" y="268">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="-34" y="422">
+                <block type="robConf_rgbled" id="lgi%C3,J!smR:eP0aal_" intask="true" deletable="false">
+                    <field name="NAME">_R</field>
+                </block>
+            </instance>
+            <instance x="-34" y="450">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+            <instance x="197" y="162">
+                <block type="robConf_sound" id="e:4V0FcDx%9,.7xO,Ns@" intask="true" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="80" y="239">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="80" y="378">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="80" y="211">
+                <block type="robConf_gyro" id="lIT?C5y|(7FWCQIUn~pc" intask="true" deletable="false">
+                    <field name="NAME">_G</field>
+                </block>
+            </instance>
+            <instance x="197" y="190">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="250" y="250">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="NAME">undefined</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

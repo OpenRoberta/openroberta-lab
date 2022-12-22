@@ -15,7 +15,7 @@ int main()
 {
     _uBit.init();
     ___ergebnis = 0;
-    
+
     // Math basics START
     ___ergebnis = ___ergebnis + 1;
     ___ergebnis = ___ergebnis - 3;
