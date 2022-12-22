@@ -1,0 +1,4 @@
+MethodCall [macheEtwas, , , VOID]
+
+Var [Element] := MethodExpr [MethodCall [macheEtwas2, , , NUMBER]]
+

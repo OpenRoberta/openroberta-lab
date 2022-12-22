@@ -14,7 +14,7 @@ int main()
 {
     _uBit.init();
     ___x = 0;
-    
+
     // logik_boolean_op-- Start
     ___x = ( ( true ) ? ( ___x + 1 ) : ( ___x + 1000) );
     ___x = ( ( false ) ? ( ___x + 1000 ) : ( ___x + 1) );

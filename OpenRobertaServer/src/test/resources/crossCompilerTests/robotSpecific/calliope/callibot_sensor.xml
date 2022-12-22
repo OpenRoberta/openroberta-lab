@@ -1,0 +1,151 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+            <instance x="13" y="304">
+                <block type="robControls_start" id="%NONZ_rrr[%uqiwDg*7g" intask="true" deletable="false">
+                    <mutation declare="true"></mutation>
+                    <field name="DEBUG"></field>
+                    <statement name="ST">
+                        <block type="robGlobalVariables_declare" id="NZVP]3]/x{OWP%o3tM`Q" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Boolean"></mutation>
+                            <field name="VAR">line</field>
+                            <field name="TYPE">Boolean</field>
+                            <value name="VALUE">
+                                <block type="logic_boolean" id="Blf7j-AsqRchJo8d?.*e" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="Zt53nc8SLORhnJ-SNMO~" intask="true" deletable="false" movable="false">
+                            <mutation next="false" declaration_type="Number"></mutation>
+                            <field name="VAR">dist</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="math_number" id="*.`u*1~g;c+N/WfcvR`4" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="variables_set" id="nR`[AcpI,Zn.s!Hswj0k" intask="true">
+                    <mutation datatype="Boolean"></mutation>
+                    <field name="VAR">line</field>
+                    <value name="VALUE">
+                        <block type="robSensors_infrared_getSample" id="4U,D^#w,~o=@0;[-Sbqg" intask="true">
+                            <mutation mode="LINE"></mutation>
+                            <field name="MODE">LINE</field>
+                            <field name="SENSORPORT">I</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="variables_set" id="Xp^To+hY%_}B%(eLza{`" intask="true">
+                    <mutation datatype="Boolean"></mutation>
+                    <field name="VAR">line</field>
+                    <value name="VALUE">
+                        <block type="robSensors_infrared_getSample" id="DpF*SI8?m2_)4_O#g2Q," intask="true">
+                            <mutation mode="LINE"></mutation>
+                            <field name="MODE">LINE</field>
+                            <field name="SENSORPORT">I2</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="variables_set" id="M=riBD8IRMo.-P[5plZ|" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">dist</field>
+                    <value name="VALUE">
+                        <block type="robSensors_ultrasonic_getSample" id="6q*[vX6}8}C#l%O]:.C8" intask="true">
+                            <mutation mode="DISTANCE"></mutation>
+                            <field name="MODE">DISTANCE</field>
+                            <field name="SENSORPORT">U</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set robottype="calliope" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="-35" y="-435">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="-35" y="-585">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="79" y="-437">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="742" y="-659">
+                <block type="robConf_callibot" id="A`]]^h1xvKyMp3aTtCT." intask="true">
+                    <field name="NAME">C</field>
+                    <field name="MOTOR_L">M</field>
+                    <field name="MOTOR_R">M3</field>
+                    <field name="RGBLED_LF">R</field>
+                    <field name="RGBLED_RF">R2</field>
+                    <field name="RGBLED_LR">R3</field>
+                    <field name="RGBLED_RR">R4</field>
+                    <field name="RGBLED_A">R5</field>
+                    <field name="LED_L">L</field>
+                    <field name="LED_R">L2</field>
+                    <field name="LED_B">L3</field>
+                    <field name="INFRARED_L">I</field>
+                    <field name="INFRARED_R">I2</field>
+                    <field name="ULTRASONIC">U</field>
+                    <field name="SERVO_S1">S</field>
+                    <field name="SERVO_S2">S5</field>
+                </block>
+            </instance>
+            <instance x="-35" y="-255">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+            <instance x="79" y="-466">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="79" y="-494">
+                <block type="robConf_gyro" id="lIT?C5y|(7FWCQIUn~pc" intask="true" deletable="false">
+                    <field name="NAME">_G</field>
+                </block>
+            </instance>
+            <instance x="196" y="-515">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="249" y="-455">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="NAME">undefined</field>
+                </block>
+            </instance>
+            <instance x="-35" y="-283">
+                <block type="robConf_rgbled" id="lgi%C3,J!smR:eP0aal_" intask="true" deletable="false">
+                    <field name="NAME">_R</field>
+                </block>
+            </instance>
+            <instance x="196" y="-543">
+                <block type="robConf_sound" id="e:4V0FcDx%9,.7xO,Ns@" intask="true" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="79" y="-327">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

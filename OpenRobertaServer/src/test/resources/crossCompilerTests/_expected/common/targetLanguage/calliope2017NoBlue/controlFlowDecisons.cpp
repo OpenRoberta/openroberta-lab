@@ -14,7 +14,7 @@ int main()
 {
     _uBit.init();
     ___X = 0;
-    
+
     assertNepo((0 == ___X), "pos-0", 0, "EQ", ___X);
     if ( true ) {
         ___X += 1;

@@ -14,7 +14,7 @@ int main()
 {
     _uBit.init();
     ___x = 0;
-    
+
     // Logic Boolean Operators -- Start
     if ( true && true ) {
         ___x += 1;

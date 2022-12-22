@@ -18,7 +18,7 @@ int main()
     ___number = 0;
     ___boolean2 = true;
     ___string = ManagedString("");
-    
+
     // Variable Test START
     ___number = 0 + 5;
     ___number = 3 + 0.999999999999;

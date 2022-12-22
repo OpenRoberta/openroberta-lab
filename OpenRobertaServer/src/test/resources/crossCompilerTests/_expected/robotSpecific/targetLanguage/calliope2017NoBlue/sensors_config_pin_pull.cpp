@@ -25,6 +25,6 @@ int main()
     _uBit.io.P2.setPull(PullDown);
     _uBit.io.P19.setPull(PullDown);
     _uBit.io.P3.setPull(PullUp);
-    
+
     release_fiber();
 }

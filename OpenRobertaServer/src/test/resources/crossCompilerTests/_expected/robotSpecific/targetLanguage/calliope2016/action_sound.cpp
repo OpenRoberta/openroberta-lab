@@ -16,7 +16,7 @@ int main()
 {
     _uBit.init();
     ___n = 0;
-    
+
     ____sounds();
     release_fiber();
 }

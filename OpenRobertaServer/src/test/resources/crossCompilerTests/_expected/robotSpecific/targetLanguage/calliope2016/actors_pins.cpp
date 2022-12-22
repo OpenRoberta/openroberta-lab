@@ -16,7 +16,7 @@ int main()
 {
     _uBit.init();
     ___numberVar = 0;
-    
+
     ____pin();
     release_fiber();
 }

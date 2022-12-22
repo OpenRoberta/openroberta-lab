@@ -16,7 +16,7 @@ int main()
     _uBit.init();
     ___x = 0;
     ___y = 1;
-    
+
     // Control Flow Loop -- Start
     assertNepo((0 == ___x), "pos-0", 0, "EQ", ___x);
     for (int ___k0 = 0; ___k0 < 5; ___k0 += 1) {

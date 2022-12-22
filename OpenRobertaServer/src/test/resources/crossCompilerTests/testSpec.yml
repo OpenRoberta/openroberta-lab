@@ -16,16 +16,9 @@ robots:
     dir: calliope
     suffix: ".cpp"
     # messages: not available if bluetooth is enabled
-    # other: RAM overflow. Partition the programs!
     exclude:
       [
-        messages,
-        actors_all_without_pins_and_callibot,
-        callibot,
-        control_logic,
-        math_lists,
-        sensors_all_without_pins_and_callibot,
-        text_colour_images_functions,
+        messages
       ]
   calliope2016:
     template: calliope
@@ -181,7 +174,6 @@ progs:
   listOperationsBasic:
     decl: basicListOperations
     exclude:
-      calliope2017: "RAM overflow - partition the program!"
       nxt: "no extendable lists"
       bob3: "no lists"
       rob3rta: "no lists"
@@ -203,7 +195,6 @@ progs:
   mathAndLists:
     decl: mathAndLists
     exclude:
-      calliope2017: "RAM overflow - partition the program!"
       edison: "no extendable lists"
       nxt: "no extendable lists"
       bob3: "no lists"

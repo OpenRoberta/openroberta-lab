@@ -15,7 +15,7 @@ int main()
 {
     _uBit.init();
     ___result = false;
-    
+
     // Math power -- Start --
     ___result = 1 == pow(2, 0);
     assertNepo((true == ___result), "pos-1", true, "EQ", ___result);

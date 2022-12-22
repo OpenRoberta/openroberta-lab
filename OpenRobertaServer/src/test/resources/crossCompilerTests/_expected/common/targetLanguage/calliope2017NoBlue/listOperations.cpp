@@ -19,7 +19,7 @@ int main()
     ___input = {1, 2, 3, 4, 3};
     ___input2 = {};
     ___result = 0;
-    
+
     ___result = ((int) ___input.size());
     ___result = ___result + ((int) ___input2.size());
     if ( ___input.empty() ) {
@@ -89,7 +89,7 @@ int main()
     ___result = ___result + _getListAverage(___input);
     ___result = ___result + _getListMedian(___input);
     ___result = ___result + _getListStandardDeviation(___input);
-    // 161.414... 
+    // 161.414...
     // 161.414 - sim, 161.5 - board, OK
     release_fiber();
 }

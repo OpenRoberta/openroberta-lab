@@ -15,7 +15,7 @@ int main()
 {
     _uBit.init();
     ___X = 0;
-    
+
     // Control Flow Nested Loop --Start
     while ( true ) {
         while ( ! (___X >= 20) ) {
@@ -85,7 +85,7 @@ int main()
         _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);
     }
     break_loop10:;
-    
+
     // Control Flow Nested Loop -- End
     release_fiber();
 }

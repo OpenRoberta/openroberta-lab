@@ -1,0 +1,7 @@
+DisplayTextAction[mode: TEXT, msg: StringConst[value: test]]
+StmtTextComment[textComment: test]
+DisplayTextAction[mode: TEXT, msg: FunctionExpr [TextJoinFunct [StringConst[value: test], StringConst[value: test]]]]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: Hallo]]
+
+exprStmt Binary [TEXT_APPEND, Var [Element2], StringConst[value: test]]
+DisplayTextAction[mode: TEXT, msg: FunctionExpr [TextCharCastNumberFunct [[StringConst[value: test], NumConst[value: 0]]]]]

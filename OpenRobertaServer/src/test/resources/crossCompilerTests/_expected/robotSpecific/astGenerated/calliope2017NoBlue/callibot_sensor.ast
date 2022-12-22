@@ -1,0 +1,9 @@
+
+Var [line] := SensorExpr [InfraredSensor [I, LINE, - EMPTY_SLOT -]]
+
+
+Var [line] := SensorExpr [InfraredSensor [I2, LINE, - EMPTY_SLOT -]]
+
+
+Var [dist] := SensorExpr [UltrasonicSensor [U, DISTANCE, - EMPTY_SLOT -]]
+

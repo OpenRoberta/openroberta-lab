@@ -1,0 +1,231 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+            <instance x="305" y="8">
+                <block type="robControls_start" id="r!]l%tIxih`5Q5!rmm8n" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG"></field>
+                </block>
+                <block type="mbedActions_display_image" id="YVu]DF[@:7Iy++B,gu(l" intask="true">
+                    <mutation type="IMAGE"></mutation>
+                    <field name="TYPE">IMAGE</field>
+                    <value name="VALUE">
+                        <block type="mbedImage_image" id="nC?oIc3{BT[+DRWa%zgc" intask="true">
+                            <field name="P00"></field>
+                            <field name="P10"></field>
+                            <field name="P20"></field>
+                            <field name="P30"></field>
+                            <field name="P40"></field>
+                            <field name="P01"></field>
+                            <field name="P11"></field>
+                            <field name="P21"></field>
+                            <field name="P31"></field>
+                            <field name="P41"></field>
+                            <field name="P02"></field>
+                            <field name="P12"></field>
+                            <field name="P22"></field>
+                            <field name="P32"></field>
+                            <field name="P42"></field>
+                            <field name="P03"></field>
+                            <field name="P13"></field>
+                            <field name="P23"></field>
+                            <field name="P33"></field>
+                            <field name="P43"></field>
+                            <field name="P04"></field>
+                            <field name="P14"></field>
+                            <field name="P24"></field>
+                            <field name="P34"></field>
+                            <field name="P44"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_image" id="#}BdebJ?575CzY-CS=-T" intask="true">
+                    <mutation type="IMAGE"></mutation>
+                    <field name="TYPE">IMAGE</field>
+                    <value name="VALUE">
+                        <block type="mbedImage_invert" id="e=+elnkHZueT=NM^TMA8" intask="true">
+                            <value name="VAR">
+                                <block type="mbedImage_image" id="?|s;bul0ceCxK7iQ/Etu" intask="true">
+                                    <field name="P00"></field>
+                                    <field name="P10"></field>
+                                    <field name="P20"></field>
+                                    <field name="P30"></field>
+                                    <field name="P40"></field>
+                                    <field name="P01"></field>
+                                    <field name="P11">#</field>
+                                    <field name="P21"></field>
+                                    <field name="P31"></field>
+                                    <field name="P41"></field>
+                                    <field name="P02"></field>
+                                    <field name="P12"></field>
+                                    <field name="P22">#</field>
+                                    <field name="P32"></field>
+                                    <field name="P42"></field>
+                                    <field name="P03"></field>
+                                    <field name="P13"></field>
+                                    <field name="P23"></field>
+                                    <field name="P33">#</field>
+                                    <field name="P43"></field>
+                                    <field name="P04"></field>
+                                    <field name="P14"></field>
+                                    <field name="P24"></field>
+                                    <field name="P34"></field>
+                                    <field name="P44"></field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_image" id="W=w).^Lj3qkTqM:0BIH}" intask="true">
+                    <mutation type="IMAGE"></mutation>
+                    <field name="TYPE">IMAGE</field>
+                    <value name="VALUE">
+                        <block type="mbedImage_shift" id="V4dKu(oSF]bg!F|_cgLY" intask="true">
+                            <field name="OP">UP</field>
+                            <value name="A">
+                                <block type="mbedImage_image" id="H0,~]6zfeXEWig]7.gCE" intask="true">
+                                    <field name="P00"></field>
+                                    <field name="P10"></field>
+                                    <field name="P20"></field>
+                                    <field name="P30"></field>
+                                    <field name="P40"></field>
+                                    <field name="P01"></field>
+                                    <field name="P11">#</field>
+                                    <field name="P21"></field>
+                                    <field name="P31"></field>
+                                    <field name="P41"></field>
+                                    <field name="P02"></field>
+                                    <field name="P12"></field>
+                                    <field name="P22">#</field>
+                                    <field name="P32"></field>
+                                    <field name="P42"></field>
+                                    <field name="P03"></field>
+                                    <field name="P13"></field>
+                                    <field name="P23"></field>
+                                    <field name="P33">#</field>
+                                    <field name="P43"></field>
+                                    <field name="P04"></field>
+                                    <field name="P14"></field>
+                                    <field name="P24"></field>
+                                    <field name="P34"></field>
+                                    <field name="P44"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="math_number" id="-[+h]Q@0yR;#}e)`T;TJ" intask="true">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_image" id="3zGnRG7^XB.]n(eYS.zI" intask="true">
+                    <mutation type="IMAGE"></mutation>
+                    <field name="TYPE">IMAGE</field>
+                    <value name="VALUE">
+                        <block type="mbedImage_get_image" id="f9k!9udloc{+WEY:t~FB" intask="true">
+                            <field name="IMAGE">HEART</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_image" id="l~vP#hsQx9sFImTG/,5U" intask="true">
+                    <mutation type="IMAGE"></mutation>
+                    <field name="TYPE">IMAGE</field>
+                    <value name="VALUE">
+                        <block type="mbedImage_get_image" id="{T/mc(nL.+|epD92GxRd" intask="true">
+                            <field name="IMAGE">SMILE</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_image" id="reI|@o}PvhCrrq)I1Q{-" intask="true">
+                    <mutation type="IMAGE"></mutation>
+                    <field name="TYPE">IMAGE</field>
+                    <value name="VALUE">
+                        <block type="mbedImage_get_image" id="/3p?x[yN)%T8{KHwTS^K" intask="true">
+                            <field name="IMAGE">STICKFIGURE</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_image" id="ufljqU5Y?9o_Hcc?V:pG" intask="true">
+                    <mutation type="IMAGE"></mutation>
+                    <field name="TYPE">IMAGE</field>
+                    <value name="VALUE">
+                        <block type="mbedImage_get_image" id="5D/oyDwg%~Out=L2[]({" intask="true">
+                            <field name="IMAGE">GIRAFFE</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_image" id=",?%Rj1O[;S!kChS):;w:" intask="true">
+                    <mutation type="IMAGE"></mutation>
+                    <field name="TYPE">IMAGE</field>
+                    <value name="VALUE">
+                        <block type="mbedImage_get_image" id="O;.=}ox,r{ub//^:tx0d" intask="true">
+                            <field name="IMAGE">UMBRELLA</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+            <instance x="-34" y="120">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="197" y="162">
+                <block type="robConf_sound" id="e:4V0FcDx%9,.7xO,Ns@" intask="true" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="197" y="190">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="80" y="211">
+                <block type="robConf_gyro" id="lIT?C5y|(7FWCQIUn~pc" intask="true" deletable="false">
+                    <field name="NAME">_G</field>
+                </block>
+            </instance>
+            <instance x="80" y="239">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="250" y="250">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
+            <instance x="-34" y="270">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="80" y="268">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="80" y="378">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="-34" y="422">
+                <block type="robConf_rgbled" id="lgi%C3,J!smR:eP0aal_" intask="true" deletable="false">
+                    <field name="NAME">_R</field>
+                </block>
+            </instance>
+            <instance x="-34" y="450">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>
