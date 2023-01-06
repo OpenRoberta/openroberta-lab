@@ -1,5 +1,5 @@
 '''
-test/debug the reporting program w.t.h. of this file :-) 
+test/debug the reporting program w.t.h. of this file :-)
 
 @author: rbudde
 '''
@@ -9,12 +9,14 @@ import time
 from util import *
 from store import *
 from entry import *
+from pathlib import WindowsPath
 
 if __name__ == "__main__":
-    logDir = "D:/data/openroberta-lab/server/master/admin/logging/statistics-2020"
+    logDir = WindowsPath(
+        "D:/data/openroberta-lab/server/master/admin/logging/statistics-2020")
     logFile = "01.log.zip"
-    outputFileHandle = open("D:/temp/testoutput.txt", 'w')
-    printer = lambda text: outputFileHandle.write(text + '\n')
+    outputFileHandle = open(WindowsPath("D:/temp/testoutput.txt"), 'w')
+    def printer(text): return outputFileHandle.write(text + '\n')
     start = time.time()
     Store.printer = printer
     fromTime = '0000'
@@ -23,9 +25,9 @@ if __name__ == "__main__":
 
     for line in getReader(logDir, logFile):
         fromStat(line).after(fromTime).before(untilTime)\
-        .filterVal('action','ServerStart','Initialization','ChangeRobot','SessionDestroy',negate=True,substring=False)\
-        .filterVal('robotName','',substring=False)\
-        .showEntry(printer)
-        
+            .filterVal('action', 'ServerStart', 'Initialization', 'ChangeRobot', 'SessionDestroy', negate=True, substring=False)\
+            .filterVal('robotName', '', substring=False)\
+            .showEntry(printer)
+
     end = time.time()
-    print("run finished after {:.3f} sec".format(end - start)) 
+    print("run finished after {:.3f} sec".format(end - start))
