@@ -13,7 +13,7 @@ _colors = {
             "black": (0,0,0)
         }
 
-def _RGBAsString(rgb):
+def RGBAsString(rgb):
     r, g, b = rgb
     color_diffs = []
     for color in _colors:
@@ -35,7 +35,7 @@ def ____colours():
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList
     cyberpi.display.set_brush((204, 0, 0)[0], (204, 0, 0)[1], (204, 0, 0)[2])
     cyberpi.led.on((255, 102, 0)[0], (255, 102, 0)[1], (255, 102, 0)[2], 1)
-    mbuild.quad_rgb_sensor.set_led(_RGBAsString((255, 255, 0)), 1)
+    mbuild.quad_rgb_sensor.set_led(RGBAsString((255, 255, 0)), 1)
     cyberpi.led.on((51, 204, 0)[0], (51, 204, 0)[1], (51, 204, 0)[2], 1)
     cyberpi.led.on((51, 255, 255)[0], (51, 255, 255)[1], (51, 255, 255)[2], 1)
     cyberpi.led.on((51, 102, 255)[0], (51, 102, 255)[1], (51, 102, 255)[2], 1)
@@ -43,9 +43,9 @@ def ____colours():
     cyberpi.led.on((255, 255, 255)[0], (255, 255, 255)[1], (255, 255, 255)[2], 1)
     cyberpi.led.on((0, 0, 0)[0], (0, 0, 0)[1], (0, 0, 0)[2], 1)
     cyberpi.led.on((0, 102, 0)[0], (0, 102, 0)[1], (0, 102, 0)[2], 1)
-    mbuild.quad_rgb_sensor.set_led(_RGBAsString((51, 51, 153)), 1)
+    mbuild.quad_rgb_sensor.set_led(RGBAsString((51, 51, 153)), 1)
     cyberpi.led.on((255, 20, 150)[0], (255, 20, 150)[1], (255, 20, 150)[2], 1)
-    mbuild.quad_rgb_sensor.set_led(_RGBAsString((255, 20, 150)), 1)
+    mbuild.quad_rgb_sensor.set_led(RGBAsString((255, 20, 150)), 1)
     cyberpi.display.set_brush((255, 20, 150)[0], (255, 20, 150)[1], (255, 20, 150)[2])
     cyberpi.console.println((255, 255, 255))
     cyberpi.console.println((204, 204, 204))

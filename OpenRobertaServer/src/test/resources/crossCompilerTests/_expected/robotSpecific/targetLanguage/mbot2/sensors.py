@@ -49,9 +49,9 @@ def ____sensors():
     ___booleanVar = cyberpi.controller.is_press("B")
     ___numVar = cyberpi.get_bri()
     ___numVar = cyberpi.get_rotation("x")
-    ___numVar = cyberpi.get_acc("x")/ 9,80665
-    ___numVar = cyberpi.get_acc("y")/ 9,80665
-    ___numVar = cyberpi.get_acc("z")/ 9,80665
+    ___numVar = cyberpi.get_acc("x")/ 9.80665
+    ___numVar = cyberpi.get_acc("y")/ 9.80665
+    ___numVar = cyberpi.get_acc("z")/ 9.80665
     ___numVar = ((cyberpi.timer.get() - _timer1)*1000)
     ___numVar = ((cyberpi.timer.get() - _timer2)*1000)
     ___numVar = ((cyberpi.timer.get() - _timer3)*1000)
@@ -74,8 +74,8 @@ def ____sensors():
     _timer3 = cyberpi.timer.get()
     _timer4 = cyberpi.timer.get()
     _timer5 = cyberpi.timer.get()
-    mbot2.EM_reset_angle("EM1") 
-    mbot2.EM_reset_angle("EM2") 
+    mbot2.EM_reset_angle("EM1")
+    mbot2.EM_reset_angle("EM2")
 
 def ____wait_until():
     global _timer1, _timer2, _timer3, _timer4, _timer5, ___numVar, ___colourVar, ___numList, ___booleanVar
@@ -98,7 +98,7 @@ def ____wait_until():
         if cyberpi.get_rotation("x") > 90:
             break
     while True:
-        if cyberpi.get_acc("x")/ 9,80665 > 30:
+        if cyberpi.get_acc("x")/ 9.80665 > 30:
             break
     while True:
         if ((cyberpi.timer.get() - _timer1)*1000) > 500:

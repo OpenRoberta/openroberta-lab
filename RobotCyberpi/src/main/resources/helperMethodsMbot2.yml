@@ -4,22 +4,36 @@ include: "classpath:/common.methods.yml"
 
 DIFFDRIVEFOR:
   PYTHON: |
-    def _diffDriveFor(rpmL, rpmR, distance):
-        speedL = rpmL * _circumference / 60
-        speedR = rpmR * _circumference / 60
-        r = (speedL + speedR) * _trackWidth / 2
-        w = speedR / speedL / _trackWidth
-        timeToWait = abs(distance / (r * w))
+    def diffDriveFor(rpmL, rpmR, distance):
+        timeToWait = getTimeToWait(rpmL, rpmR, distance)
+        if distance < 0:
+            rpmL = -rpmL
+            rpmR = -rpmR
         if _diffPortsSwapped:
-            mbot2.drive_speed(-rpmR, RpmL)
+            mbot2.drive_speed(-rpmR, rpmL)
         else:
             mbot2.drive_speed(rpmL, -rpmR)
         time.sleep(timeToWait)
         mbot2.EM_stop()
 
+    def getTimeToWait(rpmL, rpmR, distance):
+        absoluteDistance = abs(distance)
+        speedL = rpmL * _circumference / 60
+        speedR = rpmR * _circumference / 60
+
+        resultingSpeed = (speedL + speedR) / 2
+        angVel = (speedR - speedL) / (_trackWidth)
+        if angVel != 0 and resultingSpeed != 0:
+            radius = resultingSpeed / angVel
+            absoluteDistance = radius * math.sin(absoluteDistance/radius)
+        if resultingSpeed != 0:
+            return abs(absoluteDistance / resultingSpeed)
+        else:
+            return 0
+
 RGBASSTRING:
   PYTHON: |
-    def _RGBAsString(rgb):
+    def RGBAsString(rgb):
         r, g, b = rgb
         color_diffs = []
         for color in _colors:

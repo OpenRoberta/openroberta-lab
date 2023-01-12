@@ -17,20 +17,34 @@ _colors = {
             "black": (0,0,0)
         }
 
-def _diffDriveFor(rpmL, rpmR, distance):
-    speedL = rpmL * _circumference / 60
-    speedR = rpmR * _circumference / 60
-    r = (speedL + speedR) * _trackWidth / 2
-    w = speedR / speedL / _trackWidth
-    timeToWait = abs(distance / (r * w))
+def diffDriveFor(rpmL, rpmR, distance):
+    timeToWait = getTimeToWait(rpmL, rpmR, distance)
+    if distance < 0:
+        rpmL = -rpmL
+        rpmR = -rpmR
     if _diffPortsSwapped:
-        mbot2.drive_speed(-rpmR, RpmL)
+        mbot2.drive_speed(-rpmR, rpmL)
     else:
         mbot2.drive_speed(rpmL, -rpmR)
     time.sleep(timeToWait)
     mbot2.EM_stop()
 
-def _RGBAsString(rgb):
+def getTimeToWait(rpmL, rpmR, distance):
+    absoluteDistance = abs(distance)
+    speedL = rpmL * _circumference / 60
+    speedR = rpmR * _circumference / 60
+
+    resultingSpeed = (speedL + speedR) / 2
+    angVel = (speedR - speedL) / (_trackWidth)
+    if angVel != 0 and resultingSpeed != 0:
+        radius = resultingSpeed / angVel
+        absoluteDistance = radius * math.sin(absoluteDistance/radius)
+    if resultingSpeed != 0:
+        return abs(absoluteDistance / resultingSpeed)
+    else:
+        return 0
+
+def RGBAsString(rgb):
     r, g, b = rgb
     color_diffs = []
     for color in _colors:
@@ -58,8 +72,8 @@ def ____move():
     mbot2.EM_turn((5), 30, "EM1")
 
 def ____drive():
-    _diffDriveFor(30, 30, 10)
-    _diffDriveFor(-(30), -(30), 10)
+    diffDriveFor(30, 30, 10)
+    diffDriveFor(-(30), -(30), 10)
     mbot2.drive_speed(30, -(30))
     mbot2.drive_speed(-(30),30)
     mbot2.EM_stop()
@@ -67,8 +81,8 @@ def ____drive():
     mbot2.turn(-(20), 30)
     mbot2.drive_speed(30, 30)
     mbot2.drive_speed(-(30), -(30))
-    _diffDriveFor(10, 30, 20)
-    _diffDriveFor(-(10), -(30), 20)
+    diffDriveFor(10, 30, 20)
+    diffDriveFor(-(10), -(30), 20)
     mbot2.drive_speed(10, -(30))
     mbot2.drive_speed(-(10),30)
 
@@ -112,7 +126,7 @@ def ____lights():
     mbuild.ultrasonic2.set_bri(50, 7, 1)
     mbuild.ultrasonic2.set_bri(50, 8, 1)
     mbuild.ultrasonic2.set_bri(50, "all", 1)
-    mbuild.quad_rgb_sensor.set_led(_RGBAsString((204, 0, 0)), 1)
+    mbuild.quad_rgb_sensor.set_led(RGBAsString((204, 0, 0)), 1)
     mbuild.quad_rgb_sensor.off_led(1)
 
 def run():
