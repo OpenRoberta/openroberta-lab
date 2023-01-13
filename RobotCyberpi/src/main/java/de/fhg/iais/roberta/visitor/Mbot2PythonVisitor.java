@@ -386,6 +386,10 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
             case "LINE":
                 this.sb.append("mbuild.quad_rgb_sensor.get_line_sta(\"all\", ").append(index).append(")");
                 break;
+            case SC.LIGHT:
+                this.sb.append("mbuild.quad_rgb_sensor.get_gray(").append("\"")
+                    .append(quadRGBSensor.getSlot()).append("\", ").append(index).append(")");
+                break;
             case SC.COLOUR:
                 this.sb.append("_colors[")
                     .append("mbuild.quad_rgb_sensor.get_color_sta(").append("\"")
