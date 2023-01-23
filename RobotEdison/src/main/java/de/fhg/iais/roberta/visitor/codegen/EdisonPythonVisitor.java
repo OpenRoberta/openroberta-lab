@@ -258,7 +258,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
                 direction = "Ed.BACKWARD";
                 break;
         }
-
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class)
             .getHelperMethodGenerator()
             .getHelperMethodName(EdisonMethods.DIFFDRIVE));
@@ -270,9 +269,11 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         } else {
             this.sb.append("Ed.DISTANCE_UNLIMITED");
         }
-
         this.sb.append(")");
-
+        if ( driveAction.param.getDuration() != null ) {
+            nlIndent();
+            this.sb.append("Ed.ReadClapSensor()");
+        }
         return null;
     }
 
@@ -401,6 +402,10 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
             curveAction.paramLeft.getDuration().getValue().accept(this);
         }
         this.sb.append(")");
+        if ( curveAction.paramLeft.getDuration() != null ) {
+            nlIndent();
+            this.sb.append("Ed.ReadClapSensor()");
+        }
         return null;
     }
 
@@ -421,7 +426,10 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
             this.sb.append("Ed.DISTANCE_UNLIMITED");
         }
         this.sb.append(")");
-
+        if ( turnAction.param.getDuration() != null ) {
+            nlIndent();
+            this.sb.append("Ed.ReadClapSensor()");
+        }
         return null;
     }
 
@@ -476,6 +484,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
             default:
                 break;
         }
+        nlIndent();
+        this.sb.append("Ed.ReadClapSensor()");
         return null;
     }
 
@@ -494,6 +504,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         this.sb.append("Ed.Drive(Ed.STOP, Ed.SPEED_1, 1)");
+        nlIndent();
+        this.sb.append("Ed.ReadClapSensor()");
         return null;
     }
 
@@ -629,6 +641,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         this.sb.append("Ed.TimeWait(");
         toneAction.duration.accept(this);
         this.sb.append(", Ed.TIME_MILLISECONDS)");
+        nlIndent();
+        this.sb.append("Ed.ReadClapSensor()");
         return null;
     }
 
@@ -639,6 +653,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         this.sb.append(", ").append(playNoteAction.duration).append(")");
         nlIndent();
         this.sb.append("Ed.TimeWait(").append(playNoteAction.duration).append(", Ed.TIME_MILLISECONDS)");
+        nlIndent();
+        this.sb.append("Ed.ReadClapSensor()");
         return null;
     }
 
@@ -688,7 +704,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         nlIndent();
         this.sb.append("pass");
         decrIndentation();
-
+        nlIndent();
+        this.sb.append("Ed.ReadClapSensor()");
         return null;
     }
 

@@ -50,8 +50,10 @@ def _irSeek(mode):
     if (obstacleDetectionOn == True):
         Ed.ObstacleDetectionBeam(Ed.OFF)
         obstacleDetectionOn = False
-    if (mode == 0): return Ed.ReadIRData()
-    elif (mode == 1): return Ed.ReadRemote()
+    if (mode == 0): 
+        return Ed.ReadIRData()
+    elif (mode == 1): 
+        return Ed.ReadRemote()
 
 def _irSend(payload):
     global obstacleDetectionOn
