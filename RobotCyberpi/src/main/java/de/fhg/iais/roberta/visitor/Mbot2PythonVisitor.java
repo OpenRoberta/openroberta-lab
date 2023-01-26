@@ -17,6 +17,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LedsOffAction;
+import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationReceiveAction;
+import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationSendAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.DisplaySetColourAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.LedBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.LedOnActionWithIndex;
@@ -275,6 +277,24 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
         appendRGBAsArguments(ledOnActionWithIndex.color);
         this.sb.append(", ");
         appendLedNumber(ledOnActionWithIndex.led);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitCommunicationSendAction(CommunicationSendAction communicationSendAction) {
+        this.sb.append("cyberpi.wifi_broadcast.set(");
+        communicationSendAction.channel.accept(this);
+        this.sb.append(", ");
+        communicationSendAction.message.accept(this);
+        this.sb.append(")");
+        return null; 
+    }
+
+    @Override
+    public Void visitCommunicationReceiveAction(CommunicationReceiveAction communicationReceiveAction) {
+        this.sb.append("cyberpi.wifi_broadcast.get(");
+        communicationReceiveAction.channel.accept(this);
         this.sb.append(")");
         return null;
     }

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2023-01-13 13:11:49.244270",
+		"lastupdated": "2023-02-01 16:21:30.675355",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -639,6 +639,8 @@
 	"LOOP": "repeat until",
 	"LOOP_FOREVER": "repeat indefinitely",
 	"CONNECTION_SEND_DATA": "send message",
+	"CONNECTION_CHANNEL": "channel",
+	"CONNECTION_MESSAGE": "message",
 	"CONNECTION_TO_ROBOT": "to robot",
 	"CONNECTION_FROM_ROBOT": "from robot",
 	"CONNECTION_TO_CONNECTION": "to connection",
@@ -650,7 +652,9 @@
 	"CONNECTION_START_TOOLTIP": "Tries to make a connection to another robot via Bluetooth.",
 	"CONNECTION_WAIT_TOOLTIP": "Waits for a connection via Bluetooth.",
 	"CONNECTION_RECEIVE_TOOLTIP": "Waits for a message from the robot which you declare in the connection.",
+	"CONNECTION_CHANNEL_RECEIVE_TOOLTIP": "Receive the last message sent to the specified channel.",
 	"CONNECTION_SEND_TOOLTIP": "Sends a message to another robot.",
+	"CONNECTION_CHANNEL_SEND_TOOLTIP": "Sends a message to another robot over the specified channel.",
 	"CONNECTION_TOOLTIP": "A robot's connection",
 	"CONNECTION_CHECK": "connection to robot %1 active?",
 	"CONNECTION_CHECK_TOOLTIP": "Check if the connection to the robot is active.",

@@ -193,7 +193,6 @@
     <category name="TOOLBOX_SENSOR" svg="true">
         <block type="robSensors_ultrasonic_getSample"/>
         <block type="robSensors_quadrgb_getSample"/>
-        <block type="robSensors_line_getSample"/>
         <block type="robSensors_sound_getSample"/>
         <block type="robSensors_sound_record"/>
         <block type="robSensors_joystickKeys_getSample"/>
@@ -206,6 +205,7 @@
         <block type="robSensors_timer_reset"/>
         <block type="robSensors_encoder_getSample"/>
         <block type="robSensors_encoder_reset"/>
+        <block type="robSensors_line_getSample"/>
     </category>
     <category name="TOOLBOX_CONTROL" svg="true">
         <category name="TOOLBOX_DECISION" svg="true">
@@ -405,4 +405,25 @@
     <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true">
     </category>
     <category name="TOOLBOX_PROCEDURE" custom="PROCEDURE" svg="true"/>
+    <category name="TOOLBOX_COMMUNICATION" svg="true">
+        <block type="communication_send_message">
+            <value name='CHANNEL'>
+                <block type="text">
+                    <field name="TEXT">Channel1</field>
+                </block>
+            </value>
+            <value name='MESSAGE'>
+                <block type="text">
+                    <field name="TEXT">1</field>
+                </block>
+            </value>
+        </block>
+        <block type="communication_receive_message">
+            <value name='CHANNEL'>
+                <block type="text">
+                    <field name="TEXT">Channel1</field>
+                </block>
+            </value>
+        </block>
+    </category>
 </toolbox_set>

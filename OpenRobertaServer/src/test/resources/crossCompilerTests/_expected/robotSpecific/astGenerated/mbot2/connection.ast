@@ -1,0 +1,4 @@
+CommunicationSendAction[channel: StringConst[value: Channel1], message: StringConst[value: 1]]
+CommunicationSendAction[channel: StringConst[value: Channel1], message: NumConst[value: 0]]
+CommunicationSendAction[channel: StringConst[value: Channel1], message: BoolConst[value: true]]
+PrintlnAction[msg: ActionExpr [CommunicationReceiveAction[channel: StringConst[value: Channel1]]], port: _LCD]
