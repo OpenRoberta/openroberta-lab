@@ -15,6 +15,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LedsOffAction;
+import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationReceiveAction;
+import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationSendAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.DisplaySetColourAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.LedBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.LedOnActionWithIndex;
@@ -228,6 +230,16 @@ public class Mbot2ValidatorAndCollectorVisitor extends DifferentialMotorValidato
         checkActorPort(ledOnActionWithIndex);
         requiredComponentVisited(ledOnActionWithIndex, ledOnActionWithIndex.color);
         usedHardwareBuilder.addUsedActor(new UsedActor(ledOnActionWithIndex.getUserDefinedPort(), SC.RGBLED));
+        return null;
+    }
+
+    @Override
+    public Void visitCommunicationSendAction(CommunicationSendAction communicationSendAction) {
+        return null;
+    }
+    
+    @Override
+    public Void visitCommunicationReceiveAction(CommunicationReceiveAction communicationReceiveAction) {
         return null;
     }
 

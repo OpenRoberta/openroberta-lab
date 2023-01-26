@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.action.light.LedsOffAction;
+import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationReceiveAction;
+import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationSendAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.DisplaySetColourAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.LedBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.LedOnActionWithIndex;
@@ -46,4 +48,8 @@ public interface IMbot2Visitor<V> extends IActors4AutonomousDriveRobots<V>, ISen
     V visitPrintlnAction(PrintlnAction printlnAction);
 
     V visitLedOnActionWithIndex(LedOnActionWithIndex ledOnActionWithIndex);
+    
+    V visitCommunicationSendAction(CommunicationSendAction communicationSendAction);
+    
+    V visitCommunicationReceiveAction(CommunicationReceiveAction communicationReceiveAction);
 }

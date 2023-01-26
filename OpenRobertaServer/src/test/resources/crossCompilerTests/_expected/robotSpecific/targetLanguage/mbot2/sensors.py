@@ -74,8 +74,8 @@ def ____sensors():
     _timer3 = cyberpi.timer.get()
     _timer4 = cyberpi.timer.get()
     _timer5 = cyberpi.timer.get()
-    mbot2.EM_reset_angle("EM1") 
-    mbot2.EM_reset_angle("EM2") 
+    mbot2.EM_reset_angle("EM1")
+    mbot2.EM_reset_angle("EM2")
 
 def ____wait_until():
     global _timer1, _timer2, _timer3, _timer4, _timer5, ___numVar, ___colourVar, ___numList, ___booleanVar
