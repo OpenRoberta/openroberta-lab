@@ -1,0 +1,31 @@
+RadioSetChannelAction[channel: NumConst[value: 7]]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: Hallo!]]
+
+(repeat [TIMES, Var [k0], NumConst[value: 0], NumConst[value: 3], NumConst[value: 1]]
+AktionStmt [DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: PredefinedImage[imageName: HEART]]]WaitTimeStmt[time: NumConst[value: 500]]
+AktionStmt [DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: PredefinedImage[imageName: HEART_SMALL]]]WaitTimeStmt[time: NumConst[value: 500]]
+)
+ClearDisplayAction[port: - EMPTY_PORT -]
+
+(repeat [TIMES, Var [k1], NumConst[value: 0], NumConst[value: 5], NumConst[value: 1]]
+AktionStmt [LedOnAction[ledColor: FunctionExpr [ListGetIndex [GET, FROM_START, [Var [colours], Var [idx]]]], port: R]]WaitTimeStmt[time: NumConst[value: 500]]
+exprStmt Binary [MATH_CHANGE, Var [idx], NumConst[value: 1]]
+)
+LightStatusAction [R, OFF]
+DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: PredefinedImage[imageName: MUSIC_QUAVERS]]
+PlayNoteAction[duration: 500, frequency: 261.626, port: BZ]
+PlayNoteAction[duration: 500, frequency: 195.998, port: BZ]
+PlayNoteAction[duration: 1000, frequency: 466.164, port: BZ]
+ClearDisplayAction[port: - EMPTY_PORT -]
+DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: Image [[, , #, , ]
+[, #, #, , ]
+[#, #, #, #, #]
+[, #, #, , ]
+[, , #, , ]]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+RadioSendAction[type: String, power: 7, message: StringConst[value: Hallo Roberta!]]
+WaitTimeStmt[time: NumConst[value: 100]]
+ClearDisplayAction[port: - EMPTY_PORT -]
+DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: PredefinedImage[imageName: YES]]

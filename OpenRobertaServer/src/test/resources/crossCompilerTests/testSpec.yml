@@ -18,7 +18,9 @@ robots:
     # messages: not available if bluetooth is enabled
     exclude:
       [
-        messages
+        messages,
+        radio_rx,
+        radio_tx
       ]
   calliope2016:
     template: calliope

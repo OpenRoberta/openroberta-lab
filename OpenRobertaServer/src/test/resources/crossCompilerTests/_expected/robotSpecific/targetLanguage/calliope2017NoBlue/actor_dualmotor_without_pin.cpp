@@ -2,6 +2,7 @@
 
 #include "MicroBit.h"
 #include "NEPODefs.h"
+#include "nrf_gpiote.h"
 #include <list>
 #include <array>
 #include <stdlib.h>
@@ -18,6 +19,8 @@ int main()
 {
     _uBit.init();
     ___n = 0;
+    nrf_gpiote_task_configure(0, CALLIOPE_PIN_MOTOR_IN1, NRF_GPIOTE_POLARITY_TOGGLE, NRF_GPIOTE_INITIAL_VALUE_HIGH);
+    nrf_gpiote_task_configure(1, CALLIOPE_PIN_MOTOR_IN2, NRF_GPIOTE_POLARITY_TOGGLE, NRF_GPIOTE_INITIAL_VALUE_LOW);
 
     ____action();
     release_fiber();

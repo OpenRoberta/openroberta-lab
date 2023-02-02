@@ -1,0 +1,336 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+            <instance x="-1585" y="-454">
+                <block type="robControls_start" id="SRhyqr`97V.~KiRhwz2?" intask="true" deletable="false">
+                    <mutation declare="true"></mutation>
+                    <field name="DEBUG"></field>
+                    <statement name="ST">
+                        <block type="robGlobalVariables_declare" id="DEUmoekTq6z5d#fTC[;e" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Array_Colour"></mutation>
+                            <field name="VAR">colours</field>
+                            <field name="TYPE">Array_Colour</field>
+                            <value name="VALUE">
+                                <block type="robLists_create_with" id="wg_5#Lzkb|1Ia3EeoVw#" intask="true">
+                                    <mutation items="5" list_type="Colour"></mutation>
+                                    <field name="LIST_TYPE">Colour</field>
+                                    <value name="ADD0">
+                                        <block type="mbedColour_picker" id="IFp(aZ~eC]XX^YjA%]oR" intask="true">
+                                            <field name="COLOUR">#ff0000</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="mbedColour_picker" id="DkCox.~?qcF=b*Zpk]Ix" intask="true">
+                                            <field name="COLOUR">#ff9900</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD2">
+                                        <block type="mbedColour_picker" id="p`WTJ@FT{_SB.^:Lva1:" intask="true">
+                                            <field name="COLOUR">#ffff00</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD3">
+                                        <block type="mbedColour_picker" id="XVOZ!@xe3L_Y1kobI4|7" intask="true">
+                                            <field name="COLOUR">#33ff33</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD4">
+                                        <block type="mbedColour_picker" id="*uw,|WcdWOa`SOS)FnW," intask="true">
+                                            <field name="COLOUR">#66cccc</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="4-ASy::oI)0/))q:kV?@" intask="true" deletable="false" movable="false">
+                            <mutation next="false" declaration_type="Number"></mutation>
+                            <field name="VAR">idx</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="math_number" id="hXBjJbG_Z/f-9!GCE?JZ" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="mbedCommunication_setChannel" id="(Fe:jR)FP{wE56kD-c.{" intask="true">
+                    <value name="CONNECTION">
+                        <block type="math_number" id="(wp=184+Ipg@_U:-QEZM" intask="true">
+                            <field name="NUM">7</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="X^ELdMRn}K*;#|M2%,y(" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="_rhXEEbyS%uz6Vg{gQdX" intask="true">
+                            <field name="TEXT">Hallo!</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="controls_repeat_ext" id="9#4C+:UdG_ij8WvU^WTQ" intask="true">
+                    <value name="TIMES">
+                        <block type="math_number" id="ifE,nR-~-d7;c@RyTy=]" intask="true">
+                            <field name="NUM">3</field>
+                        </block>
+                    </value>
+                    <statement name="DO">
+                        <block type="mbedActions_display_image" id=";RN=xUcOr%*mYU{OedX{" intask="true">
+                            <mutation type="IMAGE"></mutation>
+                            <field name="TYPE">IMAGE</field>
+                            <value name="VALUE">
+                                <block type="mbedImage_get_image" id="#~#Yo~)UYoq7J5eMsBM?" intask="true">
+                                    <field name="IMAGE">HEART</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_wait_time" id="B+j/r:s/zMM)#]):Ws_{" intask="true">
+                            <value name="WAIT">
+                                <block type="math_number" id="~Sa*/@rP+di83M[_c(GG" intask="true">
+                                    <field name="NUM">500</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="mbedActions_display_image" id="PIYm.xgV?r[mEOiG:~*U" intask="true">
+                            <mutation type="IMAGE"></mutation>
+                            <field name="TYPE">IMAGE</field>
+                            <value name="VALUE">
+                                <block type="mbedImage_get_image" id="m_Zgr@yW5=]TlTM!i,!^" intask="true">
+                                    <field name="IMAGE">HEART_SMALL</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_wait_time" id="|(rsw1l~hI(,H7aUY||i" intask="true">
+                            <value name="WAIT">
+                                <block type="math_number" id="!7=q#P/5vA6|UD=9S+KF" intask="true">
+                                    <field name="NUM">500</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="mbedActions_display_clear" id="4r{[R.@WWd`V0I0F~[O}" intask="true"></block>
+                <block type="controls_repeat_ext" id="JALnx5XX;S=rKoar?(Bc" intask="true">
+                    <value name="TIMES">
+                        <block type="math_number" id="50^xa9)2x*jBMNkaL00," intask="true">
+                            <field name="NUM">5</field>
+                        </block>
+                    </value>
+                    <statement name="DO">
+                        <block type="mbedActions_leds_on" id="GJj2de#nKspqq*@_md3|" intask="true">
+                            <field name="ACTORPORT">R</field>
+                            <hide name="ACTORPORT" value="R"></hide>
+                            <value name="COLOR">
+                                <block type="robLists_getIndex" id="9`:3;*A-}/]l~ukt[m|C" intask="true">
+                                    <mutation statement="false" at="true" datatype="Colour"></mutation>
+                                    <field name="MODE">GET</field>
+                                    <field name="WHERE">FROM_START</field>
+                                    <value name="VALUE">
+                                        <block type="variables_get" id=",lN(D~V-@=t.hEWMcZZ1" intask="true">
+                                            <mutation datatype="Array_Colour"></mutation>
+                                            <field name="VAR">colours</field>
+                                        </block>
+                                    </value>
+                                    <value name="AT">
+                                        <block type="variables_get" id="/.(-XVqy3l.}C}_DeYL]" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">idx</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_wait_time" id="@aB.Y+3vk@uHeq=oGsN|" intask="true">
+                            <value name="WAIT">
+                                <block type="math_number" id="fXlW8*J{n~XL0@k{DcQH" intask="true">
+                                    <field name="NUM">500</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robMath_change" id="StwyP?=_BZ6w[V{L!3.H" intask="true">
+                            <value name="VAR">
+                                <block type="variables_get" id="{,{Nn?RDemaO9rWLIQAX" intask="true">
+                                    <mutation datatype="Number"></mutation>
+                                    <field name="VAR">idx</field>
+                                </block>
+                            </value>
+                            <value name="DELTA">
+                                <block type="math_number" id="Q7Wo;u?uPPV5x~X_aRM{" intask="true">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="mbedActions_leds_off" id="VyhRL`fPfcC4)ozBgldt" intask="true">
+                    <field name="ACTORPORT">R</field>
+                </block>
+                <block type="mbedActions_display_image" id="Xp@=@.u.;CT7a[3(Ctm`" intask="true">
+                    <mutation type="IMAGE"></mutation>
+                    <field name="TYPE">IMAGE</field>
+                    <value name="VALUE">
+                        <block type="mbedImage_get_image" id="46Nh0xU[^4[usb^emYFO" intask="true">
+                            <field name="IMAGE">MUSIC_QUAVERS</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_play_note" id="FT;zV}s_eq@G7mb^`k22" intask="true">
+                    <field name="DURATION">500</field>
+                    <field name="FREQUENCE">261.626</field>
+                    <field name="ACTORPORT">BZ</field>
+                    <hide name="ACTORPORT" value="BZ"></hide>
+                </block>
+                <block type="mbedActions_play_note" id="q8?osHp_8CnH9B}4;]mB" intask="true">
+                    <field name="DURATION">500</field>
+                    <field name="FREQUENCE">195.998</field>
+                    <field name="ACTORPORT">BZ</field>
+                    <hide name="ACTORPORT" value="BZ"></hide>
+                </block>
+                <block type="mbedActions_play_note" id="sr[cN]3n|cw}]btlO-Om" intask="true">
+                    <field name="DURATION">1000</field>
+                    <field name="FREQUENCE">466.164</field>
+                    <field name="ACTORPORT">BZ</field>
+                    <hide name="ACTORPORT" value="BZ"></hide>
+                </block>
+                <block type="mbedActions_display_clear" id=")XzRrXh|(uxeI6MfwVN1" intask="true"></block>
+                <block type="mbedActions_display_image" id="7y_J/M`xR^0owciRPVH]" intask="true">
+                    <mutation type="IMAGE"></mutation>
+                    <field name="TYPE">IMAGE</field>
+                    <value name="VALUE">
+                        <block type="mbedImage_image" id=",GTCrM=)7_ITJQmt/VI2" intask="true">
+                            <field name="P00"></field>
+                            <field name="P10"></field>
+                            <field name="P20">#</field>
+                            <field name="P30"></field>
+                            <field name="P40"></field>
+                            <field name="P01"></field>
+                            <field name="P11"></field>
+                            <field name="P21">#</field>
+                            <field name="P31">#</field>
+                            <field name="P41"></field>
+                            <field name="P02">#</field>
+                            <field name="P12">#</field>
+                            <field name="P22">#</field>
+                            <field name="P32">#</field>
+                            <field name="P42">#</field>
+                            <field name="P03"></field>
+                            <field name="P13"></field>
+                            <field name="P23">#</field>
+                            <field name="P33">#</field>
+                            <field name="P43"></field>
+                            <field name="P04"></field>
+                            <field name="P14"></field>
+                            <field name="P24">#</field>
+                            <field name="P34"></field>
+                            <field name="P44"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="q]:Oq{=TxOtKl06=1PYX" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="hGc.}zFw!JN8j6+F|V:F" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="3q;T#@EPlfj};q,@rl=," intask="true">
+                                    <mutation input="KEY_PRESSED"></mutation>
+                                    <field name="SENSORTYPE">KEY_PRESSED</field>
+                                    <field name="SENSORPORT">B</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="tJGRmEXuXO?c:Rrbx:D#" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="9+f`[;B^+m(SW^?;,3w!" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id=";/JCYJA?UYPqGi`x+%gy" intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id=",5:~OKchaLbid/K^]7T:" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="mbedCommunication_receiveBlock" id="yb2k*F]GgBy@p?O]9]-9" intask="true">
+                            <mutation datatype="String"></mutation>
+                            <field name="TYPE">String</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_clear" id="Qb{*UQrOZcV4[V.}]k_t" intask="true"></block>
+                <block type="mbedActions_display_image" id="k}WHUX/eT]@?/8,pn2jr" intask="true">
+                    <mutation type="IMAGE"></mutation>
+                    <field name="TYPE">IMAGE</field>
+                    <value name="VALUE">
+                        <block type="mbedImage_get_image" id="O^r,o:bEz-(t(hF,@#kM" intask="true">
+                            <field name="IMAGE">YES</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set robottype="calliope" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="1136" y="-1065">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true">
+                    <field name="NAME">Acc</field>
+                </block>
+            </instance>
+            <instance x="1269" y="-1254">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="1662" y="-1251">
+                <block type="robConf_rgbled" id="lgi%C3,J!smR:eP0aal_" intask="true">
+                    <field name="NAME">R</field>
+                    <field name="PIN1">0</field>
+                </block>
+            </instance>
+            <instance x="1269" y="-1190">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="1400" y="-1190">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true">
+                    <field name="NAME">C</field>
+                </block>
+            </instance>
+            <instance x="1348" y="-974">
+                <block type="robConf_gyro" id="lIT?C5y|(7FWCQIUn~pc" intask="true">
+                    <field name="NAME">G</field>
+                </block>
+            </instance>
+            <instance x="1692" y="-1133">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true">
+                    <field name="NAME">BZ</field>
+                </block>
+            </instance>
+            <instance x="1428" y="-1061">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true">
+                    <field name="NAME">TM</field>
+                </block>
+            </instance>
+            <instance x="1400" y="-1254">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true">
+                    <field name="NAME">L</field>
+                </block>
+            </instance>
+            <instance x="1400" y="-1123">
+                <block type="robConf_sound" id="e:4V0FcDx%9,.7xO,Ns@" intask="true">
+                    <field name="NAME">M</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>
