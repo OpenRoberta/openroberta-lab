@@ -104,6 +104,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         } else if ( usedActorA.componentType.equals("CALLIBOT") ) {
             usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
         }
+        checkDifferentialDrive();
         requiredComponentVisited(bothMotorsOnAction, bothMotorsOnAction.speedA, bothMotorsOnAction.speedB);
         return null;
     }
@@ -330,6 +331,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
             checkForZeroSpeed(motorOnAction, motorOnAction.param.getSpeed());
             requiredComponentVisited(motorOnAction, duration.getValue());
         }
+        checkDifferentialDrive();
         return addActorMaybeCallibot(motorOnAction);
     }
 
@@ -617,5 +619,16 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
             }
         }
         return false;
+    }
+
+    private Void checkDifferentialDrive() {
+        int countMotors = (int) this.robotConfiguration.getConfigurationComponentsValues()
+            .stream()
+            .filter(comp -> comp.componentType.equals("MOTOR"))
+            .count();
+        if ( countMotors == 2 ) {
+            usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DIFFERENTIALDRIVE));
+        }
+        return null;
     }
 }

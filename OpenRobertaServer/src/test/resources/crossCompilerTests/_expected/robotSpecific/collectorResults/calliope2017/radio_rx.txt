@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [, RADIO], UsedActor [, DISPLAY], UsedActor [R, RGBLED], UsedActor [R, LIGHT], UsedActor [, MUSIC], UsedActor [, DISPLAY_GRAYSCALE], UsedActor [, KEY]]
+Methods: 
+[GET]

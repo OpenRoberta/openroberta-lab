@@ -704,6 +704,12 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             nlIndent();
             this.sb.append("_uBit.accelerometer.updateSample();");
         }
+        if ( this.isDualMode() && this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIFFERENTIALDRIVE) ) {
+            this.sb.append("nrf_gpiote_task_configure(0, CALLIOPE_PIN_MOTOR_IN1, NRF_GPIOTE_POLARITY_TOGGLE, NRF_GPIOTE_INITIAL_VALUE_HIGH);");
+            nlIndent();
+            this.sb.append("nrf_gpiote_task_configure(1, CALLIOPE_PIN_MOTOR_IN2, NRF_GPIOTE_POLARITY_TOGGLE, NRF_GPIOTE_INITIAL_VALUE_LOW);");
+            nlIndent();
+        }
         return null;
     }
 
@@ -1180,6 +1186,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         }
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.HUMIDITY) ) {
             this.sb.append("#include \"Sht31.h\"\n");
+        }
+        if ( this.isDualMode() && this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIFFERENTIALDRIVE) ) {
+            this.sb.append("#include \"nrf_gpiote.h\"\n");
         }
         this.sb.append("#include <list>\n");
         this.sb.append("#include <array>\n");
