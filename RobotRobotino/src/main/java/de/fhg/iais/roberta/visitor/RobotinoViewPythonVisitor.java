@@ -291,6 +291,20 @@ public final class RobotinoViewPythonVisitor extends AbstractPythonVisitor imple
                 .append("(1, False)");
             nlIndent();
         }
+        
+        this.sb.append("requests.put(\"http://localhost/data/startStopProgram?sid=NEPO\",\n" +
+            "             headers={\n" +
+            "                 \"Content-Type\": \"application/json\"},\n" +
+            "             json={\n" +
+            "                 \"action\": \"<img class='startStopImage' src='images/start.png'>\",\n" +
+            "                 \"id\": 3,\n" +
+            "                 \"name\": \"NEPOview\",\n" +
+            "                 \"old\": \"NEPOview\",\n" +
+            "                 \"suffix\": \"rvwx\",\n" +
+            "                 \"undefined\": \"undefined\"\n" +
+            "             })");
+        
+        
 
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(RobotinoConstants.OMNIDRIVE) || this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIGITAL_PIN) ) {
             decrIndentation();
