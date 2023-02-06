@@ -610,7 +610,7 @@ export class RobotinoChassis extends ChassisMobile {
         this.xDiff = mX;
         this.yDiff = -mY;
         this.transformNewPose(robot.pose, this);
-        if (this.distance) {
+        if (this.distance !== null) {
             let dist = Math.sqrt(Math.pow(robot.pose.x - robot.pose.xOld, 2) + Math.pow(robot.pose.y - robot.pose.yOld, 2));
             this.distance -= dist;
             let div = (Math.abs(this.xVel) + Math.abs(this.yVel)) / 10;

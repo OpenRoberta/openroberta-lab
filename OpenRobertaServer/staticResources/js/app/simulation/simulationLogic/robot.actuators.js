@@ -572,7 +572,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
             this.xDiff = mX;
             this.yDiff = -mY;
             this.transformNewPose(robot.pose, this);
-            if (this.distance) {
+            if (this.distance !== null) {
                 var dist = Math.sqrt(Math.pow(robot.pose.x - robot.pose.xOld, 2) + Math.pow(robot.pose.y - robot.pose.yOld, 2));
                 this.distance -= dist;
                 var div = (Math.abs(this.xVel) + Math.abs(this.yVel)) / 10;
