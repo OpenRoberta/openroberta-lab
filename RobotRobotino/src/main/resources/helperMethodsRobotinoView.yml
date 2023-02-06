@@ -16,6 +16,7 @@ OMNIDRIVESPEED:
                 currentSpeed[index] = -max
             else:
                 currentSpeed[index] = speed / 100 * max
+        postVel()
 
 POSTVEL:
   PYTHON: |
@@ -122,6 +123,7 @@ DRIVETOPOSITION:
             currentSpeed = [speedX, speedY, 0]
             time.sleep(0.05)
         currentSpeed = [0, 0, 0]
+        postVel()
     
     def toSlowCheck(rawSpeed, percentSpeed):
         if abs(rawSpeed) < 0.005:
