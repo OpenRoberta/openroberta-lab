@@ -195,9 +195,6 @@ Blockly.Msg.CONFIGURATION_PORT = "Port1";  // untranslated
 Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP = "Klicke hier um alle ausgewählten Roboterkonfigurationen zu löschen.";
 Blockly.Msg.CONFLIST_DELETE_TOOLTIP = "Klicke hier um deine Roboterkonfiguration zu löschen.";
 Blockly.Msg.CONFLIST_LOAD_TOOLTIP = "Klicke hier um deine Roboterkonfiguration in die Konfigurationsumgebung zu laden.";
-Blockly.Msg.CONNECTION_CHANNEL = "Kanal";
-Blockly.Msg.CONNECTION_CHANNEL_RECEIVE_TOOLTIP = "Empfange die letzte Nachricht, die über den gebenden Kanal versendet wurde.";
-Blockly.Msg.CONNECTION_CHANNEL_SEND_TOOLTIP = "Sendet eine Nachricht zu einem anderen Roboter über den gegebenen Kanal.";
 Blockly.Msg.CONNECTION_CHECK = "Verbindung zu Roboter %1 aktiv?";
 Blockly.Msg.CONNECTION_CHECK_TOOLTIP = "Prüft, ob die Verbindung zu dem Roboter aktiv ist.";
 Blockly.Msg.CONNECTION_CONNECT = "Verbinde mit Robotername";
@@ -205,7 +202,6 @@ Blockly.Msg.CONNECTION_FROM_CONNECTION = "von Verbindung";
 Blockly.Msg.CONNECTION_FROM_ROBOT = "von Roboter";
 Blockly.Msg.CONNECTION_MBED_RECEIVE_TOOLTIP = "Liest eine Nachricht über Kanal 0 bis 255. Der voreingestellte Kanal ist 0.";
 Blockly.Msg.CONNECTION_MBED_SEND_TOOLTIP = "Sendet eine Nachricht zu einem anderen System über Kanal 0 bis 255 mit einer Signalstärke von 0 bis 7. Wobei 0 ist ein schwaches Signal und 7 das stärkste Signal ist.";
-Blockly.Msg.CONNECTION_MESSAGE = "Nachricht";
 Blockly.Msg.CONNECTION_OVER_CHANNEL = "über Kanal";
 Blockly.Msg.CONNECTION_POWER = "mit Stärke";
 Blockly.Msg.CONNECTION_PROTOCOL_BLUETOOTH = "Bluetooth";
@@ -1389,8 +1385,7 @@ Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP = "Klicke hier um alle ausgewählten Pro
 Blockly.Msg.PROGLIST_DELETE_TOOLTIP = "Klicke hier um dein Programm zu löschen.";
 Blockly.Msg.PROGLIST_LOAD_TOOLTIP = "Klicke hier um dein Programm in die Programmierumgebung zu laden.";
 Blockly.Msg.PROGLIST_SHARE_TOOLTIP = "Klicke hier um dein Programm mit einem Freund zu teilen.";
-Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY = "Möchtest du dein Programm wirklich in die Gallerie hochladen und mit allen anderen Benutzern teilen? Wenn du dir nicht sicher bist, schaue <a href='https://www.roberta-home.de/index.php?id=138' target='_blank'>hier</a> nochmal genau nach!";
-Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP = "Klicke hier um dein Programm in der Galerie hochzuladen und es mit allen anderen Benutzern zu teilen.";
+Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY = "Möchtest du dein Programm wirklich in die Gallerie hochladen und mit allen anderen Benutzern teilen? Schaue dir die Vorschau oben genau an. Genau so werden es alle anderen in der Gallery sehen. Die zwei Zeilen unter dem Namen des Programmes sind eine Vorschau auf die Programmdokumentation. Wenn du dir nicht sicher bist, schaue <a href='https://www.roberta-home.de/index.php?id=138' target='_blank'>hier</a> nochmal genau nach!";
 Blockly.Msg.PROGRAM_ERROR_EXPRBLOCK_PARSE = "Dieser Ausdruck ist falsch aufgebaut. Syntaxfehler.";
 Blockly.Msg.PROGRAM_ERROR_EXPRBLOCK_TYPECHECK = "Dieser Ausdruck ist nicht gültig. Fehler beim Typecheck.";
 Blockly.Msg.PULSEHIGH = "Pulszeit HIGH";
