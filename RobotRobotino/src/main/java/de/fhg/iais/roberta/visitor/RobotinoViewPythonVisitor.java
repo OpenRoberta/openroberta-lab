@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.actor.robotino.OmnidriveAction;
 import de.fhg.iais.roberta.syntax.actor.robotino.OmnidriveDistanceAction;
 import de.fhg.iais.roberta.syntax.actor.robotino.OmnidrivePositionAction;
@@ -576,6 +577,15 @@ public final class RobotinoViewPythonVisitor extends AbstractPythonVisitor imple
             port = configurationAst.getConfigurationComponent(opticalSensor.getUserDefinedPort()).getComponentProperties().get("WH").substring(2);
         }
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETDIGITALPIN)).append("(" + port + ")");
+        return null;
+    }
+    
+    @Override
+    public Void visitSerialWriteAction(SerialWriteAction serialWriteAction){
+        this.sb.append("RV.writeString(7, str(");
+        serialWriteAction.value.accept(this);
+        this.sb.append("))");
+        
         return null;
     }
 
