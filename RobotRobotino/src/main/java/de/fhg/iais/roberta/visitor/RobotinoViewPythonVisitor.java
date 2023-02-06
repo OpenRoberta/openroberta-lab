@@ -269,14 +269,12 @@ public final class RobotinoViewPythonVisitor extends AbstractPythonVisitor imple
     }
 
     private void generateFinally() {
-        if ( this.getBean(UsedHardwareBean.class).isActorUsed(RobotinoConstants.OMNIDRIVE) || this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIGITAL_PIN) ) {
-            this.sb.append("finally:");
-            incrIndentation();
+        this.sb.append("finally:");
+        incrIndentation();
+        nlIndent();
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIGITAL_PIN) ) {
+            this.sb.append("global _digitalPinValues");
             nlIndent();
-            if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIGITAL_PIN) ) {
-                this.sb.append("global _digitalPinValues");
-                nlIndent();
-            }
         }
 
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(RobotinoConstants.OMNIDRIVE) ) {
