@@ -195,7 +195,6 @@
                         </block>
                         <block type="mbedSensors_timer_reset" id="0~`W~^V!]O,9=i@MSKSQ" intask="true">
                             <field name="SENSORPORT">1</field>
-                            <field name="SLOT"/>
                         </block>
                         <block type="mbedActions_display_text" id="NQYadph1p.}|]GBnR=ai" intask="true">
                             <field name="TYPE">TEXT</field>

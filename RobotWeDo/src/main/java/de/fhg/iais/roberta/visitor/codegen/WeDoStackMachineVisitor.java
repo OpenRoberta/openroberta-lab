@@ -188,7 +188,7 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        JSONObject o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, timerReset.getUserDefinedPort());
+        JSONObject o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, timerReset.sensorPort);
         return add(o);
     }
 

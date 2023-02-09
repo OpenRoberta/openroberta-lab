@@ -557,7 +557,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitEncoderReset(EncoderReset encoderReset) {
-        String encoderMotorPort = encoderReset.getUserDefinedPort();
+        String encoderMotorPort = encoderReset.sensorPort;
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(encoderMotorPort);
         String methodName = isRegulated ? "hal.resetRegulatedMotorTacho(" : "hal.resetUnregulatedMotorTacho(";
         this.sb.append(methodName).append("ActorPort.").append(encoderMotorPort).append(");");
@@ -582,7 +582,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitGyroReset(GyroReset gyroReset) {
-        String gyroSensorPort = "SensorPort.S" + gyroReset.getUserDefinedPort();
+        String gyroSensorPort = "SensorPort.S" + gyroReset.sensorPort;
         this.sb.append("hal.resetGyroSensor(" + gyroSensorPort + ");");
         return null;
     }
@@ -612,7 +612,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        String timerNumber = timerReset.getUserDefinedPort();
+        String timerNumber = timerReset.sensorPort;
         this.sb.append("hal.resetTimer(").append(timerNumber).append(");");
         return null;
     }

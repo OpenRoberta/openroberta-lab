@@ -288,7 +288,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
         this.sb.append(", ");
         communicationSendAction.message.accept(this);
         this.sb.append(")");
-        return null; 
+        return null;
     }
 
     @Override
@@ -507,7 +507,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitEncoderReset(EncoderReset encoderReset) {
-        String port = getPortFromConfig(encoderReset.getUserDefinedPort());
+        String port = getPortFromConfig(encoderReset.sensorPort);
         this.sb.append("mbot2.EM_reset_angle(\"").append(port).append("\") ");
         return null;
     }
@@ -773,7 +773,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        this.sb.append("_timer").append(timerReset.getUserDefinedPort()).append(" = cyberpi.timer.get()");
+        this.sb.append("_timer").append(timerReset.sensorPort).append(" = cyberpi.timer.get()");
         return null;
     }
 

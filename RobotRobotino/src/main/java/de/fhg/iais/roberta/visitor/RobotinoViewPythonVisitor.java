@@ -322,7 +322,7 @@ public final class RobotinoViewPythonVisitor extends AbstractPythonVisitor imple
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        this.sb.append("_timer").append(timerReset.getUserDefinedPort()).append(" = time.time()");
+        this.sb.append("_timer").append(timerReset.sensorPort).append(" = time.time()");
         return null;
     }
 

@@ -1,15 +1,19 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
-import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
-import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
 @NepoPhrase(name = "ENCODER_RESET", category = "SENSOR", blocklyNames = {"robSensors_encoder_reset"})
-public final class EncoderReset extends ExternalSensor {
+public final class EncoderReset extends Sensor {
 
-    public EncoderReset(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
-        super(properties, externalSensorBean);
+    @NepoField(name = "SENSORPORT")
+    public final String sensorPort;
+
+    public EncoderReset(BlocklyProperties properties, String sensorPort) {
+        super(properties);
+        this.sensorPort = sensorPort;
         setReadOnly();
     }
 }

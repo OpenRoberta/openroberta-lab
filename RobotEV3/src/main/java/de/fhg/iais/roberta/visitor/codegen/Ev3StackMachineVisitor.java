@@ -356,7 +356,7 @@ public class Ev3StackMachineVisitor extends AbstractStackMachineVisitor implemen
 
     @Override
     public Void visitEncoderReset(EncoderReset encoderReset) {
-        String port = encoderReset.getUserDefinedPort().toLowerCase();
+        String port = encoderReset.sensorPort.toLowerCase();
         JSONObject o = makeNode(C.ENCODER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
         return add(o);
     }
@@ -377,7 +377,7 @@ public class Ev3StackMachineVisitor extends AbstractStackMachineVisitor implemen
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        String port = timerReset.getUserDefinedPort();
+        String port = timerReset.sensorPort;
         JSONObject o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
         return add(o);
     }
@@ -413,7 +413,7 @@ public class Ev3StackMachineVisitor extends AbstractStackMachineVisitor implemen
 
     @Override
     public Void visitGyroReset(GyroReset gyroReset) {
-        String port = gyroReset.getUserDefinedPort().toLowerCase();
+        String port = gyroReset.sensorPort.toLowerCase();
         JSONObject o = makeNode(C.GYRO_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
         return add(o);
     }

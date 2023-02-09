@@ -231,7 +231,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        String timerNumber = timerReset.getUserDefinedPort();
+        String timerNumber = timerReset.sensorPort;
         this.sb.append("__time_").append(timerNumber).append(" = millis();");
         return null;
     }

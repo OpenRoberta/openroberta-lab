@@ -475,7 +475,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitEncoderReset(EncoderReset encoderReset) {
-        String encoderSensorPort = encoderReset.getUserDefinedPort();
+        String encoderSensorPort = encoderReset.sensorPort;
         this.sb.append("hal.resetMotorTacho('").append(encoderSensorPort).append("')");
         return null;
     }
@@ -489,7 +489,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitGyroReset(GyroReset gyroReset) {
-        String gyroSensorPort = gyroReset.getUserDefinedPort();
+        String gyroSensorPort = gyroReset.sensorPort;
         this.sb.append("hal.resetGyroSensor('" + gyroSensorPort + "')");
         return null;
     }
@@ -550,7 +550,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        String timerNumber = timerReset.getUserDefinedPort();
+        String timerNumber = timerReset.sensorPort;
         this.sb.append("hal.resetTimer(").append(timerNumber).append(")");
         return null;
     }

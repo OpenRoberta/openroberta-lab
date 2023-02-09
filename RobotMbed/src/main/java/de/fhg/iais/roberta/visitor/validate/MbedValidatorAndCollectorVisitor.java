@@ -468,7 +468,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        usedHardwareBuilder.addUsedSensor(new UsedSensor(timerReset.getUserDefinedPort(), SC.TIMER, timerReset.getMode()));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(timerReset.sensorPort, SC.TIMER, SC.DEFAULT));
         return null;
     }
 

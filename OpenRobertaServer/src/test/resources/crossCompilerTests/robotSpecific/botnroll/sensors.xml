@@ -630,7 +630,6 @@
                         </block>
                         <block type="robSensors_timer_reset" id="J5]]c,AT.r(Uq)ggVYvG" intask="true">
                             <field name="SENSORPORT">1</field>
-                            <field name="SLOT"/>
                         </block>
                         <block type="robActions_display_text" id="ml11Dh{072q_bR}P;sOF" inline="true" intask="true">
                             <value name="OUT">

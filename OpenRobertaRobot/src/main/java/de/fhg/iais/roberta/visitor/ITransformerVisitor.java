@@ -750,7 +750,7 @@ public interface ITransformerVisitor extends ISensorVisitor<Phrase>, IAllActorsV
 
     @Override
     default Phrase visitEncoderReset(EncoderReset encoderReset) {
-        return new EncoderReset(encoderReset.getProperty(), new ExternalSensorBean(encoderReset.getUserDefinedPort(), encoderReset.getMode(), encoderReset.getSlot(), encoderReset.getMutation()));
+        return new EncoderReset(encoderReset.getProperty(), encoderReset.sensorPort);
     }
 
     @Override
@@ -760,7 +760,7 @@ public interface ITransformerVisitor extends ISensorVisitor<Phrase>, IAllActorsV
 
     @Override
     default Phrase visitGyroReset(GyroReset gyroReset) {
-        return new GyroReset(gyroReset.getProperty(), new ExternalSensorBean(gyroReset.getUserDefinedPort(), gyroReset.getMode(), gyroReset.getSlot(), gyroReset.getMutation()));
+        return new GyroReset(gyroReset.getProperty(), gyroReset.sensorPort);
     }
 
 
@@ -776,7 +776,7 @@ public interface ITransformerVisitor extends ISensorVisitor<Phrase>, IAllActorsV
 
     @Override
     default Phrase visitTimerReset(TimerReset timerReset) {
-        return new TimerReset(timerReset.getProperty(), new ExternalSensorBean(timerReset.getUserDefinedPort(), timerReset.getMode(), timerReset.getSlot(), timerReset.getMutation()));
+        return new TimerReset(timerReset.getProperty(), timerReset.sensorPort);
     }
 
     @Override

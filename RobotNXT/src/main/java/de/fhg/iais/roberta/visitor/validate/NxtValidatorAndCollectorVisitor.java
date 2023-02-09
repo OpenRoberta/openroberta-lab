@@ -99,11 +99,11 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
 
     @Override
     public Void visitEncoderReset(EncoderReset encoderReset) {
-        ConfigurationComponent configurationComponent = robotConfiguration.optConfigurationComponent(encoderReset.getUserDefinedPort());
+        ConfigurationComponent configurationComponent = robotConfiguration.optConfigurationComponent(encoderReset.sensorPort);
         if ( configurationComponent == null ) {
             addErrorToPhrase(encoderReset, "CONFIGURATION_ERROR_MOTOR_MISSING");
         } else {
-            usedHardwareBuilder.addUsedActor(new UsedActor(encoderReset.getUserDefinedPort(), configurationComponent.componentType));
+            usedHardwareBuilder.addUsedActor(new UsedActor(encoderReset.sensorPort, configurationComponent.componentType));
         }
         return null;
     }
@@ -222,7 +222,7 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        usedHardwareBuilder.addUsedSensor(new UsedSensor(timerReset.getUserDefinedPort(), SC.TIMER, SC.RESET));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(timerReset.sensorPort, SC.TIMER, SC.DEFAULT));
         return null;
     }
 

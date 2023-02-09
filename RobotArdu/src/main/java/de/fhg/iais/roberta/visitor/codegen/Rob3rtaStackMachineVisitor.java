@@ -43,7 +43,7 @@ public final class Rob3rtaStackMachineVisitor extends AbstractStackMachineVisito
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        String port = timerReset.getUserDefinedPort();
+        String port = timerReset.sensorPort;
         JSONObject o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "rob3rta");
         return add(o);
     }

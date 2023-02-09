@@ -6,8 +6,7 @@
                     <mutation declare="true"></mutation>
                     <field name="DEBUG">TRUE</field>
                     <statement name="ST">
-                        <block type="robGlobalVariables_declare" id="(?j85Q%P6kCGVd?%my0R" intask="true"
-                               deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="(?j85Q%P6kCGVd?%my0R" intask="true" deletable="false" movable="false">
                             <mutation next="true" declaration_type="Number"></mutation>
                             <field name="VAR">numberVar</field>
                             <field name="TYPE">Number</field>
@@ -17,8 +16,7 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id=".%S=Tob)Z3n9AI5yK?+N" intask="true"
-                               deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id=".%S=Tob)Z3n9AI5yK?+N" intask="true" deletable="false" movable="false">
                             <mutation next="true" declaration_type="Boolean"></mutation>
                             <field name="VAR">booleanVar</field>
                             <field name="TYPE">Boolean</field>
@@ -28,8 +26,7 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id="6|.WDVY,@X3IR;E=0p7M" intask="true"
-                               deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="6|.WDVY,@X3IR;E=0p7M" intask="true" deletable="false" movable="false">
                             <mutation next="true" declaration_type="String"></mutation>
                             <field name="VAR">stringVar</field>
                             <field name="TYPE">String</field>
@@ -39,8 +36,7 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id="QdG=N3v~7?{p^EU-4QS~" intask="true"
-                               deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="QdG=N3v~7?{p^EU-4QS~" intask="true" deletable="false" movable="false">
                             <mutation next="true" declaration_type="Colour"></mutation>
                             <field name="VAR">colourVar</field>
                             <field name="TYPE">Colour</field>
@@ -50,8 +46,7 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id="UyQ({9lXoKM*BD2E3lQ[" intask="true"
-                               deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="UyQ({9lXoKM*BD2E3lQ[" intask="true" deletable="false" movable="false">
                             <mutation next="true" declaration_type="Connection"></mutation>
                             <field name="VAR">connectionVar</field>
                             <field name="TYPE">Connection</field>
@@ -59,8 +54,7 @@
                                 <block type="logic_null" id="mp:NGQL=w.F=6mHpk4Cm" intask="true"></block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id="T)~/,5F-}73,G#{hr([M" intask="true"
-                               deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="T)~/,5F-}73,G#{hr([M" intask="true" deletable="false" movable="false">
                             <mutation next="true" declaration_type="Array_Number"></mutation>
                             <field name="VAR">numberList</field>
                             <field name="TYPE">Array_Number</field>
@@ -86,8 +80,7 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id="4V.-fm:x+VZ=I{K!b|+:" intask="true"
-                               deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="4V.-fm:x+VZ=I{K!b|+:" intask="true" deletable="false" movable="false">
                             <mutation next="true" declaration_type="Array_Boolean"></mutation>
                             <field name="VAR">booleanList</field>
                             <field name="TYPE">Array_Boolean</field>
@@ -113,8 +106,7 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id="7;keDHsbkjbdH2Q(.z+t" intask="true"
-                               deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="7;keDHsbkjbdH2Q(.z+t" intask="true" deletable="false" movable="false">
                             <mutation next="true" declaration_type="Array_String"></mutation>
                             <field name="VAR">stringList</field>
                             <field name="TYPE">Array_String</field>
@@ -140,8 +132,7 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id="iofWH?P^_[tRvp:E_pZD" intask="true"
-                               deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="iofWH?P^_[tRvp:E_pZD" intask="true" deletable="false" movable="false">
                             <mutation next="true" declaration_type="Array_Colour"></mutation>
                             <field name="VAR">colourList</field>
                             <field name="TYPE">Array_Colour</field>
@@ -167,8 +158,7 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id="e/eqDrkl2{A+IXtn9V`5" intask="true"
-                               deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="e/eqDrkl2{A+IXtn9V`5" intask="true" deletable="false" movable="false">
                             <mutation next="false" declaration_type="Array_Connection"></mutation>
                             <field name="VAR">connectionList</field>
                             <field name="TYPE">Array_Connection</field>
@@ -314,15 +304,12 @@
                         </block>
                         <block type="robSensors_encoder_reset" id="k[X/do:Wpi:@v]g%{_wC" intask="true">
                             <field name="SENSORPORT">A</field>
-                            <field name="SLOT"/>
                         </block>
                         <block type="robSensors_encoder_reset" id="^aJ0{|VF#uS#~!nLh-!/" intask="true">
                             <field name="SENSORPORT">B</field>
-                            <field name="SLOT"/>
                         </block>
                         <block type="robSensors_encoder_reset" id="9`wOd2nqvx#PT9(l5i2F" intask="true">
                             <field name="SENSORPORT">C</field>
-                            <field name="SLOT"/>
                         </block>
                         <block type="robActions_display_text" id="_xPYRuxei/]K5E^THvrT" inline="true" intask="true">
                             <value name="OUT">
@@ -612,7 +599,6 @@
                         </block>
                         <block type="robSensors_timer_reset" id="[%A@K3[NZ[*Cb3f3|OFh" intask="true">
                             <field name="SENSORPORT">1</field>
-                            <field name="SLOT"/>
                         </block>
                     </statement>
                 </block>
@@ -888,13 +874,13 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.1" description="" tags="">
+        <block_set robottype="nxt" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="237" y="43">
                 <block type="robBrick_EV3-Brick" id="1" intask="true" deletable="false">
                     <field name="WHEEL_DIAMETER">5.6</field>
                     <field name="TRACK_WIDTH">12</field>
                     <value name="S1">
-                        <block type="robBrick_touch" id="2" intask="true"></block>
+                        <block type="robBrick_touch" id="2" intask="true"/>
                     </value>
                     <value name="S2">
                         <block type="robBrick_sound" id="3" intask="true">
@@ -902,13 +888,13 @@
                         </block>
                     </value>
                     <value name="S3">
-                        <block type="robBrick_light" id="4" intask="true"></block>
+                        <block type="robBrick_light" id="4" intask="true"/>
                     </value>
                     <value name="S4">
-                        <block type="robBrick_ultrasonic" id="5" intask="true"></block>
+                        <block type="robBrick_ultrasonic" id="5" intask="true"/>
                     </value>
                     <value name="MA">
-                        <block type="robBrick_actor" id="wguH-l/ZOfy=t[`pBs;H" intask="true"></block>
+                        <block type="robBrick_actor" id="wguH-l/ZOfy=t[`pBs;H" intask="true"/>
                     </value>
                     <value name="MB">
                         <block type="robBrick_motor_big" id="6" intask="true">
