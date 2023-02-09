@@ -727,7 +727,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitEncoderReset(EncoderReset encoderReset) {
-        String userDefinedPort = encoderReset.getUserDefinedPort();
+        String userDefinedPort = encoderReset.sensorPort;
         this.sb.append("ResetTachoCount(OUT_").append(userDefinedPort).append(");");
         return null;
     }
@@ -741,7 +741,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        String timerNumber = timerReset.getUserDefinedPort();
+        String timerNumber = timerReset.sensorPort;
         this.sb.append("timer").append(timerNumber).append(" = CurrentTick();");
         return null;
     }

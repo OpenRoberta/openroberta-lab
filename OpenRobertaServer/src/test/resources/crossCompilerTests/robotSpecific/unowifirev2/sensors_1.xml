@@ -190,7 +190,6 @@
                         </block>
                         <block type="robSensors_timer_reset" id="GST-EJUG|nfw!uu1|ZRg" intask="true">
                             <field name="SENSORPORT">1</field>
-                            <field name="SLOT"/>
                         </block>
                         <block type="robActions_serial_print" id="E(_vyO*R~RPeJsT)|rIs" intask="true">
                             <value name="OUT">
@@ -876,14 +875,7 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.1" description="" tags="">
-            <instance x="816" y="-880">
-                <block type="robConf_digitalout" id="tgx7Iy*Zc8p!V(yR`n7e" intask="true">
-                    <field name="NAME">S</field>
-                    <field name="PIN_PULL">PIN_PULL_NONE</field>
-                    <field name="OUTPUT">0</field>
-                </block>
-            </instance>
+        <block_set robottype="arduino" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="980" y="-881">
                 <block type="robConf_digitalout" id="DH;rhE/ywCmI4T]nLZM;" intask="true">
                     <field name="NAME">S3</field>
@@ -891,10 +883,9 @@
                     <field name="OUTPUT">1</field>
                 </block>
             </instance>
-            <instance x="1154" y="-836">
-                <block type="robConf_temperature" id="c;cyDAU%@f2(6DOAX*Eh" intask="true">
-                    <field name="NAME">T2</field>
-                    <field name="OUTPUT">A1</field>
+            <instance x="901" y="-401">
+                <block type="robConf_accelerometer" id="|/W?czJ4;:]zhD}dHkBT" intask="true">
+                    <field name="NAME">A</field>
                 </block>
             </instance>
             <instance x="1412" y="-836">
@@ -903,22 +894,16 @@
                     <field name="OUTPUT">A2</field>
                 </block>
             </instance>
-            <instance x="825" y="-778">
-                <block type="robConf_analogout" id="PAE?5@x.lGV[8m9a]5^~" intask="true">
-                    <field name="NAME">S2</field>
-                    <field name="OUTPUT">A0</field>
-                </block>
-            </instance>
             <instance x="937" y="-707">
                 <block type="robConf_motion" id="miX)08B)AZ/O%NvdC=%f" intask="true">
                     <field name="NAME">B</field>
                     <field name="OUTPUT">7</field>
                 </block>
             </instance>
-            <instance x="825" y="-685">
-                <block type="robConf_key" id="]ty=HxSJJ{`2?4AZ_Ujq" intask="true">
-                    <field name="NAME">T</field>
-                    <field name="PIN1">3</field>
+            <instance x="884" y="-571">
+                <block type="robConf_light" id="MZ.Jp1|Hc(GVT}5+Xl#J" intask="true">
+                    <field name="NAME">L2</field>
+                    <field name="OUTPUT">A3</field>
                 </block>
             </instance>
             <instance x="1214" y="-703">
@@ -927,10 +912,26 @@
                     <field name="OUTPUT">2</field>
                 </block>
             </instance>
+            <instance x="722" y="-395">
+                <block type="robConf_gyro" id="GC4bh)w{:m7d4yvW|Hc%" intask="true">
+                    <field name="NAME">G</field>
+                </block>
+            </instance>
             <instance x="622" y="-651">
                 <block type="robConf_infrared" id="F52gdBhKB+;qJy}y9..=" intask="true">
                     <field name="NAME">I</field>
                     <field name="OUTPUT">11</field>
+                </block>
+            </instance>
+            <instance x="126" y="-314">
+                <block type="robConf_robot" id="robot" intask="true">
+                    <field name="NAME">undefined</field>
+                </block>
+            </instance>
+            <instance x="1400" y="-573">
+                <block type="robConf_pulse" id=";*WblJ,h~#|j_kusm9y)" intask="true">
+                    <field name="NAME">P</field>
+                    <field name="S">A5</field>
                 </block>
             </instance>
             <instance x="408" y="-554">
@@ -940,22 +941,17 @@
                     <field name="SDA">10</field>
                 </block>
             </instance>
-            <instance x="884" y="-571">
-                <block type="robConf_light" id="MZ.Jp1|Hc(GVT}5+Xl#J" intask="true">
-                    <field name="NAME">L2</field>
-                    <field name="OUTPUT">A3</field>
+            <instance x="816" y="-880">
+                <block type="robConf_digitalout" id="tgx7Iy*Zc8p!V(yR`n7e" intask="true">
+                    <field name="NAME">S</field>
+                    <field name="PIN_PULL">PIN_PULL_NONE</field>
+                    <field name="OUTPUT">0</field>
                 </block>
             </instance>
-            <instance x="1218" y="-570">
-                <block type="robConf_drop" id="1C]5gXkV`Y6mDynA9,]:" intask="true">
-                    <field name="NAME">T3</field>
-                    <field name="S">A4</field>
-                </block>
-            </instance>
-            <instance x="1400" y="-573">
-                <block type="robConf_pulse" id=";*WblJ,h~#|j_kusm9y)" intask="true">
-                    <field name="NAME">P</field>
-                    <field name="S">A5</field>
+            <instance x="825" y="-685">
+                <block type="robConf_key" id="]ty=HxSJJ{`2?4AZ_Ujq" intask="true">
+                    <field name="NAME">T</field>
+                    <field name="PIN1">3</field>
                 </block>
             </instance>
             <instance x="1542" y="-577">
@@ -965,19 +961,22 @@
                     <field name="ECHO">6</field>
                 </block>
             </instance>
-            <instance x="722" y="-395">
-                <block type="robConf_gyro" id="GC4bh)w{:m7d4yvW|Hc%" intask="true">
-                    <field name="NAME">G</field>
+            <instance x="1154" y="-836">
+                <block type="robConf_temperature" id="c;cyDAU%@f2(6DOAX*Eh" intask="true">
+                    <field name="NAME">T2</field>
+                    <field name="OUTPUT">A1</field>
                 </block>
             </instance>
-            <instance x="901" y="-401">
-                <block type="robConf_accelerometer" id="|/W?czJ4;:]zhD}dHkBT" intask="true">
-                    <field name="NAME">A</field>
+            <instance x="825" y="-778">
+                <block type="robConf_analogout" id="PAE?5@x.lGV[8m9a]5^~" intask="true">
+                    <field name="NAME">S2</field>
+                    <field name="OUTPUT">A0</field>
                 </block>
             </instance>
-            <instance x="126" y="-314">
-                <block type="robConf_robot" id="robot" intask="true">
-                    <field name="ROBOT">undefined</field>
+            <instance x="1218" y="-570">
+                <block type="robConf_drop" id="1C]5gXkV`Y6mDynA9,]:" intask="true">
+                    <field name="NAME">T3</field>
+                    <field name="S">A4</field>
                 </block>
             </instance>
         </block_set>

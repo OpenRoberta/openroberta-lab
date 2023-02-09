@@ -3,11 +3,11 @@
         <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="rob3rta" xmlversion="3.1" description="" tags="">
             <instance x="257" y="-25">
                 <block type="robControls_start_ardu" id="l9Lp`gNd]GQJ_0PBfA?z" intask="true" deletable="false">
-                    <mutation declare="true"/>
-                    <field name="DEBUG"/>
+                    <mutation declare="true"></mutation>
+                    <field name="DEBUG"></field>
                     <statement name="ST">
                         <block type="robGlobalVariables_declare" id="T^oOn+i^[LHyu`i+W)XC" intask="true" deletable="false" movable="false">
-                            <mutation next="true" declaration_type="Boolean"/>
+                            <mutation next="true" declaration_type="Boolean"></mutation>
                             <field name="VAR">b</field>
                             <field name="TYPE">Boolean</field>
                             <value name="VALUE">
@@ -17,7 +17,7 @@
                             </value>
                         </block>
                         <block type="robGlobalVariables_declare" id="C^]5`~#^HIaCIQf6w?XL" intask="true" deletable="false" movable="false">
-                            <mutation next="false" declaration_type="Number"/>
+                            <mutation next="false" declaration_type="Number"></mutation>
                             <field name="VAR">c</field>
                             <field name="TYPE">Number</field>
                             <value name="VALUE">
@@ -54,17 +54,17 @@
                             </value>
                         </block>
                         <block type="robProcedures_callnoreturn" id="E.1`aN(}`HH/Uqx^vz%m" intask="true">
-                            <mutation name="sensors"/>
+                            <mutation name="sensors"></mutation>
                         </block>
                         <block type="robProcedures_callnoreturn" id="**,Z7+WUmzrCLo,sM1IW" intask="true">
-                            <mutation name="sensorsWaitUntil"/>
+                            <mutation name="sensorsWaitUntil"></mutation>
                         </block>
                     </statement>
                 </block>
             </instance>
             <instance x="751" y="-18">
                 <block type="robProcedures_defnoreturn" id="#C,FS~Up^D!vl/~mvh}c" intask="true">
-                    <mutation declare="false"/>
+                    <mutation declare="false"></mutation>
                     <field name="NAME">sensorsWaitUntil</field>
                     <statement name="STACK">
                         <block type="robControls_wait_for" id="59}JiZH)A7E7c6CP({wF" intask="true">
@@ -73,7 +73,7 @@
                                     <field name="OP">EQ</field>
                                     <value name="A">
                                         <block type="robSensors_getSample" id="SRE@Ju=`1IPFXoT70|[d" intask="true">
-                                            <mutation input="PINTOUCH_PRESSED" port="EAR"/>
+                                            <mutation input="PINTOUCH_PRESSED" port="EAR"></mutation>
                                             <field name="SENSORTYPE">PINTOUCH_PRESSED</field>
                                             <field name="SENSORPORT">EAR</field>
                                             <field name="SLOT">2</field>
@@ -93,7 +93,7 @@
                                     <field name="OP">EQ</field>
                                     <value name="A">
                                         <block type="robSensors_getSample" id="j%uD{=gU]k~jqX]r}X8%" intask="true">
-                                            <mutation input="PINTOUCH_PRESSED" port="EAR"/>
+                                            <mutation input="PINTOUCH_PRESSED" port="EAR"></mutation>
                                             <field name="SENSORTYPE">PINTOUCH_PRESSED</field>
                                             <field name="SENSORPORT">EAR</field>
                                             <field name="SLOT">1</field>
@@ -113,7 +113,7 @@
                                     <field name="OP">EQ</field>
                                     <value name="A">
                                         <block type="robSensors_getSample" id="fVU.(I#I%qb)f9Il|zlw" intask="true">
-                                            <mutation input="PINTOUCH_PRESSED" port="WHEEL"/>
+                                            <mutation input="PINTOUCH_PRESSED" port="WHEEL"></mutation>
                                             <field name="SENSORTYPE">PINTOUCH_PRESSED</field>
                                             <field name="SENSORPORT">WHEEL</field>
                                             <field name="SLOT">A</field>
@@ -133,7 +133,7 @@
                                     <field name="OP">EQ</field>
                                     <value name="A">
                                         <block type="robSensors_getSample" id="V=4_kks|lHTIu^Xh|J?Q" intask="true">
-                                            <mutation input="PINTOUCH_PRESSED" port="WHEEL"/>
+                                            <mutation input="PINTOUCH_PRESSED" port="WHEEL"></mutation>
                                             <field name="SENSORTYPE">PINTOUCH_PRESSED</field>
                                             <field name="SENSORPORT">WHEEL</field>
                                             <field name="SLOT">B</field>
@@ -153,7 +153,7 @@
                                     <field name="OP">EQ</field>
                                     <value name="A">
                                         <block type="robSensors_getSample" id="rAGM(37M5[A;*Knv3D3@" intask="true">
-                                            <mutation input="PINTOUCH_PRESSED" port="WHEEL"/>
+                                            <mutation input="PINTOUCH_PRESSED" port="WHEEL"></mutation>
                                             <field name="SENSORTYPE">PINTOUCH_PRESSED</field>
                                             <field name="SENSORPORT">WHEEL</field>
                                             <field name="SLOT">C</field>
@@ -173,7 +173,7 @@
                                     <field name="OP">EQ</field>
                                     <value name="A">
                                         <block type="robSensors_getSample" id="U?Ayz%O:ky#l%Y0a*S4#" intask="true">
-                                            <mutation input="PINTOUCH_PRESSED" port="WHEEL"/>
+                                            <mutation input="PINTOUCH_PRESSED" port="WHEEL"></mutation>
                                             <field name="SENSORTYPE">PINTOUCH_PRESSED</field>
                                             <field name="SENSORPORT">WHEEL</field>
                                             <field name="SLOT">D</field>
@@ -193,10 +193,10 @@
                                     <field name="OP">LT</field>
                                     <value name="A">
                                         <block type="robSensors_getSample" id="zhuiN6q!=e`^3nz]Mnf." intask="true">
-                                            <mutation input="INFRARED_AMBIENTLIGHT"/>
+                                            <mutation input="INFRARED_AMBIENTLIGHT"></mutation>
                                             <field name="SENSORTYPE">INFRARED_AMBIENTLIGHT</field>
-                                            <field name="SENSORPORT"/>
-                                            <field name="SLOT"/>
+                                            <field name="SENSORPORT"></field>
+                                            <field name="SLOT"></field>
                                         </block>
                                     </value>
                                     <value name="B">
@@ -213,10 +213,10 @@
                                     <field name="OP">LT</field>
                                     <value name="A">
                                         <block type="robSensors_getSample" id="wRk*Sts!%F|FS`^#-j/6" intask="true">
-                                            <mutation input="INFRARED_REFLEXION"/>
+                                            <mutation input="INFRARED_REFLEXION"></mutation>
                                             <field name="SENSORTYPE">INFRARED_REFLEXION</field>
-                                            <field name="SENSORPORT"/>
-                                            <field name="SLOT"/>
+                                            <field name="SENSORPORT"></field>
+                                            <field name="SLOT"></field>
                                         </block>
                                     </value>
                                     <value name="B">
@@ -233,10 +233,10 @@
                                     <field name="OP">LT</field>
                                     <value name="A">
                                         <block type="robSensors_getSample" id="4v:;VHE=yo]e#JY7Uekg" intask="true">
-                                            <mutation input="TEMPERATURE_VALUE"/>
+                                            <mutation input="TEMPERATURE_VALUE"></mutation>
                                             <field name="SENSORTYPE">TEMPERATURE_VALUE</field>
-                                            <field name="SENSORPORT"/>
-                                            <field name="SLOT"/>
+                                            <field name="SENSORPORT"></field>
+                                            <field name="SLOT"></field>
                                         </block>
                                     </value>
                                     <value name="B">
@@ -253,10 +253,10 @@
                                     <field name="OP">GT</field>
                                     <value name="A">
                                         <block type="robSensors_getSample" id="C2z36Q#VRu=ww1sRYksC" intask="true">
-                                            <mutation input="TIMER_VALUE"/>
+                                            <mutation input="TIMER_VALUE"></mutation>
                                             <field name="SENSORTYPE">TIMER_VALUE</field>
                                             <field name="SENSORPORT">1</field>
-                                            <field name="SLOT"/>
+                                            <field name="SLOT"></field>
                                         </block>
                                     </value>
                                     <value name="B">
@@ -272,15 +272,15 @@
             </instance>
             <instance x="259" y="367">
                 <block type="robProcedures_defnoreturn" id="|{-Ps)YG%:6grwr|H!;}" intask="true">
-                    <mutation declare="false"/>
+                    <mutation declare="false"></mutation>
                     <field name="NAME">sensors</field>
                     <statement name="STACK">
                         <block type="variables_set" id="~mT4xn0fjK(Hf4A3hHsx" intask="true">
-                            <mutation datatype="Boolean"/>
+                            <mutation datatype="Boolean"></mutation>
                             <field name="VAR">b</field>
                             <value name="VALUE">
                                 <block type="robSensors_pintouch_getSample" id="k_1PMGWz@.f+Pgr.rmUs" intask="true">
-                                    <mutation mode="PRESSED" port="EAR"/>
+                                    <mutation mode="PRESSED" port="EAR"></mutation>
                                     <field name="MODE">PRESSED</field>
                                     <field name="SENSORPORT">EAR</field>
                                     <field name="SLOT">2</field>
@@ -288,11 +288,11 @@
                             </value>
                         </block>
                         <block type="variables_set" id="/?-+(p!00[?3A/}r0B%*" intask="true">
-                            <mutation datatype="Boolean"/>
+                            <mutation datatype="Boolean"></mutation>
                             <field name="VAR">b</field>
                             <value name="VALUE">
                                 <block type="robSensors_pintouch_getSample" id="bHw1W[t+*~iE0KNpH+E8" intask="true">
-                                    <mutation mode="PRESSED" port="EAR"/>
+                                    <mutation mode="PRESSED" port="EAR"></mutation>
                                     <field name="MODE">PRESSED</field>
                                     <field name="SENSORPORT">EAR</field>
                                     <field name="SLOT">1</field>
@@ -300,11 +300,11 @@
                             </value>
                         </block>
                         <block type="variables_set" id="OdB?wsh*#rtQZBssN|]3" intask="true">
-                            <mutation datatype="Boolean"/>
+                            <mutation datatype="Boolean"></mutation>
                             <field name="VAR">b</field>
                             <value name="VALUE">
                                 <block type="robSensors_pintouch_getSample" id=";#oG]];|m7a8Ec^HHi5y" intask="true">
-                                    <mutation mode="PRESSED" port="WHEEL"/>
+                                    <mutation mode="PRESSED" port="WHEEL"></mutation>
                                     <field name="MODE">PRESSED</field>
                                     <field name="SENSORPORT">WHEEL</field>
                                     <field name="SLOT">A</field>
@@ -312,11 +312,11 @@
                             </value>
                         </block>
                         <block type="variables_set" id="AY=f({wrsS?V`6B:Lg4^" intask="true">
-                            <mutation datatype="Boolean"/>
+                            <mutation datatype="Boolean"></mutation>
                             <field name="VAR">b</field>
                             <value name="VALUE">
                                 <block type="robSensors_pintouch_getSample" id="^Gr.~BUdF{{GUJU5U1`z" intask="true">
-                                    <mutation mode="PRESSED" port="WHEEL"/>
+                                    <mutation mode="PRESSED" port="WHEEL"></mutation>
                                     <field name="MODE">PRESSED</field>
                                     <field name="SENSORPORT">WHEEL</field>
                                     <field name="SLOT">B</field>
@@ -324,11 +324,11 @@
                             </value>
                         </block>
                         <block type="variables_set" id="|fLM:#8O8X6:Z7V^y4`^" intask="true">
-                            <mutation datatype="Boolean"/>
+                            <mutation datatype="Boolean"></mutation>
                             <field name="VAR">b</field>
                             <value name="VALUE">
                                 <block type="robSensors_pintouch_getSample" id="6|A6nuf1EFIb7rdLV[YL" intask="true">
-                                    <mutation mode="PRESSED" port="WHEEL"/>
+                                    <mutation mode="PRESSED" port="WHEEL"></mutation>
                                     <field name="MODE">PRESSED</field>
                                     <field name="SENSORPORT">WHEEL</field>
                                     <field name="SLOT">C</field>
@@ -336,11 +336,11 @@
                             </value>
                         </block>
                         <block type="variables_set" id="D@]]y96(/Az_U(R`v3Pu" intask="true">
-                            <mutation datatype="Boolean"/>
+                            <mutation datatype="Boolean"></mutation>
                             <field name="VAR">b</field>
                             <value name="VALUE">
                                 <block type="robSensors_pintouch_getSample" id="}X09i*uMNvU*~P^h6ivP" intask="true">
-                                    <mutation mode="PRESSED" port="WHEEL"/>
+                                    <mutation mode="PRESSED" port="WHEEL"></mutation>
                                     <field name="MODE">PRESSED</field>
                                     <field name="SENSORPORT">WHEEL</field>
                                     <field name="SLOT">D</field>
@@ -348,68 +348,67 @@
                             </value>
                         </block>
                         <block type="variables_set" id="nx~XR?H!oiGF0JCL^a%f" intask="true">
-                            <mutation datatype="Number"/>
+                            <mutation datatype="Number"></mutation>
                             <field name="VAR">c</field>
                             <value name="VALUE">
                                 <block type="robSensors_infrared_getSample" id="dlmSMLu|:f}Nj]}1del," intask="true">
-                                    <mutation mode="AMBIENTLIGHT"/>
+                                    <mutation mode="AMBIENTLIGHT"></mutation>
                                     <field name="MODE">AMBIENTLIGHT</field>
-                                    <field name="SENSORPORT"/>
-                                    <field name="SLOT"/>
+                                    <field name="SENSORPORT"></field>
+                                    <field name="SLOT"></field>
                                 </block>
                             </value>
                         </block>
                         <block type="variables_set" id="q_32gb/O{CKXUUO_3#}*" intask="true">
-                            <mutation datatype="Number"/>
+                            <mutation datatype="Number"></mutation>
                             <field name="VAR">c</field>
                             <value name="VALUE">
                                 <block type="robSensors_infrared_getSample" id="tir}~a_WBw=7y^!9_ogU" intask="true">
-                                    <mutation mode="REFLEXION"/>
+                                    <mutation mode="REFLEXION"></mutation>
                                     <field name="MODE">REFLEXION</field>
-                                    <field name="SENSORPORT"/>
-                                    <field name="SLOT"/>
+                                    <field name="SENSORPORT"></field>
+                                    <field name="SLOT"></field>
                                 </block>
                             </value>
                         </block>
                         <block type="variables_set" id="Cistai7w}St2*Rdsam}r" intask="true">
-                            <mutation datatype="Number"/>
+                            <mutation datatype="Number"></mutation>
                             <field name="VAR">c</field>
                             <value name="VALUE">
                                 <block type="robSensors_temperature_getSample" id="iv:~.`P#q3sDQxqozRjn" intask="true">
-                                    <mutation mode="VALUE"/>
+                                    <mutation mode="VALUE"></mutation>
                                     <field name="MODE">VALUE</field>
-                                    <field name="SENSORPORT"/>
-                                    <field name="SLOT"/>
+                                    <field name="SENSORPORT"></field>
+                                    <field name="SLOT"></field>
                                 </block>
                             </value>
                         </block>
                         <block type="variables_set" id="@}X*JbFL_.jGj(/3s_X|" intask="true">
-                            <mutation datatype="Number"/>
+                            <mutation datatype="Number"></mutation>
                             <field name="VAR">c</field>
                             <value name="VALUE">
                                 <block type="robSensors_code_getSample" id="QSvFw~/],ijRZ6bT152k" intask="true">
-                                    <mutation mode="VALUE"/>
+                                    <mutation mode="VALUE"></mutation>
                                     <field name="MODE">VALUE</field>
-                                    <field name="SENSORPORT"/>
-                                    <field name="SLOT"/>
+                                    <field name="SENSORPORT"></field>
+                                    <field name="SLOT"></field>
                                 </block>
                             </value>
                         </block>
                         <block type="variables_set" id="ee1#DWalWbH7dmp:FsTx" intask="true">
-                            <mutation datatype="Number"/>
+                            <mutation datatype="Number"></mutation>
                             <field name="VAR">c</field>
                             <value name="VALUE">
                                 <block type="robSensors_timer_getSample" id="-0d9vCXzCBTHc.+|dtkq" intask="true">
-                                    <mutation mode="VALUE"/>
+                                    <mutation mode="VALUE"></mutation>
                                     <field name="MODE">VALUE</field>
                                     <field name="SENSORPORT">1</field>
-                                    <field name="SLOT"/>
+                                    <field name="SLOT"></field>
                                 </block>
                             </value>
                         </block>
                         <block type="robSensors_timer_reset" id="3cqb[9cIg_1~#]9k%6O=" intask="true">
                             <field name="SENSORPORT">1</field>
-                            <field name="SLOT"/>
                         </block>
                     </statement>
                 </block>
@@ -417,7 +416,7 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="rob3rta" xmlversion="3.1" description="" tags="">
+        <block_set robottype="rob3rta" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="213" y="213">
                 <block type="robControls_loopForever_ardu" id="1" intask="true" deletable="false" movable="false"/>
             </instance>

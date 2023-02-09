@@ -190,7 +190,6 @@
                         </block>
                         <block type="robSensors_timer_reset" id="GST-EJUG|nfw!uu1|ZRg" intask="true">
                             <field name="SENSORPORT">1</field>
-                            <field name="SLOT"/>
                         </block>
                         <block type="robActions_serial_print" id="E(_vyO*R~RPeJsT)|rIs" intask="true">
                             <value name="OUT">
@@ -686,8 +685,7 @@
         </block_set>
     </program>
     <config>
-        <block_set robottype="arduino" xmlversion="3.1" description="" tags=""
-                   xmlns="http://de.fhg.iais.roberta.blockly">
+        <block_set robottype="arduino" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="579" y="-102">
                 <block type="robConf_digitalout" id="=3UH=y@DD~}+LHV|^DSV" intask="true">
                     <field name="NAME">S_UP</field>

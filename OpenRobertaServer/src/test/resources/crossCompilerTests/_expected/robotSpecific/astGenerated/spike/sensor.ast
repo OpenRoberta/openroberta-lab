@@ -1,5 +1,5 @@
 StmtTextComment[textComment: sensors]
-TimerReset [1, DEFAULT, - EMPTY_SLOT -]
+TimerReset[sensorPort: 1]
 DebugAction[value: SensorExpr [ColorSensor [F, COLOUR, - EMPTY_SLOT -]]]
 DebugAction[value: SensorExpr [ColorSensor [F, LIGHT, - EMPTY_SLOT -]]]
 DebugAction[value: SensorExpr [ColorSensor [F, REDCHANNEL, - EMPTY_SLOT -]]]

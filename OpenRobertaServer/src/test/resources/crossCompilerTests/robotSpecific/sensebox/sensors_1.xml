@@ -410,7 +410,6 @@
                         </block>
                         <block type="robSensors_timer_reset" id="44GBNN|9Dh2kgapWxRxy" intask="true">
                             <field name="SENSORPORT">1</field>
-                            <field name="SLOT"/>
                         </block>
                     </statement>
                 </block>
@@ -1006,66 +1005,25 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="sensebox" xmlversion="3.1" description="" tags="">
+        <block_set robottype="sensebox" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="-799" y="184">
                 <block type="robConf_analogout" id="!L0|Xg[KCq11Wx-~swU:" intask="true">
                     <field name="NAME">S3</field>
                     <field name="OUTPUT">2</field>
                 </block>
             </instance>
-            <instance x="-623" y="185">
-                <block type="robConf_digitalout" id="aq%uaPJMuyFf5)NBx^[E" intask="true">
-                    <field name="NAME">S2</field>
-                    <field name="OUTPUT">4</field>
+            <instance x="-799" y="340">
+                <block type="robBrick_senseBox-Brick" id="DC@kFZs8?McKYe+9Bl3y" intask="true" deletable="false">
+                    <mutation items="1"/>
+                    <field name="BOX_ID"></field>
+                    <field name="NAME1">ID1</field>
+                    <field name="ID1"></field>
                 </block>
             </instance>
             <instance x="-967" y="212">
                 <block type="robConf_sound" id="kwUKR*U4S6mhY`t/drDq" intask="true">
                     <field name="NAME">S4</field>
                     <field name="OUT">1</field>
-                </block>
-            </instance>
-            <instance x="-799" y="262">
-                <block type="robConf_humidity" id="#+)_+6ii%.jTRtxBY4sv" intask="true">
-                    <field name="NAME">H</field>
-                    <field name="I2C">I2C</field>
-                </block>
-            </instance>
-            <instance x="250" y="250">
-                <block type="robConf_robot" id="robot" intask="true">
-                    <field name="ROBOT">undefined</field>
-                </block>
-            </instance>
-            <instance x="-799" y="340">
-                <block type="robBrick_senseBox-Brick" id="DC@kFZs8?McKYe+9Bl3y" intask="true" deletable="false">
-                    <mutation items="1"></mutation>
-                    <field name="BOX_ID"></field>
-                    <field name="NAME1">ID1</field>
-                    <field name="ID1"></field>
-                </block>
-            </instance>
-            <instance x="-966" y="353">
-                <block type="robConf_potentiometer" id="ie+-v@8t^:x:pXSc_(iO" intask="true">
-                    <field name="NAME">P</field>
-                    <field name="OUTPUT">3</field>
-                </block>
-            </instance>
-            <instance x="-581" y="344">
-                <block type="robConf_led" id="O)bMmWN5:W1`T:0!R@-a" intask="true" deletable="false">
-                    <field name="NAME">G</field>
-                    <field name="INPUT">8</field>
-                </block>
-            </instance>
-            <instance x="-799" y="443">
-                <block type="robConf_light" id="_=nCr`U3v%mUU3Lj;X6[" intask="true">
-                    <field name="NAME">L</field>
-                    <field name="OUTPUT">5</field>
-                </block>
-            </instance>
-            <instance x="-648" y="442">
-                <block type="robConf_led" id="Tris)a2:6F0Y.;)LAiy|" intask="true" deletable="false">
-                    <field name="NAME">R</field>
-                    <field name="INPUT">7</field>
                 </block>
             </instance>
             <instance x="-799" y="546">
@@ -1079,10 +1037,16 @@
                     <field name="NAME">B</field>
                 </block>
             </instance>
-            <instance x="-799" y="624">
-                <block type="robConf_key" id="o5mTDYg.nC9yRNfh2SXg" intask="true">
-                    <field name="NAME">B3</field>
-                    <field name="PIN1">6</field>
+            <instance x="-581" y="344">
+                <block type="robConf_led" id="O)bMmWN5:W1`T:0!R@-a" intask="true" deletable="false">
+                    <field name="NAME">G</field>
+                    <field name="INPUT">8</field>
+                </block>
+            </instance>
+            <instance x="-799" y="262">
+                <block type="robConf_humidity" id="#+)_+6ii%.jTRtxBY4sv" intask="true">
+                    <field name="NAME">H</field>
+                    <field name="I2C">I2C</field>
                 </block>
             </instance>
             <instance x="-672" y="619">
@@ -1091,10 +1055,33 @@
                     <field name="I2C">I2C</field>
                 </block>
             </instance>
-            <instance x="-1040" y="655">
-                <block type="robConf_lightveml" id="RM[Or*q!Y0dO7Y~:MEo=" intask="true">
-                    <field name="NAME">V</field>
-                    <field name="I2C">I2C</field>
+            <instance x="-799" y="443">
+                <block type="robConf_light" id="_=nCr`U3v%mUU3Lj;X6[" intask="true">
+                    <field name="NAME">L</field>
+                    <field name="OUTPUT">5</field>
+                </block>
+            </instance>
+            <instance x="250" y="250">
+                <block type="robConf_robot" id="robot" intask="true">
+                    <field name="NAME">undefined</field>
+                </block>
+            </instance>
+            <instance x="-966" y="353">
+                <block type="robConf_potentiometer" id="ie+-v@8t^:x:pXSc_(iO" intask="true">
+                    <field name="NAME">P</field>
+                    <field name="OUTPUT">3</field>
+                </block>
+            </instance>
+            <instance x="-799" y="624">
+                <block type="robConf_key" id="o5mTDYg.nC9yRNfh2SXg" intask="true">
+                    <field name="NAME">B3</field>
+                    <field name="PIN1">6</field>
+                </block>
+            </instance>
+            <instance x="-648" y="442">
+                <block type="robConf_led" id="Tris)a2:6F0Y.;)LAiy|" intask="true" deletable="false">
+                    <field name="NAME">R</field>
+                    <field name="INPUT">7</field>
                 </block>
             </instance>
             <instance x="-980" y="731">
@@ -1107,6 +1094,18 @@
                 <block type="robConf_environmental" id="jJ(g47OdQWa3_(J8nPjO" intask="true">
                     <field name="NAME">U</field>
                     <field name="I2C">I2C</field>
+                </block>
+            </instance>
+            <instance x="-1040" y="655">
+                <block type="robConf_lightveml" id="RM[Or*q!Y0dO7Y~:MEo=" intask="true">
+                    <field name="NAME">V</field>
+                    <field name="I2C">I2C</field>
+                </block>
+            </instance>
+            <instance x="-623" y="185">
+                <block type="robConf_digitalout" id="aq%uaPJMuyFf5)NBx^[E" intask="true">
+                    <field name="NAME">S2</field>
+                    <field name="OUTPUT">4</field>
                 </block>
             </instance>
         </block_set>

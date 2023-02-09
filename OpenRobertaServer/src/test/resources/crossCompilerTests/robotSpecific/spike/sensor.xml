@@ -11,7 +11,6 @@
                 </block>
                 <block type="robSensors_timer_reset" id="s/3J+rZvuGSL4+PS/AVL" intask="true">
                     <field name="SENSORPORT">1</field>
-                    <field name="SLOT"/>
                 </block>
                 <block type="robActions_debug" id="P_tLjXNRUHL.1rCr.p53" intask="true">
                     <value name="OUT">

@@ -20,7 +20,6 @@
                 </block>
                 <block type="robSensors_timer_reset" id="J)5I~P9|`+~m65sTqQQ+" intask="true">
                     <field name="SENSORPORT">1</field>
-                    <field name="SLOT"/>
                 </block>
                 <block type="robControls_wait_for" id=":cGO@q?a:#}IQ%Hxj@ne" intask="true">
                     <mutation wait="10"></mutation>

@@ -48,6 +48,7 @@ task main() {
     SetSensorLight(S3, false);
     SetSensor(S4, SENSOR_LOWSPEED);
     timer1 = CurrentTick();
+    timer1 = CurrentTick();
     ____sensors();
     ____waitUntil();
 }

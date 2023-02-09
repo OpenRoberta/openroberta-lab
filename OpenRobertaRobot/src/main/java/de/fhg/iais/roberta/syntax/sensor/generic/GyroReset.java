@@ -1,15 +1,19 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
-import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
-import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
 @NepoPhrase(name = "GYRO_RESET", category = "SENSOR", blocklyNames = {"robSensors_gyro_reset"})
-public final class GyroReset extends ExternalSensor {
+public final class GyroReset extends Sensor {
 
-    public GyroReset(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {
-        super(properties, externalSensorBean);
+    @NepoField(name = "SENSORPORT")
+    public final String sensorPort;
+
+    public GyroReset(BlocklyProperties properties, String sensorPort) {
+        super(properties);
+        this.sensorPort = sensorPort;
         setReadOnly();
     }
 }

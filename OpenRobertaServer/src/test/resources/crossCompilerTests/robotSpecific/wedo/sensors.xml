@@ -152,7 +152,6 @@
                         </block>
                         <block type="robSensors_timer_reset" id="X(8fAsL(tuf4cZ(pKC3p" intask="true">
                             <field name="SENSORPORT">1</field>
-                            <field name="SLOT"/>
                         </block>
                     </statement>
                 </block>
@@ -349,27 +348,9 @@
     </program>
     <config>
         <block_set robottype="wedo" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
-            <instance x="223" y="53">
-                <block type="robBrick_WeDo-Brick" id="1" intask="true" deletable="false">
-                    <field name="VAR">W</field>
-                </block>
-            </instance>
-            <instance x="372" y="131">
-                <block type="robConf_gyro" id="f+fi:U5b8C-LJ-96G8r7" intask="true">
-                    <field name="NAME">T2</field>
-                    <field name="VAR">W</field>
-                    <field name="CONNECTOR">1</field>
-                </block>
-            </instance>
             <instance x="219" y="225">
                 <block type="robConf_buzzer" id="3" intask="true">
                     <field name="NAME">S</field>
-                    <field name="VAR">W</field>
-                </block>
-            </instance>
-            <instance x="224" y="300">
-                <block type="robConf_led" id="4" intask="true">
-                    <field name="NAME">L</field>
                     <field name="VAR">W</field>
                 </block>
             </instance>
@@ -379,11 +360,29 @@
                     <field name="VAR">W</field>
                 </block>
             </instance>
+            <instance x="223" y="53">
+                <block type="robBrick_WeDo-Brick" id="1" intask="true" deletable="false">
+                    <field name="VAR">W</field>
+                </block>
+            </instance>
             <instance x="207" y="445">
                 <block type="robConf_infrared" id="6" intask="true">
                     <field name="NAME">I</field>
                     <field name="VAR">W</field>
                     <field name="CONNECTOR">2</field>
+                </block>
+            </instance>
+            <instance x="224" y="300">
+                <block type="robConf_led" id="4" intask="true">
+                    <field name="NAME">L</field>
+                    <field name="VAR">W</field>
+                </block>
+            </instance>
+            <instance x="372" y="131">
+                <block type="robConf_gyro" id="f+fi:U5b8C-LJ-96G8r7" intask="true">
+                    <field name="NAME">T2</field>
+                    <field name="VAR">W</field>
+                    <field name="CONNECTOR">1</field>
                 </block>
             </instance>
         </block_set>

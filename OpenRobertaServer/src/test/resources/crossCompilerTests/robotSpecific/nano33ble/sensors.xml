@@ -322,7 +322,6 @@
                         </block>
                         <block type="robSensors_timer_reset" id="GST-EJUG|nfw!uu1|ZRg" intask="true">
                             <field name="SENSORPORT">1</field>
-                            <field name="SLOT"/>
                         </block>
                         <block type="robActions_serial_print" id="xk;n}b,zNJESKNV;7Xda" intask="true">
                             <value name="OUT">
@@ -400,25 +399,30 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nano33ble" xmlversion="3.1" description="" tags="">
-            <instance x="762" y="-185">
-                <block type="robConf_digitalout" id="Z`b.JL8,I4,a7T;|LaOd" intask="true">
-                    <field name="NAME">S</field>
-                    <field name="PIN_PULL">PIN_PULL_NONE</field>
-                    <field name="OUTPUT">3</field>
-                </block>
-            </instance>
-            <instance x="921" y="-142">
-                <block type="robConf_analogout" id="XHPwx?@?WjXOIcqH~-4h" intask="true">
-                    <field name="NAME">S2</field>
-                    <field name="OUTPUT">A1</field>
-                </block>
-            </instance>
+        <block_set robottype="nano33ble" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="762" y="-101">
                 <block type="robConf_digitalout" id="7aBWVh~]?]0JhdZaSbUL" intask="true">
                     <field name="NAME">S3</field>
                     <field name="PIN_PULL">PIN_PULL_UP</field>
                     <field name="OUTPUT">5</field>
+                </block>
+            </instance>
+            <instance x="1253" y="24">
+                <block type="robConf_motion" id="T!q{OnQ5^dn4J-vb8H]n" intask="true">
+                    <field name="NAME">B</field>
+                    <field name="OUTPUT">4</field>
+                </block>
+            </instance>
+            <instance x="1415" y="141">
+                <block type="robConf_pulse" id="PBv-#h/mcmYLYabxfd9w" intask="true">
+                    <field name="NAME">P2</field>
+                    <field name="S">A4</field>
+                </block>
+            </instance>
+            <instance x="1057" y="-62">
+                <block type="robConf_light" id="W%%f~T6l(r-^u{rj[rs|" intask="true">
+                    <field name="NAME">L2</field>
+                    <field name="OUTPUT">A3</field>
                 </block>
             </instance>
             <instance x="313" y="-72">
@@ -427,10 +431,38 @@
                     <field name="INPUT">LED_BUILTIN</field>
                 </block>
             </instance>
-            <instance x="1057" y="-62">
-                <block type="robConf_light" id="W%%f~T6l(r-^u{rj[rs|" intask="true">
-                    <field name="NAME">L2</field>
-                    <field name="OUTPUT">A3</field>
+            <instance x="313" y="148">
+                <block type="robConf_apds9960" id="3" intask="true" deletable="false">
+                    <field name="NAME">_APDS9960</field>
+                </block>
+            </instance>
+            <instance x="463" y="98">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="NAME">undefined</field>
+                </block>
+            </instance>
+            <instance x="1093" y="259">
+                <block type="robConf_potentiometer" id="lUu0cNm)g03_D|,A,w.X" intask="true">
+                    <field name="NAME">P</field>
+                    <field name="OUTPUT">A2</field>
+                </block>
+            </instance>
+            <instance x="762" y="-185">
+                <block type="robConf_digitalout" id="Z`b.JL8,I4,a7T;|LaOd" intask="true">
+                    <field name="NAME">S</field>
+                    <field name="PIN_PULL">PIN_PULL_NONE</field>
+                    <field name="OUTPUT">3</field>
+                </block>
+            </instance>
+            <instance x="313" y="68">
+                <block type="robConf_lsm9ds1" id="2" intask="true" deletable="false">
+                    <field name="NAME">_LSM9DS1</field>
+                </block>
+            </instance>
+            <instance x="794" y="207">
+                <block type="robConf_key" id="]{=C/!Rqig1]+,SG/t,1" intask="true">
+                    <field name="NAME">T</field>
+                    <field name="PIN1">2</field>
                 </block>
             </instance>
             <instance x="785" y="37">
@@ -440,31 +472,9 @@
                     <field name="ECHO">6</field>
                 </block>
             </instance>
-            <instance x="313" y="68">
-                <block type="robConf_lsm9ds1" id="2" intask="true" deletable="false">
-                    <field name="NAME">_LSM9DS1</field>
-                </block>
-            </instance>
-            <instance x="1253" y="24">
-                <block type="robConf_motion" id="T!q{OnQ5^dn4J-vb8H]n" intask="true">
-                    <field name="NAME">B</field>
-                    <field name="OUTPUT">4</field>
-                </block>
-            </instance>
-            <instance x="463" y="98">
-                <block type="robConf_robot" id="robot" intask="false" deletable="false">
-                    <field name="ROBOT">undefined</field>
-                </block>
-            </instance>
-            <instance x="313" y="148">
-                <block type="robConf_apds9960" id="3" intask="true" deletable="false">
-                    <field name="NAME">_APDS9960</field>
-                </block>
-            </instance>
-            <instance x="1415" y="141">
-                <block type="robConf_pulse" id="PBv-#h/mcmYLYabxfd9w" intask="true">
-                    <field name="NAME">P2</field>
-                    <field name="S">A4</field>
+            <instance x="313" y="309">
+                <block type="robConf_hts221" id="5" intask="true" deletable="false">
+                    <field name="NAME">_HTS221</field>
                 </block>
             </instance>
             <instance x="313" y="229">
@@ -472,33 +482,22 @@
                     <field name="NAME">_LPS22HB</field>
                 </block>
             </instance>
-            <instance x="794" y="207">
-                <block type="robConf_key" id="]{=C/!Rqig1]+,SG/t,1" intask="true">
-                    <field name="NAME">T</field>
-                    <field name="PIN1">2</field>
+            <instance x="846" y="365">
+                <block type="robConf_temperature" id="l]#@E5oi+fEkrA%Rdrr0" intask="true">
+                    <field name="NAME">T2</field>
+                    <field name="OUTPUT">A0</field>
                 </block>
             </instance>
-            <instance x="1093" y="259">
-                <block type="robConf_potentiometer" id="lUu0cNm)g03_D|,A,w.X" intask="true">
-                    <field name="NAME">P</field>
-                    <field name="OUTPUT">A2</field>
-                </block>
-            </instance>
-            <instance x="313" y="309">
-                <block type="robConf_hts221" id="5" intask="true" deletable="false">
-                    <field name="NAME">_HTS221</field>
+            <instance x="921" y="-142">
+                <block type="robConf_analogout" id="XHPwx?@?WjXOIcqH~-4h" intask="true">
+                    <field name="NAME">S2</field>
+                    <field name="OUTPUT">A1</field>
                 </block>
             </instance>
             <instance x="1415" y="294">
                 <block type="robConf_drop" id="`Ejx0,?Axu-o{OWY[*_k" intask="true">
                     <field name="NAME">T3</field>
                     <field name="S">A5</field>
-                </block>
-            </instance>
-            <instance x="846" y="365">
-                <block type="robConf_temperature" id="l]#@E5oi+fEkrA%Rdrr0" intask="true">
-                    <field name="NAME">T2</field>
-                    <field name="OUTPUT">A0</field>
                 </block>
             </instance>
         </block_set>

@@ -896,7 +896,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitEncoderReset(EncoderReset encoderReset) {
-        String port = encoderReset.getUserDefinedPort();
+        String port = encoderReset.sensorPort;
         this.sb.append("ResetRotationCount(").append(Ev3C4ev3Visitor.getPrefixedOutputPort(port)).append(");");
         return null;
     }
@@ -926,7 +926,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        String timerNumber = timerReset.getUserDefinedPort();
+        String timerNumber = timerReset.sensorPort;
         this.sb.append("ResetTimer(").append(timerNumber).append(");");
         return null;
     }
@@ -972,7 +972,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitGyroReset(GyroReset gyroReset) {
-        String port = gyroReset.getUserDefinedPort();
+        String port = gyroReset.sensorPort;
         generateResetGyroSensor(port);
         return null;
     }

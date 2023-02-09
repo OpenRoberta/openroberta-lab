@@ -299,7 +299,7 @@ public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        String port = timerReset.getUserDefinedPort();
+        String port = timerReset.sensorPort;
         JSONObject o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, port);
         return add(o);
     }

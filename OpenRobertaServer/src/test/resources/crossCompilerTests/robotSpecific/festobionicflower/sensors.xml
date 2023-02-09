@@ -129,7 +129,6 @@
                         </block>
                         <block type="robSensors_timer_reset" id="GST-EJUG|nfw!uu1|ZRg" intask="true">
                             <field name="SENSORPORT">1</field>
-                            <field name="SLOT"/>
                         </block>
                     </statement>
                 </block>
@@ -165,7 +164,7 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="festobionicflower" xmlversion="3.1" description="" tags="">
+        <block_set robottype="festobionicflower" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="138" y="80">
                 <block type="robConf_rgbled" id="%=kg52SHeud7*/CEei@q" intask="true" deletable="false">
                     <field name="NAME">R</field>
