@@ -81,7 +81,7 @@ case "${CMD}" in
     auto-deploy)  source ${SCRIPT_HELPER}/_autodeploy.sh ;;
     start-all)    echo 'start database container and all server container'
                   ${SCRIPT_MAIN}/run.sh -q start-dbc
-                  sleep 10
+                  sleep 60
                   for SERVER_NAME in ${SERVERS}; do
                       ${SCRIPT_MAIN}/run.sh -q start ${SERVER_NAME}
                   done ;;

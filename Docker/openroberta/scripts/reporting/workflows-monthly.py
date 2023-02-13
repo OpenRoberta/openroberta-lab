@@ -28,10 +28,9 @@ def processInitData(logDir, outputDir, logFileNameOptionallyWithZip, fromTime='0
     condenseStore(groupOperatingSystem, condenseOperatingSystem, condenseOS)
     cutCountryCode = Store()
     cutStore(groupCountryCode, cutCountryCode,
-             nameForOther="other", lowerLimitForOther=100)
+             nameForOther="-other-", lowerLimitForOther=1000)
     groupInits.show(fmt='{:12s} {:5d}', title='initialization calls per day')
-    groupCountryCode.show(fmt='{:12s} {:5d}', title='country codes')
-    cutCountryCode.show(fmt='{:12s} {:5d}', title='reduced country codes')
+    cutCountryCode.show(fmt='{:12s} {:5d}', title='country codes')
     groupBrowser.show(fmt='{:40s} {:5d}', title='browser types')
     groupOperatingSystem.show(fmt='{:40s} {:5d}', title='operating systems')
     condenseOperatingSystem.show(
@@ -50,9 +49,7 @@ def processInitData(logDir, outputDir, logFileNameOptionallyWithZip, fromTime='0
 
     groupInits.showBar(title='Unique Sessions',
                        file=initPlotFile, legend=(1.04, 0))
-    groupCountryCode.showPie(title='country codes', file=countrycodePlotFile)
-    cutCountryCode.showPie(title='reduced country codes',
-                           file=outputDir / (filePrefix + 'countrycodeCut.png'))
+    cutCountryCode.showPie(title='country codes', file=countrycodePlotFile)
     groupBrowser.showPie(title='browser types', file=browserTypesPlotFile)
     condenseOperatingSystem.showPie(
         title='operating systems (grouped)', file=operatingSystemsPlotFile)
@@ -79,19 +76,6 @@ def monthly(logDir, outputDir, logFile, printer=print):
     processInitData(logDir, outputDir, logFile)
     processRobotUsage(logDir, outputDir, logFile)
 
-
-if __name__ == "__main__":
-    logDir = WindowsPath(
-        "D:/Projekte/OPEN-ROBERTA-BACKUP/loggingAndReports/logging/statistics-2022")
-    logFile = "12.log.zip"
-    outputDir = WindowsPath("D:/tmp/12")
-    outputFileHandle = open(outputDir / "textResults-12.txt", 'w')
-    def printer(text): return outputFileHandle.write(text + '\n')
-    start = time.time()
-    monthly(logDir, outputDir, logFile, printer=printer)
-    end = time.time()
-    print("run finished after {:.3f} sec".format(end - start))
-    exit()
 
 if __name__ == "__main__":
     logDir = Path(sys.argv[1])

@@ -174,7 +174,7 @@ def condenseStore(storeInput, storeOutput, condenseFn=condenseIdentity):
         itemOutput.counter += item.counter
 
 
-def cutStore(storeInput, storeOutput, nameForOther="other", lowerLimitForOther=100):
+def cutStore(storeInput, storeOutput, nameForOther="--other--", lowerLimitForOther=100):
     """
     accept an input store and create an output store, in which all keys, whose values are less a lower limit,
     are removed and their value is aggregated in an "other" category.
