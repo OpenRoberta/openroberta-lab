@@ -193,6 +193,7 @@ Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gibt den aktuellen Wert des Kompasssens
 Blockly.Msg.COMPASS_TOOLTIP = "Block für den Kompasssensor.";
 Blockly.Msg.COMPASS_TOOLTIP_EV3 = "Block für den HiTechnic NXT Kompasssensor.";
 Blockly.Msg.CONFIGURATION_ERROR_ACTOR_MISSING = "In der Roboterkonfiguration ist dieser Aktuator nicht mit einem Actorport verbunden!";
+Blockly.Msg.CONFIGURATION_ERROR_DIFFDRIVE_NOT_UNIQUE = "Dieser Konfigurationsblock darf nur einmal vorkommen.";
 Blockly.Msg.CONFIGURATION_ERROR_MISSING_PIN = "Der Pin dieser Komponente existiert nicht!";
 Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "Die Drehrichtung des linken und rechten Motors ist nicht gleich!";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "In der Roboterkonfiguration ist kein linker Motor angegeben!";

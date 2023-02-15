@@ -193,6 +193,7 @@ Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compa
 Blockly.Msg.COMPASS_TOOLTIP = "Represents a compass sensor.";
 Blockly.Msg.COMPASS_TOOLTIP_EV3 = "Represents a HiTechnic NXT compass sensor.";
 Blockly.Msg.CONFIGURATION_ERROR_ACTOR_MISSING = "This actuator is not configured. Please add the corresponding block in the configuration tab!";
+Blockly.Msg.CONFIGURATION_ERROR_DIFFDRIVE_NOT_UNIQUE = "This configuration block may only occur once.";
 Blockly.Msg.CONFIGURATION_ERROR_MISSING_PIN = "The pin used by this component does not exist!";
 Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "The direction of rotation of the left and right motor is different!";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "Left motor missing in the configuration!";

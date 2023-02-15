@@ -193,6 +193,7 @@ Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compa
 Blockly.Msg.COMPASS_TOOLTIP = "Representerar en kompassensor";
 Blockly.Msg.COMPASS_TOOLTIP_EV3 = "HiTechnic NXT kompass sensor";
 Blockly.Msg.CONFIGURATION_ERROR_ACTOR_MISSING = "Motorn är inte kopplad till någon port";
+Blockly.Msg.CONFIGURATION_ERROR_DIFFDRIVE_NOT_UNIQUE = "This configuration block may only occur once.";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MISSING_PIN = "The pin used by this component does not exist!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "Det är olika rotationsriktningar för vänster och höger motor!";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "Vänster motor saknas i konfigurationen";

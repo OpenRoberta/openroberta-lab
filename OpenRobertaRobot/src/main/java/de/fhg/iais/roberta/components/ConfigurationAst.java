@@ -161,6 +161,12 @@ public final class ConfigurationAst {
         return null;
     }
 
+    public Map<String, ConfigurationComponent> getAllConfigurationComponentByType(String type) {
+        return this.configurationComponents.entrySet()
+            .stream()
+            .filter(a -> a.getValue().componentType.equals(type)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
     /**
      * Returns all actors in the configuration component map. While insertion order is preserved internally, it is unnecessary for code generation and similar
      * tasks. Here, the insertion ordered {@link LinkedHashMap} is wrapped in a {@link HashMap} to ensure a reproducible order.

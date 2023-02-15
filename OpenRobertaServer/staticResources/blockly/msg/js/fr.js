@@ -193,6 +193,7 @@ Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compa
 Blockly.Msg.COMPASS_TOOLTIP = "Bloc pour le capteur boussole.";
 Blockly.Msg.COMPASS_TOOLTIP_EV3 = "Représente un capteur boussole HiTechnic NXT";
 Blockly.Msg.CONFIGURATION_ERROR_ACTOR_MISSING = "This actuator is not configured. Please add the corresponding block in the configuration tab!";  // untranslated
+Blockly.Msg.CONFIGURATION_ERROR_DIFFDRIVE_NOT_UNIQUE = "This configuration block may only occur once.";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MISSING_PIN = "The pin used by this component does not exist!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "Le sens de rotation entre le moteur gauche et le moteur droit est différent.";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "Le moteur gauche est manquant dans la configuration du robot !";

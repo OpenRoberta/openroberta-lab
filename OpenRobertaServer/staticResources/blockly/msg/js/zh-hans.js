@@ -193,6 +193,7 @@ Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compa
 Blockly.Msg.COMPASS_TOOLTIP = "表示罗盘传感器。";
 Blockly.Msg.COMPASS_TOOLTIP_EV3 = "表示 HiTechnic NXT 罗盘传感器。";
 Blockly.Msg.CONFIGURATION_ERROR_ACTOR_MISSING = "此执行器未设置为端口!";
+Blockly.Msg.CONFIGURATION_ERROR_DIFFDRIVE_NOT_UNIQUE = "This configuration block may only occur once.";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MISSING_PIN = "The pin used by this component does not exist!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "左右电机的旋转方向不同!";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "左电机缺少配置!";

@@ -41,8 +41,9 @@ public class SpikeValidatorAndCollectorWorker extends AbstractValidatorAndCollec
     private void validateConfig(Project project) {
         List<String> takenPins = new ArrayList<>();
         project.getConfigurationAst().getConfigurationComponents().forEach((k, v) -> checkIfPortTaken(project, v, takenPins));
-        ConfigurationComponent diffDrive = project.getConfigurationAst().optConfigurationComponentByType("DIFFERENTIALDRIVE");
-        if ( diffDrive != null ) {
+        Map<String, ConfigurationComponent> diffDrives = project.getConfigurationAst().getAllConfigurationComponentByType("DIFFERENTIALDRIVE");
+        boolean diffDriveCompUnique = diffDrives.size() == 1;
+        diffDrives.forEach((a, diffDrive) -> {
             boolean rightMotorMissing = true;
             boolean leftMotorMissing = true;
             for ( ConfigurationComponent configComp : project.getConfigurationAst().getConfigurationComponents().values() ) {
@@ -55,15 +56,18 @@ public class SpikeValidatorAndCollectorWorker extends AbstractValidatorAndCollec
                     }
                 }
             }
-            if ( rightMotorMissing || leftMotorMissing ) {
+            if ( rightMotorMissing || leftMotorMissing || !diffDriveCompUnique ) {
                 String blockId = diffDrive.getProperty().getBlocklyId();
                 project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
                 project.addToErrorCounter(1, null);
+                if ( leftMotorMissing ) {
+                    project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_MOTOR_LEFT_MISSING"));
+                }
                 if ( rightMotorMissing ) {
                     project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING"));
                 }
-                if ( leftMotorMissing ) {
-                    project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_MOTOR_LEFT_MISSING"));
+                if ( !diffDriveCompUnique ) {
+                    project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_DIFFDRIVE_NOT_UNIQUE"));
                 }
             }
             if ( diffDrive.getProperty("MOTOR_L").equals(diffDrive.getProperty(("MOTOR_R"))) ) {
@@ -72,7 +76,7 @@ public class SpikeValidatorAndCollectorWorker extends AbstractValidatorAndCollec
                 project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
                 project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
             }
-        }
+        });
     }
 
     private void checkIfPortTaken(Project project, ConfigurationComponent configurationComponent, List<String> takenPins) {
