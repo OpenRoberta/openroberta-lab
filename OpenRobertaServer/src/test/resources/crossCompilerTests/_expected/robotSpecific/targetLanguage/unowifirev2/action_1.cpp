@@ -39,11 +39,11 @@ Stepper _stepper_S2(_SPU_S2, 1, 3, 2, 4);
 void ____display() {
     Serial.println(___stringVar);
     _lcd_L3.setCursor(___numberVar,___numberVar);
-    _lcd_L3.print(___stringVar);
-    
+    _printToDisplay(_lcd_L3, ___stringVar);
+
     _lcd_L3.clear();
-    
-    
+
+
 }
 
 void ____action() {

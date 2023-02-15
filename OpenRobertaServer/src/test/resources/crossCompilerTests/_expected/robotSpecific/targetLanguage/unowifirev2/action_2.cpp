@@ -20,7 +20,7 @@ void setup()
 void loop()
 {
     _lcd_L2.setCursor(___numberVar,___numberVar);
-    _lcd_L2.print(___stringVar);
-    
+    _printToDisplay(_lcd_L2, ___stringVar);
+
     _lcd_L2.clear();
 }

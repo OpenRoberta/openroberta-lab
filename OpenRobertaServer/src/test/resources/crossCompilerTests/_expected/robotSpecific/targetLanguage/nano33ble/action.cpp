@@ -60,8 +60,8 @@ void loop()
     analogWrite(_led_blue_R, 0);
 
     _lcd_O.setCursor(0,1);
-    _lcd_O.print("Hallo");
-    _lcd_O.display();
+    _printToDisplay(_lcd_O, "Hallo", true);
+
     _lcd_O.clearDisplay();
     _lcd_O.display();
     analogWrite(_output_Aa, (int)1);
