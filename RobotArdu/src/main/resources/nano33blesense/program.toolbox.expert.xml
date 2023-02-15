@@ -165,33 +165,35 @@
         <block type="logic_ternary"/>
     </category>
 
-    <category name="AIFES" svg="true">
-        <block type="robActions_aifes_initrawdata"></block>
-        <block type="robActions_aifes_addrawdata">
-            <value name="NN_RAW_DATA">
-                <block type="math_number" intask="true">
-                    <field name="NUM">0</field>
-                </block>
-            </value>
-        </block>
-        <block type="robActions_aifes_addtrainingsdata">
-            <value name="NN_CLASS_NUMBER">
-                <block type="math_number" intask="true">
-                    <field name="NUM">0</field>
-                </block>
-            </value>
-        </block>
-        <block type="robActions_aifes_addclassifydata">
-            <value name="NN_CLASSIFY_DATA">
-                <block type="math_number" intask="true">
-                    <field name="NUM">0</field>
-                </block>
-            </value>
-        </block>
-        <block type="robActions_aifes_initclassifydata"></block>
-        <block type="robActions_aifes_train"></block>
-        <block type="robActions_aifes_classify"></block>
-    </category>
+    <!--
+        <category name="AIFES" svg="true">
+            <block type="robActions_aifes_initrawdata"></block>
+            <block type="robActions_aifes_addrawdata">
+                <value name="NN_RAW_DATA">
+                    <block type="math_number" intask="true">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_aifes_addtrainingsdata">
+                <value name="NN_CLASS_NUMBER">
+                    <block type="math_number" intask="true">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_aifes_train"></block>
+            <block type="robActions_aifes_initclassifydata"></block>
+            <block type="robActions_aifes_addclassifydata">
+                <value name="NN_CLASSIFY_DATA">
+                    <block type="math_number" intask="true">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_aifes_classify"></block>
+        </category>
+    -->
 
     <category name="TOOLBOX_MATH" svg="true">
         <block type="math_number"/>
