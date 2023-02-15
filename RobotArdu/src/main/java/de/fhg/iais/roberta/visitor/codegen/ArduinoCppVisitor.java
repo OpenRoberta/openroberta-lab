@@ -76,13 +76,13 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
         showTextAction.y.accept(this);
         this.sb.append(");");
         nlIndent();
-        this.sb.append("_lcd_" + showTextAction.port + ".print(");
+        this.sb.append("_printToDisplay(").append("_lcd_").append(showTextAction.port).append(", ");
         showTextAction.msg.accept(this);
+        if ( showTextAction.getProperty().getBlockType().contains("oledssd1306i2c") ) {
+            this.sb.append(", true");
+        }
         this.sb.append(");");
         nlIndent();
-        if ( showTextAction.getProperty().getBlockType().contains("oledssd1306i2c") ) {
-            this.sb.append("_lcd_" + showTextAction.port + ".display();");
-        }
         return null;
     }
 

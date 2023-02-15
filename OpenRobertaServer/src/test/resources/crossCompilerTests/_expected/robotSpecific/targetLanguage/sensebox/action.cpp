@@ -48,26 +48,22 @@ void ____action() {
     _display_myDisplay.setCursor(___n, ___n);
     _display_myDisplay.setTextSize(1);
     _display_myDisplay.setTextColor(WHITE, BLACK);
-    _display_myDisplay.println(___n);
-    _display_myDisplay.display();
+    _printToDisplay(_display_myDisplay, ___n, true);
 
     _display_myDisplay.setCursor(___n, ___n);
     _display_myDisplay.setTextSize(1);
     _display_myDisplay.setTextColor(WHITE, BLACK);
-    _display_myDisplay.println(___b);
-    _display_myDisplay.display();
+    _printToDisplay(_display_myDisplay, ___b, true);
 
     _display_myDisplay.setCursor(___n, ___n);
     _display_myDisplay.setTextSize(1);
     _display_myDisplay.setTextColor(WHITE, BLACK);
-    _display_myDisplay.println(___s);
-    _display_myDisplay.display();
+    _printToDisplay(_display_myDisplay, ___s, true);
 
     _display_myDisplay.setCursor(___n, ___n);
     _display_myDisplay.setTextSize(1);
     _display_myDisplay.setTextColor(WHITE, BLACK);
-    _display_myDisplay.println(___c);
-    _display_myDisplay.display();
+    _printToDisplay(_display_myDisplay, ___c, true);
 
     _display_myDisplay.clearDisplay();
     tone(_buzzer_B2, ___n);

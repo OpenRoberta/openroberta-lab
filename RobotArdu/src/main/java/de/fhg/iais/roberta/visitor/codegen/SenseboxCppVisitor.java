@@ -185,11 +185,9 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         nlIndent();
         this.sb.append("_display_").append(showTextAction.port).append(".setTextColor(WHITE, BLACK);");
         nlIndent();
-        this.sb.append("_display_").append(showTextAction.port).append(".println(");
+        this.sb.append("_printToDisplay(").append("_display_").append(showTextAction.port).append(", ");
         showTextAction.msg.accept(this);
-        this.sb.append(");");
-        nlIndent();
-        this.sb.append("_display_").append(showTextAction.port).append(".display();");
+        this.sb.append(", true);");
         nlIndent();
         return null;
     }
