@@ -29,8 +29,8 @@ RUN apt-get install -y libusb-0.1-4 && \
     apt-get install -y g++-arm-linux-gnueabi
     
 WORKDIR /tmp
-RUN wget http://ftp.de.debian.org/debian/pool/main/n/newlib/libnewlib-dev_3.1.0.20181231-1_all.deb && \
-    wget http://ftp.de.debian.org/debian/pool/main/n/newlib/libnewlib-arm-none-eabi_3.1.0.20181231-1_all.deb && \
+RUN wget http://ftp.debian.org/debian/pool/main/n/newlib/libnewlib-dev_3.1.0.20181231-1_all.deb && \
+    wget http://ftp.debian.org/debian/pool/main/n/newlib/libnewlib-arm-none-eabi_3.1.0.20181231-1_all.deb && \
     dpkg -i libnewlib-dev_3.1.0.20181231-1_all.deb libnewlib-arm-none-eabi_3.1.0.20181231-1_all.deb && \
     rm libnewlib-dev_3.1.0.20181231-1_all.deb libnewlib-arm-none-eabi_3.1.0.20181231-1_all.deb
 

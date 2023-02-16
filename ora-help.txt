@@ -30,7 +30,7 @@ Commands of the ora.sh script:
 The following commands are used by admins of the test and prod server. These systems are running as docker instances. See Docker/README.md for details.
 The base-dir of the docker setup on LINUX systems is usually '/data/openroberta-lab'
                                  on WIN10 systems may be 'D:/data/openroberta-lab'.
-                                 Note how the drive number should be written if you use a shell like the git-bash.
+                                 Note how the path should be written if you use a shell like the git-bash.
   
   new-docker-setup {base-dir}
              creates a new test server setup in {base-dir}. {base-dir} must not exist. Afterwards you have to edit '{base-dir}/config.sh' CAREFULLY.

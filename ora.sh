@@ -146,7 +146,7 @@ new-server-in-docker-setup)
                 cp -r Docker/openroberta/server/_server-template $server_dir
                 echo "New server $server_name created. Edit '$base_dir/decl.sh' and '$server_dir/decl.sh'"
                 echo "Copy an existing database or create an empty database after 'mvn clean install -DskipTests'"
-                echo "by calling from this repo './admin.sh -dbParentdir $base_dir/db/$server_name create-empty-db' " ;;
+                echo "by calling from this repo './admin.sh -git-mode -db-parentdir $base_dir/db/$server_name create-empty-db' " ;;
 
 update-docker-setup)
                 base_dir="$1"

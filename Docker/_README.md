@@ -1,52 +1,62 @@
-# Instructions to setup and run the test and prod server using DOCKER container (2020-06-08)
+# Instructions to setup the lab using DOCKER container (2023-03-06)
 
 This text is for *developer* and *maintainer* of the openroberta lab, *not* if you want to run a local server. Running a local server is described in our wiki
-https://jira.iais.fraunhofer.de/wiki/display/ORInfo/Stand+alone+Server. This text describes the docker-related scripts, that are used to setup a docker network,
-create docker images and run docker container of the OpenRoberta lab. They are used to run OpenRoberta's prod and test servers. On every Linux-based machine it
-should be easy to run our setup. Windows 10 should works too, if you are careful with pathes. To create an instance of our docker installation,
+on GitHub. This text describes the docker-related scripts, which are used for a large installation (as our prod and test servers are),
+
+* to setup a docker network,
+* create docker images for a data base server and lab server and
+* run docker container of the OpenRoberta lab.
+
+On every Linux-based machine it should be easy to run our setup. Commands are shown as bash commands. Windows 10 should work too, if you are careful with
+pathes. Btw: if you install git for Windows, you get a nice bash running in Windows.
+
+Docker must be installed. A lot of Internet resources describe how to proceed.
+
+To create an instance of our docker installation,
 
 * run `git clone https://github.com/OpenRoberta/openroberta-lab`
-* in this directory run `./ora.sh new-docker-setup <BASEDIR_MUST_NOT_EXIST>`. Follow the instructions from the script. From this point use the the
-  administration script `<BASEDIR>/scripts/run.sh` (abbreviated as `RUN`). Execute `RUN` without parameters to get a message explaining all commands available.
-  You have to
+* in this directory run `./ora.sh new-docker-setup <BASEDIR>`. The `<BASEDIR>` must _not_ exist. Follow the instructions written by the command.
+* create the servers you need by calling `./ora.sh new-server-in-docker-setup BASEDIR SERVER`. Follow the instructions written by the command. Note,
+  that `test, dev, dev1...dev9` are the only names accepted as server names. It is easy to add or remove server later.
+* for each server a data base for its own has to be created. Double check that the data bases are in `<BASEDIR>/db`.
+* Put the database names into the global `<BASEDIR>/decl.sh`.
+
+From now use the administration script `<BASEDIR>/scripts/run.sh` (abbreviated as `RUN`). Execute `RUN` without parameters to get a message explaining all
+commands available.
+
+The repo, from which you have run the `./ora.sh new-docker-setup <BASEDIR>` command is not needed anymore. You can reuse it by moving it into `<BASEDIR>/git`
+instead of cloning it again, see below.
+
+You have to
 
 * clone the openroberta-lab repository into `<BASEDIR>/git`, update the server's `decl.sh appropriately` (set the repo, select the branch, ...)
-* create a new docker bridge network (`RUN gen-net`). The name is defined in the global `decl.sh`.
+* create a new docker bridge network (`RUN gen-net`). The name of the network is defined in the global `decl.sh`.
 * generate a database server image and start the database container (`RUN gen-dbc` and `RUN start-dbc`). Check the result with `docker ps`. Inspect the log file
   in `BASEDIR/db/dbAdmin/`
-* create the servers you need (e.g. `test`) by calling `./ora.sh new-server-in-docker-setup BASEDIR SERVER`. For each server in `BASEDIR/server/SERVER`
-  update the `decl.sh` (set the repo, select the branch, ...). Note, that `test, dev, dev1...dev9` are the only names accepted as server names.
-* supply the databases needed for your server in directory `db`. For each server one database with exactly the server's name is needed. You can create empty
-  databases. Follow the instructions when the server is created. Put the database names into the global `decl.sh`.
 * deploy the server ((`RUN deploy SERVER`). Check the result with `docker ps`. Inspect the log file in `BASEDIR/server/SERVER/admin/logging/...`
 
-Looks more complicated as it is :-). Details of the file system structure used and the more functionality supported (database backup, alice checking,
-autorestart) are described later. I tried to make all scripts as robust as possible. Please mail any problems, improvements, ideas to reinhard.budde at
+Looks more complicated as it is :-). I tried to make all scripts as robust as possible. Please mail any problems, improvements, ideas to reinhard.budde at
 iais.fraunhofer.de
 
-We can generate docker images for different architectures. Currently we support
-
-* `x64` - the standard architecture. Our prod server, your laptop, ... use this architecture
-* `arm32v7` - the architecture used by Raspberry pi's 3 and 4. These "small" devices can run a docker demon, a database and a jetty-based rest-server without
-  performance problems. We support these devices to run local servers: for privacy reasons, bad internet connectivity, ... .
-
-In the following the shell variable `ARCH` refers to either `x64` or `arm32v7`. Docker must be installed. Google how to do this.
+> Below I describe, what the design rationale behind our Docker architecture is, and how we, the lab maintainers, create images, that are available at
+> dockerhub and are used in our Docker architecture. If you are curious, whether it works, you can read and try it. Besides that there is no need for you
+> to read further. The text is for our internal documentation.
 
 # (re-)create the base image (done from time to time)
-
-## generate the "base" IMAGE. This image contains the crosscompiler and the crosscompiler resources (header files, ...).
 
 The docker "base" image is used as basis for further images. It contains all software needed by the lab to create binaries for all the robots, i.e.
 
 * the crosscompiler binaries itself. They are installed by calling `apt`, `wget`, ... .
-* header etc. to be used together with the cross compiler. They are copied from our git repository `ora-cc-rsc`.
+* header, libraries, scripts, ..., to be used together with the cross compiler.
 
-This done in two steps. Because the crosscompiler binaries dont't change often, an image `openroberta/ccbin-${ARCH}` is build first. From this image
-the `openroberta/base-${ARCH}` image is derived. This occurs much more often. Both images have an independant version numbering.
+This is done in two steps. Because the crosscompiler binaries dont't change often, an image `openroberta/ccbin-${ARCH}` is build first. From this image
+the `openroberta/base-${ARCH}` image is derived. This occurs much more often. Both images have an independent version numbering.
 
 ### step 1: image with crosscompiler binaries (usually not needed, because the crosscompiler binaries are stable)
 
 The image is available at dockerhub. Name: openroberta/ccbin-x64:<number>>. Use the highest number.
+
+It has been created using the shell commands:
 
 ```bash
 BASE_DIR=/data/openroberta-lab
@@ -65,11 +75,14 @@ forget, to increase the version numer in the next section, too.
 
 The image is available at dockerhub. Name: openroberta/base-x64:<number>>. Use the highest number.
 
+To create it, you need a clone of our GitHub repository `ora-cc-rsc`, whose path is set in the commands below (`CC_RESOURCES`). It contains the resource to be
+copied into the Docker image. The Docker image has been created using the shell commands:
+
 ```bash
 BASE_DIR=/data/openroberta-lab
 ARCH=x64             # either x64 or arm32v7
 CCBIN_VERSION=1      # this is needed in the dockerfile!
-BASE_VERSION=27
+BASE_VERSION=32
 CC_RESOURCES=/data/openroberta-lab/git/ora-cc-rsc
 cd $CC_RESOURCES
 
@@ -85,110 +98,27 @@ docker push openroberta/base-${ARCH}:${BASE_VERSION}
 
 _Note:_ If the git repository `ora-cc-rsc` is changed, the `openroberta/base-${ARCH}` image and all images built upon it must be rebuilt. This is fast, but
 don't forget it! The version of the `openroberta/base-${ARCH}` image (a simple number) should match a tag in the git repository `ora-cc-rsc`. This reminds you,
-that the data from that tag is the data stored in the base image. The variable `BASE_VERSION` contains this number, which is both a tag name in git and a
-version number in docker.
-
-### step 3 image for the integration tests (x64 only)
-
-This section is outdated. We use a github action for integration tests.
-
-The image is often available at dockerhub. Name: openroberta/it-x64-offical-gitrepo-with-develop:<number>>. Use the highest number. It is only available for
-the `x64` architecture. This step creates an image, that during build has executed a git clone of an openroberta git repository and has executed
-a `mvn clean install`. This is done to fill the
-(mvn) cache and to speed up later builds considerably. The entry point is defined as the bash script "runIT.sh". If the image is started, it will checkout a
-branch given as start parameter and runs both the tests and the integration tests.
-
-```bash
-BASE_DIR=/data/openroberta-lab
-ARCH=x64
-BASE_VERSION=27
-GITREPO=https://github.com/OpenRoberta/openroberta-lab.git       # this is the URL of the official repo, you may use your fork
-BRANCH=develop                                                   # the branch used to fill the maven cache
-IMAGE_NAME=openroberta/it-${ARCH}-offical-gitrepo-with-develop   # change the name SUFFIX when using a forked repo
-cd ${BASE_DIR}/conf/${ARCH}/3-runIT
-docker build --no-cache --build-arg BASE_VERSION=${BASE_VERSION} --build-arg GITREPO="${GITREPO}" --build-arg BRANCH="${BRANCH}" \
-       -t ${IMAGE_NAME}:${BASE_VERSION} .
-docker push ${IMAGE_NAME}:${BASE_VERSION}
-```
-
-To run the integration tests on your local machine (usually a build server like `bamboo` will do this), execute:
-
-```bash
-ARCH=x64
-BASE_VERSION=27
-IMAGE_NAME=openroberta/it-x64-offical-gitrepo-with-develop:${BASE_VERSION}      # the name from above!
-export GITREPO='https://github.com/OpenRoberta/openroberta-lab.git'             # the repo URL from above!
-export BRANCH='develop'
-docker run "${IMAGE_NAME}" "${GITREPO}" "${BRANCH}"
-```
-
-### step 4 image for a standalone lab
-
-This section is outdated. We use a github action for creating a standalone image (for all architectures).
-
-This creates an image, that can be used for a standalone server. The data base is embedded. Select carefully
-
-* the branch: it should be master
-* the VERSION: it will become the tag on dockerhub and thus be pulled from dockerhub when people start a local server. *Never* re-use a version number!
-* the git repo: it is definitively changed and the required branch is checked out, independant from its old state.
-
-The image is available at dockerhub. Name: openroberta/standalone-${ARCH}:<number>>. Use the highest number.
-
-```bash
-BASE_DIR='/data/openroberta-lab'
-GIT_REPO='openroberta-lab'                  # ${BASE_DIR}/git/${GIT_REPO} must be a git repo where branches can be added and deleted at will
-ARCH=x64                                    # either x64 or arm32v7
-BASE_VERSION=27
-EXPORT_DIR='/tmp/openroberta-lab-export'    # my choice, directory must not exist, is deleted at the end of this script
-VERSION='4.1.2'                             # becomes the TAG of the image generated
-BRANCH=master                               # the current master should be used for standalones
-IMAGE_NAME=openroberta/standalone-${ARCH}:${VERSION}
-
-cd ${BASE_DIR}/git/${GIT_REPO}
-# taken from the script scripts/helper/_gen.sh. Update the lines below, if this script is changed!
-echo "checking out branch '${BRANCH}'. Throw away the complete old state"
-git fetch --all
-git reset --hard
-git clean -fd
-# goto a branch different from the one to be checked out. Otherwise the -D will fail. Then checkout the branch, connect to the remote implicitly
-case "${BRANCH}" in
-  develop) git checkout master ;;
-  *)       git checkout develop ;;
-esac
-git branch -D ${BRANCH}
-git checkout ${BRANCH}
-LAST_COMMIT=$(git rev-list HEAD...HEAD~1)   # get the last commit for documentation
-
-mvn clean install -DskipTests
-./ora.sh export ${EXPORT_DIR} gzip          # export the build
-
-cd ${EXPORT_DIR}
-export MSYS_NO_PATHCONV=1                   # if you using git bash on windows10 you need this
-cp ${BASE_DIR}/conf/y-standalone-lab/* .
-FROM="openroberta/base-${ARCH}:${BASE_VERSION}"
-docker build --no-cache --tag ${IMAGE_NAME} --build-arg FROM=${FROM} .
-docker push ${IMAGE_NAME}
-cd ${BASE_DIR}
-echo rm -Ir ${EXPORT_DIR}
-rm -Ir ${EXPORT_DIR}
-```
+that the data from that tag is the data stored in the base image. The variable `BASE_VERSION` in all `decl.sh` files of all servers contains this number, and
+you have to edit these files, if you change the version number. It is legal, to use different base versions for different servers.
 
 # Operating Instructions for the Test and Prod Server
 
-Our test server serves many different instances of the openroberta lab server. Our prod server runs the prod version of the openroberta lab server. They are
-setup in the same way. The following text describes the test server setup (the prod setup is the same, but uses the server named `master`).
+For developing the lab, we use a test server, which serves many different instances of the openroberta lab server. Our prod server runs the prod version of the
+openroberta lab server. They are setup in the same way. The following text describes the test server setup (the prod setup is the same, but uses a server
+named `master` only).
 
 ## Directory structure
 
-The template for this framework is contained in directory `Docker/openroberta`. It contains the directories
+The template for our framework is contained in directory `Docker/openroberta`. It contains the directories
 
-* conf - contains an example of an nginx and an apache2 configuration and four directories used to generate docker images for the db and the jetty server
+* conf - contains an example of an nginx and an apache2 configuration and directories used to generate docker images for the db and the lab server
 
 * scripts - contains shell scripts to administrate the framework. The main script is `run.sh`. Call it without parameters to get help. the directory `helper`
   contains scripts, that are sourced from `run.sh` and do the "real" work.
 
 * git - here one or more git repos, used to generate the openroberta server instances, are stored. At least one git repo is needed, usually a clone
-  from https://github.com/OpenRoberta/openroberta-lab.git
+  from https://github.com/OpenRoberta/openroberta-lab.git . The git repositories are changed by scripts during image generation. They are _only_ for this
+  purpose. _Never_ store valuable data (branches, ...) there!
 
 * server - contains the servers. Each server has a name (one of master,test,dev,dev1...dev9), which is also the name of a directory. This directory stores all
   data to configure the server in file `decl.sh`. In the file `_server-template/decl.sh` each property is explained. Each server has an associated docker
@@ -196,10 +126,9 @@ The template for this framework is contained in directory `Docker/openroberta`. 
     * In the subdirectory `export` all artifacts making up the server are stored during server generation.
     * In subdirectory `admin` all logging data and the tutorials are stored.
 
-* db - contains the databases. Each database has a name (one of master,test,dev,dev1...dev9) matching the name of the jetty server who needs this data. the name
-  of the database is the name of a directory, which in turn contains all database files. All databases are served by one Hsqldb server instance.
-  Directory `dbAdmin` stores logging data and database backups. There is one docker image `openroberta/db_server` and usually a running container, whose name
-  is `db-server`.
+* db - contains the databases. Each database has a name (one of master,test,dev,dev1...dev9) matching the name of the server who needs this data. The name of
+  the database is the name of the directory, which contains all database files. All databases are served by one Hsqldb server instance. Directory `dbAdmin`
+  stores logging data and database backups. There is one docker image `openroberta/db_server` and usually a running container, whose name is `db-server`.
 
 ## Overview
 
@@ -229,9 +158,9 @@ docker ps                      # the container for 'dev4' should be running
 
 ## Web server software
 
-We need a running web server to distribute requests to the different openroberta lab servers. This is done with web server software. Apache and nginx are the
-most popular ones at the moment. Inside the server docker container the port 1999 is used. When a server container is started, this port is mapped to a
-accessible port on the host machine (this maybe 1999 again, or 1998, ... or any other port. For instance, on the prod server
+We need a running web server to distribute requests to the different openroberta lab servers. This is done with web server software. Apache and nginx are most
+popular. Inside the server docker container the port 1999 is used. When a server container is started, this port is mapped to a accessible port on the host
+machine (this maybe 1999 again, or 1998, ... or any other port. For instance, on the prod server
 
 * `container:1999` is mapped to
 * `host:8080` and
@@ -241,7 +170,7 @@ The nginx configuration examples are in the directory `z-nginx`. The configurati
 file `nginx.conf` see the ssl-, -server and include-section in the example file for the global configuration. The example file `lab.open-roberta`
 contains the open-roberta specific configuration. The Apache2 configuration examples are in the directory `z-apache2`.
 
-Actually we are using nginx. Apache would do it as well.
+Actually we are using nginx. Apache would do as well.
 
 ## Conventions
 
@@ -291,7 +220,7 @@ it is safe, that many test server share one git repository. This increases the p
 
 ## database server
 
-each jetty server needs connection to a Hsqldb-based database. The database URI's match the openroberta lab server names:
+each server needs connection to a Hsqldb-based database. The database URI's match the openroberta lab server names:
 
 * `jdbc:hsqldb:hsql://localhost/openroberta-db-test`
 * `jdbc:hsqldb:hsql://localhost/openroberta-db-dev`
@@ -304,7 +233,7 @@ These databases are served by one database server. The database files are locate
 * `$DATABASE_DIR/dev1` to `$BASE/db/dev9`
 
 The database server is deployed in a docker container with name `ora-db-server` created from the docker image `rbudde/openroberta--db-server:<hsqldb-version>`.
-The database server is listening to the port `$DATABASE_SERVER_PORT` as defined in the global `decl.sh`. This is often the Hsqldb default `9001`.
+The database server is listening to the port `$DATABASE_SERVER_PORT` as defined in the global `decl.sh`. This is usually the Hsqldb default `9001`.
 
 ## Automatic deploy, database backup, removing temporary files, automatic restart
 
@@ -450,13 +379,5 @@ arbitrary number of command line arguments like `-d KEY=VALUE`. The final list o
   *NOTE:* this is the place for the last deployer-defined additions: declare the list of robot plugins to use, whether this is the public server or not, and so
   on. It is possible, but _not_ adviced to overwrite properties already defined at the two other places described above
 
-## Can be ignored, TODO: to be integrated somewhere else
-
-> Since the fix needed to compile c4ev3 programs on raspberry hasn't been published yet, the Dockerfile
-> contains 3 lines that references 3 folders/files that need to be in this folder before creating the image.
-> The files are:
-> - recent version of ora-cc-rsc
-> - recent version of RobotEV3.jar
-> - C4EV3.Toolchain-2019.08.0-rpi.tar.gz
 
 
