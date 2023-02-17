@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.edison.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.edison.SendIRAction;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
@@ -128,6 +129,9 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     @Override
     public Void visitToneAction(ToneAction toneAction) {
         requiredComponentVisited(toneAction, toneAction.frequency, toneAction.duration);
+        if ( !toneAction.frequency.getClass().equals(NumConst.class) ) {
+            addErrorToPhrase(toneAction, "NO_CONST_NOT_SUPPORTED");
+        }
         return null;
     }
 
