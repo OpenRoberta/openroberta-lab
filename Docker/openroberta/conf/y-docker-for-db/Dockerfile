@@ -1,4 +1,4 @@
-FROM eclipse-temurin:11
+FROM openjdk:8u151-jdk
 
 RUN mkdir --parent /opt/openRoberta/lib
 WORKDIR /opt/openRoberta

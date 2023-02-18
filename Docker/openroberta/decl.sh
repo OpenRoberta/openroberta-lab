@@ -2,7 +2,7 @@
 
 DOCKER_NETWORK_NAME='ora-net'   # the network for cooperation between jetty and database server. Can be changed, must be unique.
 DATABASE_SERVER_PORT='9001'     # one database server for all jetty server. It is listening on this port. Can be changed
-HSQL_DB_SERVER_VERSION='2.7.1'  # this version MUST match the version found in the OpenRobertaParent/pom.xml
+HSQL_DB_SERVER_VERSION='2.4.0'  # this version MUST match the version found in the OpenRobertaParent/pom.xml
                                 # this version MUST match the version in the name of the jar found in conf/y-docker-for-db
 
 SERVERS=''                      # these servers can run (used in start-all and stop-all), e.g. 'test dev dev4'
