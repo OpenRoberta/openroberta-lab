@@ -406,6 +406,14 @@ function switchRobot(robot, opt_continue, opt_callback) {
                 typeof opt_callback === 'function'
                     ? opt_callback()
                     : MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getRobotRealName());
+                let deprecatedData = GUISTATE_C.getRobotDeprecatedData(robot);
+                if (deprecatedData !== undefined) {
+                    $('#show-message>.modal-dialog').removeClass('modal-sm');
+                    $('#show-message').on('hidden.bs.modal', function () {
+                        $('#show-message>.modal-dialog').addClass('modal-sm');
+                    });
+                    MSG.displayPopupMessage(GUISTATE_C.getLanguage(), deprecatedData, 'OK', false);
+                }
             } else {
                 MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getRobotRealName());
             }

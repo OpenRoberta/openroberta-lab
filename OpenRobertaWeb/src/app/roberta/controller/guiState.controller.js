@@ -9,6 +9,7 @@ import * as SOCKET_C from 'socket.controller';
 import * as $ from 'jquery';
 import * as Blockly from 'blockly';
 import * as THYMIO_C from 'thymioSocket.controller';
+import * as NOTIFICATION_C from 'notification.controller';
 
 var LONG = 300000; // Ping time 5min
 var SHORT = 3000; // Ping time 3sec
@@ -424,7 +425,6 @@ function setRobot(robot, result, opt_init) {
     } else {
         GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.hideStopProgram();
     }
-
     UTIL.clearTabAlert('tabConfiguration'); // also clear tab alert when switching robots
 }
 
@@ -542,16 +542,18 @@ function getMenuRobotRealName(robotName) {
     return 'Robot not found';
 }
 
-function getIsRobotBeta(robotName) {
-    for (var robot in getRobots()) {
-        if (!getRobots().hasOwnProperty(robot)) {
-            continue;
-        }
-        if (getRobots()[robot].name == robotName && getRobots()[robot].beta == true) {
-            return true;
-        }
+function isRobotBeta(robotName) {
+    return getRobotsByName()[robotName].announcement == 'beta';
+}
+
+export function isRobotDeprecated(robot) {
+    return getRobotsByName()[robot].announcement == 'deprecated';
+}
+
+export function getRobotDeprecatedData(robot) {
+    if (isRobotDeprecated(robot)) {
+        return NOTIFICATION_C.getDeprecatedNotifications(robot, getLanguage());
     }
-    return false;
 }
 
 function getHasRobotStopButton(robotName) {
@@ -927,6 +929,10 @@ function getProgramXML() {
 
 function getRobots() {
     return GUISTATE.server.robots;
+}
+
+function getRobotsByName() {
+    return GUISTATE.server.robotsByName;
 }
 
 function getProgramToolbox() {
@@ -1305,7 +1311,7 @@ export {
     getRobotPort,
     getRobotRealName,
     getMenuRobotRealName,
-    getIsRobotBeta,
+    isRobotBeta,
     getRobotInfoDE,
     getRobotInfoEN,
     isRobotConnected,

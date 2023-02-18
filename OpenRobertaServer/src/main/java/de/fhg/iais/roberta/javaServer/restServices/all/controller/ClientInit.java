@@ -100,7 +100,7 @@ public class ClientInit {
                     String robotInfoEN = httpSessionState.getRobotFactory(robot).getInfoEN();
                     robotDescription.put("infoDE", robotInfoDE);
                     robotDescription.put("infoEN", robotInfoEN);
-                    robotDescription.put("beta", httpSessionState.getRobotFactory(robot).isBeta());
+                    robotDescription.put("announcement", httpSessionState.getRobotFactory(robot).getRobotAnnouncement());
                     robotDescription.put("stopButton", httpSessionState.getRobotFactory(robot).hasStopButton());
                     robotDescription.put("group", httpSessionState.getRobotFactory(robot).getGroup());
                 }

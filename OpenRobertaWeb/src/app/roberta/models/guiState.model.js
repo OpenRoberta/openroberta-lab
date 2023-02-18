@@ -16,6 +16,7 @@ function init() {
 
     server.ping = true;
     server.pingTime = 3000;
+    server.robotsByName = {};
 
     gui.view = '';
     gui.prevView = '';
@@ -102,6 +103,9 @@ function init() {
                 if (result.rc === 'ok') {
                     COMM.setInitToken(result.initToken);
                     $.extend(server, result.server);
+                    for (var key in server.robots) {
+                        server.robotsByName[server.robots[key].name] = server.robots[key];
+                    }
                     server.version = result['server.version'];
                     server.time = result.serverTime;
                     ready.resolve();

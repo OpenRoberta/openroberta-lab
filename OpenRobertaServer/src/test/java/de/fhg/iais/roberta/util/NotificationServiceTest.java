@@ -1,8 +1,5 @@
 package de.fhg.iais.roberta.util;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -19,6 +16,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NotificationServiceTest {
@@ -48,20 +48,24 @@ public class NotificationServiceTest {
         JSONObject notification1 = new JSONObject("{\n" + "  \"handlers\": []\n" + "}");
 
         JSONArray jsonArray = new JSONArray(Arrays.asList(notification0, notification1));
-        this.notificationService.saveNotifications(jsonArray.toString());
-        JSONArray notificationsArray = this.notificationService.getNotifications();
-        assertThat(notificationsArray).hasSize(2);
-        assertThat(notificationsArray.getJSONObject(0)).satisfies(result -> assertThat(result.similar(notification0)).isTrue());
-        assertThat(notificationsArray.getJSONObject(1)).satisfies(result -> assertThat(result.similar(notification1)).isTrue());
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("notifications", jsonArray);
+        this.notificationService.saveNotifications(jsonObject.toString());
+        JSONObject notificationsObject = this.notificationService.getNotifications();
+        assertThat(notificationsObject.getJSONArray("notifications")).hasSize(2);
+        assertThat(notificationsObject.getJSONArray("notifications").getJSONObject(0)).satisfies(result -> assertThat(result.similar(notification0)).isTrue());
+        assertThat(notificationsObject.getJSONArray("notifications").getJSONObject(1)).satisfies(result -> assertThat(result.similar(notification1)).isTrue());
     }
 
     @Test
     public void testSaveNotifications() {
         JSONArray notifications = new JSONArray("[{\"once\": true, \"name\": \"Calliope\"}]");
-        this.notificationService.saveNotifications(notifications.toString());
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("notifications", notifications);
+        this.notificationService.saveNotifications(jsonObject.toString());
 
         Path notificationFile = this.adminDir.toPath().resolve("notifications.json");
-        assertThat(notificationFile).exists().hasContent(notifications.toString());
+        assertThat(notificationFile).exists().hasContent(jsonObject.toString());
     }
 
     @Test
@@ -74,8 +78,10 @@ public class NotificationServiceTest {
     @Test
     public void testCurrentDigest() throws IOException {
         JSONArray notifications = new JSONArray("[{\"once\": true, \"name\": \"Calliope\"}]");
-        this.notificationService.saveNotifications(notifications.toString());
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("notifications", notifications);
+        this.notificationService.saveNotifications(jsonObject.toString());
         String currentDigest = this.notificationService.getCurrentDigest();
-        assertThat(currentDigest).isEqualTo(NotificationService.digestOfString(notifications.toString()));
+        assertThat(currentDigest).isEqualTo(NotificationService.digestOfString(jsonObject.toString()));
     }
 }

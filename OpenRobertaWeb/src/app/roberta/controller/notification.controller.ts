@@ -31,10 +31,19 @@ const defaultPopupTime = 20 * 1000;
 const defaultStartScreenTime = undefined;
 
 let activeNotifications: NotificationProcessor[] = [];
+let activeDeprecated: object[] = [];
+
+export function getDeprecatedNotifications(robot, language) {
+    let robotDeprecated: object = activeDeprecated.find((value) => value[robot] !== undefined);
+    if (robotDeprecated) {
+        return robotDeprecated[robot][language];
+    }
+}
 
 function loadAndInitNotifications() {
     notificationModel.getNotifications((result) => {
-        activeNotifications = initNotifications(result.notifications);
+        activeNotifications = initNotifications(result.notifications.notifications);
+        activeDeprecated = result.notifications.deprecated;
     });
 }
 
@@ -182,7 +191,7 @@ class NotificationProcessor {
     }
 
     public showNotification() {
-        if (this.specification.once) {
+        if (this.specification.once === true) {
             this.removeTriggers();
         }
 
@@ -262,7 +271,7 @@ class NotificationProcessor {
         }
 
         this.specification.triggers.forEach((trigger) => {
-            const { event, addClass, removeClass, conditions } = trigger;
+            const { event, addClass, removeClass, conditions, deprecated } = trigger;
             const selector = parseSelector(trigger);
 
             if (!selector) return;

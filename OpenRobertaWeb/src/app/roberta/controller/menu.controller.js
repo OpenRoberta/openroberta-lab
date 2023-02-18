@@ -244,7 +244,7 @@ function initMenu() {
             });
             $en.appendTo(clone);
         } else {
-            clone.find('a').remove();
+            clone.find('a').css('visibility', 'hidden');
         }
         return clone;
     };
@@ -269,11 +269,14 @@ function initMenu() {
                 if (key === 'calliope') {
                     robotName = 'calliope2017NoBlue';
                 }
-                clone.find('span:eq( 1 )').html(GUISTATE_C.getMenuRobotRealName(robotName));
+                clone.find('span:eq( 2 )').html(GUISTATE_C.getMenuRobotRealName(robotName));
                 clone.attr('data-type', robotName);
                 addInfoLink(clone, robotName);
-                if (!GUISTATE_C.getIsRobotBeta(robotName)) {
-                    clone.find('img.img-beta').css('visibility', 'hidden');
+                if (GUISTATE_C.isRobotBeta(robotName)) {
+                    clone.find('img.img-beta').css('visibility', 'visible');
+                }
+                if (GUISTATE_C.isRobotDeprecated(robotName)) {
+                    clone.find('img.img-deprecated').css('visibility', 'visible');
                 }
                 $('#popup-robot-main').append(clone);
             } else {
@@ -282,13 +285,12 @@ function initMenu() {
                 var clone = proto.clone().prop('id', 'menu-' + robotGroup);
                 clone.attr('data-type', robotGroup);
                 if (robotGroup == 'arduino') {
-                    clone.find('span:eq( 1 )').html('Nepo4Arduino');
+                    clone.find('span:eq( 2 )').html('Nepo4Arduino');
                 } else {
-                    clone.find('span:eq( 1 )').html(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1)); // we have no real name for group
+                    clone.find('span:eq( 2 )').html(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1)); // we have no real name for group
                 }
                 clone.find('span:eq( 0 )').removeClass('typcn-open');
                 clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup); // so we just capitalize the first letter + add typicon
-                clone.find('img.img-beta').css('visibility', 'hidden'); // groups do not have 'beta' labels
                 addInfoLink(clone, robotGroup); // this will just kill the link tag, because no description for group
                 clone.attr('data-group', true);
                 $('#popup-robot-main').append(clone);
@@ -299,14 +301,17 @@ function initMenu() {
                     clone.addClass('hidden');
                     clone.addClass('robotSubGroup');
                     clone.addClass(robotGroup);
-                    if (!GUISTATE_C.getIsRobotBeta(robotName)) {
-                        clone.find('img.img-beta').css('visibility', 'hidden');
+                    if (GUISTATE_C.isRobotBeta(robotName)) {
+                        clone.find('img.img-beta').css('visibility', 'visible');
+                    }
+                    if (GUISTATE_C.isRobotDeprecated(robotName)) {
+                        clone.find('img.img-deprecated').css('visibility', 'visible');
                     }
                     addInfoLink(clone, robotName);
                     clone.attr('data-type', robotName);
                     clone.find('span:eq( 0 )').removeClass('typcn-open');
                     clone.find('span:eq( 0 )').addClass('img-' + robotName); // there are no typicons for robots
-                    clone.find('span:eq( 1 )').html(GUISTATE_C.getMenuRobotRealName(robotName)); // instead we use images
+                    clone.find('span:eq( 2 )').html(GUISTATE_C.getMenuRobotRealName(robotName)); // instead we use images
                     clone.attr('data-type', robotName);
                     $('#popup-robot-subgroup').append(clone);
                 }

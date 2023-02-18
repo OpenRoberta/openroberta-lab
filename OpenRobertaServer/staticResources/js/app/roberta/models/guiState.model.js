@@ -15,6 +15,7 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
         var ready = new $.Deferred();
         exports.server.ping = true;
         exports.server.pingTime = 3000;
+        exports.server.robotsByName = {};
         exports.gui.view = '';
         exports.gui.prevView = '';
         exports.gui.language = '';
@@ -91,6 +92,9 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
                 if (result.rc === 'ok') {
                     COMM.setInitToken(result.initToken);
                     $.extend(exports.server, result.server);
+                    for (var key in exports.server.robots) {
+                        exports.server.robotsByName[exports.server.robots[key].name] = exports.server.robots[key];
+                    }
                     exports.server.version = result['server.version'];
                     exports.server.time = result.serverTime;
                     ready.resolve();

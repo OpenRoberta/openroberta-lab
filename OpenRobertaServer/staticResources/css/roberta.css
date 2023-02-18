@@ -234,13 +234,26 @@ body.blocklyMinimalBody * {
 
 .img-beta {
     position: relative;
-    bottom: 80px;
+    bottom: 100px;
     left: 66px;
     -moz-transform: rotate(-10deg);
     -webkit-transform: rotate(-10deg);
     -o-transform: rotate(-10deg);
     -ms-transform: rotate(-10deg);
     transform: rotate(-10deg);
+    visibility: hidden;
+}
+
+.img-deprecated {
+    position: relative;
+    bottom: 133px;
+    left: 36px;
+    -moz-transform: rotate(-10deg);
+    -webkit-transform: rotate(-10deg);
+    -o-transform: rotate(-10deg);
+    -ms-transform: rotate(-10deg);
+    transform: rotate(-10deg);
+    visibility: hidden;
 }
 
 @media only screen and (max-width: 1023px) {
@@ -661,15 +674,15 @@ div.rightMenuButton:hover,
 
 #show-startup-message .popup-robot a {
     position: relative;
-    bottom: 103px;
-    left: -55px;
+    bottom: 20px;
+    right: 75px;
     color: #000;
     font-size: 25px;
 }
 
 #show-startup-message .popup-robot.robotSpecial a {
-    bottom: 10px;
-    left: 25%;
+    left: 86px;
+    top: 20px;
 }
 
 #show-startup-message .robot-info {
@@ -1489,7 +1502,7 @@ table [data-toggle="collapse"].collapsed:after {
     border-color: #ddd;
     width: 140px;
     height: 88px;
-    display: inline-block;
+    display: inline-grid;
     margin: 20px;
     padding: 13px 0;
     text-align: center;
@@ -1504,12 +1517,16 @@ table [data-toggle="collapse"].collapsed:after {
 }
 
 .robotSpecial > .img-beta {
-    bottom: 170px;
-    left: 100px
+    bottom: 190px;
+    left: 94px
+}
+
+.robotSpecial > .img-deprecated {
+    bottom: 230px;
+    left: 66px
 }
 
 .robotSpecial > .robot-label {
-    bottom: -10px;
     position: relative;
 }
 
@@ -1597,7 +1614,9 @@ table [data-toggle="collapse"].collapsed:after {
 }
 
 .robot-icon {
+    position: relative;
     font-size: 40px;
+    right: -16px;
 }
 
 .typcn.robot-icon:before {

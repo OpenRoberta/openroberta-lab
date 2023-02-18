@@ -25,7 +25,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 define(["require", "exports", "guiState.model", "guiState.controller", "notification.model", "comm", "jquery"], function (require, exports, guiStateModel, guiStateController, notificationModel, comm, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.showNotificationModal = exports.reloadNotifications = exports.init = void 0;
+    exports.showNotificationModal = exports.reloadNotifications = exports.init = exports.getDeprecatedNotifications = void 0;
     var fadingDuration = 400;
     var notificationElement = $('#releaseInfo');
     var notificationElementTitle = notificationElement.children('#releaseInfoTitle');
@@ -37,9 +37,18 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
     var defaultPopupTime = 20 * 1000;
     var defaultStartScreenTime = undefined;
     var activeNotifications = [];
+    var activeDeprecated = [];
+    function getDeprecatedNotifications(robot, language) {
+        var robotDeprecated = activeDeprecated.find(function (value) { return value[robot] !== undefined; });
+        if (robotDeprecated) {
+            return robotDeprecated[robot][language];
+        }
+    }
+    exports.getDeprecatedNotifications = getDeprecatedNotifications;
     function loadAndInitNotifications() {
         notificationModel.getNotifications(function (result) {
-            activeNotifications = initNotifications(result.notifications);
+            activeNotifications = initNotifications(result.notifications.notifications);
+            activeDeprecated = result.notifications.deprecated;
         });
     }
     function init() {
@@ -173,7 +182,7 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
             });
         };
         NotificationProcessor.prototype.showNotification = function () {
-            if (this.specification.once) {
+            if (this.specification.once === true) {
                 this.removeTriggers();
             }
             this.notificationHandlers.forEach(function (notification) { return notification.show(); });
@@ -240,7 +249,7 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
                 return;
             }
             this.specification.triggers.forEach(function (trigger) {
-                var event = trigger.event, addClass = trigger.addClass, removeClass = trigger.removeClass, conditions = trigger.conditions;
+                var event = trigger.event, addClass = trigger.addClass, removeClass = trigger.removeClass, conditions = trigger.conditions, deprecated = trigger.deprecated;
                 var selector = parseSelector(trigger);
                 if (!selector)
                     return;
