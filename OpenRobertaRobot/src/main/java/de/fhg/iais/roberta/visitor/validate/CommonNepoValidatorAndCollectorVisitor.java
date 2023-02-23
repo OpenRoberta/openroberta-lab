@@ -104,7 +104,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
             this.getBuilder(UsedHardwareBean.Builder.class).addMarkedVariableAsGlobal(variableName);
         }
         if ( !builder.containsInScopeVariable(variableName) ) {
-            addErrorToPhrase(assignStmt, "PROCEDURES_VARIABLES_OUT_OF_SCOPE_ERROR");
+            addErrorToPhrase(assignStmt, "SCOPE_ERROR"); // key will be overwritten by blockly
         }
         return null;
     }
@@ -553,7 +553,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     public Void visitVar(Var var) {
         String variableName = var.name;
         if ( !(this.getBuilder(UsedHardwareBean.Builder.class).containsInScopeVariable(variableName)) ) {
-            addErrorToPhrase(var, "PROCEDURES_VARIABLES_OUT_OF_SCOPE_ERROR");
+            addErrorToPhrase(var, "SCOPE_ERROR"); // key will be overwritten by blockly
         }
         return null;
     }
