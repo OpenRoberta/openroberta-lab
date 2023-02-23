@@ -7,10 +7,16 @@ robots:
     template: ardu
     dir: botnroll
     suffix: ".ino"
+    exclude:
+      [
+        sensors,
+        text_colours_functions
+      ]
   calliope2017NoBlue:
     template: calliope
     dir: calliope
     suffix: ".cpp"
+    exclude: [ math ]
   calliope2017:
     template: calliope
     dir: calliope
@@ -18,6 +24,7 @@ robots:
     # messages: not available if bluetooth is enabled
     exclude:
       [
+        math,
         messages,
         radio_rx,
         radio_tx
@@ -26,6 +33,7 @@ robots:
     template: calliope
     dir: calliope
     suffix: ".cpp"
+    exclude: [ math ]
   edison:
     template: edison
     dir: edison
@@ -97,10 +105,6 @@ robots:
   uno:
     template: ardu
     dir: ardu
-    suffix: ".ino"
-  unowifirev2:
-    template: ardu
-    dir: unowifirev2
     suffix: ".ino"
   nano33ble:
     template: nano33ble
