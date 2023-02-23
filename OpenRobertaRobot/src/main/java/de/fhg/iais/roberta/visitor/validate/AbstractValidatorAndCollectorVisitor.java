@@ -120,7 +120,7 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
             throw new DbcException("at least one sub phrase is required");
         }
         for ( Phrase subPhrase : subPhrases ) {
-            mkEmptyCheck(superPhrase, subPhrase);
+            mkEmptyOrDisabledCheck(superPhrase, subPhrase);
             subPhrase.accept(mainVisitor);
         }
     }
@@ -133,24 +133,24 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      */
     public final <T extends Phrase> void requiredComponentVisited(Phrase superPhrase, List<T> subPhrases) {
         for ( Phrase subPhrase : subPhrases ) {
-            mkEmptyCheck(superPhrase, subPhrase);
+            mkEmptyOrDisabledCheck(superPhrase, subPhrase);
             subPhrase.accept(mainVisitor);
         }
     }
 
-    private void mkEmptyCheck(Phrase superPhrase, Phrase subPhrase) {
-        if ( subPhrase instanceof EmptyExpr ) {
+    private void mkEmptyOrDisabledCheck(Phrase superPhrase, Phrase subPhrase) {
+        if ( subPhrase instanceof EmptyExpr || subPhrase.getProperty().isDisabled() ) {
             addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
         } else if ( subPhrase instanceof ExprList ) {
             for ( Expr expr : ((ExprList) subPhrase).get() ) {
-                if ( expr instanceof EmptyExpr ) {
+                if ( expr instanceof EmptyExpr || expr.getProperty().isDisabled() ) {
                     addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
                 }
             }
         } else if ( subPhrase instanceof StmtList ) {
             for ( Stmt stmt : ((StmtList) subPhrase).get() ) {
                 if ( stmt instanceof ExprStmt ) {
-                    if ( ((ExprStmt) stmt).expr instanceof EmptyExpr ) {
+                    if ( ((ExprStmt) stmt).expr instanceof EmptyExpr || ((ExprStmt) stmt).expr.getProperty().isDisabled() ) {
                         addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
                     }
                 }
