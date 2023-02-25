@@ -430,5 +430,25 @@ define(["require", "exports"], function (require, exports) {
             width: '483.12px',
             height: '424.125px',
         },
+        spike: {
+            ports: [
+                // ports
+                { name: 'A', position: { x: 0, y: 105 } },
+                { name: 'B', position: { x: 210, y: 105 } },
+                { name: 'C', position: { x: 0, y: 168 } },
+                { name: 'D', position: { x: 210, y: 168 } },
+                { name: 'E', position: { x: 0, y: 229 } },
+                { name: 'F', position: { x: 210, y: 229 } },
+                //build in
+                { name: 'display', position: { x: 105, y: 168 } },
+                { name: 'LEFT', position: { x: 35, y: 292 } },
+                { name: 'RIGHT', position: { x: 176, y: 292 } },
+                { name: 'buzzer', position: { x: 105, y: 340 } },
+                { name: 'gyro', position: { x: 130, y: 70 } },
+                { name: 'rgbled', position: { x: 105, y: 292 } },
+            ],
+            width: '217px',
+            height: '342px',
+        },
     };
 });
