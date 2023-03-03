@@ -311,7 +311,7 @@ function initMenu() {
                     clone.attr('data-type', robotName);
                     clone.find('span:eq( 0 )').removeClass('typcn-open');
                     clone.find('span:eq( 0 )').addClass('img-' + robotName); // there are no typicons for robots
-                    clone.find('span:eq( 2 )').html(GUISTATE_C.getMenuRobotRealName(robotName)); // instead we use images
+                    clone.find('span:eq( 3 )').html(GUISTATE_C.getMenuRobotRealName(robotName)); // instead we use images
                     clone.attr('data-type', robotName);
                     $('#popup-robot-subgroup').append(clone);
                 }
