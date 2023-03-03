@@ -1610,7 +1610,7 @@ table [data-toggle="collapse"].collapsed:after {
 
 .robot-label {
     display: block;
-    line-height: 16px;
+    line-height: 14px;
 }
 
 .robot-icon {

@@ -214,7 +214,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                     onclick: 'window.open("' + robotInfoEN + '");return false;',
                     class: 'EN',
                 });
-                $en.appendTo(clone);
+                $de.after($en);
             }
             else {
                 clone.find('a').css('visibility', 'hidden');
