@@ -12,9 +12,14 @@ import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
 
-public class MicrobitCompilerWorker implements ICompilerWorker {
+public abstract class MicrobitCompilerWorker implements ICompilerWorker {
 
     private static final Logger LOG = LoggerFactory.getLogger(MicrobitCompilerWorker.class);
+    private final String version;
+
+    public MicrobitCompilerWorker(String version) {
+        this.version = version;
+    }
 
     @Override
     public void execute(Project project) {
@@ -37,7 +42,7 @@ public class MicrobitCompilerWorker implements ICompilerWorker {
                 compilerBinDir + "python",
                 scriptName,
                 sourceCode,
-                "V1"
+                version
             };
         project.setCompiledHex(this.getBinaryFromCrossCompiler(executableWithParameters));
         if ( project.getCompiledHex() != null ) {

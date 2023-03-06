@@ -1,0 +1,54 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbitv2" xmlversion="3.1" description="" tags="">
+    <instance x="-72" y="74">
+        <block type="robConf_sound" id="|V?XJqd+HFH{ggh3jw:I" intask="true" deletable="false">
+            <field name="NAME">_S</field>
+        </block>
+    </instance>
+    <instance x="73" y="99">
+        <block type="robConf_robot" id="robot" intask="false" deletable="false">
+            <field name="ROBOT">undefined</field>
+        </block>
+    </instance>
+    <instance x="-49" y="117">
+        <block type="robConf_logotouch" id="?ybc9g.wQa:_7M,%d=~g" intask="true" deletable="false">
+            <field name="NAME">_LO</field>
+        </block>
+    </instance>
+    <instance x="526" y="104">
+        <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+            <field name="NAME">_T</field>
+        </block>
+    </instance>
+    <instance x="-69" y="147">
+        <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+            <field name="NAME">A</field>
+            <field name="PIN1">A</field>
+        </block>
+    </instance>
+    <instance x="527" y="154">
+        <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+            <field name="NAME">_B</field>
+        </block>
+    </instance>
+    <instance x="-70" y="208">
+        <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+            <field name="NAME">B</field>
+            <field name="PIN1">B</field>
+        </block>
+    </instance>
+    <instance x="527" y="193">
+        <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+            <field name="NAME">_A</field>
+        </block>
+    </instance>
+    <instance x="528" y="228">
+        <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+            <field name="NAME">_C</field>
+        </block>
+    </instance>
+    <instance x="-91" y="271">
+        <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+            <field name="NAME">_L</field>
+        </block>
+    </instance>
+</block_set>

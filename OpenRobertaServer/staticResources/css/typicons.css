@@ -1,10 +1,10 @@
 @font-face {
     font-family: 'typicons';
-    src: url('fonts/typicons.eot?ea7hgi');
-    src: url('fonts/typicons.eot?ea7hgi#iefix') format('embedded-opentype'),
-    url('fonts/typicons.ttf?ea7hgi') format('truetype'),
-    url('fonts/typicons.woff?ea7hgi') format('woff'),
-    url('fonts/typicons.svg?ea7hgi#typicons') format('svg');
+    src: url('fonts/typicons.eot?2y752x');
+    src: url('fonts/typicons.eot?2y752x#iefix') format('embedded-opentype'),
+    url('fonts/typicons.ttf?2y752x') format('truetype'),
+    url('fonts/typicons.woff?2y752x') format('woff'),
+    url('fonts/typicons.svg?2y752x#typicons') format('svg');
     font-weight: normal;
     font-style: normal;
     font-display: block;
@@ -25,8 +25,24 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.typcn-spike:before {
-    content: "\ea87";
+.typcn-microbitv2:before {
+    content: "\ea79";
+}
+
+.typcn-menu_dots:before {
+    content: "\e600";
+}
+
+.typcn-step:before {
+    content: "\e601";
+}
+
+.typcn-Roberta:before {
+    content: "\e603";
+}
+
+.typcn-20:before {
+    content: "\e900";
 }
 
 .typcn-99:before {
@@ -61,24 +77,8 @@
     content: "\e908";
 }
 
-.typcn-20:before {
-    content: "\e900";
-}
-
 .typcn-10:before {
     content: "\e909";
-}
-
-.typcn-menu_dots:before {
-    content: "\e600";
-}
-
-.typcn-step:before {
-    content: "\e601";
-}
-
-.typcn-Roberta:before {
-    content: "\e603";
 }
 
 .typcn-debug:before {
@@ -1550,57 +1550,61 @@
 }
 
 .typcn-microbit:before {
-    content: "\ea79";
-}
-
-.typcn-calliope:before {
     content: "\ea7a";
 }
 
-.typcn-mbot2:before {
+.typcn-calliope:before {
     content: "\ea7b";
 }
 
-.typcn-media-cancel:before {
+.typcn-mbot2:before {
     content: "\ea7c";
 }
 
-.typcn-festobionicflower:before {
+.typcn-media-cancel:before {
     content: "\ea7d";
 }
 
-.typcn-xNN:before {
+.typcn-festobionicflower:before {
     content: "\ea7e";
 }
 
-.typcn-Rob3rta:before {
+.typcn-xNN:before {
     content: "\ea7f";
 }
 
-.typcn-mbot:before {
+.typcn-Rob3rta:before {
     content: "\ea80";
 }
 
-.typcn-robotino:before {
+.typcn-mbot:before {
     content: "\ea81";
 }
 
-.typcn-thymio:before {
+.typcn-robotino:before {
     content: "\ea82";
 }
 
-.typcn-15:before {
+.typcn-thymio:before {
     content: "\ea83";
 }
 
-.typcn-2:before {
+.typcn-15:before {
     content: "\ea84";
 }
 
-.typcn-1:before {
+.typcn-2:before {
     content: "\ea85";
 }
 
-.typcn-0:before {
+.typcn-1:before {
     content: "\ea86";
+}
+
+.typcn-0:before {
+    content: "\ea87";
+}
+
+.typcn-spike:before {
+    content: "\ea88";
 }

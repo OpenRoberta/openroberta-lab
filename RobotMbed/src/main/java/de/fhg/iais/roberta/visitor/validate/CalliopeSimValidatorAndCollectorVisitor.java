@@ -1,16 +1,31 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import com.google.common.collect.ClassToInstanceMap;
+
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.mbed.*;
-import de.fhg.iais.roberta.syntax.sensor.generic.*;
+import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
+import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
+import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
+import de.fhg.iais.roberta.syntax.action.mbed.MotionKitDualSetAction;
+import de.fhg.iais.roberta.syntax.action.mbed.MotionKitSingleSetAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
+import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
+import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.util.syntax.SC;
-import de.fhg.iais.roberta.visitor.IMbedVisitorWithoutDefault;
+import de.fhg.iais.roberta.visitor.ICalliopeVisitor;
 
-public final class CalliopeSimValidatorAndCollectorVisitor extends MbedValidatorAndCollectorVisitor implements IMbedVisitorWithoutDefault<Void> {
+public final class CalliopeSimValidatorAndCollectorVisitor extends CalliopeValidatorAndCollectorVisitor implements ICalliopeVisitor<Void> {
 
     public CalliopeSimValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(brickConfiguration, beanBuilders);

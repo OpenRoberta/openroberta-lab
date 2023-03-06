@@ -5,7 +5,7 @@ DriveAction [FOREWARD, MotionParam [speed=NumConst[value: 30], duration=MotorDur
 MethodCall [driveBack, , , VOID]
 PlayNoteAction[duration: 2000, frequency: 261.626, port: - EMPTY_PORT -]
 ToneAction[frequency: NumConst[value: 300], duration: NumConst[value: 100], port: NO PORT]
-PlayFileAction[fileName: 0]
+PlayFileAction[port: - EMPTY_PORT -, fileName: 0]
 PlayRecordingAction[filename: NumConst[value: 1]]
 LedButtonOnAction[led1: NumConst[value: 100], led2: NumConst[value: 100], led3: NumConst[value: 100], led4: NumConst[value: 100]]
 LedCircleOnAction[led1: NumConst[value: 100], led2: NumConst[value: 100], led3: NumConst[value: 100], led4: NumConst[value: 100], led5: NumConst[value: 100], led6: NumConst[value: 100], led7: NumConst[value: 100], led8: NumConst[value: 100]]

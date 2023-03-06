@@ -1,0 +1,256 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbitv2" xmlversion="3.1" description="" tags="">
+            <instance x="257" y="37">
+                <block type="robControls_start" id="hh:i6kC+MtQ2];QK/J7C" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG">TRUE</field>
+                </block>
+                <block type="mbedActions_display_text" id="*F7}Y4{8cWte9G879t(y" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="U,``0%dZ[4sn+)s%615y" intask="true">
+                            <field name="TEXT">TEXT</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="@hI[%vuF#fw4x{xM]Fa9" intask="true">
+                    <field name="TYPE">CHARACTER</field>
+                    <value name="OUT">
+                        <block type="math_number" id="b|81?@^)oC~IT=i6Iw[d" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_image" id="_*1X6nzqZ+*~^?GP%J%U" intask="true">
+                    <mutation type="IMAGE"></mutation>
+                    <field name="TYPE">IMAGE</field>
+                    <value name="VALUE">
+                        <block type="mbedImage_image" id="Zehsw9Z*(,APP4Z5,Zi[" intask="true">
+                            <field name="P00">#</field>
+                            <field name="P10"></field>
+                            <field name="P20"></field>
+                            <field name="P30"></field>
+                            <field name="P40">#</field>
+                            <field name="P01"></field>
+                            <field name="P11">#</field>
+                            <field name="P21"></field>
+                            <field name="P31">#</field>
+                            <field name="P41"></field>
+                            <field name="P02"></field>
+                            <field name="P12"></field>
+                            <field name="P22">#</field>
+                            <field name="P32"></field>
+                            <field name="P42"></field>
+                            <field name="P03"></field>
+                            <field name="P13">#</field>
+                            <field name="P23"></field>
+                            <field name="P33">#</field>
+                            <field name="P43"></field>
+                            <field name="P04">#</field>
+                            <field name="P14"></field>
+                            <field name="P24"></field>
+                            <field name="P34"></field>
+                            <field name="P44">#</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id=",(|lhr`q!b9(Hw^LkVmh" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="wb?~|CId5,wnhT2[BK@:" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_clear" id="P{-J%T4Ca@(73!=2Bx6Z" intask="true"></block>
+                <block type="mbedActions_display_image" id=")djY@Ru,ekj2}po:3+/0" intask="true">
+                    <mutation type="IMAGE"></mutation>
+                    <field name="TYPE">IMAGE</field>
+                    <value name="VALUE">
+                        <block type="mbedImage_get_image" id="QcwB9hxPnV)}T(:^|Yj%" intask="true">
+                            <field name="IMAGE">HEART</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="g2}4JZK2-Za9Yyx*{I)0" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="D3g?rr0{B{)}rjb}+bDw" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_clear" id="Mn2whr]kE=7{Eni(1QRj" intask="true"></block>
+                <block type="mbedActions_display_setPixel" id="lmgkC^xj{`hgX:GFENB3" intask="true">
+                    <value name="X">
+                        <block type="math_number" id="q}M5~w#*O4}zOt)H]yM~" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                    <value name="Y">
+                        <block type="math_number" id="isp;gsmNZfK|u^wR@b=S" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                    <value name="BRIGHTNESS">
+                        <block type="math_number" id="n;orWM;9pm/T@MC+7}FL" intask="true">
+                            <field name="NUM">5</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="]BIZpALc|P}Zy!VCT1E%" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="(4_+tg;U~lVxn??W|m7_" intask="true">
+                            <field name="NUM">500</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_setPixel" id="FpvX6n(Hi^QbUY/EdvrQ" intask="true">
+                    <value name="X">
+                        <block type="math_number" id="IBCgs1zE+,sKO(;A.^PF" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                    <value name="Y">
+                        <block type="math_number" id="{wNkk,gf5##ssC3Hi*uY" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                    <value name="BRIGHTNESS">
+                        <block type="math_number" id=".gmZFeQ(t6ofCXGh2r*y" intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="hENl;7)S=QR+?aFBSqPj" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="AN%kCx2ns!ygO,*KRrfR" intask="true">
+                            <field name="NUM">500</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_setPixel" id=")dpfHn`noS]7a=dB[f=L" intask="true">
+                    <value name="X">
+                        <block type="math_number" id="6dWfm*e~P6h*Q#0cU{7(" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                    <value name="Y">
+                        <block type="math_number" id="tmAV]h/!liJejVKo=@0L" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                    <value name="BRIGHTNESS">
+                        <block type="math_number" id="V[-P46%ig]O:!nb6!a;)" intask="true">
+                            <field name="NUM">50</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id=",*W9+@C-mID*;T=j!t9O" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="s=:E}eU33G,.;m(K{Lsc" intask="true">
+                            <field name="TEXT">Serial Monitor</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="}Wl7S}/9#1)m}Aj{l)f#" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="1:0GqhrWn(rZK209*DYu" intask="true">
+                            <field name="TEXT">LED Brightness expected 50</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="k4n4v=~!e^6f/;linlPe" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="mbedActions_display_getPixel" id="/`UcP?kZZ]OSn19N8iRZ" intask="true">
+                            <value name="X">
+                                <block type="math_number" id="_{gzqF*j{s-ey_d2vmEn" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                            <value name="Y">
+                                <block type="math_number" id="68z!g7x}Js})b4V4kk#c" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_setPixel" id=")*rfSq3fE*Ea#bTvr0LS" intask="true">
+                    <value name="X">
+                        <block type="math_number" id="1JP@@Ub([m2?nO{mT/~a" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                    <value name="Y">
+                        <block type="math_number" id="uoZpV[Y!Y:PaGaN(~k@[" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                    <value name="BRIGHTNESS">
+                        <block type="math_number" id="LC_9;OI~c#hYr^7,b(X6" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbitv2" xmlversion="3.1" description="" tags="">
+            <instance x="-72" y="74">
+                <block type="robConf_sound" id="|V?XJqd+HFH{ggh3jw:I" intask="true" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="73" y="99">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
+            <instance x="-49" y="117">
+                <block type="robConf_logotouch" id="?ybc9g.wQa:_7M,%d=~g" intask="true" deletable="false">
+                    <field name="NAME">_LO</field>
+                </block>
+            </instance>
+            <instance x="526" y="104">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="-69" y="147">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="527" y="154">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+            <instance x="-70" y="208">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="527" y="193">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="528" y="228">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="-91" y="271">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

@@ -102,7 +102,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.CalliopeMethods;
-import de.fhg.iais.roberta.visitor.IMbedVisitor;
+import de.fhg.iais.roberta.visitor.ICalliopeVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
@@ -110,7 +110,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable C++ code representation of a phrase to a
  * StringBuilder. <b>This representation is correct C++ code for Calliope systems.</b> <br>
  */
-public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbedVisitor<Void> {
+public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICalliopeVisitor<Void> {
     private static final Map<String, String> PIN_MAP = new HashMap<>(); // TODO better?
     private static final Map<String, String> CALLIBOT_TO_PIN_MAP = new HashMap<>();
 

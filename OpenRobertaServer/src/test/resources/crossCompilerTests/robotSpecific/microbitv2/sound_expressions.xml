@@ -1,0 +1,258 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbitv2" xmlversion="3.1" description="" tags="">
+            <instance x="257" y="37">
+                <block type="robControls_start" id="hh:i6kC+MtQ2];QK/J7C" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG">TRUE</field>
+                </block>
+                <block type="mbedActions_display_text" id="wtm+Lcw(Nx|=Tfav`MH2" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="j8{6|egM!e]vv(dTm*Kt" intask="true">
+                            <field name="TEXT">giggle</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_expression" id="goAsNt78fa[xebjGz=D)" intask="true">
+                    <field name="FILE">GIGGLE</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                </block>
+                <block type="robControls_wait_time" id="(8sWGN+o`wL3%G65|hQ/" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="(Oh9!g!mJG@2!p#~KI(9" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="0b8O445RxX!yv1T?V^-_" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="v7CHQSllg6.Dw#sZ})t+" intask="true">
+                            <field name="TEXT">happy</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_expression" id="-9-;CZd6u6SAe}BUL1lN" intask="true">
+                    <field name="FILE">HAPPY</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                </block>
+                <block type="robControls_wait_time" id="FMk,3I2/C@NGvd+8w-GL" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="Kh_x?)/}cw_{PDnrAyh+" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="ThGJFKSddd2F4cO,oA)P" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="JbJNY/Z88T++D)hd2ya7" intask="true">
+                            <field name="TEXT">hello</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_expression" id="0?].%8edsyB1BsxE:@Pw" intask="true">
+                    <field name="FILE">HELLO</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                </block>
+                <block type="robControls_wait_time" id="zpI3j2,kR8mfR31UaAKe" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id=")^|h9X{r-uO[5J}{Yw%j" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="97U*U4Wt-LOYf.M_Ba;F" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="uOgKsvP=8UL%G4@eIN.V" intask="true">
+                            <field name="TEXT">mysterious</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_expression" id="XQvS.s+iaV|Ssl@B*BGm" intask="true">
+                    <field name="FILE">MYSTERIOUS</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                </block>
+                <block type="robControls_wait_time" id="86+wIw7wBf1Z1x|UYfZD" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="^=h4z.q.(oFP~ONMTk}f" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="Vb=Bei#b~m4l*.lUpW.!" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="E3.Ll)^4A4c],L5+/5c-" intask="true">
+                            <field name="TEXT">sad</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_expression" id=":H~#yN!OdVGq=N~p[aTe" intask="true">
+                    <field name="FILE">SAD</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                </block>
+                <block type="robControls_wait_time" id="ZwyCpPs#u_SX9,/4x`bT" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="m)t/?Mb;%)Z}*nR*y(/W" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="TDWcV(V?,DX2|F?`s*Q=" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="@CwhBwT2/`J:7MFK1c=t" intask="true">
+                            <field name="TEXT">slide</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_expression" id="c^IWx[XJ7)XF:!,7wdx5" intask="true">
+                    <field name="FILE">SLIDE</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                </block>
+                <block type="robControls_wait_time" id="[6whk9S1WQp}NsRj:h2[" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="KsSnpvy0Z0AO0D{@,J|e" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="Nl8@aa:o@5fx}wD8.#OD" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="OqP^na`zx8h{A[=)2#pr" intask="true">
+                            <field name="TEXT">soaring</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_expression" id="inLH2nF?asC}UkhPf7)N" intask="true">
+                    <field name="FILE">SOARING</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                </block>
+                <block type="robControls_wait_time" id="?rC0(~lVA0^ie#zhz!`-" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="_y90Ym?;)F[5JGT.1[Rl" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id=",L:Wf(yI;madnnqd-A*Y" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="8qxmx9?Td*+t2E)Dk_b@" intask="true">
+                            <field name="TEXT">spring</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_expression" id="?zNjoiZU/4SWKbHm]w+K" intask="true">
+                    <field name="FILE">SPRING</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                </block>
+                <block type="robControls_wait_time" id="[D[29x+-wp/[NFL*zl,O" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="ymI0k=?5.[gptkZ}az[)" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="E^1tR83u[Sn]Za?[xhe(" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="SUi.FI3Hc]_y7csok;8/" intask="true">
+                            <field name="TEXT">twinkle</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_expression" id="lm+Eo2-79C-I667kt[Dj" intask="true">
+                    <field name="FILE">TWINKLE</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                </block>
+                <block type="robControls_wait_time" id=")PfCAj;ol^aO6Z]Q)L}T" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="3zM!31%CJdMClrMZJElh" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="C+pW{L?QwR33]7B2Ybf?" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="^)9jF+J!I-?vl8+_B3G9" intask="true">
+                            <field name="TEXT">yawn</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_expression" id="|]3?Xl_w``uU*9DnA-7%" intask="true">
+                    <field name="FILE">YAWN</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                </block>
+                <block type="robControls_wait_time" id="f{Hzyhv-i`mFG5I+SXT^" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="Ii*:sZq|yI1w]3EXl-IJ" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbitv2" xmlversion="3.1" description="" tags="">
+            <instance x="-72" y="74">
+                <block type="robConf_sound" id="|V?XJqd+HFH{ggh3jw:I" intask="true" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="73" y="99">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
+            <instance x="-49" y="117">
+                <block type="robConf_logotouch" id="?ybc9g.wQa:_7M,%d=~g" intask="true" deletable="false">
+                    <field name="NAME">_LO</field>
+                </block>
+            </instance>
+            <instance x="526" y="104">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="-69" y="147">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="527" y="154">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+            <instance x="-70" y="208">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="527" y="193">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="528" y="228">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="-91" y="271">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

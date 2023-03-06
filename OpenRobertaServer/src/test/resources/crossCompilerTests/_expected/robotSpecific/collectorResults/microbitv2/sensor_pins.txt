@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [, DISPLAY], UsedActor [S2, PIN_VALUE], UsedActor [ANALOGSENSOR, PIN_VALUE], UsedActor [S3, PIN_VALUE], UsedActor [S4, PIN_VALUE], UsedActor [S5, PIN_VALUE], UsedActor [S6, PIN_VALUE], UsedActor [S7, PIN_VALUE], UsedActor [S8, PIN_VALUE], UsedActor [S9, PIN_VALUE], UsedActor [S10, PIN_VALUE], UsedActor [S11, PIN_VALUE], UsedActor [S12, PIN_VALUE], UsedActor [S13, PIN_VALUE], UsedActor [S14, PIN_VALUE], UsedActor [S15, PIN_VALUE], UsedActor [S16, PIN_VALUE], UsedActor [S17, PIN_VALUE], UsedActor [S18, PIN_VALUE], UsedActor [S19, PIN_VALUE]]
+Methods: 
+[]

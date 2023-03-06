@@ -20,10 +20,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
@@ -50,7 +47,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
-import de.fhg.iais.roberta.visitor.IMbedVisitor;
+import de.fhg.iais.roberta.visitor.IMicrobitVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
@@ -58,7 +55,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
-public final class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMbedVisitor<Void> {
+public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMicrobitVisitor<Void> {
     private final ConfigurationAst robotConfiguration;
 
     /**
@@ -459,27 +456,41 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
+    public Void visitPlayFileAction(PlayFileAction playFileAction) {
+        switch ( playFileAction.fileName ) {
+            case "DADADADUM":
+            case "ENTERTAINER":
+            case "PRELUDE":
+            case "ODE":
+            case "NYAN":
+            case "RINGTONE":
+            case "FUNK":
+            case "BLUES":
+            case "BIRTHDAY":
+            case "WEDDING":
+            case "FUNERAL":
+            case "PUNCHLINE":
+            case "PYTHON":
+            case "BADDY":
+            case "CHASE":
+            case "BA_DING":
+            case "WAWAWAWAA":
+            case "JUMP_UP":
+            case "JUMP_DOWN":
+            case "POWER_UP":
+            case "POWER_DOWN": {
+                this.sb.append("music.play(music." + playFileAction.fileName + ")");
+                break;
+            }
+            default: {
+                throw new DbcException("Invalid play file name: " + playFileAction.fileName);
+            }
+        }
+        return null;
+    }
+
+    @Override
     public Void visitConnectConst(ConnectConst connectConst) {
-        throw new DbcException("Not supported!");
-    }
-
-    @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
-        throw new DbcException("Not supported!");
-    }
-
-    @Override
-    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
-        throw new DbcException("Not supported!");
-    }
-
-    @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
-        throw new DbcException("Not supported!");
-    }
-
-    @Override
-    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         throw new DbcException("Not supported!");
     }
 }

@@ -252,7 +252,7 @@ public interface ITransformerVisitor extends ISensorVisitor<Phrase>, IAllActorsV
 
     @Override
     default Phrase visitPlayFileAction(PlayFileAction playFileAction) {
-        return new PlayFileAction(playFileAction.getProperty(), playFileAction.fileName);
+        return new PlayFileAction(playFileAction.getProperty(),playFileAction.port, playFileAction.fileName, playFileAction.hide);
     }
 
     @Override

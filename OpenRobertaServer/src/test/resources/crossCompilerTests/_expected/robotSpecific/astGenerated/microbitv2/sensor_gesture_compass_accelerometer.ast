@@ -1,0 +1,38 @@
+DisplayTextAction[mode: TEXT, msg: StringConst[value: make gesture upright]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, UP, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: make gesture upside down]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, DOWN, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: make gesture at the front side]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, FACE_DOWN, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: make gesture at the back]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, FACE_UP, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: make gesture shaking]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, SHAKE, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: make gesture freely falling]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, FREEFALL, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: ANGLE OF COMPASS:]]
+DisplayTextAction[mode: TEXT, msg: SensorExpr [CompassSensor [_C, ANGLE, - EMPTY_SLOT -]]]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: SPEED IN X DIRECTION]]
+DisplayTextAction[mode: TEXT, msg: SensorExpr [AccelerometerSensor [_A, VALUE, X]]]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: SPEED IN Y DIRECTION]]
+DisplayTextAction[mode: TEXT, msg: SensorExpr [AccelerometerSensor [_A, VALUE, Y]]]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: SPEED IN Z DIRECTION]]
+DisplayTextAction[mode: TEXT, msg: SensorExpr [AccelerometerSensor [_A, VALUE, Z]]]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: ACCELEROMETER STRENGTH:]]
+DisplayTextAction[mode: TEXT, msg: SensorExpr [AccelerometerSensor [_A, VALUE, STRENGTH]]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+AktionStmt [DisplayTextAction[mode: TEXT, msg: SensorExpr [GestureSensor [- EMPTY_PORT -, UP, - EMPTY_SLOT -]]]]WaitTimeStmt[time: NumConst[value: 5000]]
+)

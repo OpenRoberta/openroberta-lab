@@ -11,37 +11,14 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
-import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
-import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
-import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
-import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
-import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
-import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
-import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
-import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
-import de.fhg.iais.roberta.syntax.action.mbed.MotionKitDualSetAction;
-import de.fhg.iais.roberta.syntax.action.mbed.MotionKitSingleSetAction;
-import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
-import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
-import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
-import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
-import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
@@ -53,31 +30,21 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
-import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.syntax.MotorDuration;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 import de.fhg.iais.roberta.visitor.CalliopeMethods;
-import de.fhg.iais.roberta.visitor.IMbedVisitorWithoutDefault;
+import de.fhg.iais.roberta.visitor.IMbedVisitor;
 
-public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IMbedVisitorWithoutDefault<Void> {
+public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IMbedVisitor<Void> {
 
     public static final double DOUBLE_EPS = 1E-7;
 
@@ -93,42 +60,8 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     }
 
     @Override
-    public Void visitBothMotorsOnAction(BothMotorsOnAction bothMotorsOnAction) {
-        ConfigurationComponent usedActorA = robotConfiguration.optConfigurationComponent(bothMotorsOnAction.portA);
-        ConfigurationComponent usedActorB = robotConfiguration.optConfigurationComponent(bothMotorsOnAction.portB);
-        boolean allActorsPresent = (usedActorA != null) && (usedActorB != null);
-        if ( !allActorsPresent ) {
-            addErrorToPhrase(bothMotorsOnAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
-        } else if ( bothMotorsOnAction.portA.equals(bothMotorsOnAction.portB) || !usedActorA.componentType.equals(usedActorB.componentType) ) {
-            addErrorToPhrase(bothMotorsOnAction, "BLOCK_NOT_EXECUTED");
-        } else if ( usedActorA.componentType.equals("CALLIBOT") ) {
-            usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
-        }
-        checkDifferentialDrive();
-        requiredComponentVisited(bothMotorsOnAction, bothMotorsOnAction.speedA, bothMotorsOnAction.speedB);
-        return null;
-    }
-
-    @Override
-    public Void visitBothMotorsStopAction(BothMotorsStopAction bothMotorsStopAction) {
-        if ( robotConfiguration.isComponentTypePresent(SC.CALLIBOT) ) {
-            usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
-        } else if ( !robotConfiguration.isComponentTypePresent("MOTOR") ) {
-            addErrorToPhrase(bothMotorsStopAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
-        }
-        return null;
-    }
-
-    @Override
     public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DISPLAY));
-        return null;
-    }
-
-    @Override
-    public Void visitColorSensor(ColorSensor colorSensor) {
-        checkSensorExists(colorSensor);
-        usedHardwareBuilder.addUsedSensor(new UsedSensor(colorSensor.getUserDefinedPort(), SC.COLOR, colorSensor.getMode()));
         return null;
     }
 
@@ -136,12 +69,6 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     public Void visitCompassSensor(CompassSensor compassSensor) {
         checkSensorExists(compassSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(compassSensor.getUserDefinedPort(), SC.COMPASS, compassSensor.getMode()));
-        return null;
-    }
-
-    @Override
-    public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction displayGetBrightnessAction) {
-        usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DISPLAY_GRAYSCALE));
         return null;
     }
 
@@ -159,12 +86,6 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return null;
     }
 
-    @Override
-    public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction displaySetBrightnessAction) {
-        requiredComponentVisited(displaySetBrightnessAction, displaySetBrightnessAction.brightness);
-        usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DISPLAY_GRAYSCALE));
-        return null;
-    }
 
     @Override
     public Void visitDisplaySetPixelAction(DisplaySetPixelAction displaySetPixelAction) {
@@ -181,25 +102,6 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     }
 
     @Override
-    public Void visitFourDigitDisplayClearAction(FourDigitDisplayClearAction fourDigitDisplayClearAction) {
-        checkActorByTypeExists(fourDigitDisplayClearAction, "FOURDIGITDISPLAY");
-        usedHardwareBuilder.addUsedActor(new UsedActor("", SC.FOUR_DIGIT_DISPLAY));
-        return null;
-    }
-
-    @Override
-    public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction fourDigitDisplayShowAction) {
-        checkActorByTypeExists(fourDigitDisplayShowAction, "FOURDIGITDISPLAY");
-        requiredComponentVisited(
-            fourDigitDisplayShowAction,
-            fourDigitDisplayShowAction.value,
-            fourDigitDisplayShowAction.position,
-            fourDigitDisplayShowAction.colon);
-        usedHardwareBuilder.addUsedActor(new UsedActor("", SC.FOUR_DIGIT_DISPLAY));
-        return null;
-    }
-
-    @Override
     public Void visitGestureSensor(GestureSensor gestureSensor) {
         if ( gestureSensor.getMode().equals("SHAKE") ) {
             usedMethodBuilder.addUsedMethod(CalliopeMethods.IS_GESTURE_SHAKE);
@@ -208,25 +110,6 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return null;
     }
 
-    @Override
-    public Void visitGetSampleSensor(GetSampleSensor sensorGetSample) {
-        requiredComponentVisited(sensorGetSample, sensorGetSample.sensor);
-        return null;
-    }
-
-    @Override
-    public Void visitGyroSensor(GyroSensor gyroSensor) {
-        checkSensorExists(gyroSensor);
-        usedHardwareBuilder.addUsedSensor(new UsedSensor(gyroSensor.getUserDefinedPort(), SC.ACCELEROMETER, gyroSensor.getMode()));
-        return null;
-    }
-
-    @Override
-    public Void visitHumiditySensor(HumiditySensor humiditySensor) {
-        checkSensorExists(humiditySensor);
-        usedHardwareBuilder.addUsedSensor(new UsedSensor(humiditySensor.getUserDefinedPort(), SC.HUMIDITY, humiditySensor.getMode()));
-        return null;
-    }
 
     @Override
     public Void visitImage(Image image) {
@@ -248,10 +131,6 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return null;
     }
 
-    @Override
-    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
-        return addActorMaybeCallibot(infraredSensor);
-    }
 
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
@@ -260,31 +139,6 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return null;
     }
 
-    @Override
-    public Void visitLedBarSetAction(LedBarSetAction ledBarSetAction) {
-        checkActorByTypeExists(ledBarSetAction, "LEDBAR");
-        requiredComponentVisited(ledBarSetAction, ledBarSetAction.x, ledBarSetAction.brightness);
-        usedHardwareBuilder.addUsedActor(new UsedActor("", SC.LED_BAR));
-        return null;
-    }
-
-    @Override
-    public Void visitLedOnAction(LedOnAction ledOnAction) {
-        requiredComponentVisited(ledOnAction, ledOnAction.ledColor);
-        return addActorMaybeCallibot(ledOnAction, SC.RGBLED);
-    }
-
-    @Override
-    public Void visitLightAction(LightAction lightAction) {
-        // TODO: design better blockly blocks and don't reuse blocks with different number of parameters and don't use EmptyExpr
-        String blocktype = lightAction.getProperty().getBlockType();
-        checkActorByPortExists(lightAction, lightAction.port);
-        if ( !blocktype.equals("robActions_brickLight_on") ) {
-            requiredComponentVisited(lightAction, lightAction.rgbLedColor);
-        }
-        usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
-        return null;
-    }
 
     @Override
     public Void visitLightSensor(LightSensor lightSensor) {
@@ -293,58 +147,6 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return null;
     }
 
-    @Override
-    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
-        return addActorMaybeCallibot(lightStatusAction, SC.LIGHT);
-    }
-
-    @Override
-    public Void visitMotionKitDualSetAction(MotionKitDualSetAction motionKitDualSetAction) {
-        if ( isMotionKitPinsOverlapping() ) {
-            addErrorToPhrase(motionKitDualSetAction, "MOTIONKIT_PIN_OVERLAP_WARNING");
-        } else {
-            usedHardwareBuilder.addUsedActor(new UsedActor("", "MOTIONKIT"));
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitMotionKitSingleSetAction(MotionKitSingleSetAction motionKitSingleSetAction) {
-        if ( isMotionKitPinsOverlapping() ) {
-            addErrorToPhrase(motionKitSingleSetAction, "MOTIONKIT_PIN_OVERLAP_WARNING");
-        } else {
-            usedHardwareBuilder.addUsedActor(new UsedActor(motionKitSingleSetAction.port, "MOTIONKIT"));
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
-        throw new DbcException("This block is not implemented.");
-    }
-
-    @Override
-    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
-        requiredComponentVisited(motorOnAction, motorOnAction.param.getSpeed());
-        MotorDuration duration = motorOnAction.param.getDuration();
-        if ( duration != null ) {
-            checkForZeroSpeed(motorOnAction, motorOnAction.param.getSpeed());
-            requiredComponentVisited(motorOnAction, duration.getValue());
-        }
-        checkDifferentialDrive();
-        return addActorMaybeCallibot(motorOnAction);
-    }
-
-    @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
-        throw new DbcException("This block is not implemented");
-    }
-
-    @Override
-    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
-        checkMotorPort(motorStopAction);
-        return addActorMaybeCallibot(motorStopAction);
-    }
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor pinValueSensor) {
@@ -353,11 +155,6 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return null;
     }
 
-    @Override
-    public Void visitPinSetPullAction(PinSetPullAction pinSetPullAction) {
-        addErrorToPhrase(pinSetPullAction, "");
-        return null;
-    }
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor pinTouchSensor) {
@@ -365,10 +162,6 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return null;
     }
 
-    @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
-        throw new DbcException("Mbed devices should use MbedPinWriteValueAction!");
-    }
 
     @Override
     public Void visitMbedPinWriteValueAction(MbedPinWriteValueAction mbedPinWriteValueAction) {
@@ -379,6 +172,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         }
         return null;
     }
+
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
@@ -398,11 +192,6 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return null;
     }
 
-    @Override
-    public Void visitRadioRssiSensor(RadioRssiSensor radioRssiSensor) {
-        usedHardwareBuilder.addUsedActor(new UsedActor("", SC.RADIO));
-        return null;
-    }
 
     @Override
     public Void visitRadioSendAction(RadioSendAction radioSendAction) {
@@ -418,42 +207,6 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return null;
     }
 
-    @Override
-    public Void visitServoSetAction(ServoSetAction servoSetAction) {
-        requiredComponentVisited(servoSetAction, servoSetAction.value);
-        return addActorMaybeCallibot(servoSetAction, SC.SERVOMOTOR);
-    }
-
-    @Override
-    public Void visitShowTextAction(ShowTextAction showTextAction) {
-        usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DISPLAY));
-        requiredComponentVisited(showTextAction, showTextAction.msg, showTextAction.x, showTextAction.y);
-        return null;
-    }
-
-    @Override
-    public Void visitSingleMotorOnAction(SingleMotorOnAction singleMotorOnAction) {
-        requiredComponentVisited(singleMotorOnAction, singleMotorOnAction.speed);
-        return null;
-    }
-
-    @Override
-    public Void visitSingleMotorStopAction(SingleMotorStopAction singleMotorStopAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitSoundSensor(SoundSensor soundSensor) {
-        checkSensorExists(soundSensor);
-        usedHardwareBuilder.addUsedSensor(new UsedSensor(soundSensor.getUserDefinedPort(), SC.SOUND, soundSensor.getMode()));
-        return null;
-    }
-
-    @Override
-    public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction) {
-        usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DISPLAY));
-        return null;
-    }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
@@ -488,13 +241,8 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return null;
     }
 
-    @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
-        checkSensorExists(ultrasonicSensor);
-        return addActorMaybeCallibot(ultrasonicSensor, SC.ULTRASONIC);
-    }
 
-    private ConfigurationComponent checkActorByPortExists(Phrase actor, String port) {
+    protected ConfigurationComponent checkActorByPortExists(Phrase actor, String port) {
         ConfigurationComponent usedActor = robotConfiguration.optConfigurationComponent(port);
         if ( usedActor == null ) {
             addErrorToPhrase(actor, "CONFIGURATION_ERROR_ACTOR_MISSING");
@@ -568,7 +316,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return configurationComponent;
     }
 
-    private void checkForZeroSpeed(Phrase action, Expr speed) {
+    protected void checkForZeroSpeed(Phrase action, Expr speed) {
         if ( speed.getKind().hasName("NUM_CONST") ) {
             NumConst speedNumConst = (NumConst) speed;
             if ( Math.abs(Double.parseDouble(speedNumConst.value)) < DOUBLE_EPS ) {
@@ -577,7 +325,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         }
     }
 
-    private Void addActorMaybeCallibot(WithUserDefinedPort phrase) {
+    protected Void addActorMaybeCallibot(WithUserDefinedPort phrase) {
         final String userDefinedPort = phrase.getUserDefinedPort();
         ConfigurationComponent configurationComponent = checkActorByPortExists((Phrase) phrase, userDefinedPort);
         if ( configurationComponent != null ) {
@@ -587,7 +335,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         }
     }
 
-    private Void addActorMaybeCallibot(WithUserDefinedPort phrase, String componentType) {
+    protected Void addActorMaybeCallibot(WithUserDefinedPort phrase, String componentType) {
         final String userDefinedPort = phrase.getUserDefinedPort();
         ConfigurationComponent configurationComponent = checkActorByPortExists((Phrase) phrase, userDefinedPort);
         if ( configurationComponent != null ) {
@@ -600,13 +348,9 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return null;
     }
 
-    private Boolean isMotionKitPinsOverlapping() {
+    protected Boolean isMotionKitPinsOverlapping() {
         Map<String, ConfigurationComponent> usedConfig = robotConfiguration.getConfigurationComponents();
-        if ( robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT) != null || robotConfiguration.isComponentTypePresent("LEDBAR") ||
-            robotConfiguration.isComponentTypePresent("FOURDIGITDISPLAY") ||
-            robotConfiguration.isComponentTypePresent(SC.ULTRASONIC) ||
-            robotConfiguration.isComponentTypePresent(SC.HUMIDITY) ||
-            robotConfiguration.isComponentTypePresent(SC.COLOUR) ) {
+        if ( robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT) != null || robotConfiguration.isComponentTypePresent("LEDBAR") || robotConfiguration.isComponentTypePresent("FOURDIGITDISPLAY") || robotConfiguration.isComponentTypePresent(SC.ULTRASONIC) || robotConfiguration.isComponentTypePresent(SC.HUMIDITY) || robotConfiguration.isComponentTypePresent(SC.COLOUR) ) {
             return true;
         }
         for ( Map.Entry<String, ConfigurationComponent> confComp : usedConfig.entrySet() ) {
@@ -621,11 +365,8 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return false;
     }
 
-    private Void checkDifferentialDrive() {
-        int countMotors = (int) this.robotConfiguration.getConfigurationComponentsValues()
-            .stream()
-            .filter(comp -> comp.componentType.equals("MOTOR"))
-            .count();
+    protected Void checkDifferentialDrive() {
+        int countMotors = (int) this.robotConfiguration.getConfigurationComponentsValues().stream().filter(comp -> comp.componentType.equals("MOTOR")).count();
         if ( countMotors == 2 ) {
             usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DIFFERENTIALDRIVE));
         }

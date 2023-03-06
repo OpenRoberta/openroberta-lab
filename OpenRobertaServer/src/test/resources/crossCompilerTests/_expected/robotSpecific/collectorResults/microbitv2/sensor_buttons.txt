@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [0, PIN, RESISTIVE], UsedSensor [1, PIN, RESISTIVE], UsedSensor [2, PIN, RESISTIVE], UsedSensor [_LO, LOGOTOUCH, - EMPTY_SLOT -]]
+Actors: 
+[UsedActor [, DISPLAY], UsedActor [, KEY], UsedActor [0, PIN_VALUE], UsedActor [1, PIN_VALUE], UsedActor [2, PIN_VALUE]]
+Methods: 
+[]

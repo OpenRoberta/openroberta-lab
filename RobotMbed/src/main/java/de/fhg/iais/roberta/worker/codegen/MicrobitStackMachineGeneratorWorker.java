@@ -2,13 +2,12 @@ package de.fhg.iais.roberta.worker.codegen;
 
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.visitor.codegen.MbedStackMachineVisitor;
+import de.fhg.iais.roberta.visitor.codegen.MicrobitStackMachineVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
-import de.fhg.iais.roberta.worker.AbstractStackMachineGeneratorWorker;
 
-public class MbedStackMachineGeneratorWorker extends AbstractStackMachineGeneratorWorker {
+public class MicrobitStackMachineGeneratorWorker extends CalliopeStackMachineGeneratorWorker {
     @Override
     protected AbstractStackMachineVisitor getVisitor(Project project, UsedHardwareBean usedHardwareBean) {
-        return new MbedStackMachineVisitor(project.getConfigurationAst(), project.getProgramAst().getTree());
+        return new MicrobitStackMachineVisitor(project.getConfigurationAst(), project.getProgramAst().getTree());
     }
 }

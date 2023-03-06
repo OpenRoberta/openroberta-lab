@@ -1,0 +1,581 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbitv2" xmlversion="3.1" description="" tags="">
+            <instance x="370" y="50">
+                <block type="robControls_start" id="HK08s[J/^kLd9?7dmyZY" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG">TRUE</field>
+                </block>
+                <block type="mbedActions_display_text" id="p-`qo0_4OiX3H5C655[:" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="rZ{Lv?HIlS{%hrcJ|Kw/" intask="true">
+                            <field name="TEXT">Pulse LOW Pin 1</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="wSQkDQo=aq1Uh-*}va;t" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="Ze5Ln*k*%%C*vwp=mp]P" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">PULSELOW</field>
+                            <field name="SENSORPORT">S2</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="29Ris`oM3xEY-`[`})y~" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="Z*qahLU:JXV[-CSjB#~f" intask="true">
+                            <field name="TEXT">Pulse High Pin 1</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="it_3(8[7}HF#z6tO;]?]" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="b5Ny3b7hC@2CE9!J{^?." intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">PULSEHIGH</field>
+                            <field name="SENSORPORT">S2</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="e)A#@=2KbJBT;bD4+J5F" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="|*06Q][=dHD`M,k^~2B6" intask="true">
+                            <field name="TEXT">Sensor Analog 0</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="d[/V7pRh!+JaO0mDXdEI" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="pg;(#;%9urPDxH2k3KjC" intask="true">
+                            <mutation mode="ANALOG"></mutation>
+                            <field name="MODE">ANALOG</field>
+                            <field name="SENSORPORT">ANALOGSENSOR</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="LTtm@!IEA1QgC-o-ZJNX" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="bc+sdwJr?6L#N1#/X]MD" intask="true">
+                            <field name="TEXT">Sensor Digital 1</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="(/R%1wBP?P,:yRRu)K^P" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="Dn^OLqBMCW[}Y6!EEc^r" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S2</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="[B46/fI!`0%|MH]|:._S" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="!A94Z};~2~[TZSoZ8DI[" intask="true">
+                            <field name="TEXT">Sensor Digital 2</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="-}-gLYbpcCsQ`qFiCXdl" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="JX,4`[8~6lM:RM%i}Zv?" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S3</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="Duq`L5p;Ht8Nh24`*,KC" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="=R_zTqp#yf?Ai:Ltc#EF" intask="true">
+                            <field name="TEXT">Sensor Digital 3</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="3I0~@uXi!/i#BEdoJaOs" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="DewNwqhBT`|Rfyol%n*{" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S4</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id=",Y.?jY{|1LX?s,{swGb]" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="/h/AmTK[Y70`~LxYStrs" intask="true">
+                            <field name="TEXT">Sensor Digital 4</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="(CD8w/79y(*1Qv.+;p50" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="M~ZV,Zmc#2*,;`sbB,BX" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S5</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id=":e}fvnP[jV7q4ONPz3VQ" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="v}?jIvu_z2uM]xU3][Oq" intask="true">
+                            <field name="TEXT">Sensor Digital 5</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="wTS-]!Z#w#l?K1Uzi6%h" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="F*!6y5[h(7po7X6]w|_P" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S6</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="I(9{_Cs*706W*TQ)}f61" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="LjQxEI(xV@5;TV~KuK.s" intask="true">
+                            <field name="TEXT">Sensor Digital 6</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="-cfrR6_yKZR(?,RFN}lo" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="/{W3o1.0V8B,MoZ(SMR)" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S7</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id=".3Rd}!aZxPboD`/f}%,." intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="6p_[xI)}qfbvE*)_u9C[" intask="true">
+                            <field name="TEXT">Sensor Digital 7</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id=";/,:.Q=W!O1cJMTD*QW?" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="p:pg[oM4,CM#6s({9gM-" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S8</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="[r0i|*:kzVpmxuxSX@IM" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="g-e=FZ1irbY;H+t.Nd.2" intask="true">
+                            <field name="TEXT">Sensor Digital 9</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="qiRAHfp*N3.St0c?)/en" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="JPppO[7S-~%8Z-wJPS|M" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S9</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="]:9TVuHE8M)X(]jYic=e" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="A1Ukx@J^#N]}s37?ALdn" intask="true">
+                            <field name="TEXT">Sensor Digital 10</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="wFExJaV5PXzM,Q(71SqH" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="Jq|z0;e+~E2iJTPd`lDi" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S10</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="M,^k%bh2lumV{IKAL3J%" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="(TdpWW#4bbJU|?GgGJ}s" intask="true">
+                            <field name="TEXT">Sensor Digital 11</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="h%Mcp.A*0G5ZhA7}/7XX" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="#W@R`rO*GZnc!Ed%_##q" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S11</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="Vb_.tve}Uu8g9d=ODu[=" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="*+.cPq)dM2-7)-T_nAuB" intask="true">
+                            <field name="TEXT">Sensor Digital 12</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id=")_9T!w,nk=pdHVzu*DH9" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="N_XP`(S=EN8s|2v:E3sU" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S12</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="o#1LlI#qp-OSRgK:Wz+y" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="c|hmjvWJ:klErnYPTm=K" intask="true">
+                            <field name="TEXT">Sensor Digital 13</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="FKS8_/+r_Kw2IgHVl!0-" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="8K4l-VPQHnX=wT-PL+c%" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S13</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="OR,fL[W6|ss+)q?7e:VZ" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="uEHa_j][UoF1-17Ze^0S" intask="true">
+                            <field name="TEXT">Sensor Digital 14</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="::o]l7A3_,}F_gF;IpB1" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="d@/Sa+1o=dUj~@2Et6i1" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S14</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="sLQzH~]!7;q:+B_WK;Ze" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="q:!X:S}nU8?kO^U;U*vQ" intask="true">
+                            <field name="TEXT">Sensor Digital 15</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="]/blH51Z(1eE2o7!y!1i" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id=".1M/,3okp9fXzr1~`.O1" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S15</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="2AV|ryxzgG4q8u8vP[W." intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="Zu4dPgy#e9aVkFY;u(~X" intask="true">
+                            <field name="TEXT">Sensor Digital 16</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="epfXk|g^5O7?j;HzfPL." intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="pVgoHY=NoN{6@]:XF+BE" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S16</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id=".xCR4Aua{7zPM2nhGv@i" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="KaONqbQgxY=JIBKiCqq;" intask="true">
+                            <field name="TEXT">Sensor Digital 17</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="M186u05HEmc;gNEJ]mWj" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="u#wcq,/UAkyV,48DaBmM" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S17</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="[`pj19Y+ms?C`/sEJEff" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="5Lq*pF?ihKs@#eD3~L-|" intask="true">
+                            <field name="TEXT">Sensor Digital 18</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="_7^(vb0%FDW5XG[mYj8+" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="(LC`|K1pJEEJVCWvY,uk" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S18</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="E[=HxyViQYmVpnLQEjm{" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="`,w}DE/!SrTbJA=0c!Y3" intask="true">
+                            <field name="TEXT">Sensor Digital 19</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="VGN~V).oF=+.Spl|CHrT" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="robSensors_pin_getSample" id="Hav*v1l4,jE,@o2Ds]3z" intask="true">
+                            <mutation mode="DIGITAL"></mutation>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S19</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbitv2" xmlversion="3.1" description="" tags="">
+            <instance x="-72" y="74">
+                <block type="robConf_sound" id="|V?XJqd+HFH{ggh3jw:I" intask="true" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="73" y="99">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
+            <instance x="-49" y="117">
+                <block type="robConf_logotouch" id="?ybc9g.wQa:_7M,%d=~g" intask="true" deletable="false">
+                    <field name="NAME">_LO</field>
+                </block>
+            </instance>
+            <instance x="526" y="104">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="-69" y="147">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="527" y="154">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+            <instance x="-70" y="208">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="527" y="193">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="528" y="228">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="-91" y="271">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="-197" y="353">
+                <block type="robConf_analogout" id="B0wNvR?8LG2pqX+iVARo" intask="true">
+                    <field name="NAME">ANALOGSENSOR</field>
+                    <field name="PIN1">0</field>
+                </block>
+            </instance>
+            <instance x="337" y="343">
+                <block type="robConf_digitalout" id="kBIsXi/Lz!#w}]R/+D3x" intask="true">
+                    <field name="NAME">S7</field>
+                    <field name="PIN1">6</field>
+                </block>
+            </instance>
+            <instance x="-102" y="411">
+                <block type="robConf_digitalout" id="YJC;gl_4!KZI0yUle2~/" intask="true">
+                    <field name="NAME">S2</field>
+                    <field name="PIN1">1</field>
+                </block>
+            </instance>
+            <instance x="341" y="410">
+                <block type="robConf_digitalout" id="-R:WZf},af5b1-x3Qg;G" intask="true">
+                    <field name="NAME">S8</field>
+                    <field name="PIN1">7</field>
+                </block>
+            </instance>
+            <instance x="-107" y="471">
+                <block type="robConf_digitalout" id="{!vVmUs1x~_K-]{O_0OW" intask="true">
+                    <field name="NAME">S3</field>
+                    <field name="PIN1">2</field>
+                </block>
+            </instance>
+            <instance x="343" y="479">
+                <block type="robConf_digitalout" id=",c9Y1fG)YvGr%I84q:`h" intask="true">
+                    <field name="NAME">S9</field>
+                    <field name="PIN1">8</field>
+                </block>
+            </instance>
+            <instance x="-109" y="532">
+                <block type="robConf_digitalout" id="XefI+j3Z5^LXAfLnxt#d" intask="true">
+                    <field name="NAME">S4</field>
+                    <field name="PIN1">3</field>
+                </block>
+            </instance>
+            <instance x="338" y="545">
+                <block type="robConf_digitalout" id="XfTbh;o*AcfmTR^P)hO+" intask="true">
+                    <field name="NAME">S10</field>
+                    <field name="PIN1">9</field>
+                </block>
+            </instance>
+            <instance x="-113" y="585">
+                <block type="robConf_digitalout" id="8`RDrS.1RCnWhgz5-QnW" intask="true">
+                    <field name="NAME">S5</field>
+                    <field name="PIN1">4</field>
+                </block>
+            </instance>
+            <instance x="339" y="613">
+                <block type="robConf_digitalout" id="tcSImH24q}}hm8}S;0:1" intask="true">
+                    <field name="NAME">S11</field>
+                    <field name="PIN1">10</field>
+                </block>
+            </instance>
+            <instance x="-124" y="640">
+                <block type="robConf_digitalout" id="T2=5OIW~7IAmL?@xd[|2" intask="true">
+                    <field name="NAME">S6</field>
+                    <field name="PIN1">5</field>
+                </block>
+            </instance>
+            <instance x="329" y="686">
+                <block type="robConf_digitalout" id="LL4vIK2,;F=fxGdX*Lbn" intask="true">
+                    <field name="NAME">S12</field>
+                    <field name="PIN1">11</field>
+                </block>
+            </instance>
+            <instance x="-131" y="761">
+                <block type="robConf_digitalout" id="1pER?cJD[1Q9E/uPQwp4" intask="true">
+                    <field name="NAME">S13</field>
+                    <field name="PIN1">12</field>
+                </block>
+            </instance>
+            <instance x="-129" y="823">
+                <block type="robConf_digitalout" id="~+;GIa#QCUU6X4LhO:1i" intask="true">
+                    <field name="NAME">S14</field>
+                    <field name="PIN1">13</field>
+                </block>
+            </instance>
+            <instance x="-128" y="880">
+                <block type="robConf_digitalout" id="T9nDq#,d~!*!%f?ij!i%" intask="true">
+                    <field name="NAME">S15</field>
+                    <field name="PIN1">14</field>
+                </block>
+            </instance>
+            <instance x="-122" y="945">
+                <block type="robConf_digitalout" id="zuo_YQJ.S3b])[#UR0E1" intask="true">
+                    <field name="NAME">S16</field>
+                    <field name="PIN1">15</field>
+                </block>
+            </instance>
+            <instance x="319" y="929">
+                <block type="robConf_digitalout" id="!Xj.-=,cTVk5;l%IffDe" intask="true">
+                    <field name="NAME">S17</field>
+                    <field name="PIN1">16</field>
+                </block>
+            </instance>
+            <instance x="324" y="999">
+                <block type="robConf_digitalout" id="e%xWpCX,hkqm+}FL_l|5" intask="true">
+                    <field name="NAME">S18</field>
+                    <field name="PIN1">19</field>
+                </block>
+            </instance>
+            <instance x="337" y="1059">
+                <block type="robConf_digitalout" id="R9*F|C^upD.-;F9ecvLf" intask="true">
+                    <field name="NAME">S19</field>
+                    <field name="PIN1">20</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

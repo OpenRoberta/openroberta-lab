@@ -57,6 +57,7 @@
             </block>
         </category>
         <category name="TOOLBOX_SOUND" svg="true">
+            <block type="mbedActions_play_note"/>
             <block type="mbedActions_play_tone">
                 <value name="FREQUENCE">
                     <block type="math_number">
@@ -69,7 +70,7 @@
                     </block>
                 </value>
             </block>
-            <block type="mbedActions_play_note"/>
+            <block type='actions_play_file_port'></block>
         </category>
         <category name="TOOLBOX_PIN" svg="false">
             <block type='mbedActions_write_to_pin'>
