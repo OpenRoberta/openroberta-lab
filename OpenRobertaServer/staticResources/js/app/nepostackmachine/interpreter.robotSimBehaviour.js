@@ -303,10 +303,18 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             if (this.hardwareState.actions.omniDrive == undefined) {
                 this.hardwareState.actions.omniDrive = {};
             }
-            this.hardwareState.actions.omniDrive[C.X + C.SPEED] = xVel;
-            this.hardwareState.actions.omniDrive[C.Y + C.SPEED] = yVel;
-            this.hardwareState.actions.omniDrive[C.DISTANCE] = distance;
-            this.setBlocking(true);
+            // This is to handle 0 distance or 0 speed being passed in
+            if (distance === 0 || (xVel === 0 && yVel === 0)) {
+                this.hardwareState.actions.omniDrive[C.X + C.SPEED] = 0;
+                this.hardwareState.actions.omniDrive[C.Y + C.SPEED] = 0;
+                this.hardwareState.actions.omniDrive[C.DISTANCE] = 0;
+            }
+            else {
+                this.hardwareState.actions.omniDrive[C.X + C.SPEED] = xVel;
+                this.hardwareState.actions.omniDrive[C.Y + C.SPEED] = yVel;
+                this.hardwareState.actions.omniDrive[C.DISTANCE] = distance;
+                this.setBlocking(true);
+            }
             return 0;
         };
         RobotSimBehaviour.prototype.omniStopDriveAction = function () {
