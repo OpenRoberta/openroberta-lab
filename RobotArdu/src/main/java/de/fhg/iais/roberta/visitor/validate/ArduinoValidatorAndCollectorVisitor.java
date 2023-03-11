@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -69,6 +70,11 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
         put("VOLTAGE_SENSING", SC.POTENTIOMETER);
         put("ENCODER_SENSING", SC.ENCODER);
     }});
+
+    private boolean isServoMotorUsed = false;
+    private boolean isBuzzerUsed = false;
+    private boolean isIRSensorUsed = false;
+
 
     public ArduinoValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(brickConfiguration, beanBuilders);
@@ -129,7 +135,12 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
 
     @Override
     public Void visitInfraredSensor(InfraredSensor infraredSensor) {
-        usedHardwareBuilder.addUsedSensor(new UsedSensor(infraredSensor.getUserDefinedPort(), SC.INFRARED, infraredSensor.getMode()));
+        if ( isServoMotorUsed && isBuzzerUsed ) {
+            addErrorToPhrase(infraredSensor, "CONFIGURATION_ERROR_TIMER_ALREADY_IN_USE_BY_" + SC.INFRARED);
+        } else {
+            usedHardwareBuilder.addUsedSensor(new UsedSensor(infraredSensor.getUserDefinedPort(), SC.INFRARED, infraredSensor.getMode()));
+            isIRSensorUsed = true;
+        }
         return null;
     }
 
@@ -195,6 +206,18 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
         checkSensorPort(motionSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(motionSensor.getUserDefinedPort(), SC.MOTION, motionSensor.getMode()));
         return null;
+    }
+
+    @Override
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
+        if ( motorOnAction.param.getDuration() == null ) {  // only for servo motor
+            if ( isIRSensorUsed && isBuzzerUsed ) {
+                addErrorToPhrase(motorOnAction, "CONFIGURATION_ERROR_TIMER_ALREADY_IN_USE_BY_" + SC.INFRARED);
+            } else {
+                isServoMotorUsed = true;
+            }
+        }
+        return super.visitMotorOnAction(motorOnAction);
     }
 
     @Override
@@ -264,6 +287,12 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.BUZZER) ) {
             addErrorToPhrase(playNoteAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
+        }
+        if ( isServoMotorUsed && isIRSensorUsed ) {
+            addErrorToPhrase(playNoteAction, "CONFIGURATION_ERROR_TIMER_ALREADY_IN_USE_BY_" + SC.INFRARED);
+        } else {
+            usedHardwareBuilder.addUsedActor(new UsedActor(playNoteAction.port, SC.BUZZER));
+            isBuzzerUsed = true;
         }
         return null;
     }
@@ -335,6 +364,12 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
         requiredComponentVisited(toneAction, toneAction.duration, toneAction.frequency);
         if ( !this.robotConfiguration.isComponentTypePresent(SC.BUZZER) ) {
             addErrorToPhrase(toneAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
+        }
+        if ( isServoMotorUsed && isIRSensorUsed ) {
+            addErrorToPhrase(toneAction, "CONFIGURATION_ERROR_TIMER_ALREADY_IN_USE_BY_" + SC.INFRARED);
+        } else {
+            usedHardwareBuilder.addUsedActor(new UsedActor(toneAction.port, SC.BUZZER));
+            isBuzzerUsed = true;
         }
         return null;
     }

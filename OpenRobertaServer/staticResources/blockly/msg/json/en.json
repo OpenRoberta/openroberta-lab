@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2023-02-24 06:38:33.540734",
+		"lastupdated": "2023-03-31 12:41:12.391309",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -886,6 +886,7 @@
 	"CONFIGURATION_ERROR_MISSING_PIN": "The pin used by this component does not exist!",
 	"CONFIGURATION_ERROR_NO_BUILTIN_RGBLED": "This board does not have a built in RGB LED!",
 	"CONFIGURATION_ERROR_DIFFDRIVE_NOT_UNIQUE": "This configuration block may only occur once.",
+	"CONFIGURATION_ERROR_TIMER_ALREADY_IN_USE_BY_INFRARED": "You cannot unfortunately use Buzzer, IR sensor and Servo motor in the same program on Arduino Uno and Nano because of conflicting timer usage internally.",
 	"DATATABLE_PROGRAM_NAME": "Program name",
 	"DATATABLE_CREATED_BY": "Creator",
 	"DATATABLE_SHARED": "Shared",

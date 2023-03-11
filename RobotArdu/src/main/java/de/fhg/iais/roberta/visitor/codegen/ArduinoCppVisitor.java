@@ -358,15 +358,13 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     }
 
     public void createMeasureIRSensor() {
-        this.sb.append("bool _getIRPresence(IRrecv &irrecv) {");
+        this.sb.append("bool _getIRPresence() {");
         incrIndentation();
         nlIndent();
-        this.sb.append("decode_results results;");
-        nlIndent();
-        this.sb.append("if (irrecv.decode(&results)) {");
+        this.sb.append("if (IrReceiver.decode()) {");
         incrIndentation();
         nlIndent();
-        this.sb.append("irrecv.resume();");
+        this.sb.append("IrReceiver.resume();");
         nlIndent();
         this.sb.append("return true;");
         decrIndentation();
@@ -383,17 +381,15 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
         this.sb.append("}");
         nlIndent();
         nlIndent();
-        this.sb.append("long int  _getIRValue(IRrecv &irrecv) {");
+        this.sb.append("long int _getIRValue() {");
         incrIndentation();
         nlIndent();
-        this.sb.append("decode_results results;");
-        nlIndent();
-        this.sb.append("if (irrecv.decode(&results)) {");
+        this.sb.append("if (IrReceiver.decode()) {");
         incrIndentation();
         nlIndent();
-        this.sb.append("long int tmpValue = results.value;");
+        this.sb.append("long int tmpValue = IrReceiver.decodedIRData.decodedRawData;");
         nlIndent();
-        this.sb.append("irrecv.resume();");
+        this.sb.append("IrReceiver.resume();");
         nlIndent();
         this.sb.append("return tmpValue;");
         decrIndentation();
@@ -415,10 +411,10 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         switch ( infraredSensor.getMode() ) {
             case SC.PRESENCE:
-                this.sb.append("_getIRPresence(_irrecv_").append(infraredSensor.getUserDefinedPort()).append(")");
+                this.sb.append("_getIRPresence()");
                 break;
             case SC.VALUE:
-                this.sb.append("_getIRValue(_irrecv_").append(infraredSensor.getUserDefinedPort()).append(")");
+                this.sb.append("_getIRValue()");
                 break;
             default:
                 throw new DbcException(infraredSensor.getKind().getName() + " mode is not supported: " + infraredSensor.getMode());
@@ -557,7 +553,19 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                     headerFiles.add("#include <DHT_sensor_library/DHT.h>");
                     break;
                 case SC.INFRARED:
-                    headerFiles.add("#include <IRremote/src/IRremote.h>");
+                    if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.INFRARED) ) {
+                        if ( this.configuration.getRobotName().equalsIgnoreCase("uno") ||
+                            this.configuration.getRobotName().equalsIgnoreCase("nano") ) {
+                            if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.BUZZER) ) {
+                                headerFiles.add("#define IR_USE_AVR_TIMER1");
+                            } else if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.SERVOMOTOR) ) {
+                                headerFiles.add("#define IR_USE_AVR_TIMER2");
+                            }
+                        } else {
+                            headerFiles.add("#define IR_USE_AVR_TIMER3");
+                        }
+                        headerFiles.add("#include <IRremote/src/IRremote.hpp>");
+                    }
                     break;
                 case SC.RFID:
                     if ( !this.configuration.getRobotName().equals("unowifirev2") ) { // TODO remove once rfid library is supported for unowifirev2
@@ -578,7 +586,9 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                     headerFiles.add("#include <Stepper/src/Stepper.h>");
                     break;
                 case SC.SERVOMOTOR:
-                    headerFiles.add("#include <Servo/src/Servo.h>");
+                    if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.SERVOMOTOR) ) {
+                        headerFiles.add("#include <Servo/src/Servo.h>");
+                    }
                     break;
                 case SC.GYRO:
                 case SC.ACCELEROMETER:
@@ -659,10 +669,12 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                 case SC.MOISTURE:
                     break;
                 case SC.INFRARED:
-                    this.sb.append("pinMode(13, OUTPUT);");
-                    nlIndent();
-                    this.sb.append("_irrecv_" + usedConfigurationBlock.userDefinedPortName + ".enableIRIn();");
-                    nlIndent();
+                    if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.INFRARED) ) {
+                        this.sb.append("pinMode(13, OUTPUT);");
+                        nlIndent();
+                        this.sb.append("IrReceiver.begin(" + usedConfigurationBlock.getProperty("OUTPUT") + ", ENABLE_LED_FEEDBACK);");
+                        nlIndent();
+                    }
                     break;
                 case SC.KEY:
                     this.sb.append("pinMode(_taster_" + usedConfigurationBlock.userDefinedPortName + ", INPUT);");
@@ -732,9 +744,11 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                 case SC.STEPMOTOR:
                     break;
                 case SC.SERVOMOTOR:
-                    this.sb
-                        .append("_servo_" + usedConfigurationBlock.userDefinedPortName + ".attach(" + usedConfigurationBlock.getProperty(SC.PULSE) + ");");
-                    nlIndent();
+                    if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.SERVOMOTOR) ) {
+                        this.sb
+                            .append("_servo_" + usedConfigurationBlock.userDefinedPortName + ".attach(" + usedConfigurationBlock.getProperty(SC.PULSE) + ");");
+                        nlIndent();
+                    }
                     break;
                 case SC.DIGITAL_PIN:
                     this.sb.append("pinMode(_input_" + usedConfigurationBlock.userDefinedPortName + ", INPUT");
@@ -811,6 +825,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
             String blockName = cc.userDefinedPortName;
             switch ( cc.componentType ) {
                 case SC.ROBOT:
+                case SC.INFRARED:
                     break;
                 case SC.HUMIDITY:
                     this.sb.append("#define DHTPIN" + blockName + " ").append(cc.getProperty("OUTPUT"));
@@ -828,10 +843,6 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                     break;
                 case SC.MOISTURE:
                     this.sb.append("int _moisturePin_" + blockName + " = ").append(cc.getProperty("S")).append(";");
-                    nlIndent();
-                    break;
-                case SC.INFRARED:
-                    this.sb.append("IRrecv _irrecv_").append(blockName).append("(").append(cc.getProperty("OUTPUT")).append(");");
                     nlIndent();
                     break;
                 case SC.LIGHT:
@@ -947,8 +958,10 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                     nlIndent();
                     break;
                 case SC.SERVOMOTOR:
-                    this.sb.append("Servo _servo_" + blockName + ";");
-                    nlIndent();
+                    if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.SERVOMOTOR) ) {
+                        this.sb.append("Servo _servo_" + blockName + ";");
+                        nlIndent();
+                    }
                     break;
                 case SC.ANALOG_PIN:
                 case SC.DIGITAL_PIN:
