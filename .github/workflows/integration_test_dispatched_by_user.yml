@@ -1,4 +1,4 @@
-name: IntegrationTest-Dispatch
+name: IntegrationTest-Dispatch-By_User
 
 on:
   workflow_dispatch:

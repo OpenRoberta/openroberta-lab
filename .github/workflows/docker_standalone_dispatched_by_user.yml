@@ -1,4 +1,4 @@
-name: DockerStandalone
+name: Standalone-Dispatch-By_User
 
 on:
   workflow_dispatch:

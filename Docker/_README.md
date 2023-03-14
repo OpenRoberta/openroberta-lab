@@ -76,16 +76,18 @@ forget, to increase the version numer in the next section, too.
 The image is available at dockerhub. Name: openroberta/base-x64:<number>>. Use the highest number.
 
 To create it, you need a clone of our GitHub repository `ora-cc-rsc`, whose path is set in the commands below (`CC_RESOURCES`). It contains the resource to be
-copied into the Docker image. The Docker image has been created using the shell commands:
+copied into the Docker image. _Make sure, that the repository `ora-cc-rsc` is clean. Uncommitted data will be lost. The Docker image has been created using the
+shell commands:
 
 ```bash
-BASE_DIR=/data/openroberta-lab
+BASE_DIR=/D/data/openroberta-lab
 ARCH=x64             # either x64 or arm32v7
 CCBIN_VERSION=1      # this is needed in the dockerfile!
 BASE_VERSION=32
-CC_RESOURCES=/data/openroberta-lab/git/ora-cc-rsc
+CC_RESOURCES=/C/git/ora-cc-rsc
 cd $CC_RESOURCES
 
+git fetch --all; git reset --hard; git clean -fd
 git checkout master; git pull
 git checkout tags/${BASE_VERSION}
 
