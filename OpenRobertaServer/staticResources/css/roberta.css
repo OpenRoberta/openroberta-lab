@@ -3095,6 +3095,8 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
     line-height: 18px;
     font-size: 13px;
     padding: 0px;
+    z-index: 5;
+    color: transparent;
 }
 
 #codeDiv pre {
