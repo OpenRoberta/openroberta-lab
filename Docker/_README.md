@@ -80,12 +80,13 @@ copied into the Docker image. _Make sure, that the repository `ora-cc-rsc` is cl
 shell commands:
 
 ```bash
-BASE_DIR=/D/data/openroberta-lab
+BASE_DIR=/data/openroberta-lab
 ARCH=x64             # either x64 or arm32v7
 CCBIN_VERSION=1      # this is needed in the dockerfile!
 BASE_VERSION=32
 CC_RESOURCES=/C/git/ora-cc-rsc
 cd $CC_RESOURCES
+if [ ! -d .git ]; then echo "this script only runs in a git directory - exit 12"; exit 12; fi
 
 git fetch --all; git reset --hard; git clean -fd
 git checkout master; git pull

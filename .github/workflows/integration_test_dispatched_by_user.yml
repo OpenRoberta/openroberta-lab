@@ -1,4 +1,4 @@
-name: IntegrationTest-Dispatch-By_User
+name: IntegrationTest-Dispatch-By-User
 
 on:
   workflow_dispatch:
@@ -8,13 +8,13 @@ on:
         required: true
         default: 'develop'
       oraccrsctag:
-        description: 'Tag for the crosscompiler resources'
+        description: 'Tag/version for the crosscompiler resources'
         required: true
         default: 'tag # from ora-cc-rsc repo'
 
 jobs:
   integration-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container: openroberta/base-x64:${{ github.event.inputs.oraccrsctag }}
     steps:
       - name: branch ${{ github.event.inputs.branch }}, repo ${{ github.repository }}, ora-cc-rsc-tag ${{ github.event.inputs.oraccrsctag }}

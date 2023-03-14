@@ -7,7 +7,7 @@ WORKDIR /tmp/build
 COPY . .
 RUN mvn clean install -DskipTests && ./ora.sh export /tmp/build/export gzip
 
-FROM openroberta/base:$BASEVERSION
+FROM openroberta/base-x64:$BASEVERSION
 
 VOLUME /opt/db /tmp/openrobertaTmp
 EXPOSE 1999

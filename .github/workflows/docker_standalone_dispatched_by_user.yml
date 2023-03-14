@@ -1,21 +1,25 @@
-name: Standalone-Dispatch-By_User
+name: Standalone-Dispatch-By-User
 
 on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch/ref for integration tests'
+        description: 'Branch/ref for the standalone'
         required: true
         default: 'develop'
-      oraccrsctag:
-        description: 'Tag for the crosscompiler resources'
+      base:
+        description: 'Base number'
         required: true
-        default: 'tag # from ora-cc-rsc repo'
+        default: 'base number, e.g. 32'
+      version:
+        description: 'Version to be build, take from tag ORA-<version>'
+        required: true
+        default: 'version, e.g. 5.1.0'
 
 jobs:
   docker:
     if: ${{ github.repository == 'OpenRoberta/openroberta-lab' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout the branch
         uses: actions/checkout@v3
@@ -24,7 +28,7 @@ jobs:
       - name: Set up QEMU for multi architecture build
         uses: docker/setup-qemu-action@master
         with:
-          platforms: all
+          platforms: linux/amd64
       - name: Set up docker buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
@@ -33,27 +37,13 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Get tag name
-        id: getTagName
-        # Parse version number without ORA prefix
-        run: |
-          echo ::set-output name=tag::${GITHUB_REF#refs/tags/ORA-}
       - name: Build docker image for standalone
         uses: docker/build-push-action@v3
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./Docker/openroberta/conf/y-standalone-lab/Dockerfile
-          platforms: linux/arm/v7, linux/amd64
+          platforms: linux/amd64
           push: true
-          tags: openroberta/standalone:latest, openroberta/standalone:${{ steps.getTagName.outputs.tag }}
-#      - name: Build docker image for the lab server
-#        if: ${{ false }}  # disable for now
-#        uses: docker/build-push-action@v3
-#        with:
-#          builder: ${{ steps.buildx.outputs.name }}
-#          context: .
-#          file: ./Docker/openroberta/conf/y-docker-for-lab-ci/Dockerfile
-#          platforms: linux/amd64
-#          push: true
-#          tags: openroberta/server:${{ steps.getTagName.outputs.tag }}
+          tags: openroberta/standalone:latest, openroberta/standalone:${{ github.event.inputs.version }}
+

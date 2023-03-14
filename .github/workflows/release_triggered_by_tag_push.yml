@@ -8,7 +8,7 @@ on:
 jobs:
   release:
     if: ${{ github.repository == 'OpenRoberta/openroberta-lab' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Create release for branch ${{ github.ref }} and tag ${GITHUB_REF#refs/tags/ORA-} of repo ${{ github.repository }}
         run: echo "Create release for branch ${{ github.ref }} and tag ${GITHUB_REF#refs/tags/ORA-} of repo ${{ github.repository }}"
