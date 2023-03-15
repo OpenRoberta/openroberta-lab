@@ -1,8 +1,12 @@
-ARG BASEVERSION=32
+ARG BASEVERSION
+ARG ARCH
 
-FROM maven:3.8-adoptopenjdk-8 AS build
+FROM openroberta/base-${ARCH}:${BASE_VERSION}
 
-RUN mkdir -p /tmp/build && cd /tmp/build
+RUN mkdir -p /tmp/build && cd /tmp/build; \
+    apt-get update && \
+    apt-get install --no-install-recommends -y maven \
+
 WORKDIR /tmp/build
 COPY . .
 RUN mvn clean install -DskipTests && ./ora.sh export /tmp/build/export gzip

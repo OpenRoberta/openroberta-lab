@@ -1,7 +1,8 @@
 # Instructions to setup the lab using DOCKER container (2023-03-06)
 
-This text is for *developer* and *maintainer* of the openroberta lab, *not* if you want to run a local server. Running a local server is described in our wiki
-on GitHub. This text describes the docker-related scripts, which are used for a large installation (as our prod and test servers are),
+This text is for *developer* and *maintainer* of the openroberta lab, *not* if you want to run a local server. Running a local server is described in our
+[wiki on GitHub](https://github.com/OpenRoberta/openroberta-lab/wiki/Instructions-to-run-a-openroberta-lab-server-using-DOCKER). This text describes the
+docker-related scripts, which are used for a large installation (as our prod and test servers are),
 
 * to setup a docker network,
 * create docker images for a data base server and lab server and
@@ -61,7 +62,7 @@ It has been created using the shell commands:
 ```bash
 BASE_DIR=/data/openroberta-lab
 ARCH=x64             # either x64 or arm32v7
-CCBIN_VERSION=1
+CCBIN_VERSION=2
 
 cd ${BASE_DIR}/conf/${ARCH}/1-cc-binaries
 docker build --no-cache -t openroberta/ccbin-${ARCH}:${CCBIN_VERSION} .
@@ -82,9 +83,9 @@ shell commands:
 ```bash
 BASE_DIR=/data/openroberta-lab
 ARCH=x64             # either x64 or arm32v7
-CCBIN_VERSION=1      # this is needed in the dockerfile!
-BASE_VERSION=32
-CC_RESOURCES=/C/git/ora-cc-rsc
+CCBIN_VERSION=2      # this is needed in the dockerfile!
+BASE_VERSION=35
+CC_RESOURCES=/data/openroberta-lab/git/ora-cc-rsc
 cd $CC_RESOURCES
 if [ ! -d .git ]; then echo "this script only runs in a git directory - exit 12"; exit 12; fi
 
@@ -97,12 +98,40 @@ docker build --no-cache -t openroberta/base-${ARCH}:${BASE_VERSION} \
        --build-arg CCBIN_VERSION=${CCBIN_VERSION} \
        -f $BASE_DIR/conf/${ARCH}/2-cc-resources/Dockerfile .
 docker push openroberta/base-${ARCH}:${BASE_VERSION}
+# do this if you sure, that your tag is the LATEST (this one is used for the INTEGRATION TESTS on GitHub!)
+docker tag openroberta/base-${ARCH}:${BASE_VERSION} openroberta/base-${ARCH}:latest
+docker push openroberta/base-${ARCH}:latest
 ```
 
 _Note:_ If the git repository `ora-cc-rsc` is changed, the `openroberta/base-${ARCH}` image and all images built upon it must be rebuilt. This is fast, but
 don't forget it! The version of the `openroberta/base-${ARCH}` image (a simple number) should match a tag in the git repository `ora-cc-rsc`. This reminds you,
 that the data from that tag is the data stored in the base image. The variable `BASE_VERSION` in all `decl.sh` files of all servers contains this number, and
 you have to edit these files, if you change the version number. It is legal, to use different base versions for different servers.
+
+### step 3: image for integration tests (on GitHub, most be done ALWAYS after step 2 has succeeded)
+
+this image contains a populated maven cache to speed up the nightly runs
+
+```bash
+BASE_DIR=/data/openroberta-lab
+ARCH=x64             # either x64 or arm32v7
+CCBIN_VERSION=2      # this is needed in the dockerfile!
+BASE_VERSION=35
+
+cd ${BASE_DIR}/
+git fetch --all; git reset --hard; git clean -fd
+git checkout master; git pull
+git checkout tags/${BASE_VERSION}
+
+mvn clean install    # necessary to create the update resources for ev3- and arduino-based systems
+docker build --no-cache -t openroberta/base-${ARCH}:${BASE_VERSION} \
+       --build-arg CCBIN_VERSION=${CCBIN_VERSION} \
+       -f $BASE_DIR/conf/${ARCH}/2-cc-resources/Dockerfile .
+docker push openroberta/base-${ARCH}:${BASE_VERSION}
+# do this if you sure, that your tag is the LATEST (this one is used for the INTEGRATION TESTS on GitHub!)
+docker tag openroberta/base-${ARCH}:${BASE_VERSION} openroberta/base-${ARCH}:latest
+docker push openroberta/base-${ARCH}:latest
+```
 
 # Operating Instructions for the Test and Prod Server
 

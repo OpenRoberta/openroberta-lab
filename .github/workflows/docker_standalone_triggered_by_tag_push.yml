@@ -37,6 +37,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./Docker/openroberta/conf/y-standalone-lab/Dockerfile
+          build-args: BASEVERSION=latest
           platforms: linux/amd64
           push: true
           tags: openroberta/standalone:latest, openroberta/standalone:${{ steps.getTagName.outputs.tag }}

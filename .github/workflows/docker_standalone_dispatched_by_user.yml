@@ -10,7 +10,7 @@ on:
       base:
         description: 'Base number'
         required: true
-        default: 'base number, e.g. 32'
+        default: 'base number, e.g. latest or 35'
       version:
         description: 'Version to be build, take from tag ORA-<version>'
         required: true
@@ -43,6 +43,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./Docker/openroberta/conf/y-standalone-lab/Dockerfile
+          build-args: BASEVERSION=${{ github.event.inputs.base }}
           platforms: linux/amd64
           push: true
           tags: openroberta/standalone:latest, openroberta/standalone:${{ github.event.inputs.version }}

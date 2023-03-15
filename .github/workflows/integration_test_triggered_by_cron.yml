@@ -4,21 +4,18 @@ on:
   schedule:
     - cron: "30 0 * * *"
 
-env:
-  ORA_CC_RSC: 34
-
 jobs:
   integration-test:
     if: ${{ github.repository == 'OpenRoberta/openroberta-lab' }}
     runs-on: ubuntu-22.04
-    container: openroberta/base-x64:$ORA_CC_RSC
+    container: openroberta/base-x64:latest
     steps:
-      - name: branch ${{ github.ref }}, repo ${{ github.repository }}, ora-cc-rsc-tag $ORA_CC_RSC
+      - name: branch ${{ github.ref }}, repo ${{ github.repository }}, ora-cc-rsc-tag is latest
         uses: actions/checkout@v3
       - name: Setup Java JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
+          java-version: '8'
           distribution: 'adopt'
       - name: Cache local maven repository
         uses: actions/cache@v3

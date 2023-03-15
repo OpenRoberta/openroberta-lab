@@ -58,7 +58,7 @@ public class EdisonCompilerWorker implements ICompilerWorker {
         //build and start the Python process
         String[] executableWithParameters =
             {
-                "python2",
+                "python",
                 compilerResourcesDir + "EdPy.py",
                 compilerResourcesDir + "en_lang.json",
                 sourceFilePath + pyFile + ".py",

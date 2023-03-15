@@ -1,4 +1,4 @@
-ARG BASEVERSION=32
+ARG BASEVERSION=35
 
 FROM --platform=$BUILDPLATFORM maven:3.8-adoptopenjdk-8 AS build
 
