@@ -1042,6 +1042,31 @@ export function RGBAToHexA(rgba) {
     return '#' + r + g + b + a;
 }
 
+export function updateNNBlocksXMLIfRenamed(state) {
+    let changedInputPairs = state.inputs.filter((i) => i[0] !== i[1]);
+    let changedOutputPairs = state.outputs.filter((o) => o[0] !== o[1]);
+    if (changedInputPairs.length) {
+        findAndUpdateNNBlocksXMLInProgram(changedInputPairs);
+    }
+    if (changedOutputPairs.length) {
+        findAndUpdateNNBlocksXMLInProgram(changedOutputPairs);
+    }
+}
+
+function findAndUpdateNNBlocksXMLInProgram(inputOutputPairs) {
+    let workspace = Blockly.Workspace.getByContainer('blocklyDiv');
+    for (const block of workspace.getAllBlocks()) {
+        if (block.dependNN) {
+            for (const field of block.dependNN.fields) {
+                let possibleChangeIdx = inputOutputPairs.findIndex((x) => x[1] === block.getFieldValue(field));
+                if (possibleChangeIdx > -1) {
+                    block.setFieldValue(inputOutputPairs[possibleChangeIdx][0], field);
+                }
+            }
+        }
+    }
+}
+
 export {
     getTheStartBlock,
     base64decode,

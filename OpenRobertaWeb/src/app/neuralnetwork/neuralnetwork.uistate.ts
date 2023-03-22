@@ -23,8 +23,9 @@ export class State {
     weightArcMaxSize = 8;
     weightSuppressMultOp = true;
 
-    inputs = [];
-    outputs = [];
+    // These consist of [currentName, oldName] tuples
+    inputs: string[][] = [];
+    outputs: string[][] = [];
 
     constructor(json: any) {
         // if no JSON is available from the program, the default from above is taken

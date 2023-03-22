@@ -51,7 +51,7 @@ export function programWasReplaced() {
  * - reset node selection (yellow node)
  */
 export function saveNN2Blockly() {
-    NN_UI.saveNN2Blockly();
+    NN_UI.saveNN2BlocklyAndUpdateProgramXML();
     NN_UI.resetUiOnTerminate();
 }
 

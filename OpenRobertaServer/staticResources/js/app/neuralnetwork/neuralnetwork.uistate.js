@@ -23,6 +23,7 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
             this.precision = '2';
             this.weightArcMaxSize = 8;
             this.weightSuppressMultOp = true;
+            // These consist of [currentName, oldName] tuples
             this.inputs = [];
             this.outputs = [];
             // if no JSON is available from the program, the default from above is taken

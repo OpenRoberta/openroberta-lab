@@ -41,7 +41,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", "./neuralnetwork.uistate", "log", "./neuralnetwork.msg", "util"], function (require, exports, H, neuralnetwork_nn_1, neuralnetwork_uistate_1, LOG, MSG, UTIL) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.getNetwork = exports.saveNN2Blockly = exports.programWasReplaced = exports.resetUiOnTerminate = exports.runNNEditor = exports.setupNN = void 0;
+    exports.getNetwork = exports.saveNN2BlocklyAndUpdateProgramXML = exports.programWasReplaced = exports.resetUiOnTerminate = exports.runNNEditor = exports.setupNN = void 0;
     var NodeType;
     (function (NodeType) {
         NodeType[NodeType["INPUT"] = 0] = "INPUT";
@@ -374,7 +374,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             var i = 1;
             while (true) {
                 var id = 'n' + i++;
-                if (state.inputs.indexOf(id) <= -1 && state.outputs.indexOf(id) <= -1) {
+                if (state.inputs.map(function (e) { return e[0]; }).indexOf(id) <= -1 && state.outputs.map(function (e) { return e[0]; }).indexOf(id) <= -1) {
                     return id;
                 }
             }
@@ -393,7 +393,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                         return;
                     }
                     var id = selectDefaultId();
-                    state.inputs.push(id);
+                    state.inputs.push([id, id]);
                     hideAllCards();
                     reconstructNNIncludingUI();
                 };
@@ -405,7 +405,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                         return;
                     }
                     var id = selectDefaultId();
-                    state.outputs.push(id);
+                    state.outputs.push([id, id]);
                     hideAllCards();
                     reconstructNNIncludingUI();
                 };
@@ -644,13 +644,15 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     }
     function updateNodeName(node, newId) {
         for (var i = 0; i < state.inputs.length; i++) {
-            if (state.inputs[i] === node.id) {
-                state.inputs[i] = newId;
+            if (state.inputs[i][0] === node.id) {
+                state.inputs[i][0] = newId;
+                state.inputs[i][1] = node.id;
             }
         }
         for (var i = 0; i < state.outputs.length; i++) {
-            if (state.outputs[i] === node.id) {
-                state.outputs[i] = newId;
+            if (state.outputs[i][0] === node.id) {
+                state.outputs[i][0] = newId;
+                state.outputs[i][1] = node.id;
             }
         }
         node.id = newId;
@@ -835,8 +837,9 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     exports.programWasReplaced = programWasReplaced;
     /**
      * extract data from the network and put it into the state and store the state in the start block
+     * Also, save the updates into the program XML
      */
-    function saveNN2Blockly() {
+    function saveNN2BlocklyAndUpdateProgramXML() {
         if (rememberProgramWasReplaced) {
             return; // program was imported. Old NN should NOT be saved
         }
@@ -844,15 +847,16 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         try {
             state.weights = network.getWeightArray();
             state.biases = network.getBiasArray();
-            state.inputs = network.getInputNames();
-            state.outputs = network.getOutputNames();
+            state.inputs = network.getInputNames(state.inputs);
+            state.outputs = network.getOutputNames(state.outputs);
             startBlock.data = JSON.stringify(state);
+            UTIL.updateNNBlocksXMLIfRenamed(state);
         }
         catch (e) {
             LOG.error('failed to create a JSON string from nn state');
         }
     }
-    exports.saveNN2Blockly = saveNN2Blockly;
+    exports.saveNN2BlocklyAndUpdateProgramXML = saveNN2BlocklyAndUpdateProgramXML;
     function getNetwork() {
         return network;
     }

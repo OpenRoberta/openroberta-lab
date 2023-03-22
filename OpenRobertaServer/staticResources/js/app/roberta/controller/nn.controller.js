@@ -33,7 +33,7 @@ define(["require", "exports", "guiState.controller", "neuralnetwork.ui", "jquery
      * - reset node selection (yellow node)
      */
     function saveNN2Blockly() {
-        NN_UI.saveNN2Blockly();
+        NN_UI.saveNN2BlocklyAndUpdateProgramXML();
         NN_UI.resetUiOnTerminate();
     }
     exports.saveNN2Blockly = saveNN2Blockly;

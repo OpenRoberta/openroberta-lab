@@ -293,7 +293,7 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
                 network.push(currentLayer);
                 var numNodes = shape[layerIdx];
                 for (var i = 0; i < numNodes; i++) {
-                    var nodeName = isInputLayer ? state.inputs[i] : isOutputLayer ? state.outputs[i] : 'h' + layerIdx + 'n' + (i + 1);
+                    var nodeName = isInputLayer ? state.inputs[i][0] : isOutputLayer ? state.outputs[i][0] : 'h' + layerIdx + 'n' + (i + 1);
                     var node = new Node(nodeName, state.activation);
                     currentLayer.push(node);
                     if (layerIdx >= 1) {
@@ -490,24 +490,30 @@ define(["require", "exports", "./neuralnetwork.helper", "util"], function (requi
             }
             return biasesAllLayers;
         };
-        Network.prototype.getInputNames = function () {
+        Network.prototype.getInputNames = function (oldStateInputs) {
             var inputNames = [];
             if (this.network != null && this.network.length > 0) {
                 var inputLayer = this.network[0];
+                var _loop_1 = function (node) {
+                    inputNames.push([node.id, oldStateInputs.filter(function (e) { return e[0] == node.id; })[0][1]]);
+                };
                 for (var _i = 0, inputLayer_1 = inputLayer; _i < inputLayer_1.length; _i++) {
                     var node = inputLayer_1[_i];
-                    inputNames.push(node.id);
+                    _loop_1(node);
                 }
             }
             return inputNames;
         };
-        Network.prototype.getOutputNames = function () {
+        Network.prototype.getOutputNames = function (oldStateOutputs) {
             var outputNames = [];
             if (this.network != null && this.network.length > 0) {
                 var outputLayer = this.network[this.network.length - 1];
+                var _loop_2 = function (node) {
+                    outputNames.push([node.id, oldStateOutputs.filter(function (e) { return e[0] == node.id; })[0][1]]);
+                };
                 for (var _i = 0, outputLayer_1 = outputLayer; _i < outputLayer_1.length; _i++) {
                     var node = outputLayer_1[_i];
-                    outputNames.push(node.id);
+                    _loop_2(node);
                 }
             }
             return outputNames;

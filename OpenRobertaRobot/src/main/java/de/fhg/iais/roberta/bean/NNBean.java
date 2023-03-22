@@ -70,8 +70,8 @@ public class NNBean implements IProjectBean {
                 JSONObject netStateDefinition = new JSONObject(data.getValue());
                 this.weights = netStateDefinition.getJSONArray("weights");
                 this.bias = netStateDefinition.getJSONArray("biases");
-                netStateDefinition.getJSONArray("inputs").forEach(i -> inputNeurons.add((String) i));
-                netStateDefinition.getJSONArray("outputs").forEach(o -> outputNeurons.add((String) o));
+                netStateDefinition.getJSONArray("inputs").forEach(i -> inputNeurons.add((String) ((JSONArray) i).toList().get(0)));
+                netStateDefinition.getJSONArray("outputs").forEach(o -> outputNeurons.add((String) ((JSONArray) o).toList().get(0)));
                 netStateDefinition.getJSONArray("networkShape").forEach(c -> networkShape.add((Integer) c));
                 if ( !neuronNamesConsistent(inputNeurons, outputNeurons) ) {
                     return "NN_INVALID_NEURONNAME";

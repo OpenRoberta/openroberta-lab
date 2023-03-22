@@ -301,7 +301,7 @@ export class Network {
             network.push(currentLayer);
             let numNodes = shape[layerIdx];
             for (let i = 0; i < numNodes; i++) {
-                let nodeName = isInputLayer ? state.inputs[i] : isOutputLayer ? state.outputs[i] : 'h' + layerIdx + 'n' + (i + 1);
+                let nodeName = isInputLayer ? state.inputs[i][0] : isOutputLayer ? state.outputs[i][0] : 'h' + layerIdx + 'n' + (i + 1);
                 let node = new Node(nodeName, state.activation);
                 currentLayer.push(node);
                 if (layerIdx >= 1) {
@@ -503,23 +503,23 @@ export class Network {
         return biasesAllLayers;
     }
 
-    getInputNames(): string[] {
-        let inputNames: string[] = [];
+    getInputNames(oldStateInputs: string[][]): string[][] {
+        let inputNames: string[][] = [];
         if (this.network != null && this.network.length > 0) {
             let inputLayer = this.network[0];
             for (let node of inputLayer) {
-                inputNames.push(node.id);
+                inputNames.push([node.id, oldStateInputs.filter((e) => e[0] == node.id)[0][1]]);
             }
         }
         return inputNames;
     }
 
-    getOutputNames(): string[] {
-        let outputNames: string[] = [];
+    getOutputNames(oldStateOutputs: string[][]): string[][] {
+        let outputNames: string[][] = [];
         if (this.network != null && this.network.length > 0) {
             let outputLayer = this.network[this.network.length - 1];
             for (let node of outputLayer) {
-                outputNames.push(node.id);
+                outputNames.push([node.id, oldStateOutputs.filter((e) => e[0] == node.id)[0][1]]);
             }
         }
         return outputNames;

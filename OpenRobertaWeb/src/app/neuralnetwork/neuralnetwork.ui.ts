@@ -50,12 +50,12 @@ export function setupNN(stateFromStartBlock: any) {
 export async function runNNEditor() {
     D3 = await import('d3');
     D3.select('#goto-sim').on('click', () => {
-        $.when($('#tabProgram').trigger('click')).done(function() {
+        $.when($('#tabProgram').trigger('click')).done(function () {
             $('#simButton').trigger('click');
         });
     });
 
-    D3.select('#nn-focus').on('change', function() {
+    D3.select('#nn-focus').on('change', function () {
         focusStyle = FocusStyle[(this as HTMLSelectElement).value];
         if (focusStyle === undefined || focusStyle === null) {
             focusStyle = FocusStyle.SHOW_ALL;
@@ -87,14 +87,14 @@ export async function runNNEditor() {
         reconstructNNIncludingUI();
     });
 
-    let activationDropdown = D3.select('#nn-activations').on('change', function() {
+    let activationDropdown = D3.select('#nn-activations').on('change', function () {
         state.activationKey = this.value;
         state.activation = H.activations[this.value];
         drawNetworkUI(network);
     });
     activationDropdown.property('value', getKeyFromValue(H.activations, state.activation));
 
-    D3.select('#nn-show-precision').on('change', function() {
+    D3.select('#nn-show-precision').on('change', function () {
         state.precision = this.value;
         drawNetworkUI(network);
     });
@@ -268,10 +268,10 @@ function drawNetworkUI(network: Network): void {
         }
         let theWholeNNSvgNode = D3.select('#nn-svg').node();
         nodeGroup
-            .on('dblclick', function() {
+            .on('dblclick', function () {
                 runNameCard(node, D3.mouse(theWholeNNSvgNode));
             })
-            .on('click', function() {
+            .on('click', function () {
                 if ((D3.event as any).shiftKey) {
                     runNameCard(node, D3.mouse(theWholeNNSvgNode));
                 } else if (inputNeuronNameEditingMode && node.inputLinks.length === 0) {
@@ -371,7 +371,7 @@ function drawNetworkUI(network: Network): void {
                 .append('path')
                 .attr('d', diagonal(datum, 0))
                 .attr('class', cssForPath)
-                .on('click', function() {
+                .on('click', function () {
                     runEditCard(link, D3.mouse(this));
                 });
         }
@@ -387,7 +387,7 @@ function drawNetworkUI(network: Network): void {
         let i = 1;
         while (true) {
             let id = 'n' + i++;
-            if (state.inputs.indexOf(id) <= -1 && state.outputs.indexOf(id) <= -1) {
+            if (state.inputs.map((e) => e[0]).indexOf(id) <= -1 && state.outputs.map((e) => e[0]).indexOf(id) <= -1) {
                 return id;
             }
         }
@@ -407,7 +407,7 @@ function drawNetworkUI(network: Network): void {
                     return;
                 }
                 const id = selectDefaultId();
-                state.inputs.push(id);
+                state.inputs.push([id, id]);
                 hideAllCards();
                 reconstructNNIncludingUI();
             };
@@ -418,7 +418,7 @@ function drawNetworkUI(network: Network): void {
                     return;
                 }
                 const id = selectDefaultId();
-                state.outputs.push(id);
+                state.outputs.push([id, id]);
                 hideAllCards();
                 reconstructNNIncludingUI();
             };
@@ -536,7 +536,7 @@ function drawNetworkUI(network: Network): void {
             );
             biasRect.attr('class', 'nn-bias-click');
             if (focusStyle !== FocusStyle.CLICK_NODE || focusNode === node) {
-                biasRect.on('click', function() {
+                biasRect.on('click', function () {
                     (D3.event as any).stopPropagation();
                     runEditCard(node, D3.mouse(container.node()));
                 });
@@ -551,7 +551,7 @@ function drawNetworkUI(network: Network): void {
             });
             biasRect.attr('class', 'nn-bias-click');
             if (focusStyle !== FocusStyle.CLICK_NODE || focusNode === node) {
-                biasRect.on('click', function() {
+                biasRect.on('click', function () {
                     (D3.event as any).stopPropagation();
                     runEditCard(node, D3.mouse(container.node()));
                 });
@@ -661,13 +661,15 @@ function checkInputOutputNeuronNameValid(oldName: string, newName: string): stri
 
 function updateNodeName(node: Node, newId: string) {
     for (let i = 0; i < state.inputs.length; i++) {
-        if (state.inputs[i] === node.id) {
-            state.inputs[i] = newId;
+        if (state.inputs[i][0] === node.id) {
+            state.inputs[i][0] = newId;
+            state.inputs[i][1] = node.id;
         }
     }
     for (let i = 0; i < state.outputs.length; i++) {
-        if (state.outputs[i] === node.id) {
-            state.outputs[i] = newId;
+        if (state.outputs[i][0] === node.id) {
+            state.outputs[i][0] = newId;
+            state.outputs[i][1] = node.id;
         }
     }
     node.id = newId;
@@ -834,8 +836,8 @@ function nodeOrLink2Value(nodeOrLink: Node | Link): string {
     return nodeOrLink instanceof Link
         ? nodeOrLink.weight.getWithPrecision('*', state.weightSuppressMultOp)
         : nodeOrLink instanceof Node
-            ? nodeOrLink.bias.getWithPrecision('*', state.weightSuppressMultOp)
-            : '';
+        ? nodeOrLink.bias.getWithPrecision('*', state.weightSuppressMultOp)
+        : '';
 }
 
 function value2NodeOrLink(nodeOrLink: Node | Link, value: string) {
@@ -863,8 +865,9 @@ export function programWasReplaced(): void {
 
 /**
  * extract data from the network and put it into the state and store the state in the start block
+ * Also, save the updates into the program XML
  */
-export function saveNN2Blockly(): void {
+export function saveNN2BlocklyAndUpdateProgramXML(): void {
     if (rememberProgramWasReplaced) {
         return; // program was imported. Old NN should NOT be saved
     }
@@ -872,9 +875,10 @@ export function saveNN2Blockly(): void {
     try {
         state.weights = network.getWeightArray();
         state.biases = network.getBiasArray();
-        state.inputs = network.getInputNames();
-        state.outputs = network.getOutputNames();
+        state.inputs = network.getInputNames(state.inputs);
+        state.outputs = network.getOutputNames(state.outputs);
         startBlock.data = JSON.stringify(state);
+        UTIL.updateNNBlocksXMLIfRenamed(state);
     } catch (e) {
         LOG.error('failed to create a JSON string from nn state');
     }

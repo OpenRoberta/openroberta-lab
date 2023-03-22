@@ -1,6 +1,6 @@
 define(["require", "exports", "message", "log", "jquery", "blockly", "interpreter.util", "jquery-validate", "bootstrap"], function (require, exports, MSG, LOG, $, Blockly, U) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.toFixedPrecision = exports.closeSimRobotWindow = exports.openSimRobotWindow = exports.removeLinks = exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = exports.getTheStartBlock = exports.RGBAToHexA = exports.addVariableValue = exports.extendMouseEvent = exports.getWebAudio = exports.initMicrophone = exports.isEdge = exports.isIE = exports.checkInCircle = exports.getLinesFromRectangle = void 0;
+    exports.toFixedPrecision = exports.closeSimRobotWindow = exports.openSimRobotWindow = exports.removeLinks = exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = exports.getTheStartBlock = exports.updateNNBlocksXMLIfRenamed = exports.RGBAToHexA = exports.addVariableValue = exports.extendMouseEvent = exports.getWebAudio = exports.initMicrophone = exports.isEdge = exports.isIE = exports.checkInCircle = exports.getLinesFromRectangle = void 0;
     var ANIMATION_DURATION = 750;
     function getLinesFromRectangle(myObj) {
         return [
@@ -981,4 +981,36 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "interprete
         return '#' + r + g + b + a;
     }
     exports.RGBAToHexA = RGBAToHexA;
+    function updateNNBlocksXMLIfRenamed(state) {
+        var changedInputPairs = state.inputs.filter(function (i) { return i[0] !== i[1]; });
+        var changedOutputPairs = state.outputs.filter(function (o) { return o[0] !== o[1]; });
+        if (changedInputPairs.length) {
+            findAndUpdateNNBlocksXMLInProgram(changedInputPairs);
+        }
+        if (changedOutputPairs.length) {
+            findAndUpdateNNBlocksXMLInProgram(changedOutputPairs);
+        }
+    }
+    exports.updateNNBlocksXMLIfRenamed = updateNNBlocksXMLIfRenamed;
+    function findAndUpdateNNBlocksXMLInProgram(inputOutputPairs) {
+        var workspace = Blockly.Workspace.getByContainer('blocklyDiv');
+        var _loop_1 = function (block) {
+            if (block.dependNN) {
+                var _loop_2 = function (field) {
+                    var possibleChangeIdx = inputOutputPairs.findIndex(function (x) { return x[1] === block.getFieldValue(field); });
+                    if (possibleChangeIdx > -1) {
+                        block.setFieldValue(inputOutputPairs[possibleChangeIdx][0], field);
+                    }
+                };
+                for (var _b = 0, _c = block.dependNN.fields; _b < _c.length; _b++) {
+                    var field = _c[_b];
+                    _loop_2(field);
+                }
+            }
+        };
+        for (var _i = 0, _a = workspace.getAllBlocks(); _i < _a.length; _i++) {
+            var block = _a[_i];
+            _loop_1(block);
+        }
+    }
 });
