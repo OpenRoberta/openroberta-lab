@@ -354,10 +354,11 @@ export class RectangleSimulationObject extends BaseSimulationObject {
                     this.x += this.SHIFT;
                     break;
                 case 'c':
-                    if (e.ctrlKey) {
+                    if (e.ctrlKey || e.metaKey) {
                         let id: number = this.myScene.uniqueObjectId;
                         let shape: SimObjectShape = SimObjectShape.Rectangle;
                         this.myScene.objectToCopy = SimObjectFactory.copy(this);
+                        e.preventDefault(); // Prevent the default copy behavior of Safari, which may beep or otherwise indicate an error due to the lack of a selection. See https://github.com/google/blockly/pull/4925.
                     }
                     break;
                 default:
@@ -715,10 +716,11 @@ export class CircleSimulationObject extends BaseSimulationObject {
                 default:
                 // nothing to do so far
             }
-            if (e.key === 'c' && e.ctrlKey) {
+            if (e.key === 'c' && (e.ctrlKey || e.metaKey)) {
                 let id: number = this.myScene.uniqueObjectId;
                 let shape: SimObjectShape = SimObjectShape.Circle;
                 this.myScene.objectToCopy = SimObjectFactory.copy(this);
+                e.preventDefault(); // Prevent the default copy behavior of Safari, which may beep or otherwise indicate an error due to the lack of a selection. See https://github.com/google/blockly/pull/4925.
             }
             this.updateCorners();
             $('#robotLayer').attr('tabindex', 0);
@@ -966,10 +968,11 @@ export class TriangleSimulationObject extends BaseSimulationObject {
                 default:
                 // nothing to do so far
             }
-            if (e.key === 'c' && e.ctrlKey) {
+            if (e.key === 'c' && (e.ctrlKey || e.metaKey)) {
                 let id: number = this.myScene.uniqueObjectId;
                 let shape: SimObjectShape = SimObjectShape.Triangle;
                 this.myScene.objectToCopy = SimObjectFactory.copy(this);
+                e.preventDefault(); // Prevent the default copy behavior of Safari, which may beep or otherwise indicate an error due to the lack of a selection. See https://github.com/google/blockly/pull/4925.
             }
             this.updateCorners();
             $('#robotLayer').attr('tabindex', 0);
