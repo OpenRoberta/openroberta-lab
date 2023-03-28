@@ -349,7 +349,7 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             });
         };
         SimulationScene.prototype.handleKeyEvent = function (e) {
-            if (e.key === 'v' && e.ctrlKey) {
+            if (e.key === 'v' && (e.ctrlKey || e.metaKey)) {
                 this.pasteObject(this.sim.lastMousePosition);
                 e.stopImmediatePropagation();
             }

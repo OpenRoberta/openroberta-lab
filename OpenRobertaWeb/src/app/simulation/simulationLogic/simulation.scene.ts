@@ -365,7 +365,7 @@ export class SimulationScene {
     }
 
     handleKeyEvent(e) {
-        if (e.key === 'v' && e.ctrlKey) {
+        if (e.key === 'v' && (e.ctrlKey || e.metaKey)) {
             this.pasteObject(this.sim.lastMousePosition);
             e.stopImmediatePropagation();
         }
