@@ -325,7 +325,8 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             e.stopPropagation();
         });
         $('.blocklyButtonBack, .blocklyWidgetDiv, #head-navigation, #main-section, #tutorial-navigation').on('mousedown touchstart keydown', function (e) {
-            if ($(e.target).not('.blocklyTreeLabel, .blocklytreerow, .toolboxicon, div.goog-menuitem-content, div.goog-menuitem, img').length > 0) {
+            if ($(e.target).not('.blocklyTreeLabel, .blocklytreerow, .toolboxicon, .goog-palette-colorswatch, .goog-menu-vertical, .goog-menuitem-checkbox,' +
+                ' div.goog-menuitem-content, div.goog-menuitem, img').length > 0) {
                 if ($(e.target).filter('.blocklyhtmlinput').length > 0 && !(e.metaKey || e.ctrlKey)) {
                     return;
                 }
