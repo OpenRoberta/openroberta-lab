@@ -129,6 +129,9 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
 
     @Override
     public Void visitInfraredSensor(InfraredSensor infraredSensor) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.INFRARED) ) {
+            addErrorToPhrase(infraredSensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
+        }
         usedHardwareBuilder.addUsedSensor(new UsedSensor(infraredSensor.getUserDefinedPort(), SC.INFRARED, infraredSensor.getMode()));
         return null;
     }
@@ -262,9 +265,11 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
-        if ( !this.robotConfiguration.isComponentTypePresent(SC.BUZZER) ) {
+        ConfigurationComponent actor = this.robotConfiguration.optConfigurationComponent(playNoteAction.port);
+        if ( actor == null ) {
             addErrorToPhrase(playNoteAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
+        usedHardwareBuilder.addUsedActor(new UsedActor(playNoteAction.port, SC.BUZZER));
         return null;
     }
 
@@ -333,9 +338,11 @@ public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollec
     @Override
     public Void visitToneAction(ToneAction toneAction) {
         requiredComponentVisited(toneAction, toneAction.duration, toneAction.frequency);
-        if ( !this.robotConfiguration.isComponentTypePresent(SC.BUZZER) ) {
+        ConfigurationComponent actor = this.robotConfiguration.optConfigurationComponent(toneAction.port);
+        if ( actor == null ) {
             addErrorToPhrase(toneAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
+        usedHardwareBuilder.addUsedActor(new UsedActor(toneAction.port, actor.componentType));
         return null;
     }
 

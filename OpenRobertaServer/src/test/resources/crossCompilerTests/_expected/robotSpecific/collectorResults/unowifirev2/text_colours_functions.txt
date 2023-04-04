@@ -1,6 +1,0 @@
-Sensors: 
-[]
-Actors: 
-[UsedActor [SERIAL, SERIAL], UsedActor [R, RGBLED]]
-Methods: 
-[]

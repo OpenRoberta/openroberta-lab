@@ -1,3 +1,0 @@
-
-(repeat [FOREVER_ARDU, BoolConst[value: true]]MethodStmt [MethodCall [control, , , VOID]]MethodStmt [MethodCall [logic, , , VOID]]
-)

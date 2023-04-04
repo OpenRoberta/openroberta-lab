@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.IWorker;
@@ -27,12 +28,14 @@ import de.fhg.iais.roberta.worker.IWorker;
 public class WorkflowTestHelper {
 
     private RobotFactory robotFactory;
+    private String robot;
     protected List<IWorker> workerChain;
     protected List<Phrase> phrases;
     protected List<ConfigurationComponent> configurationComponents;
 
     @Before
     public void setUp() throws Exception {
+        AstFactory.loadBlocks();
         StmtList variables = new StmtList();
         variables.setReadOnly();
 
@@ -42,6 +45,7 @@ public class WorkflowTestHelper {
     }
 
     protected void setupRobotFactory(String robotName) {
+        this.robot = robotName;
         robotFactory = Util.configureRobotPlugin(robotName, "", "", Collections.emptyList());
     }
 
@@ -62,6 +66,7 @@ public class WorkflowTestHelper {
             .setFactory(robotFactory)
             .setProgramAst(programAst)
             .setConfigurationAst(configurationAst)
+            .setRobot(robot)
             .build();
 
         if ( project.hasSucceeded() ) {

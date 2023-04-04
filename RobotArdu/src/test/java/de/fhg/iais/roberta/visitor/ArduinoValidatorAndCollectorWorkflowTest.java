@@ -415,7 +415,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitPlayNoteAction_noPort() {
-        PlayNoteAction playNoteAction = new PlayNoteAction(bp, "100", "100", "P1", null);
+        PlayNoteAction playNoteAction = new PlayNoteAction(bp, "100", "100", "no_port", null);
         phrases.add(playNoteAction);
 
         executeWorkflow();

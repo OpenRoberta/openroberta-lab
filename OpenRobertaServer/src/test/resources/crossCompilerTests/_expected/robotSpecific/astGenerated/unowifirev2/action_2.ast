@@ -1,5 +1,0 @@
-
-(repeat [FOREVER_ARDU, BoolConst[value: true]]
-AktionStmt [ShowTextAction[msg: Var [stringVar], x: Var [numberVar], y: Var [numberVar], port: L2]]
-AktionStmt [ClearDisplayAction[port: L2]]
-)

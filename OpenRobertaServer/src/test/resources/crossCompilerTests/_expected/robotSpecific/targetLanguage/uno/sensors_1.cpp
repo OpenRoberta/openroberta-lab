@@ -3,7 +3,7 @@
 #include <Arduino.h>
 
 #include <DHT_sensor_library/DHT.h>
-#include <IRremote/src/IRremote.h>
+#include <IRremote/src/IRremote.hpp>
 #include <MFRC522/src/MFRC522.h>
 #include <NEPODefs.h>
 
@@ -25,7 +25,6 @@ int _output_L2 = A3;
 #define DHTPINL3 2
 #define DHTTYPE DHT11
 DHT _dht_L3(DHTPINL3, DHTTYPE);
-IRrecv _irrecv_I(11);
 int _SensorPin_P = A5;
 #define SS_PIN_R 10
 #define RST_PIN_R 9
@@ -39,21 +38,19 @@ int _input_S2 = A0;
 int _S_T3 = A4;
 unsigned long __time_1 = millis();
 
-bool _getIRPresence(IRrecv &irrecv) {
-    decode_results results;
-    if (irrecv.decode(&results)) {
-        irrecv.resume();
+bool _getIRPresence() {
+    if (IrReceiver.decode()) {
+        IrReceiver.resume();
         return true;
     } else {
         return false;
     }
 }
 
-long int  _getIRValue(IRrecv &irrecv) {
-    decode_results results;
-    if (irrecv.decode(&results)) {
-        long int tmpValue = results.value;
-        irrecv.resume();
+long int _getIRValue() {
+    if (IrReceiver.decode()) {
+        long int tmpValue = IrReceiver.decodedIRData.decodedRawData;
+        IrReceiver.resume();
         return tmpValue;
     } else {
         return 0;
@@ -93,7 +90,7 @@ void ____sensors() {
     Serial.println(digitalRead(_taster_T));
     Serial.println(digitalRead(_output_B));
     Serial.println(analogRead(_output_L2)/10.24);
-    Serial.println(_getIRValue(_irrecv_I));
+    Serial.println(_getIRValue());
     Serial.println(_dht_L3.readHumidity());
     Serial.println(map(analogRead(_TMP36_T2), 0, 410, -50, 150));
     Serial.println(analogRead(_S_T3)/10.24);
@@ -160,13 +157,13 @@ void ____sensorsWaitUntil() {
         delay(1);
     }
     while (true) {
-        if ( _getIRValue(_irrecv_I) < 30 ) {
+        if ( _getIRValue() < 30 ) {
             break;
         }
         delay(1);
     }
     while (true) {
-        if ( _getIRPresence(_irrecv_I) == true ) {
+        if ( _getIRPresence() == true ) {
             break;
         }
         delay(1);
@@ -222,7 +219,7 @@ void setup()
     pinMode(_output_B, INPUT);
     _dht_L3.begin();
     pinMode(13, OUTPUT);
-    _irrecv_I.enableIRIn();
+    IrReceiver.begin(11, ENABLE_LED_FEEDBACK);
     SPI.begin();
     _mfrc522_R.PCD_Init();
     pinMode(_input_S, INPUT);
