@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2023-02-24 06:38:33.540734",
+		"lastupdated": "2023-04-06 09:11:11.980523",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1961,5 +1961,6 @@
 	"ACTION_DISPLAY": "display",
 	"DISPLAY_TOOLTIP": "Represents a screen.",
 	"DISPLAY_TOOLTIP_SPIKE": "Represents a screen with a 5 x 5 LED matrix.",
-	"MODE_FORCE": "force"
+	"MODE_FORCE": "force",
+	"CONFIGURATION_ERROR_TIMER_CONFLICT": "These configuration blocks use the same internal timers and all three cannot be used together."
 }

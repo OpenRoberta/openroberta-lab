@@ -208,6 +208,7 @@ Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "Anderer Stromverbraucher 
 Blockly.Msg.CONFIGURATION_ERROR_OVERLAPPING_PORTS = "Eine andere Komponente benutzt bereits den gleichen Port!";
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "In der Roboterkonfiguration ist dieser Sensor nicht mit einem Sensorport verbunden!";
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_WRONG = "In der Roboterkonfiguration ist ein anderer Sensor mit diesem Sensorport verbunden!";
+Blockly.Msg.CONFIGURATION_ERROR_TIMER_CONFLICT = "Diese Konfigurationsblöcke verwenden dieselben internen Timer und alle drei können nicht zusammen verwendet werden.";
 Blockly.Msg.CONFIGURATION_ERROR_WLAN_CREDENTIALS_MISSING = "WLAN Zugangsdaten fehlen, bitte unter dem »Robot -> WLAN Zugangsdaten« ... Menupunkt eingeben!";
 Blockly.Msg.CONFIGURATION_ERROR_WLAN_MISSING = "WLAN ist nicht konfiguriert. Bitte füge den entsprechenden Block im Konfigurationstab hinzu!";
 Blockly.Msg.CONFIGURATION_NO_PHENOMENON = "no phenomenon";  // untranslated

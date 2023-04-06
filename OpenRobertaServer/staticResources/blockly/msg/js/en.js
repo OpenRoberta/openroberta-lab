@@ -208,6 +208,7 @@ Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "Other power consumer does
 Blockly.Msg.CONFIGURATION_ERROR_OVERLAPPING_PORTS = "Another component is already using the same port!";
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "This sensor is not configured. Please add the corresponding block in the configuration tab!";
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_WRONG = "Connected wrong sensor to the given port!";
+Blockly.Msg.CONFIGURATION_ERROR_TIMER_CONFLICT = "These configuration blocks use the same internal timers and all three cannot be used together.";
 Blockly.Msg.CONFIGURATION_ERROR_WLAN_CREDENTIALS_MISSING = "Missing WLAN credentials, please enter them in robot -> WLAN credentials ... !";
 Blockly.Msg.CONFIGURATION_ERROR_WLAN_MISSING = "WiFi is not configured. Please add the corresponding block in the configuration tab!";
 Blockly.Msg.CONFIGURATION_NO_PHENOMENON = "no phenomenon";

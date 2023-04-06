@@ -36,7 +36,8 @@ public class MicrobitCompilerWorker implements ICompilerWorker {
             {
                 compilerBinDir + "python",
                 scriptName,
-                sourceCode
+                sourceCode,
+                "V1"
             };
         project.setCompiledHex(this.getBinaryFromCrossCompiler(executableWithParameters));
         if ( project.getCompiledHex() != null ) {
