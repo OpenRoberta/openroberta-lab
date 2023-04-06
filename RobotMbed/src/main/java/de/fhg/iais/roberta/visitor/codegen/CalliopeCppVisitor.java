@@ -705,9 +705,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             this.sb.append("_uBit.accelerometer.updateSample();");
         }
         if ( this.isDualMode() && this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIFFERENTIALDRIVE) ) {
-            this.sb.append("nrf_gpiote_task_configure(0, CALLIOPE_PIN_MOTOR_IN1, NRF_GPIOTE_POLARITY_TOGGLE, NRF_GPIOTE_INITIAL_VALUE_HIGH);");
+            this.sb.append("nrf_gpiote_task_configure(0, CALLIOPE_PIN_MOTOR_IN2, NRF_GPIOTE_POLARITY_TOGGLE, NRF_GPIOTE_INITIAL_VALUE_HIGH);");
             nlIndent();
-            this.sb.append("nrf_gpiote_task_configure(1, CALLIOPE_PIN_MOTOR_IN2, NRF_GPIOTE_POLARITY_TOGGLE, NRF_GPIOTE_INITIAL_VALUE_LOW);");
+            this.sb.append("nrf_gpiote_task_configure(1, CALLIOPE_PIN_MOTOR_IN1, NRF_GPIOTE_POLARITY_TOGGLE, NRF_GPIOTE_INITIAL_VALUE_LOW);");
             nlIndent();
         }
         return null;
