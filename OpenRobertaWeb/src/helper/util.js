@@ -50,6 +50,67 @@ function getTheStartBlock() {
     throw 'start block not found. That is impossible.';
 }
 
+/**
+ * @return all block from the program.
+ */
+function getAllBlocks() {
+    return Blockly.Workspace.getByContainer('blocklyDiv').getAllBlocks();
+}
+
+/**
+ * rename the block drop down for neuron names used in the program after a neuron was renamed
+ *
+ * @param {string}
+ *            oldName Configuration title to rename.
+ * @param {string}
+ *            newName New configuration name.
+ */
+function renameNeuron(oldName, newName) {
+    var blocks = getAllBlocks();
+    for (var x = 0; x < blocks.length; x++) {
+        var block = blocks[x];
+        if (!block.dependNeuron) {
+            continue;
+        }
+        var dependNeuron;
+        if (typeof block.dependNeuron === 'function') {
+            dependNeuron = block.dependNeuron();
+        } else {
+            dependNeuron = block.dependNeuron;
+        }
+        var dropDown = dependNeuron.dropDown;
+        if (!Array.isArray(dropDown)) {
+            dropDown = [dropDown];
+        }
+        for (var d = 0; d < dropDown.length; d++) {
+            var index = -1;
+            for (var i = 0; i < dropDown[d].menuGenerator_.length; i++) {
+                if (dropDown[d].menuGenerator_[i][1] === oldName) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index >= 0) {
+                dropDown[d].menuGenerator_[index][0] = newName;
+                dropDown[d].menuGenerator_[index][1] = newName;
+                if (dropDown[d].value_ === oldName) {
+                    dropDown[d].setValue(newName);
+                }
+            } else {
+                dropDown[d].menuGenerator_.push([newName, newName]);
+                if (dropDown[d].arrow_) {
+                    dropDown[d].arrow_.replaceChild(
+                        document.createTextNode(dropDown[d].sourceBlock_.RTL ? Blockly.FieldDropdown.ARROW_CHAR + ' ' : ' ' + Blockly.FieldDropdown.ARROW_CHAR),
+                        dropDown[d].arrow_.childNodes[0]
+                    );
+                }
+                dropDown[d].render_();
+            }
+        }
+        block.render();
+    }
+}
+
 var ratioWorkspace = 1;
 var simRobotWindowPositions = [];
 /**
@@ -393,7 +454,7 @@ function sgn(x) {
  *            {String} - path
  */
 function getBasename(path) {
-    var base = new String(path).substring(path.lastIndexOf('/') + 1);
+    var base = String(path).substring(path.lastIndexOf('/') + 1);
     if (base.lastIndexOf('.') != -1) {
         base = base.substring(0, base.lastIndexOf('.'));
     }
@@ -1044,6 +1105,8 @@ export function RGBAToHexA(rgba) {
 
 export {
     getTheStartBlock,
+    getAllBlocks,
+    renameNeuron,
     base64decode,
     clone,
     isEmpty,

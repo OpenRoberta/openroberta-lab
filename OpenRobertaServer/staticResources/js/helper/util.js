@@ -1,6 +1,6 @@
 define(["require", "exports", "message", "log", "jquery", "blockly", "interpreter.util", "jquery-validate", "bootstrap"], function (require, exports, MSG, LOG, $, Blockly, U) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.toFixedPrecision = exports.closeSimRobotWindow = exports.openSimRobotWindow = exports.removeLinks = exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = exports.getTheStartBlock = exports.RGBAToHexA = exports.addVariableValue = exports.extendMouseEvent = exports.getWebAudio = exports.initMicrophone = exports.isEdge = exports.isIE = exports.checkInCircle = exports.getLinesFromRectangle = void 0;
+    exports.toFixedPrecision = exports.closeSimRobotWindow = exports.openSimRobotWindow = exports.removeLinks = exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = exports.renameNeuron = exports.getAllBlocks = exports.getTheStartBlock = exports.RGBAToHexA = exports.addVariableValue = exports.extendMouseEvent = exports.getWebAudio = exports.initMicrophone = exports.isEdge = exports.isIE = exports.checkInCircle = exports.getLinesFromRectangle = void 0;
     var ANIMATION_DURATION = 750;
     function getLinesFromRectangle(myObj) {
         return [
@@ -45,6 +45,66 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "interprete
         throw 'start block not found. That is impossible.';
     }
     exports.getTheStartBlock = getTheStartBlock;
+    /**
+     * @return all block from the program.
+     */
+    function getAllBlocks() {
+        return Blockly.Workspace.getByContainer('blocklyDiv').getAllBlocks();
+    }
+    exports.getAllBlocks = getAllBlocks;
+    /**
+     * rename the block drop down for neuron names used in the program after a neuron was renamed
+     *
+     * @param {string}
+     *            oldName Configuration title to rename.
+     * @param {string}
+     *            newName New configuration name.
+     */
+    function renameNeuron(oldName, newName) {
+        var blocks = getAllBlocks();
+        for (var x = 0; x < blocks.length; x++) {
+            var block = blocks[x];
+            if (!block.dependNeuron) {
+                continue;
+            }
+            var dependNeuron;
+            if (typeof block.dependNeuron === 'function') {
+                dependNeuron = block.dependNeuron();
+            }
+            else {
+                dependNeuron = block.dependNeuron;
+            }
+            var dropDown = dependNeuron.dropDown;
+            if (!Array.isArray(dropDown)) {
+                dropDown = [dropDown];
+            }
+            for (var d = 0; d < dropDown.length; d++) {
+                var index = -1;
+                for (var i = 0; i < dropDown[d].menuGenerator_.length; i++) {
+                    if (dropDown[d].menuGenerator_[i][1] === oldName) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index >= 0) {
+                    dropDown[d].menuGenerator_[index][0] = newName;
+                    dropDown[d].menuGenerator_[index][1] = newName;
+                    if (dropDown[d].value_ === oldName) {
+                        dropDown[d].setValue(newName);
+                    }
+                }
+                else {
+                    dropDown[d].menuGenerator_.push([newName, newName]);
+                    if (dropDown[d].arrow_) {
+                        dropDown[d].arrow_.replaceChild(document.createTextNode(dropDown[d].sourceBlock_.RTL ? Blockly.FieldDropdown.ARROW_CHAR + ' ' : ' ' + Blockly.FieldDropdown.ARROW_CHAR), dropDown[d].arrow_.childNodes[0]);
+                    }
+                    dropDown[d].render_();
+                }
+            }
+            block.render();
+        }
+    }
+    exports.renameNeuron = renameNeuron;
     var ratioWorkspace = 1;
     var simRobotWindowPositions = [];
     /**
@@ -360,7 +420,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "interprete
      *            {String} - path
      */
     function getBasename(path) {
-        var base = new String(path).substring(path.lastIndexOf('/') + 1);
+        var base = String(path).substring(path.lastIndexOf('/') + 1);
         if (base.lastIndexOf('.') != -1) {
             base = base.substring(0, base.lastIndexOf('.'));
         }

@@ -643,6 +643,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         return null;
     }
     function updateNodeName(node, newId) {
+        var oldId = node.id;
         for (var i = 0; i < state.inputs.length; i++) {
             if (state.inputs[i] === node.id) {
                 state.inputs[i] = newId;
@@ -654,6 +655,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             }
         }
         node.id = newId;
+        UTIL.renameNeuron(oldId, newId);
     }
     function hideAllCards() {
         if (D3 !== undefined && D3 !== null) {
