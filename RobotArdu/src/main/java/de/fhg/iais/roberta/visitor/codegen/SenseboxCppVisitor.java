@@ -170,6 +170,8 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         this.sb.append("_display_").append(clearDisplayAction.port).append(".clearDisplay();");
+        nlIndent();
+        this.sb.append("_display_").append(clearDisplayAction.port).append(".display();");
         return null;
     }
 

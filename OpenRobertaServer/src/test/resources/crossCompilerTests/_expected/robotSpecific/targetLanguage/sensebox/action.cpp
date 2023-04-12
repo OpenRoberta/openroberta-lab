@@ -66,6 +66,7 @@ void ____action() {
     _printToDisplay(_display_myDisplay, ___c, true);
 
     _display_myDisplay.clearDisplay();
+    _display_myDisplay.display();
     tone(_buzzer_B2, ___n);
     delay(___n);
     noTone(_buzzer_B2);
