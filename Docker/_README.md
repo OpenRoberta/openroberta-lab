@@ -1,4 +1,4 @@
-# Instructions to setup the lab using DOCKER container (2023-03-06)
+# Instructions to setup the lab using DOCKER container (2023-04-19)
 
 This text is for *developer* and *maintainer* of the openroberta lab, *not* if you want to run a local server. Running a local server is described in our
 [wiki on GitHub](https://github.com/OpenRoberta/openroberta-lab/wiki/Instructions-to-run-a-openroberta-lab-server-using-DOCKER). This text describes the
@@ -15,12 +15,15 @@ Docker must be installed. A lot of Internet resources describe how to proceed.
 
 To create an instance of our docker installation,
 
-* run `git clone https://github.com/OpenRoberta/openroberta-lab`
+* run `git clone https://github.com/OpenRoberta/openroberta-lab`. Run `mvn clean install -DskipTests` or `mvn clean install` to check wether everything is fine
+  and to generate some jars for later use.
 * in this directory run `./ora.sh new-docker-setup <BASEDIR>`. The `<BASEDIR>` must _not_ exist. Follow the instructions written by the command.
-* create the servers you need by calling `./ora.sh new-server-in-docker-setup BASEDIR SERVER`. Follow the instructions written by the command. Note,
-  that `test, dev, dev1...dev9` are the only names accepted as server names. It is easy to add or remove server later.
-* for each server a data base for its own has to be created. Double check that the data bases are in `<BASEDIR>/db`.
-* Put the database names into the global `<BASEDIR>/decl.sh`.
+* create the servers you need by calling `./ora.sh new-server-in-docker-setup <BASEDIR> <SERVER>`. Follow the instructions written by the command. Note,
+  that `test, dev, dev1...dev9` are the only names accepted as server names. It is easy to add or remove server later. Don't forget to put the server names into
+  variable `SERVERS` in the global `<BASEDIR>/decl.sh`.
+* for each server a data base for its own is needed. Double check that the data bases are in `<BASEDIR>/db`. An empty database can be created by, e.g.
+  `./admin.sh -git-mode -db-parentdir <BASEDIR>/db/<SERVER> create-empty-db`
+* Put the database names into variable `DATABASES` in the global `<BASEDIR>/decl.sh`.
 
 From now use the administration script `<BASEDIR>/scripts/run.sh` (abbreviated as `RUN`). Execute `RUN` without parameters to get a message explaining all
 commands available.
@@ -30,7 +33,7 @@ instead of cloning it again, see below.
 
 You have to
 
-* clone the openroberta-lab repository into `<BASEDIR>/git`, update the server's `decl.sh appropriately` (set the repo, select the branch, ...)
+* clone the openroberta-lab repository into `<BASEDIR>/git`.
 * create a new docker bridge network (`RUN gen-net`). The name of the network is defined in the global `decl.sh`.
 * generate a database server image and start the database container (`RUN gen-dbc` and `RUN start-dbc`). Check the result with `docker ps`. Inspect the log file
   in `BASEDIR/db/dbAdmin/`
@@ -39,99 +42,39 @@ You have to
 Looks more complicated as it is :-). I tried to make all scripts as robust as possible. Please mail any problems, improvements, ideas to reinhard.budde at
 iais.fraunhofer.de
 
-> Below I describe, what the design rationale behind our Docker architecture is, and how we, the lab maintainers, create images, that are available at
+> Below I describe the design rationale behind our Docker architecture, and how we, the lab maintainers, create images, that are available at
 > dockerhub and are used in our Docker architecture. If you are curious, whether it works, you can read and try it. Besides that there is no need for you
 > to read further. The text is for our internal documentation.
 
 # (re-)create the base image (done from time to time)
 
-The docker "base" image is used as basis for further images. It contains all software needed by the lab to create binaries for all the robots, i.e.
+The docker "base" image is used as basis for the images, that run a version of the openrobrta lab. The version number of thee base image is used in
+the `decl.sh` of each server. It contains all software needed by the lab to create binaries for all the robots, i.e.
 
 * the crosscompiler binaries itself. They are installed by calling `apt`, `wget`, ... .
 * header, libraries, scripts, ..., to be used together with the cross compiler.
 
-This is done in two steps. Because the crosscompiler binaries dont't change often, an image `openroberta/ccbin-${ARCH}` is build first. From this image
-the `openroberta/base-${ARCH}` image is derived. This occurs much more often. Both images have an independent version numbering.
+This image is build in two steps. Because the crosscompiler binaries dont't change often, an image `openroberta/ccbin-${ARCH}` is build first. From this image
+the `openroberta/base-${ARCH}` image is derived. This occurs more often. Both images have an independent version numbering.
 
-### step 1: image with crosscompiler binaries (usually not needed, because the crosscompiler binaries are stable)
+1. The image with crosscompiler binaries is very seldom build, because the crosscompiler binaries are stable. It is available at dockerhub.
+   Name: `openroberta/ccbin-x64:<number>>`. The current version (19.4.2023) is _2_. The image is created using the shell
+   command `RUN gen_ccbin <arch> <ccbin-version>`. The last build was `RUN gen_ccbin x64 2`.
 
-The image is available at dockerhub. Name: openroberta/ccbin-x64:<number>>. Use the highest number.
+2. The image with crosscompiler resources is more often build, because our add-ons, e.g. header files, libs, ... change more frequently. The image is available
+   at dockerhub. Name: `openroberta/base-x64:<number>>`. The current version (19.4.2023) is _35_. To create it, you need a clone of our GitHub
+   repository `ora-cc-rsc`, whose path is set in the command below (`CC_RESOURCES`). It contains the resources to be copied into the Docker image. _Make sure,
+   that the repository `ora-cc-rsc` is clean. Uncommitted data will be lost. The Docker image is created using the shell
+   command `RUN gen_base <arch> <ccbin-version> <base-version> <ora-cc-rsc-repo`. The last build
+   was `RUN gen_base x64 2 35 /data/openroberta-lab/git/ora-cc-rsc`.
 
-It has been created using the shell commands:
+_Note:_ If the git repository `ora-cc-rsc` is changed, the `openroberta/base-${ARCH}` image must be re-built. It should get a new version number (increase the
+last one used by 1). The variable `BASE_VERSION` in the `decl.sh` file of all servers contains this version number. If the image of a deployed server should use
+this new image as its basis, you have to set the variable `BASE_VERSION`to the new base version number and re-deploy the server (a new image based on the new
+base image is then generated and started). This is fast, but don't forget it!
 
-```bash
-BASE_DIR=/data/openroberta-lab
-ARCH=x64             # either x64 or arm32v7
-CCBIN_VERSION=2
-
-cd ${BASE_DIR}/conf/${ARCH}/1-cc-binaries
-docker build --no-cache -t openroberta/ccbin-${ARCH}:${CCBIN_VERSION} .
-docker push openroberta/ccbin-${ARCH}:${CCBIN_VERSION}
-```
-
-_NOTE:_ If `openroberta/ccbin-${ARCH}` is rebuild with new or updated crosscompiler binaries, its version number `CCBIN_VERSION` has to be increased. Do _not_
-forget, to increase the version numer in the next section, too.
-
-### step 2: image with crosscompiler resources (more often needed, because our add-ons, e.g. header files, libs, ... change more frequently)
-
-The image is available at dockerhub. Name: openroberta/base-x64:<number>>. Use the highest number.
-
-To create it, you need a clone of our GitHub repository `ora-cc-rsc`, whose path is set in the commands below (`CC_RESOURCES`). It contains the resource to be
-copied into the Docker image. _Make sure, that the repository `ora-cc-rsc` is clean. Uncommitted data will be lost. The Docker image has been created using the
-shell commands:
-
-```bash
-BASE_DIR=/data/openroberta-lab
-ARCH=x64             # either x64 or arm32v7
-CCBIN_VERSION=2      # this is needed in the dockerfile!
-BASE_VERSION=35
-CC_RESOURCES=/data/openroberta-lab/git/ora-cc-rsc
-cd $CC_RESOURCES
-if [ ! -d .git ]; then echo "this script only runs in a git directory - exit 12"; exit 12; fi
-
-git fetch --all; git reset --hard; git clean -fd
-git checkout master; git pull
-git checkout tags/${BASE_VERSION}
-
-mvn clean install    # necessary to create the update resources for ev3- and arduino-based systems
-docker build --no-cache -t openroberta/base-${ARCH}:${BASE_VERSION} \
-       --build-arg CCBIN_VERSION=${CCBIN_VERSION} \
-       -f $BASE_DIR/conf/${ARCH}/2-cc-resources/Dockerfile .
-docker push openroberta/base-${ARCH}:${BASE_VERSION}
-# do this if you sure, that your tag is the LATEST (this one is used for the INTEGRATION TESTS on GitHub!)
-docker tag openroberta/base-${ARCH}:${BASE_VERSION} openroberta/base-${ARCH}:latest
-docker push openroberta/base-${ARCH}:latest
-```
-
-_Note:_ If the git repository `ora-cc-rsc` is changed, the `openroberta/base-${ARCH}` image and all images built upon it must be rebuilt. This is fast, but
-don't forget it! The version of the `openroberta/base-${ARCH}` image (a simple number) should match a tag in the git repository `ora-cc-rsc`. This reminds you,
-that the data from that tag is the data stored in the base image. The variable `BASE_VERSION` in all `decl.sh` files of all servers contains this number, and
-you have to edit these files, if you change the version number. It is legal, to use different base versions for different servers.
-
-### step 3: image for integration tests (on GitHub, most be done ALWAYS after step 2 has succeeded)
-
-this image contains a populated maven cache to speed up the nightly runs
-
-```bash
-BASE_DIR=/data/openroberta-lab
-ARCH=x64             # either x64 or arm32v7
-CCBIN_VERSION=2      # this is needed in the dockerfile!
-BASE_VERSION=35
-
-cd ${BASE_DIR}/
-git fetch --all; git reset --hard; git clean -fd
-git checkout master; git pull
-git checkout tags/${BASE_VERSION}
-
-mvn clean install    # necessary to create the update resources for ev3- and arduino-based systems
-docker build --no-cache -t openroberta/base-${ARCH}:${BASE_VERSION} \
-       --build-arg CCBIN_VERSION=${CCBIN_VERSION} \
-       -f $BASE_DIR/conf/${ARCH}/2-cc-resources/Dockerfile .
-docker push openroberta/base-${ARCH}:${BASE_VERSION}
-# do this if you sure, that your tag is the LATEST (this one is used for the INTEGRATION TESTS on GitHub!)
-docker tag openroberta/base-${ARCH}:${BASE_VERSION} openroberta/base-${ARCH}:latest
-docker push openroberta/base-${ARCH}:latest
-```
+_Note:_ The version of the `openroberta/base-${ARCH}` image is a number and should match a tag in the git repository `ora-cc-rsc`. This reminds you, that the
+data from that tag is the data stored in the base image.
 
 # Operating Instructions for the Test and Prod Server
 

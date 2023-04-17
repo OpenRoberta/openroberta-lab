@@ -166,6 +166,40 @@ case "${CMD}" in
                          LOGFILE=$1; shift
                          SERVERURL=$1; shift
                          source ${SCRIPT_HELPER}/_showActivityOnce.sh ;;
+    gen-ccbin)           export ARCH=$1; shift
+                         export CCBIN_VERSION=$1; shift
+                         question 'you generate a new ccbin version. That is very seldom required. Is this ok?'
+                         question 'really?'
+                         cd ${BASE_DIR}/conf/${ARCH}/1-cc-binaries
+                         docker build --no-cache -t openroberta/ccbin-${ARCH}:${CCBIN_VERSION} .
+                         question "you generated an image openroberta/ccbin-${ARCH}:${CCBIN_VERSION}. Should that image be pushed to dockerhub?"
+                         docker push openroberta/ccbin-${ARCH}:${CCBIN_VERSION} ;;
+    gen-base)            export ARCH=$1; shift
+                         export CCBIN_VERSION=$1; shift
+                         export ORACCRSC_TAG=$1; shift
+                         export BASE_VERSION=$1; shift
+                         export CC_RESOURCES=$1; shift
+                         if [ "${ORACCRSC_TAG}" != "${BASE_VERSION}" ]; then
+                             question "oraccrsc tag (${ORACCRSC_TAG}) not equal to base version (${BASE_VERSION}). Makes sense for tests. Is this ok?"
+                         fi
+                         question 'you generated a new ccbase version. That is not often required. Is this ok?'
+                         question 'is the ora-cc-rsc repo given as parameter clean? Can arbitrary tags be checked out?'
+                         cd $CC_RESOURCES
+                         if [ ! -d .git ]; then echo "this script only runs in a git directory - exit 12"; exit 12; fi
+
+                         git fetch --all; git reset --hard; git clean -fd
+                         git checkout master; git pull
+                         git checkout tags/${BASE_VERSION}
+
+                         mvn clean install    # necessary to create the update resources for ev3- and arduino-based systems
+                         docker build --no-cache -t openroberta/base-${ARCH}:${BASE_VERSION} \
+                                --build-arg CCBIN_VERSION=${CCBIN_VERSION} \
+                                -f $BASE_DIR/conf/${ARCH}/2-cc-resources/Dockerfile .
+                         question "you generated an image openroberta/base-${ARCH}:${BASE_VERSION}. Should that image be pushed to dockerhub?"
+                         docker push openroberta/base-${ARCH}:${BASE_VERSION}
+                         question "should the image openroberta/base-${ARCH} become the 'latest' tag at dockerhub?"
+                         docker tag openroberta/base-${ARCH}:${BASE_VERSION} openroberta/base-${ARCH}:latest
+                         docker push openroberta/base-${ARCH}:latest ;;
 
     test)                source ${SCRIPT_HELPER}/_test.sh ;;
     *)                   echo "invalid command: '${CMD}'" ;;
