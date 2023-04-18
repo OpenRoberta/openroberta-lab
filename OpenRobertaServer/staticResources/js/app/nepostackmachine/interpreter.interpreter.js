@@ -1,4 +1,4 @@
-define(["require", "exports", "./interpreter.state", "./interpreter.constants", "./interpreter.util", "neuralnetwork.ui", "simulation.roberta"], function (require, exports, interpreter_state_1, C, U, UI, simulation_roberta_1) {
+define(["require", "exports", "./interpreter.state", "./interpreter.constants", "./interpreter.util", "neuralnetwork.ui", "simulation.roberta", "util"], function (require, exports, interpreter_state_1, C, U, UI, simulation_roberta_1, UTIL) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Interpreter = void 0;
     var Interpreter = /** @class */ (function () {
@@ -1149,7 +1149,8 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                 throw 'Unhandled option (lists_getSublist).';
             }
         };
-        Interpreter.prototype.invertImage = function (image) {
+        Interpreter.prototype.invertImage = function (imageToInvert) {
+            var image = UTIL.clone(imageToInvert);
             for (var i = 0; i < image.length; i++) {
                 for (var j = 0; j < image[i].length; j++) {
                     image[i][j] = Math.abs(255 - image[i][j]);
@@ -1157,7 +1158,8 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
             }
             return image;
         };
-        Interpreter.prototype.shiftImageAction = function (image, direction, nShift) {
+        Interpreter.prototype.shiftImageAction = function (imageToShift, direction, nShift) {
+            var image = UTIL.clone(imageToShift);
             nShift = Math.round(nShift);
             var shift = {
                 down: function () {
@@ -1179,7 +1181,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         array.shift();
                         array.push(0);
                     });
-                }
+                },
             };
             if (nShift < 0) {
                 nShift *= -1;
@@ -1223,7 +1225,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         array.shift();
                         array.push(0);
                     });
-                }
+                },
             };
             if (nShift < 0) {
                 nShift *= -1;

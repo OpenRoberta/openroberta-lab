@@ -1062,6 +1062,9 @@ function toFixedPrecision(value, precision) {
 }
 
 export function addVariableValue($elem, name, value) {
+    if (value === undefined) {
+        return;
+    }
     switch (typeof value) {
         case 'number': {
             $elem.append('<div><label>' + name + ' :  </label><span> ' + round(value, 2) + '</span></div>');
