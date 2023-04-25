@@ -38,6 +38,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathModuloFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
@@ -57,9 +58,11 @@ import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.MathChangeStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -617,6 +620,32 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
+    public Void visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
+        super.visitMathChangeStmt(mathChangeStmt);
+        this.sb.append(";");
+        return null;
+    }
+
+    @Override
+    public Void visitMathModuloFunct(MathModuloFunct mathModuloFunct) {
+        this.sb.append("fmod((");
+        mathModuloFunct.dividend.accept(this);
+        this.sb.append("), (");
+        mathModuloFunct.divisor.accept(this);
+        this.sb.append("))");
+        return null;
+    }
+
+    @Override
+    public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        textAppendStmt.var.accept(this);
+        this.sb.append(" += ");
+        textAppendStmt.text.accept(this);
+        this.sb.append(";");
+        return null;
+    }
+
+    @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         this.sb.append("std::stof(");
         textStringCastNumberFunct.param.get(0).accept(this);
@@ -962,8 +991,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
                         entry(Binary.Op.GTE, ">="),
                         entry(Binary.Op.AND, "&&"),
                         entry(Binary.Op.OR, "||"),
-                        entry(Binary.Op.MATH_CHANGE, "+="),
-                        entry(Binary.Op.TEXT_APPEND, "+="),
                         entry(Binary.Op.IN, ":"),
                         entry(Binary.Op.ASSIGNMENT, "="),
                         entry(Binary.Op.ADD_ASSIGNMENT, "+="),

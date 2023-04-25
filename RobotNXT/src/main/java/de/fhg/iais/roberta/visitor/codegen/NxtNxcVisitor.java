@@ -54,6 +54,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathModuloFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
@@ -66,6 +67,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -208,15 +210,6 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         String sym = getBinaryOperatorSymbol(op);
         this.sb.append(" ").append(sym).append(" ");
         switch ( op ) {
-            case TEXT_APPEND:
-                if ( binary.getRight().getVarType().toString().contains("NUMBER") ) {
-                    this.sb.append("NumToStr(");
-                    generateSubExpr(this.sb, false, binary.getRight(), binary);
-                    this.sb.append(")");
-                } else {
-                    generateSubExpr(this.sb, false, binary.getRight(), binary);
-                }
-                break;
             case DIVIDE:
                 this.sb.append("((");
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
@@ -228,6 +221,20 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         if ( isOpBasicMaths ) {
             this.sb.append(")");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        textAppendStmt.var.accept(this);
+        this.sb.append(" += ");
+        String numToStr = textAppendStmt.text.getVarType().toString().contains("NUMBER") ? "NumToStr(" : "";
+        sb.append(numToStr);
+        textAppendStmt.text.accept(this);
+        if ( numToStr != "" ) {
+            sb.append(" )");
+        }
+        sb.append(";");
         return null;
     }
 
@@ -1079,6 +1086,16 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         this.sb.append(", ");
         mathPowerFunct.param.get(1).accept(this);
         this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathModuloFunct(MathModuloFunct mathModuloFunct) {
+        this.sb.append("( ( ");
+        mathModuloFunct.dividend.accept(this);
+        this.sb.append(" ) % ( ");
+        mathModuloFunct.divisor.accept(this);
+        this.sb.append(" ) )");
         return null;
     }
 

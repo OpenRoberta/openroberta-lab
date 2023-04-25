@@ -41,6 +41,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathModuloFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
@@ -59,6 +60,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.MathChangeStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNSetBiasStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNSetInputNeuronVal;
@@ -69,6 +71,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -318,6 +321,24 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
             usedMethodBuilder.addUsedMethod(mathSingleFunct.functName);
         }
         requiredComponentVisited(mathSingleFunct, mathSingleFunct.param);
+        return null;
+    }
+
+    @Override
+    public Void visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
+        requiredComponentVisited(mathChangeStmt, mathChangeStmt.var, mathChangeStmt.delta);
+        return null;
+    }
+
+    @Override
+    public Void visitMathModuloFunct(MathModuloFunct mathModuloFunct) {
+        requiredComponentVisited(mathModuloFunct, mathModuloFunct.dividend, mathModuloFunct.divisor);
+        return null;
+    }
+
+    @Override
+    public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        requiredComponentVisited(textAppendStmt, textAppendStmt.var, textAppendStmt.text);
         return null;
     }
 

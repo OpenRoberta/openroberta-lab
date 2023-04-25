@@ -7,19 +7,15 @@ Var [summe] := Binary [ADD, Var [two], MethodExpr [MethodCall [get3, , , NUMBER]
 StmtTextComment[textComment: 5]
 
 if Binary [EQ, MethodExpr [MethodCall [getString, , , STRING]], StringConst[value: ++--]]
-,then
-exprStmt Binary [MATH_CHANGE, Var [summe], NumConst[value: 4]]
+,thenMathChangeStmt[var: Var [summe], delta: NumConst[value: 4]]
 
 StmtTextComment[textComment: 9]
-
-exprStmt Binary [MATH_CHANGE, Var [summe], FunctionExpr [ListGetIndex [GET, FROM_START, [MethodExpr [MethodCall [getListUpd1To8, Var [x2], Var [liste00], ARRAY_NUMBER]], NumConst[value: 1]]]]]
+MathChangeStmt[var: Var [summe], delta: FunctionExpr [ListGetIndex [GET, FROM_START, [MethodExpr [MethodCall [getListUpd1To8, Var [x2], Var [liste00], ARRAY_NUMBER]], NumConst[value: 1]]]]]
 StmtTextComment[textComment: 17]
-
-exprStmt Binary [MATH_CHANGE, Var [summe], MethodExpr [MethodCall [getParmPlus6, Var [x1], NumConst[value: 1], NUMBER]]]
+MathChangeStmt[var: Var [summe], delta: MethodExpr [MethodCall [getParmPlus6, Var [x1], NumConst[value: 1], NUMBER]]]
 StmtTextComment[textComment: 24]
 
 if Binary [EQ, MethodExpr [MethodCall [getStringAppPP, Var [x3], StringConst[value: --], STRING]], StringConst[value: --++]]
-,then
-exprStmt Binary [MATH_CHANGE, Var [summe], NumConst[value: 11]]
+,thenMathChangeStmt[var: Var [summe], delta: NumConst[value: 11]]
 
 StmtTextComment[textComment: 35]

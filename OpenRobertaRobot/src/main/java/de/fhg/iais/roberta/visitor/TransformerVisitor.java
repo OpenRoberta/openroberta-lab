@@ -15,8 +15,10 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectio
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightResetAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -71,6 +73,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathModuloFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
@@ -93,6 +96,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.MathChangeStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNSetBiasStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNSetInputNeuronVal;
@@ -105,6 +109,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
@@ -244,8 +249,16 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
         return new LightAction(lightAction.port, lightAction.color, lightAction.mode, (Expr) lightAction.rgbLedColor.modify(this), lightAction.getProperty());
     }
 
-    public Phrase visitLightStatusAction(LightStatusAction lightStatusAction) {
-        return new LightStatusAction(lightStatusAction.getUserDefinedPort(), lightStatusAction.status, lightStatusAction.getProperty());
+    public Phrase visitBrickLightOffAction(BrickLightOffAction brickLightOffAction) {
+        return new BrickLightOffAction(brickLightOffAction.getProperty());
+    }
+
+    public Phrase visitBrickLightResetAction(BrickLightResetAction brickLightResetAction) {
+        return new BrickLightOffAction(brickLightResetAction.getProperty());
+    }
+
+    public Phrase visitLightOffAction(LightOffAction lightOffAction) {
+        return new LightOffAction(lightOffAction.getProperty(), lightOffAction.port);
     }
 
     public Phrase visitToneAction(ToneAction toneAction) {
@@ -432,6 +445,18 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
 
     public Phrase visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         return new WaitTimeStmt(waitTimeStmt.getProperty(), (Expr) waitTimeStmt.time.modify(this));
+    }
+
+    public Phrase visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
+        return new MathChangeStmt(mathChangeStmt.getProperty(), (Expr) mathChangeStmt.var.modify(this), (Expr) mathChangeStmt.delta.modify(this));
+    }
+
+    public Phrase visitMathModuloFunct(MathModuloFunct mathModuloFunct) {
+        return new MathModuloFunct(mathModuloFunct.getProperty(), (Expr) mathModuloFunct.dividend.modify(this), (Expr) mathModuloFunct.divisor.modify(this));
+    }
+
+    public Phrase visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        return new TextAppendStmt(textAppendStmt.getProperty(), (Expr) textAppendStmt.var.modify(this), (Expr) textAppendStmt.text.modify(this));
     }
 
     public Phrase visitTextPrintFunct(TextPrintFunct textPrintFunct) {

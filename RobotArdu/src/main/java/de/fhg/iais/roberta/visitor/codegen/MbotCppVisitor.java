@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -228,8 +228,8 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
-        this.sb.append("_meRgbLed.setColor(" + lightStatusAction.getUserDefinedPort());
+    public Void visitLightOffAction(LightOffAction lightOffAction) {
+        this.sb.append("_meRgbLed.setColor(" + lightOffAction.port);
         this.sb.append(", 0, 0, 0);");
         nlIndent();
         this.sb.append("_meRgbLed.show();");

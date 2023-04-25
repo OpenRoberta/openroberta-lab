@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
@@ -424,43 +424,23 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     }
 
     @Test
-    public void visitLightStatusActionOff() {
+    public void visitLightOffAction() {
         configurationComponents.add(new ConfigurationComponent(SC.RGBLED, true, "P1", "P1", new HashMap<>()));
 
-        LightStatusAction lightStatusAction = new LightStatusAction("P1", LightStatusAction.Status.OFF, bp);
-        phrases.add(lightStatusAction);
+        LightOffAction lightOffAction = new LightOffAction(bp, "P1");
+        phrases.add(lightOffAction);
 
         executeWorkflow();
-        assertHasNoNepoInfo(lightStatusAction);
+        assertHasNoNepoInfo(lightOffAction);
     }
 
     @Test
-    public void visitLightStatusActionOff_noPort() {
-        LightStatusAction lightStatusAction = new LightStatusAction("P1", LightStatusAction.Status.OFF, bp);
-        phrases.add(lightStatusAction);
+    public void visitLightOffAction_noPort() {
+        LightOffAction lightOffAction = new LightOffAction(bp, "P1");
+        phrases.add(lightOffAction);
 
         executeWorkflow();
-        assertHasNepoInfo(lightStatusAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
-    }
-
-    @Test
-    public void visitLightStatusActionReset() {
-        configurationComponents.add(new ConfigurationComponent(SC.RGBLED, true, "P1", "P1", new HashMap<>()));
-
-        LightStatusAction lightStatusAction = new LightStatusAction("P1", LightStatusAction.Status.RESET, bp);
-        phrases.add(lightStatusAction);
-
-        executeWorkflow();
-        assertHasNoNepoInfo(lightStatusAction);
-    }
-
-    @Test
-    public void visitLightStatusActionReset_noPort() {
-        LightStatusAction lightStatusAction = new LightStatusAction("P1", LightStatusAction.Status.RESET, bp);
-        phrases.add(lightStatusAction);
-
-        executeWorkflow();
-        assertHasNepoInfo(lightStatusAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
+        assertHasNepoInfo(lightOffAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
     }
 
     @Test

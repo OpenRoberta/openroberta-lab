@@ -30,7 +30,7 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
         DOWN: '9.0',
         BACK: '5.0',
         FRONT: '7.0',
-        NO: '0.0'
+        NO: '0.0',
     };
 
     constructor(btInterfaceFct: any, toDisplayFct: any) {
@@ -211,7 +211,7 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
         this.btInterfaceFct(cmd);
     }
 
-    public statusLightOffAction(name: string, port: number) {
+    public ledOffAction(name: string, port: number) {
         var brickid = this.getBrickIdByName(name);
         const robotText = 'robot: ' + name + ', port: ' + port;
         U.debug(robotText + ' led off');
@@ -241,7 +241,7 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
             action: 'on',
             id: port,
             direction: speed < 0 ? 1 : 0,
-            power: Math.abs(speed)
+            power: Math.abs(speed),
         };
         this.btInterfaceFct(cmd);
         return 0;
@@ -391,8 +391,7 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
         throw new Error('Method not implemented.');
     }
 
-    proxHLedAction(ledValues: number[]): void {
-    }
+    proxHLedAction(ledValues: number[]): void {}
 
     omniDriveAction(xVel: number, yVel: number, thetaVel: number): number {
         throw new Error('Method not implemented.');

@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -149,8 +149,8 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
-        return addActorMaybeCallibot(lightStatusAction, SC.LIGHT);
+    public Void visitLightOffAction(LightOffAction lightOffAction) {
+        return addActorMaybeCallibot(lightOffAction, SC.LIGHT);
     }
 
     @Override

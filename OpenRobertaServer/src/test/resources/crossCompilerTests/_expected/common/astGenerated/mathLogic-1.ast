@@ -25,8 +25,7 @@ Var [b1] := Binary [AND, Var [b1], FunctionExpr [MathNumPropFunct [DIVISIBLE_BY,
 
 Var [b1] := Binary [AND, Var [b1], Unary [NOT, FunctionExpr [MathNumPropFunct [DIVISIBLE_BY, [Var [r1], NumConst[value: 3]]]]]]
 
-
-exprStmt Binary [MATH_CHANGE, Var [r1], NumConst[value: 1]]
+MathChangeStmt[var: Var [r1], delta: NumConst[value: 1]]
 
 Var [b1] := Binary [AND, Var [b1], FunctionExpr [MathNumPropFunct [EVEN, [Var [r1]]]]]
 
@@ -58,7 +57,7 @@ Var [b1] := Var [b1]
 Var [b1] := Binary [AND, Binary [AND, Var [b1], Binary [LT, Var [r2], Var [r1]]], Binary [LTE, Var [r1], Var [r1]]]
 
 
-Var [b1] := Binary [AND, Var [b1], Binary [EQ, Binary [MOD, Var [r1], NumConst[value: 4]], NumConst[value: 2]]]
+Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathModuloFunct[dividend: Var [r1], divisor: NumConst[value: 4]]], NumConst[value: 2]]]
 
 
 Var [b1] := Binary [AND, Var [b1], Binary [EQ, NumConst[value: 29], Binary [ADD, FunctionExpr [MathConstrainFunct [[MathPowerFunct [POWER, [NumConst[value: 3], NumConst[value: 2]]], NumConst[value: 1], NumConst[value: 20]]]], Binary [ADD, FunctionExpr [MathConstrainFunct [[NumConst[value: 9], Binary [MULTIPLY, NumConst[value: 3], NumConst[value: 4]], NumConst[value: 18]]]], FunctionExpr [MathConstrainFunct [[Binary [MULTIPLY, NumConst[value: 3], NumConst[value: 3]], NumConst[value: 5], NumConst[value: 8]]]]]]]]

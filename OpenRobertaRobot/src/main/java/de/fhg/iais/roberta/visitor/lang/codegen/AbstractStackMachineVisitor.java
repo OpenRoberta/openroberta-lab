@@ -60,6 +60,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathModuloFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
@@ -81,6 +82,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.MathChangeStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNSetBiasStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNSetInputNeuronVal;
@@ -95,6 +97,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
@@ -315,21 +318,8 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                 binary.left.accept(this);
                 binary.getRight().accept(this);
                 JSONObject o;
-                // FIXME: The math change should be removed from the binary expression since it is a statement
-                switch ( binary.op ) {
-                    case MATH_CHANGE:
-                        o = makeNode(C.MATH_CHANGE).put(C.NAME, ((Var) binary.left).name);
-                        break;
-                    case TEXT_APPEND:
-                        o = makeNode(C.TEXT_APPEND).put(C.NAME, ((Var) binary.left).name);
-                        break;
-
-                    default:
-                        o = makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, binary.op);
-                        break;
-                }
+                o = makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, binary.op);
                 return add(o);
-
         }
 
     }
@@ -766,6 +756,33 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     @Override
     public final Void visitLocation(Location location) {
         throw new DbcException("Operation not supported");
+    }
+
+    @Override
+    public Void visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
+        mathChangeStmt.var.accept(this);
+        mathChangeStmt.delta.accept(this);
+        JSONObject o;
+        o = makeNode(C.MATH_CHANGE).put(C.NAME, ((Var) mathChangeStmt.var).name);
+        return add(o);
+    }
+
+    @Override
+    public Void visitMathModuloFunct(MathModuloFunct mathModuloFunct) {
+        mathModuloFunct.dividend.accept(this);
+        mathModuloFunct.divisor.accept(this);
+        JSONObject o;
+        o = makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, "MOD");
+        return add(o);
+    }
+
+    @Override
+    public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        textAppendStmt.var.accept(this);
+        textAppendStmt.text.accept(this);
+        JSONObject o;
+        o = makeNode(C.TEXT_APPEND).put(C.NAME, ((Var) textAppendStmt.var).name);
+        return add(o);
     }
 
     @Override

@@ -26,7 +26,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 DOWN: '9.0',
                 BACK: '5.0',
                 FRONT: '7.0',
-                NO: '0.0'
+                NO: '0.0',
             };
             _this.btInterfaceFct = btInterfaceFct;
             _this.toDisplayFct = toDisplayFct;
@@ -210,7 +210,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             var cmd = { target: 'wedo', type: 'command', actuator: 'light', brickid: brickid, color: color };
             this.btInterfaceFct(cmd);
         };
-        RobotWeDoBehaviour.prototype.statusLightOffAction = function (name, port) {
+        RobotWeDoBehaviour.prototype.ledOffAction = function (name, port) {
             var brickid = this.getBrickIdByName(name);
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' led off');
@@ -238,7 +238,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 action: 'on',
                 id: port,
                 direction: speed < 0 ? 1 : 0,
-                power: Math.abs(speed)
+                power: Math.abs(speed),
             };
             this.btInterfaceFct(cmd);
             return 0;
@@ -355,8 +355,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
         RobotWeDoBehaviour.prototype.buttonLedAction = function (ledValues) {
             throw new Error('Method not implemented.');
         };
-        RobotWeDoBehaviour.prototype.proxHLedAction = function (ledValues) {
-        };
+        RobotWeDoBehaviour.prototype.proxHLedAction = function (ledValues) { };
         RobotWeDoBehaviour.prototype.omniDriveAction = function (xVel, yVel, thetaVel) {
             throw new Error('Method not implemented.');
         };

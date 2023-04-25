@@ -127,7 +127,7 @@ def ____math():
     cyberpi.console.println(_median(___numberList))
     cyberpi.console.println(_standard_deviation(___numberList))
     cyberpi.console.println(___numberList[0])
-    cyberpi.console.println(___numberVar % ___numberVar)
+    cyberpi.console.println(( ( ___numberVar ) % ( ___numberVar ) ))
     cyberpi.console.println(min(max(___numberVar, ___numberVar), ___numberVar))
     cyberpi.console.println(random.randint(___numberVar, ___numberVar))
     cyberpi.console.println(random.random())

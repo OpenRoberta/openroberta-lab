@@ -36,6 +36,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathModuloFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
@@ -57,6 +58,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.MathChangeStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNSetBiasStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNSetInputNeuronVal;
@@ -68,6 +70,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
@@ -177,9 +180,13 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
 
     V visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct);
 
+    V visitMathChangeStmt(MathChangeStmt mathChangeStmt);
+
     V visitMathConst(MathConst mathConst);
 
     V visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct);
+
+    V visitMathModuloFunct(MathModuloFunct mathModuloFunct);
 
     V visitMathNumPropFunct(MathNumPropFunct mathNumPropFunct);
 
@@ -232,6 +239,8 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitStmtTextComment(StmtTextComment stmtTextComment);
 
     V visitStringConst(StringConst stringConst);
+
+    V visitTextAppendStmt(TextAppendStmt textAppendStmt);
 
     V visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct);
 

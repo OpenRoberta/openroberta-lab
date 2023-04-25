@@ -297,7 +297,6 @@ public class C {
     public static final String SPEED_R = "speedR";
     public static final String START = "start";
     public static final String STATEMENTS = "statements";
-    public static final String STATUS_LIGHT_ACTION = "statusLightAction";
     public static final String STD_DEV = "std_dev";
     public static final String STMT_LIST = "stmtList";
     public static final String STOP = "stop";

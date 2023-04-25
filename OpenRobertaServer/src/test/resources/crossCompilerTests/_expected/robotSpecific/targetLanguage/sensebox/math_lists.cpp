@@ -67,7 +67,7 @@ void ____math() {
     Serial.println(_getListMedian(___numList));
     Serial.println(_getListStandardDeviation(___numList));
     Serial.println(_getListElementByIndex(___numList, 0));
-    Serial.println(fmod(___numVar, ___numVar));
+    Serial.println(fmod((___numVar), (___numVar)));
     Serial.println(std::min(std::max((double) ___numVar, (double) ___numVar), (double) ___numVar));
     Serial.println(_randomIntegerInRange(___numVar, ___numVar));
     Serial.println(((double) rand() / (RAND_MAX)));

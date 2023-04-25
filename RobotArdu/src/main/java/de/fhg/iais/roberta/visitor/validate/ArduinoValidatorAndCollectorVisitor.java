@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -169,10 +169,10 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoAndMotorValid
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
-        if ( lightStatusAction.getInfos().getErrorCount() == 0 ) {
+    public Void visitLightOffAction(LightOffAction lightOffAction) {
+        if ( lightOffAction.getInfos().getErrorCount() == 0 ) {
             if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
-                addErrorToPhrase(lightStatusAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
+                addErrorToPhrase(lightOffAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
             }
         }
         return null;

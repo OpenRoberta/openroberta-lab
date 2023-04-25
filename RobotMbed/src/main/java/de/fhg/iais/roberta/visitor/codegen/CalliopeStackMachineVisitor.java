@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -45,8 +45,8 @@ public class CalliopeStackMachineVisitor extends MbedStackMachineVisitor impleme
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
-        JSONObject o = makeNode(C.STATUS_LIGHT_ACTION).put(C.NAME, "calliope");
+    public Void visitLightOffAction(LightOffAction lightOffAction) {
+        JSONObject o = makeNode(C.LED_OFF_ACTION).put(C.NAME, "calliope");
         return add(o);
     }
 

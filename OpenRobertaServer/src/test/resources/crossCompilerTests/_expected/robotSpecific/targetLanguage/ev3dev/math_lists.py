@@ -75,7 +75,7 @@ def ____math():
     hal.drawText(str(_median(___numberList)), ___numberVar, ___numberVar)
     hal.drawText(str(_standard_deviation(___numberList)), ___numberVar, ___numberVar)
     hal.drawText(str(___numberList[0]), ___numberVar, ___numberVar)
-    hal.drawText(str(___numberVar % ___numberVar), ___numberVar, ___numberVar)
+    hal.drawText(str(( ( ___numberVar ) % ( ___numberVar ) )), ___numberVar, ___numberVar)
     hal.drawText(str(min(max(___numberVar, ___numberVar), ___numberVar)), ___numberVar, ___numberVar)
     hal.drawText(str(_randInt(___numberVar, ___numberVar)), ___numberVar, ___numberVar)
     hal.drawText(str(_randDouble()), ___numberVar, ___numberVar)

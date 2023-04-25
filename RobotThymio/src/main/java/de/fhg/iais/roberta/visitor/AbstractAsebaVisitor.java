@@ -41,6 +41,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathModuloFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
@@ -59,11 +60,13 @@ import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.MathChangeStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
@@ -142,8 +145,6 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
                         AbstractLanguageVisitor.entry(Binary.Op.GTE, ">="),
                         AbstractLanguageVisitor.entry(Binary.Op.AND, "and"),
                         AbstractLanguageVisitor.entry(Binary.Op.OR, "or"),
-                        AbstractLanguageVisitor.entry(Binary.Op.MATH_CHANGE, "+="),
-                        AbstractLanguageVisitor.entry(Binary.Op.TEXT_APPEND, "+="),
                         AbstractLanguageVisitor.entry(Binary.Op.IN, "in"),
                         AbstractLanguageVisitor.entry(Binary.Op.ASSIGNMENT, "="),
                         AbstractLanguageVisitor.entry(Binary.Op.ADD_ASSIGNMENT, "+="),
@@ -245,28 +246,9 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
             case MINUS:
             case MULTIPLY:
             case DIVIDE:
-            case MOD:
             case ASSIGNMENT: {
-                visitBinaryBothSides(binary);
+                visitBinaryBothSides(binary.left, binary.right);
                 this.sb.append("_A = _B[").append(this.nestedBinaryCounter).append("] ").append(getBinaryOperatorSymbol(binary.op)).append(" _C[").append(this.nestedBinaryCounter).append("]");
-                break;
-            }
-            case MATH_CHANGE:
-            case ADD_ASSIGNMENT: // TODO: check not used?
-            case MINUS_ASSIGNMENT: // TODO: check not used?
-            case MULTIPLY_ASSIGNMENT: // TODO: check not used?
-            case DIVIDE_ASSIGNMENT: // TODO: check not used?
-            case MOD_ASSIGNMENT: { // TODO: check not used?
-                visitBinaryBothSides(binary);
-                this.sb.append("_B[").append(this.nestedBinaryCounter).append("] ").append(getBinaryOperatorSymbol(binary.op)).append(" _C[").append(this.nestedBinaryCounter).append("]");
-                nlIndent();
-                // TODO: check if only MATH_CHANGE is used and remove if ...
-                if ( binary.left.getKind().hasName("VAR") ) {
-                    this.sb.append(((Var) binary.left).getCodeSafeName());
-                } else {
-                    this.sb.append("_A");
-                }
-                this.sb.append(" = _B[").append(this.nestedBinaryCounter).append("]");
                 break;
             }
             case EQ:
@@ -275,7 +257,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
             case LTE:
             case GT:
             case GTE: {
-                visitBinaryBothSides(binary);
+                visitBinaryBothSides(binary.left, binary.right);
                 this.sb.append("if _B[").append(this.nestedBinaryCounter).append("] ").append(getBinaryOperatorSymbol(binary.op)).append(" _C[").append(this.nestedBinaryCounter).append("] then");
                 incrIndentation();
                 nlIndent();
@@ -293,7 +275,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
             }
             case AND:
             case OR: {
-                visitBinaryBothSides(binary);
+                visitBinaryBothSides(binary.left, binary.right);
                 this.sb.append("if _B[").append(this.nestedBinaryCounter).append("] == 1 ").append(getBinaryOperatorSymbol(binary.op)).append(" _C[").append(this.nestedBinaryCounter).append("] == 1 then");
                 incrIndentation();
                 nlIndent();
@@ -316,17 +298,17 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
         return null;
     }
 
-    private void visitBinaryBothSides(Binary binary) {
-        if ( binary.left.getKind().hasName("VAR") ) {
+    private void visitBinaryBothSides(Expr left, Expr right) {
+        if ( left.getKind().hasName("VAR") ) {
             this.sb.append("_A = ");
-            this.sb.append(((Var) binary.left).getCodeSafeName());
+            this.sb.append(((Var) left).getCodeSafeName());
         } else {
-            binary.left.accept(this);
+            left.accept(this);
         }
         nlIndent();
         this.sb.append("_B[").append(this.nestedBinaryCounter).append("] = _A");
         nlIndent();
-        binary.right.accept(this);
+        right.accept(this);
         nlIndent();
         this.sb.append("_C[").append(this.nestedBinaryCounter).append("] = _A");
         nlIndent();
@@ -892,6 +874,31 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
+    public Void visitMathModuloFunct(MathModuloFunct mathModuloFunct) {
+        this.nestedBinaryCounterPlus();
+        visitBinaryBothSides(mathModuloFunct.dividend, mathModuloFunct.divisor);
+        this.sb.append("_A = _B[").append(this.nestedBinaryCounter).append("] % _C[").append(this.nestedBinaryCounter).append("]");
+        this.nestedBinaryCounterMinus();
+        return null;
+    }
+
+    @Override
+    public Void visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
+        this.nestedBinaryCounterPlus();
+        visitBinaryBothSides(mathChangeStmt.var, mathChangeStmt.delta);
+        this.sb.append("_B[").append(this.nestedBinaryCounter).append("] += _C[").append(this.nestedBinaryCounter).append("]");
+        nlIndent();
+        this.sb.append(" = _B[").append(this.nestedBinaryCounter).append("]");
+        this.nestedBinaryCounterMinus();
+        return null;
+    }
+
+    @Override
+    public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        throw new DbcException("BLOCK_NOT_SUPPORTED");
+    }
+
+    @Override
     public Void visitMethodCall(MethodCall methodCall) {
         this.nestedMethodCallsCounterPlus();
         this.stateCounter++;
@@ -1329,13 +1336,5 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     @Override
     protected String getUnaryOperatorSymbol(Unary.Op op) {
         return AbstractAsebaVisitor.unaryOpSymbols().get(op);
-    }
-
-    private void generateCodeRightExpression(Binary binary, Binary.Op op) {
-        if ( op == Binary.Op.TEXT_APPEND ) {
-            generateSubExpr(this.sb, false, binary.getRight(), binary);
-        } else {
-            generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-        }
     }
 }

@@ -78,7 +78,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         }
     }
 
-    statusLightOffAction(name: string, port: number) {
+    ledOffAction(name: string, port: number) {
         const robotText = 'robot: ' + name + ', port: ' + port;
         U.debug(robotText + ' led off');
 

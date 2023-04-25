@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
@@ -76,10 +77,7 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
         generateSubExpr(this.sb, false, binary.left, binary);
         String sym = getBinaryOperatorSymbol(op);
         this.sb.append(whitespace() + sym + whitespace());
-        if ( op == Op.TEXT_APPEND ) {
-            convertToString(binary);
-            return null;
-        } else if ( op == Op.DIVIDE ) {
+        if ( op == Op.DIVIDE ) {
             appendCastToFloat(binary);
             return null;
         } else {
@@ -102,18 +100,18 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
         this.sb.append(")");
     }
 
-    private void convertToString(Binary binary) {
-        switch ( binary.getRight().getVarType() ) {
+    private void convertToString(Expr expr) {
+        switch ( expr.getVarType() ) {
             case BOOLEAN:
             case NUMBER:
             case NUMBER_INT:
             case COLOR:
                 this.sb.append("String(");
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                expr.accept(this);
                 this.sb.append(")");
                 break;
             default:
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                expr.accept(this);
                 break;
         }
     }
@@ -215,6 +213,15 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
 
     @Override
     public Void visitTextPrintFunct(TextPrintFunct textPrintFunct) {
+        return null;
+    }
+
+    @Override
+    public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        textAppendStmt.var.accept(this);
+        this.sb.append(" += ");
+        convertToString(textAppendStmt.text);
+        this.sb.append(";");
         return null;
     }
 

@@ -75,7 +75,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.info(robotText + ' led on color ' + color);
         };
-        RobotWeDoBehaviourTest.prototype.statusLightOffAction = function (name, port) {
+        RobotWeDoBehaviourTest.prototype.ledOffAction = function (name, port) {
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.info(robotText + ' led off');
         };
@@ -187,10 +187,8 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
         RobotWeDoBehaviourTest.prototype.circleLedAction = function (ledValues) {
             throw new Error('Method not implemented.');
         };
-        RobotWeDoBehaviourTest.prototype.buttonLedAction = function (ledValues) {
-        };
-        RobotWeDoBehaviourTest.prototype.proxHLedAction = function (ledValues) {
-        };
+        RobotWeDoBehaviourTest.prototype.buttonLedAction = function (ledValues) { };
+        RobotWeDoBehaviourTest.prototype.proxHLedAction = function (ledValues) { };
         RobotWeDoBehaviourTest.prototype.omniDriveAction = function (xVel, yVel, thetaVel) {
             throw new Error('Method not implemented.');
         };

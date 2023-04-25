@@ -84,7 +84,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 this.hardwareState.actions.led[C.COLOR] = color;
             }
         };
-        RobotSimBehaviour.prototype.statusLightOffAction = function (name, port) {
+        RobotSimBehaviour.prototype.ledOffAction = function (name, port) {
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' led off');
             if (name === 'mbot') {

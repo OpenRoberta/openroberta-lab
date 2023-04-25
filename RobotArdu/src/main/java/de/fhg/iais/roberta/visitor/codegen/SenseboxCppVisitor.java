@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -331,15 +331,15 @@ public class SenseboxCppVisitor extends NepoArduinoCppVisitor implements ISenseb
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
+    public Void visitLightOffAction(LightOffAction lightOffAction) {
         this.sb
             .append("_rgbled_")
-            .append(lightStatusAction.getUserDefinedPort())
+            .append(lightOffAction.port)
             .append(".setPixelColor(0, _rgbled_")
-            .append(lightStatusAction.getUserDefinedPort())
+            .append(lightOffAction.port)
             .append(".Color(0,0,0));");
         this.nlIndent();
-        this.sb.append("_rgbled_").append(lightStatusAction.getUserDefinedPort()).append(".show();");
+        this.sb.append("_rgbled_").append(lightOffAction.port).append(".show();");
         this.nlIndent();
         return null;
     }

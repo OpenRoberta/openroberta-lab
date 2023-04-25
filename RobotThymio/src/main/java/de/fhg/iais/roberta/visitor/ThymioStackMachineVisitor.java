@@ -186,7 +186,7 @@ public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor
     @Override
     public Void visitLedsOffAction(LedsOffAction ledsOffAction) {
         String port = ledsOffAction.port.toLowerCase();
-        JSONObject o = makeNode(C.STATUS_LIGHT_ACTION).put(C.PORT, port);
+        JSONObject o = makeNode(C.LED_OFF_ACTION).put(C.PORT, port);
         return add(o);
     }
 

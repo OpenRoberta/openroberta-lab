@@ -73,7 +73,7 @@ void ____math() {
     drawStrLEDMatrix(&__meLEDMatrix_1, String(_getListMedian(___numList)), 100);
     drawStrLEDMatrix(&__meLEDMatrix_1, String(_getListStandardDeviation(___numList)), 100);
     drawStrLEDMatrix(&__meLEDMatrix_1, String(_getListElementByIndex(___numList, 0)), 100);
-    drawStrLEDMatrix(&__meLEDMatrix_1, String(fmod(___numVar, ___numVar)), 100);
+    drawStrLEDMatrix(&__meLEDMatrix_1, String(fmod((___numVar), (___numVar))), 100);
     drawStrLEDMatrix(&__meLEDMatrix_1, String(std::min(std::max((double) ___numVar, (double) ___numVar), (double) ___numVar)), 100);
     drawStrLEDMatrix(&__meLEDMatrix_1, String(_randomIntegerInRange(___numVar, ___numVar)), 100);
     drawStrLEDMatrix(&__meLEDMatrix_1, String(((double) rand() / (RAND_MAX))), 100);

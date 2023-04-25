@@ -57,10 +57,12 @@ import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.MathChangeStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
@@ -143,9 +145,6 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         String sym = getBinaryOperatorSymbol(op);
         this.sb.append(whitespace() + sym + whitespace());
         switch ( op ) {
-            case TEXT_APPEND:
-                generateCodeToStringCastOnExpr(binary);
-                break;
             case DIVIDE:
                 this.sb.append("((float) ");
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
@@ -459,6 +458,22 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
+    public Void visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
+        super.visitMathChangeStmt(mathChangeStmt);
+        this.sb.append(";");
+        return null;
+    }
+
+    @Override
+    public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        textAppendStmt.var.accept(this);
+        this.sb.append(" += String.valueOf(");
+        textAppendStmt.text.accept(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         this.sb.append("Float.parseFloat(");
         textStringCastNumberFunct.param.get(0).accept(this);
@@ -738,12 +753,6 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         return isEqualityOp && isLeftAndRightString;
     }
 
-    private void generateCodeToStringCastOnExpr(Binary binary) {
-        this.sb.append("String.valueOf(");
-        generateSubExpr(this.sb, false, binary.getRight(), binary);
-        this.sb.append(")");
-    }
-
     private void generateCodeForStringEqualityOp(Binary binary) {
         if ( binary.op == Op.NEQ ) {
             this.sb.append("!");
@@ -821,8 +830,6 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
                         entry(Binary.Op.GTE, ">="),
                         entry(Binary.Op.AND, "&&"),
                         entry(Binary.Op.OR, "||"),
-                        entry(Binary.Op.MATH_CHANGE, "+="),
-                        entry(Binary.Op.TEXT_APPEND, "+="),
                         entry(Binary.Op.IN, ":"),
                         entry(Binary.Op.ASSIGNMENT, "="),
                         entry(Binary.Op.ADD_ASSIGNMENT, "+="),

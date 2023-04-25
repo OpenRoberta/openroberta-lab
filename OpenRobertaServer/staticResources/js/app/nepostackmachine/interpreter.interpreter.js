@@ -481,8 +481,8 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         }
                         this.robotBehaviour.lightAction(stmt[C.MODE], color, stmt[C.PORT]);
                         return [0, true];
-                    case C.STATUS_LIGHT_ACTION:
-                        this.robotBehaviour.statusLightOffAction(stmt[C.NAME], stmt[C.PORT]);
+                    case C.LED_OFF_ACTION:
+                        this.robotBehaviour.ledOffAction(stmt[C.NAME], stmt[C.PORT]);
                         return [0, true];
                     case C.CIRCLE_LED_ACTION:
                     case C.PROXH_LED_ACTION:

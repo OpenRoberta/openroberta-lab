@@ -66,6 +66,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
@@ -467,6 +468,15 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
+    public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        textAppendStmt.var.accept(this);
+        this.sb.append(" += str(");
+        textAppendStmt.text.accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         this.sb.append("float(");
         textStringCastNumberFunct.param.get(0).accept(this);
@@ -819,11 +829,6 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     private void generateCodeRightExpression(Binary binary, Binary.Op op) {
         switch ( op ) {
-            case TEXT_APPEND:
-                this.sb.append("str(");
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
-                this.sb.append(")");
-                break;
             case DIVIDE:
                 this.sb.append("float(");
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
@@ -926,8 +931,6 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
                         AbstractLanguageVisitor.entry(Binary.Op.GTE, ">="),
                         AbstractLanguageVisitor.entry(Binary.Op.AND, "and"),
                         AbstractLanguageVisitor.entry(Binary.Op.OR, "or"),
-                        AbstractLanguageVisitor.entry(Binary.Op.MATH_CHANGE, "+="),
-                        AbstractLanguageVisitor.entry(Binary.Op.TEXT_APPEND, "+="),
                         AbstractLanguageVisitor.entry(Binary.Op.IN, "in"),
                         AbstractLanguageVisitor.entry(Binary.Op.ASSIGNMENT, "="),
                         AbstractLanguageVisitor.entry(Binary.Op.ADD_ASSIGNMENT, "+="),

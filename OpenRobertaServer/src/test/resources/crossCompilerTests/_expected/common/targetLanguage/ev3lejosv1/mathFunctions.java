@@ -50,7 +50,7 @@ public class NEPOprog {
         ___x = ___x + (float) Math.log((float) Math.exp(2));
         ___x = ___x + (float) Math.log10(100);
         ___x = ___x + (float) Math.pow(10, 2);
-        ___x = ___x + ( 5 % 3 );
+        ___x = ___x + ( ( 5 ) % ( 3 ) );
         ___x = ___x + (float) Math.sin((float) Math.PI / ((float) 2));
         ___x = ___x + (float) Math.cos(0);
         ___x = ___x + (float) Math.tan(0);

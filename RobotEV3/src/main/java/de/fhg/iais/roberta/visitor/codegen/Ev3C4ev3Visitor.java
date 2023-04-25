@@ -35,8 +35,9 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectio
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightResetAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -361,10 +362,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         generateSubExpr(this.sb, false, binary.left, binary);
         String sym = getBinaryOperatorSymbol(op);
         this.sb.append(whitespace() + sym + whitespace());
-        if ( op == Binary.Op.TEXT_APPEND ) {
-            convertToString(binary);
-            return null;
-        } else if ( op == Binary.Op.DIVIDE ) {
+        if ( op == Binary.Op.DIVIDE ) {
             appendCastToFloat(binary);
             return null;
         } else {
@@ -1262,17 +1260,15 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
-        switch ( lightStatusAction.status ) {
-            case OFF:
-                this.sb.append("SetLedPattern(LED_BLACK);");
-                break;
-            case RESET:
-                // TODO: Implement
-                break;
-            default:
-                throw new DbcException("Invalid LED status mode!");
-        }
+    public Void visitBrickLightResetAction(BrickLightResetAction brickLightResetAction) {
+        // TODO: Light reset not implemented for C4EV3 yet...;
+        return null;
+
+    }
+
+    @Override
+    public Void visitBrickLightOffAction(BrickLightOffAction brickLightOffAction) {
+        this.sb.append("SetLedPattern(LED_BLACK);");
         return null;
     }
 

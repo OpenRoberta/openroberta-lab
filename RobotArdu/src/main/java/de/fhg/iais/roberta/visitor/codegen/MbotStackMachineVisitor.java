@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -46,6 +46,7 @@ import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
@@ -107,11 +108,11 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
+    public Void visitLightOffAction(LightOffAction lightOffAction) {
         JSONObject o =
-            makeNode(C.STATUS_LIGHT_ACTION)
-                .put(C.MODE, lightStatusAction.status)
-                .put(C.PORT, lightStatusAction.getUserDefinedPort())
+            makeNode(C.LED_OFF_ACTION)
+                .put(C.MODE, SC.OFF)
+                .put(C.PORT, lightOffAction.port)
                 .put(C.NAME, "mbot");
         return add(o);
     }
