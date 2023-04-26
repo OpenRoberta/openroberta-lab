@@ -3,7 +3,14 @@ import { IDrawable, ILabel, IReset, IUpdateAction, RobotBase } from 'robot.base'
 import * as C from 'interpreter.constants';
 import * as SIMATH from 'simulation.math';
 import * as GUISTATE_C from 'guiState.controller';
-import { CircleSimulationObject, Ground, ISimulationObstacle, RectangleSimulationObject, TriangleSimulationObject } from './simulation.objects';
+import {
+    CircleSimulationObject,
+    Ground,
+    ISimulationObstacle,
+    MarkerSimulationObject,
+    RectangleSimulationObject,
+    TriangleSimulationObject,
+} from './simulation.objects';
 import * as UTIL from 'util';
 import * as $ from 'jquery';
 // @ts-ignore
@@ -1040,7 +1047,7 @@ export class EV3Chassis extends LegoChassis {
             let y = display.y;
             let $display = $('#display' + this.id);
             if (text) {
-                $display.html($display.html() + '<text x=' + x * 10 + ' y=' + (y + 1) * 16 + '>' + text + '</text>');
+                $display.html($display.html() + '<text x=' + x * 10 + ' "y=' + (y + 1) * 16 + '">' + text + '</text>');
             }
             if (display.picture) {
                 $display.html(this.display[display.picture]);
@@ -1927,7 +1934,7 @@ export abstract class MatrixDisplay implements IUpdateAction, IDrawable, IReset 
         for (var i = 0; i < this.leds.length; i++) {
             for (var j = 0; j < this.leds[i].length; j++) {
                 var thisLED = Math.min(this.leds[i][j], this.brightness);
-                var colorIndex = UTIL.round(thisLED * 0.035294118, 0);
+                var colorIndex = UTIL.round(thisLED / C.BRIGHTNESS_MULTIPLIER, 0);
                 if (colorIndex > 0) {
                     rCtx.save();
                     rCtx.beginPath();
@@ -1983,7 +1990,8 @@ export abstract class MatrixDisplay implements IUpdateAction, IDrawable, IReset 
                 let that = this;
                 let textArray = this.generateText(display.text);
                 let myText = function (textArray, that) {
-                    that.leds = textArray.slice(0, that.leds.length);
+                    let shallow = textArray.slice(0, that.leds.length);
+                    that.leds = JSON.parse(JSON.stringify(shallow));
                     if (textArray.length > that.leds.length) {
                         textArray.shift();
                         that.timeout = setTimeout(myText, 150, textArray, that);
@@ -2046,9 +2054,8 @@ export abstract class MatrixDisplay implements IUpdateAction, IDrawable, IReset 
             }
             if (display.pixel) {
                 let pixel = display.pixel;
-
-                if (0 <= pixel.y == pixel.y < this.leds.length && 0 <= pixel.x == pixel.x < this.leds[0].length) {
-                    this.leds[pixel.x][pixel.y] = pixel.brightness * C.BRIGHTNESS_MULTIPLIER;
+                if (0 <= pixel.y && pixel.y < this.leds.length && 0 <= pixel.x && pixel.x < this.leds[0].length) {
+                    this.leds[pixel.x][pixel.y] = Math.round(pixel.brightness * C.BRIGHTNESS_MULTIPLIER);
                 } else {
                     if (0 <= pixel.y != pixel.y < this.leds[0].length) {
                         console.warn('actions.pixel.y out of range: ' + pixel.y);
@@ -2059,7 +2066,7 @@ export abstract class MatrixDisplay implements IUpdateAction, IDrawable, IReset 
                 }
             }
             if (display.brightness || display.brightness === 0) {
-                this.brightness = Math.round((display.brightness * 255.0) / 9.0);
+                this.brightness = Math.round(display.brightness * C.BRIGHTNESS_MULTIPLIER);
             }
         }
     }
@@ -2120,7 +2127,7 @@ export abstract class MatrixDisplay implements IUpdateAction, IDrawable, IReset 
     }
 }
 
-export class MbedDisplay extends MatrixDisplay {
+export class MbedDisplay extends MatrixDisplay implements ISensor {
     leds: number[][] = [
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
@@ -2141,6 +2148,21 @@ export class MbedDisplay extends MatrixDisplay {
         this.x = location.x;
         this.y = location.y;
         this.imageTranspose = true;
+    }
+
+    updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBase,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D,
+        personalObstacleList: any[],
+        markerList: MarkerSimulationObject[]
+    ): void {
+        values['display'] = values['display'] || {};
+        values['display']['pixel'] = this.leds.map((col) => col.map((row) => Math.round(row / C.BRIGHTNESS_MULTIPLIER)));
+        values['display']['brightness'] = Math.round(this.brightness / C.BRIGHTNESS_MULTIPLIER);
     }
 }
 

@@ -983,7 +983,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                 var y = display.y;
                 var $display = $('#display' + this.id);
                 if (text) {
-                    $display.html($display.html() + '<text x=' + x * 10 + ' y=' + (y + 1) * 16 + '>' + text + '</text>');
+                    $display.html($display.html() + '<text x=' + x * 10 + ' "y=' + (y + 1) * 16 + '">' + text + '</text>');
                 }
                 if (display.picture) {
                     $display.html(this.display[display.picture]);
@@ -1845,7 +1845,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
             for (var i = 0; i < this.leds.length; i++) {
                 for (var j = 0; j < this.leds[i].length; j++) {
                     var thisLED = Math.min(this.leds[i][j], this.brightness);
-                    var colorIndex = UTIL.round(thisLED * 0.035294118, 0);
+                    var colorIndex = UTIL.round(thisLED / C.BRIGHTNESS_MULTIPLIER, 0);
                     if (colorIndex > 0) {
                         rCtx.save();
                         rCtx.beginPath();
@@ -1891,7 +1891,8 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                     var that = this;
                     var textArray = this.generateText(display.text);
                     var myText_1 = function (textArray, that) {
-                        that.leds = textArray.slice(0, that.leds.length);
+                        var shallow = textArray.slice(0, that.leds.length);
+                        that.leds = JSON.parse(JSON.stringify(shallow));
                         if (textArray.length > that.leds.length) {
                             textArray.shift();
                             that.timeout = setTimeout(myText_1, 150, textArray, that);
@@ -1955,8 +1956,8 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                 }
                 if (display.pixel) {
                     var pixel = display.pixel;
-                    if (0 <= pixel.y == pixel.y < this.leds.length && 0 <= pixel.x == pixel.x < this.leds[0].length) {
-                        this.leds[pixel.x][pixel.y] = pixel.brightness * C.BRIGHTNESS_MULTIPLIER;
+                    if (0 <= pixel.y && pixel.y < this.leds.length && 0 <= pixel.x && pixel.x < this.leds[0].length) {
+                        this.leds[pixel.x][pixel.y] = Math.round(pixel.brightness * C.BRIGHTNESS_MULTIPLIER);
                     }
                     else {
                         if (0 <= pixel.y != pixel.y < this.leds[0].length) {
@@ -1968,7 +1969,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                     }
                 }
                 if (display.brightness || display.brightness === 0) {
-                    this.brightness = Math.round((display.brightness * 255.0) / 9.0);
+                    this.brightness = Math.round(display.brightness * C.BRIGHTNESS_MULTIPLIER);
                 }
             }
         };
@@ -2050,6 +2051,11 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
             _this.imageTranspose = true;
             return _this;
         }
+        MbedDisplay.prototype.updateSensor = function (running, dt, myRobot, values, uCtx, udCtx, personalObstacleList, markerList) {
+            values['display'] = values['display'] || {};
+            values['display']['pixel'] = this.leds.map(function (col) { return col.map(function (row) { return Math.round(row / C.BRIGHTNESS_MULTIPLIER); }); });
+            values['display']['brightness'] = Math.round(this.brightness / C.BRIGHTNESS_MULTIPLIER);
+        };
         return MbedDisplay;
     }(MatrixDisplay));
     exports.MbedDisplay = MbedDisplay;
