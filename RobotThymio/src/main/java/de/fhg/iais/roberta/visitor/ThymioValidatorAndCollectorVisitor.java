@@ -1,8 +1,5 @@
 package de.fhg.iais.roberta.visitor;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
@@ -11,8 +8,6 @@ import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
-import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LedsOffAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
@@ -57,7 +52,6 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
@@ -70,10 +64,6 @@ import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisit
 
 
 public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IThymioVisitor<Void> {
-    private static final Map<String, String> SENSOR_COMPONENT_TYPE_MAP = new HashMap<String, String>() {{
-        put("SOUND_RECORD", SC.SOUND);
-        put("GYRO_AXIS_RESET", SC.GYRO);
-    }};
 
     public ThymioValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(robotConfiguration, beanBuilders);
@@ -187,11 +177,6 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
-        return null;
-    }
-
-    @Override
     public Void visitCurveAction(CurveAction curveAction) {
         requiredComponentVisited(curveAction, curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed());
         if ( curveAction.paramRight.getDuration() != null ) {
@@ -232,11 +217,6 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
         requiredComponentVisited(lightAction, lightAction.rgbLedColor);
         usedHardwareBuilder.addUsedActor(new UsedActor(lightAction.port, SC.RGBLED));
         usedHardwareBuilder.addDeclaredVariable("color_");
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensor(LightSensor lightSensor) {
         return null;
     }
 
@@ -302,11 +282,6 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     public Void visitLedButtonOnAction(LedButtonOnAction ledButtonOnAction) {
         usedHardwareBuilder.addDeclaredVariable("led_");
         usedHardwareBuilder.addUsedActor(new UsedActor(ledButtonOnAction.getKind().getName(), ledButtonOnAction.getKind().getName()));
-        return null;
-    }
-
-    @Override
-    public Void visitShowTextAction(ShowTextAction showTextAction) {
         return null;
     }
 

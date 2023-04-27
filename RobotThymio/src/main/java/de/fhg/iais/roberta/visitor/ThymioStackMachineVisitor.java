@@ -10,8 +10,6 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LedsOffAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
@@ -37,9 +35,11 @@ import de.fhg.iais.roberta.syntax.action.thymio.PlayRecordingAction;
 import de.fhg.iais.roberta.syntax.action.thymio.RecordStartAction;
 import de.fhg.iais.roberta.syntax.action.thymio.RecordStopAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.thymio.TapSensor;
@@ -56,8 +56,8 @@ public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
-        throw new DbcException("Not supported!");
+    public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
+        return null;
     }
 
     @Override
@@ -276,11 +276,6 @@ public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction showTextAction) {
-        throw new DbcException("Not supported!");
-    }
-
-    @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
         return add(makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.SOUND).put(C.MODE, C.VOLUME));
     }
@@ -288,6 +283,11 @@ public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor
     @Override
     public Void visitTapSensor(TapSensor tapSensor) {
         return add(makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TOUCH));
+    }
+
+    @Override
+    public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
+        return null;
     }
 
     @Override

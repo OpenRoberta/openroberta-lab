@@ -1,6 +1,20 @@
 package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.action.light.LedsOffAction;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
+import de.fhg.iais.roberta.syntax.action.sound.GetVolumeAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
+import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.thymio.LedButtonOnAction;
 import de.fhg.iais.roberta.syntax.action.thymio.LedCircleOnAction;
 import de.fhg.iais.roberta.syntax.action.thymio.LedProxHOnAction;
@@ -10,33 +24,88 @@ import de.fhg.iais.roberta.syntax.action.thymio.LedTemperatureOnAction;
 import de.fhg.iais.roberta.syntax.action.thymio.PlayRecordingAction;
 import de.fhg.iais.roberta.syntax.action.thymio.RecordStartAction;
 import de.fhg.iais.roberta.syntax.action.thymio.RecordStopAction;
+import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.thymio.TapSensor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IActors4AutonomousDriveRobots;
-import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
-public interface IThymioVisitor<V> extends IActors4AutonomousDriveRobots<V>, ISensorVisitor<V> {
-    V visitPlayRecordingAction(PlayRecordingAction playRecordingAction);
+public interface IThymioVisitor<V> extends IVisitor<V> {
 
-    V visitLedButtonOnAction(LedButtonOnAction ledButtonOnAction);
+    default Void visitGetSampleSensor(GetSampleSensor sensorGetSample) {
+        sensorGetSample.sensor.accept(this);
+        return null;
+    }
 
-    V visitLedCircleOnAction(LedCircleOnAction ledCircleOnAction);
+    Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor);
 
-    V visitLedSoundOnAction(LedSoundOnAction ledSoundOnAction);
+    Void visitColorConst(ColorConst colorConst);
 
-    V visitLedTemperatureOnAction(LedTemperatureOnAction ledTemperatureOnAction);
 
-    V visitLedProxHOnAction(LedProxHOnAction ledProxHOnAction);
+    Void visitCurveAction(CurveAction curveAction);
 
-    V visitLedProxVOnAction(LedProxVOnAction ledProxVOnAction);
+    Void visitDriveAction(DriveAction driveAction);
 
-    V visitLedsOffAction(LedsOffAction ledsOffAction);
+    Void visitInfraredSensor(InfraredSensor infraredSensor);
 
-    V visitTapSensor(TapSensor tapSensor);
+    Void visitKeysSensor(KeysSensor keysSensor);
 
-    V visitSoundSensor(SoundSensor soundSensor);
+    Void visitLedButtonOnAction(LedButtonOnAction ledButtonOnAction);
 
-    V visitRecordStartAction(RecordStartAction recordStartAction);
+    Void visitLedCircleOnAction(LedCircleOnAction ledCircleOnAction);
 
-    V visitRecordStopAction(RecordStopAction recordStopAction);
+    Void visitLedProxHOnAction(LedProxHOnAction ledProxHOnAction);
+
+    Void visitLedProxVOnAction(LedProxVOnAction ledProxVOnAction);
+
+    Void visitLedSoundOnAction(LedSoundOnAction ledSoundOnAction);
+
+    Void visitLedTemperatureOnAction(LedTemperatureOnAction ledTemperatureOnAction);
+
+    Void visitLedsOffAction(LedsOffAction ledsOffAction);
+
+    Void visitLightAction(LightAction lightAction);
+
+    Void visitMotorDriveStopAction(MotorDriveStopAction stopAction);
+
+    Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction);
+
+    Void visitMotorOnAction(MotorOnAction motorOnAction);
+
+    Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction);
+
+    Void visitMotorStopAction(MotorStopAction motorStopAction);
+
+    Void visitPlayFileAction(PlayFileAction playFileAction);
+
+    Void visitPlayNoteAction(PlayNoteAction playNoteAction);
+
+    Void visitPlayRecordingAction(PlayRecordingAction playRecordingAction);
+
+    Void visitRecordStartAction(RecordStartAction recordStartAction);
+
+    Void visitRecordStopAction(RecordStopAction recordStopAction);
+    
+    Void visitSoundSensor(SoundSensor soundSensor);
+
+    Void visitTapSensor(TapSensor tapSensor);
+
+    Void visitTemperatureSensor(TemperatureSensor temperatureSensor);
+
+    Void visitTimerSensor(TimerSensor timerSensor);
+
+    Void visitTimerReset(TimerReset timerReset);
+
+    Void visitToneAction(ToneAction toneAction);
+
+    Void visitTurnAction(TurnAction turnAction);
+
+    Void visitGetVolumeAction(GetVolumeAction getVolumeAction);
+
+    Void visitSetVolumeAction(SetVolumeAction setVolumeAction);
 }

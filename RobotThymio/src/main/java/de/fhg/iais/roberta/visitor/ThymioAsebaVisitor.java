@@ -12,8 +12,6 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LedsOffAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
@@ -46,10 +44,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
@@ -73,10 +69,6 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
         return null;
     }
 
-    @Override
-    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
-        return null;
-    }
 
     @Override
     public Void visitColorConst(ColorConst colorConst) {
@@ -86,11 +78,6 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
 
     @Override
     public Void visitEmptyList(EmptyList emptyList) {
-        return null;
-    }
-
-    @Override
-    public Void visitColorSensor(ColorSensor colorSensor) {
         return null;
     }
 
@@ -142,12 +129,6 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
         lightAction.rgbLedColor.accept(this);
         nlIndent();
         this.sb.append("call leds.").append(lightAction.port.toLowerCase()).append("(___color_[0] / _RGB_DIV, ___color_[1] / _RGB_DIV, ___color_[2] / _RGB_DIV)");
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensor(LightSensor lightSensor) {
-        this.sb.append("_A = prox.ground.ambiant").append("[").append(lightSensor.getSlot()).append("]");
         return null;
     }
 
@@ -361,11 +342,6 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
         rgbColor.B.accept(this);
         nlIndent();
         this.sb.append("___color_[2] = _A");
-        return null;
-    }
-
-    @Override
-    public Void visitShowTextAction(ShowTextAction showTextAction) {
         return null;
     }
 
