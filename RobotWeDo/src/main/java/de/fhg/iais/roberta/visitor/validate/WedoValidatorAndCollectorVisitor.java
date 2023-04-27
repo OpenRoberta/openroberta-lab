@@ -28,13 +28,16 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.IWeDoVisitor;
 
-public class WedoValidatorAndCollectorVisitor extends MotorValidatorAndCollectorVisitor implements IWeDoVisitor<Void> {
+public class WedoValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IWeDoVisitor<Void> {
+    private static final double DOUBLE_EPS = 1E-7;
+
     private static final Map<String, String> SENSOR_COMPONENT_TYPE_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
         put("KEYS_SENSING", SC.KEY);
         put("INFRARED_SENSING", SC.INFRARED);
         put("TIMER_SENSING", SC.TIMER);
         put("GYRO_SENSING", SC.GYRO);
     }});
+
     private static final Map<String, String> ACTOR_COMPONENT_TYPE_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
         put("MOTOR_ON_ACTION", SC.MOTOR);
         put("MOTOR_STOP_ACTION", SC.MOTOR);

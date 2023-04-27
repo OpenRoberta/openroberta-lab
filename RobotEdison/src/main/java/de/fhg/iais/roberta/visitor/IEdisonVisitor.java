@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.visitor.hardware.actor.IDifferentialMotorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISoundVisitor;
 
-public interface IEdisonVisitor<V> extends ILightVisitor<V>, IDifferentialMotorVisitor<V>, ISoundVisitor<V> {
+public interface IEdisonVisitor<V> extends ILightVisitor<V>, IDifferentialMotorVisitor<V>, ISoundVisitor<V> implements extends IVisitor<V> {
     V visitSendIRAction(SendIRAction sendIRAction);
 
     V visitReceiveIRAction(ReceiveIRAction receiveIRAction);

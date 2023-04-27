@@ -18,7 +18,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -190,12 +189,6 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
     public Void visitTimerReset(TimerReset timerReset) {
         JSONObject o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, timerReset.sensorPort);
         return add(o);
-    }
-
-    @Override
-    public Void visitGetSampleSensor(GetSampleSensor sensorGetSample) {
-        sensorGetSample.sensor.accept(this);
-        return null;
     }
 
     @Override
