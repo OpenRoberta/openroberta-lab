@@ -60,7 +60,6 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DetectMarkSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
@@ -926,11 +925,6 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         }
         this.sb.append("()");
         return null;
-    }
-
-    @Override
-    public Void visitGetSampleSensor(GetSampleSensor sensorGetSample) {
-        return sensorGetSample.sensor.accept(this);
     }
 
     @Override

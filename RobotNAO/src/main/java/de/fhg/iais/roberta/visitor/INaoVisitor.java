@@ -27,236 +27,128 @@ import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
 import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
+import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
+import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DetectMarkSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFaceSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrentSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
-import de.fhg.iais.roberta.visitor.hardware.actor.ISpeechVisitor;
-import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
-public interface INaoVisitor<V> extends ISpeechVisitor<V>, ISensorVisitor<V> {
+public interface INaoVisitor<V> extends IVisitor<V> {
 
-    /**
-     * visit a {@link SetMode}.
-     *
-     * @param mode phrase to be visited
-     */
-    V visitSetMode(SetMode mode);
+    V visitTouchSensor(TouchSensor touchSensor);
 
-    /**
-     * visit a {@link ApplyPosture}.
-     *
-     * @param apply posture phrase to be visited
-     */
-    V visitApplyPosture(ApplyPosture applyPosture);
+    V visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor);
 
-    /**
-     * visit a {@link SetStiffness}.
-     *
-     * @param setStiffness on phrase to be visited
-     */
-    V visitSetStiffness(SetStiffness setStiffness);
+    V visitGyroSensor(GyroSensor gyroSensor);
 
-    /**
-     * visit a {@link Hand}.
-     *
-     * @param Hand on phrase to be visited
-     */
-    V visitHand(Hand hand);
+    V visitAccelerometerSensor(AccelerometerSensor accelerometerSensor);
 
-    /**
-     * visit a {@link MoveJoint}.
-     *
-     * @param ElectricCurrentSensor on phrase to be visited
-     */
-    V visitMoveJoint(MoveJoint moveJoint);
+    V visitSetIntensity(SetIntensity setIntensity);
 
-    /**
-     * visit a {@link WalkDistance}.
-     *
-     * @param walkDistance phrase to be visited
-     */
-    V visitWalkDistance(WalkDistance walkDistance);
-
-    /**
-     * visit a {@link TurnDegrees}.
-     *
-     * @param turnDegrees phrase to be visited
-     */
-    V visitTurnDegrees(TurnDegrees turnDegrees);
-
-    /**
-     * visit a {@link WalkTo}.
-     *
-     * @param walkTo phrase to be visited
-     */
-    V visitWalkTo(WalkTo walkTo);
-
-    /**
-     * visit a {@link WalkAsync}.
-     *
-     * @param walkAsync phrase to be visited
-     */
-    V visitWalkAsync(WalkAsync walkAsync);
-
-    /**
-     * visit a {@link Stop}.
-     *
-     * @param stop phrase to be visited
-     */
-    V visitStop(Stop stop);
-
-    /**
-     * visit a {@link MoveJoint}.
-     *
-     * @param ElectricCurrentSensor on phrase to be visited
-     */
-    V visitAnimation(Animation animation);
-
-    /**
-     * visit a {@link PointLookAt}.
-     *
-     * @param point look at phrase to be visited
-     */
-    V visitPointLookAt(PointLookAt pointLookAt);
-
-    /**
-     * visit a {@link setVolume}.
-     *
-     * @param set volume on phrase to be visited
-     */
-    V visitSetVolume(SetVolume setVolume);
-
-    /**
-     * visit a {@link GetVolume}.
-     *
-     * @param getVolume phrase to be visited
-     */
-    V visitGetVolume(GetVolume getVolume);
-
-    /**
-     * visit a {@link GetLanguage}.
-     *
-     * @param getLanguage phrase to be visited
-     */
-    V visitGetLanguage(GetLanguage getLanguage);
-
-    /**
-     * visit a {@link PlayFile}.
-     *
-     * @param playFile phrase to be visited
-     */
-    V visitPlayFile(PlayFile playFile);
-
-    /**
-     * visit a {@link SetLeds}.
-     *
-     * @param set leds phrase to be visited
-     */
-    V visitSetLeds(SetLeds setLeds);
-
-    /**
-     * visit a {@link ledOff}.
-     *
-     * @param led off phrase to be visited
-     */
-    V visitLedOff(LedOff ledOff);
-
-    /**
-     * visit a {@link ledReset}.
-     *
-     * @param led reset phrase to be visited
-     */
-    V visitLedReset(LedReset ledReset);
-
-    /**
-     * visit a {@link RandomEyesDuration}.
-     *
-     * @param random eyes duration phrase to be visited
-     */
-    V visitRandomEyesDuration(RandomEyesDuration randomEyesDuration);
-
-    /**
-     * visit a {@link RastaDuration}.
-     *
-     * @param rast duration phrase to be visited
-     */
-    V visitRastaDuration(RastaDuration rastaDuration);
-
-    /**
-     * visit a {@link FsrSensor}.
-     *
-     * @param force sensor phrase to be visited
-     */
     V visitFsrSensor(FsrSensor forceSensor);
 
-    /**
-     * visit a {@link DetectMarkSensor}.
-     *
-     * @param DetectMarkMode on phrase to be visited
-     */
-    V visitDetectMarkSensor(DetectMarkSensor naoMark);
+    V visitHand(Hand hand);
 
-    /**
-     * visit a {@link DetectMarkSensor}.
-     *
-     * @param DetectMarkMode on phrase to be visited
-     */
+    V visitMoveJoint(MoveJoint moveJoint);
+
+    V visitWalkDistance(WalkDistance walkDistance);
+
+    V visitTurnDegrees(TurnDegrees turnDegrees);
+
+    V visitSetLeds(SetLeds setLeds);
+
+    V visitLedOff(LedOff ledOff);
+
+    V visitLedReset(LedReset ledReset);
+
+    V visitWalkAsync(WalkAsync walkAsync);
+
+    V visitSetMode(SetMode setMode);
+
+    V visitApplyPosture(ApplyPosture applyPosture);
+
+    V visitSetStiffness(SetStiffness setStiffness);
+
+    V visitAutonomous(Autonomous autonomous);
+
+    V visitWalkTo(WalkTo walkTo);
+
+    V visitStop(Stop stop);
+
+    V visitAnimation(Animation animation);
+
+    V visitPointLookAt(PointLookAt pointLookAt);
+
+    V visitSetVolume(SetVolume setVolume);
+
+    V visitGetVolume(GetVolume getVolume);
+
+    V visitSetLanguageAction(SetLanguageAction setLanguageAction);
+
+    V visitGetLanguage(GetLanguage getLanguage);
+
+    V visitSayTextAction(SayTextAction sayTextAction);
+
+    V visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction sayTextAction);
+
+    V visitPlayFile(PlayFile playFile);
+
+    V visitRandomEyesDuration(RandomEyesDuration randomEyesDuration);
+
+    V visitRastaDuration(RastaDuration rastaDuration);
+
+    V visitDetectMarkSensor(DetectMarkSensor detectedMark);
+
     V visitTakePicture(TakePicture takePicture);
 
-    /**
-     * visit a {@link DetectMarkSensor}.
-     *
-     * @param DetectMarkMode on phrase to be visited
-     */
     V visitRecordVideo(RecordVideo recordVideo);
 
-    /**
-     * visit a {@link LearnFace}.
-     *
-     * @param LearnFace on phrase to be visited
-     */
     V visitLearnFace(LearnFace learnFace);
 
-    /**
-     * visit a {@link ForgetFace}.
-     *
-     * @param ForgetFace on phrase to be visited
-     */
     V visitForgetFace(ForgetFace forgetFace);
 
-    /**
-     * visit a {@link DetectFaceSensor}.
-     *
-     * @param DetectFaceSensor on phrase to be visited
-     */
     V visitDetectFaceSensor(DetectFaceSensor detectFace);
 
     V visitElectricCurrentSensor(ElectricCurrentSensor electricCurrent);
 
-    V visitSetIntensity(SetIntensity setIntensity);
-
-    V visitAutonomous(Autonomous autonomous);
-
     V visitRecognizeWord(RecognizeWord recognizeWord);
 
-    /**
-     * visit a {@link NaoMarkInformation}.
-     *
-     * @param naoMarkInformation on phrase to be visited
-     */
     V visitNaoMarkInformation(NaoMarkInformation naoMarkInformation);
 
-    /**
-     * visit a {@link DetectedFaceInformation}.
-     *
-     * @param detectedFaceInformation on phrase to be visited
-     */
     V visitDetectedFaceInformation(DetectedFaceInformation detectedFaceInformation);
+
+    V visitTimerSensor(TimerSensor timerSensor);
+
+    V visitTimerReset(TimerReset timerReset);
+
+    V visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct);
+
+    V visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct);
+
+    V visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct);
+
+    V visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct);
+
+    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
+        return sensorGetSample.sensor.accept(this);
+    }
 }
