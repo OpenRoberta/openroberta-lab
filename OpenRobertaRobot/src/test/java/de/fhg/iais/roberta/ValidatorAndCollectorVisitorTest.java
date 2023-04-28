@@ -1,7 +1,5 @@
 package de.fhg.iais.roberta;
 
-import java.util.Arrays;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -108,7 +106,7 @@ public class ValidatorAndCollectorVisitorTest {
         TestSimplePhrase childPhrase1 = new TestSimplePhrase();
         TestSimplePhrase childPhrase2 = new TestSimplePhrase();
 
-        delegatedValidatorAndCollectorVisitor.requiredComponentVisited(phrase, Arrays.asList(childPhrase1, childPhrase2));
+        delegatedValidatorAndCollectorVisitor.requiredComponentVisited(phrase, childPhrase1, childPhrase2);
 
         ErrorAndWarningBean errorAndWarningBean = errorAndWarningBeanBuilder.build();
 
@@ -129,7 +127,7 @@ public class ValidatorAndCollectorVisitorTest {
         Phrase phrase = new TestSimplePhrase();
         Phrase emptyExpression = new EmptyExpr(BlocklyType.ANY);
 
-        delegatedValidatorAndCollectorVisitor.requiredComponentVisited(phrase, Arrays.asList(emptyExpression));
+        delegatedValidatorAndCollectorVisitor.requiredComponentVisited(phrase, emptyExpression);
 
         ErrorAndWarningBean errorAndWarningBean = errorAndWarningBeanBuilder.build();
 

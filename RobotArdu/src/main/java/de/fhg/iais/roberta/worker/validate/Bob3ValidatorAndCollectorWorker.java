@@ -11,6 +11,6 @@ public class Bob3ValidatorAndCollectorWorker extends NIBOValidatorAndCollectorWo
 
     @Override
     protected NIBOValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
-        return new Bob3ValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
+        return new Bob3ValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, false);
     }
 }

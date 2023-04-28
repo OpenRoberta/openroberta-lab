@@ -16,7 +16,7 @@ public class NxtValidatorAndCollectorWorker extends AbstractValidatorAndCollecto
 
     @Override
     protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
-        return new NxtValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
+        return new NxtValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, false);
     }
 
     @Override

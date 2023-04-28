@@ -17,6 +17,6 @@ public class MbotValidatorAndCollectorWorker extends AbstractValidatorAndCollect
 
     @Override
     protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
-        return new MbotValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
+        return new MbotValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, false);
     }
 }

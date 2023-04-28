@@ -8,8 +8,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 
 public class Rob3rtaValidatorAndCollectorVisitor extends NIBOValidatorAndCollectorVisitor {
 
-    public Rob3rtaValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
-        super(brickConfiguration, beanBuilders);
+    public Rob3rtaValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders, boolean isSim) {
+        super(brickConfiguration, beanBuilders, isSim);
     }
 
     @Override

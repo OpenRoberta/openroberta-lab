@@ -14,8 +14,8 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
  */
 public final class Calliope2017ValidatorAndCollectorVisitor extends CalliopeValidatorAndCollectorVisitor {
 
-    public Calliope2017ValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
-        super(brickConfiguration, beanBuilders);
+    public Calliope2017ValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders, boolean isSim) {
+        super(brickConfiguration, beanBuilders, isSim);
     }
 
     @Override

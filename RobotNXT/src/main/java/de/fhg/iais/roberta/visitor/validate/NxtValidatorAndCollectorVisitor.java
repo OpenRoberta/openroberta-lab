@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
@@ -52,33 +53,48 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
         put("ULTRASONIC_SENSING", SC.ULTRASONIC);
     }});
 
-    public NxtValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
+    private final boolean isSim;
+
+    public NxtValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders, boolean isSim) {
         super(brickConfiguration, beanBuilders);
+        this.isSim = isSim;
     }
 
     @Override
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction bluetoothCheckConnectAction) {
+        addToPhraseIfUnsupportedInSim(bluetoothCheckConnectAction, false, isSim);
         requiredComponentVisited(bluetoothCheckConnectAction, bluetoothCheckConnectAction.connection);
         return null;
     }
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction bluetoothReceiveAction) {
+        addToPhraseIfUnsupportedInSim(bluetoothReceiveAction, true, isSim);
         requiredComponentVisited(bluetoothReceiveAction, bluetoothReceiveAction.connection);
         return null;
     }
 
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction bluetoothSendAction) {
+        addToPhraseIfUnsupportedInSim(bluetoothSendAction, false, isSim);
         requiredComponentVisited(bluetoothSendAction, bluetoothSendAction.connection, bluetoothSendAction.msg);
         return null;
     }
 
     @Override
     public Void visitColorSensor(ColorSensor colorSensor) {
+        if ( isSim && colorSensor.getMode().equals("AMBIENTLIGHT") ) {
+            addErrorToPhrase(colorSensor, "SIM_BLOCK_NOT_SUPPORTED");
+        }
         checkSensorPort(colorSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(colorSensor.getUserDefinedPort(), SC.COLOR, colorSensor.getMode()));
         return null;
+    }
+
+    @Override
+    public Void visitConnectConst(ConnectConst connectConst) {
+        addToPhraseIfUnsupportedInSim(connectConst, true, isSim);
+        return super.visitConnectConst(connectConst);
     }
 
     @Override
@@ -110,6 +126,7 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
 
     @Override
     public Void visitHTColorSensor(HTColorSensor htColorSensor) {
+        addToPhraseIfUnsupportedInSim(htColorSensor, true, isSim);
         checkSensorPort(htColorSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(htColorSensor.getUserDefinedPort(), SC.HT_COLOR, htColorSensor.getMode()));
         return null;
@@ -135,6 +152,9 @@ public class NxtValidatorAndCollectorVisitor extends DifferentialMotorOldConfVal
 
     @Override
     public Void visitLightSensor(LightSensor lightSensor) {
+        if ( isSim && lightSensor.getMode().equals("AMBIENTLIGHT") ) {
+            addErrorToPhrase(lightSensor, "SIM_BLOCK_NOT_SUPPORTED");
+        }
         checkSensorPort(lightSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(lightSensor.getUserDefinedPort(), SC.LIGHT, lightSensor.getMode()));
         return null;

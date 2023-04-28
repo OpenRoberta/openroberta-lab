@@ -49,8 +49,11 @@ import de.fhg.iais.roberta.visitor.IEv3Visitor;
 
 public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorAndCollectorVisitorEv3 implements IEv3Visitor<Void> {
 
-    public Ev3ValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
+    private final boolean isSim;
+
+    public Ev3ValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders, boolean isSim) {
         super(robotConfiguration, beanBuilders);
+        this.isSim = isSim;
     }
 
     @Override
@@ -67,6 +70,7 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction bluetoothReceiveAction) {
+        addToPhraseIfUnsupportedInSim(bluetoothReceiveAction, true, isSim);
         requiredComponentVisited(bluetoothReceiveAction, bluetoothReceiveAction.connection);
         return null;
     }
@@ -97,6 +101,7 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
 
     @Override
     public Void visitCompassSensor(CompassSensor compassSensor) {
+        addToPhraseIfUnsupportedInSim(compassSensor, true, isSim);
         checkSensorPort(compassSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(compassSensor.getUserDefinedPort(), SC.COMPASS, compassSensor.getMode()));
         return null;
@@ -104,6 +109,7 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
 
     @Override
     public Void visitCompassCalibrate(CompassCalibrate compassCalibrate) {
+        addToPhraseIfUnsupportedInSim(compassCalibrate, true, isSim);
         checkSensorPort(compassCalibrate);
         if ( this.robotConfiguration.getRobotName().equals("ev3dev") ) {
             addWarningToPhrase(compassCalibrate, "BLOCK_NOT_SUPPORTED");
@@ -149,6 +155,7 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
 
     @Override
     public Void visitHTColorSensor(HTColorSensor htColorSensor) {
+        addToPhraseIfUnsupportedInSim(htColorSensor, true, isSim);
         checkSensorPort(htColorSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(htColorSensor.getUserDefinedPort(), SC.HT_COLOR, htColorSensor.getMode()));
         return null;
@@ -248,6 +255,7 @@ public class Ev3ValidatorAndCollectorVisitor extends DifferentialMotorValidatorA
 
     @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
+        addToPhraseIfUnsupportedInSim(soundSensor, true, isSim);
         checkSensorPort(soundSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(soundSensor.getUserDefinedPort(), SC.SOUND, soundSensor.getMode()));
         return null;

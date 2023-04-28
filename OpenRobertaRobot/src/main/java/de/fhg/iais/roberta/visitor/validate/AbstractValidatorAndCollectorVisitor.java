@@ -92,7 +92,7 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
         Assert.notNull(nnBeanBuilder, "beanBuilders must contain a instance of NNBean.Builder");
     }
 
-    protected <T extends IProjectBean.IBuilder> T getBuilder(Class<T> clazz) {
+    protected final <T extends IProjectBean.IBuilder> T getBuilder(Class<T> clazz) {
         return this.beanBuilders.getInstance(clazz);
     }
 
@@ -102,14 +102,15 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      *
      * @param subPhrase to be visited, if not empty
      */
-    protected void optionalComponentVisited(Phrase subPhrase) {
+    protected final void optionalComponentVisited(Phrase subPhrase) {
         if ( !(subPhrase instanceof EmptyExpr) ) {
             subPhrase.accept(mainVisitor);
         }
     }
 
     /**
-     * for the superPhrase check, that subPhrases are not empty. If true, visit the subPhrases, otherwise add error information to the superPhrase.
+     * for the superPhrase check, that subPhrases are not empty. If true, visit the subPhrases, otherwise add error information to the superPhrase.<br>
+     * public for tests :-<
      *
      * @param superPhrase phrase, whose components should be checked and visited
      * @param subPhrases the component of superPhrase to be checked and visited
@@ -131,40 +132,18 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      * @param superPhrase phrase, whose components should be checked and visited
      * @param subPhrases the component of superPhrase to be checked and visited
      */
-    public final <T extends Phrase> void requiredComponentVisited(Phrase superPhrase, List<T> subPhrases) {
+    protected final <T extends Phrase> void requiredComponentVisited(Phrase superPhrase, List<T> subPhrases) {
         for ( Phrase subPhrase : subPhrases ) {
             mkEmptyOrDisabledCheck(superPhrase, subPhrase);
             subPhrase.accept(mainVisitor);
         }
     }
 
-    private void mkEmptyOrDisabledCheck(Phrase superPhrase, Phrase subPhrase) {
-        if ( subPhrase instanceof EmptyExpr || subPhrase.getProperty().isDisabled() ) {
-            addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
-        } else if ( subPhrase instanceof ExprList ) {
-            for ( Expr expr : ((ExprList) subPhrase).get() ) {
-                if ( expr instanceof EmptyExpr || expr.getProperty().isDisabled() ) {
-                    addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
-                }
-            }
-        } else if ( subPhrase instanceof StmtList ) {
-            for ( Stmt stmt : ((StmtList) subPhrase).get() ) {
-                if ( stmt instanceof ExprStmt ) {
-                    if ( ((ExprStmt) stmt).expr instanceof EmptyExpr || ((ExprStmt) stmt).expr.getProperty().isDisabled() ) {
-                        addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
-                    }
-                }
-            }
-        }
-    }
-
     /**
-     * Appends an error to the phrase and remembers the error by delegating it to a {@link ErrorAndWarningBean}
-     *
-     * @param phrase
-     * @param message
+     * Appends an error to the phrase and remembers the error by delegating it to a {@link ErrorAndWarningBean}<br>
+     * public for tests :-<
      */
-    public void addErrorToPhrase(final Phrase phrase, final String message) {
+    public final void addErrorToPhrase(final Phrase phrase, final String message) {
         NepoInfo info = NepoInfo.error(message);
         if ( phrase instanceof SensorExpr ) {
             ((SensorExpr) phrase).sensor.addInfo(info);
@@ -183,12 +162,10 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
     }
 
     /**
-     * Appends a warning to the phrase and remembers the warning by delegating it to a {@link ErrorAndWarningBean}
-     *
-     * @param phrase
-     * @param message
+     * Appends a warning to the phrase and remembers the warning by delegating it to a {@link ErrorAndWarningBean}<br>
+     * public for tests :-<
      */
-    public void addWarningToPhrase(final Phrase phrase, final String message) {
+    public final void addWarningToPhrase(final Phrase phrase, final String message) {
         NepoInfo info = NepoInfo.warning(message);
         if ( phrase instanceof SensorExpr ) {
             ((SensorExpr) phrase).sensor.addInfo(info);
@@ -204,5 +181,35 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
             phrase.addInfo(info);
         }
         errorAndWarningBuilder.addWarning(message);
+    }
+
+    protected final void addToPhraseIfUnsupportedInSim(final Phrase phrase, final boolean isError, final boolean isSim) {
+        if ( isSim ) {
+            if ( isError ) {
+                addErrorToPhrase(phrase, "SIM_BLOCK_NOT_SUPPORTED");
+            } else {
+                addWarningToPhrase(phrase, "SIM_BLOCK_NOT_SUPPORTED");
+            }
+        }
+    }
+
+    private final void mkEmptyOrDisabledCheck(Phrase superPhrase, Phrase subPhrase) {
+        if ( subPhrase instanceof EmptyExpr || subPhrase.getProperty().isDisabled() ) {
+            addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
+        } else if ( subPhrase instanceof ExprList ) {
+            for ( Expr expr : ((ExprList) subPhrase).get() ) {
+                if ( expr instanceof EmptyExpr || expr.getProperty().isDisabled() ) {
+                    addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
+                }
+            }
+        } else if ( subPhrase instanceof StmtList ) {
+            for ( Stmt stmt : ((StmtList) subPhrase).get() ) {
+                if ( stmt instanceof ExprStmt ) {
+                    if ( ((ExprStmt) stmt).expr instanceof EmptyExpr || ((ExprStmt) stmt).expr.getProperty().isDisabled() ) {
+                        addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
+                    }
+                }
+            }
+        }
     }
 }

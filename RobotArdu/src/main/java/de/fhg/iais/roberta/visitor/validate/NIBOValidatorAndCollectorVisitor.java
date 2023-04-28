@@ -25,8 +25,11 @@ import de.fhg.iais.roberta.visitor.hardware.INIBOVisitor;
 
 public class NIBOValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements INIBOVisitor<Void> {
 
-    public NIBOValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
+    private final boolean isSim;
+
+    public NIBOValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders, boolean isSim) {
         super(brickConfiguration, beanBuilders);
+        this.isSim = isSim;
     }
 
     @Override
@@ -41,12 +44,14 @@ public class NIBOValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitSendIRAction(SendIRAction sendIRAction) {
+        addToPhraseIfUnsupportedInSim(sendIRAction, false, isSim);
         requiredComponentVisited(sendIRAction, sendIRAction.code);
         return null;
     }
 
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
+        addToPhraseIfUnsupportedInSim(receiveIRAction, true, isSim);
         return null;
     }
 

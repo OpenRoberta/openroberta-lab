@@ -18,6 +18,9 @@ import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.MotionKitDualSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.MotionKitSingleSetAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
@@ -25,10 +28,12 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
@@ -38,15 +43,18 @@ import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.ICalliopeVisitor;
 
 public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollectorVisitor implements ICalliopeVisitor<Void> {
-
     public static final double DOUBLE_EPS = 1E-7;
 
-    public CalliopeValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
+    private final boolean isSim;
+
+    public CalliopeValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders, boolean isSim) {
         super(brickConfiguration, beanBuilders);
+        this.isSim = isSim;
     }
 
     @Override
     public Void visitColorSensor(ColorSensor colorSensor) {
+        addToPhraseIfUnsupportedInSim(colorSensor, true, isSim);
         checkSensorExists(colorSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(colorSensor.getUserDefinedPort(), SC.COLOR, colorSensor.getMode()));
         return null;
@@ -67,6 +75,7 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
 
     @Override
     public Void visitGyroSensor(GyroSensor gyroSensor) {
+        addToPhraseIfUnsupportedInSim(gyroSensor, true, isSim);
         checkSensorExists(gyroSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(gyroSensor.getUserDefinedPort(), SC.ACCELEROMETER, gyroSensor.getMode()));
         return null;
@@ -74,6 +83,7 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
 
     @Override
     public Void visitHumiditySensor(HumiditySensor humiditySensor) {
+        addToPhraseIfUnsupportedInSim(humiditySensor, true, isSim);
         checkSensorExists(humiditySensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(humiditySensor.getUserDefinedPort(), SC.HUMIDITY, humiditySensor.getMode()));
         return null;
@@ -86,6 +96,7 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
 
     @Override
     public Void visitLedBarSetAction(LedBarSetAction ledBarSetAction) {
+        addToPhraseIfUnsupportedInSim(ledBarSetAction, false, isSim);
         checkActorByTypeExists(ledBarSetAction, "LEDBAR");
         requiredComponentVisited(ledBarSetAction, ledBarSetAction.x, ledBarSetAction.brightness);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.LED_BAR));
@@ -101,6 +112,7 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
     @Override
     public Void visitLightAction(LightAction lightAction) {
         // TODO: design better blockly blocks and don't reuse blocks with different number of parameters and don't use EmptyExpr
+        addToPhraseIfUnsupportedInSim(lightAction, false, isSim);
         String blocktype = lightAction.getProperty().getBlockType();
         checkActorByPortExists(lightAction, lightAction.port);
         if ( !blocktype.equals("robActions_brickLight_on") ) {
@@ -111,12 +123,39 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
     }
 
     @Override
+    public Void visitRadioSendAction(RadioSendAction radioSendAction) {
+        addToPhraseIfUnsupportedInSim(radioSendAction, false, isSim);
+        return super.visitRadioSendAction(radioSendAction);
+    }
+
+    @Override
+    public Void visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
+        addToPhraseIfUnsupportedInSim(radioReceiveAction, true, isSim);
+        return super.visitRadioReceiveAction(radioReceiveAction);
+    }
+
+    @Override
+    public Void visitRadioSetChannelAction(RadioSetChannelAction radioSetChannelAction) {
+        addToPhraseIfUnsupportedInSim(radioSetChannelAction, false, isSim);
+        return super.visitRadioSetChannelAction(radioSetChannelAction);
+    }
+
+    @Override
+    public Void visitPinGetValueSensor(PinGetValueSensor pinValueSensor) {
+        if ( isSim && (pinValueSensor.getMode().equals(SC.PULSEHIGH) || pinValueSensor.getMode().equals(SC.PULSELOW) || pinValueSensor.getMode().equals(SC.PULSE)) ) {
+            addErrorToPhrase(pinValueSensor, "SIM_BLOCK_NOT_SUPPORTED");
+        }
+        return super.visitPinGetValueSensor(pinValueSensor);
+    }
+
+    @Override
     public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
         return addActorMaybeCallibot(lightStatusAction, SC.LIGHT);
     }
 
     @Override
     public Void visitMotionKitDualSetAction(MotionKitDualSetAction motionKitDualSetAction) {
+        addToPhraseIfUnsupportedInSim(motionKitDualSetAction, false, isSim);
         if ( isMotionKitPinsOverlapping() ) {
             addErrorToPhrase(motionKitDualSetAction, "MOTIONKIT_PIN_OVERLAP_WARNING");
         } else {
@@ -127,6 +166,7 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
 
     @Override
     public Void visitMotionKitSingleSetAction(MotionKitSingleSetAction motionKitSingleSetAction) {
+        addToPhraseIfUnsupportedInSim(motionKitSingleSetAction, false, isSim);
         if ( isMotionKitPinsOverlapping() ) {
             addErrorToPhrase(motionKitSingleSetAction, "MOTIONKIT_PIN_OVERLAP_WARNING");
         } else {
@@ -165,16 +205,24 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
 
     @Override
     public Void visitRadioRssiSensor(RadioRssiSensor radioRssiSensor) {
+        addToPhraseIfUnsupportedInSim(radioRssiSensor, true, isSim);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.RADIO));
         return null;
     }
 
     @Override
+    public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
+        addToPhraseIfUnsupportedInSim(accelerometerSensor, true, isSim);
+        return super.visitAccelerometerSensor(accelerometerSensor);
+    }
+
+    @Override
     public Void visitServoSetAction(ServoSetAction servoSetAction) {
+        addToPhraseIfUnsupportedInSim(servoSetAction, false, isSim);
         requiredComponentVisited(servoSetAction, servoSetAction.value);
         return addActorMaybeCallibot(servoSetAction, SC.SERVOMOTOR);
     }
-    
+
     @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
         checkSensorExists(soundSensor);
@@ -184,12 +232,14 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
 
     @Override
     public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction) {
+        addToPhraseIfUnsupportedInSim(switchLedMatrixAction, false, isSim);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DISPLAY));
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
+        addToPhraseIfUnsupportedInSim(ultrasonicSensor, true, isSim);
         checkSensorExists(ultrasonicSensor);
         return addActorMaybeCallibot(ultrasonicSensor, SC.ULTRASONIC);
     }
@@ -224,6 +274,7 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
 
     @Override
     public Void visitFourDigitDisplayClearAction(FourDigitDisplayClearAction fourDigitDisplayClearAction) {
+        addToPhraseIfUnsupportedInSim(fourDigitDisplayClearAction, false, isSim);
         checkActorByTypeExists(fourDigitDisplayClearAction, "FOURDIGITDISPLAY");
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.FOUR_DIGIT_DISPLAY));
         return null;
@@ -231,6 +282,7 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
 
     @Override
     public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction fourDigitDisplayShowAction) {
+        addToPhraseIfUnsupportedInSim(fourDigitDisplayShowAction, false, isSim);
         checkActorByTypeExists(fourDigitDisplayShowAction, "FOURDIGITDISPLAY");
         requiredComponentVisited(
             fourDigitDisplayShowAction,

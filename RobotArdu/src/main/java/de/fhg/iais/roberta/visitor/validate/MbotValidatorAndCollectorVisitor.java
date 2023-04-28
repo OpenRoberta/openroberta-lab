@@ -50,8 +50,11 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
         put("ULTRASONIC_SENSING", SC.ULTRASONIC);
     }});
 
-    public MbotValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
+    private final boolean isSim;
+
+    public MbotValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders, boolean isSim) {
         super(brickConfiguration, beanBuilders);
+        this.isSim = isSim;
     }
 
     @Override
@@ -120,6 +123,8 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
 
     @Override
     public Void visitSendIRAction(SendIRAction sendIRAction) {
+        addToPhraseIfUnsupportedInSim(sendIRAction, false, isSim);
+        addToPhraseIfUnsupportedInSim(sendIRAction, false, isSim);
         requiredComponentVisited(sendIRAction, sendIRAction.message);
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.IR_TRANSMITTER));
         return null;
@@ -127,6 +132,7 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
 
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
+        addToPhraseIfUnsupportedInSim(receiveIRAction, true, isSim);
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.IR_TRANSMITTER));
         return null;
     }
@@ -223,6 +229,7 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
 
     @Override
     public Void visitLightSensor(LightSensor lightSensor) {
+        addToPhraseIfUnsupportedInSim(lightSensor, true, isSim);
         checkSensorPort(lightSensor);
         return super.visitLightSensor(lightSensor);
     }

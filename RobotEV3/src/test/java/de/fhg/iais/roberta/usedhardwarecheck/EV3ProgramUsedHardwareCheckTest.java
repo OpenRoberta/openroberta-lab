@@ -67,7 +67,8 @@ public class EV3ProgramUsedHardwareCheckTest extends Ev3LejosAstTest {
         Ev3ValidatorAndCollectorVisitor checkVisitor =
             new Ev3ValidatorAndCollectorVisitor(
                 makeLargeLargeMediumTouchGyroColorUltrasonic(),
-                map.build());
+                map.build(),
+                false);
         for ( List<Phrase> phrases : phrasesOfPhrases ) {
             for ( Phrase phrase : phrases ) {
                 phrase.accept(checkVisitor);

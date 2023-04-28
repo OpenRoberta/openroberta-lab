@@ -34,6 +34,6 @@ public class CalliopeValidatorAndCollectorWorker extends MbedValidatorAndCollect
 
     @Override
     protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
-        return new CalliopeValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
+        return new CalliopeValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, false);
     }
 }

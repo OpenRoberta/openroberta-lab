@@ -29,8 +29,7 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
-public interface ICalliopeVisitor<V>
-    extends IMbedVisitor<V> {
+public interface ICalliopeVisitor<V> extends IMbedVisitor<V> {
     V visitLightStatusAction(LightStatusAction lightStatusAction);
 
     V visitMotorOnAction(MotorOnAction motorOnAction);

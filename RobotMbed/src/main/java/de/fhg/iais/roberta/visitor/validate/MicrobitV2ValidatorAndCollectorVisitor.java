@@ -18,14 +18,19 @@ import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.IMicrobitV2Visitor;
 
 public class MicrobitV2ValidatorAndCollectorVisitor extends MicrobitValidatorAndCollectorVisitor implements IMicrobitV2Visitor<Void> {
+    private final boolean isSim;
+
     public MicrobitV2ValidatorAndCollectorVisitor(
         ConfigurationAst brickConfiguration,
-        ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
-        super(brickConfiguration, beanBuilders);
+        ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders,
+        boolean isSim) {
+        super(brickConfiguration, beanBuilders, isSim);
+        this.isSim = isSim;
     }
 
     @Override
     public Void visitSoundToggleAction(SoundToggleAction soundToggleAction) {
+        addToPhraseIfUnsupportedInSim(soundToggleAction, false, isSim);
         ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(soundToggleAction.hide.getValue());
         if ( usedConfigurationBlock == null ) {
             Phrase actionAsPhrase = soundToggleAction;
@@ -36,7 +41,7 @@ public class MicrobitV2ValidatorAndCollectorVisitor extends MicrobitValidatorAnd
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor soundSensor){
+    public Void visitSoundSensor(SoundSensor soundSensor) {
         checkSensorExists(soundSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(soundSensor.getUserDefinedPort(), SC.SOUND, soundSensor.getSlot()));
 
