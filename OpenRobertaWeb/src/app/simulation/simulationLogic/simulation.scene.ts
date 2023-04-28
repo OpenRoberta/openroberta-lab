@@ -4,7 +4,16 @@
  */
 import * as UTIL from 'util';
 import * as $ from 'jquery';
-import { BaseSimulationObject, Ground, ISimulationObstacle, MarkerSimulationObject, RectangleSimulationObject, Ruler, SimObjectFactory, SimObjectShape, SimObjectType } from 'simulation.objects';
+import {
+    BaseSimulationObject,
+    Ground,
+    ISimulationObstacle,
+    MarkerSimulationObject,
+    RectangleSimulationObject,
+    SimObjectFactory,
+    SimObjectShape,
+    SimObjectType,
+} from 'simulation.objects';
 import { SimulationRoberta } from 'simulation.roberta';
 import { IDestroyable, RobotBase, RobotFactory } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
@@ -31,7 +40,6 @@ export class SimulationScene {
         w: 0,
         h: 0,
     };
-    ruler: Ruler;
     sim: SimulationRoberta;
     readonly uCanvas: HTMLCanvasElement;
     private _colorAreaList: BaseSimulationObject[] = [];
@@ -40,13 +48,11 @@ export class SimulationScene {
     private _redrawColorAreas: boolean = false;
     private _redrawObstacles: boolean = false;
     private _redrawMarkers: boolean = false;
-    private _redrawRuler: boolean = false;
     private _robots: RobotBase[] = [];
-    private _uniqueObjectId = 1; // 0 is blocked by the standard obstacle, 1 is blocked by the ruler
+    private _uniqueObjectId = 0; // 0 is blocked by the standard obstacle
     private readonly bCtx: CanvasRenderingContext2D;
     private currentBackground: number;
     private dCtx: CanvasRenderingContext2D;
-    private readonly mCtx: CanvasRenderingContext2D;
     private readonly oCtx: CanvasRenderingContext2D;
     private readonly rCtx: CanvasRenderingContext2D;
     private robotClass: RobotBase;
@@ -64,7 +70,6 @@ export class SimulationScene {
         this.udCtx = this.udCanvas.getContext('2d', { willReadFrequently: true }); // unit context
         this.bCtx = ($('#backgroundLayer')[0] as HTMLCanvasElement).getContext('2d'); // background context
         this.dCtx = ($('#drawLayer')[0] as HTMLCanvasElement).getContext('2d'); // background context
-        this.mCtx = ($('#rulerLayer')[0] as HTMLCanvasElement).getContext('2d'); // ruler == *m*easurement context
         this.aCtx = ($('#arucoMarkerLayer')[0] as HTMLCanvasElement).getContext('2d'); // object context
         this.oCtx = ($('#objectLayer')[0] as HTMLCanvasElement).getContext('2d'); // object context
         this.rCtx = ($('#robotLayer')[0] as HTMLCanvasElement).getContext('2d'); // robot context
@@ -135,14 +140,6 @@ export class SimulationScene {
 
     set redrawColorAreas(value: boolean) {
         this._redrawColorAreas = value;
-    }
-
-    get redrawRuler(): boolean {
-        return this._redrawRuler;
-    }
-
-    set redrawRuler(value: boolean) {
-        this._redrawRuler = value;
     }
 
     addColorArea(shape: SimObjectShape) {
@@ -302,10 +299,6 @@ export class SimulationScene {
             this.drawMarkers();
             this.redrawMarkers = false;
         }
-        if (this.redrawRuler) {
-            this.drawRuler();
-            this.redrawRuler = false;
-        }
         this.rCtx.restore();
         this.dCtx.restore();
     }
@@ -321,7 +314,7 @@ export class SimulationScene {
         this.bCtx.scale(this.sim.scale, this.sim.scale);
         this.bCtx.clearRect(this.ground.x - 10, this.ground.y - 10, this.ground.w + 20, this.ground.h + 20);
         this.bCtx.drawImage(this.uCanvas, 0, 0, w, h, 0, 0, w, h);
-        this.colorAreaList.forEach((colorArea) => colorArea.draw(this.bCtx, this.uCtx, this.mCtx));
+        this.colorAreaList.forEach((colorArea) => colorArea.draw(this.bCtx, this.uCtx));
     }
 
     drawObstacles() {
@@ -329,7 +322,7 @@ export class SimulationScene {
         this.oCtx.save();
         this.oCtx.scale(this.sim.scale, this.sim.scale);
         this.oCtx.clearRect(this.ground.x - 10, this.ground.y - 10, this.ground.w + 20, this.ground.h + 20);
-        this.obstacleList.forEach((obstacle) => obstacle.draw(this.oCtx, this.uCtx, this.mCtx));
+        this.obstacleList.forEach((obstacle) => obstacle.draw(this.oCtx, this.uCtx));
     }
 
     drawMarkers() {
@@ -337,7 +330,7 @@ export class SimulationScene {
         this.aCtx.save();
         this.aCtx.scale(this.sim.scale, this.sim.scale);
         this.aCtx.clearRect(this.ground.x - 10, this.ground.y - 10, this.ground.w + 20, this.ground.h + 20);
-        this.markerList.forEach((marker) => marker.draw(this.aCtx, this.uCtx, this.mCtx));
+        this.markerList.forEach((marker) => marker.draw(this.aCtx, this.uCtx));
     }
 
     drawPattern(ctx) {
@@ -348,14 +341,6 @@ export class SimulationScene {
             ctx.lineWidth = 10;
             ctx.strokeRect(5, 5, this.backgroundImg.width + 10, this.backgroundImg.height + 10);
         }
-    }
-
-    drawRuler() {
-        this.mCtx.restore();
-        this.mCtx.save();
-        this.mCtx.scale(this.sim.scale, this.sim.scale);
-        this.mCtx.clearRect(this.ground.x - 10, this.ground.y - 10, this.ground.w + 20, this.ground.h + 20);
-        this.mCtx.drawImage(this.ruler.img, this.ruler.x, this.ruler.y, this.ruler.w, this.ruler.h);
     }
 
     getRobotPoses(): Pose[][] {
@@ -405,43 +390,30 @@ export class SimulationScene {
                         let mobile: boolean = scene.robots[0].mobile;
                         if (mobile) {
                             $('.simMobile').show();
-                            scene.images = scene.loadImages(
-                                ['roadWorks', 'pattern', 'ruler'],
-                                ['roadWorks' + imgType, 'wallPattern.png', 'ruler' + imgType],
-                                function () {
-                                    scene.ground = new Ground(
-                                        10,
-                                        10,
-                                        scene.imgBackgroundList[scene.currentBackground].width,
-                                        scene.imgBackgroundList[scene.currentBackground].height
-                                    );
-                                    scene.ruler = new Ruler(
-                                        1,
-                                        scene,
-                                        scene.sim.selectionListener,
-                                        SimObjectType.Passiv,
-                                        { x: 430, y: 400 },
-                                        scene.images['ruler'],
-                                        ...[300, 30]
-                                    );
-                                    let standardObstacle = new RectangleSimulationObject(
-                                        0,
-                                        scene,
-                                        scene.sim.selectionListener,
-                                        SimObjectType.Obstacle,
-                                        { x: 580, y: 290 },
-                                        null,
-                                        ...[100, 100]
-                                    );
-                                    scene.obstacleList.push(standardObstacle);
-                                    scene.resetAllCanvas(scene.imgBackgroundList[0]);
-                                    scene.resizeAll(true);
-                                    scene.initEvents();
-                                    scene.sim.initColorPicker(RobotBase.colorRange);
-                                    scene.showFullyLoadedSim(callbackOnLoaded);
-                                    scene.sim.start();
-                                }
-                            );
+                            scene.images = scene.loadImages(['roadWorks', 'pattern'], ['roadWorks' + imgType, 'wallPattern.png'], function () {
+                                scene.ground = new Ground(
+                                    10,
+                                    10,
+                                    scene.imgBackgroundList[scene.currentBackground].width,
+                                    scene.imgBackgroundList[scene.currentBackground].height
+                                );
+                                let standardObstacle = new RectangleSimulationObject(
+                                    0,
+                                    scene,
+                                    scene.sim.selectionListener,
+                                    SimObjectType.Obstacle,
+                                    { x: 580, y: 290 },
+                                    null,
+                                    ...[100, 100]
+                                );
+                                scene.obstacleList.push(standardObstacle);
+                                scene.resetAllCanvas(scene.imgBackgroundList[0]);
+                                scene.resizeAll(true);
+                                scene.initEvents();
+                                scene.sim.initColorPicker(RobotBase.colorRange);
+                                scene.showFullyLoadedSim(callbackOnLoaded);
+                                scene.sim.start();
+                            });
                         } else {
                             $('.simMobile').hide();
                             scene.images = {};
@@ -652,8 +624,6 @@ export class SimulationScene {
         this.dCtx.canvas.height = h;
         this.bCtx.canvas.width = w;
         this.bCtx.canvas.height = h;
-        this.mCtx.canvas.width = w;
-        this.mCtx.canvas.height = h;
         this.aCtx.canvas.width = w;
         this.aCtx.canvas.height = h;
         if (resetUnified) {
@@ -673,9 +643,6 @@ export class SimulationScene {
         this.drawColorAreas();
         this.drawObstacles();
         this.drawMarkers();
-        if (this.currentBackground == 2 && this.imgBackgroundList[2].currentSrc.includes('robertaBackground')) {
-            this.redrawRuler = true;
-        }
     }
 
     resizeAll(opt_resetScale?: boolean) {
@@ -713,7 +680,6 @@ export class SimulationScene {
 
     stepBackground(num: number) {
         let workingScene = this.currentBackground == 2 && this.imgBackgroundList[2].currentSrc.includes('robertaBackground');
-        this.ruler.removeMouseEvents();
         if (workingScene) {
             let myObstacle: BaseSimulationObject = this.obstacleList.find((obstacle) => obstacle.myId === 0);
             if (myObstacle) {
@@ -737,7 +703,6 @@ export class SimulationScene {
         this.resizeAll(true);
         this.sim.setNewConfig(configData);
         if (workingScene) {
-            this.ruler.addMouseEvents();
             let myObstacle: BaseSimulationObject = this.obstacleList.find((obstacle) => {
                 if ((obstacle as RectangleSimulationObject).type === SimObjectType.Obstacle) {
                     (obstacle as RectangleSimulationObject).h = 100;

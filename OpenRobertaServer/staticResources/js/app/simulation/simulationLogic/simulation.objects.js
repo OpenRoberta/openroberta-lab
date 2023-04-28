@@ -24,7 +24,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 };
 define(["require", "exports", "jquery", "util", "simulation.roberta", "simulation.math"], function (require, exports, $, UTIL, simulation_roberta_1, SIMATH) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Ruler = exports.Ground = exports.TriangleSimulationObject = exports.CircleSimulationObject = exports.MarkerSimulationObject = exports.RectangleSimulationObject = exports.SimObjectShape = exports.SimObjectType = exports.SimObjectFactory = exports.BaseSimulationObject = void 0;
+    exports.Ground = exports.TriangleSimulationObject = exports.CircleSimulationObject = exports.MarkerSimulationObject = exports.RectangleSimulationObject = exports.SimObjectShape = exports.SimObjectType = exports.SimObjectFactory = exports.BaseSimulationObject = void 0;
     var BaseSimulationObject = /** @class */ (function () {
         function BaseSimulationObject(myId, myScene, mySelectionListener, type, optColor) {
             this.SHIFT = 1;
@@ -252,9 +252,8 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
             enumerable: false,
             configurable: true
         });
-        RectangleSimulationObject.prototype.draw = function (ctx, uCtx, mCtx) {
+        RectangleSimulationObject.prototype.draw = function (ctx, uCtx) {
             ctx.save();
-            mCtx.save();
             uCtx.save();
             ctx.fillStyle = this.color;
             switch (this.type) {
@@ -283,15 +282,6 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
                     }
                     break;
                 }
-                case SimObjectType.Passiv: {
-                    if (this._img) {
-                        mCtx.drawImage(this._img, this.x, this.y, this.w, this.h);
-                    }
-                    else {
-                        mCtx.fillRect(this.x, this.y, this.w, this.h);
-                    }
-                    break;
-                }
                 default:
                     break;
             }
@@ -316,7 +306,6 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
             }
             ctx.restore();
             uCtx.restore();
-            mCtx.restore();
         };
         RectangleSimulationObject.prototype.handleKeyEvent = function (e) {
             if (this.selected) {
@@ -520,7 +509,7 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
             _this.updateCorners();
             return _this;
         }
-        MarkerSimulationObject.prototype.draw = function (ctx, uCtx, mCtx) {
+        MarkerSimulationObject.prototype.draw = function (ctx, uCtx) {
             ctx.save();
             ctx.fillStyle = '#ffffff';
             var border = this.w / 12;
@@ -618,7 +607,7 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
             _this.updateCorners();
             return _this;
         }
-        CircleSimulationObject.prototype.draw = function (ctx, uCtx, mCtx) {
+        CircleSimulationObject.prototype.draw = function (ctx, uCtx) {
             ctx.save();
             uCtx.save();
             if (this.type === SimObjectType.Obstacle || this.type === SimObjectType.ColorArea) {
@@ -865,7 +854,7 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
             _this.updateCorners();
             return _this;
         }
-        TriangleSimulationObject.prototype.draw = function (ctx, uCtx, mCtx) {
+        TriangleSimulationObject.prototype.draw = function (ctx, uCtx) {
             ctx.save();
             uCtx.save();
             if (this.type === SimObjectType.Obstacle || this.type === SimObjectType.ColorArea) {
@@ -1139,29 +1128,4 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
         return Ground;
     }());
     exports.Ground = Ground;
-    var Ruler = /** @class */ (function (_super) {
-        __extends(Ruler, _super);
-        function Ruler(myId, myScene, mySelectionListener, type, p, img) {
-            var params = [];
-            for (var _i = 6; _i < arguments.length; _i++) {
-                params[_i - 6] = arguments[_i];
-            }
-            var _this = _super.apply(this, __spreadArray([myId, myScene, mySelectionListener, type, p, null], params, false)) || this;
-            _this.img = img;
-            _this.updateCorners();
-            return _this;
-        }
-        Ruler.prototype.updateCorners = function () {
-            this.corners[0] = { x: this.x, y: this.y, isDown: false };
-            this.corners[1] = { x: this.x + this.w, y: this.y, isDown: false };
-            this.corners[2] = { x: this.x + this.w, y: this.y + this.h, isDown: false };
-            this.corners[3] = { x: this.x, y: this.y + this.h, isDown: false };
-            this.redraw();
-        };
-        Ruler.prototype.redraw = function () {
-            this.myScene.redrawRuler = true;
-        };
-        return Ruler;
-    }(RectangleSimulationObject));
-    exports.Ruler = Ruler;
 });

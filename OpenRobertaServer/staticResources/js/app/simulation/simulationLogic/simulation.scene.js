@@ -35,9 +35,8 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             this._redrawColorAreas = false;
             this._redrawObstacles = false;
             this._redrawMarkers = false;
-            this._redrawRuler = false;
             this._robots = [];
-            this._uniqueObjectId = 1; // 0 is blocked by the standard obstacle, 1 is blocked by the ruler
+            this._uniqueObjectId = 0; // 0 is blocked by the standard obstacle
             this.sim = sim;
             this.uCanvas = document.createElement('canvas');
             this.uCtx = this.uCanvas.getContext('2d', { willReadFrequently: true }); // unit context
@@ -45,7 +44,6 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             this.udCtx = this.udCanvas.getContext('2d', { willReadFrequently: true }); // unit context
             this.bCtx = $('#backgroundLayer')[0].getContext('2d'); // background context
             this.dCtx = $('#drawLayer')[0].getContext('2d'); // background context
-            this.mCtx = $('#rulerLayer')[0].getContext('2d'); // ruler == *m*easurement context
             this.aCtx = $('#arucoMarkerLayer')[0].getContext('2d'); // object context
             this.oCtx = $('#objectLayer')[0].getContext('2d'); // object context
             this.rCtx = $('#robotLayer')[0].getContext('2d'); // robot context
@@ -130,16 +128,6 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             },
             set: function (value) {
                 this._redrawMarkers = value;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(SimulationScene.prototype, "redrawRuler", {
-            get: function () {
-                return this._redrawRuler;
-            },
-            set: function (value) {
-                this._redrawRuler = value;
             },
             enumerable: false,
             configurable: true
@@ -290,10 +278,6 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
                 this.drawMarkers();
                 this.redrawMarkers = false;
             }
-            if (this.redrawRuler) {
-                this.drawRuler();
-                this.redrawRuler = false;
-            }
             this.rCtx.restore();
             this.dCtx.restore();
         };
@@ -309,7 +293,7 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             this.bCtx.scale(this.sim.scale, this.sim.scale);
             this.bCtx.clearRect(this.ground.x - 10, this.ground.y - 10, this.ground.w + 20, this.ground.h + 20);
             this.bCtx.drawImage(this.uCanvas, 0, 0, w, h, 0, 0, w, h);
-            this.colorAreaList.forEach(function (colorArea) { return colorArea.draw(_this.bCtx, _this.uCtx, _this.mCtx); });
+            this.colorAreaList.forEach(function (colorArea) { return colorArea.draw(_this.bCtx, _this.uCtx); });
         };
         SimulationScene.prototype.drawObstacles = function () {
             var _this = this;
@@ -317,7 +301,7 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             this.oCtx.save();
             this.oCtx.scale(this.sim.scale, this.sim.scale);
             this.oCtx.clearRect(this.ground.x - 10, this.ground.y - 10, this.ground.w + 20, this.ground.h + 20);
-            this.obstacleList.forEach(function (obstacle) { return obstacle.draw(_this.oCtx, _this.uCtx, _this.mCtx); });
+            this.obstacleList.forEach(function (obstacle) { return obstacle.draw(_this.oCtx, _this.uCtx); });
         };
         SimulationScene.prototype.drawMarkers = function () {
             var _this = this;
@@ -325,7 +309,7 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             this.aCtx.save();
             this.aCtx.scale(this.sim.scale, this.sim.scale);
             this.aCtx.clearRect(this.ground.x - 10, this.ground.y - 10, this.ground.w + 20, this.ground.h + 20);
-            this.markerList.forEach(function (marker) { return marker.draw(_this.aCtx, _this.uCtx, _this.mCtx); });
+            this.markerList.forEach(function (marker) { return marker.draw(_this.aCtx, _this.uCtx); });
         };
         SimulationScene.prototype.drawPattern = function (ctx) {
             if (this.images && this.images['pattern']) {
@@ -335,13 +319,6 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
                 ctx.lineWidth = 10;
                 ctx.strokeRect(5, 5, this.backgroundImg.width + 10, this.backgroundImg.height + 10);
             }
-        };
-        SimulationScene.prototype.drawRuler = function () {
-            this.mCtx.restore();
-            this.mCtx.save();
-            this.mCtx.scale(this.sim.scale, this.sim.scale);
-            this.mCtx.clearRect(this.ground.x - 10, this.ground.y - 10, this.ground.w + 20, this.ground.h + 20);
-            this.mCtx.drawImage(this.ruler.img, this.ruler.x, this.ruler.y, this.ruler.w, this.ruler.h);
         };
         SimulationScene.prototype.getRobotPoses = function () {
             return this.robots.map(function (robot) {
@@ -389,14 +366,8 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
                             var mobile = scene.robots[0].mobile;
                             if (mobile) {
                                 $('.simMobile').show();
-                                scene.images = scene.loadImages(['roadWorks', 'pattern', 'ruler'], ['roadWorks' + imgType_1, 'wallPattern.png', 'ruler' + imgType_1], function () {
+                                scene.images = scene.loadImages(['roadWorks', 'pattern'], ['roadWorks' + imgType_1, 'wallPattern.png'], function () {
                                     scene.ground = new simulation_objects_1.Ground(10, 10, scene.imgBackgroundList[scene.currentBackground].width, scene.imgBackgroundList[scene.currentBackground].height);
-                                    scene.ruler = new (simulation_objects_1.Ruler.bind.apply(simulation_objects_1.Ruler, __spreadArray([void 0, 1,
-                                        scene,
-                                        scene.sim.selectionListener,
-                                        simulation_objects_1.SimObjectType.Passiv,
-                                        { x: 430, y: 400 },
-                                        scene.images['ruler']], [300, 30], false)))();
                                     var standardObstacle = new (simulation_objects_1.RectangleSimulationObject.bind.apply(simulation_objects_1.RectangleSimulationObject, __spreadArray([void 0, 0,
                                         scene,
                                         scene.sim.selectionListener,
@@ -614,8 +585,6 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             this.dCtx.canvas.height = h;
             this.bCtx.canvas.width = w;
             this.bCtx.canvas.height = h;
-            this.mCtx.canvas.width = w;
-            this.mCtx.canvas.height = h;
             this.aCtx.canvas.width = w;
             this.aCtx.canvas.height = h;
             if (resetUnified) {
@@ -635,9 +604,6 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             this.drawColorAreas();
             this.drawObstacles();
             this.drawMarkers();
-            if (this.currentBackground == 2 && this.imgBackgroundList[2].currentSrc.includes('robertaBackground')) {
-                this.redrawRuler = true;
-            }
         };
         SimulationScene.prototype.resizeAll = function (opt_resetScale) {
             // only when opening the sim view we want to calculate the offsets and scale
@@ -673,7 +639,6 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
         };
         SimulationScene.prototype.stepBackground = function (num) {
             var workingScene = this.currentBackground == 2 && this.imgBackgroundList[2].currentSrc.includes('robertaBackground');
-            this.ruler.removeMouseEvents();
             if (workingScene) {
                 var myObstacle = this.obstacleList.find(function (obstacle) { return obstacle.myId === 0; });
                 if (myObstacle) {
@@ -698,7 +663,6 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             this.resizeAll(true);
             this.sim.setNewConfig(configData);
             if (workingScene) {
-                this.ruler.addMouseEvents();
                 var myObstacle = this.obstacleList.find(function (obstacle) {
                     if (obstacle.type === simulation_objects_1.SimObjectType.Obstacle) {
                         obstacle.h = 100;

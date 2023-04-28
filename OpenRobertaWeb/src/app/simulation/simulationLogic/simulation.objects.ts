@@ -79,7 +79,7 @@ export abstract class BaseSimulationObject implements ISelectable, ISimulationOb
         return this._hsv;
     }
 
-    abstract draw(rCtx: CanvasRenderingContext2D, uCtx: CanvasRenderingContext2D, mCtx: CanvasRenderingContext2D): void;
+    abstract draw(rCtx: CanvasRenderingContext2D, uCtx: CanvasRenderingContext2D): void;
 
     abstract handleMouseDown(e: JQuery.TouchEventBase): void;
 
@@ -274,9 +274,8 @@ export class RectangleSimulationObject extends BaseSimulationObject {
         this._img = value;
     }
 
-    draw(ctx: CanvasRenderingContext2D, uCtx: CanvasRenderingContext2D, mCtx: CanvasRenderingContext2D): void {
+    draw(ctx: CanvasRenderingContext2D, uCtx: CanvasRenderingContext2D): void {
         ctx.save();
-        mCtx.save();
         uCtx.save();
         ctx.fillStyle = this.color;
         switch (this.type) {
@@ -303,14 +302,6 @@ export class RectangleSimulationObject extends BaseSimulationObject {
                 }
                 break;
             }
-            case SimObjectType.Passiv: {
-                if (this._img) {
-                    mCtx.drawImage(this._img, this.x, this.y, this.w, this.h);
-                } else {
-                    mCtx.fillRect(this.x, this.y, this.w, this.h);
-                }
-                break;
-            }
             default:
                 break;
         }
@@ -334,7 +325,6 @@ export class RectangleSimulationObject extends BaseSimulationObject {
         }
         ctx.restore();
         uCtx.restore();
-        mCtx.restore();
     }
 
     handleKeyEvent(e: JQuery.TouchEventBase): void {
@@ -544,7 +534,7 @@ export class MarkerSimulationObject extends RectangleSimulationObject {
         this.updateCorners();
     }
 
-    override draw(ctx: CanvasRenderingContext2D, uCtx: CanvasRenderingContext2D, mCtx: CanvasRenderingContext2D): void {
+    override draw(ctx: CanvasRenderingContext2D, uCtx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.fillStyle = '#ffffff';
         let border = this.w / 12;
@@ -645,7 +635,7 @@ export class CircleSimulationObject extends BaseSimulationObject {
         this.updateCorners();
     }
 
-    draw(ctx: CanvasRenderingContext2D, uCtx: CanvasRenderingContext2D, mCtx: CanvasRenderingContext2D): void {
+    draw(ctx: CanvasRenderingContext2D, uCtx: CanvasRenderingContext2D): void {
         ctx.save();
         uCtx.save();
         if (this.type === SimObjectType.Obstacle || this.type === SimObjectType.ColorArea) {
@@ -892,7 +882,7 @@ export class TriangleSimulationObject extends BaseSimulationObject {
         this.updateCorners();
     }
 
-    draw(ctx: CanvasRenderingContext2D, uCtx: CanvasRenderingContext2D, mCtx: CanvasRenderingContext2D): void {
+    draw(ctx: CanvasRenderingContext2D, uCtx: CanvasRenderingContext2D): void {
         ctx.save();
         uCtx.save();
         if (this.type === SimObjectType.Obstacle || this.type === SimObjectType.ColorArea) {
@@ -1172,25 +1162,5 @@ export class Ground implements ISimulationObstacle {
 
     getTolerance(): number {
         return 0;
-    }
-}
-
-export class Ruler extends RectangleSimulationObject {
-    constructor(myId: number, myScene: any, mySelectionListener: SelectionListener, type: SimObjectType, p: Point, img: typeof Image, ...params: number[]) {
-        super(myId, myScene, mySelectionListener, type, p, null, ...params);
-        this.img = img;
-        this.updateCorners();
-    }
-
-    protected override updateCorners() {
-        this.corners[0] = { x: this.x, y: this.y, isDown: false };
-        this.corners[1] = { x: this.x + this.w, y: this.y, isDown: false };
-        this.corners[2] = { x: this.x + this.w, y: this.y + this.h, isDown: false };
-        this.corners[3] = { x: this.x, y: this.y + this.h, isDown: false };
-        this.redraw();
-    }
-
-    protected override redraw(): void {
-        this.myScene.redrawRuler = true;
     }
 }
