@@ -241,6 +241,7 @@
     <category name="TOOLBOX_TEXT" svg="true">
         <block type="text"/>
         <block type="text_comment"/>
+        <block type="robText_join"/>
         <block type="robText_append"/>
     </category>
     <category name="TOOLBOX_LIST" svg="true">

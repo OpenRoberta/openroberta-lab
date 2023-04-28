@@ -201,6 +201,15 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct textJoinFunct) {
+        List<Expr> texts = textJoinFunct.param.get();
+        for ( int i = 0; i < texts.size(); i++ ) {
+            this.sb.append("String(");
+            texts.get(i).accept(this);
+            this.sb.append(")");
+            if ( i < texts.size() - 1 ) {
+                this.sb.append(" + ");
+            }
+        }
         return null;
     }
 
