@@ -7,43 +7,52 @@ import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
-import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
-import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
 
-public interface INIBOVisitor<V> extends ILightVisitor<V>, ISensorVisitor<V> {
-
-    default V visitCodePadSensor(CodePadSensor codePadSensor) {
-        throw new DbcException("Block is not implemented!");
+public interface INIBOVisitor<V> extends IVisitor<V> {
+    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
+        return sensorGetSample.sensor.accept(this);
     }
 
-    default V visitBodyLEDAction(BodyLEDAction bodyLEDAction) {
-        throw new DbcException("Block is not implemented!");
-    }
+    V visitInfraredSensor(InfraredSensor infraredSensor);
 
-    default V visitSendIRAction(SendIRAction sendIRAction) {
-        throw new DbcException("Block is not implemented!");
-    }
+    V visitTemperatureSensor(TemperatureSensor temperatureSensor);
 
-    default V visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
-        throw new DbcException("Block is not implemented!");
-    }
+    V visitMainTask(MainTask mainTask);
 
-    default V visitRememberAction(RememberAction rememberAction) {
-        throw new DbcException("Block is not implemented!");
-    }
+    V visitLedOnAction(LedOnAction ledOnAction);
 
-    default V visitRecallAction(RecallAction recallAction) {
-        throw new DbcException("Block is not implemented!");
-    }
+    V visitLedOffAction(LedOffAction ledOffAction);
 
-    default V visitLedOffAction(LedOffAction ledOffAction) {
-        throw new DbcException("Block is not implemented!");
-    }
+    V visitBodyLEDAction(BodyLEDAction bodyLEDAction);
 
-    default V visitLedOnAction(LedOnAction ledOnAction) {
-        throw new DbcException("Block is not implemented!");
-    }
+    V visitSendIRAction(SendIRAction sendIRAction);
 
+    V visitReceiveIRAction(ReceiveIRAction receiveIRAction);
+
+    V visitRememberAction(RememberAction rememberAction);
+
+    V visitRecallAction(RecallAction recallAction);
+
+    V visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct);
+
+    V visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct);
+
+    V visitDebugAction(DebugAction debugAction);
+
+    V visitAssertStmt(AssertStmt assertStmt);
+
+    V visitPinTouchSensor(PinTouchSensor pinTouchSensor);
+
+    V visitCodePadSensor(CodePadSensor codePadSensor);
 }

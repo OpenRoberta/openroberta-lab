@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.visitor.hardware.IFestobionicVisitor;
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a StringBuilder.
  * <b>This representation is correct C code for Arduino.</b> <br>
  */
-public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor implements IFestobionicVisitor<Void> {
+public final class FestobionicCppVisitor extends NepoArduinoCppVisitor implements IFestobionicVisitor<Void> {
 
     // mapping of the 4 "ports" of the board to the actual pin numbers
     private static final Map<String, String> PIN_MAPPING = new HashMap<>();

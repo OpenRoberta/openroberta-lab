@@ -34,7 +34,7 @@ import de.fhg.iais.roberta.visitor.hardware.INano33BleSensorVisitor;
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a StringBuilder.
  * <b>This class generates C++ code for the Arduino Nano 33 BLE.</b> <br>
  */
-public class Nano33bleCppVisitor extends ArduinoCppVisitor implements INano33BleSensorVisitor<Void> {
+public class Nano33bleCppVisitor extends CommonArduinoCppVisitor implements INano33BleSensorVisitor<Void> {
     /**
      * Initialize the C++ code generator visitor.
      *

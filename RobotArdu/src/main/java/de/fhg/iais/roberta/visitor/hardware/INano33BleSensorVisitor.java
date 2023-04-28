@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Lsm9ds1AccSenso
 import de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Lsm9ds1GyroSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Lsm9ds1MagneticFieldSensor;
 
-public interface INano33BleSensorVisitor<V> {
+public interface INano33BleSensorVisitor<V> extends IArduinoVisitor<V> {
     V visitLsm9ds1AccSensor(Lsm9ds1AccSensor sensor);
 
     V visitLsm9ds1GyroSensor(Lsm9ds1GyroSensor sensor);

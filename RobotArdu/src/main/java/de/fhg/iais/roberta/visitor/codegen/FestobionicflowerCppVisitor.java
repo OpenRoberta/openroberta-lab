@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.visitor.hardware.IFestobionicflowerVisitor;
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a StringBuilder.
  * <b>This representation is correct C code for Arduino.</b> <br>
  */
-public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppVisitor implements IFestobionicflowerVisitor<Void> {
+public final class FestobionicflowerCppVisitor extends NepoArduinoCppVisitor implements IFestobionicflowerVisitor<Void> {
 
     /**
      * Initialize the C++ code generator visitor.

@@ -7,9 +7,11 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
 
-public interface IFestobionicflowerVisitor<V> extends ILightVisitor<V> {
+public interface IFestobionicflowerVisitor<V> extends IVisitor<V> {
+    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
+        return sensorGetSample.sensor.accept(this);
+    }
 
     V visitLedOffAction(LedOffAction ledOffAction);
 
@@ -20,8 +22,4 @@ public interface IFestobionicflowerVisitor<V> extends ILightVisitor<V> {
     V visitTouchSensor(TouchSensor touchSensor);
 
     V visitLightSensor(LightSensor lightSensor);
-
-    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
-        return sensorGetSample.sensor.accept(this);
-    }
 }

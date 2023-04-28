@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -20,8 +21,10 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.INIBOVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
@@ -139,7 +142,17 @@ public final class Rob3rtaStackMachineVisitor extends AbstractStackMachineVisito
     }
 
     public Void visitSendIRAction(SendIRAction sendIRAction) {
-        return null;
+        throw new DbcException("not supported");
+    }
+
+    @Override
+    public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
+        throw new DbcException("not supported");
+    }
+
+    @Override
+    public Void visitCodePadSensor(CodePadSensor codePadSensor) {
+        throw new DbcException("not supported");
     }
 
 }

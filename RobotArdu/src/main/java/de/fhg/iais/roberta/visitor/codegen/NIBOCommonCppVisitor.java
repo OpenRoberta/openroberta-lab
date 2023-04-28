@@ -7,8 +7,6 @@ import com.google.common.collect.ClassToInstanceMap;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction;
@@ -32,7 +30,7 @@ import de.fhg.iais.roberta.visitor.hardware.INIBOVisitor;
  * The Visitor class <b>has to be extended</b> by NIBO robots {@link Bob3CppVisitor} and {@link Rob3rtaCppVisitor}.
  * <b>This representation is correct C code for Arduino.</b> <br>
  */
-public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisitor implements INIBOVisitor<Void> {
+public abstract class NIBOCommonCppVisitor extends NepoArduinoCppVisitor implements INIBOVisitor<Void> {
 
     /**
      * Initialize the C++ code generator visitor.
@@ -147,12 +145,6 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     }
 
     @Override
-    public Void visitCodePadSensor(CodePadSensor codePadSensor) {
-        this.sb.append("rob.getID()");
-        return null;
-    }
-
-    @Override
     public Void visitSendIRAction(SendIRAction sendIRAction) {
         this.sb.append("rob.transmitIRCode(");
         sendIRAction.code.accept(this);
@@ -177,19 +169,6 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
     @Override
     public Void visitRecallAction(RecallAction recallAction) {
         this.sb.append("recall()");
-        return null;
-    }
-
-    @Override
-    public Void visitLightAction(LightAction lightAction) {
-        this.sb.append("rob.setWhiteLeds(WHITE, WHITE);");
-        return null;
-    }
-
-    @Override
-    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
-        this.sb.append("rob.setLed(2, OFF);");
-        this.sb.append("rob.setLed(1, OFF);");
         return null;
     }
 
@@ -229,4 +208,9 @@ public abstract class NIBOCommonCppVisitor extends AbstractCommonArduinoCppVisit
         return null;
     }
 
+    @Override
+    public Void visitCodePadSensor(CodePadSensor codePadSensor) {
+        this.sb.append("rob.getID()");
+        return null;
+    }
 }

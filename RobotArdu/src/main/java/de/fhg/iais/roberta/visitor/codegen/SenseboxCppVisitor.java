@@ -57,7 +57,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.hardware.ISenseboxVisitor;
 
-public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implements ISenseboxVisitor<Void> {
+public class SenseboxCppVisitor extends NepoArduinoCppVisitor implements ISenseboxVisitor<Void> {
 
     private final String SSID;
     private final String password;

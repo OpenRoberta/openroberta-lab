@@ -6,8 +6,9 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.visitor.validate.Bob3ValidatorAndCollectorVisitor;
 import de.fhg.iais.roberta.visitor.validate.NIBOValidatorAndCollectorVisitor;
+import de.fhg.iais.roberta.worker.AbstractValidatorAndCollectorWorker;
 
-public class Bob3ValidatorAndCollectorWorker extends NIBOValidatorAndCollectorWorker {
+public class Bob3ValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
 
     @Override
     protected NIBOValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {

@@ -41,6 +41,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -181,6 +182,11 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
     public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         JSONObject o = makeNode(C.STOP_DRIVE).put(C.NAME, "mbot");
         return add(o);
+    }
+
+    @Override
+    public Void visitLightSensor(LightSensor lightSensor) {
+        return null;
     }
 
     @Override
@@ -345,9 +351,9 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
         return null;
     }
 
-    @Override
-    public Void visitLightSensor(LightSensor lightSensor) {
-        lightSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+    public Void visitVoltageSensor(VoltageSensor voltageSensor) {
+        voltageSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
+
 }

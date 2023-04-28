@@ -1,7 +1,23 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
+import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
+import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkAddClassifyData;
+import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkAddRawData;
+import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkAddTrainingsData;
+import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkClassify;
+import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkInitClassifyData;
+import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkInitRawData;
+import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkSetup;
+import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkTrain;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
@@ -21,19 +37,15 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IPinVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.ISimpleSoundVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
 
-public interface IArduinoVisitor<V>
-    extends IDisplayVisitor<V>, ISimpleSoundVisitor<V>, ILightVisitor<V>, IPinVisitor<V>, INeuralNetworkVisitor<V>, IHardwareVisitor<V> {
-
-    V visitDropSensor(DropSensor dropSensor);
+public interface IArduinoVisitor<V> extends IVisitor<V> {
 
     default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
         return sensorGetSample.sensor.accept(this);
     }
+
+    V visitDropSensor(DropSensor dropSensor);
 
     V visitHumiditySensor(HumiditySensor humiditySensor);
 
@@ -51,7 +63,23 @@ public interface IArduinoVisitor<V>
 
     V visitMoistureSensor(MoistureSensor moistureSensor);
 
+    V visitShowTextAction(ShowTextAction showTextAction);
+
+    V visitClearDisplayAction(ClearDisplayAction clearDisplayAction);
+
+    V visitLightAction(LightAction lightAction);
+
+    V visitLightStatusAction(LightStatusAction lightStatusAction);
+
     V visitMotorOnAction(MotorOnAction motorOnAction);
+
+    V visitPlayNoteAction(PlayNoteAction playNoteAction);
+
+    V visitToneAction(ToneAction toneAction);
+
+    V visitMainTask(MainTask mainTask);
+
+    V visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction);
 
     V visitPinGetValueSensor(PinGetValueSensor pinGetValueSensor);
 
@@ -71,6 +99,21 @@ public interface IArduinoVisitor<V>
 
     V visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor);
 
-    V visitVoltageSensor(VoltageSensor voltageSensor);
+    V visitVoltageSensor(VoltageSensor potentiometer);
 
+    V visitNeuralNetworkSetup(NeuralNetworkSetup nn);
+
+    V visitNeuralNetworkInitRawData(NeuralNetworkInitRawData nn);
+
+    V visitNeuralNetworkAddRawData(NeuralNetworkAddRawData nn);
+
+    V visitNeuralNetworkAddTrainingsData(NeuralNetworkAddTrainingsData nn);
+
+    V visitNeuralNetworkTrain(NeuralNetworkTrain nn);
+
+    V visitNeuralNetworkAddClassifyData(NeuralNetworkAddClassifyData nn);
+
+    V visitNeuralNetworkInitClassifyData(NeuralNetworkInitClassifyData nn);
+
+    V visitNeuralNetworkClassify(NeuralNetworkClassify nn);
 }

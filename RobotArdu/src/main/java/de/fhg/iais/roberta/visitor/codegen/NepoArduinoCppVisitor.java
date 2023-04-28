@@ -33,13 +33,18 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
+import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
-public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor {
+/**
+ * This class is implementing {@link IVisitor} and appends a human-readable, correct C++ representation of a phrase to a StringBuilder.<br>
+ * <b>The phrases covered are the NEPO parts common to all robots (if, variables, ...).</b>
+ */
+public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
 
     protected ConfigurationAst configuration;
 
-    protected AbstractCommonArduinoCppVisitor(List<List<Phrase>> programPhrases, ConfigurationAst configuration, ClassToInstanceMap<IProjectBean> beans) {
+    protected NepoArduinoCppVisitor(List<List<Phrase>> programPhrases, ConfigurationAst configuration, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
         this.configuration = configuration;
     }
