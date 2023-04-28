@@ -2582,6 +2582,12 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                 }
             }
         };
+        PinActuators.prototype.reset = function () {
+            for (var pin in this.pins) {
+                var myPin = this.pins[pin];
+                myPin.typeValue = 0;
+            }
+        };
         return PinActuators;
     }());
     exports.PinActuators = PinActuators;

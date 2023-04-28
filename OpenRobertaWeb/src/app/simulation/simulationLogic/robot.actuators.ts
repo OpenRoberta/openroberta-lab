@@ -2679,7 +2679,7 @@ export class MbotRGBLed extends RGBLed {
     }
 }
 
-export class PinActuators implements IUpdateAction, IDrawable {
+export class PinActuators implements IUpdateAction, IDrawable, IReset {
     protected pins: object = {};
     protected transP: Point;
 
@@ -2728,6 +2728,13 @@ export class PinActuators implements IUpdateAction, IDrawable {
                     this.pins[i].typeValue = pin.analog;
                 }
             }
+        }
+    }
+
+    reset(): void {
+        for (var pin in this.pins) {
+            let myPin = this.pins[pin];
+            myPin.typeValue = 0;
         }
     }
 }
