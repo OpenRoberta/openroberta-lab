@@ -47,7 +47,7 @@ export default class RobotCalliope extends RobotBaseStationary {
         let myActuatorPins: DrawableTouchKey[] = [];
         let myDrawableMotors: DrawableMotor[] = [
             {
-                cx: 362,
+                cx: 562,
                 cy: 720,
                 theta: 0,
                 color: 'grey',
@@ -57,7 +57,7 @@ export default class RobotCalliope extends RobotBaseStationary {
                 timeout: 0,
             },
             {
-                cx: 562, //-45, // center x
+                cx: 362, //-45, // center x
                 cy: 720, // center y
                 theta: 0,
                 color: 'grey',

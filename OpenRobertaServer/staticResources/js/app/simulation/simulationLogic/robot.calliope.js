@@ -46,7 +46,7 @@ define(["require", "exports", "robot.sensors", "./robot.actuators", "robot.base.
             var myActuatorPins = [];
             var myDrawableMotors = [
                 {
-                    cx: 362,
+                    cx: 562,
                     cy: 720,
                     theta: 0,
                     color: 'grey',
@@ -56,7 +56,7 @@ define(["require", "exports", "robot.sensors", "./robot.actuators", "robot.base.
                     timeout: 0,
                 },
                 {
-                    cx: 562,
+                    cx: 362,
                     cy: 720,
                     theta: 0,
                     color: 'grey',
