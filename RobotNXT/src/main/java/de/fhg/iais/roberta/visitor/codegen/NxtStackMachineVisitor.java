@@ -33,18 +33,12 @@ import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
@@ -323,13 +317,6 @@ public class NxtStackMachineVisitor extends AbstractStackMachineVisitor implemen
     }
 
     @Override
-    public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
-        String mode = temperatureSensor.getMode();
-        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TEMPERATURE).put(C.PORT, mode.toLowerCase()).put(C.NAME, "ev3");
-        return add(o);
-    }
-
-    @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
         String mode = keysSensor.getUserDefinedPort().toLowerCase();
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, mode).put(C.NAME, "ev3");
@@ -359,49 +346,10 @@ public class NxtStackMachineVisitor extends AbstractStackMachineVisitor implemen
     }
 
     @Override
-    public Void visitPinTouchSensor(PinTouchSensor sensorGetSample) {
-        String port = sensorGetSample.getUserDefinedPort();
-        String mode = sensorGetSample.getMode();
-
-        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.PIN + port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
-        return add(o);
-    }
-
-    @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
         String port = soundSensor.getUserDefinedPort();
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.SOUND).put(C.MODE, C.VOLUME).put(C.PORT, port).put(C.NAME, "ev3");
         return add(o);
-    }
-
-    @Override
-    public Void visitCompassSensor(CompassSensor compassSensor) {
-        String mode = compassSensor.getMode();
-        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COMPASS).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
-        return add(o);
-    }
-
-    @Override
-    public Void visitGyroSensor(GyroSensor gyroSensor) {
-        String mode = gyroSensor.getMode().toLowerCase();
-        String port = gyroSensor.getUserDefinedPort().toLowerCase();
-        JSONObject o;
-        if ( mode.equals(C.RESET) ) {
-            o = makeNode(C.GYRO_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
-        } else {
-            o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GYRO).put(C.MODE, mode).put(C.NAME, "ev3");
-        }
-        return add(o);
-    }
-
-    @Override
-    public Void visitHumiditySensor(HumiditySensor humiditySensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
-        return null;
     }
 
     @Override
