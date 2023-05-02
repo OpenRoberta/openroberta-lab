@@ -30,6 +30,8 @@ import de.fhg.iais.roberta.syntax.action.spike.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.spike.PlayToneAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
@@ -42,6 +44,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.spike.Image;
 import de.fhg.iais.roberta.syntax.spike.PredefinedImage;
+import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
@@ -263,6 +266,19 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
         checkSensorPort(ultrasonicSensor);
         usedMethodBuilder.addUsedMethod(SpikeMethods.GETSAMPLEULTRASONIC);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(ultrasonicSensor.getUserDefinedPort(), SC.ULTRASONIC, ultrasonicSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(null, C.RANDOM_DOUBLE));
+        return null;
+    }
+
+    @Override
+    public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
+        super.visitMathRandomIntFunct(mathRandomIntFunct);
+        usedHardwareBuilder.addUsedActor(new UsedActor(null, C.RANDOM));
         return null;
     }
 

@@ -46,6 +46,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.spike.Image;
 import de.fhg.iais.roberta.syntax.spike.PredefinedImage;
+import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
@@ -651,10 +652,13 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
         if ( !withWrapping ) {
             return;
         }
+        UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
         this.src.add("import spike").nlI();
         this.src.add("import math").nlI();
+        if ( usedHardwareBean.isActorUsed(C.RANDOM) || usedHardwareBean.isActorUsed(C.RANDOM_DOUBLE) ) {
+            this.src.add("import random").nlI();
+        }
         this.src.add("from spike.control import wait_for_seconds, wait_until");
-        UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
         if ( usedHardwareBean.isSensorUsed(SC.TIMER) ) {
             this.src.add(", Timer");
         }
