@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
-public class TestTransformerVisitor extends BaseVisitor<Phrase> implements ITransformerVisitor {
+public class TestTransformerVisitor extends TransformerVisitor {
 
     private final BlocklyDropdownFactory blocklyDropdownFactory;
 

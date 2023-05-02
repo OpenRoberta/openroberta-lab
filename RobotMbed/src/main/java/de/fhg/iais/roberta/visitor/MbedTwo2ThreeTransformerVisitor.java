@@ -48,7 +48,7 @@ import de.fhg.iais.roberta.worker.MbedTwo2ThreeTransformerHelper;
  * Used to replace port names of old Mbed programs to fit with the new configuration. Also keeps track of configuration components used, in order to only use
  * the actually used ones.
  */
-public class MbedTwo2ThreeTransformerVisitor extends BaseVisitor<Phrase> implements IMbedTransformerVisitor {
+public class MbedTwo2ThreeTransformerVisitor extends MbedTransformerVisitor {
 
     private final MbedTwo2ThreeTransformerHelper helper;
     private final NewUsedHardwareBean.Builder builder;

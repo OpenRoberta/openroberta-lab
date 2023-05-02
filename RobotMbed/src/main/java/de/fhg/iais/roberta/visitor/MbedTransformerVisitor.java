@@ -32,136 +32,135 @@ import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 
-public interface IMbedTransformerVisitor extends ITransformerVisitor {
-    default Phrase visitDisplayTextAction(DisplayTextAction displayTextAction) {
+public abstract class MbedTransformerVisitor extends TransformerVisitor {
+    public Phrase visitDisplayTextAction(DisplayTextAction displayTextAction) {
         return new DisplayTextAction(displayTextAction.getProperty(), displayTextAction.mode, (Expr) displayTextAction.msg.modify(this));
     }
 
-    default Phrase visitPredefinedImage(PredefinedImage predefinedImage) {
+    public Phrase visitPredefinedImage(PredefinedImage predefinedImage) {
         return new PredefinedImage(predefinedImage.getProperty(), predefinedImage.getImageNameString());
     }
 
-    default Phrase visitDisplayImageAction(DisplayImageAction displayImageAction) {
+    public Phrase visitDisplayImageAction(DisplayImageAction displayImageAction) {
         return new DisplayImageAction(displayImageAction.getProperty(), displayImageAction.mutation, displayImageAction.displayImageMode, (Expr) displayImageAction.valuesToDisplay.modify(this));
     }
 
-    default Phrase visitImageShiftFunction(ImageShiftFunction imageShiftFunction) {
+    public Phrase visitImageShiftFunction(ImageShiftFunction imageShiftFunction) {
         return new ImageShiftFunction(imageShiftFunction.getProperty(), imageShiftFunction.shiftDirection, (Expr) imageShiftFunction.image.modify(this), (Expr) imageShiftFunction.positions.modify(this));
     }
 
-
-    default Phrase visitImageInvertFunction(ImageInvertFunction imageInvertFunction) {
+    public Phrase visitImageInvertFunction(ImageInvertFunction imageInvertFunction) {
         return new ImageInvertFunction(imageInvertFunction.getProperty(), (Expr) imageInvertFunction.image.modify(this));
     }
 
 
-    default Phrase visitImage(Image image) {
+    public Phrase visitImage(Image image) {
         return new Image(image.image, image.getProperty());
     }
 
 
-    default Phrase visitLedOnAction(LedOnAction ledOnAction) {
+    public Phrase visitLedOnAction(LedOnAction ledOnAction) {
         return new LedOnAction(ledOnAction.getProperty(), (Expr) ledOnAction.ledColor.modify(this), ledOnAction.getUserDefinedPort(), ledOnAction.hide);
     }
 
 
-    default Phrase visitRadioSendAction(RadioSendAction radioSendAction) {
+    public Phrase visitRadioSendAction(RadioSendAction radioSendAction) {
         return new RadioSendAction(radioSendAction.getProperty(), radioSendAction.mutation, radioSendAction.type, radioSendAction.power, (Expr) radioSendAction.message.modify(this));
     }
 
 
-    default Phrase visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
+    public Phrase visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
         return new RadioReceiveAction(radioReceiveAction.getProperty(), radioReceiveAction.mutation, radioReceiveAction.type);
     }
 
-    default Phrase visitPinSetPullAction(PinSetPullAction pinSetPullAction) {
+    public Phrase visitPinSetPullAction(PinSetPullAction pinSetPullAction) {
         return new PinSetPullAction(pinSetPullAction.getProperty(), pinSetPullAction.pinPull, pinSetPullAction.port);
     }
 
 
-    default Phrase visitDisplaySetBrightnessAction(DisplaySetBrightnessAction displaySetBrightnessAction) {
+    public Phrase visitDisplaySetBrightnessAction(DisplaySetBrightnessAction displaySetBrightnessAction) {
         return new DisplaySetBrightnessAction(displaySetBrightnessAction.getProperty(), (Expr) displaySetBrightnessAction.brightness.modify(this));
     }
 
 
-    default Phrase visitDisplayGetBrightnessAction(DisplayGetBrightnessAction displayGetBrightnessAction) {
+    public Phrase visitDisplayGetBrightnessAction(DisplayGetBrightnessAction displayGetBrightnessAction) {
         return new DisplayGetBrightnessAction(displayGetBrightnessAction.getProperty());
     }
 
 
-    default Phrase visitDisplaySetPixelAction(DisplaySetPixelAction displaySetPixelAction) {
+    public Phrase visitDisplaySetPixelAction(DisplaySetPixelAction displaySetPixelAction) {
         return new DisplaySetPixelAction(displaySetPixelAction.getProperty(), (Expr) displaySetPixelAction.x.modify(this), (Expr) displaySetPixelAction.y.modify(this), (Expr) displaySetPixelAction.brightness.modify(this));
     }
 
 
-    default Phrase visitDisplayGetPixelAction(DisplayGetPixelAction displayGetPixelAction) {
+    public Phrase visitDisplayGetPixelAction(DisplayGetPixelAction displayGetPixelAction) {
         return new DisplayGetPixelAction(displayGetPixelAction.getProperty(), (Expr) displayGetPixelAction.x.modify(this), (Expr) displayGetPixelAction.y.modify(this));
     }
 
 
-    default Phrase visitRadioSetChannelAction(RadioSetChannelAction radioSetChannelAction) {
+    public Phrase visitRadioSetChannelAction(RadioSetChannelAction radioSetChannelAction) {
         return new RadioSetChannelAction(radioSetChannelAction.getProperty(), (Expr) radioSetChannelAction.channel.modify(this));
     }
 
 
-    default Phrase visitMbedPinWriteValueAction(MbedPinWriteValueAction mbedPinWriteValueAction) {
+    public Phrase visitMbedPinWriteValueAction(MbedPinWriteValueAction mbedPinWriteValueAction) {
         return null;
     }
 
 
-    default Phrase visitFourDigitDisplayShowAction(FourDigitDisplayShowAction fourDigitDisplayShowAction) {
+    public Phrase visitFourDigitDisplayShowAction(FourDigitDisplayShowAction fourDigitDisplayShowAction) {
         return new FourDigitDisplayShowAction(fourDigitDisplayShowAction.getProperty(), (Expr) fourDigitDisplayShowAction.value.modify(this), (Expr) fourDigitDisplayShowAction.position.modify(this), (Expr) fourDigitDisplayShowAction.colon.modify(this));
     }
 
 
-    default Phrase visitFourDigitDisplayClearAction(FourDigitDisplayClearAction fourDigitDisplayClearAction) {
+    public Phrase visitFourDigitDisplayClearAction(FourDigitDisplayClearAction fourDigitDisplayClearAction) {
         return new FourDigitDisplayClearAction(fourDigitDisplayClearAction.getProperty());
     }
 
 
-    default Phrase visitBothMotorsOnAction(BothMotorsOnAction bothMotorsOnAction) {
+    public Phrase visitBothMotorsOnAction(BothMotorsOnAction bothMotorsOnAction) {
         return new BothMotorsOnAction(bothMotorsOnAction.getProperty(), (Expr) bothMotorsOnAction.speedA.modify(this), (Expr) bothMotorsOnAction.speedB.modify(this), bothMotorsOnAction.portA, bothMotorsOnAction.portB);
     }
 
 
-    default Phrase visitBothMotorsStopAction(BothMotorsStopAction bothMotorsStopAction) {
+    public Phrase visitBothMotorsStopAction(BothMotorsStopAction bothMotorsStopAction) {
         return new BothMotorsStopAction(bothMotorsStopAction.getProperty());
     }
 
 
-    default Phrase visitRadioRssiSensor(RadioRssiSensor radioRssiSensor) {
+    public Phrase visitRadioRssiSensor(RadioRssiSensor radioRssiSensor) {
         return new RadioRssiSensor(radioRssiSensor.getProperty(), radioRssiSensor.getSensorMetaDataBean());
     }
 
 
-    default Phrase visitLedBarSetAction(LedBarSetAction ledBarSetAction) {
+    public Phrase visitLedBarSetAction(LedBarSetAction ledBarSetAction) {
         return new LedBarSetAction(ledBarSetAction.getProperty(), (Expr) ledBarSetAction.x.modify(this), (Expr) ledBarSetAction.brightness.modify(this));
     }
 
 
-    default Phrase visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction) {
+    public Phrase visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction) {
         return new SwitchLedMatrixAction(switchLedMatrixAction.getProperty(), switchLedMatrixAction.activated);
     }
 
 
-    default Phrase visitServoSetAction(ServoSetAction servoSetAction) {
+    public Phrase visitServoSetAction(ServoSetAction servoSetAction) {
         return new ServoSetAction(servoSetAction.getProperty(), servoSetAction.getUserDefinedPort(), (Expr) servoSetAction.value.modify(this));
     }
 
 
-    default Phrase visitMotionKitSingleSetAction(MotionKitSingleSetAction motionKitSingleSetAction) {
+    public Phrase visitMotionKitSingleSetAction(MotionKitSingleSetAction motionKitSingleSetAction) {
         return new MotionKitSingleSetAction(motionKitSingleSetAction.getProperty(), motionKitSingleSetAction.port, motionKitSingleSetAction.direction);
     }
 
 
-    default Phrase visitMotionKitDualSetAction(MotionKitDualSetAction motionKitDualSetAction) {
+    public Phrase visitMotionKitDualSetAction(MotionKitDualSetAction motionKitDualSetAction) {
         return new MotionKitDualSetAction(motionKitDualSetAction.getProperty(), motionKitDualSetAction.directionLeft, motionKitDualSetAction.directionRight);
     }
 
     // unrelated defaults
     @Override
-    default Phrase visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
-        return ITransformerVisitor.super.visitPinWriteValueAction(pinWriteValueAction);
+    public Phrase visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
+        return super.visitPinWriteValueAction(pinWriteValueAction);
     }
 
     /**
@@ -172,7 +171,7 @@ public interface IMbedTransformerVisitor extends ITransformerVisitor {
      */
     @Deprecated
     // needed for transformator
-    Phrase visitSingleMotorOnAction(SingleMotorOnAction singleMotorOnAction);
+    abstract Phrase visitSingleMotorOnAction(SingleMotorOnAction singleMotorOnAction);
 
     /**
      * visit a {@link SingleMotorStopAction}.
@@ -182,10 +181,5 @@ public interface IMbedTransformerVisitor extends ITransformerVisitor {
      */
     @Deprecated
     // needed for transformator
-    Phrase visitSingleMotorStopAction(SingleMotorStopAction singleMotorStopAction);
-
-    @Override
-    default Phrase visit(Phrase visitable) {
-        return null;
-    }
+    abstract Phrase visitSingleMotorStopAction(SingleMotorStopAction singleMotorStopAction);
 }

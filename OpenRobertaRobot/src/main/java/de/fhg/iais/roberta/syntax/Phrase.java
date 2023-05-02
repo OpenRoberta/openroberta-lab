@@ -11,8 +11,8 @@ import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.ITransformerVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.TransformerVisitor;
 
 /**
  * the top class of all class used to represent the AST (abstract syntax tree) of a program. After construction an AST should be immutable.
@@ -122,13 +122,13 @@ abstract public class Phrase {
     }
 
     /**
-     * Can be used to modify the Phrase itself. Used in conjunction with {@link ITransformerVisitor} to replace phrases with copies of themselves or even other
+     * Can be used to modify the Phrase itself. Used in conjunction with {@link TransformerVisitor} to replace phrases with copies of themselves or even other
      * phrases.
      *
      * @param visitor the modify visitor to use
      * @return a newly constructed phrase
      */
-    public final Phrase modify(ITransformerVisitor visitor) {
+    public final Phrase modify(TransformerVisitor visitor) {
         return visitor.visit(this);
     }
 

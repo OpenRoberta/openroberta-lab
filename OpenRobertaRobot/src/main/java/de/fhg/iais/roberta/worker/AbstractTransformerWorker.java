@@ -12,10 +12,10 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.ITransformerVisitor;
+import de.fhg.iais.roberta.visitor.TransformerVisitor;
 
 /**
- * Used to transform ASTs between different versions. Uses a {@link ITransformerVisitor} to generate a deep copy of the input AST(s) and replaces them in the
+ * Used to transform ASTs between different versions. Uses a {@link TransformerVisitor} to generate a deep copy of the input AST(s) and replaces them in the
  * project. It is only applied up to a specific version range of the AST, the version of the new AST can also be determined.
  */
 public abstract class AbstractTransformerWorker implements IWorker {
@@ -39,7 +39,7 @@ public abstract class AbstractTransformerWorker implements IWorker {
         this.newXmlVersion = newXmlVersion;
     }
 
-    private static List<List<Phrase>> deepCopyAst(List<List<Phrase>> tree, ITransformerVisitor visitor) {
+    private static List<List<Phrase>> deepCopyAst(List<List<Phrase>> tree, TransformerVisitor visitor) {
         List<List<Phrase>> newTree = new ArrayList<>(tree.size());
         for ( List<Phrase> phrases : tree ) {
             List<Phrase> newPhrases = new ArrayList<>(phrases.size());
@@ -62,7 +62,7 @@ public abstract class AbstractTransformerWorker implements IWorker {
         NewUsedHardwareBean.Builder usedHardwareBeanBuilder = new NewUsedHardwareBean.Builder();
 
         // TODO usedHardwareBeanBuilder should probably be extracted into its own collect visitor, combined for now so only 1 visitor needs to run
-        ITransformerVisitor visitor = getVisitor(project, usedHardwareBeanBuilder, project.getConfigurationAst());
+        TransformerVisitor visitor = getVisitor(project, usedHardwareBeanBuilder, project.getConfigurationAst());
 
         // Most of the time no transformation other than the version is necessary
         List<List<Phrase>> lists;
@@ -118,5 +118,5 @@ public abstract class AbstractTransformerWorker implements IWorker {
      * @param configuration the configuration
      * @return the appropriate visitor for the current robot, null if no transform is needed
      */
-    protected abstract ITransformerVisitor getVisitor(Project project, NewUsedHardwareBean.Builder builder, ConfigurationAst configuration);
+    protected abstract TransformerVisitor getVisitor(Project project, NewUsedHardwareBean.Builder builder, ConfigurationAst configuration);
 }

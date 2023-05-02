@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
 
-public class MbedThree2ThreeOneTransformerVisitor extends BaseVisitor<Phrase> implements IMbedTransformerVisitor {
+public class MbedThree2ThreeOneTransformerVisitor extends MbedTransformerVisitor {
 
     private static final Map<String, String> NEW_NAMES = new HashMap<>();
     static {
