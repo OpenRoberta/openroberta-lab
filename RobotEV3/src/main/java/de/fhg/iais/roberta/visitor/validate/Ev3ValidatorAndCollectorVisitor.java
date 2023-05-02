@@ -58,7 +58,7 @@ import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.EV3DevMethods;
 import de.fhg.iais.roberta.visitor.IEv3Visitor;
 
-public class Ev3ValidatorAndCollectorVisitor extends MotorValidatorAndCollectorVisitor implements IEv3Visitor<Void> {
+public class Ev3ValidatorAndCollectorVisitor extends CommonNepoAndMotorValidatorAndCollectorVisitor implements IEv3Visitor<Void> {
 
     private final boolean isSim;
 

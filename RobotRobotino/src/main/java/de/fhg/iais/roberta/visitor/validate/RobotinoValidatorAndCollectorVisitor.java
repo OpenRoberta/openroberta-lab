@@ -37,7 +37,7 @@ import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 import de.fhg.iais.roberta.visitor.IRobotinoVisitor;
 import de.fhg.iais.roberta.visitor.RobotinoMethods;
 
-public class RobotinoValidatorAndCollectorVisitor extends MotorValidatorAndCollectorVisitor implements IRobotinoVisitor<Void> {
+public class RobotinoValidatorAndCollectorVisitor extends CommonNepoAndMotorValidatorAndCollectorVisitor implements IRobotinoVisitor<Void> {
 
     private final boolean isSim;
 

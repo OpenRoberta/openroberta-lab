@@ -19,11 +19,11 @@ import de.fhg.iais.roberta.util.syntax.MotorDuration;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.hardware.IMotorVisitor;
 
-public abstract class MotorValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IMotorVisitor<Void> {
+public abstract class CommonNepoAndMotorValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IMotorVisitor<Void> {
 
     public static final double DOUBLE_EPS = 1E-7;
 
-    public MotorValidatorAndCollectorVisitor(
+    public CommonNepoAndMotorValidatorAndCollectorVisitor(
         ConfigurationAst robotConfiguration,
         ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(robotConfiguration, beanBuilders);

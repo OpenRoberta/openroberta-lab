@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor;
 
-import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
@@ -30,6 +29,11 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
 public interface IMbedVisitor<V> extends IVisitor<V> {
+    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
+        sensorGetSample.sensor.accept(this);
+        return null;
+    }
+
     V visitClearDisplayAction(ClearDisplayAction clearDisplayAction);
 
     V visitDisplayTextAction(DisplayTextAction displayTextAction);
@@ -76,11 +80,4 @@ public interface IMbedVisitor<V> extends IVisitor<V> {
 
     V visitPlayNoteAction(PlayNoteAction playNoteAction);
 
-    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
-        sensorGetSample.sensor.accept(this);
-        return null;
-    }
-
-    @Override
-    V visit(Phrase visitable);
 }

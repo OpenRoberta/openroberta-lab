@@ -55,7 +55,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
-public class ArduinoValidatorAndCollectorVisitor extends MotorValidatorAndCollectorVisitor implements IArduinoVisitor<Void> {
+public class ArduinoValidatorAndCollectorVisitor extends CommonNepoAndMotorValidatorAndCollectorVisitor implements IArduinoVisitor<Void> {
     private static final Map<String, String> SENSOR_COMPONENT_TYPE_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
         put("COLOR_SENSING", "COLOR");
         put("TOUCH_SENSING", "TOUCH");

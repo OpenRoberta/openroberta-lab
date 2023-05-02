@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 
-public interface IMotorVisitor<V> extends IHardwareVisitor<V> {
+public interface IMotorVisitor<V> {
 
     V visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction);
 
