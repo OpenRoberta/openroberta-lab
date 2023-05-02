@@ -252,7 +252,7 @@ public interface ITransformerVisitor extends ISensorVisitor<Phrase>, IAllActorsV
 
     @Override
     default Phrase visitPlayFileAction(PlayFileAction playFileAction) {
-        return new PlayFileAction(playFileAction.getProperty(),playFileAction.port, playFileAction.fileName, playFileAction.hide);
+        return new PlayFileAction(playFileAction.getProperty(), playFileAction.port, playFileAction.fileName, playFileAction.hide);
     }
 
     @Override
@@ -897,6 +897,11 @@ public interface ITransformerVisitor extends ISensorVisitor<Phrase>, IAllActorsV
     @Override
     default Phrase visitHTColorSensor(HTColorSensor htColorSensor) {
         return new HTColorSensor(htColorSensor.getProperty(), new ExternalSensorBean(htColorSensor.getUserDefinedPort(), htColorSensor.getMode(), htColorSensor.getSlot(), htColorSensor.getMutation()));
+    }
+
+    @Override
+    default Phrase visitAccelerometer(AccelerometerSensor accelerometerSensor) {
+        return new AccelerometerSensor(accelerometerSensor.getProperty(), new ExternalSensorBean(accelerometerSensor.getUserDefinedPort(), accelerometerSensor.getMode(), accelerometerSensor.getSlot(), accelerometerSensor.getMutation()));
     }
 
     // Helper methods

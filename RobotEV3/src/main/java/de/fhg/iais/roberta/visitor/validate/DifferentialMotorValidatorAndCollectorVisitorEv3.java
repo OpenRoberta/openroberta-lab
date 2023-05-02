@@ -7,21 +7,20 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.EV3DevMethods;
-import de.fhg.iais.roberta.visitor.hardware.actor.IDifferentialMotorVisitor;
 
-public abstract class DifferentialMotorValidatorAndCollectorVisitorEv3 extends MotorValidatorAndCollectorVisitor implements IDifferentialMotorVisitor<Void> {
+public abstract class DifferentialMotorValidatorAndCollectorVisitorEv3 extends MotorValidatorAndCollectorVisitor {
 
     public DifferentialMotorValidatorAndCollectorVisitorEv3(
         ConfigurationAst robotConfiguration,
@@ -29,8 +28,7 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitorEv3 extends M
         super(robotConfiguration, beanBuilders);
     }
 
-    @Override
-    public Void visitCurveAction(CurveAction curveAction) {
+    public final Void visitCurveAction(CurveAction curveAction) {
         if ( Objects.equals(robotConfiguration.getRobotName(), "ev3dev") ) {
             /*
              Only add the helper methods for "ev3dev". Following methods are needed for visitCurveAction:
@@ -52,24 +50,21 @@ public abstract class DifferentialMotorValidatorAndCollectorVisitorEv3 extends M
         return null;
     }
 
-    @Override
-    public Void visitTurnAction(TurnAction turnAction) {
+    public final Void visitTurnAction(TurnAction turnAction) {
         checkAndVisitMotionParam(turnAction, turnAction.param);
         checkLeftRightMotorPort(turnAction);
         addLeftAndRightMotorToUsedActors();
         return null;
     }
 
-    @Override
-    public Void visitDriveAction(DriveAction driveAction) {
+    public final Void visitDriveAction(DriveAction driveAction) {
         checkAndVisitMotionParam(driveAction, driveAction.param);
         checkLeftRightMotorPort(driveAction);
         addLeftAndRightMotorToUsedActors();
         return null;
     }
 
-    @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
+    public final Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         checkLeftRightMotorPort(stopAction);
         addLeftAndRightMotorToUsedActors();
         return null;

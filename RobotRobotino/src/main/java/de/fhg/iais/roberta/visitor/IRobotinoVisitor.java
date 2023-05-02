@@ -7,6 +7,7 @@ import de.fhg.iais.roberta.syntax.actor.robotino.OmnidriveAction;
 import de.fhg.iais.roberta.syntax.actor.robotino.OmnidriveDistanceAction;
 import de.fhg.iais.roberta.syntax.actor.robotino.OmnidrivePositionAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.DetectMarkSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
@@ -17,19 +18,20 @@ import de.fhg.iais.roberta.syntax.sensor.robotino.MarkerInformation;
 import de.fhg.iais.roberta.syntax.sensor.robotino.OdometrySensor;
 import de.fhg.iais.roberta.syntax.sensor.robotino.OdometrySensorReset;
 import de.fhg.iais.roberta.syntax.sensor.robotino.OpticalSensor;
-import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
-public interface IRobotinoVisitor<V> extends ISensorVisitor<V> {
+public interface IRobotinoVisitor<V> extends IVisitor<V> {
+    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
+        return sensorGetSample.sensor.accept(this);
+    }
 
     V visitTouchSensor(TouchSensor touchSensor);
 
     V visitOmnidriveAction(OmnidriveAction omnidriveAction);
 
     V visitOmnidriveDistanceAction(OmnidriveDistanceAction omnidriveDistanceAction);
-
 
     V visitMotorDriveStopAction(MotorDriveStopAction stopAction);
 

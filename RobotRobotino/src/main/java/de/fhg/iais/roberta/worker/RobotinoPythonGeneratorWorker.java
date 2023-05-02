@@ -4,13 +4,13 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.visitor.RobotinoViewPythonVisitor;
+import de.fhg.iais.roberta.visitor.RobotinoPythonVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractLanguageVisitor;
 
-public final class RobotinoViewPythonGeneratorWorker extends AbstractLanguageGeneratorWorker {
+public final class RobotinoPythonGeneratorWorker extends AbstractLanguageGeneratorWorker {
 
     @Override
     protected AbstractLanguageVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean> beans) {
-        return new RobotinoViewPythonVisitor(project.getProgramAst().getTree(), beans, project.getConfigurationAst());
+        return new RobotinoPythonVisitor(project.getProgramAst().getTree(), beans, project.getConfigurationAst());
     }
 }
