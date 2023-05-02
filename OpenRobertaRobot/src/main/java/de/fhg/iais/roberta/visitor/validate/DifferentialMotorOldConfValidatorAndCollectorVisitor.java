@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.util.syntax.SC;
-import de.fhg.iais.roberta.visitor.hardware.actor.IDifferentialMotorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IDifferentialMotorVisitor;
 
 public abstract class DifferentialMotorOldConfValidatorAndCollectorVisitor extends MotorValidatorAndCollectorVisitor implements IDifferentialMotorVisitor<Void> {
 

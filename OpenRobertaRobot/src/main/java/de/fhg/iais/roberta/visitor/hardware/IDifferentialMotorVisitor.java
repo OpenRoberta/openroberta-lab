@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.visitor.hardware.actor;
+package de.fhg.iais.roberta.visitor.hardware;
 
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;

@@ -1,10 +1,9 @@
-package de.fhg.iais.roberta.visitor.hardware.actor;
+package de.fhg.iais.roberta.visitor.hardware;
 
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.visitor.hardware.IHardwareVisitor;
 
 public interface IMotorVisitor<V> extends IHardwareVisitor<V> {
 

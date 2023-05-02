@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
 import de.fhg.iais.roberta.util.syntax.SC;
-import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IMotorVisitor;
 
 public abstract class MotorValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IMotorVisitor<Void> {
 
