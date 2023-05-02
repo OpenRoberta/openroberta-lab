@@ -1,0 +1,273 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbitv2" xmlversion="3.1" description="" tags="">
+            <instance x="157" y="54">
+                <block type="robControls_start" id="ok+9Z`_~4=[T3I{bJ}^8" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG">TRUE</field>
+                </block>
+                <block type="mbedActions_display_text" id=",I%xR}3MP^!XIuB_7`~K" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="4O{b5ruNa1`OqvTa78pp" intask="true">
+                            <field name="TEXT">Sound level, press A to go next</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="controls_whileUntil" id="xB[?XXAWL+NK3FfOct6v" intask="true">
+                    <field name="MODE">UNTIL</field>
+                    <value name="BOOL">
+                        <block type="robSensors_key_getSample" id="d14d,Dnmdy`!sFihn(O9" intask="true">
+                            <mutation mode="PRESSED"></mutation>
+                            <field name="MODE">PRESSED</field>
+                            <field name="SENSORPORT">A</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                    <statement name="DO">
+                        <block type="mbedActions_display_text" id="SX2y_;U5?#8X5k3[cNjG" intask="true">
+                            <field name="TYPE">TEXT</field>
+                            <value name="OUT">
+                                <block type="robSensors_sound_getSample" id="hp8}%Dw8s}WtAYZn}^Px" intask="true">
+                                    <mutation mode="SOUND"></mutation>
+                                    <field name="MODE">SOUND</field>
+                                    <field name="SLOT"></field>
+                                    <field name="SENSORPORT">_S</field>
+                                    <hide name="SENSORPORT" value="_S"></hide>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="robActions_play_setVolume" id="v@]vDF@_,w/`{gDO`oHu" intask="true">
+                    <hide name="ACTORPORT" value="_B"></hide>
+                    <value name="VOLUME">
+                        <block type="math_number" id="VbuA2rm(vA8jX?M%YO*2" intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="%zEozn;9oIe23FQrP0n1" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="eF!jx|h]MT65AM}nQ[2a" intask="true">
+                            <field name="TEXT">Volume 100</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_play_tone" id="]n]rKBlC#{Jno)3CkfN`" intask="true">
+                    <field name="ACTORPORT">_B</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                    <value name="FREQUENCE">
+                        <block type="math_number" id="cV1B18s5YYoK+%bc|fZP" intask="true">
+                            <field name="NUM">300</field>
+                        </block>
+                    </value>
+                    <value name="DURATION">
+                        <block type="math_number" id="1p%x:nJlk0lU^-}=BHqL" intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_play_setVolume" id="L6)`RGLYY#Bq:iczTk)J" intask="true">
+                    <hide name="ACTORPORT" value="_B"></hide>
+                    <value name="VOLUME">
+                        <block type="math_number" id="u!s?eA*roy`C{Eb@fym=" intask="true">
+                            <field name="NUM">50</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="nPO7Wq85.Es%l4?0Xe`o" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="HRZ04){1Jz_j)5in3-G7" intask="true">
+                            <field name="TEXT">Volume 50</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_play_tone" id="ycx;!18XseY*^mO.ZlYK" intask="true">
+                    <field name="ACTORPORT">_B</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                    <value name="FREQUENCE">
+                        <block type="math_number" id="7h1ftU)5WbsD]AGp}?_]" intask="true">
+                            <field name="NUM">300</field>
+                        </block>
+                    </value>
+                    <value name="DURATION">
+                        <block type="math_number" id="1G=bK20%~_wsWjLA(LXH" intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_play_setVolume" id="6EeEfeq7de=s*bg.9QMX" intask="true">
+                    <hide name="ACTORPORT" value="_B"></hide>
+                    <value name="VOLUME">
+                        <block type="math_number" id="U:((vV-)4|3w,Qqto0/r" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="N+~e#DGtl6b(W2Mp9}^," intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="if*_g!KmXh;bn(*=^[M_" intask="true">
+                            <field name="TEXT">Volume 0</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_play_tone" id="b4KrX=fh2zVvcc9~ZIJ2" intask="true">
+                    <field name="ACTORPORT">_B</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                    <value name="FREQUENCE">
+                        <block type="math_number" id="CxPhA2X3CoFUS,X%0DV^" intask="true">
+                            <field name="NUM">300</field>
+                        </block>
+                    </value>
+                    <value name="DURATION">
+                        <block type="math_number" id="YG-!vG9N^fj*{%GR8aNJ" intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_play_setVolume" id="EMMWA([/dvNFfD]}l34W" intask="true">
+                    <hide name="ACTORPORT" value="_B"></hide>
+                    <value name="VOLUME">
+                        <block type="math_number" id="`IznbAx]F:@.7[/Uex0=" intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="#2kIOn}p93ThC]eo[LH{" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="cf0zvP7vUQ1j`IzNqlS^" intask="true">
+                            <field name="TEXT">Volume 100</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_play_tone" id="dk/n8*WZq-8oP9V%ve{Y" intask="true">
+                    <field name="ACTORPORT">_B</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                    <value name="FREQUENCE">
+                        <block type="math_number" id="f/VAWI3Y,_b4j*)q/^dX" intask="true">
+                            <field name="NUM">300</field>
+                        </block>
+                    </value>
+                    <value name="DURATION">
+                        <block type="math_number" id="=R]G5=}j%v{CAH`XGSsb" intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="!Yj_,;T;iKNUk^gz2cwR" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="Zu#3{q^~w^`Z.H4Y#bJ@" intask="true">
+                            <field name="TEXT">Toggle Speaker OFF</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_sound_toggle" id="ghTrN}t^2{GXae:vDT0r" intask="true">
+                    <field name="MODE">OFF</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                </block>
+                <block type="mbedActions_play_tone" id="qm[P*:7vLQqR5xG.OS.g" intask="true">
+                    <field name="ACTORPORT">_B</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                    <value name="FREQUENCE">
+                        <block type="math_number" id="}BfV~;aaT9OoW/B8NFSu" intask="true">
+                            <field name="NUM">300</field>
+                        </block>
+                    </value>
+                    <value name="DURATION">
+                        <block type="math_number" id="JF)U0{+66`?U[ZOlCb!U" intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_sound_toggle" id="@9q`5xJC}.OTvAa1B:=T" intask="true">
+                    <field name="MODE">ON</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                </block>
+                <block type="mbedActions_display_text" id="u]tWGxwymZ3ieEFIDmyf" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="c1F{UD^};lB+SHIlG9l*" intask="true">
+                            <field name="TEXT">Toggle Speaker ON</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_play_tone" id="SDlWJyv2p9U+xi5{!}[." intask="true">
+                    <field name="ACTORPORT">_B</field>
+                    <hide name="ACTORPORT" value="_B"></hide>
+                    <value name="FREQUENCE">
+                        <block type="math_number" id="OB#Qc}wz(6Lrb%kta?(G" intask="true">
+                            <field name="NUM">300</field>
+                        </block>
+                    </value>
+                    <value name="DURATION">
+                        <block type="math_number" id="{Jz0cvH1UboI@~8~:%SJ" intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbitv2" xmlversion="3.1" description="" tags="">
+            <instance x="-72" y="74">
+                <block type="robConf_sound" id="|V?XJqd+HFH{ggh3jw:I" intask="true" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="73" y="99">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
+            <instance x="-49" y="117">
+                <block type="robConf_logotouch" id="?ybc9g.wQa:_7M,%d=~g" intask="true" deletable="false">
+                    <field name="NAME">_LO</field>
+                </block>
+            </instance>
+            <instance x="526" y="104">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="-69" y="147">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="527" y="154">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+            <instance x="-70" y="208">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="527" y="193">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="528" y="228">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="-91" y="271">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

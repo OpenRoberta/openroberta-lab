@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [_S, SOUND, - EMPTY_SLOT -]]
+Actors: 
+[UsedActor [, DISPLAY], UsedActor [, KEY], UsedActor [, BUZZER], UsedActor [, MUSIC]]
+Methods: 
+[]

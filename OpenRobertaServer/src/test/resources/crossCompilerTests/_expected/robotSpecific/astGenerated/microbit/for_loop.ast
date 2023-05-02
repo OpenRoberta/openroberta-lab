@@ -1,0 +1,8 @@
+
+(repeat [FOR, Var [i], NumConst[value: 0], NumConst[value: 5], NumConst[value: 1]]
+AktionStmt [DisplayTextAction[mode: TEXT, msg: Var [i]]]WaitTimeStmt[time: NumConst[value: 500]]
+)
+
+(repeat [FOR_EACH, Binary [IN, VarDeclaration [NUMBER, Element, EmptyExpr [defVal=NUMBER], false, false], Var [Element2]]]
+AktionStmt [DisplayTextAction[mode: TEXT, msg: Var [Element]]]WaitTimeStmt[time: NumConst[value: 500]]
+)

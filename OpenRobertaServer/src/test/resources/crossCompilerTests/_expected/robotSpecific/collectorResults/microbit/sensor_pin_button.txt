@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [, DISPLAY], UsedActor [, KEY], UsedActor [0, PIN_VALUE], UsedActor [1, PIN_VALUE], UsedActor [2, PIN_VALUE]]
+Methods: 
+[]

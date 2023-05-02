@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [, DISPLAY], UsedActor [Pin0, DIGITAL_INPUT], UsedActor [ANALOGPin1, ANALOG_INPUT], UsedActor [Pin2, DIGITAL_INPUT], UsedActor [Pin3, DIGITAL_INPUT], UsedActor [Pin4, DIGITAL_INPUT], UsedActor [Pin5, DIGITAL_INPUT], UsedActor [Pin6, DIGITAL_INPUT], UsedActor [Pin7, DIGITAL_INPUT], UsedActor [Pin8, DIGITAL_INPUT], UsedActor [Pin9, DIGITAL_INPUT], UsedActor [Pin10, DIGITAL_INPUT], UsedActor [Pin11, DIGITAL_INPUT], UsedActor [Pin12, DIGITAL_INPUT], UsedActor [Pin13, DIGITAL_INPUT], UsedActor [Pin14, DIGITAL_INPUT], UsedActor [Pin15, DIGITAL_INPUT], UsedActor [Pin16, DIGITAL_INPUT], UsedActor [Pin17, DIGITAL_INPUT], UsedActor [Pin18, DIGITAL_INPUT]]
+Methods: 
+[]

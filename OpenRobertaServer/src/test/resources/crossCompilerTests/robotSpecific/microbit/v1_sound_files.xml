@@ -1,0 +1,310 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbit" xmlversion="3.1" description="" tags="">
+            <instance x="192" y="50">
+                <block type="robControls_start" id="]v;g,@ob?`HQo(Tz_|+t" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG"></field>
+                </block>
+                <block type="mbedActions_display_text" id="Rv[;-B(_4N,Q-=G.wX,T" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="XfH8c%7KS|IqPH@uw~M;" intask="true">
+                            <field name="TEXT">dadadadum</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="ga|.^7q:[i?s5k(z{_oM" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">DADADADUM</field>
+                </block>
+                <block type="mbedActions_display_text" id="gx_sXOz7FgEai`,o~j@`" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="OEm~.5GhftD2iv=8Y-:h" intask="true">
+                            <field name="TEXT">entertainer</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="jbg`=nuX0R!s:hg:Q+K-" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">ENTERTAINER</field>
+                </block>
+                <block type="mbedActions_display_text" id="^3o3GzTO|-3zdvT=qp8x" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="1S{Jo7dY]Cs1V^ikHRH6" intask="true">
+                            <field name="TEXT">prelude</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id=",_c)o?Os~{+A:Q{ynYCS" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">PRELUDE</field>
+                </block>
+                <block type="mbedActions_display_text" id="P*9wjh.zVf)ykaqNy5.k" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="K|*c8mwp{W~JRzc;T3k[" intask="true">
+                            <field name="TEXT">ode</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="^PJR|LwgK@YS2}k7{@_H" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">ODE</field>
+                </block>
+                <block type="mbedActions_display_text" id="kzH)eUy/nK]{zF%{]=Vh" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="-@|;4jvj0T5})pzJ6T]V" intask="true">
+                            <field name="TEXT">nyan</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="Iz66{x81eG,adl(~C=Mw" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">NYAN</field>
+                </block>
+                <block type="mbedActions_display_text" id="N126ctn#QSOj0gt.m:^." intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="z|^{rTkor_[TsBC[EK!n" intask="true">
+                            <field name="TEXT">ringtone</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="uY265mOt{3!eo!7S+pG!" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">RINGTONE</field>
+                </block>
+                <block type="mbedActions_display_text" id="UVRKI)tEQL}m=87D5_d^" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="j-%+ln{F/r%RC6+|lsg=" intask="true">
+                            <field name="TEXT">funk</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="XD@f)S.7r4|?)(sVvv3/" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">FUNK</field>
+                </block>
+                <block type="mbedActions_display_text" id="K)5qD/-(A6Z/5OKogeR0" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="AC[=TVZ6eF:,nl)_rw=X" intask="true">
+                            <field name="TEXT">blues</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="{2B8-_FIk{0h:`Q}JzRy" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">BLUES</field>
+                </block>
+                <block type="mbedActions_display_text" id="4S*=z%9u]{%|=fGCi_/*" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="hcbVXl]U?vru#gAqm`ak" intask="true">
+                            <field name="TEXT">birthday</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="#TATa.:DV,O3[5x#~dnk" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">BIRTHDAY</field>
+                </block>
+                <block type="mbedActions_display_text" id="OaNZ,W:k2U!/%xa@+Kf8" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="JE;EWzGVP;vr1oS4LB6," intask="true">
+                            <field name="TEXT">wedding</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="`eubXTAIeK*80{_l`Jz_" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">WEDDING</field>
+                </block>
+                <block type="mbedActions_display_text" id="#(#^NCB%voHzY,|FBOnh" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="pwlI)kLW(sq=7m|(1`S+" intask="true">
+                            <field name="TEXT">funeral</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="%}!zajY{5afc~#pIQ)[," intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">FUNERAL</field>
+                </block>
+                <block type="mbedActions_display_text" id="^FA8A?i][d!}M!LP.5pc" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="}Lu%E{`l?GV2o:Xkh|%*" intask="true">
+                            <field name="TEXT">punchline</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="1N:b+wZOBHes2Gwl1eCy" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">PUNCHLINE</field>
+                </block>
+                <block type="mbedActions_display_text" id="u1tdlx`(utEgU~t5CGC/" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="x{L/y,wN}z+KDUd*42z4" intask="true">
+                            <field name="TEXT">python</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="M22BAqRo+?M%N{rB63?l" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">PYTHON</field>
+                </block>
+                <block type="mbedActions_display_text" id="Oo`9nCRM8c?ZDc;XuPh^" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="b4pl#KNNAlP*S}RHb})N" intask="true">
+                            <field name="TEXT">baddy</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="=@HN#S|^nJ#?G8+,2I;I" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">BADDY</field>
+                </block>
+                <block type="mbedActions_display_text" id="+C24m;KNGU^Uw8.I*4q%" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="%UaQk]m;)fDHYgNZ^o^_" intask="true">
+                            <field name="TEXT">chase</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="FMBEoFW({NP_u~V_xJ}D" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">CHASE</field>
+                </block>
+                <block type="mbedActions_display_text" id="Ei4VKqLM2Lxz?}IipZS`" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="LN)_w^r}8n/OUMQA3;rk" intask="true">
+                            <field name="TEXT">ba_ding</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="uY(TL+qgsaiX{}n!ZROx" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">BA_DING</field>
+                </block>
+                <block type="mbedActions_display_text" id="}85;4MjBwq|oj#ZB-Lk^" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="jNQlrL3mQ;=Y7Ay|16cI" intask="true">
+                            <field name="TEXT">wawawawaa</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="~}=OZ_!X6P/Vo?yOS:|a" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">WAWAWAWAA</field>
+                </block>
+                <block type="mbedActions_display_text" id="3?%3/4.K/ubw_8hB~pm5" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="b}WJ-l{wOi}K[5obe_Vz" intask="true">
+                            <field name="TEXT">jump up</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id=")5G{QMsxDMiuFg`9O_3P" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">JUMP_UP</field>
+                </block>
+                <block type="mbedActions_display_text" id="+^|KP-[D~jC{(x%85:qo" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="8L-v|FHGTsEvxf_car9S" intask="true">
+                            <field name="TEXT">jump down</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="A4v2Fx4.TqUa7i8233wm" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">JUMP_DOWN</field>
+                </block>
+                <block type="mbedActions_display_text" id="K@=%`h`{KuY^;W9%s.TW" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="u5w!!B9OP#x@@_lO3p:|" intask="true">
+                            <field name="TEXT">power up</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="1wW-SWd99.DzBq3]QcR9" intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">POWER_UP</field>
+                </block>
+                <block type="mbedActions_display_text" id="+=S#8j|W{z03@?=sywAh" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="M0hH]o+Xx,WRHGE[1~S;" intask="true">
+                            <field name="TEXT">power down</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_play_file_port" id="w1R~.ujE]iWd%tw-vr6," intask="true">
+                    <field name="ACTORPORT">B2</field>
+                    <field name="FILE">POWER_DOWN</field>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set robottype="microbit" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="111" y="493">
+                <block type="robConf_buzzer" id="mm[Ow,h]WImfF:VApe*+" intask="true">
+                    <field name="NAME">B2</field>
+                </block>
+            </instance>
+            <instance x="111" y="259">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="254" y="108">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="111" y="203">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="254" y="137">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="273" y="76">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="141" y="170">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="250" y="250">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="NAME">undefined</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

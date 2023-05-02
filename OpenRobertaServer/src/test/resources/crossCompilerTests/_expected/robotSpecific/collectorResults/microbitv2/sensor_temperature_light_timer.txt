@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [_T, TEMPERATURE, VALUE], UsedSensor [_L, LIGHT, VALUE], UsedSensor [1, TIMER, VALUE], UsedSensor [1, TIMER, DEFAULT]]
+Actors: 
+[UsedActor [, DISPLAY], UsedActor [, KEY]]
+Methods: 
+[]

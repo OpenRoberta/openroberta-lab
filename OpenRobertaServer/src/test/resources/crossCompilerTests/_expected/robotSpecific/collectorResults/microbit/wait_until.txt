@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [- EMPTY_PORT -, ACCELEROMETER, UP], UsedSensor [- EMPTY_PORT -, ACCELEROMETER, FREEFALL], UsedSensor [_C, COMPASS, ANGLE], UsedSensor [_A, ACCELEROMETER, DEFAULT], UsedSensor [_L, LIGHT, LIGHT_VALUE], UsedSensor [_T, TEMPERATURE, VALUE]]
+Actors: 
+[UsedActor [, DISPLAY], UsedActor [, KEY], UsedActor [0, PIN_VALUE], UsedActor [S, PIN_VALUE], UsedActor [S2, PIN_VALUE]]
+Methods: 
+[]

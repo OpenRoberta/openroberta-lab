@@ -1,6 +1,0 @@
-Sensors: 
-[]
-Actors: 
-[UsedActor [, DISPLAY], UsedActor [, MUSIC], UsedActor [, BUZZER]]
-Methods: 
-[]

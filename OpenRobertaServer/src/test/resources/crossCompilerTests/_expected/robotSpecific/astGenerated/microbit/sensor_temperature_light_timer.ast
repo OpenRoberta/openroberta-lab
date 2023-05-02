@@ -1,0 +1,23 @@
+DisplayTextAction[mode: TEXT, msg: StringConst[value: press A to go to the next sensor]]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: Temperature]]
+
+(repeat [UNTIL, Unary [NOT, SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]]]
+AktionStmt [DisplayTextAction[mode: TEXT, msg: SensorExpr [TemperatureSensor [_T, VALUE, - EMPTY_SLOT -]]]]
+)
+DisplayTextAction[mode: TEXT, msg: StringConst[value: light sensor]]
+
+(repeat [UNTIL, Unary [NOT, SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]]]
+AktionStmt [DisplayTextAction[mode: TEXT, msg: SensorExpr [LightSensor [_L, VALUE, - EMPTY_SLOT -]]]]
+)
+DisplayTextAction[mode: TEXT, msg: StringConst[value: Timer:]]
+
+(repeat [UNTIL, Unary [NOT, SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]]]
+AktionStmt [DisplayTextAction[mode: TEXT, msg: SensorExpr [TimerSensor [1, VALUE, - EMPTY_SLOT -]]]]
+)
+TimerReset[sensorPort: 1]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: Timer Reset]]
+
+(repeat [UNTIL, Unary [NOT, SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]]]
+AktionStmt [DisplayTextAction[mode: TEXT, msg: SensorExpr [TimerSensor [1, VALUE, - EMPTY_SLOT -]]]]
+)
+DisplayTextAction[mode: TEXT, msg: StringConst[value: Done]]

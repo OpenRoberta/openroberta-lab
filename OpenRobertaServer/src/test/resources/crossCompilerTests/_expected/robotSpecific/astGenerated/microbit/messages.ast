@@ -1,0 +1,5 @@
+RadioSetChannelAction[channel: NumConst[value: 0]]
+RadioSendAction[type: String, power: 7, message: StringConst[value: Hi]]
+DisplayTextAction[mode: TEXT, msg: ActionExpr [RadioReceiveAction[type: String]]]
+RadioSendAction[type: String, power: 0, message: StringConst[value: Bye]]
+DisplayTextAction[mode: TEXT, msg: ActionExpr [RadioReceiveAction[type: String]]]

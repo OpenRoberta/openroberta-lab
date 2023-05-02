@@ -1,0 +1,39 @@
+DisplayTextAction[mode: TEXT, msg: StringConst[value: Press A]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: Press B]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [B, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: Press Pin 0]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [0, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: Press Pin 1]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [1, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: Press Pin 2]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [2, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayTextAction[mode: TEXT, msg: StringConst[value: A]]]
+,else if SensorExpr [KeysSensor [B, PRESSED, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayTextAction[mode: TEXT, msg: StringConst[value: B]]]
+,else if SensorExpr [PinTouchSensor [0, PRESSED, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayTextAction[mode: TEXT, msg: StringConst[value: P0]]]
+,else if SensorExpr [PinTouchSensor [1, PRESSED, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayTextAction[mode: TEXT, msg: StringConst[value: P1]]]
+,else if SensorExpr [PinTouchSensor [2, PRESSED, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayTextAction[mode: TEXT, msg: StringConst[value: P2]]]
+
+)

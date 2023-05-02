@@ -1,25 +1,25 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbitv2" xmlversion="3.1" description="" tags="">
-            <instance x="370" y="50">
-                <block type="robControls_start" id="?.scQqD?sxI2;W1vCIbL" intask="true" deletable="false">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbit" xmlversion="3.1" description="" tags="">
+            <instance x="192" y="50">
+                <block type="robControls_start" id="6?KuHVf-R4=9};5p*`4y" intask="true" deletable="false">
                     <mutation declare="false"></mutation>
-                    <field name="DEBUG">TRUE</field>
+                    <field name="DEBUG"></field>
                 </block>
-                <block type="mbedActions_display_text" id="9ZN?;OG%jBKH/UYaAIZb" intask="true">
+                <block type="mbedActions_display_text" id="1yH[6bQ4k/_+gHK}Nh:|" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="text" id="QELye%OQR5fKW[#1[GNN" intask="true">
+                        <block type="text" id="qDL1#%=]ButO+OoNWz84" intask="true">
                             <field name="TEXT">make gesture upright</field>
                         </block>
                     </value>
                 </block>
-                <block type="robControls_wait_for" id="h/Hy6TL{oG|QM}s[B}ZU" intask="true">
+                <block type="robControls_wait_for" id="RA)[|gB[Ao1XDV?kjvD=" intask="true">
                     <value name="WAIT0">
-                        <block type="logic_compare" id="pWgv[~J%M1l1WvXekfG7" intask="true">
+                        <block type="logic_compare" id="951ON^/I`|y9i6=~lD~2" intask="true">
                             <field name="OP">EQ</field>
                             <value name="A">
-                                <block type="robSensors_getSample" id="vLf_~6-6UOx##1ZJi:V*" intask="true">
+                                <block type="robSensors_getSample" id="zz;%lou8xptPdG4~hc?C" intask="true">
                                     <mutation input="GESTURE_UP"></mutation>
                                     <field name="SENSORTYPE">GESTURE_UP</field>
                                     <field name="SENSORPORT"></field>
@@ -27,27 +27,27 @@
                                 </block>
                             </value>
                             <value name="B">
-                                <block type="logic_boolean" id="q_Rl!PmHHhixMKV{yV0N" intask="true">
+                                <block type="logic_boolean" id="RrT-@X:Pg0OBeJw%otf1" intask="true">
                                     <field name="BOOL">TRUE</field>
                                 </block>
                             </value>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="XuS5=!Jf.-|D2P~Qn]]c" intask="true">
+                <block type="mbedActions_display_text" id="Z]{b_ow9Yx)?}]492Gqd" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="text" id="|H4Y=z}z*9s8AQh/e2sm" intask="true">
+                        <block type="text" id="a[]y!*7}unw4%-3P=sGC" intask="true">
                             <field name="TEXT">make gesture upside down</field>
                         </block>
                     </value>
                 </block>
-                <block type="robControls_wait_for" id="3Fv4TNoy.1L7{M,c@(-d" intask="true">
+                <block type="robControls_wait_for" id="l3~90!zd(E*sgI};WIi0" intask="true">
                     <value name="WAIT0">
-                        <block type="logic_compare" id="?}4(5NrC`)tJINkh,V4l" intask="true">
+                        <block type="logic_compare" id="kn+q2[G0fZoN23WEE8xv" intask="true">
                             <field name="OP">EQ</field>
                             <value name="A">
-                                <block type="robSensors_getSample" id="XNkGQgnj#`~[#gJ5SQcl" intask="true">
+                                <block type="robSensors_getSample" id="{_)XWE(]M|i2M-A|zuKw" intask="true">
                                     <mutation input="GESTURE_DOWN"></mutation>
                                     <field name="SENSORTYPE">GESTURE_DOWN</field>
                                     <field name="SENSORPORT"></field>
@@ -55,27 +55,27 @@
                                 </block>
                             </value>
                             <value name="B">
-                                <block type="logic_boolean" id="B6IJ2]]sFMaSQvoI+K!6" intask="true">
+                                <block type="logic_boolean" id="dD^QgevsFPrptf?v)@cR" intask="true">
                                     <field name="BOOL">TRUE</field>
                                 </block>
                             </value>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="Bpy|E3+5KWVJY8[/bH6x" intask="true">
+                <block type="mbedActions_display_text" id="oQq%D`.zPzEej`T=E#et" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="text" id="1cm6y3N1h,E#!#P;DqM7" intask="true">
+                        <block type="text" id="zE`vlV`-n3nf:baN~}HU" intask="true">
                             <field name="TEXT">make gesture at the front side</field>
                         </block>
                     </value>
                 </block>
-                <block type="robControls_wait_for" id="gRSPJbgduI`X]d0lI[_A" intask="true">
+                <block type="robControls_wait_for" id="%2lqj-uq(~d0YbYmdTxr" intask="true">
                     <value name="WAIT0">
-                        <block type="logic_compare" id="0F%sclM.(qX.^4{1Gk3." intask="true">
+                        <block type="logic_compare" id="v=hcIeSgT?b7R,[76z]t" intask="true">
                             <field name="OP">EQ</field>
                             <value name="A">
-                                <block type="robSensors_getSample" id="`.x[*og|MCu!,-J2d`Df" intask="true">
+                                <block type="robSensors_getSample" id="q%1=ms@(nqnAO(Ef`HMz" intask="true">
                                     <mutation input="GESTURE_FACE_DOWN"></mutation>
                                     <field name="SENSORTYPE">GESTURE_FACE_DOWN</field>
                                     <field name="SENSORPORT"></field>
@@ -83,27 +83,27 @@
                                 </block>
                             </value>
                             <value name="B">
-                                <block type="logic_boolean" id="vxvDzr2ui}t.;MZ_eDGg" intask="true">
+                                <block type="logic_boolean" id="VTxZsw-LZp/=IM-0qQA9" intask="true">
                                     <field name="BOOL">TRUE</field>
                                 </block>
                             </value>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="kwqXO!bYBm9wuD#|-sk0" intask="true">
+                <block type="mbedActions_display_text" id="zRt`)V]cZIgs9,~7?X9i" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="text" id="8%{n(!_6|A0Qb-OD+oS(" intask="true">
+                        <block type="text" id="xfRsf;dH.4(ywwlQGre1" intask="true">
                             <field name="TEXT">make gesture at the back</field>
                         </block>
                     </value>
                 </block>
-                <block type="robControls_wait_for" id="`@7f~)BJ7u@0jWblyN7U" intask="true">
+                <block type="robControls_wait_for" id="*@p+X%kj^X9s%O=}5-(A" intask="true">
                     <value name="WAIT0">
-                        <block type="logic_compare" id=":oTyYrpEf(/hXd+En1XV" intask="true">
+                        <block type="logic_compare" id="!txp0ORC[A/vsS6uditA" intask="true">
                             <field name="OP">EQ</field>
                             <value name="A">
-                                <block type="robSensors_getSample" id="NFix:xDL_7RG~EltRp#Q" intask="true">
+                                <block type="robSensors_getSample" id=";Gife5Gyp2b;76SQu6}P" intask="true">
                                     <mutation input="GESTURE_FACE_UP"></mutation>
                                     <field name="SENSORTYPE">GESTURE_FACE_UP</field>
                                     <field name="SENSORPORT"></field>
@@ -111,27 +111,27 @@
                                 </block>
                             </value>
                             <value name="B">
-                                <block type="logic_boolean" id="jaPyzTmlb2DHNA}#9{WX" intask="true">
+                                <block type="logic_boolean" id=")8h!5.Xq*tafjbmwMvMl" intask="true">
                                     <field name="BOOL">TRUE</field>
                                 </block>
                             </value>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="4!Y*nc4[IH2_GAfbacHZ" intask="true">
+                <block type="mbedActions_display_text" id="F7Y_=ld/^^ie5+KXKr);" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="text" id="`)tbSR_l3o7}k6}2JFFd" intask="true">
+                        <block type="text" id="cs9u=hnPnk01f`6W6S~R" intask="true">
                             <field name="TEXT">make gesture shaking</field>
                         </block>
                     </value>
                 </block>
-                <block type="robControls_wait_for" id="_6[O2FPM]=KvcbNs,EC-" intask="true">
+                <block type="robControls_wait_for" id="4AvV2^~@Wjdh!3xZS%N`" intask="true">
                     <value name="WAIT0">
-                        <block type="logic_compare" id="M}dC:KBw@Tw14J29GTKp" intask="true">
+                        <block type="logic_compare" id="L6L1oeZewJLJIu|h46v]" intask="true">
                             <field name="OP">EQ</field>
                             <value name="A">
-                                <block type="robSensors_getSample" id=".P,4Du4wpH)]Z8z]eF/?" intask="true">
+                                <block type="robSensors_getSample" id="d-8#9fiw`ltuQI60Mb+h" intask="true">
                                     <mutation input="GESTURE_SHAKE"></mutation>
                                     <field name="SENSORTYPE">GESTURE_SHAKE</field>
                                     <field name="SENSORPORT"></field>
@@ -139,27 +139,27 @@
                                 </block>
                             </value>
                             <value name="B">
-                                <block type="logic_boolean" id="9bh7c@iF83rj0[kVW[O~" intask="true">
+                                <block type="logic_boolean" id="ZpfXUSUt3x^%!EKB7!IX" intask="true">
                                     <field name="BOOL">TRUE</field>
                                 </block>
                             </value>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="gkqMm7(Z_+F+x*kYXJDJ" intask="true">
+                <block type="mbedActions_display_text" id="I:GcnK~9u38SH3]+^u]e" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="text" id="kj1`UKy?LX,7g72};L,B" intask="true">
+                        <block type="text" id="ClUpdCldEw=Dx5vM-qcM" intask="true">
                             <field name="TEXT">make gesture freely falling</field>
                         </block>
                     </value>
                 </block>
-                <block type="robControls_wait_for" id="3Tegb|L_V_-4Pt/-mn?(" intask="true">
+                <block type="robControls_wait_for" id="JL*.41`9fdZy!r1oJ{ec" intask="true">
                     <value name="WAIT0">
-                        <block type="logic_compare" id="%T|F0X}|q)!!FgRGGxD0" intask="true">
+                        <block type="logic_compare" id=")m=IzV9BWfo+Vwks_f6S" intask="true">
                             <field name="OP">EQ</field>
                             <value name="A">
-                                <block type="robSensors_getSample" id="sqWoz,F/g4Ybq3acicpO" intask="true">
+                                <block type="robSensors_getSample" id="0/4^,gIZsziKCV1/vFBQ" intask="true">
                                     <mutation input="GESTURE_FREEFALL"></mutation>
                                     <field name="SENSORTYPE">GESTURE_FREEFALL</field>
                                     <field name="SENSORPORT"></field>
@@ -167,25 +167,25 @@
                                 </block>
                             </value>
                             <value name="B">
-                                <block type="logic_boolean" id="a?JfjUcM`7wyIP+ll|(Y" intask="true">
+                                <block type="logic_boolean" id=",IhyL;8/,Rj(F)pT;Sc#" intask="true">
                                     <field name="BOOL">TRUE</field>
                                 </block>
                             </value>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="jhaqNW+BeB#`;U}DLD_j" intask="true">
+                <block type="mbedActions_display_text" id=")OoiPyoD.QDMJTCuyse{" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="text" id="y?*Y1vqEOZYYWqjIa]IL" intask="true">
+                        <block type="text" id="J*7g}@oqC/4hIk|72TWr" intask="true">
                             <field name="TEXT">ANGLE OF COMPASS:</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="TG[hu)7#T!;N*6NiZf9b" intask="true">
+                <block type="mbedActions_display_text" id="A9[D-t1,rdMe)mvz;D.t" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="robSensors_compass_getSample" id="[k.)SR/-PKppBnm~-C!R" intask="true">
+                        <block type="robSensors_compass_getSample" id="JA]_q#{oh0?XI^b9ngYt" intask="true">
                             <mutation mode="ANGLE"></mutation>
                             <field name="MODE">ANGLE</field>
                             <field name="SLOT"></field>
@@ -194,18 +194,18 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="^eQe|:7hiDeU5FZZFtT." intask="true">
+                <block type="mbedActions_display_text" id="pshg02EYr=/ml,idaT^l" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="text" id="BQho%L?vufgUlh1S9@F/" intask="true">
+                        <block type="text" id="AAi?,O5w2H`]D|O%WJUs" intask="true">
                             <field name="TEXT">SPEED IN X DIRECTION</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="2wXf)sHp3rzPI?/6uj*O" intask="true">
+                <block type="mbedActions_display_text" id="OPeg,r)A#iBS[;^aWt*2" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="robSensors_accelerometer_getSample" id="?/FlMjYh(y#Xc@SaE}6(" intask="true">
+                        <block type="robSensors_accelerometer_getSample" id="7%L;_YgM+XyFTbX_pis/" intask="true">
                             <mutation mode="VALUE"></mutation>
                             <field name="MODE">VALUE</field>
                             <field name="SLOT">X</field>
@@ -214,18 +214,18 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="({IQb#UEiu2i9%+4PsF!" intask="true">
+                <block type="mbedActions_display_text" id="BOk_d(:b;j*671#ZgwaY" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="text" id="p_gZoKxAtIZy0|L-1.F{" intask="true">
+                        <block type="text" id="X;7mX`qoEfE6t4}cou#b" intask="true">
                             <field name="TEXT">SPEED IN Y DIRECTION</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="LQq}ATD;ns(8.h!J2RlJ" intask="true">
+                <block type="mbedActions_display_text" id="h:=tBy}K?ld^#z!p/wg%" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="robSensors_accelerometer_getSample" id="ZL^XS^Q{F]d0sSi8[w-c" intask="true">
+                        <block type="robSensors_accelerometer_getSample" id="|`3V|x=1Mep]Za|(`X)n" intask="true">
                             <mutation mode="VALUE"></mutation>
                             <field name="MODE">VALUE</field>
                             <field name="SLOT">Y</field>
@@ -234,18 +234,18 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="LHpYehu6vp3hwMKs*^@r" intask="true">
+                <block type="mbedActions_display_text" id="xzW}=#e`faV^khUalZQG" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="text" id="=]jdw1Do/0qVy/PK~vWF" intask="true">
+                        <block type="text" id="yb:5N,8HLiq@G)oJrzm+" intask="true">
                             <field name="TEXT">SPEED IN Z DIRECTION</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="M!Db?70{7[){mUG_XNnR" intask="true">
+                <block type="mbedActions_display_text" id="PRb!7.xHI@0IKQ!NVX%W" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="robSensors_accelerometer_getSample" id="y#Q)Nft4~~p1!4~Cgq63" intask="true">
+                        <block type="robSensors_accelerometer_getSample" id="]HbFz?67fzmAkaXh(aaT" intask="true">
                             <mutation mode="VALUE"></mutation>
                             <field name="MODE">VALUE</field>
                             <field name="SLOT">Z</field>
@@ -254,18 +254,18 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="kYF-]^3|KtF{fyDfjJ~1" intask="true">
+                <block type="mbedActions_display_text" id="2u-L:P8wXYHE_|X!1i_9" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="text" id="`ovW),)K%V-:V0~9z`(J" intask="true">
+                        <block type="text" id="?iPC~}2+bU^)q!n{gm~e" intask="true">
                             <field name="TEXT">ACCELEROMETER STRENGTH:</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="tu@}sJ[+BmXE{wu{YKk=" intask="true">
+                <block type="mbedActions_display_text" id="9d]F9r{%5[kYTl6tYPh;" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="robSensors_accelerometer_getSample" id="0^6fE}?h,|g-PmPAUE5Q" intask="true">
+                        <block type="robSensors_accelerometer_getSample" id="]+%l18Qu!#z~vMLkWg,P" intask="true">
                             <mutation mode="VALUE"></mutation>
                             <field name="MODE">VALUE</field>
                             <field name="SLOT">STRENGTH</field>
@@ -274,18 +274,18 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="rU|aB,]T-TZ+t.RwPWQ_" intask="true">
+                <block type="mbedActions_display_text" id="/.Ow`,6T%HqqFBo4bz7K" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="text" id="OyOsOU%F}evLt~3_G*zX" intask="true">
+                        <block type="text" id="W1OjZjvAd#sBySCAuRxq" intask="true">
                             <field name="TEXT">Gesture Upright?</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="i5!+#k8#P?c52.VRN(][" intask="true">
+                <block type="mbedActions_display_text" id="~P]dU{p89{_udlq9ep{d" intask="true">
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
-                        <block type="robSensors_gesture_getSample" id=":~gL(nw1#L]YFcGKW.J7" intask="true">
+                        <block type="robSensors_gesture_getSample" id="@eS+[IlmRVbz19Xfki)1" intask="true">
                             <mutation mode="UP"></mutation>
                             <field name="MODE">UP</field>
                             <field name="SENSORPORT"></field>
@@ -297,57 +297,42 @@
         </block_set>
     </program>
     <config>
-        <block_set robottype="microbitv2" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
-            <instance x="-69" y="147">
-                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
-                    <field name="NAME">A</field>
-                    <field name="PIN1">A</field>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbit" xmlversion="3.1" description="" tags="">
+            <instance x="273" y="76">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
                 </block>
             </instance>
-            <instance x="-70" y="208">
+            <instance x="254" y="108">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="254" y="137">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="141" y="170">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="111" y="203">
                 <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
                     <field name="NAME">B</field>
                     <field name="PIN1">B</field>
                 </block>
             </instance>
-            <instance x="527" y="193">
-                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
-                    <field name="NAME">_A</field>
-                </block>
-            </instance>
-            <instance x="-49" y="117">
-                <block type="robConf_logotouch" id="?ybc9g.wQa:_7M,%d=~g" intask="true" deletable="false">
-                    <field name="NAME">_LO</field>
-                </block>
-            </instance>
-            <instance x="527" y="154">
-                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
-                    <field name="NAME">_B</field>
-                </block>
-            </instance>
-            <instance x="-72" y="74">
-                <block type="robConf_sound" id="|V?XJqd+HFH{ggh3jw:I" intask="true" deletable="false">
-                    <field name="NAME">_S</field>
-                </block>
-            </instance>
-            <instance x="528" y="228">
-                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
-                    <field name="NAME">_C</field>
-                </block>
-            </instance>
-            <instance x="526" y="104">
-                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
-                    <field name="NAME">_T</field>
-                </block>
-            </instance>
-            <instance x="-91" y="271">
-                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
-                    <field name="NAME">_L</field>
-                </block>
-            </instance>
-            <instance x="73" y="99">
+            <instance x="250" y="250">
                 <block type="robConf_robot" id="robot" intask="false" deletable="false">
-                    <field name="NAME">undefined</field>
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
+            <instance x="111" y="259">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
                 </block>
             </instance>
         </block_set>

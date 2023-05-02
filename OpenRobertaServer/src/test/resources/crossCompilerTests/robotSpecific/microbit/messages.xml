@@ -1,0 +1,98 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbit" xmlversion="3.1" description="" tags="">
+            <instance x="206" y="50">
+                <block type="robControls_start" id="^Ok)j}i3})E,4fK2E[3r" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG"></field>
+                </block>
+                <block type="mbedCommunication_setChannel" id="qWHI[ws4y;duoXIHzU,0" intask="true">
+                    <value name="CONNECTION">
+                        <block type="math_number" id="cw[hkpZjNv[jrawVykj~" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedCommunication_sendBlock" id="L1):leS#Ut|rRjUrn[oG" intask="true">
+                    <mutation datatype="String"></mutation>
+                    <field name="TYPE">String</field>
+                    <field name="POWER">7</field>
+                    <value name="sendData">
+                        <block type="text" id="p)lMVh4|Y9w`EKc4}AQ%" intask="true">
+                            <field name="TEXT">Hi</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="/AwbgcwF{2nmN+Kf[yA#" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="mbedCommunication_receiveBlock" id="I3X)-nr5NuKY/~;Fp{%[" intask="true">
+                            <mutation datatype="String"></mutation>
+                            <field name="TYPE">String</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedCommunication_sendBlock" id="6p~:6O#7sgU)GFk:BOLe" intask="true">
+                    <mutation datatype="String"></mutation>
+                    <field name="TYPE">String</field>
+                    <field name="POWER">0</field>
+                    <value name="sendData">
+                        <block type="text" id="#T,POgDK;[YPm0P_J._5" intask="true">
+                            <field name="TEXT">Bye</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="+P0cGz_ZH3c.eO(T4E[`" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="mbedCommunication_receiveBlock" id="=G/!~5RJ`V98h;Yv{Qg=" intask="true">
+                            <mutation datatype="String"></mutation>
+                            <field name="TYPE">String</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set robottype="microbit" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="111" y="259">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="254" y="108">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="111" y="203">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="254" y="137">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="273" y="76">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="141" y="170">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="250" y="250">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="NAME">undefined</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

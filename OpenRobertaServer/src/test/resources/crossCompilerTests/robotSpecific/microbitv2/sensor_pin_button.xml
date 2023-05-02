@@ -1,0 +1,307 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbitv2" xmlversion="3.1" description="" tags="">
+            <instance x="370" y="50">
+                <block type="robControls_start" id="?.scQqD?sxI2;W1vCIbL" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG">TRUE</field>
+                </block>
+                <block type="mbedActions_display_text" id="X]QysXtr3R`wt8GA1ZiH" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="!st;[`:!=8PBseZ^co.|" intask="true">
+                            <field name="TEXT">Press A</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="~xt{(U/2SZrJAY7b8A?C" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="0]~ehAzU:Kji*hV_b1y_" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="if?Vud!)D2B3pvFx^;6n" intask="true">
+                                    <mutation input="KEY_PRESSED"></mutation>
+                                    <field name="SENSORTYPE">KEY_PRESSED</field>
+                                    <field name="SENSORPORT">A</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="ZO5a`L5%3-c%;WerNWVE" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="nlyYIz}vos/gdzhciKH5" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="ewCV#JvlTbWK%9]TBNxK" intask="true">
+                            <field name="TEXT">Press B</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="7|mmUE3Lk=4(|7mU;[)_" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="Q~Ck,9A?}Si=pxndr3qX" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="r6L}j}~0_@O%beLDKm/a" intask="true">
+                                    <mutation input="KEY_PRESSED"></mutation>
+                                    <field name="SENSORTYPE">KEY_PRESSED</field>
+                                    <field name="SENSORPORT">B</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="Ppi^x!A)Z+Ug8cd+p9Zs" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="}^Pau#ua#I%#UXA%9_GF" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="}]|b@:,*d6]+D^@ENvrR" intask="true">
+                            <field name="TEXT">Press Pin 0</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="FenPIE-J?oUwf-z2L%Ok" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="vanbD18~uc!phD2;QKyi" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="(lNiCl.Kx=ytooozX)e)" intask="true">
+                                    <mutation input="PINTOUCH_PRESSED"></mutation>
+                                    <field name="SENSORTYPE">PINTOUCH_PRESSED</field>
+                                    <field name="SENSORPORT">0</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="`*sHUt5REpzN]h02%EDj" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="h)ahEpb{IfTUvk3!`PY9" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="S^wyBeP,~ai8Ttz]Qm;R" intask="true">
+                            <field name="TEXT">Press Pin 1</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="HD;MP~b)qaopsnN~/]Uz" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="LM@s]-DAzo^m[J7VHc6V" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="YrC:sX)(b|sod:]3.,F}" intask="true">
+                                    <mutation input="PINTOUCH_PRESSED"></mutation>
+                                    <field name="SENSORTYPE">PINTOUCH_PRESSED</field>
+                                    <field name="SENSORPORT">1</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="Ejs]5drnVy|+Q;Yis!Z." intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_display_text" id="Q{6kU=:_)Gr0xB9Y^Ea{" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="/%a%AUgueah1R#w]vFk~" intask="true">
+                            <field name="TEXT">Press Pin 2</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="l;)_U{vh*kgR;fDD]K^)" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="1=mW02Fu~QnL*8t5Qok}" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="IuG;Hm{tSH4}_UV!I~1V" intask="true">
+                                    <mutation input="PINTOUCH_PRESSED"></mutation>
+                                    <field name="SENSORTYPE">PINTOUCH_PRESSED</field>
+                                    <field name="SENSORPORT">2</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="cF}kLN!JdNf24qhvj{AH" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_loopForever" id="?TlwQtc8/%rbN=2eCRmi" intask="true">
+                    <statement name="DO">
+                        <block type="robControls_if" id="i%(Tx?BwF{(xBhKG4w{]" intask="true">
+                            <mutation elseif="4"></mutation>
+                            <repetitions>
+                                <value name="IF0">
+                                    <block type="robSensors_key_getSample" id="qJ[2gC*%m}E}|`4DkQfa" intask="true">
+                                        <mutation mode="PRESSED"></mutation>
+                                        <field name="MODE">PRESSED</field>
+                                        <field name="SENSORPORT">A</field>
+                                        <field name="SLOT"></field>
+                                    </block>
+                                </value>
+                                <statement name="DO0">
+                                    <block type="mbedActions_display_text" id="x!@m^#ZqDzE7P*Z`9s6," intask="true">
+                                        <field name="TYPE">TEXT</field>
+                                        <value name="OUT">
+                                            <block type="text" id="=+)%-n}7xk)P,=vav*cJ" intask="true">
+                                                <field name="TEXT">A</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                </statement>
+                                <value name="IF1">
+                                    <block type="robSensors_key_getSample" id="_@8`RY,J9W*CJPsn^.+@" intask="true">
+                                        <mutation mode="PRESSED"></mutation>
+                                        <field name="MODE">PRESSED</field>
+                                        <field name="SENSORPORT">B</field>
+                                        <field name="SLOT"></field>
+                                    </block>
+                                </value>
+                                <statement name="DO1">
+                                    <block type="mbedActions_display_text" id="|OudyS7[m/61A|Q3E5D|" intask="true">
+                                        <field name="TYPE">TEXT</field>
+                                        <value name="OUT">
+                                            <block type="text" id="8/]l;02WGlG(K1drUwTU" intask="true">
+                                                <field name="TEXT">B</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                </statement>
+                                <value name="IF2">
+                                    <block type="robSensors_pintouch_getSample" id="Veu,F[#H.5NoI!4JpL_x" intask="true">
+                                        <mutation mode="PRESSED"></mutation>
+                                        <field name="MODE">PRESSED</field>
+                                        <field name="SENSORPORT">0</field>
+                                        <field name="SLOT"></field>
+                                    </block>
+                                </value>
+                                <statement name="DO2">
+                                    <block type="mbedActions_display_text" id="h*D;n(q](6sSISV?u.Fe" intask="true">
+                                        <field name="TYPE">TEXT</field>
+                                        <value name="OUT">
+                                            <block type="text" id="t0%k9`rT%=hsz:QrT5X)" intask="true">
+                                                <field name="TEXT">P0</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                </statement>
+                                <value name="IF3">
+                                    <block type="robSensors_pintouch_getSample" id="ipGEHX-+Msr{{QeQIVn*" intask="true">
+                                        <mutation mode="PRESSED"></mutation>
+                                        <field name="MODE">PRESSED</field>
+                                        <field name="SENSORPORT">1</field>
+                                        <field name="SLOT"></field>
+                                    </block>
+                                </value>
+                                <statement name="DO3">
+                                    <block type="mbedActions_display_text" id="YfHy_GGq%.l@~_e:VUEk" intask="true">
+                                        <field name="TYPE">TEXT</field>
+                                        <value name="OUT">
+                                            <block type="text" id="hTr@b2QmN[a@7e)VFP(=" intask="true">
+                                                <field name="TEXT">P1</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                </statement>
+                                <value name="IF4">
+                                    <block type="robSensors_pintouch_getSample" id="8i-j3@@f;t)NzWj0JFiI" intask="true">
+                                        <mutation mode="PRESSED"></mutation>
+                                        <field name="MODE">PRESSED</field>
+                                        <field name="SENSORPORT">2</field>
+                                        <field name="SLOT"></field>
+                                    </block>
+                                </value>
+                                <statement name="DO4">
+                                    <block type="mbedActions_display_text" id=";#6N[LG(9r@oGZH0BG`3" intask="true">
+                                        <field name="TYPE">TEXT</field>
+                                        <value name="OUT">
+                                            <block type="text" id="7{zun5{MceDLy]%ma`kT" intask="true">
+                                                <field name="TEXT">P2</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                </statement>
+                            </repetitions>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set robottype="microbitv2" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="-69" y="147">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="-70" y="208">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="527" y="193">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="-49" y="117">
+                <block type="robConf_logotouch" id="?ybc9g.wQa:_7M,%d=~g" intask="true" deletable="false">
+                    <field name="NAME">_LO</field>
+                </block>
+            </instance>
+            <instance x="527" y="154">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+            <instance x="-72" y="74">
+                <block type="robConf_sound" id="|V?XJqd+HFH{ggh3jw:I" intask="true" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="528" y="228">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="526" y="104">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="-91" y="271">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="73" y="99">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="NAME">undefined</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

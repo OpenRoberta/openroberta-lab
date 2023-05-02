@@ -1,0 +1,44 @@
+DisplayTextAction[mode: TEXT, msg: StringConst[value: gesture upright]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, UP, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: freely falling]]
+WaitStmt [
+(repeat [WAIT, SensorExpr [GestureSensor [- EMPTY_PORT -, FREEFALL, - EMPTY_SLOT -]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: Button A]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: Button B]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [B, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: Pin 0]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [0, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: angle smaller than 30]]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [CompassSensor [_C, ANGLE, - EMPTY_SLOT -]]], NumConst[value: 30]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: millig g x accelerometer bigger than 30]]
+WaitStmt [
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [AccelerometerSensor [_A, DEFAULT, X]]], NumConst[value: 30]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: light sensor smaller than 30]]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [LightSensor [_L, LIGHT_VALUE, - EMPTY_SLOT -]]], NumConst[value: 30]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: Pin digital value != 0]]
+WaitStmt [
+(repeat [WAIT, Binary [NEQ, SensorExpr [GetSampleSensor [PinGetValueSensor [S, DIGITAL, - EMPTY_SLOT -]]], NumConst[value: 0]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: Pin analog smaller than 20]]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [PinGetValueSensor [S2, ANALOG, - EMPTY_SLOT -]]], NumConst[value: 20]]]
+)]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: temperature higher than 10]]
+WaitStmt [
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [TemperatureSensor [_T, VALUE, - EMPTY_SLOT -]]], NumConst[value: 10]]]
+)]

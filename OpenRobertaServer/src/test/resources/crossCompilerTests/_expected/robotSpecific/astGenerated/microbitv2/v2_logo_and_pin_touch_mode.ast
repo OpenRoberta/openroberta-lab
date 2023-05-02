@@ -1,0 +1,32 @@
+DisplayTextAction[mode: TEXT, msg: StringConst[value: press logo to start]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [LogoTouchSensor [_LO, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if SensorExpr [LogoTouchSensor [_LO, PRESSED, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayTextAction[mode: TEXT, msg: StringConst[value: logo]]]
+,else if SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayTextAction[mode: TEXT, msg: StringConst[value: capacitive mode]]]
+SensorStmt PinSetTouchMode[mode: CAPACITIVE, sensorport: 0]
+SensorStmt PinSetTouchMode[mode: CAPACITIVE, sensorport: 1]
+SensorStmt PinSetTouchMode[mode: CAPACITIVE, sensorport: 2]
+,else if SensorExpr [KeysSensor [B, PRESSED, - EMPTY_SLOT -]]
+,then
+SensorStmt PinSetTouchMode[mode: RESISTIVE, sensorport: 0]
+SensorStmt PinSetTouchMode[mode: RESISTIVE, sensorport: 1]
+SensorStmt PinSetTouchMode[mode: RESISTIVE, sensorport: 2]
+AktionStmt [DisplayTextAction[mode: TEXT, msg: StringConst[value: resistive mode]]]
+,else if SensorExpr [PinTouchSensor [0, PRESSED, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayTextAction[mode: TEXT, msg: StringConst[value: pin 0]]]
+,else if SensorExpr [PinTouchSensor [1, PRESSED, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayTextAction[mode: TEXT, msg: StringConst[value: pin 1]]]
+,else if SensorExpr [PinTouchSensor [2, PRESSED, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayTextAction[mode: TEXT, msg: StringConst[value: pin 2]]]
+
+)
