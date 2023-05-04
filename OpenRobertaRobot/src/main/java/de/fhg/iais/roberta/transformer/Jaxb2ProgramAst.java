@@ -10,7 +10,6 @@ import de.fhg.iais.roberta.blockly.generated.Arg;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
-import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Category;
@@ -24,7 +23,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
-import de.fhg.iais.roberta.syntax.lang.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
@@ -404,17 +402,8 @@ public class Jaxb2ProgramAst {
     }
 
     private Phrase extractBlock(Value value) {
-        Shadow shadow = value.getShadow();
         Block block = value.getBlock();
-        if ( shadow != null ) {
-            Block shadowBlock = Jaxb2Ast.shadow2block(shadow);
-            if ( block != null ) {
-                return new ShadowExpr(Jaxb2Ast.convertPhraseToExpr(block2ast(shadowBlock)), Jaxb2Ast.convertPhraseToExpr(block2ast(block)));
-            }
-            return new ShadowExpr(Jaxb2Ast.convertPhraseToExpr(block2ast(shadowBlock)), null);
-        } else {
-            return block2ast(block);
-        }
+        return block2ast(block);
     }
 
     private StmtList blocksToStmtList(List<Block> statementBlocks) {

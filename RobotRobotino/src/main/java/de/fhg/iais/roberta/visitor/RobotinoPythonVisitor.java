@@ -23,7 +23,6 @@ import de.fhg.iais.roberta.syntax.actor.robotino.OmnidriveDistanceAction;
 import de.fhg.iais.roberta.syntax.actor.robotino.OmnidrivePositionAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
@@ -297,11 +296,6 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
             decrIndentation();
             nlIndent();
         }
-    }
-
-    @Override
-    public Void visitConnectConst(ConnectConst connectConst) {
-        return null;
     }
 
     @Override

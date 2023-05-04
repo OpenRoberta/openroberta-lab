@@ -54,7 +54,6 @@ import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
@@ -203,11 +202,6 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         decrIndentation();
         nlIndent();
         this.sb.append("}");
-        return null;
-    }
-
-    @Override
-    public Void visitConnectConst(ConnectConst connectConst) {
         return null;
     }
 

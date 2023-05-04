@@ -42,6 +42,7 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
@@ -1132,6 +1133,12 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         this.sb.append(", ").append(bluetoothSendAction.channel).append(", ");
         bluetoothSendAction.msg.accept(this);
         this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitConnectConst(ConnectConst connectConst) {
+        this.sb.append(connectConst.value);
         return null;
     }
 

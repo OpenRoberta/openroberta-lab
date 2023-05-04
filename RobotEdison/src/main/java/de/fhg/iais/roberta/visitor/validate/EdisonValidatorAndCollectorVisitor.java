@@ -225,6 +225,7 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
      */
     @Override
     public Void visitGetSampleSensor(GetSampleSensor sensorGetSample) {
+        super.visitGetSampleSensor(sensorGetSample);
         switch ( sensorGetSample.sensorTypeAndMode ) {
             case "INFRARED_OBSTACLE":
                 usedMethodBuilder.addUsedMethod(EdisonMethods.OBSTACLEDETECTION);

@@ -16,7 +16,6 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
-import de.fhg.iais.roberta.syntax.lang.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
@@ -182,16 +181,7 @@ public final class Ast2Jaxb {
         if ( !value.getKind().hasName("EMPTY_EXPR") ) {
             Value blockValue = new Value();
             blockValue.setName(name);
-            if ( value.getKind().hasName("SHADOW_EXPR") ) {
-                ShadowExpr shadowExpr = (ShadowExpr) value;
-                blockValue.setShadow(block2shadow(shadowExpr.shadow.ast2xml()));
-                if ( shadowExpr.block != null ) {
-                    blockValue.setBlock(shadowExpr.block.ast2xml());
-                }
-            } else {
-                blockValue.setBlock(value.ast2xml());
-            }
-
+            blockValue.setBlock(value.ast2xml());
             block.getValue().add(blockValue);
         }
     }

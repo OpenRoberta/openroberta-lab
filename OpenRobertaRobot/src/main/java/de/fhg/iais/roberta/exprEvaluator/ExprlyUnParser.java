@@ -26,7 +26,6 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
@@ -210,14 +209,6 @@ public class ExprlyUnParser {
                 + visitAST(rgbColor.A)
                 + ")";
         }
-    }
-
-    /**
-     * @param ConnectConst Expression
-     * @return Textual representation of the ConnectConst
-     */
-    public String visitConnectConst(ConnectConst connectConst) {
-        return "connect " + connectConst.value + "," + connectConst.value; // TODO: inspect generation. Was: connectConst.getDataValue()
     }
 
     /**
@@ -566,9 +557,6 @@ public class ExprlyUnParser {
         }
         if ( ast instanceof RgbColor ) {
             return visitRgbColor((RgbColor) ast);
-        }
-        if ( ast instanceof ConnectConst ) {
-            return visitConnectConst((ConnectConst) ast);
         }
         if ( ast instanceof Var ) {
             return visitVar((Var) ast);

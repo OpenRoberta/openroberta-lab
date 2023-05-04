@@ -21,7 +21,6 @@ import de.fhg.iais.roberta.syntax.actors.arduino.mbot.SendIRAction;
 import de.fhg.iais.roberta.syntax.expressions.arduino.LEDMatrixImage;
 import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageShiftFunction;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -29,10 +28,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
 public interface IMbotVisitor<V> extends IVisitor<V> {
-    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
-        return sensorGetSample.sensor.accept(this);
-    }
-
     V visitClearDisplayAction(ClearDisplayAction clearDisplayAction);
 
     V visitSendIRAction(SendIRAction sendIRAction);

@@ -24,16 +24,13 @@ import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.StartActivityTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -49,7 +46,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
@@ -118,7 +114,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     private static final Predicate<String> IS_INVALID_BLOCK_ID = s -> s.equals("1");
     private static final List<Class<? extends Phrase>> DONT_ADD_DEBUG_STOP = Arrays.asList(Expr.class, VarDeclaration.class, Sensor.class, MainTask.class, ExprStmt.class, StmtList.class, RepeatStmt.class, WaitStmt.class);
 
-    private StackMachineBuilder codeBuilder = new StackMachineBuilder();
+    private final StackMachineBuilder codeBuilder = new StackMachineBuilder();
     protected final ConfigurationAst configuration;
 
     private final Map<String, List<JSONObject>> methodCalls = new HashMap<>();
@@ -144,22 +140,31 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         this.configuration = configuration;
     }
 
-    @Override
-    public Void visit(Phrase visitable) {
-        boolean shouldHighlight = shouldBeHighlighted(visitable);
-        if ( shouldHighlight ) beginPhrase(visitable);
-        Void result = super.visit(visitable);
-        if ( shouldHighlight ) endPhrase(visitable);
-        return result;
-    }
-
     private boolean shouldBeHighlighted(Phrase visitable) {
         boolean isNotMainTask = !(visitable instanceof MainTask);
         return isNotMainTask && !currentlyHighlightedBlocks.contains(visitable.getProperty().getBlocklyId());
     }
 
-    protected void endPhrase(Phrase phrase) {
-        String blocklyId = phrase.getProperty().getBlocklyId();
+    @Override
+    protected final boolean preVisitCheck(Phrase visitable) {
+        boolean shouldHighlight = shouldBeHighlighted(visitable);
+        if ( shouldHighlight ) {
+            String blocklyId = visitable.getProperty().getBlocklyId();
+            if ( debugger && isValidBlocklyId(blocklyId) ) {
+                toHighlightBlocks.add(blocklyId);
+                currentlyHighlightedBlocks.add(blocklyId);
+
+                if ( DONT_ADD_DEBUG_STOP.stream().noneMatch(cls -> cls.isInstance(visitable)) ) {
+                    possibleDebugStops.add(blocklyId);
+                }
+            }
+        }
+        return shouldHighlight;
+    }
+
+    @Override
+    protected final void postVisitCheck(Phrase visitable) {
+        String blocklyId = visitable.getProperty().getBlocklyId();
         if ( debugger && isValidBlocklyId(blocklyId) ) {
             if ( !codeBuilder.isEmpty() ) {
                 JSONObject lastElement = codeBuilder.getLast();
@@ -174,18 +179,6 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
             }
             toHighlightBlocks.remove(blocklyId);
             currentlyHighlightedBlocks.remove(blocklyId);
-        }
-    }
-
-    protected void beginPhrase(Phrase phrase) {
-        String blocklyId = phrase.getProperty().getBlocklyId();
-        if ( debugger && isValidBlocklyId(blocklyId) ) {
-            toHighlightBlocks.add(blocklyId);
-            currentlyHighlightedBlocks.add(blocklyId);
-
-            if ( DONT_ADD_DEBUG_STOP.stream().noneMatch(cls -> cls.isInstance(phrase)) ) {
-                possibleDebugStops.add(blocklyId);
-            }
         }
     }
 
@@ -270,16 +263,6 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         rgbColor.B.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.RGB_COLOR_CONST);
         return add(o);
-    }
-
-    @Override
-    public final Void visitShadowExpr(ShadowExpr shadowExpr) {
-        if ( shadowExpr.block != null ) {
-            shadowExpr.block.accept(this);
-        } else {
-            shadowExpr.shadow.accept(this);
-        }
-        return null;
     }
 
     @Override
@@ -744,16 +727,6 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     }
 
     @Override
-    public final Void visitActivityTask(ActivityTask activityTask) {
-        throw new DbcException("Operation not supported");
-    }
-
-    @Override
-    public final Void visitStartActivityTask(StartActivityTask startActivityTask) {
-        throw new DbcException("Operation not supported");
-    }
-
-    @Override
     public final Void visitWaitStmt(WaitStmt waitStmt) {
         int uniqueCompoundNumber = codeBuilder.pushCompound(StackMachineBuilder.Compound.WAIT);
         int orCounter = 0;
@@ -1062,11 +1035,6 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         appComment(C.CALL, false).put(C.LABEL, "rtn_" + uniqueCompoundNumber);
         codeBuilder.popCompound(StackMachineBuilder.Compound.CALL);
         return null;
-    }
-
-    @Override
-    public Void visitConnectConst(ConnectConst connectConst) {
-        throw new DbcException("Operation not supported");
     }
 
     @SuppressWarnings("unchecked")

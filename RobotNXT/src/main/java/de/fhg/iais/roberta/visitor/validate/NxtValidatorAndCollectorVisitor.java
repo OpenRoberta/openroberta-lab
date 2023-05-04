@@ -103,7 +103,7 @@ public class NxtValidatorAndCollectorVisitor extends CommonNepoAndMotorValidator
     @Override
     public Void visitConnectConst(ConnectConst connectConst) {
         addToPhraseIfUnsupportedInSim(connectConst, true, isSim);
-        return super.visitConnectConst(connectConst);
+        return null;
     }
 
     @Override

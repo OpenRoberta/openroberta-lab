@@ -20,7 +20,6 @@ import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkSetup;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkTrain;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
@@ -40,11 +39,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
 public interface IArduinoVisitor<V> extends IVisitor<V> {
-
-    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
-        return sensorGetSample.sensor.accept(this);
-    }
-
     V visitDropSensor(DropSensor dropSensor);
 
     V visitHumiditySensor(HumiditySensor humiditySensor);

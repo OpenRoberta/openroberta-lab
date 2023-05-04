@@ -12,7 +12,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
@@ -20,10 +19,6 @@ import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
 public interface INIBOVisitor<V> extends IVisitor<V> {
-    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
-        return sensorGetSample.sensor.accept(this);
-    }
-
     V visitInfraredSensor(InfraredSensor infraredSensor);
 
     V visitTemperatureSensor(TemperatureSensor temperatureSensor);

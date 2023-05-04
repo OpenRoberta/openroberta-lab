@@ -29,7 +29,6 @@ import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
@@ -487,10 +486,5 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
             }
         }
         return null;
-    }
-
-    @Override
-    public Void visitConnectConst(ConnectConst connectConst) {
-        throw new DbcException("Not supported!");
     }
 }

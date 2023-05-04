@@ -16,7 +16,6 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
@@ -241,14 +240,6 @@ public class ExprlyTypechecker {
         }
 
         return rgbColor.getVarType();
-    }
-
-    /**
-     * @param ConnectConst Expression
-     * @return Type of block
-     */
-    private BlocklyType visitConnectConst(ConnectConst connectConst) {
-        return connectConst.getVarType();
     }
 
     /**
@@ -1036,9 +1027,6 @@ public class ExprlyTypechecker {
         }
         if ( ast instanceof RgbColor ) {
             return visitRgbColor((RgbColor) ast);
-        }
-        if ( ast instanceof ConnectConst ) {
-            return visitConnectConst((ConnectConst) ast);
         }
         if ( ast instanceof Var ) {
             return visitVar((Var) ast);

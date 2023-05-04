@@ -34,15 +34,12 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.StartActivityTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.EvalExpr;
@@ -59,7 +56,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
@@ -322,10 +318,6 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
 
     public Phrase visitStmtTextComment(StmtTextComment stmtTextComment) {
         return new StmtTextComment(stmtTextComment.getProperty(), stmtTextComment.textComment);
-    }
-
-    public Phrase visitConnectConst(ConnectConst connectConst) {
-        return new ConnectConst(connectConst.getProperty(), connectConst.value, connectConst.value);
     }
 
     public Phrase visitVar(Var var) {
@@ -594,20 +586,8 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
         return new StmtExpr((Stmt) stmtExpr.stmt.modify(this));
     }
 
-    public Phrase visitShadowExpr(ShadowExpr shadowExpr) {
-        return new ShadowExpr((Expr) shadowExpr.shadow.modify(this), (Expr) shadowExpr.block.modify(this));
-    }
-
     public Phrase visitSensorStmt(SensorStmt sensorStmt) {
         return new SensorStmt((Sensor) sensorStmt.sensor.modify(this));
-    }
-
-    public Phrase visitActivityTask(ActivityTask activityTask) {
-        return new ActivityTask(activityTask.getProperty(), (Expr) activityTask.activityName.modify(this));
-    }
-
-    public Phrase visitStartActivityTask(StartActivityTask startActivityTask) {
-        return new StartActivityTask(startActivityTask.getProperty(), (Expr) startActivityTask.activityName.modify(this));
     }
 
     public Phrase visitLocation(Location location) {

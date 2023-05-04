@@ -18,7 +18,6 @@ import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
@@ -29,11 +28,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
 public interface IMbedVisitor<V> extends IVisitor<V> {
-    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
-        sensorGetSample.sensor.accept(this);
-        return null;
-    }
-
     V visitClearDisplayAction(ClearDisplayAction clearDisplayAction);
 
     V visitDisplayTextAction(DisplayTextAction displayTextAction);

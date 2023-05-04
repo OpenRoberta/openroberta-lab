@@ -26,7 +26,6 @@ import de.fhg.iais.roberta.syntax.actors.edison.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.edison.SendIRAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
@@ -758,11 +757,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
             this.sb.append(": return");
         }
         return null;
-    }
-
-    @Override
-    public Void visitConnectConst(ConnectConst connectConst) {
-        throw new DbcException("Not supported!");
     }
 
     @Override

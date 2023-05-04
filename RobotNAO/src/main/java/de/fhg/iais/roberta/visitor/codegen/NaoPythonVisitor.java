@@ -46,7 +46,6 @@ import de.fhg.iais.roberta.syntax.action.speech.SayTextWithSpeedAndPitchAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
@@ -1041,11 +1040,6 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         nlIndent();
 
         super.generateProgramSuffix(withWrapping);
-    }
-
-    @Override
-    public Void visitConnectConst(ConnectConst connectConst) {
-        return null;
     }
 
     @Override

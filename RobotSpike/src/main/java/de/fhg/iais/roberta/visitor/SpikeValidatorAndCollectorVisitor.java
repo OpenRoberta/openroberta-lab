@@ -35,7 +35,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
@@ -52,7 +51,7 @@ import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 
 
-public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements ISpike {
+public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements ISpikeVisitor<Void> {
 
 
     private static final Map<String, String> SENSOR_COMPONENT_TYPE_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
@@ -98,12 +97,6 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
     @Override
     public Void visitGestureSensor(GestureSensor gestureSensor) {
         usedHardwareBuilder.addUsedActor(new UsedActor("", "HUB"));
-        return null;
-    }
-
-    @Override
-    public Void visitGetSampleSensor(GetSampleSensor sensorGetSample) {
-        sensorGetSample.sensor.accept(this);
         return null;
     }
 

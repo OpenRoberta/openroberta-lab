@@ -18,7 +18,6 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.edison.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.edison.SendIRAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -80,6 +79,4 @@ public interface IEdisonVisitor<V> extends IVisitor<V> {
     V visitKeysSensor(KeysSensor keysSensor);
 
     V visitWaitStmt(WaitStmt waitStmt);
-
-    V visitGetSampleSensor(GetSampleSensor sensorGetSample);
 }

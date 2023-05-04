@@ -305,12 +305,11 @@ public class ReuseIntegrationAsUnitTest {
         }
         checkAndShowTestResult();
     }
-
-    @Ignore
+    
     @Test
     public void testOneRobotSpecificProgramAsUnitTests() throws Exception {
-        String robotName = "mbot2";
-        String programName = "sensors";
+        String robotName = "nxt";
+        String programName = "text_colours_messages_functions";
         LOG.info("========= testing program " + programName + " for robot " + robotName);
         final String resourceDirectory = setupRobotFactoryAndGetResourceDirForRobotSpecificTests(robotName);
         runRegenerateAndCodeGenerationForOneRobotSpecificProgram(resourceDirectory, programName + ".xml", robotName, Collections.emptyList());

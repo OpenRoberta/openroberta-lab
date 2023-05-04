@@ -35,7 +35,6 @@ import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.UtilForHtmlXml;
@@ -369,11 +368,6 @@ public class Administration {
         Instance instance = new Instance();
         for ( List<Phrase> tree : astProgram ) {
             for ( Phrase phrase : tree ) {
-                if ( phrase.getKind().hasName("LOCATION") ) {
-                    blockSet.getInstance().add(instance);
-                    instance.setX(((Location) phrase).x);
-                    instance.setY(((Location) phrase).y);
-                }
                 instance.getBlock().add(phrase.ast2xml());
             }
         }

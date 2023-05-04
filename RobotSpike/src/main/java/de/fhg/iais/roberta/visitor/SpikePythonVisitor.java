@@ -30,14 +30,12 @@ import de.fhg.iais.roberta.syntax.action.spike.PlayToneAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
@@ -55,7 +53,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
-public final class SpikePythonVisitor extends AbstractPythonVisitor implements ISpike {
+public final class SpikePythonVisitor extends AbstractPythonVisitor implements ISpikeVisitor<Void> {
 
     private final ConfigurationAst configurationAst;
     private String rightMotorPort;
@@ -69,11 +67,6 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
         List<List<Phrase>> programPhrases, ClassToInstanceMap<IProjectBean> beans, ConfigurationAst configurationAst) {
         super(programPhrases, beans);
         this.configurationAst = configurationAst;
-    }
-
-    @Override
-    public Void visitConnectConst(ConnectConst connectConst) {
-        return null;
     }
 
     @Override
@@ -346,11 +339,6 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
                 throw new DbcException("Invalid key sensor port: " + port);
         }
         return null;
-    }
-
-    @Override
-    public Void visitGetSampleSensor(GetSampleSensor sensorGetSample) {
-        return sensorGetSample.sensor.accept(this);
     }
 
     @Override

@@ -1,15 +1,12 @@
 package de.fhg.iais.roberta.visitor.lang;
 
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.StartActivityTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.EvalExpr;
@@ -25,7 +22,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
@@ -74,11 +70,16 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
 public interface ILanguageVisitor<V> extends IVisitor<V> {
+
+    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
+        return sensorGetSample.sensor.accept(this);
+    }
 
     default V visitActionExpr(ActionExpr actionExpr) {
         actionExpr.action.accept(this);
@@ -90,38 +91,10 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
         return null;
     }
 
-    default V visitActivityTask(ActivityTask activityTask) {
-        return null;
-    }
-
-    V visitAssertStmt(AssertStmt assertStmt);
-
-    V visitAssignStmt(AssignStmt assignStmt);
-
-    V visitBinary(Binary binary);
-
-    V visitBoolConst(BoolConst boolConst);
-
-    V visitColorConst(ColorConst colorConst);
-
-    V visitConnectConst(ConnectConst connectConst);
-
-    V visitDebugAction(DebugAction debugAction);
-
-    V visitEmptyExpr(EmptyExpr emptyExpr);
-
-    V visitEmptyList(EmptyList emptyList);
-
     default V visitEvalExpr(EvalExpr evalExpr) {
-        if ( evalExpr.exprBlock instanceof ListCreate ) {
-            ((ListCreate) evalExpr.exprBlock).accept(this);
-        } else {
-            evalExpr.exprBlock.accept(this);
-        }
+        evalExpr.exprBlock.accept(this);
         return null;
     }
-
-    V visitExprList(ExprList exprList);
 
     default V visitExprStmt(ExprStmt exprStmt) {
         exprStmt.expr.accept(this);
@@ -137,6 +110,48 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
         functionStmt.function.accept(this);
         return null;
     }
+
+    default V visitLocation(Location location) {
+        return null;
+    }
+
+    default V visitMethodExpr(MethodExpr methodExpr) {
+        methodExpr.getMethod().accept(this);
+        return null;
+    }
+
+    default V visitSensorExpr(SensorExpr sensorExpr) {
+        sensorExpr.sensor.accept(this);
+        return null;
+    }
+
+    default V visitSensorStmt(SensorStmt sensorStmt) {
+        sensorStmt.sensor.accept(this);
+        return null;
+    }
+
+    default V visitStmtExpr(StmtExpr stmtExpr) {
+        stmtExpr.stmt.accept(this);
+        return null;
+    }
+
+    V visitAssertStmt(AssertStmt assertStmt);
+
+    V visitAssignStmt(AssignStmt assignStmt);
+
+    V visitBinary(Binary binary);
+
+    V visitBoolConst(BoolConst boolConst);
+
+    V visitColorConst(ColorConst colorConst);
+
+    V visitDebugAction(DebugAction debugAction);
+
+    V visitEmptyExpr(EmptyExpr emptyExpr);
+
+    V visitEmptyList(EmptyList emptyList);
+
+    V visitExprList(ExprList exprList);
 
     V visitGetSubFunct(GetSubFunct getSubFunct);
 
@@ -155,10 +170,6 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitListRepeat(ListRepeat listRepeat);
 
     V visitListSetIndex(ListSetIndex listSetIndex);
-
-    default V visitLocation(Location location) {
-        return null;
-    }
 
     V visitMainTask(MainTask mainTask);
 
@@ -183,11 +194,6 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitMathSingleFunct(MathSingleFunct mathSingleFunct);
 
     V visitMethodCall(MethodCall methodCall);
-
-    default V visitMethodExpr(MethodExpr methodExpr) {
-        methodExpr.getMethod().accept(this);
-        return null;
-    }
 
     V visitMethodIfReturn(MethodIfReturn methodIfReturn);
 
@@ -218,34 +224,6 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitRepeatStmt(RepeatStmt repeatStmt);
 
     V visitRgbColor(RgbColor rgbColor);
-
-    default V visitSensorExpr(SensorExpr sensorExpr) {
-        sensorExpr.sensor.accept(this);
-        return null;
-    }
-
-    default V visitSensorStmt(SensorStmt sensorStmt) {
-        sensorStmt.sensor.accept(this);
-        return null;
-    }
-
-    default V visitShadowExpr(ShadowExpr shadowExpr) {
-        if ( shadowExpr.block != null ) {
-            shadowExpr.block.accept(this);
-        } else {
-            shadowExpr.shadow.accept(this);
-        }
-        return null;
-    }
-
-    default V visitStartActivityTask(StartActivityTask startActivityTask) {
-        return null;
-    }
-
-    default V visitStmtExpr(StmtExpr stmtExpr) {
-        stmtExpr.stmt.accept(this);
-        return null;
-    }
 
     V visitStmtFlowCon(StmtFlowCon stmtFlowCon);
 
@@ -278,5 +256,4 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitWaitTimeStmt(WaitTimeStmt waitTimeStmt);
 
     V visitSerialWriteAction(SerialWriteAction serialWriteAction);
-
 }

@@ -20,7 +20,6 @@ import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
@@ -350,11 +349,6 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     public Void visitBoolConst(BoolConst boolConst) {
         String value = boolConst.value ? "1" : "0";
         this.sb.append("_A = ").append(value);
-        return null;
-    }
-
-    @Override
-    public Void visitConnectConst(ConnectConst connectConst) {
         return null;
     }
 

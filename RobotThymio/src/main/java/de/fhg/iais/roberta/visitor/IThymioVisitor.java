@@ -26,7 +26,6 @@ import de.fhg.iais.roberta.syntax.action.thymio.RecordStartAction;
 import de.fhg.iais.roberta.syntax.action.thymio.RecordStopAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
@@ -36,76 +35,70 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.thymio.TapSensor;
 
 public interface IThymioVisitor<V> extends IVisitor<V> {
+    V visitAccelerometerSensor(AccelerometerSensor accelerometerSensor);
 
-    default Void visitGetSampleSensor(GetSampleSensor sensorGetSample) {
-        sensorGetSample.sensor.accept(this);
-        return null;
-    }
-
-    Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor);
-
-    Void visitColorConst(ColorConst colorConst);
+    V visitColorConst(ColorConst colorConst);
 
 
-    Void visitCurveAction(CurveAction curveAction);
+    V visitCurveAction(CurveAction curveAction);
 
-    Void visitDriveAction(DriveAction driveAction);
+    V visitDriveAction(DriveAction driveAction);
 
-    Void visitInfraredSensor(InfraredSensor infraredSensor);
+    V visitInfraredSensor(InfraredSensor infraredSensor);
 
-    Void visitKeysSensor(KeysSensor keysSensor);
+    V visitKeysSensor(KeysSensor keysSensor);
 
-    Void visitLedButtonOnAction(LedButtonOnAction ledButtonOnAction);
+    V visitLedButtonOnAction(LedButtonOnAction ledButtonOnAction);
 
-    Void visitLedCircleOnAction(LedCircleOnAction ledCircleOnAction);
+    V visitLedCircleOnAction(LedCircleOnAction ledCircleOnAction);
 
-    Void visitLedProxHOnAction(LedProxHOnAction ledProxHOnAction);
+    V visitLedProxHOnAction(LedProxHOnAction ledProxHOnAction);
 
-    Void visitLedProxVOnAction(LedProxVOnAction ledProxVOnAction);
+    V visitLedProxVOnAction(LedProxVOnAction ledProxVOnAction);
 
-    Void visitLedSoundOnAction(LedSoundOnAction ledSoundOnAction);
+    V visitLedSoundOnAction(LedSoundOnAction ledSoundOnAction);
 
-    Void visitLedTemperatureOnAction(LedTemperatureOnAction ledTemperatureOnAction);
+    V visitLedTemperatureOnAction(LedTemperatureOnAction ledTemperatureOnAction);
 
-    Void visitLedsOffAction(LedsOffAction ledsOffAction);
+    V visitLedsOffAction(LedsOffAction ledsOffAction);
 
-    Void visitLightAction(LightAction lightAction);
+    V visitLightAction(LightAction lightAction);
 
-    Void visitMotorDriveStopAction(MotorDriveStopAction stopAction);
+    V visitMotorDriveStopAction(MotorDriveStopAction stopAction);
 
-    Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction);
+    V visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction);
 
-    Void visitMotorOnAction(MotorOnAction motorOnAction);
+    V visitMotorOnAction(MotorOnAction motorOnAction);
 
-    Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction);
+    V visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction);
 
-    Void visitMotorStopAction(MotorStopAction motorStopAction);
+    V visitMotorStopAction(MotorStopAction motorStopAction);
 
-    Void visitPlayFileAction(PlayFileAction playFileAction);
+    V visitPlayFileAction(PlayFileAction playFileAction);
 
-    Void visitPlayNoteAction(PlayNoteAction playNoteAction);
+    V visitPlayNoteAction(PlayNoteAction playNoteAction);
 
-    Void visitPlayRecordingAction(PlayRecordingAction playRecordingAction);
+    V visitPlayRecordingAction(PlayRecordingAction playRecordingAction);
 
-    Void visitRecordStartAction(RecordStartAction recordStartAction);
+    V visitRecordStartAction(RecordStartAction recordStartAction);
 
-    Void visitRecordStopAction(RecordStopAction recordStopAction);
-    
-    Void visitSoundSensor(SoundSensor soundSensor);
+    V visitRecordStopAction(RecordStopAction recordStopAction);
 
-    Void visitTapSensor(TapSensor tapSensor);
+    V visitSoundSensor(SoundSensor soundSensor);
 
-    Void visitTemperatureSensor(TemperatureSensor temperatureSensor);
+    V visitTapSensor(TapSensor tapSensor);
 
-    Void visitTimerSensor(TimerSensor timerSensor);
+    V visitTemperatureSensor(TemperatureSensor temperatureSensor);
 
-    Void visitTimerReset(TimerReset timerReset);
+    V visitTimerSensor(TimerSensor timerSensor);
 
-    Void visitToneAction(ToneAction toneAction);
+    V visitTimerReset(TimerReset timerReset);
 
-    Void visitTurnAction(TurnAction turnAction);
+    V visitToneAction(ToneAction toneAction);
 
-    Void visitGetVolumeAction(GetVolumeAction getVolumeAction);
+    V visitTurnAction(TurnAction turnAction);
 
-    Void visitSetVolumeAction(SetVolumeAction setVolumeAction);
+    V visitGetVolumeAction(GetVolumeAction getVolumeAction);
+
+    V visitSetVolumeAction(SetVolumeAction setVolumeAction);
 }

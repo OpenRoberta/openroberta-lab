@@ -43,7 +43,6 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
@@ -756,11 +755,6 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
         this.sb.append("cyberpi.audio.set_vol(");
         setVolumeAction.volume.accept(this);
         this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitConnectConst(ConnectConst connectConst) {
         return null;
     }
 

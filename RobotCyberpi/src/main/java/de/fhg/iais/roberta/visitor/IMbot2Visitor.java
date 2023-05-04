@@ -28,12 +28,10 @@ import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -50,10 +48,6 @@ import de.fhg.iais.roberta.syntax.sensor.mbot2.SoundRecord;
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
 public interface IMbot2Visitor<V> extends IVisitor<V> {
-    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
-        return sensorGetSample.sensor.accept(this);
-    }
-
     V visitMainTask(MainTask mainTask);
 
     V visitKeysSensor(KeysSensor keysSensor);
@@ -129,8 +123,6 @@ public interface IMbot2Visitor<V> extends IVisitor<V> {
     V visitGetVolumeAction(GetVolumeAction getVolumeAction);
 
     V visitSetVolumeAction(SetVolumeAction setVolumeAction);
-
-    V visitConnectConst(ConnectConst connectConst);
 
     V visitTimerSensor(TimerSensor timerSensor);
 

@@ -36,7 +36,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DetectMarkSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
@@ -147,8 +146,4 @@ public interface INaoVisitor<V> extends IVisitor<V> {
     V visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct);
 
     V visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct);
-
-    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
-        return sensorGetSample.sensor.accept(this);
-    }
 }
