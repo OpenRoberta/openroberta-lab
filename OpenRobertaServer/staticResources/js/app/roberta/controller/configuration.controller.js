@@ -336,14 +336,9 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
     }
     exports.reloadConf = reloadConf;
     function reloadView() {
-        if (isVisible()) {
-            var dom = confVis ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
-            var xml = Blockly.Xml.domToText(dom);
-            configurationToBricklyWorkspace(xml);
-        }
-        else {
-            seen = false;
-        }
+        var dom = confVis ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
+        var xml = Blockly.Xml.domToText(dom);
+        configurationToBricklyWorkspace(xml);
         var toolbox = GUISTATE_C.getConfigurationToolbox();
         bricklyWorkspace.updateToolbox(toolbox);
     }
