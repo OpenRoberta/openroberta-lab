@@ -11,27 +11,27 @@ def run():
     global timer1
     microbit.display.scroll("make gesture upright")
     while True:
-        if "up" == microbit.accelerometer.current_gesture() == True:
+        if ("up" == microbit.accelerometer.current_gesture()) == True:
             break
     microbit.display.scroll("make gesture upside down")
     while True:
-        if "down" == microbit.accelerometer.current_gesture() == True:
+        if ("down" == microbit.accelerometer.current_gesture()) == True:
             break
     microbit.display.scroll("make gesture at the front side")
     while True:
-        if "face down" == microbit.accelerometer.current_gesture() == True:
+        if ("face down" == microbit.accelerometer.current_gesture()) == True:
             break
     microbit.display.scroll("make gesture at the back")
     while True:
-        if "face up" == microbit.accelerometer.current_gesture() == True:
+        if ("face up" == microbit.accelerometer.current_gesture()) == True:
             break
     microbit.display.scroll("make gesture shaking")
     while True:
-        if "shake" == microbit.accelerometer.current_gesture() == True:
+        if ("shake" == microbit.accelerometer.current_gesture()) == True:
             break
     microbit.display.scroll("make gesture freely falling")
     while True:
-        if "freefall" == microbit.accelerometer.current_gesture() == True:
+        if ("freefall" == microbit.accelerometer.current_gesture()) == True:
             break
     microbit.display.scroll("ANGLE OF COMPASS:")
     microbit.display.scroll(str(microbit.compass.heading()))
@@ -44,7 +44,7 @@ def run():
     microbit.display.scroll("ACCELEROMETER STRENGTH:")
     microbit.display.scroll(str(math.sqrt(microbit.accelerometer.get_x()**2 + microbit.accelerometer.get_y()**2 + microbit.accelerometer.get_z()**2)))
     microbit.display.scroll("Gesture Upright?")
-    microbit.display.scroll(str("up" == microbit.accelerometer.current_gesture()))
+    microbit.display.scroll(str(("up" == microbit.accelerometer.current_gesture())))
 
 def main():
     try:

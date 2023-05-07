@@ -141,7 +141,7 @@
                     </value>
                     <value name="BRIGHTNESS">
                         <block type="math_number" id="V[-P46%ig]O:!nb6!a;)" intask="true">
-                            <field name="NUM">50</field>
+                            <field name="NUM">5</field>
                         </block>
                     </value>
                 </block>
@@ -156,7 +156,7 @@
                     <field name="TYPE">TEXT</field>
                     <value name="OUT">
                         <block type="text" id="1:0GqhrWn(rZK209*DYu" intask="true">
-                            <field name="TEXT">LED Brightness expected 50</field>
+                            <field name="TEXT">LED Brightness expected 5</field>
                         </block>
                     </value>
                 </block>

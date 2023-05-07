@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IMicrobitVisitor;
@@ -19,6 +20,11 @@ public class MicrobitStackMachineVisitor extends MbedStackMachineVisitor impleme
 
     @Override
     public Void visitPlayFileAction(PlayFileAction playFileAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction) {
         return null;
     }
 

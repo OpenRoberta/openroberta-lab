@@ -6,16 +6,17 @@
                     <mutation declare="false"></mutation>
                     <field name="DEBUG"></field>
                 </block>
-                <block type="mbedActions_display_text" id="p-`qo0_4OiX3H5C655[:" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="mbedActions_switch_led_matrix" id="J%Hwq[+s`Bh?_5~a|BDd" intask="true">
+                    <field name="STATE">OFF</field>
+                </block>
+                <block type="robActions_serial_print" id="LtyL`eV89{zcO.~z~+lD" intask="true">
                     <value name="OUT">
                         <block type="text" id="rZ{Lv?HIlS{%hrcJ|Kw/" intask="true">
                             <field name="TEXT">Pulse LOW Pin 1</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="wSQkDQo=aq1Uh-*}va;t" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="::.C#~A1CDPhNY~f2D`8" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="Ze5Ln*k*%%C*vwp=mp]P" intask="true">
                             <mutation mode="DIGITAL"></mutation>
@@ -25,16 +26,14 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="29Ris`oM3xEY-`[`})y~" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="lx%LG[~M/2k(tdY|#U4i" intask="true">
                     <value name="OUT">
                         <block type="text" id="Z*qahLU:JXV[-CSjB#~f" intask="true">
                             <field name="TEXT">Pulse High Pin 1</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="it_3(8[7}HF#z6tO;]?]" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="b.1rV[9`;MB%#GHVmL?]" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="b5Ny3b7hC@2CE9!J{^?." intask="true">
                             <mutation mode="DIGITAL"></mutation>
@@ -44,16 +43,14 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="e)A#@=2KbJBT;bD4+J5F" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="W+ls}Dlph5gj.q[mJ{qt" intask="true">
                     <value name="OUT">
                         <block type="text" id="|*06Q][=dHD`M,k^~2B6" intask="true">
                             <field name="TEXT">Sensor Analog 0</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="d[/V7pRh!+JaO0mDXdEI" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="#Q`cw=T)Y/3-wZQm`^;6" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="pg;(#;%9urPDxH2k3KjC" intask="true">
                             <mutation mode="ANALOG"></mutation>
@@ -63,16 +60,14 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="LTtm@!IEA1QgC-o-ZJNX" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="(`l%zha-D`FlSV2yXbbL" intask="true">
                     <value name="OUT">
                         <block type="text" id="bc+sdwJr?6L#N1#/X]MD" intask="true">
                             <field name="TEXT">Sensor Digital 1</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="(/R%1wBP?P,:yRRu)K^P" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="X+UI`Dt2h_ybV9w7]^A:" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="Dn^OLqBMCW[}Y6!EEc^r" intask="true">
                             <mutation mode="DIGITAL"></mutation>
@@ -82,16 +77,14 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="[B46/fI!`0%|MH]|:._S" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="~qyEuqB1sP?H0!2~nK.-" intask="true">
                     <value name="OUT">
                         <block type="text" id="!A94Z};~2~[TZSoZ8DI[" intask="true">
                             <field name="TEXT">Sensor Digital 2</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="-}-gLYbpcCsQ`qFiCXdl" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="`G@,|1zNRmSfWjr6Z;:}" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="JX,4`[8~6lM:RM%i}Zv?" intask="true">
                             <mutation mode="DIGITAL"></mutation>
@@ -101,16 +94,14 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="Duq`L5p;Ht8Nh24`*,KC" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="B)9z(:kx}U,oOak+=K6_" intask="true">
                     <value name="OUT">
                         <block type="text" id="=R_zTqp#yf?Ai:Ltc#EF" intask="true">
                             <field name="TEXT">Sensor Digital 3</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="3I0~@uXi!/i#BEdoJaOs" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="wj7X=^(rd}NZy.+rh|,z" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="DewNwqhBT`|Rfyol%n*{" intask="true">
                             <mutation mode="DIGITAL"></mutation>
@@ -120,16 +111,14 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id=",Y.?jY{|1LX?s,{swGb]" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="bDZ[J.Gy.kc+ywG8Qm|T" intask="true">
                     <value name="OUT">
                         <block type="text" id="/h/AmTK[Y70`~LxYStrs" intask="true">
                             <field name="TEXT">Sensor Digital 4</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="(CD8w/79y(*1Qv.+;p50" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="zO)/y8Y-uKS6)s;0J.rn" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="M~ZV,Zmc#2*,;`sbB,BX" intask="true">
                             <mutation mode="DIGITAL"></mutation>
@@ -139,16 +128,14 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id=":e}fvnP[jV7q4ONPz3VQ" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="t{NaFSGY8`dnT-~a|!h5" intask="true">
                     <value name="OUT">
                         <block type="text" id="v}?jIvu_z2uM]xU3][Oq" intask="true">
                             <field name="TEXT">Sensor Digital 5</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="wTS-]!Z#w#l?K1Uzi6%h" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="l,!FJuRtmmw=36f|O/=Q" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="F*!6y5[h(7po7X6]w|_P" intask="true">
                             <mutation mode="DIGITAL"></mutation>
@@ -158,16 +145,14 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="I(9{_Cs*706W*TQ)}f61" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="{^LB_gwcH,Fm6pS!Gg}[" intask="true">
                     <value name="OUT">
                         <block type="text" id="LjQxEI(xV@5;TV~KuK.s" intask="true">
                             <field name="TEXT">Sensor Digital 6</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="-cfrR6_yKZR(?,RFN}lo" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="={mrJ1uYHe:9ftu8:X%X" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="/{W3o1.0V8B,MoZ(SMR)" intask="true">
                             <mutation mode="DIGITAL"></mutation>
@@ -177,16 +162,14 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id=".3Rd}!aZxPboD`/f}%,." intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="rlW^0.;|xV(EXsARUf}8" intask="true">
                     <value name="OUT">
                         <block type="text" id="6p_[xI)}qfbvE*)_u9C[" intask="true">
                             <field name="TEXT">Sensor Digital 7</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id=";/,:.Q=W!O1cJMTD*QW?" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="en*GqBxz_woYRwXlHFG0" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="p:pg[oM4,CM#6s({9gM-" intask="true">
                             <mutation mode="DIGITAL"></mutation>
@@ -196,16 +179,14 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="[r0i|*:kzVpmxuxSX@IM" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="pXYh3:}fl@]IE.t_8#P@" intask="true">
                     <value name="OUT">
                         <block type="text" id="g-e=FZ1irbY;H+t.Nd.2" intask="true">
                             <field name="TEXT">Sensor Digital 9</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="qiRAHfp*N3.St0c?)/en" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="T(-0hnecW|(sG4vOnPP?" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="JPppO[7S-~%8Z-wJPS|M" intask="true">
                             <mutation mode="DIGITAL"></mutation>
@@ -215,16 +196,14 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="]:9TVuHE8M)X(]jYic=e" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id=".m%XVvcR?Xrj.Jj,Z!f|" intask="true">
                     <value name="OUT">
                         <block type="text" id="A1Ukx@J^#N]}s37?ALdn" intask="true">
                             <field name="TEXT">Sensor Digital 10</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="wFExJaV5PXzM,Q(71SqH" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="i:ZL#l{L~mlieNEguE06" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="Jq|z0;e+~E2iJTPd`lDi" intask="true">
                             <mutation mode="DIGITAL"></mutation>
@@ -234,16 +213,14 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="M,^k%bh2lumV{IKAL3J%" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="~InDeFwP-QR5w#0O3TYk" intask="true">
                     <value name="OUT">
                         <block type="text" id="(TdpWW#4bbJU|?GgGJ}s" intask="true">
                             <field name="TEXT">Sensor Digital 11</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="h%Mcp.A*0G5ZhA7}/7XX" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="cvcBLf/h5CiX8y.f[k]m" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="#W@R`rO*GZnc!Ed%_##q" intask="true">
                             <mutation mode="DIGITAL"></mutation>
@@ -253,16 +230,14 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="Vb_.tve}Uu8g9d=ODu[=" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="ts-8n_u!ce:tz6-lN:#[" intask="true">
                     <value name="OUT">
                         <block type="text" id="*+.cPq)dM2-7)-T_nAuB" intask="true">
                             <field name="TEXT">Sensor Digital 12</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id=")_9T!w,nk=pdHVzu*DH9" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="KwLy5zLNX-SIqK{sw=om" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="N_XP`(S=EN8s|2v:E3sU" intask="true">
                             <mutation mode="DIGITAL"></mutation>
@@ -272,16 +247,14 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="o#1LlI#qp-OSRgK:Wz+y" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="P.EY!n+D@Cbb/Rh7kRUv" intask="true">
                     <value name="OUT">
                         <block type="text" id="c|hmjvWJ:klErnYPTm=K" intask="true">
                             <field name="TEXT">Sensor Digital 13</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="FKS8_/+r_Kw2IgHVl!0-" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="?^!=(}E=TmSdIu)ySuSh" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="8K4l-VPQHnX=wT-PL+c%" intask="true">
                             <mutation mode="DIGITAL"></mutation>
@@ -291,16 +264,14 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="OR,fL[W6|ss+)q?7e:VZ" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id=",;r;Ox~U/GnDF][=U_,I" intask="true">
                     <value name="OUT">
                         <block type="text" id="uEHa_j][UoF1-17Ze^0S" intask="true">
                             <field name="TEXT">Sensor Digital 14</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="::o]l7A3_,}F_gF;IpB1" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="::o]l7A3_,}F_gF;IpB1" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="d@/Sa+1o=dUj~@2Et6i1" intask="true">
                             <mutation mode="DIGITAL"></mutation>
@@ -310,16 +281,14 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="sLQzH~]!7;q:+B_WK;Ze" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="sLQzH~]!7;q:+B_WK;Ze" intask="true">
                     <value name="OUT">
                         <block type="text" id="q:!X:S}nU8?kO^U;U*vQ" intask="true">
                             <field name="TEXT">Sensor Digital 15</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="]/blH51Z(1eE2o7!y!1i" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="]/blH51Z(1eE2o7!y!1i" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id=".1M/,3okp9fXzr1~`.O1" intask="true">
                             <mutation mode="DIGITAL"></mutation>
@@ -329,16 +298,14 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="2AV|ryxzgG4q8u8vP[W." intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="2AV|ryxzgG4q8u8vP[W." intask="true">
                     <value name="OUT">
                         <block type="text" id="Zu4dPgy#e9aVkFY;u(~X" intask="true">
                             <field name="TEXT">Sensor Digital 16</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="epfXk|g^5O7?j;HzfPL." intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="epfXk|g^5O7?j;HzfPL." intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="pVgoHY=NoN{6@]:XF+BE" intask="true">
                             <mutation mode="DIGITAL"></mutation>
@@ -348,59 +315,19 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id=".xCR4Aua{7zPM2nhGv@i" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id=".xCR4Aua{7zPM2nhGv@i" intask="true">
                     <value name="OUT">
                         <block type="text" id="KaONqbQgxY=JIBKiCqq;" intask="true">
                             <field name="TEXT">Sensor Digital 17</field>
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_display_text" id="M186u05HEmc;gNEJ]mWj" intask="true">
-                    <field name="TYPE">TEXT</field>
+                <block type="robActions_serial_print" id="M186u05HEmc;gNEJ]mWj" intask="true">
                     <value name="OUT">
                         <block type="robSensors_pin_getSample" id="u#wcq,/UAkyV,48DaBmM" intask="true">
                             <mutation mode="DIGITAL"></mutation>
                             <field name="MODE">DIGITAL</field>
                             <field name="SENSORPORT">S17</field>
-                            <field name="SLOT"></field>
-                        </block>
-                    </value>
-                </block>
-                <block type="mbedActions_display_text" id="[`pj19Y+ms?C`/sEJEff" intask="true">
-                    <field name="TYPE">TEXT</field>
-                    <value name="OUT">
-                        <block type="text" id="5Lq*pF?ihKs@#eD3~L-|" intask="true">
-                            <field name="TEXT">Sensor Digital 18</field>
-                        </block>
-                    </value>
-                </block>
-                <block type="mbedActions_display_text" id="_7^(vb0%FDW5XG[mYj8+" intask="true">
-                    <field name="TYPE">TEXT</field>
-                    <value name="OUT">
-                        <block type="robSensors_pin_getSample" id="(LC`|K1pJEEJVCWvY,uk" intask="true">
-                            <mutation mode="DIGITAL"></mutation>
-                            <field name="MODE">DIGITAL</field>
-                            <field name="SENSORPORT">S18</field>
-                            <field name="SLOT"></field>
-                        </block>
-                    </value>
-                </block>
-                <block type="mbedActions_display_text" id="E[=HxyViQYmVpnLQEjm{" intask="true">
-                    <field name="TYPE">TEXT</field>
-                    <value name="OUT">
-                        <block type="text" id="`,w}DE/!SrTbJA=0c!Y3" intask="true">
-                            <field name="TEXT">Sensor Digital 19</field>
-                        </block>
-                    </value>
-                </block>
-                <block type="mbedActions_display_text" id="VGN~V).oF=+.Spl|CHrT" intask="true">
-                    <field name="TYPE">TEXT</field>
-                    <value name="OUT">
-                        <block type="robSensors_pin_getSample" id="Hav*v1l4,jE,@o2Ds]3z" intask="true">
-                            <mutation mode="DIGITAL"></mutation>
-                            <field name="MODE">DIGITAL</field>
-                            <field name="SENSORPORT">S19</field>
                             <field name="SLOT"></field>
                         </block>
                     </value>
@@ -547,18 +474,6 @@
                 <block type="robConf_digitalout" id="!Xj.-=,cTVk5;l%IffDe" intask="true">
                     <field name="NAME">S17</field>
                     <field name="PIN1">16</field>
-                </block>
-            </instance>
-            <instance x="324" y="999">
-                <block type="robConf_digitalout" id="e%xWpCX,hkqm+}FL_l|5" intask="true">
-                    <field name="NAME">S18</field>
-                    <field name="PIN1">19</field>
-                </block>
-            </instance>
-            <instance x="337" y="1059">
-                <block type="robConf_digitalout" id="R9*F|C^upD.-;F9ecvLf" intask="true">
-                    <field name="NAME">S19</field>
-                    <field name="PIN1">20</field>
                 </block>
             </instance>
         </block_set>

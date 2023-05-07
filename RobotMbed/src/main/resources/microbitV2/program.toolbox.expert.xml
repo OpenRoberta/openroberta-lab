@@ -89,6 +89,7 @@
                     </block>
                 </value>
             </block>
+            <block type='mbedActions_switch_led_matrix'></block>
         </category>
     </category>
     <category name="TOOLBOX_SENSOR" svg="true">

@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
+import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
@@ -61,6 +62,11 @@ public class MicrobitValidatorAndCollectorVisitor extends MbedValidatorAndCollec
         addToPhraseIfUnsupportedInSim(playFileAction, false, isSim);
         checkActorByTypeExists(playFileAction, "BUZZER");
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.MUSIC));
+        return null;
+    }
+
+    @Override
+    public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction) {
         return null;
     }
 }

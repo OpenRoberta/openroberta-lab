@@ -21,9 +21,9 @@ def run():
     microbit.sleep(500)
     microbit.display.set_pixel(0, 0, 100)
     microbit.sleep(500)
-    microbit.display.set_pixel(0, 0, 50)
+    microbit.display.set_pixel(0, 0, 5)
     print("Serial Monitor")
-    microbit.display.scroll("LED Brightness expected 50")
+    microbit.display.scroll("LED Brightness expected 5")
     microbit.display.scroll(str(microbit.display.get_pixel(0, 0)))
     microbit.display.set_pixel(0, 0, 0)
 

@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
+import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -221,11 +222,23 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
         String valueType = pinValueSensor.getMode().toLowerCase(Locale.ENGLISH);
-        this.sb.append("microbit.pin");
-        this.sb.append(pin1);
-        this.sb.append(".read_");
-        this.sb.append(valueType);
-        this.sb.append("()");
+        if (valueType.equalsIgnoreCase(SC.PULSEHIGH)){
+            this.sb.append("machine.time_pulse_us(microbit.pin");
+            this.sb.append(pin1);
+            this.sb.append(", 1)");
+        } 
+        else if(valueType.equalsIgnoreCase(SC.PULSELOW)){
+            this.sb.append("machine.time_pulse_us(microbit.pin");
+            this.sb.append(pin1);
+            this.sb.append(", 0)");
+        }
+        else {
+            this.sb.append("microbit.pin");
+            this.sb.append(pin1);
+            this.sb.append(".read_");
+            this.sb.append(valueType);
+            this.sb.append("()");
+        }
         return null;
     }
 
@@ -294,7 +307,7 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
 
     @Override
     public Void visitGestureSensor(GestureSensor gestureSensor) {
-        this.sb.append("\"" + gestureSensor.getMode().toString().toLowerCase().replace("_", " ") + "\" == microbit.accelerometer.current_gesture()");
+        this.sb.append("(\"" + gestureSensor.getMode().toString().toLowerCase().replace("_", " ") + "\" == microbit.accelerometer.current_gesture())");
         return null;
     }
 
@@ -409,6 +422,10 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
             this.sb.append("import music");
             nlIndent();
         }
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.PIN_VALUE) ) {
+            this.sb.append("import machine");
+            nlIndent();
+        }
         nlIndent();
         this.sb.append("class BreakOutOfALoop(Exception): pass");
         nlIndent();
@@ -484,6 +501,16 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
             default: {
                 throw new DbcException("Invalid play file name: " + playFileAction.fileName);
             }
+        }
+        return null;
+    }
+    
+    @Override
+    public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction){
+        if ( switchLedMatrixAction.activated.equals("ON") ) {
+            this.sb.append("microbit.display.on()");
+        } else {
+            this.sb.append("microbit.display.off()");
         }
         return null;
     }

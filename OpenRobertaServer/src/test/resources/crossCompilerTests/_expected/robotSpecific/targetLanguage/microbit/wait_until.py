@@ -1,6 +1,7 @@
 import microbit
 import random
 import math
+import machine
 
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
@@ -11,11 +12,11 @@ def run():
     global timer1
     microbit.display.scroll("gesture upright")
     while True:
-        if "up" == microbit.accelerometer.current_gesture() == True:
+        if ("up" == microbit.accelerometer.current_gesture()) == True:
             break
     microbit.display.scroll("freely falling")
     while True:
-        if "freefall" == microbit.accelerometer.current_gesture():
+        if ("freefall" == microbit.accelerometer.current_gesture()):
             break
     microbit.display.scroll("Button A")
     while True:
