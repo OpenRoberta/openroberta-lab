@@ -107,9 +107,9 @@ void ____math() {
 }
 
 void ____lists() {
-    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___numberList));
-    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___stringList));
-    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___booleanList));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___numberList));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___stringList));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___booleanList));
     BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___numberList) == 0);
     BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___stringList) == 0);
     BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___booleanList) == 0);

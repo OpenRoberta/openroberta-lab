@@ -48,7 +48,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
@@ -827,18 +828,18 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
-        if ( lengthOfIsEmptyFunct.functName == FunctionNames.LIST_IS_EMPTY ) {
-            String methodName = "ArrayLen(";
-            this.sb.append(methodName);
-            lengthOfIsEmptyFunct.param.get(0).accept(this);
-            this.sb.append(") == 0");
-        } else {
-            String methodName = "ArrayLen(";
-            this.sb.append(methodName);
-            lengthOfIsEmptyFunct.param.get(0).accept(this);
-            this.sb.append(")");
-        }
+    public Void visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
+        this.sb.append("ArrayLen(");
+        lengthOfListFunct.value.accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
+        this.sb.append("ArrayLen(");
+        isListEmptyFunct.value.accept(this);
+        this.sb.append(") == 0");
         return null;
     }
 

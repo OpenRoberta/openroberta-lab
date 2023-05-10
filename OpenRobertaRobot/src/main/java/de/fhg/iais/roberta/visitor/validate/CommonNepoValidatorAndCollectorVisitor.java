@@ -34,7 +34,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
@@ -187,11 +188,21 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     }
 
     @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
-        requiredComponentVisited(lengthOfIsEmptyFunct, lengthOfIsEmptyFunct.param);
-        if ( lengthOfIsEmptyFunct.param.get(0).toString().contains("ListCreate ") ||
-            lengthOfIsEmptyFunct.param.get(0).toString().contains("ListRepeat ") ) {
-            addErrorToPhrase(lengthOfIsEmptyFunct, "BLOCK_USED_INCORRECTLY");
+    public Void visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
+        requiredComponentVisited(lengthOfListFunct, lengthOfListFunct.value);
+        if ( lengthOfListFunct.value.toString().contains("ListCreate ") ||
+            lengthOfListFunct.value.toString().contains("ListRepeat ") ) {
+            addErrorToPhrase(lengthOfListFunct, "BLOCK_USED_INCORRECTLY");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
+        requiredComponentVisited(isListEmptyFunct, isListEmptyFunct.value);
+        if ( isListEmptyFunct.value.toString().contains("ListCreate ") ||
+            isListEmptyFunct.value.toString().contains("ListRepeat ") ) {
+            addErrorToPhrase(isListEmptyFunct, "BLOCK_USED_INCORRECTLY");
         }
         return null;
     }

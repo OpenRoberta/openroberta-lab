@@ -29,7 +29,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
@@ -164,7 +165,9 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
 
     V visitIndexOfFunct(IndexOfFunct indexOfFunct);
 
-    V visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct);
+    V visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct);
+
+    V visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct);
 
     V visitListCreate(ListCreate listCreate);
 

@@ -32,7 +32,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
@@ -257,7 +258,7 @@ public class ExprlyVisitor extends ExprlyBaseVisitor<Expr> {
             return new FunctionExpr(new MathOnListFunct(BCMAKE, null, FunctionNames.get(f), args.get(0)));
         }
         if ( f.equals("lengthOf") ) {
-            return new FunctionExpr(new LengthOfIsEmptyFunct(FunctionNames.LIST_LENGTH, args, BCMAKE));
+            return new FunctionExpr(new LengthOfListFunct(BCMAKE, args.get(0)));
         }
         if ( f.equals("indexOfFirst") ) {
             return new FunctionExpr(new IndexOfFunct(BCMAKE, IndexLocation.FIRST, args.get(0), args.get(1)));
@@ -385,7 +386,7 @@ public class ExprlyVisitor extends ExprlyBaseVisitor<Expr> {
             return new FunctionExpr(new MathConstrainFunct(BCMAKE, args.get(0), args.get(1), args.get(2)));
         }
         if ( f.equals("isEmpty") ) {
-            return new FunctionExpr(new LengthOfIsEmptyFunct(FunctionNames.LIST_IS_EMPTY, args, BCMAKE));
+            return new FunctionExpr(new IsListEmptyFunct(BCMAKE, args.get(0)));
         }
         if ( f.equals("getRGB") ) {
             if ( args.size() == 3 ) {

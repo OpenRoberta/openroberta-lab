@@ -66,7 +66,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.Function;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
@@ -475,10 +476,12 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
         return new IndexOfFunct(indexOfFunct.getProperty(), indexOfFunct.location, (Expr) indexOfFunct.value.modify(this), (Expr) indexOfFunct.find.modify(this));
     }
 
-    public Phrase visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
-        List<Expr> newParam = new ArrayList();
-        lengthOfIsEmptyFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new LengthOfIsEmptyFunct(lengthOfIsEmptyFunct.functName, newParam, lengthOfIsEmptyFunct.getProperty());
+    public Phrase visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
+        return new LengthOfListFunct(lengthOfListFunct.getProperty(), (Expr) lengthOfListFunct.value.modify(this));
+    }
+
+    public Phrase visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
+        return new IsListEmptyFunct(isListEmptyFunct.getProperty(), (Expr) isListEmptyFunct.value.modify(this));
     }
 
     public Phrase visitListCreate(ListCreate listCreate) {

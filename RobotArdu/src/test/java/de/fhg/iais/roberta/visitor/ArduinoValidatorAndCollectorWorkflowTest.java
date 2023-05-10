@@ -26,7 +26,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
@@ -560,32 +561,53 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     }
 
     @Test
-    public void visitLengthOfIsEmptyFunct() {
-        List<Expr> param = new ArrayList<>();
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
+    public void visitLengthOfListFunct() {
+        // TODO: Use list instantiations (proper lists) for validation instead of NumConst - Test is too weak
+        Expr list = new NumConst(null, "10");
 
-        LengthOfIsEmptyFunct lengthOfIsEmptyFunct = new LengthOfIsEmptyFunct(FunctionNames.LIST_IS_EMPTY, param, bp);
-        phrases.add(lengthOfIsEmptyFunct);
+        LengthOfListFunct lengthOfListFunct = new LengthOfListFunct(bp, list);
+        phrases.add(lengthOfListFunct);
 
         executeWorkflow();
-        assertHasNoNepoInfo(lengthOfIsEmptyFunct);
+        assertHasNoNepoInfo(lengthOfListFunct);
     }
 
     @Test
-    public void visitLengthOfIsEmptyFunct_noFirsstElement() {
-        List<Expr> param = new ArrayList<>();
-        param.add(new NumConst(null, "ListCreate "));
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
+    public void visitLengthOfListFunct_noFirsstElement() {
+        // TODO: Use list instantiations (proper lists) for validation instead of NumConst - Test is too weak
+        Expr list = new NumConst(null, " ");
 
-        LengthOfIsEmptyFunct lengthOfIsEmptyFunct = new LengthOfIsEmptyFunct(FunctionNames.LIST_IS_EMPTY, param, bp);
-        phrases.add(lengthOfIsEmptyFunct);
+        LengthOfListFunct lengthOfListFunct = new LengthOfListFunct(bp, list);
+        phrases.add(lengthOfListFunct);
 
         executeWorkflow();
-        assertEquals((((NumConst) lengthOfIsEmptyFunct.param.get(0)).value), "0");
-        assertHasNoNepoInfo(lengthOfIsEmptyFunct);
+        assertEquals((((NumConst) lengthOfListFunct.value).value), "0");
+        assertHasNoNepoInfo(lengthOfListFunct);
+    }
+
+    @Test
+    public void visitIsListEmptyFunct() {
+        // TODO: Use list instantiations (proper lists) for validation instead of NumConst - Test is too weak
+        Expr list = new NumConst(null, "10");
+
+        IsListEmptyFunct isListEmptyFunct = new IsListEmptyFunct(bp, list);
+        phrases.add(isListEmptyFunct);
+
+        executeWorkflow();
+        assertHasNoNepoInfo(isListEmptyFunct);
+    }
+
+    @Test
+    public void visitIsListEmptyFunct_noFirsstElement() {
+        // TODO: Use list instantiations (proper lists) for validation instead of NumConst - Test is too weak
+        Expr list = new NumConst(null, " ");
+
+        IsListEmptyFunct isListEmptyFunct = new IsListEmptyFunct(bp, list);
+        phrases.add(isListEmptyFunct);
+
+        executeWorkflow();
+        assertEquals((((NumConst) isListEmptyFunct.value).value), "0");
+        assertHasNoNepoInfo(isListEmptyFunct);
     }
 
     @Test

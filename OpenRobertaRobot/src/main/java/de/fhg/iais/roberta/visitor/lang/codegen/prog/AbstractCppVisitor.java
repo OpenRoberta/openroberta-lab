@@ -31,7 +31,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
@@ -410,15 +411,17 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
-        if ( lengthOfIsEmptyFunct.functName == FunctionNames.LIST_IS_EMPTY ) {
-            lengthOfIsEmptyFunct.param.get(0).accept(this);
-            this.sb.append(".empty()");
-        } else {
-            this.sb.append("((int) ");
-            lengthOfIsEmptyFunct.param.get(0).accept(this);
-            this.sb.append(".size())");
-        }
+    public Void visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
+        this.sb.append("((int) ");
+        lengthOfListFunct.value.accept(this);
+        this.sb.append(".size())");
+        return null;
+    }
+
+    @Override
+    public Void visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
+        isListEmptyFunct.value.accept(this);
+        this.sb.append(".empty()");
         return null;
     }
 

@@ -1,11 +1,11 @@
 
-Var [result] := FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [input]]]]
+Var [result] := FunctionExpr [LengthOfListFunct[value: Var [input]]]
 
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [input2]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [LengthOfListFunct[value: Var [input2]]]]
 
 
-if FunctionExpr [LengthOfFunct [LIST_IS_EMPTY, [Var [input]]]]
+if FunctionExpr [IsListEmptyFunct[value: Var [input]]]
 ,then
 Var [result] := Binary [ADD, Var [result], NumConst[value: 1]]
 
@@ -14,7 +14,7 @@ Var [result] := Binary [ADD, Var [result], NumConst[value: 2]]
 
 
 
-if FunctionExpr [LengthOfFunct [LIST_IS_EMPTY, [Var [input2]]]]
+if FunctionExpr [IsListEmptyFunct[value: Var [input2]]]
 ,then
 Var [result] := Binary [ADD, Var [result], NumConst[value: 1]]
 
@@ -56,7 +56,7 @@ Var [result] := Binary [ADD, Var [result], FunctionExpr [ListGetIndex [GET_REMOV
 Var [result] := Binary [ADD, Var [result], FunctionExpr [ListGetIndex [GET_REMOVE, LAST, [Var [input]]]]]
 
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [input]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [LengthOfListFunct[value: Var [input]]]]
 
 StmtTextComment[textComment: 35]
 ListSetIndex [INSERT, FROM_START, [Var [input], NumConst[value: 1], NumConst[value: 0]]]
@@ -64,7 +64,7 @@ ListSetIndex [INSERT, FROM_END, [Var [input], NumConst[value: 2], NumConst[value
 ListSetIndex [INSERT, FIRST, [Var [input], NumConst[value: 0]]]
 ListSetIndex [INSERT, LAST, [Var [input], NumConst[value: 4]]]
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [input]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [LengthOfListFunct[value: Var [input]]]]
 
 StmtTextComment[textComment: 40]
 ListGetIndex [REMOVE, FROM_START, [Var [input], NumConst[value: 1]]]
@@ -72,7 +72,7 @@ ListGetIndex [REMOVE, FROM_END, [Var [input], NumConst[value: 1]]]
 ListGetIndex [REMOVE, FIRST, [Var [input]]]
 ListGetIndex [REMOVE, LAST, [Var [input]]]
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [input]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [LengthOfListFunct[value: Var [input]]]]
 
 
 Var [result] := Binary [ADD, Var [result], FunctionExpr [ListGetIndex [GET, LAST, [Var [input]]]]]

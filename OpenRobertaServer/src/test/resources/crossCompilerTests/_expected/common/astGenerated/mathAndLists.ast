@@ -20,10 +20,10 @@ Var [x] := FunctionExpr [MathOnListFunct[functName: STD_DEV, list: Var [l1]]]
 Var [l2] := Var [l1]
 
 
-Var [b] := FunctionExpr [LengthOfFunct [LIST_IS_EMPTY, [Var [l1]]]]
+Var [b] := FunctionExpr [IsListEmptyFunct[value: Var [l1]]]
 
 
-Var [x] := FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [l1]]]]
+Var [x] := FunctionExpr [LengthOfListFunct[value: Var [l1]]]
 
 
 Var [x] := FunctionExpr [IndexOfFunct[location: FIRST, value: Var [l1], find: NumConst[value: 0]]]

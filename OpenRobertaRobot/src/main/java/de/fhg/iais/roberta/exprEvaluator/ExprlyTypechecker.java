@@ -32,7 +32,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
@@ -875,46 +876,62 @@ public class ExprlyTypechecker {
      * @param Function
      * @return Return Type of function
      */
-    private BlocklyType visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
+    private BlocklyType visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
         if ( this.robotName != null ) {
             if ( okMap.get(this.robotName).contains("noList") ) {
                 addError(TcError.TcErrorMsg.NO_TYPE, "TYPE", "list");
             }
         }
-        BlocklyType t, t0;
-        t0 = BlocklyType.ARRAY;
-        FunctionNames fname = lengthOfIsEmptyFunct.functName;
-        List<Expr> args = lengthOfIsEmptyFunct.param;
-        if ( args.size() != 1 ) {
-            addError(TcError.TcErrorMsg.INVALID_ARGUMENT_NUMBER);
-        }
+        BlocklyType t;
+        Expr value = lengthOfListFunct.value;
 
-        for ( int i = 0; i < args.size(); i++ ) {
-            t = checkAST(args.get(i));
-            if ( i == 0 ) {
-                t0 = t;
-            }
-            if ( t.equals(BlocklyType.NOTHING) ) {
-                addError(TcError.TcErrorMsg.UNEXPECTED_METHOD);
-            } else if ( !t.equals(BlocklyType.VOID) ) {
-                if ( !(t0.equals(BlocklyType.ARRAY)
-                    || t0.equals(BlocklyType.ARRAY_NUMBER)
-                    || t0.equals(BlocklyType.ARRAY_BOOLEAN)
-                    || t0.equals(BlocklyType.ARRAY_STRING)
-                    || t0.equals(BlocklyType.ARRAY_CONNECTION)
-                    || t0.equals(BlocklyType.ARRAY_COLOUR)) ) {
-                    ExprlyUnParser up = new ExprlyUnParser(args.get(i));
-                    addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
-                }
+        t = checkAST(value);
+        if ( t.equals(BlocklyType.NOTHING) ) {
+            addError(TcError.TcErrorMsg.UNEXPECTED_METHOD);
+        } else if ( !t.equals(BlocklyType.VOID) ) {
+            if ( !(t.equals(BlocklyType.ARRAY)
+                || t.equals(BlocklyType.ARRAY_NUMBER)
+                || t.equals(BlocklyType.ARRAY_BOOLEAN)
+                || t.equals(BlocklyType.ARRAY_STRING)
+                || t.equals(BlocklyType.ARRAY_CONNECTION)
+                || t.equals(BlocklyType.ARRAY_COLOUR)) ) {
+                ExprlyUnParser up = new ExprlyUnParser(value);
+                addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
             }
         }
+        return BlocklyType.NUMBER;
+    }
 
-        if ( fname.equals(FunctionNames.LIST_LENGTH) ) {
-            return BlocklyType.NUMBER;
-        } else if ( fname.equals(FunctionNames.LIST_IS_EMPTY) ) {
-            return BlocklyType.BOOLEAN;
+    /**
+     * Method to check IsListEmptyFunct, stores any errors found in the error list.
+     *
+     * @param Function
+     * @return Return Type of function
+     */
+    private BlocklyType visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
+        if ( this.robotName != null ) {
+            if ( okMap.get(this.robotName).contains("noList") ) {
+                addError(TcError.TcErrorMsg.NO_TYPE, "TYPE", "list");
+            }
         }
-        throw new UnsupportedOperationException("Invalid function name in LengthOsIsEmptyExpr");
+        BlocklyType t;
+        Expr value = isListEmptyFunct.value;
+
+        t = checkAST(value);
+        if ( t.equals(BlocklyType.NOTHING) ) {
+            addError(TcError.TcErrorMsg.UNEXPECTED_METHOD);
+        } else if ( !t.equals(BlocklyType.VOID) ) {
+            if ( !(t.equals(BlocklyType.ARRAY)
+                || t.equals(BlocklyType.ARRAY_NUMBER)
+                || t.equals(BlocklyType.ARRAY_BOOLEAN)
+                || t.equals(BlocklyType.ARRAY_STRING)
+                || t.equals(BlocklyType.ARRAY_CONNECTION)
+                || t.equals(BlocklyType.ARRAY_COLOUR)) ) {
+                ExprlyUnParser up = new ExprlyUnParser(value);
+                addError(TcError.TcErrorMsg.INVALID_ARGUMENT_TYPE, "EXPR", up.fullUnParse());
+            }
+        }
+        return BlocklyType.BOOLEAN;
     }
 
     /**
@@ -1065,8 +1082,11 @@ public class ExprlyTypechecker {
         if ( ast instanceof MathSingleFunct ) {
             return visitMathSingleFunct((MathSingleFunct) ast);
         }
-        if ( ast instanceof LengthOfIsEmptyFunct ) {
-            return visitLengthOfIsEmptyFunct((LengthOfIsEmptyFunct) ast);
+        if ( ast instanceof LengthOfListFunct ) {
+            return visitLengthOfListFunct((LengthOfListFunct) ast);
+        }
+        if ( ast instanceof IsListEmptyFunct ) {
+            return visitIsListEmptyFunct((IsListEmptyFunct) ast);
         }
         if ( ast instanceof ListSetIndex ) {
             return visitListSetIndex((ListSetIndex) ast);

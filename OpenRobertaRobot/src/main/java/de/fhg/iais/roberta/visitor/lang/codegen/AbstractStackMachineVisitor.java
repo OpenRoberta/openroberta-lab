@@ -53,7 +53,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
@@ -835,9 +836,16 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     }
 
     @Override
-    public final Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
-        lengthOfIsEmptyFunct.param.get(0).accept(this);
-        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, lengthOfIsEmptyFunct.functName.toString().toLowerCase());
+    public final Void visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
+        lengthOfListFunct.value.accept(this);
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, C.LIST_LENGTH);
+        return add(o);
+    }
+
+    @Override
+    public Void visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
+        isListEmptyFunct.value.accept(this);
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, C.LIST_IS_EMPTY);
         return add(o);
     }
 

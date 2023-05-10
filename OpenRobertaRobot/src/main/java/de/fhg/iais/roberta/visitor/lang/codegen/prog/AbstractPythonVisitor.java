@@ -37,7 +37,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
@@ -675,21 +676,17 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
-        switch ( lengthOfIsEmptyFunct.functName ) {
-            case LIST_LENGTH:
-                this.sb.append("len( ");
-                lengthOfIsEmptyFunct.param.get(0).accept(this);
-                this.sb.append(")");
-                break;
+    public Void visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
+        this.sb.append("len( ");
+        lengthOfListFunct.value.accept(this);
+        this.sb.append(")");
+        return null;
+    }
 
-            case LIST_IS_EMPTY:
-                this.sb.append("not ");
-                lengthOfIsEmptyFunct.param.get(0).accept(this);
-                break;
-            default:
-                break;
-        }
+    @Override
+    public Void visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
+        this.sb.append("not ");
+        isListEmptyFunct.value.accept(this);
         return null;
     }
 

@@ -60,7 +60,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
@@ -789,18 +790,16 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     }
 
     @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
-        lengthOfIsEmptyFunct.param.get(0).accept(this);
-        switch ( lengthOfIsEmptyFunct.functName ) {
-            case LIST_IS_EMPTY:
-                this.sb.append(".isEmpty()");
-                break;
-            case LIST_LENGTH:
-                this.sb.append(".size()");
-                break;
-            default:
-                LOG.error("this should NOT be executed (" + lengthOfIsEmptyFunct.functName + ")");
-        }
+    public Void visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
+        lengthOfListFunct.value.accept(this);
+        this.sb.append(".size()");
+        return null;
+    }
+
+    @Override
+    public Void visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
+        isListEmptyFunct.value.accept(this);
+        this.sb.append(".isEmpty()");
         return null;
     }
 
