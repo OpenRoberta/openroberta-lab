@@ -491,7 +491,8 @@ public class ExprlyTypechecker {
                 addError(TcError.TcErrorMsg.NO_TYPE, "TYPE", "list");
             }
         }
-        List<Expr> args = mathOnListFunct.param;
+        List<Expr> args = new ArrayList<>(1);
+        args.add(mathOnListFunct.list);
         // All the list functions take only one list
         // Check that is only one
         BlocklyType t = BlocklyType.VOID;
@@ -546,7 +547,10 @@ public class ExprlyTypechecker {
      * @return Return Type of function
      */
     private BlocklyType visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        return functionHelper(mathRandomIntFunct.param, 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
+        List<Expr> param = new ArrayList<>(2);
+        param.add(mathRandomIntFunct.from);
+        param.add(mathRandomIntFunct.to);
+        return functionHelper(param, 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
     }
 
     /**
@@ -582,7 +586,11 @@ public class ExprlyTypechecker {
      * @return Return Type of function
      */
     private BlocklyType visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
-        return functionHelper(mathConstrainFunct.param, 3, BlocklyType.NUMBER, BlocklyType.NUMBER);
+        List<Expr> param = new ArrayList(3);
+        param.add(mathConstrainFunct.value);
+        param.add(mathConstrainFunct.lowerBound);
+        param.add(mathConstrainFunct.upperBound);
+        return functionHelper(param, 3, BlocklyType.NUMBER, BlocklyType.NUMBER);
     }
 
     /**
@@ -922,7 +930,9 @@ public class ExprlyTypechecker {
             }
         }
         BlocklyType t, t1;
-        List<Expr> args = indexOfFunct.param;
+        List<Expr> args = new ArrayList<>(2);
+        args.add(indexOfFunct.value);
+        args.add(indexOfFunct.find);
         if ( args.size() != 2 ) {
             addError(TcError.TcErrorMsg.INVALID_ARGUMENT_NUMBER);
             return BlocklyType.NUMBER;

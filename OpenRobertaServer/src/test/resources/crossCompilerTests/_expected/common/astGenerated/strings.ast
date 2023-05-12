@@ -16,15 +16,15 @@ Var [text] := FunctionExpr [TextJoinFunct [FunctionExpr [TextJoinFunct [Var [tex
 
 DebugAction[value: TernaryExpr[condition: Binary [EQ, StringConst[value: start: one two three456 seven eight nine ten eleven twelve], Var [text]], thenPart: StringConst[value: String Concat SUCCESS], elsePart: StringConst[value: String Concat FAIL]]]
 
-Var [number] := FunctionExpr [TextStringCastNumberFunct [[Var [text]]]]
+Var [number] := FunctionExpr [TextStringCastNumberFunct[value: Var [text]]]
 
 
-Var [number] := FunctionExpr [TextCharCastNumberFunct [[Var [text], NumConst[value: 0]]]]
+Var [number] := FunctionExpr [TextCharCastNumberFunct[value: Var [text], atIndex: NumConst[value: 0]]]
 
 
-Var [text] := FunctionExpr [MathCastStringFunct [[NumConst[value: 10]]]]
+Var [text] := FunctionExpr [MathCastStringFunct[value: NumConst[value: 10]]]
 
 
-Var [text] := FunctionExpr [MathCastCharFunct [[NumConst[value: 30]]]]
+Var [text] := FunctionExpr [MathCastCharFunct[value: NumConst[value: 30]]]
 
 StmtTextComment[textComment: String Concat -- End --]

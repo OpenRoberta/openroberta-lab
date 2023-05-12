@@ -334,11 +334,11 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
         this.sb.append("Math.min(Math.max(");
-        mathConstrainFunct.param.get(0).accept(this);
+        mathConstrainFunct.value.accept(this);
         this.sb.append(", ");
-        mathConstrainFunct.param.get(1).accept(this);
+        mathConstrainFunct.lowerBound.accept(this);
         this.sb.append("), ");
-        mathConstrainFunct.param.get(2).accept(this);
+        mathConstrainFunct.upperBound.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -395,21 +395,21 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         switch ( mathOnListFunct.functName ) {
             case MIN:
                 this.sb.append("Collections.min(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 break;
             case MAX:
                 this.sb.append("Collections.max(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 break;
             case RANDOM:
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append(".get(0"); // TODO remove? implement?
                 break;
             default:
                 this.sb
                     .append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(mathOnListFunct.functName))
                     .append("(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 break;
         }
         this.sb.append(")");
@@ -425,11 +425,11 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.sb.append("( Math.round(Math.random() * (");
-        mathRandomIntFunct.param.get(1).accept(this);
+        mathRandomIntFunct.to.accept(this);
         this.sb.append(" - ");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         this.sb.append(")) + ");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         this.sb.append(" )");
         return null;
     }
@@ -444,7 +444,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         this.sb.append("(String.valueOf(");
-        mathCastStringFunct.param.get(0).accept(this);
+        mathCastStringFunct.value.accept(this);
         this.sb.append("))");
         return null;
     }
@@ -452,7 +452,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         this.sb.append("String.valueOf((char)(int)(");
-        mathCastCharFunct.param.get(0).accept(this);
+        mathCastCharFunct.value.accept(this);
         this.sb.append("))");
         return null;
     }
@@ -476,7 +476,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         this.sb.append("Float.parseFloat(");
-        textStringCastNumberFunct.param.get(0).accept(this);
+        textStringCastNumberFunct.value.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -484,9 +484,9 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         this.sb.append("(int)(");
-        textCharCastNumberFunct.param.get(0).accept(this);
+        textCharCastNumberFunct.value.accept(this);
         this.sb.append(".charAt(");
-        textCharCastNumberFunct.param.get(1).accept(this);
+        textCharCastNumberFunct.atIndex.accept(this);
         this.sb.append("))");
         return null;
     }

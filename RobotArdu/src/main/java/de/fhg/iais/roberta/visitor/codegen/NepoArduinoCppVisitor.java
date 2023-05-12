@@ -184,14 +184,14 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
     public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
         String methodName = indexOfFunct.location == IndexLocation.LAST ? "_getLastOccuranceOfElement(" : "_getFirstOccuranceOfElement(";
         this.sb.append(methodName);
-        indexOfFunct.param.get(0).accept(this);
+        indexOfFunct.value.accept(this);
         this.sb.append(", ");
-        if ( indexOfFunct.param.get(1).getClass().equals(StringConst.class) ) {
+        if ( indexOfFunct.find.getClass().equals(StringConst.class) ) {
             this.sb.append("String(");
-            indexOfFunct.param.get(1).accept(this);
+            indexOfFunct.find.accept(this);
             this.sb.append(")");
         } else {
-            indexOfFunct.param.get(1).accept(this);
+            indexOfFunct.find.accept(this);
         }
         this.sb.append(")");
         return null;
@@ -236,9 +236,9 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.sb.append("_randomIntegerInRange(");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         this.sb.append(", ");
-        mathRandomIntFunct.param.get(1).accept(this);
+        mathRandomIntFunct.to.accept(this);
         this.sb.append(")");
         return null;
     }

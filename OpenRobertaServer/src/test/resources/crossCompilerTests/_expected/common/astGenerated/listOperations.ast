@@ -24,10 +24,10 @@ Var [result] := Binary [ADD, Var [result], NumConst[value: 2]]
 
 StmtTextComment[textComment: 8]
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [IndexOfFunct [FIRST, [Var [input], NumConst[value: 3]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [IndexOfFunct[location: FIRST, value: Var [input], find: NumConst[value: 3]]]]
 
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [IndexOfFunct [LAST, [Var [input], NumConst[value: 3]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [IndexOfFunct[location: LAST, value: Var [input], find: NumConst[value: 3]]]]
 
 StmtTextComment[textComment: 14]
 
@@ -88,54 +88,54 @@ ListSetIndex [SET, FROM_END, [Var [input], NumConst[value: 4], NumConst[value: 1
 ListSetIndex [SET, FIRST, [Var [input], NumConst[value: 1]]]
 ListSetIndex [SET, LAST, [Var [input], NumConst[value: 5]]]
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [Var [input]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct[functName: SUM, list: Var [input]]]]
 
 StmtTextComment[textComment: 57]
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_START, FROM_START], [Var [input], NumConst[value: 1], NumConst[value: 3]]]]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct[functName: SUM, list: FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_START, FROM_START], [Var [input], NumConst[value: 1], NumConst[value: 3]]]]]]]
 
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_START, FROM_END], [Var [input], NumConst[value: 1], NumConst[value: 1]]]]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct[functName: SUM, list: FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_START, FROM_END], [Var [input], NumConst[value: 1], NumConst[value: 1]]]]]]]
 
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_START, LAST], [Var [input], NumConst[value: 1]]]]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct[functName: SUM, list: FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_START, LAST], [Var [input], NumConst[value: 1]]]]]]]
 
 StmtTextComment[textComment: 89]
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_END, FROM_START], [Var [input], NumConst[value: 3], NumConst[value: 4]]]]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct[functName: SUM, list: FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_END, FROM_START], [Var [input], NumConst[value: 3], NumConst[value: 4]]]]]]]
 
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_END, FROM_END], [Var [input], NumConst[value: 4], NumConst[value: 3]]]]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct[functName: SUM, list: FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_END, FROM_END], [Var [input], NumConst[value: 4], NumConst[value: 3]]]]]]]
 
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_END, LAST], [Var [input], NumConst[value: 3]]]]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct[functName: SUM, list: FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_END, LAST], [Var [input], NumConst[value: 3]]]]]]]
 
 StmtTextComment[textComment: 120]
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FIRST, FROM_START], [Var [input], NumConst[value: 3]]]]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct[functName: SUM, list: FunctionExpr [GetSubFunct [GET_SUBLIST, [FIRST, FROM_START], [Var [input], NumConst[value: 3]]]]]]]
 
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FIRST, FROM_END], [Var [input], NumConst[value: 3]]]]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct[functName: SUM, list: FunctionExpr [GetSubFunct [GET_SUBLIST, [FIRST, FROM_END], [Var [input], NumConst[value: 3]]]]]]]
 
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FIRST, LAST], [Var [input]]]]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct[functName: SUM, list: FunctionExpr [GetSubFunct [GET_SUBLIST, [FIRST, LAST], [Var [input]]]]]]]
 
 StmtTextComment[textComment: 148]
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [MIN, [Var [input]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct[functName: MIN, list: Var [input]]]]
 
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [MAX, [Var [input]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct[functName: MAX, list: Var [input]]]]
 
 StmtTextComment[textComment: 154]
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [AVERAGE, [Var [input]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct[functName: AVERAGE, list: Var [input]]]]
 
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [MEDIAN, [Var [input]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct[functName: MEDIAN, list: Var [input]]]]
 
 
-Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [STD_DEV, [Var [input]]]]]
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct[functName: STD_DEV, list: Var [input]]]]
 
 StmtTextComment[textComment: 161.414... ]
 StmtTextComment[textComment: 161.414 - sim, 161.5 - board, OK]

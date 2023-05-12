@@ -175,11 +175,11 @@ public abstract class NIBOCommonCppVisitor extends NepoArduinoCppVisitor impleme
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
         this.sb.append("_CLAMP(");
-        mathConstrainFunct.param.get(0).accept(this);
+        mathConstrainFunct.value.accept(this);
         this.sb.append(", ");
-        mathConstrainFunct.param.get(1).accept(this);
+        mathConstrainFunct.lowerBound.accept(this);
         this.sb.append(", ");
-        mathConstrainFunct.param.get(2).accept(this);
+        mathConstrainFunct.upperBound.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -187,9 +187,9 @@ public abstract class NIBOCommonCppVisitor extends NepoArduinoCppVisitor impleme
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.sb.append("randomNumber(");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         this.sb.append(", ");
-        mathRandomIntFunct.param.get(1).accept(this);
+        mathRandomIntFunct.to.accept(this);
         this.sb.append(")");
         return null;
     }

@@ -286,9 +286,9 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         if ( mathOnListFunct.functName == FunctionNames.AVERAGE ) {
             this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(SUM));
             this.sb.append("(");
-            mathOnListFunct.param.get(0).accept(this);
+            mathOnListFunct.list.accept(this);
             this.sb.append(") / len(");
-            mathOnListFunct.param.get(0).accept(this);
+            mathOnListFunct.list.accept(this);
             this.sb.append(")");
         } else {
             super.visitMathOnListFunct(mathOnListFunct);

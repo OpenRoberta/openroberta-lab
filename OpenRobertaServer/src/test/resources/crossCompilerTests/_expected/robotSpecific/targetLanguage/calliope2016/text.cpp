@@ -23,7 +23,7 @@ int main()
     _uBit.display.scroll(ManagedString(ManagedString("test")) + ManagedString(ManagedString("test")));
     _uBit.display.scroll(ManagedString("Hallo"));
     ___Element2 = ___Element2 + ManagedString(ManagedString("test"));
-    _uBit.display.scroll((int)(ManagedString("test").charAt(0)));
+    _uBit.display.scroll(ManagedString((int)(ManagedString("test").charAt(0))));
     release_fiber();
 }
 

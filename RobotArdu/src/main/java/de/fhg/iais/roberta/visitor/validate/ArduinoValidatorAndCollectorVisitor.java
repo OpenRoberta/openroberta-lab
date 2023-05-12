@@ -180,7 +180,7 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoAndMotorValid
 
     @Override
     public Void visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
-        if ( mathOnListFunct.param.get(0).toString().contains("ListCreate ") ) {
+        if ( mathOnListFunct.list.toString().contains("ListCreate ") ) {
             addErrorToPhrase(mathOnListFunct, "BLOCK_USED_INCORRECTLY");
         }
         return super.visitMathOnListFunct(mathOnListFunct);

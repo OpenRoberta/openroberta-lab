@@ -178,9 +178,9 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
-        requiredComponentVisited(indexOfFunct, indexOfFunct.param);
-        if ( indexOfFunct.param.get(0).toString().contains("ListCreate ") ||
-            indexOfFunct.param.get(0).toString().contains("ListRepeat ") ) {
+        requiredComponentVisited(indexOfFunct, indexOfFunct.value, indexOfFunct.find);
+        if ( indexOfFunct.value.toString().contains("ListCreate ") ||
+            indexOfFunct.value.toString().contains("ListRepeat ") ) {
             addErrorToPhrase(indexOfFunct, "BLOCK_USED_INCORRECTLY");
         }
         return null;
@@ -253,14 +253,14 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.CAST);
-        requiredComponentVisited(mathCastCharFunct, mathCastCharFunct.param);
+        requiredComponentVisited(mathCastCharFunct, mathCastCharFunct.value);
         return null;
     }
 
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.CAST);
-        requiredComponentVisited(mathCastStringFunct, mathCastStringFunct.param);
+        requiredComponentVisited(mathCastStringFunct, mathCastStringFunct.value);
         return null;
     }
 
@@ -271,7 +271,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
-        requiredComponentVisited(mathConstrainFunct, mathConstrainFunct.param);
+        requiredComponentVisited(mathConstrainFunct, mathConstrainFunct.value, mathConstrainFunct.lowerBound, mathConstrainFunct.upperBound);
         return null;
     }
 
@@ -285,9 +285,9 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
         usedMethodBuilder.addUsedMethod(mathOnListFunct.functName);
-        requiredComponentVisited(mathOnListFunct, mathOnListFunct.param);
-        if ( mathOnListFunct.param.get(0).toString().contains("ListCreate ") ||
-            mathOnListFunct.param.get(0).toString().contains("ListRepeat ") ) {
+        requiredComponentVisited(mathOnListFunct, mathOnListFunct.list);
+        if ( mathOnListFunct.list.toString().contains("ListCreate ") ||
+            mathOnListFunct.list.toString().contains("ListRepeat ") ) {
             addErrorToPhrase(mathOnListFunct, "BLOCK_USED_INCORRECTLY");
         }
         return null;
@@ -309,7 +309,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.RANDOM);
-        requiredComponentVisited(mathRandomIntFunct, mathRandomIntFunct.param);
+        requiredComponentVisited(mathRandomIntFunct, mathRandomIntFunct.from, mathRandomIntFunct.to);
         return null;
     }
 
@@ -535,7 +535,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.CAST);
-        requiredComponentVisited(textCharCastNumberFunct, textCharCastNumberFunct.param);
+        requiredComponentVisited(textCharCastNumberFunct, textCharCastNumberFunct.value, textCharCastNumberFunct.atIndex);
         return null;
     }
 
@@ -554,7 +554,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.CAST);
-        requiredComponentVisited(textStringCastNumberFunct, textStringCastNumberFunct.param);
+        requiredComponentVisited(textStringCastNumberFunct, textStringCastNumberFunct.value);
         return null;
     }
 

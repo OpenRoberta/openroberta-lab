@@ -336,11 +336,11 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
         this.sb.append("min(max(");
-        mathConstrainFunct.param.get(0).accept(this);
+        mathConstrainFunct.value.accept(this);
         this.sb.append(", ");
-        mathConstrainFunct.param.get(1).accept(this);
+        mathConstrainFunct.lowerBound.accept(this);
         this.sb.append("), ");
-        mathConstrainFunct.param.get(2).accept(this);
+        mathConstrainFunct.upperBound.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -399,9 +399,9 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.sb.append("random.randint(");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         this.sb.append(", ");
-        mathRandomIntFunct.param.get(1).accept(this);
+        mathRandomIntFunct.to.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -411,38 +411,38 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         switch ( mathOnListFunct.functName ) {
             case SUM:
                 this.sb.append("sum(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append(")");
                 break;
             case MIN:
                 this.sb.append("min(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append(")");
                 break;
             case MAX:
                 this.sb.append("max(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append(")");
                 break;
             case AVERAGE:
                 this.sb.append("float(sum(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append("))/len(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append(")");
                 break;
             case MEDIAN:
                 this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.MEDIAN)).append("(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append(")");
                 break;
             case STD_DEV:
                 this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.STD_DEV)).append("(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append(")");
                 break;
             case RANDOM:
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append("[0]");
                 break;
             default:
@@ -454,7 +454,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         this.sb.append("str(");
-        mathCastStringFunct.param.get(0).accept(this);
+        mathCastStringFunct.value.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -462,7 +462,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         this.sb.append("chr((int)(");
-        mathCastCharFunct.param.get(0).accept(this);
+        mathCastCharFunct.value.accept(this);
         this.sb.append("))");
         return null;
     }
@@ -479,7 +479,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         this.sb.append("float(");
-        textStringCastNumberFunct.param.get(0).accept(this);
+        textStringCastNumberFunct.value.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -487,9 +487,9 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         this.sb.append("ord(");
-        textCharCastNumberFunct.param.get(0).accept(this);
+        textCharCastNumberFunct.value.accept(this);
         this.sb.append("[");
-        textCharCastNumberFunct.param.get(1).accept(this);
+        textCharCastNumberFunct.atIndex.accept(this);
         this.sb.append("])");
         return null;
     }
@@ -598,18 +598,18 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
         switch ( (IndexLocation) indexOfFunct.location ) {
             case FIRST:
-                indexOfFunct.param.get(0).accept(this);
+                indexOfFunct.value.accept(this);
                 this.sb.append(".index(");
-                indexOfFunct.param.get(1).accept(this);
+                indexOfFunct.find.accept(this);
                 this.sb.append(")");
                 break;
             case LAST:
                 this.sb.append("(len(");
-                indexOfFunct.param.get(0).accept(this);
+                indexOfFunct.value.accept(this);
                 this.sb.append(") - 1) - ");
-                indexOfFunct.param.get(0).accept(this);
+                indexOfFunct.value.accept(this);
                 this.sb.append("[::-1].index(");
-                indexOfFunct.param.get(1).accept(this);
+                indexOfFunct.find.accept(this);
                 this.sb.append(")");
                 break;
             default:

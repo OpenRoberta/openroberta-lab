@@ -824,7 +824,8 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     public final Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
-        indexOfFunct.param.forEach(x -> x.accept(this));
+        indexOfFunct.value.accept(this);
+        indexOfFunct.find.accept(this);
         JSONObject o =
             makeNode(C.EXPR)
                 .put(C.EXPR, C.LIST_OPERATION)
@@ -879,9 +880,9 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     public final Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
-        mathConstrainFunct.param.get(0).accept(this);
-        mathConstrainFunct.param.get(1).accept(this);
-        mathConstrainFunct.param.get(2).accept(this);
+        mathConstrainFunct.value.accept(this);
+        mathConstrainFunct.lowerBound.accept(this);
+        mathConstrainFunct.upperBound.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.MATH_CONSTRAIN_FUNCTION);
         return add(o);
     }
@@ -898,7 +899,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     public final Void visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
-        mathOnListFunct.param.forEach(x -> x.accept(this));
+        mathOnListFunct.list.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.MATH_ON_LIST).put(C.OP, mathOnListFunct.functName.toString().toLowerCase());
         return add(o);
     }
@@ -911,8 +912,8 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     public final Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        mathRandomIntFunct.param.get(0).accept(this);
-        mathRandomIntFunct.param.get(1).accept(this);
+        mathRandomIntFunct.from.accept(this);
+        mathRandomIntFunct.to.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.RANDOM_INT);
         return add(o);
     }
@@ -926,29 +927,29 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
-        mathCastStringFunct.param.get(0).accept(this);
+        mathCastStringFunct.value.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CAST_STRING);
         return add(o);
     }
 
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
-        mathCastCharFunct.param.get(0).accept(this);
+        mathCastCharFunct.value.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CAST_CHAR);
         return add(o);
     }
 
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
-        textStringCastNumberFunct.param.get(0).accept(this);
+        textStringCastNumberFunct.value.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CAST_STRING_NUMBER);
         return add(o);
     }
 
     @Override
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
-        textCharCastNumberFunct.param.get(0).accept(this);
-        textCharCastNumberFunct.param.get(1).accept(this);
+        textCharCastNumberFunct.value.accept(this);
+        textCharCastNumberFunct.atIndex.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CAST_CHAR_NUMBER);
         return add(o);
     }

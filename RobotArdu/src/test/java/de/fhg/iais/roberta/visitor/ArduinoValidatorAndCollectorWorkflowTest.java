@@ -509,12 +509,9 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitIndexOfFunct() {
-        List<Expr> param = new ArrayList<>();
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
+        Expr list = new NumConst(null, "10");
 
-        IndexOfFunct listSetIndex = new IndexOfFunct(IndexLocation.FIRST, param, bp);
+        IndexOfFunct listSetIndex = new IndexOfFunct(bp, IndexLocation.FIRST, list, new NumConst(null, "10"));
         phrases.add(listSetIndex);
 
         executeWorkflow();
@@ -523,16 +520,13 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitIndexOfFunct_noFirsstElement() {
-        List<Expr> param = new ArrayList<>();
-        param.add(new NumConst(null, "ListCreate "));
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
+        Expr list = new NumConst(null, "ListCreate ");
 
-        IndexOfFunct listSetIndex = new IndexOfFunct(IndexLocation.FIRST, param, bp);
+        IndexOfFunct listSetIndex = new IndexOfFunct(bp, IndexLocation.FIRST, list, new NumConst(null, "1"));
         phrases.add(listSetIndex);
 
         executeWorkflow();
-        assertEquals((((NumConst) listSetIndex.param.get(0)).value), "0");
+        assertEquals((((NumConst) listSetIndex.value).value), "0");
         assertHasNoNepoInfo(listSetIndex);
     }
 
@@ -596,12 +590,10 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitMathOnListFunct() {
-        List<Expr> param = new ArrayList<>();
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
+        // TODO: Use list instantiations (proper lists) for validation instead of NumConst - Test is too weak
+        Expr list = new NumConst(null, " ");
 
-        MathOnListFunct mathOnListFunct = new MathOnListFunct(FunctionNames.LIST_IS_EMPTY, param, bp);
+        MathOnListFunct mathOnListFunct = new MathOnListFunct(bp, null, FunctionNames.LIST_IS_EMPTY, list);
         phrases.add(mathOnListFunct);
 
         executeWorkflow();
@@ -610,16 +602,14 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitMathOnListFunct_noFirstElement() {
-        List<Expr> param = new ArrayList<>();
-        param.add(new NumConst(null, "ListCreate "));
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
+        // TODO: Use list instantiations (proper lists) for validation instead of NumConst - Test is too weak
+        Expr list = new NumConst(null, " ");
 
-        MathOnListFunct mathOnListFunct = new MathOnListFunct(FunctionNames.LIST_IS_EMPTY, param, bp);
+        MathOnListFunct mathOnListFunct = new MathOnListFunct(bp, null, FunctionNames.LIST_IS_EMPTY, list);
         phrases.add(mathOnListFunct);
 
         executeWorkflow();
-        assertEquals((((NumConst) mathOnListFunct.param.get(0)).value), "0");
+        assertEquals((((NumConst) mathOnListFunct.list).value), "0");
         assertHasNoNepoInfo(mathOnListFunct);
     }
 

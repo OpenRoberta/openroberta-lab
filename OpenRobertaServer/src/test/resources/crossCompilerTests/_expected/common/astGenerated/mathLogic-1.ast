@@ -60,9 +60,9 @@ Var [b1] := Binary [AND, Binary [AND, Var [b1], Binary [LT, Var [r2], Var [r1]]]
 Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathModuloFunct[dividend: Var [r1], divisor: NumConst[value: 4]]], NumConst[value: 2]]]
 
 
-Var [b1] := Binary [AND, Var [b1], Binary [EQ, NumConst[value: 29], Binary [ADD, FunctionExpr [MathConstrainFunct [[MathPowerFunct [POWER, [NumConst[value: 3], NumConst[value: 2]]], NumConst[value: 1], NumConst[value: 20]]]], Binary [ADD, FunctionExpr [MathConstrainFunct [[NumConst[value: 9], Binary [MULTIPLY, NumConst[value: 3], NumConst[value: 4]], NumConst[value: 18]]]], FunctionExpr [MathConstrainFunct [[Binary [MULTIPLY, NumConst[value: 3], NumConst[value: 3]], NumConst[value: 5], NumConst[value: 8]]]]]]]]
+Var [b1] := Binary [AND, Var [b1], Binary [EQ, NumConst[value: 29], Binary [ADD, FunctionExpr [MathConstrainFunct[value: MathPowerFunct [POWER, [NumConst[value: 3], NumConst[value: 2]]], lowerBound: NumConst[value: 1], upperBound: NumConst[value: 20]]], Binary [ADD, FunctionExpr [MathConstrainFunct[value: NumConst[value: 9], lowerBound: Binary [MULTIPLY, NumConst[value: 3], NumConst[value: 4]], upperBound: NumConst[value: 18]]], FunctionExpr [MathConstrainFunct[value: Binary [MULTIPLY, NumConst[value: 3], NumConst[value: 3]], lowerBound: NumConst[value: 5], upperBound: NumConst[value: 8]]]]]]]
 
 
-Var [b1] := Binary [AND, Var [b1], Binary [GT, NumConst[value: 11], Binary [MULTIPLY, FunctionExpr [MathRandomFloatFunct[]], FunctionExpr [MathRandomIntFunct [[NumConst[value: 1], NumConst[value: 10]]]]]]]
+Var [b1] := Binary [AND, Var [b1], Binary [GT, NumConst[value: 11], Binary [MULTIPLY, FunctionExpr [MathRandomFloatFunct[]], FunctionExpr [MathRandomIntFunct[from: NumConst[value: 1], to: NumConst[value: 10]]]]]]
 
 StmtTextComment[textComment: if b1 is true, the test succeeded, otherwise it failed :-)]

@@ -769,7 +769,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
-        indexOfFunct.param.get(0).accept(this);
+        indexOfFunct.value.accept(this);
         switch ( (IndexLocation) indexOfFunct.location ) {
             case FIRST:
                 this.sb.append(".indexOf(");
@@ -780,10 +780,10 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
             default:
                 // nothing to do
         }
-        if ( indexOfFunct.param.get(1).getVarType() == BlocklyType.NUMBER ) {
+        if ( indexOfFunct.find.getVarType() == BlocklyType.NUMBER ) {
             this.sb.append(" (float) ");
         }
-        indexOfFunct.param.get(1).accept(this);
+        indexOfFunct.find.accept(this);
         this.sb.append(")");
         return null;
     }

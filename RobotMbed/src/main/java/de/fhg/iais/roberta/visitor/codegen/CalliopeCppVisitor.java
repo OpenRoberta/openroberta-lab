@@ -710,11 +710,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
         this.sb.append("min(max(");
-        mathConstrainFunct.param.get(0).accept(this);
+        mathConstrainFunct.value.accept(this);
         this.sb.append(", ");
-        mathConstrainFunct.param.get(1).accept(this);
+        mathConstrainFunct.lowerBound.accept(this);
         this.sb.append("), ");
-        mathConstrainFunct.param.get(2).accept(this);
+        mathConstrainFunct.upperBound.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -722,12 +722,12 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.sb.append("(_uBit.random(");
-        mathRandomIntFunct.param.get(1).accept(this);
+        mathRandomIntFunct.to.accept(this);
         this.sb.append(" - ");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         this.sb.append(" + 1)");
         this.sb.append(" + ");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -735,7 +735,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         this.sb.append("ManagedString(");
-        mathCastStringFunct.param.get(0).accept(this);
+        mathCastStringFunct.value.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -743,7 +743,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         this.sb.append("ManagedString((char)(");
-        mathCastCharFunct.param.get(0).accept(this);
+        mathCastCharFunct.value.accept(this);
         this.sb.append("))");
         return null;
     }
@@ -772,7 +772,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         this.sb.append("std::atof((");
-        textStringCastNumberFunct.param.get(0).accept(this);
+        textStringCastNumberFunct.value.accept(this);
         this.sb.append(").toCharArray())");
         return null;
     }
@@ -780,9 +780,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         this.sb.append("(int)(");
-        textCharCastNumberFunct.param.get(0).accept(this);
+        textCharCastNumberFunct.value.accept(this);
         this.sb.append(".charAt(");
-        textCharCastNumberFunct.param.get(1).accept(this);
+        textCharCastNumberFunct.atIndex.accept(this);
         this.sb.append("))");
         return null;
     }

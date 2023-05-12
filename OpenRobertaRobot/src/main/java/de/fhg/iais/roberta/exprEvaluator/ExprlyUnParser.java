@@ -301,7 +301,7 @@ public class ExprlyUnParser {
      * @return Textual representation of function
      */
     public String visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
-        return ExprlyUnParser.fnames.get(mathOnListFunct.functName) + "(" + paramList(mathOnListFunct.param) + ")";
+        return ExprlyUnParser.fnames.get(mathOnListFunct.functName) + "(" + visitAST(mathOnListFunct.list) + ")";
     }
 
     /**
@@ -319,7 +319,7 @@ public class ExprlyUnParser {
      * @return Textual representation of function
      */
     public String visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        return "randInt" + "(" + paramList(mathRandomIntFunct.param) + ")";
+        return "randInt" + "(" + visitAST(mathRandomIntFunct.from) + "," + visitAST(mathRandomIntFunct.to) + ")";
     }
 
     /**
@@ -354,11 +354,10 @@ public class ExprlyUnParser {
      * @return Textual representation of function
      */
     private String visitIndexOfFunct(IndexOfFunct indexOfFunct) {
-        List<Expr> args = indexOfFunct.param;
         if ( indexOfFunct.location.equals(IndexLocation.FIRST) ) {
-            return "indexOfFirst(" + paramList(args) + ")";
+            return "indexOfFirst(" + visitAST(indexOfFunct.value) + "," + visitAST(indexOfFunct.find) + ")";
         } else if ( indexOfFunct.location.equals(IndexLocation.LAST) ) {
-            return "indexOfLast(" + paramList(args) + ")";
+            return "indexOfLast(" + visitAST(indexOfFunct.value) + "," + visitAST(indexOfFunct.find) + ")";
         }
         throw new UnsupportedOperationException("Not supported Index mode for IndexOfFunct");
     }
@@ -381,7 +380,7 @@ public class ExprlyUnParser {
      * @return Textual representation of the function
      */
     private String visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
-        return "constrain(" + paramList(mathConstrainFunct.param) + ")";
+        return "constrain(" + visitAST(mathConstrainFunct.value) + "," + visitAST(mathConstrainFunct.lowerBound) + "," + visitAST(mathConstrainFunct.upperBound) + ")";
     }
 
     /**

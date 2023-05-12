@@ -472,9 +472,7 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
     }
 
     public Phrase visitIndexOfFunct(IndexOfFunct indexOfFunct) {
-        List<Expr> newParam = new ArrayList();
-        indexOfFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new IndexOfFunct(indexOfFunct.location, newParam, indexOfFunct.getProperty());
+        return new IndexOfFunct(indexOfFunct.getProperty(), indexOfFunct.location, (Expr) indexOfFunct.value.modify(this), (Expr) indexOfFunct.find.modify(this));
     }
 
     public Phrase visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
@@ -506,9 +504,7 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
     }
 
     public Phrase visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
-        List<Expr> newParam = new ArrayList();
-        mathConstrainFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new MathConstrainFunct(newParam, mathConstrainFunct.getProperty());
+        return new MathConstrainFunct(mathConstrainFunct.getProperty(), (Expr) mathConstrainFunct.value.modify(this), (Expr) mathConstrainFunct.lowerBound.modify(this), (Expr) mathConstrainFunct.upperBound.modify(this));
     }
 
     public Phrase visitMathNumPropFunct(MathNumPropFunct mathNumPropFunct) {
@@ -518,9 +514,7 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
     }
 
     public Phrase visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
-        List<Expr> newParam = new ArrayList();
-        mathOnListFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new MathOnListFunct(mathOnListFunct.functName, newParam, mathOnListFunct.getProperty());
+        return new MathOnListFunct(mathOnListFunct.getProperty(), mathOnListFunct.mutation, mathOnListFunct.functName, (Expr) mathOnListFunct.list.modify(this));
     }
 
     public Phrase visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
@@ -528,9 +522,7 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
     }
 
     public Phrase visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        List<Expr> newParam = new ArrayList();
-        mathRandomIntFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new MathRandomIntFunct(newParam, mathRandomIntFunct.getProperty());
+        return new MathRandomIntFunct(mathRandomIntFunct.getProperty(), (Expr) mathRandomIntFunct.from.modify(this), (Expr) mathRandomIntFunct.to.modify(this));
     }
 
     public Phrase visitMathSingleFunct(MathSingleFunct mathSingleFunct) {
@@ -540,27 +532,19 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
     }
 
     public Phrase visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
-        List<Expr> newParam = new ArrayList();
-        mathCastStringFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new MathCastStringFunct(newParam, mathCastStringFunct.getProperty());
+        return new MathCastStringFunct(mathCastStringFunct.getProperty(), (Expr) mathCastStringFunct.value.modify(this));
     }
 
     public Phrase visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
-        List<Expr> newParam = new ArrayList();
-        mathCastCharFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new MathCastStringFunct(newParam, mathCastCharFunct.getProperty());
+        return new MathCastStringFunct(mathCastCharFunct.getProperty(), (Expr) mathCastCharFunct.value.modify(this));
     }
 
     public Phrase visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
-        List<Expr> newParam = new ArrayList();
-        textStringCastNumberFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new MathCastStringFunct(newParam, textStringCastNumberFunct.getProperty());
+        return new TextStringCastNumberFunct(textStringCastNumberFunct.getProperty(), (Expr) textStringCastNumberFunct.value.modify(this));
     }
 
     public Phrase visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
-        List<Expr> newParam = new ArrayList();
-        textCharCastNumberFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new MathCastStringFunct(newParam, textCharCastNumberFunct.getProperty());
+        return new TextCharCastNumberFunct(textCharCastNumberFunct.getProperty(), (Expr) textCharCastNumberFunct.value.modify(this), (Expr) textCharCastNumberFunct.atIndex.modify(this));
     }
 
     public Phrase visitTextJoinFunct(TextJoinFunct textJoinFunct) {

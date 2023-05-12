@@ -6,9 +6,9 @@ Var [initialEmptyNumbers] := ListCreate [NUMBER, NumConst[value: 1], NumConst[va
 
 Var [item] := FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [initialEmptyNumbers]]]]
 
-Var [item] := FunctionExpr [IndexOfFunct [FIRST, [Var [initialEmptyNumbers], NumConst[value: 1]]]]
+Var [item] := FunctionExpr [IndexOfFunct[location: FIRST, value: Var [initialEmptyNumbers], find: NumConst[value: 1]]]
 
-Var [item] := FunctionExpr [IndexOfFunct [FIRST, [Var [initialEmptyNumbers], NumConst[value: 5]]]]
+Var [item] := FunctionExpr [IndexOfFunct[location: FIRST, value: Var [initialEmptyNumbers], find: NumConst[value: 5]]]
 FunctionStmt [ListSetIndex [SET, FIRST, [Var [initialEmptyNumbers], NumConst[value: 2]]]]
 
 
@@ -18,9 +18,9 @@ Var [initialEmptyBoolean] := ListCreate [BOOLEAN, BoolConst[value: true], BoolCo
 
 Var [item] := FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [initialEmptyBoolean]]]]
 
-Var [item] := FunctionExpr [IndexOfFunct [FIRST, [Var [initialEmptyBoolean], Var [bool]]]]
+Var [item] := FunctionExpr [IndexOfFunct[location: FIRST, value: Var [initialEmptyBoolean], find: Var [bool]]]
 
-Var [item] := FunctionExpr [IndexOfFunct [FIRST, [Var [initialEmptyBoolean], NullConst[]]]]
+Var [item] := FunctionExpr [IndexOfFunct[location: FIRST, value: Var [initialEmptyBoolean], find: NullConst[]]]
 FunctionStmt [ListSetIndex [INSERT, LAST, [Var [initialEmptyBoolean], BoolConst[value: true]]]]
 
 
@@ -30,7 +30,7 @@ Var [initialEmptyStrings] := ListCreate [STRING, StringConst[value: a], StringCo
 
 Var [item] := FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [initialEmptyStrings]]]]
 
-Var [item] := FunctionExpr [IndexOfFunct [FIRST, [Var [initialEmptyStrings], StringConst[value: a]]]]
+Var [item] := FunctionExpr [IndexOfFunct[location: FIRST, value: Var [initialEmptyStrings], find: StringConst[value: a]]]
 FunctionStmt [ListSetIndex [SET, FROM_END, [Var [initialEmptyStrings], StringConst[value: c], NumConst[value: 2]]]]FunctionStmt [ListSetIndex [INSERT, FROM_END, [Var [initialEmptyStrings], StringConst[value: d], NumConst[value: 1]]]]
 
 StmtTextComment[textComment: Basis List Operations END]

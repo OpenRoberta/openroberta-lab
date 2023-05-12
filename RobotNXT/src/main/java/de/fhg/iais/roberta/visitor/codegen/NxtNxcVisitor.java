@@ -794,7 +794,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
-        BlocklyType arrayType = indexOfFunct.param.get(0).getVarType();
+        BlocklyType arrayType = indexOfFunct.value.getVarType();
         String methodName = "ArrFindFirst";
         if ( indexOfFunct.location == IndexLocation.LAST ) {
             methodName = "ArrFindLast";
@@ -819,9 +819,9 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         }
 
         this.sb.append(methodName);
-        indexOfFunct.param.get(0).accept(this);
+        indexOfFunct.value.accept(this);
         this.sb.append(", ");
-        indexOfFunct.param.get(1).accept(this);
+        indexOfFunct.find.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -934,11 +934,11 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
         this.sb.append("MIN(MAX(");
-        mathConstrainFunct.param.get(0).accept(this);
+        mathConstrainFunct.value.accept(this);
         this.sb.append(", ");
-        mathConstrainFunct.param.get(1).accept(this);
+        mathConstrainFunct.lowerBound.accept(this);
         this.sb.append("), ");
-        mathConstrainFunct.param.get(2).accept(this);
+        mathConstrainFunct.upperBound.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -1016,7 +1016,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             default:
                 break;
         }
-        mathOnListFunct.param.get(0).accept(this);
+        mathOnListFunct.list.accept(this);
         if ( mathOnListFunct.functName == FunctionNames.RANDOM ) {
             this.sb.append("[0]");
         } else {
@@ -1034,11 +1034,11 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.sb.append("Random(");
-        mathRandomIntFunct.param.get(1).accept(this);
+        mathRandomIntFunct.to.accept(this);
         this.sb.append(" - ");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         this.sb.append(") + ");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         return null;
     }
 
