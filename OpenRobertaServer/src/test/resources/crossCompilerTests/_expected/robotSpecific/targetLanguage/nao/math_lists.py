@@ -60,7 +60,7 @@ def ____math2():
     h.say(str(_median(___numberList)))
     h.say(str(_standard_deviation(___numberList)))
     h.say(str(___numberList[0]))
-    h.say(str(___numberVar % ___numberVar))
+    h.say(str(( ( ___numberVar ) % ( ___numberVar ) )))
     h.say(str(min(max(___numberVar, ___numberVar), ___numberVar)))
     h.say(str(random.randint(___numberVar, ___numberVar)))
     h.say(str(random.random()))

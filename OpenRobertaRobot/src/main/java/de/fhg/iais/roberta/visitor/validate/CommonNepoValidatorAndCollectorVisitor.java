@@ -34,13 +34,15 @@ import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathModuloFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
@@ -59,6 +61,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.MathChangeStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNSetBiasStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNSetInputNeuronVal;
@@ -69,6 +72,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -175,20 +179,30 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
-        requiredComponentVisited(indexOfFunct, indexOfFunct.param);
-        if ( indexOfFunct.param.get(0).toString().contains("ListCreate ") ||
-            indexOfFunct.param.get(0).toString().contains("ListRepeat ") ) {
+        requiredComponentVisited(indexOfFunct, indexOfFunct.value, indexOfFunct.find);
+        if ( indexOfFunct.value.toString().contains("ListCreate ") ||
+            indexOfFunct.value.toString().contains("ListRepeat ") ) {
             addErrorToPhrase(indexOfFunct, "BLOCK_USED_INCORRECTLY");
         }
         return null;
     }
 
     @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
-        requiredComponentVisited(lengthOfIsEmptyFunct, lengthOfIsEmptyFunct.param);
-        if ( lengthOfIsEmptyFunct.param.get(0).toString().contains("ListCreate ") ||
-            lengthOfIsEmptyFunct.param.get(0).toString().contains("ListRepeat ") ) {
-            addErrorToPhrase(lengthOfIsEmptyFunct, "BLOCK_USED_INCORRECTLY");
+    public Void visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
+        requiredComponentVisited(lengthOfListFunct, lengthOfListFunct.value);
+        if ( lengthOfListFunct.value.toString().contains("ListCreate ") ||
+            lengthOfListFunct.value.toString().contains("ListRepeat ") ) {
+            addErrorToPhrase(lengthOfListFunct, "BLOCK_USED_INCORRECTLY");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
+        requiredComponentVisited(isListEmptyFunct, isListEmptyFunct.value);
+        if ( isListEmptyFunct.value.toString().contains("ListCreate ") ||
+            isListEmptyFunct.value.toString().contains("ListRepeat ") ) {
+            addErrorToPhrase(isListEmptyFunct, "BLOCK_USED_INCORRECTLY");
         }
         return null;
     }
@@ -250,14 +264,14 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.CAST);
-        requiredComponentVisited(mathCastCharFunct, mathCastCharFunct.param);
+        requiredComponentVisited(mathCastCharFunct, mathCastCharFunct.value);
         return null;
     }
 
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.CAST);
-        requiredComponentVisited(mathCastStringFunct, mathCastStringFunct.param);
+        requiredComponentVisited(mathCastStringFunct, mathCastStringFunct.value);
         return null;
     }
 
@@ -268,7 +282,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
-        requiredComponentVisited(mathConstrainFunct, mathConstrainFunct.param);
+        requiredComponentVisited(mathConstrainFunct, mathConstrainFunct.value, mathConstrainFunct.lowerBound, mathConstrainFunct.upperBound);
         return null;
     }
 
@@ -282,9 +296,9 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
         usedMethodBuilder.addUsedMethod(mathOnListFunct.functName);
-        requiredComponentVisited(mathOnListFunct, mathOnListFunct.param);
-        if ( mathOnListFunct.param.get(0).toString().contains("ListCreate ") ||
-            mathOnListFunct.param.get(0).toString().contains("ListRepeat ") ) {
+        requiredComponentVisited(mathOnListFunct, mathOnListFunct.list);
+        if ( mathOnListFunct.list.toString().contains("ListCreate ") ||
+            mathOnListFunct.list.toString().contains("ListRepeat ") ) {
             addErrorToPhrase(mathOnListFunct, "BLOCK_USED_INCORRECTLY");
         }
         return null;
@@ -306,7 +320,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.RANDOM);
-        requiredComponentVisited(mathRandomIntFunct, mathRandomIntFunct.param);
+        requiredComponentVisited(mathRandomIntFunct, mathRandomIntFunct.from, mathRandomIntFunct.to);
         return null;
     }
 
@@ -318,6 +332,24 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
             usedMethodBuilder.addUsedMethod(mathSingleFunct.functName);
         }
         requiredComponentVisited(mathSingleFunct, mathSingleFunct.param);
+        return null;
+    }
+
+    @Override
+    public Void visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
+        requiredComponentVisited(mathChangeStmt, mathChangeStmt.var, mathChangeStmt.delta);
+        return null;
+    }
+
+    @Override
+    public Void visitMathModuloFunct(MathModuloFunct mathModuloFunct) {
+        requiredComponentVisited(mathModuloFunct, mathModuloFunct.dividend, mathModuloFunct.divisor);
+        return null;
+    }
+
+    @Override
+    public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        requiredComponentVisited(textAppendStmt, textAppendStmt.var, textAppendStmt.text);
         return null;
     }
 
@@ -514,7 +546,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.CAST);
-        requiredComponentVisited(textCharCastNumberFunct, textCharCastNumberFunct.param);
+        requiredComponentVisited(textCharCastNumberFunct, textCharCastNumberFunct.value, textCharCastNumberFunct.atIndex);
         return null;
     }
 
@@ -533,7 +565,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         this.usedMethodBuilder.addUsedMethod(FunctionNames.CAST);
-        requiredComponentVisited(textStringCastNumberFunct, textStringCastNumberFunct.param);
+        requiredComponentVisited(textStringCastNumberFunct, textStringCastNumberFunct.value);
         return null;
     }
 

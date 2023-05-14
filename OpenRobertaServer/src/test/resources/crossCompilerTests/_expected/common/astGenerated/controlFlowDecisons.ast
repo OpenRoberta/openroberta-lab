@@ -1,54 +1,44 @@
 AssertStmt[asserts: Binary [EQ, NumConst[value: 0], Var [X]], msg: pos-0]
 
 if BoolConst[value: true]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 1], Var [X]], msg: pos-1]
 
 if BoolConst[value: false]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 1], Var [X]], msg: pos-2]
 
 if BoolConst[value: true]
 ,then
 if BoolConst[value: true]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
-
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1]]
+MathChangeStmt[var: Var [X], delta: NumConst[value: 1]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 3], Var [X]], msg: pos-3]
 
 if BoolConst[value: true]
 ,then
 if BoolConst[value: false]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
-
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
+MathChangeStmt[var: Var [X], delta: NumConst[value: 1]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 4], Var [X]], msg: pos-4]
 
 if BoolConst[value: false]
 ,then
 if BoolConst[value: false]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
-
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
+MathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 4], Var [X]], msg: pos-5]
 
 if BoolConst[value: false]
 ,then
 if BoolConst[value: true]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
-
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
+MathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 4], Var [X]], msg: pos-6]
 
@@ -57,90 +47,67 @@ if BoolConst[value: true]
 if BoolConst[value: true]
 ,then
 if BoolConst[value: false]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
-
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
-
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
+MathChangeStmt[var: Var [X], delta: NumConst[value: 1]]
+MathChangeStmt[var: Var [X], delta: NumConst[value: 1]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 6], Var [X]], msg: pos-7]
 
 if BoolConst[value: true]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1]]
 ,else if BoolConst[value: false]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 7], Var [X]], msg: pos-8]
 
 if BoolConst[value: false]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
 ,else if BoolConst[value: true]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 8], Var [X]], msg: pos-9]
 
 if BoolConst[value: true]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
-,else
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1]]
+,elseMathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 9], Var [X]], msg: pos-10]
 
 if BoolConst[value: false]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
-,else
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
+,elseMathChangeStmt[var: Var [X], delta: NumConst[value: 1]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 10], Var [X]], msg: pos-11]
 
 if BoolConst[value: true]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1]]
 ,else if BoolConst[value: true]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
-,else
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
+,elseMathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 11], Var [X]], msg: pos-12]
 
 if BoolConst[value: false]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
 ,else if BoolConst[value: false]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
-,else
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
+,elseMathChangeStmt[var: Var [X], delta: NumConst[value: 1]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 12], Var [X]], msg: pos-13]
 
 if BoolConst[value: true]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1]]
 ,else if BoolConst[value: false]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
-,else
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
+,elseMathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 14], Var [X]], msg: pos-14]
 
 if BoolConst[value: false]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
 ,else if BoolConst[value: true]
-,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
-,else
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
+,thenMathChangeStmt[var: Var [X], delta: NumConst[value: 1]]
+,elseMathChangeStmt[var: Var [X], delta: NumConst[value: 1000]]
 
 AssertStmt[asserts: Binary [EQ, NumConst[value: 14], Var [X]], msg: pos-15]
 DebugAction[value: TernaryExpr[condition: Binary [EQ, NumConst[value: 14], Var [X]], thenPart: StringConst[value: Control Flow Test: success], elsePart: StringConst[value: Control Flow Test: FAIL]]]

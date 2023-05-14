@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -286,9 +286,9 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         if ( mathOnListFunct.functName == FunctionNames.AVERAGE ) {
             this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(SUM));
             this.sb.append("(");
-            mathOnListFunct.param.get(0).accept(this);
+            mathOnListFunct.list.accept(this);
             this.sb.append(") / len(");
-            mathOnListFunct.param.get(0).accept(this);
+            mathOnListFunct.list.accept(this);
             this.sb.append(")");
         } else {
             super.visitMathOnListFunct(mathOnListFunct);
@@ -600,13 +600,13 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to turn off the LEDs visit a {@link LightStatusAction} for the block "robActions_led_off"
+     * Function to turn off the LEDs visit a {@link LightOffAction} for the block "robActions_led_off"
      *
-     * @param lightStatusAction to be visited
+     * @param lightOffAction to be visited
      */
     @Override
-    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
-        switch ( lightStatusAction.getUserDefinedPort() ) {
+    public Void visitLightOffAction(LightOffAction lightOffAction) {
+        switch ( lightOffAction.port ) {
             case "1":
             case "RLED":
                 this.sb.append("Ed.RightLed(Ed.OFF)");

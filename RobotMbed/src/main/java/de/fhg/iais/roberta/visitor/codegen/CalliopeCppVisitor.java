@@ -22,7 +22,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -70,6 +70,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathModuloFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
@@ -78,6 +79,7 @@ import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
@@ -219,22 +221,14 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         }
         generateSubExpr(this.sb, false, binary.left, binary);
         final String sym;
-        if ( op.equals(Op.TEXT_APPEND) ) {
-            sym = "=";
-        } else if ( op.equals(Op.NEQ) ) {
+        if ( op.equals(Op.NEQ) ) {
             sym = "==";
         } else {
             sym = getBinaryOperatorSymbol(op);
         }
 
-        this.sb.append(whitespace() + sym + whitespace());
+        this.src.add(whitespace(), sym, whitespace());
         switch ( op ) {
-            case TEXT_APPEND:
-                generateSubExpr(this.sb, false, binary.left, binary);
-                this.sb.append(" + ManagedString(");
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
-                this.sb.append(")");
-                break;
             case DIVIDE:
                 this.sb.append("((float) ");
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
@@ -376,8 +370,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
-        String port = lightStatusAction.getUserDefinedPort();
+    public Void visitLightOffAction(LightOffAction lightOffAction) {
+        String port = lightOffAction.port;
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : "0";
         switch ( pin1 ) {
@@ -392,7 +386,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
                 this.sb.append("_cbSetRGBLed(_buf, &_i2c, ").append(pin1).append(", 0);");
                 break;
             default:
-                throw new DbcException("LedOffAction; invalid port: " + pin1);
+                throw new DbcException("LightOffAction; invalid port: " + pin1);
         }
         return null;
     }
@@ -716,11 +710,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
         this.sb.append("min(max(");
-        mathConstrainFunct.param.get(0).accept(this);
+        mathConstrainFunct.value.accept(this);
         this.sb.append(", ");
-        mathConstrainFunct.param.get(1).accept(this);
+        mathConstrainFunct.lowerBound.accept(this);
         this.sb.append("), ");
-        mathConstrainFunct.param.get(2).accept(this);
+        mathConstrainFunct.upperBound.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -728,12 +722,12 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.sb.append("(_uBit.random(");
-        mathRandomIntFunct.param.get(1).accept(this);
+        mathRandomIntFunct.to.accept(this);
         this.sb.append(" - ");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         this.sb.append(" + 1)");
         this.sb.append(" + ");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -741,7 +735,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         this.sb.append("ManagedString(");
-        mathCastStringFunct.param.get(0).accept(this);
+        mathCastStringFunct.value.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -749,15 +743,36 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         this.sb.append("ManagedString((char)(");
-        mathCastCharFunct.param.get(0).accept(this);
+        mathCastCharFunct.value.accept(this);
         this.sb.append("))");
+        return null;
+    }
+
+    @Override
+    public Void visitMathModuloFunct(MathModuloFunct mathModuloFunct) {
+        this.sb.append("( (int) ( ");
+        mathModuloFunct.dividend.accept(this);
+        this.sb.append(" ) % (int) ( ");
+        mathModuloFunct.divisor.accept(this);
+        this.sb.append(" ) )");
+        return null;
+    }
+
+    @Override
+    public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        textAppendStmt.var.accept(this);
+        this.sb.append(" = ");
+        textAppendStmt.var.accept(this);
+        this.sb.append(" + ManagedString(");
+        textAppendStmt.text.accept(this);
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         this.sb.append("std::atof((");
-        textStringCastNumberFunct.param.get(0).accept(this);
+        textStringCastNumberFunct.value.accept(this);
         this.sb.append(").toCharArray())");
         return null;
     }
@@ -765,9 +780,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         this.sb.append("(int)(");
-        textCharCastNumberFunct.param.get(0).accept(this);
+        textCharCastNumberFunct.value.accept(this);
         this.sb.append(".charAt(");
-        textCharCastNumberFunct.param.get(1).accept(this);
+        textCharCastNumberFunct.atIndex.accept(this);
         this.sb.append("))");
         return null;
     }

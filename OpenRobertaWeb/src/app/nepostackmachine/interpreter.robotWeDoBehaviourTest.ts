@@ -72,7 +72,7 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
         U.info(robotText + ' led on color ' + color);
     }
 
-    public statusLightOffAction(name: string, port: number) {
+    public ledOffAction(name: string, port: number) {
         const robotText = 'robot: ' + name + ', port: ' + port;
         U.info(robotText + ' led off');
     }
@@ -218,11 +218,9 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
         throw new Error('Method not implemented.');
     }
 
-    buttonLedAction(ledValues: number[]): void {
-    }
+    buttonLedAction(ledValues: number[]): void {}
 
-    proxHLedAction(ledValues: number[]): void {
-    }
+    proxHLedAction(ledValues: number[]): void {}
 
     omniDriveAction(xVel: number, yVel: number, thetaVel: number): number {
         throw new Error('Method not implemented.');

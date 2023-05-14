@@ -68,7 +68,7 @@ void ____math() {
     DrawString(ToString(_getListMedian(___numberList)), ___numberVar, ___numberVar);
     DrawString(ToString(_getListStandardDeviation(___numberList)), ___numberVar, ___numberVar);
     DrawString(ToString(_getListElementByIndex(___numberList, 0)), ___numberVar, ___numberVar);
-    DrawString(ToString(fmod(___numberVar, ___numberVar)), ___numberVar, ___numberVar);
+    DrawString(ToString(fmod((___numberVar), (___numberVar))), ___numberVar, ___numberVar);
     DrawString(ToString(std::min(std::max((double) ___numberVar, (double) ___numberVar), (double) ___numberVar)), ___numberVar, ___numberVar);
     DrawString(ToString(((rand() % (int) (___numberVar - ___numberVar)) + ___numberVar)), ___numberVar, ___numberVar);
     DrawString(ToString(((double) rand() / (RAND_MAX))), ___numberVar, ___numberVar);

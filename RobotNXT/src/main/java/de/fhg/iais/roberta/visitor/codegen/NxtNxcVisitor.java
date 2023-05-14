@@ -48,12 +48,14 @@ import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathModuloFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
@@ -66,6 +68,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -208,15 +211,6 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         String sym = getBinaryOperatorSymbol(op);
         this.sb.append(" ").append(sym).append(" ");
         switch ( op ) {
-            case TEXT_APPEND:
-                if ( binary.getRight().getVarType().toString().contains("NUMBER") ) {
-                    this.sb.append("NumToStr(");
-                    generateSubExpr(this.sb, false, binary.getRight(), binary);
-                    this.sb.append(")");
-                } else {
-                    generateSubExpr(this.sb, false, binary.getRight(), binary);
-                }
-                break;
             case DIVIDE:
                 this.sb.append("((");
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
@@ -228,6 +222,20 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         if ( isOpBasicMaths ) {
             this.sb.append(")");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        textAppendStmt.var.accept(this);
+        this.sb.append(" += ");
+        String numToStr = textAppendStmt.text.getVarType().toString().contains("NUMBER") ? "NumToStr(" : "";
+        sb.append(numToStr);
+        textAppendStmt.text.accept(this);
+        if ( numToStr != "" ) {
+            sb.append(" )");
+        }
+        sb.append(";");
         return null;
     }
 
@@ -787,7 +795,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
-        BlocklyType arrayType = indexOfFunct.param.get(0).getVarType();
+        BlocklyType arrayType = indexOfFunct.value.getVarType();
         String methodName = "ArrFindFirst";
         if ( indexOfFunct.location == IndexLocation.LAST ) {
             methodName = "ArrFindLast";
@@ -812,26 +820,26 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         }
 
         this.sb.append(methodName);
-        indexOfFunct.param.get(0).accept(this);
+        indexOfFunct.value.accept(this);
         this.sb.append(", ");
-        indexOfFunct.param.get(1).accept(this);
+        indexOfFunct.find.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
-        if ( lengthOfIsEmptyFunct.functName == FunctionNames.LIST_IS_EMPTY ) {
-            String methodName = "ArrayLen(";
-            this.sb.append(methodName);
-            lengthOfIsEmptyFunct.param.get(0).accept(this);
-            this.sb.append(") == 0");
-        } else {
-            String methodName = "ArrayLen(";
-            this.sb.append(methodName);
-            lengthOfIsEmptyFunct.param.get(0).accept(this);
-            this.sb.append(")");
-        }
+    public Void visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
+        this.sb.append("ArrayLen(");
+        lengthOfListFunct.value.accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
+        this.sb.append("ArrayLen(");
+        isListEmptyFunct.value.accept(this);
+        this.sb.append(") == 0");
         return null;
     }
 
@@ -927,11 +935,11 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
         this.sb.append("MIN(MAX(");
-        mathConstrainFunct.param.get(0).accept(this);
+        mathConstrainFunct.value.accept(this);
         this.sb.append(", ");
-        mathConstrainFunct.param.get(1).accept(this);
+        mathConstrainFunct.lowerBound.accept(this);
         this.sb.append("), ");
-        mathConstrainFunct.param.get(2).accept(this);
+        mathConstrainFunct.upperBound.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -1009,7 +1017,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             default:
                 break;
         }
-        mathOnListFunct.param.get(0).accept(this);
+        mathOnListFunct.list.accept(this);
         if ( mathOnListFunct.functName == FunctionNames.RANDOM ) {
             this.sb.append("[0]");
         } else {
@@ -1027,11 +1035,11 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.sb.append("Random(");
-        mathRandomIntFunct.param.get(1).accept(this);
+        mathRandomIntFunct.to.accept(this);
         this.sb.append(" - ");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         this.sb.append(") + ");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         return null;
     }
 
@@ -1079,6 +1087,16 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         this.sb.append(", ");
         mathPowerFunct.param.get(1).accept(this);
         this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathModuloFunct(MathModuloFunct mathModuloFunct) {
+        this.sb.append("( ( ");
+        mathModuloFunct.dividend.accept(this);
+        this.sb.append(" ) % ( ");
+        mathModuloFunct.divisor.accept(this);
+        this.sb.append(" ) )");
         return null;
     }
 

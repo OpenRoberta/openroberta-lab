@@ -1,35 +1,35 @@
 
-Var [x] := FunctionExpr [MathOnListFunct [SUM, [Var [l1]]]]
+Var [x] := FunctionExpr [MathOnListFunct[functName: SUM, list: Var [l1]]]
 
 
-Var [x] := FunctionExpr [MathOnListFunct [MIN, [Var [l1]]]]
+Var [x] := FunctionExpr [MathOnListFunct[functName: MIN, list: Var [l1]]]
 
 
-Var [x] := FunctionExpr [MathOnListFunct [MAX, [Var [l1]]]]
+Var [x] := FunctionExpr [MathOnListFunct[functName: MAX, list: Var [l1]]]
 
 
-Var [x] := FunctionExpr [MathOnListFunct [AVERAGE, [Var [l1]]]]
+Var [x] := FunctionExpr [MathOnListFunct[functName: AVERAGE, list: Var [l1]]]
 
 
-Var [x] := FunctionExpr [MathOnListFunct [MEDIAN, [Var [l1]]]]
+Var [x] := FunctionExpr [MathOnListFunct[functName: MEDIAN, list: Var [l1]]]
 
 
-Var [x] := FunctionExpr [MathOnListFunct [STD_DEV, [Var [l1]]]]
+Var [x] := FunctionExpr [MathOnListFunct[functName: STD_DEV, list: Var [l1]]]
 
 
 Var [l2] := Var [l1]
 
 
-Var [b] := FunctionExpr [LengthOfFunct [LIST_IS_EMPTY, [Var [l1]]]]
+Var [b] := FunctionExpr [IsListEmptyFunct[value: Var [l1]]]
 
 
-Var [x] := FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [l1]]]]
+Var [x] := FunctionExpr [LengthOfListFunct[value: Var [l1]]]
 
 
-Var [x] := FunctionExpr [IndexOfFunct [FIRST, [Var [l1], NumConst[value: 0]]]]
+Var [x] := FunctionExpr [IndexOfFunct[location: FIRST, value: Var [l1], find: NumConst[value: 0]]]
 
 
-Var [x] := FunctionExpr [IndexOfFunct [LAST, [Var [l1], NumConst[value: 0]]]]
+Var [x] := FunctionExpr [IndexOfFunct[location: LAST, value: Var [l1], find: NumConst[value: 0]]]
 
 
 Var [x] := FunctionExpr [ListGetIndex [GET, FROM_START, [Var [l1], NumConst[value: 0]]]]

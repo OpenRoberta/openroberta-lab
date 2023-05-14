@@ -72,7 +72,7 @@ public class NEPOprog {
         hal.drawText(String.valueOf(_median(___numberList)), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf(_standardDeviation(___numberList)), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf(___numberList.get(0)), ___numberVar, ___numberVar);
-        hal.drawText(String.valueOf(___numberVar % ___numberVar), ___numberVar, ___numberVar);
+        hal.drawText(String.valueOf(( ( ___numberVar ) % ( ___numberVar ) )), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf(Math.min(Math.max(___numberVar, ___numberVar), ___numberVar)), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf(( Math.round(Math.random() * (___numberVar - ___numberVar)) + ___numberVar )), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf((float) Math.random()), ___numberVar, ___numberVar);

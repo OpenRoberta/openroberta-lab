@@ -23,8 +23,9 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectio
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightResetAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -189,17 +190,14 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
-        switch ( lightStatusAction.status ) {
-            case OFF:
-                this.sb.append("hal.ledOff()");
-                break;
-            case RESET:
-                this.sb.append("hal.resetLED()");
-                break;
-            default:
-                throw new DbcException("Invalid LED status mode!");
-        }
+    public Void visitBrickLightResetAction(BrickLightResetAction brickLightResetAction) {
+        this.sb.append("hal.resetLED()");
+        return null;
+    }
+
+    @Override
+    public Void visitBrickLightOffAction(BrickLightOffAction brickLightOffAction) {
+        this.sb.append("hal.ledOff()");
         return null;
     }
 
@@ -653,9 +651,9 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.RANDOM)).append("(");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         this.sb.append(", ");
-        mathRandomIntFunct.param.get(1).accept(this);
+        mathRandomIntFunct.to.accept(this);
         this.sb.append(")");
         return null;
     }

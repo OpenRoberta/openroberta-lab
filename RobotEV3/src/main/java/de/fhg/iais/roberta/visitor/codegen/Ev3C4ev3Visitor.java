@@ -35,8 +35,9 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectio
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightResetAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -361,10 +362,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         generateSubExpr(this.sb, false, binary.left, binary);
         String sym = getBinaryOperatorSymbol(op);
         this.sb.append(whitespace() + sym + whitespace());
-        if ( op == Binary.Op.TEXT_APPEND ) {
-            convertToString(binary);
-            return null;
-        } else if ( op == Binary.Op.DIVIDE ) {
+        if ( op == Binary.Op.DIVIDE ) {
             appendCastToFloat(binary);
             return null;
         } else {
@@ -513,20 +511,20 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     // copied from Arduino
     @Override
     public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
-        if ( indexOfFunct.param.get(0).toString().contains("ListCreate ") ) {
+        if ( indexOfFunct.value.toString().contains("ListCreate ") ) {
             this.sb.append("null");
             return null;
         }
         String methodName = indexOfFunct.location == IndexLocation.LAST ? "_getLastOccuranceOfElement(" : "_getFirstOccuranceOfElement(";
         this.sb.append(methodName);
-        indexOfFunct.param.get(0).accept(this);
+        indexOfFunct.value.accept(this);
         this.sb.append(", ");
-        if ( indexOfFunct.param.get(1).getClass().equals(StringConst.class) ) {
+        if ( indexOfFunct.find.getClass().equals(StringConst.class) ) {
             this.sb.append("ToString(");
-            indexOfFunct.param.get(1).accept(this);
+            indexOfFunct.find.accept(this);
             this.sb.append(")");
         } else {
-            indexOfFunct.param.get(1).accept(this);
+            indexOfFunct.find.accept(this);
         }
         this.sb.append(")");
         return null;
@@ -586,8 +584,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        Expr min = mathRandomIntFunct.param.get(0);
-        Expr max = mathRandomIntFunct.param.get(1);
+        Expr min = mathRandomIntFunct.from;
+        Expr max = mathRandomIntFunct.to;
         this.sb.append("((rand() % (int) (");
         min.accept(this);
         this.sb.append(" - ");
@@ -602,7 +600,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         // TODO check why this is not working for Arduinos!
         this.sb.append("(ToString(");
-        mathCastStringFunct.param.get(0).accept(this);
+        mathCastStringFunct.value.accept(this);
         this.sb.append("))");
         return null;
     }
@@ -1262,17 +1260,15 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
-        switch ( lightStatusAction.status ) {
-            case OFF:
-                this.sb.append("SetLedPattern(LED_BLACK);");
-                break;
-            case RESET:
-                // TODO: Implement
-                break;
-            default:
-                throw new DbcException("Invalid LED status mode!");
-        }
+    public Void visitBrickLightResetAction(BrickLightResetAction brickLightResetAction) {
+        // TODO: Light reset not implemented for C4EV3 yet...;
+        return null;
+
+    }
+
+    @Override
+    public Void visitBrickLightOffAction(BrickLightOffAction brickLightOffAction) {
+        this.sb.append("SetLedPattern(LED_BLACK);");
         return null;
     }
 

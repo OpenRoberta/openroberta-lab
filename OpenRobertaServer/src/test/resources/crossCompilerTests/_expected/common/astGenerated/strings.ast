@@ -1,15 +1,11 @@
 StmtTextComment[textComment: String Concat -- Start --]
-
-exprStmt Binary [TEXT_APPEND, Var [text], StringConst[value:  one]]
+TextAppendStmt[var: Var [text], text: StringConst[value:  one]]
 AssertStmt[asserts: Binary [EQ, StringConst[value: start: one], Var [text]], msg: POS-1]
-
-exprStmt Binary [TEXT_APPEND, Var [text], FunctionExpr [TextJoinFunct [StringConst[value:  two], StringConst[value:  three]]]]
+TextAppendStmt[var: Var [text], text: FunctionExpr [TextJoinFunct [StringConst[value:  two], StringConst[value:  three]]]]
 AssertStmt[asserts: Binary [EQ, StringConst[value: start: one two three], Var [text]], msg: POS-2]
-
-exprStmt Binary [TEXT_APPEND, Var [text], FunctionExpr [TextJoinFunct [NumConst[value: 4], NumConst[value: 5]]]]
+TextAppendStmt[var: Var [text], text: FunctionExpr [TextJoinFunct [NumConst[value: 4], NumConst[value: 5]]]]
 AssertStmt[asserts: Binary [EQ, StringConst[value: start: one two three45], Var [text]], msg: POS-3]
-
-exprStmt Binary [TEXT_APPEND, Var [text], FunctionExpr [TextJoinFunct [NumConst[value: 6], StringConst[value:  seven]]]]
+TextAppendStmt[var: Var [text], text: FunctionExpr [TextJoinFunct [NumConst[value: 6], StringConst[value:  seven]]]]
 AssertStmt[asserts: Binary [EQ, StringConst[value: start: one two three456 seven], Var [text]], msg: POS-4]
 
 Var [text] := FunctionExpr [TextJoinFunct [FunctionExpr [TextJoinFunct [Var [text], Var [eight]]], StringConst[value:  nine]]]
@@ -20,15 +16,15 @@ Var [text] := FunctionExpr [TextJoinFunct [FunctionExpr [TextJoinFunct [Var [tex
 
 DebugAction[value: TernaryExpr[condition: Binary [EQ, StringConst[value: start: one two three456 seven eight nine ten eleven twelve], Var [text]], thenPart: StringConst[value: String Concat SUCCESS], elsePart: StringConst[value: String Concat FAIL]]]
 
-Var [number] := FunctionExpr [TextStringCastNumberFunct [[Var [text]]]]
+Var [number] := FunctionExpr [TextStringCastNumberFunct[value: Var [text]]]
 
 
-Var [number] := FunctionExpr [TextCharCastNumberFunct [[Var [text], NumConst[value: 0]]]]
+Var [number] := FunctionExpr [TextCharCastNumberFunct[value: Var [text], atIndex: NumConst[value: 0]]]
 
 
-Var [text] := FunctionExpr [MathCastStringFunct [[NumConst[value: 10]]]]
+Var [text] := FunctionExpr [MathCastStringFunct[value: NumConst[value: 10]]]
 
 
-Var [text] := FunctionExpr [MathCastCharFunct [[NumConst[value: 30]]]]
+Var [text] := FunctionExpr [MathCastCharFunct[value: NumConst[value: 30]]]
 
 StmtTextComment[textComment: String Concat -- End --]

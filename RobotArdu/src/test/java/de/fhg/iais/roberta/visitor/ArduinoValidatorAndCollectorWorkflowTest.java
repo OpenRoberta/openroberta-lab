@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
@@ -26,7 +26,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
@@ -424,43 +425,23 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     }
 
     @Test
-    public void visitLightStatusActionOff() {
+    public void visitLightOffAction() {
         configurationComponents.add(new ConfigurationComponent(SC.RGBLED, true, "P1", "P1", new HashMap<>()));
 
-        LightStatusAction lightStatusAction = new LightStatusAction("P1", LightStatusAction.Status.OFF, bp);
-        phrases.add(lightStatusAction);
+        LightOffAction lightOffAction = new LightOffAction(bp, "P1");
+        phrases.add(lightOffAction);
 
         executeWorkflow();
-        assertHasNoNepoInfo(lightStatusAction);
+        assertHasNoNepoInfo(lightOffAction);
     }
 
     @Test
-    public void visitLightStatusActionOff_noPort() {
-        LightStatusAction lightStatusAction = new LightStatusAction("P1", LightStatusAction.Status.OFF, bp);
-        phrases.add(lightStatusAction);
+    public void visitLightOffAction_noPort() {
+        LightOffAction lightOffAction = new LightOffAction(bp, "P1");
+        phrases.add(lightOffAction);
 
         executeWorkflow();
-        assertHasNepoInfo(lightStatusAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
-    }
-
-    @Test
-    public void visitLightStatusActionReset() {
-        configurationComponents.add(new ConfigurationComponent(SC.RGBLED, true, "P1", "P1", new HashMap<>()));
-
-        LightStatusAction lightStatusAction = new LightStatusAction("P1", LightStatusAction.Status.RESET, bp);
-        phrases.add(lightStatusAction);
-
-        executeWorkflow();
-        assertHasNoNepoInfo(lightStatusAction);
-    }
-
-    @Test
-    public void visitLightStatusActionReset_noPort() {
-        LightStatusAction lightStatusAction = new LightStatusAction("P1", LightStatusAction.Status.RESET, bp);
-        phrases.add(lightStatusAction);
-
-        executeWorkflow();
-        assertHasNepoInfo(lightStatusAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
+        assertHasNepoInfo(lightOffAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
     }
 
     @Test
@@ -529,12 +510,9 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitIndexOfFunct() {
-        List<Expr> param = new ArrayList<>();
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
+        Expr list = new NumConst(null, "10");
 
-        IndexOfFunct listSetIndex = new IndexOfFunct(IndexLocation.FIRST, param, bp);
+        IndexOfFunct listSetIndex = new IndexOfFunct(bp, IndexLocation.FIRST, list, new NumConst(null, "10"));
         phrases.add(listSetIndex);
 
         executeWorkflow();
@@ -543,16 +521,13 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitIndexOfFunct_noFirsstElement() {
-        List<Expr> param = new ArrayList<>();
-        param.add(new NumConst(null, "ListCreate "));
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
+        Expr list = new NumConst(null, "ListCreate ");
 
-        IndexOfFunct listSetIndex = new IndexOfFunct(IndexLocation.FIRST, param, bp);
+        IndexOfFunct listSetIndex = new IndexOfFunct(bp, IndexLocation.FIRST, list, new NumConst(null, "1"));
         phrases.add(listSetIndex);
 
         executeWorkflow();
-        assertEquals((((NumConst) listSetIndex.param.get(0)).value), "0");
+        assertEquals((((NumConst) listSetIndex.value).value), "0");
         assertHasNoNepoInfo(listSetIndex);
     }
 
@@ -586,42 +561,61 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     }
 
     @Test
-    public void visitLengthOfIsEmptyFunct() {
-        List<Expr> param = new ArrayList<>();
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
+    public void visitLengthOfListFunct() {
+        // TODO: Use list instantiations (proper lists) for validation instead of NumConst - Test is too weak
+        Expr list = new NumConst(null, "10");
 
-        LengthOfIsEmptyFunct lengthOfIsEmptyFunct = new LengthOfIsEmptyFunct(FunctionNames.LIST_IS_EMPTY, param, bp);
-        phrases.add(lengthOfIsEmptyFunct);
+        LengthOfListFunct lengthOfListFunct = new LengthOfListFunct(bp, list);
+        phrases.add(lengthOfListFunct);
 
         executeWorkflow();
-        assertHasNoNepoInfo(lengthOfIsEmptyFunct);
+        assertHasNoNepoInfo(lengthOfListFunct);
     }
 
     @Test
-    public void visitLengthOfIsEmptyFunct_noFirsstElement() {
-        List<Expr> param = new ArrayList<>();
-        param.add(new NumConst(null, "ListCreate "));
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
+    public void visitLengthOfListFunct_noFirsstElement() {
+        // TODO: Use list instantiations (proper lists) for validation instead of NumConst - Test is too weak
+        Expr list = new NumConst(null, " ");
 
-        LengthOfIsEmptyFunct lengthOfIsEmptyFunct = new LengthOfIsEmptyFunct(FunctionNames.LIST_IS_EMPTY, param, bp);
-        phrases.add(lengthOfIsEmptyFunct);
+        LengthOfListFunct lengthOfListFunct = new LengthOfListFunct(bp, list);
+        phrases.add(lengthOfListFunct);
 
         executeWorkflow();
-        assertEquals((((NumConst) lengthOfIsEmptyFunct.param.get(0)).value), "0");
-        assertHasNoNepoInfo(lengthOfIsEmptyFunct);
+        assertEquals((((NumConst) lengthOfListFunct.value).value), "0");
+        assertHasNoNepoInfo(lengthOfListFunct);
+    }
+
+    @Test
+    public void visitIsListEmptyFunct() {
+        // TODO: Use list instantiations (proper lists) for validation instead of NumConst - Test is too weak
+        Expr list = new NumConst(null, "10");
+
+        IsListEmptyFunct isListEmptyFunct = new IsListEmptyFunct(bp, list);
+        phrases.add(isListEmptyFunct);
+
+        executeWorkflow();
+        assertHasNoNepoInfo(isListEmptyFunct);
+    }
+
+    @Test
+    public void visitIsListEmptyFunct_noFirsstElement() {
+        // TODO: Use list instantiations (proper lists) for validation instead of NumConst - Test is too weak
+        Expr list = new NumConst(null, " ");
+
+        IsListEmptyFunct isListEmptyFunct = new IsListEmptyFunct(bp, list);
+        phrases.add(isListEmptyFunct);
+
+        executeWorkflow();
+        assertEquals((((NumConst) isListEmptyFunct.value).value), "0");
+        assertHasNoNepoInfo(isListEmptyFunct);
     }
 
     @Test
     public void visitMathOnListFunct() {
-        List<Expr> param = new ArrayList<>();
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
+        // TODO: Use list instantiations (proper lists) for validation instead of NumConst - Test is too weak
+        Expr list = new NumConst(null, " ");
 
-        MathOnListFunct mathOnListFunct = new MathOnListFunct(FunctionNames.LIST_IS_EMPTY, param, bp);
+        MathOnListFunct mathOnListFunct = new MathOnListFunct(bp, null, FunctionNames.LIST_IS_EMPTY, list);
         phrases.add(mathOnListFunct);
 
         executeWorkflow();
@@ -630,16 +624,14 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitMathOnListFunct_noFirstElement() {
-        List<Expr> param = new ArrayList<>();
-        param.add(new NumConst(null, "ListCreate "));
-        param.add(new NumConst(null, "10"));
-        param.add(new NumConst(null, "10"));
+        // TODO: Use list instantiations (proper lists) for validation instead of NumConst - Test is too weak
+        Expr list = new NumConst(null, " ");
 
-        MathOnListFunct mathOnListFunct = new MathOnListFunct(FunctionNames.LIST_IS_EMPTY, param, bp);
+        MathOnListFunct mathOnListFunct = new MathOnListFunct(bp, null, FunctionNames.LIST_IS_EMPTY, list);
         phrases.add(mathOnListFunct);
 
         executeWorkflow();
-        assertEquals((((NumConst) mathOnListFunct.param.get(0)).value), "0");
+        assertEquals((((NumConst) mathOnListFunct.list).value), "0");
         assertHasNoNepoInfo(mathOnListFunct);
     }
 

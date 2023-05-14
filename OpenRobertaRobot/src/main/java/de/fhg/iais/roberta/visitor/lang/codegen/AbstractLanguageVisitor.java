@@ -34,11 +34,13 @@ import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.lang.functions.MathModuloFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.MathChangeStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNSetBiasStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNSetInputNeuronVal;
@@ -485,6 +487,24 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
         return null;
     }
 
+    @Override
+    public Void visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
+        mathChangeStmt.var.accept(this);
+        this.sb.append(" += ");
+        mathChangeStmt.delta.accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitMathModuloFunct(MathModuloFunct mathModuloFunct) {
+        this.sb.append("( ( ");
+        mathModuloFunct.dividend.accept(this);
+        this.sb.append(" ) % ( ");
+        mathModuloFunct.divisor.accept(this);
+        this.sb.append(" ) )");
+        return null;
+    }
+
     protected void generateExprCode(Unary unary, StringBuilder sb) {
         if ( unary.expr.getPrecedence() < unary.getPrecedence() || unary.op == Unary.Op.NEG ) {
             sb.append("(");
@@ -550,9 +570,9 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
             // parentheses are omitted
             expr.accept(this);
         } else {
-            sb.append("(" + whitespace());
+            sb.append("( ");
             expr.accept(this);
-            sb.append(whitespace() + ")");
+            sb.append(" )");
         }
     }
 

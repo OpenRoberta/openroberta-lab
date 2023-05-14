@@ -41,7 +41,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
@@ -301,7 +302,7 @@ public class ExprlyUnParser {
      * @return Textual representation of function
      */
     public String visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
-        return ExprlyUnParser.fnames.get(mathOnListFunct.functName) + "(" + paramList(mathOnListFunct.param) + ")";
+        return ExprlyUnParser.fnames.get(mathOnListFunct.functName) + "(" + visitAST(mathOnListFunct.list) + ")";
     }
 
     /**
@@ -319,7 +320,7 @@ public class ExprlyUnParser {
      * @return Textual representation of function
      */
     public String visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        return "randInt" + "(" + paramList(mathRandomIntFunct.param) + ")";
+        return "randInt" + "(" + visitAST(mathRandomIntFunct.from) + "," + visitAST(mathRandomIntFunct.to) + ")";
     }
 
     /**
@@ -354,11 +355,10 @@ public class ExprlyUnParser {
      * @return Textual representation of function
      */
     private String visitIndexOfFunct(IndexOfFunct indexOfFunct) {
-        List<Expr> args = indexOfFunct.param;
         if ( indexOfFunct.location.equals(IndexLocation.FIRST) ) {
-            return "indexOfFirst(" + paramList(args) + ")";
+            return "indexOfFirst(" + visitAST(indexOfFunct.value) + "," + visitAST(indexOfFunct.find) + ")";
         } else if ( indexOfFunct.location.equals(IndexLocation.LAST) ) {
-            return "indexOfLast(" + paramList(args) + ")";
+            return "indexOfLast(" + visitAST(indexOfFunct.value) + "," + visitAST(indexOfFunct.find) + ")";
         }
         throw new UnsupportedOperationException("Not supported Index mode for IndexOfFunct");
     }
@@ -381,7 +381,7 @@ public class ExprlyUnParser {
      * @return Textual representation of the function
      */
     private String visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
-        return "constrain(" + paramList(mathConstrainFunct.param) + ")";
+        return "constrain(" + visitAST(mathConstrainFunct.value) + "," + visitAST(mathConstrainFunct.lowerBound) + "," + visitAST(mathConstrainFunct.upperBound) + ")";
     }
 
     /**
@@ -450,14 +450,18 @@ public class ExprlyUnParser {
      * @param Function
      * @return Textual representation of the function
      */
-    private String visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
-        FunctionNames fname = lengthOfIsEmptyFunct.functName;
-        if ( fname.equals(FunctionNames.LIST_LENGTH) ) {
-            return "lengthOf(" + paramList(lengthOfIsEmptyFunct.param) + ")";
-        } else if ( fname.equals(FunctionNames.LIST_IS_EMPTY) ) {
-            return "isEmpty(" + paramList(lengthOfIsEmptyFunct.param) + ")";
-        }
-        return null;
+    private String visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
+        return "lengthOf(" + visitAST(lengthOfListFunct.value) + ")";
+    }
+
+    /**
+     * Method to UnParse IsListEmptyFunct
+     *
+     * @param Function
+     * @return Textual representation of the function
+     */
+    private String visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
+        return "isEmpty(" + visitAST(isListEmptyFunct.value) + ")";
     }
 
     /**
@@ -585,8 +589,11 @@ public class ExprlyUnParser {
         if ( ast instanceof ListCreate ) {
             return visitExprList(((ListCreate) ast).exprList);
         }
-        if ( ast instanceof LengthOfIsEmptyFunct ) {
-            return visitLengthOfIsEmptyFunct((LengthOfIsEmptyFunct) ast);
+        if ( ast instanceof LengthOfListFunct ) {
+            return visitLengthOfListFunct((LengthOfListFunct) ast);
+        }
+        if ( ast instanceof IsListEmptyFunct ) {
+            return visitIsListEmptyFunct((IsListEmptyFunct) ast);
         }
         if ( ast instanceof ListSetIndex ) {
             return visitListSetIndex((ListSetIndex) ast);

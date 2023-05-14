@@ -295,7 +295,6 @@ export const SPEED_ONLY: string = "speedOnly";
 export const SPEED_R: string = "speedR";
 export const START: string = "start";
 export const STATEMENTS: string = "statements";
-export const STATUS_LIGHT_ACTION: string = "statusLightAction";
 export const STD_DEV: string = "std_dev";
 export const STMT_LIST: string = "stmtList";
 export const STOP: string = "stop";

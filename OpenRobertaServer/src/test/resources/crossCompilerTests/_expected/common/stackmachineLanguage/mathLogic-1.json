@@ -97,159 +97,159 @@
   96:            jump            conditional: always, target: b_e_8,                                 > 
   97: b_m_8      expr            expr: BOOL_CONST, value: false,                                     > 
   98: b_e_8      comment         text: Binary, type: end,                                            > -: ["u*bRnIe){h{0^zI-jNSs"], 
-  99:            AssignStmt      name: b1,                                                           > -: ["#:LJ-#sG8j*TGyjmQAba"], 
- 100:            expr            expr: Var, name: r1,                                                > +: ["wr`.J%bE|[quUSBbbgi!","g^Y`mmw#3k#cc72SS~Dt"], -: ["g^Y`mmw#3k#cc72SS~Dt"], 
- 101:            expr            expr: NUM_CONST, value: 1,                                          > +: ["IHDwTWBmHeY}cN7Snf=8"], -: ["IHDwTWBmHeY}cN7Snf=8"], 
- 102:            mathChange      name: r1,                                                           > -: ["wr`.J%bE|[quUSBbbgi!"], 
- 103:            comment         n: 9, text: Binary, type: start,                                    > +: ["F;wY.bjCtM%tJiu1qLM}","QuFB=)tEis/2W9)~px^`"], possibleDebugStop: ["QuFB=)tEis/2W9)~px^`"], 
- 104:            expr            expr: Var, name: b1,                                                > +: ["1}(q8wP)Y~7NU8Acy=W+"], -: ["1}(q8wP)Y~7NU8Acy=W+"], 
- 105:            jump            conditional: false, target: b_m_9,                                  > 
- 106:            expr            expr: Var, name: r1,                                                > +: ["%vk#T(qwchut?3j+djBM","x^T}vUp9SE3s1Ss:#:=~"], -: ["x^T}vUp9SE3s1Ss:#:=~"], 
- 107:            expr            expr: MathPropFunct, op: EVEN,                                      > -: ["%vk#T(qwchut?3j+djBM"], 
- 108:            jump            conditional: always, target: b_e_9,                                 > 
- 109: b_m_9      expr            expr: BOOL_CONST, value: false,                                     > 
- 110: b_e_9      comment         text: Binary, type: end,                                            > -: ["F;wY.bjCtM%tJiu1qLM}"], 
- 111:            AssignStmt      name: b1,                                                           > -: ["QuFB=)tEis/2W9)~px^`"], 
- 112:            expr            expr: NUM_CONST, value: 20,                                         > +: ["]V`8XQ7WG(^;Yc,{I#Tu","PAmWFBUn*nF]ddqUi,=:","xh=?exru@(_?/~hq~A37"], -: ["]V`8XQ7WG(^;Yc,{I#Tu"], possibleDebugStop: ["xh=?exru@(_?/~hq~A37"], 
- 113:            expr            expr: SingleFunction, op: ROOT,                                     > -: ["PAmWFBUn*nF]ddqUi,=:"], 
- 114:            AssignStmt      name: r2,                                                           > -: ["xh=?exru@(_?/~hq~A37"], 
- 115:            comment         n: 10, text: Binary, type: start,                                   > +: ["@6T:WdVEFfvzoO%+CZ3]","`F3Yg.D)cQ1hP7N=lygA"], possibleDebugStop: ["`F3Yg.D)cQ1hP7N=lygA"], 
- 116:            expr            expr: Var, name: b1,                                                > +: ["5:3Zf`]YS^E]VT*7eQzj"], -: ["5:3Zf`]YS^E]VT*7eQzj"], 
- 117:            jump            conditional: false, target: b_m_10,                                 > 
- 118:            expr            expr: Var, name: r2,                                                > +: ["?]0Gzk!A+8OZ#a^|*9ZQ","Uw(X[4[XAp0wJaroL`ve","=p^P}YWTU|nWQIG9q_km"], -: ["Uw(X[4[XAp0wJaroL`ve"], 
- 119:            expr            expr: MathPropFunct, op: WHOLE,                                     > -: ["?]0Gzk!A+8OZ#a^|*9ZQ"], 
- 120:            expr            expr: Unary, op: NOT,                                               > -: ["=p^P}YWTU|nWQIG9q_km"], 
- 121:            jump            conditional: always, target: b_e_10,                                > 
- 122: b_m_10     expr            expr: BOOL_CONST, value: false,                                     > 
- 123: b_e_10     comment         text: Binary, type: end,                                            > -: ["@6T:WdVEFfvzoO%+CZ3]"], 
- 124:            AssignStmt      name: b1,                                                           > -: ["`F3Yg.D)cQ1hP7N=lygA"], 
- 125:            comment         n: 11, text: Binary, type: start,                                   > +: ["lA*}2,ai*2T#PgAEV9Z?","NozRai-%P8@3Z{?2f3_V"], possibleDebugStop: ["NozRai-%P8@3Z{?2f3_V"], 
- 126:            expr            expr: Var, name: b1,                                                > +: ["YRMa_(0fE^}`C(w{TUGt"], -: ["YRMa_(0fE^}`C(w{TUGt"], 
- 127:            jump            conditional: false, target: b_m_11,                                 > 
- 128:            expr            expr: Var, name: r2,                                                > +: ["O?pdV0~`@de5ox}ps]w%","L-8zc0Khh-3C]7l`}uCz","qfVQ1;T^:F(eHuu?F)m["], -: ["qfVQ1;T^:F(eHuu?F)m["], 
- 129:            expr            expr: SingleFunction, op: ROUND,                                    > -: ["L-8zc0Khh-3C]7l`}uCz"], 
- 130:            expr            expr: NUM_CONST, value: 4,                                          > +: ["%ajum~}CvZ!Jq-FU-5f1"], -: ["%ajum~}CvZ!Jq-FU-5f1"], 
- 131:            expr            expr: Binary, op: EQ,                                               > -: ["O?pdV0~`@de5ox}ps]w%"], 
- 132:            jump            conditional: always, target: b_e_11,                                > 
- 133: b_m_11     expr            expr: BOOL_CONST, value: false,                                     > 
- 134: b_e_11     comment         text: Binary, type: end,                                            > -: ["lA*}2,ai*2T#PgAEV9Z?"], 
- 135:            AssignStmt      name: b1,                                                           > -: ["NozRai-%P8@3Z{?2f3_V"], 
- 136:            comment         n: 12, text: Binary, type: start,                                   > +: ["/[@@37zYbhE]GLc2tnUO","FY]SzTJ8YuO{2Yhn(~KV"], possibleDebugStop: ["/[@@37zYbhE]GLc2tnUO"], 
- 137:            expr            expr: Var, name: b1,                                                > +: ["w+W%eFjNT41f];Kk:l52"], -: ["w+W%eFjNT41f];Kk:l52"], 
- 138:            jump            conditional: false, target: b_m_12,                                 > 
- 139:            expr            expr: Var, name: r2,                                                > +: ["[HOZ@2cSm}DC761|1`9h","JHz/=J)D@0mSU.V%Te_/","|KLPSOTEQL?NyFVxYlii"], -: ["|KLPSOTEQL?NyFVxYlii"], 
- 140:            expr            expr: SingleFunction, op: ROUNDUP,                                  > -: ["[HOZ@2cSm}DC761|1`9h"], 
- 141:            expr            expr: NUM_CONST, value: 5,                                          > +: ["s=Aou=5Iz_%:90E6DlLD"], -: ["s=Aou=5Iz_%:90E6DlLD"], 
- 142:            expr            expr: Binary, op: EQ,                                               > -: ["JHz/=J)D@0mSU.V%Te_/"], 
- 143:            jump            conditional: always, target: b_e_12,                                > 
- 144: b_m_12     expr            expr: BOOL_CONST, value: false,                                     > 
- 145: b_e_12     comment         text: Binary, type: end,                                            > -: ["FY]SzTJ8YuO{2Yhn(~KV"], 
- 146:            AssignStmt      name: b1,                                                           > -: ["/[@@37zYbhE]GLc2tnUO"], 
- 147:            comment         n: 13, text: Binary, type: start,                                   > +: ["[XXUOsx,KbUHkEg])?/X","a]%8;YipadSuG6u/3*gA"], possibleDebugStop: ["[XXUOsx,KbUHkEg])?/X"], 
- 148:            expr            expr: Var, name: b1,                                                > +: ["T)ixd~nNEq}II#o~-XV+"], -: ["T)ixd~nNEq}II#o~-XV+"], 
- 149:            jump            conditional: false, target: b_m_13,                                 > 
- 150:            expr            expr: Var, name: r2,                                                > +: ["OB+AZ6m2/{5|6E(`W[f7","6%s`02sFdt(M%.yIJ?z(","ltE!{QdjD,KM-@)7?m-D"], -: ["OB+AZ6m2/{5|6E(`W[f7"], 
- 151:            expr            expr: SingleFunction, op: ROUNDDOWN,                                > -: ["ltE!{QdjD,KM-@)7?m-D"], 
- 152:            expr            expr: NUM_CONST, value: 4,                                          > +: ["hzY2QsyY`M~4x1MRU%_;"], -: ["hzY2QsyY`M~4x1MRU%_;"], 
- 153:            expr            expr: Binary, op: EQ,                                               > -: ["6%s`02sFdt(M%.yIJ?z("], 
- 154:            jump            conditional: always, target: b_e_13,                                > 
- 155: b_m_13     expr            expr: BOOL_CONST, value: false,                                     > 
- 156: b_e_13     comment         text: Binary, type: end,                                            > -: ["a]%8;YipadSuG6u/3*gA"], 
- 157:            AssignStmt      name: b1,                                                           > -: ["[XXUOsx,KbUHkEg])?/X"], 
- 158:            comment         n: 14, text: Binary, type: start,                                   > +: [".?.{)of`(A6HDnf,b8jJ",".];ne#`~2*iD18!?*}gz"], possibleDebugStop: [".];ne#`~2*iD18!?*}gz"], 
- 159:            expr            expr: Var, name: b1,                                                > +: ["xa|zrsA=IxqZPi?.Kh{["], -: ["xa|zrsA=IxqZPi?.Kh{["], 
- 160:            jump            conditional: false, target: b_m_14,                                 > 
- 161:            expr            expr: Var, name: r1,                                                > +: ["M{oAntk/(7c-v|DiZKC*","H82WjCQKSx{cMwv@5Zd:"], -: ["M{oAntk/(7c-v|DiZKC*"], 
- 162:            expr            expr: Var, name: r2,                                                > +: ["I;W6FcsDC^~bc_MqT?l7"], -: ["I;W6FcsDC^~bc_MqT?l7"], 
- 163:            expr            expr: Binary, op: GT,                                               > -: ["H82WjCQKSx{cMwv@5Zd:"], 
- 164:            jump            conditional: always, target: b_e_14,                                > 
- 165: b_m_14     expr            expr: BOOL_CONST, value: false,                                     > 
- 166: b_e_14     comment         text: Binary, type: end,                                            > -: [".?.{)of`(A6HDnf,b8jJ"], 
- 167:            AssignStmt      name: b1,                                                           > -: [".];ne#`~2*iD18!?*}gz"], 
- 168:            comment         n: 15, text: Binary, type: start,                                   > +: ["{O+biD#0=ul4!+EL2(vi","t^Lv8nzL[hd!%00BXB-}"], possibleDebugStop: ["{O+biD#0=ul4!+EL2(vi"], 
- 169:            expr            expr: Var, name: b1,                                                > +: ["FbC?fX,RmSE%i_a51iYU"], -: ["FbC?fX,RmSE%i_a51iYU"], 
- 170:            jump            conditional: false, target: b_m_15,                                 > 
- 171:            expr            expr: Var, name: r1,                                                > +: ["rY]Y,^xO*G;@pds(0p=R","5HC.llDGhk(jP4ll-9*L"], -: ["rY]Y,^xO*G;@pds(0p=R"], 
- 172:            expr            expr: Var, name: r2,                                                > +: [";*2l)00ov-_aqB1.3Fr0"], -: [";*2l)00ov-_aqB1.3Fr0"], 
- 173:            expr            expr: Binary, op: GTE,                                              > -: ["5HC.llDGhk(jP4ll-9*L"], 
- 174:            jump            conditional: always, target: b_e_15,                                > 
- 175: b_m_15     expr            expr: BOOL_CONST, value: false,                                     > 
- 176: b_e_15     comment         text: Binary, type: end,                                            > -: ["t^Lv8nzL[hd!%00BXB-}"], 
- 177:            AssignStmt      name: b1,                                                           > -: ["{O+biD#0=ul4!+EL2(vi"], 
- 178:            expr            expr: Var, name: b1,                                                > +: ["xbfbRQgOM*~|Lm@:Cl!{","ch+d4RB*WFYoaEzsDAz)"], -: ["xbfbRQgOM*~|Lm@:Cl!{"], possibleDebugStop: ["ch+d4RB*WFYoaEzsDAz)"], 
- 179:            AssignStmt      name: b1,                                                           > -: ["ch+d4RB*WFYoaEzsDAz)"], 
- 180:            comment         n: 16, text: Binary, type: start,                                   > +: ["dEkEyr)AD8d;f2%kqL1K","Ume1/%Iik}Mgi@Ow+%tC"], possibleDebugStop: ["Ume1/%Iik}Mgi@Ow+%tC"], 
- 181:            comment         n: 17, text: Binary, type: start,                                   > +: ["iC/qOu2OQW=PilG*}nNO"], 
- 182:            expr            expr: Var, name: b1,                                                > +: ["D%8u*)@!V(KRj+jr,wF)"], -: ["D%8u*)@!V(KRj+jr,wF)"], 
- 183:            jump            conditional: false, target: b_m_17,                                 > 
- 184:            expr            expr: Var, name: r2,                                                > +: ["yT+N)s64/iE7Y(w44H0w","a;_7nIc9n!@71iCc(*1p"], -: ["a;_7nIc9n!@71iCc(*1p"], 
- 185:            expr            expr: Var, name: r1,                                                > +: ["2!b=29cxKbAVW;_%[#5z"], -: ["2!b=29cxKbAVW;_%[#5z"], 
- 186:            expr            expr: Binary, op: LT,                                               > -: ["yT+N)s64/iE7Y(w44H0w"], 
- 187:            jump            conditional: always, target: b_e_17,                                > 
- 188: b_m_17     expr            expr: BOOL_CONST, value: false,                                     > 
- 189: b_e_17     comment         text: Binary, type: end,                                            > -: ["iC/qOu2OQW=PilG*}nNO"], 
- 190:            jump            conditional: false, target: b_m_16,                                 > 
- 191:            expr            expr: Var, name: r1,                                                > +: ["o3q]ai9oPhOpw!Ug%d0r","^!]ReOKmB5mp}GK5)9m^"], -: ["o3q]ai9oPhOpw!Ug%d0r"], 
- 192:            expr            expr: Var, name: r1,                                                > +: ["3Z/S!zYTxhXU6;upJa^N"], -: ["3Z/S!zYTxhXU6;upJa^N"], 
- 193:            expr            expr: Binary, op: LTE,                                              > -: ["^!]ReOKmB5mp}GK5)9m^"], 
- 194:            jump            conditional: always, target: b_e_16,                                > 
- 195: b_m_16     expr            expr: BOOL_CONST, value: false,                                     > 
- 196: b_e_16     comment         text: Binary, type: end,                                            > -: ["dEkEyr)AD8d;f2%kqL1K"], 
- 197:            AssignStmt      name: b1,                                                           > -: ["Ume1/%Iik}Mgi@Ow+%tC"], 
- 198:            comment         n: 18, text: Binary, type: start,                                   > +: ["u=JXL0k#iT.*/(agO)aN","rOj!6.l[fRsDFh`+EH^E"], possibleDebugStop: ["rOj!6.l[fRsDFh`+EH^E"], 
- 199:            expr            expr: Var, name: b1,                                                > +: ["F?_*=T(i4N|Viln{!{g~"], -: ["F?_*=T(i4N|Viln{!{g~"], 
- 200:            jump            conditional: false, target: b_m_18,                                 > 
- 201:            expr            expr: Var, name: r1,                                                > +: ["j%P6A[n(D6UE_]|Z:5gb","0L9{n^i{XYkJE_7*jL5=","QmZ;R8Z)`.zlmh.%3]#*"], -: ["QmZ;R8Z)`.zlmh.%3]#*"], 
- 202:            expr            expr: NUM_CONST, value: 4,                                          > +: ["/VQGH9i`50czXM@mALzP"], -: ["/VQGH9i`50czXM@mALzP"], 
- 203:            expr            expr: Binary, op: MOD,                                              > -: ["j%P6A[n(D6UE_]|Z:5gb"], 
- 204:            expr            expr: NUM_CONST, value: 2,                                          > +: ["P(DbiPls,(n3TW/RUsQN"], -: ["P(DbiPls,(n3TW/RUsQN"], 
- 205:            expr            expr: Binary, op: EQ,                                               > -: ["0L9{n^i{XYkJE_7*jL5="], 
- 206:            jump            conditional: always, target: b_e_18,                                > 
- 207: b_m_18     expr            expr: BOOL_CONST, value: false,                                     > 
- 208: b_e_18     comment         text: Binary, type: end,                                            > -: ["u=JXL0k#iT.*/(agO)aN"], 
- 209:            AssignStmt      name: b1,                                                           > -: ["rOj!6.l[fRsDFh`+EH^E"], 
- 210:            comment         n: 19, text: Binary, type: start,                                   > +: ["dcGiGGAycyblvv!2.twm","[yAHV0oE-e2K?K-kAfGH"], possibleDebugStop: ["dcGiGGAycyblvv!2.twm"], 
- 211:            expr            expr: Var, name: b1,                                                > +: ["3`e5z%J1Pto^p)jXoTO5"], -: ["3`e5z%J1Pto^p)jXoTO5"], 
- 212:            jump            conditional: false, target: b_m_19,                                 > 
- 213:            expr            expr: NUM_CONST, value: 29,                                         > +: ["3,A:*w#mT)|U;g_hO.)f","eIe5VwNk:r{WC86E*D`;"], -: ["eIe5VwNk:r{WC86E*D`;"], 
- 214:            expr            expr: NUM_CONST, value: 3,                                          > +: ["3E`eohQ(LLxF;@kVrTzQ","ILG1~4COn[;Yk-w/zU6@","mNZ)#H,z*AZ@qerthY9v","nN9t7EQsdbb;3l`5sSTv"], -: ["mNZ)#H,z*AZ@qerthY9v"], 
- 215:            expr            expr: NUM_CONST, value: 2,                                          > +: ["IoEC-ul{TC3E)p~d.pXc"], -: ["IoEC-ul{TC3E)p~d.pXc"], 
- 216:            expr            expr: Binary, op: POWER,                                            > -: ["nN9t7EQsdbb;3l`5sSTv"], 
- 217:            expr            expr: NUM_CONST, value: 1,                                          > +: ["0y#6^1`.f!Y)L*~R6iD."], -: ["0y#6^1`.f!Y)L*~R6iD."], 
- 218:            expr            expr: NUM_CONST, value: 20,                                         > +: ["4dT5BXOeedp!eHm14sCi"], -: ["4dT5BXOeedp!eHm14sCi"], 
- 219:            expr            expr: MathConstrainFunct,                                           > -: ["3E`eohQ(LLxF;@kVrTzQ"], 
- 220:            expr            expr: NUM_CONST, value: 9,                                          > +: ["II,2nZ:DYX@`]Q1HGE]D","lBqlK]0=MY@v9[^}Wq*Z","9cOl7|{(IV8R{5H#Ohm)"], -: ["II,2nZ:DYX@`]Q1HGE]D"], 
- 221:            expr            expr: NUM_CONST, value: 3,                                          > +: [")c(L[,~)}6x4zAN]903l","Woh5Q|Y2aHKP*CyV;9-|"], -: ["Woh5Q|Y2aHKP*CyV;9-|"], 
- 222:            expr            expr: NUM_CONST, value: 4,                                          > +: ["qq%z:MH~wths0?rpQHF*"], -: ["qq%z:MH~wths0?rpQHF*"], 
- 223:            expr            expr: Binary, op: MULTIPLY,                                         > -: [")c(L[,~)}6x4zAN]903l"], 
- 224:            expr            expr: NUM_CONST, value: 18,                                         > +: ["!=}t)!`ayi_[US4I2-4]"], -: ["!=}t)!`ayi_[US4I2-4]"], 
- 225:            expr            expr: MathConstrainFunct,                                           > -: ["lBqlK]0=MY@v9[^}Wq*Z"], 
- 226:            expr            expr: NUM_CONST, value: 3,                                          > +: ["R9(E@OC4O?.-YLy-0s=q","g/,7;oBr@?9_XVL:OS4U","?21tUS}EWYhQILNH`gZ1"], -: ["?21tUS}EWYhQILNH`gZ1"], 
- 227:            expr            expr: NUM_CONST, value: 3,                                          > +: ["PI2+@f-W)DsF2_=SFH:k"], -: ["PI2+@f-W)DsF2_=SFH:k"], 
- 228:            expr            expr: Binary, op: MULTIPLY,                                         > -: ["g/,7;oBr@?9_XVL:OS4U"], 
- 229:            expr            expr: NUM_CONST, value: 5,                                          > +: ["rV3y{,xzyyoSUMP:%3~{"], -: ["rV3y{,xzyyoSUMP:%3~{"], 
- 230:            expr            expr: NUM_CONST, value: 8,                                          > +: ["27WRUD{vnB51`eBA;@Rs"], -: ["27WRUD{vnB51`eBA;@Rs"], 
- 231:            expr            expr: MathConstrainFunct,                                           > -: ["R9(E@OC4O?.-YLy-0s=q"], 
- 232:            expr            expr: Binary, op: ADD,                                              > -: ["9cOl7|{(IV8R{5H#Ohm)"], 
- 233:            expr            expr: Binary, op: ADD,                                              > -: ["ILG1~4COn[;Yk-w/zU6@"], 
- 234:            expr            expr: Binary, op: EQ,                                               > -: ["3,A:*w#mT)|U;g_hO.)f"], 
- 235:            jump            conditional: always, target: b_e_19,                                > 
- 236: b_m_19     expr            expr: BOOL_CONST, value: false,                                     > 
- 237: b_e_19     comment         text: Binary, type: end,                                            > -: ["[yAHV0oE-e2K?K-kAfGH"], 
- 238:            AssignStmt      name: b1,                                                           > -: ["dcGiGGAycyblvv!2.twm"], 
- 239:            comment         n: 20, text: Binary, type: start,                                   > +: ["w-_t:IU;Cf6hVhvtR(oF","kE,/uoU?satY[_djvw`]"], possibleDebugStop: ["w-_t:IU;Cf6hVhvtR(oF"], 
- 240:            expr            expr: Var, name: b1,                                                > +: ["c%uf_{Tkt}4+3ATv+=Q*"], -: ["c%uf_{Tkt}4+3ATv+=Q*"], 
- 241:            jump            conditional: false, target: b_m_20,                                 > 
- 242:            expr            expr: NUM_CONST, value: 11,                                         > +: ["pH5~H_5XDHDOSA[jy]uz","1%{UafeY1#r1#6}NIP+:"], -: ["1%{UafeY1#r1#6}NIP+:"], 
- 243:            expr            expr: randDouble,                                                   > +: ["6T7r=voXVHB{eud[c(Qp","ejIk_o?-.d`|qUyl+n:v"], -: ["6T7r=voXVHB{eud[c(Qp"], 
- 244:            expr            expr: NUM_CONST, value: 1,                                          > +: ["qw%0=.Tc@[~#Vgx.IRX~","SFap,8#u?5/`B~[1XyQd"], -: ["qw%0=.Tc@[~#Vgx.IRX~"], 
- 245:            expr            expr: NUM_CONST, value: 10,                                         > +: ["[uu.w~{Zq/Z^qOXFF+Vu"], -: ["[uu.w~{Zq/Z^qOXFF+Vu"], 
- 246:            expr            expr: randInt,                                                      > -: ["SFap,8#u?5/`B~[1XyQd"], 
- 247:            expr            expr: Binary, op: MULTIPLY,                                         > -: ["ejIk_o?-.d`|qUyl+n:v"], 
- 248:            expr            expr: Binary, op: GT,                                               > -: ["pH5~H_5XDHDOSA[jy]uz"], 
- 249:            jump            conditional: always, target: b_e_20,                                > 
- 250: b_m_20     expr            expr: BOOL_CONST, value: false,                                     > 
- 251: b_e_20     comment         text: Binary, type: end,                                            > -: ["kE,/uoU?satY[_djvw`]"], 
- 252:            AssignStmt      name: b1,                                                           > -: ["w-_t:IU;Cf6hVhvtR(oF"], 
- 253:            comment         value: if b1 is true, the test succeeded, otherwise it failed :-),  > +: ["2_U,ISULP_/HW*O~3mo+"], -: ["2_U,ISULP_/HW*O~3mo+"], possibleDebugStop: ["2_U,ISULP_/HW*O~3mo+"], 
- 254:            stop                                                                                > 
+  99:            AssignStmt      name: b1,                                                           > -: ["#:LJ-#sG8j*TGyjmQAba"],
+ 100:            expr            expr: Var, name: r1,                                                > +: ["wr`.J%bE|[quUSBbbgi!","g^Y`mmw#3k#cc72SS~Dt"], -: ["g^Y`mmw#3k#cc72SS~Dt"], possibleDebugStop: ["wr`.J%bE|[quUSBbbgi!"],
+ 101:            expr            expr: NUM_CONST, value: 1,                                          > +: ["IHDwTWBmHeY}cN7Snf=8"], -: ["IHDwTWBmHeY}cN7Snf=8"],
+ 102:            mathChange      name: r1,                                                           > -: ["wr`.J%bE|[quUSBbbgi!"],
+ 103:            comment         n: 9, text: Binary, type: start,                                    > +: ["F;wY.bjCtM%tJiu1qLM}","QuFB=)tEis/2W9)~px^`"], possibleDebugStop: ["QuFB=)tEis/2W9)~px^`"],
+ 104:            expr            expr: Var, name: b1,                                                > +: ["1}(q8wP)Y~7NU8Acy=W+"], -: ["1}(q8wP)Y~7NU8Acy=W+"],
+ 105:            jump            conditional: false, target: b_m_9,                                  >
+ 106:            expr            expr: Var, name: r1,                                                > +: ["%vk#T(qwchut?3j+djBM","x^T}vUp9SE3s1Ss:#:=~"], -: ["x^T}vUp9SE3s1Ss:#:=~"],
+ 107:            expr            expr: MathPropFunct, op: EVEN,                                      > -: ["%vk#T(qwchut?3j+djBM"],
+ 108:            jump            conditional: always, target: b_e_9,                                 >
+ 109: b_m_9      expr            expr: BOOL_CONST, value: false,                                     >
+ 110: b_e_9      comment         text: Binary, type: end,                                            > -: ["F;wY.bjCtM%tJiu1qLM}"],
+ 111:            AssignStmt      name: b1,                                                           > -: ["QuFB=)tEis/2W9)~px^`"],
+ 112:            expr            expr: NUM_CONST, value: 20,                                         > +: ["]V`8XQ7WG(^;Yc,{I#Tu","PAmWFBUn*nF]ddqUi,=:","xh=?exru@(_?/~hq~A37"], -: ["]V`8XQ7WG(^;Yc,{I#Tu"], possibleDebugStop: ["xh=?exru@(_?/~hq~A37"],
+ 113:            expr            expr: SingleFunction, op: ROOT,                                     > -: ["PAmWFBUn*nF]ddqUi,=:"],
+ 114:            AssignStmt      name: r2,                                                           > -: ["xh=?exru@(_?/~hq~A37"],
+ 115:            comment         n: 10, text: Binary, type: start,                                   > +: ["@6T:WdVEFfvzoO%+CZ3]","`F3Yg.D)cQ1hP7N=lygA"], possibleDebugStop: ["`F3Yg.D)cQ1hP7N=lygA"],
+ 116:            expr            expr: Var, name: b1,                                                > +: ["5:3Zf`]YS^E]VT*7eQzj"], -: ["5:3Zf`]YS^E]VT*7eQzj"],
+ 117:            jump            conditional: false, target: b_m_10,                                 >
+ 118:            expr            expr: Var, name: r2,                                                > +: ["?]0Gzk!A+8OZ#a^|*9ZQ","Uw(X[4[XAp0wJaroL`ve","=p^P}YWTU|nWQIG9q_km"], -: ["Uw(X[4[XAp0wJaroL`ve"],
+ 119:            expr            expr: MathPropFunct, op: WHOLE,                                     > -: ["?]0Gzk!A+8OZ#a^|*9ZQ"],
+ 120:            expr            expr: Unary, op: NOT,                                               > -: ["=p^P}YWTU|nWQIG9q_km"],
+ 121:            jump            conditional: always, target: b_e_10,                                >
+ 122: b_m_10     expr            expr: BOOL_CONST, value: false,                                     >
+ 123: b_e_10     comment         text: Binary, type: end,                                            > -: ["@6T:WdVEFfvzoO%+CZ3]"],
+ 124:            AssignStmt      name: b1,                                                           > -: ["`F3Yg.D)cQ1hP7N=lygA"],
+ 125:            comment         n: 11, text: Binary, type: start,                                   > +: ["lA*}2,ai*2T#PgAEV9Z?","NozRai-%P8@3Z{?2f3_V"], possibleDebugStop: ["NozRai-%P8@3Z{?2f3_V"],
+ 126:            expr            expr: Var, name: b1,                                                > +: ["YRMa_(0fE^}`C(w{TUGt"], -: ["YRMa_(0fE^}`C(w{TUGt"],
+ 127:            jump            conditional: false, target: b_m_11,                                 >
+ 128:            expr            expr: Var, name: r2,                                                > +: ["O?pdV0~`@de5ox}ps]w%","L-8zc0Khh-3C]7l`}uCz","qfVQ1;T^:F(eHuu?F)m["], -: ["qfVQ1;T^:F(eHuu?F)m["],
+ 129:            expr            expr: SingleFunction, op: ROUND,                                    > -: ["L-8zc0Khh-3C]7l`}uCz"],
+ 130:            expr            expr: NUM_CONST, value: 4,                                          > +: ["%ajum~}CvZ!Jq-FU-5f1"], -: ["%ajum~}CvZ!Jq-FU-5f1"],
+ 131:            expr            expr: Binary, op: EQ,                                               > -: ["O?pdV0~`@de5ox}ps]w%"],
+ 132:            jump            conditional: always, target: b_e_11,                                >
+ 133: b_m_11     expr            expr: BOOL_CONST, value: false,                                     >
+ 134: b_e_11     comment         text: Binary, type: end,                                            > -: ["lA*}2,ai*2T#PgAEV9Z?"],
+ 135:            AssignStmt      name: b1,                                                           > -: ["NozRai-%P8@3Z{?2f3_V"],
+ 136:            comment         n: 12, text: Binary, type: start,                                   > +: ["/[@@37zYbhE]GLc2tnUO","FY]SzTJ8YuO{2Yhn(~KV"], possibleDebugStop: ["/[@@37zYbhE]GLc2tnUO"],
+ 137:            expr            expr: Var, name: b1,                                                > +: ["w+W%eFjNT41f];Kk:l52"], -: ["w+W%eFjNT41f];Kk:l52"],
+ 138:            jump            conditional: false, target: b_m_12,                                 >
+ 139:            expr            expr: Var, name: r2,                                                > +: ["[HOZ@2cSm}DC761|1`9h","JHz/=J)D@0mSU.V%Te_/","|KLPSOTEQL?NyFVxYlii"], -: ["|KLPSOTEQL?NyFVxYlii"],
+ 140:            expr            expr: SingleFunction, op: ROUNDUP,                                  > -: ["[HOZ@2cSm}DC761|1`9h"],
+ 141:            expr            expr: NUM_CONST, value: 5,                                          > +: ["s=Aou=5Iz_%:90E6DlLD"], -: ["s=Aou=5Iz_%:90E6DlLD"],
+ 142:            expr            expr: Binary, op: EQ,                                               > -: ["JHz/=J)D@0mSU.V%Te_/"],
+ 143:            jump            conditional: always, target: b_e_12,                                >
+ 144: b_m_12     expr            expr: BOOL_CONST, value: false,                                     >
+ 145: b_e_12     comment         text: Binary, type: end,                                            > -: ["FY]SzTJ8YuO{2Yhn(~KV"],
+ 146:            AssignStmt      name: b1,                                                           > -: ["/[@@37zYbhE]GLc2tnUO"],
+ 147:            comment         n: 13, text: Binary, type: start,                                   > +: ["[XXUOsx,KbUHkEg])?/X","a]%8;YipadSuG6u/3*gA"], possibleDebugStop: ["[XXUOsx,KbUHkEg])?/X"],
+ 148:            expr            expr: Var, name: b1,                                                > +: ["T)ixd~nNEq}II#o~-XV+"], -: ["T)ixd~nNEq}II#o~-XV+"],
+ 149:            jump            conditional: false, target: b_m_13,                                 >
+ 150:            expr            expr: Var, name: r2,                                                > +: ["OB+AZ6m2/{5|6E(`W[f7","6%s`02sFdt(M%.yIJ?z(","ltE!{QdjD,KM-@)7?m-D"], -: ["OB+AZ6m2/{5|6E(`W[f7"],
+ 151:            expr            expr: SingleFunction, op: ROUNDDOWN,                                > -: ["ltE!{QdjD,KM-@)7?m-D"],
+ 152:            expr            expr: NUM_CONST, value: 4,                                          > +: ["hzY2QsyY`M~4x1MRU%_;"], -: ["hzY2QsyY`M~4x1MRU%_;"],
+ 153:            expr            expr: Binary, op: EQ,                                               > -: ["6%s`02sFdt(M%.yIJ?z("],
+ 154:            jump            conditional: always, target: b_e_13,                                >
+ 155: b_m_13     expr            expr: BOOL_CONST, value: false,                                     >
+ 156: b_e_13     comment         text: Binary, type: end,                                            > -: ["a]%8;YipadSuG6u/3*gA"],
+ 157:            AssignStmt      name: b1,                                                           > -: ["[XXUOsx,KbUHkEg])?/X"],
+ 158:            comment         n: 14, text: Binary, type: start,                                   > +: [".?.{)of`(A6HDnf,b8jJ",".];ne#`~2*iD18!?*}gz"], possibleDebugStop: [".];ne#`~2*iD18!?*}gz"],
+ 159:            expr            expr: Var, name: b1,                                                > +: ["xa|zrsA=IxqZPi?.Kh{["], -: ["xa|zrsA=IxqZPi?.Kh{["],
+ 160:            jump            conditional: false, target: b_m_14,                                 >
+ 161:            expr            expr: Var, name: r1,                                                > +: ["M{oAntk/(7c-v|DiZKC*","H82WjCQKSx{cMwv@5Zd:"], -: ["M{oAntk/(7c-v|DiZKC*"],
+ 162:            expr            expr: Var, name: r2,                                                > +: ["I;W6FcsDC^~bc_MqT?l7"], -: ["I;W6FcsDC^~bc_MqT?l7"],
+ 163:            expr            expr: Binary, op: GT,                                               > -: ["H82WjCQKSx{cMwv@5Zd:"],
+ 164:            jump            conditional: always, target: b_e_14,                                >
+ 165: b_m_14     expr            expr: BOOL_CONST, value: false,                                     >
+ 166: b_e_14     comment         text: Binary, type: end,                                            > -: [".?.{)of`(A6HDnf,b8jJ"],
+ 167:            AssignStmt      name: b1,                                                           > -: [".];ne#`~2*iD18!?*}gz"],
+ 168:            comment         n: 15, text: Binary, type: start,                                   > +: ["{O+biD#0=ul4!+EL2(vi","t^Lv8nzL[hd!%00BXB-}"], possibleDebugStop: ["{O+biD#0=ul4!+EL2(vi"],
+ 169:            expr            expr: Var, name: b1,                                                > +: ["FbC?fX,RmSE%i_a51iYU"], -: ["FbC?fX,RmSE%i_a51iYU"],
+ 170:            jump            conditional: false, target: b_m_15,                                 >
+ 171:            expr            expr: Var, name: r1,                                                > +: ["rY]Y,^xO*G;@pds(0p=R","5HC.llDGhk(jP4ll-9*L"], -: ["rY]Y,^xO*G;@pds(0p=R"],
+ 172:            expr            expr: Var, name: r2,                                                > +: [";*2l)00ov-_aqB1.3Fr0"], -: [";*2l)00ov-_aqB1.3Fr0"],
+ 173:            expr            expr: Binary, op: GTE,                                              > -: ["5HC.llDGhk(jP4ll-9*L"],
+ 174:            jump            conditional: always, target: b_e_15,                                >
+ 175: b_m_15     expr            expr: BOOL_CONST, value: false,                                     >
+ 176: b_e_15     comment         text: Binary, type: end,                                            > -: ["t^Lv8nzL[hd!%00BXB-}"],
+ 177:            AssignStmt      name: b1,                                                           > -: ["{O+biD#0=ul4!+EL2(vi"],
+ 178:            expr            expr: Var, name: b1,                                                > +: ["xbfbRQgOM*~|Lm@:Cl!{","ch+d4RB*WFYoaEzsDAz)"], -: ["xbfbRQgOM*~|Lm@:Cl!{"], possibleDebugStop: ["ch+d4RB*WFYoaEzsDAz)"],
+ 179:            AssignStmt      name: b1,                                                           > -: ["ch+d4RB*WFYoaEzsDAz)"],
+ 180:            comment         n: 16, text: Binary, type: start,                                   > +: ["dEkEyr)AD8d;f2%kqL1K","Ume1/%Iik}Mgi@Ow+%tC"], possibleDebugStop: ["Ume1/%Iik}Mgi@Ow+%tC"],
+ 181:            comment         n: 17, text: Binary, type: start,                                   > +: ["iC/qOu2OQW=PilG*}nNO"],
+ 182:            expr            expr: Var, name: b1,                                                > +: ["D%8u*)@!V(KRj+jr,wF)"], -: ["D%8u*)@!V(KRj+jr,wF)"],
+ 183:            jump            conditional: false, target: b_m_17,                                 >
+ 184:            expr            expr: Var, name: r2,                                                > +: ["yT+N)s64/iE7Y(w44H0w","a;_7nIc9n!@71iCc(*1p"], -: ["a;_7nIc9n!@71iCc(*1p"],
+ 185:            expr            expr: Var, name: r1,                                                > +: ["2!b=29cxKbAVW;_%[#5z"], -: ["2!b=29cxKbAVW;_%[#5z"],
+ 186:            expr            expr: Binary, op: LT,                                               > -: ["yT+N)s64/iE7Y(w44H0w"],
+ 187:            jump            conditional: always, target: b_e_17,                                >
+ 188: b_m_17     expr            expr: BOOL_CONST, value: false,                                     >
+ 189: b_e_17     comment         text: Binary, type: end,                                            > -: ["iC/qOu2OQW=PilG*}nNO"],
+ 190:            jump            conditional: false, target: b_m_16,                                 >
+ 191:            expr            expr: Var, name: r1,                                                > +: ["o3q]ai9oPhOpw!Ug%d0r","^!]ReOKmB5mp}GK5)9m^"], -: ["o3q]ai9oPhOpw!Ug%d0r"],
+ 192:            expr            expr: Var, name: r1,                                                > +: ["3Z/S!zYTxhXU6;upJa^N"], -: ["3Z/S!zYTxhXU6;upJa^N"],
+ 193:            expr            expr: Binary, op: LTE,                                              > -: ["^!]ReOKmB5mp}GK5)9m^"],
+ 194:            jump            conditional: always, target: b_e_16,                                >
+ 195: b_m_16     expr            expr: BOOL_CONST, value: false,                                     >
+ 196: b_e_16     comment         text: Binary, type: end,                                            > -: ["dEkEyr)AD8d;f2%kqL1K"],
+ 197:            AssignStmt      name: b1,                                                           > -: ["Ume1/%Iik}Mgi@Ow+%tC"],
+ 198:            comment         n: 18, text: Binary, type: start,                                   > +: ["u=JXL0k#iT.*/(agO)aN","rOj!6.l[fRsDFh`+EH^E"], possibleDebugStop: ["rOj!6.l[fRsDFh`+EH^E"],
+ 199:            expr            expr: Var, name: b1,                                                > +: ["F?_*=T(i4N|Viln{!{g~"], -: ["F?_*=T(i4N|Viln{!{g~"],
+ 200:            jump            conditional: false, target: b_m_18,                                 >
+ 201:            expr            expr: Var, name: r1,                                                > +: ["j%P6A[n(D6UE_]|Z:5gb","0L9{n^i{XYkJE_7*jL5=","QmZ;R8Z)`.zlmh.%3]#*"], -: ["QmZ;R8Z)`.zlmh.%3]#*"],
+ 202:            expr            expr: NUM_CONST, value: 4,                                          > +: ["/VQGH9i`50czXM@mALzP"], -: ["/VQGH9i`50czXM@mALzP"],
+ 203:            expr            expr: Binary, op: MOD,                                              > -: ["j%P6A[n(D6UE_]|Z:5gb"],
+ 204:            expr            expr: NUM_CONST, value: 2,                                          > +: ["P(DbiPls,(n3TW/RUsQN"], -: ["P(DbiPls,(n3TW/RUsQN"],
+ 205:            expr            expr: Binary, op: EQ,                                               > -: ["0L9{n^i{XYkJE_7*jL5="],
+ 206:            jump            conditional: always, target: b_e_18,                                >
+ 207: b_m_18     expr            expr: BOOL_CONST, value: false,                                     >
+ 208: b_e_18     comment         text: Binary, type: end,                                            > -: ["u=JXL0k#iT.*/(agO)aN"],
+ 209:            AssignStmt      name: b1,                                                           > -: ["rOj!6.l[fRsDFh`+EH^E"],
+ 210:            comment         n: 19, text: Binary, type: start,                                   > +: ["dcGiGGAycyblvv!2.twm","[yAHV0oE-e2K?K-kAfGH"], possibleDebugStop: ["dcGiGGAycyblvv!2.twm"],
+ 211:            expr            expr: Var, name: b1,                                                > +: ["3`e5z%J1Pto^p)jXoTO5"], -: ["3`e5z%J1Pto^p)jXoTO5"],
+ 212:            jump            conditional: false, target: b_m_19,                                 >
+ 213:            expr            expr: NUM_CONST, value: 29,                                         > +: ["3,A:*w#mT)|U;g_hO.)f","eIe5VwNk:r{WC86E*D`;"], -: ["eIe5VwNk:r{WC86E*D`;"],
+ 214:            expr            expr: NUM_CONST, value: 3,                                          > +: ["3E`eohQ(LLxF;@kVrTzQ","ILG1~4COn[;Yk-w/zU6@","mNZ)#H,z*AZ@qerthY9v","nN9t7EQsdbb;3l`5sSTv"], -: ["mNZ)#H,z*AZ@qerthY9v"],
+ 215:            expr            expr: NUM_CONST, value: 2,                                          > +: ["IoEC-ul{TC3E)p~d.pXc"], -: ["IoEC-ul{TC3E)p~d.pXc"],
+ 216:            expr            expr: Binary, op: POWER,                                            > -: ["nN9t7EQsdbb;3l`5sSTv"],
+ 217:            expr            expr: NUM_CONST, value: 1,                                          > +: ["0y#6^1`.f!Y)L*~R6iD."], -: ["0y#6^1`.f!Y)L*~R6iD."],
+ 218:            expr            expr: NUM_CONST, value: 20,                                         > +: ["4dT5BXOeedp!eHm14sCi"], -: ["4dT5BXOeedp!eHm14sCi"],
+ 219:            expr            expr: MathConstrainFunct,                                           > -: ["3E`eohQ(LLxF;@kVrTzQ"],
+ 220:            expr            expr: NUM_CONST, value: 9,                                          > +: ["II,2nZ:DYX@`]Q1HGE]D","lBqlK]0=MY@v9[^}Wq*Z","9cOl7|{(IV8R{5H#Ohm)"], -: ["II,2nZ:DYX@`]Q1HGE]D"],
+ 221:            expr            expr: NUM_CONST, value: 3,                                          > +: [")c(L[,~)}6x4zAN]903l","Woh5Q|Y2aHKP*CyV;9-|"], -: ["Woh5Q|Y2aHKP*CyV;9-|"],
+ 222:            expr            expr: NUM_CONST, value: 4,                                          > +: ["qq%z:MH~wths0?rpQHF*"], -: ["qq%z:MH~wths0?rpQHF*"],
+ 223:            expr            expr: Binary, op: MULTIPLY,                                         > -: [")c(L[,~)}6x4zAN]903l"],
+ 224:            expr            expr: NUM_CONST, value: 18,                                         > +: ["!=}t)!`ayi_[US4I2-4]"], -: ["!=}t)!`ayi_[US4I2-4]"],
+ 225:            expr            expr: MathConstrainFunct,                                           > -: ["lBqlK]0=MY@v9[^}Wq*Z"],
+ 226:            expr            expr: NUM_CONST, value: 3,                                          > +: ["R9(E@OC4O?.-YLy-0s=q","g/,7;oBr@?9_XVL:OS4U","?21tUS}EWYhQILNH`gZ1"], -: ["?21tUS}EWYhQILNH`gZ1"],
+ 227:            expr            expr: NUM_CONST, value: 3,                                          > +: ["PI2+@f-W)DsF2_=SFH:k"], -: ["PI2+@f-W)DsF2_=SFH:k"],
+ 228:            expr            expr: Binary, op: MULTIPLY,                                         > -: ["g/,7;oBr@?9_XVL:OS4U"],
+ 229:            expr            expr: NUM_CONST, value: 5,                                          > +: ["rV3y{,xzyyoSUMP:%3~{"], -: ["rV3y{,xzyyoSUMP:%3~{"],
+ 230:            expr            expr: NUM_CONST, value: 8,                                          > +: ["27WRUD{vnB51`eBA;@Rs"], -: ["27WRUD{vnB51`eBA;@Rs"],
+ 231:            expr            expr: MathConstrainFunct,                                           > -: ["R9(E@OC4O?.-YLy-0s=q"],
+ 232:            expr            expr: Binary, op: ADD,                                              > -: ["9cOl7|{(IV8R{5H#Ohm)"],
+ 233:            expr            expr: Binary, op: ADD,                                              > -: ["ILG1~4COn[;Yk-w/zU6@"],
+ 234:            expr            expr: Binary, op: EQ,                                               > -: ["3,A:*w#mT)|U;g_hO.)f"],
+ 235:            jump            conditional: always, target: b_e_19,                                >
+ 236: b_m_19     expr            expr: BOOL_CONST, value: false,                                     >
+ 237: b_e_19     comment         text: Binary, type: end,                                            > -: ["[yAHV0oE-e2K?K-kAfGH"],
+ 238:            AssignStmt      name: b1,                                                           > -: ["dcGiGGAycyblvv!2.twm"],
+ 239:            comment         n: 20, text: Binary, type: start,                                   > +: ["w-_t:IU;Cf6hVhvtR(oF","kE,/uoU?satY[_djvw`]"], possibleDebugStop: ["w-_t:IU;Cf6hVhvtR(oF"],
+ 240:            expr            expr: Var, name: b1,                                                > +: ["c%uf_{Tkt}4+3ATv+=Q*"], -: ["c%uf_{Tkt}4+3ATv+=Q*"],
+ 241:            jump            conditional: false, target: b_m_20,                                 >
+ 242:            expr            expr: NUM_CONST, value: 11,                                         > +: ["pH5~H_5XDHDOSA[jy]uz","1%{UafeY1#r1#6}NIP+:"], -: ["1%{UafeY1#r1#6}NIP+:"],
+ 243:            expr            expr: randDouble,                                                   > +: ["6T7r=voXVHB{eud[c(Qp","ejIk_o?-.d`|qUyl+n:v"], -: ["6T7r=voXVHB{eud[c(Qp"],
+ 244:            expr            expr: NUM_CONST, value: 1,                                          > +: ["qw%0=.Tc@[~#Vgx.IRX~","SFap,8#u?5/`B~[1XyQd"], -: ["qw%0=.Tc@[~#Vgx.IRX~"],
+ 245:            expr            expr: NUM_CONST, value: 10,                                         > +: ["[uu.w~{Zq/Z^qOXFF+Vu"], -: ["[uu.w~{Zq/Z^qOXFF+Vu"],
+ 246:            expr            expr: randInt,                                                      > -: ["SFap,8#u?5/`B~[1XyQd"],
+ 247:            expr            expr: Binary, op: MULTIPLY,                                         > -: ["ejIk_o?-.d`|qUyl+n:v"],
+ 248:            expr            expr: Binary, op: GT,                                               > -: ["pH5~H_5XDHDOSA[jy]uz"],
+ 249:            jump            conditional: always, target: b_e_20,                                >
+ 250: b_m_20     expr            expr: BOOL_CONST, value: false,                                     >
+ 251: b_e_20     comment         text: Binary, type: end,                                            > -: ["kE,/uoU?satY[_djvw`]"],
+ 252:            AssignStmt      name: b1,                                                           > -: ["w-_t:IU;Cf6hVhvtR(oF"],
+ 253:            comment         value: if b1 is true, the test succeeded, otherwise it failed :-),  > +: ["2_U,ISULP_/HW*O~3mo+"], -: ["2_U,ISULP_/HW*O~3mo+"], possibleDebugStop: ["2_U,ISULP_/HW*O~3mo+"],
+ 254:            stop                                                                                >

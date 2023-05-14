@@ -97,7 +97,7 @@ def ____math():
     ___number = _median(___numberList)
     ___number = _standard_deviation(___numberList)
     ___number = ___numberList[0]
-    ___number = 1 % 2
+    ___number = ( ( 1 ) % ( 2 ) )
     ___number = min(max(1002, 1), 100)
     ___number = random.randint(1, 100)
     ___number = random.random()

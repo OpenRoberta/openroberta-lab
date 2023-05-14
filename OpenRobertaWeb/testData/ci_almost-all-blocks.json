@@ -60,13 +60,17 @@
       "expr": "NUM_CONST",
       "value": "500"
     },
-    {"opc": "WaitTimeSTMT"},
+    {
+      "opc": "WaitTimeSTMT"
+    },
     {
       "opc": "motorStop",
       "port": "1",
       "name": "W"
     },
-    {"opc": "ClearDisplay"},
+    {
+      "opc": "ClearDisplay"
+    },
     {
       "opc": "expr",
       "expr": "NUM_CONST",
@@ -109,9 +113,11 @@
       "expr": "NUM_CONST",
       "value": "500"
     },
-    {"opc": "WaitTimeSTMT"},
     {
-      "opc": "statusLightAction",
+      "opc": "WaitTimeSTMT"
+    },
+    {
+      "opc": "ledOffAction",
       "name": "W"
     },
     {
@@ -123,7 +129,9 @@
       "expr": "NUM_CONST",
       "value": "500"
     },
-    {"opc": "WaitTimeSTMT"},
+    {
+      "opc": "WaitTimeSTMT"
+    },
     {
       "opc": "WaitStmt",
       "stmtList": [
@@ -145,19 +153,23 @@
         },
         {
           "opc": "IfTrueStatement",
-          "stmtList": [{
-            "opc": "flowControl",
-            "conditional": false,
-            "break": true,
-            "kind": "WaitStmt"
-          }]
+          "stmtList": [
+            {
+              "opc": "flowControl",
+              "conditional": false,
+              "break": true,
+              "kind": "WaitStmt"
+            }
+          ]
         },
         {
           "opc": "expr",
           "expr": "NUM_CONST",
           "value": 1
         },
-        {"opc": "WaitTimeSTMT"}
+        {
+          "opc": "WaitTimeSTMT"
+        }
       ]
     },
     {
@@ -180,19 +192,23 @@
         },
         {
           "opc": "IfTrueStatement",
-          "stmtList": [{
-            "opc": "flowControl",
-            "conditional": false,
-            "break": true,
-            "kind": "WaitStmt"
-          }]
+          "stmtList": [
+            {
+              "opc": "flowControl",
+              "conditional": false,
+              "break": true,
+              "kind": "WaitStmt"
+            }
+          ]
         },
         {
           "opc": "expr",
           "expr": "NUM_CONST",
           "value": 1
         },
-        {"opc": "WaitTimeSTMT"}
+        {
+          "opc": "WaitTimeSTMT"
+        }
       ]
     },
     {
@@ -207,19 +223,23 @@
         },
         {
           "opc": "IfTrueStatement",
-          "stmtList": [{
-            "opc": "flowControl",
-            "conditional": false,
-            "break": true,
-            "kind": "WaitStmt"
-          }]
+          "stmtList": [
+            {
+              "opc": "flowControl",
+              "conditional": false,
+              "break": true,
+              "kind": "WaitStmt"
+            }
+          ]
         },
         {
           "opc": "expr",
           "expr": "NUM_CONST",
           "value": 1
         },
-        {"opc": "WaitTimeSTMT"}
+        {
+          "opc": "WaitTimeSTMT"
+        }
       ]
     },
     {
@@ -232,19 +252,23 @@
         },
         {
           "opc": "IfTrueStatement",
-          "stmtList": [{
-            "opc": "flowControl",
-            "conditional": false,
-            "break": true,
-            "kind": "WaitStmt"
-          }]
+          "stmtList": [
+            {
+              "opc": "flowControl",
+              "conditional": false,
+              "break": true,
+              "kind": "WaitStmt"
+            }
+          ]
         },
         {
           "opc": "expr",
           "expr": "NUM_CONST",
           "value": 1
         },
-        {"opc": "WaitTimeSTMT"}
+        {
+          "opc": "WaitTimeSTMT"
+        }
       ]
     },
     {
@@ -270,7 +294,9 @@
       "name": "s",
       "expr": "Var"
     },
-    {"opc": "ShowTextAction"}
+    {
+      "opc": "ShowTextAction"
+    }
   ],
   "functionDeclaration": {}
 }

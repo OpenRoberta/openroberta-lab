@@ -47,7 +47,7 @@ def run():
     ___b1 = ___b1 and ( ___r1 >= ___r2 )
     ___b1 = ___b1
     ___b1 = ( ___b1 and ( ___r2 < ___r1 ) ) and ( ___r1 <= ___r1 )
-    ___b1 = ___b1 and ( ( ___r1 % 4 ) == 2 )
+    ___b1 = ___b1 and ( ( ( ___r1 ) % ( 4 ) ) == 2 )
     ___b1 = ___b1 and ( 29 == ( min(max(math.pow(3, 2), 1), 20) + ( min(max(9, 3 * 4), 18) + min(max(3 * 3, 5), 8) ) ) )
     ___b1 = ___b1 and ( 11 > ( _randDouble() * _randInt(1, 10) ) )
     # if b1 is true, the test succeeded, otherwise it failed :-)

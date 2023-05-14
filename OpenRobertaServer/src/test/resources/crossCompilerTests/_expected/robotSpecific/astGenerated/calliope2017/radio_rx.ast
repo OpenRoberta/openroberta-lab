@@ -11,7 +11,7 @@ ClearDisplayAction[port: - EMPTY_PORT -]
 AktionStmt [LedOnAction[ledColor: FunctionExpr [ListGetIndex [GET, FROM_START, [Var [colours], Var [idx]]]], port: R]]WaitTimeStmt[time: NumConst[value: 500]]
 exprStmt Binary [MATH_CHANGE, Var [idx], NumConst[value: 1]]
 )
-LightStatusAction [R, OFF]
+LightOffAction[port:R]
 DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: PredefinedImage[imageName: MUSIC_QUAVERS]]
 PlayNoteAction[duration: 500, frequency: 261.626, port: BZ]
 PlayNoteAction[duration: 500, frequency: 195.998, port: BZ]

@@ -31,13 +31,15 @@ import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathModuloFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
@@ -57,9 +59,11 @@ import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.MathChangeStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -218,9 +222,9 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         }
         this.sb.append(methodName);
 
-        indexOfFunct.param.get(0).accept(this);
+        indexOfFunct.value.accept(this);
         this.sb.append(", ");
-        indexOfFunct.param.get(1).accept(this);
+        indexOfFunct.find.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -407,15 +411,17 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
-        if ( lengthOfIsEmptyFunct.functName == FunctionNames.LIST_IS_EMPTY ) {
-            lengthOfIsEmptyFunct.param.get(0).accept(this);
-            this.sb.append(".empty()");
-        } else {
-            this.sb.append("((int) ");
-            lengthOfIsEmptyFunct.param.get(0).accept(this);
-            this.sb.append(".size())");
-        }
+    public Void visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
+        this.sb.append("((int) ");
+        lengthOfListFunct.value.accept(this);
+        this.sb.append(".size())");
+        return null;
+    }
+
+    @Override
+    public Void visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
+        isListEmptyFunct.value.accept(this);
+        this.sb.append(".empty()");
         return null;
     }
 
@@ -443,13 +449,13 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
             case RANDOM:
                 // TODO it has no implementation and should probably be removed from blockly as well
                 this.sb.append("_getListElementByIndex(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append(", 0)");
                 return null;
             default:
                 break;
         }
-        mathOnListFunct.param.get(0).accept(this);
+        mathOnListFunct.list.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -525,9 +531,9 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
-        Expr n = mathConstrainFunct.param.get(0);
-        Expr min = mathConstrainFunct.param.get(1);
-        Expr max = mathConstrainFunct.param.get(2);
+        Expr n = mathConstrainFunct.value;
+        Expr min = mathConstrainFunct.lowerBound;
+        Expr max = mathConstrainFunct.upperBound;
         this.sb.append("std::min(std::max((double) ");
         n.accept(this);
         this.sb.append(", (double) ");
@@ -603,7 +609,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         // TODO check why this is not working for Arduinos!
         this.sb.append("(std::to_string(");
-        mathCastStringFunct.param.get(0).accept(this);
+        mathCastStringFunct.value.accept(this);
         this.sb.append("))");
         return null;
     }
@@ -611,15 +617,41 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         this.sb.append("(char)(int)(");
-        mathCastCharFunct.param.get(0).accept(this);
+        mathCastCharFunct.value.accept(this);
         this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
+        super.visitMathChangeStmt(mathChangeStmt);
+        this.sb.append(";");
+        return null;
+    }
+
+    @Override
+    public Void visitMathModuloFunct(MathModuloFunct mathModuloFunct) {
+        this.sb.append("fmod((");
+        mathModuloFunct.dividend.accept(this);
+        this.sb.append("), (");
+        mathModuloFunct.divisor.accept(this);
+        this.sb.append("))");
+        return null;
+    }
+
+    @Override
+    public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        textAppendStmt.var.accept(this);
+        this.sb.append(" += ");
+        textAppendStmt.text.accept(this);
+        this.sb.append(";");
         return null;
     }
 
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         this.sb.append("std::stof(");
-        textStringCastNumberFunct.param.get(0).accept(this);
+        textStringCastNumberFunct.value.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -628,9 +660,9 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         this.sb.append("(int)(");
         this.sb.append("(");
-        textCharCastNumberFunct.param.get(0).accept(this);
+        textCharCastNumberFunct.value.accept(this);
         this.sb.append(")[");
-        textCharCastNumberFunct.param.get(1).accept(this);
+        textCharCastNumberFunct.atIndex.accept(this);
         this.sb.append("])");
         return null;
     }
@@ -962,8 +994,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
                         entry(Binary.Op.GTE, ">="),
                         entry(Binary.Op.AND, "&&"),
                         entry(Binary.Op.OR, "||"),
-                        entry(Binary.Op.MATH_CHANGE, "+="),
-                        entry(Binary.Op.TEXT_APPEND, "+="),
                         entry(Binary.Op.IN, ":"),
                         entry(Binary.Op.ASSIGNMENT, "="),
                         entry(Binary.Op.ADD_ASSIGNMENT, "+="),

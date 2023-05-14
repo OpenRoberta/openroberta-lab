@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
@@ -50,13 +50,13 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
-        ConfigurationComponent confLedBlock = getConfigurationComponent(lightStatusAction.getUserDefinedPort());
+    public Void visitLightOffAction(LightOffAction lightOffAction) {
+        ConfigurationComponent confLedBlock = getConfigurationComponent(lightOffAction.port);
         String brickName = confLedBlock.getProperty("VAR");
         if ( brickName != null ) {
-            // for wedo this block is only for setting off the led, so no test for status required lightStatusAction.getStatus()
+            // for wedo this block is only for setting off the led, so no test for status required
 
-            JSONObject o = makeNode(C.STATUS_LIGHT_ACTION).put(C.NAME, brickName);
+            JSONObject o = makeNode(C.LED_OFF_ACTION).put(C.NAME, brickName);
             return add(o);
         } else {
             throw new DbcException("No robot name or no port!");

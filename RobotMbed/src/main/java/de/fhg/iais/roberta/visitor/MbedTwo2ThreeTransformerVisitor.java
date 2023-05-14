@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
@@ -42,6 +42,7 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.worker.MbedTwo2ThreeTransformerHelper;
 
 /**
@@ -94,13 +95,13 @@ public class MbedTwo2ThreeTransformerVisitor extends MbedTransformerVisitor {
     }
 
     @Override
-    public Phrase visitLightStatusAction(LightStatusAction lightStatusAction) {
+    public Phrase visitLightOffAction(LightOffAction lightOffAction) {
         Pair<ConfigurationComponent, String> compAndName =
-            this.helper.getComponentAndName(lightStatusAction.getKind().getName(), lightStatusAction.status.name(), lightStatusAction.getUserDefinedPort());
+            this.helper.getComponentAndName(lightOffAction.getKind().getName(), SC.OFF, lightOffAction.port);
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-        return new LightStatusAction(compAndName.getSecond(), lightStatusAction.status, lightStatusAction.getProperty());
+        return new LightOffAction(lightOffAction.getProperty(), compAndName.getSecond());
     }
 
     @Override

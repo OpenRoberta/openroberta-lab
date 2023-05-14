@@ -52,7 +52,7 @@ void ____math2() {
     ___n = round(___n);
     ___n = ceil(___n);
     ___n = floor(___n);
-    ___n = fmod(___n, ___n);
+    ___n = fmod((___n), (___n));
     ___n = _CLAMP(___n, ___n, ___n);
     ___n = randomNumber(___n, ___n);
     ___n = ((double) rand() / (RAND_MAX));

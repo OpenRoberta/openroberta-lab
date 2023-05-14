@@ -3,7 +3,7 @@
 AktionStmt [ToneAction[frequency: NumConst[value: 300], duration: NumConst[value: 100], port: S]]
 AktionStmt [LightAction [L, ON, DEFAULT, EmptyExpr [defVal=COLOR]]]
 AktionStmt [LightAction [R, DEFAULT, DEFAULT, ColorConst[hexValue: #cc0000]]]
-AktionStmt [LightStatusAction [R, RESET]]
+AktionStmt [LightOffAction[port: R]]
 AktionStmt [ShowTextAction[msg: StringConst[value: Hallo], x: NumConst[value: 0], y: NumConst[value: 1], port: O]]
 AktionStmt [ClearDisplayAction[port: O]]
 AktionStmt [PinWriteValueAction[pinValue: ANALOG, port: Aa, value: NumConst[value: 1]]]

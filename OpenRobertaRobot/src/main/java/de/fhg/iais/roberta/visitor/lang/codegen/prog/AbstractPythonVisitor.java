@@ -37,7 +37,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
@@ -66,6 +67,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
@@ -335,11 +337,11 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
         this.sb.append("min(max(");
-        mathConstrainFunct.param.get(0).accept(this);
+        mathConstrainFunct.value.accept(this);
         this.sb.append(", ");
-        mathConstrainFunct.param.get(1).accept(this);
+        mathConstrainFunct.lowerBound.accept(this);
         this.sb.append("), ");
-        mathConstrainFunct.param.get(2).accept(this);
+        mathConstrainFunct.upperBound.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -398,9 +400,9 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.sb.append("random.randint(");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         this.sb.append(", ");
-        mathRandomIntFunct.param.get(1).accept(this);
+        mathRandomIntFunct.to.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -410,38 +412,38 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         switch ( mathOnListFunct.functName ) {
             case SUM:
                 this.sb.append("sum(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append(")");
                 break;
             case MIN:
                 this.sb.append("min(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append(")");
                 break;
             case MAX:
                 this.sb.append("max(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append(")");
                 break;
             case AVERAGE:
                 this.sb.append("float(sum(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append("))/len(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append(")");
                 break;
             case MEDIAN:
                 this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.MEDIAN)).append("(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append(")");
                 break;
             case STD_DEV:
                 this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.STD_DEV)).append("(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append(")");
                 break;
             case RANDOM:
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append("[0]");
                 break;
             default:
@@ -453,7 +455,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         this.sb.append("str(");
-        mathCastStringFunct.param.get(0).accept(this);
+        mathCastStringFunct.value.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -461,15 +463,24 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         this.sb.append("chr((int)(");
-        mathCastCharFunct.param.get(0).accept(this);
+        mathCastCharFunct.value.accept(this);
         this.sb.append("))");
+        return null;
+    }
+
+    @Override
+    public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        textAppendStmt.var.accept(this);
+        this.sb.append(" += str(");
+        textAppendStmt.text.accept(this);
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         this.sb.append("float(");
-        textStringCastNumberFunct.param.get(0).accept(this);
+        textStringCastNumberFunct.value.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -477,9 +488,9 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         this.sb.append("ord(");
-        textCharCastNumberFunct.param.get(0).accept(this);
+        textCharCastNumberFunct.value.accept(this);
         this.sb.append("[");
-        textCharCastNumberFunct.param.get(1).accept(this);
+        textCharCastNumberFunct.atIndex.accept(this);
         this.sb.append("])");
         return null;
     }
@@ -588,18 +599,18 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
         switch ( (IndexLocation) indexOfFunct.location ) {
             case FIRST:
-                indexOfFunct.param.get(0).accept(this);
+                indexOfFunct.value.accept(this);
                 this.sb.append(".index(");
-                indexOfFunct.param.get(1).accept(this);
+                indexOfFunct.find.accept(this);
                 this.sb.append(")");
                 break;
             case LAST:
                 this.sb.append("(len(");
-                indexOfFunct.param.get(0).accept(this);
+                indexOfFunct.value.accept(this);
                 this.sb.append(") - 1) - ");
-                indexOfFunct.param.get(0).accept(this);
+                indexOfFunct.value.accept(this);
                 this.sb.append("[::-1].index(");
-                indexOfFunct.param.get(1).accept(this);
+                indexOfFunct.find.accept(this);
                 this.sb.append(")");
                 break;
             default:
@@ -665,21 +676,17 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
-        switch ( lengthOfIsEmptyFunct.functName ) {
-            case LIST_LENGTH:
-                this.sb.append("len( ");
-                lengthOfIsEmptyFunct.param.get(0).accept(this);
-                this.sb.append(")");
-                break;
+    public Void visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
+        this.sb.append("len( ");
+        lengthOfListFunct.value.accept(this);
+        this.sb.append(")");
+        return null;
+    }
 
-            case LIST_IS_EMPTY:
-                this.sb.append("not ");
-                lengthOfIsEmptyFunct.param.get(0).accept(this);
-                break;
-            default:
-                break;
-        }
+    @Override
+    public Void visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
+        this.sb.append("not ");
+        isListEmptyFunct.value.accept(this);
         return null;
     }
 
@@ -819,11 +826,6 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     private void generateCodeRightExpression(Binary binary, Binary.Op op) {
         switch ( op ) {
-            case TEXT_APPEND:
-                this.sb.append("str(");
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
-                this.sb.append(")");
-                break;
             case DIVIDE:
                 this.sb.append("float(");
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
@@ -926,8 +928,6 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
                         AbstractLanguageVisitor.entry(Binary.Op.GTE, ">="),
                         AbstractLanguageVisitor.entry(Binary.Op.AND, "and"),
                         AbstractLanguageVisitor.entry(Binary.Op.OR, "or"),
-                        AbstractLanguageVisitor.entry(Binary.Op.MATH_CHANGE, "+="),
-                        AbstractLanguageVisitor.entry(Binary.Op.TEXT_APPEND, "+="),
                         AbstractLanguageVisitor.entry(Binary.Op.IN, "in"),
                         AbstractLanguageVisitor.entry(Binary.Op.ASSIGNMENT, "="),
                         AbstractLanguageVisitor.entry(Binary.Op.ADD_ASSIGNMENT, "+="),

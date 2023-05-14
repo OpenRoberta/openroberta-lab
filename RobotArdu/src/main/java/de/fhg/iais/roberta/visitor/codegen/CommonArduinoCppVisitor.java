@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -168,7 +168,7 @@ public abstract class CommonArduinoCppVisitor extends NepoArduinoCppVisitor impl
     }
 
     @Override
-    public final Void visitLightStatusAction(LightStatusAction lightStatusAction) {
+    public final Void visitLightOffAction(LightOffAction lightOffAction) {
         String[] colors =
             {
                 "red",
@@ -176,7 +176,7 @@ public abstract class CommonArduinoCppVisitor extends NepoArduinoCppVisitor impl
                 "blue"
             };
         for ( int i = 0; i < 3; i++ ) {
-            this.sb.append("analogWrite(_led_" + colors[i] + "_" + lightStatusAction.getUserDefinedPort() + ", 0);");
+            this.sb.append("analogWrite(_led_" + colors[i] + "_" + lightOffAction.port + ", 0);");
             nlIndent();
         }
         return null;

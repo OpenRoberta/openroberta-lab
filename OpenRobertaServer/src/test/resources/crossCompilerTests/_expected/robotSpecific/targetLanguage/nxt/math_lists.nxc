@@ -100,16 +100,16 @@ void ____math() {
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayMedian(___numberList));
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayStdDev(___numberList));
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___numberList[0]);
-    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___numberVar % ___numberVar);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ( ( ___numberVar ) % ( ___numberVar ) ));
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MIN(MAX(___numberVar, ___numberVar), ___numberVar));
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, Random(___numberVar - ___numberVar) + ___numberVar);
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, Random(100) / 100);
 }
 
 void ____lists() {
-    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___numberList));
-    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___stringList));
-    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___booleanList));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___numberList));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___stringList));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___booleanList));
     BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___numberList) == 0);
     BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___stringList) == 0);
     BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___booleanList) == 0);

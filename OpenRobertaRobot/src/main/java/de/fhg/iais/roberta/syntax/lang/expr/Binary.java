@@ -9,7 +9,6 @@ import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
-import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
@@ -28,7 +27,7 @@ import de.fhg.iais.roberta.util.syntax.FunctionNames;
  * This class represents blockly blocks defining binary operations in the AST<br>
  * The enumeration {@link Op} specifies the allowed binary operations.
  */
-@NepoBasic(name = "BINARY", category = "EXPR", blocklyNames = {"math_arithmetic", "math_change", "math_modulo", "robMath_change", "logic_compare", "logic_operation", "robText_append"})
+@NepoBasic(name = "BINARY", category = "EXPR", blocklyNames = {"math_arithmetic", "logic_compare", "logic_operation"})
 public final class Binary extends Expr {
     public final Op op;
     public final Expr left;
@@ -90,8 +89,6 @@ public final class Binary extends Expr {
         GTE(90, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER), ">="),
         AND(70, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.BOOLEAN, BlocklyType.BOOLEAN), "&&", "and"),
         OR(60, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.BOOLEAN, BlocklyType.BOOLEAN), "||", "or"),
-        MATH_CHANGE(80, Assoc.NONE, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "+="),
-        TEXT_APPEND(1, Assoc.LEFT, Sig.of(BlocklyType.STRING, BlocklyType.STRING, BlocklyType.STRING), "+=", "TEXTAPPEND"),
         IN(1, Assoc.LEFT, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), ":", "in"),
         ASSIGNMENT(1, Assoc.RIGHT, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "="),
         ADD_ASSIGNMENT(1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "+="),
@@ -167,26 +164,6 @@ public final class Binary extends Expr {
         Phrase leftt;
         Phrase rightt;
         switch ( block.getType() ) {
-            case BlocklyConstants.TEXT_APPEND:
-                values = Jaxb2Ast.extractValues(block, (short) 2);
-                leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, BlocklyType.STRING));
-                rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.TEXT, BlocklyType.STRING));
-                return new ExprStmt(new Binary(Op.TEXT_APPEND, Jaxb2Ast.convertPhraseToExpr(leftt), Jaxb2Ast.convertPhraseToExpr(rightt), "", Jaxb2Ast.extractBlocklyProperties(block)));
-            case BlocklyConstants.ROB_MATH_CHANGE:
-            case BlocklyConstants.MATH_CHANGE:
-                values = Jaxb2Ast.extractValues(block, (short) 2);
-                leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, BlocklyType.STRING));
-                rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.DELTA, BlocklyType.NUMBER_INT));
-                return new ExprStmt(new Binary(Op.MATH_CHANGE, Jaxb2Ast.convertPhraseToExpr(leftt), Jaxb2Ast.convertPhraseToExpr(rightt), "", Jaxb2Ast.extractBlocklyProperties(block)));
-
-            case BlocklyConstants.MATH_MODULO:
-                return helper
-                    .blockToBinaryExpr(
-                        block,
-                        new ExprParam(BlocklyConstants.DIVIDEND, BlocklyType.NUMBER_INT),
-                        new ExprParam(BlocklyConstants.DIVISOR, BlocklyType.NUMBER_INT),
-                        BlocklyConstants.MOD);
-
             case BlocklyConstants.MATH_ARITHMETIC:
                 String opp = Jaxb2Ast.extractOperation(block, BlocklyConstants.OP);
                 if ( opp.equals(BlocklyConstants.POWER) ) {
@@ -217,21 +194,6 @@ public final class Binary extends Expr {
             jaxbDestination.setMutation(mutation);
         }
         switch ( this.op ) {
-
-            case MATH_CHANGE:
-                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VAR, this.left);
-                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DELTA, getRight());
-                return jaxbDestination;
-            case TEXT_APPEND:
-                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VAR, this.left);
-                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.TEXT, getRight());
-                return jaxbDestination;
-
-            case MOD:
-                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DIVIDEND, this.left);
-                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DIVISOR, getRight());
-                return jaxbDestination;
-
             default:
                 Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, this.op.name());
                 Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.A, this.left);

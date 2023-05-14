@@ -57,10 +57,12 @@ import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.MathChangeStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
@@ -143,9 +145,6 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         String sym = getBinaryOperatorSymbol(op);
         this.sb.append(whitespace() + sym + whitespace());
         switch ( op ) {
-            case TEXT_APPEND:
-                generateCodeToStringCastOnExpr(binary);
-                break;
             case DIVIDE:
                 this.sb.append("((float) ");
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
@@ -335,11 +334,11 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
         this.sb.append("Math.min(Math.max(");
-        mathConstrainFunct.param.get(0).accept(this);
+        mathConstrainFunct.value.accept(this);
         this.sb.append(", ");
-        mathConstrainFunct.param.get(1).accept(this);
+        mathConstrainFunct.lowerBound.accept(this);
         this.sb.append("), ");
-        mathConstrainFunct.param.get(2).accept(this);
+        mathConstrainFunct.upperBound.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -396,21 +395,21 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         switch ( mathOnListFunct.functName ) {
             case MIN:
                 this.sb.append("Collections.min(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 break;
             case MAX:
                 this.sb.append("Collections.max(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 break;
             case RANDOM:
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 this.sb.append(".get(0"); // TODO remove? implement?
                 break;
             default:
                 this.sb
                     .append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(mathOnListFunct.functName))
                     .append("(");
-                mathOnListFunct.param.get(0).accept(this);
+                mathOnListFunct.list.accept(this);
                 break;
         }
         this.sb.append(")");
@@ -426,11 +425,11 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.sb.append("( Math.round(Math.random() * (");
-        mathRandomIntFunct.param.get(1).accept(this);
+        mathRandomIntFunct.to.accept(this);
         this.sb.append(" - ");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         this.sb.append(")) + ");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         this.sb.append(" )");
         return null;
     }
@@ -445,7 +444,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         this.sb.append("(String.valueOf(");
-        mathCastStringFunct.param.get(0).accept(this);
+        mathCastStringFunct.value.accept(this);
         this.sb.append("))");
         return null;
     }
@@ -453,15 +452,31 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
         this.sb.append("String.valueOf((char)(int)(");
-        mathCastCharFunct.param.get(0).accept(this);
+        mathCastCharFunct.value.accept(this);
         this.sb.append("))");
+        return null;
+    }
+
+    @Override
+    public Void visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
+        super.visitMathChangeStmt(mathChangeStmt);
+        this.sb.append(";");
+        return null;
+    }
+
+    @Override
+    public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        textAppendStmt.var.accept(this);
+        this.sb.append(" += String.valueOf(");
+        textAppendStmt.text.accept(this);
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
         this.sb.append("Float.parseFloat(");
-        textStringCastNumberFunct.param.get(0).accept(this);
+        textStringCastNumberFunct.value.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -469,9 +484,9 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         this.sb.append("(int)(");
-        textCharCastNumberFunct.param.get(0).accept(this);
+        textCharCastNumberFunct.value.accept(this);
         this.sb.append(".charAt(");
-        textCharCastNumberFunct.param.get(1).accept(this);
+        textCharCastNumberFunct.atIndex.accept(this);
         this.sb.append("))");
         return null;
     }
@@ -738,12 +753,6 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         return isEqualityOp && isLeftAndRightString;
     }
 
-    private void generateCodeToStringCastOnExpr(Binary binary) {
-        this.sb.append("String.valueOf(");
-        generateSubExpr(this.sb, false, binary.getRight(), binary);
-        this.sb.append(")");
-    }
-
     private void generateCodeForStringEqualityOp(Binary binary) {
         if ( binary.op == Op.NEQ ) {
             this.sb.append("!");
@@ -821,8 +830,6 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
                         entry(Binary.Op.GTE, ">="),
                         entry(Binary.Op.AND, "&&"),
                         entry(Binary.Op.OR, "||"),
-                        entry(Binary.Op.MATH_CHANGE, "+="),
-                        entry(Binary.Op.TEXT_APPEND, "+="),
                         entry(Binary.Op.IN, ":"),
                         entry(Binary.Op.ASSIGNMENT, "="),
                         entry(Binary.Op.ADD_ASSIGNMENT, "+="),

@@ -53,13 +53,15 @@ import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathModuloFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
@@ -81,6 +83,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.MathChangeStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNSetBiasStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNSetInputNeuronVal;
@@ -95,6 +98,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
@@ -315,21 +319,8 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                 binary.left.accept(this);
                 binary.getRight().accept(this);
                 JSONObject o;
-                // FIXME: The math change should be removed from the binary expression since it is a statement
-                switch ( binary.op ) {
-                    case MATH_CHANGE:
-                        o = makeNode(C.MATH_CHANGE).put(C.NAME, ((Var) binary.left).name);
-                        break;
-                    case TEXT_APPEND:
-                        o = makeNode(C.TEXT_APPEND).put(C.NAME, ((Var) binary.left).name);
-                        break;
-
-                    default:
-                        o = makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, binary.op);
-                        break;
-                }
+                o = makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, binary.op);
                 return add(o);
-
         }
 
     }
@@ -769,6 +760,33 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     }
 
     @Override
+    public Void visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
+        mathChangeStmt.var.accept(this);
+        mathChangeStmt.delta.accept(this);
+        JSONObject o;
+        o = makeNode(C.MATH_CHANGE).put(C.NAME, ((Var) mathChangeStmt.var).name);
+        return add(o);
+    }
+
+    @Override
+    public Void visitMathModuloFunct(MathModuloFunct mathModuloFunct) {
+        mathModuloFunct.dividend.accept(this);
+        mathModuloFunct.divisor.accept(this);
+        JSONObject o;
+        o = makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, "MOD");
+        return add(o);
+    }
+
+    @Override
+    public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        textAppendStmt.var.accept(this);
+        textAppendStmt.text.accept(this);
+        JSONObject o;
+        o = makeNode(C.TEXT_APPEND).put(C.NAME, ((Var) textAppendStmt.var).name);
+        return add(o);
+    }
+
+    @Override
     public final Void visitTextPrintFunct(TextPrintFunct textPrintFunct) {
         return null;
     }
@@ -807,7 +825,8 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     public final Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
-        indexOfFunct.param.forEach(x -> x.accept(this));
+        indexOfFunct.value.accept(this);
+        indexOfFunct.find.accept(this);
         JSONObject o =
             makeNode(C.EXPR)
                 .put(C.EXPR, C.LIST_OPERATION)
@@ -817,9 +836,16 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     }
 
     @Override
-    public final Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
-        lengthOfIsEmptyFunct.param.get(0).accept(this);
-        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, lengthOfIsEmptyFunct.functName.toString().toLowerCase());
+    public final Void visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
+        lengthOfListFunct.value.accept(this);
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, C.LIST_LENGTH);
+        return add(o);
+    }
+
+    @Override
+    public Void visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
+        isListEmptyFunct.value.accept(this);
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, C.LIST_IS_EMPTY);
         return add(o);
     }
 
@@ -862,9 +888,9 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     public final Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
-        mathConstrainFunct.param.get(0).accept(this);
-        mathConstrainFunct.param.get(1).accept(this);
-        mathConstrainFunct.param.get(2).accept(this);
+        mathConstrainFunct.value.accept(this);
+        mathConstrainFunct.lowerBound.accept(this);
+        mathConstrainFunct.upperBound.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.MATH_CONSTRAIN_FUNCTION);
         return add(o);
     }
@@ -881,7 +907,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     public final Void visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
-        mathOnListFunct.param.forEach(x -> x.accept(this));
+        mathOnListFunct.list.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.MATH_ON_LIST).put(C.OP, mathOnListFunct.functName.toString().toLowerCase());
         return add(o);
     }
@@ -894,8 +920,8 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     public final Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        mathRandomIntFunct.param.get(0).accept(this);
-        mathRandomIntFunct.param.get(1).accept(this);
+        mathRandomIntFunct.from.accept(this);
+        mathRandomIntFunct.to.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.RANDOM_INT);
         return add(o);
     }
@@ -909,29 +935,29 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
-        mathCastStringFunct.param.get(0).accept(this);
+        mathCastStringFunct.value.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CAST_STRING);
         return add(o);
     }
 
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
-        mathCastCharFunct.param.get(0).accept(this);
+        mathCastCharFunct.value.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CAST_CHAR);
         return add(o);
     }
 
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
-        textStringCastNumberFunct.param.get(0).accept(this);
+        textStringCastNumberFunct.value.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CAST_STRING_NUMBER);
         return add(o);
     }
 
     @Override
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
-        textCharCastNumberFunct.param.get(0).accept(this);
-        textCharCastNumberFunct.param.get(1).accept(this);
+        textCharCastNumberFunct.value.accept(this);
+        textCharCastNumberFunct.atIndex.accept(this);
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.CAST_CHAR_NUMBER);
         return add(o);
     }

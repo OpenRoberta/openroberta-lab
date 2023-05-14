@@ -307,6 +307,8 @@ let CONST = {
 
     LED_ON_ACTION: 'ledOnAction',
 
+    LED_OFF_ACTION: 'ledOffAction',
+
     GREEN: 'GREEN',
 
     RED: 'red',
@@ -324,8 +326,6 @@ let CONST = {
     FLASH: 'FLASH',
 
     DOUBLE_FLASH: 'DOUBLE_FLASH',
-
-    STATUS_LIGHT_ACTION: 'statusLightAction',
 
     AMBIENTLIGHT: 'ambientlight',
 

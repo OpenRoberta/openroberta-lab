@@ -29,7 +29,7 @@ def run():
     ___x = ___x + math.log(math.exp(2))
     ___x = ___x + math.log10(100)
     ___x = ___x + math.pow(10, 2)
-    ___x = ___x + ( 5 % 3 )
+    ___x = ___x + ( ( 5 ) % ( 3 ) )
     ___x = ___x + math.sin(math.pi / float(2))
     ___x = ___x + math.cos(0)
     ___x = ___x + math.tan(0)

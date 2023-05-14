@@ -15,8 +15,10 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectio
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightResetAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -64,13 +66,15 @@ import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.Function;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathModuloFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
@@ -93,6 +97,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.MathChangeStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNSetBiasStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNSetInputNeuronVal;
@@ -105,6 +110,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
@@ -244,8 +250,16 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
         return new LightAction(lightAction.port, lightAction.color, lightAction.mode, (Expr) lightAction.rgbLedColor.modify(this), lightAction.getProperty());
     }
 
-    public Phrase visitLightStatusAction(LightStatusAction lightStatusAction) {
-        return new LightStatusAction(lightStatusAction.getUserDefinedPort(), lightStatusAction.status, lightStatusAction.getProperty());
+    public Phrase visitBrickLightOffAction(BrickLightOffAction brickLightOffAction) {
+        return new BrickLightOffAction(brickLightOffAction.getProperty());
+    }
+
+    public Phrase visitBrickLightResetAction(BrickLightResetAction brickLightResetAction) {
+        return new BrickLightOffAction(brickLightResetAction.getProperty());
+    }
+
+    public Phrase visitLightOffAction(LightOffAction lightOffAction) {
+        return new LightOffAction(lightOffAction.getProperty(), lightOffAction.port);
     }
 
     public Phrase visitToneAction(ToneAction toneAction) {
@@ -434,6 +448,18 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
         return new WaitTimeStmt(waitTimeStmt.getProperty(), (Expr) waitTimeStmt.time.modify(this));
     }
 
+    public Phrase visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
+        return new MathChangeStmt(mathChangeStmt.getProperty(), (Expr) mathChangeStmt.var.modify(this), (Expr) mathChangeStmt.delta.modify(this));
+    }
+
+    public Phrase visitMathModuloFunct(MathModuloFunct mathModuloFunct) {
+        return new MathModuloFunct(mathModuloFunct.getProperty(), (Expr) mathModuloFunct.dividend.modify(this), (Expr) mathModuloFunct.divisor.modify(this));
+    }
+
+    public Phrase visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        return new TextAppendStmt(textAppendStmt.getProperty(), (Expr) textAppendStmt.var.modify(this), (Expr) textAppendStmt.text.modify(this));
+    }
+
     public Phrase visitTextPrintFunct(TextPrintFunct textPrintFunct) {
         List<Expr> newParam = new ArrayList();
         textPrintFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
@@ -447,15 +473,15 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
     }
 
     public Phrase visitIndexOfFunct(IndexOfFunct indexOfFunct) {
-        List<Expr> newParam = new ArrayList();
-        indexOfFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new IndexOfFunct(indexOfFunct.location, newParam, indexOfFunct.getProperty());
+        return new IndexOfFunct(indexOfFunct.getProperty(), indexOfFunct.location, (Expr) indexOfFunct.value.modify(this), (Expr) indexOfFunct.find.modify(this));
     }
 
-    public Phrase visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
-        List<Expr> newParam = new ArrayList();
-        lengthOfIsEmptyFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new LengthOfIsEmptyFunct(lengthOfIsEmptyFunct.functName, newParam, lengthOfIsEmptyFunct.getProperty());
+    public Phrase visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
+        return new LengthOfListFunct(lengthOfListFunct.getProperty(), (Expr) lengthOfListFunct.value.modify(this));
+    }
+
+    public Phrase visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
+        return new IsListEmptyFunct(isListEmptyFunct.getProperty(), (Expr) isListEmptyFunct.value.modify(this));
     }
 
     public Phrase visitListCreate(ListCreate listCreate) {
@@ -481,9 +507,7 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
     }
 
     public Phrase visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
-        List<Expr> newParam = new ArrayList();
-        mathConstrainFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new MathConstrainFunct(newParam, mathConstrainFunct.getProperty());
+        return new MathConstrainFunct(mathConstrainFunct.getProperty(), (Expr) mathConstrainFunct.value.modify(this), (Expr) mathConstrainFunct.lowerBound.modify(this), (Expr) mathConstrainFunct.upperBound.modify(this));
     }
 
     public Phrase visitMathNumPropFunct(MathNumPropFunct mathNumPropFunct) {
@@ -493,9 +517,7 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
     }
 
     public Phrase visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
-        List<Expr> newParam = new ArrayList();
-        mathOnListFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new MathOnListFunct(mathOnListFunct.functName, newParam, mathOnListFunct.getProperty());
+        return new MathOnListFunct(mathOnListFunct.getProperty(), mathOnListFunct.mutation, mathOnListFunct.functName, (Expr) mathOnListFunct.list.modify(this));
     }
 
     public Phrase visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
@@ -503,9 +525,7 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
     }
 
     public Phrase visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        List<Expr> newParam = new ArrayList();
-        mathRandomIntFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new MathRandomIntFunct(newParam, mathRandomIntFunct.getProperty());
+        return new MathRandomIntFunct(mathRandomIntFunct.getProperty(), (Expr) mathRandomIntFunct.from.modify(this), (Expr) mathRandomIntFunct.to.modify(this));
     }
 
     public Phrase visitMathSingleFunct(MathSingleFunct mathSingleFunct) {
@@ -515,27 +535,19 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
     }
 
     public Phrase visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
-        List<Expr> newParam = new ArrayList();
-        mathCastStringFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new MathCastStringFunct(newParam, mathCastStringFunct.getProperty());
+        return new MathCastStringFunct(mathCastStringFunct.getProperty(), (Expr) mathCastStringFunct.value.modify(this));
     }
 
     public Phrase visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
-        List<Expr> newParam = new ArrayList();
-        mathCastCharFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new MathCastStringFunct(newParam, mathCastCharFunct.getProperty());
+        return new MathCastStringFunct(mathCastCharFunct.getProperty(), (Expr) mathCastCharFunct.value.modify(this));
     }
 
     public Phrase visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
-        List<Expr> newParam = new ArrayList();
-        textStringCastNumberFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new MathCastStringFunct(newParam, textStringCastNumberFunct.getProperty());
+        return new TextStringCastNumberFunct(textStringCastNumberFunct.getProperty(), (Expr) textStringCastNumberFunct.value.modify(this));
     }
 
     public Phrase visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
-        List<Expr> newParam = new ArrayList();
-        textCharCastNumberFunct.param.forEach(phraseExpr -> newParam.add((Expr) phraseExpr.modify(this)));
-        return new MathCastStringFunct(newParam, textCharCastNumberFunct.getProperty());
+        return new TextCharCastNumberFunct(textCharCastNumberFunct.getProperty(), (Expr) textCharCastNumberFunct.value.modify(this), (Expr) textCharCastNumberFunct.atIndex.modify(this));
     }
 
     public Phrase visitTextJoinFunct(TextJoinFunct textJoinFunct) {

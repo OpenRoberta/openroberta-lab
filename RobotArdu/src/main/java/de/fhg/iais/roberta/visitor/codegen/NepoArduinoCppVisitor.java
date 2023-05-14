@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
@@ -76,10 +77,7 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
         generateSubExpr(this.sb, false, binary.left, binary);
         String sym = getBinaryOperatorSymbol(op);
         this.sb.append(whitespace() + sym + whitespace());
-        if ( op == Op.TEXT_APPEND ) {
-            convertToString(binary);
-            return null;
-        } else if ( op == Op.DIVIDE ) {
+        if ( op == Op.DIVIDE ) {
             appendCastToFloat(binary);
             return null;
         } else {
@@ -102,18 +100,18 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
         this.sb.append(")");
     }
 
-    private void convertToString(Binary binary) {
-        switch ( binary.getRight().getVarType() ) {
+    private void convertToString(Expr expr) {
+        switch ( expr.getVarType() ) {
             case BOOLEAN:
             case NUMBER:
             case NUMBER_INT:
             case COLOR:
                 this.sb.append("String(");
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                expr.accept(this);
                 this.sb.append(")");
                 break;
             default:
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                expr.accept(this);
                 break;
         }
     }
@@ -186,14 +184,14 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
     public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
         String methodName = indexOfFunct.location == IndexLocation.LAST ? "_getLastOccuranceOfElement(" : "_getFirstOccuranceOfElement(";
         this.sb.append(methodName);
-        indexOfFunct.param.get(0).accept(this);
+        indexOfFunct.value.accept(this);
         this.sb.append(", ");
-        if ( indexOfFunct.param.get(1).getClass().equals(StringConst.class) ) {
+        if ( indexOfFunct.find.getClass().equals(StringConst.class) ) {
             this.sb.append("String(");
-            indexOfFunct.param.get(1).accept(this);
+            indexOfFunct.find.accept(this);
             this.sb.append(")");
         } else {
-            indexOfFunct.param.get(1).accept(this);
+            indexOfFunct.find.accept(this);
         }
         this.sb.append(")");
         return null;
@@ -219,6 +217,15 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
     }
 
     @Override
+    public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        textAppendStmt.var.accept(this);
+        this.sb.append(" += ");
+        convertToString(textAppendStmt.text);
+        this.sb.append(";");
+        return null;
+    }
+
+    @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         this.sb.append("delay(");
         waitTimeStmt.time.accept(this);
@@ -229,9 +236,9 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         this.sb.append("_randomIntegerInRange(");
-        mathRandomIntFunct.param.get(0).accept(this);
+        mathRandomIntFunct.from.accept(this);
         this.sb.append(", ");
-        mathRandomIntFunct.param.get(1).accept(this);
+        mathRandomIntFunct.to.accept(this);
         this.sb.append(")");
         return null;
     }

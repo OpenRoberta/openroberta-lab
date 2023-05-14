@@ -33,8 +33,9 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectio
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightResetAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -59,7 +60,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
@@ -286,17 +288,14 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction lightStatusAction) {
-        switch ( lightStatusAction.status ) {
-            case OFF:
-                this.sb.append("hal.ledOff();");
-                break;
-            case RESET:
-                this.sb.append("hal.resetLED();");
-                break;
-            default:
-                throw new DbcException("Invalid LED status mode!");
-        }
+    public Void visitBrickLightResetAction(BrickLightResetAction brickLightResetAction) {
+        this.sb.append("hal.resetLED();");
+        return null;
+    }
+
+    @Override
+    public Void visitBrickLightOffAction(BrickLightOffAction brickLightOffAction) {
+        this.sb.append("hal.ledOff();");
         return null;
     }
 
@@ -771,7 +770,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
-        indexOfFunct.param.get(0).accept(this);
+        indexOfFunct.value.accept(this);
         switch ( (IndexLocation) indexOfFunct.location ) {
             case FIRST:
                 this.sb.append(".indexOf(");
@@ -782,27 +781,25 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
             default:
                 // nothing to do
         }
-        if ( indexOfFunct.param.get(1).getVarType() == BlocklyType.NUMBER ) {
+        if ( indexOfFunct.find.getVarType() == BlocklyType.NUMBER ) {
             this.sb.append(" (float) ");
         }
-        indexOfFunct.param.get(1).accept(this);
+        indexOfFunct.find.accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct lengthOfIsEmptyFunct) {
-        lengthOfIsEmptyFunct.param.get(0).accept(this);
-        switch ( lengthOfIsEmptyFunct.functName ) {
-            case LIST_IS_EMPTY:
-                this.sb.append(".isEmpty()");
-                break;
-            case LIST_LENGTH:
-                this.sb.append(".size()");
-                break;
-            default:
-                LOG.error("this should NOT be executed (" + lengthOfIsEmptyFunct.functName + ")");
-        }
+    public Void visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
+        lengthOfListFunct.value.accept(this);
+        this.sb.append(".size()");
+        return null;
+    }
+
+    @Override
+    public Void visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
+        isListEmptyFunct.value.accept(this);
+        this.sb.append(".isEmpty()");
         return null;
     }
 

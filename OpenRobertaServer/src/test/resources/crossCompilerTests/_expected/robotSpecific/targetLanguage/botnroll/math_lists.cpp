@@ -68,7 +68,7 @@ void ____math() {
     one.lcd1(_getListMedian(___numberList));
     one.lcd1(_getListStandardDeviation(___numberList));
     one.lcd1(_getListElementByIndex(___numberList, 0));
-    one.lcd1(fmod(___numberVar, ___numberVar));
+    one.lcd1(fmod((___numberVar), (___numberVar)));
     one.lcd1(std::min(std::max((double) ___numberVar, (double) ___numberVar), (double) ___numberVar));
     one.lcd1(_randomIntegerInRange(___numberVar, ___numberVar));
     one.lcd1(((double) rand() / (RAND_MAX)));
@@ -82,7 +82,7 @@ void ____lists() {
     ___stringList = _createListRepeat(___numberVar, (String) ___stringVar);
     ___colourList = _createListRepeat(___numberVar, ___colourVar);
     one.lcd1(((int) ___numberList.size()));
-    one.lcd1(___numberList.empty());
+    one.lcd1(bnr.boolToString(___numberList.empty()));
     one.lcd1(_getFirstOccuranceOfElement(___numberList, ___numberVar));
     one.lcd1(_getLastOccuranceOfElement(___numberList, ___numberVar));
     one.lcd1(_getListElementByIndex(___numberList, ___numberVar));

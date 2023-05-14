@@ -32,7 +32,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
@@ -226,7 +227,7 @@ public class ExprlyVisitor extends ExprlyBaseVisitor<Expr> {
 
         // check the function name and return the corresponfing one
         if ( f.equals("randInt") ) {
-            return new FunctionExpr(new MathRandomIntFunct(args, BCMAKE));
+            return new FunctionExpr(new MathRandomIntFunct(BCMAKE, args.get(0), args.get(1)));
         }
         if ( f.equals("randFloat") ) {
             return new FunctionExpr(new MathRandomFloatFunct(BCMAKE));
@@ -243,27 +244,27 @@ public class ExprlyVisitor extends ExprlyBaseVisitor<Expr> {
         }
         if ( f.equals("avg") ) {
             f = "average";
-            return new FunctionExpr(new MathOnListFunct(FunctionNames.get(f), args, BCMAKE));
+            return new FunctionExpr(new MathOnListFunct(BCMAKE, null, FunctionNames.get(f), args.get(0)));
         }
         if ( f.equals("sd") ) {
             f = "std_dev";
-            return new FunctionExpr(new MathOnListFunct(FunctionNames.get(f), args, BCMAKE));
+            return new FunctionExpr(new MathOnListFunct(BCMAKE, null, FunctionNames.get(f), args.get(0)));
         }
         if ( f.equals("randItem") ) {
             f = "random";
-            return new FunctionExpr(new MathOnListFunct(FunctionNames.get(f), args, BCMAKE));
+            return new FunctionExpr(new MathOnListFunct(BCMAKE, null, FunctionNames.get(f), args.get(0)));
         }
         if ( f.equals("min") || f.equals("max") || f.equals("sum") || f.equals("median") ) {
-            return new FunctionExpr(new MathOnListFunct(FunctionNames.get(f), args, BCMAKE));
+            return new FunctionExpr(new MathOnListFunct(BCMAKE, null, FunctionNames.get(f), args.get(0)));
         }
         if ( f.equals("lengthOf") ) {
-            return new FunctionExpr(new LengthOfIsEmptyFunct(FunctionNames.LIST_LENGTH, args, BCMAKE));
+            return new FunctionExpr(new LengthOfListFunct(BCMAKE, args.get(0)));
         }
         if ( f.equals("indexOfFirst") ) {
-            return new FunctionExpr(new IndexOfFunct(IndexLocation.FIRST, args, BCMAKE));
+            return new FunctionExpr(new IndexOfFunct(BCMAKE, IndexLocation.FIRST, args.get(0), args.get(1)));
         }
         if ( f.equals("indexOfLast") ) {
-            return new FunctionExpr(new IndexOfFunct(IndexLocation.LAST, args, BCMAKE));
+            return new FunctionExpr(new IndexOfFunct(BCMAKE, IndexLocation.LAST, args.get(0), args.get(1)));
         }
         if ( f.contains("setIndex") ) {
             if ( f.equals("setIndex") ) {
@@ -382,10 +383,10 @@ public class ExprlyVisitor extends ExprlyBaseVisitor<Expr> {
 
         }
         if ( f.equals("constrain") ) {
-            return new FunctionExpr(new MathConstrainFunct(args, BCMAKE));
+            return new FunctionExpr(new MathConstrainFunct(BCMAKE, args.get(0), args.get(1), args.get(2)));
         }
         if ( f.equals("isEmpty") ) {
-            return new FunctionExpr(new LengthOfIsEmptyFunct(FunctionNames.LIST_IS_EMPTY, args, BCMAKE));
+            return new FunctionExpr(new IsListEmptyFunct(BCMAKE, args.get(0)));
         }
         if ( f.equals("getRGB") ) {
             if ( args.size() == 3 ) {
