@@ -28,7 +28,7 @@ public final class XsltTransformer {
 
     private static final TransformerFactory factory = TransformerFactory.newInstance();
     private static final List<String> TRANSFORMER_SOURCES =
-        Arrays.asList(Util.readResourceContent("/mapping.xslt"), Util.readResourceContent("/expansion.xslt"));
+        Arrays.asList(Util.readResourceContent("/mappingBlockNames.xslt"), Util.readResourceContent("/mappingFieldsMutations.xslt"), Util.readResourceContent("/expansion.xslt"));
 
     private final ArrayList<Transformer> transformers = new ArrayList<>();
 

@@ -22,7 +22,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
 
-@NepoBasic(name = "MOTOR_ON_ACTION", category = "ACTOR", blocklyNames = {"sim_motor_on_for", "robActions_motor_on_for_ardu", "robActions_motor_on", "sim_motor_on", "robActions_motor_on_for", "mbedActions_motor_on"})
+@NepoBasic(name = "MOTOR_ON_ACTION", category = "ACTOR", blocklyNames = {"robActions_motor_on_for_ardu", "robActions_motor_on", "robActions_motor_on_for", "mbedActions_motor_on"})
 public final class MotorOnAction extends MoveAction {
 
     public final MotionParam param;
@@ -42,7 +42,6 @@ public final class MotorOnAction extends MoveAction {
         MotionParam mp;
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_ON)
-            || block.getType().equals(BlocklyConstants.SIM_MOTOR_ON)
             || block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_ON_FOR_ARDU)
             || block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_ON_FOR_MBED) ) {
             fields = Jaxb2Ast.extractFields(block, (short) 1);

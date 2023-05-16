@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
-@NepoPhrase(name = "SET_LANGUAGE", category = "ACTOR", blocklyNames = {"naoActions_setLanguage", "robActions_setLanguage"})
+@NepoPhrase(name = "SET_LANGUAGE", category = "ACTOR", blocklyNames = {"robActions_setLanguage"})
 public final class SetLanguageAction extends Action {
 
     @NepoField(name = "LANGUAGE")

@@ -4,7 +4,7 @@ package de.fhg.iais.roberta.util.syntax;
  * This class contains all Blockly name constants that are used in the XML representation of the block.
  */
 public final class BlocklyConstants {
-    
+
     private BlocklyConstants() {
         // no objects :-)
     }
@@ -119,23 +119,18 @@ public final class BlocklyConstants {
     public static final String ROB_SENSOR_COLOUR_GET_SAMPLE = "robSensors_colour_getSample";
     public static final String ROB_SENSOR_LIGHT_GET_SAMPLE = "robSensors_light_getSample";
     public static final String ROB_SENSOR_SOUND_GET_SAMPLE = "robSensors_sound_getSample";
-    public static final String ROB_SENSOR_TOUCH_IS_PRESSED = "robSensors_touch_isPressed";
     public static final String ROB_SENSOR_COMPASS_GET_SAMPLE = "robSensors_compass_getSample";
     public static final String ROB_SENSOR_MICROPHONE_GET_SAMPLE = "robSensors_microphone_getSample";
     public static final String ROB_SENSOR_VOLTAGE_GET_SAMPLE = "robSensors_battery_getSample";
     public static final String ROB_SENSOR_ULTRASONIC_GET_SAMPLE = "robSensors_ultrasonic_getSample";
     public static final String ROB_SENSOR_INFRARED_GET_SAMPLE = "robSensors_infrared_getSample";
     public static final String ROB_SENSOR_ENCODER_GET_SAMPLE = "robSensors_encoder_getSample";
-    public static final String ROB_SENSOR_KEY_IS_PRESSED = "robSensors_key_isPressed";
     public static final String ROB_SENSOR_GYRO_GET_SAMPLE = "robSensors_gyro_getSample";
     public static final String ROB_SENSOR_TIMER_GET_SAMPLE = "robSensors_timer_getSample";
-    public static final String ROB_SENSOR_TIMER_GET_SAMPLE_CALLIOPE = "mbedsensors_timer_getsample";
     public static final String ROB_SENSOR_GET_SAMPLE = "robSensors_getSample";
-    public static final String ROB_SENSOR_GET_SAMPLE_ARDU = "robSensors_getSample_ardu";
     public static final String ROB_COLOUR_PICKER = "robColour_picker";
     public static final String CONNECTION_NXT = "robCommunication_connection";
 
-    public static final String MBED_SENSOR_TEMPERATURE_GET_SAMPLE = "mbedSensors_temperature_getSample";
     public static final String ROB_SENSOR_TEMPERATURE_GET_SAMPLE = "makeblockSensors_temperature_getSample";
 
     public static final String ROB_GLOBAL_VARIABLES_DECLARE = "robGlobalvariables_declare";
@@ -275,21 +270,9 @@ public final class BlocklyConstants {
     public static final String ROB_BRICK_LIGHT = "robBrick_light";
     public static final String ROB_BRICK_SOUND = "robBrick_sound";
 
-    public static final String SIM_LED_ON = "sim_LED_on";
-    public static final String SIM_LED_OFF = "sim_LED_off";
     public static final String SENSOR_LIGHT_ON = "sensorLight_on";
     public static final String SENSOR_LIGHT_OFF = "sensorLight_off";
 
-    public static final String SIM_GET_SAMPLE = "sim_getSample";
-    public static final String SIM_TOUCH_IS_PRESSED = "sim_touch_isPressed";
-    public static final String SIM_ULTRASONIC_GET_SAMPLE = "sim_ultrasonic_getSample";
-    public static final String SIM_COLOUR_GET_SAMPLE = "sim_colour_getSample";
-    public static final String SIM_LIGHT_GET_SAMPLE = "sim_light_getSample";
-    public static final String SIM_SOUND_GET_SAMPLE = "sim_sound_getSample";
-
-    public static final String SIM_MOTOR_ON = "sim_motor_on";
-    public static final String SIM_MOTOR_ON_FOR = "sim_motor_on_for";
-    public static final String SIM_MOTOR_STOP = "sim_motor_stop";
     public static final String IMAGE = "IMAGE";
     public static final String GESTURE = "GESTURE";
     public static final String GESTURE_ACTIVE = "GESTURE_ACTIVE";

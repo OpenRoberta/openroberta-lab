@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
-@NepoExpr(name = "ACCELEROMETER_SENSING", category = "SENSOR", blocklyNames = {"mbedSensors_acceleration_getSample", "robsensors_accelerometer_getsample"},
+@NepoExpr(name = "ACCELEROMETER_SENSING", category = "SENSOR", blocklyNames = {"robSensors_accelerometer_getSample"},
     sampleValues = {@F2M(field = "ACCELEROMETER_VALUE", mode = "DEFAULT"), @F2M(field = "ACCELEROMETER_Z", mode = "Z"), @F2M(field = "ACCELEROMETER_X", mode = "X"), @F2M(field = "ACCELEROMETER_Y", mode = "Y")})
 public final class AccelerometerSensor extends ExternalSensor {
 

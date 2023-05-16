@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  * <br>
  * See {@link #getMode()} for the kind of the repeat statements.
  */
-@NepoBasic(name = "WAIT_STMT", category = "STMT", blocklyNames = {"robControls_wait", "mbedControls_wait_for", "robControls_wait_for", "naocontrols_wait_for"})
+@NepoBasic(name = "WAIT_STMT", category = "STMT", blocklyNames = {"robControls_wait", "mbedControls_wait_for", "robControls_wait_for"})
 public final class WaitStmt extends Stmt {
     public final StmtList statements;
 

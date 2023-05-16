@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoBasic(name = "LIGHT_ACTION", category = "ACTOR", blocklyNames = {"robActions_led_on", "sim_LED_on", "robActions_brickLight_on", "robActions_sensorLight_on"})
+@NepoBasic(name = "LIGHT_ACTION", category = "ACTOR", blocklyNames = {"robActions_led_on", "robActions_brickLight_on", "robActions_sensorLight_on"})
 public final class LightAction extends Action {
     private static List<Field> fields;
     private static boolean isActor;
