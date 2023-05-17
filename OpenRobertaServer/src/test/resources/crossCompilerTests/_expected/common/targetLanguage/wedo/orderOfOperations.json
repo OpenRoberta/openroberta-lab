@@ -1,0 +1,1463 @@
+{"ops": [
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "item",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "returnAddress",
+    "target": "rtn_1"
+  },
+  {
+    "opc": "expr",
+    "name": "item",
+    "expr": "Var"
+  },
+  {
+    "opc": "call",
+    "target": "mthd_s_plusOperations"
+  },
+  {
+    "opc": "comment",
+    "text": "call",
+    "label": "rtn_1",
+    "type": "end"
+  },
+  {
+    "opc": "returnAddress",
+    "target": "rtn_2"
+  },
+  {
+    "opc": "expr",
+    "name": "item",
+    "expr": "Var"
+  },
+  {
+    "opc": "call",
+    "target": "mthd_s_minusOperations"
+  },
+  {
+    "opc": "comment",
+    "text": "call",
+    "label": "rtn_2",
+    "type": "end"
+  },
+  {
+    "opc": "returnAddress",
+    "target": "rtn_3"
+  },
+  {
+    "opc": "expr",
+    "name": "item",
+    "expr": "Var"
+  },
+  {
+    "opc": "call",
+    "target": "mthd_s_multiplicationOperations"
+  },
+  {
+    "opc": "comment",
+    "text": "call",
+    "label": "rtn_3",
+    "type": "end"
+  },
+  {
+    "opc": "returnAddress",
+    "target": "rtn_4"
+  },
+  {
+    "opc": "expr",
+    "name": "item",
+    "expr": "Var"
+  },
+  {
+    "opc": "call",
+    "target": "mthd_s_divisionOperations"
+  },
+  {
+    "opc": "comment",
+    "text": "call",
+    "label": "rtn_4",
+    "type": "end"
+  },
+  {
+    "opc": "returnAddress",
+    "target": "rtn_5"
+  },
+  {
+    "opc": "expr",
+    "name": "item",
+    "expr": "Var"
+  },
+  {
+    "opc": "call",
+    "target": "mthd_s_exponentOperations"
+  },
+  {
+    "opc": "comment",
+    "text": "call",
+    "label": "rtn_5",
+    "type": "end"
+  },
+  {"opc": "stop"},
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_s_plusOperations",
+    "type": "start"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "item2",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "100"
+  },
+  {
+    "opc": "expr",
+    "expr": "MathConstrainFunct"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "op": "ROOT",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "SIN",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "expr": "createMathConstant",
+    "value": "PI"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "7.8"
+  },
+  {
+    "op": "ROUND",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "10"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "100"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "randInt"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item2"
+  },
+  {
+    "opc": "expr",
+    "expr": "randDouble"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item2"
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_6",
+    "type": "start"
+  },
+  {
+    "opc": "unbindVar",
+    "name": "item2"
+  },
+  {
+    "opc": "return",
+    "values": false
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "type": "end"
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_s_multiplicationOperations",
+    "type": "start"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "item4",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item4"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "100"
+  },
+  {
+    "opc": "expr",
+    "expr": "MathConstrainFunct"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item4"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "op": "ROOT",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "SIN",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item4"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "expr": "createMathConstant",
+    "value": "PI"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "7.8"
+  },
+  {
+    "op": "ROUND",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item4"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "10"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "100"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "randInt"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item4"
+  },
+  {
+    "opc": "expr",
+    "expr": "randDouble"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item4"
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_7",
+    "type": "start"
+  },
+  {
+    "opc": "unbindVar",
+    "name": "item4"
+  },
+  {
+    "opc": "return",
+    "values": false
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "type": "end"
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_s_exponentOperations",
+    "type": "start"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "item6",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item6"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "100"
+  },
+  {
+    "opc": "expr",
+    "expr": "MathConstrainFunct"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item6"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "op": "ROOT",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "SIN",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item6"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "expr": "createMathConstant",
+    "value": "PI"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "7.8"
+  },
+  {
+    "op": "ROUND",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item6"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "10"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "100"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "randInt"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item6"
+  },
+  {
+    "opc": "expr",
+    "expr": "randDouble"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item6"
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_8",
+    "type": "start"
+  },
+  {
+    "opc": "unbindVar",
+    "name": "item6"
+  },
+  {
+    "opc": "return",
+    "values": false
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "type": "end"
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_s_minusOperations",
+    "type": "start"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "item3",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "100"
+  },
+  {
+    "opc": "expr",
+    "expr": "MathConstrainFunct"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "op": "ROOT",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "SIN",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "expr": "createMathConstant",
+    "value": "PI"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "7.8"
+  },
+  {
+    "op": "ROUND",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "10"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "100"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "randInt"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item3"
+  },
+  {
+    "opc": "expr",
+    "expr": "randDouble"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item3"
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_9",
+    "type": "start"
+  },
+  {
+    "opc": "unbindVar",
+    "name": "item3"
+  },
+  {
+    "opc": "return",
+    "values": false
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "type": "end"
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_s_divisionOperations",
+    "type": "start"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "item5",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "DIVIDE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item5"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "DIVIDE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "100"
+  },
+  {
+    "opc": "expr",
+    "expr": "MathConstrainFunct"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item5"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "op": "ROOT",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "SIN",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "op": "DIVIDE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item5"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "expr": "createMathConstant",
+    "value": "PI"
+  },
+  {
+    "op": "DIVIDE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "7.8"
+  },
+  {
+    "op": "ROUND",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item5"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "10"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "100"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "randInt"
+  },
+  {
+    "op": "DIVIDE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item5"
+  },
+  {
+    "opc": "expr",
+    "expr": "randDouble"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "DIVIDE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item5"
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_10",
+    "type": "start"
+  },
+  {
+    "opc": "unbindVar",
+    "name": "item5"
+  },
+  {
+    "opc": "return",
+    "values": false
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "type": "end"
+  }
+]}

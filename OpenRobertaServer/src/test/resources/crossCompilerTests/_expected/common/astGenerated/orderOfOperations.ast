@@ -1,0 +1,5 @@
+MethodCall [plusOperations, Var [item2], Var [item], VOID]
+MethodCall [minusOperations, Var [item3], Var [item], VOID]
+MethodCall [multiplicationOperations, Var [item4], Var [item], VOID]
+MethodCall [divisionOperations, Var [item5], Var [item], VOID]
+MethodCall [exponentOperations, Var [item6], Var [item], VOID]

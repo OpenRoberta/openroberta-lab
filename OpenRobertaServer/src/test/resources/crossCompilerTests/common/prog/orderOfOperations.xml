@@ -1,0 +1,55 @@
+<block type="robProcedures_callnoreturn" id="GwI*ze9ajj;2U}svJ]Qc" intask="true">
+    <mutation name="plusOperations">
+        <arg name="item2" type="Number"></arg>
+    </mutation>
+    <value name="ARG0">
+        <block type="variables_get" id="pyuQmhQH=ny+GVBkbQex" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">item</field>
+        </block>
+    </value>
+</block>
+<block type="robProcedures_callnoreturn" id="pn25!dD-Q!ug4TlcMc=," intask="true">
+    <mutation name="minusOperations">
+        <arg name="item3" type="Number"></arg>
+    </mutation>
+    <value name="ARG0">
+        <block type="variables_get" id="lb_D{8I93D)mGTEh987L" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">item</field>
+        </block>
+    </value>
+</block>
+<block type="robProcedures_callnoreturn" id="Nw0BKW#y].Fj?}R[{qio" intask="true">
+    <mutation name="multiplicationOperations">
+        <arg name="item4" type="Number"></arg>
+    </mutation>
+    <value name="ARG0">
+        <block type="variables_get" id="M#u_Q3r2DTIC=h71EWBl" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">item</field>
+        </block>
+    </value>
+</block>
+<block type="robProcedures_callnoreturn" id="2u(g2!r]8_v]VSMU{*fD" intask="true">
+    <mutation name="divisionOperations">
+        <arg name="item5" type="Number"></arg>
+    </mutation>
+    <value name="ARG0">
+        <block type="variables_get" id="tl^I~7l.kF@g~yk5LP/N" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">item</field>
+        </block>
+    </value>
+</block>
+<block type="robProcedures_callnoreturn" id="vmuM+Y)Up^0e,GXdpn!I" intask="true">
+    <mutation name="exponentOperations">
+        <arg name="item6" type="Number"></arg>
+    </mutation>
+    <value name="ARG0">
+        <block type="variables_get" id=".9-H,k5u{T!^y5DloxQ(" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">item</field>
+        </block>
+    </value>
+</block>

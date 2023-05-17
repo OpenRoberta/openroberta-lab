@@ -317,3 +317,4 @@ bool MathIsWhole(float val) {
     int intPart = val;
     return ((val - intPart) == 0);
 }
+

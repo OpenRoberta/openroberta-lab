@@ -73,7 +73,7 @@ robots:
   microbitv2:
     template: microbitv2
     dir: microbitv2
-    suffix: ".py"  
+    suffix: ".py"
   mbot:
     template: mbot
     dir: mbot
@@ -253,6 +253,10 @@ progs:
       edison: "Not all pow functions are supported"
       thymio: "Not supported"
     remark: "different combinations for math power of"
+  orderOfOperations:
+    decl: orderOfOperations
+    fragment: orderOfOperations
+    remark: "precedence check for math binary operations"
   strings:
     decl: strings
     exclude:
