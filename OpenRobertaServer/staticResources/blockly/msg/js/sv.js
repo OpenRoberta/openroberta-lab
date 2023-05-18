@@ -1942,6 +1942,8 @@ Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Giltiga specialtecken: »=
 Blockly.Msg.VALIDATION_FIELD_REQUIRED = "Detta fält får inte vara tomt!";
 Blockly.Msg.VALIDATION_MAX_LENGTH = "Maxlängden är 25 tecken!";
 Blockly.Msg.VALIDATION_PASSWORD_MIN_LENGTH = "Minsta längd för lösenord är 6!";
+Blockly.Msg.VALIDATION_PIN_TAKEN_BY_INTERNAL_COMPONENT = "This pin is connected to an inbuilt component and should be used with caution.";  // untranslated
+Blockly.Msg.VALIDATION_PIN_TAKEN_BY_LED_MATRIX = "Before using this pin, make sure to disable the internal LED matrix using the 'switch LED matrix off' block.";  // untranslated
 Blockly.Msg.VALIDATION_SECOND_PASSWORD_EQUAL = "De båda lösenorden måste vara samma";
 Blockly.Msg.VALIDATION_TOKEN_LENGTH = "Tokenlängd är 8 tecken!";
 Blockly.Msg.VALIDATION_VALID_EMAIL_ADDRESS = "Vänligen ange en godkänd epost-adress!";

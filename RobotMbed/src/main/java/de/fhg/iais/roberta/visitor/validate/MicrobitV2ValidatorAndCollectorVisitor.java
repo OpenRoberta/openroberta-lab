@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.visitor.validate;
 
+import java.util.Arrays;
+
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
@@ -23,9 +25,11 @@ public class MicrobitV2ValidatorAndCollectorVisitor extends MicrobitValidatorAnd
     public MicrobitV2ValidatorAndCollectorVisitor(
         ConfigurationAst brickConfiguration,
         ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders,
-        boolean isSim) {
-        super(brickConfiguration, beanBuilders, isSim);
+        boolean isSim, boolean displaySwitchUsed) {
+        super(brickConfiguration, beanBuilders, isSim, displaySwitchUsed);
         this.isSim = isSim;
+        this.occupiedPins = Arrays.asList("3", "4", "5", "6", "7", "10", "11", "12", "19", "20");
+        this.ledPins = Arrays.asList("3", "4", "6", "7", "10");
     }
 
     @Override
