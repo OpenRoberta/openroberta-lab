@@ -1,12 +1,13 @@
 package de.fhg.iais.roberta.javaServer.basics.restInterface;
 
-import de.fhg.iais.roberta.util.Key;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import de.fhg.iais.roberta.util.Key;
 
 public class ProgramRestTest extends AbstractRestInterfaceTest {
     @Before
@@ -119,7 +120,7 @@ public class ProgramRestTest extends AbstractRestInterfaceTest {
 
         restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         JSONObject responseJson = new JSONObject((String) this.response.getEntity());
-        Assert.assertTrue(responseJson.has("confXML"));
+        Assert.assertTrue(!responseJson.has("confXML") && !responseJson.has("confName"));
         saveProgram(this.sMinscha, minschaId, "minscha", -1, "p1", ".1.1.minscha", "c1", null, "ok", Key.PROGRAM_SAVE_SUCCESS);
         restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         responseJson = new JSONObject((String) this.response.getEntity());
@@ -446,8 +447,8 @@ public class ProgramRestTest extends AbstractRestInterfaceTest {
             saveProgramAs(this.sMinscha, "minscha", "minscha", "mp1", "mp1.minscha", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
             saveProgramAs(this.sMinscha, "minscha", "minscha", "mp2", "mp2.minscha", null, "mp2.conf.minscha", "ok", Key.PROGRAM_SAVE_SUCCESS);
             saveProgramAs(this.sMinscha, "minscha", "minscha", "mp3", "mp3.minscha", "mc1", null, "ok", Key.PROGRAM_SAVE_SUCCESS);
-            saveProgramAs(this.sMinscha, "minscha", "minscha", "mp4", "mp3.minscha", "mc1", "mp2.conf.minscha", "error", Key.SERVER_ERROR);
-            Assert.assertEquals(3, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where NAME like 'mp%'"));
+            saveProgramAs(this.sMinscha, "minscha", "minscha", "mp4", "mp3.minscha", "mc1", "mp2.conf.minscha", "ok", Key.PROGRAM_SAVE_SUCCESS);
+            Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where NAME like 'mp%'"));
             String cnMp1 = this.memoryDbSetup.getOne("select CONFIG_NAME from PROGRAM where NAME = 'mp1'");
             String chMp1 = this.memoryDbSetup.getOne("select CONFIG_HASH from PROGRAM where NAME = 'mp1'");
             Assert.assertTrue(cnMp1 == null && chMp1 == null);
@@ -461,7 +462,7 @@ public class ProgramRestTest extends AbstractRestInterfaceTest {
             Assert.assertTrue(cnMp3 != null && chMp3 == null);
             String chMc1 = this.memoryDbSetup.getOne("select CONFIGURATION_HASH from CONFIGURATION where NAME = 'mc1'");
             String ctMc1 = this.memoryDbSetup.getOne("select CONFIGURATION_TEXT from CONFIGURATION_DATA where CONFIGURATION_HASH = '" + chMc1 + "'");
-            Assert.assertTrue(ctMc1.contains("mc1.1.conf.minscha"));
+            Assert.assertTrue(ctMc1.contains("mp2.conf.minscha"));
         }
     }
 

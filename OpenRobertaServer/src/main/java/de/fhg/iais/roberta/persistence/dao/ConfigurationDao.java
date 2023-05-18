@@ -35,7 +35,8 @@ public class ConfigurationDao extends AbstractDao<Program> {
      * @param name the name of the configuration, never null
      * @param owner the user who owns the configuration, never null
      * @param robot the robot the configuration is defined for, never null
-     * @param configurationText the configuration text, never null * @return the configuration hash; null, if an error occurs (e.g. mayExist==false, but exists)
+     * @param configurationText the configuration text, never null
+     * @return true, if the creation was successful
      */
     public boolean persistConfigurationText(String name, User owner, Robot robot, String configurationText, boolean mayExist) {
         Assert.notNull(name);
@@ -45,6 +46,9 @@ public class ConfigurationDao extends AbstractDao<Program> {
         String configurationHash = optionalStore(configurationText);
         Configuration configuration = load(name, owner, robot);
         if ( configuration == null ) {
+            if ( configurationText == null ) { // configuration doesn't exist, but no text to create it
+
+            }
             configuration = new Configuration(name, owner, robot);
             configuration.setConfigurationHash(configurationHash);
             this.session.save(configuration);
@@ -84,7 +88,7 @@ public class ConfigurationDao extends AbstractDao<Program> {
      * configuration)
      *
      * @param name the name of the configuration, never null
-     * @param user the owner of the configuration, never null
+     * @param user the owner of the configuration, null if no user is logged in
      * @param robot the robot this configuration is usable for
      * @return the configuration, null if the configuration is not found
      */

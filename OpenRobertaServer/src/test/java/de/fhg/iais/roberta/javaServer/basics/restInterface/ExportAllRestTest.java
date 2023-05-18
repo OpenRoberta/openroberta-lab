@@ -1,22 +1,21 @@
 package de.fhg.iais.roberta.javaServer.basics.restInterface;
 
-import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.util.Key;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import javax.ws.rs.core.Response;
-
-import static org.junit.Assert.assertNull;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import javax.ws.rs.core.Response;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import de.fhg.iais.roberta.persistence.util.HttpSessionState;
+import de.fhg.iais.roberta.util.Key;
+import static org.junit.Assert.assertNull;
 
 public class ExportAllRestTest extends AbstractRestInterfaceTest {
 
@@ -78,10 +77,10 @@ public class ExportAllRestTest extends AbstractRestInterfaceTest {
         //check if xml text is correct
         Assert.assertEquals(
             "<export xmlns=\"http://de.fhg.iais.roberta.blockly\"><program><block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" " +
-                "robottype=\"ev3\" xmlversion=\"2.0\" description=\"\" tags=\"\"><instance x=\"512\" y=\"50\"><block type=\"robControls_start\" " +
+                "robottype=\"ev3\" xmlversion=\"3.0\" description=\"\" tags=\"\"><instance x=\"512\" y=\"50\"><block type=\"robControls_start\" " +
                 "id=\"RDF[XZ?y7bn;Z{?V}Q)(\" intask=\"true\" deletable=\"false\"><mutation declare=\"false\"></mutation><field name=\"DEBUG\">FALSE</field><comment " +
                 "w=\"0\" h=\"0\" pinned=\"false\">progTextToExport</comment></block></instance></block_set></program><config><block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" " +
-                "robottype=\"ev3\" xmlversion=\"2.0\" description=\"\" tags=\"\"><instance x=\"213\" y=\"213\"><block type=\"robBrick_EV3-Brick\" id=\"1\" " +
+                "robottype=\"ev3\" xmlversion=\"3.0\" description=\"\" tags=\"\"><instance x=\"213\" y=\"213\"><block type=\"robBrick_EV3-Brick\" id=\"1\" " +
                 "intask=\"true\" deletable=\"false\"><comment w=\"0\" h=\"0\" pinned=\"false\">xmlTextToExport</comment><value name=\"S1\"><block type=\"robBrick_touch\" id=\"2\" " +
                 "intask=\"true\"></block></value></block></instance></block_set></config></export>"
             ,

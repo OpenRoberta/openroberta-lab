@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.factory.RobotFactory;
@@ -57,6 +59,7 @@ import de.fhg.iais.roberta.persistence.bo.UserGroup;
 import de.fhg.iais.roberta.persistence.dao.ConfigurationDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
+import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
@@ -67,7 +70,6 @@ import de.fhg.iais.roberta.util.UtilForXmlTransformation;
 import de.fhg.iais.roberta.util.XsltTransformer;
 import de.fhg.iais.roberta.util.archiver.UserProgramsArchiver;
 import de.fhg.iais.roberta.util.basic.Pair;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 @Path("/program")
@@ -75,10 +77,15 @@ public class ClientProgramController {
     private static final Logger LOG = LoggerFactory.getLogger(ClientProgramController.class);
 
     private final boolean isPublicServer;
+    private final Map<String, RobotFactory> robotPluginMap;
+    private final boolean feature_Toggle_rewrite_transformed_programs_into_the_database;
 
     @Inject
-    public ClientProgramController(ServerProperties serverProperties) {
+    public ClientProgramController(ServerProperties serverProperties, @Named("robotPluginMap") Map<String, RobotFactory> robotPluginMap) {
         this.isPublicServer = serverProperties.getBooleanProperty("server.public");
+        this.feature_Toggle_rewrite_transformed_programs_into_the_database =
+            serverProperties.getBooleanProperty("feature-toggle.rewrite-transformed-programs-into-the-database");
+        this.robotPluginMap = robotPluginMap;
     }
 
     @POST
@@ -184,19 +191,21 @@ public class ClientProgramController {
                 if ( program == null ) {
                     return UtilForREST.makeBaseResponseForError(programProcessor.getMessage(), httpSessionState, null);
                 } else {
-                    String configText = programProcessor.getProgramsConfig(program);
-                    String transformedXml = xsltTransformer.transform(program.getProgramText());
-                    Pair<String, String> progConfPair = UtilForXmlTransformation.transformBetweenVersions(httpSessionState.getRobotFactory(), transformedXml, configText);
                     String configName = program.getConfigName();
-                    String configXML = progConfPair.getSecond();
-                    response.setProgXML(progConfPair.getFirst());
-                    // check and set config name for default config.
-                    if ( configName == null && configText == null ) {
-                        configName = robot.toUpperCase() + "basis";
+                    String programText = program.getProgramText();
+                    String configText = programProcessor.getProgramsConfig(program);
+                    programText = xsltTransformer.transform(programText);
+                    Pair<String, String> progConfPair = UtilForXmlTransformation.transformBetweenVersions(httpSessionState.getRobotFactory(), programText, configText);
+                    programText = progConfPair == null ? programText : progConfPair.getFirst();
+                    configText = progConfPair == null ? configText : configName == null && configText == null ? null : progConfPair.getSecond();
+                    if ( feature_Toggle_rewrite_transformed_programs_into_the_database && progConfPair != null ) {
+                        programProcessor.replaceTransformedProgram(program, programText, configName, configText); // save the transformed program text and conf
+                        LOG.error("number and id of XML transformed programs replaced in the database: " + program.getId() + ", " + AliveData.transformerDatabaseSavesTotal.get());
                     }
+                    response.setProgXML(programText);
                     response.setConfigName(configName); // may be null, if an anonymous configuration is used
-                    response.setConfXML(configXML); // may be null, if the default configuration is used
-                    response.setProgramName((program.getName()));
+                    response.setConfXML(configText); // may be null, if the default configuration is used
+                    response.setProgramName(program.getName());
                     response.setLastChanged(program.getLastChanged().getTime());
                     // count the views if the program is from the gallery!
                     if ( ownerName.equals("Gallery") ) {
@@ -420,13 +429,13 @@ public class ClientProgramController {
                 if ( robotType1.equals(robot) && robotType2.equals(robot) ) {
                     ImportResponse response = ImportResponse.make();
                     response.setProgramName(programName);
-                    Pair<String, String> progConfPair =
-                        UtilForXmlTransformation.transformBetweenVersions(
-                            httpSessionState.getRobotFactory(),
-                            JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet()),
-                            JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet()));
-                    response.setProgXML(progConfPair.getFirst());
-                    response.setConfXML(progConfPair.getSecond());
+                    String progXml = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
+                    String configXml = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
+                    Pair<String, String> progConfPair = UtilForXmlTransformation.transformBetweenVersions(httpSessionState.getRobotFactory(), progXml, configXml);
+                    progXml = progConfPair == null ? progXml : progConfPair.getFirst();
+                    configXml = progConfPair == null ? configXml : progConfPair.getSecond();
+                    response.setProgXML(progXml);
+                    response.setConfXML(configXml);
                     UtilForREST.addSuccessInfo(response, Key.PROGRAM_IMPORT_SUCCESS);
                     Statistics.info("ProgramImport", "success", true);
                     return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
@@ -445,8 +454,41 @@ public class ClientProgramController {
         }
         LOG.error("program import failed (" + errorDescription + "). Probably no or user-edited XML");
         ImportResponse response = ImportResponse.make();
-            UtilForREST.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR);
-            return UtilForREST.makeBaseResponseForError(Key.PROGRAM_IMPORT_ERROR, httpSessionState, null);
+        UtilForREST.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR);
+        return UtilForREST.makeBaseResponseForError(Key.PROGRAM_IMPORT_ERROR, httpSessionState, null);
+    }
+
+    @POST
+    @Path("/transform")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response transform(@XsltTrans XsltTransformer xsltTransformer, String toTransform) {
+        String transformed = "";
+        try {
+            toTransform = UtilForHtmlXml.checkProgramTextForXSS(toTransform);
+            toTransform = xsltTransformer.transform(toTransform);
+            if ( toTransform != null ) {
+                Export jaxbImportExport = JaxbHelper.xml2Element(toTransform, Export.class);
+                if ( jaxbImportExport != null ) {
+                    String robotType1 = jaxbImportExport.getProgram().getBlockSet().getRobottype();
+                    String robotType2 = jaxbImportExport.getConfig().getBlockSet().getRobottype();
+                    RobotFactory robotFactory = getArbitraryPluginOfAPluginGroup(robotType1, robotPluginMap);
+                    if ( robotFactory != null && robotType1.equals(robotType2) ) {
+                        String progXml = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
+                        String configXml = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
+                        Pair<String, String> progConfPair = UtilForXmlTransformation.transformBetweenVersions(robotFactory, progXml, configXml);
+                        progXml = progConfPair == null ? progXml : progConfPair.getFirst();
+                        configXml = progConfPair == null ? configXml : progConfPair.getSecond();
+                        transformed = "<export xmlns=\"http://de.fhg.iais.roberta.blockly\"><program>" + progXml + "</program><config>" + configXml + "</config></export>";
+                        Statistics.info("ProgramTransForm", "success", true);
+                    }
+                }
+            }
+        } catch ( Exception e ) {
+            transformed = "";
+            Statistics.info("ProgramTransForm", "success", false);
+        }
+        return Response.ok(transformed).build();
     }
 
     /**
@@ -764,5 +806,14 @@ public class ClientProgramController {
         return httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup().isEmpty()
             ? httpSessionState.getRobotName()
             : httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
+    }
+
+    private RobotFactory getArbitraryPluginOfAPluginGroup(String pluginNameOrPluginGroup, Map<String, RobotFactory> robotPluginMap) {
+        for ( RobotFactory robotPlugin : robotPluginMap.values() ) {
+            if ( pluginNameOrPluginGroup.equals(robotPlugin.getGroup()) ) {
+                return robotPlugin;
+            }
+        }
+        return null;
     }
 }

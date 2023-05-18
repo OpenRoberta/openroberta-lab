@@ -29,9 +29,5 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>de.fhg.iais.openroberta</groupId>
-            <artifactId>OpenRobertaRobot</artifactId>
-        </dependency>
     </dependencies>
 </project>

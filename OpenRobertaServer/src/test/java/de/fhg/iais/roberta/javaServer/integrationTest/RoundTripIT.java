@@ -106,7 +106,7 @@ public class RoundTripIT {
         memoryDbSetup = tc.getMemoryDbSetup();
 
         restUser = new ClientUser(brickCommunicator, serverProperties, null);
-        restProject = new ClientProgramController(serverProperties);
+        restProject = new ClientProgramController(serverProperties, null);
         Map<String, RobotFactory> robotPlugins = new HashMap<>();
         loadPlugin(robotPlugins);
         s1 = HttpSessionState.initOnlyLegalForDebugging("", robotPlugins, serverProperties, 1);

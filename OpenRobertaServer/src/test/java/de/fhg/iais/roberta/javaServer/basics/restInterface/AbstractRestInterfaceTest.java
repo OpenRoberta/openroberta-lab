@@ -73,7 +73,7 @@ public abstract class AbstractRestInterfaceTest {
     protected static final String PROG_PRE_ROBOT = "<block_set xmlns=\\\"http://de.fhg.iais.roberta.blockly\\\" robottype=\\\"";
 
     protected static final String PROG_PRE_TEXT =
-        "\\\" xmlversion=\\\"2.0\\\" description=\\\"\\\" tags=\\\"\\\">"
+        "\\\" xmlversion=\\\"3.0\\\" description=\\\"\\\" tags=\\\"\\\">"
             + "<instance x=\\\"512\\\" y=\\\"50\\\">"
             + "<block type=\\\"robControls_start\\\" id=\\\"RDF[XZ?y7bn;Z{?V}Q)(\\\" intask=\\\"true\\\" deletable=\\\"false\\\">"
             + "<mutation declare=\\\"false\\\"></mutation>"
@@ -81,7 +81,7 @@ public abstract class AbstractRestInterfaceTest {
             + "<comment w=\\\"0\\\" h=\\\"0\\\" pinned=\\\"false\\\">";
     protected static final String PROG_POST = "</comment>" + "</block></instance></block_set>";
     protected static final String CONF_PRE =
-        "<block_set xmlns=\\\"http://de.fhg.iais.roberta.blockly\\\" robottype=\\\"ev3\\\" xmlversion=\\\"2.0\\\" description=\\\"\\\" tags=\\\"\\\">"
+        "<block_set xmlns=\\\"http://de.fhg.iais.roberta.blockly\\\" robottype=\\\"ev3\\\" xmlversion=\\\"3.0\\\" description=\\\"\\\" tags=\\\"\\\">"
             + "<instance x=\\\"213\\\" y=\\\"213\\\">"
             + "<block type=\\\"robBrick_EV3-Brick\\\" id=\\\"1\\\" intask=\\\"true\\\" deletable=\\\"false\\\">"
             + "<comment w=\\\"0\\\" h=\\\"0\\\" pinned=\\\"false\\\">";
@@ -131,7 +131,7 @@ public abstract class AbstractRestInterfaceTest {
 
         this.xsltTransformer = new XsltTransformer();
 
-        this.restProject = new ClientProgramController(this.serverProperties);
+        this.restProject = new ClientProgramController(this.serverProperties, null);
         this.restGroup = new UserGroupController(this.robotCommunicator, this.serverProperties);
         this.restClient = new ClientAdmin(robotCommunicator, serverProperties);
         this.restConfiguration = new ClientConfiguration(this.robotCommunicator);

@@ -31,6 +31,7 @@ import de.fhg.iais.roberta.persistence.dao.UserGroupDao;
 import de.fhg.iais.roberta.persistence.dao.UserGroupProgramShareDao;
 import de.fhg.iais.roberta.persistence.dao.UserProgramShareDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
+import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.basic.Pair;
@@ -613,7 +614,7 @@ public class ProgramProcessor extends AbstractProcessor {
      *
      * @param programName the name of the program. Never null.
      * @param programText the program text. Never null.
-     * @param configName the name of the attached configuration. Null, if the configurartion is anonymous.
+     * @param configName the name of the attached configuration. Null, if the configuration is anonymous.
      * @param configText the XML definition of the attached configuration. Null, if the configuration is the default configuration.
      * @param userId the owner of the program
      * @param robotName the name of the robot the program was written for
@@ -647,7 +648,6 @@ public class ProgramProcessor extends AbstractProcessor {
 
         RobotDao robotDao = new RobotDao(this.dbSession);
         ProgramDao programDao = new ProgramDao(this.dbSession);
-        ConfigurationDao confDao = new ConfigurationDao(this.dbSession);
 
         Robot robot = robotDao.loadRobot(robotName);
         User owner, author;
@@ -697,19 +697,25 @@ public class ProgramProcessor extends AbstractProcessor {
         }
 
         String confHash;
-        if ( configName == null && configText == null ) { // default configuration
-            confHash = null;
-        } else if ( configName == null && configText != null ) { // anonymous configuration
-            confHash = confDao.persistConfigurationHash(configText);
-        } else if ( configName != null && configText == null ) { // named configuration (must be persisted already! Check that!)
-            if ( confDao.load(configName, author, robot) == null ) {
-                this.setStatus(ProcessorStatus.FAILED, Key.SERVER_ERROR, new HashMap<>());
-                return null;
+        if ( configName == null ) { // an anonymous configuration
+            if ( configText == null ) { // the default configuration
+                confHash = null;
+            } else {
+                ConfigurationDao confDao = new ConfigurationDao(this.dbSession);
+                confHash = confDao.persistConfigurationHash(configText);
             }
-            confHash = null;
-        } else { // illegal call (frontend error)
-            this.setStatus(ProcessorStatus.FAILED, Key.SERVER_ERROR, new HashMap<>());
-            return null;
+        } else { // a named configuration
+            if ( configText == null ) { // named configuration without an update (must be persisted already! Check that!)
+                ConfigurationDao confDao = new ConfigurationDao(this.dbSession);
+                Configuration namedConfig = confDao.load(configName, author, robot);
+                if ( namedConfig == null ) {
+                    this.setStatus(ProcessorStatus.FAILED, Key.SERVER_ERROR, new HashMap<>());
+                    return null;
+                }
+                confHash = null;
+            } else {
+                confHash = saveConfiguration(configName, configText, author, robot);
+            }
         }
 
         Pair<Key, Program> result;
@@ -720,7 +726,7 @@ public class ProgramProcessor extends AbstractProcessor {
         }
         // a bit strange, but necessary as Java has no N-tuple
         if ( result.getFirst() == Key.PROGRAM_SAVE_SUCCESS ) {
-            this.setStatus(ProcessorStatus.SUCCEEDED, Key.PROGRAM_SAVE_SUCCESS, new HashMap<>());
+            setStatus(ProcessorStatus.SUCCEEDED, Key.PROGRAM_SAVE_SUCCESS, new HashMap<>());
         } else {
             setStatus(ProcessorStatus.FAILED, result.getFirst(), new HashMap<>());
         }
@@ -788,5 +794,31 @@ public class ProgramProcessor extends AbstractProcessor {
 
     public void addOneView(Program program) {
         program.incrViewed();
+    }
+
+    public void replaceTransformedProgram(Program program, String programText, String configName, String configText) {
+        AliveData.transformerDatabaseSavesTotal.incrementAndGet();
+        program.setProgramText(programText);
+        String confHash = saveConfiguration(configName, configText, program.getAuthor(), program.getRobot());
+        program.setConfigData(configName, confHash);
+    }
+
+    /**
+     * save a anonymous or named configuration into the database
+     *
+     * @param configName the name of the configuration, may be null
+     * @param configText the xml of the configuration, may be null
+     * @return the hash of the configuration, if an anonymous configuration is stored or found in the database
+     */
+    private String saveConfiguration(String configName, String configText, User author, Robot robot) {
+        ConfigurationDao confDao = new ConfigurationDao(this.dbSession);
+        if ( configName == null && configText == null ) {
+            return null; // default configuration
+        } else if ( configName == null && configText != null ) { // anonymous configuration
+            return confDao.persistConfigurationHash(configText);
+        } else { // named configutation, may need an update
+            confDao.persistConfigurationText(configName, author, robot, configText, true);
+            return null;
+        }
     }
 }

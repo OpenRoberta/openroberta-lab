@@ -51,8 +51,8 @@ import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.UtilForREST;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.ast.AstFactory;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
@@ -405,6 +405,9 @@ public class ServerStarter {
     }
 
     private void logTheNumberOfStoredPrograms() {
+        if ( true ) {
+            return; // disabled: uses too much resources with too little information :-)
+        }
         try {
             DbSession session = this.injector.getInstance(SessionFactoryWrapper.class).getSession();
             List<?> numberOfProgramsInList = session.createSqlQuery("select count(*) from PROGRAM").list();
