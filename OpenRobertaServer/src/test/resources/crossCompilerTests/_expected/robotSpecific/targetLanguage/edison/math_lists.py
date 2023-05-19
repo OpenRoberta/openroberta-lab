@@ -50,9 +50,9 @@ ____lists()
 
 
 def _abs(num):
-    if (num < 0):
+    if (num < 0): 
         return -num
-    else:
+    else: 
         return num
 
 def max(list):
@@ -79,18 +79,19 @@ def _pow(base, exp):
     return result
 
 def _isPrime(num):
-    if num <= 1:
+    if num <= 1: 
         return False
     newNum = num - 2
     for x in range(newNum):
         y = (x + 2)
-        if (num % y) == 0:
+        if (num % y) == 0: 
             return False
     return True
 
 def sum(list):
     listSum = 0
     listLength = len(list)
-    for i in range(listLength):
+    for i in range(listLength): 
         listSum = (listSum + list[i])
     return listSum
+

@@ -586,13 +586,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         Expr min = mathRandomIntFunct.from;
         Expr max = mathRandomIntFunct.to;
-        this.sb.append("((rand() % (int) (");
+        this.sb.append("((rand() % (int) ((");
         min.accept(this);
-        this.sb.append(" - ");
+        this.sb.append(") - (");
         max.accept(this);
-        this.sb.append(")) + ");
+        this.sb.append("))) + (");
         min.accept(this);
-        this.sb.append(")");
+        this.sb.append("))");
         return null;
     }
 

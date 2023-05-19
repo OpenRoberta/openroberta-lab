@@ -721,14 +721,14 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        this.sb.append("(_uBit.random(");
+        this.sb.append("(_uBit.random((");
         mathRandomIntFunct.to.accept(this);
-        this.sb.append(" - ");
+        this.sb.append(") - (");
         mathRandomIntFunct.from.accept(this);
-        this.sb.append(" + 1)");
-        this.sb.append(" + ");
+        this.sb.append(") + 1)");
+        this.sb.append(" + (");
         mathRandomIntFunct.from.accept(this);
-        this.sb.append(")");
+        this.sb.append("))");
         return null;
     }
 

@@ -70,7 +70,7 @@ public class NEPOprog {
         ___b1 = ( ___b1 && ( ___r2 < ___r1 ) ) && ( ___r1 <= ___r1 );
         ___b1 = ___b1 && ( ( ( ___r1 ) % ( 4 ) ) == 2 );
         ___b1 = ___b1 && ( 29 == ( Math.min(Math.max((float) Math.pow(3, 2), 1), 20) + ( Math.min(Math.max(9, 3 * 4), 18) + Math.min(Math.max(3 * 3, 5), 8) ) ) );
-        ___b1 = ___b1 && ( 11 > ( (float) Math.random() * ( Math.round(Math.random() * (10 - 1)) + 1 ) ) );
+        ___b1 = ___b1 && ( 11 > ( (float) Math.random() * ( Math.round(Math.random() * ((10) - (1))) + (1) ) ) );
         // if b1 is true, the test succeeded, otherwise it failed :-)
     }
 

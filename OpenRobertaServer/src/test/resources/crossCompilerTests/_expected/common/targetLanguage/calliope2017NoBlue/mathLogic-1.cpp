@@ -47,7 +47,7 @@ int main()
     ___b1 = ( ___b1 && ( ___r2 < ___r1 ) ) && ( ___r1 <= ___r1 );
     ___b1 = ___b1 && ( ( (int) ( ___r1 ) % (int) ( 4 ) ) == 2 );
     ___b1 = ___b1 && ( 29 == ( min(max(pow(3, 2), 1), 20) + ( min(max(9, 3 * 4), 18) + min(max(3 * 3, 5), 8) ) ) );
-    ___b1 = ___b1 && ( 11 > ( ((double) rand() / (RAND_MAX)) * (_uBit.random(10 - 1 + 1) + 1) ) );
+    ___b1 = ___b1 && ( 11 > ( ((double) rand() / (RAND_MAX)) * (_uBit.random((10) - (1) + 1) + (1)) ) );
     // if b1 is true, the test succeeded, otherwise it failed :-)
     release_fiber();
 }

@@ -1034,12 +1034,13 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        this.sb.append("Random(");
+        this.sb.append("Random((");
         mathRandomIntFunct.to.accept(this);
-        this.sb.append(" - ");
+        this.sb.append(") - (");
         mathRandomIntFunct.from.accept(this);
-        this.sb.append(") + ");
+        this.sb.append(")) + (");
         mathRandomIntFunct.from.accept(this);
+        this.sb.append(")");
         return null;
     }
 

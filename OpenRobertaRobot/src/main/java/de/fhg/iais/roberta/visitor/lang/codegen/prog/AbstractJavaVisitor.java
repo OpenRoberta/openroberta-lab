@@ -424,13 +424,13 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        this.sb.append("( Math.round(Math.random() * (");
+        this.sb.append("( Math.round(Math.random() * ((");
         mathRandomIntFunct.to.accept(this);
-        this.sb.append(" - ");
+        this.sb.append(") - (");
         mathRandomIntFunct.from.accept(this);
-        this.sb.append(")) + ");
+        this.sb.append("))) + (");
         mathRandomIntFunct.from.accept(this);
-        this.sb.append(" )");
+        this.sb.append(") )");
         return null;
     }
 
