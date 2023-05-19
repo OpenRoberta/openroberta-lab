@@ -2,43 +2,27 @@ package de.fhg.iais.roberta.main;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.persistence.bo.Configuration;
 import de.fhg.iais.roberta.persistence.bo.ConfigurationData;
-import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.dao.ConfigurationDao;
-import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.util.DbExecutor;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.UtilForHtmlXml;
-import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 /**
  * a class with a static main method, responsible for some administrative work, like<br>
@@ -60,7 +44,7 @@ public class Administration {
      * classpath. May be <code>null</code>, if the default resource from the classpath should be loaded.
      *
      * @param args first element may contain the URI of a property file.
-     * @throws Exception
+     * @throws Exception if something goes wrong
      */
     public static void main(String[] args) throws Exception {
         try {
@@ -83,12 +67,11 @@ public class Administration {
     private void run() {
         expectArgs(1);
         String cmd = this.args[0];
-        switch ( cmd ) {
-            case "version":
-                println(version());
-                return;
-            default:
-                LOG.info("*** " + cmd + " ***");
+        if ( "version".equals(cmd) ) {
+            println(version());
+            return;
+        } else {
+            LOG.info("*** " + cmd + " ***");
         }
         switch ( cmd ) {
             case "create-empty-db":
@@ -127,8 +110,7 @@ public class Administration {
 
     private String version() {
         Properties serverProperties = Util.loadProperties(null);
-        String version = serverProperties.getProperty("openRobertaServer.version");
-        return version;
+        return serverProperties.getProperty("openRobertaServer.version");
     }
 
     private void createEmptyDatabase() {
@@ -207,7 +189,7 @@ public class Administration {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             while ( true ) {
                 System.out.print("sql> ");
-                String sqlStmt = dbExecutor.readSqlStmtLinesUntilSemikolon(br);
+                String sqlStmt = dbExecutor.readSqlStmtLinesUntilSemicolon(br);
                 if ( sqlStmt == null ) {
                     break;
                 } else if ( true || DbExecutor.isSelect(sqlStmt) ) {
@@ -281,107 +263,11 @@ public class Administration {
         session.createSqlQuery("shutdown").executeUpdate();
     }
 
-    /*
-     * This method loads _all_ programs from the database (potentially slow or takes too much memory?)
-     * using the unchecked version of the getter and then saves them back with the setter that checks
-     * for XSS. That setter will also print the relevant information about the author.
-     */
-    @SuppressWarnings("unused")
-    private void checkAndPatchAllProgramsForXSS() {
-        SessionFactoryWrapper sessionFactory = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
-        DbSession session = sessionFactory.getSession();
-        ProgramDao programDao = new ProgramDao(session);
-        List<Program> programList = programDao.loadAll();
-        int totalProcessed = 0;
-        int totalDescriptions = 0;
-        int totalDifferent = 0;
-        for ( Program program : programList ) {
-            String uncheckedProgramText = program.getUncheckedProgramText();
-            totalProcessed += 1;
-            if ( uncheckedProgramText == null || uncheckedProgramText.equals("") ) {
-                continue;
-            }
-            totalDescriptions += 1;
-            String checkedProgramText = UtilForHtmlXml.checkProgramTextForXSS(uncheckedProgramText);
-            if ( !checkedProgramText.equals(uncheckedProgramText) ) {
-                totalDifferent += 1;
-                try {
-                    program.setProgramText(checkedProgramText);
-                } catch ( NullPointerException e ) {
-                    LOG.error("Program text is empty!", program.getName());
-                }
-            }
-        }
-        LOG.info("Total programs processed: " + totalProcessed);
-        LOG.info("Total programs descriptions: " + totalDescriptions);
-        LOG.info("Total programs different: " + totalDifferent);
-        session.commit(); // implicitly a new transaction is started
-        session.createSqlQuery("shutdown").executeUpdate();
-    }
-
-    // -------------------- helper ---------------------------------------------------------------------------------
-
-    @SuppressWarnings("unused")
-    private String xml2Ast2xml(String updatedProgram) throws Exception, JAXBException {
-        BlockSet program = JaxbHelper.xml2BlockSet(updatedProgram);
-        Jaxb2ProgramAst transformer = new Jaxb2ProgramAst(null);
-        BlockSet blockSet = astToJaxb(transformer.blocks2ast(program).getTree());
-        return jaxbToXml(blockSet);
-    }
-
-    @SuppressWarnings("unused")
-    private List<Object[]> selectEV3programByName(Session hibernateSession, String sqlGetProgramByName, String name) {
-        SQLQuery selectByProgramName = hibernateSession.createSQLQuery(sqlGetProgramByName);
-        selectByProgramName.setString("name", name);
-        @SuppressWarnings("unchecked")
-        List<Object[]> result = selectByProgramName.list();
-        return result;
-    }
-
-    @SuppressWarnings("unused")
-    private boolean isSimulationProgram(int robotId) {
-        return robotId == 43;
-    }
-
-    @SuppressWarnings("unused")
-    private String renameBlocksInProgram(String program, Map<String, String> blockNames) {
-        for ( Entry<String, String> entry : blockNames.entrySet() ) {
-            program = replaceWord(program, entry.getKey(), entry.getValue());
-        }
-        return program;
-    }
-
     private void expectArgs(int number) {
         if ( this.args == null || this.args.length < number ) {
             Administration.LOG.error("not enough arguments - exit 8");
             System.exit(8);
         }
-    }
-
-    private String replaceWord(String source, String oldWord, String newWord) {
-        return source.replaceAll(oldWord, newWord);
-    }
-
-    private BlockSet astToJaxb(List<List<Phrase>> astProgram) {
-        BlockSet blockSet = new BlockSet();
-
-        Instance instance = new Instance();
-        for ( List<Phrase> tree : astProgram ) {
-            for ( Phrase phrase : tree ) {
-                instance.getBlock().add(phrase.ast2xml());
-            }
-        }
-        blockSet.getInstance().add(instance);
-        return blockSet;
-    }
-
-    private String jaxbToXml(BlockSet blockSet) throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
-        Marshaller m = jaxbContext.createMarshaller();
-        m.setProperty(Marshaller.JAXB_FRAGMENT, true);
-        StringWriter writer = new StringWriter();
-        m.marshal(blockSet, writer);
-        return writer.toString();
     }
 
     private static void println(String msg) {

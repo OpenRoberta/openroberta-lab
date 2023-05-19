@@ -29,7 +29,7 @@ import static org.junit.Assert.fail;
 public class GroupTest {
     private static final Logger LOG = LoggerFactory.getLogger(GroupTest.class);
     private static SessionFactoryWrapper sessionFactoryWrapper;
-    private static Random RANDOM = new Random();
+    private static final Random RANDOM = new Random();
     private static final String CHARSET_FOR_RANDOM_STRING = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789";
     private static final int CHARSET_FOR_RANDOM_STRING_LENGTH = CHARSET_FOR_RANDOM_STRING.length();
 

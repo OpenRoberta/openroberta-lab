@@ -44,21 +44,12 @@ public class RobertaGuiceServletConfig extends GuiceServletContextListener {
                         RobertaGuiceServletConfig.this.robotPluginMap,
                         RobertaGuiceServletConfig.this.robotCommunicator,
                         RobertaGuiceServletConfig.this.ipToCountry));
-                //TODO: we have doubled the properties
-                // look for guice modules from robot plugins
-                //                for ( RobotFactory robotFactory : RobertaGuiceServletConfig.this.robotPluginMap.values() ) {
-                //                    AbstractModule guiceModule = robotFactory.getGuiceModule();
-                //                    if ( guiceModule != null ) {
-                //                        install(guiceModule);
-                //                    }
-                //                }
                 Map<String, String> initParams = new HashMap<>();
                 // initParams.put("com.sun.jersey.config.feature.Trace", "true");
                 initParams.put("com.sun.jersey.api.json.POJOMappingFeature", "true");
                 String packages =
-                    "" //
-                        + "de.fhg.iais.roberta.javaServer.restServices,"
-                        + "de.fhg.iais.roberta.javaServer.provider";
+                    "de.fhg.iais.roberta.javaServer.restServices," +
+                        "de.fhg.iais.roberta.javaServer.provider";
                 initParams.put("com.sun.jersey.config.property.packages", packages);
                 serve("/*").with(GuiceContainer.class, initParams);
             }

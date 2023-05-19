@@ -45,14 +45,14 @@ public class SourceBuilder {
         return this;
     }
 
-    public SourceBuilder add(String... vals) {
+    public SourceBuilder add(Object... vals) {
         for ( Object val : vals ) {
             this.sb.append(val);
         }
         return this;
     }
 
-    public boolean addIf(boolean first, String val) {
+    public boolean addIf(boolean first, Object val) {
         if ( !first ) {
             add(val);
         }

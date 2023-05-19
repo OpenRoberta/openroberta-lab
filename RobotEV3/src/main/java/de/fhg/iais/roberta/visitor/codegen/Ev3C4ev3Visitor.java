@@ -150,22 +150,14 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateConstants() {
-        this.sb.append("#define PROGRAM_NAME \"" + this.programName + "\"\n");
-        this.sb.append("#define WHEEL_DIAMETER " + this.brickConfiguration.getWheelDiameter() + "\n");
-        this.sb.append("#define TRACK_WIDTH " + this.brickConfiguration.getTrackWidth() + "\n");
+        this.src.add("#define PROGRAM_NAME \"", this.programName, "\"\n");
+        this.src.add("#define WHEEL_DIAMETER ", this.brickConfiguration.getWheelDiameter(), "\n");
+        this.src.add("#define TRACK_WIDTH ", this.brickConfiguration.getTrackWidth(), "\n");
         decrIndentation();
     }
 
     private void generateImports() {
-        nlIndent();
-        this.sb.append("#include <ev3.h>");
-        nlIndent();
-        this.sb.append("#include <math.h>");
-        nlIndent();
-        this.sb.append("#include <list>");
-        nlIndent();
-        this.sb.append("#include \"NEPODefs.h\"");
-        nlIndent();
+        this.src.nlI().add("#include <ev3.h>").nlI().add("#include <math.h>").nlI().add("#include <list>").nlI().add("#include \"NEPODefs.h\"").nlI();
     }
 
     @Override
@@ -189,8 +181,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateSensorInitialization() {
-        this.sb.append("NEPOSetAllSensors(").append(getSensorsInitializationArguments()).append(");");
-        nlIndent();
+        this.src.add("NEPOSetAllSensors(", getSensorsInitializationArguments(), ");").nlI();
     }
 
     private String getSensorsInitializationArguments() {

@@ -93,7 +93,7 @@ public class Jaxb2ProgramAst {
         for ( Instance instance : instances ) {
             List<Block> blocks = instance.getBlock();
             Location location = new Location(instance.getX(), instance.getY());
-            List<Phrase> range = new ArrayList();
+            List<Phrase> range = new ArrayList<>();
             range.add(location);
             for ( Block block : blocks ) {
                 range.add(block2ast(block));
@@ -137,6 +137,7 @@ public class Jaxb2ProgramAst {
         try {
             method = astClass.getMethod("xml2ast", Block.class);
         } catch ( NoSuchMethodException | SecurityException e ) {
+            // checked below
         }
         if ( method != null ) {
             try {
@@ -148,6 +149,7 @@ public class Jaxb2ProgramAst {
         try {
             method = astClass.getMethod("xml2ast", Block.class, Jaxb2ProgramAst.class);
         } catch ( NoSuchMethodException | SecurityException e ) {
+            // checked below
         }
         if ( method != null ) {
             try {
@@ -209,7 +211,7 @@ public class Jaxb2ProgramAst {
      * @return list of parameters represented with the {@link Expr} class.
      */
     public List<Expr> extractExprParameters(Block block, List<ExprParam> exprParams) {
-        List<Expr> params = new ArrayList();
+        List<Expr> params = new ArrayList<>();
         List<Value> values = Jaxb2Ast.extractValues(block, (short) exprParams.size());
         for ( ExprParam exprParam : exprParams ) {
             params.add(Jaxb2Ast.convertPhraseToExpr(extractValue(values, exprParam)));
@@ -228,12 +230,12 @@ public class Jaxb2ProgramAst {
      * @return if statement object from the AST representation
      */
     public Phrase blocksToIfStmt(Block block, int _else, int _elseIf) {
-        List<Expr> exprsList = new ArrayList();
-        List<StmtList> thenList = new ArrayList();
+        List<Expr> exprsList = new ArrayList<>();
+        List<StmtList> thenList = new ArrayList<>();
         StmtList elseList = null;
 
-        List<Value> values = new ArrayList();
-        List<Statement> statements = new ArrayList();
+        List<Value> values = new ArrayList<>();
+        List<Statement> statements = new ArrayList<>();
 
         if ( _else + _elseIf != 0 ) {
             List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();
@@ -382,7 +384,7 @@ public class Jaxb2ProgramAst {
      * get from a value list (a XML substructure) the phrase matching a variable.<br>
      * Returning null is dangerous. Currently it is needed for the checking of empty fields of nano33ble
      *
-     * @param values
+     * @param values the list in which a variable is looked up
      * @param name name of the variable
      * @return the Var phrase; return null, if not found
      */

@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class DbExecutor {
-    private static Logger LOG = LoggerFactory.getLogger(DbExecutor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DbExecutor.class);
 
     private final Session session;
 
@@ -28,13 +28,12 @@ public class DbExecutor {
     }
 
     public void sqlFile(InputStream sqlStmtFileStream) {
-        String line = "";
         int count = 0;
         try {
             Reader reader = new InputStreamReader(sqlStmtFileStream, "UTF-8");
             BufferedReader in = new BufferedReader(reader);
-            String sqlStmt = null;
-            while ( (sqlStmt = readSqlStmtLinesUntilSemikolon(in)) != null ) {
+            String sqlStmt;
+            while ( (sqlStmt = readSqlStmtLinesUntilSemicolon(in)) != null ) {
                 count++;
                 sqlStmt(sqlStmt);
                 this.session.flush();
@@ -61,7 +60,7 @@ public class DbExecutor {
      * @param reader the source of the sql stmts
      * @return the sql stmt; return null, if the user types 'BYE' in a single line or the reader is exhausted
      */
-    public String readSqlStmtLinesUntilSemikolon(BufferedReader reader) {
+    public String readSqlStmtLinesUntilSemicolon(BufferedReader reader) {
         StringBuilder sb = new StringBuilder();
         String line;
         try {
@@ -106,8 +105,9 @@ public class DbExecutor {
         }
     }
 
-    public <T> List<T> select(String sqlStmt) {
-        List<?> resultSet = this.session.createSQLQuery(sqlStmt).list();
+    @SuppressWarnings("rawtypes")
+    public List select(String sqlStmt) {
+        List resultSet = this.session.createSQLQuery(sqlStmt).list();
         LOG.debug("got " + resultSet.size() + " rows");
         for ( Object result : resultSet ) {
             if ( result instanceof Object[] ) {
@@ -116,11 +116,11 @@ public class DbExecutor {
                 LOG.debug("  " + result);
             }
         }
-        return (List<T>) resultSet;
+        return resultSet;
     }
 
     public Object oneValueSelect(String sqlStmt) {
-        List<Object> resultSet = this.session.createSQLQuery(sqlStmt).list();
+        @SuppressWarnings("rawtypes") List resultSet = this.session.createSQLQuery(sqlStmt).list();
         Assert.isTrue(resultSet.size() == 1, "result set should contain 1 row, but contains " + resultSet.size() + " rows");
         Object result = resultSet.get(0);
         LOG.debug(result == null ? "null" : result.toString());

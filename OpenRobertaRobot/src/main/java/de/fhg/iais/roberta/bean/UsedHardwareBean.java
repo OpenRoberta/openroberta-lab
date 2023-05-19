@@ -163,15 +163,9 @@ public class UsedHardwareBean implements IProjectBean {
         public boolean removeInScopeVariable(String inScopeVariable) {
             return this.usedHardwareBean.inScopeVariables.remove(inScopeVariable);
         }
-
-        @Deprecated
+        
         public boolean containsGlobalVariable(String variableName) {
             return this.usedHardwareBean.globalVariables.contains(variableName);
-        }
-
-        @Deprecated
-        public boolean containsDeclaredVariable(String variableName) {
-            return this.usedHardwareBean.declaredVariables.contains(variableName);
         }
 
         @Override

@@ -24,8 +24,6 @@ import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
-import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
-import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +36,6 @@ import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.guice.RobertaGuiceServletConfig;
-import de.fhg.iais.roberta.javaServer.websocket.Ev3SensorLoggingWS;
 import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
@@ -159,19 +156,16 @@ public class ServerStarter {
         }
         server.setConnectors(connectors.toArray(new ServerConnector[0]));
 
-        // configure robot plugins
         RobotCommunicator robotCommunicator = new RobotCommunicator();
         Map<String, RobotFactory> robotPluginMap = configureRobotPlugins(robotCommunicator, this.serverProperties, pluginDefines);
-
-        // setup services and threads to run the services
         IIpToCountry ipToCountry = configureIpToCountryDb();
-        configureHttpSessionStateCleanup();
-        configureDbSessionCleanup();
 
         RobertaGuiceServletConfig robertaGuiceServletConfig =
             new RobertaGuiceServletConfig(this.serverProperties, robotPluginMap, robotCommunicator, ipToCountry);
 
-        // 1. REST API with /rest prefix
+        configureCleanupThreads(); // setup a service to cleanup expired http sessions and expired database sessions
+
+        //  REST API with /rest prefix
         ServletContextHandler restHttpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         restHttpHandler.setContextPath("/rest");
         restHttpHandler.setSessionHandler(new SessionHandler());
@@ -179,24 +173,10 @@ public class ServerStarter {
         restHttpHandler.addFilter(GuiceFilter.class, "/*", null);
         restHttpHandler.addServlet(DefaultServlet.class, "/*");
 
-        // 2. websockets with /ws/<version>/ prefix
-        ServletContextHandler wsHandler = new ServletContextHandler();
-        wsHandler.setContextPath("/ws");
-        wsHandler.addServlet(WebSocketServiceServlet.class, "/*");
-
-        // 3. static resources
+        // static resources
         ServletContextHandler defaultHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         defaultHandler.setContextPath("/*");
         defaultHandler.setSessionHandler(new SessionHandler());
-        // see /rest endpoint, this will cover this: restHttpHandler.getSessionHandler().addEventListener(mkSessionListener(" for / static resources, no REST endpoint"));
-
-        // 3.1 REST API without prefix (deprecated, used by very old ev3 robots. Initializes the guice injector and implicitly the db session wrapper a SECOND TIME)
-        defaultHandler.addEventListener(robertaGuiceServletConfig);
-        defaultHandler.addFilter(GuiceFilter.class, "/pushcmd/*", null);
-        defaultHandler.addFilter(GuiceFilter.class, "/download/*", null);
-        defaultHandler.addFilter(GuiceFilter.class, "/update/*", null);
-
-        // 3.2 static resources
         ServletHolder staticResourceServlet = defaultHandler.addServlet(DefaultServlet.class, "/*");
         staticResourceServlet.setInitParameter("dirAllowed", "false");
         staticResourceServlet.setInitParameter("precompressed", "gzip=.gz");
@@ -209,7 +189,6 @@ public class ServerStarter {
             .setHandlers(
                 new Handler[] {
                     restHttpHandler,
-                    wsHandler,
                     defaultHandler
                 });
         server.setHandler(handlers);
@@ -233,15 +212,13 @@ public class ServerStarter {
             LOG.error("Could not start the server at " + serverMessage, e);
             System.exit(20);
         }
-        this.injector = robertaGuiceServletConfig.getCreatedInjector();
-        Ev3SensorLoggingWS.setGuiceInjector(this.injector);
 
+        this.injector = robertaGuiceServletConfig.getCreatedInjector();
         DbSession dbSession = this.injector.getInstance(SessionFactoryWrapper.class).getSession();  // session is closed in the method called below
         checkRobotPluginsDB(dbSession, robotPluginMap.values());
         checkAstClassAnnotations();
         Runtime.getRuntime().addShutdownHook(new ShutdownHook("embedded".equals(this.serverProperties.getStringProperty("database.mode")), this.injector));
         LOG.info("Shutdown hook added. If the server is gracefully stopped in the future, a shutdown message is logged");
-        logTheNumberOfStoredPrograms();
 
         return server;
     }
@@ -356,30 +333,25 @@ public class ServerStarter {
     }
 
     /**
-     * configure a thread, that runs periodically a service, that will remove expired HttpSessionState objects
+     * configure threads, that runs periodically a service,<br>
+     * - that will remove expired HttpSessionState objects<br>
+     * - that will remove expired database sessions
      */
-    private void configureHttpSessionStateCleanup() {
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private void configureCleanupThreads() {
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(0);
         Runnable cleanupHttpSessionState = new Runnable() {
             @Override
             public void run() {
                 HttpSessionState.removeExpired();
             }
         };
-        scheduler.scheduleAtFixedRate(cleanupHttpSessionState, INTERVAL_HTTPSESSION_EXPIRE_SEC + 1, INTERVAL_HTTPSESSION_EXPIRE_SEC, TimeUnit.SECONDS);
-    }
-
-    /**
-     * configure a thread, that runs periodically a service, that will remove expired database sessions
-     */
-    private void configureDbSessionCleanup() {
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         Runnable cleanupDbSession = new Runnable() {
             @Override
             public void run() {
                 DbSession.cleanupSessions();
             }
         };
+        scheduler.scheduleAtFixedRate(cleanupHttpSessionState, INTERVAL_HTTPSESSION_EXPIRE_SEC + 1, INTERVAL_HTTPSESSION_EXPIRE_SEC, TimeUnit.SECONDS);
         scheduler.scheduleAtFixedRate(cleanupDbSession, INTERVAL_DB_SESSION_EXPIRE_SEC + 2, INTERVAL_DB_SESSION_EXPIRE_SEC, TimeUnit.SECONDS);
     }
 
@@ -404,21 +376,6 @@ public class ServerStarter {
         properties.put("hibernate.connection.url", dbUrl);
     }
 
-    private void logTheNumberOfStoredPrograms() {
-        if ( true ) {
-            return; // disabled: uses too much resources with too little information :-)
-        }
-        try {
-            DbSession session = this.injector.getInstance(SessionFactoryWrapper.class).getSession();
-            List<?> numberOfProgramsInList = session.createSqlQuery("select count(*) from PROGRAM").list();
-            LOG.info("Number of programs stored in the database: " + numberOfProgramsInList);
-            session.close();
-        } catch ( Exception e ) {
-            LOG.error("Server could not connect to the database (exit 20)", e);
-            System.exit(20);
-        }
-    }
-
     /**
      * Checks all AST classes if the Nepo Annotations where used correctly.
      * Throws a {@link NepoAnnotationException} if an AST class is invalid.
@@ -439,6 +396,7 @@ public class ServerStarter {
      */
     public static void checkRobotPluginsDB(DbSession dbSession, Collection<RobotFactory> robotFactories) {
         try {
+            LOG.error("Match robot plugins and database rows of table ROBOT");
             RobotDao robotDao = new RobotDao(dbSession);
             for ( RobotFactory robotFactory : robotFactories ) {
                 String robotForDb = robotFactory.getGroup();
@@ -468,14 +426,5 @@ public class ServerStarter {
 
     private static List<String> asList(String... s) {
         return Arrays.asList(s);
-    }
-
-    public static class WebSocketServiceServlet extends WebSocketServlet {
-        private static final long serialVersionUID = -2697779106901658247L;
-
-        @Override
-        public void configure(WebSocketServletFactory factory) {
-            factory.register(Ev3SensorLoggingWS.class);
-        }
     }
 }

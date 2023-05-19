@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.visitor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -52,7 +52,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     public ArduinoValidatorAndCollectorWorkflowTest() {
         setupRobotFactory("uno");
-        workerChain = Arrays.asList(new UnoValidatorAndCollectorWorker());
+        workerChain = Collections.singletonList(new UnoValidatorAndCollectorWorker());
     }
 
     @Test
@@ -380,7 +380,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitLightAction() {
         configurationComponents.add(new ConfigurationComponent(SC.RGBLED, true, "P1", "P1", new HashMap<>()));
 
-        RgbColor rgbColor = (RgbColor) new RgbColor(bp, new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"));
+        RgbColor rgbColor = new RgbColor(bp, new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"));
 
         LightAction lightAction = new LightAction("P1", BrickLedColor.ORANGE, LightMode.DEFAULT, rgbColor, bp);
         phrases.add(lightAction);
@@ -392,7 +392,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitLightAction_noActor() {
-        RgbColor rgbColor = (RgbColor) new RgbColor(bp, new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"));
+        RgbColor rgbColor = new RgbColor(bp, new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"));
 
         LightAction lightAction = new LightAction("P1", BrickLedColor.ORANGE, LightMode.DEFAULT, rgbColor, bp);
         phrases.add(lightAction);

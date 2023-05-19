@@ -178,7 +178,7 @@ public class MbedTwo2ThreeTransformerVisitor extends MbedTransformerVisitor {
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-        MotionParam.Builder motionParamBuilder = new MotionParam.Builder<>();
+        MotionParam.Builder motionParamBuilder = new MotionParam.Builder();
         motionParamBuilder.speed((Expr) singleMotorOnAction.speed.modify(this));
 
         return new MotorOnAction(compAndName.getSecond(), motionParamBuilder.build(), modifyPropertyType(singleMotorOnAction.getProperty(), "mbedActions_motor_on"));

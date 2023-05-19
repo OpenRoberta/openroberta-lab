@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -56,7 +57,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class AnnotationHelperTest {
 
-    private static final List<Class> VALID_TEST_PHRASES = Arrays.asList(TestPhrase.class, TestPhraseField.class, TestPhraseWithAll.class, TestPhraseFieldBoolean.class, TestPhraseFieldDouble.class, TestPhraseFieldEnum.class, TestOperation.class);
+    private static final List<Class<?>> VALID_TEST_PHRASES = Arrays.asList(TestPhrase.class, TestPhraseField.class, TestPhraseWithAll.class, TestPhraseFieldBoolean.class, TestPhraseFieldDouble.class, TestPhraseFieldEnum.class, TestOperation.class);
 
     private Jaxb2ProgramAst jaxb2ProgramAst;
 
@@ -226,9 +227,9 @@ public class AnnotationHelperTest {
         assertThat(testPhrase.getProperty().getBlockType()).isEqualTo("TEST_PHRASE_FIELD");
 
         BlockDescriptor blockDescriptor = testPhrase.getKind();
-        assertThat(blockDescriptor.hasName("TEST_PHRASE_FIELD"));
+        assertThat(blockDescriptor.hasName("TEST_PHRASE_FIELD")).isEqualTo(true);
         assertThat(blockDescriptor.getCategory().name()).isEqualTo("EXPR");
-        assertThat(blockDescriptor.getBlocklyNames()).isEqualTo(new HashSet(Arrays.asList("test_phrase_field")));
+        assertThat(blockDescriptor.getBlocklyNames()).isEqualTo(new HashSet<>(Collections.singletonList("test_phrase_field")));
     }
 
     @Test

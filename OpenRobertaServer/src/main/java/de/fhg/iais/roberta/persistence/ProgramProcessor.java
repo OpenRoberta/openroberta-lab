@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +39,7 @@ import de.fhg.iais.roberta.util.basic.Pair;
 
 public class ProgramProcessor extends AbstractProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(ProgramProcessor.class);
+    private static final AtomicInteger cacheTheGalleryId = new AtomicInteger(-1);
 
     public ProgramProcessor(DbSession dbSession, int userId) {
         super(dbSession, userId);
@@ -599,9 +601,14 @@ public class ProgramProcessor extends AbstractProcessor {
      * @param galleryId the gallery user
      */
     public JSONArray getProgramGallery(int userId, String robotGroup) {
-        UserDao userDao = new UserDao(this.dbSession);
+        int galleryId = cacheTheGalleryId.get();
+        // cache the id of the Gallery user. Concurrent computation are no probleem, the resulte should not differ.
+        if ( galleryId == -1 ) {
+            UserDao userDao = new UserDao(this.dbSession);
+            galleryId = userDao.loadUser(null, "Gallery").getId();
+            cacheTheGalleryId.set(galleryId);
+        }
         ProgramDao programDao = new ProgramDao(this.dbSession);
-        int galleryId = userDao.loadUser(null, "Gallery").getId();
         JSONArray programs = programDao.loadGallery(galleryId, userId, robotGroup);
         Map<String, String> processorParameters = new HashMap<>();
         processorParameters.put("PROGRAMS_LENGTH", "" + programs.length());

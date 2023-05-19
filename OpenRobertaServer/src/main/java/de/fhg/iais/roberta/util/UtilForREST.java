@@ -212,7 +212,7 @@ public class UtilForREST {
                             response.setRobotName(state.getRobotName());
                             response.setRobotVersion(state.getMenuVersion());
                             response.setRobotFirmwareName(state.getFirmwareName());
-                            response.setRobotSensorvalues(state.getSensorValues());
+                            response.setRobotSensorvalues(new JSONObject()); // TODO: from an unused socket handler. To be removed.
                             response.setRobotNepoexitvalue(state.getNepoExitValue());
                             State communicationState = state.getState();
                             String infoAboutState;

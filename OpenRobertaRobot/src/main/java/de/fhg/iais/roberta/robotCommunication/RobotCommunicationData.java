@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.robotCommunication;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +30,6 @@ public class RobotCommunicationData {
     private final String runtimeversion;
     private final String firmwarename;
     private final String firmwareversion;
-    private JSONObject sensorvalues;
     private int nepoExitValue;
 
     private Clock timerStartedByLastRequest;
@@ -67,7 +65,6 @@ public class RobotCommunicationData {
         this.firmwarename = firmwarename;
         // informal robot firmware version details
         this.firmwareversion = firmwareversion;
-        this.sensorvalues = new JSONObject();
 
         this.timerStartedByLastRequest = Clock.start();
         this.state = State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
@@ -310,10 +307,6 @@ public class RobotCommunicationData {
         this.battery = battery;
     }
 
-    public void setSensorValues(JSONObject sensorvalues) {
-        this.sensorvalues = sensorvalues;
-    }
-
     public void setNepoExitValue(int nepoExitValue) {
         this.nepoExitValue = nepoExitValue;
     }
@@ -360,10 +353,6 @@ public class RobotCommunicationData {
 
     public String getRuntimeVersion() {
         return this.runtimeversion;
-    }
-
-    public JSONObject getSensorValues() {
-        return this.sensorvalues;
     }
 
     public int getNepoExitValue() {

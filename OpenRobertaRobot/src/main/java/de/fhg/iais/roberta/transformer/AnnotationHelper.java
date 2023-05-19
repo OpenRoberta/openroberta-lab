@@ -34,7 +34,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 
 public class AnnotationHelper {
-    private static List<Class<? extends Annotation>> NEPO_FIELD_ANNOTATIONS =
+    private static final List<Class<? extends Annotation>> NEPO_FIELD_ANNOTATIONS =
         Arrays.asList(NepoValue.class, NepoField.class, NepoData.class, NepoHide.class, NepoMutation.class);
 
     private static final String externalSensorClassName = ExternalSensor.class.getName();
@@ -42,7 +42,7 @@ public class AnnotationHelper {
     /**
      * check whether the class is final AND annotated with a @NepoPhrase or @NepoOp or @NepoExternalSensor annotation
      *
-     * @param clazz
+     * @param clazz to look up for annotations
      * @return true, if annotated
      */
     public static boolean isNepoAnnotatedClass(Class<?> clazz) {
@@ -59,8 +59,8 @@ public class AnnotationHelper {
     /**
      * check whether the class is a subclass of ExternalSensor
      *
-     * @param clazz
-     * @return true, if annotated
+     * @param clazz to be checked
+     * @return true, if clazz is a subclass of ExternalSensor
      */
     public static boolean isExternalSensorSubClass(Class<?> clazz) {
         return clazz.getSuperclass().getName().equals(externalSensorClassName);
@@ -84,7 +84,7 @@ public class AnnotationHelper {
             for ( Field field : astClass.getFields() ) {
                 for ( Annotation anno : field.getAnnotations() ) {
                     if ( anno instanceof NepoValue ) {
-                        constructorParameters.add(extractNepoValueConstructorParameters(block, (NepoValue) anno, field, helper, astClass));
+                        constructorParameters.add(extractNepoValueConstructorParameters(block, (NepoValue) anno, field, helper));
                         break;
                     } else if ( anno instanceof NepoField ) {
                         constructorParameters.add(extractNepoFieldConstructorParameters(block, (NepoField) anno, field));
@@ -248,8 +248,8 @@ public class AnnotationHelper {
         Block block,
         NepoValue anno,
         Field field,
-        Jaxb2ProgramAst helper,
-        Class<?> astClass) {
+        Jaxb2ProgramAst helper)  //
+    {
         List<Value> values = block.getValue();
         if ( field.getType().equals(Expr.class) ) {
             Phrase sub = helper.extractValue(values, new ExprParam(anno.name(), anno.type()));
@@ -258,7 +258,7 @@ public class AnnotationHelper {
         } else if ( field.getType().equals(Var.class) ) {
             Expr sub = helper.getVar(values, anno.name());
             if ( sub instanceof Var ) {
-                return new ConstructorParameter(Var.class, (Var) sub);
+                return new ConstructorParameter(Var.class, sub);
             }
         }
         throw new DbcException("Inconsistency in startup");
@@ -293,7 +293,7 @@ public class AnnotationHelper {
         return new ConstructorParameter(Hide.class, hide);
     }
 
-    private static <V> ConstructorParameter extractNepoExternalSensorParameters(Block block, Jaxb2ProgramAst helper) {
+    private static ConstructorParameter extractNepoExternalSensorParameters(Block block, Jaxb2ProgramAst helper) {
         ExternalSensorBean sensorData = ExternalSensor.extractPortAndModeAndSlot(block, helper);
         return new ConstructorParameter(ExternalSensorBean.class, sensorData);
     }

@@ -15,7 +15,7 @@ export const getNotifications = function (successFn) {
                 successFn(result);
             }
         },
-        'load notofications'
+        'load notifications'
     );
 };
 

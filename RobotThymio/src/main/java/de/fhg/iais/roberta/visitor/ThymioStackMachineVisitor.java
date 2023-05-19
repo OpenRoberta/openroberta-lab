@@ -212,7 +212,7 @@ public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor
     @Override
     public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         motorOnAction.param.getSpeed().accept(this);
-        MotorDuration<?> duration = motorOnAction.param.getDuration();
+        MotorDuration duration = motorOnAction.param.getDuration();
         boolean speedOnly = !processOptionalDuration(duration);
         String port = motorOnAction.getUserDefinedPort();
 

@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.visitor;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -146,10 +145,10 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
         this.sb.append("onevent timer0");
         incrIndentation();
         nlIndent();
-        if ( !(this
+        if ( this
             .getBean(UsedHardwareBean.class)
             .getUsedSensors()
-            .stream().noneMatch(usedSensor -> usedSensor.getType().equals(SC.TIMER))) ) {
+            .stream().anyMatch(usedSensor -> usedSensor.getType().equals(SC.TIMER)) ) {
             this.sb.append("_timer += 10");
             nlIndent();
         }
@@ -662,14 +661,14 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
         nlIndent();
         this.sb.append("const _LED_DIV = 3");
         nlIndent();
-        this.myMethods = new ArrayList();
+        this.myMethods = new ArrayList<>();
         this.getBean(UsedHardwareBean.class).getUserDefinedMethods().forEach(method -> this.myMethods.add(method.getCodeSafeMethodName()));
         this.myMethods.forEach(m -> {
             this.funcStart.add(this.stateCounter);
             this.stateCounter++;
         });
         appendRobotVariables();
-        generateVariablesForUsage(this.programPhrases);
+        generateVariablesForUsage(this.programPhrases); // TODO: why are the program phrases needed? Remove!
     }
 
     @Override
@@ -786,12 +785,7 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
         this.sb.append("var _state = ").append(this.stateCounter).append("       # current state of the program flow");
         nlIndent();
         this.sb.append("var _time            # current elapsed time");
-        if ( !this
-            .getBean(UsedHardwareBean.class)
-            .getUsedSensors()
-            .stream()
-            .filter(usedSensor -> usedSensor.getType().equals(SC.TIMER))
-            .collect(Collectors.toList()).isEmpty() ) {
+        if ( this.getBean(UsedHardwareBean.class).getUsedSensors().stream().anyMatch(usedSensor -> usedSensor.getType().equals(SC.TIMER)) ) {
             nlIndent();
             this.sb.append("var _timer = 0       # overall elapsed time from timer 1");
         }

@@ -222,12 +222,12 @@
             <dependency>
                 <groupId>com.google.inject</groupId>
                 <artifactId>guice</artifactId>
-                <version>4.2.0</version>
+                <version>5.1.0</version>
             </dependency>
             <dependency>
                 <groupId>com.google.inject.extensions</groupId>
                 <artifactId>guice-servlet</artifactId>
-                <version>4.2.0</version>
+                <version>5.1.0</version>
             </dependency>
 
             <dependency>
@@ -473,19 +473,9 @@
                     </dependencies>
                 </plugin>
                 <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.4</version>
-                </plugin>
-                <plugin>
                     <groupId>org.owasp</groupId>
                     <artifactId>dependency-check-maven</artifactId>
                     <version>6.0.2</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.1.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -535,24 +525,6 @@
                     </excludedGroups>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
@@ -577,100 +549,10 @@
         </profile>
     </profiles>
 
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration></configuration>
-            </plugin>
-        </plugins>
-    </reporting>
     <organization>
         <name>Open Roberta</name>
         <url>http://www.openroberta.de</url>
     </organization>
-    <developers>
-        <developer>
-            <id>bjost</id>
-            <name>Beate Jost</name>
-            <email>beate.jost@iais.fraunhofer.de</email>
-            <organization>Fraunhofer IAIS</organization>
-            <organizationUrl>http://www.iais.fraunhofer.de/</organizationUrl>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-        <developer>
-            <id>rbudde</id>
-            <name>Reinhard Budde</name>
-            <email>reinhard.budde@iais.fraunhofer.de</email>
-            <organization>Fraunhofer IAIS</organization>
-            <organizationUrl>http://www.iais.fraunhofer.de/</organizationUrl>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-        <developer>
-            <id>mketterl</id>
-            <name>Markus Ketterl</name>
-            <email>mketterl@uni-osnabrueck.de</email>
-            <organization>Fraunhofer IAIS</organization>
-            <organizationUrl>http://www.iais.fraunhofer.de/</organizationUrl>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-        <developer>
-            <id>kcvejoski</id>
-            <name>Kostadin Cvejoski</name>
-            <email>kostadin.cvejoski@iais.fraunhofer.de</email>
-            <organization>Fraunhofer IAIS</organization>
-            <organizationUrl>http://www.iais.fraunhofer.de/</organizationUrl>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-        <developer>
-            <id>dpyka</id>
-            <name>Daniel Pyka</name>
-            <email>daniel.pyka@iais.fraunhofer.de</email>
-            <organization>Fraunhofer IAIS</organization>
-            <organizationUrl>http://www.iais.fraunhofer.de/</organizationUrl>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-    </developers>
-    <contributors>
-        <contributor>
-            <name>Thorsten Leimbach</name>
-            <email>thorsten.leimbach@iais.fraunhofer.de</email>
-            <url>http://iais.fraunhofer.de</url>
-            <organization>Fraunhofer IAIS</organization>
-            <organizationUrl>http://iais.fraunhofer.de</organizationUrl>
-            <roles>
-                <role>PM</role>
-            </roles>
-            <timezone>+1</timezone>
-        </contributor>
-        <contributor>
-            <name>Achim Kapusta</name>
-            <email>achim.kapusta@iais.fraunhofer.de</email>
-            <url>http://iais.fraunhofer.de</url>
-            <organization>Fraunhofer IAIS</organization>
-            <organizationUrl>http://iais.fraunhofer.de</organizationUrl>
-            <roles>
-                <role>designer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </contributor>
-    </contributors>
     <licenses>
         <license>
             <name>Licensed under the Apache License, Version 2.0 (the "License")</name>

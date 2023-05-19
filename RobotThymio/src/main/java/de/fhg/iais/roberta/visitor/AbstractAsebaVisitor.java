@@ -87,15 +87,15 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
 
     private int nestedMethodCallsCounter = -1;
     private int maxNestedMethodCalls = 1;
-    List<Integer> loopsStart = new ArrayList();
-    List<Integer> loopsBody = new ArrayList();
-    List<Integer> loopsEnd = new ArrayList();
-    List<Integer> funcStart = new ArrayList();
+    List<Integer> loopsStart = new ArrayList<>();
+    List<Integer> loopsBody = new ArrayList<>();
+    List<Integer> loopsEnd = new ArrayList<>();
+    List<Integer> funcStart = new ArrayList<>();
     protected int funcCounter = -1;
     protected boolean ifOnce = false;
 
-    protected ArrayList myMethods;
-    List<Unary.Op> unarySyms = new ArrayList();
+    protected ArrayList<String> myMethods;
+    List<Unary.Op> unarySyms = new ArrayList<>();
 
 
     protected AbstractAsebaVisitor(List<List<Phrase>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
@@ -652,23 +652,6 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
             nlIndent();
         }
         return null;
-    }
-
-
-    private void addSetIndex(ListSetIndex listSetIndex) {
-        this.sb.append("[");
-        switch ( (IndexLocation) listSetIndex.location ) {
-            case FIRST:
-                this.sb.append("0");
-                break;
-            case FROM_END:
-            case FROM_START:
-                listSetIndex.param.get(2).accept(this);
-                break;
-            default:
-                break;
-        }
-        this.sb.append("] = ");
     }
 
     @Override

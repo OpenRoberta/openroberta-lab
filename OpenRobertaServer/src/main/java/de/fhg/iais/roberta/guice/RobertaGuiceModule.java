@@ -18,7 +18,6 @@ import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.RestExample;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotCommand;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotDownloadProgram;
-import de.fhg.iais.roberta.javaServer.restServices.robot.RobotSensorLogging;
 import de.fhg.iais.roberta.main.IIpToCountry;
 import de.fhg.iais.roberta.main.MailManagement;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -53,7 +52,6 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(ClientUser.class);
         bind(RobotDownloadProgram.class);
         bind(RobotCommand.class);
-        bind(RobotSensorLogging.class);
         bind(RestExample.class);
         bind(ClientPing.class);
 

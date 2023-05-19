@@ -65,31 +65,6 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <excludes>
-                                <exclude>de.fhg.iais.roberta:EV3Menu:jar:</exclude>
-                                <exclude>de.fhg.iais.roberta:ev3classes:jar:</exclude>
-                                <exclude>de.fhg.iais.roberta:dbusjava:jar:</exclude>
-                                <exclude>org.lejos:jna:jar:</exclude>
-                            </excludes>
-                            <includeScope>compile</includeScope>
-                            <outputDirectory>${project.build.directory}/resources</outputDirectory>
-                            <overWriteReleases>true</overWriteReleases>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <executions>
                     <execution>
@@ -129,32 +104,4 @@
             </plugin>
         </plugins>
     </build>
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>gr.abiss.mvn.plugins</groupId>
-                <artifactId>maven-jstools-plugin</artifactId>
-                <inherited>false</inherited>
-                <configuration>
-                    <jsDir>${basedir}/staticResources/roberta</jsDir>
-                    <!-- this is actually the default -->
-                    <includes>**/*.js</includes>
-                    <!-- maybe you need to exclude compressed JS files -->
-                    <excludes>**/*_compressed.js</excludes>
-                    <!-- this is actually the default -->
-                    <caseSensitive>true</caseSensitive>
-                    <outputBaseDirectory>${project.build.directory}/site/</outputBaseDirectory>
-                </configuration>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <!-- include the desired reports -->
-                            <!--<report>jslint</report> -->
-                            <report>jsdoc</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-        </plugins>
-    </reporting>
 </project>
