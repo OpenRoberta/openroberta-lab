@@ -1,15 +1,17 @@
 package de.fhg.iais.roberta.worker.validate;
 
-import com.google.common.collect.ClassToInstanceMap;
-import de.fhg.iais.roberta.bean.IProjectBean;
-import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
-import de.fhg.iais.roberta.visitor.validate.MbedValidatorAndCollectorVisitor;
-import de.fhg.iais.roberta.worker.AbstractValidatorAndCollectorWorker;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.components.Project;
+import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
+import de.fhg.iais.roberta.visitor.validate.MbedValidatorAndCollectorVisitor;
+import de.fhg.iais.roberta.worker.AbstractValidatorAndCollectorWorker;
 
 
 public abstract class MbedValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
@@ -30,6 +32,15 @@ public abstract class MbedValidatorAndCollectorWorker extends AbstractValidatorA
         this.defaultProperties = Collections.unmodifiableList(defaultProps);
         this.existingPins = Collections.unmodifiableList(freePins);
         this.mapCorrectConfigPins = mapCorrectConfigPins;
+    }
+
+    protected boolean isDisplaySwitchUsed(Project project) {
+        for ( List<Phrase> subTree : project.getProgramAst().getTree() ) {
+            if ( subTree.get(1).getProperty().isInTask() && subTree.toString().contains("SwitchLedMatrix") ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

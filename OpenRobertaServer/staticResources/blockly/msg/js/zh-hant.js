@@ -1942,6 +1942,8 @@ Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "有效的特殊字元: »=
 Blockly.Msg.VALIDATION_FIELD_REQUIRED = "此欄位不能為空!";
 Blockly.Msg.VALIDATION_MAX_LENGTH = "最大長度為25個字元!";
 Blockly.Msg.VALIDATION_PASSWORD_MIN_LENGTH = "密碼最小長度為 6!";
+Blockly.Msg.VALIDATION_PIN_TAKEN_BY_INTERNAL_COMPONENT = "This pin is connected to an inbuilt component and should be used with caution.";  // untranslated
+Blockly.Msg.VALIDATION_PIN_TAKEN_BY_LED_MATRIX = "Before using this pin, make sure to disable the internal LED matrix using the 'switch LED matrix off' block.";  // untranslated
 Blockly.Msg.VALIDATION_SECOND_PASSWORD_EQUAL = "兩個密碼必須相同!";
 Blockly.Msg.VALIDATION_TOKEN_LENGTH = "權杖長度為8個字元!";
 Blockly.Msg.VALIDATION_VALID_EMAIL_ADDRESS = "請輸入有效的電子郵件地址!";

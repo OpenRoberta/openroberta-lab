@@ -11,6 +11,6 @@ public class MicrobitV2SimValidatorAndCollectorWorker extends MicrobitV2Validato
 
     @Override
     protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
-        return new MicrobitV2ValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, true);
+        return new MicrobitV2ValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, true, isDisplaySwitchUsed(project));
     }
 }

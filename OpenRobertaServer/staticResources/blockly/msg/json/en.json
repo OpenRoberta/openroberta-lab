@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2023-04-27 14:15:53.905556",
+		"lastupdated": "2023-05-19 10:38:52.907054",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -911,6 +911,8 @@
 	"VALIDATION_VALID_EMAIL_ADDRESS": "Please enter a valid email address!",
 	"VALIDATION_CONTAINS_SPECIAL_CHARACTERS": "Valid special characters: »=+!?.,%#+&^@_-«",
 	"VALIDATION_MAX_LENGTH": "The max. lenght is 25 characters!",
+	"VALIDATION_PIN_TAKEN_BY_INTERNAL_COMPONENT": "This pin is connected to an inbuilt component and should be used with caution.",
+	"VALIDATION_PIN_TAKEN_BY_LED_MATRIX": "Before using this pin, make sure to disable the internal LED matrix using the 'switch LED matrix off' block.",
 	"SIM_BLOCK_NOT_SUPPORTED": "Unfortunately you can not use this block in the simulation!",
 	"SIM_CONFIGURATION_WARNING_SENSOR_MISSING": "This sensor is not in the configuration! The behaviour of the program on the real robot will be different than expected!",
 	"SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT": "In this block you have used a wrong sensor port! The behaviour of the program on the real robot will be different than expected, please check the robot configuration!",

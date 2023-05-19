@@ -222,17 +222,15 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
         String valueType = pinValueSensor.getMode().toLowerCase(Locale.ENGLISH);
-        if (valueType.equalsIgnoreCase(SC.PULSEHIGH)){
+        if ( valueType.equalsIgnoreCase(SC.PULSEHIGH) ) {
             this.sb.append("machine.time_pulse_us(microbit.pin");
             this.sb.append(pin1);
             this.sb.append(", 1)");
-        } 
-        else if(valueType.equalsIgnoreCase(SC.PULSELOW)){
+        } else if ( valueType.equalsIgnoreCase(SC.PULSELOW) ) {
             this.sb.append("machine.time_pulse_us(microbit.pin");
             this.sb.append(pin1);
             this.sb.append(", 0)");
-        }
-        else {
+        } else {
             this.sb.append("microbit.pin");
             this.sb.append(pin1);
             this.sb.append(".read_");
@@ -504,9 +502,9 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
         }
         return null;
     }
-    
+
     @Override
-    public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction){
+    public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction) {
         if ( switchLedMatrixAction.activated.equals("ON") ) {
             this.sb.append("microbit.display.on()");
         } else {

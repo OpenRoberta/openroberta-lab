@@ -1942,6 +1942,8 @@ Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "有效的特殊字符: »=
 Blockly.Msg.VALIDATION_FIELD_REQUIRED = "此字段不能为空!";
 Blockly.Msg.VALIDATION_MAX_LENGTH = "最大长度为25个字符!";
 Blockly.Msg.VALIDATION_PASSWORD_MIN_LENGTH = "密码最小长度为 6!";
+Blockly.Msg.VALIDATION_PIN_TAKEN_BY_INTERNAL_COMPONENT = "This pin is connected to an inbuilt component and should be used with caution.";  // untranslated
+Blockly.Msg.VALIDATION_PIN_TAKEN_BY_LED_MATRIX = "Before using this pin, make sure to disable the internal LED matrix using the 'switch LED matrix off' block.";  // untranslated
 Blockly.Msg.VALIDATION_SECOND_PASSWORD_EQUAL = "两个密码必须相同!";
 Blockly.Msg.VALIDATION_TOKEN_LENGTH = "令牌长度为8个字符!";
 Blockly.Msg.VALIDATION_VALID_EMAIL_ADDRESS = "请输入有效的电子邮件地址!";

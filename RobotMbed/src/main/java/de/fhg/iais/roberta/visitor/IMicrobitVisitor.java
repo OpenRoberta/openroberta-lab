@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 public interface IMicrobitVisitor<V> extends IMbedVisitor<V> {
 
     V visitPlayFileAction(PlayFileAction playFileAction);
-    
+
     V visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction);
 
 }
