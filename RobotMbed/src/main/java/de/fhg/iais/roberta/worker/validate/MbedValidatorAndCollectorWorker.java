@@ -34,7 +34,7 @@ public abstract class MbedValidatorAndCollectorWorker extends AbstractValidatorA
         this.mapCorrectConfigPins = mapCorrectConfigPins;
     }
 
-    public boolean isDisplaySwitchUsed(Project project) {
+    protected boolean isDisplaySwitchUsed(Project project) {
         for ( List<Phrase> subTree : project.getProgramAst().getTree() ) {
             if ( subTree.get(1).getProperty().isInTask() && subTree.toString().contains("SwitchLedMatrix") ) {
                 return true;

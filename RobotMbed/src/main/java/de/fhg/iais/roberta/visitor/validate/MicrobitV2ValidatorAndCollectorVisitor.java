@@ -25,7 +25,9 @@ public class MicrobitV2ValidatorAndCollectorVisitor extends MicrobitValidatorAnd
     public MicrobitV2ValidatorAndCollectorVisitor(
         ConfigurationAst brickConfiguration,
         ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders,
-        boolean isSim, boolean displaySwitchUsed) {
+        boolean isSim,
+        boolean displaySwitchUsed) //
+    {
         super(brickConfiguration, beanBuilders, isSim, displaySwitchUsed);
         this.isSim = isSim;
         this.occupiedPins = Arrays.asList("3", "4", "5", "6", "7", "10", "11", "12", "19", "20");

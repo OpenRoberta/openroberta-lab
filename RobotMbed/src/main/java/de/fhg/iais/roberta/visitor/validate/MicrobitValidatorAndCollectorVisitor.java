@@ -28,12 +28,14 @@ public class MicrobitValidatorAndCollectorVisitor extends MbedValidatorAndCollec
     protected List<String> occupiedPins = Arrays.asList("3", "4", "5", "6", "7", "9", "10", "11", "12", "19", "20");
     protected List<String> ledPins = Arrays.asList("3", "4", "6", "7", "9", "10");
 
-    private Boolean displaySwitchUsed;
+    private final boolean displaySwitchUsed;
 
     public MicrobitValidatorAndCollectorVisitor(
         ConfigurationAst brickConfiguration,
         ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders,
-        boolean isSim, boolean displaySwitchUsed) {
+        boolean isSim,
+        boolean displaySwitchUsed) //
+    {
         super(brickConfiguration, beanBuilders);
         this.isSim = isSim;
         this.displaySwitchUsed = displaySwitchUsed;
