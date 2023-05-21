@@ -98,7 +98,7 @@ export class CircuitVisualization {
         (<any>window).Blockly.Blocks['robConf_robot'] = createRobotBlock(this.currentRobot);
 
         if (!this.dom.querySelector('block[type=robConf_robot]')) {
-            const robotXml = `<instance x='250' y='250'><block type='robConf_robot' id='robot'></block></instance>`;
+            const robotXml = `<instance x="250" y="250"><block type="robConf_robot" id="robot"></block></instance>`;
             const oParser = new DOMParser();
             const robotElement = oParser.parseFromString(robotXml, 'text/xml').firstChild;
             this.dom.appendChild(robotElement);
@@ -115,16 +115,29 @@ export class CircuitVisualization {
     };
 
     onChangeListener = (event) => {
+        let blockId;
         if (!event.blockId) {
-            return;
+            if (event.newValue) {
+                blockId = event.newValue;
+            } else {
+                return;
+            }
+        } else {
+            blockId = event.blockId;
         }
-        const block = this.workspace.getBlockById(event.blockId);
+        var block = this.workspace.getBlockById(blockId);
 
         switch (event.type) {
             case (<any>window).Blockly.Events.CREATE:
                 this.createBlockPorts(block);
                 this.initEventListeners(block);
                 this.renderBlockConnections(block);
+                while (block && block.getChildren().length > 0) {
+                    block = block.getChildren()[0];
+                    this.createBlockPorts(block);
+                    this.initEventListeners(block);
+                    this.renderBlockConnections(block);
+                }
                 break;
             case (<any>window).Blockly.Events.CHANGE:
                 this.updateBlockPorts(block);
@@ -156,10 +169,18 @@ export class CircuitVisualization {
     }
 
     private renderBlockConnections(block: any) {
-        if (block.id !== 'robot') {
+        if (block.id === 'robot') {
+            return this.renderConnections(this.connections);
+        } else if (block.ports.length == 0) {
+            let blockIds = [];
+            while (block && block.getChildren().length > 0) {
+                block = block.getChildren()[0];
+                blockIds.push(block.id);
+            }
+            return this.renderConnections(this.connections.filter(({ blockId }) => blockIds.includes(blockId)));
+        } else {
             return this.renderConnections(this.connections.filter(({ blockId }) => blockId === block.id));
         }
-        return this.renderConnections(this.connections);
     }
 
     private renderConnections(connections: Connection[]): void {

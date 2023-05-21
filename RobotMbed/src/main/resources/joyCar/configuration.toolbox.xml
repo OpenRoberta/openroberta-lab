@@ -1,0 +1,10 @@
+<toolbox_set id="toolbox" style="display: none">
+    <category name="TOOLBOX_ACTION" svg="true">
+        <block type="robConf_digitalin" />
+        <block type="robConf_analogin" />
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type="robConf_digitalout" />
+        <block type="robConf_analogout" />
+    </category>
+</toolbox_set>

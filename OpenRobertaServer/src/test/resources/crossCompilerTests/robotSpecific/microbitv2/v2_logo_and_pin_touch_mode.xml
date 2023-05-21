@@ -88,6 +88,10 @@
                                         <field name="SENSORPORT">2</field>
                                         <field name="MODE">CAPACITIVE</field>
                                     </block>
+                                    <block type="robSensors_set_logo_mode" id="9[ca*0Ytd^[65.CnZRSL" intask="true">
+                                        <field name="MODE">CAPACITIVE</field>
+                                        <hide name="SENSORPORT" value="_LO"></hide>
+                                    </block>
                                 </statement>
                                 <value name="IF2">
                                     <block type="robSensors_key_getSample" id="7p~M;OHz(.@Rlj5.l*Z?" intask="true">
@@ -109,6 +113,10 @@
                                     <block type="robSensors_set_pin_mode" id="3ma?a]J!wfqLG#=lA)tc" intask="true">
                                         <field name="SENSORPORT">2</field>
                                         <field name="MODE">RESISTIVE</field>
+                                    </block>
+                                    <block type="robSensors_set_logo_mode" id="NJV3xl^O{=Ot7=!Sjrp{" intask="true">
+                                        <field name="MODE">RESISTIVE</field>
+                                        <hide name="SENSORPORT" value="_LO"></hide>
                                     </block>
                                     <block type="mbedActions_display_text" id="u7}E5zQsJ`RdzC`Hf,7@" intask="true">
                                         <field name="TYPE">TEXT</field>

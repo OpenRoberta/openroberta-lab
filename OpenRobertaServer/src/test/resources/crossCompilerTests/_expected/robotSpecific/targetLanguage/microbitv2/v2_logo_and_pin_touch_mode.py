@@ -22,10 +22,12 @@ def run():
             microbit.pin0.set_touch_mode(microbit.pin0.CAPACITIVE)
             microbit.pin1.set_touch_mode(microbit.pin1.CAPACITIVE)
             microbit.pin2.set_touch_mode(microbit.pin2.CAPACITIVE)
+            microbit.pin_logo.set_touch_mode(microbit.pin_logo.CAPACITIVE)
         elif microbit.button_b.is_pressed():
             microbit.pin0.set_touch_mode(microbit.pin0.RESISTIVE)
             microbit.pin1.set_touch_mode(microbit.pin1.RESISTIVE)
             microbit.pin2.set_touch_mode(microbit.pin2.RESISTIVE)
+            microbit.pin_logo.set_touch_mode(microbit.pin_logo.RESISTIVE)
             microbit.display.scroll("resistive mode")
         elif microbit.pin0.is_touched():
             microbit.display.scroll("pin 0")

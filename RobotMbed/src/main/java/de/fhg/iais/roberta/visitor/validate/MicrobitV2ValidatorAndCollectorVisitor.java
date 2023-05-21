@@ -64,12 +64,12 @@ public class MicrobitV2ValidatorAndCollectorVisitor extends MicrobitValidatorAnd
 
     @Override
     public Void visitLogoSetTouchMode(LogoSetTouchMode logoSetTouchMode) {
-        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(logoSetTouchMode.port);
+        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(logoSetTouchMode.getUserDefinedPort());
         if ( usedConfigurationBlock == null ) {
             Phrase actionAsPhrase = logoSetTouchMode;
             addErrorToPhrase(actionAsPhrase, "CONFIGURATION_ERROR_SENSOR_MISSING");
         }
-        usedHardwareBuilder.addUsedSensor(new UsedSensor(logoSetTouchMode.port, "LOGOTOUCH", logoSetTouchMode.mode));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor("LOGOTOUCH", "LOGOTOUCH", logoSetTouchMode.mode));
         return null;
     }
 

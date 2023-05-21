@@ -32,6 +32,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -77,6 +78,8 @@ public interface IMbot2Visitor<V> extends IVisitor<V> {
     V visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor);
 
     V visitQuadRGBSensor(QuadRGBSensor quadRGBSensor);
+
+    V visitGetLineSensor(GetLineSensor getLineSensor);
 
     V visitQuadRGBLightOnAction(QuadRGBLightOnAction quadRGBLightOnAction);
 

@@ -1,0 +1,153 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="joycar" xmlversion="3.1" description="" tags="">
+    <instance x="450" y="17">
+        <block type="robConf_sound" id="qL1P2J};PfSuwPf#!n93" intask="true" deletable="false">
+            <field name="NAME">_S</field>
+        </block>
+    </instance>
+    <instance x="310" y="37">
+        <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+            <field name="NAME">_C</field>
+        </block>
+    </instance>
+    <instance x="786" y="28">
+        <block type="robConf_differentialdrive" id="AM=n{?7R#nO#1~?a3j~u" intask="true" deletable="false">
+            <field name="NAME">_D</field>
+            <field name="BRICK_WHEEL_DIAMETER">6,5</field>
+            <field name="BRICK_TRACK_WIDTH">15</field>
+            <field name="MOTOR_L">MOT_L</field>
+            <field name="MOTOR_R">MOT_R</field>
+        </block>
+    </instance>
+    <instance x="644" y="39">
+        <block type="robConf_light" id="9Ktt(7_4XmKC0]5Zha?" intask="true" deletable="false">
+            <field name="NAME">_L</field>
+        </block>
+    </instance>
+    <instance x="223" y="68">
+        <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+            <field name="NAME">_A</field>
+        </block>
+    </instance>
+    <instance x="173" y="102">
+        <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+            <field name="NAME">_T</field>
+        </block>
+    </instance>
+    <instance x="669" y="77">
+        <block type="robConf_logotouch" id="iLsHeX}C+}Zb7jzAuaNo" intask="true" deletable="false">
+            <field name="NAME">_LO</field>
+        </block>
+    </instance>
+    <instance x="177" y="138">
+        <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+            <field name="NAME">A</field>
+            <field name="PIN1">A</field>
+        </block>
+    </instance>
+    <instance x="868" y="161">
+        <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+            <field name="NAME">B</field>
+            <field name="PIN1">B</field>
+        </block>
+    </instance>
+    <instance x="348" y="205">
+        <block type="robConf_robot" id="robot" intask="true" deletable="false">
+            <field name="ROBOT">undefined</field>
+        </block>
+    </instance>
+    <instance x="171" y="228">
+        <block type="robConf_motor" id="g)[bSyslSNkl)+BHmAc`" intask="true" deletable="false">
+            <field name="NAME">MR</field>
+            <field name="PORT">MOT_R</field>
+        </block>
+    </instance>
+    <instance x="827" y="228">
+        <block type="robConf_motor" id="S(Xm/UHHH;N[4Km1TML0" intask="true" deletable="false">
+            <field name="NAME">ML</field>
+            <field name="PORT">MOT_L</field>
+        </block>
+    </instance>
+    <instance x="176" y="320">
+        <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+            <field name="NAME">_B</field>
+        </block>
+    </instance>
+    <instance x="793" y="401">
+        <block type="robConf_i2c_bus" id="@|CnfJ?*ctRADR{@t@][" intask="true" deletable="false">
+            <field name="NAME">IO_Extender</field>
+            <field name="ADDRESS">0x38</field>
+            <statement name="BUS">
+                <block type="robConf_encoder" id="S(Xm/UHHH;N[4Km1TML1" intask="true" movable="false">
+                    <field name="NAME">EL</field>
+                    <field name="PORT">SPEED_L</field>
+                </block>
+                <block type="robConf_encoder" id="S(Xm/UHHH;N[4Km1TML2" intask="true" movable="false">
+                    <field name="NAME">ER</field>
+                    <field name="PORT">SPEED_R</field>
+                </block>
+                <block type="robConf_infrared" id="S(Xm/UHHH;N[4Km1TML6" intask="true" movable="false">
+                    <field name="NAME">OL</field>
+                    <field name="PORT">OBSTCL_L</field>
+                </block>
+                <block type="robConf_infrared" id="S(Xm/UHHH;N[4Km1TML7" intask="true" movable="false">
+                    <field name="NAME">OR</field>
+                    <field name="PORT">OBSTCL_R</field>
+                </block>
+                <block type="robConf_line" id="S(Xm/UHHH;N[4Km1TML3" intask="true" movable="false">
+                    <field name="NAME">LL</field>
+                    <field name="PORT">LINE_TRK_L</field>
+                </block>
+                <block type="robConf_line" id="S(Xm/UHHH;N[4Km1TML4" intask="true" movable="false">
+                    <field name="NAME">LM</field>
+                    <field name="PORT">LINE_TRK_M</field>
+                </block>
+                <block type="robConf_line" id="S(Xm/UHHH;N[4Km1TML5" intask="true" movable="false">
+                    <field name="NAME">LR</field>
+                    <field name="PORT">LINE_TRK_R</field>
+                </block>
+            </statement>
+        </block>
+    </instance>
+    <instance x="161" y="452">
+        <block type="robConf_rgbled" id="?:_l?rc?~FAjXmA#]}rE" intask="true" deletable="false">
+            <field name="NAME">FL</field>
+            <field name="PORT">B0</field>
+        </block>
+    </instance>
+    <instance x="289" y="504">
+        <block type="robConf_rgbled" id="Wr2-Zy-a|Ok%8qCY/rkb" intask="true" deletable="false">
+            <field name="NAME">FR</field>
+            <field name="PORT">B2</field>
+        </block>
+    </instance>
+    <instance x="161" y="536">
+        <block type="robConf_rgbled" id="YC)K{Vw@p!FRB,*e9!2t" intask="true" deletable="false">
+            <field name="NAME">RL</field>
+            <field name="PORT">B4</field>
+        </block>
+    </instance>
+    <instance x="285" y="587">
+        <block type="robConf_rgbled" id="K-ixjkG8K.(v~a1f^4B]" intask="true" deletable="false">
+            <field name="NAME">RR</field>
+            <field name="PORT">B6</field>
+        </block>
+    </instance>
+    <instance x="152" y="643">
+        <block type="robConf_ultrasonic" id="Z5a?AUX(BKNfDVeH/-Dz" intask="true" deletable="false">
+            <field name="NAME">U</field>
+            <field name="US">US</field>
+        </block>
+    </instance>
+    <instance x="314" y="698">
+        <block type="robConf_servo" id="AqNY(e(XV=kcA0N!{#:{" intask="true" deletable="false">
+            <field name="NAME">S1</field>
+            <field name="PORT">SERVO1</field>
+        </block>
+    </instance>
+    <instance x="171" y="754">
+        <block type="robConf_servo" id="v!HajR)LoCJ@)vEga0^N" intask="true" deletable="false">
+            <field name="NAME">S2</field>
+            <field name="PORT">SERVO2</field>
+        </block>
+    </instance>
+</block_set>

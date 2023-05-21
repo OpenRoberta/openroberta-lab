@@ -1,0 +1,97 @@
+include: "classpath:/common.methods.yml"
+
+ULTRASONIC_GET_DISTANCE:
+  PYTHON: |
+    def ultrasonic_get_distance(echo, trigger):
+        trigger.write_digital(0)
+        microbit.sleep(2)
+        trigger.write_digital(1) 
+        microbit.sleep(10) 
+        trigger.write_digital(0) 
+
+
+        duration = machine.time_pulse_us(echo, 1)  
+        distance = duration * 0.0343 / 2  
+
+        return round(distance, 2)   
+    
+DIFFDRIVE:
+  PYTHON: |
+    def drive(speedLeft, speedRight):
+        speedRight = -round(speedRight * 2.55)
+        speedLeft = -round(speedLeft * 2.55)
+        if speedRight >= 0:
+            microbit.i2c.write(0x70, b'\x02' + bytes([abs(speedRight)]))
+            microbit.i2c.write(0x70, b'\x03' + bytes([0]))
+        else:
+            microbit.i2c.write(0x70, b'\x02' + bytes([0]))
+            microbit.i2c.write(0x70, b'\x03' + bytes([abs(speedRight)]))
+        if speedLeft >= 0:
+            microbit.i2c.write(0x70, b'\x04' + bytes([abs(speedLeft)]))
+            microbit.i2c.write(0x70, b'\x05' + bytes([0]))
+        else:
+            microbit.i2c.write(0x70, b'\x04' + bytes([0]))
+            microbit.i2c.write(0x70, b'\x05' + bytes([abs(speedLeft)]))
+
+SETSPEED:
+  PYTHON: |
+    def setSpeed(port, speed):
+        speed = -round(speed * 2.55)
+        if port == "MOT_R":
+            if speed >= 0:
+                microbit.i2c.write(0x70, b'\x02' + bytes([abs(speed)]))
+                microbit.i2c.write(0x70, b'\x03' + bytes([0]))
+            else:
+                microbit.i2c.write(0x70, b'\x02' + bytes([0]))
+                microbit.i2c.write(0x70, b'\x03' + bytes([abs(speed)]))
+        elif port == "MOT_L":
+            if speed >= 0:
+                microbit.i2c.write(0x70, b'\x04' + bytes([abs(speed)]))
+                microbit.i2c.write(0x70, b'\x05' + bytes([0]))
+            else:
+                microbit.i2c.write(0x70, b'\x04' + bytes([0]))
+                microbit.i2c.write(0x70, b'\x05' + bytes([abs(speed)]))
+
+zfill:
+  PYTHON: |
+    def zfill(s, width):
+        return '{:0>{w}}'.format(s, w=width)
+
+I2C_GET_SENSORDATA:
+  PYTHON: |
+    def fetch_sensor_data(adress):
+        data = "{0:b}".format(ord(microbit.i2c.read(adress, 1)))
+        data = zfill(data, 8)
+        bol_data_dict = {}
+        bit_count = 7
+        for i in data:
+            if i == "0":
+                bol_data_dict[bit_count] = False
+                bit_count -= 1
+            else:
+                bol_data_dict[bit_count] = True
+                bit_count -= 1
+        # bit 0 = SpeedLeft, bit 1 = SpeedRight, bit 2 = LineTrackerLeft,
+        # bit 3 = LineTrackerMiddle, bit 4 = LineTrackerRight,
+        # bit 5 = ObstclLeft, bit 6 = ObstclRight, bit 7 = Buzzer
+        return bol_data_dict
+    
+    def zfill(s, width):
+        return '{:0>{w}}'.format(s, w=width)
+
+SERVO_SET_ANGLE:
+  PYTHON: |
+    def servo_set_angle(x, y):
+        y = round(min(max((y * 100) / 180 + 100, 100), 200))
+        if x == 1:
+            microbit.pin1.write_analog(y)
+        elif x == 2:
+            microbit.pin13.write_analog(y)
+
+LED_SET_COLOUR:
+  PYTHON: |
+    def led_set_colour(x, colour):
+        global np
+        np[x] = colour
+        np.show()
+    

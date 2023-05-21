@@ -13,11 +13,13 @@ AktionStmt [DisplayTextAction[mode: TEXT, msg: StringConst[value: capacitive mod
 SensorStmt PinSetTouchMode[mode: CAPACITIVE, sensorport: 0]
 SensorStmt PinSetTouchMode[mode: CAPACITIVE, sensorport: 1]
 SensorStmt PinSetTouchMode[mode: CAPACITIVE, sensorport: 2]
+SensorStmt LogoSetTouchMode[mode: CAPACITIVE]
 ,else if SensorExpr [KeysSensor [B, PRESSED, - EMPTY_SLOT -]]
 ,then
 SensorStmt PinSetTouchMode[mode: RESISTIVE, sensorport: 0]
 SensorStmt PinSetTouchMode[mode: RESISTIVE, sensorport: 1]
 SensorStmt PinSetTouchMode[mode: RESISTIVE, sensorport: 2]
+SensorStmt LogoSetTouchMode[mode: RESISTIVE]
 AktionStmt [DisplayTextAction[mode: TEXT, msg: StringConst[value: resistive mode]]]
 ,else if SensorExpr [PinTouchSensor [0, PRESSED, - EMPTY_SLOT -]]
 ,then

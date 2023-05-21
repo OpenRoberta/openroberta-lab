@@ -56,7 +56,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
 public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMicrobitVisitor<Void> {
-    private final ConfigurationAst robotConfiguration;
+    protected final ConfigurationAst robotConfiguration;
 
     /**
      * initialize the Python code generator visitor.

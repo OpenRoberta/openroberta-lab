@@ -51,6 +51,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -401,9 +402,6 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
         int index = getSensorNumber(CyberpiConstants.MBUILD_QUADRGB, quadRGBSensor.getUserDefinedPort());
         String mode = quadRGBSensor.getMode();
         switch ( mode ) {
-            case "LINE":
-                this.src.add("mbuild.quad_rgb_sensor.get_line_sta(\"all\", ", index, ")");
-                break;
             case SC.LIGHT:
                 this.src.add("mbuild.quad_rgb_sensor.get_gray(", "\"", quadRGBSensor.getSlot(), "\", ", index, ")");
                 break;
@@ -419,6 +417,13 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
                     "]");
                 break;
         }
+        return null;
+    }
+
+    @Override
+    public Void visitGetLineSensor(GetLineSensor getLineSensor) {
+        int index = getSensorNumber(CyberpiConstants.MBUILD_QUADRGB, getLineSensor.getUserDefinedPort());
+        this.src.add("mbuild.quad_rgb_sensor.get_line_sta(\"all\", ", index, ")");
         return null;
     }
 

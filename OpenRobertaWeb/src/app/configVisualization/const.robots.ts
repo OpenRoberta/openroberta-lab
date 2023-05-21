@@ -514,4 +514,38 @@ export const ROBOTS = {
         width: '217px',
         height: '342px',
     },
+    joycar: {
+        ports: [
+            // ports
+            { name: 'SERVO1', position: { x: 141, y: 204 } },
+            { name: 'SERVO2', position: { x: 154, y: 204 } },
+            { name: 'SPEED_L', position: { x: 174, y: 204 } },
+            { name: 'SPEED_R', position: { x: 187, y: 204 } },
+            { name: 'OBSTCL_L', position: { x: 208, y: 204 } },
+            { name: 'OBSTCL_R', position: { x: 221, y: 204 } },
+            { name: 'LINE_TRK_L', position: { x: 240, y: 204 } },
+            { name: 'LINE_TRK_M', position: { x: 253, y: 204 } },
+            { name: 'LINE_TRK_R', position: { x: 266, y: 204 } },
+            { name: 'B0', position: { x: 62, y: 217 } },
+            { name: 'B2', position: { x: 74, y: 217 } },
+            { name: 'B4', position: { x: 87, y: 217 } },
+            { name: 'B6', position: { x: 100, y: 217 } },
+            { name: 'US', position: { x: 121, y: 217 } },
+            { name: 'MOT_R', position: { x: 28, y: 58 } },
+            { name: 'MOT_L', position: { x: 385, y: 58 } },
+
+            //build in
+            { name: 'A', position: { x: 74, y: 58 } },
+            { name: 'temperature', position: { x: 111, y: 58 } },
+            { name: 'accelerometer', position: { x: 149, y: 58 } },
+            { name: 'compass', position: { x: 186, y: 58 } },
+            { name: 'sound', position: { x: 224, y: 58 } },
+            { name: 'light', position: { x: 262, y: 58 } },
+            { name: 'logotouch', position: { x: 299, y: 58 } },
+            { name: 'B', position: { x: 338, y: 58 } },
+            { name: 'buzzer', position: { x: 28.5, y: 125 } },
+        ],
+        width: '417px',
+        height: '272px',
+    },
 };

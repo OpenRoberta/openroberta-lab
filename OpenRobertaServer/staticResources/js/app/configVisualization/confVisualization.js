@@ -53,15 +53,30 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
                 }
             };
             this.onChangeListener = function (event) {
+                var blockId;
                 if (!event.blockId) {
-                    return;
+                    if (event.newValue) {
+                        blockId = event.newValue;
+                    }
+                    else {
+                        return;
+                    }
                 }
-                var block = _this.workspace.getBlockById(event.blockId);
+                else {
+                    blockId = event.blockId;
+                }
+                var block = _this.workspace.getBlockById(blockId);
                 switch (event.type) {
                     case window.Blockly.Events.CREATE:
                         _this.createBlockPorts(block);
                         _this.initEventListeners(block);
                         _this.renderBlockConnections(block);
+                        while (block && block.getChildren().length > 0) {
+                            block = block.getChildren()[0];
+                            _this.createBlockPorts(block);
+                            _this.initEventListeners(block);
+                            _this.renderBlockConnections(block);
+                        }
                         break;
                     case window.Blockly.Events.CHANGE:
                         _this.updateBlockPorts(block);
@@ -221,7 +236,7 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
         CircuitVisualization.prototype.injectRobotBoard = function () {
             window.Blockly.Blocks['robConf_robot'] = (0, robotBlock_1.createRobotBlock)(this.currentRobot);
             if (!this.dom.querySelector('block[type=robConf_robot]')) {
-                var robotXml = "<instance x='250' y='250'><block type='robConf_robot' id='robot'></block></instance>";
+                var robotXml = "<instance x=\"250\" y=\"250\"><block type=\"robConf_robot\" id=\"robot\"></block></instance>";
                 var oParser = new DOMParser();
                 var robotElement = oParser.parseFromString(robotXml, 'text/xml').firstChild;
                 this.dom.appendChild(robotElement);
@@ -243,13 +258,26 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
             this.observers.push(observer);
         };
         CircuitVisualization.prototype.renderBlockConnections = function (block) {
-            if (block.id !== 'robot') {
+            if (block.id === 'robot') {
+                return this.renderConnections(this.connections);
+            }
+            else if (block.ports.length == 0) {
+                var blockIds_1 = [];
+                while (block && block.getChildren().length > 0) {
+                    block = block.getChildren()[0];
+                    blockIds_1.push(block.id);
+                }
+                return this.renderConnections(this.connections.filter(function (_a) {
+                    var blockId = _a.blockId;
+                    return blockIds_1.includes(blockId);
+                }));
+            }
+            else {
                 return this.renderConnections(this.connections.filter(function (_a) {
                     var blockId = _a.blockId;
                     return blockId === block.id;
                 }));
             }
-            return this.renderConnections(this.connections);
         };
         CircuitVisualization.prototype.renderConnections = function (connections) {
             var _this = this;
