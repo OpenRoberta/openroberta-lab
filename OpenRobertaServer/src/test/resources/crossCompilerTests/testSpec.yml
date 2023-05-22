@@ -256,6 +256,9 @@ progs:
   orderOfOperations:
     decl: orderOfOperations
     fragment: orderOfOperations
+    exclude:
+      edison: "Most math functions are not supported"
+      thymio: "Most math functions are not supported"
     remark: "precedence check for math binary operations"
   strings:
     decl: strings

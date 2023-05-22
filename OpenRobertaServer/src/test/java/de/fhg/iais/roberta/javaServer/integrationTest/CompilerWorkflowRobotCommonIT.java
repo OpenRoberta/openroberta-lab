@@ -376,7 +376,7 @@ public class CompilerWorkflowRobotCommonIT {
             LOG.error("Could not generate source code for robot {}", robotName);
             return false;
         }
-        List<String> requiredWorkflowsList = Arrays.asList("showsource", "compile", "run", "runnative", "compilenative", "transform", "getsimulationcode");
+        List<String> requiredWorkflowsList = Arrays.asList("showsource", "compile", "run", "runnative", "compilenative", "getsimulationcode");
         Set<String> requiredWorkflows = new HashSet<>(requiredWorkflowsList);
         Set<String> allWorkflowsOfRobot = pluginMap.get(robotName).getWorkflows();
         requiredWorkflows.addAll(allWorkflowsOfRobot);
