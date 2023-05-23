@@ -11,7 +11,7 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
             if (result.rc === 'ok' && result.message === 'ORA_SERVER_SUCCESS') {
                 successFn(result);
             }
-        }, 'load notofications');
+        }, 'load notifications');
     };
     exports.getNotifications = getNotifications;
     var postNotifications = function (notifications, successFn) {

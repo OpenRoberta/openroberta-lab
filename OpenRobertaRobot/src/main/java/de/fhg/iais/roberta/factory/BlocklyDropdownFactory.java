@@ -49,6 +49,10 @@ public class BlocklyDropdownFactory {
         return AstFactory.getConfigurationComponentTypeByBlocklyName(blocklyName);
     }
 
+    public String getConfigurationComponentCategoryByBlocklyName(String blocklyName) {
+        return AstFactory.getConfigurationComponentCategoryByBlocklyName(blocklyName);
+    }
+
     public String getMode(String mode) {
         return AstFactory.validateAndGetMode(mode);
     }

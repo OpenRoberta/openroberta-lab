@@ -26,7 +26,8 @@ define(["require", "exports", "robot.ev3", "./robot.actuators", "./robot.sensors
             this.chassis = new robot_actuators_1.NXTChassis(this.id, configuration, this.pose);
             var sensors = configuration['SENSORS'];
             var _loop_1 = function (c) {
-                switch (sensors[c]) {
+                console.log(sensors[c]['TYPE']);
+                switch (sensors[c]['TYPE']) {
                     case 'TOUCH':
                         // only one is drawable as bumper
                         this_1[c] = new robot_sensors_1.TouchSensor(c, 25, 0, this_1.chassis.geom.color);
@@ -41,9 +42,9 @@ define(["require", "exports", "robot.ev3", "./robot.actuators", "./robot.sensors
                             }
                         });
                         var ord = myColorLightSensors_1.length + 1;
-                        var id = Object.keys(sensors).filter(function (type) { return sensors[type] == 'LIGHT' || sensors[type] == 'COLOR'; }).length;
+                        var id = Object.keys(sensors).filter(function (sensor) { return sensors[sensor]['TYPE'] == 'LIGHT' || sensors[sensor]['TYPE'] == 'COLOR'; }).length;
                         var y = ord * 10 - 5 * (id + 1);
-                        this_1[c] = sensors[c] === 'COLOR' ? new robot_sensors_1.NXTColorSensor(c, 15, y, 0, 5) : new robot_sensors_1.LightSensor(c, 15, y, 0, 5);
+                        this_1[c] = sensors[c]['TYPE'] === 'COLOR' ? new robot_sensors_1.NXTColorSensor(c, 15, y, 0, 5) : new robot_sensors_1.LightSensor(c, 15, y, 0, 5);
                         break;
                     }
                     case 'SOUND':
@@ -58,7 +59,7 @@ define(["require", "exports", "robot.ev3", "./robot.actuators", "./robot.sensors
                             }
                         });
                         var ord = myUltraSensors_1.length + 1;
-                        var num = Object.keys(sensors).filter(function (type) { return sensors[type] == 'ULTRASONIC'; }).length;
+                        var num = Object.keys(sensors).filter(function (sensor) { return sensors[sensor]['TYPE'] == 'ULTRASONIC'; }).length;
                         var position = new robot_base_mobile_1.Pose(this_1.chassis.geom.x + this_1.chassis.geom.w, 0, 0);
                         if (num == 3) {
                             if (ord == 1) {

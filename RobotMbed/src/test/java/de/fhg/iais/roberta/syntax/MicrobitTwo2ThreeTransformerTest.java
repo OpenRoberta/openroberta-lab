@@ -39,7 +39,7 @@ public class MicrobitTwo2ThreeTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[CompassSensor[_C,ANGLE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=COMPASS,isActor=true,userDefinedName=_C,portName=_C,componentProperties={}]"
+                "ConfigurationComponent[componentType=COMPASS,category=CONFIGURATION_SENSOR,userDefinedName=_C,portName=_C,componentProperties={}]"
             };
 
         Project project =
@@ -62,8 +62,8 @@ public class MicrobitTwo2ThreeTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[KeysSensor[B,PRESSED,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=KEY,isActor=true,userDefinedName=A,portName=A,componentProperties={PIN1=A}]",
-                "ConfigurationComponent[componentType=KEY,isActor=true,userDefinedName=B,portName=B,componentProperties={PIN1=B}]"
+                "ConfigurationComponent[componentType=KEY,category=CONFIGURATION_SENSOR,userDefinedName=A,portName=A,componentProperties={PIN1=A}]",
+                "ConfigurationComponent[componentType=KEY,category=CONFIGURATION_SENSOR,userDefinedName=B,portName=B,componentProperties={PIN1=B}]"
             };
 
         Project project =
@@ -84,7 +84,7 @@ public class MicrobitTwo2ThreeTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[LightSensor[_L,LIGHT_VALUE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=LIGHT,isActor=true,userDefinedName=_L,portName=_L,componentProperties={}]"
+                "ConfigurationComponent[componentType=LIGHT,category=CONFIGURATION_SENSOR,userDefinedName=_L,portName=_L,componentProperties={}]"
             };
 
         Project project =
@@ -105,7 +105,7 @@ public class MicrobitTwo2ThreeTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[TemperatureSensor[_T,VALUE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=TEMPERATURE,isActor=true,userDefinedName=_T,portName=_T,componentProperties={}]"
+                "ConfigurationComponent[componentType=TEMPERATURE,category=CONFIGURATION_SENSOR,userDefinedName=_T,portName=_T,componentProperties={}]"
             };
 
         Project project =
@@ -150,31 +150,31 @@ public class MicrobitTwo2ThreeTransformerTest {
                 + "MbedPinWriteValueAction[pinValue: DIGITAL, port: P20, value: NumConst[value:1]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P9,portName=P9,componentProperties={PIN1=9}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P6,portName=P6,componentProperties={PIN1=6}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P5,portName=P5,componentProperties={PIN1=5}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P4_2,portName=P4_2,componentProperties={PIN1=4}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P3_2,portName=P3_2,componentProperties={PIN1=3}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P2_2,portName=P2_2,componentProperties={PIN1=2}",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P4,portName=P4,componentProperties={PIN1=4}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P1_2,portName=P1_2,componentProperties={PIN1=1}",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P3,portName=P3,componentProperties={PIN1=3}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P0_2,portName=P0_2,componentProperties={PIN1=0}",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P2,portName=P2,componentProperties={PIN1=2}",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P1,portName=P1,componentProperties={PIN1=1}",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P0,portName=P0,componentProperties={PIN1=0}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P16,portName=P16,componentProperties={PIN1=16}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P19,portName=P19,componentProperties={PIN1=19}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P12,portName=P12,componentProperties={PIN1=12}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P13,portName=P13,componentProperties={PIN1=13}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P14,portName=P14,componentProperties={PIN1=14}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P15,portName=P15,componentProperties={PIN1=15}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P10_2,portName=P10_2,componentProperties={PIN1=10}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P11,portName=P11,componentProperties={PIN1=11}",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P10,portName=P10,componentProperties={PIN1=10}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P20,portName=P20,componentProperties={PIN1=20}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P7,portName=P7,componentProperties={PIN1=7}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P8,portName=P8,componentProperties={PIN1=8}"
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P9,portName=P9,componentProperties={PIN1=9}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P6,portName=P6,componentProperties={PIN1=6}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P5,portName=P5,componentProperties={PIN1=5}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P4_2,portName=P4_2,componentProperties={PIN1=4}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P3_2,portName=P3_2,componentProperties={PIN1=3}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P2_2,portName=P2_2,componentProperties={PIN1=2}",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P4,portName=P4,componentProperties={PIN1=4}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P1_2,portName=P1_2,componentProperties={PIN1=1}",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P3,portName=P3,componentProperties={PIN1=3}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P0_2,portName=P0_2,componentProperties={PIN1=0}",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P2,portName=P2,componentProperties={PIN1=2}",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P1,portName=P1,componentProperties={PIN1=1}",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P0,portName=P0,componentProperties={PIN1=0}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P16,portName=P16,componentProperties={PIN1=16}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P19,portName=P19,componentProperties={PIN1=19}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P12,portName=P12,componentProperties={PIN1=12}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P13,portName=P13,componentProperties={PIN1=13}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P14,portName=P14,componentProperties={PIN1=14}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P15,portName=P15,componentProperties={PIN1=15}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P10_2,portName=P10_2,componentProperties={PIN1=10}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P11,portName=P11,componentProperties={PIN1=11}",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P10,portName=P10,componentProperties={PIN1=10}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P20,portName=P20,componentProperties={PIN1=20}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P7,portName=P7,componentProperties={PIN1=7}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P8,portName=P8,componentProperties={PIN1=8}"
             };
 
         Project project =
@@ -205,7 +205,7 @@ public class MicrobitTwo2ThreeTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,STRENGTH]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=ACCELEROMETER,isActor=true,userDefinedName=_A,portName=_A,componentProperties={}]"
+                "ConfigurationComponent[componentType=ACCELEROMETER,category=CONFIGURATION_SENSOR,userDefinedName=_A,portName=_A,componentProperties={}]"
             };
 
         Project project =
@@ -231,7 +231,7 @@ public class MicrobitTwo2ThreeTransformerTest {
                 + "PlayNoteAction[duration:125,frequency:261.626,port:BZ]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=BUZZER,isActor=true,userDefinedName=BZ,portName=BZ,componentProperties={PIN1=- EMPTY_PORT -}]"
+                "ConfigurationComponent[componentType=BUZZER,category=CONFIGURATION_ACTOR,userDefinedName=BZ,portName=BZ,componentProperties={PIN1=- EMPTY_PORT -}]"
             };
 
         Project project =
@@ -313,31 +313,31 @@ public class MicrobitTwo2ThreeTransformerTest {
                 + "DebugAction[value:SensorExpr[PinGetValueSensor[P20,PULSELOW,- EMPTY_SLOT -]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P20,portName=P20,componentProperties={PIN1=20}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P14,portName=P14,componentProperties={PIN1=14}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P15,portName=P15,componentProperties={PIN1=15}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P11,portName=P11,componentProperties={PIN1=11}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P16,portName=P16,componentProperties={PIN1=16}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P10_2,portName=P10_2,componentProperties={PIN1=10}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P12,portName=P12,componentProperties={PIN1=12}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P13,portName=P13,componentProperties={PIN1=13}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P8,portName=P8,componentProperties={PIN1=8}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P7,portName=P7,componentProperties={PIN1=7}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P19,portName=P19,componentProperties={PIN1=19}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P9,portName=P9,componentProperties={PIN1=9}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P4_2,portName=P4_2,componentProperties={PIN1=4}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P3_2,portName=P3_2,componentProperties={PIN1=3}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P6,portName=P6,componentProperties={PIN1=6}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P5,portName=P5,componentProperties={PIN1=5}",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=P3,portName=P3,componentProperties={PIN1=3}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P0_2,portName=P0_2,componentProperties={PIN1=0}",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=P2,portName=P2,componentProperties={PIN1=2}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P2_2,portName=P2_2,componentProperties={PIN1=2}",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=P4,portName=P4,componentProperties={PIN1=4}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P1_2,portName=P1_2,componentProperties={PIN1=1}",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=P1,portName=P1,componentProperties={PIN1=1}",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=P0,portName=P0,componentProperties={PIN1=0}",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=P10,portName=P10,componentProperties={PIN1=10}"
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P20,portName=P20,componentProperties={PIN1=20}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P14,portName=P14,componentProperties={PIN1=14}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P15,portName=P15,componentProperties={PIN1=15}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P11,portName=P11,componentProperties={PIN1=11}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P16,portName=P16,componentProperties={PIN1=16}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P10_2,portName=P10_2,componentProperties={PIN1=10}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P12,portName=P12,componentProperties={PIN1=12}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P13,portName=P13,componentProperties={PIN1=13}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P8,portName=P8,componentProperties={PIN1=8}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P7,portName=P7,componentProperties={PIN1=7}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P19,portName=P19,componentProperties={PIN1=19}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P9,portName=P9,componentProperties={PIN1=9}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P4_2,portName=P4_2,componentProperties={PIN1=4}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P3_2,portName=P3_2,componentProperties={PIN1=3}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P6,portName=P6,componentProperties={PIN1=6}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P5,portName=P5,componentProperties={PIN1=5}",
+                "ConfigurationComponent[componentType=ANALOG_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P3,portName=P3,componentProperties={PIN1=3}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P0_2,portName=P0_2,componentProperties={PIN1=0}",
+                "ConfigurationComponent[componentType=ANALOG_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P2,portName=P2,componentProperties={PIN1=2}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P2_2,portName=P2_2,componentProperties={PIN1=2}",
+                "ConfigurationComponent[componentType=ANALOG_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P4,portName=P4,componentProperties={PIN1=4}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P1_2,portName=P1_2,componentProperties={PIN1=1}",
+                "ConfigurationComponent[componentType=ANALOG_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P1,portName=P1,componentProperties={PIN1=1}",
+                "ConfigurationComponent[componentType=ANALOG_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P0,portName=P0,componentProperties={PIN1=0}",
+                "ConfigurationComponent[componentType=ANALOG_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P10,portName=P10,componentProperties={PIN1=10}"
             };
 
         Project project =

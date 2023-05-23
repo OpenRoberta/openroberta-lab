@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 public final class SenseboxConfigurationComponent extends ConfigurationComponent {
     private SenseboxConfigurationComponent(
         String componentType,
-        boolean isActor,
+        String category,
         String portName,
         String userDefinedName,
         Map<String, String> componentProperties,
@@ -23,7 +23,7 @@ public final class SenseboxConfigurationComponent extends ConfigurationComponent
 
         int x,
         int y) {
-        super(componentType, isActor, portName, userDefinedName, componentProperties, properties, x, y);
+        super(componentType, category, portName, userDefinedName, componentProperties, properties, x, y);
     }
 
     @Override

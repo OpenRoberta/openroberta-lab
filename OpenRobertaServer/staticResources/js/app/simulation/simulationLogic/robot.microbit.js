@@ -68,16 +68,15 @@ define(["require", "exports", "./robot.calliope", "./robot.sensors", "./robot.ac
                 },
             ];
             var _loop_1 = function (component) {
-                var type = configuration['ACTUATORS'][component]['TYPE'];
+                var type = configuration['SENSORS'][component]['TYPE'];
                 var internal = component.substring(0, 1) === '_';
                 var myComponentName = internal ? type : component;
-                switch (type // sensors
-                ) {
+                switch (type) {
                     case 'COMPASS':
                         this_1[myComponentName] = new robot_sensors_1.CompassSensor();
                         break;
                     case 'KEY':
-                        var port = configuration['ACTUATORS'][component]['PIN1'];
+                        var port = configuration['SENSORS'][component]['PIN1'];
                         var color = void 0;
                         if (port === 'A') {
                             color = ['#f29400ff'];
@@ -99,27 +98,35 @@ define(["require", "exports", "./robot.calliope", "./robot.sensors", "./robot.ac
                         this_1[myComponentName] = new robot_sensors_1.TemperatureSensor();
                         break;
                     case 'DIGITAL_PIN': {
-                        var myPin = mySensorPins.find(function (pin) { return pin.port === configuration['ACTUATORS'][component]['PIN1']; });
+                        var myPin = mySensorPins.find(function (pin) { return pin.port === configuration['SENSORS'][component]['PIN1']; });
                         myPin.name = myComponentName;
                         myPin.type = 'DIGITAL_PIN';
                         myPin.color = '#ff0000';
                         break;
                     }
                     case 'ANALOG_PIN': {
-                        var myPin = mySensorPins.find(function (pin) { return pin.port === configuration['ACTUATORS'][component]['PIN1']; });
+                        var myPin = mySensorPins.find(function (pin) { return pin.port === configuration['SENSORS'][component]['PIN1']; });
                         myPin.name = myComponentName;
                         myPin.type = 'ANALOG_PIN';
                         myPin.color = '#ff0000';
                         break;
                     }
                 }
-                switch (type // actuators
-                ) {
+            };
+            var this_1 = this;
+            for (var component in configuration['SENSORS']) {
+                _loop_1(component);
+            }
+            var _loop_2 = function (component) {
+                var type = configuration['ACTUATORS'][component]['TYPE'];
+                var internal = component.substring(0, 1) === '_';
+                var myComponentName = internal ? type : component;
+                switch (type) {
                     case 'BUZZER':
-                        this_1[myComponentName] = new robot_actuators_1.WebAudio();
+                        this_2[myComponentName] = new robot_actuators_1.WebAudio();
                         break;
                     case 'RGBLED':
-                        this_1[myComponentName] = new robot_actuators_1.RGBLed({ x: 463, y: 643 });
+                        this_2[myComponentName] = new robot_actuators_1.RGBLed({ x: 463, y: 643 });
                         break;
                     case 'ANALOG_INPUT': {
                         var myPinIndex = mySensorPins.findIndex(function (pin) { return pin.port === configuration['ACTUATORS'][component]['PIN1']; });
@@ -139,9 +146,9 @@ define(["require", "exports", "./robot.calliope", "./robot.sensors", "./robot.ac
                     }
                 }
             };
-            var this_1 = this;
+            var this_2 = this;
             for (var component in configuration['ACTUATORS']) {
-                _loop_1(component);
+                _loop_2(component);
             }
             if (myButtons.length > 0) {
                 this.buttons = new robot_sensors_1.TouchKeys(myButtons, this.id);

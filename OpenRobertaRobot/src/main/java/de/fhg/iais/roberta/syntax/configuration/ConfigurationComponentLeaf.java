@@ -8,7 +8,7 @@ public final class ConfigurationComponentLeaf extends ConfigurationComponent {
 
     public ConfigurationComponentLeaf(
         String componentType,
-        boolean isActor,
+        String category,
         String internalPortName,
         String userDefinedName,
         Map<String, String> componentProperties,
@@ -16,6 +16,6 @@ public final class ConfigurationComponentLeaf extends ConfigurationComponent {
 
         int x,
         int y) {
-        super(componentType, isActor, internalPortName, userDefinedName, componentProperties, properties, x, y);
+        super(componentType, category, internalPortName, userDefinedName, componentProperties, properties, x, y);
     }
 }

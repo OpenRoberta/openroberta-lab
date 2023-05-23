@@ -40,7 +40,7 @@ export default class RobotEv3 extends RobotBaseMobile {
         this.led = new StatusLed();
         let sensors: object = configuration['SENSORS'];
         for (const c in sensors) {
-            switch (sensors[c]) {
+            switch (sensors[c]['TYPE']) {
                 case 'TOUCH':
                     // only one is drawable as bumper
                     this[c] = new TouchSensor(c, 25, 0, this.chassis.geom.color);
@@ -58,7 +58,7 @@ export default class RobotEv3 extends RobotBaseMobile {
                         }
                     });
                     const ord = myColorSensors.length + 1;
-                    const id = Object.keys(sensors).filter((type) => sensors[type] == 'COLOR').length;
+                    const id = Object.keys(sensors).filter((port) => sensors[port]['TYPE'] == 'COLOR').length;
                     let y = ord * 10 - 5 * (id + 1);
                     this[c] = new ColorSensor(c, 15, y, 0, 5);
                     break;
@@ -72,7 +72,7 @@ export default class RobotEv3 extends RobotBaseMobile {
                         }
                     });
                     const ord = mySensors.length + 1;
-                    const num = Object.keys(sensors).filter((type) => sensors[type] == 'ULTRASONIC' || sensors[type] == 'INFRARED').length;
+                    const num = Object.keys(sensors).filter((port) => sensors[port]['TYPE'] == 'ULTRASONIC' || sensors[port]['TYPE'] == 'INFRARED').length;
                     let position: Pose = new Pose(this.chassis.geom.x + this.chassis.geom.w, 0, 0);
                     if (num == 3) {
                         if (ord == 1) {
@@ -96,7 +96,7 @@ export default class RobotEv3 extends RobotBaseMobile {
                                 break;
                         }
                     }
-                    if (sensors[c] == 'ULTRASONIC') {
+                    if (sensors[c]['TYPE'] == 'ULTRASONIC') {
                         this[c] = new UltrasonicSensor(c, position.x, position.y, position.theta, 255);
                     } else {
                         this[c] = new InfraredSensor(c, position.x, position.y, position.theta, 70);

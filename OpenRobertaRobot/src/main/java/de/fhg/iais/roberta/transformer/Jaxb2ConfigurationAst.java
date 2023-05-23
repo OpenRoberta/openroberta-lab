@@ -95,7 +95,7 @@ public final class Jaxb2ConfigurationAst {
             ConfigurationComponent configComp =
                 new ConfigurationComponentLeaf(
                     factory.getConfigurationComponentTypeByBlocklyName(blocklyName),
-                    isActor,
+                    factory.getConfigurationComponentCategoryByBlocklyName(blocklyName),
                     portName,
                     userDefinedName,
                     properties,
@@ -129,6 +129,7 @@ public final class Jaxb2ConfigurationAst {
 
     private static ConfigurationComponent block2NewConfigComp(Block block, BlocklyDropdownFactory factory, String x, String y) {
         String componentType = factory.getConfigurationComponentTypeByBlocklyName(block.getType());
+        String category = factory.getConfigurationComponentCategoryByBlocklyName(block.getType());
         String userDefinedName = block.getField().get(0).getValue();
         Map<String, String> map = new LinkedHashMap<>();
         for ( int i = 1; i < block.getField().size(); i++ ) {
@@ -139,7 +140,7 @@ public final class Jaxb2ConfigurationAst {
         if ( statements.size() == 0 ) {
             return new ConfigurationComponentLeaf(
                 componentType,
-                true,
+                category,
                 userDefinedName,
                 userDefinedName,
                 map,
@@ -158,7 +159,7 @@ public final class Jaxb2ConfigurationAst {
 
         return new ConfigurationComponentNode(
             componentType,
-            true,
+            category,
             userDefinedName,
             userDefinedName,
             map,
@@ -171,6 +172,7 @@ public final class Jaxb2ConfigurationAst {
     private static ConfigurationComponent instance2NewConfigComp(Instance instance, BlocklyDropdownFactory factory) {
         Block firstBlock = instance.getBlock().get(0);
         String componentType = factory.getConfigurationComponentTypeByBlocklyName(firstBlock.getType());
+        String category = factory.getConfigurationComponentCategoryByBlocklyName(firstBlock.getType());
         String userDefinedName = firstBlock.getField().get(0).getValue();
         Map<String, String> map = new LinkedHashMap<>();
         for ( int i = 1; i < firstBlock.getField().size(); i++ ) {
@@ -191,7 +193,7 @@ public final class Jaxb2ConfigurationAst {
                         .forName(className)
                         .getDeclaredConstructor(
                             String.class,
-                            Boolean.TYPE,
+                            String.class,
                             String.class,
                             String.class,
                             Map.class,
@@ -202,7 +204,7 @@ public final class Jaxb2ConfigurationAst {
                 return constructor
                     .newInstance(
                         componentType,
-                        true,
+                        category,
                         null,
                         userDefinedName,
                         map,
@@ -215,7 +217,7 @@ public final class Jaxb2ConfigurationAst {
         } else {
             return new ConfigurationComponentLeaf(
                 componentType,
-                true,
+                category,
                 userDefinedName,
                 userDefinedName,
                 map,

@@ -19,10 +19,10 @@ import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
@@ -37,8 +37,8 @@ public class ArduinoUsedHardwareCollectorVisitorTest {
     }
 
     public static ConfigurationAst makeValidConfig() {
-        ConfigurationComponent pinS = new ConfigurationComponent("PIN", false, "S", "S", Collections.emptyMap());
-        ConfigurationComponent pinS2 = new ConfigurationComponent("PIN", false, "S2", "S2", Collections.emptyMap());
+        ConfigurationComponent pinS = new ConfigurationComponent("PIN", "CONFIGURATION_SENSOR", "S", "S", Collections.emptyMap());
+        ConfigurationComponent pinS2 = new ConfigurationComponent("PIN", "CONFIGURATION_SENSOR", "S2", "S2", Collections.emptyMap());
 
         ArrayList<ConfigurationComponent> components = Lists.newArrayList(pinS, pinS2);
 

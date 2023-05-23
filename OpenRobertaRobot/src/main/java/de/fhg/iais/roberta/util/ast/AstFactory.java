@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -68,7 +69,7 @@ public class AstFactory {
      * a map build from the data found in the @NepoConfiguration annotation of configuration AST classes. It maps the blockly name of the configuration block
      * to an internal name that is used to generate the AST object (always of type {@link ConfigurationComponent}, which represent the confuguration block.
      */
-    private static final Map<String, String> configurationComponentTypes = new HashMap<>();
+    private static final Map<String, Pair<String, String>> configurationComponentTypes = new HashMap<>();
 
     private static boolean alreadyLoaded = false;
 
@@ -124,7 +125,7 @@ public class AstFactory {
                 return;
             } else if ( general instanceof NepoConfiguration ) {
                 NepoConfiguration specific = (NepoConfiguration) general;
-                String blockDescription = specific.name();
+                Pair<String, String> blockDescription = Pair.of(specific.name(), specific.category());
                 for ( String blocklyName : specific.blocklyNames() ) {
                     configurationComponentTypes.put(blocklyName, blockDescription);
                 }
@@ -183,9 +184,16 @@ public class AstFactory {
 
     public static String getConfigurationComponentTypeByBlocklyName(String blocklyName) {
         Assert.nonEmptyString(blocklyName, "Invalid blockly name for a configuration block");
-        String blockType = configurationComponentTypes.get(blocklyName);
+        String blockType = configurationComponentTypes.get(blocklyName).getFirst();
         Assert.notNull(blockType, "No component type for configuration blockly name %s found", blocklyName);
         return blockType;
+    }
+
+    public static String getConfigurationComponentCategoryByBlocklyName(String blocklyName) {
+        Assert.nonEmptyString(blocklyName, "Invalid blockly name for a configuration block");
+        String category = configurationComponentTypes.get(blocklyName).getSecond();
+        Assert.notNull(category, "No component type for configuration blockly name %s found", blocklyName);
+        return category;
     }
 
     public static List<Class<?>> getAstClasses() {

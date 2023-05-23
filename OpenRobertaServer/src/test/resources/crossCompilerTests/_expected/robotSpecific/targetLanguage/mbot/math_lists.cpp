@@ -80,8 +80,6 @@ void ____math() {
 }
 
 void ____lists() {
-    ___numList = {};
-    ___numList = {0, 0, 0};
     ___numList = _createListRepeat(___numVar, (double) ___numVar);
     drawStrLEDMatrix(&__meLEDMatrix_1, String(___numVar), 100);
     drawStrLEDMatrix(&__meLEDMatrix_1, String(___numList.empty()), 100);

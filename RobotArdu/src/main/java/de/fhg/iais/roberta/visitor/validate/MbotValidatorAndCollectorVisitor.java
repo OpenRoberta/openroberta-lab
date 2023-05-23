@@ -253,6 +253,9 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
 
     @Override
     protected void checkSensorPort(ExternalSensor sensor) {
+        if ( sensor.getUserDefinedPort().equals("6") ) {
+            return;
+        }
         ConfigurationComponent usedSensor = this.robotConfiguration.optConfigurationComponent("ORT_" + sensor.getUserDefinedPort());
         if ( usedSensor == null ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");

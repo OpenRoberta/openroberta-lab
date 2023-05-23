@@ -130,7 +130,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[CompassSensor[_C,ANGLE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=COMPASS,isActor=true,userDefinedName=_C,portName=_C,componentProperties={}]"
+                "ConfigurationComponent[componentType=COMPASS,category=CONFIGURATION_SENSOR,userDefinedName=_C,portName=_C,componentProperties={}]"
             };
 
         Project project =
@@ -167,8 +167,8 @@ public class CalliopeThree2ThreeOneTransformerTest {
                 + "LightAction[L_CalliBot_beide,OFF,DEFAULT,EmptyExpr[defVal=COLOR]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=_R,portName=_R,componentProperties={PIN1=0}]",
-                "ConfigurationComponent[componentType=CALLIBOT, isActor=true, userDefinedName=CalliBot, portName=CalliBot,"
+                "ConfigurationComponent[componentType=RGBLED,category=CONFIGURATION_ACTOR,userDefinedName=_R,portName=_R,componentProperties={PIN1=0}]",
+                "ConfigurationComponent[componentType=CALLIBOT, category=CONFIGURATION_ACTOR, userDefinedName=CalliBot, portName=CalliBot,"
                     + "componentProperties={MOTOR_L=CalliBot_links, MOTOR_R=CalliBot_rechts, RGBLED_LF=CalliBot_links_vorne,"
                     + "RGBLED_RF=CalliBot_rechts_vorne, RGBLED_LR=CalliBot_links_hinten, RGBLED_RR=CalliBot_rechts_hinten,"
                     + "RGBLED_A=CalliBot_alle, LED_L=L_CalliBot_links, LED_R=L_CalliBot_rechts, LED_B=L_CalliBot_beide,"
@@ -194,7 +194,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[LightSensor[_L,LIGHT_VALUE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=LIGHT,isActor=true,userDefinedName=_L,portName=_L,componentProperties={}]"
+                "ConfigurationComponent[componentType=LIGHT,category=CONFIGURATION_SENSOR,userDefinedName=_L,portName=_L,componentProperties={}]"
             };
 
         Project project =
@@ -215,7 +215,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[SoundSensor[_S,SOUND,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=SOUND,isActor=true,userDefinedName=_S,portName=_S,componentProperties={}]"
+                "ConfigurationComponent[componentType=SOUND,category=CONFIGURATION_SENSOR,userDefinedName=_S,portName=_S,componentProperties={}]"
             };
 
         Project project =
@@ -236,7 +236,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[TemperatureSensor[_T,VALUE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=TEMPERATURE,isActor=true,userDefinedName=_T,portName=_T,componentProperties={}]"
+                "ConfigurationComponent[componentType=TEMPERATURE,category=CONFIGURATION_SENSOR,userDefinedName=_T,portName=_T,componentProperties={}]"
             };
 
         Project project =
@@ -260,8 +260,8 @@ public class CalliopeThree2ThreeOneTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[UltrasonicSensor[CalliBot_vorne,DISTANCE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=ULTRASONIC,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=1}]",
-                "ConfigurationComponent[componentType=CALLIBOT, isActor=true, userDefinedName=CalliBot, portName=CalliBot,"
+                "ConfigurationComponent[componentType=ULTRASONIC,category=CONFIGURATION_SENSOR,userDefinedName=A1,portName=A1,componentProperties={PIN1=1}]",
+                "ConfigurationComponent[componentType=CALLIBOT, category=CONFIGURATION_ACTOR, userDefinedName=CalliBot, portName=CalliBot,"
                     + "componentProperties={MOTOR_L=CalliBot_links, MOTOR_R=CalliBot_rechts, RGBLED_LF=CalliBot_links_vorne,"
                     + "RGBLED_RF=CalliBot_rechts_vorne, RGBLED_LR=CalliBot_links_hinten, RGBLED_RR=CalliBot_rechts_hinten,"
                     + "RGBLED_A=CalliBot_alle, LED_L=L_CalliBot_links, LED_R=L_CalliBot_rechts, LED_B=L_CalliBot_beide,"
@@ -293,7 +293,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,STRENGTH]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=ACCELEROMETER,isActor=true,userDefinedName=_A,portName=_A,componentProperties={}]"
+                "ConfigurationComponent[componentType=ACCELEROMETER,category=CONFIGURATION_SENSOR,userDefinedName=_A,portName=_A,componentProperties={}]"
             };
 
         Project project =
@@ -317,7 +317,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[GyroSensor[_G,ANGLE,Y]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=GYRO,isActor=true,userDefinedName=_G,portName=_G,componentProperties={}]"
+                "ConfigurationComponent[componentType=GYRO,category=CONFIGURATION_SENSOR,userDefinedName=_G,portName=_G,componentProperties={}]"
             };
 
         Project project =
@@ -342,7 +342,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
                 + "PlayNoteAction[duration:125,frequency:261.626,port:-EMPTY_PORT-]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=BUZZER,isActor=true,userDefinedName=_B,portName=_B,componentProperties={}]"
+                "ConfigurationComponent[componentType=BUZZER,category=CONFIGURATION_ACTOR,userDefinedName=_B,portName=_B,componentProperties={}]"
             };
 
         Project project =

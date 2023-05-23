@@ -38,7 +38,7 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[CompassSensor[_C,ANGLE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=COMPASS,isActor=true,userDefinedName=_C,portName=_C,componentProperties={}]"
+                "ConfigurationComponent[componentType=COMPASS,category=CONFIGURATION_SENSOR,userDefinedName=_C,portName=_C,componentProperties={}]"
             };
 
         Project project =
@@ -61,8 +61,8 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[KeysSensor[B,PRESSED,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=KEY,isActor=true,userDefinedName=A,portName=A,componentProperties={PIN1=A}]",
-                "ConfigurationComponent[componentType=KEY,isActor=true,userDefinedName=B,portName=B,componentProperties={PIN1=B}]"
+                "ConfigurationComponent[componentType=KEY,category=CONFIGURATION_SENSOR,userDefinedName=A,portName=A,componentProperties={PIN1=A}]",
+                "ConfigurationComponent[componentType=KEY,category=CONFIGURATION_SENSOR,userDefinedName=B,portName=B,componentProperties={PIN1=B}]"
             };
 
         Project project =
@@ -99,8 +99,8 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "LightAction[L_CalliBot_beide,OFF,DEFAULT,EmptyExpr[defVal=COLOR]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=_R,portName=_R,componentProperties={}]",
-                "ConfigurationComponent[componentType=CALLIBOT, isActor=true, userDefinedName=CalliBot, portName=CalliBot,"
+                "ConfigurationComponent[componentType=RGBLED,category=CONFIGURATION_ACTOR,userDefinedName=_R,portName=_R,componentProperties={}]",
+                "ConfigurationComponent[componentType=CALLIBOT, category=CONFIGURATION_ACTOR, userDefinedName=CalliBot, portName=CalliBot,"
                     + "componentProperties={LED_B=L_CalliBot_beide, RGBLED_RF=CalliBot_rechts_vorne, INFRARED_L=I_CalliBot_links,"
                     + "RGBLED_A=CalliBot_alle, RGBLED_LF=CalliBot_links_vorne, RGBLED_LR=CalliBot_links_hinten, MOTOR_L=CalliBot_links,"
                     + "LED_R=L_CalliBot_rechts, RGBLED_RR=CalliBot_rechts_hinten, ULTRASONIC=CalliBot_vorne, LED_L=L_CalliBot_links,"
@@ -126,7 +126,7 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[LightSensor[_L,LIGHT_VALUE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=LIGHT,isActor=true,userDefinedName=_L,portName=_L,componentProperties={}]"
+                "ConfigurationComponent[componentType=LIGHT,category=CONFIGURATION_SENSOR,userDefinedName=_L,portName=_L,componentProperties={}]"
             };
 
         Project project =
@@ -147,7 +147,7 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[SoundSensor[_S,SOUND,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=SOUND,isActor=true,userDefinedName=_S,portName=_S,componentProperties={}]"
+                "ConfigurationComponent[componentType=SOUND,category=CONFIGURATION_SENSOR,userDefinedName=_S,portName=_S,componentProperties={}]"
             };
 
         Project project =
@@ -168,7 +168,7 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[TemperatureSensor[_T,VALUE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=TEMPERATURE,isActor=true,userDefinedName=_T,portName=_T,componentProperties={}]"
+                "ConfigurationComponent[componentType=TEMPERATURE,category=CONFIGURATION_SENSOR,userDefinedName=_T,portName=_T,componentProperties={}]"
             };
 
         Project project =
@@ -192,8 +192,8 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[UltrasonicSensor[CalliBot_vorne,DISTANCE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=ULTRASONIC,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=1}]",
-                "ConfigurationComponent[componentType=CALLIBOT, isActor=true, userDefinedName=CalliBot, portName=CalliBot,"
+                "ConfigurationComponent[componentType=ULTRASONIC,category=CONFIGURATION_SENSOR,userDefinedName=A1,portName=A1,componentProperties={PIN1=1}]",
+                "ConfigurationComponent[componentType=CALLIBOT, category=CONFIGURATION_ACTOR, userDefinedName=CalliBot, portName=CalliBot,"
                     + "componentProperties={LED_B=L_CalliBot_beide, RGBLED_RF=CalliBot_rechts_vorne, INFRARED_L=I_CalliBot_links,"
                     + "RGBLED_A=CalliBot_alle, RGBLED_LF=CalliBot_links_vorne, RGBLED_LR=CalliBot_links_hinten, MOTOR_L=CalliBot_links,"
                     + "LED_R=L_CalliBot_rechts, RGBLED_RR=CalliBot_rechts_hinten, ULTRASONIC=CalliBot_vorne, LED_L=L_CalliBot_links,"
@@ -244,33 +244,33 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "MbedPinWriteValueAction[pinValue: DIGITAL, port: C19, value: NumConst[value:1]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P0,portName=P0,componentProperties={PIN1=0}]",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P2,portName=P2,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P2_2,portName=P2_2,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P1_2,portName=P1_2,componentProperties={PIN1=1}]",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P1,portName=P1,componentProperties={PIN1=1}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C06_2,portName=C06_2,componentProperties={PIN1=C06}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C07,portName=C07,componentProperties={PIN1=C07}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A0,portName=A0,componentProperties={PIN1=4}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C04_2,portName=C04_2,componentProperties={PIN1=C04}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A1_2,portName=A1_2,componentProperties={PIN1=5}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C05_2,portName=C05_2,componentProperties={PIN1=C05}]",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=C05,portName=C05,componentProperties={PIN1=C05}]",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=C06,portName=C06,componentProperties={PIN1=C06}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P3,portName=P3,componentProperties={PIN1=3}]",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=C04,portName=C04,componentProperties={PIN1=C04}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C08,portName=C08,componentProperties={PIN1=C08}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C09,portName=C09,componentProperties={PIN1=C09}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C10,portName=C10,componentProperties={PIN1=C10}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C18,portName=C18,componentProperties={PIN1=C18}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C17_2,portName=C17_2,componentProperties={PIN1=C17}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C16_2,portName=C16_2,componentProperties={PIN1=C16}]",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=C17,portName=C17,componentProperties={PIN1=C17}]",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=C16,portName=C16,componentProperties={PIN1=C16}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C12,portName=C12,componentProperties={PIN1=C12}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C11,portName=C11,componentProperties={PIN1=C11}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C19,portName=C19,componentProperties={PIN1=C19}]"
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P0,portName=P0,componentProperties={PIN1=0}]",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P2,portName=P2,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P2_2,portName=P2_2,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P1_2,portName=P1_2,componentProperties={PIN1=1}]",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P1,portName=P1,componentProperties={PIN1=1}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C06_2,portName=C06_2,componentProperties={PIN1=C06}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C07,portName=C07,componentProperties={PIN1=C07}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=A0,portName=A0,componentProperties={PIN1=4}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C04_2,portName=C04_2,componentProperties={PIN1=C04}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=A1_2,portName=A1_2,componentProperties={PIN1=5}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C05_2,portName=C05_2,componentProperties={PIN1=C05}]",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C05,portName=C05,componentProperties={PIN1=C05}]",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C06,portName=C06,componentProperties={PIN1=C06}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=P3,portName=P3,componentProperties={PIN1=3}]",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C04,portName=C04,componentProperties={PIN1=C04}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C08,portName=C08,componentProperties={PIN1=C08}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C09,portName=C09,componentProperties={PIN1=C09}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C10,portName=C10,componentProperties={PIN1=C10}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C18,portName=C18,componentProperties={PIN1=C18}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C17_2,portName=C17_2,componentProperties={PIN1=C17}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C16_2,portName=C16_2,componentProperties={PIN1=C16}]",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C17,portName=C17,componentProperties={PIN1=C17}]",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C16,portName=C16,componentProperties={PIN1=C16}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C12,portName=C12,componentProperties={PIN1=C12}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C11,portName=C11,componentProperties={PIN1=C11}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,category=CONFIGURATION_ACTOR,userDefinedName=C19,portName=C19,componentProperties={PIN1=C19}]"
             };
 
         Project project =
@@ -301,7 +301,7 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,STRENGTH]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=ACCELEROMETER,isActor=true,userDefinedName=_A,portName=_A,componentProperties={}]"
+                "ConfigurationComponent[componentType=ACCELEROMETER,category=CONFIGURATION_SENSOR,userDefinedName=_A,portName=_A,componentProperties={}]"
             };
 
         Project project =
@@ -325,7 +325,7 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[GyroSensor[_G,ANGLE,Y]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=GYRO,isActor=true,userDefinedName=_G,portName=_G,componentProperties={}]"
+                "ConfigurationComponent[componentType=GYRO,category=CONFIGURATION_SENSOR,userDefinedName=_G,portName=_G,componentProperties={}]"
             };
 
         Project project =
@@ -348,7 +348,7 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[HumiditySensor[A1,TEMPERATURE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=HUMIDITY,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]"
+                "ConfigurationComponent[componentType=HUMIDITY,category=CONFIGURATION_SENSOR,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]"
             };
 
         Project project =
@@ -371,7 +371,7 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "DebugAction[value:SensorExpr[GetSampleSensor[InfraredSensor[I_CalliBot_rechts,LINE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=CALLIBOT, isActor=true, userDefinedName=CalliBot, portName=CalliBot,"
+                "ConfigurationComponent[componentType=CALLIBOT, category=CONFIGURATION_ACTOR, userDefinedName=CalliBot, portName=CalliBot,"
                     + "componentProperties={LED_B=L_CalliBot_beide, RGBLED_RF=CalliBot_rechts_vorne, INFRARED_L=I_CalliBot_links,"
                     + "RGBLED_A=CalliBot_alle, RGBLED_LF=CalliBot_links_vorne, RGBLED_LR=CalliBot_links_hinten, MOTOR_L=CalliBot_links,"
                     + "LED_R=L_CalliBot_rechts, RGBLED_RR=CalliBot_rechts_hinten, ULTRASONIC=CalliBot_vorne, LED_L=L_CalliBot_links,"
@@ -402,14 +402,14 @@ public class CalliopeTwo2ThreeTransformerTest {
                 "ServoSetAction[port:C17,value:NumConst[value:90]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=C06,portName=C06,componentProperties={PIN1=C06}]",
-                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=C17,portName=C17,componentProperties={PIN1=C17}]",
-                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=C05,portName=C05,componentProperties={PIN1=C05}]",
-                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=C16,portName=C16,componentProperties={PIN1=C16}]",
-                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=C04,portName=C04,componentProperties={PIN1=C04}]",
-                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=P2,portName=P2,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=P1,portName=P1,componentProperties={PIN1=1}]",
-                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]"
+                "ConfigurationComponent[componentType=SERVOMOTOR,category=CONFIGURATION_ACTOR,userDefinedName=C06,portName=C06,componentProperties={PIN1=C06}]",
+                "ConfigurationComponent[componentType=SERVOMOTOR,category=CONFIGURATION_ACTOR,userDefinedName=C17,portName=C17,componentProperties={PIN1=C17}]",
+                "ConfigurationComponent[componentType=SERVOMOTOR,category=CONFIGURATION_ACTOR,userDefinedName=C05,portName=C05,componentProperties={PIN1=C05}]",
+                "ConfigurationComponent[componentType=SERVOMOTOR,category=CONFIGURATION_ACTOR,userDefinedName=C16,portName=C16,componentProperties={PIN1=C16}]",
+                "ConfigurationComponent[componentType=SERVOMOTOR,category=CONFIGURATION_ACTOR,userDefinedName=C04,portName=C04,componentProperties={PIN1=C04}]",
+                "ConfigurationComponent[componentType=SERVOMOTOR,category=CONFIGURATION_ACTOR,userDefinedName=P2,portName=P2,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=SERVOMOTOR,category=CONFIGURATION_ACTOR,userDefinedName=P1,portName=P1,componentProperties={PIN1=1}]",
+                "ConfigurationComponent[componentType=SERVOMOTOR,category=CONFIGURATION_ACTOR,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]"
             };
 
         Project project =
@@ -434,7 +434,7 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "PlayNoteAction[duration:125,frequency:261.626,port:_B]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=BUZZER,isActor=true,userDefinedName=_B,portName=_B,componentProperties={}]"
+                "ConfigurationComponent[componentType=BUZZER,category=CONFIGURATION_ACTOR,userDefinedName=_B,portName=_B,componentProperties={}]"
             };
 
         Project project =
@@ -518,33 +518,33 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "DebugAction[value:SensorExpr[PinGetValueSensor[C19,PULSELOW,- EMPTY_SLOT -]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C16_2,portName=C16_2,componentProperties={PIN1=C16}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C17_2,portName=C17_2,componentProperties={PIN1=C17}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C18,portName=C18,componentProperties={PIN1=C18}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C19,portName=C19,componentProperties={PIN1=C19}]",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=P1,portName=P1,componentProperties={PIN1=1}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P1_2,portName=P1_2,componentProperties={PIN1=1}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P2_2,portName=P2_2,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=P2,portName=P2,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P0,portName=P0,componentProperties={PIN1=0}]",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=C04,portName=C04,componentProperties={PIN1=C04}]",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=C05,portName=C05,componentProperties={PIN1=C05}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P3,portName=P3,componentProperties={PIN1=3}]",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=C06,portName=C06,componentProperties={PIN1=C06}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C04_2,portName=C04_2,componentProperties={PIN1=C04}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C05_2,portName=C05_2,componentProperties={PIN1=C05}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C06_2,portName=C06_2,componentProperties={PIN1=C06}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C07,portName=C07,componentProperties={PIN1=C07}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C08,portName=C08,componentProperties={PIN1=C08}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C09,portName=C09,componentProperties={PIN1=C09}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C10,portName=C10,componentProperties={PIN1=C10}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C11,portName=C11,componentProperties={PIN1=C11}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C12,portName=C12,componentProperties={PIN1=C12}]",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=C16,portName=C16,componentProperties={PIN1=C16}]",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=C17,portName=C17,componentProperties={PIN1=C17}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=A1_2,portName=A1_2,componentProperties={PIN1=5}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=A0,portName=A0,componentProperties={PIN1=4}]"
+                "ConfigurationComponent[componentType=ANALOG_PIN,category=CONFIGURATION_SENSOR,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C16_2,portName=C16_2,componentProperties={PIN1=C16}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C17_2,portName=C17_2,componentProperties={PIN1=C17}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C18,portName=C18,componentProperties={PIN1=C18}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C19,portName=C19,componentProperties={PIN1=C19}]",
+                "ConfigurationComponent[componentType=ANALOG_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P1,portName=P1,componentProperties={PIN1=1}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P1_2,portName=P1_2,componentProperties={PIN1=1}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P2_2,portName=P2_2,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=ANALOG_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P2,portName=P2,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P0,portName=P0,componentProperties={PIN1=0}]",
+                "ConfigurationComponent[componentType=ANALOG_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C04,portName=C04,componentProperties={PIN1=C04}]",
+                "ConfigurationComponent[componentType=ANALOG_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C05,portName=C05,componentProperties={PIN1=C05}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=P3,portName=P3,componentProperties={PIN1=3}]",
+                "ConfigurationComponent[componentType=ANALOG_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C06,portName=C06,componentProperties={PIN1=C06}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C04_2,portName=C04_2,componentProperties={PIN1=C04}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C05_2,portName=C05_2,componentProperties={PIN1=C05}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C06_2,portName=C06_2,componentProperties={PIN1=C06}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C07,portName=C07,componentProperties={PIN1=C07}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C08,portName=C08,componentProperties={PIN1=C08}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C09,portName=C09,componentProperties={PIN1=C09}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C10,portName=C10,componentProperties={PIN1=C10}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C11,portName=C11,componentProperties={PIN1=C11}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C12,portName=C12,componentProperties={PIN1=C12}]",
+                "ConfigurationComponent[componentType=ANALOG_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C16,portName=C16,componentProperties={PIN1=C16}]",
+                "ConfigurationComponent[componentType=ANALOG_PIN,category=CONFIGURATION_SENSOR,userDefinedName=C17,portName=C17,componentProperties={PIN1=C17}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=A1_2,portName=A1_2,componentProperties={PIN1=5}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,category=CONFIGURATION_SENSOR,userDefinedName=A0,portName=A0,componentProperties={PIN1=4}]"
             };
 
         Project project =
@@ -563,7 +563,7 @@ public class CalliopeTwo2ThreeTransformerTest {
         String expectedProgramAst = "BlockAST[project=[[Location[x=512,y=50],MainTask[]," + "LedBarSetAction[x:NumConst[value:0],brightness:NumConst[value:5]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=LEDBAR,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]"
+                "ConfigurationComponent[componentType=LEDBAR,category=CONFIGURATION_ACTOR,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]"
             };
 
         Project project =
@@ -584,7 +584,7 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "FourDigitDisplayClearAction[]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=FOURDIGITDISPLAY,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]"
+                "ConfigurationComponent[componentType=FOURDIGITDISPLAY,category=CONFIGURATION_ACTOR,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]"
             };
 
         Project project =
@@ -608,7 +608,7 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "MotorStop[port=Port_A,mode=SLEEP]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=Port_A,portName=Port_A,componentProperties={PIN1=A}]"
+                "ConfigurationComponent[componentType=MOTOR,category=CONFIGURATION_ACTOR,userDefinedName=Port_A,portName=Port_A,componentProperties={PIN1=A}]"
             };
 
         Project project =
@@ -631,9 +631,9 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "BothMotorsStopAction[]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=Port_B,portName=Port_B,componentProperties={PIN1=B}]",
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=Port_A,portName=Port_A,componentProperties={PIN1=A}]",
-                "ConfigurationComponent[componentType=CALLIBOT, isActor=true, userDefinedName=CalliBot, portName=CalliBot,"
+                "ConfigurationComponent[componentType=MOTOR,category=CONFIGURATION_ACTOR,userDefinedName=Port_B,portName=Port_B,componentProperties={PIN1=B}]",
+                "ConfigurationComponent[componentType=MOTOR,category=CONFIGURATION_ACTOR,userDefinedName=Port_A,portName=Port_A,componentProperties={PIN1=A}]",
+                "ConfigurationComponent[componentType=CALLIBOT, category=CONFIGURATION_ACTOR, userDefinedName=CalliBot, portName=CalliBot,"
                     + "componentProperties={LED_B=L_CalliBot_beide, RGBLED_RF=CalliBot_rechts_vorne, INFRARED_L=I_CalliBot_links,"
                     + "RGBLED_A=CalliBot_alle, RGBLED_LF=CalliBot_links_vorne, RGBLED_LR=CalliBot_links_hinten, MOTOR_L=CalliBot_links,"
                     + "LED_R=L_CalliBot_rechts, RGBLED_RR=CalliBot_rechts_hinten, ULTRASONIC=CalliBot_vorne, LED_L=L_CalliBot_links,"
@@ -665,9 +665,9 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "MotorStop[port=CalliBot_rechts]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=Port_B,portName=Port_B,componentProperties={PIN1=B}]",
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=Port_A,portName=Port_A,componentProperties={PIN1=A}]",
-                "ConfigurationComponent[componentType=CALLIBOT, isActor=true, userDefinedName=CalliBot, portName=CalliBot,"
+                "ConfigurationComponent[componentType=MOTOR,category=CONFIGURATION_ACTOR,userDefinedName=Port_B,portName=Port_B,componentProperties={PIN1=B}]",
+                "ConfigurationComponent[componentType=MOTOR,category=CONFIGURATION_ACTOR,userDefinedName=Port_A,portName=Port_A,componentProperties={PIN1=A}]",
+                "ConfigurationComponent[componentType=CALLIBOT, category=CONFIGURATION_ACTOR, userDefinedName=CalliBot, portName=CalliBot,"
                     + "componentProperties={LED_B=L_CalliBot_beide, RGBLED_RF=CalliBot_rechts_vorne, INFRARED_L=I_CalliBot_links,"
                     + "RGBLED_A=CalliBot_alle, RGBLED_LF=CalliBot_links_vorne, RGBLED_LR=CalliBot_links_hinten, MOTOR_L=CalliBot_links,"
                     + "LED_R=L_CalliBot_rechts, RGBLED_RR=CalliBot_rechts_hinten, ULTRASONIC=CalliBot_vorne, LED_L=L_CalliBot_links,"
@@ -695,9 +695,9 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "BothMotorsStopAction[]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=Port_B,portName=Port_B,componentProperties={PIN1=B}]",
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=Port_A,portName=Port_A,componentProperties={PIN1=A}]",
-                "ConfigurationComponent[componentType=CALLIBOT, isActor=true, userDefinedName=CalliBot, portName=CalliBot,"
+                "ConfigurationComponent[componentType=MOTOR,category=CONFIGURATION_ACTOR,userDefinedName=Port_B,portName=Port_B,componentProperties={PIN1=B}]",
+                "ConfigurationComponent[componentType=MOTOR,category=CONFIGURATION_ACTOR,userDefinedName=Port_A,portName=Port_A,componentProperties={PIN1=A}]",
+                "ConfigurationComponent[componentType=CALLIBOT, category=CONFIGURATION_ACTOR, userDefinedName=CalliBot, portName=CalliBot,"
                     + "componentProperties={LED_B=L_CalliBot_beide, RGBLED_RF=CalliBot_rechts_vorne, INFRARED_L=I_CalliBot_links,"
                     + "RGBLED_A=CalliBot_alle, RGBLED_LF=CalliBot_links_vorne, RGBLED_LR=CalliBot_links_hinten, MOTOR_L=CalliBot_links,"
                     + "LED_R=L_CalliBot_rechts, RGBLED_RR=CalliBot_rechts_hinten, ULTRASONIC=CalliBot_vorne, LED_L=L_CalliBot_links,"

@@ -45,7 +45,7 @@ define(["require", "exports", "robot.base.mobile", "robot.sensors", "./robot.act
             this.led = new robot_actuators_1.StatusLed();
             var sensors = configuration['SENSORS'];
             var _loop_1 = function (c) {
-                switch (sensors[c]) {
+                switch (sensors[c]['TYPE']) {
                     case 'TOUCH':
                         // only one is drawable as bumper
                         this_1[c] = new robot_sensors_1.TouchSensor(c, 25, 0, this_1.chassis.geom.color);
@@ -63,7 +63,7 @@ define(["require", "exports", "robot.base.mobile", "robot.sensors", "./robot.act
                             }
                         });
                         var ord = myColorSensors_1.length + 1;
-                        var id = Object.keys(sensors).filter(function (type) { return sensors[type] == 'COLOR'; }).length;
+                        var id = Object.keys(sensors).filter(function (port) { return sensors[port]['TYPE'] == 'COLOR'; }).length;
                         var y = ord * 10 - 5 * (id + 1);
                         this_1[c] = new robot_sensors_1.ColorSensor(c, 15, y, 0, 5);
                         break;
@@ -77,7 +77,7 @@ define(["require", "exports", "robot.base.mobile", "robot.sensors", "./robot.act
                             }
                         });
                         var ord_1 = mySensors_1.length + 1;
-                        var num = Object.keys(sensors).filter(function (type) { return sensors[type] == 'ULTRASONIC' || sensors[type] == 'INFRARED'; }).length;
+                        var num = Object.keys(sensors).filter(function (port) { return sensors[port]['TYPE'] == 'ULTRASONIC' || sensors[port]['TYPE'] == 'INFRARED'; }).length;
                         var position = new robot_base_mobile_1.Pose(this_1.chassis.geom.x + this_1.chassis.geom.w, 0, 0);
                         if (num == 3) {
                             if (ord_1 == 1) {
@@ -103,7 +103,7 @@ define(["require", "exports", "robot.base.mobile", "robot.sensors", "./robot.act
                                     break;
                             }
                         }
-                        if (sensors[c] == 'ULTRASONIC') {
+                        if (sensors[c]['TYPE'] == 'ULTRASONIC') {
                             this_1[c] = new robot_sensors_1.UltrasonicSensor(c, position.x, position.y, position.theta, 255);
                         }
                         else {

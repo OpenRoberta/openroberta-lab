@@ -30,7 +30,7 @@ define(["require", "exports", "robot.ev3", "robot.actuators", "robot.sensors", "
             this.display = new robot_actuators_1.MbotDisplay(this.id, { x: 15, y: 50 });
             var sensors = configuration['SENSORS'];
             var _loop_1 = function (c) {
-                switch (sensors[c]) {
+                switch (sensors[c]['TYPE']) {
                     case 'ULTRASONIC': {
                         var myUltraSensors_1 = [];
                         var mbot_1 = this_1;
@@ -40,7 +40,7 @@ define(["require", "exports", "robot.ev3", "robot.actuators", "robot.sensors", "
                             }
                         });
                         var ord = myUltraSensors_1.length + 1;
-                        var num = Object.keys(sensors).filter(function (type) { return sensors[type] == 'ULTRASONIC'; }).length;
+                        var num = Object.keys(sensors).filter(function (sensor) { return sensors[sensor]['TYPE'] == 'ULTRASONIC'; }).length;
                         var position = new robot_base_mobile_1.Pose(this_1.chassis.geom.x + this_1.chassis.geom.w, 0, 0);
                         if (num == 3) {
                             if (ord == 1) {

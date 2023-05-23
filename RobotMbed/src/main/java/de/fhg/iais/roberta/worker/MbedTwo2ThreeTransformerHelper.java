@@ -408,6 +408,7 @@ public final class MbedTwo2ThreeTransformerHelper {
         int yPos = this.minY + (OFFSET_Y * (((this.createdComps.size() - this.nDefaultComps)) % MAX_VERTICAL_BLOCKS));
 
         String confType = this.dropdownFactory.getConfigurationComponentTypeByBlocklyName(confBlocklyName);
+        String category = this.dropdownFactory.getConfigurationComponentCategoryByBlocklyName(confBlocklyName);
         String name;
         Map<String, String> properties = new HashMap<>();
         if ( confType.equals("CALLIBOT") ) {
@@ -430,6 +431,6 @@ public final class MbedTwo2ThreeTransformerHelper {
             properties = Collections.singletonMap("PIN1", port);
         }
         BlocklyProperties blocklyProperties = new BlocklyProperties(confBlocklyName, name, false, false, false, true, true, true, false, false, null);
-        return new ConfigurationComponent(confType, true, name, name, properties, blocklyProperties, xPos, yPos);
+        return new ConfigurationComponent(confType, category, name, name, properties, blocklyProperties, xPos, yPos);
     }
 }

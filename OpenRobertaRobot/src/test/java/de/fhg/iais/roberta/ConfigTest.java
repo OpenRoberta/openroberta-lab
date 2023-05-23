@@ -14,9 +14,9 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class ConfigTest extends AstTest {
 
-    private static final ConfigurationComponent ledComp = new ConfigurationComponent("LED", true, "port1", "userPort1", Collections.emptyMap());
-    private static final ConfigurationComponent tempComp = new ConfigurationComponent("TEMPERATURE", false, "port2", "userPort2", Collections.emptyMap());
-    private static final ConfigurationComponent humiComp = new ConfigurationComponent("HUMIDITY", false, "port3", "userPort3", Collections.emptyMap());
+    private static final ConfigurationComponent ledComp = new ConfigurationComponent("LED", "CONFIGURATION_ACTOR", "port1", "userPort1", Collections.emptyMap());
+    private static final ConfigurationComponent tempComp = new ConfigurationComponent("TEMPERATURE", "CONFIGURATION_SENSOR", "port2", "userPort2", Collections.emptyMap());
+    private static final ConfigurationComponent humiComp = new ConfigurationComponent("HUMIDITY", "CONFIGURATION_SENSOR", "port3", "userPort3", Collections.emptyMap());
 
     @Test
     public void builder_ShouldCreateCorrectConfig() {

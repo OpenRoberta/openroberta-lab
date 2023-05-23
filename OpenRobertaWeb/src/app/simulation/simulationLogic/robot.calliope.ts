@@ -38,7 +38,6 @@ export default class RobotCalliope extends RobotBaseStationary {
     protected configure(configuration): void {
         // TODO touch pins and the gesture sensor to configuration
         // TODO display to configuration
-        // TODO separate sensors and actuators in the configuration
         $('#simRobotContent').append(this.topView);
         $.validator.addClassRules('range', { required: true, number: true });
         this.gestureSensor = new GestureSensor();
@@ -117,19 +116,18 @@ export default class RobotCalliope extends RobotBaseStationary {
                 typeValue: 0,
             },
         ];
-        for (const component in configuration['ACTUATORS']) {
-            let type = configuration['ACTUATORS'][component]['TYPE'];
+        console.log(configuration['SENSORS']);
+        for (const component in configuration['SENSORS']) {
+            let sensorType = configuration['SENSORS'][component]['TYPE'];
 
             let internal: boolean = component.substring(0, 1) === '_';
-            let myComponentName = internal ? type : component;
-            switch (
-                type // sensors
-            ) {
+            let myComponentName = internal ? sensorType : component;
+            switch (sensorType) {
                 case 'COMPASS':
                     this[myComponentName] = new CompassSensor();
                     break;
                 case 'KEY':
-                    let port = configuration['ACTUATORS'][component]['PIN1'];
+                    let port = configuration['SENSORS'][component]['PIN1'];
                     let color: string[];
                     if (port === 'A') {
                         color = ['#0000ffff'];
@@ -153,23 +151,27 @@ export default class RobotCalliope extends RobotBaseStationary {
                     this[myComponentName] = new TemperatureSensor();
                     break;
                 case 'DIGITAL_PIN': {
-                    let myPin: DrawableTouchKey = mySensorPins.find((pin) => pin.port === configuration['ACTUATORS'][component]['PIN1']);
+                    let myPin: DrawableTouchKey = mySensorPins.find((pin) => pin.port === configuration['SENSORS'][component]['PIN1']);
                     myPin.name = myComponentName;
                     myPin.type = 'DIGITAL_PIN';
                     myPin.color = '#ff0000';
                     break;
                 }
                 case 'ANALOG_PIN': {
-                    let myPin: DrawableTouchKey = mySensorPins.find((pin) => pin.port === configuration['ACTUATORS'][component]['PIN1']);
+                    let myPin: DrawableTouchKey = mySensorPins.find((pin) => pin.port === configuration['SENSORS'][component]['PIN1']);
                     myPin.name = myComponentName;
                     myPin.type = 'ANALOG_PIN';
                     myPin.color = '#ff0000';
                     break;
                 }
             }
-            switch (
-                type // actuators
-            ) {
+        }
+        for (const component in configuration['ACTUATORS']) {
+            let actuatorType = configuration['ACTUATORS'][component]['TYPE'];
+
+            let internal: boolean = component.substring(0, 1) === '_';
+            let myComponentName = internal ? actuatorType : component;
+            switch (actuatorType) {
                 case 'BUZZER':
                     this[myComponentName] = new WebAudio();
                     break;

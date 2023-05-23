@@ -67,7 +67,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitKeysSensor_withPort() {
-        configurationComponents.add(new ConfigurationComponent(SC.KEY, false, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.KEY, "CONFIGURATION_SENSOR", "P1", "P1", new HashMap<>()));
 
         KeysSensor keysSensor = new KeysSensor(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(keysSensor);
@@ -89,7 +89,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitMoistureSensor_withPort() {
-        configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, "CONFIGURATION_SENSOR", "P1", "P1", new HashMap<>()));
 
         MoistureSensor moistureSensor = new MoistureSensor(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(moistureSensor);
@@ -102,7 +102,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitMoistureSensor_withPortWrongSensor() {
-        configurationComponents.add(new ConfigurationComponent(SC.MOTION, false, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.MOTION, "CONFIGURATION_SENSOR", "P1", "P1", new HashMap<>()));
 
         MoistureSensor moistureSensor = new MoistureSensor(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(moistureSensor);
@@ -124,7 +124,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitMotion_withPort() {
-        configurationComponents.add(new ConfigurationComponent(SC.MOTION, false, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.MOTION, "CONFIGURATION_SENSOR", "P1", "P1", new HashMap<>()));
 
         MotionSensor motionSensor = new MotionSensor(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(motionSensor);
@@ -137,7 +137,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitMotion_withPortWrongSensorType() {
-        configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, "CONFIGURATION_SENSOR", "P1", "P1", new HashMap<>()));
 
         MotionSensor motionSensor = new MotionSensor(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(motionSensor);
@@ -159,7 +159,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitDropSensor_withPort() {
-        configurationComponents.add(new ConfigurationComponent(SC.DROP, false, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.DROP, "CONFIGURATION_SENSOR", "P1", "P1", new HashMap<>()));
 
         DropSensor dropSensor = new DropSensor(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(dropSensor);
@@ -182,7 +182,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitDropSensor_withWrongSensorType() {
-        configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, "CONFIGURATION_SENSOR", "P1", "P1", new HashMap<>()));
 
         DropSensor dropSensor = new DropSensor(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(dropSensor);
@@ -194,7 +194,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitRfidSensor_withPort() {
-        configurationComponents.add(new ConfigurationComponent(SC.RFID, false, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.RFID, "CONFIGURATION_SENSOR", "P1", "P1", new HashMap<>()));
 
         RfidSensor rfidSensor = new RfidSensor(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(rfidSensor);
@@ -209,7 +209,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitRfidSensor_onUnoWifiRev2() {
         setupRobotFactory("unowifirev2");
 
-        configurationComponents.add(new ConfigurationComponent(SC.RFID, false, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.RFID, "CONFIGURATION_SENSOR", "P1", "P1", new HashMap<>()));
 
         RfidSensor rfidSensor = new RfidSensor(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(rfidSensor);
@@ -231,7 +231,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitRfidSensor_withWrongSensorType() {
-        configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, "CONFIGURATION_SENSOR", "P1", "P1", new HashMap<>()));
 
         RfidSensor rfidSensor = new RfidSensor(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(rfidSensor);
@@ -243,7 +243,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitHumiditySensor_withPort() {
-        configurationComponents.add(new ConfigurationComponent(SC.HUMIDITY, false, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.HUMIDITY, "CONFIGURATION_SENSOR", "P1", "P1", new HashMap<>()));
 
         HumiditySensor humiditySensor = new HumiditySensor(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(humiditySensor);
@@ -266,7 +266,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitHumiditySensor_withWrongSensorType() {
-        configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, "CONFIGURATION_SENSOR", "P1", "P1", new HashMap<>()));
 
         HumiditySensor humiditySensor = new HumiditySensor(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(humiditySensor);
@@ -278,7 +278,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitVoltageSensor_withPort() {
-        configurationComponents.add(new ConfigurationComponent(SC.POTENTIOMETER, false, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.POTENTIOMETER, "CONFIGURATION_SENSOR", "P1", "P1", new HashMap<>()));
 
         VoltageSensor voltageSensor = new VoltageSensor(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(voltageSensor);
@@ -301,7 +301,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitVoltageSensor_withWrongSensorType() {
-        configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, "CONFIGURATION_SENSOR", "P1", "P1", new HashMap<>()));
 
         VoltageSensor voltageSensor = new VoltageSensor(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(voltageSensor);
@@ -313,7 +313,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitMotorOnAction() {
-        configurationComponents.add(new ConfigurationComponent(SC.STEPMOTOR, true, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.STEPMOTOR, "CONFIGURATION_ACTOR", "P1", "P1", new HashMap<>()));
 
         MotionParam motionParam = new MotionParam.Builder()
             .speed(new NumConst(null, "10"))
@@ -345,7 +345,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitMotorOnAction_withOtherType() {
-        configurationComponents.add(new ConfigurationComponent(SC.OTHER, true, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.OTHER, "CONFIGURATION_ACTOR", "P1", "P1", new HashMap<>()));
 
         MotionParam motionParam = new MotionParam.Builder()
             .speed(new NumConst(null, "10"))
@@ -362,7 +362,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitMotorOnAction_withoutDuration() {
-        configurationComponents.add(new ConfigurationComponent(SC.STEPMOTOR, true, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.STEPMOTOR, "CONFIGURATION_ACTOR", "P1", "P1", new HashMap<>()));
 
         MotionParam motionParam = new MotionParam.Builder()
             .speed(new NumConst(null, "10"))
@@ -378,7 +378,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitLightAction() {
-        configurationComponents.add(new ConfigurationComponent(SC.RGBLED, true, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.RGBLED, "CONFIGURATION_ACTOR", "P1", "P1", new HashMap<>()));
 
         RgbColor rgbColor = new RgbColor(bp, new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"));
 
@@ -404,7 +404,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitPlayNoteAction() {
-        configurationComponents.add(new ConfigurationComponent(SC.BUZZER, true, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.BUZZER, "CONFIGURATION_ACTOR", "P1", "P1", new HashMap<>()));
 
         PlayNoteAction playNoteAction = new PlayNoteAction(bp, "100", "100", "P1", null);
         phrases.add(playNoteAction);
@@ -426,7 +426,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitLightOffAction() {
-        configurationComponents.add(new ConfigurationComponent(SC.RGBLED, true, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.RGBLED, "CONFIGURATION_ACTOR", "P1", "P1", new HashMap<>()));
 
         LightOffAction lightOffAction = new LightOffAction(bp, "P1");
         phrases.add(lightOffAction);
@@ -446,7 +446,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitRelayAction() {
-        configurationComponents.add(new ConfigurationComponent(SC.RELAY, true, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.RELAY, "CONFIGURATION_ACTOR", "P1", "P1", new HashMap<>()));
 
         RelayAction relayAction = new RelayAction(bp, "P1", RelayMode.DEFAULT);
         phrases.add(relayAction);
@@ -466,7 +466,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitShowTexAction() {
-        configurationComponents.add(new ConfigurationComponent(SC.DISPLAY, true, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.DISPLAY, "CONFIGURATION_ACTOR", "P1", "P1", new HashMap<>()));
 
         ShowTextAction showTextAction = new ShowTextAction(bp, new NumConst(null, "Text"), new NumConst(null, "0"), new NumConst(null, "0"), "P1", null);
         phrases.add(showTextAction);
@@ -477,7 +477,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitPinGetValueSensor() {
-        configurationComponents.add(new ConfigurationComponent(SC.OTHER, false, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.OTHER, "CONFIGURATION_ACTOR", "P1", "P1", new HashMap<>()));
 
         PinGetValueSensor pinGetValueSensor = new PinGetValueSensor(bp, new ExternalSensorBean("P1", "", "", null));
         phrases.add(pinGetValueSensor);
@@ -488,7 +488,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitPinWriteValueAction() {
-        configurationComponents.add(new ConfigurationComponent(SC.DIGITAL_PIN, true, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.DIGITAL_PIN, "CONFIGURATION_ACTOR", "P1", "P1", new HashMap<>()));
 
         Mutation mutation = new Mutation();
         PinWriteValueAction pinWriteValueAction = new PinWriteValueAction(bp, mutation, "1", "P1", new NumConst(null, "1"));

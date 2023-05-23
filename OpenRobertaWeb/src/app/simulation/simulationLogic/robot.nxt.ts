@@ -11,7 +11,8 @@ export default class RobotNxt extends RobotEv3 {
         this.chassis = new NXTChassis(this.id, configuration, this.pose);
         let sensors: object = configuration['SENSORS'];
         for (const c in sensors) {
-            switch (sensors[c]) {
+            console.log(sensors[c]['TYPE']);
+            switch (sensors[c]['TYPE']) {
                 case 'TOUCH':
                     // only one is drawable as bumper
                     this[c] = new TouchSensor(c, 25, 0, this.chassis.geom.color);
@@ -26,9 +27,9 @@ export default class RobotNxt extends RobotEv3 {
                         }
                     });
                     const ord = myColorLightSensors.length + 1;
-                    const id = Object.keys(sensors).filter((type) => sensors[type] == 'LIGHT' || sensors[type] == 'COLOR').length;
+                    const id = Object.keys(sensors).filter((sensor) => sensors[sensor]['TYPE'] == 'LIGHT' || sensors[sensor]['TYPE'] == 'COLOR').length;
                     let y = ord * 10 - 5 * (id + 1);
-                    this[c] = sensors[c] === 'COLOR' ? new NXTColorSensor(c, 15, y, 0, 5) : new LightSensor(c, 15, y, 0, 5);
+                    this[c] = sensors[c]['TYPE'] === 'COLOR' ? new NXTColorSensor(c, 15, y, 0, 5) : new LightSensor(c, 15, y, 0, 5);
                     break;
                 }
                 case 'SOUND':
@@ -43,7 +44,7 @@ export default class RobotNxt extends RobotEv3 {
                         }
                     });
                     const ord = myUltraSensors.length + 1;
-                    const num = Object.keys(sensors).filter((type) => sensors[type] == 'ULTRASONIC').length;
+                    const num = Object.keys(sensors).filter((sensor) => sensors[sensor]['TYPE'] == 'ULTRASONIC').length;
                     let position: Pose = new Pose(this.chassis.geom.x + this.chassis.geom.w, 0, 0);
                     if (num == 3) {
                         if (ord == 1) {

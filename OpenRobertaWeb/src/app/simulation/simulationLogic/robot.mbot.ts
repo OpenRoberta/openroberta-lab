@@ -25,7 +25,7 @@ export default class MBOT extends RobotEv3 {
         this.display = new MbotDisplay(this.id, { x: 15, y: 50 });
         let sensors: object = configuration['SENSORS'];
         for (const c in sensors) {
-            switch (sensors[c]) {
+            switch (sensors[c]['TYPE']) {
                 case 'ULTRASONIC': {
                     let myUltraSensors = [];
                     let mbot = this;
@@ -35,7 +35,7 @@ export default class MBOT extends RobotEv3 {
                         }
                     });
                     const ord = myUltraSensors.length + 1;
-                    const num = Object.keys(sensors).filter((type) => sensors[type] == 'ULTRASONIC').length;
+                    const num = Object.keys(sensors).filter((sensor) => sensors[sensor]['TYPE'] == 'ULTRASONIC').length;
                     let position: Pose = new Pose(this.chassis.geom.x + this.chassis.geom.w, 0, 0);
                     if (num == 3) {
                         if (ord == 1) {

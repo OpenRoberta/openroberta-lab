@@ -21,7 +21,7 @@ public @interface NepoConfiguration {
     String name();
 
     /**
-     * the category this block belongs to (must be "CONFIGURATION_BLOCK")
+     * the category this block belongs to (should start with "CONFIGURATION_")
      */
     String category();
 

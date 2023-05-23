@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.syntax.configuration;
 import java.util.Map;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 /**
  * Just to override the name of the "usedDefinedPortName" field of the generic {@link ConfigurationComponent}. TODO: should be removed if possible
@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 public final class WedoConfigurationComponent extends ConfigurationComponent {
     private WedoConfigurationComponent(
         String componentType,
-        boolean isActor,
+        String category,
         String portName,
         String userDefinedName,
         Map<String, String> componentProperties,
@@ -20,7 +20,7 @@ public final class WedoConfigurationComponent extends ConfigurationComponent {
 
         int x,
         int y) {
-        super(componentType, isActor, portName, userDefinedName, componentProperties, properties, x, y);
+        super(componentType, category, portName, userDefinedName, componentProperties, properties, x, y);
     }
 
     @Override

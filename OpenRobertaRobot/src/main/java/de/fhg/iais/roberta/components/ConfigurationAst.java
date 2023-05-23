@@ -174,7 +174,7 @@ public final class ConfigurationAst {
      * @return all actors in the configuration component map
      */
     public Collection<ConfigurationComponent> getActors() {
-        return new HashMap<>(this.configurationComponents).values().stream().filter(ConfigurationComponent::isActor).collect(Collectors.toList());
+        return new HashMap<>(this.configurationComponents).values().stream().filter(configurationComponent -> configurationComponent.category.equals("CONFIGURATION_ACTOR")).collect(Collectors.toList());
     }
 
     /**
@@ -184,7 +184,7 @@ public final class ConfigurationAst {
      * @return all sensors in the configuration component map
      */
     public Collection<ConfigurationComponent> getSensors() {
-        return new HashMap<>(this.configurationComponents).values().stream().filter(ConfigurationComponent::isSensor).collect(Collectors.toList());
+        return new HashMap<>(this.configurationComponents).values().stream().filter(configurationComponent -> configurationComponent.category.equals("CONFIGURATION_SENSOR")).collect(Collectors.toList());
     }
 
     public ConfigurationComponent getConfigurationComponent(String userDefinedName) {
@@ -235,7 +235,7 @@ public final class ConfigurationAst {
     public List<ConfigurationComponent> getMotors(String side) {
         List<ConfigurationComponent> found = new ArrayList<>();
         for ( ConfigurationComponent component : this.configurationComponents.values() ) {
-            if ( component.isActor() && side.equals(component.getOptProperty(SC.MOTOR_DRIVE)) ) {
+            if ( component.category().equals("CONFIGURATION_ACTOR") && side.equals(component.getOptProperty(SC.MOTOR_DRIVE)) ) {
                 found.add(component);
             }
         }

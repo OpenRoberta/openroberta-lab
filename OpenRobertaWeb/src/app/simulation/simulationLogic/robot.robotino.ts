@@ -45,51 +45,6 @@ export default class RobotRobotino extends RobotBaseMobile {
 
     // this method might go up to BaseMobileRobots as soon as the configuration has detailed information about the sensors geometry and location on the robot
     protected configure(configuration: object): void {
-        /*        ACTUATORS
-:
-M1
-:
-{PORT1: 'M1', TYPE: 'ENCODER'}
-M2
-:
-{PORT1: 'M2', TYPE: 'ENCODER'}
-M3
-:
-{PORT1: 'M3', TYPE: 'ENCODER'}
-left
-:
-BK
-:
-"DI3"
-TYPE
-:
-"OPTICAL"
-WH
-:
-"DI4"
-[[Prototype]]
-:
-Object
-right
-:
-TYPE
-:
-"OPTICAL"
-[[Prototype]]
-:
-Object
-_I
-:
-{TYPE: 'CAMERA'}
-_O
-:
-{TYPE: 'OMNIDRIVE'}
-_OD
-:
-{TYPE: 'ODOMETRY'}
-_T
-:
-{TYPE: 'TOUCH'}*/
         this.chassis = new RobotinoChassis(this.id, this.pose);
         this.robotinoTouchSensor = new RobotinoTouchSensor();
         this.infraredSensor = new RobotinoInfraredSensor();
@@ -97,10 +52,10 @@ _T
         this.cameraSensor = new CameraSensor(new Pose(25, 0, 0), (2 * Math.PI) / 5);
         let numOptical: number = Object.keys(configuration['ACTUATORS']).filter((sensor) => configuration['ACTUATORS'][sensor].TYPE == 'OPTICAL').length;
         let robotino = this;
-        Object.keys(configuration['ACTUATORS'])
-            .filter((sensor) => configuration['ACTUATORS'][sensor].TYPE == 'OPTICAL')
+        Object.keys(configuration['SENSORS'])
+            .filter((sensor) => configuration['SENSORS'][sensor].TYPE == 'OPTICAL')
             .forEach((optical, index) => {
-                let myoptical = configuration['ACTUATORS'][optical];
+                let myoptical = configuration['SENSORS'][optical];
                 robotino[myoptical['BK']] = new OpticalSensor(optical, myoptical['BK'], 50, index % 2 == 0 ? -6 : 6, 0, 5);
             });
     }

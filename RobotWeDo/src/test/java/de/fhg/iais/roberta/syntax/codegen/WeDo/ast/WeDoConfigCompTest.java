@@ -9,7 +9,7 @@ public class WeDoConfigCompTest extends AstTest {
     @Test
     public void WeDoBrick_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=WEDO,isActor=true,userDefinedName=W,portName=null,componentProperties={}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=WEDO,category=CONFIGURATION_BOARD,userDefinedName=W,portName=null,componentProperties={}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/robBrick_WeDo-Brick.xml");
     }
 
@@ -21,7 +21,7 @@ public class WeDoConfigCompTest extends AstTest {
     @Test
     public void buzzer_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=BUZZER,isActor=true,userDefinedName=S,portName=S,componentProperties={VAR=W}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=BUZZER,category=CONFIGURATION_ACTOR,userDefinedName=S,portName=S,componentProperties={VAR=W}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/robConf_buzzer.xml");
     }
 
@@ -33,7 +33,7 @@ public class WeDoConfigCompTest extends AstTest {
     @Test
     public void gyro_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=GYRO,isActor=true,userDefinedName=N,portName=N,componentProperties={VAR=W,CONNECTOR=1}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=GYRO,category=CONFIGURATION_SENSOR,userDefinedName=N,portName=N,componentProperties={VAR=W,CONNECTOR=1}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/robConf_gyro.xml");
     }
 
@@ -45,7 +45,7 @@ public class WeDoConfigCompTest extends AstTest {
     @Test
     public void infrared_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=INFRARED,isActor=true,userDefinedName=I,portName=I,componentProperties={VAR=W,CONNECTOR=2}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=INFRARED,category=CONFIGURATION_SENSOR,userDefinedName=I,portName=I,componentProperties={VAR=W,CONNECTOR=2}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/robConf_infrared.xml");
     }
 
@@ -57,7 +57,7 @@ public class WeDoConfigCompTest extends AstTest {
     @Test
     public void key_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=KEY,isActor=true,userDefinedName=T,portName=T,componentProperties={VAR=W}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=KEY,category=CONFIGURATION_SENSOR,userDefinedName=T,portName=T,componentProperties={VAR=W}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/robConf_key.xml");
     }
 
@@ -69,7 +69,7 @@ public class WeDoConfigCompTest extends AstTest {
     @Test
     public void led_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=LED,isActor=true,userDefinedName=L,portName=L,componentProperties={VAR=W}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=LED,category=CONFIGURATION_ACTOR,userDefinedName=L,portName=L,componentProperties={VAR=W}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/robConf_led.xml");
     }
 

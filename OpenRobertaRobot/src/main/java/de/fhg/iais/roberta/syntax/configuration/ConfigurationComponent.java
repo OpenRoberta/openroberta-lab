@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.util.syntax.SC;
  */
 public class ConfigurationComponent extends Phrase {
     public final String componentType;
-    public final boolean isActor; // TODO: for the new configuration there is currently no distinction between actors and sensors, should there be one?
+    public final String category;
     public final String userDefinedPortName;
     public final String internalPortName;
     public final LinkedHashMap<String, String> componentProperties;
@@ -40,13 +40,13 @@ public class ConfigurationComponent extends Phrase {
      */
     public ConfigurationComponent(
         String name,
-        boolean isActor,
+        String category,
         String internalPortName,
         String userDefinedPortName,
         Map<String, String> componentProperties) {
         this(
             name,
-            isActor,
+            category,
             internalPortName,
             userDefinedPortName,
             componentProperties,
@@ -59,7 +59,7 @@ public class ConfigurationComponent extends Phrase {
      * Creates a configuration component. Should only be used by {@link Jaxb2ConfigurationAst}.
      *
      * @param name the name of the configuration component
-     * @param isActor whether the component is an actor or not
+     * @param category whether the component is an actor or not
      * @param internalPortName the internal port name, may represent the name used for generating code
      * @param userDefinedPortName the user defined port name
      * @param componentProperties the map of component properties
@@ -70,7 +70,7 @@ public class ConfigurationComponent extends Phrase {
      */
     public ConfigurationComponent(
         String name,
-        boolean isActor,
+        String category,
         String internalPortName,
         String userDefinedPortName,
         Map<String, String> componentProperties,
@@ -78,10 +78,10 @@ public class ConfigurationComponent extends Phrase {
 
         int x,
         int y) {
-        super(new BlockDescriptor(name, Category.CONFIGURATION_BLOCK, ConfigurationComponent.class, new String[0], Collections.emptyMap()), properties);
+        super(new BlockDescriptor(name, Category.valueOf(category), ConfigurationComponent.class, new String[0], Collections.emptyMap()), properties);
         Util.sanitizeConfigurationProperties(componentProperties);
         this.componentType = name;
-        this.isActor = isActor;
+        this.category = category;
         this.internalPortName = Util.sanitizeConfigurationInternalPortName(internalPortName);
         this.userDefinedPortName = userDefinedPortName;
         this.componentProperties = new LinkedHashMap<>(componentProperties);
@@ -89,12 +89,8 @@ public class ConfigurationComponent extends Phrase {
         this.y = y;
     }
 
-    public boolean isActor() {
-        return this.isActor;
-    }
-
-    public boolean isSensor() {
-        return !this.isActor;
+    public String category() {
+        return this.category;
     }
 
     public boolean isRegulated() {
@@ -142,8 +138,8 @@ public class ConfigurationComponent extends Phrase {
         return "ConfigurationComponent ["
             + "componentType="
             + this.componentType
-            + ", isActor="
-            + this.isActor
+            + ", category="
+            + this.category
             + ", userDefinedName="
             + this.userDefinedPortName
             + ", portName="

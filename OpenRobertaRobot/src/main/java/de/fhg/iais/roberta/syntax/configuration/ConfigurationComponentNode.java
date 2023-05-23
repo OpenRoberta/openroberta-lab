@@ -13,7 +13,7 @@ public final class ConfigurationComponentNode extends ConfigurationComponent {
 
     public ConfigurationComponentNode(
         String componentType,
-        boolean isActor,
+        String category,
         String internalPortName,
         String userDefinedName,
         Map<String, String> componentProperties,
@@ -22,7 +22,7 @@ public final class ConfigurationComponentNode extends ConfigurationComponent {
         int x,
         int y,
         LinkedHashMap<String, List<ConfigurationComponent>> subComponents) {
-        super(componentType, isActor, internalPortName, userDefinedName, componentProperties, properties, x, y);
+        super(componentType, category, internalPortName, userDefinedName, componentProperties, properties, x, y);
         this.subComponents = subComponents;
     }
 

@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 
 /**
  * This class represents the <b>makeblockColours</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate color.<br/>
@@ -73,7 +73,7 @@ public final class LEDMatrixImage extends Expr {
         String[][] image = new String[X][Y];
         for ( int i = 0; i < X; i++ ) {
             for ( int j = 0; j < Y; j++ ) {
-                image[i][j] = Jaxb2Ast.extractField(fields, "P" + i + (Y - 1 - j));
+                image[i][j] = Jaxb2Ast.extractField(fields, "P" + i + j);
             }
         }
         return new LEDMatrixImage(image, Jaxb2Ast.extractBlocklyProperties(block));
@@ -83,9 +83,9 @@ public final class LEDMatrixImage extends Expr {
     public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
-        for ( int i = 0; i < X; i++ ) {
-            for ( int j = 0; j < Y; j++ ) {
-                Ast2Jaxb.addField(jaxbDestination, "P" + i + (Y - 1 - j), this.image[i][j]);
+        for ( int j = 0; j < Y; j++ ) {
+            for ( int i = 0; i < X; i++ ) {
+                Ast2Jaxb.addField(jaxbDestination, "P" + i + j, this.image[i][j]);
             }
         }
         return jaxbDestination;

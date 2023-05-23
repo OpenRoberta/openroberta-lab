@@ -8,6 +8,7 @@
 
 MeUltrasonicSensor _meUltraSensor3(PORT_3);
 MeLineFollower __meLineFollower2(PORT_2);
+MeLightSensor _meLight6(PORT_6);
 MeLightSensor _meLight4(PORT_4);
 MeLEDMatrix __meLEDMatrix_1(1);
 
@@ -37,7 +38,7 @@ void ____sensors() {
     drawStrLEDMatrix(&__meLEDMatrix_1, String(_meUltraSensor3.distanceCm()), 100);
     drawStrLEDMatrix(&__meLEDMatrix_1, String(!__meLineFollower2.readSensor1()), 100);
     drawStrLEDMatrix(&__meLEDMatrix_1, String(!__meLineFollower2.readSensor2()), 100);
-    drawStrLEDMatrix(&__meLEDMatrix_1, String(_meLight4.read() * ANALOG2PERCENT), 100);
+    drawStrLEDMatrix(&__meLEDMatrix_1, String(_meLight6.read() * ANALOG2PERCENT), 100);
     drawStrLEDMatrix(&__meLEDMatrix_1, String(_meLight4.read() * ANALOG2PERCENT), 100);
     drawStrLEDMatrix(&__meLEDMatrix_1, String((int) (millis() - __time_1)), 100);
     __time_1 = millis();
@@ -58,6 +59,12 @@ void ____waitUntil() {
     }
     while (true) {
         if ( !__meLineFollower2.readSensor1() == true ) {
+            break;
+        }
+        delay(1);
+    }
+    while (true) {
+        if ( _meLight6.read() * ANALOG2PERCENT < 50 ) {
             break;
         }
         delay(1);

@@ -55,8 +55,6 @@ public class MicrobitValidatorAndCollectorVisitor extends MbedValidatorAndCollec
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor pinValueSensor) {
-        addToPhraseIfUnsupportedInSim(pinValueSensor, true, isSim);
-
         checkInternalPorts(pinValueSensor, pinValueSensor.getUserDefinedPort());
         return super.visitPinGetValueSensor(pinValueSensor);
     }
@@ -68,14 +66,16 @@ public class MicrobitValidatorAndCollectorVisitor extends MbedValidatorAndCollec
     }
 
     private void checkInternalPorts(Phrase pinValueSensor, String port) {
-        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
-        String pin = configurationComponent.getProperty("PIN1");
-        if ( this.ledPins.contains(pin) ) {
-            if ( !this.displaySwitchUsed ) {
-                addWarningToPhrase(pinValueSensor, "VALIDATION_PIN_TAKEN_BY_LED_MATRIX");
+        ConfigurationComponent configurationComponent = this.robotConfiguration.optConfigurationComponent(port);
+        if ( configurationComponent != null ) {
+            String pin = configurationComponent.getProperty("PIN1");
+            if ( this.ledPins.contains(pin) ) {
+                if ( !this.displaySwitchUsed ) {
+                    addWarningToPhrase(pinValueSensor, "VALIDATION_PIN_TAKEN_BY_LED_MATRIX");
+                }
+            } else if ( this.occupiedPins.contains(pin) ) {
+                addWarningToPhrase(pinValueSensor, "VALIDATION_PIN_TAKEN_BY_INTERNAL_COMPONENT");
             }
-        } else if ( this.occupiedPins.contains(pin) ) {
-            addWarningToPhrase(pinValueSensor, "VALIDATION_PIN_TAKEN_BY_INTERNAL_COMPONENT");
         }
     }
 

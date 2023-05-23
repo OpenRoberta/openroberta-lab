@@ -389,7 +389,12 @@ public final class Project {
                 this.project.configurationJSON.put("TRACKWIDTH", configurationAst.getTrackWidth());
                 this.project.configurationJSON.put("WHEELDIAMETER", configurationAst.getWheelDiameter());
                 for ( ConfigurationComponent sensor : configurationAst.getSensors() ) {
-                    sensorsJSON.put(sensor.userDefinedPortName, sensor.componentType);
+                    JSONObject propJSON = new JSONObject();
+                    propJSON.put("TYPE", sensor.componentType);
+                    for ( String prop : sensor.getComponentProperties().keySet() ) {
+                        propJSON.put(prop, sensor.getComponentProperties().get(prop));
+                    }
+                    sensorsJSON.put(sensor.userDefinedPortName, propJSON);
                 }
                 for ( ConfigurationComponent actuator : configurationAst.getActors() ) {
                     JSONObject propJSON = new JSONObject();

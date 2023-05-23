@@ -53,19 +53,16 @@ export default class RobotMicrobit extends RobotCalliope {
                 typeValue: 0,
             },
         ];
-        for (const component in configuration['ACTUATORS']) {
-            let type = configuration['ACTUATORS'][component]['TYPE'];
-
+        for (const component in configuration['SENSORS']) {
+            let type = configuration['SENSORS'][component]['TYPE'];
             let internal: boolean = component.substring(0, 1) === '_';
             let myComponentName = internal ? type : component;
-            switch (
-                type // sensors
-            ) {
+            switch (type) {
                 case 'COMPASS':
                     this[myComponentName] = new CompassSensor();
                     break;
                 case 'KEY':
-                    let port = configuration['ACTUATORS'][component]['PIN1'];
+                    let port = configuration['SENSORS'][component]['PIN1'];
                     let color: string[];
                     if (port === 'A') {
                         color = ['#f29400ff'];
@@ -86,23 +83,26 @@ export default class RobotMicrobit extends RobotCalliope {
                     this[myComponentName] = new TemperatureSensor();
                     break;
                 case 'DIGITAL_PIN': {
-                    let myPin: DrawableTouchKey = mySensorPins.find((pin) => pin.port === configuration['ACTUATORS'][component]['PIN1']);
+                    let myPin: DrawableTouchKey = mySensorPins.find((pin) => pin.port === configuration['SENSORS'][component]['PIN1']);
                     myPin.name = myComponentName;
                     myPin.type = 'DIGITAL_PIN';
                     myPin.color = '#ff0000';
                     break;
                 }
                 case 'ANALOG_PIN': {
-                    let myPin: DrawableTouchKey = mySensorPins.find((pin) => pin.port === configuration['ACTUATORS'][component]['PIN1']);
+                    let myPin: DrawableTouchKey = mySensorPins.find((pin) => pin.port === configuration['SENSORS'][component]['PIN1']);
                     myPin.name = myComponentName;
                     myPin.type = 'ANALOG_PIN';
                     myPin.color = '#ff0000';
                     break;
                 }
             }
-            switch (
-                type // actuators
-            ) {
+        }
+        for (const component in configuration['ACTUATORS']) {
+            let type = configuration['ACTUATORS'][component]['TYPE'];
+            let internal: boolean = component.substring(0, 1) === '_';
+            let myComponentName = internal ? type : component;
+            switch (type) {
                 case 'BUZZER':
                     this[myComponentName] = new WebAudio();
                     break;

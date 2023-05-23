@@ -60,7 +60,7 @@ public class MbedThree2ThreeOneTransformerVisitor extends MbedTransformerVisitor
                     .addUsedConfigurationComponent(
                         new ConfigurationComponent(
                             cc.componentType,
-                            cc.isActor(),
+                            cc.category,
                             NEW_NAMES.get(cc.componentType),
                             NEW_NAMES.get(cc.componentType),
                             cc.getComponentProperties(),
