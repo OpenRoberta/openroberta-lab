@@ -2083,11 +2083,10 @@ div.galleryDescription, div.tutorialOverview {
 }
 
 .galleryTable td {
-    border: none;
-    color: #333333;
+    border: none !important;
+    color: #FFFFFF;
     width: 100vw;
     position: relative;
-    border: none !important;
 }
 
 #galleryPreview tr {
@@ -2702,7 +2701,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
     left: 0;
     font-size: 24px;
     top: 4px;
-    color: #333;
+    color: #FFFFFF;
     display: table-cell;
 }
 
