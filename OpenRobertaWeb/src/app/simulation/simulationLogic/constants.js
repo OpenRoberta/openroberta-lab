@@ -443,8 +443,6 @@ let CONST = {
 
     TEXT_JOIN: 'createTextJoin',
 
-    LIGHT_ACTION: 'lightSensorAction',
-
     WHERE1: 'where1',
 
     WHERE2: 'where2',

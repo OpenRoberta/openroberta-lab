@@ -31,4 +31,11 @@ public class XsltTest {
         String expected = Resources.toString(Resources.getResource("util/Xslt_calliope_out.xml"), Charsets.UTF_8);
         Assert.assertNull(UnitTestHelper.runXmlUnit(expected, xsltTransformer.transform(input)));
     }
+
+    @Test
+    public void transform_ShouldReturnTransformedArduinoXML_WhenGivenOldArduinoXML() throws Exception {
+        String input = Resources.toString(Resources.getResource("util/Xslt_arduino_in.xml"), Charsets.UTF_8);
+        String expected = Resources.toString(Resources.getResource("util/Xslt_arduino_out.xml"), Charsets.UTF_8);
+        Assert.assertNull(UnitTestHelper.runXmlUnit(expected, xsltTransformer.transform(input)));
+    }
 }

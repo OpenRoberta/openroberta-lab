@@ -12,13 +12,13 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SensorLightAction;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
@@ -147,14 +147,14 @@ public class NxtValidatorAndCollectorVisitor extends CommonNepoAndMotorValidator
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
-        ConfigurationComponent configurationComponent = robotConfiguration.optConfigurationComponent(lightAction.port);
+    public Void visitSensorLightAction(SensorLightAction sensorLightAction) {
+        ConfigurationComponent configurationComponent = robotConfiguration.optConfigurationComponent(sensorLightAction.port);
         if ( configurationComponent == null ) {
-            addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_SENSOR_MISSING");
+            addErrorToPhrase(sensorLightAction, "CONFIGURATION_ERROR_SENSOR_MISSING");
         } else if ( !configurationComponent.componentType.equals(SC.COLOR) ) {
-            addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_SENSOR_WRONG");
+            addErrorToPhrase(sensorLightAction, "CONFIGURATION_ERROR_SENSOR_WRONG");
         } else {
-            usedHardwareBuilder.addUsedSensor(new UsedSensor(lightAction.port, configurationComponent.componentType, SC.COLOR));
+            usedHardwareBuilder.addUsedSensor(new UsedSensor(sensorLightAction.port, configurationComponent.componentType, SC.COLOR));
         }
         return null;
     }

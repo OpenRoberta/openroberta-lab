@@ -159,12 +159,12 @@ public class CalliopeThree2ThreeOneTransformerTest {
                 + "LightOffAction[port:CalliBot_links_hinten],"
                 + "LightOffAction[port:CalliBot_rechts_hinten],"
                 + "LightOffAction[port:CalliBot_alle],"
-                + "LightAction[L_CalliBot_links,ON,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CalliBot_links,OFF,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CalliBot_rechts,ON,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CalliBot_rechts,OFF,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CalliBot_beide,ON,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CalliBot_beide,OFF,DEFAULT,EmptyExpr[defVal=COLOR]]]]]";
+                + "BuiltInLedAction[port:L_CalliBot_links,mode:ON],"
+                + "BuiltInLedAction[port:L_CalliBot_links,mode:OFF],"
+                + "BuiltInLedAction[port:L_CalliBot_rechts,mode:ON],"
+                + "BuiltInLedAction[port:L_CalliBot_rechts,mode:OFF],"
+                + "BuiltInLedAction[port:L_CalliBot_beide,mode:ON],"
+                + "BuiltInLedAction[port:L_CalliBot_beide,mode:OFF]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=RGBLED,category=CONFIGURATION_ACTOR,userDefinedName=_R,portName=_R,componentProperties={PIN1=0}]",

@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.BuiltInLedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
@@ -913,17 +913,17 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
-        String port = lightAction.port;
+    public Void visitBuiltInLedAction(BuiltInLedAction builtInLedAction) {
+        String port = builtInLedAction.port;
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
-        String mode = lightAction.mode.getValues()[0];
+        String mode = builtInLedAction.mode.getValues()[0];
         if ( mode.equals(BlocklyConstants.HIGH) ) {
             mode = "1";
-        } else if ( mode.equals("LOW") ) {
+        } else if ( mode.equals(BlocklyConstants.LOW) ) {
             mode = "0";
         } else {
-            throw new DbcException("LightAction; invalid mode: " + mode);
+            throw new DbcException("BuiltInLedAction; invalid mode: " + mode);
         }
         this.src.add("_cbSetLed(_buf, &_i2c, _cbLedState, ", pin1, ", ", mode, ");");
         return null;

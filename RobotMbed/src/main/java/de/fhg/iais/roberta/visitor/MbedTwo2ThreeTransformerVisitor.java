@@ -5,7 +5,6 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
@@ -82,16 +81,6 @@ public class MbedTwo2ThreeTransformerVisitor extends MbedTransformerVisitor {
     @Override
     public BlocklyDropdownFactory getBlocklyDropdownFactory() {
         return this.blocklyDropdownFactory;
-    }
-
-    @Override
-    public Phrase visitLightAction(LightAction lightAction) {
-        Pair<ConfigurationComponent, String> compAndName =
-            this.helper.getComponentAndName(lightAction.getKind().getName(), lightAction.mode.toString(), lightAction.port);
-
-        this.builder.addUsedConfigurationComponent(compAndName.getFirst());
-
-        return new LightAction(compAndName.getSecond(), lightAction.color, lightAction.mode, (Expr) lightAction.rgbLedColor.modify(this), lightAction.getProperty());
     }
 
     @Override

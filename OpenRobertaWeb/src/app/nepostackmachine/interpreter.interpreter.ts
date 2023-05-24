@@ -504,15 +504,8 @@ export class Interpreter {
                     this.robotBehaviour.displayGetPixelBrightnessAction(this.state, x, y);
                     break;
                 }
-                case C.LIGHT_ACTION:
-                    let color;
-                    if (stmt[C.NAME] === 'mbot') {
-                        const rgb = this.state.pop();
-                        color = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
-                    } else {
-                        color = stmt[C.COLOR];
-                    }
-                    this.robotBehaviour.lightAction(stmt[C.MODE], color, stmt[C.PORT]);
+                case C.LED_ON_WITH_MODE:
+                    this.robotBehaviour.ledOnWithModeAction(stmt[C.MODE], stmt[C.COLOR], stmt[C.PORT]);
                     return [0, true];
                 case C.LED_OFF_ACTION:
                     this.robotBehaviour.ledOffAction(stmt[C.NAME], stmt[C.PORT]);

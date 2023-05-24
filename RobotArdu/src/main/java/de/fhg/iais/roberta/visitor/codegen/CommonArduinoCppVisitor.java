@@ -17,8 +17,9 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.BuiltInLedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RGBLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -48,7 +49,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
@@ -99,71 +99,72 @@ public abstract class CommonArduinoCppVisitor extends NepoArduinoCppVisitor impl
         return null;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public final Void visitLightAction(LightAction lightAction) {
-        if ( !lightAction.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
-            this.src.add("digitalWrite(_led_", lightAction.port, ", ", lightAction.mode.getValues()[0], ");");
+    public Void visitBuiltInLedAction(BuiltInLedAction builtInLedAction) {
+        this.src.add("digitalWrite(_led_", builtInLedAction.port, ", ", builtInLedAction.mode.getValues()[0], ");");
+        return null;
+    }
+
+    @Override
+    public Void visitRGBLedOnAction(RGBLedOnAction rgbLedOnAction) {
+        Map<String, Object> channels = new LinkedHashMap<>();
+        String redName;
+        String greenName;
+        String blueName;
+        if ( this.configuration.getRobotName().equals("unowifirev2")
+            && CommonArduinoCppVisitor.isInternalRgbLed(this.configuration.getConfigurationComponent(rgbLedOnAction.port)) ) {
+            redName = "WiFiDrv::analogWrite(25";
+            greenName = "WiFiDrv::analogWrite(26";
+            blueName = "WiFiDrv::analogWrite(27";
         } else {
-            Map<String, Object> channels = new LinkedHashMap<>();
-            String redName;
-            String greenName;
-            String blueName;
-            if ( this.configuration.getRobotName().equals("unowifirev2")
-                && CommonArduinoCppVisitor.isInternalRgbLed(this.configuration.getConfigurationComponent(lightAction.port)) ) {
-                redName = "WiFiDrv::analogWrite(25";
-                greenName = "WiFiDrv::analogWrite(26";
-                blueName = "WiFiDrv::analogWrite(27";
-            } else {
-                redName = "analogWrite(_led_red_" + lightAction.port;
-                greenName = "analogWrite(_led_green_" + lightAction.port;
-                blueName = "analogWrite(_led_blue_" + lightAction.port;
-            }
-            if ( lightAction.rgbLedColor.getClass().equals(ColorConst.class) ) {
-                String hexValue = ((ColorConst) lightAction.rgbLedColor).getHexValueAsString();
-                hexValue = hexValue.split("#")[1];
-                channels.put(redName, String.valueOf(Integer.decode("0x" + hexValue.substring(0, 2))));
-                channels.put(greenName, String.valueOf(Integer.decode("0x" + hexValue.substring(2, 4))));
-                channels.put(blueName, String.valueOf(Integer.decode("0x" + hexValue.substring(4, 6))));
-            } else if ( lightAction.rgbLedColor.getClass().equals(Var.class) ) {
-                String tempVarName = "___" + ((Var) lightAction.rgbLedColor).name;
-                channels.put(redName, "RCHANNEL(" + tempVarName + ")");
-                channels.put(greenName, "GCHANNEL(" + tempVarName + ")");
-                channels.put(blueName, "BCHANNEL(" + tempVarName + ")");
-            } else if ( lightAction.rgbLedColor.getClass().equals(MethodExpr.class) ) {
-                String tempVarName = "_v_colour_temp";
-                this.src.add(tempVarName, " = ");
-                visitMethodCall((MethodCall) ((MethodExpr) lightAction.rgbLedColor).method);
-                this.src.add(";");
-                nlIndent();
-                channels.put(redName, "RCHANNEL(" + tempVarName + ")");
-                channels.put(greenName, "GCHANNEL(" + tempVarName + ")");
-                channels.put(blueName, "BCHANNEL(" + tempVarName + ")");
-            } else if ( lightAction.rgbLedColor.getClass().equals(FunctionExpr.class) ) {
-                String tempVarName = "_v_colour_temp";
-                this.src.add(tempVarName, " = ");
-                ((FunctionExpr) lightAction.rgbLedColor).function.accept(this);
-                this.src.add(";");
-                nlIndent();
-                channels.put(redName, "RCHANNEL(" + tempVarName + ")");
-                channels.put(greenName, "GCHANNEL(" + tempVarName + ")");
-                channels.put(blueName, "BCHANNEL(" + tempVarName + ")");
-            } else {
-                channels.put(redName, ((RgbColor) lightAction.rgbLedColor).R);
-                channels.put(greenName, ((RgbColor) lightAction.rgbLedColor).G);
-                channels.put(blueName, ((RgbColor) lightAction.rgbLedColor).B);
-            }
-            channels.forEach((name, v) -> {
-                this.src.add(name, ", ");
-                if ( v instanceof Phrase ) {
-                    ((Phrase) v).accept(this);
-                } else {
-                    this.src.add(v);
-                }
-                this.src.add(");");
-                nlIndent();
-            });
+            redName = "analogWrite(_led_red_" + rgbLedOnAction.port;
+            greenName = "analogWrite(_led_green_" + rgbLedOnAction.port;
+            blueName = "analogWrite(_led_blue_" + rgbLedOnAction.port;
         }
+        if ( rgbLedOnAction.rgbLedColor.getClass().equals(ColorConst.class) ) {
+            String hexValue = ((ColorConst) rgbLedOnAction.rgbLedColor).getHexValueAsString();
+            hexValue = hexValue.split("#")[1];
+            channels.put(redName, String.valueOf(Integer.decode("0x" + hexValue.substring(0, 2))));
+            channels.put(greenName, String.valueOf(Integer.decode("0x" + hexValue.substring(2, 4))));
+            channels.put(blueName, String.valueOf(Integer.decode("0x" + hexValue.substring(4, 6))));
+        } else if ( rgbLedOnAction.rgbLedColor.getClass().equals(Var.class) ) {
+            String tempVarName = "___" + ((Var) rgbLedOnAction.rgbLedColor).name;
+            channels.put(redName, "RCHANNEL(" + tempVarName + ")");
+            channels.put(greenName, "GCHANNEL(" + tempVarName + ")");
+            channels.put(blueName, "BCHANNEL(" + tempVarName + ")");
+        } else if ( rgbLedOnAction.rgbLedColor.getClass().equals(MethodExpr.class) ) {
+            String tempVarName = "_v_colour_temp";
+            this.src.add(tempVarName, " = ");
+            visitMethodCall((MethodCall) ((MethodExpr) rgbLedOnAction.rgbLedColor).method);
+            this.src.add(";");
+            nlIndent();
+            channels.put(redName, "RCHANNEL(" + tempVarName + ")");
+            channels.put(greenName, "GCHANNEL(" + tempVarName + ")");
+            channels.put(blueName, "BCHANNEL(" + tempVarName + ")");
+        } else if ( rgbLedOnAction.rgbLedColor.getClass().equals(FunctionExpr.class) ) {
+            String tempVarName = "_v_colour_temp";
+            this.src.add(tempVarName, " = ");
+            ((FunctionExpr) rgbLedOnAction.rgbLedColor).function.accept(this);
+            this.src.add(";");
+            nlIndent();
+            channels.put(redName, "RCHANNEL(" + tempVarName + ")");
+            channels.put(greenName, "GCHANNEL(" + tempVarName + ")");
+            channels.put(blueName, "BCHANNEL(" + tempVarName + ")");
+        } else {
+            channels.put(redName, ((RgbColor) rgbLedOnAction.rgbLedColor).R);
+            channels.put(greenName, ((RgbColor) rgbLedOnAction.rgbLedColor).G);
+            channels.put(blueName, ((RgbColor) rgbLedOnAction.rgbLedColor).B);
+        }
+        channels.forEach((name, v) -> {
+            this.src.add(name, ", ");
+            if ( v instanceof Phrase ) {
+                ((Phrase) v).accept(this);
+            } else {
+                this.src.add(v);
+            }
+            this.src.add(");");
+            nlIndent();
+        });
         return null;
     }
 

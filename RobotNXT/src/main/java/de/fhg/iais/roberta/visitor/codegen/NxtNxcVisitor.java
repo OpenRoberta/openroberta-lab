@@ -18,12 +18,12 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SensorLightAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -655,13 +655,13 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
-        if ( lightAction.mode.toString().equals("ON") ) {
-            this.src.add("SetSensorColor", lightAction.color.getValues()[0], "(");
+    public Void visitSensorLightAction(SensorLightAction sensorLightAction) {
+        if ( sensorLightAction.mode.toString().equals("ON") ) {
+            this.src.add("SetSensorColor", sensorLightAction.color.getValues()[0], "(");
         } else {
             this.src.add("SetSensorColorNone(");
         }
-        String port = this.brickConfiguration.getConfigurationComponent(lightAction.port).internalPortName;
+        String port = this.brickConfiguration.getConfigurationComponent(sensorLightAction.port).internalPortName;
         this.src.add(port, ");");
         return null;
     }

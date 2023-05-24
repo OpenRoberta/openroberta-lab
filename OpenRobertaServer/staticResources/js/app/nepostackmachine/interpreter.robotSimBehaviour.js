@@ -390,7 +390,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             this.hardwareState.actions.display[C.BRIGHTNESS] = value;
             return 0;
         };
-        RobotSimBehaviour.prototype.lightAction = function (mode, color, port) {
+        RobotSimBehaviour.prototype.ledOnWithModeAction = function (mode, color, port) {
             U.debug('***** light action mode= "' + mode + ' color=' + color + '" *****');
             if (port !== undefined) {
                 if (!this.hardwareState.actions.leds) {

@@ -141,7 +141,7 @@ public class C {
     public static final String LED_ON_ACTION = "ledOnAction";
     public static final String LEFT = "left";
     public static final String LIGHT = "light";
-    public static final String LIGHT_ACTION = "lightAction";
+    public static final String LED_ON_WITH_MODE = "ledOnWithModeAction";
     public static final String LINE = "line";
     public static final String LIST = "list";
     public static final String LIST_OPERATION = "list_operation";

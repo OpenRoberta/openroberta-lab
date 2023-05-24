@@ -8,7 +8,6 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
@@ -93,13 +92,6 @@ public class MbedThree2ThreeOneTransformerVisitor extends MbedTransformerVisitor
     @Override
     public Phrase visitSingleMotorStopAction(SingleMotorStopAction singleMotorStopAction) {
         return null;
-    }
-
-    @Override
-    public Phrase visitLightAction(LightAction lightAction) {
-        String newName = getNewName(lightAction.port);
-
-        return new LightAction(newName, lightAction.color, lightAction.mode, (Expr) lightAction.rgbLedColor.modify(this), lightAction.getProperty());
     }
 
     @Override

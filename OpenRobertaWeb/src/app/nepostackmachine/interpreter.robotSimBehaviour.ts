@@ -409,7 +409,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         return 0;
     }
 
-    lightAction(mode: string, color: string, port: string): void {
+    ledOnWithModeAction(mode: string, color: string, port: string): void {
         U.debug('***** light action mode= "' + mode + ' color=' + color + '" *****');
 
         if (port !== undefined) {

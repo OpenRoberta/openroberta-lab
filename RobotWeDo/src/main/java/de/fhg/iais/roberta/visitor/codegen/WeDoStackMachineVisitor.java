@@ -5,8 +5,8 @@ import org.json.JSONObject;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RGBLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
@@ -37,11 +37,11 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
-        ConfigurationComponent confLedBlock = getConfigurationComponent(lightAction.port);
+    public Void visitRGBLedOnAction(RGBLedOnAction rgbLedOnAction) {
+        ConfigurationComponent confLedBlock = getConfigurationComponent(rgbLedOnAction.port);
         String brickName = confLedBlock.getProperty("VAR");
         if ( brickName != null ) {
-            lightAction.rgbLedColor.accept(this);
+            rgbLedOnAction.rgbLedColor.accept(this);
             JSONObject o = makeNode(C.LED_ON_ACTION).put(C.NAME, brickName);
             return add(o);
         } else {

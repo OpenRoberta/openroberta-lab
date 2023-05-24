@@ -43,7 +43,7 @@ export abstract class ARobotBehaviour {
 
     abstract ledOnAction(name: string, port: number, color: number): void;
 
-    abstract lightAction(mode: string, color: string, port: string): void;
+    abstract ledOnWithModeAction(mode: string, color: string, port: string): void;
 
     abstract ledOffAction(name: string, port: number): void;
 

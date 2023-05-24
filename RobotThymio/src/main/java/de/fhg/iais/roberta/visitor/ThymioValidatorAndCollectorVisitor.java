@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.action.light.LedsOffAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.RGBLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -213,9 +213,9 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
-        requiredComponentVisited(lightAction, lightAction.rgbLedColor);
-        usedHardwareBuilder.addUsedActor(new UsedActor(lightAction.port, SC.RGBLED));
+    public Void visitRGBLedOnAction(RGBLedOnAction rgbLedOnAction) {
+        requiredComponentVisited(rgbLedOnAction, rgbLedOnAction.rgbLedColor);
+        usedHardwareBuilder.addUsedActor(new UsedActor(rgbLedOnAction.port, SC.RGBLED));
         usedHardwareBuilder.addDeclaredVariable("color_");
         return null;
     }

@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.visitor;
 
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.BuiltInLedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
@@ -50,7 +50,7 @@ public interface ICalliopeVisitor<V> extends IMbedVisitor<V> {
 
     V visitLedOnAction(LedOnAction ledOnAction);
 
-    V visitLightAction(LightAction lightAction);
+    V visitBuiltInLedAction(BuiltInLedAction builtInLedAction);
 
     V visitRadioRssiSensor(RadioRssiSensor radioRssiSensor);
 

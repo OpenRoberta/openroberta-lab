@@ -9,15 +9,13 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.mode.action.BrickLedColor;
-import de.fhg.iais.roberta.mode.action.LightMode;
 import de.fhg.iais.roberta.mode.action.RelayMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RGBLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
@@ -377,12 +375,12 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     }
 
     @Test
-    public void visitLightAction() {
+    public void visitLedOnWithColorAction() {
         configurationComponents.add(new ConfigurationComponent(SC.RGBLED, "CONFIGURATION_ACTOR", "P1", "P1", new HashMap<>()));
 
         RgbColor rgbColor = new RgbColor(bp, new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"));
 
-        LightAction lightAction = new LightAction("P1", BrickLedColor.ORANGE, LightMode.DEFAULT, rgbColor, bp);
+        RGBLedOnAction lightAction = new RGBLedOnAction(bp, "P1", rgbColor);
         phrases.add(lightAction);
 
         executeWorkflow();
@@ -391,10 +389,10 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     }
 
     @Test
-    public void visitLightAction_noActor() {
+    public void visitLedOnWithColorAction_noActor() {
         RgbColor rgbColor = new RgbColor(bp, new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"));
 
-        LightAction lightAction = new LightAction("P1", BrickLedColor.ORANGE, LightMode.DEFAULT, rgbColor, bp);
+        RGBLedOnAction lightAction = new RGBLedOnAction(bp, "P1", rgbColor);
         phrases.add(lightAction);
 
         executeWorkflow();

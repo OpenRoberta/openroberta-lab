@@ -1,8 +1,8 @@
 
 (repeat [FOREVER_ARDU, BoolConst[value: true]]
 AktionStmt [ToneAction[frequency: NumConst[value: 300], duration: NumConst[value: 100], port: S]]
-AktionStmt [LightAction [L, ON, DEFAULT, EmptyExpr [defVal=COLOR]]]
-AktionStmt [LightAction [R, DEFAULT, DEFAULT, ColorConst[hexValue: #cc0000]]]
+AktionStmt [BuiltInLedAction[port: L, mode: ON]]
+AktionStmt [RGBLedOnAction[port: R, rgbLedColor: ColorConst[hexValue: #cc0000]]]
 AktionStmt [LightOffAction[port: R]]
 AktionStmt [ShowTextAction[msg: StringConst[value: Hallo], x: NumConst[value: 0], y: NumConst[value: 1], port: O]]
 AktionStmt [ClearDisplayAction[port: O]]

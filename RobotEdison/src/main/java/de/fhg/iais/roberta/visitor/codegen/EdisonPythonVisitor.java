@@ -7,7 +7,7 @@ import com.google.common.collect.ClassToInstanceMap;
 import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
@@ -575,13 +575,13 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to turn on the LEDs visit a {@link LightAction} for the block "robActions_led_on"
+     * Function to turn on the LEDs visit a {@link LedOnAction} for the block "robActions_led_on"
      *
-     * @param lightAction to be visited
+     * @param ledOnAction to be visited
      */
     @Override
-    public Void visitLightAction(LightAction lightAction) {
-        switch ( lightAction.port ) {
+    public Void visitLedOnAction(LedOnAction ledOnAction) {
+        switch ( ledOnAction.port ) {
             case "RLED":
                 this.src.add("Ed.RightLed(Ed.ON)");
                 break;
@@ -591,7 +591,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
             default:
                 break;
         }
-
         return null;
     }
 

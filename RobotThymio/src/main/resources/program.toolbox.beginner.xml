@@ -70,7 +70,7 @@
         </block>
         <block type='mbedActions_play_note'/>
         <block type='robActions_play_file'/>
-        <block type='robActions_led_on'>
+        <block type='robActions_rgbled_on'>
             <value name='COLOR'>
                 <block type='robColour_picker'>
                     <field name='COLOUR'>#cc0000</field>

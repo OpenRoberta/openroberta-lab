@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.BuiltInLedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
@@ -143,7 +143,7 @@ public class CalliopeStackMachineVisitor extends MbedStackMachineVisitor impleme
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
+    public Void visitBuiltInLedAction(BuiltInLedAction builtInLedAction) {
         return null;
     }
 

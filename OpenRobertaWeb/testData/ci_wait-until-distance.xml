@@ -1,9 +1,9 @@
 <block_set robottype="wedo" xmlversion="3.1"
-    description="ROBOT &lt;div&gt;WeDo &lt;/div&gt;&lt;div&gt;START-RESULT &lt;/div&gt;&lt;div&gt;robot: w1, port: undefined led on color 9 &lt;/div&gt;&lt;div&gt;END-RESULT&lt;/div&gt;"
-    tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+           description="ROBOT &lt;div&gt;WeDo &lt;/div&gt;&lt;div&gt;START-RESULT &lt;/div&gt;&lt;div&gt;robot: w1, port: undefined led on color 9 &lt;/div&gt;&lt;div&gt;END-RESULT&lt;/div&gt;"
+           tags="" xmlns="http://de.fhg.iais.roberta.blockly">
     <instance x="13" y="74">
         <block type="robControls_start" id="@.*As2dFC,VdUC}Z|0[K" intask="true" deletable="false">
-            <mutation declare="false" />
+            <mutation declare="false"/>
             <field name="DEBUG">FALSE</field>
         </block>
         <block type="robControls_wait_for" id="BUEF=q;~@?5mJyH:LbF;" intask="true">
@@ -12,7 +12,7 @@
                     <field name="OP">lt</field>
                     <value name="A">
                         <block type="robSensors_infrared_getSample" id="?I./J1MNUDU(!^,Nl|NB" intask="true">
-                            <mutation mode="DISTANCE" />
+                            <mutation mode="DISTANCE"/>
                             <field name="MODE">DISTANCE</field>
                             <field name="SENSORPORT">ir</field>
                             <field name="SLOT"></field>
@@ -26,7 +26,7 @@
                 </block>
             </value>
         </block>
-        <block type="robActions_led_on" id="s_#gjlcja|~cNiUJYNS|" intask="true">
+        <block type="robActions_rgbled_on" id="s_#gjlcja|~cNiUJYNS|" intask="true">
             <field name="ACTORPORT">led</field>
             <value name="COLOR">
                 <block type="robColour_picker" id="MUC!:^.`mb)77|wuWOi(" intask="true">

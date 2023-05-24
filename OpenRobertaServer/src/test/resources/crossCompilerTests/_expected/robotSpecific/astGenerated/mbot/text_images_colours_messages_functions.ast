@@ -3,7 +3,7 @@
 AktionStmt [LEDMatrixTextAction[displayMode: TEXT, port: 1, msg: MethodExpr [MethodCall [function_return_numberVar, , , NUMBER]]]]
 AktionStmt [LEDMatrixTextAction[displayMode: TEXT, port: 1, msg: MethodExpr [MethodCall [function_return_booleanVar, , , BOOLEAN]]]]
 AktionStmt [LEDMatrixTextAction[displayMode: TEXT, port: 1, msg: MethodExpr [MethodCall [function_return_stringVar, , , STRING]]]]
-AktionStmt [LightAction [2, DEFAULT, DEFAULT, ColorConst[hexValue: #00cccc]]]
+AktionStmt [RGBLedOnAction[port: 2, rgbLedColor: ColorConst[hexValue: #00cccc]]]
 AktionStmt [LEDMatrixImageAction[displayImageMode: IMAGE, port: 1, valuesToDisplay: MethodExpr [MethodCall [function_return_imageVar, , , IMAGE]]]]
 Var [numList] := MethodExpr [MethodCall [function_return_numberList, , , ARRAY_NUMBER]]
 

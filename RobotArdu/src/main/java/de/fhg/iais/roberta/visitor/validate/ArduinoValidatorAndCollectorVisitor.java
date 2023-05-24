@@ -14,8 +14,9 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.BuiltInLedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RGBLedOnAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -51,7 +52,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
@@ -143,21 +143,22 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoAndMotorValid
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
-        if ( !lightAction.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
-            optionalComponentVisited(lightAction.rgbLedColor);
-            if ( !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
-                addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
-            } else {
-                this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(lightAction.port, SC.LED));
-            }
+    public Void visitBuiltInLedAction(BuiltInLedAction builtInLedAction) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
+            addErrorToPhrase(builtInLedAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         } else {
-            requiredComponentVisited(lightAction, lightAction.rgbLedColor);
-            if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
-                addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
-            } else {
-                this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(lightAction.port, SC.RGBLED));
-            }
+            this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(builtInLedAction.port, SC.LED));
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitRGBLedOnAction(RGBLedOnAction rgbLedOnAction) {
+        requiredComponentVisited(rgbLedOnAction, rgbLedOnAction.rgbLedColor);
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
+            addErrorToPhrase(rgbLedOnAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
+        } else {
+            this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(rgbLedOnAction.port, SC.RGBLED));
         }
         return null;
     }

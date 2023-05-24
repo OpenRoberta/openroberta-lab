@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LedsOffAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.RGBLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -124,10 +124,10 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
-        lightAction.rgbLedColor.accept(this);
+    public Void visitRGBLedOnAction(RGBLedOnAction rgbLedOnAction) {
+        rgbLedOnAction.rgbLedColor.accept(this);
         nlIndent();
-        this.src.add("call leds.", lightAction.port.toLowerCase(), "(___color_[0] / _RGB_DIV, ___color_[1] / _RGB_DIV, ___color_[2] / _RGB_DIV)");
+        this.src.add("call leds.", rgbLedOnAction.port.toLowerCase(), "(___color_[0] / _RGB_DIV, ___color_[1] / _RGB_DIV, ___color_[2] / _RGB_DIV)");
         return null;
     }
 

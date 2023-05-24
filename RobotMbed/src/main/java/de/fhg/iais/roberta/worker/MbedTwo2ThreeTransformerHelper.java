@@ -51,12 +51,12 @@ public final class MbedTwo2ThreeTransformerHelper {
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ON_ACTION", "", "3"), "robConf_callibot");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ON_ACTION", "", "4"), "robConf_callibot");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ON_ACTION", "", "5"), "robConf_callibot");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_ACTION", "ON", "1"), "robConf_callibot");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_ACTION", "ON", "2"), "robConf_callibot");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_ACTION", "ON", "3"), "robConf_callibot");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_ACTION", "OFF", "1"), "robConf_callibot");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_ACTION", "OFF", "2"), "robConf_callibot");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_ACTION", "OFF", "3"), "robConf_callibot");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("BRICK_LIGHT_ON_WITHOUT_COLOR_ACTION", "ON", "1"), "robConf_callibot");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("BRICK_LIGHT_ON_WITHOUT_COLOR_ACTION", "ON", "2"), "robConf_callibot");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("BRICK_LIGHT_ON_WITHOUT_COLOR_ACTION", "ON", "3"), "robConf_callibot");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("BRICK_LIGHT_ON_WITHOUT_COLOR_ACTION", "OFF", "1"), "robConf_callibot");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("BRICK_LIGHT_ON_WITHOUT_COLOR_ACTION", "OFF", "2"), "robConf_callibot");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("BRICK_LIGHT_ON_WITHOUT_COLOR_ACTION", "OFF", "3"), "robConf_callibot");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_SENSING", "DEFAULT", ""), "robConf_light");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_SENSING", "LIGHT_VALUE", BlocklyConstants.EMPTY_PORT), "robConf_light");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_SENSING", "VALUE", BlocklyConstants.EMPTY_PORT), "robConf_light");
@@ -277,9 +277,9 @@ public final class MbedTwo2ThreeTransformerHelper {
 
         CALLIBOT.put(Pair.of("INFRARED_SENSING", "2"), "I_CalliBot_links");
         CALLIBOT.put(Pair.of("INFRARED_SENSING", "1"), "I_CalliBot_rechts");
-        CALLIBOT.put(Pair.of("LIGHT_ACTION", "1"), "L_CalliBot_links");
-        CALLIBOT.put(Pair.of("LIGHT_ACTION", "2"), "L_CalliBot_rechts");
-        CALLIBOT.put(Pair.of("LIGHT_ACTION", "3"), "L_CalliBot_beide");
+        CALLIBOT.put(Pair.of("BRICK_LIGHT_ON_WITHOUT_COLOR_ACTION", "1"), "L_CalliBot_links");
+        CALLIBOT.put(Pair.of("BRICK_LIGHT_ON_WITHOUT_COLOR_ACTION", "2"), "L_CalliBot_rechts");
+        CALLIBOT.put(Pair.of("BRICK_LIGHT_ON_WITHOUT_COLOR_ACTION", "3"), "L_CalliBot_beide");
         CALLIBOT.put(Pair.of("LED_ON_ACTION", "1"), "CalliBot_links_vorne");
         CALLIBOT.put(Pair.of("LED_ON_ACTION", "4"), "CalliBot_rechts_vorne");
         CALLIBOT.put(Pair.of("LED_ON_ACTION", "2"), "CalliBot_links_hinten");

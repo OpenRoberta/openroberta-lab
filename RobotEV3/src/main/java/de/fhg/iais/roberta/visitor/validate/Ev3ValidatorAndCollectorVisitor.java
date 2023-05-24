@@ -20,8 +20,8 @@ import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.light.BrickLightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightOnAction;
 import de.fhg.iais.roberta.syntax.action.light.BrickLightResetAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
@@ -199,9 +199,8 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoAndMotorValidator
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
-        optionalComponentVisited(lightAction.rgbLedColor);
-        usedHardwareBuilder.addUsedActor(new UsedActor(lightAction.port, SC.LIGHT));
+    public Void visitBrickLightOnAction(BrickLightOnAction bricklightOnAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.LIGHT));
         return null;
     }
 

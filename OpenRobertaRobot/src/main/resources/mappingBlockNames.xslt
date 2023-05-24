@@ -53,6 +53,24 @@
                 <xsl:when test=". = 'sim_motor_stop'">robActions_motor_stop</xsl:when>
                 <xsl:when test=". = 'robActions_write_to_pin'">robActions_write_pin</xsl:when>
                 <xsl:when test=". = 'robSensors_pin_getSample' and ancestor::b:block_set/@robottype = 'arduino'">robSensors_out_getSample</xsl:when>
+                <xsl:when test=". = 'robActions_brickLight_on' and
+                    (ancestor::b:block_set/@robottype = 'arduino' or
+                     ancestor::b:block_set/@robottype = 'botnroll' or
+                     ancestor::b:block_set/@robottype = 'calliope' or
+                     ancestor::b:block_set/@robottype = 'festobionic' or
+                     ancestor::b:block_set/@robottype = 'nano33ble' or
+                     ancestor::b:block_set/@robottype = 'sensebox')">
+                    <xsl:text>robActions_inbuilt_led</xsl:text>
+                </xsl:when>
+                <xsl:when test=". = 'robActions_led_on' and
+                    (ancestor::b:block_set/@robottype = 'arduino' or
+                     ancestor::b:block_set/@robottype = 'mbot' or
+                     ancestor::b:block_set/@robottype = 'nano33ble' or
+                     ancestor::b:block_set/@robottype = 'sensebox' or
+                     ancestor::b:block_set/@robottype = 'thymio' or
+                     ancestor::b:block_set/@robottype = 'wedo')">
+                    <xsl:text>robActions_rgbled_on</xsl:text>
+                </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="."/>
                 </xsl:otherwise>

@@ -36,8 +36,8 @@ import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.light.BrickLightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightOnAction;
 import de.fhg.iais.roberta.syntax.action.light.BrickLightResetAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -1213,8 +1213,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
-        String pattern = getLedPattern(lightAction.color, lightAction.mode);
+    public Void visitBrickLightOnAction(BrickLightOnAction bricklightOnAction) {
+        String pattern = getLedPattern(bricklightOnAction.color, bricklightOnAction.mode);
         this.src.add("SetLedPattern(", pattern, ");");
         return null;
     }

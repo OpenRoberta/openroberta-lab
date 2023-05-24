@@ -16,9 +16,12 @@ import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.BrickLightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightOnAction;
 import de.fhg.iais.roberta.syntax.action.light.BrickLightResetAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.BuiltInLedAction;
+import de.fhg.iais.roberta.syntax.action.light.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RGBLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -246,8 +249,20 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
         return new ShowTextAction(showTextAction.getProperty(), (Expr) showTextAction.msg.modify(this), (Expr) showTextAction.x.modify(this), (Expr) showTextAction.y.modify(this), showTextAction.port, null);
     }
 
-    public Phrase visitLightAction(LightAction lightAction) {
-        return new LightAction(lightAction.port, lightAction.color, lightAction.mode, (Expr) lightAction.rgbLedColor.modify(this), lightAction.getProperty());
+    public Phrase visitBrickLightOnAction(BrickLightOnAction brickLightOnAction) {
+        return new BrickLightOnAction(brickLightOnAction.getProperty(), brickLightOnAction.color, brickLightOnAction.mode);
+    }
+
+    public Phrase visitBuiltInLedAction(BuiltInLedAction builtInLedAction) {
+        return new BuiltInLedAction(builtInLedAction.getProperty(), builtInLedAction.port, builtInLedAction.mode);
+    }
+
+    public Phrase visitRGBLedOnAction(RGBLedOnAction rgbLedOnAction) {
+        return new RGBLedOnAction(rgbLedOnAction.getProperty(), rgbLedOnAction.port, (Expr) rgbLedOnAction.rgbLedColor.modify(this));
+    }
+
+    public Phrase visitLedOnWithoutColorAction(LedOnAction ledOnAction) {
+        return new LedOnAction(ledOnAction.getProperty(), ledOnAction.port);
     }
 
     public Phrase visitBrickLightOffAction(BrickLightOffAction brickLightOffAction) {

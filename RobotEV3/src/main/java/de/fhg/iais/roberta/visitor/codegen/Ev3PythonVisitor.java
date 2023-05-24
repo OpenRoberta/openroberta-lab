@@ -24,8 +24,8 @@ import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.light.BrickLightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightOnAction;
 import de.fhg.iais.roberta.syntax.action.light.BrickLightResetAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -184,8 +184,8 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
-        this.src.add("hal.ledOn(", getEnumCode(lightAction.color), ", ", getEnumCode(lightAction.mode), ")");
+    public Void visitBrickLightOnAction(BrickLightOnAction bricklightOnAction) {
+        this.src.add("hal.ledOn(", getEnumCode(bricklightOnAction.color), ", ", getEnumCode(bricklightOnAction.mode), ")");
         return null;
     }
 

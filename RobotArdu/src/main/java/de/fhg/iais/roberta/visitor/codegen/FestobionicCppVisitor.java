@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.BuiltInLedAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -47,8 +47,8 @@ public final class FestobionicCppVisitor extends NepoArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
-        this.src.add("digitalWrite(_led_", lightAction.port, ", ", lightAction.mode.getValues()[0], ");");
+    public Void visitBuiltInLedAction(BuiltInLedAction builtInLedAction) {
+        this.src.add("digitalWrite(_led_", builtInLedAction.port, ", ", builtInLedAction.mode.getValues()[0], ");");
         return null;
     }
 

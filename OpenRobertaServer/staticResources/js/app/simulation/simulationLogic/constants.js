@@ -223,7 +223,6 @@ define(["require", "exports"], function (require, exports) {
         METHOD_CALL_VOID: 'createMethodCallVoid',
         METHOD_CALL_RETURN: 'createMethodCallReturn',
         TEXT_JOIN: 'createTextJoin',
-        LIGHT_ACTION: 'lightSensorAction',
         WHERE1: 'where1',
         WHERE2: 'where2',
         AT1: 'at1',

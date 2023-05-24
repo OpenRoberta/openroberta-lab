@@ -260,8 +260,8 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         UI.getNetwork().changeBias(stmt[C.NAME], this.state.pop());
                         break;
                     case C.LED_ON_ACTION: {
-                        var color_1 = this.state.pop();
-                        this.robotBehaviour.ledOnAction(stmt[C.NAME], stmt[C.PORT], color_1);
+                        var color = this.state.pop();
+                        this.robotBehaviour.ledOnAction(stmt[C.NAME], stmt[C.PORT], color);
                         break;
                     }
                     case C.REMEMBER: {
@@ -470,16 +470,8 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         this.robotBehaviour.displayGetPixelBrightnessAction(this.state, x, y);
                         break;
                     }
-                    case C.LIGHT_ACTION:
-                        var color = void 0;
-                        if (stmt[C.NAME] === 'mbot') {
-                            var rgb = this.state.pop();
-                            color = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
-                        }
-                        else {
-                            color = stmt[C.COLOR];
-                        }
-                        this.robotBehaviour.lightAction(stmt[C.MODE], color, stmt[C.PORT]);
+                    case C.LED_ON_WITH_MODE:
+                        this.robotBehaviour.ledOnWithModeAction(stmt[C.MODE], stmt[C.COLOR], stmt[C.PORT]);
                         return [0, true];
                     case C.LED_OFF_ACTION:
                         this.robotBehaviour.ledOffAction(stmt[C.NAME], stmt[C.PORT]);

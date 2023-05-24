@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.BuiltInLedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
@@ -110,14 +110,9 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
-        // TODO: design better blockly blocks and don't reuse blocks with different number of parameters and don't use EmptyExpr
-        addToPhraseIfUnsupportedInSim(lightAction, false, isSim);
-        String blocktype = lightAction.getProperty().getBlockType();
-        checkActorByPortExists(lightAction, lightAction.port);
-        if ( !blocktype.equals("robActions_brickLight_on") ) {
-            requiredComponentVisited(lightAction, lightAction.rgbLedColor);
-        }
+    public Void visitBuiltInLedAction(BuiltInLedAction builtInLedAction) {
+        addToPhraseIfUnsupportedInSim(builtInLedAction, false, isSim);
+        checkActorByPortExists(builtInLedAction, builtInLedAction.port);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
         return null;
     }

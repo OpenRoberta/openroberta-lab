@@ -10,12 +10,12 @@ import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SensorLightAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -278,11 +278,11 @@ public class NxtStackMachineVisitor extends AbstractStackMachineVisitor implemen
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
-        String mode = lightAction.mode.toString().toLowerCase();
-        String color = lightAction.color.toString().toLowerCase();
-        String port = lightAction.port;
-        JSONObject o = makeNode(C.LIGHT_ACTION).put(C.MODE, mode).put(C.PORT, port).put(C.COLOR, color);
+    public Void visitSensorLightAction(SensorLightAction sensorLightAction) {
+        String state = sensorLightAction.mode.toString().toLowerCase();
+        String color = sensorLightAction.color.toString().toLowerCase();
+        String port = sensorLightAction.port;
+        JSONObject o = makeNode(C.LED_ON_WITH_MODE).put(C.MODE, state).put(C.PORT, port).put(C.COLOR, color);
         return add(o);
     }
 

@@ -48,7 +48,7 @@
             </block>
         </category>
         <category name="TOOLBOX_LIGHT" svg="true">
-            <block type="robActions_led_on">
+            <block type="robActions_rgbled_on">
                 <value name="COLOR">
                     <block type="robColour_picker">
                         <field name="COLOUR">#FF0000</field>

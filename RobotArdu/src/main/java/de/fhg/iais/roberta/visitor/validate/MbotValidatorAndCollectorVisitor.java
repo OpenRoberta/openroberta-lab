@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RGBLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -190,8 +190,8 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
-        requiredComponentVisited(lightAction, lightAction.rgbLedColor);
+    public Void visitRGBLedOnAction(RGBLedOnAction rgbLedOnAction) {
+        requiredComponentVisited(rgbLedOnAction, rgbLedOnAction.rgbLedColor);
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.LED_ON_BOARD));
         return null;
     }
