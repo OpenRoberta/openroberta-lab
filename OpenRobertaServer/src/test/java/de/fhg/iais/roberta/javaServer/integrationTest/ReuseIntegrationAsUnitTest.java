@@ -258,6 +258,9 @@ public class ReuseIntegrationAsUnitTest {
         String progFragmentName = progDeclFromTestSpec.optString("fragment");
         String progFragment = progFragmentName.isEmpty() ? "" : read("fragment", progFragmentName + ".xml");
         template = template.replaceAll("\\[\\[fragment\\]\\]", progFragment);
+        String nnFragmentName = progDeclFromTestSpec.optString("nn");
+        String nnFragment = nnFragmentName == null ? "" : read("nn", nnFragmentName + ".xml");
+        template = template.replaceAll("\\[\\[nn\\]\\]", nnFragment == null ? "" : nnFragment);
         String declName = progDeclFromTestSpec.optString("decl");
         Assert.assertNotNull(declName, "decl for program not found: " + progName);
         String decl = read("decl", declName + ".xml");

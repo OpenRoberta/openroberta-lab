@@ -194,6 +194,7 @@ public class ClientAdmin {
                     response.setMultipleSim(robotFactory.hasMultipleSim());
                     response.setMarkerSim(robotFactory.hasMarkerSim());
                     response.setNn(robotFactory.hasNN());
+                    response.setNnActivations(robotFactory.getNNActivations());
                     response.setWebotsSim(robotFactory.hasWebotsSim());
                     response.setWebotsUrl(robotFactory.getWebotsUrl());
                     response.setConnection(robotFactory.getConnectionType());

@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,6 +103,15 @@ public class RobotFactory {
 
     public final Boolean hasNN() {
         return this.pluginProperties.getStringProperty("robot.nn") != null && this.pluginProperties.getStringProperty("robot.nn").equals("true");
+    }
+
+    public final JSONArray getNNActivations() {
+        if ( hasNN() ) {
+            String values = this.pluginProperties.getStringProperty("robot.nn.activations");
+            List<String> activations = Stream.of(values.trim().split("\\s*,\\s*")).collect(Collectors.toList());
+            return new JSONArray(activations);
+        }
+        return new JSONArray();
     }
 
     public Boolean hasWebotsSim() {

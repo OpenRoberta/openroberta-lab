@@ -61,6 +61,10 @@ import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetBiasStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetInputNeuronVal;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetWeightStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
@@ -749,6 +753,36 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         } else {
             this.src.add(": return None");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitNNStepStmt(NNStepStmt nnStepStmt) {
+        this.src.add("____nnStep()");
+        return null;
+    }
+
+    @Override
+    public Void visitNNSetInputNeuronVal(NNSetInputNeuronVal setVal) {
+        this.src.add("global ____").add(setVal.name);
+        this.src.nlI().add("____").add(setVal.name).add(" = ");
+        setVal.value.accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitNNSetWeightStmt(NNSetWeightStmt chgStmt) {
+        this.src.add("global ____w_", chgStmt.from, "_", chgStmt.to);
+        this.src.nlI().add("____w_", chgStmt.from, "_", chgStmt.to, " = ");
+        chgStmt.value.accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitNNSetBiasStmt(NNSetBiasStmt chgStmt) {
+        this.src.add("global ____b_", chgStmt.name);
+        this.src.nlI().add("____b_", chgStmt.name, " = ");
+        chgStmt.value.accept(this);
         return null;
     }
 

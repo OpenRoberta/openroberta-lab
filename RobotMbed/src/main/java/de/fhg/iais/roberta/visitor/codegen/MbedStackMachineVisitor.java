@@ -7,6 +7,8 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import de.fhg.iais.roberta.bean.NNBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.general.IDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -44,8 +46,8 @@ import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public class MbedStackMachineVisitor extends AbstractStackMachineVisitor implements IMbedVisitor<Void> {
 
-    public MbedStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases) {
-        super(configuration);
+    public MbedStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
+        super(configuration, usedHardwareBean, nnBean);
         Assert.isTrue(!phrases.isEmpty());
 
     }

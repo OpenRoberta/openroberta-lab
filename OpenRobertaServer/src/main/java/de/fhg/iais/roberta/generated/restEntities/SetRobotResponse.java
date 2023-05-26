@@ -5,6 +5,7 @@
  */
 package de.fhg.iais.roberta.generated.restEntities;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,6 +25,7 @@ public class SetRobotResponse extends BaseResponse {
     protected boolean markerSim;
     protected boolean markerSimDefined = false;
     protected boolean nn;
+    protected JSONArray nnActivations;
     protected boolean nnDefined = false;
     protected boolean webotsSim;
     protected boolean webotsSimDefined = false;
@@ -87,6 +89,7 @@ public class SetRobotResponse extends BaseResponse {
         boolean multipleSim,
         boolean markerSim,
         boolean nn,
+        JSONArray nnActivations,
         boolean webotsSim,
         String webotsUrl,
         String connection,
@@ -123,6 +126,7 @@ public class SetRobotResponse extends BaseResponse {
         entity.setMultipleSim(multipleSim);
         entity.setMarkerSim(markerSim);
         entity.setNn(nn);
+        entity.setNnActivations(nnActivations);
         entity.setWebotsSim(webotsSim);
         entity.setWebotsUrl(webotsUrl);
         entity.setConnection(connection);
@@ -202,6 +206,8 @@ public class SetRobotResponse extends BaseResponse {
                     setMarkerSim(jsonO.getBoolean(key));
                 } else if ( "nn".equals(key) ) {
                     setNn(jsonO.getBoolean(key));
+                } else if ( "nn.activations".equals(key) ) {
+                    setNnActivations(jsonO.getJSONArray(key));
                 } else if ( "webotsSim".equals(key) ) {
                     setWebotsSim(jsonO.getBoolean(key));
                 } else if ( "webotsUrl".equals(key) ) {
@@ -288,6 +294,9 @@ public class SetRobotResponse extends BaseResponse {
         }
         if ( !nnDefined ) {
             _message = "required property nn of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( nnActivations == null ) {
+            _message = "required property nn.activations of SetRobotResponse-object is not set: " + toString();
         }
         if ( !webotsSimDefined ) {
             _message = "required property webotsSim of SetRobotResponse-object is not set: " + toString();
@@ -465,6 +474,27 @@ public class SetRobotResponse extends BaseResponse {
         }
         this.nn = nn;
         this.nnDefined = true;
+        return this;
+    }
+
+    /**
+     * GET NN activations. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public JSONArray getNnActivations() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no NN activations from an object under construction: " + toString());
+        }
+        return this.nnActivations;
+    }
+
+    /**
+     * SET NN activations for the robot. Object must be mutable.
+     */
+    public SetRobotResponse setNnActivations(JSONArray nnActivations) {
+        if ( this.immutable ) {
+            throw new RuntimeException("nn activations assigned to an immutable object: " + toString());
+        }
+        this.nnActivations = nnActivations;
         return this;
     }
 
@@ -799,6 +829,7 @@ public class SetRobotResponse extends BaseResponse {
             jsonO.put("multipleSim", this.multipleSim);
             jsonO.put("markerSim", this.markerSim);
             jsonO.put("nn", this.nn);
+            jsonO.put("nnActivations", this.nnActivations);
             jsonO.put("webotsSim", this.webotsSim);
             if ( this.webotsUrl != null ) {
                 jsonO.put("webotsUrl", this.webotsUrl);
@@ -826,7 +857,7 @@ public class SetRobotResponse extends BaseResponse {
 
     @Override
     public String toString() {
-        return "SetRobotResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", robot=" + this.robot + ", program=" + this.program + ", configuration=" + this.configuration + ", sim=" + this.sim + ", multipleSim=" + this.multipleSim + ", markerSim=" + this.markerSim + ", nn=" + this.nn + ", webotsSim=" + this.webotsSim + ", webotsUrl=" + this.webotsUrl + ", connection=" + this.connection + ", vendor=" + this.vendor + ", configurationUsed=" + this.configurationUsed + ", commandLine=" + this.commandLine + ", signature=" + this.signature + ", sourceCodeFileExtension=" + this.sourceCodeFileExtension + ", binaryFileExtension=" + this.binaryFileExtension + ", hasWlan=" + this.hasWlan + ", firmwareDefault=" + this.firmwareDefault + " ]";
+        return "SetRobotResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", robot=" + this.robot + ", program=" + this.program + ", configuration=" + this.configuration + ", sim=" + this.sim + ", multipleSim=" + this.multipleSim + ", markerSim=" + this.markerSim + ", nn=" + this.nn + ", nnActivations=" + this.nnActivations + ", webotsSim=" + this.webotsSim + ", webotsUrl=" + this.webotsUrl + ", connection=" + this.connection + ", vendor=" + this.vendor + ", configurationUsed=" + this.configurationUsed + ", commandLine=" + this.commandLine + ", signature=" + this.signature + ", sourceCodeFileExtension=" + this.sourceCodeFileExtension + ", binaryFileExtension=" + this.binaryFileExtension + ", hasWlan=" + this.hasWlan + ", firmwareDefault=" + this.firmwareDefault + " ]";
     }
 
     @Override

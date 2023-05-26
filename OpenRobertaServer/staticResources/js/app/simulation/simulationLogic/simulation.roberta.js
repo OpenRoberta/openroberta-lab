@@ -175,8 +175,10 @@ define(["require", "exports", "interpreter.constants", "util", "interpreter.inte
                 console.log('END of Sim');
             }
             // only reset mobile robots, because currently all non mobile real "robots" do not reset their actuators when the program is executed
-            this.scene.robots.forEach(function (robot) { return robot.interpreter.isTerminated() && robot.mobile && robot.reset(); });
-            NN_CTRL.saveNN2Blockly();
+            this.scene.robots.forEach(function (robot) {
+                robot.interpreter.isTerminated() && robot.mobile && robot.reset();
+                robot.interpreter.updateNNView && NN_CTRL.saveNN2Blockly(robot.interpreter.neuralNetwork);
+            });
         };
         SimulationRoberta.prototype.deleteAllColorArea = function () {
             this.scene.colorAreaList = [];
@@ -500,7 +502,7 @@ define(["require", "exports", "interpreter.constants", "util", "interpreter.inte
             this.interpreters = programs.map(function (x) {
                 var src = JSON.parse(x['javaScriptProgram']);
                 configurations.push(x['configuration']);
-                return new SIM_I.Interpreter(src, new ROBOT_B.RobotSimBehaviour(), _this.callbackOnTermination.bind(_this), _this.breakpoints, x['savedName']);
+                return new SIM_I.Interpreter(src, new ROBOT_B.RobotSimBehaviour(), _this.callbackOnTermination.bind(_this), _this.breakpoints, x['programName'], x['updateNNView']);
             });
             this.updateDebugMode(this.debugMode);
             var programNames = programs.map(function (x) { return x['programName']; });
@@ -728,16 +730,18 @@ define(["require", "exports", "interpreter.constants", "util", "interpreter.inte
             }
         };
         SimulationRoberta.prototype.stop = function () {
-            NN_CTRL.saveNN2Blockly();
+            this.interpreters.forEach(function (interpreter) {
+                interpreter.updateNNView && NN_CTRL.saveNN2Blockly(interpreter.neuralNetwork);
+            });
             this.canceled = true;
         };
         SimulationRoberta.prototype.stopProgram = function () {
             this.interpreters.forEach(function (interpreter) {
                 interpreter.removeHighlights();
                 interpreter.terminate();
+                interpreter.updateNNView && NN_CTRL.saveNN2Blockly(interpreter.neuralNetwork);
             });
             this.interpreterRunning = false;
-            NN_CTRL.saveNN2Blockly();
         };
         SimulationRoberta.prototype.toggleColorPicker = function () {
             if ($('.huebee').length) {

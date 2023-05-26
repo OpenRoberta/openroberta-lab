@@ -40,7 +40,6 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
@@ -76,12 +75,6 @@ public class Mbot2ValidatorAndCollectorVisitor extends CommonNepoAndMotorValidat
 
     public Mbot2ValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(robotConfiguration, beanBuilders);
-    }
-
-    @Override
-    public Void visitMainTask(MainTask mainTask) {
-        requiredComponentVisited(mainTask, mainTask.variables);
-        return null;
     }
 
     @Override

@@ -11,6 +11,7 @@
                 </block>
                 [[prog]]
             </instance>
+            [[fragment]]
         </block_set>
     </program>
     <config>

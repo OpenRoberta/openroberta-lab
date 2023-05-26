@@ -142,7 +142,6 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
         generateConstants();
         generateImports();
-        generateNNStuff("c++");
         nlIndent();
 
         super.generateProgramPrefix(withWrapping);

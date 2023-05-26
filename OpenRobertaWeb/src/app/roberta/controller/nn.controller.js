@@ -50,8 +50,8 @@ export function programWasReplaced() {
  * - close the edit card
  * - reset node selection (yellow node)
  */
-export function saveNN2Blockly() {
-    NN_UI.saveNN2Blockly();
+export function saveNN2Blockly(neuralNetwork = null) {
+    NN_UI.saveNN2Blockly(neuralNetwork);
     NN_UI.resetUiOnTerminate();
 }
 
@@ -74,5 +74,5 @@ export function mkNNfromProgramStartBlock() {
  */
 export function mkNNfromNNStepDataAndRunNNEditor() {
     mkNNfromProgramStartBlock();
-    NN_UI.runNNEditor();
+    NN_UI.runNNEditor(GUISTATE_C.hasSim());
 }

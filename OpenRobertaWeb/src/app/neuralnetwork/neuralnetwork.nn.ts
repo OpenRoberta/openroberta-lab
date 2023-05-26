@@ -556,7 +556,7 @@ export class Network {
             return 0;
         }
     }
-
+    
     /**
      * finds a link and updates its weight. Called from the simulation
      * @param from id of the source of the link

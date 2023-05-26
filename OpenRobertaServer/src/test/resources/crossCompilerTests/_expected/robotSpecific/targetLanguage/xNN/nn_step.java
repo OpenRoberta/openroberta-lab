@@ -30,6 +30,9 @@ public class NEPOprog {
 
     private float ____i1;
     private float ____i2;
+    private float ____h1n1;
+    private float ____h1n2;
+    private float ____h1n3;
     private float ____o1;
     private float ____o2;
     private float ____b_h1n1 = 1.0f;
@@ -51,9 +54,9 @@ public class NEPOprog {
     private float ____w_h1n3_o2 = 1.0f;
 
     private void ____nnStep() {
-        float ____h1n1 = ____b_h1n1 + ____i1 * ____w_i1_h1n1 + ____i2 * ____w_i2_h1n1;
-        float ____h1n2 = ____b_h1n2 + ____i1 * ____w_i1_h1n2 + ____i2 * ____w_i2_h1n2;
-        float ____h1n3 = ____b_h1n3 + ____i1 * ____w_i1_h1n3 + ____i2 * ____w_i2_h1n3;
+        ____h1n1 = ____b_h1n1 + ____i1 * ____w_i1_h1n1 + ____i2 * ____w_i2_h1n1;
+        ____h1n2 = ____b_h1n2 + ____i1 * ____w_i1_h1n2 + ____i2 * ____w_i2_h1n2;
+        ____h1n3 = ____b_h1n3 + ____i1 * ____w_i1_h1n3 + ____i2 * ____w_i2_h1n3;
         ____o1 = ____b_o1 + ____h1n1 * ____w_h1n1_o1 + ____h1n2 * ____w_h1n2_o1 + ____h1n3 * ____w_h1n3_o1;
         ____o2 = ____b_o2 + ____h1n1 * ____w_h1n1_o2 + ____h1n2 * ____w_h1n2_o2 + ____h1n3 * ____w_h1n3_o2;
     }

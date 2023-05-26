@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import de.fhg.iais.roberta.bean.NNBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
@@ -40,8 +42,8 @@ import de.fhg.iais.roberta.visitor.ICalliopeVisitor;
 
 public class CalliopeStackMachineVisitor extends MbedStackMachineVisitor implements ICalliopeVisitor<Void> {
 
-    public CalliopeStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases) {
-        super(configuration, phrases);
+    public CalliopeStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
+        super(configuration, phrases, usedHardwareBean, nnBean);
         Assert.isTrue(!phrases.isEmpty());
 
     }

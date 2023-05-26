@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import de.fhg.iais.roberta.bean.NNBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
@@ -68,8 +70,8 @@ import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public class Ev3StackMachineVisitor extends AbstractStackMachineVisitor implements IEv3Visitor<Void> {
 
-    public Ev3StackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, ILanguage language) {
-        super(configuration);
+    public Ev3StackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, ILanguage language, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
+        super(configuration, usedHardwareBean, nnBean);
         Assert.isTrue(!phrases.isEmpty());
 
     }

@@ -1,0 +1,176 @@
+{"ops": [
+  {
+    "outputs": [
+      "n2",
+      "n4"
+    ],
+    "opc": "neuralNetwork",
+    "inputs": [
+      "n1",
+      "n3"
+    ],
+    "weights": [
+      [
+        [
+          "1",
+          "3"
+        ],
+        [
+          "2",
+          "4"
+        ]
+      ],
+      [
+        [
+          "7",
+          "8"
+        ],
+        [
+          "6",
+          "5"
+        ]
+      ],
+      [
+        [],
+        []
+      ]
+    ],
+    "activationKey": "linear",
+    "learningRate": 0.03,
+    "numHiddenLayers": 1,
+    "percTrainData": 50,
+    "biases": [
+      [
+        "0",
+        "0"
+      ],
+      [
+        "0.5",
+        "1.5"
+      ],
+      [
+        "0",
+        "0"
+      ]
+    ],
+    "discretize": false,
+    "noise": 0,
+    "networkShape": [2],
+    "batchSize": 10,
+    "regularizationRate": 0
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "n",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "returnAddress",
+    "target": "rtn_1"
+  },
+  {
+    "opc": "call",
+    "target": "mthd_s_runNN"
+  },
+  {
+    "opc": "comment",
+    "text": "call",
+    "label": "rtn_1",
+    "type": "end"
+  },
+  {"opc": "stop"},
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_s_runNN",
+    "type": "start"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "nnSetInputNeuronStmt",
+    "name": "n1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "opc": "nnSetInputNeuronStmt",
+    "name": "n3"
+  },
+  {
+    "opc": "expr",
+    "expr": "nnGetWeight",
+    "FROM": "h1n2",
+    "TO": "n2"
+  },
+  {
+    "opc": "nnSetWeightStmt",
+    "FROM": "n1",
+    "TO": "h1n1"
+  },
+  {
+    "opc": "expr",
+    "expr": "nnGetWeight",
+    "FROM": "h1n2",
+    "TO": "n4"
+  },
+  {
+    "opc": "nnSetWeightStmt",
+    "FROM": "n3",
+    "TO": "h1n1"
+  },
+  {
+    "opc": "expr",
+    "name": "h1n1",
+    "expr": "nnGetBias"
+  },
+  {
+    "opc": "nnSetBiasStmt",
+    "name": "n2"
+  },
+  {
+    "opc": "expr",
+    "name": "h1n2",
+    "expr": "nnGetBias"
+  },
+  {
+    "opc": "nnSetBiasStmt",
+    "name": "n4"
+  },
+  {"opc": "nnStepStmt"},
+  {
+    "opc": "expr",
+    "name": "n2",
+    "expr": "nnGetOutputNeuronVal"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "n"
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "label": "mthd_e_2",
+    "type": "start"
+  },
+  {
+    "opc": "return",
+    "values": false
+  },
+  {
+    "opc": "comment",
+    "text": "createMethodVoid",
+    "type": "end"
+  }
+]}

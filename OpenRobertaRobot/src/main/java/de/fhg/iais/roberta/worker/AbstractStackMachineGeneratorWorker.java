@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.worker;
 
 import org.json.JSONObject;
 
+import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
@@ -16,7 +17,8 @@ public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
     @Override
     public final void execute(Project project) {
         UsedHardwareBean usedHardwareBean = project.getWorkerResult(UsedHardwareBean.class);
-        AbstractStackMachineVisitor visitor = this.getVisitor(project, usedHardwareBean);
+        NNBean nnBean = project.getWorkerResult(NNBean.class);
+        AbstractStackMachineVisitor visitor = this.getVisitor(project, usedHardwareBean, nnBean);
         visitor.generateCodeFromPhrases(project.getProgramAst().getTree());
         JSONObject generatedCode = new JSONObject();
         generatedCode.put(C.OPS, visitor.getCode());
@@ -31,7 +33,8 @@ public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
      *
      * @param project the project
      * @param usedHardwareBean the used hardware bean
+     * @param nnBean the used NN bean
      * @return the appropriate visitor for the current robot
      */
-    protected abstract AbstractStackMachineVisitor getVisitor(Project project, UsedHardwareBean usedHardwareBean);
+    protected abstract AbstractStackMachineVisitor getVisitor(Project project, UsedHardwareBean usedHardwareBean, NNBean nnBean);
 }

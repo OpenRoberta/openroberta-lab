@@ -186,8 +186,10 @@ export class SimulationRoberta implements Simulation {
             console.log('END of Sim');
         }
         // only reset mobile robots, because currently all non mobile real "robots" do not reset their actuators when the program is executed
-        this.scene.robots.forEach((robot) => robot.interpreter.isTerminated() && robot.mobile && robot.reset());
-        NN_CTRL.saveNN2Blockly();
+        this.scene.robots.forEach((robot) => {
+            robot.interpreter.isTerminated() && robot.mobile && robot.reset();
+            robot.interpreter.updateNNView && NN_CTRL.saveNN2Blockly(robot.interpreter.neuralNetwork);
+        });
     }
 
     deleteAllColorArea() {
@@ -519,7 +521,14 @@ export class SimulationRoberta implements Simulation {
         this.interpreters = programs.map((x) => {
             let src = JSON.parse(x['javaScriptProgram']);
             configurations.push(x['configuration']);
-            return new SIM_I.Interpreter(src, new ROBOT_B.RobotSimBehaviour(), this.callbackOnTermination.bind(this), this.breakpoints, x['savedName']);
+            return new SIM_I.Interpreter(
+                src,
+                new ROBOT_B.RobotSimBehaviour(),
+                this.callbackOnTermination.bind(this),
+                this.breakpoints,
+                x['programName'],
+                x['updateNNView']
+            );
         });
         this.updateDebugMode(this.debugMode);
         let programNames = programs.map((x) => x['programName']);
@@ -760,7 +769,9 @@ export class SimulationRoberta implements Simulation {
     }
 
     stop() {
-        NN_CTRL.saveNN2Blockly();
+        this.interpreters.forEach((interpreter) => {
+            interpreter.updateNNView && NN_CTRL.saveNN2Blockly(interpreter.neuralNetwork);
+        });
         this.canceled = true;
     }
 
@@ -768,9 +779,9 @@ export class SimulationRoberta implements Simulation {
         this.interpreters.forEach((interpreter) => {
             interpreter.removeHighlights();
             interpreter.terminate();
+            interpreter.updateNNView && NN_CTRL.saveNN2Blockly(interpreter.neuralNetwork);
         });
         this.interpreterRunning = false;
-        NN_CTRL.saveNN2Blockly();
     }
 
     toggleColorPicker() {

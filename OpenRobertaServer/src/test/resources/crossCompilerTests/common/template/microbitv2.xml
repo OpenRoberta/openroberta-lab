@@ -3,8 +3,9 @@
         <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbitv2" xmlversion="3.1" description="" tags="">
             <instance x="384" y="50">
                 <block type="robControls_start" id="l+hZouIf7~H96m^O={Wz" intask="true" deletable="false">
-                    <mutation declare="true" />
-                    <field name="DEBUG" />
+                    <mutation declare="true"/>
+                    <field name="DEBUG"/>
+                    [[nn]]
                     <statement name="ST">
                         [[decl]]
                     </statement>

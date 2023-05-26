@@ -28,6 +28,7 @@ public class UsedHardwareBean implements IProjectBean {
     private Set<String> markedVariablesAsGlobal = new HashSet<>();
     private boolean isProgramEmpty = false;
     private boolean isListsUsed = false;
+    private boolean isNNBlockUsed = false;
 
     private Map<Integer, Boolean> loopsLabelContainer = new HashMap<>();
 
@@ -58,6 +59,10 @@ public class UsedHardwareBean implements IProjectBean {
 
     public boolean isListsUsed() {
         return this.isListsUsed;
+    }
+
+    public boolean isNNBlockUsed() {
+        return this.isNNBlockUsed;
     }
 
     public Set<UsedSensor> getUsedSensors() {
@@ -131,6 +136,11 @@ public class UsedHardwareBean implements IProjectBean {
             return this;
         }
 
+        public Builder setNNBlockUsed(boolean isNNBlockUsed) {
+            this.usedHardwareBean.isNNBlockUsed = isNNBlockUsed;
+            return this;
+        }
+
         public Builder addUsedSensor(UsedSensor usedSensor) {
             this.usedHardwareBean.usedSensors.add(usedSensor);
             return this;
@@ -163,7 +173,7 @@ public class UsedHardwareBean implements IProjectBean {
         public boolean removeInScopeVariable(String inScopeVariable) {
             return this.usedHardwareBean.inScopeVariables.remove(inScopeVariable);
         }
-        
+
         public boolean containsGlobalVariable(String variableName) {
             return this.usedHardwareBean.globalVariables.contains(variableName);
         }

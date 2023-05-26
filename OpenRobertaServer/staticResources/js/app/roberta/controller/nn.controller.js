@@ -32,8 +32,9 @@ define(["require", "exports", "guiState.controller", "neuralnetwork.ui", "jquery
      * - close the edit card
      * - reset node selection (yellow node)
      */
-    function saveNN2Blockly() {
-        NN_UI.saveNN2Blockly();
+    function saveNN2Blockly(neuralNetwork) {
+        if (neuralNetwork === void 0) { neuralNetwork = null; }
+        NN_UI.saveNN2Blockly(neuralNetwork);
         NN_UI.resetUiOnTerminate();
     }
     exports.saveNN2Blockly = saveNN2Blockly;
@@ -57,7 +58,7 @@ define(["require", "exports", "guiState.controller", "neuralnetwork.ui", "jquery
      */
     function mkNNfromNNStepDataAndRunNNEditor() {
         mkNNfromProgramStartBlock();
-        NN_UI.runNNEditor();
+        NN_UI.runNNEditor(GUISTATE_C.hasSim());
     }
     exports.mkNNfromNNStepDataAndRunNNEditor = mkNNfromNNStepDataAndRunNNEditor;
 });

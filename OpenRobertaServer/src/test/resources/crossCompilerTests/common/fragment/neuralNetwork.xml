@@ -1,0 +1,70 @@
+<instance x="800" y="51">
+    <block type="robProcedures_defnoreturn" id="ddSx5uil3x/v%2+PaJ=9" intask="true">
+        <mutation declare="false"/>
+        <field name="NAME">runNN</field>
+        <statement name="STACK">
+            <block type="robActions_set_inputneuron_val" id=";~req=NYHaR5maR~siZ=" intask="true">
+                <field name="NAME">n1</field>
+                <value name="VALUE">
+                    <block type="math_number" id="*s@4E|}Nhti0~/)cvXOI" intask="true">
+                        <field name="NUM">2</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_set_inputneuron_val" id="E9LB:k;+IYqN[G(Xq0GJ" intask="true">
+                <field name="NAME">n3</field>
+                <value name="VALUE">
+                    <block type="math_number" id="(~ZZ9X`~dc=Rk@OsT?]f" intask="true">
+                        <field name="NUM">4</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_set_weight" id="C6Z?G:[0rn}5j8wDb`u^" intask="true">
+                <field name="FROM">n1</field>
+                <field name="TO">h1n1</field>
+                <value name="VALUE">
+                    <block type="robSensors_get_weight" id="w_y?^qxUmcnjcX3flaSH" intask="true">
+                        <field name="FROM">h1n2</field>
+                        <field name="TO">n2</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_set_weight" id=".#5x5)e2N~,yL9@1`99)" intask="true">
+                <field name="FROM">n3</field>
+                <field name="TO">h1n1</field>
+                <value name="VALUE">
+                    <block type="robSensors_get_weight" id="{tpbk;RFJ~YmXFUeGw25" intask="true">
+                        <field name="FROM">h1n2</field>
+                        <field name="TO">n4</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_set_bias" id="|2*8@%zp]*Wkbi21r?aj" intask="true">
+                <field name="NAME">n2</field>
+                <value name="VALUE">
+                    <block type="robSensors_get_bias" id="X,N?a+w8ZBz2q~Y`gTz2" intask="true">
+                        <field name="NAME">h1n1</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_set_bias" id="Qu^P(ok{KZV6QHZXU%_8" intask="true">
+                <field name="NAME">n4</field>
+                <value name="VALUE">
+                    <block type="robSensors_get_bias" id="S7IwlV^g-}huMwWTUd4p" intask="true">
+                        <field name="NAME">h1n2</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_NNstep" id="ntVh,5shng3Cy*OL{c.o" intask="true"/>
+            <block type="variables_set" id="|oaZM5@;4xV*y-85jJd8" intask="true">
+                <mutation datatype="Number"/>
+                <field name="VAR">n</field>
+                <value name="VALUE">
+                    <block type="robSensors_get_outputneuron_val" id="~jkqT`2=l?UzBeAUT/p5" intask="true">
+                        <field name="NAME">n2</field>
+                    </block>
+                </value>
+            </block>
+        </statement>
+    </block>
+</instance>

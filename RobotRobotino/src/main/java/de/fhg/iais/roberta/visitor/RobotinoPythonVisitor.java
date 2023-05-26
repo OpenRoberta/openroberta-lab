@@ -81,6 +81,7 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
             this.src.add(helperMethodImpls);
         }
         generateTimerVariables(false);
+        generateNNStuff("python");
     }
 
     private void generateVariables() {

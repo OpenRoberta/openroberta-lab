@@ -1,8 +1,9 @@
 import { ARobotBehaviour } from './interpreter.aRobotBehaviour';
 import { State } from './interpreter.state';
+import { Network } from './neuralnetwork.nn';
+import { getNetwork, setupNN } from './neuralnetwork.ui';
 import * as C from './interpreter.constants';
 import * as U from './interpreter.util';
-import * as UI from 'neuralnetwork.ui';
 import { SimulationRoberta } from 'simulation.roberta';
 import * as UTIL from 'util';
 
@@ -18,6 +19,9 @@ export class Interpreter {
     private lastStoppedBlock: any;
     private lastBlock: any;
 
+    private _neuralNetwork: Network;
+    private _updateNNView: boolean;
+
     private readonly debugDelay = 2;
 
     /*
@@ -26,12 +30,13 @@ export class Interpreter {
      * . @param robotBehaviour implementation of the ARobotBehaviour class
      * . @param cbOnTermination is called when the program has terminated
      */
-    constructor(generatedCode: any, r: ARobotBehaviour, cbOnTermination: () => void, simBreakpoints: any[], name: string) {
+    constructor(generatedCode: any, r: ARobotBehaviour, cbOnTermination: () => void, simBreakpoints: any[], name: string, updateNNView: boolean) {
         this.terminated = false;
         this.callbackOnTermination = cbOnTermination;
         const stmts = generatedCode[C.OPS];
         this.robotBehaviour = r;
         this.name = name;
+        this.updateNNView = updateNNView;
 
         this.breakpoints = simBreakpoints;
 
@@ -53,6 +58,22 @@ export class Interpreter {
 
     set name(value: string) {
         this._name = value;
+    }
+
+    get neuralNetwork(): Network {
+        return this._neuralNetwork;
+    }
+
+    set neuralNetwork(network: Network) {
+        this._neuralNetwork = network;
+    }
+
+    get updateNNView(): boolean {
+        return this._updateNNView;
+    }
+
+    set updateNNView(value: boolean) {
+        this._updateNNView = value;
     }
 
     /**
@@ -281,17 +302,21 @@ export class Interpreter {
                     const markerId = this.state.pop();
                     this.robotBehaviour.getSample(this.state, stmt[C.NAME], stmt[C.GET_SAMPLE], stmt[C.PORT], stmt[C.MODE], markerId);
                     break;
+                case C.NEURAL_NETWORK:
+                    setupNN(stmt);
+                    this.neuralNetwork = getNetwork();
+                    break;
                 case C.NN_STEP_STMT:
-                    UI.getNetwork().forwardProp();
+                    this.neuralNetwork.forwardProp();
                     break;
                 case C.NN_SETINPUTNEURON_STMT:
-                    UI.getNetwork().setInputNeuronVal(stmt[C.NAME], this.state.pop());
+                    this.neuralNetwork.setInputNeuronVal(stmt[C.NAME], this.state.pop());
                     break;
                 case C.NN_SETWEIGHT_STMT:
-                    UI.getNetwork().changeWeight(stmt[C.FROM], stmt[C.TO], this.state.pop());
+                    this.neuralNetwork.changeWeight(stmt[C.FROM], stmt[C.TO], this.state.pop());
                     break;
                 case C.NN_SETBIAS_STMT:
-                    UI.getNetwork().changeBias(stmt[C.NAME], this.state.pop());
+                    this.neuralNetwork.changeBias(stmt[C.NAME], this.state.pop());
                     break;
                 case C.LED_ON_ACTION: {
                     const color = this.state.pop();
@@ -775,15 +800,15 @@ export class Interpreter {
                 break;
             }
             case C.NN_GETWEIGHT: {
-                this.state.push(UI.getNetwork().getWeight(expr[C.FROM], expr[C.TO]));
+                this.state.push(this.neuralNetwork.getWeight(expr[C.FROM], expr[C.TO]));
                 break;
             }
             case C.NN_GETBIAS: {
-                this.state.push(UI.getNetwork().getBias(expr[C.NAME]));
+                this.state.push(this.neuralNetwork.getBias(expr[C.NAME]));
                 break;
             }
             case C.NN_GETOUTPUTNEURON_VAL: {
-                this.state.push(UI.getNetwork().getOutputNeuronVal(expr[C.NAME]));
+                this.state.push(this.neuralNetwork.getOutputNeuronVal(expr[C.NAME]));
                 break;
             }
             case C.SINGLE_FUNCTION: {

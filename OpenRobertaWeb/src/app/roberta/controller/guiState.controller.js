@@ -13,6 +13,8 @@ import * as NOTIFICATION_C from 'notification.controller';
 
 var LONG = 300000; // Ping time 5min
 var SHORT = 3000; // Ping time 3sec
+
+const activationDisplayName = { linear: 'Linear', relu: 'ReLU', tanh: 'Tanh', sigmoid: 'Sigmoid', bool: 'Bool(0,1)' };
 /**
  * Init robot
  */
@@ -259,6 +261,7 @@ function setRobot(robot, result, opt_init) {
     GUISTATE.gui.multipleSim = result.multipleSim;
     GUISTATE.gui.markerSim = result.markerSim;
     GUISTATE.gui.nn = result.nn;
+    GUISTATE.gui.nnActivations = result.nnActivations;
     GUISTATE.gui.webotsSim = result.webotsSim;
     GUISTATE.gui.webotsUrl = result.webotsUrl;
     GUISTATE.gui.neuralNetwork = result.neuralNetwork === undefined ? false : result.neuralNetwork;
@@ -414,6 +417,15 @@ function setRobot(robot, result, opt_init) {
     if (GUISTATE.gui.nn) {
         $('#tabNNctxt').show();
         $('#menuTabNNctxt').show();
+        $('#nn-activations').empty();
+        $.each(GUISTATE.gui.nnActivations, function (_, item) {
+            $('#nn-activations').append(
+                $('<option>', {
+                    value: item,
+                    text: activationDisplayName[item],
+                })
+            );
+        });
         $('#nn').show();
     } else {
         $('#tabNNctxt').hide();

@@ -70,7 +70,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         makeNetworkFromState();
     }
     exports.setupNN = setupNN;
-    function runNNEditor() {
+    function runNNEditor(hasSim) {
         return __awaiter(this, void 0, void 0, function () {
             function getKeyFromValue(obj, value) {
                 for (var key in obj) {
@@ -86,11 +86,17 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                     case 0: return [4 /*yield*/, new Promise(function (resolve_1, reject_1) { require(['d3'], resolve_1, reject_1); })];
                     case 1:
                         D3 = _a.sent();
-                        D3.select('#goto-sim').on('click', function () {
-                            $.when($('#tabProgram').trigger('click')).done(function () {
-                                $('#simButton').trigger('click');
+                        if (hasSim) {
+                            D3.select('#goto-sim').style('visibility', 'visible');
+                            D3.select('#goto-sim').on('click', function () {
+                                $.when($('#tabProgram').trigger('click')).done(function () {
+                                    $('#simButton').trigger('click');
+                                });
                             });
-                        });
+                        }
+                        else {
+                            D3.select('#goto-sim').style('visibility', 'hidden');
+                        }
                         D3.select('#nn-focus').on('change', function () {
                             focusStyle = FocusStyle[this.value];
                             if (focusStyle === undefined || focusStyle === null) {
@@ -838,9 +844,12 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     /**
      * extract data from the network and put it into the state and store the state in the start block
      */
-    function saveNN2Blockly() {
+    function saveNN2Blockly(neuralNetwork) {
         if (rememberProgramWasReplaced) {
             return; // program was imported. Old NN should NOT be saved
+        }
+        if (neuralNetwork) {
+            network = neuralNetwork;
         }
         var startBlock = UTIL.getTheStartBlock();
         try {

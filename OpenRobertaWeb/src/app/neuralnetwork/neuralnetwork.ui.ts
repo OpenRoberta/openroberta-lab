@@ -47,13 +47,18 @@ export function setupNN(stateFromStartBlock: any) {
     makeNetworkFromState();
 }
 
-export async function runNNEditor() {
+export async function runNNEditor(hasSim: boolean) {
     D3 = await import('d3');
-    D3.select('#goto-sim').on('click', () => {
-        $.when($('#tabProgram').trigger('click')).done(function () {
-            $('#simButton').trigger('click');
+    if (hasSim) {
+        D3.select('#goto-sim').style('visibility', 'visible');
+        D3.select('#goto-sim').on('click', () => {
+            $.when($('#tabProgram').trigger('click')).done(function () {
+                $('#simButton').trigger('click');
+            });
         });
-    });
+    } else {
+        D3.select('#goto-sim').style('visibility', 'hidden');
+    }
 
     D3.select('#nn-focus').on('change', function () {
         focusStyle = FocusStyle[(this as HTMLSelectElement).value];
@@ -866,9 +871,12 @@ export function programWasReplaced(): void {
 /**
  * extract data from the network and put it into the state and store the state in the start block
  */
-export function saveNN2Blockly(): void {
+export function saveNN2Blockly(neuralNetwork?: Network): void {
     if (rememberProgramWasReplaced) {
         return; // program was imported. Old NN should NOT be saved
+    }
+    if (neuralNetwork) {
+        network = neuralNetwork;
     }
     var startBlock = UTIL.getTheStartBlock();
     try {

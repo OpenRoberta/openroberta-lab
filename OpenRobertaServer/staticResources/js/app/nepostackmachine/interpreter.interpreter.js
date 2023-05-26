@@ -1,4 +1,4 @@
-define(["require", "exports", "./interpreter.state", "./interpreter.constants", "./interpreter.util", "neuralnetwork.ui", "simulation.roberta", "util"], function (require, exports, interpreter_state_1, C, U, UI, simulation_roberta_1, UTIL) {
+define(["require", "exports", "./interpreter.state", "./neuralnetwork.ui", "./interpreter.constants", "./interpreter.util", "simulation.roberta", "util"], function (require, exports, interpreter_state_1, neuralnetwork_ui_1, C, U, simulation_roberta_1, UTIL) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Interpreter = void 0;
     var Interpreter = /** @class */ (function () {
@@ -8,7 +8,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
          * . @param robotBehaviour implementation of the ARobotBehaviour class
          * . @param cbOnTermination is called when the program has terminated
          */
-        function Interpreter(generatedCode, r, cbOnTermination, simBreakpoints, name) {
+        function Interpreter(generatedCode, r, cbOnTermination, simBreakpoints, name, updateNNView) {
             this.terminated = false;
             this.callbackOnTermination = undefined;
             this.debugDelay = 2;
@@ -17,6 +17,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
             var stmts = generatedCode[C.OPS];
             this.robotBehaviour = r;
             this.name = name;
+            this.updateNNView = updateNNView;
             this.breakpoints = simBreakpoints;
             this.events = {};
             this.events[C.DEBUG_STEP_INTO] = false;
@@ -33,6 +34,26 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
             },
             set: function (value) {
                 this._name = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Interpreter.prototype, "neuralNetwork", {
+            get: function () {
+                return this._neuralNetwork;
+            },
+            set: function (network) {
+                this._neuralNetwork = network;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Interpreter.prototype, "updateNNView", {
+            get: function () {
+                return this._updateNNView;
+            },
+            set: function (value) {
+                this._updateNNView = value;
             },
             enumerable: false,
             configurable: true
@@ -247,17 +268,21 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         var markerId = this.state.pop();
                         this.robotBehaviour.getSample(this.state, stmt[C.NAME], stmt[C.GET_SAMPLE], stmt[C.PORT], stmt[C.MODE], markerId);
                         break;
+                    case C.NEURAL_NETWORK:
+                        (0, neuralnetwork_ui_1.setupNN)(stmt);
+                        this.neuralNetwork = (0, neuralnetwork_ui_1.getNetwork)();
+                        break;
                     case C.NN_STEP_STMT:
-                        UI.getNetwork().forwardProp();
+                        this.neuralNetwork.forwardProp();
                         break;
                     case C.NN_SETINPUTNEURON_STMT:
-                        UI.getNetwork().setInputNeuronVal(stmt[C.NAME], this.state.pop());
+                        this.neuralNetwork.setInputNeuronVal(stmt[C.NAME], this.state.pop());
                         break;
                     case C.NN_SETWEIGHT_STMT:
-                        UI.getNetwork().changeWeight(stmt[C.FROM], stmt[C.TO], this.state.pop());
+                        this.neuralNetwork.changeWeight(stmt[C.FROM], stmt[C.TO], this.state.pop());
                         break;
                     case C.NN_SETBIAS_STMT:
-                        UI.getNetwork().changeBias(stmt[C.NAME], this.state.pop());
+                        this.neuralNetwork.changeBias(stmt[C.NAME], this.state.pop());
                         break;
                     case C.LED_ON_ACTION: {
                         var color_1 = this.state.pop();
@@ -746,15 +771,15 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     break;
                 }
                 case C.NN_GETWEIGHT: {
-                    this.state.push(UI.getNetwork().getWeight(expr[C.FROM], expr[C.TO]));
+                    this.state.push(this.neuralNetwork.getWeight(expr[C.FROM], expr[C.TO]));
                     break;
                 }
                 case C.NN_GETBIAS: {
-                    this.state.push(UI.getNetwork().getBias(expr[C.NAME]));
+                    this.state.push(this.neuralNetwork.getBias(expr[C.NAME]));
                     break;
                 }
                 case C.NN_GETOUTPUTNEURON_VAL: {
-                    this.state.push(UI.getNetwork().getOutputNeuronVal(expr[C.NAME]));
+                    this.state.push(this.neuralNetwork.getOutputNeuronVal(expr[C.NAME]));
                     break;
                 }
                 case C.SINGLE_FUNCTION: {

@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import de.fhg.iais.roberta.bean.NNBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.mbed.microbitV2.SoundToggleAction;
@@ -18,8 +20,8 @@ import de.fhg.iais.roberta.visitor.IMicrobitV2Visitor;
 
 public class MicrobitV2StackMachineVisitor extends MicrobitStackMachineVisitor implements IMicrobitV2Visitor<Void> {
 
-    public MicrobitV2StackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases) {
-        super(configuration, phrases);
+    public MicrobitV2StackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
+        super(configuration, phrases, usedHardwareBean, nnBean);
         Assert.isTrue(!phrases.isEmpty());
 
     }

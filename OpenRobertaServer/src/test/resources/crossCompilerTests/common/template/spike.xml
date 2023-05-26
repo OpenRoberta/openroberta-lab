@@ -5,6 +5,7 @@
                 <block type="robControls_start" id="1S8#~:0rpnT8(/Uj0g}S" intask="true" deletable="false">
                     <mutation declare="true"/>
                     <field name="DEBUG">FALSE</field>
+                    [[nn]]
                     <statement name="ST">
                         [[decl]]
                     </statement>

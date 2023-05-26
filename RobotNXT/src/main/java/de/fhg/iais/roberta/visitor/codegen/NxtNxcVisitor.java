@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
@@ -68,6 +69,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
@@ -1196,7 +1198,23 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         this.src.add("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources");
         nlIndent();
         nlIndent();
-        super.generateProgramPrefix(withWrapping);
+        generateSignaturesOfUserDefinedMethods();
+        if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
+            nlIndent();
+            String helperMethodImpls =
+                this
+                    .getBean(CodeGeneratorSetupBean.class)
+                    .getHelperMethodGenerator()
+                    .getHelperMethodDeclarations(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
+            Iterator<String> it = Arrays.stream(helperMethodImpls.split("\n")).iterator();
+            while ( it.hasNext() ) {
+                this.src.add(it.next());
+                if ( it.hasNext() ) {
+                    nlIndent();
+                }
+            }
+        }
+        generateNNStuff("nxc");
     }
 
     @Override

@@ -2,6 +2,8 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.List;
 
+import de.fhg.iais.roberta.bean.NNBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
@@ -11,8 +13,8 @@ import de.fhg.iais.roberta.visitor.IMicrobitVisitor;
 
 public class MicrobitStackMachineVisitor extends MbedStackMachineVisitor implements IMicrobitVisitor<Void> {
 
-    public MicrobitStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases) {
-        super(configuration, phrases);
+    public MicrobitStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
+        super(configuration, phrases, usedHardwareBean, nnBean);
         Assert.isTrue(!phrases.isEmpty());
 
     }

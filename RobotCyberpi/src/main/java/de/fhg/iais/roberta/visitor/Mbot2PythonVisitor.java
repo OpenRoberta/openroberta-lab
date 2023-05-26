@@ -121,6 +121,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
                     .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
             this.src.add(helperMethodImpls);
         }
+        generateNNStuff("python");
     }
 
     private void appendRobotVariables() {

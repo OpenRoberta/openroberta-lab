@@ -1,10 +1,11 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
-	<program>
+    <program>
         <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1" description="" tags="">
             <instance x="161" y="33">
                 <block type="robControls_start" id="V!%l^|R6UknOyCx4AB}8" intask="true" deletable="false">
-                    <mutation declare="true" />
+                    <mutation declare="true"/>
                     <field name="DEBUG">FALSE</field>
+                    [[nn]]
                     <statement name="ST">
                         [[decl]]
                     </statement>
@@ -14,7 +15,7 @@
             [[fragment]]
         </block_set>
     </program>
-	<config>
-		[[conf]]
-	</config>
+    <config>
+        [[conf]]
+    </config>
 </export>

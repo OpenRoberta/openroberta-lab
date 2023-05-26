@@ -1,7 +1,6 @@
 import * as MSG from 'message';
 import * as UTIL from 'util';
 import * as GUISTATE_C from 'guiState.controller';
-import * as NN_CTRL from 'nn.controller';
 import * as TOUR_C from 'tour.controller';
 import * as PROG_C from 'program.controller';
 import * as PROGRAM from 'program.model';
@@ -80,13 +79,13 @@ class ProgSimController {
             'click.sim',
             function () {
                 if (!SIM.isInterpreterRunning()) {
-                    NN_CTRL.mkNNfromProgramStartBlock();
                     let myCallback = function (result) {
                         if (result.rc == 'ok') {
                             MSG.displayMessage('MESSAGE_EDIT_START', 'TOAST', GUISTATE_C.getProgramName(), null, null);
                             $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
                             $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
                             result.savedName = GUISTATE_C.getProgramName();
+                            result.updateNNView = true;
                             SIM.run([result], function () {
                                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
                                 $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
@@ -453,6 +452,7 @@ class ProgSimDebugController extends ProgSimController {
             let myCallback = function (result) {
                 if (result.rc == 'ok') {
                     result.savedName = GUISTATE_C.getProgramName();
+                    result.updateNNView = true;
                     SIM.run([result], function () {
                         $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-play');
                         $('#simStop').addClass('disabled');
@@ -525,6 +525,7 @@ class ProgSimMultiController extends ProgSimController {
                     if (row.num > 0) {
                         let myProg = row;
                         myProg['times'] = row.num;
+                        myProg['updateNNView'] = index === 0;
                         C.selectedPrograms.push(myProg);
                     }
                 });
@@ -614,6 +615,7 @@ class ProgSimMultiController extends ProgSimController {
                     for (let resultProp in result) {
                         combinedResult[resultProp] = result[resultProp];
                     }
+                    combinedResult.updateNNView = item.updateNNView;
                     C.extractedPrograms.push(combinedResult);
                     resolve('ok');
                 } else {
@@ -783,7 +785,6 @@ class ProgSimMultiController extends ProgSimController {
             'click.sim',
             function () {
                 if (!SIM.isInterpreterRunning()) {
-                    NN_CTRL.mkNNfromProgramStartBlock();
                     $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
                     $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
                     C.loadProgramms().then((loadedPrograms) => {

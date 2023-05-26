@@ -706,6 +706,7 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
             nlIndent();
             this.src.add("hub = spike.PrimeHub()");
         }
+        generateNNStuff("python");
     }
 
     @Override

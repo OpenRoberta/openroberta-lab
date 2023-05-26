@@ -49,7 +49,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-define(["require", "exports", "message", "util", "guiState.controller", "nn.controller", "tour.controller", "program.controller", "program.model", "program.model", "blockly", "jquery", "simulation.objects", "simulation.webots", "simulation.roberta", "simulation.constants", "progList.model", "jquery-validate"], function (require, exports, MSG, UTIL, GUISTATE_C, NN_CTRL, TOUR_C, PROG_C, PROGRAM, PROGRAM_M, Blockly, $, simulation_objects_1, simulation_webots_1, simulation_roberta_1, simulation_constants_1, PROGLIST) {
+define(["require", "exports", "message", "util", "guiState.controller", "tour.controller", "program.controller", "program.model", "program.model", "blockly", "jquery", "simulation.objects", "simulation.webots", "simulation.roberta", "simulation.constants", "progList.model", "jquery-validate"], function (require, exports, MSG, UTIL, GUISTATE_C, TOUR_C, PROG_C, PROGRAM, PROGRAM_M, Blockly, $, simulation_objects_1, simulation_webots_1, simulation_roberta_1, simulation_constants_1, PROGLIST) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.createProgSimMultiInstance = exports.createProgSimDebugInstance = exports.createProgSimInstance = void 0;
     var INITIAL_WIDTH = 0.5;
@@ -87,13 +87,13 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
             var C = this;
             $('#simControl').onWrap('click.sim', function () {
                 if (!SIM.isInterpreterRunning()) {
-                    NN_CTRL.mkNNfromProgramStartBlock();
                     var myCallback = function (result) {
                         if (result.rc == 'ok') {
                             MSG.displayMessage('MESSAGE_EDIT_START', 'TOAST', GUISTATE_C.getProgramName(), null, null);
                             $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
                             $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
                             result.savedName = GUISTATE_C.getProgramName();
+                            result.updateNNView = true;
                             SIM.run([result], function () {
                                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
                                 $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
@@ -335,6 +335,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
                 var myCallback = function (result) {
                     if (result.rc == 'ok') {
                         result.savedName = GUISTATE_C.getProgramName();
+                        result.updateNNView = true;
                         SIM.run([result], function () {
                             $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-play');
                             $('#simStop').addClass('disabled');
@@ -453,6 +454,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
                     if (row.num > 0) {
                         var myProg = row;
                         myProg['times'] = row.num;
+                        myProg['updateNNView'] = index === 0;
                         C.selectedPrograms.push(myProg);
                     }
                 });
@@ -539,6 +541,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
                         for (var resultProp in result) {
                             combinedResult[resultProp] = result[resultProp];
                         }
+                        combinedResult.updateNNView = item.updateNNView;
                         C.extractedPrograms.push(combinedResult);
                         resolve('ok');
                     }
@@ -655,7 +658,6 @@ define(["require", "exports", "message", "util", "guiState.controller", "nn.cont
             $('#simControl').onWrap('click.sim', function () {
                 var _this = this;
                 if (!SIM.isInterpreterRunning()) {
-                    NN_CTRL.mkNNfromProgramStartBlock();
                     $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
                     $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
                     C.loadProgramms().then(function (loadedPrograms) {

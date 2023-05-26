@@ -435,6 +435,7 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
             nlIndent();
             this.src.add("radio.on()");
         }
+        generateNNStuff("python");
     }
 
     @Override

@@ -39,7 +39,14 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetBias;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetOutputNeuronVal;
+import de.fhg.iais.roberta.syntax.lang.expr.NNGetWeight;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetBiasStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetInputNeuronVal;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNSetWeightStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
@@ -236,6 +243,51 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
     public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         String motorSide = motorStopAction.port.toLowerCase();
         this.src.add("motor.", motorSide, ".target = 0");
+        return null;
+    }
+
+    @Override
+    public Void visitNNGetBias(NNGetBias getVal) {
+        src.add("_A = ____b_", getVal.name);
+        return null;
+    }
+
+    @Override
+    public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal getVal) {
+        src.add("_A = ____").add(getVal.name);
+        return null;
+    }
+
+    @Override
+    public Void visitNNGetWeight(NNGetWeight getVal) {
+        src.add("_A = ____w_", getVal.from, "_", getVal.to);
+        return null;
+    }
+
+    @Override
+    public Void visitNNSetBiasStmt(NNSetBiasStmt chgStmt) {
+        chgStmt.value.accept(this);
+        this.src.nlI().add("____b_", chgStmt.name, " = _A");
+        return null;
+    }
+
+    @Override
+    public Void visitNNSetInputNeuronVal(NNSetInputNeuronVal setVal) {
+        setVal.value.accept(this);
+        this.src.nlI().add("____").add(setVal.name).add(" = _A");
+        return null;
+    }
+
+    @Override
+    public Void visitNNSetWeightStmt(NNSetWeightStmt chgStmt) {
+        chgStmt.value.accept(this);
+        this.src.nlI().add("____w_", chgStmt.from, "_", chgStmt.to, " = _A");
+        return null;
+    }
+
+    @Override
+    public Void visitNNStepStmt(NNStepStmt nnStepStmt) {
+        this.src.add("callsub ____nnStep");
         return null;
     }
 
@@ -669,6 +721,9 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
         });
         appendRobotVariables();
         generateVariablesForUsage(this.programPhrases); // TODO: why are the program phrases needed? Remove!
+        if ( this.getBean(UsedHardwareBean.class).isNNBlockUsed() ) {
+            generateNNVariables("aseba");
+        }
     }
 
     @Override
@@ -707,6 +762,9 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
         if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
             String helperMethodImpls = this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
             this.src.add(helperMethodImpls);
+        }
+        if ( this.getBean(UsedHardwareBean.class).isNNBlockUsed() ) {
+            generateNNStepFunction("aseba");
         }
         nlIndent();
         this.src.add("sub thymio_close");

@@ -86,6 +86,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     private int currentLoop = 0;
 
     private NNBean nnBean; // set by the start block, used to check neuron name consistency etc.
+    private boolean isNNBlockUsed = false;
 
     protected CommonNepoValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) //
     {
@@ -398,12 +399,14 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitNNStepStmt(NNStepStmt stmt) {
+        checkNNBlockUsed();
         return null;
     }
 
     @Override
     public Void visitNNGetOutputNeuronVal(NNGetOutputNeuronVal get) {
         checkNeuronName(get, false, false, true, get.name);
+        checkNNBlockUsed();
         return null;
     }
 
@@ -411,6 +414,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     public Void visitNNSetInputNeuronVal(NNSetInputNeuronVal get) {
         checkNeuronName(get, true, false, false, get.name);
         requiredComponentVisited(get, get.value);
+        checkNNBlockUsed();
         return null;
     }
 
@@ -418,6 +422,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     public Void visitNNSetWeightStmt(NNSetWeightStmt stmt) {
         checkConnectedNeuronNames(stmt, stmt.from, stmt.to);
         requiredComponentVisited(stmt, stmt.value);
+        checkNNBlockUsed();
         return null;
     }
 
@@ -425,18 +430,21 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     public Void visitNNSetBiasStmt(NNSetBiasStmt stmt) {
         checkNeuronName(stmt, false, true, true, stmt.name);
         requiredComponentVisited(stmt, stmt.value);
+        checkNNBlockUsed();
         return null;
     }
 
     @Override
     public Void visitNNGetWeight(NNGetWeight get) {
         checkConnectedNeuronNames(get, get.from, get.to);
+        checkNNBlockUsed();
         return null;
     }
 
     @Override
     public Void visitNNGetBias(NNGetBias get) {
         checkNeuronName(get, false, true, true, get.name);
+        checkNNBlockUsed();
         return null;
     }
 
@@ -474,6 +482,13 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         int l2 = getLevelOfNeuron(n2);
         if ( l1 <= -1 || l2 <= -1 || l1 + 1 != l2 ) {
             addErrorToPhrase(toBeChecked, "NN_INVALID_NEURONNAMES");
+        }
+    }
+
+    private void checkNNBlockUsed() {
+        if ( !isNNBlockUsed ) {
+            usedHardwareBuilder.setNNBlockUsed(true);
+            isNNBlockUsed = true;
         }
     }
 

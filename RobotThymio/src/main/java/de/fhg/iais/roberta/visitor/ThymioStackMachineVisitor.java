@@ -6,6 +6,8 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import de.fhg.iais.roberta.bean.NNBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -50,8 +52,8 @@ import de.fhg.iais.roberta.util.syntax.MotorDuration;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor implements IThymioVisitor<Void> {
-    public ThymioStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases) {
-        super(configuration);
+    public ThymioStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
+        super(configuration, usedHardwareBean, nnBean);
         Assert.isTrue(!phrases.isEmpty());
     }
 

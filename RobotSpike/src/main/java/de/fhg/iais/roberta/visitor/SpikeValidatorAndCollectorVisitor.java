@@ -29,7 +29,6 @@ import de.fhg.iais.roberta.syntax.action.spike.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.spike.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.spike.PlayToneAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
@@ -129,11 +128,6 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
         requiredComponentVisited(rgbLedOnHiddenAction, rgbLedOnHiddenAction.colour);
         usedMethodBuilder.addUsedMethod(SpikeMethods.SETSTATUSLIGHT);
         usedHardwareBuilder.addUsedActor(new UsedActor("", "HUB"));
-        return null;
-    }
-
-    public Void visitMainTask(MainTask mainTask) {
-        requiredComponentVisited(mainTask, mainTask.variables);
         return null;
     }
 

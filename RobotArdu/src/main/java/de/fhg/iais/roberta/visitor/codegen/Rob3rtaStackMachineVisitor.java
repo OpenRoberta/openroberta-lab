@@ -6,6 +6,8 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import de.fhg.iais.roberta.bean.NNBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
@@ -32,8 +34,8 @@ public final class Rob3rtaStackMachineVisitor extends AbstractStackMachineVisito
 
     private int port;
 
-    public Rob3rtaStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases) {
-        super(configuration);
+    public Rob3rtaStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
+        super(configuration, usedHardwareBean, nnBean);
         Assert.isTrue(!phrases.isEmpty());
     }
 

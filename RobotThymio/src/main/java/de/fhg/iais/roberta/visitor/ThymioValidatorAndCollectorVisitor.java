@@ -32,7 +32,6 @@ import de.fhg.iais.roberta.syntax.action.thymio.LedTemperatureOnAction;
 import de.fhg.iais.roberta.syntax.action.thymio.PlayRecordingAction;
 import de.fhg.iais.roberta.syntax.action.thymio.RecordStartAction;
 import de.fhg.iais.roberta.syntax.action.thymio.RecordStopAction;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
@@ -217,12 +216,6 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
         requiredComponentVisited(rgbLedOnAction, rgbLedOnAction.colour);
         usedHardwareBuilder.addUsedActor(new UsedActor(rgbLedOnAction.port, SC.RGBLED));
         usedHardwareBuilder.addDeclaredVariable("color_");
-        return null;
-    }
-
-    @Override
-    public Void visitMainTask(MainTask mainTask) {
-        requiredComponentVisited(mainTask, mainTask.variables);
         return null;
     }
 

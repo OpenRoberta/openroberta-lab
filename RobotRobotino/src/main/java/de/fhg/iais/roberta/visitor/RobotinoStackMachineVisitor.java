@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import de.fhg.iais.roberta.bean.NNBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -35,8 +37,8 @@ public final class RobotinoStackMachineVisitor extends AbstractStackMachineVisit
 
     private int port;
 
-    public RobotinoStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases) {
-        super(configuration);
+    public RobotinoStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
+        super(configuration, usedHardwareBean, nnBean);
         Assert.isTrue(!phrases.isEmpty());
     }
 

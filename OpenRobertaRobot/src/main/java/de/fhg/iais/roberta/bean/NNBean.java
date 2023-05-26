@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,13 +19,39 @@ public class NNBean implements IProjectBean {
     private final JSONArray weights;
     private final JSONArray biases;
     private final List<Integer> networkShape;
+    private final Integer numHiddenLayers;
+    private final Float learningRate;
+    private final Float regularizationRate;
+    private final Float noise;
+    private final Integer batchSize;
+    private final Boolean discretize;
+    private final Float percTrainData;
+    private final String activationKey;
+    private final List<List<String>> hiddenNeurons;
 
-    public NNBean(List<String> inputNeurons, List<String> outputNeurons, JSONArray weights, JSONArray biases, List<Integer> networkShape) {
+    public NNBean(
+        List<String> inputNeurons, List<String> outputNeurons, JSONArray weights, JSONArray biases, List<Integer> networkShape,
+        Integer numHiddenLayers, Float learningRate,
+        Float regularizationRate,
+        Float noise,
+        Integer batchSize,
+        Boolean discretize,
+        Float percTrainData,
+        String activationKey, List<List<String>> hiddenNeurons) {
         this.inputNeurons = inputNeurons;
         this.outputNeurons = outputNeurons;
         this.weights = weights;
         this.biases = biases;
         this.networkShape = networkShape;
+        this.numHiddenLayers = numHiddenLayers;
+        this.learningRate = learningRate;
+        this.regularizationRate = regularizationRate;
+        this.noise = noise;
+        this.batchSize = batchSize;
+        this.discretize = discretize;
+        this.percTrainData = percTrainData;
+        this.activationKey = activationKey;
+        this.hiddenNeurons = hiddenNeurons;
     }
 
     public List<String> getInputNeurons() {
@@ -47,8 +74,48 @@ public class NNBean implements IProjectBean {
         return biases;
     }
 
+    public Float getLearningRate() {
+        return learningRate;
+    }
+
+    public Float getRegularizationRate() {
+        return regularizationRate;
+    }
+
+    public Float getNoise() {
+        return noise;
+    }
+
+    public Integer getBatchSize() {
+        return batchSize;
+    }
+
+    public Boolean getDiscretize() {
+        return discretize;
+    }
+
+    public Float getPercTrainData() {
+        return percTrainData;
+    }
+
+    public String getActivationKey() {
+        return activationKey;
+    }
+
+    public Integer getNumHiddenLayers() {
+        return numHiddenLayers;
+    }
+
     public boolean hasAtLeastOneInputAndOutputNeuron() {
         return inputNeurons.size() > 0 && outputNeurons.size() > 0;
+    }
+
+    public List<String> getAllHiddenNeurons() {
+        return hiddenNeurons.stream().flatMap(List::stream).collect(Collectors.toList());
+    }
+
+    public List<String> getHiddenNeuronsByLayer(int layerIdx) {
+        return hiddenNeurons.get(layerIdx);
     }
 
     public static class Builder implements IBuilder<NNBean> {
@@ -57,6 +124,15 @@ public class NNBean implements IProjectBean {
         private List<String> inputNeurons = new ArrayList<>();
         private List<String> outputNeurons = new ArrayList<>();
         private List<Integer> networkShape = new ArrayList<>();
+        private Float learningRate = null;
+        private Float regularizationRate = null;
+        private Float noise = null;
+        private Integer batchSize = null;
+        private Boolean discretize = null;
+        private Float percTrainData = null;
+        private String activationKey = null;
+        private Integer numHiddenLayers = null;
+        private List<List<String>> hiddenNeurons = new ArrayList<List<String>>();
 
         /**
          * data contains the NN definition. Save it for later usage.
@@ -73,6 +149,22 @@ public class NNBean implements IProjectBean {
                 netStateDefinition.getJSONArray("inputs").forEach(i -> inputNeurons.add((String) i));
                 netStateDefinition.getJSONArray("outputs").forEach(o -> outputNeurons.add((String) o));
                 netStateDefinition.getJSONArray("networkShape").forEach(c -> networkShape.add((Integer) c));
+                this.learningRate = netStateDefinition.getFloat("learningRate");
+                this.regularizationRate = netStateDefinition.getFloat("regularizationRate");
+                this.noise = netStateDefinition.getFloat("noise");
+                this.batchSize = netStateDefinition.getInt("batchSize");
+                this.discretize = netStateDefinition.getBoolean("discretize");
+                this.percTrainData = netStateDefinition.getFloat("percTrainData");
+                this.activationKey = netStateDefinition.getString("activationKey");
+                this.numHiddenLayers = netStateDefinition.getInt("numHiddenLayers");
+                for ( int layerIdx = 1; layerIdx <= networkShape.size(); layerIdx++ ) {
+                    List<String> hiddenNeuronsForLayer = new ArrayList<>();
+                    for ( int neuronIdx = 1; neuronIdx <= networkShape.get(layerIdx - 1); neuronIdx++ ) {
+                        String neuronName = "h" + layerIdx + "n" + neuronIdx;
+                        hiddenNeuronsForLayer.add(neuronName);
+                    }
+                    hiddenNeurons.add(hiddenNeuronsForLayer);
+                }
                 if ( !neuronNamesConsistent(inputNeurons, outputNeurons) ) {
                     return "NN_INVALID_NEURONNAME";
                 } else {
@@ -94,7 +186,7 @@ public class NNBean implements IProjectBean {
 
         @Override
         public NNBean build() {
-            return new NNBean(inputNeurons, outputNeurons, weights, bias, networkShape);
+            return new NNBean(inputNeurons, outputNeurons, weights, bias, networkShape, numHiddenLayers, learningRate, regularizationRate, noise, batchSize, discretize, percTrainData, activationKey, hiddenNeurons);
         }
     }
 }

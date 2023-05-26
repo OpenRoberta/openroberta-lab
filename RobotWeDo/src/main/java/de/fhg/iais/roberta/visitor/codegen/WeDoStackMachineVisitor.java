@@ -2,6 +2,8 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import org.json.JSONObject;
 
+import de.fhg.iais.roberta.bean.NNBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
@@ -31,8 +33,8 @@ import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor implements IWeDoVisitor<Void> {
 
-    public WeDoStackMachineVisitor(ConfigurationAst configuration) {
-        super(configuration);
+    public WeDoStackMachineVisitor(ConfigurationAst configuration, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
+        super(configuration, usedHardwareBean, nnBean);
         debugger = false;
     }
 

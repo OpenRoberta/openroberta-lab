@@ -131,11 +131,11 @@ public abstract class AbstractRestInterfaceTest {
 
         this.xsltTransformer = new XsltTransformer();
 
-        this.restProject = new ClientProgramController(this.serverProperties, null);
+        this.robotPlugins = ServerStarter.configureRobotPlugins(this.robotCommunicator, this.serverProperties, EMPTY_STRING_LIST);
+        this.restProject = new ClientProgramController(this.serverProperties, robotPlugins);
         this.restGroup = new UserGroupController(this.robotCommunicator, this.serverProperties);
         this.restClient = new ClientAdmin(robotCommunicator, serverProperties);
         this.restConfiguration = new ClientConfiguration(this.robotCommunicator);
-        this.robotPlugins = ServerStarter.configureRobotPlugins(this.robotCommunicator, this.serverProperties, EMPTY_STRING_LIST);
         DbSession dbSession = this.tc.getSessionFactoryWrapper().getSession(); // session is closed in the method called below
         ServerStarter.checkRobotPluginsDB(dbSession, robotPlugins.values());
         this.sPid = HttpSessionState.initOnlyLegalForDebugging("pid", robotPlugins, this.serverProperties, 1);

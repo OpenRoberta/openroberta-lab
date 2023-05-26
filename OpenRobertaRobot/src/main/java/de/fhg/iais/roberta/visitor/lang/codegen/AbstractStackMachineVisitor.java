@@ -16,6 +16,8 @@ import org.json.JSONObject;
 
 import com.google.common.collect.Lists;
 
+import de.fhg.iais.roberta.bean.NNBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
@@ -120,6 +122,8 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     private final StackMachineBuilder codeBuilder = new StackMachineBuilder();
     protected final ConfigurationAst configuration;
+    protected final UsedHardwareBean usedHardwareBean;
+    protected final NNBean nnBean;
 
     private final Map<String, List<JSONObject>> methodCalls = new HashMap<>();
     private final Map<String, Integer> methodDeclarations = new HashMap<>();
@@ -140,8 +144,10 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     protected boolean debugger = true;
 
-    protected AbstractStackMachineVisitor(ConfigurationAst configuration) {
+    protected AbstractStackMachineVisitor(ConfigurationAst configuration, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
         this.configuration = configuration;
+        this.usedHardwareBean = usedHardwareBean;
+        this.nnBean = nnBean;
     }
 
     private boolean shouldBeHighlighted(Phrase visitable) {
@@ -709,11 +715,33 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     public final Void visitMainTask(MainTask mainTask) {
+        if ( this.usedHardwareBean.isNNBlockUsed() ) {
+            generateNNVars();
+        }
         mainTask.variables.accept(this);
         if ( mainTask.debug.equals("TRUE") ) {
             JSONObject o = makeNode(C.CREATE_DEBUG_ACTION);
             return add(o);
         }
+        return null;
+    }
+
+    private Void generateNNVars() {
+        add(makeNode(C.NEURAL_NETWORK)
+            .put(C.NN_INPUT_NEURONS, this.nnBean.getInputNeurons())
+            .put(C.NN_OUTPUT_NEURONS, this.nnBean.getOutputNeurons())
+            .put(C.NN_WEIGHTS, this.nnBean.getWeights())
+            .put(C.NN_BIASES, this.nnBean.getBiases())
+            .put(C.NN_NETWORK_SHAPE, this.nnBean.getNetworkShape())
+            .put(C.NN_LEARNING_RATE, this.nnBean.getLearningRate())
+            .put(C.NN_REGULARIZATION_RATE, this.nnBean.getRegularizationRate())
+            .put(C.NN_NOISE, this.nnBean.getNoise())
+            .put(C.NN_BATCH_SIZE, this.nnBean.getBatchSize())
+            .put(C.NN_DISCRETIZE, this.nnBean.getDiscretize())
+            .put(C.NN_PERCENT_TRAIN_DATA, this.nnBean.getPercTrainData())
+            .put(C.NN_ACTIVATION_KEY, this.nnBean.getActivationKey())
+            .put(C.NN_NUMBER_HIDDEN_LAYERS, this.nnBean.getNumHiddenLayers())
+        );
         return null;
     }
 

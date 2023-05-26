@@ -93,7 +93,6 @@
         <block type="robSensors_hts221_temperature_getDataAvailableSample"></block>
         <block type="robSensors_hts221_humidity_getDataAvailableSample"></block>
     </category>
-
     <category name="TOOLBOX_CONTROL" svg="true">
         <category name="TOOLBOX_DECISION" svg="true">
             <block type="robControls_if"/>
@@ -164,7 +163,6 @@
         <block type="logic_null"/>
         <block type="logic_ternary"/>
     </category>
-
     <!--
         <category name="AIFES" svg="true">
             <block type="robActions_aifes_initrawdata"></block>
@@ -194,7 +192,6 @@
             <block type="robActions_aifes_classify"></block>
         </category>
     -->
-
     <category name="TOOLBOX_MATH" svg="true">
         <block type="math_number"/>
         <block type="math_arithmetic"/>
@@ -237,6 +234,15 @@
             </value>
         </block>
         <block type="math_random_float"/>
+    </category>
+    <category name="TOOLBOX_NN" svg="true">
+        <block type="robActions_NNstep"></block>
+        <block type="robActions_set_inputneuron_val"></block>
+        <block type="robSensors_get_outputneuron_val"></block>
+        <block type="robActions_set_weight"></block>
+        <block type="robActions_set_bias"></block>
+        <block type="robSensors_get_weight"></block>
+        <block type="robSensors_get_bias"></block>
     </category>
     <category name="TOOLBOX_TEXT" svg="true">
         <block type="text"/>
