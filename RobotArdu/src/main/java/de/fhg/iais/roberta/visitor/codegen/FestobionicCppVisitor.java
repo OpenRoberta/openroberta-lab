@@ -48,15 +48,15 @@ public final class FestobionicCppVisitor extends NepoArduinoCppVisitor implement
 
     @Override
     public Void visitLightAction(LightAction lightAction) {
-        this.sb.append("digitalWrite(_led_").append(lightAction.port).append(", ").append(lightAction.mode.getValues()[0]).append(");");
+        this.src.add("digitalWrite(_led_", lightAction.port, ", ", lightAction.mode.getValues()[0], ");");
         return null;
     }
 
     @Override
     public Void visitMotorOnAction(MotorOnAction motorOnAction) {
-        this.sb.append("_servo_").append(motorOnAction.getUserDefinedPort()).append(".write(");
+        this.src.add("_servo_", motorOnAction.getUserDefinedPort(), ".write(");
         motorOnAction.param.getSpeed().accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
@@ -78,26 +78,27 @@ public final class FestobionicCppVisitor extends NepoArduinoCppVisitor implement
         if ( numberConf != 0 ) {
             nlIndent();
         }
-        this.sb.append("void setup()");
+        this.src.add("void setup()");
         nlIndent();
-        this.sb.append("{");
+        this.src.add("{");
 
         incrIndentation();
 
         nlIndent();
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.SERIAL) ) {
-            this.sb.append("Serial.begin(9600);");
+            this.src.add("Serial.begin(9600);");
             nlIndent();
         }
         generateConfigurationSetup();
 
         generateUsedVars();
-        this.sb.delete(this.sb.lastIndexOf("\n"), this.sb.length());
+        StringBuilder sb = src.getStringBuilder();
+        sb.delete(sb.lastIndexOf("\n"), sb.length());
 
         decrIndentation();
 
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
 
         nlIndent();
         return null;
@@ -110,14 +111,14 @@ public final class FestobionicCppVisitor extends NepoArduinoCppVisitor implement
         } else {
             decrIndentation();
         }
-        this.sb.append("#define _ARDUINO_STL_NOT_NEEDED"); // TODO remove negation and thus double negation in NEPODEFS.h, maybe define when necessary
+        this.src.add("#define _ARDUINO_STL_NOT_NEEDED"); // TODO remove negation and thus double negation in NEPODEFS.h, maybe define when necessary
         nlIndent();
-        this.sb.append("#define LED_BUILTIN 13");
+        this.src.add("#define LED_BUILTIN 13");
         nlIndent();
         nlIndent();
-        this.sb.append("#include <Arduino.h>\n");
+        this.src.add("#include <Arduino.h>\n");
         nlIndent();
-        this.sb.append("#include <NEPODefs.h>");
+        this.src.add("#include <NEPODefs.h>");
         nlIndent();
         Set<String> headerFiles = new LinkedHashSet<>();
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
@@ -132,7 +133,7 @@ public final class FestobionicCppVisitor extends NepoArduinoCppVisitor implement
             }
         }
         for ( String header : headerFiles ) {
-            this.sb.append(header);
+            this.src.add(header);
             nlIndent();
         }
 
@@ -143,16 +144,11 @@ public final class FestobionicCppVisitor extends NepoArduinoCppVisitor implement
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
             switch ( usedConfigurationBlock.componentType ) {
                 case SC.LED:
-                    this.sb.append("pinMode(_led_").append(usedConfigurationBlock.userDefinedPortName).append(", OUTPUT);");
+                    this.src.add("pinMode(_led_", usedConfigurationBlock.userDefinedPortName, ", OUTPUT);");
                     nlIndent();
                     break;
                 case SC.SERVOMOTOR:
-                    this.sb
-                        .append("_servo_")
-                        .append(usedConfigurationBlock.userDefinedPortName)
-                        .append(".attach(")
-                        .append(PIN_MAPPING.get(usedConfigurationBlock.getProperty(SC.PULSE)))
-                        .append(");");
+                    this.src.add("_servo_", usedConfigurationBlock.userDefinedPortName, ".attach(", PIN_MAPPING.get(usedConfigurationBlock.getProperty(SC.PULSE)), ");");
                     nlIndent();
                     break;
                 default:
@@ -166,11 +162,11 @@ public final class FestobionicCppVisitor extends NepoArduinoCppVisitor implement
             String blockName = cc.userDefinedPortName;
             switch ( cc.componentType ) {
                 case SC.LED:
-                    this.sb.append("int _led_").append(blockName).append(" = ").append(cc.getProperty("INPUT")).append(";");
+                    this.src.add("int _led_", blockName, " = ", cc.getProperty("INPUT"), ";");
                     nlIndent();
                     break;
                 case SC.SERVOMOTOR:
-                    this.sb.append("Servo _servo_").append(blockName).append(";");
+                    this.src.add("Servo _servo_", blockName, ";");
                     nlIndent();
                     break;
                 default:

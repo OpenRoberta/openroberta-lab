@@ -106,152 +106,152 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.sb.append("while True:");
+        this.src.add("while True:");
         incrIndentation();
         visitStmtList(waitStmt.statements);
         nlIndent();
-        this.sb.append("hal.waitFor(15)");
+        this.src.add("hal.waitFor(15)");
         decrIndentation();
         return null;
     }
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
-        this.sb.append("hal.waitFor(");
+        this.src.add("hal.waitFor(");
         waitTimeStmt.time.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
-        this.sb.append("hal.clearDisplay()");
+        this.src.add("hal.clearDisplay()");
         return null;
     }
 
     @Override
     public Void visitGetVolumeAction(GetVolumeAction getVolumeAction) {
-        this.sb.append("hal.getVolume()");
+        this.src.add("hal.getVolume()");
         return null;
     }
 
     @Override
     public Void visitSetVolumeAction(SetVolumeAction setVolumeAction) {
-        this.sb.append("hal.setVolume(");
+        this.src.add("hal.setVolume(");
         setVolumeAction.volume.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitSetLanguageAction(SetLanguageAction setLanguageAction) {
-        this.sb.append("hal.setLanguage(\"");
-        this.sb.append(TTSLanguageMapper.getLanguageString(setLanguageAction.language));
-        this.sb.append("\")");
+        this.src.add("hal.setLanguage(\"");
+        this.src.add(TTSLanguageMapper.getLanguageString(setLanguageAction.language));
+        this.src.add("\")");
         return null;
     }
 
     @Override
     public Void visitSayTextAction(SayTextAction sayTextAction) {
-        this.sb.append("hal.sayText(");
+        this.src.add("hal.sayText(");
         if ( !sayTextAction.msg.getKind().hasName("STRING_CONST") ) {
-            this.sb.append("str(");
+            this.src.add("str(");
             sayTextAction.msg.accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         } else {
             sayTextAction.msg.accept(this);
         }
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction sayTextAction) {
-        this.sb.append("hal.sayText(");
+        this.src.add("hal.sayText(");
         if ( !sayTextAction.msg.getKind().hasName("STRING_CONST") ) {
-            this.sb.append("str(");
+            this.src.add("str(");
             sayTextAction.msg.accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         } else {
             sayTextAction.msg.accept(this);
         }
-        this.sb.append(",");
+        this.src.add(",");
         sayTextAction.speed.accept(this);
-        this.sb.append(",");
+        this.src.add(",");
         sayTextAction.pitch.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitLightAction(LightAction lightAction) {
-        this.sb.append("hal.ledOn(" + getEnumCode(lightAction.color) + ", " + getEnumCode(lightAction.mode) + ")");
+        this.src.add("hal.ledOn(", getEnumCode(lightAction.color), ", ", getEnumCode(lightAction.mode), ")");
         return null;
     }
 
     @Override
     public Void visitBrickLightResetAction(BrickLightResetAction brickLightResetAction) {
-        this.sb.append("hal.resetLED()");
+        this.src.add("hal.resetLED()");
         return null;
     }
 
     @Override
     public Void visitBrickLightOffAction(BrickLightOffAction brickLightOffAction) {
-        this.sb.append("hal.ledOff()");
+        this.src.add("hal.ledOff()");
         return null;
     }
 
     @Override
     public Void visitPlayFileAction(PlayFileAction playFileAction) {
-        this.sb.append("hal.playFile(" + playFileAction.fileName + ")");
+        this.src.add("hal.playFile(", playFileAction.fileName, ")");
         return null;
     }
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction showPictureAction) {
-        this.sb.append("hal.drawPicture(predefinedImages['").append(showPictureAction.pic).append("'], ");
+        this.src.add("hal.drawPicture(predefinedImages['", showPictureAction.pic, "'], ");
         showPictureAction.x.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         showPictureAction.y.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitShowTextAction(ShowTextAction showTextAction) {
-        this.sb.append("hal.drawText(");
+        this.src.add("hal.drawText(");
         if ( !showTextAction.msg.getKind().hasName("STRING_CONST") ) {
-            this.sb.append("str(");
+            this.src.add("str(");
             showTextAction.msg.accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         } else {
             showTextAction.msg.accept(this);
         }
-        this.sb.append(", ");
+        this.src.add(", ");
         showTextAction.x.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         showTextAction.y.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitToneAction(ToneAction toneAction) {
-        this.sb.append("hal.playTone(");
+        this.src.add("hal.playTone(");
         toneAction.frequency.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         toneAction.duration.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
-        this.sb.append("hal.playTone(float(");
-        this.sb.append(playNoteAction.frequency);
-        this.sb.append("), float(");
-        this.sb.append(playNoteAction.duration);
-        this.sb.append("))");
+        this.src.add("hal.playTone(float(");
+        this.src.add(playNoteAction.frequency);
+        this.src.add("), float(");
+        this.src.add(playNoteAction.duration);
+        this.src.add("))");
         return null;
     }
 
@@ -275,14 +275,13 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
             } else {
                 methodName = isRegulated ? "hal.turnOnRegulatedMotor('" : "hal.turnOnUnregulatedMotor('";
             }
-            this.sb.append(methodName + userDefinedPort.toString() + "', ");
+            this.src.add(methodName, userDefinedPort.toString(), "', ");
             motorOnAction.param.getSpeed().accept(this);
             if ( duration ) {
-                this.sb.append(", " + getEnumCode(motorOnAction.getDurationMode()));
-                this.sb.append(", ");
+                this.src.add(", ", getEnumCode(motorOnAction.getDurationMode()), ", ");
                 motorOnAction.getDurationValue().accept(this);
             }
-            this.sb.append(")");
+            this.src.add(")");
         }
         return null;
     }
@@ -293,9 +292,9 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         if ( isActorOnPort(userDefinedPort) ) {
             boolean isRegulated = this.brickConfiguration.isMotorRegulated(userDefinedPort);
             String methodName = isRegulated ? "hal.setRegulatedMotorSpeed('" : "hal.setUnregulatedMotorSpeed('";
-            this.sb.append(methodName + userDefinedPort + "', ");
+            this.src.add(methodName, userDefinedPort, "', ");
             motorSetPowerAction.power.accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         }
         return null;
     }
@@ -306,7 +305,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         if ( isActorOnPort(userDefinedPort) ) {
             boolean isRegulated = this.brickConfiguration.isMotorRegulated(userDefinedPort);
             String methodName = isRegulated ? "hal.getRegulatedMotorSpeed('" : "hal.getUnregulatedMotorSpeed('";
-            this.sb.append(methodName + userDefinedPort + "')");
+            this.src.add(methodName, userDefinedPort, "')");
         }
         return null;
     }
@@ -314,12 +313,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         if ( isActorOnPort(motorStopAction.getUserDefinedPort()) ) {
-            this.sb
-                .append("hal.stopMotor('")
-                .append(motorStopAction.getUserDefinedPort())
-                .append("', ")
-                .append(getEnumCode(motorStopAction.mode))
-                .append(')');
+            this.src.add("hal.stopMotor('", motorStopAction.getUserDefinedPort(), "', ", getEnumCode(motorStopAction.mode), ')');
         }
         return null;
     }
@@ -329,16 +323,16 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         if ( isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)) && isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.RIGHT)) ) {
             boolean isDuration = driveAction.param.getDuration() != null;
             String methodName = isDuration ? "hal.driveDistance(" : "hal.regulatedDrive(";
-            this.sb.append(methodName);
-            this.sb.append("'" + this.brickConfiguration.getFirstMotorPort(SC.LEFT) + "', ");
-            this.sb.append("'" + this.brickConfiguration.getFirstMotorPort(SC.RIGHT) + "', False, ");
-            this.sb.append(getEnumCode(driveAction.direction) + ", ");
+            this.src.add(methodName);
+            this.src.add("'", this.brickConfiguration.getFirstMotorPort(SC.LEFT), "', ");
+            this.src.add("'", this.brickConfiguration.getFirstMotorPort(SC.RIGHT), "', False, ");
+            this.src.add(getEnumCode(driveAction.direction), ", ");
             driveAction.param.getSpeed().accept(this);
             if ( isDuration ) {
-                this.sb.append(", ");
+                this.src.add(", ");
                 driveAction.param.getDuration().getValue().accept(this);
             }
-            this.sb.append(")");
+            this.src.add(")");
         }
         return null;
     }
@@ -350,17 +344,16 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         if ( isActorOnPort(leftMotorPort) && isActorOnPort(rightMotorPort) ) {
             boolean isDuration = turnAction.param.getDuration() != null;
             boolean isRegulated = this.brickConfiguration.isMotorRegulated(leftMotorPort);
-            String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : isRegulated ? "Regulated" : "Unregulated") + "(";
-            this.sb.append(methodName);
-            this.sb.append("'" + leftMotorPort + "', ");
-            this.sb.append("'" + rightMotorPort + "', False, ");
-            this.sb.append(getEnumCode(turnAction.direction) + ", ");
+            this.src.add("hal.rotateDirection", isDuration ? "Angle" : isRegulated ? "Regulated" : "Unregulated", "(");
+            this.src.add("'", leftMotorPort, "', ");
+            this.src.add("'", rightMotorPort, "', False, ");
+            this.src.add(getEnumCode(turnAction.direction), ", ");
             turnAction.param.getSpeed().accept(this);
             if ( isDuration ) {
-                this.sb.append(", ");
+                this.src.add(", ");
                 turnAction.param.getDuration().getValue().accept(this);
             }
-            this.sb.append(")");
+            this.src.add(")");
         }
         return null;
     }
@@ -370,9 +363,9 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         String leftMotorPort = this.brickConfiguration.getFirstMotorPort(SC.LEFT);
         String rightMotorPort = this.brickConfiguration.getFirstMotorPort(SC.RIGHT);
         if ( isActorOnPort(leftMotorPort) && isActorOnPort(rightMotorPort) ) {
-            this.sb.append("hal.stopMotors(");
-            this.sb.append("'" + leftMotorPort + "', ");
-            this.sb.append("'" + rightMotorPort + "')");
+            this.src.add("hal.stopMotors(");
+            this.src.add("'", leftMotorPort, "', ");
+            this.src.add("'", rightMotorPort, "')");
         }
         return null;
     }
@@ -383,17 +376,17 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         String rightMotorPort = this.brickConfiguration.getFirstMotorPort(SC.RIGHT);
         if ( isActorOnPort(leftMotorPort) && isActorOnPort(rightMotorPort) ) {
             MotorDuration duration = curveAction.paramLeft.getDuration();
-            this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EV3DevMethods.DRIVE_IN_CURVE)).append("(");
-            this.sb.append(getEnumCode(curveAction.direction) + ", ");
-            this.sb.append("'" + leftMotorPort + "', ");
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EV3DevMethods.DRIVE_IN_CURVE), "(");
+            this.src.add(getEnumCode(curveAction.direction), ", ");
+            this.src.add("'", leftMotorPort, "', ");
             curveAction.paramLeft.getSpeed().accept(this);
-            this.sb.append(", '" + rightMotorPort + "', ");
+            this.src.add(", '", rightMotorPort, "', ");
             curveAction.paramRight.getSpeed().accept(this);
             if ( duration != null ) {
-                this.sb.append(", ");
+                this.src.add(", ");
                 duration.getValue().accept(this);
             }
-            this.sb.append(")");
+            this.src.add(")");
         }
         return null;
     }
@@ -402,10 +395,10 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     public Void visitKeysSensor(KeysSensor keysSensor) {
         switch ( keysSensor.getMode() ) {
             case SC.PRESSED:
-                this.sb.append("hal.isKeyPressed('" + keysSensor.getUserDefinedPort().toLowerCase() + "')");
+                this.src.add("hal.isKeyPressed('", keysSensor.getUserDefinedPort().toLowerCase(), "')");
                 break;
             case SC.WAIT_FOR_PRESS_AND_RELEASE:
-                this.sb.append("hal.isKeyPressedAndReleased(" + keysSensor.getUserDefinedPort().toLowerCase() + ")");
+                this.src.add("hal.isKeyPressedAndReleased(", keysSensor.getUserDefinedPort().toLowerCase(), ")");
                 break;
             default:
                 throw new DbcException("Invalide mode for KeysSensor!");
@@ -434,7 +427,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
             default:
                 throw new DbcException("Invalid mode for EV3 Color Sensor!");
         }
-        this.sb.append(methodName).append("('").append(colorSensorPort).append("')");
+        this.src.add(methodName, "('", colorSensorPort, "')");
         return null;
     }
 
@@ -459,42 +452,42 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
             default:
                 throw new DbcException("Invalid mode for HiTec Color Sensor V2!");
         }
-        this.sb.append(methodName).append("('").append(colorSensorPort).append("')");
+        this.src.add(methodName, "('", colorSensorPort, "')");
         return null;
     }
 
     @Override
     public Void visitEncoderSensor(EncoderSensor encoderSensor) {
         String encoderSensorPort = encoderSensor.getUserDefinedPort();
-        this.sb.append("hal.getMotorTachoValue('").append(encoderSensorPort).append("', ").append(getEnumCode(encoderSensor.getMode())).append(")");
+        this.src.add("hal.getMotorTachoValue('", encoderSensorPort, "', ", getEnumCode(encoderSensor.getMode()), ")");
         return null;
     }
 
     @Override
     public Void visitEncoderReset(EncoderReset encoderReset) {
         String encoderSensorPort = encoderReset.sensorPort;
-        this.sb.append("hal.resetMotorTacho('").append(encoderSensorPort).append("')");
+        this.src.add("hal.resetMotorTacho('", encoderSensorPort, "')");
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor gyroSensor) {
         String gyroSensorPort = gyroSensor.getUserDefinedPort();
-        this.sb.append("hal.getGyroSensorValue('" + gyroSensorPort + "', " + getEnumCode(gyroSensor.getMode()) + ")");
+        this.src.add("hal.getGyroSensorValue('", gyroSensorPort, "', ", getEnumCode(gyroSensor.getMode()), ")");
         return null;
     }
 
     @Override
     public Void visitGyroReset(GyroReset gyroReset) {
         String gyroSensorPort = gyroReset.sensorPort;
-        this.sb.append("hal.resetGyroSensor('" + gyroSensorPort + "')");
+        this.src.add("hal.resetGyroSensor('", gyroSensorPort, "')");
         return null;
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor compassSensor) {
         String compassSensorPort = compassSensor.getUserDefinedPort();
-        this.sb.append("hal.getHiTecCompassSensorValue('").append(compassSensorPort).append("', ").append(getEnumCode(compassSensor.getMode())).append(")");
+        this.src.add("hal.getHiTecCompassSensorValue('", compassSensorPort, "', ", getEnumCode(compassSensor.getMode()), ")");
         return null;
     }
 
@@ -510,10 +503,10 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         String infraredSensorPort = infraredSensor.getUserDefinedPort();
         switch ( infraredSensor.getMode() ) {
             case SC.DISTANCE:
-                this.sb.append("hal.getInfraredSensorDistance('" + infraredSensorPort + "')");
+                this.src.add("hal.getInfraredSensorDistance('", infraredSensorPort, "')");
                 break;
             case SC.PRESENCE:
-                this.sb.append("hal.getInfraredSensorSeek('" + infraredSensorPort + "')");
+                this.src.add("hal.getInfraredSensorSeek('", infraredSensorPort, "')");
                 break;
             default:
                 throw new DbcException("Invalid Infrared Sensor Mode!");
@@ -527,10 +520,10 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         String irSeekerSensorPort = irSeekerSensor.getUserDefinedPort();
         switch ( irSeekerSensor.getMode() ) {
             case SC.MODULATED:
-                this.sb.append("hal.getHiTecIRSeekerSensorValue('" + irSeekerSensorPort + "', 'AC')");
+                this.src.add("hal.getHiTecIRSeekerSensorValue('", irSeekerSensorPort, "', 'AC')");
                 break;
             case SC.UNMODULATED:
-                this.sb.append("hal.getHiTecIRSeekerSensorValue('" + irSeekerSensorPort + "', 'DC')");
+                this.src.add("hal.getHiTecIRSeekerSensorValue('", irSeekerSensorPort, "', 'DC')");
                 break;
             default:
                 throw new DbcException("Invalid IRSeeker Mode!");
@@ -541,20 +534,20 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
         String timerNumber = timerSensor.getUserDefinedPort();
-        this.sb.append("hal.getTimerValue(").append(timerNumber).append(")");
+        this.src.add("hal.getTimerValue(", timerNumber, ")");
         return null;
     }
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
         String timerNumber = timerReset.sensorPort;
-        this.sb.append("hal.resetTimer(").append(timerNumber).append(")");
+        this.src.add("hal.resetTimer(", timerNumber, ")");
         return null;
     }
 
     @Override
     public Void visitTouchSensor(TouchSensor touchSensor) {
-        this.sb.append("hal.isPressed('" + touchSensor.getUserDefinedPort() + "')");
+        this.src.add("hal.isPressed('", touchSensor.getUserDefinedPort(), "')");
         return null;
     }
 
@@ -562,9 +555,9 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         String ultrasonicSensorPort = ultrasonicSensor.getUserDefinedPort();
         if ( ultrasonicSensor.getMode().equals(SC.DISTANCE) ) {
-            this.sb.append("hal.getUltraSonicSensorDistance('" + ultrasonicSensorPort + "')");
+            this.src.add("hal.getUltraSonicSensorDistance('", ultrasonicSensorPort, "')");
         } else {
-            this.sb.append("hal.getUltraSonicSensorPresence('" + ultrasonicSensorPort + "')");
+            this.src.add("hal.getUltraSonicSensorPresence('", ultrasonicSensorPort, "')");
         }
         return null;
     }
@@ -572,7 +565,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
         String soundSensorPort = soundSensor.getUserDefinedPort();
-        this.sb.append("hal.getSoundLevel('" + soundSensorPort + "')");
+        this.src.add("hal.getSoundLevel('", soundSensorPort, "')");
         return null;
     }
 
@@ -582,11 +575,11 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         variables.accept(this);
         generateUserDefinedMethods();
         nlIndent();
-        this.sb.append("def run():");
+        this.src.add("def run():");
         incrIndentation();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             nlIndent();
-            this.sb.append("global ").append(String.join(", ", this.usedGlobalVarInFunctions));
+            this.src.add("global ", String.join(", ", this.usedGlobalVarInFunctions));
         } else {
             addPassIfProgramIsEmpty();
         }
@@ -595,45 +588,45 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction bluetoothReadAction) {
-        this.sb.append("hal.readMessage(");
+        this.src.add("hal.readMessage(");
         bluetoothReadAction.connection.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitBluetoothConnectAction(BluetoothConnectAction bluetoothConnectAction) {
-        this.sb.append("hal.establishConnectionTo(");
+        this.src.add("hal.establishConnectionTo(");
         if ( !bluetoothConnectAction.address.getKind().hasName("STRING_CONST") ) {
-            this.sb.append("str(");
+            this.src.add("str(");
             bluetoothConnectAction.address.accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         } else {
             bluetoothConnectAction.address.accept(this);
         }
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction bluetoothSendAction) {
-        this.sb.append("hal.sendMessage(");
+        this.src.add("hal.sendMessage(");
         bluetoothSendAction.connection.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         if ( !bluetoothSendAction.msg.getKind().hasName("STRING_CONST") ) {
-            this.sb.append("str(");
+            this.src.add("str(");
             bluetoothSendAction.msg.accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         } else {
             bluetoothSendAction.msg.accept(this);
         }
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction bluetoothWaitForConnection) {
-        this.sb.append("hal.waitForConnection()");
+        this.src.add("hal.waitForConnection()");
         return null;
     }
 
@@ -644,17 +637,17 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.RANDOM_DOUBLE)).append("()");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.RANDOM_DOUBLE), "()");
         return null;
     }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.RANDOM)).append("(");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.RANDOM), "(");
         mathRandomIntFunct.from.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         mathRandomIntFunct.to.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
@@ -664,37 +657,37 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
             return;
         }
         this.usedGlobalVarInFunctions.clear();
-        this.sb.append("#!/usr/bin/python");
+        this.src.add("#!/usr/bin/python");
         nlIndent();
         nlIndent();
-        this.sb.append("from __future__ import absolute_import");
+        this.src.add("from __future__ import absolute_import");
         nlIndent();
-        this.sb.append("from roberta.ev3 import Hal");
+        this.src.add("from roberta.ev3 import Hal");
         nlIndent();
-        this.sb.append("from ev3dev import ev3 as ev3dev");
+        this.src.add("from ev3dev import ev3 as ev3dev");
         nlIndent();
-        this.sb.append("import math");
+        this.src.add("import math");
         nlIndent();
-        this.sb.append("import os");
+        this.src.add("import os");
         nlIndent();
-        this.sb.append("import time");
-        nlIndent();
-        nlIndent();
-        this.sb.append("class BreakOutOfALoop(Exception): pass");
-        nlIndent();
-        this.sb.append("class ContinueLoop(Exception): pass");
+        this.src.add("import time");
         nlIndent();
         nlIndent();
-        this.sb.append(generateUsedImages());
-        this.sb.append(generateRegenerateConfiguration());
+        this.src.add("class BreakOutOfALoop(Exception): pass");
         nlIndent();
-        this.sb.append("hal = Hal(_brickConfiguration)");
+        this.src.add("class ContinueLoop(Exception): pass");
+        nlIndent();
+        nlIndent();
+        this.src.add(generateUsedImages());
+        this.src.add(generateRegenerateConfiguration());
+        nlIndent();
+        this.src.add("hal = Hal(_brickConfiguration)");
 
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.VOICE) ) {
             nlIndent();
-            this.sb.append("hal.setLanguage(\"");
-            this.sb.append(TTSLanguageMapper.getLanguageString(this.language));
-            this.sb.append("\")");
+            this.src.add("hal.setLanguage(\"");
+            this.src.add(TTSLanguageMapper.getLanguageString(this.language));
+            this.src.add("\")");
         }
         generateNNStuff("python");
     }
@@ -707,30 +700,30 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         decrIndentation(); // everything is still indented from main program
         nlIndent();
         nlIndent();
-        this.sb.append("def main():");
+        this.src.add("def main():");
         incrIndentation();
         nlIndent();
-        this.sb.append("try:");
+        this.src.add("try:");
         incrIndentation();
         nlIndent();
-        this.sb.append("run()");
+        this.src.add("run()");
         decrIndentation();
         nlIndent();
-        this.sb.append("except Exception as e:");
+        this.src.add("except Exception as e:");
         incrIndentation();
         nlIndent();
-        this.sb.append("hal.drawText('Fehler im EV3', 0, 0)");
+        this.src.add("hal.drawText('Fehler im EV3', 0, 0)");
         nlIndent();
-        this.sb.append("hal.drawText(e.__class__.__name__, 0, 1)");
+        this.src.add("hal.drawText(e.__class__.__name__, 0, 1)");
         nlIndent();
         // FIXME: we can only print about 30 chars
-        this.sb.append("hal.drawText(str(e), 0, 2)");
+        this.src.add("hal.drawText(str(e), 0, 2)");
         nlIndent();
-        this.sb.append("hal.drawText('Press any key', 0, 4)");
+        this.src.add("hal.drawText('Press any key', 0, 4)");
         nlIndent();
-        this.sb.append("while not hal.isKeyPressed('any'): hal.waitFor(500)");
+        this.src.add("while not hal.isKeyPressed('any'): hal.waitFor(500)");
         nlIndent();
-        this.sb.append("raise");
+        this.src.add("raise");
         decrIndentation();
         decrIndentation();
         nlIndent();
@@ -946,7 +939,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
             default:
                 throw new DbcException("Invalid color constant: " + colorConst.getHexValueAsString());
         }
-        this.sb.append("'" + color.toLowerCase() + "'");
+        this.src.add("'", color.toLowerCase(), "'");
         return null;
     }
 }

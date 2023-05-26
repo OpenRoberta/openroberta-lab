@@ -96,22 +96,22 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         if ( isInteger(numConst.value) ) {
             super.visitNumConst(numConst);
         } else {
-            this.sb.append("float(");
+            this.src.add("float(");
             super.visitNumConst(numConst);
-            this.sb.append(")");
+            this.src.add(")");
         }
         return null;
     }
 
     @Override
     public Void visitBoolConst(BoolConst boolConst) {
-        this.sb.append(boolConst.value ? "True" : "False");
+        this.src.add(boolConst.value ? "True" : "False");
         return null;
     }
 
     @Override
     public Void visitNullConst(NullConst nullConst) {
-        this.sb.append("None");
+        this.src.add("None");
         return null;
     }
 
@@ -119,22 +119,22 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     public Void visitMathConst(MathConst mathConst) {
         switch ( mathConst.mathConst ) {
             case PI:
-                this.sb.append("math.pi");
+                this.src.add("math.pi");
                 break;
             case E:
-                this.sb.append("math.e");
+                this.src.add("math.e");
                 break;
             case GOLDEN_RATIO:
-                this.sb.append("(1 + 5 ** 0.5) / 2");
+                this.src.add("(1 + 5 ** 0.5) / 2");
                 break;
             case SQRT2:
-                this.sb.append("math.sqrt(2)");
+                this.src.add("math.sqrt(2)");
                 break;
             case SQRT1_2:
-                this.sb.append("math.sqrt(0.5)");
+                this.src.add("math.sqrt(0.5)");
                 break;
             case INFINITY:
-                this.sb.append("float('inf')");
+                this.src.add("float('inf')");
                 break;
             default:
                 break;
@@ -145,8 +145,8 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitVarDeclaration(VarDeclaration var) {
         this.usedGlobalVarInFunctions.add(var.getCodeSafeName());
-        this.sb.append(var.getCodeSafeName());
-        this.sb.append(" = ");
+        this.src.add(var.getCodeSafeName());
+        this.src.add(" = ");
         if ( !var.value.getKind().hasName("EMPTY_EXPR") ) {
             if ( var.value.getKind().hasName("EXPR_LIST") ) {
                 ExprList list = (ExprList) var.value;
@@ -159,7 +159,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
                 var.value.accept(this);
             }
         } else {
-            this.sb.append("None");
+            this.src.add("None");
         }
         return null;
     }
@@ -168,14 +168,14 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     public Void visitBinary(Binary binary) {
         try {
             VarDeclaration variablePart = (VarDeclaration) binary.left;
-            this.sb.append(variablePart.getCodeSafeName());
+            this.src.add(variablePart.getCodeSafeName());
         } catch ( ClassCastException e ) {
-            generateSubExpr(this.sb, false, binary.left, binary);
+            generateSubExpr(this.src, false, binary.left, binary);
         }
         //if ( variablePart.getValue().getClass().equals(EmptyExpr.class) ) {
         Binary.Op op = binary.op;
         String sym = getBinaryOperatorSymbol(op);
-        this.sb.append(' ').append(sym).append(' ');
+        this.src.add(' ', sym, ' ');
         generateCodeRightExpression(binary, op);
         return null;
     }
@@ -184,27 +184,27 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     public Void visitEmptyExpr(EmptyExpr emptyExpr) {
         switch ( emptyExpr.getDefVal() ) {
             case STRING:
-                this.sb.append("\"\"");
+                this.src.add("\"\"");
                 break;
             case BOOLEAN:
-                this.sb.append("True");
+                this.src.add("True");
                 break;
             case NUMBER_INT:
-                this.sb.append("0");
+                this.src.add("0");
                 break;
             case NUMBER:
-                this.sb.append("0.0");
+                this.src.add("0.0");
                 break;
             case CAPTURED_TYPE:
-                this.sb.append("None");
+                this.src.add("None");
                 break;
             case ARRAY:
-                this.sb.append("None");
+                this.src.add("None");
                 break;
             case NULL:
                 break;
             default:
-                this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
+                this.src.add("[[EmptyExpr [defVal=", emptyExpr.getDefVal(), "]]]");
                 break;
         }
         return null;
@@ -251,23 +251,23 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     public Void visitStmtFlowCon(StmtFlowCon stmtFlowCon) {
         if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) != null ) {
             if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) ) {
-                this.sb.append("raise " + (stmtFlowCon.flow == Flow.BREAK ? "BreakOutOfALoop" : "ContinueLoop"));
+                this.src.add("raise ", (stmtFlowCon.flow == Flow.BREAK ? "BreakOutOfALoop" : "ContinueLoop"));
                 return null;
             }
         }
-        this.sb.append(stmtFlowCon.flow.toString().toLowerCase());
+        this.src.add(stmtFlowCon.flow.toString().toLowerCase());
         return null;
     }
 
     @Override
     public Void visitEmptyList(EmptyList emptyList) {
-        this.sb.append("[]");
+        this.src.add("[]");
         return null;
     }
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct mathPowerFunct) {
-        this.sb.append("math.pow(");
+        this.src.add("math.pow(");
         super.visitMathPowerFunct(mathPowerFunct);
         return null;
     }
@@ -276,73 +276,73 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     public Void visitMathSingleFunct(MathSingleFunct mathSingleFunct) {
         switch ( mathSingleFunct.functName ) {
             case SQUARE:
-                this.sb.append("math.pow(");
+                this.src.add("math.pow(");
                 mathSingleFunct.param.get(0).accept(this);
-                this.sb.append(", 2)");
+                this.src.add(", 2)");
                 return null;
             case ROOT:
-                this.sb.append("math.sqrt(");
+                this.src.add("math.sqrt(");
                 break;
             case ABS:
-                this.sb.append("math.fabs(");
+                this.src.add("math.fabs(");
                 break;
             case LN:
-                this.sb.append("math.log(");
+                this.src.add("math.log(");
                 break;
             case LOG10:
-                this.sb.append("math.log10(");
+                this.src.add("math.log10(");
                 break;
             case EXP:
-                this.sb.append("math.exp(");
+                this.src.add("math.exp(");
                 break;
             case POW10:
-                this.sb.append("math.pow(10, ");
+                this.src.add("math.pow(10, ");
                 break;
             case SIN:
-                this.sb.append("math.sin(");
+                this.src.add("math.sin(");
                 break;
             case COS:
-                this.sb.append("math.cos(");
+                this.src.add("math.cos(");
                 break;
             case TAN:
-                this.sb.append("math.tan(");
+                this.src.add("math.tan(");
                 break;
             case ASIN:
-                this.sb.append("math.asin(");
+                this.src.add("math.asin(");
                 break;
             case ATAN:
-                this.sb.append("math.atan(");
+                this.src.add("math.atan(");
                 break;
             case ACOS:
-                this.sb.append("math.acos(");
+                this.src.add("math.acos(");
                 break;
             case ROUND:
-                this.sb.append("round(");
+                this.src.add("round(");
                 break;
             case ROUNDUP:
-                this.sb.append("math.ceil(");
+                this.src.add("math.ceil(");
                 break;
             case ROUNDDOWN:
-                this.sb.append("math.floor(");
+                this.src.add("math.floor(");
                 break;
             default:
                 break;
         }
         mathSingleFunct.param.get(0).accept(this);
-        this.sb.append(")");
+        this.src.add(")");
 
         return null;
     }
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
-        this.sb.append("min(max(");
+        this.src.add("min(max(");
         mathConstrainFunct.value.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         mathConstrainFunct.lowerBound.accept(this);
-        this.sb.append("), ");
+        this.src.add("), ");
         mathConstrainFunct.upperBound.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
@@ -350,40 +350,40 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     public Void visitMathNumPropFunct(MathNumPropFunct mathNumPropFunct) {
         switch ( mathNumPropFunct.functName ) {
             case EVEN:
-                this.sb.append("(");
+                this.src.add("(");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.sb.append(" % 2) == 0");
+                this.src.add(" % 2) == 0");
                 break;
             case ODD:
-                this.sb.append("(");
+                this.src.add("(");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.sb.append(" % 2) == 1");
+                this.src.add(" % 2) == 1");
                 break;
             case PRIME:
                 String methodName = this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.PRIME);
-                this.sb.append(methodName).append("(");
+                this.src.add(methodName, "(");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.sb.append(")");
+                this.src.add(")");
                 break;
             case WHOLE:
-                this.sb.append("(");
+                this.src.add("(");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.sb.append(" % 1) == 0");
+                this.src.add(" % 1) == 0");
                 break;
             case POSITIVE:
                 mathNumPropFunct.param.get(0).accept(this);
-                this.sb.append(" > 0");
+                this.src.add(" > 0");
                 break;
             case NEGATIVE:
                 mathNumPropFunct.param.get(0).accept(this);
-                this.sb.append(" < 0");
+                this.src.add(" < 0");
                 break;
             case DIVISIBLE_BY:
-                this.sb.append("(");
+                this.src.add("(");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.sb.append(" % ");
+                this.src.add(" % ");
                 mathNumPropFunct.param.get(1).accept(this);
-                this.sb.append(") == 0");
+                this.src.add(") == 0");
                 break;
             default:
                 break;
@@ -393,17 +393,17 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
-        this.sb.append("random.random()");
+        this.src.add("random.random()");
         return null;
     }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        this.sb.append("random.randint(");
+        this.src.add("random.randint(");
         mathRandomIntFunct.from.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         mathRandomIntFunct.to.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
@@ -411,40 +411,40 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     public Void visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
         switch ( mathOnListFunct.functName ) {
             case SUM:
-                this.sb.append("sum(");
+                this.src.add("sum(");
                 mathOnListFunct.list.accept(this);
-                this.sb.append(")");
+                this.src.add(")");
                 break;
             case MIN:
-                this.sb.append("min(");
+                this.src.add("min(");
                 mathOnListFunct.list.accept(this);
-                this.sb.append(")");
+                this.src.add(")");
                 break;
             case MAX:
-                this.sb.append("max(");
+                this.src.add("max(");
                 mathOnListFunct.list.accept(this);
-                this.sb.append(")");
+                this.src.add(")");
                 break;
             case AVERAGE:
-                this.sb.append("float(sum(");
+                this.src.add("float(sum(");
                 mathOnListFunct.list.accept(this);
-                this.sb.append("))/len(");
+                this.src.add("))/len(");
                 mathOnListFunct.list.accept(this);
-                this.sb.append(")");
+                this.src.add(")");
                 break;
             case MEDIAN:
-                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.MEDIAN)).append("(");
+                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.MEDIAN), "(");
                 mathOnListFunct.list.accept(this);
-                this.sb.append(")");
+                this.src.add(")");
                 break;
             case STD_DEV:
-                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.STD_DEV)).append("(");
+                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.STD_DEV), "(");
                 mathOnListFunct.list.accept(this);
-                this.sb.append(")");
+                this.src.add(")");
                 break;
             case RANDOM:
                 mathOnListFunct.list.accept(this);
-                this.sb.append("[0]");
+                this.src.add("[0]");
                 break;
             default:
                 break;
@@ -454,60 +454,60 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
-        this.sb.append("str(");
+        this.src.add("str(");
         mathCastStringFunct.value.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
-        this.sb.append("chr((int)(");
+        this.src.add("chr((int)(");
         mathCastCharFunct.value.accept(this);
-        this.sb.append("))");
+        this.src.add("))");
         return null;
     }
 
     @Override
     public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
         textAppendStmt.var.accept(this);
-        this.sb.append(" += str(");
+        this.src.add(" += str(");
         textAppendStmt.text.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
-        this.sb.append("float(");
+        this.src.add("float(");
         textStringCastNumberFunct.value.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
-        this.sb.append("ord(");
+        this.src.add("ord(");
         textCharCastNumberFunct.value.accept(this);
-        this.sb.append("[");
+        this.src.add("[");
         textCharCastNumberFunct.atIndex.accept(this);
-        this.sb.append("])");
+        this.src.add("])");
         return null;
     }
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct textJoinFunct) {
-        this.sb.append("\"\".join(str(arg) for arg in [");
+        this.src.add("\"\".join(str(arg) for arg in [");
         textJoinFunct.param.accept(this);
-        this.sb.append("])");
+        this.src.add("])");
         return null;
     }
 
     @Override
     public Void visitListCreate(ListCreate listCreate) {
-        this.sb.append("[");
+        this.src.add("[");
         listCreate.exprList.accept(this);
-        this.sb.append("]");
+        this.src.add("]");
         return null;
     }
 
@@ -516,34 +516,34 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         listGetIndex.param.get(0).accept(this);
 
         if ( listGetIndex.getElementOperation() == GET ) {
-            this.sb.append("[");
+            this.src.add("[");
         } else if ( listGetIndex.getElementOperation() == REMOVE || listGetIndex.getElementOperation() == GET_REMOVE ) {
-            this.sb.append(".pop(");
+            this.src.add(".pop(");
         }
 
         switch ( (IndexLocation) listGetIndex.location ) {
             case RANDOM: // backwards compatibility
                 // TODO?
             case FIRST:
-                this.sb.append("0");
+                this.src.add("0");
                 break;
             case FROM_END:
-                this.sb.append("-1 -"); // TODO should be correct but how is it handled on other robots?
+                this.src.add("-1 -"); // TODO should be correct but how is it handled on other robots?
                 listGetIndex.param.get(1).accept(this);
                 break;
             case FROM_START:
                 listGetIndex.param.get(1).accept(this);
                 break;
             case LAST:
-                this.sb.append("-1");
+                this.src.add("-1");
                 break;
             default:
                 break;
         }
         if ( listGetIndex.getElementOperation() == GET ) {
-            this.sb.append("]");
+            this.src.add("]");
         } else if ( listGetIndex.getElementOperation() == REMOVE || listGetIndex.getElementOperation() == GET_REMOVE ) {
-            this.sb.append(")");
+            this.src.add(")");
         }
         return null;
     }
@@ -552,45 +552,45 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     public Void visitListSetIndex(ListSetIndex listSetIndex) {
         listSetIndex.param.get(0).accept(this);
         if ( listSetIndex.mode == SET ) {
-            this.sb.append("[");
+            this.src.add("[");
         } else if ( listSetIndex.mode == INSERT ) {
-            this.sb.append(".insert(");
+            this.src.add(".insert(");
         }
         switch ( (IndexLocation) listSetIndex.location ) {
             case RANDOM: // backwards compatibility
                 // TODO?
             case FIRST:
-                this.sb.append("0");
+                this.src.add("0");
                 break;
             case FROM_END:
-                this.sb.append("-1 -");
+                this.src.add("-1 -");
                 listSetIndex.param.get(2).accept(this);
                 break;
             case FROM_START:
                 listSetIndex.param.get(2).accept(this);
                 break;
             case LAST:
-                this.sb.append("-1");
+                this.src.add("-1");
                 break;
             default:
                 break;
         }
         if ( listSetIndex.mode == SET ) {
-            this.sb.append("] = ");
+            this.src.add("] = ");
             listSetIndex.param.get(1).accept(this);
         } else if ( listSetIndex.mode == INSERT ) {
-            this.sb.append(", ");
+            this.src.add(", ");
             listSetIndex.param.get(1).accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         }
         return null;
     }
 
     @Override
     public Void visitListRepeat(ListRepeat listRepeat) {
-        this.sb.append("[");
+        this.src.add("[");
         listRepeat.param.get(0).accept(this);
-        this.sb.append("] * ");
+        this.src.add("] * ");
         listRepeat.param.get(1).accept(this);
         return null;
     }
@@ -600,18 +600,18 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         switch ( (IndexLocation) indexOfFunct.location ) {
             case FIRST:
                 indexOfFunct.value.accept(this);
-                this.sb.append(".index(");
+                this.src.add(".index(");
                 indexOfFunct.find.accept(this);
-                this.sb.append(")");
+                this.src.add(")");
                 break;
             case LAST:
-                this.sb.append("(len(");
+                this.src.add("(len(");
                 indexOfFunct.value.accept(this);
-                this.sb.append(") - 1) - ");
+                this.src.add(") - 1) - ");
                 indexOfFunct.value.accept(this);
-                this.sb.append("[::-1].index(");
+                this.src.add("[::-1].index(");
                 indexOfFunct.find.accept(this);
-                this.sb.append(")");
+                this.src.add(")");
                 break;
             default:
                 break;
@@ -623,19 +623,19 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     public Void visitGetSubFunct(GetSubFunct getSubFunct) {
         if ( getSubFunct.functName == FunctionNames.GET_SUBLIST ) {
             getSubFunct.param.get(0).accept(this);
-            this.sb.append("[");
+            this.src.add("[");
             switch ( (IndexLocation) getSubFunct.strParam.get(0) ) {
                 case FIRST:
-                    this.sb.append("0:");
+                    this.src.add("0:");
                     break;
                 case FROM_END:
-                    this.sb.append("-1 -");
+                    this.src.add("-1 -");
                     getSubFunct.param.get(1).accept(this);
-                    this.sb.append(":");
+                    this.src.add(":");
                     break;
                 case FROM_START:
                     getSubFunct.param.get(1).accept(this);
-                    this.sb.append(":");
+                    this.src.add(":");
                     break;
                 default:
                     break;
@@ -645,7 +645,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
                     // append nothing
                     break;
                 case FROM_END:
-                    this.sb.append("-1 -");
+                    this.src.add("-1 -");
                     try {
                         getSubFunct.param.get(2).accept(this);
                     } catch ( IndexOutOfBoundsException e ) { // means that our start index does not have a variable
@@ -662,30 +662,30 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
                 default:
                     break;
             }
-            this.sb.append("]");
+            this.src.add("]");
         }
         return null;
     }
 
     @Override
     public Void visitTextPrintFunct(TextPrintFunct textPrintFunct) {
-        this.sb.append("print(");
+        this.src.add("print(");
         textPrintFunct.param.get(0).accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
-        this.sb.append("len( ");
+        this.src.add("len( ");
         lengthOfListFunct.value.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
-        this.sb.append("not ");
+        this.src.add("not ");
         isListEmptyFunct.value.accept(this);
         return null;
     }
@@ -693,22 +693,22 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMethodVoid(MethodVoid methodVoid) {
         nlIndent();
-        this.sb.append("def ").append(methodVoid.getCodeSafeMethodName()).append('(');
+        this.src.add("def ", methodVoid.getCodeSafeMethodName(), '(');
         List<String> paramList = new ArrayList<>();
         for ( Expr l : methodVoid.getParameters().get() ) {
             paramList.add(((VarDeclaration) l).getCodeSafeName());
         }
-        this.sb.append(String.join(", ", paramList));
-        this.sb.append("):");
+        this.src.add(String.join(", ", paramList));
+        this.src.add("):");
         incrIndentation();
         boolean isMethodBodyEmpty = methodVoid.body.get().isEmpty();
         if ( isMethodBodyEmpty ) {
             nlIndent();
-            this.sb.append("pass");
+            this.src.add("pass");
         } else {
             if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
                 nlIndent();
-                this.sb.append("global " + String.join(", ", this.usedGlobalVarInFunctions));
+                this.src.add("global ", String.join(", ", this.usedGlobalVarInFunctions));
             }
             methodVoid.body.accept(this);
         }
@@ -719,21 +719,21 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMethodReturn(MethodReturn methodReturn) {
         nlIndent();
-        this.sb.append("def ").append(methodReturn.getCodeSafeMethodName()).append('(');
+        this.src.add("def ", methodReturn.getCodeSafeMethodName(), '(');
         List<String> paramList = new ArrayList<>();
         for ( Expr l : methodReturn.getParameters().get() ) {
             paramList.add(((VarDeclaration) l).getCodeSafeName());
         }
-        this.sb.append(String.join(", ", paramList));
-        this.sb.append("):");
+        this.src.add(String.join(", ", paramList));
+        this.src.add("):");
         incrIndentation();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             nlIndent();
-            this.sb.append("global " + String.join(", ", this.usedGlobalVarInFunctions));
+            this.src.add("global ", String.join(", ", this.usedGlobalVarInFunctions));
         }
         methodReturn.body.accept(this);
         nlIndent();
-        this.sb.append("return ");
+        this.src.add("return ");
         methodReturn.returnValue.accept(this);
         decrIndentation();
         return null;
@@ -741,13 +741,13 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitMethodIfReturn(MethodIfReturn methodIfReturn) {
-        this.sb.append("if ");
+        this.src.add("if ");
         methodIfReturn.oraCondition.accept(this);
         if ( !methodIfReturn.oraReturnValue.getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(": return ");
+            this.src.add(": return ");
             methodIfReturn.oraReturnValue.accept(this);
         } else {
-            this.sb.append(": return None");
+            this.src.add(": return None");
         }
         return null;
     }
@@ -764,18 +764,18 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitSerialWriteAction(SerialWriteAction serialWriteAction) {
-        this.sb.append("print(");
+        this.src.add("print(");
         serialWriteAction.value.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     protected void generateCodeFromTernary(TernaryExpr ternaryExpr) {
         ternaryExpr.thenPart.accept(this);
-        this.sb.append(whitespace() + "if" + whitespace() + "(" + whitespace());
+        this.src.add(" if ( ");
         ternaryExpr.condition.accept(this);
-        this.sb.append(whitespace() + ")" + whitespace() + "else" + whitespace());
+        this.src.add(" ) else ");
         ternaryExpr.elsePart.accept(this);
     }
 
@@ -793,7 +793,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
             StmtList then = ifStmt.thenList.get(i);
             if ( then.get().isEmpty() ) {
                 nlIndent();
-                this.sb.append("pass");
+                this.src.add("pass");
             } else {
                 then.accept(this);
             }
@@ -805,7 +805,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     protected void generateCodeFromElse(IfStmt ifStmt) {
         if ( !ifStmt.elseList.get().isEmpty() ) {
             nlIndent();
-            this.sb.append("else:");
+            this.src.add("else:");
             incrIndentation();
             ifStmt.elseList.accept(this);
             decrIndentation();
@@ -820,45 +820,45 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     protected void addPassIfProgramIsEmpty() {
         if ( this.getBean(UsedHardwareBean.class).isProgramEmpty() ) {
             nlIndent();
-            this.sb.append("pass");
+            this.src.add("pass");
         }
     }
 
     private void generateCodeRightExpression(Binary binary, Binary.Op op) {
         switch ( op ) {
             case DIVIDE:
-                this.sb.append("float(");
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-                this.sb.append(")");
+                this.src.add("float(");
+                generateSubExpr(this.src, parenthesesCheck(binary), binary.getRight(), binary);
+                this.src.add(")");
                 break;
             default:
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                generateSubExpr(this.src, parenthesesCheck(binary), binary.getRight(), binary);
                 break;
         }
     }
 
     protected void generateCodeFromStmtCondition(String stmtType, Expr expr) {
-        this.sb.append(stmtType).append(whitespace());
+        this.src.add(stmtType, " ");
         expr.accept(this);
-        this.sb.append(":");
+        this.src.add(":");
     }
 
     protected void generateCodeFromStmtConditionFor(String stmtType, Expr expr) {
-        this.sb.append(stmtType).append(whitespace());
+        this.src.add(stmtType, " ");
         ExprList expressions = (ExprList) expr;
         expressions.get().get(0).accept(this);
-        this.sb.append(whitespace() + "in range(int(");
+        this.src.add(" in range(int(");
         expressions.get().get(1).accept(this);
-        this.sb.append(")," + whitespace() + "int(");
+        this.src.add("), ", "int(");
         expressions.get().get(2).accept(this);
-        this.sb.append(")," + whitespace() + "int(");
+        this.src.add("), ", "int(");
         expressions.get().get(3).accept(this);
-        this.sb.append(")):");
+        this.src.add(")):");
     }
 
     protected void appendBreakStmt(RepeatStmt repeatStmt) {
         nlIndent();
-        this.sb.append("break");
+        this.src.add("break");
     }
 
     protected void appendTry() {
@@ -867,7 +867,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) ) {
             incrIndentation();
             nlIndent();
-            this.sb.append("try:");
+            this.src.add("try:");
         }
     }
 
@@ -875,16 +875,16 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) ) {
             decrIndentation();
             nlIndent();
-            this.sb.append("except BreakOutOfALoop:");
+            this.src.add("except BreakOutOfALoop:");
             incrIndentation();
             nlIndent();
-            this.sb.append("break");
+            this.src.add("break");
             decrIndentation();
             nlIndent();
-            this.sb.append("except ContinueLoop:");
+            this.src.add("except ContinueLoop:");
             incrIndentation();
             nlIndent();
-            this.sb.append("continue");
+            this.src.add("continue");
             decrIndentation();
         }
         this.currentLoop.removeLast();
@@ -894,7 +894,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         if ( repeatStmt.list.get().isEmpty() ) {
             if ( repeatStmt.mode != RepeatStmt.Mode.WAIT ) {
                 nlIndent();
-                this.sb.append("pass");
+                this.src.add("pass");
             }
         }
     }
@@ -914,7 +914,6 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
             .unmodifiableMap(
                 Stream
                     .of(
-
                         AbstractLanguageVisitor.entry(Binary.Op.ADD, "+"),
                         AbstractLanguageVisitor.entry(Binary.Op.MINUS, "-"),
                         AbstractLanguageVisitor.entry(Binary.Op.MULTIPLY, "*"),
@@ -935,7 +934,6 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
                         AbstractLanguageVisitor.entry(Binary.Op.MULTIPLY_ASSIGNMENT, "*="),
                         AbstractLanguageVisitor.entry(Binary.Op.DIVIDE_ASSIGNMENT, "/="),
                         AbstractLanguageVisitor.entry(Binary.Op.MOD_ASSIGNMENT, "%=")
-
                     )
                     .collect(AbstractLanguageVisitor.entriesToMap()));
     }
@@ -945,44 +943,42 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
             .unmodifiableMap(
                 Stream
                     .of(
-
                         AbstractLanguageVisitor.entry(Unary.Op.PLUS, "+"),
                         AbstractLanguageVisitor.entry(Unary.Op.NEG, "-"),
                         AbstractLanguageVisitor.entry(Unary.Op.NOT, "not"),
                         AbstractLanguageVisitor.entry(Unary.Op.POSTFIX_INCREMENTS, "++"),
                         AbstractLanguageVisitor.entry(Unary.Op.PREFIX_INCREMENTS, "++")
-
                     )
                     .collect(AbstractLanguageVisitor.entriesToMap()));
     }
 
     @Override
     public Void visitStmtTextComment(StmtTextComment stmtTextComment) {
-        this.sb.append("# " + stmtTextComment.textComment.replace("\n", " "));
+        this.src.add("# ", stmtTextComment.textComment.replace("\n", " "));
         return null;
     }
 
     @Override
     public Void visitAssertStmt(AssertStmt assertStmt) {
-        this.sb.append("if not ");
+        this.src.add("if not ");
         assertStmt.asserts.accept(this);
-        this.sb.append(":");
+        this.src.add(":");
         incrIndentation();
         nlIndent();
-        this.sb.append("print(\"Assertion failed: \", \"").append(assertStmt.msg).append("\", ");
+        this.src.add("print(\"Assertion failed: \", \"", assertStmt.msg, "\", ");
         ((Binary) assertStmt.asserts).left.accept(this);
-        this.sb.append(", \"").append(((Binary) assertStmt.asserts).op.toString()).append("\", ");
+        this.src.add(", \"", ((Binary) assertStmt.asserts).op.toString(), "\", ");
         ((Binary) assertStmt.asserts).getRight().accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         decrIndentation();
         return null;
     }
 
     @Override
     public Void visitDebugAction(DebugAction debugAction) {
-        this.sb.append("print(");
+        this.src.add("print(");
         debugAction.value.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
@@ -994,14 +990,14 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
                     .getBean(CodeGeneratorSetupBean.class)
                     .getHelperMethodGenerator()
                     .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
-            this.sb.append(helperMethodImpls);
+            this.src.add(helperMethodImpls);
         }
 
         nlIndent();
-        this.sb.append("if __name__ == \"__main__\":");
+        this.src.add("if __name__ == \"__main__\":");
         incrIndentation();
         nlIndent();
-        this.sb.append("main()");
+        this.src.add("main()");
         decrIndentation();
     }
 }

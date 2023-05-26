@@ -12,6 +12,16 @@ public class SourceBuilder {
         this.sb = sb;
     }
 
+    /**
+     * return the StringBuilder underlying this SourceBuilder.<br>
+     * <b>Don't use this method. Think about rewriting code, that uses this method</b>
+     *
+     * @return the StringBuilder underlying this SourceBuilder
+     */
+    public StringBuilder getStringBuilder() {
+        return this.sb;
+    }
+
     public SourceBuilder INCR() {
         this.indentation += 1;
         return this;

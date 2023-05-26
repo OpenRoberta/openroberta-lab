@@ -86,23 +86,23 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
             return;
         }
 
-        this.sb.append("import Ed");
+        this.src.add("import Ed");
         nlIndent();
-        this.sb.append("Ed.EdisonVersion = Ed.V2");
+        this.src.add("Ed.EdisonVersion = Ed.V2");
         nlIndent();
-        this.sb.append("Ed.DistanceUnits = Ed.CM");
+        this.src.add("Ed.DistanceUnits = Ed.CM");
         nlIndent();
-        this.sb.append("Ed.Tempo = Ed.TEMPO_SLOW");
+        this.src.add("Ed.Tempo = Ed.TEMPO_SLOW");
         nlIndent();
-        this.sb.append("obstacleDetectionOn = False");
+        this.src.add("obstacleDetectionOn = False");
         nlIndent();
-        this.sb.append("Ed.LineTrackerLed(Ed.ON)");
+        this.src.add("Ed.LineTrackerLed(Ed.ON)");
         nlIndent();
-        this.sb.append("Ed.ReadClapSensor()");
+        this.src.add("Ed.ReadClapSensor()");
         nlIndent(); //zur Sicherheit -- um den Sensor zurückzusetzen
-        this.sb.append("Ed.ReadLineState()");
+        this.src.add("Ed.ReadLineState()");
         nlIndent();
-        this.sb.append("Ed.TimeWait(250, Ed.TIME_MILLISECONDS)"); //möglicherweise überflüssig
+        this.src.add("Ed.TimeWait(250, Ed.TIME_MILLISECONDS)"); //möglicherweise überflüssig
     }
 
     /**
@@ -126,7 +126,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
                     .getBean(CodeGeneratorSetupBean.class)
                     .getHelperMethodGenerator()
                     .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
-            this.sb.append(helperMethodImpls);
+            this.src.add(helperMethodImpls);
         }
     }
 
@@ -145,12 +145,12 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     protected void generateCodeFromStmtConditionFor(String stmtType, Expr expr) {
-        this.sb.append(stmtType).append(" ");
+        this.src.add(stmtType, " ");
         ExprList expressions = (ExprList) expr;
         expressions.get().get(0).accept(this);
-        this.sb.append(" in range(");
+        this.src.add(" in range(");
         expressions.get().get(2).accept(this);
-        this.sb.append("):");
+        this.src.add("):");
     }
 
     /**
@@ -160,34 +160,34 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitInfraredSensor(InfraredSensor infraredSensor) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.OBSTACLEDETECTION));
-        this.sb.append("(");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.OBSTACLEDETECTION));
+        this.src.add("(");
 
         switch ( infraredSensor.getUserDefinedPort() ) {
             case "FRONT":
-                this.sb.append("Ed.OBSTACLE_AHEAD");
+                this.src.add("Ed.OBSTACLE_AHEAD");
                 break;
             case "LEFT":
-                this.sb.append("Ed.OBSTACLE_LEFT");
+                this.src.add("Ed.OBSTACLE_LEFT");
                 break;
             case "RIGHT":
-                this.sb.append("Ed.OBSTACLE_RIGHT");
+                this.src.add("Ed.OBSTACLE_RIGHT");
                 break;
         }
 
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor irSeekerSensor) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.IRSEEK));
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.IRSEEK));
         switch ( irSeekerSensor.getMode() ) {
             case "RCCODE":
-                this.sb.append("(1)");
+                this.src.add("(1)");
                 break;
             case "EDISON_CODE":
-                this.sb.append("(0)");
+                this.src.add("(0)");
                 break;
         }
         return null;
@@ -204,16 +204,16 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     public Void visitLightSensor(LightSensor lightSensor) {
         switch ( lightSensor.getUserDefinedPort() ) {
             case "LLIGHT":
-                this.sb.append("Ed.ReadLeftLightLevel() / 10");
+                this.src.add("Ed.ReadLeftLightLevel() / 10");
                 break;
             case "RLIGHT":
-                this.sb.append("Ed.ReadRightLightLevel() / 10");
+                this.src.add("Ed.ReadRightLightLevel() / 10");
                 break;
             case "LINETRACKER":
                 if ( lightSensor.getMode().equals("LINE") ) {
-                    this.sb.append("(Ed.ReadLineState() == Ed.LINE_ON_BLACK)");
+                    this.src.add("(Ed.ReadLineState() == Ed.LINE_ON_BLACK)");
                 } else {
-                    this.sb.append("Ed.ReadLineTracker() / 10");
+                    this.src.add("Ed.ReadLineTracker() / 10");
                 }
                 break;
         }
@@ -227,23 +227,23 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
-        this.sb.append("(Ed.ReadClapSensor() == Ed.CLAP_DETECTED)");
+        this.src.add("(Ed.ReadClapSensor() == Ed.CLAP_DETECTED)");
         return null;
     }
 
     @Override
     public Void visitSendIRAction(SendIRAction sendIRAction) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.IRSEND));
-        this.sb.append("(");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.IRSEND));
+        this.src.add("(");
         sendIRAction.code.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.IRSEEK));
-        this.sb.append("(0)");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.IRSEEK));
+        this.src.add("(0)");
         return null;
     }
 
@@ -257,21 +257,21 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
                 direction = "Ed.BACKWARD";
                 break;
         }
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class)
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class)
             .getHelperMethodGenerator()
             .getHelperMethodName(EdisonMethods.DIFFDRIVE));
-        this.sb.append("(").append(direction).append(", ");
+        this.src.add("(", direction, ", ");
         driveAction.param.getSpeed().accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         if ( driveAction.param.getDuration() != null ) {
             driveAction.param.getDuration().getValue().accept(this);
         } else {
-            this.sb.append("Ed.DISTANCE_UNLIMITED");
+            this.src.add("Ed.DISTANCE_UNLIMITED");
         }
-        this.sb.append(")");
+        this.src.add(")");
         if ( driveAction.param.getDuration() != null ) {
             nlIndent();
-            this.sb.append("Ed.ReadClapSensor()");
+            this.src.add("Ed.ReadClapSensor()");
         }
         return null;
     }
@@ -284,12 +284,12 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     @Override
     public Void visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
         if ( mathOnListFunct.functName == FunctionNames.AVERAGE ) {
-            this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(SUM));
-            this.sb.append("(");
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(SUM));
+            this.src.add("(");
             mathOnListFunct.list.accept(this);
-            this.sb.append(") / len(");
+            this.src.add(") / len(");
             mathOnListFunct.list.accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         } else {
             super.visitMathOnListFunct(mathOnListFunct);
         }
@@ -328,20 +328,20 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     public Void visitListCreate(ListCreate listCreate) {
         int listSize = listCreate.exprList.get().size();
 
-        this.sb.append("Ed.List(").append(listSize).append(", [");
+        this.src.add("Ed.List(", listSize, ", [");
         if ( listSize == 0 ) {
-            this.sb.append("]");
+            this.src.add("]");
         } else {
             for ( int i = 0; i < listSize; i++ ) {
                 listCreate.exprList.get().get(i).accept(this);
                 if ( i < listSize - 1 ) {
-                    this.sb.append(",");
+                    this.src.add(",");
                 } else {
-                    this.sb.append("]");
+                    this.src.add("]");
                 }
             }
         }
-        this.sb.append(")");
+        this.src.add(")");
 
         return null;
     }
@@ -355,10 +355,10 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     public Void visitKeysSensor(KeysSensor keysSensor) {
         switch ( keysSensor.getUserDefinedPort() ) {
             case "REC":
-                this.sb.append("(Ed.ReadKeypad() == Ed.KEYPAD_ROUND)");
+                this.src.add("(Ed.ReadKeypad() == Ed.KEYPAD_ROUND)");
                 break;
             case "PLAY":
-                this.sb.append("(Ed.ReadKeypad() == Ed.KEYPAD_TRIANGLE)");
+                this.src.add("(Ed.ReadKeypad() == Ed.KEYPAD_TRIANGLE)");
                 break;
             default:
         }
@@ -386,24 +386,20 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
                 direction = "Ed.FORWARD";
                 break;
         }
-        this.sb
-            .append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.DIFFCURVE))
-            .append("(")
-            .append(direction)
-            .append(", ");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.DIFFCURVE), "(", direction, ", ");
         curveAction.paramLeft.getSpeed().accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         curveAction.paramRight.getSpeed().accept(this);
         if ( curveAction.paramLeft.getDuration() == null ) {
-            this.sb.append(", Ed.DISTANCE_UNLIMITED");
+            this.src.add(", Ed.DISTANCE_UNLIMITED");
         } else {
-            this.sb.append(", ");
+            this.src.add(", ");
             curveAction.paramLeft.getDuration().getValue().accept(this);
         }
-        this.sb.append(")");
+        this.src.add(")");
         if ( curveAction.paramLeft.getDuration() != null ) {
             nlIndent();
-            this.sb.append("Ed.ReadClapSensor()");
+            this.src.add("Ed.ReadClapSensor()");
         }
         return null;
     }
@@ -415,19 +411,19 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitTurnAction(TurnAction turnAction) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.DIFFTURN));
-        this.sb.append("(Ed.SPIN_").append(turnAction.direction).append(", ");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.DIFFTURN));
+        this.src.add("(Ed.SPIN_", turnAction.direction, ", ");
         turnAction.param.getSpeed().accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         if ( turnAction.param.getDuration() != null ) {
             turnAction.param.getDuration().getValue().accept(this);
         } else {
-            this.sb.append("Ed.DISTANCE_UNLIMITED");
+            this.src.add("Ed.DISTANCE_UNLIMITED");
         }
-        this.sb.append(")");
+        this.src.add(")");
         if ( turnAction.param.getDuration() != null ) {
             nlIndent();
-            this.sb.append("Ed.ReadClapSensor()");
+            this.src.add("Ed.ReadClapSensor()");
         }
         return null;
     }
@@ -439,26 +435,26 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
 
     @Override
     public Void visitMotorOnAction(MotorOnAction motorOnAction) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.MOTORON));
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.MOTORON));
         switch ( motorOnAction.getUserDefinedPort() ) {
             case "LMOTOR":
-                this.sb.append("(0, ");
+                this.src.add("(0, ");
                 motorOnAction.param.getSpeed().accept(this);
                 break;
             case "RMOTOR":
-                this.sb.append("(1, ");
+                this.src.add("(1, ");
                 motorOnAction.param.getSpeed().accept(this);
                 break;
             default:
                 break;
         }
-        this.sb.append(", ");
+        this.src.add(", ");
 
         if ( motorOnAction.getDurationValue() != null ) {
             motorOnAction.getDurationValue().accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         } else {
-            this.sb.append("Ed.DISTANCE_UNLIMITED)");
+            this.src.add("Ed.DISTANCE_UNLIMITED)");
         }
 
         return null;
@@ -474,17 +470,17 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         switch ( motorStopAction.getUserDefinedPort() ) {
             case "B":
             case "LMOTOR":
-                this.sb.append("Ed.DriveLeftMotor(Ed.STOP, Ed.SPEED_1, 1)");
+                this.src.add("Ed.DriveLeftMotor(Ed.STOP, Ed.SPEED_1, 1)");
                 break;
             case "C":
             case "RMOTOR":
-                this.sb.append("Ed.DriveRightMotor(Ed.STOP, Ed.SPEED_1, 1)");
+                this.src.add("Ed.DriveRightMotor(Ed.STOP, Ed.SPEED_1, 1)");
                 break;
             default:
                 break;
         }
         nlIndent();
-        this.sb.append("Ed.ReadClapSensor()");
+        this.src.add("Ed.ReadClapSensor()");
         return null;
     }
 
@@ -492,7 +488,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     public Void visitBinary(Binary binary) {
         if ( binary.op == Binary.Op.DIVIDE ) { // general implementation casts to float, which is not allowed on edison
             binary.left.accept(this);
-            this.sb.append(" / ");
+            this.src.add(" / ");
             binary.getRight().accept(this);
         } else {
             super.visitBinary(binary);
@@ -502,20 +498,20 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
-        this.sb.append("Ed.Drive(Ed.STOP, Ed.SPEED_1, 1)");
+        this.src.add("Ed.Drive(Ed.STOP, Ed.SPEED_1, 1)");
         nlIndent();
-        this.sb.append("Ed.ReadClapSensor()");
+        this.src.add("Ed.ReadClapSensor()");
         return null;
     }
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct mathPowerFunct) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(mathPowerFunct.functName));
-        this.sb.append("(");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(mathPowerFunct.functName));
+        this.src.add("(");
         mathPowerFunct.param.get(0).accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         mathPowerFunct.param.get(1).accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
@@ -523,31 +519,31 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     public Void visitMathSingleFunct(MathSingleFunct mathSingleFunct) {
         switch ( mathSingleFunct.functName ) {
             case POW10:
-                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.POWER));
-                this.sb.append("(10, ");
+                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.POWER));
+                this.src.add("(10, ");
                 mathSingleFunct.param.get(0).accept(this);
-                this.sb.append(")");
+                this.src.add(")");
                 break;
             case ROUND: // TODO should be removed after some time, round block removed from toolbox
-                this.sb.append("((");
+                this.src.add("((");
                 mathSingleFunct.param.get(0).accept(this);
-                this.sb.append("+5)/10)*10");
+                this.src.add("+5)/10)*10");
                 break;
             case ROUNDUP: // TODO should be removed after some time, round block removed from toolbox
-                this.sb.append("((");
+                this.src.add("((");
                 mathSingleFunct.param.get(0).accept(this);
-                this.sb.append("/10)+1)*10");
+                this.src.add("/10)+1)*10");
                 break;
             case ROUNDDOWN: // TODO should be removed after some time, round block removed from toolbox
-                this.sb.append("(");
+                this.src.add("(");
                 mathSingleFunct.param.get(0).accept(this);
-                this.sb.append("/10)");
+                this.src.add("/10)");
                 break;
             default:
-                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(mathSingleFunct.functName));
-                this.sb.append("(");
+                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(mathSingleFunct.functName));
+                this.src.add("(");
                 mathSingleFunct.param.get(0).accept(this);
-                this.sb.append(")");
+                this.src.add(")");
                 break;
         }
         return null;
@@ -561,20 +557,20 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.sb.append("while True:");
+        this.src.add("while True:");
         incrIndentation();
         visitStmtList(waitStmt.statements);
         nlIndent();
-        this.sb.append("pass");
+        this.src.add("pass");
         decrIndentation();
         return null;
     }
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
-        this.sb.append("Ed.TimeWait(");
+        this.src.add("Ed.TimeWait(");
         waitTimeStmt.time.accept(this);
-        this.sb.append(", Ed.TIME_MILLISECONDS)");
+        this.src.add(", Ed.TIME_MILLISECONDS)");
         return null;
     }
 
@@ -587,10 +583,10 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     public Void visitLightAction(LightAction lightAction) {
         switch ( lightAction.port ) {
             case "RLED":
-                this.sb.append("Ed.RightLed(Ed.ON)");
+                this.src.add("Ed.RightLed(Ed.ON)");
                 break;
             case "LLED":
-                this.sb.append("Ed.LeftLed(Ed.ON)");
+                this.src.add("Ed.LeftLed(Ed.ON)");
                 break;
             default:
                 break;
@@ -609,15 +605,15 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         switch ( lightOffAction.port ) {
             case "1":
             case "RLED":
-                this.sb.append("Ed.RightLed(Ed.OFF)");
+                this.src.add("Ed.RightLed(Ed.OFF)");
                 break;
             case "2":
             case "LLED":
-                this.sb.append("Ed.LeftLed(Ed.OFF)");
+                this.src.add("Ed.LeftLed(Ed.OFF)");
                 break;
             default:
-                this.sb.append("Ed.LeftLed(Ed.OFF) #there is an error in your program");
-                this.sb.append("Ed.RightLed(Ed.OFF)");
+                this.src.add("Ed.LeftLed(Ed.OFF) #there is an error in your program");
+                this.src.add("Ed.RightLed(Ed.OFF)");
                 break;
         }
 
@@ -631,29 +627,29 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitToneAction(ToneAction toneAction) {
-        this.sb.append("Ed.PlayTone(8000000/");
+        this.src.add("Ed.PlayTone(8000000/");
         toneAction.frequency.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         toneAction.duration.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         nlIndent();
-        this.sb.append("Ed.TimeWait(");
+        this.src.add("Ed.TimeWait(");
         toneAction.duration.accept(this);
-        this.sb.append(", Ed.TIME_MILLISECONDS)");
+        this.src.add(", Ed.TIME_MILLISECONDS)");
         nlIndent();
-        this.sb.append("Ed.ReadClapSensor()");
+        this.src.add("Ed.ReadClapSensor()");
         return null;
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
-        this.sb.append("Ed.PlayTone(4000000/"); //eigentlich 8mio aber die zahlen bei tiefen noten werden zu groß für edison
-        this.sb.append(Integer.parseInt(playNoteAction.frequency.split("\\.")[0]));
-        this.sb.append(", ").append(playNoteAction.duration).append(")");
+        this.src.add("Ed.PlayTone(4000000/"); //eigentlich 8mio aber die zahlen bei tiefen noten werden zu groß für edison
+        this.src.add(Integer.parseInt(playNoteAction.frequency.split("\\.")[0]));
+        this.src.add(", ", playNoteAction.duration, ")");
         nlIndent();
-        this.sb.append("Ed.TimeWait(").append(playNoteAction.duration).append(", Ed.TIME_MILLISECONDS)");
+        this.src.add("Ed.TimeWait(", playNoteAction.duration, ", Ed.TIME_MILLISECONDS)");
         nlIndent();
-        this.sb.append("Ed.ReadClapSensor()");
+        this.src.add("Ed.ReadClapSensor()");
         return null;
     }
 
@@ -671,40 +667,40 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     public Void visitPlayFileAction(PlayFileAction playFileAction) {
         switch ( playFileAction.fileName.toLowerCase() ) {
             case "0":
-                this.sb.append("___soundfile1 = Ed.TuneString(7,\"c8e8g8z\")"); //positiv
+                this.src.add("___soundfile1 = Ed.TuneString(7,\"c8e8g8z\")"); //positiv
                 nlIndent();
-                this.sb.append("Ed.PlayTune(___soundfile1)");
+                this.src.add("Ed.PlayTune(___soundfile1)");
                 break;
             case "1":
-                this.sb.append("___soundfile2 = Ed.TuneString(7,\"g8e8c8z\")"); //negativ
+                this.src.add("___soundfile2 = Ed.TuneString(7,\"g8e8c8z\")"); //negativ
                 nlIndent();
-                this.sb.append("Ed.PlayTune(___soundfile2)");
+                this.src.add("Ed.PlayTune(___soundfile2)");
                 break;
             case "2":
-                this.sb.append("___soundfile3 = Ed.TuneString(13,\"g4c4g4c4g4c4z\")"); //warnung
+                this.src.add("___soundfile3 = Ed.TuneString(13,\"g4c4g4c4g4c4z\")"); //warnung
                 nlIndent();
-                this.sb.append("Ed.PlayTune(___soundfile3)");
+                this.src.add("Ed.PlayTune(___soundfile3)");
                 break;
             case "3":
-                this.sb.append("___soundfile4 = Ed.TuneString(21, \"c8e8f4g4o4g4b4g8e4n2z\")"); //MP Tune
+                this.src.add("___soundfile4 = Ed.TuneString(21, \"c8e8f4g4o4g4b4g8e4n2z\")"); //MP Tune
                 nlIndent();
-                this.sb.append("Ed.PlayTune(___soundfile4)");
+                this.src.add("Ed.PlayTune(___soundfile4)");
                 break;
             case "4":
-                this.sb.append("___soundfile5 = Ed.TuneString(55, \"c4d4e4f4g2g2a4a4a4a4g2R2a4a4a4a4g2f4f4f4e2e2g4g4g4g4c1z\")"); //Alle meine Entchen
+                this.src.add("___soundfile5 = Ed.TuneString(55, \"c4d4e4f4g2g2a4a4a4a4g2R2a4a4a4a4g2f4f4f4e2e2g4g4g4g4c1z\")"); //Alle meine Entchen
                 nlIndent();
-                this.sb.append("Ed.PlayTune(___soundfile5)");
+                this.src.add("Ed.PlayTune(___soundfile5)");
                 break;
         }
 
         nlIndent();
-        this.sb.append("while (Ed.ReadMusicEnd() == Ed.MUSIC_NOT_FINISHED):");
+        this.src.add("while (Ed.ReadMusicEnd() == Ed.MUSIC_NOT_FINISHED):");
         incrIndentation();
         nlIndent();
-        this.sb.append("pass");
+        this.src.add("pass");
         decrIndentation();
         nlIndent();
-        this.sb.append("Ed.ReadClapSensor()");
+        this.src.add("Ed.ReadClapSensor()");
         return null;
     }
 
@@ -712,19 +708,19 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     public Void visitResetSensor(ResetSensor resetSensor) {
         switch ( resetSensor.sensor ) {
             case "OBSTACLEDETECTOR":
-                this.sb.append("Ed.ReadObstacleDetection()");
+                this.src.add("Ed.ReadObstacleDetection()");
                 break;
             case "KEYPAD":
-                this.sb.append("Ed.ReadKeypad()");
+                this.src.add("Ed.ReadKeypad()");
                 break;
             case "SOUND":
-                this.sb.append("Ed.ReadClapSensor()");
+                this.src.add("Ed.ReadClapSensor()");
                 break;
             case "RCCODE":
             case "IRCODE":
-                this.sb.append("Ed.ReadRemote()");
+                this.src.add("Ed.ReadRemote()");
                 nlIndent();
-                this.sb.append("Ed.ReadIRData()");
+                this.src.add("Ed.ReadIRData()");
                 break;
             default:
                 break;
@@ -740,21 +736,21 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitGetSampleSensor(GetSampleSensor sensorGetSample) {
-        this.sb.append("(");
+        this.src.add("(");
         sensorGetSample.sensor.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitMethodIfReturn(MethodIfReturn methodIfReturn) {
-        this.sb.append("if ");
+        this.src.add("if ");
         methodIfReturn.oraCondition.accept(this);
         if ( !methodIfReturn.oraReturnValue.getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(": return ");
+            this.src.add(": return ");
             methodIfReturn.oraReturnValue.accept(this);
         } else {
-            this.sb.append(": return");
+            this.src.add(": return");
         }
         return null;
     }

@@ -61,10 +61,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     protected LinkedList<Integer> currentLoop = new LinkedList<>();
 
     protected final List<Phrase> programPhrases;
-
-    protected StringBuilder sb;
     protected SourceBuilder src;
-
     private final ClassToInstanceMap<IProjectBean> beans;
 
     /**
@@ -89,8 +86,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     }
 
     public void setStringBuilders(StringBuilder sourceCode, StringBuilder indentation) {
-        this.sb = sourceCode;
-        this.src = new SourceBuilder(this.sb);
+        this.src = new SourceBuilder(sourceCode);
     }
 
     public void generateCode(boolean withWrapping) {
@@ -290,13 +286,13 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     @Override
     public Void visitNumConst(NumConst numConst) {
-        this.sb.append(numConst.value);
+        this.src.add(numConst.value);
         return null;
     }
 
     @Override
     public Void visitBoolConst(BoolConst boolConst) {
-        this.sb.append(boolConst.value);
+        this.src.add(boolConst.value);
         return null;
     }
 
@@ -314,18 +310,18 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     @Override
     public Void visitRgbColor(RgbColor rgbColor) {
         rgbColor.R.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         rgbColor.G.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         rgbColor.B.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         rgbColor.A.accept(this);
         return null;
     }
 
     @Override
     public Void visitVar(Var var) {
-        this.sb.append(var.getCodeSafeName());
+        this.src.add(var.getCodeSafeName());
         return null;
     }
 
@@ -359,11 +355,11 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
         Unary.Op op = unary.op;
         String sym = getUnaryOperatorSymbol(op);
         if ( op == Unary.Op.POSTFIX_INCREMENTS ) {
-            generateExprCode(unary, this.sb);
+            generateExprCode(unary, this.src);
             src.add(sym);
         } else {
-            src.add(sym, whitespace());
-            generateExprCode(unary, this.sb);
+            src.add(sym, " ");
+            generateExprCode(unary, this.src);
         }
         return null;
     }
@@ -481,35 +477,35 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
     @Override
     public Void visitMathPowerFunct(MathPowerFunct mathPowerFunct) {
         mathPowerFunct.param.get(0).accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         mathPowerFunct.param.get(1).accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
         mathChangeStmt.var.accept(this);
-        this.sb.append(" += ");
+        this.src.add(" += ");
         mathChangeStmt.delta.accept(this);
         return null;
     }
 
     @Override
     public Void visitMathModuloFunct(MathModuloFunct mathModuloFunct) {
-        this.sb.append("( ( ");
+        this.src.add("( ( ");
         mathModuloFunct.dividend.accept(this);
-        this.sb.append(" ) % ( ");
+        this.src.add(" ) % ( ");
         mathModuloFunct.divisor.accept(this);
-        this.sb.append(" ) )");
+        this.src.add(" ) )");
         return null;
     }
 
-    protected void generateExprCode(Unary unary, StringBuilder sb) {
+    protected void generateExprCode(Unary unary, SourceBuilder src) {
         if ( unary.expr.getPrecedence() < unary.getPrecedence() || unary.op == Unary.Op.NEG ) {
-            sb.append("(");
+            src.add("(");
             unary.expr.accept(this);
-            sb.append(")");
+            src.add(")");
         } else {
             unary.expr.accept(this);
         }
@@ -545,10 +541,6 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
         this.currentLoop.add(this.loopCounter);
     }
 
-    protected String whitespace() {
-        return " ";
-    }
-
     protected String getEnumCode(String value) {
         return value.toLowerCase();
     }
@@ -565,14 +557,14 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
         return binary.op == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
     }
 
-    protected void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr expr, Binary binary) {
+    protected void generateSubExpr(SourceBuilder src, boolean minusAdaption, Expr expr, Binary binary) {
         if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && !expr.getKind().hasName("BINARY") ) {
             // parentheses are omitted
             expr.accept(this);
         } else {
-            sb.append("( ");
+            src.add("( ");
             expr.accept(this);
-            sb.append(" )");
+            src.add(" )");
         }
     }
 

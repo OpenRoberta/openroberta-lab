@@ -76,6 +76,7 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
+import de.fhg.iais.roberta.util.visitor.SourceBuilder;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractLanguageVisitor;
 
 public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
@@ -189,18 +190,18 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    protected void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr expr, Binary binary) {
+    protected void generateSubExpr(SourceBuilder src, boolean minusAdaption, Expr expr, Binary binary) {
         if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && !expr.getKind().hasName("BINARY") ) {
             // parentheses are omitted
             if ( expr.getKind().hasName("NUM_CONST") ) {
-                sb.append(((NumConst) expr).value);
+                src.add(((NumConst) expr).value);
             } else {
                 expr.accept(this);
             }
         } else {
-            sb.append("(" + whitespace());
+            src.add("( ");
             expr.accept(this);
-            sb.append(whitespace() + ")");
+            src.add(" )");
         }
     }
 
@@ -209,22 +210,22 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
         if ( assignStmt.name.getVarType() == BlocklyType.COLOR ) {
             assignStmt.expr.accept(this);
             nlIndent();
-            this.sb.append(((Var) assignStmt.name).getCodeSafeName()).append(" = ___color_");
+            this.src.add(((Var) assignStmt.name).getCodeSafeName(), " = ___color_");
         } else if ( assignStmt.name.getVarType() == BlocklyType.NUMBER ) {
             assignStmt.expr.accept(this);
             nlIndent();
-            this.sb.append(((Var) assignStmt.name).getCodeSafeName()).append(" = _A");
+            this.src.add(((Var) assignStmt.name).getCodeSafeName(), " = _A");
         } else if ( assignStmt.name.getVarType() == BlocklyType.ARRAY_NUMBER ) {
-            this.sb.append(((Var) assignStmt.name).getCodeSafeName()).append(" = ");
+            this.src.add(((Var) assignStmt.name).getCodeSafeName(), " = ");
             assignStmt.expr.accept(this);
             nlIndent();
         } else if ( assignStmt.name.getVarType() == BlocklyType.ARRAY_COLOUR ) {
             if ( assignStmt.expr.getClass().equals(Var.class) ) {
-                this.sb.append(((Var) assignStmt.name).getCodeSafeName()).append("_r = ").append(((Var) assignStmt.expr).getCodeSafeName()).append("_r");
+                this.src.add(((Var) assignStmt.name).getCodeSafeName(), "_r = ", ((Var) assignStmt.expr).getCodeSafeName(), "_r");
                 nlIndent();
-                this.sb.append(((Var) assignStmt.name).getCodeSafeName()).append("_g = ").append(((Var) assignStmt.expr).getCodeSafeName()).append("_g");
+                this.src.add(((Var) assignStmt.name).getCodeSafeName(), "_g = ", ((Var) assignStmt.expr).getCodeSafeName(), "_g");
                 nlIndent();
-                this.sb.append(((Var) assignStmt.name).getCodeSafeName()).append("_b = ").append(((Var) assignStmt.expr).getCodeSafeName()).append("_b");
+                this.src.add(((Var) assignStmt.name).getCodeSafeName(), "_b = ", ((Var) assignStmt.expr).getCodeSafeName(), "_b");
             } else {
                 if ( assignStmt.expr.getClass().equals(ListCreate.class) ) {
                     this.visitListCreateColor(((Var) assignStmt.name).getCodeSafeName(), (ListCreate) assignStmt.expr, false);
@@ -249,7 +250,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
             case DIVIDE:
             case ASSIGNMENT: {
                 visitBinaryBothSides(binary.left, binary.right);
-                this.sb.append("_A = _B[").append(this.nestedBinaryCounter).append("] ").append(getBinaryOperatorSymbol(binary.op)).append(" _C[").append(this.nestedBinaryCounter).append("]");
+                this.src.add("_A = _B[", this.nestedBinaryCounter, "] ", getBinaryOperatorSymbol(binary.op), " _C[", this.nestedBinaryCounter, "]");
                 break;
             }
             case EQ:
@@ -259,37 +260,37 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
             case GT:
             case GTE: {
                 visitBinaryBothSides(binary.left, binary.right);
-                this.sb.append("if _B[").append(this.nestedBinaryCounter).append("] ").append(getBinaryOperatorSymbol(binary.op)).append(" _C[").append(this.nestedBinaryCounter).append("] then");
+                this.src.add("if _B[", this.nestedBinaryCounter, "] ", getBinaryOperatorSymbol(binary.op), " _C[", this.nestedBinaryCounter, "] then");
                 incrIndentation();
                 nlIndent();
-                this.sb.append("_A = 1");
+                this.src.add("_A = 1");
                 decrIndentation();
                 nlIndent();
-                this.sb.append("else");
+                this.src.add("else");
                 incrIndentation();
                 nlIndent();
-                this.sb.append("_A = 0");
+                this.src.add("_A = 0");
                 decrIndentation();
                 nlIndent();
-                this.sb.append("end");
+                this.src.add("end");
                 break;
             }
             case AND:
             case OR: {
                 visitBinaryBothSides(binary.left, binary.right);
-                this.sb.append("if _B[").append(this.nestedBinaryCounter).append("] == 1 ").append(getBinaryOperatorSymbol(binary.op)).append(" _C[").append(this.nestedBinaryCounter).append("] == 1 then");
+                this.src.add("if _B[", this.nestedBinaryCounter, "] == 1 ", getBinaryOperatorSymbol(binary.op), " _C[", this.nestedBinaryCounter, "] == 1 then");
                 incrIndentation();
                 nlIndent();
-                this.sb.append("_A = 1");
+                this.src.add("_A = 1");
                 decrIndentation();
                 nlIndent();
-                this.sb.append("else");
+                this.src.add("else");
                 incrIndentation();
                 nlIndent();
-                this.sb.append("_A = 0");
+                this.src.add("_A = 0");
                 decrIndentation();
                 nlIndent();
-                this.sb.append("end");
+                this.src.add("end");
                 break;
             }
             default:
@@ -301,28 +302,28 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
 
     private void visitBinaryBothSides(Expr left, Expr right) {
         if ( left.getKind().hasName("VAR") ) {
-            this.sb.append("_A = ");
-            this.sb.append(((Var) left).getCodeSafeName());
+            this.src.add("_A = ");
+            this.src.add(((Var) left).getCodeSafeName());
         } else {
             left.accept(this);
         }
         nlIndent();
-        this.sb.append("_B[").append(this.nestedBinaryCounter).append("] = _A");
+        this.src.add("_B[", this.nestedBinaryCounter, "] = _A");
         nlIndent();
         right.accept(this);
         nlIndent();
-        this.sb.append("_C[").append(this.nestedBinaryCounter).append("] = _A");
+        this.src.add("_C[", this.nestedBinaryCounter, "] = _A");
         nlIndent();
     }
 
     @Override
     public Void visitVar(Var var) {
         if ( var.getVarType() == (BlocklyType.NUMBER) ) {
-            this.sb.append("_A = ").append(var.getCodeSafeName());
+            this.src.add("_A = ", var.getCodeSafeName());
         } else if ( var.getVarType() == (BlocklyType.COLOR) ) {
-            this.sb.append("___color_ = ").append(var.getCodeSafeName());
+            this.src.add("___color_ = ", var.getCodeSafeName());
         } else {
-            this.sb.append(var.getCodeSafeName());
+            this.src.add(var.getCodeSafeName());
         }
         return null;
     }
@@ -331,15 +332,15 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitBoolConst(BoolConst boolConst) {
         String value = boolConst.value ? "1" : "0";
-        this.sb.append("_A = ").append(value);
+        this.src.add("_A = ", value);
         return null;
     }
 
     @Override
     public Void visitDebugAction(DebugAction debugAction) {
-        this.sb.append("print(");
+        this.src.add("print(");
         debugAction.value.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
@@ -347,18 +348,18 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     public Void visitEmptyExpr(EmptyExpr emptyExpr) {
         switch ( emptyExpr.getDefVal() ) {
             case BOOLEAN:
-                this.sb.append("1");
+                this.src.add("1");
                 break;
             case NUMBER_INT:
-                this.sb.append("0");
+                this.src.add("0");
                 break;
             case ARRAY:
-                this.sb.append("[0]");
+                this.src.add("[0]");
                 break;
             case NULL:
                 break;
             default:
-                this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
+                this.src.add("[[EmptyExpr [defVal=", emptyExpr.getDefVal(), "]]]");
                 break;
         }
         return null;
@@ -368,19 +369,19 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     public Void visitGetSubFunct(GetSubFunct getSubFunct) {
         if ( getSubFunct.functName == FunctionNames.GET_SUBLIST ) {
             getSubFunct.param.get(0).accept(this);
-            this.sb.append("[");
+            this.src.add("[");
             switch ( (IndexLocation) getSubFunct.strParam.get(0) ) {
                 case FIRST:
-                    this.sb.append("0:");
+                    this.src.add("0:");
                     break;
                 case FROM_END:
-                    this.sb.append("-1 -");
+                    this.src.add("-1 -");
                     getSubFunct.param.get(1).accept(this);
-                    this.sb.append(":");
+                    this.src.add(":");
                     break;
                 case FROM_START:
                     getSubFunct.param.get(1).accept(this);
-                    this.sb.append(":");
+                    this.src.add(":");
                     break;
                 default:
                     break;
@@ -390,7 +391,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
                     // append nothing
                     break;
                 case FROM_END:
-                    this.sb.append("-1 -");
+                    this.src.add("-1 -");
                     try {
                         getSubFunct.param.get(2).accept(this);
                     } catch ( IndexOutOfBoundsException e ) { // means that our start index does not have a variable
@@ -407,7 +408,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
                 default:
                     break;
             }
-            this.sb.append("]");
+            this.src.add("]");
         }
         return null;
     }
@@ -417,18 +418,18 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
         switch ( (IndexLocation) indexOfFunct.location ) {
             case FIRST:
                 indexOfFunct.value.accept(this);
-                this.sb.append(".index(");
+                this.src.add(".index(");
                 indexOfFunct.find.accept(this);
-                this.sb.append(")");
+                this.src.add(")");
                 break;
             case LAST:
-                this.sb.append("(len(");
+                this.src.add("(len(");
                 indexOfFunct.value.accept(this);
-                this.sb.append(") - 1) - ");
+                this.src.add(") - 1) - ");
                 indexOfFunct.value.accept(this);
-                this.sb.append("[::-1].index(");
+                this.src.add("[::-1].index(");
                 indexOfFunct.find.accept(this);
-                this.sb.append(")");
+                this.src.add(")");
                 break;
             default:
                 break;
@@ -438,15 +439,15 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
-        this.sb.append("len( ");
+        this.src.add("len( ");
         lengthOfListFunct.value.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
-        this.sb.append("not ");
+        this.src.add("not ");
         isListEmptyFunct.value.accept(this);
         return null;
     }
@@ -455,17 +456,17 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     public Void visitListCreate(ListCreate listCreate) {
         if ( listCreate.typeVar.toString().equals("NUMBER") ) {
             int listSize = listCreate.exprList.get().size();
-            this.sb.append("[");
+            this.src.add("[");
             for ( int i = 0; i < listSize; i++ ) {
                 if ( listCreate.exprList.get().get(i).getKind().hasName("NUM_CONST") ) {
                     NumConst a = ((NumConst) listCreate.exprList.get().get(i));
-                    this.sb.append(a.value);
+                    this.src.add(a.value);
                     if ( i < listSize - 1 ) {
-                        this.sb.append(", ");
+                        this.src.add(", ");
                     }
                 }
             }
-            this.sb.append("]");
+            this.src.add("]");
         } else if ( listCreate.typeVar.toString().equals("COLOR") ) {
             throw new DbcException("ListCreate can only be evaluated from a function!");
         }
@@ -477,43 +478,43 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
         try {
             listSize = Integer.parseInt(((NumConst) listRepeat.param.get(1)).value);
             if ( withVar ) {
-                this.sb.append("var ").append(var).append("_r[] = [");
+                this.src.add("var ", var, "_r[] = [");
             } else {
-                this.sb.append(var).append("_r = [");
+                this.src.add(var, "_r = [");
             }
             for ( int i = 0; i < listSize; i++ ) {
-                this.sb.append(((ColorConst) listRepeat.param.get(0)).getRedChannelInt());
+                this.src.add(((ColorConst) listRepeat.param.get(0)).getRedChannelInt());
                 if ( i != listSize - 1 ) {
-                    this.sb.append(", ");
+                    this.src.add(", ");
                 }
             }
-            this.sb.append("]");
+            this.src.add("]");
             nlIndent();
             if ( withVar ) {
-                this.sb.append("var ").append(var).append("_g[] = [");
+                this.src.add("var ", var, "_g[] = [");
             } else {
-                this.sb.append(var).append("_g = [");
+                this.src.add(var, "_g = [");
             }
             for ( int i = 0; i < listSize; i++ ) {
-                this.sb.append(((ColorConst) listRepeat.param.get(0)).getGreenChannelInt());
+                this.src.add(((ColorConst) listRepeat.param.get(0)).getGreenChannelInt());
                 if ( i != listSize - 1 ) {
-                    this.sb.append(", ");
+                    this.src.add(", ");
                 }
             }
-            this.sb.append("]");
+            this.src.add("]");
             nlIndent();
             if ( withVar ) {
-                this.sb.append("var ").append(var).append("_b[] = [");
+                this.src.add("var ", var, "_b[] = [");
             } else {
-                this.sb.append(var).append("_b = [");
+                this.src.add(var, "_b = [");
             }
             for ( int i = 0; i < listSize; i++ ) {
-                this.sb.append(((ColorConst) listRepeat.param.get(0)).getBlueChannelInt());
+                this.src.add(((ColorConst) listRepeat.param.get(0)).getBlueChannelInt());
                 if ( i != listSize - 1 ) {
-                    this.sb.append(", ");
+                    this.src.add(", ");
                 }
             }
-            this.sb.append("]");
+            this.src.add("]");
         } catch ( Exception e ) {
             throw new DbcException(e.getMessage());
         }
@@ -522,55 +523,55 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     private void visitListCreateColor(String var, ListCreate listCreate, boolean withVar) {
         int listSize = listCreate.exprList.get().size();
         if ( withVar ) {
-            this.sb.append("var ").append(var).append("_r[] = [");
+            this.src.add("var ", var, "_r[] = [");
         } else {
-            this.sb.append(var).append("_r = [");
+            this.src.add(var, "_r = [");
         }
         for ( int i = 0; i < listSize; i++ ) {
             if ( listCreate.exprList.get().get(i).getKind().hasName("COLOR_CONST") ) {
-                this.sb.append(((ColorConst) listCreate.exprList.get().get(i)).getRedChannelInt());
+                this.src.add(((ColorConst) listCreate.exprList.get().get(i)).getRedChannelInt());
             } else if ( listCreate.exprList.get().get(i).getKind().hasName("RGB___color_") ) {
                 ((RgbColor) listCreate.exprList.get().get(i)).R.accept(this);
             }
             if ( i != listSize - 1 ) {
-                this.sb.append(", ");
+                this.src.add(", ");
             }
         }
-        this.sb.append("]");
+        this.src.add("]");
         nlIndent();
         if ( withVar ) {
-            this.sb.append("var ").append(var).append("_g[] = [");
+            this.src.add("var ", var, "_g[] = [");
         } else {
-            this.sb.append(var).append("_g = [");
+            this.src.add(var, "_g = [");
         }
         for ( int i = 0; i < listSize; i++ ) {
             if ( listCreate.exprList.get().get(i).getKind().hasName("COLOR_CONST") ) {
-                this.sb.append(((ColorConst) listCreate.exprList.get().get(i)).getGreenChannelInt());
+                this.src.add(((ColorConst) listCreate.exprList.get().get(i)).getGreenChannelInt());
             } else if ( listCreate.exprList.get().get(i).getKind().hasName("RGB___color_") ) {
                 ((RgbColor) listCreate.exprList.get().get(i)).G.accept(this);
             }
             if ( i != listSize - 1 ) {
-                this.sb.append(", ");
+                this.src.add(", ");
             }
         }
-        this.sb.append("]");
+        this.src.add("]");
         nlIndent();
         if ( withVar ) {
-            this.sb.append("var ").append(var).append("_b[] = [");
+            this.src.add("var ", var, "_b[] = [");
         } else {
-            this.sb.append(var).append("_b = [");
+            this.src.add(var, "_b = [");
         }
         for ( int i = 0; i < listSize; i++ ) {
             if ( listCreate.exprList.get().get(i).getKind().hasName("COLOR_CONST") ) {
-                this.sb.append(((ColorConst) listCreate.exprList.get().get(i)).getBlueChannelInt());
+                this.src.add(((ColorConst) listCreate.exprList.get().get(i)).getBlueChannelInt());
             } else if ( listCreate.exprList.get().get(i).getKind().hasName("RGB___color_") ) {
                 ((RgbColor) listCreate.exprList.get().get(i)).B.accept(this);
             }
             if ( i != listSize - 1 ) {
-                this.sb.append(", ");
+                this.src.add(", ");
             }
         }
-        this.sb.append("]");
+        this.src.add("]");
     }
 
     @Override
@@ -578,23 +579,23 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
         listGetIndex.param.get(1).accept(this);
         nlIndent();
         if ( listGetIndex.param.get(0).getVarType().toString().equals("ARRAY_COLOUR") ) {
-            this.sb.append("___color_[0] = ");
+            this.src.add("___color_[0] = ");
             listGetIndex.param.get(0).accept(this);
-            this.sb.append("_r[_A]");
+            this.src.add("_r[_A]");
             nlIndent();
-            this.sb.append("___color_[1] = ");
+            this.src.add("___color_[1] = ");
             listGetIndex.param.get(0).accept(this);
-            this.sb.append("_g[_A]");
+            this.src.add("_g[_A]");
             nlIndent();
-            this.sb.append("___color_[2] = ");
+            this.src.add("___color_[2] = ");
             listGetIndex.param.get(0).accept(this);
-            this.sb.append("_b[_A]");
+            this.src.add("_b[_A]");
             nlIndent();
         } else if ( listGetIndex.param.get(0).getVarType().toString().equals("ARRAY_NUMBER") ) {
             if ( listGetIndex.mode == GET ) {
-                this.sb.append("_A = ");
+                this.src.add("_A = ");
                 listGetIndex.param.get(0).accept(this);
-                this.sb.append("[_A]");
+                this.src.add("[_A]");
                 nlIndent();
             }
         }
@@ -607,14 +608,14 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
             try {
                 int listSize = Integer.parseInt(((NumConst) listRepeat.param.get(1)).value);
                 int value = Integer.parseInt(((NumConst) listRepeat.param.get(0)).value);
-                this.sb.append("[");
+                this.src.add("[");
                 for ( int i = 0; i < listSize; i++ ) {
-                    this.sb.append(value);
+                    this.src.add(value);
                     if ( i < listSize - 1 ) {
-                        this.sb.append(", ");
+                        this.src.add(", ");
                     }
                 }
-                this.sb.append("]");
+                this.src.add("]");
             } catch ( Exception e ) {
                 throw new DbcException(e.getMessage());
             }
@@ -632,22 +633,22 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
             listSetIndex.param.get(2).accept(this);
             nlIndent();
             listSetIndex.param.get(0).accept(this);
-            this.sb.append("_r[_A] = ___color_[0]");
+            this.src.add("_r[_A] = ___color_[0]");
             nlIndent();
             listSetIndex.param.get(0).accept(this);
-            this.sb.append("_g[_A] = ___color_[1]");
+            this.src.add("_g[_A] = ___color_[1]");
             nlIndent();
             listSetIndex.param.get(0).accept(this);
-            this.sb.append("_b[_A] = ___color_[2]");
+            this.src.add("_b[_A] = ___color_[2]");
             nlIndent();
         } else if ( listSetIndex.param.get(0).getVarType().toString().equals("ARRAY_NUMBER") ) {
             this.nestedBinaryCounterPlus();
-            this.sb.append("_B[").append(this.nestedBinaryCounter).append("] = _A");
+            this.src.add("_B[", this.nestedBinaryCounter, "] = _A");
             nlIndent();
             listSetIndex.param.get(2).accept(this);
             nlIndent();
             listSetIndex.param.get(0).accept(this);
-            this.sb.append("[_A] = _B[").append(this.nestedBinaryCounter).append("]");
+            this.src.add("[_A] = _B[", this.nestedBinaryCounter, "]");
             this.nestedBinaryCounterMinus();
             nlIndent();
         }
@@ -682,83 +683,83 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
         }
         switch ( mathNumPropFunct.functName ) {
             case EVEN:
-                this.sb.append("_A = _A % 2");
+                this.src.add("_A = _A % 2");
                 break;
             case ODD:
-                this.sb.append("_A = _A % 2");
+                this.src.add("_A = _A % 2");
                 nlIndent();
-                this.sb.append("_A = abs(_A - 1)");
+                this.src.add("_A = abs(_A - 1)");
                 break;
             case WHOLE:
-                this.sb.append("_A = _A % 1");
+                this.src.add("_A = _A % 1");
                 nlIndent();
-                this.sb.append("if _A > 0 then");
+                this.src.add("if _A > 0 then");
                 incrIndentation();
                 nlIndent();
-                this.sb.append("_A = 1");
+                this.src.add("_A = 1");
                 decrIndentation();
                 nlIndent();
-                this.sb.append("else");
+                this.src.add("else");
                 incrIndentation();
                 nlIndent();
-                this.sb.append("_A = 0");
+                this.src.add("_A = 0");
                 decrIndentation();
                 nlIndent();
-                this.sb.append("end");
+                this.src.add("end");
                 break;
             case POSITIVE:
-                this.sb.append("if _A > 0 then");
+                this.src.add("if _A > 0 then");
                 incrIndentation();
                 nlIndent();
-                this.sb.append("_A = 1");
+                this.src.add("_A = 1");
                 decrIndentation();
                 nlIndent();
-                this.sb.append("else");
+                this.src.add("else");
                 incrIndentation();
                 nlIndent();
-                this.sb.append("_A = 0");
+                this.src.add("_A = 0");
                 decrIndentation();
                 nlIndent();
-                this.sb.append("end");
+                this.src.add("end");
                 break;
             case NEGATIVE:
-                this.sb.append("if _A < 0 then");
+                this.src.add("if _A < 0 then");
                 incrIndentation();
                 nlIndent();
-                this.sb.append("_A = 1");
+                this.src.add("_A = 1");
                 decrIndentation();
                 nlIndent();
-                this.sb.append("else");
+                this.src.add("else");
                 incrIndentation();
                 nlIndent();
-                this.sb.append("_A = 0");
+                this.src.add("_A = 0");
                 decrIndentation();
                 nlIndent();
-                this.sb.append("end");
+                this.src.add("end");
                 break;
             case DIVISIBLE_BY:
                 this.nestedBinaryCounterPlus();
                 mathNumPropFunct.param.get(0).accept(this);
-                this.sb.append("_B[").append(this.nestedBinaryCounter).append("] = _A");
+                this.src.add("_B[", this.nestedBinaryCounter, "] = _A");
                 nlIndent();
                 mathNumPropFunct.param.get(1).accept(this);
-                this.sb.append("_C[").append(this.nestedBinaryCounter).append("] = _A");
+                this.src.add("_C[", this.nestedBinaryCounter, "] = _A");
                 nlIndent();
-                this.sb.append("_A =  _B[").append(this.nestedBinaryCounter).append("] % _C[").append(this.nestedBinaryCounter).append("]");
+                this.src.add("_A =  _B[", this.nestedBinaryCounter, "] % _C[", this.nestedBinaryCounter, "]");
                 nlIndent();
-                this.sb.append("if _A == 0 then");
+                this.src.add("if _A == 0 then");
                 incrIndentation();
                 nlIndent();
-                this.sb.append("_A = 1");
+                this.src.add("_A = 1");
                 decrIndentation();
                 nlIndent();
-                this.sb.append("else");
+                this.src.add("else");
                 incrIndentation();
                 nlIndent();
-                this.sb.append("_A = 0");
+                this.src.add("_A = 0");
                 decrIndentation();
                 nlIndent();
-                this.sb.append("end");
+                this.src.add("end");
                 this.nestedBinaryCounterMinus();
                 break;
             case PRIME:
@@ -784,15 +785,15 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
         this.nestedBinaryCounterPlus();
         mathRandomIntFunct.from.accept(this);
         nlIndent();
-        this.sb.append("_B[").append(this.nestedBinaryCounter).append("] = _A");
+        this.src.add("_B[", this.nestedBinaryCounter, "] = _A");
         nlIndent();
         mathRandomIntFunct.to.accept(this);
         nlIndent();
-        this.sb.append("_C[").append(this.nestedBinaryCounter).append("] = _A");
+        this.src.add("_C[", this.nestedBinaryCounter, "] = _A");
         nlIndent();
-        this.sb.append("call math.rand(_A)");
+        this.src.add("call math.rand(_A)");
         nlIndent();
-        this.sb.append("_A = (_A / (32767 / (_C[").append(this.nestedBinaryCounter).append("] - _B[").append(this.nestedBinaryCounter).append("] + 1)) / 2) + (_C[").append(this.nestedBinaryCounter).append("] - _B[").append(this.nestedBinaryCounter).append("]) / 2 + _B[").append(this.nestedBinaryCounter).append("]");
+        this.src.add("_A = (_A / (32767 / (_C[", this.nestedBinaryCounter, "] - _B[", this.nestedBinaryCounter, "] + 1)) / 2) + (_C[", this.nestedBinaryCounter, "] - _B[", this.nestedBinaryCounter, "]) / 2 + _B[", this.nestedBinaryCounter, "]");
         nlIndent();
         this.nestedBinaryCounterMinus();
         return null;
@@ -803,21 +804,21 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
         this.nestedBinaryCounterPlus();
         switch ( mathOnListFunct.functName ) {
             case MIN:
-                this.sb.append("call math.stat(");
+                this.src.add("call math.stat(");
                 mathOnListFunct.list.accept(this);
-                this.sb.append(", _A, _B[").append(this.nestedBinaryCounter).append("], _B[").append(this.nestedBinaryCounter).append("])");
+                this.src.add(", _A, _B[", this.nestedBinaryCounter, "], _B[", this.nestedBinaryCounter, "])");
                 nlIndent();
                 break;
             case MAX:
-                this.sb.append("call math.stat(");
+                this.src.add("call math.stat(");
                 mathOnListFunct.list.accept(this);
-                this.sb.append(", _B[").append(this.nestedBinaryCounter).append("], _A, _B[").append(this.nestedBinaryCounter).append("])");
+                this.src.add(", _B[", this.nestedBinaryCounter, "], _A, _B[", this.nestedBinaryCounter, "])");
                 nlIndent();
                 break;
             case AVERAGE:
-                this.sb.append("call math.stat(");
+                this.src.add("call math.stat(");
                 mathOnListFunct.list.accept(this);
-                this.sb.append(", _B[").append(this.nestedBinaryCounter).append("], _B[").append(this.nestedBinaryCounter).append("], _A)");
+                this.src.add(", _B[", this.nestedBinaryCounter, "], _B[", this.nestedBinaryCounter, "], _A)");
                 nlIndent();
                 break;
             default:
@@ -833,19 +834,19 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
         nlIndent();
         switch ( mathSingleFunct.functName ) {
             case ROOT:
-                this.sb.append("call math.sqrt(_A, _A)");
+                this.src.add("call math.sqrt(_A, _A)");
                 break;
             case SIN:
-                this.sb.append("call math.sin(_A, _A)");
+                this.src.add("call math.sin(_A, _A)");
                 break;
             case COS:
-                this.sb.append("call math.cos(_A, _A)");
+                this.src.add("call math.cos(_A, _A)");
                 break;
             case SQUARE:
-                this.sb.append("call math.mul(_A, _A, _A)");
+                this.src.add("call math.mul(_A, _A, _A)");
                 break;
             case ABS:
-                this.sb.append("_A = abs(_A)");
+                this.src.add("_A = abs(_A)");
                 break;
             default:
                 throw new DbcException("Statement not supported by Aseba!");
@@ -857,7 +858,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     public Void visitMathModuloFunct(MathModuloFunct mathModuloFunct) {
         this.nestedBinaryCounterPlus();
         visitBinaryBothSides(mathModuloFunct.dividend, mathModuloFunct.divisor);
-        this.sb.append("_A = _B[").append(this.nestedBinaryCounter).append("] % _C[").append(this.nestedBinaryCounter).append("]");
+        this.src.add("_A = _B[", this.nestedBinaryCounter, "] % _C[", this.nestedBinaryCounter, "]");
         this.nestedBinaryCounterMinus();
         return null;
     }
@@ -866,9 +867,9 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     public Void visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
         this.nestedBinaryCounterPlus();
         visitBinaryBothSides(mathChangeStmt.var, mathChangeStmt.delta);
-        this.sb.append("_B[").append(this.nestedBinaryCounter).append("] += _C[").append(this.nestedBinaryCounter).append("]");
+        this.src.add("_B[", this.nestedBinaryCounter, "] += _C[", this.nestedBinaryCounter, "]");
         nlIndent();
-        this.sb.append(" = _B[").append(this.nestedBinaryCounter).append("]");
+        this.src.add(" = _B[", this.nestedBinaryCounter, "]");
         this.nestedBinaryCounterMinus();
         return null;
     }
@@ -882,29 +883,29 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     public Void visitMethodCall(MethodCall methodCall) {
         this.nestedMethodCallsCounterPlus();
         this.stateCounter++;
-        this.sb.append("_method_count++");
+        this.src.add("_method_count++");
         nlIndent();
-        this.sb.append("_return_state[_method_count] = ").append(this.stateCounter);
+        this.src.add("_return_state[_method_count] = ", this.stateCounter);
         nlIndent();
-        this.sb.append("callsub ").append(methodCall.getCodeSafeMethodName());
+        this.src.add("callsub ", methodCall.getCodeSafeMethodName());
         decrIndentation();
         nlIndent();
-        this.sb.append("elseif _state == ").append(this.stateCounter).append(" then");
+        this.src.add("elseif _state == ", this.stateCounter, " then");
         incrIndentation();
         nlIndent();
-        this.sb.append("_method_count--");
+        this.src.add("_method_count--");
         return null;
     }
 
     @Override
     public Void visitMethodIfReturn(MethodIfReturn methodIfReturn) {
-        this.sb.append("if ");
+        this.src.add("if ");
         methodIfReturn.oraCondition.accept(this);
         if ( !methodIfReturn.oraReturnValue.getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(": return ");
+            this.src.add(": return ");
             methodIfReturn.oraReturnValue.accept(this);
         } else {
-            this.sb.append(": return None");
+            this.src.add(": return None");
         }
         return null;
     }
@@ -917,11 +918,11 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMethodVoid(MethodVoid methodVoid) {
         this.funcCounter++;
-        this.sb.append(this.getIfElse()).append(" _state == ").append(this.funcStart.get(this.funcCounter)).append(" then");
+        this.src.add(this.getIfElse(), " _state == ", this.funcStart.get(this.funcCounter), " then");
         incrIndentation();
         methodVoid.body.accept(this);
         nlIndent();
-        this.sb.append("_state = _return_state[_method_count]");
+        this.src.add("_state = _return_state[_method_count]");
         decrIndentation();
         return null;
     }
@@ -944,7 +945,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitNumConst(NumConst numConst) {
-        this.sb.append("_A = " + numConst.value);
+        this.src.add("_A = ", numConst.value);
         return null;
     }
 
@@ -955,10 +956,10 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
         this.loopsEnd.add(0);
         this.loopsBody.add(0);
         this.stateCounter++;
-        this.sb.append("_state = ").append(this.stateCounter);
+        this.src.add("_state = ", this.stateCounter);
         decrIndentation();
         nlIndent();
-        this.sb.append("elseif _state == ").append(this.stateCounter).append(" then");
+        this.src.add("elseif _state == ", this.stateCounter, " then");
         incrIndentation();
         nlIndent();
         switch ( repeatStmt.mode.toString() ) {
@@ -980,34 +981,34 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
         nlIndent();
         this.stateCounter++;
         this.loopsBody.set(this.loopCounter, this.stateCounter);
-        this.sb.append("_state = ").append(this.stateCounter);
+        this.src.add("_state = ", this.stateCounter);
         decrIndentation();
         nlIndent();
-        this.sb.append("else");
+        this.src.add("else");
         incrIndentation();
         nlIndent();
         this.stateCounter++;
         this.loopsEnd.set(loopCounter, this.stateCounter);
-        this.sb.append("_state = ").append(this.stateCounter);
+        this.src.add("_state = ", this.stateCounter);
         decrIndentation();
         nlIndent();
-        this.sb.append("end");
+        this.src.add("end");
         decrIndentation();
         nlIndent();
-        this.sb.append("elseif _state == ").append(this.loopsBody.get(this.loopCounter)).append(" then");
+        this.src.add("elseif _state == ", this.loopsBody.get(this.loopCounter), " then");
         incrIndentation();
         repeatStmt.list.accept(this);
         nlIndent();
         if ( repeatStmt.mode.equals(RepeatStmt.Mode.TIMES) || repeatStmt.mode.equals(RepeatStmt.Mode.FOR) ) {
-            this.sb.append(((Var) ((ExprList) repeatStmt.expr).get().get(0)).getCodeSafeName()).append(" += _C[").append(this.nestedBinaryCounter).append("]");
+            this.src.add(((Var) ((ExprList) repeatStmt.expr).get().get(0)).getCodeSafeName(), " += _C[", this.nestedBinaryCounter, "]");
             this.nestedBinaryCounterMinus();
             nlIndent();
         }
-        this.sb.append("_state = ").append(this.loopsStart.get(this.loopCounter));
+        this.src.add("_state = ", this.loopsStart.get(this.loopCounter));
         decrIndentation();
         nlIndent();
         this.stateCounter++;
-        this.sb.append("elseif _state == ").append(this.loopsEnd.get(this.loopCounter)).append(" then");
+        this.src.add("elseif _state == ", this.loopsEnd.get(this.loopCounter), " then");
         incrIndentation();
         loopCounter--;
         return null;
@@ -1021,49 +1022,49 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitStmtFlowCon(StmtFlowCon stmtFlowCon) {
         if ( stmtFlowCon.flow.name().toLowerCase().equals(C.BREAK) ) {
-            this.sb.append("_state = ").append(this.loopsEnd.get(this.loopCounter));
+            this.src.add("_state = ", this.loopsEnd.get(this.loopCounter));
         } else if ( stmtFlowCon.flow.name().toLowerCase().equals(C.CONTINUE) ) {
-            this.sb.append("_state = ").append(this.loopsStart.get(this.loopCounter));
+            this.src.add("_state = ", this.loopsStart.get(this.loopCounter));
         } else {
             throw new DbcException("Invalid flow control statement!");
         }
         decrIndentation();
         nlIndent();
         this.stateCounter++;
-        this.sb.append("elseif _state == ").append(this.stateCounter).append(" then");
+        this.src.add("elseif _state == ", this.stateCounter, " then");
         incrIndentation();
         return null;
     }
 
     @Override
     public Void visitStmtTextComment(StmtTextComment stmtTextComment) {
-        this.sb.append("# " + stmtTextComment.textComment.replace("\n", " "));
+        this.src.add("# ", stmtTextComment.textComment.replace("\n", " "));
         return null;
     }
 
     @Override
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
-        this.sb.append("ord(");
+        this.src.add("ord(");
         textCharCastNumberFunct.value.accept(this);
-        this.sb.append("[");
+        this.src.add("[");
         textCharCastNumberFunct.atIndex.accept(this);
-        this.sb.append("])");
+        this.src.add("])");
         return null;
     }
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct textJoinFunct) {
-        this.sb.append("\"\".join(str(arg) for arg in [");
+        this.src.add("\"\".join(str(arg) for arg in [");
         textJoinFunct.param.accept(this);
-        this.sb.append("])");
+        this.src.add("])");
         return null;
     }
 
     @Override
     public Void visitTextPrintFunct(TextPrintFunct textPrintFunct) {
-        this.sb.append("print(");
+        this.src.add("print(");
         textPrintFunct.param.get(0).accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
@@ -1091,14 +1092,14 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
         switch ( this.unarySyms.get(lastIndex) ) {
             case PLUS:
             case NEG:
-                this.sb.append("_A = ").append(getUnaryOperatorSymbol(this.unarySyms.get(lastIndex))).append("_A");
+                this.src.add("_A = ", getUnaryOperatorSymbol(this.unarySyms.get(lastIndex)), "_A");
                 break;
             case NOT:
-                this.sb.append("_A = abs(_A - 1)");
+                this.src.add("_A = abs(_A - 1)");
                 break;
             case POSTFIX_INCREMENTS:
             case PREFIX_INCREMENTS:
-                this.sb.append("_A = _A").append(getUnaryOperatorSymbol(this.unarySyms.get(lastIndex)));
+                this.src.add("_A = _A", getUnaryOperatorSymbol(this.unarySyms.get(lastIndex)));
                 break;
             default:
                 throw new DbcException("Unsupported unary symbol");
@@ -1112,11 +1113,11 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     public Void visitVarDeclaration(VarDeclaration var) {
         if ( var.typeVar == BlocklyType.NUMBER || var.typeVar == BlocklyType.COLOR ) {
             if ( var.value.getKind().hasName("NUM_CONST") ) {
-                this.sb.append("var ").append(var.getCodeSafeName()).append(" = ");
-                this.sb.append(((NumConst) var.value).value);
+                this.src.add("var ", var.getCodeSafeName(), " = ");
+                this.src.add(((NumConst) var.value).value);
             } else if ( var.value.getKind().hasName("COLOR_CONST") ) {
-                this.sb.append("var ").append(var.getCodeSafeName()).append("[] = ");
-                this.sb.append("[").append(((ColorConst) var.value).getRedChannelInt()).append(", ").append(((ColorConst) var.value).getGreenChannelInt()).append(", ").append(((ColorConst) var.value).getBlueChannelInt()).append("]");
+                this.src.add("var ", var.getCodeSafeName(), "[] = ");
+                this.src.add("[", ((ColorConst) var.value).getRedChannelInt(), ", ", ((ColorConst) var.value).getGreenChannelInt(), ", ", ((ColorConst) var.value).getBlueChannelInt(), "]");
                 nlIndent();
             }
         } else if ( var.value.getKind().getName().equals("LIST_CREATE") ) {
@@ -1124,7 +1125,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
                 this.visitListCreateColor(var.getCodeSafeName(), ((ListCreate) var.value), true);
                 return null;
             } else if ( ((ListCreate) var.value).typeVar.toString().equals("NUMBER") ) {
-                this.sb.append("var ").append(var.getCodeSafeName()).append("[] = ");
+                this.src.add("var ", var.getCodeSafeName(), "[] = ");
                 var.value.accept(this);
             } else {
                 throw new DbcException("Unsupported list type");
@@ -1135,7 +1136,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
                 this.visitListRepeatColor(var.getCodeSafeName(), listRepeat, true);
                 return null;
             } else if ( listRepeat.typeVar.toString().equals("NUMBER") ) {
-                this.sb.append("var ").append(var.getCodeSafeName()).append("[] = ");
+                this.src.add("var ", var.getCodeSafeName(), "[] = ");
                 var.value.accept(this);
             } else {
                 throw new DbcException("Unsupported list type");
@@ -1149,10 +1150,10 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitWaitStmt(WaitStmt waitStmt) {
         this.stateCounter++;
-        this.sb.append("_state = ").append(this.stateCounter);
+        this.src.add("_state = ", this.stateCounter);
         decrIndentation();
         nlIndent();
-        this.sb.append("elseif _state == ").append(this.stateCounter).append(" then");
+        this.src.add("elseif _state == ", this.stateCounter, " then");
         incrIndentation();
         nlIndent();
         int stmtSize = waitStmt.statements.get().size();
@@ -1161,7 +1162,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
         int i = 0;
         for ( ; i < stmtSize; i++ ) {
             if ( i != 0 ) {
-                this.sb.append("else");
+                this.src.add("else");
                 incrIndentation();
                 nlIndent();
             }
@@ -1170,30 +1171,30 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
             nlIndent();
             this.stateCounter++;
             states[i] = this.stateCounter;
-            this.sb.append("_state = ").append(this.stateCounter);
+            this.src.add("_state = ", this.stateCounter);
             decrIndentation();
             nlIndent();
         }
         this.stateCounter++;
         states[i] = this.stateCounter;
         for ( int j = 0; j < stmtSize; j++ ) {
-            this.sb.append("end");
+            this.src.add("end");
             decrIndentation();
             nlIndent();
         }
         for ( int j = 0; j < stmtSize; j++ ) {
-            this.sb.append("elseif _state == ").append(states[j]).append(" then");
+            this.src.add("elseif _state == ", states[j], " then");
             incrIndentation();
             StmtList then = ((RepeatStmt) waitStmt.statements.get().get(j)).list;
             if ( !then.get().isEmpty() ) {
                 then.accept(this);
             }
             nlIndent();
-            this.sb.append("_state = ").append(states[statesSize - 1]);
+            this.src.add("_state = ", states[statesSize - 1]);
             decrIndentation();
             nlIndent();
         }
-        this.sb.append("elseif _state == ").append(states[statesSize - 1]).append(" then");
+        this.src.add("elseif _state == ", states[statesSize - 1], " then");
         incrIndentation();
         return null;
     }
@@ -1220,17 +1221,17 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
             nlIndent();
             this.stateCounter++;
             states[i] = this.stateCounter;
-            this.sb.append("_state = ").append(this.stateCounter);
+            this.src.add("_state = ", this.stateCounter);
             decrIndentation();
             nlIndent();
-            this.sb.append("else");
+            this.src.add("else");
             incrIndentation();
             nlIndent();
         }
         this.stateCounter++;
         states[i] = this.stateCounter;
         i++;
-        this.sb.append("_state = ").append(this.stateCounter);
+        this.src.add("_state = ", this.stateCounter);
         decrIndentation();
         if ( !ifStmt.elseList.get().isEmpty() ) {
             this.stateCounter++;
@@ -1238,32 +1239,32 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
         }
         for ( int j = 0; j < stmtSize; j++ ) {
             nlIndent();
-            this.sb.append("end");
+            this.src.add("end");
             decrIndentation();
         }
         nlIndent();
         for ( int j = 0; j < stmtSize; j++ ) {
-            this.sb.append("elseif _state == ").append(states[j]).append(" then");
+            this.src.add("elseif _state == ", states[j], " then");
             incrIndentation();
             StmtList then = ifStmt.thenList.get(j);
             if ( !then.get().isEmpty() ) {
                 then.accept(this);
             }
             nlIndent();
-            this.sb.append("_state = ").append(states[statesSize - 1]);
+            this.src.add("_state = ", states[statesSize - 1]);
             decrIndentation();
             nlIndent();
         }
         if ( !ifStmt.elseList.get().isEmpty() ) {
-            this.sb.append("elseif _state == ").append(states[statesSize - 2]).append(" then");
+            this.src.add("elseif _state == ", states[statesSize - 2], " then");
             incrIndentation();
             ifStmt.elseList.accept(this);
             nlIndent();
-            this.sb.append("_state = ").append(states[statesSize - 1]);
+            this.src.add("_state = ", states[statesSize - 1]);
             decrIndentation();
             nlIndent();
         }
-        this.sb.append("elseif _state == ").append(states[statesSize - 1]).append(" then");
+        this.src.add("elseif _state == ", states[statesSize - 1], " then");
         incrIndentation();
     }
 
@@ -1280,32 +1281,32 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     protected void generateCodeFromStmtCondition(String stmtType, Expr expr) {
         expr.accept(this);
         nlIndent();
-        this.sb.append(stmtType).append(whitespace()).append("_A == 1 then");
+        this.src.add(stmtType, " ", "_A == 1 then");
     }
 
     protected void generateCodeFromStmtConditionFor(String stmtType, Expr expr) {
         ExprList expressions = (ExprList) expr;
         expressions.get().get(1).accept(this);
         nlIndent();
-        this.sb.append(((Var) expressions.get().get(0)).getCodeSafeName()).append(" = _A");
+        this.src.add(((Var) expressions.get().get(0)).getCodeSafeName(), " = _A");
         nlIndent();
         this.nestedBinaryCounterPlus();
         expressions.get().get(2).accept(this);
         nlIndent();
-        this.sb.append("_B[").append(this.nestedBinaryCounter).append("] = _A");
+        this.src.add("_B[", this.nestedBinaryCounter, "] = _A");
         nlIndent();
         expressions.get().get(3).accept(this);
         nlIndent();
-        this.sb.append("_C[").append(this.nestedBinaryCounter).append("] = _A");
+        this.src.add("_C[", this.nestedBinaryCounter, "] = _A");
         nlIndent();
         this.stateCounter++;
-        this.sb.append("_state = ").append(this.stateCounter);
+        this.src.add("_state = ", this.stateCounter);
         decrIndentation();
         nlIndent();
-        this.sb.append("elseif _state == ").append(this.stateCounter).append(" then");
+        this.src.add("elseif _state == ", this.stateCounter, " then");
         incrIndentation();
         nlIndent();
-        this.sb.append(stmtType).append(whitespace()).append(((Var) expressions.get().get(0)).getCodeSafeName()).append(" < _B[").append(this.nestedBinaryCounter).append("] then");
+        this.src.add(stmtType, " ", ((Var) expressions.get().get(0)).getCodeSafeName(), " < _B[", this.nestedBinaryCounter, "] then");
     }
 
     @Override

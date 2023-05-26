@@ -70,7 +70,7 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
 
     @Override
     public Void visitPredefinedImage(PredefinedImage predefinedImage) {
-        this.sb.append("microbit.Image." + predefinedImage.getImageName());
+        this.src.add("microbit.Image.", predefinedImage.getImageName());
         return null;
     }
 
@@ -78,10 +78,10 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
     public Void visitEmptyExpr(EmptyExpr emptyExpr) {
         switch ( emptyExpr.getDefVal() ) {
             case PREDEFINED_IMAGE:
-                this.sb.append("microbit.Image.SILLY");
+                this.src.add("microbit.Image.SILLY");
                 break;
             case IMAGE:
-                this.sb.append("microbit.Image()");
+                this.src.add("microbit.Image()");
                 break;
             default:
                 super.visitEmptyExpr(emptyExpr);
@@ -92,7 +92,7 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
 
     @Override
     public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.sb.append("while True:");
+        this.src.add("while True:");
         incrIndentation();
         visitStmtList(waitStmt.statements);
         decrIndentation();
@@ -102,21 +102,21 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
-        this.sb.append("microbit.sleep(");
+        this.src.add("microbit.sleep(");
         waitTimeStmt.time.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
-        this.sb.append("microbit.display.clear()");
+        this.src.add("microbit.display.clear()");
         return null;
     }
 
     @Override
     public Void visitImage(Image image) {
-        this.sb.append("microbit.Image('");
+        this.src.add("microbit.Image('");
         for ( int i = 0; i < 5; i++ ) {
             for ( int j = 0; j < 5; j++ ) {
                 String pixel = image.image[i][j].trim();
@@ -125,51 +125,51 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
                 } else if ( pixel.equals("") ) {
                     pixel = "0";
                 }
-                this.sb.append(pixel);
+                this.src.add(pixel);
             }
             if ( i < 4 ) {
-                this.sb.append(":");
+                this.src.add(":");
             }
         }
-        this.sb.append("')");
+        this.src.add("')");
         return null;
     }
 
     @Override
     public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
-        this.sb.append("microbit.display.");
+        this.src.add("microbit.display.");
         appendTextDisplayType(displayTextAction);
         if ( !displayTextAction.msg.getKind().hasName("STRING_CONST") ) {
-            this.sb.append("str(");
+            this.src.add("str(");
             displayTextAction.msg.accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         } else {
             displayTextAction.msg.accept(this);
         }
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     private void appendTextDisplayType(DisplayTextAction displayTextAction) {
         if ( Objects.equals(displayTextAction.mode, "TEXT") ) {
-            this.sb.append("scroll(");
+            this.src.add("scroll(");
         } else {
-            this.sb.append("show(");
+            this.src.add("show(");
         }
     }
 
     @Override
     public Void visitDisplayImageAction(DisplayImageAction displayImageAction) {
-        this.sb.append("microbit.display.show(");
+        this.src.add("microbit.display.show(");
         displayImageAction.valuesToDisplay.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitImageInvertFunction(ImageInvertFunction imageInvertFunction) {
         imageInvertFunction.image.accept(this);
-        this.sb.append(".invert()");
+        this.src.add(".invert()");
         return null;
     }
 
@@ -178,41 +178,41 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
         String port = keysSensor.getUserDefinedPort();
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
-        this.sb.append("microbit.button_").append(pin1.toLowerCase(Locale.ENGLISH)).append(".is_pressed()");
+        this.src.add("microbit.button_", pin1.toLowerCase(Locale.ENGLISH), ".is_pressed()");
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
-        this.sb.append("microbit.temperature()");
+        this.src.add("microbit.temperature()");
         return null;
     }
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
-        this.sb.append("( microbit.running_time() - timer1 )");
+        this.src.add("( microbit.running_time() - timer1 )");
         return null;
     }
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        this.sb.append("timer1 = microbit.running_time()");
+        this.src.add("timer1 = microbit.running_time()");
         return null;
     }
 
     @Override
     public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
         if ( accelerometerSensor.getSlot().equals(SC.STRENGTH) ) {
-            this.sb.append("math.sqrt(microbit.accelerometer.get_x()**2 + microbit.accelerometer.get_y()**2 + microbit.accelerometer.get_z()**2)");
+            this.src.add("math.sqrt(microbit.accelerometer.get_x()**2 + microbit.accelerometer.get_y()**2 + microbit.accelerometer.get_z()**2)");
         } else {
-            this.sb.append("microbit.accelerometer.get_").append(accelerometerSensor.getSlot().toLowerCase(Locale.ENGLISH)).append("()");
+            this.src.add("microbit.accelerometer.get_", accelerometerSensor.getSlot().toLowerCase(Locale.ENGLISH), "()");
         }
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor lightSensor) {
-        this.sb.append("round(microbit.display.read_light_level() / 2.55)");
+        this.src.add("round(microbit.display.read_light_level() / 2.55)");
         return null;
     }
 
@@ -223,19 +223,19 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
         String pin1 = configurationComponent.getProperty("PIN1");
         String valueType = pinValueSensor.getMode().toLowerCase(Locale.ENGLISH);
         if ( valueType.equalsIgnoreCase(SC.PULSEHIGH) ) {
-            this.sb.append("machine.time_pulse_us(microbit.pin");
-            this.sb.append(pin1);
-            this.sb.append(", 1)");
+            this.src.add("machine.time_pulse_us(microbit.pin");
+            this.src.add(pin1);
+            this.src.add(", 1)");
         } else if ( valueType.equalsIgnoreCase(SC.PULSELOW) ) {
-            this.sb.append("machine.time_pulse_us(microbit.pin");
-            this.sb.append(pin1);
-            this.sb.append(", 0)");
+            this.src.add("machine.time_pulse_us(microbit.pin");
+            this.src.add(pin1);
+            this.src.add(", 0)");
         } else {
-            this.sb.append("microbit.pin");
-            this.sb.append(pin1);
-            this.sb.append(".read_");
-            this.sb.append(valueType);
-            this.sb.append("()");
+            this.src.add("microbit.pin");
+            this.src.add(pin1);
+            this.src.add(".read_");
+            this.src.add(valueType);
+            this.src.add("()");
         }
         return null;
     }
@@ -248,11 +248,11 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
         variables.accept(this);
         generateUserDefinedMethods();
         nlIndent();
-        this.sb.append("def run():");
+        this.src.add("def run():");
         incrIndentation();
         nlIndent();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
-            this.sb.append("global ").append(String.join(", ", this.usedGlobalVarInFunctions));
+            this.src.add("global ", String.join(", ", this.usedGlobalVarInFunctions));
         }
 //        TODO add as soon as microbit runtime is updated
 //        if ( this.robotConfiguration.isComponentTypePresent(SC.DIGITAL_PIN) ) {
@@ -268,7 +268,7 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
 //                        continue;
 //                    }
 //                    nlIndent();
-//                    this.sb.append("microbit.MicroBitDigitalPin.set_pull(microbit.pin" + pin1 + ".").append(mode).append(");");
+//                    this.src.add("microbit.MicroBitDigitalPin.set_pull(microbit.pin", pin1, ".",mode,");");
 //                }
 //            }
 //        }
@@ -283,19 +283,19 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
         decrIndentation(); // everything is still indented from main program
         nlIndent();
         nlIndent();
-        this.sb.append("def main():");
+        this.src.add("def main():");
         incrIndentation();
         nlIndent();
-        this.sb.append("try:");
+        this.src.add("try:");
         incrIndentation();
         nlIndent();
-        this.sb.append("run()");
+        this.src.add("run()");
         decrIndentation();
         nlIndent();
-        this.sb.append("except Exception as e:");
+        this.src.add("except Exception as e:");
         incrIndentation();
         nlIndent();
-        this.sb.append("raise");
+        this.src.add("raise");
         decrIndentation();
         decrIndentation();
         nlIndent();
@@ -305,38 +305,38 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
 
     @Override
     public Void visitGestureSensor(GestureSensor gestureSensor) {
-        this.sb.append("(\"" + gestureSensor.getMode().toString().toLowerCase().replace("_", " ") + "\" == microbit.accelerometer.current_gesture())");
+        this.src.add("(\"", gestureSensor.getMode().toString().toLowerCase().replace("_", " "), "\" == microbit.accelerometer.current_gesture())");
         return null;
     }
 
     @Override
     public Void visitImageShiftFunction(ImageShiftFunction imageShiftFunction) {
         imageShiftFunction.image.accept(this);
-        this.sb.append(".shift_" + imageShiftFunction.shiftDirection.toString().toLowerCase() + "(");
+        this.src.add(".shift_", imageShiftFunction.shiftDirection.toString().toLowerCase(), "(");
         imageShiftFunction.positions.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor compassSensor) {
-        this.sb.append("microbit.compass.heading()");
+        this.src.add("microbit.compass.heading()");
         return null;
     }
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor pinTouchSensor) {
-        this.sb.append("microbit.pin" + pinTouchSensor.getUserDefinedPort() + ".is_touched()");
+        this.src.add("microbit.pin", pinTouchSensor.getUserDefinedPort(), ".is_touched()");
         return null;
     }
 
     @Override
     public Void visitRadioSendAction(RadioSendAction radioSendAction) {
-        this.sb.append("radio.config(power=" + radioSendAction.power + ")");
+        this.src.add("radio.config(power=", radioSendAction.power, ")");
         nlIndent();
-        this.sb.append("radio.send(str(");
+        this.src.add("radio.send(str(");
         radioSendAction.message.accept(this);
-        this.sb.append("))");
+        this.src.add("))");
         return null;
     }
 
@@ -344,13 +344,13 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
     public Void visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
         switch ( radioReceiveAction.type ) {
             case "Number":
-                this.sb.append("((lambda x: 0 if x is None else float(x))(radio.receive()))");
+                this.src.add("((lambda x: 0 if x is None else float(x))(radio.receive()))");
                 break;
             case "Boolean":
-                this.sb.append("('True' == radio.receive())");
+                this.src.add("('True' == radio.receive())");
                 break;
             case "String":
-                this.sb.append("radio.receive()");
+                this.src.add("radio.receive()");
                 break;
             default:
                 throw new IllegalArgumentException("unhandled type");
@@ -360,9 +360,9 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
 
     @Override
     public Void visitRadioSetChannelAction(RadioSetChannelAction radioSetChannelAction) {
-        this.sb.append("radio.config(group=");
+        this.src.add("radio.config(group=");
         radioSetChannelAction.channel.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
@@ -371,33 +371,33 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
         String port = mbedPinWriteValueAction.port;
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
-        this.sb.append("microbit.pin").append(pin1);
+        this.src.add("microbit.pin", pin1);
         String valueType = mbedPinWriteValueAction.pinValue.equals(SC.DIGITAL) ? "digital(" : "analog(";
-        this.sb.append(".write_").append(valueType);
+        this.src.add(".write_", valueType);
         mbedPinWriteValueAction.value.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitDisplaySetPixelAction(DisplaySetPixelAction displaySetPixelAction) {
-        this.sb.append("microbit.display.set_pixel(");
+        this.src.add("microbit.display.set_pixel(");
         displaySetPixelAction.x.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         displaySetPixelAction.y.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         displaySetPixelAction.brightness.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitDisplayGetPixelAction(DisplayGetPixelAction displayGetPixelAction) {
-        this.sb.append("microbit.display.get_pixel(");
+        this.src.add("microbit.display.get_pixel(");
         displayGetPixelAction.x.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         displayGetPixelAction.y.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
@@ -406,34 +406,34 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
         if ( !withWrapping ) {
             return;
         }
-        this.sb.append("import microbit");
+        this.src.add("import microbit");
         nlIndent();
-        this.sb.append("import random");
+        this.src.add("import random");
         nlIndent();
-        this.sb.append("import math");
+        this.src.add("import math");
         nlIndent();
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
-            this.sb.append("import radio");
+            this.src.add("import radio");
             nlIndent();
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.MUSIC) ) {
-            this.sb.append("import music");
+            this.src.add("import music");
             nlIndent();
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.PIN_VALUE) ) {
-            this.sb.append("import machine");
+            this.src.add("import machine");
             nlIndent();
         }
         nlIndent();
-        this.sb.append("class BreakOutOfALoop(Exception): pass");
+        this.src.add("class BreakOutOfALoop(Exception): pass");
         nlIndent();
-        this.sb.append("class ContinueLoop(Exception): pass");
+        this.src.add("class ContinueLoop(Exception): pass");
         nlIndent();
         nlIndent();
-        this.sb.append("timer1 = microbit.running_time()");
+        this.src.add("timer1 = microbit.running_time()");
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
             nlIndent();
-            this.sb.append("radio.on()");
+            this.src.add("radio.on()");
         }
     }
 
@@ -444,28 +444,23 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
 
     @Override
     public Void visitStmtTextComment(StmtTextComment stmtTextComment) {
-        this.sb.append("# " + stmtTextComment.textComment);
+        this.src.add("# ", stmtTextComment.textComment);
         return null;
     }
 
     @Override
     public Void visitToneAction(ToneAction toneAction) {
-        this.sb.append("music.pitch(");
+        this.src.add("music.pitch(");
         toneAction.frequency.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         toneAction.duration.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
-        this.sb
-            .append("music.pitch(")
-            .append(Integer.parseInt(playNoteAction.frequency.split("\\.")[0]))
-            .append(", ")
-            .append(playNoteAction.duration)
-            .append(")");
+        this.src.add("music.pitch(", Integer.parseInt(playNoteAction.frequency.split("\\.")[0]), ", ", playNoteAction.duration, ")");
         return null;
     }
 
@@ -493,7 +488,7 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
             case "JUMP_DOWN":
             case "POWER_UP":
             case "POWER_DOWN": {
-                this.sb.append("music.play(music." + playFileAction.fileName + ")");
+                this.src.add("music.play(music.", playFileAction.fileName, ")");
                 break;
             }
             default: {
@@ -506,9 +501,9 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
     @Override
     public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction) {
         if ( switchLedMatrixAction.activated.equals("ON") ) {
-            this.sb.append("microbit.display.on()");
+            this.src.add("microbit.display.on()");
         } else {
-            this.sb.append("microbit.display.off()");
+            this.src.add("microbit.display.off()");
         }
         return null;
     }

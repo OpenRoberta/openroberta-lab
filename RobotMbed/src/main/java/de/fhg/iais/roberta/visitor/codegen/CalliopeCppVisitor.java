@@ -182,19 +182,19 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
 
     @Override
     public Void visitStringConst(StringConst stringConst) {
-        this.sb.append("ManagedString(");
+        this.src.add("ManagedString(");
         super.visitStringConst(stringConst);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitVarDeclaration(VarDeclaration var) {
-        this.sb.append(getLanguageVarTypeFromBlocklyType(var.typeVar));
+        this.src.add(getLanguageVarTypeFromBlocklyType(var.typeVar));
         if ( var.typeVar.isArray() && var.value.getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(" &");
+            this.src.add(" &");
         }
-        this.sb.append(whitespace() + var.getCodeSafeName());
+        this.src.add(" ", var.getCodeSafeName());
         return null;
     }
 
@@ -202,10 +202,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         for ( final VarDeclaration var : this.getBean(UsedHardwareBean.class).getVisitedVars() ) {
             nlIndent();
             if ( !var.value.getKind().hasName("EMPTY_EXPR") ) {
-                this.sb.append("___" + var.name);
-                this.sb.append(whitespace() + "=" + whitespace());
+                this.src.add("___", var.name);
+                this.src.add(" = ");
                 var.value.accept(this);
-                this.sb.append(";");
+                this.src.add(";");
             }
         }
         return null;
@@ -215,11 +215,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     public Void visitBinary(Binary binary) {
         final Op op = binary.op;
         if ( op == Op.MOD ) {
-            this.sb.append("(int) ");
+            this.src.add("(int) ");
         } else if ( op == Op.NEQ ) {
-            this.sb.append("!( ");
+            this.src.add("!( ");
         }
-        generateSubExpr(this.sb, false, binary.left, binary);
+        generateSubExpr(this.src, false, binary.left, binary);
         final String sym;
         if ( op.equals(Op.NEQ) ) {
             sym = "==";
@@ -227,24 +227,24 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
             sym = getBinaryOperatorSymbol(op);
         }
 
-        this.src.add(whitespace(), sym, whitespace());
+        this.src.add(" ", sym, " ");
         switch ( op ) {
             case DIVIDE:
-                this.sb.append("((float) ");
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-                this.sb.append(")");
+                this.src.add("((float) ");
+                generateSubExpr(this.src, parenthesesCheck(binary), binary.getRight(), binary);
+                this.src.add(")");
                 break;
             case MOD:
-                this.sb.append("((int) ");
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-                this.sb.append(")");
+                this.src.add("((int) ");
+                generateSubExpr(this.src, parenthesesCheck(binary), binary.getRight(), binary);
+                this.src.add(")");
                 break;
             case NEQ:
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-                this.sb.append(" )");
+                generateSubExpr(this.src, parenthesesCheck(binary), binary.getRight(), binary);
+                this.src.add(" )");
                 break;
             default:
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                generateSubExpr(this.src, parenthesesCheck(binary), binary.getRight(), binary);
         }
 
         return null;
@@ -254,30 +254,30 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     public Void visitEmptyExpr(EmptyExpr emptyExpr) {
         switch ( emptyExpr.getDefVal() ) {
             case STRING:
-                this.sb.append("\"\"");
+                this.src.add("\"\"");
                 break;
             case BOOLEAN:
-                this.sb.append("true");
+                this.src.add("true");
                 break;
             case NUMBER:
             case NUMBER_INT:
-                this.sb.append("0");
+                this.src.add("0");
                 break;
             case ARRAY:
                 break;
             case NULL:
                 break;
             case COLOR:
-                this.sb.append("MicroBitColor()");
+                this.src.add("MicroBitColor()");
                 break;
             case PREDEFINED_IMAGE:
-                this.sb.append("MicroBitImage()");
+                this.src.add("MicroBitImage()");
                 break;
             case IMAGE:
-                this.sb.append("MicroBitImage()");
+                this.src.add("MicroBitImage()");
                 break;
             default:
-                this.sb.append("NULL");
+                this.src.add("NULL");
                 break;
         }
         return null;
@@ -313,14 +313,14 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         if ( !isWaitStmt ) {
             addContinueLabelToLoop();
             nlIndent();
-            this.sb.append("_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);");
+            this.src.add("_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);");
         } else {
             appendBreakStmt();
         }
 
         decrIndentation();
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
         addBreakLabelToLoop(isWaitStmt);
 
         return null;
@@ -328,22 +328,22 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
 
     @Override
     public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.sb.append("while (true) {");
+        this.src.add("while (true) {");
         incrIndentation();
         visitStmtList(waitStmt.statements);
         nlIndent();
-        this.sb.append("_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);");
+        this.src.add("_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);");
         decrIndentation();
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
         return null;
     }
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
-        this.sb.append("_uBit.sleep(");
+        this.src.add("_uBit.sleep(");
         waitTimeStmt.time.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
@@ -351,7 +351,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
         String ending = ")";
         final String varType = displayTextAction.msg.getVarType().toString();
-        this.sb.append("_uBit.display.");
+        this.src.add("_uBit.display.");
         appendTextDisplayType(displayTextAction);
         if ( !varType.equals("STRING") ) {
             ending = wrapInManageStringToDisplay(displayTextAction, ending);
@@ -359,13 +359,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
             displayTextAction.msg.accept(this);
         }
 
-        this.sb.append(ending + ";");
+        this.src.add(ending, ";");
         return null;
     }
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
-        this.sb.append("_uBit.display.clear();");
+        this.src.add("_uBit.display.clear();");
         return null;
     }
 
@@ -376,14 +376,14 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : "0";
         switch ( pin1 ) {
             case "0":
-                this.sb.append("_uBit.rgb.off();");
+                this.src.add("_uBit.rgb.off();");
                 break;
             case "1":
             case "2":
             case "3":
             case "4":
             case "5":
-                this.sb.append("_cbSetRGBLed(_buf, &_i2c, ").append(pin1).append(", 0);");
+                this.src.add("_cbSetRGBLed(_buf, &_i2c, ", pin1, ", 0);");
                 break;
             default:
                 throw new DbcException("LightOffAction; invalid port: " + pin1);
@@ -393,21 +393,21 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
 
     @Override
     public Void visitToneAction(ToneAction toneAction) {
-        this.sb.append("_uBit.soundmotor.soundOn(");
+        this.src.add("_uBit.soundmotor.soundOn(");
         toneAction.frequency.accept(this);
-        this.sb.append("); ").append("_uBit.sleep(");
+        this.src.add("); ", "_uBit.sleep(");
         toneAction.duration.accept(this);
-        this.sb.append("); ").append("_uBit.soundmotor.soundOff();");
+        this.src.add("); ", "_uBit.soundmotor.soundOff();");
         return null;
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
-        this.sb.append("_uBit.soundmotor.soundOn(");
-        this.sb.append(playNoteAction.frequency);
-        this.sb.append("); ").append("_uBit.sleep(");
-        this.sb.append(playNoteAction.duration);
-        this.sb.append("); ").append("_uBit.soundmotor.soundOff();");
+        this.src.add("_uBit.soundmotor.soundOn(");
+        this.src.add(playNoteAction.frequency);
+        this.src.add("); ", "_uBit.sleep(");
+        this.src.add(playNoteAction.duration);
+        this.src.add("); ", "_uBit.soundmotor.soundOff();");
         return null;
     }
 
@@ -419,19 +419,19 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         switch ( pin1 ) {
             case "0":
             case "2":
-                this.sb.append("_cbSetMotor(_buf, &_i2c, ").append(pin1).append(", ");
+                this.src.add("_cbSetMotor(_buf, &_i2c, ", pin1, ", ");
                 motorOnAction.param.getSpeed().accept(this);
-                this.sb.append(");");
+                this.src.add(");");
                 break;
             case "A":
             case "B":
-                this.sb.append("_uBit.soundmotor.motor");
+                this.src.add("_uBit.soundmotor.motor");
                 if ( isDualMode() ) {
-                    this.sb.append(pin1);
+                    this.src.add(pin1);
                 }
-                this.sb.append("On(");
+                this.src.add("On(");
                 motorOnAction.param.getSpeed().accept(this);
-                this.sb.append(");");
+                this.src.add(");");
                 break;
             default:
                 throw new DbcException("visitMotorOnAction; Invalid motor port: " + pin1);
@@ -457,24 +457,24 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         switch ( pin1 ) {
             case "0":
             case "2":
-                this.sb.append("_cbSetMotor(_buf, &_i2c, ").append(pin1).append(", 0);");
+                this.src.add("_cbSetMotor(_buf, &_i2c, ", pin1, ", 0);");
                 break;
             case "A":
             case "B":
                 if ( isDualMode() ) {
-                    this.sb.append("_uBit.soundmotor.motor").append(pin1).append("Off();"); // Coast vs OFF
-                    this.sb.append("//float, break and sleep doesn't work with more than one motor connected");
+                    this.src.add("_uBit.soundmotor.motor", pin1, "Off();"); // Coast vs OFF
+                    this.src.add("//float, break and sleep doesn't work with more than one motor connected");
                 } else {
-                    this.sb.append("_uBit.soundmotor.motor");
+                    this.src.add("_uBit.soundmotor.motor");
                     switch ( (MotorStopMode) motorStopAction.mode ) {
                         case FLOAT:
-                            this.sb.append("Coast();");
+                            this.src.add("Coast();");
                             break;
                         case NONFLOAT:
-                            this.sb.append("Break();");
+                            this.src.add("Break();");
                             break;
                         case SLEEP:
-                            this.sb.append("Sleep();");
+                            this.src.add("Sleep();");
                             break;
                         default:
                             throw new DbcException("Invalide stop mode " + motorStopAction.mode);
@@ -489,7 +489,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
 
     @Override
     public Void visitLightSensor(LightSensor lightSensor) {
-        this.sb.append("round(_uBit.display.readLightLevel() * _GET_LIGHTLEVEL_MULTIPLIER)");
+        this.src.add("round(_uBit.display.readLightLevel() * _GET_LIGHTLEVEL_MULTIPLIER)");
         return null;
     }
 
@@ -498,7 +498,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         String port = keysSensor.getUserDefinedPort();
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
-        this.sb.append("_uBit.button").append(pin1).append(".isPressed()");
+        this.src.add("_uBit.button", pin1, ".isPressed()");
         return null;
     }
 
@@ -506,33 +506,33 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     public Void visitGestureSensor(GestureSensor gestureSensor) {
         String mode = gestureSensor.getMode();
         if ( mode.equals("SHAKE") ) {
-            this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(CalliopeMethods.IS_GESTURE_SHAKE));
-            this.sb.append("()");
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(CalliopeMethods.IS_GESTURE_SHAKE));
+            this.src.add("()");
         } else {
-            this.sb.append("(_uBit.accelerometer.getGesture() == MICROBIT_ACCELEROMETER_EVT_");
+            this.src.add("(_uBit.accelerometer.getGesture() == MICROBIT_ACCELEROMETER_EVT_");
             if ( mode.equals(SC.UP) || mode.equals(SC.DOWN) || mode.equals(SC.LEFT) || mode.equals(SC.RIGHT) ) {
-                this.sb.append("TILT_");
+                this.src.add("TILT_");
             }
-            this.sb.append(mode + ")");
+            this.src.add(mode, ")");
         }
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
-        this.sb.append("_uBit.thermometer.getTemperature()");
+        this.src.add("_uBit.thermometer.getTemperature()");
         return null;
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor compassSensor) {
-        this.sb.append("_uBit.compass.heading()");
+        this.src.add("_uBit.compass.heading()");
         return null;
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor microphoneSensor) {
-        this.sb.append("_uBit.io.P21.getMicrophoneValue()");
+        this.src.add("_uBit.io.P21.getMicrophoneValue()");
         return null;
     }
 
@@ -542,9 +542,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
         boolean isCallibot = confComp.componentType.equals("CALLIBOT");
         if ( isCallibot ) {
-            this.sb.append("_cbGetSampleUltrasonic(_buf, &_i2c)");
+            this.src.add("_cbGetSampleUltrasonic(_buf, &_i2c)");
         } else {
-            this.sb.append("(_uBit.io.P2.readPulseHigh() * 0.017)");
+            this.src.add("(_uBit.io.P2.readPulseHigh() * 0.017)");
         }
         return null;
     }
@@ -555,7 +555,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
         if ( pin1.equals("1") || pin1.contentEquals("2") ) {
-            this.sb.append("_cbGetSampleInfrared(_buf, &_i2c, ").append(pin1).append(")");
+            this.src.add("_cbGetSampleInfrared(_buf, &_i2c, ", pin1, ")");
         } else {
             throw new DbcException("InfraredSensor; Invalid infrared port: " + port);
         }
@@ -566,9 +566,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     public Void visitGyroSensor(GyroSensor gyroSensor) {
         String slot = gyroSensor.getSlot();
         if ( slot.equals("X") ) { // TODO rename to Pitch and Roll in the configuration?
-            this.sb.append("_uBit.accelerometer.getPitch()");
+            this.src.add("_uBit.accelerometer.getPitch()");
         } else if ( slot.equals("Y") ) {
-            this.sb.append("_uBit.accelerometer.getRoll()");
+            this.src.add("_uBit.accelerometer.getRoll()");
         } else {
             throw new DbcException("Slot " + slot + " is not valid!");
         }
@@ -577,19 +577,19 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
-        this.sb.append("( _uBit.systemTime() - _initTime )");
+        this.src.add("( _uBit.systemTime() - _initTime )");
         return null;
     }
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        this.sb.append("_initTime = _uBit.systemTime();");
+        this.src.add("_initTime = _uBit.systemTime();");
         return null;
     }
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor pinTouchSensor) {
-        this.sb.append("_uBit.io." + PIN_MAP.get(pinTouchSensor.getUserDefinedPort()) + ".isTouched()");
+        this.src.add("_uBit.io.", PIN_MAP.get(pinTouchSensor.getUserDefinedPort()), ".isTouched()");
         return null;
     }
 
@@ -599,19 +599,19 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
         String mode = pinValueSensor.getMode();
-        this.sb.append("_uBit.io." + PIN_MAP.get(pin1));
+        this.src.add("_uBit.io.", PIN_MAP.get(pin1));
         switch ( mode ) {
             case SC.DIGITAL:
-                this.sb.append(".getDigitalValue()");
+                this.src.add(".getDigitalValue()");
                 break;
             case SC.ANALOG:
-                this.sb.append(".getAnalogValue()");
+                this.src.add(".getAnalogValue()");
                 break;
             case SC.PULSEHIGH:
-                this.sb.append(".readPulseHigh()");
+                this.src.add(".readPulseHigh()");
                 break;
             case SC.PULSELOW:
-                this.sb.append(".readPulseLow()");
+                this.src.add(".readPulseLow()");
                 break;
             default:
                 throw new DbcException("Value type  " + mode + " is not supported.");
@@ -625,30 +625,30 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
         String valueType = mbedPinWriteValueAction.pinValue.equals(SC.DIGITAL) ? "DigitalValue(" : "AnalogValue(";
-        this.sb.append("_uBit.io.").append(PIN_MAP.get(pin1)).append(".set").append(valueType);
+        this.src.add("_uBit.io.", PIN_MAP.get(pin1), ".set", valueType);
         mbedPinWriteValueAction.value.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER) ) {
-            this.sb.append("int _initTime = _uBit.systemTime();");
+            this.src.add("int _initTime = _uBit.systemTime();");
         }
         mainTask.variables.accept(this);
         nlIndent();
         nlIndent();
-        this.sb.append("int main()");
+        this.src.add("int main()");
         nlIndent();
-        this.sb.append("{");
+        this.src.add("{");
         incrIndentation();
         nlIndent();
         // Initialise the micro:bit runtime.
-        this.sb.append("_uBit.init();");
+        this.src.add("_uBit.init();");
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
             nlIndent();
-            this.sb.append("_cbInit(_buf, &_i2c, &_uBit);");
+            this.src.add("_cbInit(_buf, &_i2c, &_uBit);");
         }
         if ( this.robotConfiguration.isComponentTypePresent(SC.DIGITAL_PIN) ) {
             for ( ConfigurationComponent usedConfigurationBlock : this.robotConfiguration.getConfigurationComponentsValues() ) {
@@ -663,7 +663,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
                         continue;
                     }
                     nlIndent();
-                    this.sb.append("_uBit.io." + PIN_MAP.get(pin1) + ".setPull(Pull").append(WordUtils.capitalizeFully(mode)).append(");");
+                    this.src.add("_uBit.io.", PIN_MAP.get(pin1), ".setPull(Pull", WordUtils.capitalizeFully(mode), ");");
                 }
             }
         }
@@ -678,9 +678,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
                 }
             }
             nlIndent();
-            this.sb.append("_TCS3472_init(_buf, &_i2c, TCS3472_INTEGRATIONTIME_").append(integrationTime).append(", TCS3472_GAIN_").append(gain).append(");");
+            this.src.add("_TCS3472_init(_buf, &_i2c, TCS3472_INTEGRATIONTIME_", integrationTime, ", TCS3472_GAIN_", gain, ");");
             nlIndent();
-            this.sb.append("_TCS3472_time = TCS3472_INTEGRATIONTIME_").append(integrationTime).append(";");
+            this.src.add("_TCS3472_time = TCS3472_INTEGRATIONTIME_", integrationTime, ";");
         }
 
         generateUsedVars();
@@ -688,20 +688,20 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         nlIndent();
 
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DISPLAY_GRAYSCALE) ) {
-            this.sb.append("_uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);");
+            this.src.add("_uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);");
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
             nlIndent();
-            this.sb.append("_uBit.radio.enable();");
+            this.src.add("_uBit.radio.enable();");
         }
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.ACCELEROMETER) || this.getBean(UsedHardwareBean.class).isSensorUsed(SC.COMPASS) ) {
             nlIndent();
-            this.sb.append("_uBit.accelerometer.updateSample();");
+            this.src.add("_uBit.accelerometer.updateSample();");
         }
         if ( this.isDualMode() && this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIFFERENTIALDRIVE) ) {
-            this.sb.append("nrf_gpiote_task_configure(0, CALLIOPE_PIN_MOTOR_IN2, NRF_GPIOTE_POLARITY_TOGGLE, NRF_GPIOTE_INITIAL_VALUE_HIGH);");
+            this.src.add("nrf_gpiote_task_configure(0, CALLIOPE_PIN_MOTOR_IN2, NRF_GPIOTE_POLARITY_TOGGLE, NRF_GPIOTE_INITIAL_VALUE_HIGH);");
             nlIndent();
-            this.sb.append("nrf_gpiote_task_configure(1, CALLIOPE_PIN_MOTOR_IN1, NRF_GPIOTE_POLARITY_TOGGLE, NRF_GPIOTE_INITIAL_VALUE_LOW);");
+            this.src.add("nrf_gpiote_task_configure(1, CALLIOPE_PIN_MOTOR_IN1, NRF_GPIOTE_POLARITY_TOGGLE, NRF_GPIOTE_INITIAL_VALUE_LOW);");
             nlIndent();
         }
         return null;
@@ -709,81 +709,81 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
-        this.sb.append("min(max(");
+        this.src.add("min(max(");
         mathConstrainFunct.value.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         mathConstrainFunct.lowerBound.accept(this);
-        this.sb.append("), ");
+        this.src.add("), ");
         mathConstrainFunct.upperBound.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        this.sb.append("(_uBit.random((");
+        this.src.add("(_uBit.random((");
         mathRandomIntFunct.to.accept(this);
-        this.sb.append(") - (");
+        this.src.add(") - (");
         mathRandomIntFunct.from.accept(this);
-        this.sb.append(") + 1)");
-        this.sb.append(" + (");
+        this.src.add(") + 1)");
+        this.src.add(" + (");
         mathRandomIntFunct.from.accept(this);
-        this.sb.append("))");
+        this.src.add("))");
         return null;
     }
 
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
-        this.sb.append("ManagedString(");
+        this.src.add("ManagedString(");
         mathCastStringFunct.value.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
-        this.sb.append("ManagedString((char)(");
+        this.src.add("ManagedString((char)(");
         mathCastCharFunct.value.accept(this);
-        this.sb.append("))");
+        this.src.add("))");
         return null;
     }
 
     @Override
     public Void visitMathModuloFunct(MathModuloFunct mathModuloFunct) {
-        this.sb.append("( (int) ( ");
+        this.src.add("( (int) ( ");
         mathModuloFunct.dividend.accept(this);
-        this.sb.append(" ) % (int) ( ");
+        this.src.add(" ) % (int) ( ");
         mathModuloFunct.divisor.accept(this);
-        this.sb.append(" ) )");
+        this.src.add(" ) )");
         return null;
     }
 
     @Override
     public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
         textAppendStmt.var.accept(this);
-        this.sb.append(" = ");
+        this.src.add(" = ");
         textAppendStmt.var.accept(this);
-        this.sb.append(" + ManagedString(");
+        this.src.add(" + ManagedString(");
         textAppendStmt.text.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
-        this.sb.append("std::atof((");
+        this.src.add("std::atof((");
         textStringCastNumberFunct.value.accept(this);
-        this.sb.append(").toCharArray())");
+        this.src.add(").toCharArray())");
         return null;
     }
 
     @Override
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
-        this.sb.append("(int)(");
+        this.src.add("(int)(");
         textCharCastNumberFunct.value.accept(this);
-        this.sb.append(".charAt(");
+        this.src.add(".charAt(");
         textCharCastNumberFunct.atIndex.accept(this);
-        this.sb.append("))");
+        this.src.add("))");
         return null;
     }
 
@@ -792,11 +792,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         final List<Expr> parameters = textJoinFunct.param.get();
         final int numberOfParameters = parameters.size();
         for ( int i = 0; i < numberOfParameters; i++ ) {
-            this.sb.append("ManagedString(");
+            this.src.add("ManagedString(");
             parameters.get(i).accept(this);
-            this.sb.append(")");
+            this.src.add(")");
             if ( i < numberOfParameters - 1 ) {
-                this.sb.append(" + ");
+                this.src.add(" + ");
             }
         }
         return null;
@@ -804,7 +804,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
 
     @Override
     public Void visitPredefinedImage(PredefinedImage predefinedImage) {
-        this.sb.append("MicroBitImage(\"" + predefinedImage.getImageName().getImageString() + "\")");
+        this.src.add("MicroBitImage(\"", predefinedImage.getImageName().getImageString(), "\")");
         return null;
     }
 
@@ -815,51 +815,51 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
             try {
                 Expr values = displayImageAction.valuesToDisplay;
                 int valuesSize = ((ListCreate) values).exprList.get().size();
-                this.sb.append("std::array<MicroBitImage, " + valuesSize + "> _animation = _convertToArray<MicroBitImage, " + valuesSize + ">(");
+                this.src.add("std::array<MicroBitImage, ", valuesSize, "> _animation = _convertToArray<MicroBitImage, ", valuesSize, ">(");
                 displayImageAction.valuesToDisplay.accept(this);
-                this.sb.append(");");
+                this.src.add(");");
                 nlIndent();
             } catch ( Exception e ) {
-                this.sb.append("for (MicroBitImage& image : ");
+                this.src.add("for (MicroBitImage& image : ");
                 displayImageAction.valuesToDisplay.accept(this);
-                this.sb.append(") {");
-                this.sb.append("_uBit.display.print(image, 0, 0, 255, 200);");
-                this.sb.append("_uBit.display.clear();");
-                this.sb.append("}");
+                this.src.add(") {");
+                this.src.add("_uBit.display.print(image, 0, 0, 255, 200);");
+                this.src.add("_uBit.display.clear();");
+                this.src.add("}");
                 return null;
             }
         }
-        this.sb.append("_uBit.display.");
+        this.src.add("_uBit.display.");
         if ( displayImageAction.displayImageMode.equals("ANIMATION") ) {
-            this.sb.append("animateImages(_animation, 200);");
+            this.src.add("animateImages(_animation, 200);");
             return null;
         } else {
-            this.sb.append("print(");
+            this.src.add("print(");
         }
         displayImageAction.valuesToDisplay.accept(this);
-        this.sb.append(end);
+        this.src.add(end);
         return null;
     }
 
     @Override
     public Void visitImageShiftFunction(ImageShiftFunction imageShiftFunction) {
         imageShiftFunction.image.accept(this);
-        this.sb.append(".shiftImage" + capitalizeFirstLetter(imageShiftFunction.shiftDirection.toString()) + "(");
+        this.src.add(".shiftImage", capitalizeFirstLetter(imageShiftFunction.shiftDirection.toString()), "(");
         imageShiftFunction.positions.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitImageInvertFunction(ImageInvertFunction imageInvertFunction) {
         imageInvertFunction.image.accept(this);
-        this.sb.append(".invert()");
+        this.src.add(".invert()");
         return null;
     }
 
     @Override
     public Void visitImage(Image image) {
-        this.sb.append("MicroBitImage(\"");
+        this.src.add("MicroBitImage(\"");
         for ( int i = 0; i < 5; i++ ) {
             for ( int j = 0; j < 5; j++ ) {
                 String pixel = image.image[i][j].trim();
@@ -868,30 +868,21 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
                 } else if ( pixel.equals("") ) {
                     pixel = "0";
                 }
-                this.sb.append(map(Integer.parseInt(pixel), 0, 9, 0, 255));
+                this.src.add(map(Integer.parseInt(pixel), 0, 9, 0, 255));
                 if ( j < 4 ) {
-                    this.sb.append(",");
+                    this.src.add(",");
                 }
             }
-            this.sb.append("\\n");
+            this.src.add("\\n");
         }
-        this.sb.append("\")");
+        this.src.add("\")");
         return null;
     }
 
     @Override
     public Void visitColorConst(ColorConst colorConst) {
-        this.sb
-            .append(
-                "MicroBitColor("
-                    + colorConst.getRedChannelInt()
-                    + ", "
-                    + colorConst.getGreenChannelInt()
-                    + ", "
-                    + colorConst.getBlueChannelInt()
-                    + ", "
-                    + 255
-                    + ")");
+        this.src
+            .add("MicroBitColor(", colorConst.getRedChannelInt(), ", ", colorConst.getGreenChannelInt(), ", ", colorConst.getBlueChannelInt(), ", ", 255, ")");
         return null;
     }
 
@@ -902,18 +893,18 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : "0";
         switch ( pin1 ) {
             case "0":
-                this.sb.append("_uBit.rgb.setColour(");
+                this.src.add("_uBit.rgb.setColour(");
                 ledOnAction.ledColor.accept(this);
-                this.sb.append(");");
+                this.src.add(");");
                 break;
             case "1":
             case "2":
             case "3":
             case "4":
             case "5":
-                this.sb.append("_cbSetRGBLed(_buf, &_i2c, ").append(pin1).append(", ");
+                this.src.add("_cbSetRGBLed(_buf, &_i2c, ", pin1, ", ");
                 ledOnAction.ledColor.accept(this);
-                this.sb.append(");");
+                this.src.add(");");
                 break;
             default:
                 throw new DbcException("LedOnAction; invalid port: " + pin1);
@@ -934,35 +925,35 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         } else {
             throw new DbcException("LightAction; invalid mode: " + mode);
         }
-        this.sb.append("_cbSetLed(_buf, &_i2c, _cbLedState, ").append(pin1).append(", ").append(mode).append(");");
+        this.src.add("_cbSetLed(_buf, &_i2c, _cbLedState, ", pin1, ", ", mode, ");");
         return null;
     }
 
     @Override
     public Void visitRadioSendAction(RadioSendAction radioSendAction) {
-        this.sb.append("_uBit.radio.setTransmitPower(" + radioSendAction.power + ");");
+        this.src.add("_uBit.radio.setTransmitPower(", radioSendAction.power, ");");
         nlIndent();
         switch ( radioSendAction.type ) {
             case "Number":
-                this.sb.append("_uBit.radio.datagram.send(ManagedString((int)(");
+                this.src.add("_uBit.radio.datagram.send(ManagedString((int)(");
                 radioSendAction.message.accept(this);
-                this.sb.append("))");
+                this.src.add("))");
                 break;
             case "Boolean":
-                this.sb.append("_uBit.radio.datagram.send(ManagedString((int)(");
+                this.src.add("_uBit.radio.datagram.send(ManagedString((int)(");
                 radioSendAction.message.accept(this);
-                this.sb.append(")?true:false)");
+                this.src.add(")?true:false)");
                 break;
             case "String":
-                this.sb.append("_uBit.radio.datagram.send(ManagedString((");
+                this.src.add("_uBit.radio.datagram.send(ManagedString((");
                 radioSendAction.message.accept(this);
-                this.sb.append("))");
+                this.src.add("))");
                 break;
 
             default:
                 throw new IllegalArgumentException("unhandled type");
         }
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
@@ -971,10 +962,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         switch ( radioReceiveAction.type ) {
             case "Boolean":
             case "Number":
-                this.sb.append("atoi((char*)_uBit.radio.datagram.recv().getBytes())");
+                this.src.add("atoi((char*)_uBit.radio.datagram.recv().getBytes())");
                 break;
             case "String":
-                this.sb.append("ManagedString(_uBit.radio.datagram.recv())");
+                this.src.add("ManagedString(_uBit.radio.datagram.recv())");
                 break;
             default:
                 throw new IllegalArgumentException("unhandled type");
@@ -984,105 +975,105 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
 
     @Override
     public Void visitRadioSetChannelAction(RadioSetChannelAction radioSetChannelAction) {
-        this.sb.append("_uBit.radio.setGroup(");
+        this.src.add("_uBit.radio.setGroup(");
         radioSetChannelAction.channel.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitRadioRssiSensor(RadioRssiSensor radioRssiSensor) {
-        this.sb.append("_uBit.radio.getRSSI()");
+        this.src.add("_uBit.radio.getRSSI()");
         return null;
     }
 
     @Override
     public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
-        this.sb.append("_uBit.accelerometer.get");
+        this.src.add("_uBit.accelerometer.get");
         if ( accelerometerSensor.getSlot().equals("STRENGTH") ) {
-            this.sb.append("Strength");
+            this.src.add("Strength");
         } else {
-            this.sb.append(accelerometerSensor.getSlot());
+            this.src.add(accelerometerSensor.getSlot());
         }
-        this.sb.append("()");
+        this.src.add("()");
         return null;
     }
 
     @Override
     public Void visitRgbColor(RgbColor rgbColor) {
-        this.sb.append("MicroBitColor(");
+        this.src.add("MicroBitColor(");
         rgbColor.R.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         rgbColor.G.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         rgbColor.B.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         rgbColor.A.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction displaySetBrightnessAction) {
-        this.sb.append("_uBit.display.setBrightness((");
+        this.src.add("_uBit.display.setBrightness((");
         displaySetBrightnessAction.brightness.accept(this);
-        this.sb.append(") * _SET_BRIGHTNESS_MULTIPLIER);");
+        this.src.add(") * _SET_BRIGHTNESS_MULTIPLIER);");
         return null;
     }
 
     @Override
     public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction displayGetBrightnessAction) {
-        this.sb.append("round(_uBit.display.getBrightness() * _GET_BRIGHTNESS_MULTIPLIER)");
+        this.src.add("round(_uBit.display.getBrightness() * _GET_BRIGHTNESS_MULTIPLIER)");
         return null;
     }
 
     @Override
     public Void visitDisplaySetPixelAction(DisplaySetPixelAction displaySetPixelAction) {
-        this.sb.append("_uBit.display.image.setPixelValue(");
+        this.src.add("_uBit.display.image.setPixelValue(");
         displaySetPixelAction.x.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         displaySetPixelAction.y.accept(this);
-        this.sb.append(", (");
+        this.src.add(", (");
         displaySetPixelAction.brightness.accept(this);
-        this.sb.append(") * _SET_BRIGHTNESS_MULTIPLIER);");
+        this.src.add(") * _SET_BRIGHTNESS_MULTIPLIER);");
         return null;
     }
 
     @Override
     public Void visitDisplayGetPixelAction(DisplayGetPixelAction displayGetPixelAction) {
-        this.sb.append("round(_uBit.display.image.getPixelValue(");
+        this.src.add("round(_uBit.display.image.getPixelValue(");
         displayGetPixelAction.x.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         displayGetPixelAction.y.accept(this);
-        this.sb.append(") * _GET_BRIGHTNESS_MULTIPLIER)");
+        this.src.add(") * _GET_BRIGHTNESS_MULTIPLIER)");
         return null;
     }
 
     @Override
     public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction fourDigitDisplayShowAction) {
-        this.sb.append("_fdd.show(");
+        this.src.add("_fdd.show(");
         fourDigitDisplayShowAction.value.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         fourDigitDisplayShowAction.position.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         fourDigitDisplayShowAction.colon.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitFourDigitDisplayClearAction(FourDigitDisplayClearAction fourDigitDisplayClearAction) {
-        this.sb.append("_fdd.clear();");
+        this.src.add("_fdd.clear();");
         return null;
     }
 
     @Override
     public Void visitLedBarSetAction(LedBarSetAction ledBarSetAction) {
-        this.sb.append("_ledBar.setLed(");
+        this.src.add("_ledBar.setLed(");
         ledBarSetAction.x.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         ledBarSetAction.brightness.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
@@ -1100,13 +1091,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         if ( withWrapping ) {
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
                 nlIndent();
-                this.sb.append("_cbStop(_buf, &_i2c);");
+                this.src.add("_cbStop(_buf, &_i2c);");
             }
             nlIndent();
-            this.sb.append("release_fiber();");
+            this.src.add("release_fiber();");
             decrIndentation();
             nlIndent();
-            this.sb.append("}");
+            this.src.add("}");
             nlIndent();
             generateUserDefinedMethods();
         }
@@ -1168,14 +1159,14 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
 
     private void appendTextDisplayType(DisplayTextAction displayTextAction) {
         if ( Objects.equals(displayTextAction.mode, "TEXT") ) {
-            this.sb.append("scroll(");
+            this.src.add("scroll(");
         } else {
-            this.sb.append("print(");
+            this.src.add("print(");
         }
     }
 
     private String wrapInManageStringToDisplay(DisplayTextAction displayTextAction, String ending) {
-        this.sb.append("ManagedString(");
+        this.src.add("ManagedString(");
         displayTextAction.msg.accept(this);
         ending += ")";
         return ending;
@@ -1189,52 +1180,52 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     }
 
     private void addIncludes() {
-        this.sb.append("#define _GNU_SOURCE\n\n");
-        this.sb.append("#include \"MicroBit.h\"\n");
-        this.sb.append("#include \"NEPODefs.h\"\n");
+        this.src.add("#define _GNU_SOURCE\n\n");
+        this.src.add("#include \"MicroBit.h\"\n");
+        this.src.add("#include \"NEPODefs.h\"\n");
 
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.FOUR_DIGIT_DISPLAY) ) {
-            this.sb.append("#include \"FourDigitDisplay.h\"\n");
+            this.src.add("#include \"FourDigitDisplay.h\"\n");
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.LED_BAR) ) {
-            this.sb.append("#include \"Grove_LED_Bar.h\"\n");
+            this.src.add("#include \"Grove_LED_Bar.h\"\n");
         }
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.HUMIDITY) ) {
-            this.sb.append("#include \"Sht31.h\"\n");
+            this.src.add("#include \"Sht31.h\"\n");
         }
         if ( this.isDualMode() && this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIFFERENTIALDRIVE) ) {
-            this.sb.append("#include \"nrf_gpiote.h\"\n");
+            this.src.add("#include \"nrf_gpiote.h\"\n");
         }
-        this.sb.append("#include <list>\n");
-        this.sb.append("#include <array>\n");
-        this.sb.append("#include <stdlib.h>\n");
-        this.sb.append("MicroBit _uBit;\n");
+        this.src.add("#include <list>\n");
+        this.src.add("#include <array>\n");
+        this.src.add("#include <stdlib.h>\n");
+        this.src.add("MicroBit _uBit;\n");
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.FOUR_DIGIT_DISPLAY) ) {
-            this.sb.append("FourDigitDisplay _fdd(MICROBIT_PIN_P2, MICROBIT_PIN_P8);\n"); // Only works on the right UART Grove connector
+            this.src.add("FourDigitDisplay _fdd(MICROBIT_PIN_P2, MICROBIT_PIN_P8);\n"); // Only works on the right UART Grove connector
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.LED_BAR) ) {
-            this.sb.append("Grove_LED_Bar _ledBar(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n"); // Only works on the right UART Grove connector; Clock/Data pins are swapped compared to 4DigitDisplay
+            this.src.add("Grove_LED_Bar _ledBar(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n"); // Only works on the right UART Grove connector; Clock/Data pins are swapped compared to 4DigitDisplay
         }
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.HUMIDITY) ) {
-            this.sb.append("Sht31 _sht31 = Sht31(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n");
+            this.src.add("Sht31 _sht31 = Sht31(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n");
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
-            this.sb.append("MicroBitI2C _i2c(MICROBIT_PIN_P20, MICROBIT_PIN_P19);");
+            this.src.add("MicroBitI2C _i2c(MICROBIT_PIN_P20, MICROBIT_PIN_P19);");
             nlIndent();
-            this.sb.append("char _buf[5] = { 0, 0, 0, 0, 0 };");
+            this.src.add("char _buf[5] = { 0, 0, 0, 0, 0 };");
             nlIndent();
-            this.sb.append("uint8_t _cbLedState = 0x00;");
+            this.src.add("uint8_t _cbLedState = 0x00;");
         }
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.COLOR) ) {
-            this.sb.append("MicroBitI2C _i2c(MICROBIT_PIN_P20, MICROBIT_PIN_P19);");
+            this.src.add("MicroBitI2C _i2c(MICROBIT_PIN_P20, MICROBIT_PIN_P19);");
             nlIndent();
-            this.sb.append("char _buf[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };");
+            this.src.add("char _buf[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };");
             nlIndent();
-            this.sb.append("std::list<double> _TCS3472_rgb;");
+            this.src.add("std::list<double> _TCS3472_rgb;");
             nlIndent();
-            this.sb.append("MicroBitColor _TCS3472_color;");
+            this.src.add("MicroBitColor _TCS3472_color;");
             nlIndent();
-            this.sb.append("char _TCS3472_time = 0xff;");
+            this.src.add("char _TCS3472_time = 0xff;");
         }
     }
 
@@ -1242,10 +1233,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     protected void generateSignaturesOfUserDefinedMethods() {
         for ( final Method phrase : this.getBean(UsedHardwareBean.class).getUserDefinedMethods() ) {
             nlIndent();
-            this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()));
-            this.sb.append(" " + phrase.getCodeSafeMethodName() + "(");
+            this.src.add(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()));
+            this.src.add(" ", phrase.getCodeSafeMethodName(), "(");
             phrase.getParameters().accept(this);
-            this.sb.append(");");
+            this.src.add(");");
             nlIndent();
         }
     }
@@ -1258,25 +1249,25 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         ConfigurationComponent confCompB = this.robotConfiguration.getConfigurationComponent(portB);
 
         if ( confCompA.componentType.equals("CALLIBOT") ) {
-            this.sb.append("_cbSetMotors(_buf, &_i2c, ");
+            this.src.add("_cbSetMotors(_buf, &_i2c, ");
             if ( confCompA.getProperty("MOTOR_L").equals(portA) ) {
                 bothMotorsOnAction.speedA.accept(this);
-                this.sb.append(", ");
+                this.src.add(", ");
                 bothMotorsOnAction.speedB.accept(this);
             } else {
                 bothMotorsOnAction.speedB.accept(this);
-                this.sb.append(", ");
+                this.src.add(", ");
                 bothMotorsOnAction.speedA.accept(this);
             }
-            this.sb.append(");");
+            this.src.add(");");
         } else {
-            this.sb.append("_uBit.soundmotor.motor").append(confCompA.getProperty("PIN1")).append("On(");
+            this.src.add("_uBit.soundmotor.motor", confCompA.getProperty("PIN1"), "On(");
             bothMotorsOnAction.speedA.accept(this);
-            this.sb.append(");");
+            this.src.add(");");
             nlIndent();
-            this.sb.append("_uBit.soundmotor.motor").append(confCompB.getProperty("PIN1")).append("On(");
+            this.src.add("_uBit.soundmotor.motor", confCompB.getProperty("PIN1"), "On(");
             bothMotorsOnAction.speedB.accept(this);
-            this.sb.append(");");
+            this.src.add(");");
         }
         return null;
     }
@@ -1286,7 +1277,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         Set<String> motorPorts = getMotorPins();
         boolean newLine = false;
         if ( motorPorts.contains("A") ) { // Internal motors
-            this.sb.append("_uBit.soundmotor.motorAOff();");
+            this.src.add("_uBit.soundmotor.motorAOff();");
             newLine = true;
         }
         if ( motorPorts.contains("B") ) {
@@ -1295,13 +1286,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
             } else {
                 newLine = true;
             }
-            this.sb.append("_uBit.soundmotor.motorBOff();");
+            this.src.add("_uBit.soundmotor.motorBOff();");
         }
         if ( motorPorts.contains("0") ) { // Calli:bot motors
             if ( newLine ) {
                 nlIndent();
             }
-            this.sb.append("_cbSetMotors(_buf, &_i2c, 0, 0);");
+            this.src.add("_cbSetMotors(_buf, &_i2c, 0, 0);");
         }
         return null;
     }
@@ -1312,7 +1303,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitListSetIndex(ListSetIndex listSetIndex) {
         super.visitListSetIndex(listSetIndex);
-        this.sb.append(";");
+        this.src.add(";");
         return null;
     }
 
@@ -1323,7 +1314,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     public Void visitListGetIndex(ListGetIndex listGetIndex) {
         super.visitListGetIndex(listGetIndex);
         if ( listGetIndex.getElementOperation().equals(ListElementOperations.REMOVE) ) {
-            this.sb.append(";");
+            this.src.add(";");
         }
         return null;
     }
@@ -1338,36 +1329,36 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         if ( valueToWrite instanceof RgbColor
             || valueToWrite instanceof ColorConst
             || valueToWrite instanceof Var && valueToWrite.getVarType().equals(BlocklyType.COLOR) ) {
-            this.sb.append("_uBit.serial.setTxBufferSize(ManagedString(_castColorToString(");
+            this.src.add("_uBit.serial.setTxBufferSize(ManagedString(_castColorToString(");
             valueToWrite.accept(this);
-            this.sb.append(")).length() + 2);");
+            this.src.add(")).length() + 2);");
             nlIndent();
-            this.sb.append("_uBit.serial.send(");
-            this.sb.append("_castColorToString(");
+            this.src.add("_uBit.serial.send(");
+            this.src.add("_castColorToString(");
             valueToWrite.accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         } else {
-            this.sb.append("_uBit.serial.setTxBufferSize(ManagedString((");
+            this.src.add("_uBit.serial.setTxBufferSize(ManagedString((");
             valueToWrite.accept(this);
-            this.sb.append(")).length() + 2);");
+            this.src.add(")).length() + 2);");
             nlIndent();
-            this.sb.append("_uBit.serial.send(");
-            this.sb.append("ManagedString(");
+            this.src.add("_uBit.serial.send(");
+            this.src.add("ManagedString(");
             valueToWrite.accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         }
-        this.sb.append(" + \"\\r\\n\", MicroBitSerialMode::ASYNC);");
+        this.src.add(" + \"\\r\\n\", MicroBitSerialMode::ASYNC);");
         nlIndent();
         // give serial some time
-        this.sb.append("_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);");
+        this.src.add("_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);");
     }
 
     @Override
     public Void visitHumiditySensor(HumiditySensor humiditySensor) {
         if ( humiditySensor.getMode().equals(SC.HUMIDITY) ) {
-            this.sb.append("_sht31.readHumidity()");
+            this.src.add("_sht31.readHumidity()");
         } else if ( humiditySensor.getMode().equals(SC.TEMPERATURE) ) {
-            this.sb.append("_sht31.readTemperature()");
+            this.src.add("_sht31.readTemperature()");
         } else {
             throw new UnsupportedOperationException("Mode " + humiditySensor.getMode() + " not supported!");
         }
@@ -1377,9 +1368,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction) {
         if ( switchLedMatrixAction.activated.equals("ON") ) {
-            this.sb.append("_uBit.display.enable();");
+            this.src.add("_uBit.display.enable();");
         } else {
-            this.sb.append("_uBit.display.disable();");
+            this.src.add("_uBit.display.disable();");
         }
         return null;
     }
@@ -1393,13 +1384,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitAssertStmt(AssertStmt assertStmt) {
         if ( ((Binary) assertStmt.asserts).left.getVarType().equals(BlocklyType.COLOR) ) {
-            this.sb.append("assertNepo((");
+            this.src.add("assertNepo((");
             assertStmt.asserts.accept(this);
-            this.sb.append("), \"").append(assertStmt.msg).append("\", \"");
+            this.src.add("), \"", assertStmt.msg, "\", \"");
             ((Binary) assertStmt.asserts).left.accept(this);
-            this.sb.append("\", \"").append(((Binary) assertStmt.asserts).op.toString()).append("\", \"");
+            this.src.add("\", \"", ((Binary) assertStmt.asserts).op.toString(), "\", \"");
             ((Binary) assertStmt.asserts).getRight().accept(this);
-            this.sb.append("\");");
+            this.src.add("\");");
         } else {
             super.visitAssertStmt(assertStmt);
         }
@@ -1411,16 +1402,16 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         String port = servoSetAction.getUserDefinedPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
         if ( confComp.componentType.equals("CALLIBOT") ) {
-            this.sb.append("_cbSetServo(_buf, &_i2c, ");
+            this.src.add("_cbSetServo(_buf, &_i2c, ");
             String i2cAddress = getCallibotPin(confComp, port);
-            this.sb.append(i2cAddress);
-            this.sb.append(", ");
+            this.src.add(i2cAddress);
+            this.src.add(", ");
         } else {
             String pin = PIN_MAP.get(confComp.getProperty("PIN1"));
-            this.sb.append("_uBit.io.").append(pin).append(".setServoValue(");
+            this.src.add("_uBit.io.", pin, ".setServoValue(");
         }
         servoSetAction.value.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
@@ -1436,19 +1427,19 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         if ( userDefinedName.equals(SC.BOTH) ) {
             switch ( direction ) {
                 case SC.FOREWARD:
-                    this.sb.append("_uBit.io.").append(rightMotorPort).append(".setServoValue(0);");
+                    this.src.add("_uBit.io.", rightMotorPort, ".setServoValue(0);");
                     nlIndent();
-                    this.sb.append("_uBit.io.").append(leftMotorPort).append(".setServoValue(180);");
+                    this.src.add("_uBit.io.", leftMotorPort, ".setServoValue(180);");
                     break;
                 case SC.BACKWARD:
-                    this.sb.append("_uBit.io.").append(rightMotorPort).append(".setServoValue(180);");
+                    this.src.add("_uBit.io.", rightMotorPort, ".setServoValue(180);");
                     nlIndent();
-                    this.sb.append("_uBit.io.").append(leftMotorPort).append(".setServoValue(0);");
+                    this.src.add("_uBit.io.", leftMotorPort, ".setServoValue(0);");
                     break;
                 case SC.OFF:
-                    this.sb.append("_uBit.io.").append(rightMotorPort).append(".setAnalogValue(0);");
+                    this.src.add("_uBit.io.", rightMotorPort, ".setAnalogValue(0);");
                     nlIndent();
-                    this.sb.append("_uBit.io.").append(leftMotorPort).append(".setAnalogValue(0);");
+                    this.src.add("_uBit.io.", leftMotorPort, ".setAnalogValue(0);");
                     break;
                 default:
                     throw new DbcException("Invalid direction!");
@@ -1456,17 +1447,17 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         } else {
             switch ( motionKitSingleSetAction.direction ) {
                 case SC.FOREWARD:
-                    this.sb.append("_uBit.io.").append(currentPort).append(".setServoValue(");
-                    this.sb.append(currentPort.equals(rightMotorPort) ? 0 : 180);
-                    this.sb.append(");");
+                    this.src.add("_uBit.io.", currentPort, ".setServoValue(");
+                    this.src.add(currentPort.equals(rightMotorPort) ? 0 : 180);
+                    this.src.add(");");
                     break;
                 case SC.BACKWARD:
-                    this.sb.append("_uBit.io.").append(currentPort).append(".setServoValue(");
-                    this.sb.append(currentPort.equals(rightMotorPort) ? 180 : 0);
-                    this.sb.append(");");
+                    this.src.add("_uBit.io.", currentPort, ".setServoValue(");
+                    this.src.add(currentPort.equals(rightMotorPort) ? 180 : 0);
+                    this.src.add(");");
                     break;
                 case SC.OFF:
-                    this.sb.append("_uBit.io.").append(currentPort).append(".setAnalogValue(0);");
+                    this.src.add("_uBit.io.", currentPort, ".setAnalogValue(0);");
                     break;
                 default:
                     throw new DbcException("Invalid direction!");
@@ -1483,13 +1474,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         // for the left  motor (C17) 180 is forwards and 0 is backwards
         switch ( motionKitDualSetAction.directionRight ) {
             case SC.FOREWARD:
-                this.sb.append("_uBit.io.").append(rightMotorPort).append(".setServoValue(0);");
+                this.src.add("_uBit.io.", rightMotorPort, ".setServoValue(0);");
                 break;
             case SC.BACKWARD:
-                this.sb.append("_uBit.io.").append(rightMotorPort).append(".setServoValue(180);");
+                this.src.add("_uBit.io.", rightMotorPort, ".setServoValue(180);");
                 break;
             case SC.OFF:
-                this.sb.append("_uBit.io.").append(rightMotorPort).append(".setAnalogValue(0);");
+                this.src.add("_uBit.io.", rightMotorPort, ".setAnalogValue(0);");
                 break;
             default:
                 throw new DbcException("Invalid direction!");
@@ -1497,13 +1488,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         nlIndent();
         switch ( motionKitDualSetAction.directionLeft ) {
             case SC.FOREWARD:
-                this.sb.append("_uBit.io.").append(leftMotorPort).append(".setServoValue(180);");
+                this.src.add("_uBit.io.", leftMotorPort, ".setServoValue(180);");
                 break;
             case SC.BACKWARD:
-                this.sb.append("_uBit.io.").append(leftMotorPort).append(".setServoValue(0);");
+                this.src.add("_uBit.io.", leftMotorPort, ".setServoValue(0);");
                 break;
             case SC.OFF:
-                this.sb.append("_uBit.io.").append(leftMotorPort).append(".setAnalogValue(0);");
+                this.src.add("_uBit.io.", leftMotorPort, ".setAnalogValue(0);");
                 break;
             default:
                 throw new DbcException("Invalid direction!");
@@ -1516,13 +1507,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
 
         switch ( colorSensor.getMode() ) {
             case SC.COLOUR:
-                this.sb.append("_TCS3472_getColor(_buf, _TCS3472_color, &_i2c, &_uBit, _TCS3472_time)");
+                this.src.add("_TCS3472_getColor(_buf, _TCS3472_color, &_i2c, &_uBit, _TCS3472_time)");
                 break;
             case SC.LIGHT:
-                this.sb.append("_TCS3472_getLight(_buf, &_i2c, &_uBit, _TCS3472_time)");
+                this.src.add("_TCS3472_getLight(_buf, &_i2c, &_uBit, _TCS3472_time)");
                 break;
             case SC.RGB:
-                this.sb.append("_TCS3472_getRGB(_buf, _TCS3472_rgb, &_i2c, &_uBit, _TCS3472_time)");
+                this.src.add("_TCS3472_getRGB(_buf, _TCS3472_rgb, &_i2c, &_uBit, _TCS3472_time)");
                 break;
             default:
                 throw new UnsupportedOperationException("Mode " + colorSensor.getMode() + " not supported!");

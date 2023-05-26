@@ -57,22 +57,23 @@ public final class FestobionicflowerCppVisitor extends NepoArduinoCppVisitor imp
         if ( numberConf != 0 ) {
             nlIndent();
         }
-        this.sb.append("void setup() {");
+        this.src.add("void setup() {");
         incrIndentation();
         nlIndent();
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.SERIAL) ) {
-            this.sb.append("Serial.begin(9600);");
+            this.src.add("Serial.begin(9600);");
             nlIndent();
         }
         generateConfigurationSetup();
 
         generateUsedVars();
-        this.sb.delete(this.sb.lastIndexOf("\n"), this.sb.length());
+        StringBuilder sb = src.getStringBuilder();
+        sb.delete(sb.lastIndexOf("\n"), sb.length());
 
         decrIndentation();
 
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
 
         nlIndent();
         return null;
@@ -80,24 +81,24 @@ public final class FestobionicflowerCppVisitor extends NepoArduinoCppVisitor imp
 
     @Override
     public Void visitLedOnAction(LedOnAction ledOnAction) {
-        this.sb.append("set_color(");
+        this.src.add("set_color(");
         ledOnAction.ledColor.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
 
         return null;
     }
 
     @Override
     public Void visitLedOffAction(LedOffAction ledOffAction) {
-        this.sb.append("set_color(RGB(0x00, 0x00, 0x00));");
+        this.src.add("set_color(RGB(0x00, 0x00, 0x00));");
         return null;
     }
 
     @Override
     public Void visitStepMotorAction(StepMotorAction stepMotorAction) {
-        this.sb.append("set_stepmotorpos(");
+        this.src.add("set_stepmotorpos(");
         stepMotorAction.stepMotorPos.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
@@ -110,10 +111,10 @@ public final class FestobionicflowerCppVisitor extends NepoArduinoCppVisitor imp
             String blockName = usedConfigurationBlock.userDefinedPortName;
             if ( usedConfigurationBlock.componentType.equals(SC.TOUCH) && touchSensor.getSensorMetaDataBean().getPort().equals(blockName) ) {
                 if ( pin1.equals("PAD1") ) {
-                    this.sb.append("_touchsensor_" + blockName + ".isRightTouched()");
+                    this.src.add("_touchsensor_", blockName, ".isRightTouched()");
                 }
                 if ( pin1.equals("PAD2") ) {
-                    this.sb.append("_touchsensor_" + blockName + ".isLeftTouched()");
+                    this.src.add("_touchsensor_", blockName, ".isLeftTouched()");
                 }
             }
         }
@@ -123,7 +124,7 @@ public final class FestobionicflowerCppVisitor extends NepoArduinoCppVisitor imp
 
     @Override
     public Void visitLightSensor(LightSensor lightSensor) {
-        this.sb.append("getLuminosity()");
+        this.src.add("getLuminosity()");
         return null;
     }
 
@@ -139,45 +140,45 @@ public final class FestobionicflowerCppVisitor extends NepoArduinoCppVisitor imp
         }
 
         //*** generate definitions ***
-        this.sb.append("#define _ARDUINO_STL_NOT_NEEDED");
+        this.src.add("#define _ARDUINO_STL_NOT_NEEDED");
         nlIndent();
 
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
             switch ( usedConfigurationBlock.componentType ) {
                 case SC.RGBLED:
-                    this.sb.append("#define LED_PIN 16");
+                    this.src.add("#define LED_PIN 16");
                     nlIndent();
-                    this.sb.append("#define NUM_LEDS 5");
+                    this.src.add("#define NUM_LEDS 5");
                     nlIndent();
                     nlIndent();
                     break;
                 case SC.STEPMOTOR:
-                    this.sb.append("#define DIR 33");
+                    this.src.add("#define DIR 33");
                     nlIndent();
-                    this.sb.append("#define STEP 25");
+                    this.src.add("#define STEP 25");
                     nlIndent();
-                    this.sb.append("#define SLEEP 13");
+                    this.src.add("#define SLEEP 13");
                     nlIndent();
-                    this.sb.append("#define MOTOR_STEPS 200");
+                    this.src.add("#define MOTOR_STEPS 200");
                     nlIndent();
-                    this.sb.append("#define MICROSTEPS 1");
+                    this.src.add("#define MICROSTEPS 1");
                     nlIndent();
                     nlIndent();
                     break;
                 case SC.TOUCH:
                     if ( !i2cDefinesAdded ) {
-                        this.sb.append("#define I2C_SDA 4");
+                        this.src.add("#define I2C_SDA 4");
                         nlIndent();
-                        this.sb.append("#define I2C_SCL 5");
+                        this.src.add("#define I2C_SCL 5");
                         nlIndent();
                         i2cDefinesAdded = true;
                     }
                     break;
                 case SC.LIGHT:
                     if ( !i2cDefinesAdded ) {
-                        this.sb.append("#define I2C_SDA 4");
+                        this.src.add("#define I2C_SDA 4");
                         nlIndent();
-                        this.sb.append("#define I2C_SCL 5");
+                        this.src.add("#define I2C_SCL 5");
                         nlIndent();
                         i2cDefinesAdded = true;
                     }
@@ -188,9 +189,9 @@ public final class FestobionicflowerCppVisitor extends NepoArduinoCppVisitor imp
         }
 
         //*** generate definitions ***
-        this.sb.append("#include <Arduino.h>");
+        this.src.add("#include <Arduino.h>");
         nlIndent();
-        this.sb.append("#include <NEPODefs.h>");
+        this.src.add("#include <NEPODefs.h>");
         nlIndent();
 
         Set<String> headerFiles = new LinkedHashSet<>();
@@ -222,7 +223,7 @@ public final class FestobionicflowerCppVisitor extends NepoArduinoCppVisitor imp
             }
         }
         for ( String header : headerFiles ) {
-            this.sb.append(header);
+            this.src.add(header);
             nlIndent();
         }
 
@@ -237,40 +238,40 @@ public final class FestobionicflowerCppVisitor extends NepoArduinoCppVisitor imp
             String blockName = usedConfigurationBlock.userDefinedPortName;
             switch ( usedConfigurationBlock.componentType ) {
                 case SC.RGBLED:
-                    this.sb.append("_rgbleds_" + blockName + ".begin();");
+                    this.src.add("_rgbleds_", blockName, ".begin();");
                     nlIndent();
                     break;
                 case SC.STEPMOTOR:
-                    this.sb.append("_stepper_" + blockName + ".begin(RPM, MICROSTEPS);");
+                    this.src.add("_stepper_", blockName, ".begin(RPM, MICROSTEPS);");
                     nlIndent();
-                    this.sb.append("motor_calibration();");
+                    this.src.add("motor_calibration();");
                     nlIndent();
                     break;
                 case SC.TOUCH:
                     if ( !i2cInitialized ) {
-                        this.sb.append("Wire.begin(I2C_SDA, I2C_SCL, 100000);");
+                        this.src.add("Wire.begin(I2C_SDA, I2C_SCL, 100000);");
                         nlIndent();
                         i2cInitialized = true;
                     }
                     if ( touchInitialized < 2 ) {
-                        this.sb.append("while (_touchsensor_" + blockName + ".begin() == false) {");
+                        this.src.add("while (_touchsensor_", blockName, ".begin() == false) {");
                         incrIndentation();
                         nlIndent();
-                        this.sb.append("delay(1000);");
+                        this.src.add("delay(1000);");
                         decrIndentation();
                         nlIndent();
-                        this.sb.append("}");
+                        this.src.add("}");
                         nlIndent();
                         touchInitialized++;
                     }
                     break;
                 case SC.LIGHT:
                     if ( !i2cInitialized ) {
-                        this.sb.append("Wire.begin(I2C_SDA, I2C_SCL, 100000);");
+                        this.src.add("Wire.begin(I2C_SDA, I2C_SCL, 100000);");
                         nlIndent();
                         i2cInitialized = true;
                     }
-                    this.sb.append("rc = _lightsensor_" + blockName + ".init();");
+                    this.src.add("rc = _lightsensor_", blockName, ".init();");
                     nlIndent();
                     break;
                 default:
@@ -285,34 +286,34 @@ public final class FestobionicflowerCppVisitor extends NepoArduinoCppVisitor imp
             String blockName = cc.userDefinedPortName;
             switch ( cc.componentType ) {
                 case SC.RGBLED:
-                    this.sb.append("Adafruit_NeoPixel _rgbleds_" + blockName + "(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);");
+                    this.src.add("Adafruit_NeoPixel _rgbleds_", blockName, "(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);");
                     nlIndent();
                     break;
                 case SC.STEPMOTOR:
-                    this.sb.append("BasicStepperDriver _stepper_" + blockName + "(MOTOR_STEPS, DIR, STEP, SLEEP);");
+                    this.src.add("BasicStepperDriver _stepper_", blockName, "(MOTOR_STEPS, DIR, STEP, SLEEP);");
                     nlIndent();
-                    this.sb.append("int RPM=240;");
+                    this.src.add("int RPM=240;");
                     nlIndent();
-                    this.sb.append("int FLOWER_CLOSE_TO_OPEN = 120;");
+                    this.src.add("int FLOWER_CLOSE_TO_OPEN = 120;");
                     nlIndent();
-                    this.sb.append("int current_position;");
+                    this.src.add("int current_position;");
                     nlIndent();
                     break;
                 case SC.TOUCH:
                     if ( touchSensorCreated < 2 ) {
-                        this.sb.append("CAP1203 _touchsensor_" + blockName + "=CAP1203(0x28);");
+                        this.src.add("CAP1203 _touchsensor_", blockName, "=CAP1203(0x28);");
                         nlIndent();
                         touchSensorCreated++;
                     }
                     break;
                 case SC.LIGHT:
-                    this.sb.append("RPR0521RS _lightsensor_" + blockName + ";");
+                    this.src.add("RPR0521RS _lightsensor_", blockName, ";");
                     nlIndent();
-                    this.sb.append("int rc;");
+                    this.src.add("int rc;");
                     nlIndent();
                     break;
                 default:
-                    this.sb.append(cc.componentType);
+                    this.src.add(cc.componentType);
                     throw new DbcException("Configuration block is not supported: " + cc.componentType);
             }
         }
@@ -323,97 +324,97 @@ public final class FestobionicflowerCppVisitor extends NepoArduinoCppVisitor imp
             String blockName = cc.userDefinedPortName;
             switch ( cc.componentType ) {
                 case SC.RGBLED:
-                    this.sb.append("void set_color(uint32_t color) {");
+                    this.src.add("void set_color(uint32_t color) {");
                     incrIndentation();
                     nlIndent();
-                    this.sb.append("for (int i = 0; i < NUM_LEDS; i++) {");
+                    this.src.add("for (int i = 0; i < NUM_LEDS; i++) {");
                     incrIndentation();
                     nlIndent();
-                    this.sb.append("_rgbleds_" + blockName + ".setPixelColor(i,color);");
+                    this.src.add("_rgbleds_", blockName, ".setPixelColor(i,color);");
                     decrIndentation();
                     nlIndent();
-                    this.sb.append("}");
+                    this.src.add("}");
                     nlIndent();
-                    this.sb.append("_rgbleds_" + blockName + ".show();");
+                    this.src.add("_rgbleds_", blockName, ".show();");
                     decrIndentation();
                     nlIndent();
-                    this.sb.append("}");
+                    this.src.add("}");
                     nlIndent();
                     nlIndent();
                     break;
                 case SC.STEPMOTOR:
-                    this.sb.append("void motor_calibration() {");
+                    this.src.add("void motor_calibration() {");
                     incrIndentation();
                     nlIndent();
-                    this.sb.append("for (int i =0; i<FLOWER_CLOSE_TO_OPEN;i++) {");
+                    this.src.add("for (int i =0; i<FLOWER_CLOSE_TO_OPEN;i++) {");
                     incrIndentation();
                     nlIndent();
-                    this.sb.append("_stepper_" + blockName + ".rotate(-360);");
+                    this.src.add("_stepper_", blockName, ".rotate(-360);");
                     decrIndentation();
                     nlIndent();
-                    this.sb.append("}");
+                    this.src.add("}");
                     nlIndent();
-                    this.sb.append("current_position=0;");
+                    this.src.add("current_position=0;");
                     decrIndentation();
                     nlIndent();
-                    this.sb.append("}");
+                    this.src.add("}");
                     nlIndent();
-                    this.sb.append("void set_stepmotorpos(int pos) {");
+                    this.src.add("void set_stepmotorpos(int pos) {");
                     incrIndentation();
                     nlIndent();
-                    this.sb.append("if(pos>current_position) {");
+                    this.src.add("if(pos>current_position) {");
                     incrIndentation();
                     nlIndent();
-                    this.sb.append("while(current_position < pos) {");
+                    this.src.add("while(current_position < pos) {");
                     incrIndentation();
                     nlIndent();
-                    this.sb.append("_stepper_" + blockName + ".rotate(360);");
+                    this.src.add("_stepper_", blockName, ".rotate(360);");
                     nlIndent();
-                    this.sb.append("current_position = current_position +1;");
+                    this.src.add("current_position = current_position +1;");
                     decrIndentation();
                     nlIndent();
-                    this.sb.append("}");
+                    this.src.add("}");
                     decrIndentation();
                     nlIndent();
-                    this.sb.append("}");
+                    this.src.add("}");
                     nlIndent();
-                    this.sb.append("else {");
+                    this.src.add("else {");
                     incrIndentation();
                     nlIndent();
-                    this.sb.append("while (current_position > pos) {");
+                    this.src.add("while (current_position > pos) {");
                     incrIndentation();
                     nlIndent();
-                    this.sb.append("_stepper_" + blockName + ".rotate(-360);");
+                    this.src.add("_stepper_", blockName, ".rotate(-360);");
                     nlIndent();
-                    this.sb.append("current_position = current_position -1;");
+                    this.src.add("current_position = current_position -1;");
                     decrIndentation();
                     nlIndent();
-                    this.sb.append("}");
+                    this.src.add("}");
                     decrIndentation();
                     nlIndent();
-                    this.sb.append("}");
+                    this.src.add("}");
                     decrIndentation();
                     nlIndent();
-                    this.sb.append("}");
+                    this.src.add("}");
                     nlIndent();
                     nlIndent();
                     break;
                 case SC.TOUCH:
                     break;
                 case SC.LIGHT:
-                    this.sb.append("uint32_t getLuminosity() {");
+                    this.src.add("uint32_t getLuminosity() {");
                     incrIndentation();
                     nlIndent();
-                    this.sb.append("uint32_t proximity;");
+                    this.src.add("uint32_t proximity;");
                     nlIndent();
-                    this.sb.append("float luminosity;");
+                    this.src.add("float luminosity;");
                     nlIndent();
-                    this.sb.append("rc = _lightsensor_" + blockName + ".get_psalsval(&proximity,&luminosity);");
+                    this.src.add("rc = _lightsensor_", blockName, ".get_psalsval(&proximity,&luminosity);");
                     nlIndent();
-                    this.sb.append("return (uint32_t)luminosity;");
+                    this.src.add("return (uint32_t)luminosity;");
                     decrIndentation();
                     nlIndent();
-                    this.sb.append("}");
+                    this.src.add("}");
                     nlIndent();
                     nlIndent();
                     break;

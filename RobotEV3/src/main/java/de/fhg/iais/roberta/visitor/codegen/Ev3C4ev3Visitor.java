@@ -166,10 +166,10 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         nlIndent();
         generateUserDefinedMethods();
         nlIndent();
-        this.sb.append("int main () {");
+        this.src.add("int main () {");
         incrIndentation();
         nlIndent();
-        this.sb.append("NEPOInitEV3();");
+        this.src.add("NEPOInitEV3();");
         nlIndent();
         generateSensorInitialization();
         generateTTSInitialization();
@@ -225,9 +225,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     private void generateDebugInitialization(MainTask mainTask) {
         boolean isDebug = mainTask.debug.equals("TRUE");
         if ( isDebug ) {
-            this.sb.append("startLoggingThread(");
-            this.sb.append(getConnectedMotorPorts());
-            this.sb.append(");");
+            this.src.add("startLoggingThread(");
+            this.src.add(getConnectedMotorPorts());
+            this.src.add(");");
             nlIndent();
         }
     }
@@ -242,7 +242,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private void generateTTSInitialization() {
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.VOICE) ) {
-            this.sb.append("SetLanguage(\"" + TTSLanguageMapper.getLanguageString(this.language) + "\");");
+            this.src.add("SetLanguage(\"", TTSLanguageMapper.getLanguageString(this.language), "\");");
         }
     }
 
@@ -259,12 +259,12 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     protected void generateProgramSuffix(boolean withWrapping) {
         nlIndent();
         nlIndent();
-        this.sb.append("NEPOFreeEV3();");
+        this.src.add("NEPOFreeEV3();");
         nlIndent();
-        this.sb.append("return 0;");
+        this.src.add("return 0;");
         decrIndentation();
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
         nlIndent();
 
         super.generateProgramSuffix(withWrapping);
@@ -293,7 +293,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     @Override
     public Void visitMathConst(MathConst mathConst) {
         if ( mathConst.mathConst == MathConst.Const.INFINITY ) {
-            this.sb.append("HUGE_VAL");
+            this.src.add("HUGE_VAL");
             return null;
         } else {
             return super.visitMathConst(mathConst);
@@ -303,7 +303,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     @Override
     public Void visitColorConst(ColorConst colorConst) {
         String colorConstant = getColorConstantByHex(colorConst.getHexValueAsString());
-        this.sb.append(colorConstant);
+        this.src.add(colorConstant);
         return null;
     }
 
@@ -350,30 +350,30 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
             appendFloatModulo(binary);
             return null;
         }
-        generateSubExpr(this.sb, false, binary.left, binary);
+        generateSubExpr(this.src, false, binary.left, binary);
         String sym = getBinaryOperatorSymbol(op);
-        this.sb.append(whitespace() + sym + whitespace());
+        this.src.add(" ", sym, " ");
         if ( op == Binary.Op.DIVIDE ) {
             appendCastToFloat(binary);
             return null;
         } else {
-            generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+            generateSubExpr(this.src, parenthesesCheck(binary), binary.getRight(), binary);
         }
         return null;
     }
 
     private void appendFloatModulo(Binary binary) {
-        this.sb.append("fmod(");
-        generateSubExpr(this.sb, false, binary.left, binary);
-        this.sb.append(", ");
-        generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-        this.sb.append(")");
+        this.src.add("fmod(");
+        generateSubExpr(this.src, false, binary.left, binary);
+        this.src.add(", ");
+        generateSubExpr(this.src, parenthesesCheck(binary), binary.getRight(), binary);
+        this.src.add(")");
     }
 
     private void appendCastToFloat(Binary binary) {
-        this.sb.append("((double) ");
-        generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-        this.sb.append(")");
+        this.src.add("((double) ");
+        generateSubExpr(this.src, parenthesesCheck(binary), binary.getRight(), binary);
+        this.src.add(")");
     }
 
     private void convertToString(Binary binary) {
@@ -382,12 +382,12 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
             case NUMBER:
             case NUMBER_INT:
             case COLOR:
-                this.sb.append("ToString(");
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
-                this.sb.append(")");
+                this.src.add("ToString(");
+                generateSubExpr(this.src, false, binary.getRight(), binary);
+                this.src.add(")");
                 break;
             default:
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                generateSubExpr(this.src, false, binary.getRight(), binary);
                 break;
         }
     }
@@ -428,7 +428,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         }
         decrIndentation();
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
         addBreakLabelToLoop(isWaitStmt);
         return null;
     }
@@ -439,63 +439,63 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         Expr counterInitialValue = expressions.get().get(1);
         Expr counterTargetValue = expressions.get().get(2);
         Expr counterStep = expressions.get().get(3);
-        this.sb.append("for (" + "float ");
+        this.src.add("for (", "float ");
         counterName.accept(this);
-        this.sb.append(" = ");
+        this.src.add(" = ");
         counterInitialValue.accept(this);
-        this.sb.append("; ");
+        this.src.add("; ");
         counterName.accept(this);
-        this.sb.append(" < ");
+        this.src.add(" < ");
         counterTargetValue.accept(this);
-        this.sb.append("; ");
+        this.src.add("; ");
         counterName.accept(this);
-        this.sb.append(" += ");
+        this.src.add(" += ");
         counterStep.accept(this);
-        this.sb.append(") {");
+        this.src.add(") {");
     }
 
     private void generateForEachPrefix(Expr expression) {
         ((Binary) expression).left.accept(this);
-        this.sb.append(";");
+        this.src.add(";");
         nlIndent();
-        this.sb.append("for(int i = 0; i < ");
+        this.src.add("for(int i = 0; i < ");
         ((Binary) expression).getRight().accept(this);
-        this.sb.append(".size(); ++i) {");
+        this.src.add(".size(); ++i) {");
         incrIndentation();
         nlIndent();
         ((Binary) expression).left.accept(this);
-        this.sb.append(" = _getListElementByIndex(");
+        this.src.add(" = _getListElementByIndex(");
         ((Binary) expression).getRight().accept(this);
-        this.sb.append(", i);");
+        this.src.add(", i);");
         decrIndentation();
     }
 
     @Override
     public Void visitDebugAction(DebugAction debugAction) {
-        this.sb.append("printf(\"%s\\n\", ToString(");
+        this.src.add("printf(\"%s\\n\", ToString(");
         debugAction.value.accept(this);
-        this.sb.append(").c_str());");
+        this.src.add(").c_str());");
         return null;
     }
 
     @Override
     public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.sb.append("while ( true ) {");
+        this.src.add("while ( true ) {");
         incrIndentation();
         visitStmtList(waitStmt.statements);
         //nlIndent();
-        //this.sb.append("Wait(15);");
+        //this.src.add("Wait(15);");
         decrIndentation();
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
         return null;
     }
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
-        this.sb.append("Wait(");
+        this.src.add("Wait(");
         waitTimeStmt.time.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
@@ -503,21 +503,21 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     @Override
     public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
         if ( indexOfFunct.value.toString().contains("ListCreate ") ) {
-            this.sb.append("null");
+            this.src.add("null");
             return null;
         }
         String methodName = indexOfFunct.location == IndexLocation.LAST ? "_getLastOccuranceOfElement(" : "_getFirstOccuranceOfElement(";
-        this.sb.append(methodName);
+        this.src.add(methodName);
         indexOfFunct.value.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         if ( indexOfFunct.find.getClass().equals(StringConst.class) ) {
-            this.sb.append("ToString(");
+            this.src.add("ToString(");
             indexOfFunct.find.accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         } else {
             indexOfFunct.find.accept(this);
         }
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
@@ -525,9 +525,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitListCreate(ListCreate listCreate) {
-        this.sb.append("(" + getListCreateCasting(listCreate.getVarType()));
+        this.src.add("(", getListCreateCasting(listCreate.getVarType()));
         super.visitListCreate(listCreate);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
@@ -555,7 +555,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     @Override
     public Void visitListSetIndex(ListSetIndex listSetIndex) {
         super.visitListSetIndex(listSetIndex);
-        this.sb.append(";");
+        this.src.add(";");
         return null;
     }
 
@@ -566,7 +566,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitListGetIndex(ListGetIndex listGetIndex) {
         super.visitListGetIndex(listGetIndex);
         if ( ((ListElementOperations) listGetIndex.getElementOperation()).equals(ListElementOperations.REMOVE) ) {
-            this.sb.append(";");
+            this.src.add(";");
         }
         return null;
     }
@@ -577,22 +577,22 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         Expr min = mathRandomIntFunct.from;
         Expr max = mathRandomIntFunct.to;
-        this.sb.append("((rand() % (int) ((");
+        this.src.add("((rand() % (int) ((");
         min.accept(this);
-        this.sb.append(") - (");
+        this.src.add(") - (");
         max.accept(this);
-        this.sb.append("))) + (");
+        this.src.add("))) + (");
         min.accept(this);
-        this.sb.append("))");
+        this.src.add("))");
         return null;
     }
 
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
         // TODO check why this is not working for Arduinos!
-        this.sb.append("(ToString(");
+        this.src.add("(ToString(");
         mathCastStringFunct.value.accept(this);
-        this.sb.append("))");
+        this.src.add("))");
         return null;
     }
 
@@ -600,11 +600,11 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitTextJoinFunct(TextJoinFunct textJoinFunct) {
         List<Expr> texts = textJoinFunct.param.get();
         for ( int i = 0; i < texts.size(); i++ ) {
-            this.sb.append("ToString(");
+            this.src.add("ToString(");
             texts.get(i).accept(this);
-            this.sb.append(")");
+            this.src.add(")");
             if ( i < texts.size() - 1 ) {
-                this.sb.append(" + ");
+                this.src.add(" + ");
             }
         }
         return null;
@@ -627,24 +627,24 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateRotateMotorForDuration(String port, Expr speedExpression, IMotorMoveMode durationMode, Expr durationExpression) {
-        this.sb.append("RotateMotorForAngle(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ", ");
+        this.src.add("RotateMotorForAngle(", Ev3C4ev3Visitor.getPrefixedOutputPort(port), ", ");
         visitSpeedExpression(speedExpression);
-        this.sb.append(", ");
+        this.src.add(", ");
         if ( durationMode == MotorMoveMode.ROTATIONS ) {
-            this.sb.append("360 * ");
+            this.src.add("360 * ");
         }
         durationExpression.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
     }
 
     private void generateTurnOnMotor(String port, Expr speedExpression, boolean isRegulated) {
         String functionName = isRegulated ? "OnFwdReg" : "OnFwdEx";
-        this.sb.append(functionName + "(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ", ");
+        this.src.add(functionName, "(", Ev3C4ev3Visitor.getPrefixedOutputPort(port), ", ");
         visitSpeedExpression(speedExpression);
         if ( !isRegulated ) {
-            this.sb.append(", RESET_NONE");
+            this.src.add(", RESET_NONE");
         }
-        this.sb.append(");");
+        this.src.add(");");
     }
 
     @Override
@@ -661,31 +661,31 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateDriveForDistance(Expr speedExpression, Expr distanceExpression, boolean reverse) {
-        this.sb.append("RotateMotorForAngle(" + getDriveMotorPortsConstant() + ", ");
+        this.src.add("RotateMotorForAngle(", getDriveMotorPortsConstant(), ", ");
         visitSpeedExpression(speedExpression, reverse);
-        this.sb.append(", ");
+        this.src.add(", ");
         visitDistanceOfDrive(distanceExpression);
-        this.sb.append(");");
+        this.src.add(");");
     }
 
     private void visitDistanceOfDrive(Expr distanceExpression) {
-        this.sb.append("(");
+        this.src.add("(");
         distanceExpression.accept(this);
-        this.sb.append(" * 360) / (M_PI * WHEEL_DIAMETER)");
+        this.src.add(" * 360) / (M_PI * WHEEL_DIAMETER)");
     }
 
     private void generateDrive(Expr speedExpression, boolean reverse) {
         String methodName = reverse ? "OnRevSync" : "OnFwdSync";
-        this.sb.append(methodName + "(" + getDriveMotorPortsConstant() + ", ");
+        this.src.add(methodName, "(", getDriveMotorPortsConstant(), ", ");
         visitSpeedExpression(speedExpression);
-        this.sb.append(");");
+        this.src.add(");");
     }
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         String port = motorGetPowerAction.getUserDefinedPort();
         if ( isActorOnPort(port) ) {
-            this.sb.append("MotorPower(OUT_" + motorGetPowerAction.getUserDefinedPort() + ")");
+            this.src.add("MotorPower(OUT_", motorGetPowerAction.getUserDefinedPort(), ")");
         }
         return null;
     }
@@ -693,9 +693,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
         String port = motorSetPowerAction.getUserDefinedPort();
-        this.sb.append("SetPower(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ", ");
+        this.src.add("SetPower(", Ev3C4ev3Visitor.getPrefixedOutputPort(port), ", ");
         visitSpeedExpression(motorSetPowerAction.power, isMotorReverse(port));
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
@@ -703,16 +703,16 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         String port = motorStopAction.getUserDefinedPort();
         if ( motorStopAction.mode == MotorStopMode.FLOAT ) {
-            this.sb.append("Float(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ");");
+            this.src.add("Float(", Ev3C4ev3Visitor.getPrefixedOutputPort(port), ");");
         } else {
-            this.sb.append("Off(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ");");
+            this.src.add("Off(", Ev3C4ev3Visitor.getPrefixedOutputPort(port), ");");
         }
         return null;
     }
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
-        this.sb.append("Off(" + getDriveMotorPortsConstant() + ");");
+        this.src.add("Off(", getDriveMotorPortsConstant(), ");");
         return null;
     }
 
@@ -720,16 +720,16 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitCurveAction(CurveAction curveAction) {
         MotorDuration duration = curveAction.paramLeft.getDuration();
         boolean isReverse = isReverseGivenBrickConfigurationAndAction(curveAction.direction);
-        this.sb.append(duration != null ? "SteerDriveForDistance(" : "SteerDrive(");
-        this.sb.append(getLeftDriveMotorPort() + ", " + getRightDriveMotorPort() + ", ");
+        this.src.add(duration != null ? "SteerDriveForDistance(" : "SteerDrive(");
+        this.src.add(getLeftDriveMotorPort(), ", ", getRightDriveMotorPort(), ", ");
         visitSpeedExpression(curveAction.paramLeft.getSpeed(), isReverse);
-        this.sb.append(", ");
+        this.src.add(", ");
         visitSpeedExpression(curveAction.paramRight.getSpeed(), isReverse);
         if ( duration != null ) {
-            this.sb.append(", ");
+            this.src.add(", ");
             duration.getValue().accept(this);
         }
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
@@ -779,23 +779,23 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateTurnForDistance(Expr speedExpression, Expr distanceExpression, int turn) {
-        this.sb.append("RotateMotorForAngleWithTurn(" + getDriveMotorPortsConstant() + ", ");
+        this.src.add("RotateMotorForAngleWithTurn(", getDriveMotorPortsConstant(), ", ");
         visitSpeedExpression(speedExpression);
-        this.sb.append(", ");
+        this.src.add(", ");
         visitDistanceOfTurn(distanceExpression);
-        this.sb.append(", " + turn + ");");
+        this.src.add(", ", turn, ");");
     }
 
     private void visitDistanceOfTurn(Expr distanceExpression) {
-        this.sb.append("(");
+        this.src.add("(");
         distanceExpression.accept(this);
-        this.sb.append(" * TRACK_WIDTH / WHEEL_DIAMETER)");
+        this.src.add(" * TRACK_WIDTH / WHEEL_DIAMETER)");
     }
 
     private void generateTurn(Expr speedExpression, int turn) {
-        this.sb.append("OnFwdSyncEx(" + getDriveMotorPortsConstant() + ", ");
+        this.src.add("OnFwdSyncEx(", getDriveMotorPortsConstant(), ", ");
         visitSpeedExpression(speedExpression);
-        this.sb.append(", " + turn + ", RESET_NONE);");
+        this.src.add(", ", turn, ", RESET_NONE);");
 
     }
 
@@ -804,9 +804,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void visitSpeedExpression(Expr speedExpression, boolean reverse) {
-        this.sb.append(reverse ? "-Speed(" : "Speed(");
+        this.src.add(reverse ? "-Speed(" : "Speed(");
         speedExpression.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
     }
 
     private boolean isActorOnPort(String port) {
@@ -886,43 +886,43 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     @Override
     public Void visitEncoderReset(EncoderReset encoderReset) {
         String port = encoderReset.sensorPort;
-        this.sb.append("ResetRotationCount(").append(Ev3C4ev3Visitor.getPrefixedOutputPort(port)).append(");");
+        this.src.add("ResetRotationCount(", Ev3C4ev3Visitor.getPrefixedOutputPort(port), ");");
         return null;
     }
 
     private void generateGetEncoderInDegrees(String port) {
-        this.sb.append("MotorRotationCount(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ")");
+        this.src.add("MotorRotationCount(", Ev3C4ev3Visitor.getPrefixedOutputPort(port), ")");
     }
 
     private void generateGetEncoderInRotations(String port) {
-        this.sb.append("(");
+        this.src.add("(");
         this.generateGetEncoderInDegrees(port);
-        this.sb.append(" / 360.0)");
+        this.src.add(" / 360.0)");
     }
 
     private void generateGetEncoderInDistance(String port) {
-        this.sb.append("(");
+        this.src.add("(");
         this.generateGetEncoderInRotations(port);
-        this.sb.append(" * M_PI * WHEEL_DIAMETER)");
+        this.src.add(" * M_PI * WHEEL_DIAMETER)");
     }
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
         String timerNumber = timerSensor.getUserDefinedPort();
-        this.sb.append("GetTimerValue(").append(timerNumber).append(")");
+        this.src.add("GetTimerValue(", timerNumber, ")");
         return null;
     }
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
         String timerNumber = timerReset.sensorPort;
-        this.sb.append("ResetTimer(").append(timerNumber).append(");");
+        this.src.add("ResetTimer(", timerNumber, ");");
         return null;
     }
 
     @Override
     public Void visitTouchSensor(TouchSensor touchSensor) {
-        this.sb.append("ReadEV3TouchSensor(").append(Ev3C4ev3Visitor.getPrefixedInputPort(touchSensor.getUserDefinedPort())).append(")");
+        this.src.add("ReadEV3TouchSensor(", Ev3C4ev3Visitor.getPrefixedInputPort(touchSensor.getUserDefinedPort()), ")");
         return null;
     }
 
@@ -938,16 +938,16 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateRealUltrasonicDistance(String port) {
-        this.sb.append("ReadEV3UltrasonicSensorDistance(").append(Ev3C4ev3Visitor.getPrefixedInputPort(port)).append(", CM)");
+        this.src.add("ReadEV3UltrasonicSensorDistance(", Ev3C4ev3Visitor.getPrefixedInputPort(port), ", CM)");
     }
 
     private void generateRealUltrasonicPresence(String port) {
-        this.sb.append("ReadEV3UltrasonicSensorListen(").append(Ev3C4ev3Visitor.getPrefixedInputPort(port)).append(")");
+        this.src.add("ReadEV3UltrasonicSensorListen(", Ev3C4ev3Visitor.getPrefixedInputPort(port), ")");
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
-        this.sb.append("ReadNXTSoundSensor(").append(Ev3C4ev3Visitor.getPrefixedInputPort(soundSensor.getUserDefinedPort())).append(", DB)");
+        this.src.add("ReadNXTSoundSensor(", Ev3C4ev3Visitor.getPrefixedInputPort(soundSensor.getUserDefinedPort()), ", DB)");
         return null;
     }
 
@@ -967,16 +967,11 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateResetGyroSensor(String port) {
-        this.sb.append("NEPOResetEV3GyroSensor(" + Ev3C4ev3Visitor.getPrefixedInputPort(port) + ");");
+        this.src.add("NEPOResetEV3GyroSensor(", Ev3C4ev3Visitor.getPrefixedInputPort(port), ");");
     }
 
     private void generateReadGyro(String port, String mode) {
-        this.sb
-            .append("ReadEV3GyroSensor(")
-            .append(Ev3C4ev3Visitor.getPrefixedInputPort(port))
-            .append(", ")
-            .append(getGyroSensorReadModeConstant(mode))
-            .append(")");
+        this.src.add("ReadEV3GyroSensor(", Ev3C4ev3Visitor.getPrefixedInputPort(port), ", ", getGyroSensorReadModeConstant(mode), ")");
     }
 
     private String getGyroSensorReadModeConstant(String mode) {
@@ -993,16 +988,16 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         String port = Ev3C4ev3Visitor.getPrefixedInputPort(colorSensor.getUserDefinedPort());
         switch ( mode ) {
             case SC.COLOUR:
-                this.sb.append("ReadEV3ColorSensor(").append(port).append(")");
+                this.src.add("ReadEV3ColorSensor(", port, ")");
                 break;
             case SC.LIGHT:
-                this.sb.append("ReadEV3ColorSensorLight(").append(port).append(", ReflectedLight)");
+                this.src.add("ReadEV3ColorSensorLight(", port, ", ReflectedLight)");
                 break;
             case SC.AMBIENTLIGHT:
-                this.sb.append("ReadEV3ColorSensorLight(").append(port).append(", AmbientLight)");
+                this.src.add("ReadEV3ColorSensorLight(", port, ", AmbientLight)");
                 break;
             case SC.RGB:
-                this.sb.append("NEPOReadEV3ColorSensorRGB(").append(port).append(")");
+                this.src.add("NEPOReadEV3ColorSensorRGB(", port, ")");
                 break;
         }
         return null;
@@ -1029,7 +1024,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
             default:
                 throw new DbcException("Invalid mode for HT Color Sensor V2!");
         }
-        this.sb.append(functionName).append("(").append(port).append(")");
+        this.src.add(functionName, "(", port, ")");
         return null;
     }
 
@@ -1050,17 +1045,17 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateEV3IRDistance(String port) {
-        this.sb.append("ReadEV3IrSensorProximity(").append(Ev3C4ev3Visitor.getPrefixedInputPort(port)).append(")");
+        this.src.add("ReadEV3IrSensorProximity(", Ev3C4ev3Visitor.getPrefixedInputPort(port), ")");
     }
 
     private void generateEV3IRSeeker(String port) {
-        this.sb.append("_ReadIRSeekAllChannels(" + Ev3C4ev3Visitor.getPrefixedInputPort(port) + ")");
+        this.src.add("_ReadIRSeekAllChannels(", Ev3C4ev3Visitor.getPrefixedInputPort(port), ")");
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor compassSensor) {
         String mode = getCompassSensorReadModeConstant(compassSensor.getMode());
-        this.sb.append("ReadHTCompassSensor(").append(Ev3C4ev3Visitor.getPrefixedInputPort(compassSensor.getUserDefinedPort())).append(", ").append(mode).append(")");
+        this.src.add("ReadHTCompassSensor(", Ev3C4ev3Visitor.getPrefixedInputPort(compassSensor.getUserDefinedPort()), ", ", mode, ")");
         return null;
     }
 
@@ -1068,9 +1063,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitCompassCalibrate(CompassCalibrate compassCalibrate) {
         String port = Ev3C4ev3Visitor.getPrefixedInputPort(compassCalibrate.getUserDefinedPort());
         nlIndent();
-        this.sb.append("StartHTCompassCalibration(").append(port).append(");");
-        this.sb.append("Wait(40000);");
-        this.sb.append("StopHTCompassCalibration(").append(port).append(");");
+        this.src.add("StartHTCompassCalibration(", port, ");");
+        this.src.add("Wait(40000);");
+        this.src.add("StopHTCompassCalibration(", port, ");");
         nlIndent();
         return null;
     }
@@ -1088,12 +1083,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor irSeekerSensor) {
-        this.sb
-            .append("ReadHTIrSensor(")
-            .append(Ev3C4ev3Visitor.getPrefixedInputPort(irSeekerSensor.getUserDefinedPort()))
-            .append(", ")
-            .append(getIRSeekerSensorConstantMode(irSeekerSensor.getMode()))
-            .append(")");
+        this.src.add("ReadHTIrSensor(", Ev3C4ev3Visitor.getPrefixedInputPort(irSeekerSensor.getUserDefinedPort()), ", ", getIRSeekerSensorConstantMode(irSeekerSensor.getMode()), ")");
         return null;
     }
 
@@ -1109,16 +1099,16 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateReadSensorInMode(String port, String mode) {
-        this.sb.append("ReadSensorInMode(" + Ev3C4ev3Visitor.getPrefixedInputPort(port) + ", " + mode + ")");
+        this.src.add("ReadSensorInMode(", Ev3C4ev3Visitor.getPrefixedInputPort(port), ", ", mode, ")");
     }
 
     private void generateReadSensor(String port) {
-        this.sb.append("readSensor(" + Ev3C4ev3Visitor.getPrefixedInputPort(port) + ")");
+        this.src.add("readSensor(", Ev3C4ev3Visitor.getPrefixedInputPort(port), ")");
     }
 
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
-        this.sb.append("ButtonIsDown(" + getKeyConstant(keysSensor.getUserDefinedPort()) + ")");
+        this.src.add("ButtonIsDown(", getKeyConstant(keysSensor.getUserDefinedPort()), ")");
         return null;
     }
 
@@ -1145,26 +1135,26 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
-        this.sb.append("LcdClean();");
+        this.src.add("LcdClean();");
         return null;
     }
 
     @Override
     public Void visitShowTextAction(ShowTextAction showTextAction) {
-        this.sb.append("DrawString(ToString(");
+        this.src.add("DrawString(ToString(");
         showTextAction.msg.accept(this);
-        this.sb.append("), ");
+        this.src.add("), ");
         showTextAction.x.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         showTextAction.y.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitPlayFileAction(PlayFileAction playFileAction) {
         String soundConstant = getSoundConstantByFileName(playFileAction.fileName);
-        this.sb.append("PlaySystemSound(" + soundConstant + ");");
+        this.src.add("PlaySystemSound(", soundConstant, ");");
         return null;
     }
 
@@ -1187,45 +1177,45 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
-        this.sb.append("NEPOPlayTone(" + playNoteAction.frequency + ", " + playNoteAction.duration + ");");
+        this.src.add("NEPOPlayTone(", playNoteAction.frequency, ", ", playNoteAction.duration, ");");
         return null;
     }
 
     @Override
     public Void visitGetVolumeAction(GetVolumeAction getVolumeAction) {
-        this.sb.append("GetVolume()");
+        this.src.add("GetVolume()");
         return null;
     }
 
     @Override
     public Void visitSetVolumeAction(SetVolumeAction setVolumeAction) {
-        this.sb.append("SetVolume(");
+        this.src.add("SetVolume(");
         setVolumeAction.volume.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitToneAction(ToneAction toneAction) {
-        this.sb.append("NEPOPlayTone(");
+        this.src.add("NEPOPlayTone(");
         toneAction.frequency.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         toneAction.duration.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction showPictureAction) {
         String picture = showPictureAction.pic.toString();
-        this.sb.append("LcdPicture(LCD_COLOR_BLACK, 0, 0, " + picture + ");");
+        this.src.add("LcdPicture(LCD_COLOR_BLACK, 0, 0, ", picture, ");");
         return null;
     }
 
     @Override
     public Void visitLightAction(LightAction lightAction) {
         String pattern = getLedPattern(lightAction.color, lightAction.mode);
-        this.sb.append("SetLedPattern(" + pattern + ");");
+        this.src.add("SetLedPattern(", pattern, ");");
         return null;
     }
 
@@ -1259,39 +1249,39 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitBrickLightOffAction(BrickLightOffAction brickLightOffAction) {
-        this.sb.append("SetLedPattern(LED_BLACK);");
+        this.src.add("SetLedPattern(LED_BLACK);");
         return null;
     }
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction bluetoothReceiveAction) {
-        this.sb.append("NEPOReceiveStringFrom(");
+        this.src.add("NEPOReceiveStringFrom(");
         bluetoothReceiveAction.connection.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitBluetoothConnectAction(BluetoothConnectAction bluetoothConnectAction) {
-        this.sb.append("NEPOConnectTo(");
+        this.src.add("NEPOConnectTo(");
         bluetoothConnectAction.address.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction bluetoothSendAction) {
-        this.sb.append("NEPOSendStringTo(");
+        this.src.add("NEPOSendStringTo(");
         bluetoothSendAction.connection.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         bluetoothSendAction.msg.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction bluetoothWaitForConnection) {
-        this.sb.append("NEPOWaitConnection()");
+        this.src.add("NEPOWaitConnection()");
         return null;
     }
 
@@ -1302,29 +1292,29 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitSetLanguageAction(SetLanguageAction setLanguageAction) {
-        this.sb.append("SetLanguage(\"");
-        this.sb.append(TTSLanguageMapper.getLanguageString(setLanguageAction.language));
-        this.sb.append("\");");
+        this.src.add("SetLanguage(\"");
+        this.src.add(TTSLanguageMapper.getLanguageString(setLanguageAction.language));
+        this.src.add("\");");
         return null;
     }
 
     @Override
     public Void visitSayTextAction(SayTextAction sayTextAction) {
-        this.sb.append("Say(ToString(");
+        this.src.add("Say(ToString(");
         sayTextAction.msg.accept(this);
-        this.sb.append("), 30, 50);"); // set defaults
+        this.src.add("), 30, 50);"); // set defaults
         return null;
     }
 
     @Override
     public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction sayTextAction) {
-        this.sb.append("Say(ToString(");
+        this.src.add("Say(ToString(");
         sayTextAction.msg.accept(this);
-        this.sb.append("), ");
+        this.src.add("), ");
         sayTextAction.speed.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         sayTextAction.pitch.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
 
         return null;
     }
@@ -1332,7 +1322,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     private void generateRandomSeed() {
         if ( this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().contains(FunctionNames.RANDOM)
             || this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().contains(FunctionNames.RANDOM_DOUBLE) ) {
-            this.sb.append("srand (time(NULL));");
+            this.src.add("srand (time(NULL));");
             this.nlIndent();
         }
     }

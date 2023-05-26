@@ -52,18 +52,18 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
 
     protected void generateUsedVars() {
         for ( VarDeclaration var : this.getBean(UsedHardwareBean.class).getVisitedVars() ) {
-            this.sb.append("___" + var.name);
-            this.sb.append(" = ");
+            this.src.add("___", var.name);
+            this.src.add(" = ");
             var.value.accept(this);
-            this.sb.append(";");
+            this.src.add(";");
             nlIndent();
         }
     }
 
     @Override
     public Void visitVarDeclaration(VarDeclaration var) {
-        this.sb.append(getLanguageVarTypeFromBlocklyType(var.typeVar));
-        this.sb.append(whitespace() + var.getCodeSafeName());
+        this.src.add(getLanguageVarTypeFromBlocklyType(var.typeVar));
+        this.src.add(" ", var.getCodeSafeName());
         return null;
     }
 
@@ -74,30 +74,30 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
             appendFloatModulo(binary);
             return null;
         }
-        generateSubExpr(this.sb, false, binary.left, binary);
+        generateSubExpr(this.src, false, binary.left, binary);
         String sym = getBinaryOperatorSymbol(op);
-        this.sb.append(whitespace() + sym + whitespace());
+        this.src.add(" ", sym, " ");
         if ( op == Op.DIVIDE ) {
             appendCastToFloat(binary);
             return null;
         } else {
-            generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+            generateSubExpr(this.src, parenthesesCheck(binary), binary.getRight(), binary);
         }
         return null;
     }
 
     private void appendFloatModulo(Binary binary) {
-        this.sb.append("fmod(");
-        generateSubExpr(this.sb, false, binary.left, binary);
-        this.sb.append(", ");
-        generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-        this.sb.append(")");
+        this.src.add("fmod(");
+        generateSubExpr(this.src, false, binary.left, binary);
+        this.src.add(", ");
+        generateSubExpr(this.src, parenthesesCheck(binary), binary.getRight(), binary);
+        this.src.add(")");
     }
 
     private void appendCastToFloat(Binary binary) {
-        this.sb.append("((float) ");
-        generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-        this.sb.append(")");
+        this.src.add("((float) ");
+        generateSubExpr(this.src, parenthesesCheck(binary), binary.getRight(), binary);
+        this.src.add(")");
     }
 
     private void convertToString(Expr expr) {
@@ -106,9 +106,9 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
             case NUMBER:
             case NUMBER_INT:
             case COLOR:
-                this.sb.append("String(");
+                this.src.add("String(");
                 expr.accept(this);
-                this.sb.append(")");
+                this.src.add(")");
                 break;
             default:
                 expr.accept(this);
@@ -141,9 +141,9 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
                 break;
             case FOREVER_ARDU:
                 increaseLoopCounter();
-                this.sb.append("void loop()");
+                this.src.add("void loop()");
                 nlIndent();
-                this.sb.append("{");
+                this.src.add("{");
                 break;
             default:
                 break;
@@ -154,14 +154,14 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
             addContinueLabelToLoop();
             if ( !isArduinoLoop ) {
                 nlIndent();
-                this.sb.append("delay(1);");
+                this.src.add("delay(1);");
             }
         } else {
             appendBreakStmt();
         }
         decrIndentation();
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
         addBreakLabelToLoop(isWaitStmt);
 
         return null;
@@ -169,31 +169,31 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
 
     @Override
     public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.sb.append("while (true) {");
+        this.src.add("while (true) {");
         incrIndentation();
         visitStmtList(waitStmt.statements);
         nlIndent();
-        this.sb.append("delay(1);");
+        this.src.add("delay(1);");
         decrIndentation();
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
         return null;
     }
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
         String methodName = indexOfFunct.location == IndexLocation.LAST ? "_getLastOccuranceOfElement(" : "_getFirstOccuranceOfElement(";
-        this.sb.append(methodName);
+        this.src.add(methodName);
         indexOfFunct.value.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         if ( indexOfFunct.find.getClass().equals(StringConst.class) ) {
-            this.sb.append("String(");
+            this.src.add("String(");
             indexOfFunct.find.accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         } else {
             indexOfFunct.find.accept(this);
         }
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
@@ -201,11 +201,11 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
     public Void visitTextJoinFunct(TextJoinFunct textJoinFunct) {
         List<Expr> texts = textJoinFunct.param.get();
         for ( int i = 0; i < texts.size(); i++ ) {
-            this.sb.append("String(");
+            this.src.add("String(");
             texts.get(i).accept(this);
-            this.sb.append(")");
+            this.src.add(")");
             if ( i < texts.size() - 1 ) {
-                this.sb.append(" + ");
+                this.src.add(" + ");
             }
         }
         return null;
@@ -219,53 +219,53 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
     @Override
     public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
         textAppendStmt.var.accept(this);
-        this.sb.append(" += ");
+        this.src.add(" += ");
         convertToString(textAppendStmt.text);
-        this.sb.append(";");
+        this.src.add(";");
         return null;
     }
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
-        this.sb.append("delay(");
+        this.src.add("delay(");
         waitTimeStmt.time.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        this.sb.append("_randomIntegerInRange(");
+        this.src.add("_randomIntegerInRange(");
         mathRandomIntFunct.from.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         mathRandomIntFunct.to.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
         String timerNumber = timerSensor.getUserDefinedPort();
-        this.sb.append("(int) (millis() - __time_").append(timerNumber).append(")");
+        this.src.add("(int) (millis() - __time_", timerNumber, ")");
         return null;
     }
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
         String timerNumber = timerReset.sensorPort;
-        this.sb.append("__time_").append(timerNumber).append(" = millis();");
+        this.src.add("__time_", timerNumber, " = millis();");
         return null;
     }
 
     @Override
     public Void visitColorConst(ColorConst colorConst) {
-        this.sb.append("RGB(");
-        this.sb.append(colorConst.getRedChannelHex());
-        this.sb.append(", ");
-        this.sb.append(colorConst.getGreenChannelHex());
-        this.sb.append(", ");
-        this.sb.append(colorConst.getBlueChannelHex());
-        this.sb.append(")");
+        this.src.add("RGB(");
+        this.src.add(colorConst.getRedChannelHex());
+        this.src.add(", ");
+        this.src.add(colorConst.getGreenChannelHex());
+        this.src.add(", ");
+        this.src.add(colorConst.getBlueChannelHex());
+        this.src.add(")");
         return null;
     }
 
@@ -276,9 +276,9 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
     }
 
     private void writeToSerial(Expr valueToWrite) {
-        this.sb.append("Serial.println(");
+        this.src.add("Serial.println(");
         valueToWrite.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
     }
 
     protected void generateTimerVariables() {
@@ -291,7 +291,7 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
             .keySet()
             .stream()
             .forEach(port -> {
-                this.sb.append("unsigned long __time_").append(port).append(" = millis();");
+                this.src.add("unsigned long __time_", port, " = millis();");
                 nlIndent();
             });
     }

@@ -87,14 +87,14 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
                 this.getBean(CodeGeneratorSetupBean.class)
                     .getHelperMethodGenerator()
                     .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
-            this.sb.append(helperMethodImpls);
+            this.src.add(helperMethodImpls);
         }
         nlIndent();
-        this.sb.append("def run():");
+        this.src.add("def run():");
         incrIndentation();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             nlIndent();
-            this.sb.append("global ").append(String.join(", ", this.usedGlobalVarInFunctions));
+            this.src.add("global ", String.join(", ", this.usedGlobalVarInFunctions));
         } else {
             addPassIfProgramIsEmpty();
         }
@@ -445,13 +445,13 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitRgbColor(RgbColor rgbColor) {
-        this.sb.append("(");
+        this.src.add("(");
         rgbColor.R.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         rgbColor.G.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         rgbColor.B.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
@@ -554,7 +554,7 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
                 } else if ( pixel.equals("") ) {
                     pixel = "0";
                 }
-                this.sb.append(Integer.parseInt(pixel));
+                this.src.add(Integer.parseInt(pixel));
             }
             if ( i < 4 ) {
                 this.src.add(":");
@@ -566,7 +566,7 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitPredefinedImage(PredefinedImage predefinedImage) {
-        this.src.add("Image('" + predefinedImage.getImageName().getImageString() + "')");
+        this.src.add("Image('", predefinedImage.getImageName().getImageString(), "')");
         return null;
     }
 
@@ -614,13 +614,13 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
             default:
                 throw new DbcException("Invalid color constant: " + colorConst.getHexValueAsString());
         }
-        this.sb.append(color);
+        this.src.add(color);
         return null;
     }
 
     @Override
     public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.sb.append("while True:");
+        this.src.add("while True:");
         incrIndentation();
         visitStmtList(waitStmt.statements);
         decrIndentation();
@@ -629,9 +629,9 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
-        this.sb.append("wait_for_seconds(");
+        this.src.add("wait_for_seconds(");
         waitTimeStmt.time.accept(this);
-        this.sb.append("/1000)");
+        this.src.add("/1000)");
         return null;
     }
 
@@ -716,26 +716,26 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
         decrIndentation(); // everything is still indented from main program
         nlIndent();
         nlIndent();
-        this.sb.append("def main():");
+        this.src.add("def main():");
         incrIndentation();
         nlIndent();
-        this.sb.append("try:");
+        this.src.add("try:");
         incrIndentation();
         nlIndent();
-        this.sb.append("run()");
+        this.src.add("run()");
         decrIndentation();
         nlIndent();
-        this.sb.append("except Exception as e:");
+        this.src.add("except Exception as e:");
         incrIndentation();
         nlIndent();
-        this.sb.append("hub.light_matrix.show_image('SAD')");
+        this.src.add("hub.light_matrix.show_image('SAD')");
         decrIndentation();
         //TODO finally close open ports
         decrIndentation();
         nlIndent();
         nlIndent();
 
-        this.sb.append("main()");
+        this.src.add("main()");
     }
 
     private String getPortFromConfig(String name) {

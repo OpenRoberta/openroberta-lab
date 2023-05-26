@@ -93,49 +93,49 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitRgbColor(RgbColor rgbColor) {
-        this.sb.append("int(\"{:02x}{:02x}{:02x}\".format(min(max(");
+        this.src.add("int(\"{:02x}{:02x}{:02x}\".format(min(max(");
         rgbColor.R.accept(this);
-        this.sb.append(", 0), 255), min(max(");
+        this.src.add(", 0), 255), min(max(");
         rgbColor.G.accept(this);
-        this.sb.append(", 0), 255), min(max(");
+        this.src.add(", 0), 255), min(max(");
         rgbColor.B.accept(this);
-        this.sb.append(", 0), 255)), 16)");
+        this.src.add(", 0), 255)), 16)");
         return null;
     }
 
     @Override
     public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.sb.append("while robot.step(robot.timeStep) != -1:");
+        this.src.add("while robot.step(robot.timeStep) != -1:");
         incrIndentation();
         visitStmtList(waitStmt.statements);
         nlIndent();
-        this.sb.append("wait(robot, 1)");
+        this.src.add("wait(robot, 1)");
         decrIndentation();
         return null;
     }
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
-        this.sb.append("wait(robot, ");
+        this.src.add("wait(robot, ");
         waitTimeStmt.time.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
-        this.sb.append("robot = Nao()");
+        this.src.add("robot = Nao()");
         nlIndent();
-        this.sb.append("robot.load_motion_files()");
+        this.src.add("robot.load_motion_files()");
         StmtList variables = mainTask.variables;
         variables.accept(this);
         generateUserDefinedMethods();
         nlIndent();
         nlIndent();
-        this.sb.append("def run():");
+        this.src.add("def run():");
         incrIndentation();
         nlIndent();
-        this.sb.append("robot.step(robot.timeStep)");
+        this.src.add("robot.step(robot.timeStep)");
 
         List<Stmt> variableList = variables.get();
         if ( !variableList.isEmpty() ) {
@@ -147,7 +147,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
             // would need the list of mainTask variables (store in the class?)
             // TODO: I could store the names as a list in the instance and filter it against the parameters
             // in visitMethodVoid, visitMethodReturn
-            this.sb.append("global ");
+            this.src.add("global ");
             boolean first = true;
             for ( Stmt s : variables.get() ) {
                 ExprStmt es = (ExprStmt) s;
@@ -155,9 +155,9 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
                 if ( first ) {
                     first = false;
                 } else {
-                    this.sb.append(", ");
+                    this.src.add(", ");
                 }
-                this.sb.append(vd.getCodeSafeName());
+                this.src.add(vd.getCodeSafeName());
             }
         }
         return null;
@@ -165,21 +165,21 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitHand(Hand hand) {
-        this.sb.append("move_hand_joint(robot, ");
+        this.src.add("move_hand_joint(robot, ");
         switch ( hand.turnDirection ) {
             case LEFT:
-                this.sb.append("BodySide.LEFT, ");
+                this.src.add("BodySide.LEFT, ");
                 break;
             case RIGHT:
-                this.sb.append("BodySide.RIGHT, ");
+                this.src.add("BodySide.RIGHT, ");
                 break;
         }
         switch ( hand.modus ) {
             case "OPEN":
-                this.sb.append("1)");
+                this.src.add("1)");
                 break;
             case "CLOSE":
-                this.sb.append("0)");
+                this.src.add("0)");
                 break;
         }
         return null;
@@ -187,201 +187,201 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitMoveJoint(MoveJoint moveJoint) {
-        this.sb.append("move_joint(robot, ");
+        this.src.add("move_joint(robot, ");
         switch ( moveJoint.joint ) {
             case "HEADYAW":
-                this.sb.append("\"HeadYaw\"");
+                this.src.add("\"HeadYaw\"");
                 break;
             case "HEADPITCH":
-                this.sb.append("\"HeadPitch\"");
+                this.src.add("\"HeadPitch\"");
                 break;
             case "LSHOULDERPITCH":
-                this.sb.append("\"LShoulderPitch\"");
+                this.src.add("\"LShoulderPitch\"");
                 break;
             case "LSHOULDERROLL":
-                this.sb.append("\"LShoulderRoll\"");
+                this.src.add("\"LShoulderRoll\"");
                 break;
             case "LELBOWYAW":
-                this.sb.append("\"LElbowYaw\"");
+                this.src.add("\"LElbowYaw\"");
                 break;
             case "LELBOWROLL":
-                this.sb.append("\"LElbowRoll\"");
+                this.src.add("\"LElbowRoll\"");
                 break;
             case "LWRISTYAW":
-                this.sb.append("\"LWristYaw\"");
+                this.src.add("\"LWristYaw\"");
                 break;
             case "LHAND":
-                this.sb.append("\"LHand\"");
+                this.src.add("\"LHand\"");
                 break;
             case "LHIPYAWPITCH":
-                this.sb.append("\"LHipYawPitch\"");
+                this.src.add("\"LHipYawPitch\"");
                 break;
             case "LHIPROLL":
-                this.sb.append("\"LHipRoll\"");
+                this.src.add("\"LHipRoll\"");
                 break;
             case "LHIPPITCH":
-                this.sb.append("\"LHipPitch\"");
+                this.src.add("\"LHipPitch\"");
                 break;
             case "LKNEEPITCH":
-                this.sb.append("\"LKneePitch\"");
+                this.src.add("\"LKneePitch\"");
                 break;
             case "LANKLEPITCH":
-                this.sb.append("\"LAnklePitch\"");
+                this.src.add("\"LAnklePitch\"");
                 break;
             case "RANKLEROLL":
-                this.sb.append("\"RAnkleRoll\"");
+                this.src.add("\"RAnkleRoll\"");
                 break;
             case "RHIPYAWPITCH":
-                this.sb.append("\"RHipYawPitch\"");
+                this.src.add("\"RHipYawPitch\"");
                 break;
             case "RHIPROLL":
-                this.sb.append("\"RHipRoll\"");
+                this.src.add("\"RHipRoll\"");
                 break;
             case "RHIPPITCH":
-                this.sb.append("\"RHipPitch\"");
+                this.src.add("\"RHipPitch\"");
                 break;
             case "RKNEEPITCH":
-                this.sb.append("\"RKneePitch\"");
+                this.src.add("\"RKneePitch\"");
                 break;
             case "RANKLEPITCH":
-                this.sb.append("\"RAnklePitch\"");
+                this.src.add("\"RAnklePitch\"");
                 break;
             case "RSHOULDERPITCH":
-                this.sb.append("\"RShoulderPitch\"");
+                this.src.add("\"RShoulderPitch\"");
                 break;
             case "RSHOULDERROLL":
-                this.sb.append("\"RShoulderRoll\"");
+                this.src.add("\"RShoulderRoll\"");
                 break;
             case "RELBOWYAW":
-                this.sb.append("\"RElbowYaw\"");
+                this.src.add("\"RElbowYaw\"");
                 break;
             case "RELBOWROLL":
-                this.sb.append("\"RElbowRoll\"");
+                this.src.add("\"RElbowRoll\"");
                 break;
             case "RWRISTYAW":
-                this.sb.append("\"RWristYaw\"");
+                this.src.add("\"RWristYaw\"");
                 break;
             case "RHAND":
-                this.sb.append("\"RHand\"");
+                this.src.add("\"RHand\"");
                 break;
             case "LANKLEROLL":
-                this.sb.append("\"LAnkleRoll\"");
+                this.src.add("\"LAnkleRoll\"");
                 break;
             default:
                 throw new DbcException("Invalid MoveJoint JOINT...");
         }
-        this.sb.append(", ");
+        this.src.add(", ");
         moveJoint.degrees.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         switch ( moveJoint.relativeAbsolute ) {
             case "ABSOLUTE":
-                this.sb.append("JointMovement.ABSOLUTE");
+                this.src.add("JointMovement.ABSOLUTE");
                 break;
             case "RELATIVE":
-                this.sb.append("JointMovement.RELATIVE");
+                this.src.add("JointMovement.RELATIVE");
                 break;
             default:
                 throw new DbcException("Invalid MoveJoint MODE...");
         }
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitWalkDistance(WalkDistance walkDistance) {
-        this.sb.append("walk(robot, ");
+        this.src.add("walk(robot, ");
         if ( walkDistance.walkDirection == DriveDirection.BACKWARD ) {
-            this.sb.append("-");
+            this.src.add("-");
         }
         walkDistance.distanceToWalk.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitTurnDegrees(TurnDegrees turnDegrees) {
-        this.sb.append("turn(robot, ");
+        this.src.add("turn(robot, ");
         if ( turnDegrees.turnDirection == TurnDirection.RIGHT ) {
-            this.sb.append("-");
+            this.src.add("-");
         }
         turnDegrees.degreesToTurn.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitSetLeds(SetLeds setLeds) {
-        this.sb.append("set_led(robot, Led.");
-        this.sb.append(setLeds.led.toString());
-        this.sb.append(", ");
+        this.src.add("set_led(robot, Led.");
+        this.src.add(setLeds.led.toString());
+        this.src.add(", ");
         setLeds.Color.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitSetIntensity(SetIntensity setIntensity) {
-        this.sb.append("set_intensity(robot, Led.");
-        this.sb.append(setIntensity.led.toString());
-        this.sb.append(", ");
+        this.src.add("set_intensity(robot, Led.");
+        this.src.add(setIntensity.led.toString());
+        this.src.add(", ");
         setIntensity.Intensity.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitLedOff(LedOff ledOff) {
-        this.sb.append("set_led(robot, Led.");
-        this.sb.append(ledOff.led.toString());
-        this.sb.append(", 0)");
+        this.src.add("set_led(robot, Led.");
+        this.src.add(ledOff.led.toString());
+        this.src.add(", 0)");
         return null;
     }
 
     @Override
     public Void visitLedReset(LedReset ledReset) {
-        this.sb.append("set_led(robot, Led.");
-        this.sb.append(ledReset.led.toString());
-        this.sb.append(", 0)");
+        this.src.add("set_led(robot, Led.");
+        this.src.add(ledReset.led.toString());
+        this.src.add(", 0)");
         return null;
     }
 
     @Override
     public Void visitTouchSensor(TouchSensor touchSensor) {
-        this.sb.append("is_touched(robot, ");
-        this.sb.append(getEnumCode(touchSensor.getUserDefinedPort()));
-        this.sb.append(", ");
-        this.sb.append(getEnumCode(touchSensor.getSlot()));
-        this.sb.append(")");
+        this.src.add("is_touched(robot, ");
+        this.src.add(getEnumCode(touchSensor.getUserDefinedPort()));
+        this.src.add(", ");
+        this.src.add(getEnumCode(touchSensor.getSlot()));
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor sonar) {
-        this.sb.append("get_ultrasonic(robot)");
+        this.src.add("get_ultrasonic(robot)");
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor gyroSensor) {
-        this.sb.append("get_gyro_");
-        this.sb.append(gyroSensor.getSlot().toLowerCase());
-        this.sb.append("(robot)");
+        this.src.add("get_gyro_");
+        this.src.add(gyroSensor.getSlot().toLowerCase());
+        this.src.add("(robot)");
         return null;
     }
 
     @Override
     public Void visitAccelerometerSensor(AccelerometerSensor accelerometer) {
-        this.sb.append("get_accelerometer_");
-        this.sb.append(accelerometer.getUserDefinedPort().toLowerCase());
-        this.sb.append("(robot)");
+        this.src.add("get_accelerometer_");
+        this.src.add(accelerometer.getUserDefinedPort().toLowerCase());
+        this.src.add("(robot)");
         return null;
     }
 
     @Override
     public Void visitFsrSensor(FsrSensor fsr) {
-        this.sb.append("get_force(robot, BodySide.");
-        this.sb.append(fsr.getUserDefinedPort().toUpperCase());
-        this.sb.append(")");
+        this.src.add("get_force(robot, BodySide.");
+        this.src.add(fsr.getUserDefinedPort().toUpperCase());
+        this.src.add(")");
         return null;
     }
 
@@ -427,7 +427,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
         if ( !withWrapping ) {
             return;
         }
-        this.sb.append("#!/usr/bin/python");
+        this.src.add("#!/usr/bin/python");
         nlIndent();
         nlIndent();
 
@@ -435,14 +435,14 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
         usedMethods.add(NaoSimMethods.MOTIONS);
         usedMethods.add(NaoSimMethods.TEMPLATE);
         String template = this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodDefinitions(usedMethods);
-        this.sb.append(template);
+        this.src.add(template);
         nlIndent();
 
         if ( !this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().isEmpty() ) {
             nlIndent();
-            this.sb.append("class BreakOutOfALoop(Exception): pass");
+            this.src.add("class BreakOutOfALoop(Exception): pass");
             nlIndent();
-            this.sb.append("class ContinueLoop(Exception): pass");
+            this.src.add("class ContinueLoop(Exception): pass");
             nlIndent();
             nlIndent();
         }
@@ -454,25 +454,25 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
             return;
         }
         nlIndent();
-        this.sb.append("wait(robot, 3000)"); // give the simulation time to render all
+        this.src.add("wait(robot, 3000)"); // give the simulation time to render all
         nlIndent();
-        this.sb.append("print(\"finished\")");
+        this.src.add("print(\"finished\")");
         decrIndentation(); // everything is still indented from main program
         nlIndent();
         nlIndent();
-        this.sb.append("def main():");
+        this.src.add("def main():");
         incrIndentation();
         nlIndent();
-        this.sb.append("try:");
+        this.src.add("try:");
         incrIndentation();
         nlIndent();
-        this.sb.append("run()");
+        this.src.add("run()");
         decrIndentation();
         nlIndent();
-        this.sb.append("except Exception as e:");
+        this.src.add("except Exception as e:");
         incrIndentation();
         nlIndent();
-        this.sb.append("raise");
+        this.src.add("raise");
         decrIndentation();
         nlIndent();
         decrIndentation();
@@ -482,7 +482,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitColorConst(ColorConst colorConst) {
-        this.sb.append(colorConst.getHexIntAsString());
+        this.src.add(colorConst.getHexIntAsString());
         return null;
     }
 
@@ -498,7 +498,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitApplyPosture(ApplyPosture applyPosture) {
-        this.sb.append("perform(robot, \"").append(applyPosture.posture).append("\")");
+        this.src.add("perform(robot, \"", applyPosture.posture, "\")");
         return null;
     }
 
@@ -524,7 +524,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitAnimation(Animation animation) {
-        this.sb.append("perform(robot, \"").append(animation.move).append("\")");
+        this.src.add("perform(robot, \"", animation.move, "\")");
         return null;
     }
 
@@ -535,21 +535,21 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitSetVolume(SetVolume setVolume) {
-        this.sb.append("setVolume(robot, ");
+        this.src.add("setVolume(robot, ");
         setVolume.volume.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitGetVolume(GetVolume getVolume) {
-        this.sb.append("getVolume(robot)");
+        this.src.add("getVolume(robot)");
         return null;
     }
 
     @Override
     public Void visitSetLanguageAction(SetLanguageAction setLanguageAction) {
-        this.sb.append("setLanguage(robot, \"").append(getLanguageString(setLanguageAction.language)).append("\")");
+        this.src.add("setLanguage(robot, \"", getLanguageString(setLanguageAction.language), "\")");
         return null;
     }
 
@@ -572,7 +572,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
         sayTextAction.msg.accept(this);
         src.add("), ");
         sayTextAction.speed.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         sayTextAction.pitch.accept(this);
         src.add(")");
         return null;
@@ -679,9 +679,9 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitRecognizeWord(RecognizeWord recognizeWord) {
-        this.sb.append("getRecognizedWord(robot, ");
+        this.src.add("getRecognizedWord(robot, ");
         recognizeWord.vocabulary.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 

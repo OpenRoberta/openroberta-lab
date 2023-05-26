@@ -96,17 +96,17 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
         if ( !withWrapping ) {
             return;
         }
-        this.sb.append("import cyberpi");
+        this.src.add("import cyberpi");
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.ENCODER) ) {
-            this.sb.append(", mbot2");
+            this.src.add(", mbot2");
         }
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(CyberpiConstants.MBUILDSENSOR) ) {
-            this.sb.append(", mbuild");
+            this.src.add(", mbuild");
         }
         nlIndent();
-        this.sb.append("import time");
+        this.src.add("import time");
         nlIndent();
-        this.sb.append("import math, random");
+        this.src.add("import math, random");
         nlIndent();
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIFFERENTIALDRIVE) ) {
             appendRobotVariables();
@@ -118,7 +118,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
                 this.getBean(CodeGeneratorSetupBean.class)
                     .getHelperMethodGenerator()
                     .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
-            this.sb.append(helperMethodImpls);
+            this.src.add(helperMethodImpls);
         }
     }
 
@@ -128,14 +128,14 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
             nlIndent();
             double circumference = Double.parseDouble(diffDrive.getComponentProperties().get(CyberpiConstants.DIFF_WHEEL_DIAMETER)) * Math.PI;
             double trackWidth = Double.parseDouble(diffDrive.getComponentProperties().get(CyberpiConstants.DIFF_TRACK_WIDTH));
-            this.sb.append("_trackWidth = ");
-            this.sb.append(trackWidth);
+            this.src.add("_trackWidth = ");
+            this.src.add(trackWidth);
             nlIndent();
-            this.sb.append("_circumference = ");
-            this.sb.append(circumference);
+            this.src.add("_circumference = ");
+            this.src.add(circumference);
             nlIndent();
-            this.sb.append("_diffPortsSwapped = ");
-            this.sb.append(this.rightMotorPort.equals("EM1") ? "True" : "False");
+            this.src.add("_diffPortsSwapped = ");
+            this.src.add(this.rightMotorPort.equals("EM1") ? "True" : "False");
             nlIndent();
         }
     }
@@ -149,7 +149,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
             .keySet()
             .forEach(port -> {
                 this.usedGlobalVarInFunctions.add("_timer" + port);
-                this.sb.append("_timer").append(port).append(" = cyberpi.timer.get()");
+                this.src.add("_timer", port, " = cyberpi.timer.get()");
                 nlIndent();
             });
     }
@@ -163,15 +163,15 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
         if ( colorBlocks != 0 ) {
             nlIndent();
-            this.sb.append("_colors = {\n" +
-                "            \"red\": (204,0,0),\n" +
-                "            \"yellow\": (255,255,0),\n" +
-                "            \"green\": (51,204,0),\n" +
-                "            \"cyan\": (51,255,255),\n" +
-                "            \"blue\": (51,102,255),\n" +
-                "            \"purple\": (204,51,204),\n" +
-                "            \"white\": (255,255,255),\n" +
-                "            \"black\": (0,0,0)\n" +
+            this.src.add("_colors = {\n",
+                "            \"red\": (204,0,0),\n",
+                "            \"yellow\": (255,255,0),\n",
+                "            \"green\": (51,204,0),\n",
+                "            \"cyan\": (51,255,255),\n",
+                "            \"blue\": (51,102,255),\n",
+                "            \"purple\": (204,51,204),\n",
+                "            \"white\": (255,255,255),\n",
+                "            \"black\": (0,0,0)\n",
                 "        }");
             nlIndent();
         }
@@ -184,11 +184,11 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
         variables.accept(this);
         generateUserDefinedMethods();
         nlIndent();
-        this.sb.append("def run():");
+        this.src.add("def run():");
         incrIndentation();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             nlIndent();
-            this.sb.append("global ").append(String.join(", ", this.usedGlobalVarInFunctions));
+            this.src.add("global ", String.join(", ", this.usedGlobalVarInFunctions));
         }
 
         return null;
@@ -202,123 +202,123 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
         decrIndentation(); // everything is still indented from main program
         nlIndent();
         nlIndent();
-        this.sb.append("def main():");
+        this.src.add("def main():");
         incrIndentation();
         nlIndent();
-        this.sb.append("try:");
+        this.src.add("try:");
         incrIndentation();
         nlIndent();
-        this.sb.append("run()");
+        this.src.add("run()");
         decrIndentation();
         nlIndent();
-        this.sb.append("except Exception as e:");
+        this.src.add("except Exception as e:");
         incrIndentation();
         nlIndent();
-        this.sb.append("cyberpi.display.show_label(\"Exeption on Mbot 2\", 16, int(8 * 0 + 5), int(17 * 0))");
+        this.src.add("cyberpi.display.show_label(\"Exeption on Mbot 2\", 16, int(8 * 0 + 5), int(17 * 0))");
         nlIndent();
-        this.sb.append("cyberpi.display.show_label(e, 16, int(8 * 0 + 5), int(17 * 1))");
+        this.src.add("cyberpi.display.show_label(e, 16, int(8 * 0 + 5), int(17 * 1))");
         nlIndent();
-        this.sb.append("raise");
+        this.src.add("raise");
         decrIndentation();
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.ENCODER) ) {
             nlIndent();
-            this.sb.append("finally:");
+            this.src.add("finally:");
             incrIndentation();
             nlIndent();
-            this.sb.append("mbot2.motor_stop(\"all\")");
+            this.src.add("mbot2.motor_stop(\"all\")");
             nlIndent();
-            this.sb.append("mbot2.EM_stop(\"all\")");
+            this.src.add("mbot2.EM_stop(\"all\")");
             decrIndentation();
         }
         decrIndentation();
         nlIndent();
 
-        this.sb.append("main()");
+        this.src.add("main()");
     }
 
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
-        this.sb.append("cyberpi.controller.is_press(");
+        this.src.add("cyberpi.controller.is_press(");
         String port = keysSensor.getUserDefinedPort();
         ConfigurationComponent configurationComponent = this.configurationAst.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
 
-        this.sb.append("\"").append(pin1).append("\"");
-        this.sb.append(")");
+        this.src.add("\"", pin1, "\"");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitJoystick(Joystick joystick) {
-        this.sb.append("cyberpi.controller.is_press(\"");
+        this.src.add("cyberpi.controller.is_press(\"");
         String slot = joystick.getSlot().toLowerCase();
         if ( slot.equals("center") ) {
-            this.sb.append("middle");
+            this.src.add("middle");
         } else if ( slot.equals("any") ) {
-            this.sb.append("any_direction");
+            this.src.add("any_direction");
         } else {
-            this.sb.append(slot);
+            this.src.add(slot);
         }
-        this.sb.append("\")");
+        this.src.add("\")");
         return null;
     }
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
-        this.sb.append("cyberpi.console.clear()");
+        this.src.add("cyberpi.console.clear()");
         return null;
     }
 
     @Override
     public Void visitLedOnActionWithIndex(LedOnActionWithIndex ledOnActionWithIndex) {
-        this.sb.append("cyberpi.led.on(");
+        this.src.add("cyberpi.led.on(");
         appendRGBAsArguments(ledOnActionWithIndex.color);
-        this.sb.append(", ");
+        this.src.add(", ");
         appendLedNumber(ledOnActionWithIndex.led);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitCommunicationSendAction(CommunicationSendAction communicationSendAction) {
-        this.sb.append("cyberpi.wifi_broadcast.set(");
+        this.src.add("cyberpi.wifi_broadcast.set(");
         communicationSendAction.channel.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         communicationSendAction.message.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitCommunicationReceiveAction(CommunicationReceiveAction communicationReceiveAction) {
-        this.sb.append("cyberpi.wifi_broadcast.get(");
+        this.src.add("cyberpi.wifi_broadcast.get(");
         communicationReceiveAction.channel.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitLedsOffAction(LedsOffAction ledsOffAction) {
-        this.sb.append("cyberpi.led.off(");
+        this.src.add("cyberpi.led.off(");
         appendLedNumber(ledsOffAction.led);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitLedBrightnessAction(LedBrightnessAction ledBrightnessAction) {
-        this.sb.append("cyberpi.led.set_bri(");
+        this.src.add("cyberpi.led.set_bri(");
         ledBrightnessAction.brightness.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     private void appendLedNumber(String led) {
         led = led.replace("LED", "").toLowerCase();
         if ( led.equals("all") ) {
-            this.sb.append("\"").append(led).append("\"");
+            this.src.add("\"", led, "\"");
         } else {
-            this.sb.append(led);
+            this.src.add(led);
         }
     }
 
@@ -340,59 +340,59 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     @Override
     public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         String port = getPortFromConfig(motorStopAction.getUserDefinedPort());
-        this.sb.append("mbot2.EM_stop(\"").append(port).append("\")");
+        this.src.add("mbot2.EM_stop(\"", port, "\")");
         return null;
     }
 
     @Override
     public Void visitPrintlnAction(PrintlnAction printlnAction) {
-        this.sb.append("cyberpi.console.println(");
+        this.src.add("cyberpi.console.println(");
         printlnAction.msg.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitShowTextAction(ShowTextAction showTextAction) {
-        this.sb.append("cyberpi.display.show_label(");
+        this.src.add("cyberpi.display.show_label(");
         showTextAction.msg.accept(this);
-        this.sb.append(", 16, ");
-        this.sb.append("int(8 * ");
+        this.src.add(", 16, ");
+        this.src.add("int(8 * ");
         showTextAction.x.accept(this);
-        this.sb.append(" + 5), ");
-        this.sb.append("int(17 * ");
+        this.src.add(" + 5), ");
+        this.src.add("int(17 * ");
         showTextAction.y.accept(this);
-        this.sb.append("))");
+        this.src.add("))");
         return null;
     }
 
     @Override
     public Void visitPlayRecordingAction(PlayRecordingAction playRecordingAction) {
-        this.sb.append("cyberpi.audio.play_record()");
+        this.src.add("cyberpi.audio.play_record()");
         return null;
     }
 
     @Override
     public Void visitDisplaySetColourAction(DisplaySetColourAction displaySetColourAction) {
-        this.sb.append("cyberpi.display.set_brush(");
+        this.src.add("cyberpi.display.set_brush(");
         appendRGBAsArguments(displaySetColourAction.color);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     private void appendRGBAsArguments(Expr color) {
         color.accept(this);
-        this.sb.append("[0], ");
+        this.src.add("[0], ");
         color.accept(this);
-        this.sb.append("[1], ");
+        this.src.add("[1], ");
         color.accept(this);
-        this.sb.append("[2]");
+        this.src.add("[2]");
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         int index = getSensorNumber(CyberpiConstants.ULTRASONIC2, ultrasonicSensor.getUserDefinedPort());
-        this.sb.append("mbuild.ultrasonic2.get(").append(index).append(")");
+        this.src.add("mbuild.ultrasonic2.get(", index, ")");
         return null;
     }
 
@@ -402,25 +402,21 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
         String mode = quadRGBSensor.getMode();
         switch ( mode ) {
             case "LINE":
-                this.sb.append("mbuild.quad_rgb_sensor.get_line_sta(\"all\", ").append(index).append(")");
+                this.src.add("mbuild.quad_rgb_sensor.get_line_sta(\"all\", ", index, ")");
                 break;
             case SC.LIGHT:
-                this.sb.append("mbuild.quad_rgb_sensor.get_gray(").append("\"")
-                    .append(quadRGBSensor.getSlot()).append("\", ").append(index).append(")");
+                this.src.add("mbuild.quad_rgb_sensor.get_gray(", "\"", quadRGBSensor.getSlot(), "\", ", index, ")");
                 break;
             case SC.COLOUR:
-                this.sb.append("_colors[")
-                    .append("mbuild.quad_rgb_sensor.get_color_sta(").append("\"")
-                    .append(quadRGBSensor.getSlot()).append("\", ").append(index).append(")")
-                    .append("]");
+                this.src.add("_colors[", "mbuild.quad_rgb_sensor.get_color_sta(", "\"", quadRGBSensor.getSlot(), "\", ", index, ")", "]");
                 break;
             case SC.AMBIENTLIGHT:
-                this.sb.append("mbuild.quad_rgb_sensor.get_light(").append("\"").append(quadRGBSensor.getSlot()).append("\", ").append(index).append(")");
+                this.src.add("mbuild.quad_rgb_sensor.get_light(", "\"", quadRGBSensor.getSlot(), "\", ", index, ")");
                 break;
             case SC.RGB:
-                this.sb.append("[").append(getRGBString("red", index, quadRGBSensor)).append(", ")
-                    .append(getRGBString("green", index, quadRGBSensor)).append(", ").append(getRGBString("blue", index, quadRGBSensor))
-                    .append("]");
+                this.src.add("[", getRGBString("red", index, quadRGBSensor), ", ",
+                    getRGBString("green", index, quadRGBSensor), ", ", getRGBString("blue", index, quadRGBSensor),
+                    "]");
                 break;
         }
         return null;
@@ -429,30 +425,30 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     @Override
     public Void visitQuadRGBLightOnAction(QuadRGBLightOnAction quadRGBLightOnAction) {
         int index = getSensorNumber(CyberpiConstants.MBUILD_QUADRGB, quadRGBLightOnAction.getUserDefinedPort());
-        this.sb.append("mbuild.quad_rgb_sensor.set_led(");
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Mbot2Methods.RGBASSTRING));
-        this.sb.append("(");
+        this.src.add("mbuild.quad_rgb_sensor.set_led(");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Mbot2Methods.RGBASSTRING));
+        this.src.add("(");
         quadRGBLightOnAction.color.accept(this);
-        this.sb.append(")");
-        this.sb.append(", ").append(index).append(")");
+        this.src.add(")");
+        this.src.add(", ", index, ")");
         return null;
     }
 
     @Override
     public Void visitQuadRGBLightOffAction(QuadRGBLightOffAction quadRGBLightOffAction) {
         int index = getSensorNumber(CyberpiConstants.MBUILD_QUADRGB, quadRGBLightOffAction.getUserDefinedPort());
-        this.sb.append("mbuild.quad_rgb_sensor.off_led(").append(index).append(")");
+        this.src.add("mbuild.quad_rgb_sensor.off_led(", index, ")");
         return null;
     }
 
     @Override
     public Void visitUltrasonic2LEDAction(Ultrasonic2LEDAction ultrasonic2LEDAction) {
         int index = getSensorNumber(CyberpiConstants.ULTRASONIC2, ultrasonic2LEDAction.getUserDefinedPort());
-        this.sb.append("mbuild.ultrasonic2.set_bri(");
+        this.src.add("mbuild.ultrasonic2.set_bri(");
         ultrasonic2LEDAction.brightness.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         appendLedNumber(ultrasonic2LEDAction.getLedNumber());
-        this.sb.append(", ").append(index).append(")");
+        this.src.add(", ", index, ")");
         return null;
     }
 
@@ -493,12 +489,9 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     public Void visitEncoderSensor(EncoderSensor encoderSensor) {
         String port = getPortFromConfig(encoderSensor.getUserDefinedPort());
         if ( encoderSensor.getMode().equals("ROTATION") ) {
-            this.sb.append("(mbot2.EM_get_angle(\"")
-                .append(port)
-                .append("\")")
-                .append(" / 360)");
+            this.src.add("(mbot2.EM_get_angle(\"", port, "\")", " / 360)");
         } else {
-            this.sb.append("mbot2.EM_get_angle(\"").append(port).append("\")");
+            this.src.add("mbot2.EM_get_angle(\"", port, "\")");
         }
         return null;
     }
@@ -506,13 +499,13 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     @Override
     public Void visitEncoderReset(EncoderReset encoderReset) {
         String port = getPortFromConfig(encoderReset.sensorPort);
-        this.sb.append("mbot2.EM_reset_angle(\"").append(port).append("\") ");
+        this.src.add("mbot2.EM_reset_angle(\"", port, "\") ");
         return null;
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
-        this.sb.append("cyberpi.get_loudness()");
+        this.src.add("cyberpi.get_loudness()");
         return null;
     }
 
@@ -520,9 +513,9 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     public Void visitSoundRecord(SoundRecord soundRecord) {
         String mode = soundRecord.getMode();
         if ( mode.equals("START") ) {
-            this.sb.append("cyberpi.audio.record()");
+            this.src.add("cyberpi.audio.record()");
         } else if ( mode.equals("STOP") ) {
-            this.sb.append("cyberpi.audio.stop_record()");
+            this.src.add("cyberpi.audio.stop_record()");
         } else {
             throw new DbcException("invalid mode for SoundRecord: " + mode);
         }
@@ -531,27 +524,25 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitLightSensor(LightSensor lightSensor) {
-        this.sb.append("cyberpi.get_bri()");
+        this.src.add("cyberpi.get_bri()");
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor gyroSensor) {
-        this.sb.append("cyberpi.get_rotation(\"").append(gyroSensor.getSlot().toLowerCase()).append("\")");
+        this.src.add("cyberpi.get_rotation(\"", gyroSensor.getSlot().toLowerCase(), "\")");
         return null;
     }
 
     @Override
     public Void visitGyroResetAxis(GyroResetAxis gyroResetAxis) {
-        this.sb.append("cyberpi.reset_rotation(\"")
-            .append(gyroResetAxis.getSlot().toLowerCase())
-            .append("\")");
+        this.src.add("cyberpi.reset_rotation(\"", gyroResetAxis.getSlot().toLowerCase(), "\")");
         return null;
     }
 
     @Override
     public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
-        this.sb.append("cyberpi.get_acc(\"").append(accelerometerSensor.getSlot().toLowerCase()).append("\")").append("/ 9.80665");
+        this.src.add("cyberpi.get_acc(\"", accelerometerSensor.getSlot().toLowerCase(), "\")", "/ 9.80665");
         return null;
     }
 
@@ -560,19 +551,19 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
         MotorDuration distance = motorOnAction.param.getDuration();
         String port = getPortFromConfig(motorOnAction.getUserDefinedPort());
         if ( distance == null ) {
-            this.sb.append("mbot2.EM_set_speed(");
+            this.src.add("mbot2.EM_set_speed(");
             motorOnAction.param.getSpeed().accept(this);
-            this.sb.append(", \"").append(port).append("\")");
+            this.src.add(", \"", port, "\")");
         } else {
-            this.sb.append("mbot2.EM_turn((");
+            this.src.add("mbot2.EM_turn((");
             distance.getValue().accept(this);
-            this.sb.append(")");
+            this.src.add(")");
             if ( distance.getType().toString().equals("ROTATIONS") ) {
-                this.sb.append(" * 360");
+                this.src.add(" * 360");
             }
-            this.sb.append(", ");
+            this.src.add(", ");
             motorOnAction.param.getSpeed().accept(this);
-            this.sb.append(", \"").append(port).append("\")");
+            this.src.add(", \"", port, "\")");
         }
         return null;
     }
@@ -590,7 +581,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
-        this.sb.append("mbot2.EM_stop()");
+        this.src.add("mbot2.EM_stop()");
         return null;
     }
 
@@ -613,28 +604,28 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
             multi = "-(";
             optBracket = ")";
         }
-        sb.append("mbot2.drive_speed(").append(multi);
+        this.src.add("mbot2.drive_speed(", multi);
         turnAction.param.getSpeed().accept(this);
-        sb.append(optBracket).append(", ").append(multi);
+        this.src.add(optBracket, ", ", multi);
         turnAction.param.getSpeed().accept(this);
-        sb.append(optBracket).append(")");
+        this.src.add(optBracket, ")");
 
     }
 
     private void appendTurnForAction(TurnAction turnAction, String direction) {
-        this.sb.append("mbot2.turn(");
+        this.src.add("mbot2.turn(");
         String multi = "";
         String optBracket = "";
         if ( direction.equals("left") ) {
             multi = "-(";
             optBracket = ")";
         }
-        sb.append(multi);
+        this.src.add(multi);
         turnAction.param.getDuration().getValue().accept(this);
-        sb.append(optBracket);
-        this.sb.append(", ");
+        this.src.add(optBracket);
+        this.src.add(", ");
         turnAction.param.getSpeed().accept(this);
-        this.sb.append(")");
+        this.src.add(")");
     }
 
     @Override
@@ -651,53 +642,53 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
     private void appendCurveForAction(MotionParam speedL, MotionParam speedR, MotorDuration distance, IDriveDirection direction) {
         boolean isForward = direction.toString().equals(SC.FOREWARD);
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Mbot2Methods.DIFFDRIVEFOR));
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Mbot2Methods.DIFFDRIVEFOR));
         if ( isForward ) {
-            this.sb.append("(");
+            this.src.add("(");
             speedL.getSpeed().accept(this);
-            this.sb.append(", ");
+            this.src.add(", ");
             speedR.getSpeed().accept(this);
-            this.sb.append(", ");
+            this.src.add(", ");
         } else {
-            this.sb.append("(-(");
+            this.src.add("(-(");
             speedL.getSpeed().accept(this);
-            this.sb.append("), -(");
+            this.src.add("), -(");
             speedR.getSpeed().accept(this);
-            this.sb.append("), ");
+            this.src.add("), ");
         }
         distance.getValue().accept(this);
-        this.sb.append(")");
+        this.src.add(")");
     }
 
     private void appendCurveAction(MotionParam speedLeft, MotionParam speedRight, IDriveDirection direction) {
-        this.sb.append("mbot2.drive_speed(");
+        this.src.add("mbot2.drive_speed(");
         boolean isForward = direction.toString().equals(SC.FOREWARD);
         if ( isForward ) {
             if ( isMotorSwapped() ) {
-                this.sb.append("-(");
+                this.src.add("-(");
                 speedRight.getSpeed().accept(this);
-                this.sb.append("),");
+                this.src.add("),");
                 speedLeft.getSpeed().accept(this);
             } else {
                 speedLeft.getSpeed().accept(this);
-                this.sb.append(", -(");
+                this.src.add(", -(");
                 speedRight.getSpeed().accept(this);
-                this.sb.append(")");
+                this.src.add(")");
             }
         } else {
             if ( isMotorSwapped() ) {
                 speedRight.getSpeed().accept(this);
-                this.sb.append(", -(");
+                this.src.add(", -(");
                 speedLeft.getSpeed().accept(this);
-                this.sb.append(")");
+                this.src.add(")");
             } else {
-                this.sb.append("-(");
+                this.src.add("-(");
                 speedLeft.getSpeed().accept(this);
-                this.sb.append("),");
+                this.src.add("),");
                 speedRight.getSpeed().accept(this);
             }
         }
-        this.sb.append(")");
+        this.src.add(")");
     }
 
     private ConfigurationComponent getDiffDrive() {
@@ -726,47 +717,43 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitToneAction(ToneAction toneAction) {
-        this.sb.append("cyberpi.audio.play_tone(int(");
+        this.src.add("cyberpi.audio.play_tone(int(");
         toneAction.frequency.accept(this);
-        this.sb.append("), ");
+        this.src.add("), ");
         toneAction.duration.accept(this);
-        this.sb.append(" * 0.001)");
+        this.src.add(" * 0.001)");
         return null;
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
-        this.sb.append("cyberpi.audio.play_tone(int(")
-            .append(playNoteAction.frequency)
-            .append("), ")
-            .append(playNoteAction.duration)
-            .append(" * 0.001)");
+        this.src.add("cyberpi.audio.play_tone(int(", playNoteAction.frequency, "), ", playNoteAction.duration, " * 0.001)");
         return null;
     }
 
     @Override
     public Void visitGetVolumeAction(GetVolumeAction getVolumeAction) {
-        this.sb.append("cyberpi.audio.get_vol()");
+        this.src.add("cyberpi.audio.get_vol()");
         return null;
     }
 
     @Override
     public Void visitSetVolumeAction(SetVolumeAction setVolumeAction) {
-        this.sb.append("cyberpi.audio.set_vol(");
+        this.src.add("cyberpi.audio.set_vol(");
         setVolumeAction.volume.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
-        this.sb.append("((cyberpi.timer.get() - _timer").append(timerSensor.getUserDefinedPort()).append(")*1000)");
+        this.src.add("((cyberpi.timer.get() - _timer", timerSensor.getUserDefinedPort(), ")*1000)");
         return null;
     }
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        this.sb.append("_timer").append(timerReset.sensorPort).append(" = cyberpi.timer.get()");
+        this.src.add("_timer", timerReset.sensorPort, " = cyberpi.timer.get()");
         return null;
     }
 
@@ -777,7 +764,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.sb.append("while True:");
+        this.src.add("while True:");
         incrIndentation();
         visitStmtList(waitStmt.statements);
         decrIndentation();
@@ -786,27 +773,27 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
-        this.sb.append("time.sleep(");
+        this.src.add("time.sleep(");
         waitTimeStmt.time.accept(this);
-        this.sb.append("/1000)");
+        this.src.add("/1000)");
         return null;
     }
 
     @Override
     public Void visitColorConst(ColorConst colorConst) {
-        this.sb.append("(").append(colorConst.getRedChannelInt()).append(", ").append(colorConst.getGreenChannelInt()).append(", ").append(colorConst.getBlueChannelInt()).append(")");
+        this.src.add("(", colorConst.getRedChannelInt(), ", ", colorConst.getGreenChannelInt(), ", ", colorConst.getBlueChannelInt(), ")");
         return null;
     }
 
     @Override
     public Void visitRgbColor(RgbColor rgbColor) {
-        this.sb.append("(");
+        this.src.add("(");
         rgbColor.R.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         rgbColor.G.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         rgbColor.B.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 }

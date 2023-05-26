@@ -30,18 +30,18 @@ public final class Rob3rtaCppVisitor extends NIBOCommonCppVisitor {
         if ( !withWrapping ) {
             return;
         }
-        this.sb.append("#include \"robot.h\"\n");
-        this.sb.append("#include <stdlib.h>\n");
-        this.sb.append("#include <math.h>\n");
-        this.sb.append("#define _ROB3RTA_\n");
-        this.sb.append("Robot rob;\n");
+        this.src.add("#include \"robot.h\"\n");
+        this.src.add("#include <stdlib.h>\n");
+        this.src.add("#include <math.h>\n");
+        this.src.add("#define _ROB3RTA_\n");
+        this.src.add("Robot rob;\n");
 
         super.generateProgramPrefix(withWrapping);
     }
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor pinTouchSensor) {
-        this.sb.append("( rob.getTouch(" + pinTouchSensor.getUserDefinedPort() + "_" + pinTouchSensor.getSlot() + ") == true )");
+        this.src.add("( rob.getTouch(", pinTouchSensor.getUserDefinedPort(), "_", pinTouchSensor.getSlot(), ") == true )");
         return null;
     }
 

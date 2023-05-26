@@ -80,27 +80,27 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
     public Void visitEmptyExpr(EmptyExpr emptyExpr) {
         switch ( emptyExpr.getDefVal() ) {
             case STRING:
-                this.sb.append("\"\"");
+                this.src.add("\"\"");
                 break;
             case BOOLEAN:
-                this.sb.append("true");
+                this.src.add("true");
                 break;
             case NUMBER:
             case NUMBER_INT:
-                this.sb.append("0");
+                this.src.add("0");
                 break;
             case ARRAY:
                 break;
             case NULL:
                 break;
             case COLOR:
-                this.sb.append("RGB(255, 255, 255)");
+                this.src.add("RGB(255, 255, 255)");
                 break;
             case IMAGE:
-                this.sb.append("{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}");
+                this.src.add("{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}");
                 break;
             default:
-                this.sb.append("NULL");
+                this.src.add("NULL");
                 break;
         }
         return null;
@@ -156,7 +156,7 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
-        this.sb.append("__meLEDMatrix_").append(clearDisplayAction.port).append(".clearScreen();");
+        this.src.add("__meLEDMatrix_", clearDisplayAction.port, ".clearScreen();");
         return null;
     }
 
@@ -167,114 +167,114 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
             generateCodeForRgbLed(lightAction, tempVarName);
         } else if ( lightAction.rgbLedColor.getClass().equals(ColorConst.class) ) {
             ColorConst colorConst = (ColorConst) lightAction.rgbLedColor;
-            this.sb.append("_meRgbLed.setColor(");
-            this.sb.append(lightAction.port);
-            this.sb.append(", ");
-            this.sb.append(colorConst.getRedChannelHex());
-            this.sb.append(", ");
-            this.sb.append(colorConst.getGreenChannelHex());
-            this.sb.append(", ");
-            this.sb.append(colorConst.getBlueChannelHex());
-            this.sb.append(");");
+            this.src.add("_meRgbLed.setColor(");
+            this.src.add(lightAction.port);
+            this.src.add(", ");
+            this.src.add(colorConst.getRedChannelHex());
+            this.src.add(", ");
+            this.src.add(colorConst.getGreenChannelHex());
+            this.src.add(", ");
+            this.src.add(colorConst.getBlueChannelHex());
+            this.src.add(");");
             nlIndent();
-            this.sb.append("_meRgbLed.show();");
+            this.src.add("_meRgbLed.show();");
         } else if ( lightAction.rgbLedColor.getClass().equals(MethodExpr.class) ) {
             String tempVarName = "_v_colour_temp";
-            this.sb.append(tempVarName).append(" = ");
+            this.src.add(tempVarName, " = ");
             visitMethodCall((MethodCall) ((MethodExpr) lightAction.rgbLedColor).method);
-            this.sb.append(";");
+            this.src.add(";");
             nlIndent();
             generateCodeForRgbLed(lightAction, tempVarName);
         } else if ( lightAction.rgbLedColor.getClass().equals(FunctionExpr.class) ) {
             String tempVarName = "_v_colour_temp";
-            this.sb.append(tempVarName).append(" = ");
+            this.src.add(tempVarName, " = ");
             ((FunctionExpr) lightAction.rgbLedColor).function.accept(this);
-            this.sb.append(";");
+            this.src.add(";");
             nlIndent();
             generateCodeForRgbLed(lightAction, tempVarName);
         } else {
             Map<String, Expr> Channels = new HashMap<>();
-            this.sb.append("_meRgbLed.setColor(");
-            this.sb.append(lightAction.port);
+            this.src.add("_meRgbLed.setColor(");
+            this.src.add(lightAction.port);
             Channels.put("red", ((RgbColor) lightAction.rgbLedColor).R);
             Channels.put("green", ((RgbColor) lightAction.rgbLedColor).G);
             Channels.put("blue", ((RgbColor) lightAction.rgbLedColor).B);
             Channels.forEach((k, v) -> {
-                this.sb.append(", ");
+                this.src.add(", ");
                 v.accept(this);
             });
-            this.sb.append(");");
+            this.src.add(");");
             nlIndent();
-            this.sb.append("_meRgbLed.show();");
+            this.src.add("_meRgbLed.show();");
         }
         return null;
     }
 
     private void generateCodeForRgbLed(LightAction lightAction, String tempVarName) {
-        this.sb.append("_meRgbLed.setColor(");
-        this.sb.append(lightAction.port);
-        this.sb.append(", ");
-        this.sb.append("RCHANNEL(");
-        this.sb.append(tempVarName);
-        this.sb.append("), ");
-        this.sb.append("GCHANNEL(");
-        this.sb.append(tempVarName);
-        this.sb.append("), ");
-        this.sb.append("BCHANNEL(");
-        this.sb.append(tempVarName);
-        this.sb.append("));");
+        this.src.add("_meRgbLed.setColor(");
+        this.src.add(lightAction.port);
+        this.src.add(", ");
+        this.src.add("RCHANNEL(");
+        this.src.add(tempVarName);
+        this.src.add("), ");
+        this.src.add("GCHANNEL(");
+        this.src.add(tempVarName);
+        this.src.add("), ");
+        this.src.add("BCHANNEL(");
+        this.src.add(tempVarName);
+        this.src.add("));");
         nlIndent();
-        this.sb.append("_meRgbLed.show();");
+        this.src.add("_meRgbLed.show();");
     }
 
     @Override
     public Void visitLightOffAction(LightOffAction lightOffAction) {
-        this.sb.append("_meRgbLed.setColor(" + lightOffAction.port);
-        this.sb.append(", 0, 0, 0);");
+        this.src.add("_meRgbLed.setColor(", lightOffAction.port);
+        this.src.add(", 0, 0, 0);");
         nlIndent();
-        this.sb.append("_meRgbLed.show();");
+        this.src.add("_meRgbLed.show();");
         return null;
     }
 
     @Override
     public Void visitToneAction(ToneAction toneAction) {
         //8 - sound port
-        this.sb.append("_meBuzzer.tone(8, ");
+        this.src.add("_meBuzzer.tone(8, ");
         toneAction.frequency.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         toneAction.duration.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         //8 - sound port
-        this.sb.append("_meBuzzer.tone(8, ");
-        this.sb.append(playNoteAction.frequency);
-        this.sb.append(", ");
-        this.sb.append(playNoteAction.duration);
-        this.sb.append(");");
+        this.src.add("_meBuzzer.tone(8, ");
+        this.src.add(playNoteAction.frequency);
+        this.src.add(", ");
+        this.src.add(playNoteAction.duration);
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         final MotorDuration duration = motorOnAction.param.getDuration();
-        this.sb.append("_meDCmotor").append(motorOnAction.getUserDefinedPort()).append(".run(");
+        this.src.add("_meDCmotor", motorOnAction.getUserDefinedPort(), ".run(");
         if ( !Objects.equals(this.configuration.getFirstMotorPort(SC.RIGHT), motorOnAction.getUserDefinedPort()) ) {
-            this.sb.append("-1*");
+            this.src.add("-1*");
         }
-        this.sb.append("(");
+        this.src.add("(");
         motorOnAction.param.getSpeed().accept(this);
-        this.sb.append(")*255/100);");
+        this.src.add(")*255/100);");
         if ( duration != null ) {
             nlIndent();
-            this.sb.append("delay(");
+            this.src.add("delay(");
             motorOnAction.getDurationValue().accept(this);
-            this.sb.append(");");
+            this.src.add(");");
             nlIndent();
-            this.sb.append("_meDCmotor").append(motorOnAction.getUserDefinedPort()).append(".stop();");
+            this.src.add("_meDCmotor", motorOnAction.getUserDefinedPort(), ".stop();");
         }
         return null;
     }
@@ -291,52 +291,52 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
 
     @Override
     public Void visitMotorStopAction(MotorStopAction motorStopAction) {
-        this.sb.append("_meDCmotor").append(motorStopAction.getUserDefinedPort()).append(".stop();");
+        this.src.add("_meDCmotor", motorStopAction.getUserDefinedPort(), ".stop();");
         return null;
     }
 
     @Override
     public Void visitDriveAction(DriveAction driveAction) {
         final MotorDuration duration = driveAction.param.getDuration();
-        this.sb.append("_meDrive.drive(");
+        this.src.add("_meDrive.drive(");
         driveAction.param.getSpeed().accept(this);
-        this.sb.append(", ");
-        this.sb.append(driveAction.direction == DriveDirection.FOREWARD ? 1 : 0);
+        this.src.add(", ");
+        this.src.add(driveAction.direction == DriveDirection.FOREWARD ? 1 : 0);
         if ( duration != null ) {
-            this.sb.append(", ");
+            this.src.add(", ");
             duration.getValue().accept(this);
         }
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitCurveAction(CurveAction curveAction) {
         final MotorDuration duration = curveAction.paramLeft.getDuration();
-        this.sb.append("_meDrive.steer(");
+        this.src.add("_meDrive.steer(");
         curveAction.paramLeft.getSpeed().accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         curveAction.paramRight.getSpeed().accept(this);
-        this.sb.append(", ").append(curveAction.direction == DriveDirection.FOREWARD ? 1 : 0);
+        this.src.add(", ", curveAction.direction == DriveDirection.FOREWARD ? 1 : 0);
         if ( duration != null ) {
-            this.sb.append(", ");
+            this.src.add(", ");
             duration.getValue().accept(this);
         }
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitTurnAction(TurnAction turnAction) {
         final MotorDuration duration = turnAction.param.getDuration();
-        this.sb.append("_meDrive.turn(");
+        this.src.add("_meDrive.turn(");
         turnAction.param.getSpeed().accept(this);
-        this.sb.append(", ").append(turnAction.direction == TurnDirection.LEFT ? 1 : 0);
+        this.src.add(", ", turnAction.direction == TurnDirection.LEFT ? 1 : 0);
         if ( duration != null ) {
-            this.sb.append(", ");
+            this.src.add(", ");
             duration.getValue().accept(this);
         }
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
@@ -344,7 +344,7 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
     public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         for ( final UsedActor actor : this.getBean(UsedHardwareBean.class).getUsedActors() ) {
             if ( actor.getType().equals(SC.DIFFERENTIAL_DRIVE) ) {
-                this.sb.append("_meDrive.stop();");
+                this.src.add("_meDrive.stop();");
                 break;
             }
         }
@@ -355,16 +355,16 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
     public Void visitLEDMatrixImageAction(LEDMatrixImageAction ledMatrixImageAction) {
         String end = ");";
         if ( ledMatrixImageAction.displayImageMode.equals("IMAGE") ) {
-            this.sb.append("__meLEDMatrix_").append(ledMatrixImageAction.port).append(".drawBitmap(0, 0, 16, ");
-            this.sb.append("&");
+            this.src.add("__meLEDMatrix_", ledMatrixImageAction.port, ".drawBitmap(0, 0, 16, ");
+            this.src.add("&");
             ledMatrixImageAction.valuesToDisplay.accept(this);
-            this.sb.append("[0]");
-            this.sb.append(end);
+            this.src.add("[0]");
+            this.src.add(end);
         } else if ( ledMatrixImageAction.displayImageMode.equals("ANIMATION") ) {
-            this.sb.append("drawAnimationLEDMatrix(&__meLEDMatrix_").append(ledMatrixImageAction.port).append(", ");
+            this.src.add("drawAnimationLEDMatrix(&__meLEDMatrix_", ledMatrixImageAction.port, ", ");
             ledMatrixImageAction.valuesToDisplay.accept(this);
-            this.sb.append(", 200");
-            this.sb.append(end);
+            this.src.add(", 200");
+            this.src.add(end);
         } else {
             throw new DbcException("LEDMatrix display mode is not supported: " + ledMatrixImageAction.displayImageMode);
         }
@@ -373,90 +373,90 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
 
     @Override
     public Void visitLEDMatrixTextAction(LEDMatrixTextAction ledMatrixTextAction) {
-        this.sb.append("drawStrLEDMatrix(&__meLEDMatrix_").append(ledMatrixTextAction.port).append(", ");
+        this.src.add("drawStrLEDMatrix(&__meLEDMatrix_", ledMatrixTextAction.port, ", ");
         if ( !ledMatrixTextAction.msg.getVarType().equals(BlocklyType.STRING) ) {
-            this.sb.append("String(");
+            this.src.add("String(");
             ledMatrixTextAction.msg.accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         } else {
             ledMatrixTextAction.msg.accept(this);
         }
-        this.sb.append(", 100);");
+        this.src.add(", 100);");
         return null;
     }
 
     @Override
     public Void visitLEDMatrixImage(LEDMatrixImage ledMatrixImage) {
         Map<String, String[][]> usedIDImages = this.getBean(UsedHardwareBean.class).getUsedIDImages();
-        this.sb.append("__ledMatrix").append(this.imageList.get(ledMatrixImage.getProperty().getBlocklyId()));
+        this.src.add("__ledMatrix", this.imageList.get(ledMatrixImage.getProperty().getBlocklyId()));
         return null;
     }
 
     @Override
     public Void visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction ledMatrixImageShiftFunction) {
-        this.sb.append("(shiftLEDMatrix");
-        this.sb.append(capitalizeFirstLetter(ledMatrixImageShiftFunction.shiftDirection.toString()));
-        this.sb.append("Vec(");
+        this.src.add("(shiftLEDMatrix");
+        this.src.add(capitalizeFirstLetter(ledMatrixImageShiftFunction.shiftDirection.toString()));
+        this.src.add("Vec(");
         ledMatrixImageShiftFunction.image.accept(this);
 
-        this.sb.append(", ");
+        this.src.add(", ");
         ledMatrixImageShiftFunction.positions.accept(this);
-        this.sb.append("))");
+        this.src.add("))");
         return null;
     }
 
     @Override
     public Void visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction ledMatrixImageInverFunction) {
-        this.sb.append("(invertLEDMatrixVec(");
+        this.src.add("(invertLEDMatrixVec(");
         ledMatrixImageInverFunction.image.accept(this);
 
-        this.sb.append("))");
+        this.src.add("))");
         return null;
     }
 
     @Override
     public Void visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction ledMatrixSetBrightnessAction) {
-        this.sb.append("__meLEDMatrix_").append(ledMatrixSetBrightnessAction.port).append(".setBrightness(");
+        this.src.add("__meLEDMatrix_", ledMatrixSetBrightnessAction.port, ".setBrightness(");
         ledMatrixSetBrightnessAction.brightness.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitSendIRAction(SendIRAction sendIRAction) {
-        this.sb.append("_meIr.sendString(");
+        this.src.add("_meIr.sendString(");
         sendIRAction.message.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
-        this.sb.append("_meIr.getString()");
+        this.src.add("_meIr.getString()");
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor lightSensor) {
-        this.sb.append("_meLight" + lightSensor.getUserDefinedPort() + ".read() * ANALOG2PERCENT");
+        this.src.add("_meLight", lightSensor.getUserDefinedPort(), ".read() * ANALOG2PERCENT");
         return null;
     }
 
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
-        this.sb.append("(analogRead(PORT_7) < 512)");
+        this.src.add("(analogRead(PORT_7) < 512)");
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor infraredSensor) {
-        this.sb.append("!__meLineFollower" + infraredSensor.getUserDefinedPort() + ".readSensor" + infraredSensor.getSlot() + "()");
+        this.src.add("!__meLineFollower", infraredSensor.getUserDefinedPort(), ".readSensor", infraredSensor.getSlot(), "()");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
-        this.sb.append("_meUltraSensor" + ultrasonicSensor.getUserDefinedPort() + ".distanceCm()");
+        this.src.add("_meUltraSensor", ultrasonicSensor.getUserDefinedPort(), ".distanceCm()");
         return null;
     }
 
@@ -482,19 +482,19 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
         if ( numberConf != 0 ) {
             nlIndent();
         }
-        this.sb.append("void setup()");
+        this.src.add("void setup()");
         nlIndent();
-        this.sb.append("{");
+        this.src.add("{");
         incrIndentation();
         nlIndent();
-        this.sb.append("Serial.begin(9600);");
+        this.src.add("Serial.begin(9600);");
         //      TODO test the following lines when these sensors are available
         //        for ( final UsedSensor usedSensor : this.usedSensors ) {
         //            switch ( usedSensor.getType() ) {
         //                case SC.GYRO:
         //                case SC.ACCELEROMETER:
         //                    nlIndent();
-        //                    this.sb.append("myGyro" + usedSensor.getPort() + ".begin();");
+        //                    this.src.add("myGyro", usedSensor.getPort(), ".begin();");
         //                    break;
         //                default:
         //                    break;
@@ -503,30 +503,31 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
         nlIndent();
         generateUsedVars();
         //      TODO test the following lines when these sensors are available
-        //        this.sb.append("\n}");
+        //        this.src.add("\n}");
         //        decrIndentation();
         //        for ( final UsedSensor usedSensor : this.usedSensors ) {
         //            switch ( usedSensor.getType() ) {
         //                case SC.GYRO:
         //                    nlIndent();
-        //                    this.sb.append("myGyro" + usedSensor.getPort() + ".update();");
+        //                    this.src.add("myGyro", usedSensor.getPort(), ".update();");
         //                    break;
         //                case SC.ACCELEROMETER:
         //                    nlIndent();
-        //                    this.sb.append("myGyro" + usedSensor.getPort() + ".update();");
+        //                    this.src.add("myGyro", usedSensor.getPort(), ".update();");
         //                    break;
         //                case SC.TEMPERATURE:
         //                    nlIndent();
-        //                    this.sb.append("myTemp" + usedSensor.getPort() + ".update();");
+        //                    this.src.add("myTemp", usedSensor.getPort(), ".update();");
         //                    break;
         //                default:
         //                    break;
         //            }
         //        }
-        this.sb.delete(this.sb.lastIndexOf("\n"), this.sb.length());
+        StringBuilder sb = src.getStringBuilder();
+        sb.delete(sb.lastIndexOf("\n"), sb.length());
         decrIndentation();
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
         nlIndent();
         return null;
     }
@@ -535,9 +536,9 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
         Map<String, String[][]> usedIDImages = this.getBean(UsedHardwareBean.class).getUsedIDImages();
         int i = 0;
         for ( Map.Entry<String, String[][]> entry : usedIDImages.entrySet() ) {
-            this.sb.append("const std::vector<uint8_t> __ledMatrix").append(i).append(" = ");
+            this.src.add("const std::vector<uint8_t> __ledMatrix", i, " = ");
             writeImage(entry.getValue());
-            this.sb.append(";");
+            this.src.add(";");
             nlIndent();
             this.imageList.put(entry.getKey(), i);
             i++;
@@ -551,17 +552,17 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
         } else {
             decrIndentation();
         }
-        this.sb.append("// This file is automatically generated by the Open Roberta Lab.");
+        this.src.add("// This file is automatically generated by the Open Roberta Lab.");
         nlIndent();
         nlIndent();
-        this.sb.append("#define ANALOG2PERCENT 0.0978");
+        this.src.add("#define ANALOG2PERCENT 0.0978");
         nlIndent();
         nlIndent();
-        this.sb.append("#include <MeMCore.h>");
+        this.src.add("#include <MeMCore.h>");
         nlIndent();
-        this.sb.append("#include <MeDrive.h>");
+        this.src.add("#include <MeDrive.h>");
         nlIndent();
-        this.sb.append("#include <NEPODefs.h>");
+        this.src.add("#include <NEPODefs.h>");
         nlIndent();
         generateSensors();
         generateActors();
@@ -576,35 +577,35 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
             switch ( usedSensor.getType() ) {
                 case SC.BUTTON:
                     nlIndent();
-                    this.sb.append("pinMode(7, INPUT);");
+                    this.src.add("pinMode(7, INPUT);");
                     break;
                 case SC.COLOR:
                     break;
                 case SC.ULTRASONIC:
                     nlIndent();
-                    this.sb.append("MeUltrasonicSensor _meUltraSensor" + usedSensor.getPort() + "(PORT_" + usedSensor.getPort() + ");");
+                    this.src.add("MeUltrasonicSensor _meUltraSensor", usedSensor.getPort(), "(PORT_", usedSensor.getPort(), ");");
                     break;
                 case SC.MOTION:
                     nlIndent();
-                    this.sb.append("MePIRMotionSensor _mePir" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");");
+                    this.src.add("MePIRMotionSensor _mePir", usedSensor.getPort(), "(", usedSensor.getPort(), ");");
                     break;
                 case SC.TEMPERATURE:
                     nlIndent();
-                    this.sb.append("MeHumiture _meTemp" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");");
+                    this.src.add("MeHumiture _meTemp", usedSensor.getPort(), "(", usedSensor.getPort(), ");");
                     break;
                 case SC.TOUCH:
                     nlIndent();
-                    this.sb.append("MeTouchSensor _meTouch" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");");
+                    this.src.add("MeTouchSensor _meTouch", usedSensor.getPort(), "(", usedSensor.getPort(), ");");
                     break;
                 case SC.LIGHT:
                     nlIndent();
-                    this.sb.append("MeLightSensor _meLight" + usedSensor.getPort() + "(PORT_" + usedSensor.getPort() + ");");
+                    this.src.add("MeLightSensor _meLight", usedSensor.getPort(), "(PORT_", usedSensor.getPort(), ");");
                     break;
                 case SC.INFRARED:
                     int port = Integer.parseInt(usedSensor.getPort());
                     if ( !usedInfraredPort.contains(port) ) {
                         nlIndent();
-                        this.sb.append("MeLineFollower __meLineFollower" + usedSensor.getPort() + "(PORT_" + usedSensor.getPort() + ");");
+                        this.src.add("MeLineFollower __meLineFollower", usedSensor.getPort(), "(PORT_", usedSensor.getPort(), ");");
                     }
                     usedInfraredPort.add(port);
                     break;
@@ -613,23 +614,23 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
                 case SC.GYRO:
                 case SC.ACCELEROMETER:
                     nlIndent();
-                    this.sb.append("MeGyro myGyro" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");");
+                    this.src.add("MeGyro myGyro", usedSensor.getPort(), "(", usedSensor.getPort(), ");");
                     break;
                 case SC.SOUND:
                     nlIndent();
-                    this.sb.append("MeSoundSensor _meSoundSensor" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");");
+                    this.src.add("MeSoundSensor _meSoundSensor", usedSensor.getPort(), "(", usedSensor.getPort(), ");");
                     break;
                 case SC.JOYSTICK:
                     nlIndent();
-                    this.sb.append("MeJoystick _meJoystick" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");");
+                    this.src.add("MeJoystick _meJoystick", usedSensor.getPort(), "(", usedSensor.getPort(), ");");
                     break;
                 case SC.FLAMESENSOR:
                     nlIndent();
-                    this.sb.append("MeFlameSensor _meFlameSensor" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");");
+                    this.src.add("MeFlameSensor _meFlameSensor", usedSensor.getPort(), "(", usedSensor.getPort(), ");");
                     break;
                 case SC.VOLTAGE:
                     nlIndent();
-                    this.sb.append("MePotentiometer _mePotentiometer" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");");
+                    this.src.add("MePotentiometer _mePotentiometer", usedSensor.getPort(), "(", usedSensor.getPort(), ");");
                     break;
                 case SC.TIMER:
                     break;
@@ -644,35 +645,29 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
             switch ( usedActor.getType() ) {
                 case SC.LED_ON_BOARD:
                     nlIndent();
-                    this.sb.append("MeRGBLed _meRgbLed(7, 2);");
+                    this.src.add("MeRGBLed _meRgbLed(7, 2);");
                     nlIndent();
-                    this.sb.append("int _v_colour_temp;");
+                    this.src.add("int _v_colour_temp;");
                     break;
                 case SC.GEARED_MOTOR:
                     nlIndent();
-                    this.sb.append("MeDCMotor _meDCmotor" + usedActor.getPort() + "(M" + usedActor.getPort() + ");");
+                    this.src.add("MeDCMotor _meDCmotor", usedActor.getPort(), "(M", usedActor.getPort(), ");");
                     break;
                 case SC.DIFFERENTIAL_DRIVE:
                     nlIndent();
-                    this.sb
-                        .append(
-                            "MeDrive _meDrive(M"
-                                + this.configuration.getFirstMotorPort(SC.LEFT)
-                                + ", M"
-                                + this.configuration.getFirstMotorPort(SC.RIGHT)
-                                + ");");
+                    this.src.add("MeDrive _meDrive(M", this.configuration.getFirstMotorPort(SC.LEFT), ", M", this.configuration.getFirstMotorPort(SC.RIGHT), ");");
                     break;
                 case SC.LED_MATRIX:
                     nlIndent();
-                    this.sb.append("MeLEDMatrix __meLEDMatrix_" + usedActor.getPort() + "(" + usedActor.getPort() + ");");
+                    this.src.add("MeLEDMatrix __meLEDMatrix_", usedActor.getPort(), "(", usedActor.getPort(), ");");
                     break;
                 case SC.BUZZER:
                     nlIndent();
-                    this.sb.append("MeBuzzer _meBuzzer;");
+                    this.src.add("MeBuzzer _meBuzzer;");
                     break;
                 case SC.IR_TRANSMITTER:
                     nlIndent();
-                    this.sb.append("MeIR _meIr;");
+                    this.src.add("MeIR _meIr;");
                     break;
                 case SC.SERIAL:
                     break;
@@ -683,9 +678,9 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
     }
 
     private void writeImage(String[][] image) {
-        this.sb.append("{");
+        this.src.add("{");
         for ( int i = 0; i < 16; i++ ) {
-            this.sb.append("0x");
+            this.src.add("0x");
             int hex = 0;
             for ( int j = 0; j < 8; j++ ) {
                 String pixel = image[i][j].trim();
@@ -693,12 +688,12 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
                     hex += Math.pow(2, j);
                 }
             }
-            this.sb.append(Integer.toHexString(hex));
+            this.src.add(Integer.toHexString(hex));
             if ( i < 15 ) {
-                this.sb.append(", ");
+                this.src.add(", ");
             }
         }
-        this.sb.append("}");
+        this.src.add("}");
     }
 
     private String capitalizeFirstLetter(String original) {

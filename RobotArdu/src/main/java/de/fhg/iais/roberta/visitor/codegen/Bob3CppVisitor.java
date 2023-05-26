@@ -30,10 +30,10 @@ public final class Bob3CppVisitor extends NIBOCommonCppVisitor {
         if ( !withWrapping ) {
             return;
         }
-        this.sb.append("#include \"bob3.h\"\n");
-        this.sb.append("#include <stdlib.h>\n");
-        this.sb.append("#include <math.h>\n");
-        this.sb.append("Bob3 rob;\n");
+        this.src.add("#include \"bob3.h\"\n");
+        this.src.add("#include <stdlib.h>\n");
+        this.src.add("#include <math.h>\n");
+        this.src.add("Bob3 rob;\n");
 
         super.generateProgramPrefix(withWrapping);
     }
@@ -41,9 +41,9 @@ public final class Bob3CppVisitor extends NIBOCommonCppVisitor {
     @Override
     public Void visitPinTouchSensor(PinTouchSensor pinTouchSensor) {
         if ( pinTouchSensor.getSlot().equals("0") ) {
-            this.sb.append("( rob.getArm(" + pinTouchSensor.getUserDefinedPort() + ") > " + pinTouchSensor.getSlot() + " )");
+            this.src.add("( rob.getArm(", pinTouchSensor.getUserDefinedPort(), ") > ", pinTouchSensor.getSlot(), " )");
         } else {
-            this.sb.append("( rob.getArm(" + pinTouchSensor.getUserDefinedPort() + ") == " + pinTouchSensor.getSlot() + " )");
+            this.src.add("( rob.getArm(", pinTouchSensor.getUserDefinedPort(), ") == ", pinTouchSensor.getSlot(), " )");
         }
         return null;
     }

@@ -51,7 +51,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 public final class RobotinoPythonVisitor extends AbstractPythonVisitor implements IRobotinoVisitor<Void> {
 
     private final ConfigurationAst configurationAst;
-    private List<VarDeclaration> varDeclarations;
+    private final List<VarDeclaration> varDeclarations;
 
     /**
      * initialize the Python code generator visitor.
@@ -67,9 +67,9 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     protected void generateProgramPrefix(boolean withWrapping) {
-        this.sb.append("#!/usr/bin/env python3");
+        this.src.add("#!/usr/bin/env python3");
         nlIndent();
-        this.sb.append("import math, random, time, requests, threading, sys, io");
+        this.src.add("import math, random, time, requests, threading, sys, io");
         nlIndent();
         generateVariables();
         nlIndent();
@@ -78,33 +78,32 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
                 this.getBean(CodeGeneratorSetupBean.class)
                     .getHelperMethodGenerator()
                     .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
-            this.sb.append(helperMethodImpls);
+            this.src.add(helperMethodImpls);
         }
         generateTimerVariables(false);
     }
 
     private void generateVariables() {
-        this.sb.append("sys.stdout = io.StringIO()\n" +
-            "sys.stderr = io.StringIO()");
+        this.src.add("sys.stdout = io.StringIO()\nsys.stderr = io.StringIO()");
         nlIndent();
-        this.sb.append("ROBOTINOIP = \"127.0.0.1:80\"");
+        this.src.add("ROBOTINOIP = \"127.0.0.1:80\"");
         nlIndent();
-        this.sb.append("PARAMS = {'sid':'robertaProgram'}");
+        this.src.add("PARAMS = {'sid':'robertaProgram'}");
         nlIndent();
-        this.sb.append("MAXSPEED = 0.5");
+        this.src.add("MAXSPEED = 0.5");
         nlIndent();
-        this.sb.append("MAXROTATION = 0.57");
+        this.src.add("MAXROTATION = 0.57");
         generateOptionalVariables();
     }
 
     private void generateOptionalVariables() {
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIGITAL_PIN) ) {
             nlIndent();
-            this.sb.append("_digitalPinValues = [0 for i in range(8)]");
+            this.src.add("_digitalPinValues = [0 for i in range(8)]");
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(RobotinoConstants.OMNIDRIVE) ) {
             nlIndent();
-            this.sb.append("currentSpeed = [0, 0, 0]");
+            this.src.add("currentSpeed = [0, 0, 0]");
         }
     }
 
@@ -120,11 +119,11 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
     @Override
     public Void visitVarDeclaration(VarDeclaration var) {
         this.usedGlobalVarInFunctions.add(var.getCodeSafeName());
-        this.sb.append(var.getCodeSafeName());
+        this.src.add(var.getCodeSafeName());
         if ( var.getVarType().getBlocklyName().contains("Array") ) {
-            this.sb.append(" = []");
+            this.src.add(" = []");
         } else {
-            this.sb.append(" = None");
+            this.src.add(" = None");
         }
         this.varDeclarations.add(var);
         return null;
@@ -142,22 +141,21 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
             nlIndent();
         }
         nlIndent();
-        this.sb.append("def run(RV):");
+        this.src.add("def run(RV):");
         incrIndentation();
         generateGlobalVariables();
-        this.sb.append("time.sleep(1)");
+        this.src.add("time.sleep(1)");
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(RobotinoConstants.ODOMETRY) ) {
             nlIndent();
             //odometrieReset
-            this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.RESETODOMETRY))
-                .append("(RV, 0, 0, 0)");
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.RESETODOMETRY), "(RV, 0, 0, 0)");
         }
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(RobotinoConstants.CAMERA) ) {
             //default threshold
             nlIndent();
-            this.sb.append("RV.writeFloat(4, 100) ");
+            this.src.add("RV.writeFloat(4, 100) ");
             nlIndent();
-            this.sb.append("time.sleep(0.05)");
+            this.src.add("time.sleep(0.05)");
         }
         generateTimerVariables(true);
         for ( VarDeclaration var : varDeclarations ) {
@@ -175,21 +173,21 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
     }
 
     private void generateMain() {
-        this.sb.append("def main(RV):");
+        this.src.add("def main(RV):");
         incrIndentation();
         nlIndent();
-        this.sb.append("try:");
+        this.src.add("try:");
         incrIndentation();
         nlIndent();
-        this.sb.append("run(RV)");
+        this.src.add("run(RV)");
         decrIndentation();
         nlIndent();
-        this.sb.append("except Exception as e:");
+        this.src.add("except Exception as e:");
         incrIndentation();
         nlIndent();
-        this.sb.append("print(e)");
+        this.src.add("print(e)");
         nlIndent();
-        this.sb.append("raise");
+        this.src.add("raise");
         decrIndentation();
         nlIndent();
         generateFinally();
@@ -198,11 +196,10 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
     }
 
     private void generateStart() {
-        this.sb.append("def start(RV):");
+        this.src.add("def start(RV):");
         incrIndentation();
         nlIndent();
-        this.sb.append("motorDaemon2 = threading.Thread(target=main, daemon=True, args=(RV,), name='mainProgram')\n" +
-            "    motorDaemon2.start()");
+        this.src.add("motorDaemon2 = threading.Thread(target=main, daemon=True, args=(RV,), name='mainProgram')\n    motorDaemon2.start()");
         decrIndentation();
         nlIndent();
     }
@@ -215,7 +212,7 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
         //add usermade global variables
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             nlIndent();
-            this.sb.append("global ").append(String.join(", ", this.usedGlobalVarInFunctions));
+            this.src.add("global ", String.join(", ", this.usedGlobalVarInFunctions));
         }
         nlIndent();
     }
@@ -234,16 +231,14 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
     }
 
     private void appendViewMethods() {
-        this.sb.append("def step(RV):");
+        this.src.add("def step(RV):");
         incrIndentation();
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(RobotinoConstants.OMNIDRIVE) ) {
             nlIndent();
-            this.sb.append(this.getBean(CodeGeneratorSetupBean.class).
-                    getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.POSTVEL))
-                .append("()");
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.POSTVEL), "()");
         } else {
             nlIndent();
-            this.sb.append("pass");
+            this.src.add("pass");
         }
         decrIndentation();
         nlIndent();
@@ -251,43 +246,42 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
         generateMain();
         generateStart();
         nlIndent();
-        this.sb.append("def stop(RV):");
+        this.src.add("def stop(RV):");
         incrIndentation();
         nlIndent();
-        this.sb.append("pass");
+        this.src.add("pass");
         decrIndentation();
         nlIndent();
         nlIndent();
-        this.sb.append("def cleanup(RV):");
+        this.src.add("def cleanup(RV):");
         incrIndentation();
         nlIndent();
-        this.sb.append("pass");
+        this.src.add("pass");
         decrIndentation();
         nlIndent();
     }
 
     private void generateFinally() {
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(RobotinoConstants.OMNIDRIVE) || this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIGITAL_PIN) ) {
-            this.sb.append("finally:");
+            this.src.add("finally:");
             incrIndentation();
             nlIndent();
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIGITAL_PIN) ) {
-                this.sb.append("global _digitalPinValues");
+                this.src.add("global _digitalPinValues");
                 nlIndent();
             }
         }
 
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(RobotinoConstants.OMNIDRIVE) ) {
-            this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.OMNIDRIVESPEED));
-            this.sb.append("(0,0,0)");
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.OMNIDRIVESPEED));
+            this.src.add("(0,0,0)");
             nlIndent();
         }
 
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIGITAL_PIN) ) {
-            this.sb.append("_digitalPinValues = [0 for i in range(8)]");
+            this.src.add("_digitalPinValues = [0 for i in range(8)]");
             nlIndent();
-            this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.SETDIGITALPIN))
-                .append("(1, False)");
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.SETDIGITALPIN), "(1, False)");
             nlIndent();
         }
 
@@ -303,10 +297,10 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
         switch ( timerSensor.getMode() ) {
             case SC.DEFAULT:
             case SC.VALUE:
-                this.sb.append("((time.time() - _timer").append(timerSensor.getUserDefinedPort()).append(")/1000)");
+                this.src.add("((time.time() - _timer", timerSensor.getUserDefinedPort(), ")/1000)");
                 break;
             case SC.RESET:
-                this.sb.append("_timer").append(timerSensor.getUserDefinedPort()).append(" = time.time()");
+                this.src.add("_timer", timerSensor.getUserDefinedPort(), " = time.time()");
                 break;
             default:
                 throw new DbcException("Invalid Time Mode!");
@@ -316,7 +310,7 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        this.sb.append("_timer").append(timerReset.sensorPort).append(" = time.time()");
+        this.src.add("_timer", timerReset.sensorPort, " = time.time()");
         return null;
     }
 
@@ -331,147 +325,142 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
                 this.usedGlobalVarInFunctions.add("_timer" + port);
                 nlIndent();
                 if ( decleration ) {
-                    this.sb.append("_timer").append(port).append(" = time.time()");
+                    this.src.add("_timer", port, " = time.time()");
                 } else {
-                    this.sb.append("_timer").append(port).append(" = None");
+                    this.src.add("_timer", port, " = None");
                 }
             });
     }
 
     @Override
     public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.sb.append("while True:");
+        this.src.add("while True:");
         incrIndentation();
         visitStmtList(waitStmt.statements);
         nlIndent();
-        this.sb.append("time.sleep(0.2)");
+        this.src.add("time.sleep(0.2)");
         decrIndentation();
         return null;
     }
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
-        this.sb.append("time.sleep(");
+        this.src.add("time.sleep(");
         waitTimeStmt.time.accept(this);
-        this.sb.append("/1000)");
+        this.src.add("/1000)");
         return null;
     }
 
 
     @Override
     public Void visitOmnidriveAction(OmnidriveAction omnidriveAction) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.OMNIDRIVESPEED));
-        this.sb.append("(");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.OMNIDRIVESPEED));
+        this.src.add("(");
         omnidriveAction.xVel.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         omnidriveAction.yVel.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         omnidriveAction.thetaVel.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.OMNIDRIVESPEED));
-        this.sb.append("(0, 0, 0)");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.OMNIDRIVESPEED));
+        this.src.add("(0, 0, 0)");
         return null;
     }
 
     @Override
     public Void visitOmnidriveDistanceAction(OmnidriveDistanceAction omnidriveDistanceAction) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.DRIVEFORDISTANCE));
-        this.sb.append("(RV, ");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.DRIVEFORDISTANCE));
+        this.src.add("(RV, ");
         omnidriveDistanceAction.xVel.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         omnidriveDistanceAction.yVel.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         omnidriveDistanceAction.distance.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitOmnidrivePositionAction(OmnidrivePositionAction omnidrivePositionAction) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.DRIVETOPOSITION));
-        this.sb.append("(RV, ");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.DRIVETOPOSITION));
+        this.src.add("(RV, ");
         omnidrivePositionAction.x.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         omnidrivePositionAction.y.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         omnidrivePositionAction.power.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitTurnAction(TurnAction turnAction) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.TURNFORDEGREES))
-            .append("(RV, ");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.TURNFORDEGREES), "(RV, ");
         if ( turnAction.direction == TurnDirection.RIGHT ) {
-            this.sb.append("-");
+            this.src.add("-");
         }
         turnAction.param.getSpeed().accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         turnAction.param.getDuration().getValue().accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitMarkerInformation(MarkerInformation markerInformation) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETMARKERINFO));
-        this.sb.append("(RV, ");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETMARKERINFO));
+        this.src.add("(RV, ");
         markerInformation.markerId.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitDetectMarkSensor(DetectMarkSensor detectMarkSensor) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETMARKERS));
-        this.sb.append("(RV)");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETMARKERS));
+        this.src.add("(RV)");
         return null;
     }
 
     @Override
     public Void visitCameraSensor(CameraSensor cameraSensor) {
         if ( cameraSensor.getMode().equals("LINE") ) {
-            this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETCAMERALINE))
-                .append("(RV)");
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETCAMERALINE), "(RV)");
         }
         return null;
     }
 
     @Override
     public Void visitOdometrySensor(OdometrySensor odometrySensor) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETODOMETRY));
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETODOMETRY));
         if ( odometrySensor.getSlot().equals("THETA") ) {
-            this.sb.append("('rot')")
-                .append(" * (180 / math.pi)");
+            this.src.add("('rot') * (180 / math.pi)");
         } else {
-            this.sb.append("('")
-                .append(odometrySensor.getSlot().toLowerCase())
-                .append("') * 100");
+            this.src.add("('", odometrySensor.getSlot().toLowerCase(), "') * 100");
         }
         return null;
     }
 
     @Override
     public Void visitOdometrySensorReset(OdometrySensorReset odometrySensorReset) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.RESETODOMETRY));
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.RESETODOMETRY));
         switch ( odometrySensorReset.slot ) {
             case "ALL":
-                this.sb.append("(RV, 0, 0, 0)");
+                this.src.add("(RV, 0, 0, 0)");
                 break;
             case "X":
-                this.sb.append("(RV, 0, RV.readFloatVector(1)[1], RV.readFloatVector(1)[2])");
+                this.src.add("(RV, 0, RV.readFloatVector(1)[1], RV.readFloatVector(1)[2])");
                 break;
             case "Y":
-                this.sb.append("(RV, RV.readFloatVector(1)[0], 0, RV.readFloatVector(1)[2])");
+                this.src.add("(RV, RV.readFloatVector(1)[0], 0, RV.readFloatVector(1)[2])");
                 break;
             case "THETA":
-                this.sb.append("(RV, RV.readFloatVector(1)[0], RV.readFloatVector(1)[1], 0)");
+                this.src.add("(RV, RV.readFloatVector(1)[0], RV.readFloatVector(1)[1], 0)");
                 break;
             default:
                 throw new DbcException("Invalid Odometry Mode!");
@@ -484,66 +473,62 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
         String port = configurationAst.getConfigurationComponent(pinGetValueSensor.getUserDefinedPort()).getComponentProperties().get("OUTPUT").substring(2);
 
         if ( pinGetValueSensor.getMode().equals(SC.DIGITAL) ) {
-            this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETDIGITALPIN)).append("(" + port + ")");
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETDIGITALPIN), "(", port, ")");
         } else if ( pinGetValueSensor.getMode().equals(SC.ANALOG) ) {
-            this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETANALOGPIN)).append("(" + port + ")");
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETANALOGPIN), "(", port, ")");
         }
         return null;
     }
 
     @Override
     public Void visitTouchSensor(TouchSensor touchSensor) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.ISBUMPED))
-            .append("()");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.ISBUMPED), "()");
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         String port = infraredSensor.getUserDefinedPort();
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETDISTANCE) + "(")
-            .append(port)
-            .append(")");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETDISTANCE), "(", port, ")");
         return null;
     }
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction pinWriteValueAction) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.SETDIGITALPIN))
-            .append("(")
-            .append(configurationAst.getConfigurationComponent(pinWriteValueAction.port).getComponentProperties().get("INPUT").substring(2))
-            .append(", ");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.SETDIGITALPIN),
+            "(",
+            configurationAst.getConfigurationComponent(pinWriteValueAction.port).getComponentProperties().get("INPUT").substring(2),
+            ", ");
         pinWriteValueAction.value.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitColourBlob(ColourBlob colourBlob) {
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETCOLOURBLOB))
-            .append("(RV, [");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETCOLOURBLOB), "(RV, [");
         colourBlob.minHue.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         colourBlob.maxHue.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         colourBlob.minSat.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         colourBlob.maxSat.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         colourBlob.minVal.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         colourBlob.maxVal.accept(this);
-        this.sb.append("])");
+        this.src.add("])");
         return null;
     }
 
     @Override
     public Void visitCameraThreshold(CameraThreshold cameraThreshold) {
-        this.sb.append("RV.writeFloat(4, ");
+        this.src.add("RV.writeFloat(4, ");
         cameraThreshold.threshold.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         this.nlIndent();
-        this.sb.append("time.sleep(0.005)");
+        this.src.add("time.sleep(0.005)");
         return null;
     }
 
@@ -555,7 +540,7 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
         } else {
             port = configurationAst.getConfigurationComponent(opticalSensor.getUserDefinedPort()).getComponentProperties().get("WH").substring(2);
         }
-        this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETDIGITALPIN)).append("(" + port + ")");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.GETDIGITALPIN), "(", port, ")");
         return null;
     }
 

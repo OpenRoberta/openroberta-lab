@@ -76,16 +76,16 @@ public abstract class NIBOCommonCppVisitor extends NepoArduinoCppVisitor impleme
     @Override
     public Void visitInfraredSensor(InfraredSensor infraredSensor) {
         if ( infraredSensor.getMode().equals("REFLEXION") ) {
-            this.sb.append("rob.getIRSensor()");
+            this.src.add("rob.getIRSensor()");
         } else {
-            this.sb.append("rob.getIRLight()");
+            this.src.add("rob.getIRLight()");
         }
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
-        this.sb.append("rob.getTemperature()");
+        this.src.add("rob.getTemperature()");
         return null;
     }
 
@@ -114,83 +114,83 @@ public abstract class NIBOCommonCppVisitor extends NepoArduinoCppVisitor impleme
 
     @Override
     public Void visitLedOnAction(LedOnAction ledOnAction) {
-        this.sb.append("rob.setLed(");
+        this.src.add("rob.setLed(");
         if ( ledOnAction.side.equals("Left") ) {
-            this.sb.append("EYE_2, ");
+            this.src.add("EYE_2, ");
         } else {
-            this.sb.append("EYE_1, ");
+            this.src.add("EYE_1, ");
         }
         ledOnAction.ledColor.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitLedOffAction(LedOffAction ledOffAction) {
-        this.sb.append("rob.setLed(");
+        this.src.add("rob.setLed(");
         if ( ledOffAction.side.equals("Left") ) {
-            this.sb.append("EYE_2, OFF);");
+            this.src.add("EYE_2, OFF);");
         } else {
-            this.sb.append("EYE_1, OFF);");
+            this.src.add("EYE_1, OFF);");
         }
         return null;
     }
 
     @Override
     public Void visitBodyLEDAction(BodyLEDAction bodyLEDAction) {
-        this.sb.append("rob.setLed(");
-        this.sb.append(bodyLEDAction.side + ", ");
-        this.sb.append(bodyLEDAction.ledState + ");");
+        this.src.add("rob.setLed(");
+        this.src.add(bodyLEDAction.side, ", ");
+        this.src.add(bodyLEDAction.ledState, ");");
         return null;
     }
 
     @Override
     public Void visitSendIRAction(SendIRAction sendIRAction) {
-        this.sb.append("rob.transmitIRCode(");
+        this.src.add("rob.transmitIRCode(");
         sendIRAction.code.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
-        this.sb.append("rob.receiveIRCode(500)");
+        this.src.add("rob.receiveIRCode(500)");
         return null;
     }
 
     @Override
     public Void visitRememberAction(RememberAction rememberAction) {
-        this.sb.append("remember((int)(");
+        this.src.add("remember((int)(");
         rememberAction.code.accept(this);
-        this.sb.append("));");
+        this.src.add("));");
         return null;
     }
 
     @Override
     public Void visitRecallAction(RecallAction recallAction) {
-        this.sb.append("recall()");
+        this.src.add("recall()");
         return null;
     }
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
-        this.sb.append("_CLAMP(");
+        this.src.add("_CLAMP(");
         mathConstrainFunct.value.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         mathConstrainFunct.lowerBound.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         mathConstrainFunct.upperBound.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        this.sb.append("randomNumber(");
+        this.src.add("randomNumber(");
         mathRandomIntFunct.from.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         mathRandomIntFunct.to.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
@@ -210,7 +210,7 @@ public abstract class NIBOCommonCppVisitor extends NepoArduinoCppVisitor impleme
 
     @Override
     public Void visitCodePadSensor(CodePadSensor codePadSensor) {
-        this.sb.append("rob.getID()");
+        this.src.add("rob.getID()");
         return null;
     }
 }

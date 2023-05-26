@@ -32,7 +32,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
-import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
@@ -94,16 +93,16 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         if ( isInteger(numConst.value) ) {
             super.visitNumConst(numConst);
         } else {
-            this.sb.append("((float) ");
+            this.src.add("((float) ");
             super.visitNumConst(numConst);
-            this.sb.append(")");
+            this.src.add(")");
         }
         return null;
     }
 
     @Override
     public Void visitNullConst(NullConst nullConst) {
-        this.sb.append("null");
+        this.src.add("null");
         return null;
     }
 
@@ -111,22 +110,22 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     public Void visitMathConst(MathConst mathConst) {
         switch ( mathConst.mathConst ) {
             case PI:
-                this.sb.append("(float) Math.PI");
+                this.src.add("(float) Math.PI");
                 break;
             case E:
-                this.sb.append("(float) Math.E");
+                this.src.add("(float) Math.E");
                 break;
             case GOLDEN_RATIO:
-                this.sb.append("(float) ((1.0 + Math.sqrt(5.0)) / 2.0)");
+                this.src.add("(float) ((1.0 + Math.sqrt(5.0)) / 2.0)");
                 break;
             case SQRT2:
-                this.sb.append("(float) Math.sqrt(2)");
+                this.src.add("(float) Math.sqrt(2)");
                 break;
             case SQRT1_2:
-                this.sb.append("(float) Math.sqrt(0.5)");
+                this.src.add("(float) Math.sqrt(0.5)");
                 break;
             case INFINITY:
-                this.sb.append("Float.POSITIVE_INFINITY");
+                this.src.add("Float.POSITIVE_INFINITY");
                 break;
             default:
                 break;
@@ -141,17 +140,17 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
             generateCodeForStringEqualityOp(binary);
             return null;
         }
-        generateSubExpr(this.sb, false, binary.left, binary);
+        generateSubExpr(this.src, false, binary.left, binary);
         String sym = getBinaryOperatorSymbol(op);
-        this.sb.append(whitespace() + sym + whitespace());
+        this.src.add(" ", sym, " ");
         switch ( op ) {
             case DIVIDE:
-                this.sb.append("((float) ");
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-                this.sb.append(")");
+                this.src.add("((float) ");
+                generateSubExpr(this.src, parenthesesCheck(binary), binary.getRight(), binary);
+                this.src.add(")");
                 break;
             default:
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                generateSubExpr(this.src, parenthesesCheck(binary), binary.getRight(), binary);
                 break;
         }
         return null;
@@ -161,20 +160,20 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     public Void visitEmptyExpr(EmptyExpr emptyExpr) {
         switch ( emptyExpr.getDefVal() ) {
             case STRING:
-                this.sb.append("\"\"");
+                this.src.add("\"\"");
                 break;
             case BOOLEAN:
-                this.sb.append("true");
+                this.src.add("true");
                 break;
             case NUMBER_INT:
-                this.sb.append("0");
+                this.src.add("0");
                 break;
             case ARRAY:
                 break;
             case NULL:
                 break;
             default:
-                this.sb.append("null");
+                this.src.add("null");
                 break;
         }
         return null;
@@ -183,14 +182,14 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitAssignStmt(AssignStmt assignStmt) {
         super.visitAssignStmt(assignStmt);
-        this.sb.append(";");
+        this.src.add(";");
         return null;
     }
 
     @Override
     public Void visitExprStmt(ExprStmt exprStmt) {
         super.visitExprStmt(exprStmt);
-        this.sb.append(";");
+        this.src.add(";");
         return null;
     }
 
@@ -204,7 +203,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
                  *This ""if ( true ) {" statement is needed because when we have code after the "while ( true ) "
                  *statement is unreachable
                  */
-                this.sb.append("if ( true ) {");
+                this.src.add("if ( true ) {");
                 additionalClosingBracket = true;
                 incrIndentation();
                 nlIndent();
@@ -237,11 +236,11 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         }
         decrIndentation();
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
         if ( additionalClosingBracket ) {
             decrIndentation();
             nlIndent();
-            this.sb.append("}");
+            this.src.add("}");
         }
         return null;
     }
@@ -249,7 +248,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitFunctionStmt(FunctionStmt functionStmt) {
         super.visitFunctionStmt(functionStmt);
-        this.sb.append(";");
+        this.src.add(";");
         return null;
     }
 
@@ -257,43 +256,42 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     public Void visitStmtFlowCon(StmtFlowCon stmtFlowCon) {
         if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) != null ) {
             if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) ) {
-                this.sb.append("if (true) " + stmtFlowCon.flow.toString().toLowerCase() + " loop" + this.currentLoop.getLast() + ";");
+                this.src.add("if (true) ", stmtFlowCon.flow.toString().toLowerCase(), " loop", this.currentLoop.getLast(), ";");
                 return null;
             }
         }
-        this.sb.append(stmtFlowCon.flow.toString().toLowerCase() + ";");
+        this.src.add(stmtFlowCon.flow.toString().toLowerCase(), ";");
         return null;
     }
 
     @Override
     public Void visitTextPrintFunct(TextPrintFunct textPrintFunct) {
-        this.sb.append("System.out.println(");
+        this.src.add("System.out.println(");
         textPrintFunct.param.get(0).accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitEmptyList(EmptyList emptyList) {
-        this.sb
-            .append(
-                "new ArrayList<"
-                    + getLanguageVarTypeFromBlocklyType(emptyList.typeVar).substring(0, 1).toUpperCase()
-                    + getLanguageVarTypeFromBlocklyType(emptyList.typeVar).substring(1).toLowerCase()
-                    + ">()");
+        this.src.add(
+            "new ArrayList<",
+            getLanguageVarTypeFromBlocklyType(emptyList.typeVar).substring(0, 1).toUpperCase(),
+            getLanguageVarTypeFromBlocklyType(emptyList.typeVar).substring(1).toLowerCase(),
+            ">()");
         return null;
     }
 
     @Override
     public Void visitListRepeat(ListRepeat listRepeat) {
-        this.sb.append("new ArrayList<>(Collections.nCopies( (int) ");
+        this.src.add("new ArrayList<>(Collections.nCopies( (int) ");
         listRepeat.param.get(1).accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         if ( listRepeat.param.get(0).getVarType() == BlocklyType.NUMBER ) {
-            this.sb.append(" (float) ");
+            this.src.add(" (float) ");
         }
         listRepeat.param.get(0).accept(this);
-        this.sb.append("))");
+        this.src.add("))");
         return null;
     }
 
@@ -301,45 +299,45 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     public Void visitMathSingleFunct(MathSingleFunct mathSingleFunct) {
         switch ( mathSingleFunct.functName ) {
             case SQUARE:
-                this.sb.append("(float) Math.pow(");
+                this.src.add("(float) Math.pow(");
                 mathSingleFunct.param.get(0).accept(this);
-                this.sb.append(", 2)");
+                this.src.add(", 2)");
                 return null;
             case ROOT:
-                this.sb.append("(float) Math.sqrt(");
+                this.src.add("(float) Math.sqrt(");
                 break;
             case LN:
-                this.sb.append("(float) Math.log(");
+                this.src.add("(float) Math.log(");
                 break;
             case POW10:
-                this.sb.append("(float) Math.pow(10, ");
+                this.src.add("(float) Math.pow(10, ");
                 break;
             case ROUNDUP:
-                this.sb.append("(float) Math.ceil(");
+                this.src.add("(float) Math.ceil(");
                 break;
             case ROUNDDOWN:
-                this.sb.append("(float) Math.floor(");
+                this.src.add("(float) Math.floor(");
                 break;
             default:
-                this.sb.append("(float) Math.");
-                this.sb.append(mathSingleFunct.functName.name().toLowerCase(Locale.ENGLISH)).append("(");
+                this.src.add("(float) Math.");
+                this.src.add(mathSingleFunct.functName.name().toLowerCase(Locale.ENGLISH), "(");
                 break;
         }
         mathSingleFunct.param.get(0).accept(this);
-        this.sb.append(")");
+        this.src.add(")");
 
         return null;
     }
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
-        this.sb.append("Math.min(Math.max(");
+        this.src.add("Math.min(Math.max(");
         mathConstrainFunct.value.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         mathConstrainFunct.lowerBound.accept(this);
-        this.sb.append("), ");
+        this.src.add("), ");
         mathConstrainFunct.upperBound.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
@@ -347,42 +345,42 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     public Void visitMathNumPropFunct(MathNumPropFunct mathNumPropFunct) {
         switch ( mathNumPropFunct.functName ) {
             case EVEN:
-                this.sb.append("(");
+                this.src.add("(");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.sb.append(" % 2 == 0)");
+                this.src.add(" % 2 == 0)");
                 break;
             case ODD:
-                this.sb.append("(");
+                this.src.add("(");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.sb.append(" % 2 == 1)");
+                this.src.add(" % 2 == 1)");
                 break;
             case PRIME:
                 String methodName = this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.PRIME);
-                this.sb.append(methodName).append("( (int) ");
+                this.src.add(methodName, "( (int) ");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.sb.append(")");
+                this.src.add(")");
                 break;
             case WHOLE:
-                this.sb.append("(");
+                this.src.add("(");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.sb.append(" % 1 == 0)");
+                this.src.add(" % 1 == 0)");
                 break;
             case POSITIVE:
-                this.sb.append("(");
+                this.src.add("(");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.sb.append(" > 0)");
+                this.src.add(" > 0)");
                 break;
             case NEGATIVE:
-                this.sb.append("(");
+                this.src.add("(");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.sb.append(" < 0)");
+                this.src.add(" < 0)");
                 break;
             case DIVISIBLE_BY:
-                this.sb.append("(");
+                this.src.add("(");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.sb.append(" % ");
+                this.src.add(" % ");
                 mathNumPropFunct.param.get(1).accept(this);
-                this.sb.append(" == 0)");
+                this.src.add(" == 0)");
                 break;
             default:
                 break;
@@ -394,100 +392,98 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     public Void visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
         switch ( mathOnListFunct.functName ) {
             case MIN:
-                this.sb.append("Collections.min(");
+                this.src.add("Collections.min(");
                 mathOnListFunct.list.accept(this);
                 break;
             case MAX:
-                this.sb.append("Collections.max(");
+                this.src.add("Collections.max(");
                 mathOnListFunct.list.accept(this);
                 break;
             case RANDOM:
                 mathOnListFunct.list.accept(this);
-                this.sb.append(".get(0"); // TODO remove? implement?
+                this.src.add(".get(0"); // TODO remove? implement?
                 break;
             default:
-                this.sb
-                    .append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(mathOnListFunct.functName))
-                    .append("(");
+                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(mathOnListFunct.functName), "(");
                 mathOnListFunct.list.accept(this);
                 break;
         }
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
-        this.sb.append("(float) Math.random()");
+        this.src.add("(float) Math.random()");
         return null;
     }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        this.sb.append("( Math.round(Math.random() * ((");
+        this.src.add("( Math.round(Math.random() * ((");
         mathRandomIntFunct.to.accept(this);
-        this.sb.append(") - (");
+        this.src.add(") - (");
         mathRandomIntFunct.from.accept(this);
-        this.sb.append("))) + (");
+        this.src.add("))) + (");
         mathRandomIntFunct.from.accept(this);
-        this.sb.append(") )");
+        this.src.add(") )");
         return null;
     }
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct mathPowerFunct) {
-        this.sb.append("(float) Math.pow(");
+        this.src.add("(float) Math.pow(");
         super.visitMathPowerFunct(mathPowerFunct);
         return null;
     }
 
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
-        this.sb.append("(String.valueOf(");
+        this.src.add("(String.valueOf(");
         mathCastStringFunct.value.accept(this);
-        this.sb.append("))");
+        this.src.add("))");
         return null;
     }
 
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
-        this.sb.append("String.valueOf((char)(int)(");
+        this.src.add("String.valueOf((char)(int)(");
         mathCastCharFunct.value.accept(this);
-        this.sb.append("))");
+        this.src.add("))");
         return null;
     }
 
     @Override
     public Void visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
         super.visitMathChangeStmt(mathChangeStmt);
-        this.sb.append(";");
+        this.src.add(";");
         return null;
     }
 
     @Override
     public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
         textAppendStmt.var.accept(this);
-        this.sb.append(" += String.valueOf(");
+        this.src.add(" += String.valueOf(");
         textAppendStmt.text.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
-        this.sb.append("Float.parseFloat(");
+        this.src.add("Float.parseFloat(");
         textStringCastNumberFunct.value.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
-        this.sb.append("(int)(");
+        this.src.add("(int)(");
         textCharCastNumberFunct.value.accept(this);
-        this.sb.append(".charAt(");
+        this.src.add(".charAt(");
         textCharCastNumberFunct.atIndex.accept(this);
-        this.sb.append("))");
+        this.src.add("))");
         return null;
     }
 
@@ -496,12 +492,12 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         List<Expr> exprs = textJoinFunct.param.get();
         Iterator<Expr> iterator = exprs.iterator();
         while ( iterator.hasNext() ) {
-            this.sb.append("String.valueOf(");
+            this.src.add("String.valueOf(");
             Expr expr = iterator.next();
             expr.accept(this);
-            this.sb.append(")");
+            this.src.add(")");
             if ( iterator.hasNext() ) {
-                this.sb.append(" + ");
+                this.src.add(" + ");
             }
         }
         return null;
@@ -510,43 +506,43 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMethodVoid(MethodVoid methodVoid) {
         nlIndent();
-        this.sb.append("private void ");
-        this.sb.append(methodVoid.getCodeSafeMethodName()).append("(");
+        this.src.add("private void ");
+        this.src.add(methodVoid.getCodeSafeMethodName(), "(");
         methodVoid.getParameters().accept(this);
-        this.sb.append(") {");
+        this.src.add(") {");
         incrIndentation();
         methodVoid.body.accept(this);
         decrIndentation();
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
         return null;
     }
 
     @Override
     public Void visitMethodReturn(MethodReturn methodReturn) {
         nlIndent();
-        this.sb.append("private ").append(getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
-        this.sb.append(" ").append(methodReturn.getCodeSafeMethodName()).append("(");
+        this.src.add("private ", getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
+        this.src.add(" ", methodReturn.getCodeSafeMethodName(), "(");
         methodReturn.getParameters().accept(this);
-        this.sb.append(") {");
+        this.src.add(") {");
         incrIndentation();
         methodReturn.body.accept(this);
         nlIndent();
-        this.sb.append("return ");
+        this.src.add("return ");
         methodReturn.returnValue.accept(this);
-        this.sb.append(";");
+        this.src.add(";");
         decrIndentation();
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
         return null;
     }
 
     @Override
     public Void visitMethodIfReturn(MethodIfReturn methodIfReturn) {
-        this.sb.append("if (");
+        this.src.add("if (");
         methodIfReturn.oraCondition.accept(this);
-        this.sb.append(") ");
-        this.sb.append("return ");
+        this.src.add(") ");
+        this.src.add("return ");
         methodIfReturn.oraReturnValue.accept(this);
         return null;
     }
@@ -555,7 +551,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     public Void visitMethodStmt(MethodStmt methodStmt) {
         super.visitMethodStmt(methodStmt);
         if ( methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn") ) {
-            this.sb.append(";");
+            this.src.add(";");
         }
         return null;
     }
@@ -564,48 +560,48 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     public Void visitMethodCall(MethodCall methodCall) {
         super.visitMethodCall(methodCall);
         if ( methodCall.getReturnType() == BlocklyType.VOID ) {
-            this.sb.append(";");
+            this.src.add(";");
         }
         return null;
     }
 
     @Override
     public Void visitStringConst(StringConst stringConst) {
-        this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.value.replaceAll("[<>\\$]", ""))).append("\"");
+        this.src.add("\"", StringEscapeUtils.escapeJava(stringConst.value.replaceAll("[<>\\$]", "")), "\"");
         return null;
     }
 
     @Override
     public Void visitAssertStmt(AssertStmt assertStmt) {
-        this.sb.append("if (!(");
+        this.src.add("if (!(");
         assertStmt.asserts.accept(this);
-        this.sb.append(")) {");
+        this.src.add(")) {");
         incrIndentation();
         nlIndent();
-        this.sb.append("System.out.println(\"Assertion failed: \" + \"").append(assertStmt.msg).append("\" + ");
+        this.src.add("System.out.println(\"Assertion failed: \" + \"", assertStmt.msg, "\" + ");
         ((Binary) assertStmt.asserts).left.accept(this);
-        this.sb.append(" + \"").append(((Binary) assertStmt.asserts).op.toString()).append("\" + ");
+        this.src.add(" + \"", ((Binary) assertStmt.asserts).op.toString(), "\" + ");
         ((Binary) assertStmt.asserts).getRight().accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         decrIndentation();
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
         return null;
     }
 
     @Override
     public Void visitDebugAction(DebugAction debugAction) {
-        this.sb.append("System.out.println(");
+        this.src.add("System.out.println(");
         debugAction.value.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitSerialWriteAction(SerialWriteAction serialWriteAction) {
-        this.sb.append("System.out.println(");
+        this.src.add("System.out.println(");
         serialWriteAction.value.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
@@ -660,7 +656,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
             case "STRING_CONST":
                 return true;
             case "VAR":
-                return ((Var) e).getVarType() == BlocklyType.STRING;
+                return e.getVarType() == BlocklyType.STRING;
             case "FUNCTION_EXPR":
                 BlockDescriptor functionKind = ((FunctionExpr) e).getFunction().getKind();
                 return functionKind.hasName("TEXT_JOIN_FUNCT", "LIST_INDEX_OF");
@@ -678,13 +674,13 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
 
     @Override
     protected void generateCodeFromTernary(TernaryExpr ternaryExpr) {
-        this.sb.append("(" + whitespace() + "(" + whitespace());
+        this.src.add("( ", "( ");
         ternaryExpr.condition.accept(this);
-        this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
+        this.src.add(" ) ", "? ");
         ternaryExpr.thenPart.accept(this);
-        this.sb.append(whitespace() + ":" + whitespace());
+        this.src.add(" : ");
         ternaryExpr.elsePart.accept(this);
-        this.sb.append(whitespace() + ")");
+        this.src.add(" )");
     }
 
     @Override
@@ -693,13 +689,13 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         String conditionStmt = "if";
         for ( int i = 0; i < exprSize; i++ ) {
             generateCodeFromStmtCondition(conditionStmt, ifStmt.expr.get(i));
-            conditionStmt = "else" + whitespace() + "if";
+            conditionStmt = "else if";
             incrIndentation();
             ifStmt.thenList.get(i).accept(this);
             decrIndentation();
             if ( i + 1 < exprSize ) {
                 nlIndent();
-                this.sb.append("}").append(whitespace());
+                this.src.add("} ");
             }
         }
     }
@@ -708,43 +704,43 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     protected void generateCodeFromElse(IfStmt ifStmt) {
         if ( !ifStmt.elseList.get().isEmpty() ) {
             nlIndent();
-            this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
+            this.src.add("} else {");
             incrIndentation();
             ifStmt.elseList.accept(this);
             decrIndentation();
         }
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
     }
 
     private void generateCodeFromStmtCondition(String stmtType, Expr expr) {
-        this.sb.append(stmtType + whitespace() + "(" + whitespace());
+        this.src.add(stmtType, " ( ");
         expr.accept(this);
-        this.sb.append(whitespace() + ")" + whitespace() + "{");
+        this.src.add(" ) {");
     }
 
     private void generateCodeFromStmtConditionFor(String stmtType, Expr expr) {
-        this.sb.append(stmtType + whitespace() + "(" + whitespace() + "float" + whitespace());
+        this.src.add(stmtType, " ( ", "float ");
         ExprList expressions = (ExprList) expr;
         expressions.get().get(0).accept(this);
-        this.sb.append(whitespace() + "=" + whitespace());
+        this.src.add(" = ");
         expressions.get().get(1).accept(this);
-        this.sb.append(";" + whitespace());
+        this.src.add("; ");
         expressions.get().get(0).accept(this);
         int posOpenBracket = expressions.get().toString().lastIndexOf("[");
         int posClosedBracket = expressions.get().toString().lastIndexOf("]");
         int counterPos = expressions.get().toString().lastIndexOf("-");
         if ( counterPos > posOpenBracket && counterPos < posClosedBracket ) {
-            this.sb.append(">" + whitespace());
+            this.src.add("> ");
         } else {
-            this.sb.append("<" + whitespace());
+            this.src.add("< ");
         }
         expressions.get().get(2).accept(this);
-        this.sb.append(";" + whitespace());
+        this.src.add("; ");
         expressions.get().get(0).accept(this);
-        this.sb.append("+=" + whitespace());
+        this.src.add("+= ");
         expressions.get().get(3).accept(this);
-        this.sb.append(whitespace() + ")" + whitespace() + "{");
+        this.src.add(" ) {");
     }
 
     private boolean isEqualityOpOnStrings(Binary binary) {
@@ -755,23 +751,23 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
 
     private void generateCodeForStringEqualityOp(Binary binary) {
         if ( binary.op == Op.NEQ ) {
-            this.sb.append("!");
+            this.src.add("!");
         }
-        generateSubExpr(this.sb, false, binary.left, binary);
-        this.sb.append(".equals(");
-        generateSubExpr(this.sb, false, binary.getRight(), binary);
-        this.sb.append(")");
+        generateSubExpr(this.src, false, binary.left, binary);
+        this.src.add(".equals(");
+        generateSubExpr(this.src, false, binary.getRight(), binary);
+        this.src.add(")");
     }
 
     private void appendBreakStmt() {
         nlIndent();
-        this.sb.append("break;");
+        this.src.add("break;");
     }
 
     private void addLabelToLoop() {
         increaseLoopCounter();
         if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) ) {
-            this.sb.append("loop" + this.currentLoop.getLast() + ":");
+            this.src.add("loop", this.currentLoop.getLast(), ":");
             nlIndent();
         }
     }
@@ -788,7 +784,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
                         .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
                 Iterator<String> it = Arrays.stream(helperMethodImpls.split("\n")).iterator();
                 while ( it.hasNext() ) {
-                    this.sb.append(it.next());
+                    this.src.add(it.next());
                     if ( it.hasNext() ) {
                         nlIndent();
                     }
@@ -798,7 +794,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
             }
         }
 
-        this.sb.append("}");
+        this.src.add("}");
     }
 
     @Override

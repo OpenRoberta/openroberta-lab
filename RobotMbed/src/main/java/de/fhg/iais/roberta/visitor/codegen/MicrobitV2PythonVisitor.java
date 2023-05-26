@@ -35,43 +35,43 @@ public class MicrobitV2PythonVisitor extends MicrobitPythonVisitor implements IM
 
     @Override
     public Void visitSetVolumeAction(SetVolumeAction setVolumeAction) {
-        this.sb.append("microbit.set_volume(int(2.55 * ");
+        this.src.add("microbit.set_volume(int(2.55 * ");
         setVolumeAction.volume.accept(this);
-        this.sb.append("))");
+        this.src.add("))");
         return null;
     }
 
     @Override
     public Void visitSoundToggleAction(SoundToggleAction soundToggleAction) {
         if ( soundToggleAction.mode.equals(SC.OFF) ) {
-            this.sb.append("microbit.speaker.off()");
+            this.src.add("microbit.speaker.off()");
         } else {
-            this.sb.append("microbit.speaker.on()");
+            this.src.add("microbit.speaker.on()");
         }
         return null;
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
-        this.sb.append("int((microbit.microphone.sound_level() / 255) * 100)");
+        this.src.add("int((microbit.microphone.sound_level() / 255) * 100)");
         return null;
     }
 
     @Override
     public Void visitLogoTouchSensor(LogoTouchSensor logoTouchSensor) {
-        this.sb.append("microbit.pin_logo.is_touched()");
+        this.src.add("microbit.pin_logo.is_touched()");
         return null;
     }
 
     @Override
     public Void visitLogoSetTouchMode(LogoSetTouchMode logoSetTouchMode) {
-        this.sb.append("microbit.pin_logo.set_touch_mode(microbit.pin_logo." + logoSetTouchMode.mode + ")");
+        this.src.add("microbit.pin_logo.set_touch_mode(microbit.pin_logo.", logoSetTouchMode.mode, ")");
         return null;
     }
 
     @Override
     public Void visitPinSetTouchMode(PinSetTouchMode pinSetTouchMode) {
-        this.sb.append("microbit.pin" + pinSetTouchMode.sensorport + ".set_touch_mode(microbit.pin" + pinSetTouchMode.sensorport + "." + pinSetTouchMode.mode + ")");
+        this.src.add("microbit.pin", pinSetTouchMode.sensorport, ".set_touch_mode(microbit.pin", pinSetTouchMode.sensorport, ".", pinSetTouchMode.mode, ")");
         return null;
     }
 
@@ -99,7 +99,7 @@ public class MicrobitV2PythonVisitor extends MicrobitPythonVisitor implements IM
             case "JUMP_DOWN":
             case "POWER_UP":
             case "POWER_DOWN": {
-                this.sb.append("music.play(music." + playFileAction.fileName + ")");
+                this.src.add("music.play(music.", playFileAction.fileName, ")");
                 break;
             }
             case "GIGGLE":
@@ -112,7 +112,7 @@ public class MicrobitV2PythonVisitor extends MicrobitPythonVisitor implements IM
             case "SPRING":
             case "TWINKLE":
             case "YAWN": {
-                this.sb.append("microbit.audio.play(microbit.Sound." + playFileAction.fileName + ")");
+                this.src.add("microbit.audio.play(microbit.Sound.", playFileAction.fileName, ")");
                 break;
             }
             default:

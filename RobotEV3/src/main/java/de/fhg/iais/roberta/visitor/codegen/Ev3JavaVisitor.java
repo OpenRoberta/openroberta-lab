@@ -132,29 +132,29 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         }
         generateImports();
 
-        this.sb.append("public class ").append(this.programName).append(" {");
+        this.src.add("public class ", this.programName, " {");
         incrIndentation();
         nlIndent();
-        this.sb.append("private static Configuration brickConfiguration;");
+        this.src.add("private static Configuration brickConfiguration;");
         nlIndent();
         nlIndent();
-        this.sb.append(generateRegenerateUsedSensors());
+        this.src.add(generateRegenerateUsedSensors());
         nlIndent();
         if ( !this.getBean(UsedHardwareBean.class).getUsedImages().isEmpty() ) {
-            this.sb.append("private static Map<String, String> predefinedImages = new HashMap<String, String>();");
+            this.src.add("private static Map<String, String> predefinedImages = new HashMap<String, String>();");
             nlIndent();
             nlIndent();
         }
 
-        this.sb.append("private Hal hal = new Hal(brickConfiguration, usedSensors);");
+        this.src.add("private Hal hal = new Hal(brickConfiguration, usedSensors);");
         nlIndent();
         generateUserDefinedMethods();
         generateNNStuff("java");
         nlIndent();
-        this.sb.append("public static void main(String[] args) {");
+        this.src.add("public static void main(String[] args) {");
         incrIndentation();
         nlIndent();
-        this.sb.append("try {");
+        this.src.add("try {");
         incrIndentation();
         nlIndent();
         generateRegenerateConfiguration();
@@ -162,19 +162,19 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
         generateUsedImages();
         nlIndent();
-        this.sb.append("new ").append(this.programName).append("().run();");
+        this.src.add("new ", this.programName, "().run();");
         decrIndentation();
         nlIndent();
-        this.sb.append("} catch ( Exception e ) {");
+        this.src.add("} catch ( Exception e ) {");
         incrIndentation();
         nlIndent();
-        this.sb.append("Hal.displayExceptionWaitForKeyPress(e);");
+        this.src.add("Hal.displayExceptionWaitForKeyPress(e);");
         decrIndentation();
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
         decrIndentation();
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
     }
 
     @Override
@@ -182,12 +182,12 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         if ( withWrapping ) {
             if ( this.isInDebugMode ) {
                 nlIndent();
-                this.sb.append("hal.closeResources();");
+                this.src.add("hal.closeResources();");
                 nlIndent();
             }
             decrIndentation();
             nlIndent();
-            this.sb.append("}");
+            this.src.add("}");
         }
         decrIndentation();
         nlIndent();
@@ -196,51 +196,51 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.sb.append("while ( true ) {");
+        this.src.add("while ( true ) {");
         incrIndentation();
         visitStmtList(waitStmt.statements);
         nlIndent();
-        this.sb.append("hal.waitFor(15);");
+        this.src.add("hal.waitFor(15);");
         decrIndentation();
         nlIndent();
-        this.sb.append("}");
+        this.src.add("}");
         return null;
     }
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
-        this.sb.append("hal.waitFor(");
+        this.src.add("hal.waitFor(");
         waitTimeStmt.time.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
-        this.sb.append("hal.clearDisplay();");
+        this.src.add("hal.clearDisplay();");
         return null;
     }
 
     @Override
     public Void visitGetVolumeAction(GetVolumeAction getVolumeAction) {
-        this.sb.append("hal.getVolume()");
+        this.src.add("hal.getVolume()");
         return null;
     }
 
     @Override
     public Void visitSetVolumeAction(SetVolumeAction setVolumeAction) {
-        this.sb.append("hal.setVolume(");
+        this.src.add("hal.setVolume(");
         setVolumeAction.volume.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitSetLanguageAction(SetLanguageAction setLanguageAction) {
         if ( !this.brickConfiguration.getRobotName().equals("ev3lejosv0") ) {
-            this.sb.append("hal.setLanguage(\"");
-            this.sb.append(TTSLanguageMapper.getLanguageString(setLanguageAction.language));
-            this.sb.append("\");");
+            this.src.add("hal.setLanguage(\"");
+            this.src.add(TTSLanguageMapper.getLanguageString(setLanguageAction.language));
+            this.src.add("\");");
         }
         return null;
     }
@@ -248,15 +248,15 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     @Override
     public Void visitSayTextAction(SayTextAction sayTextAction) {
         if ( !this.brickConfiguration.getRobotName().equals("ev3lejosv0") ) {
-            this.sb.append("hal.sayText(");
+            this.src.add("hal.sayText(");
             if ( !sayTextAction.msg.getKind().hasName("STRING_CONST") ) {
-                this.sb.append("String.valueOf(");
+                this.src.add("String.valueOf(");
                 sayTextAction.msg.accept(this);
-                this.sb.append(")");
+                this.src.add(")");
             } else {
                 sayTextAction.msg.accept(this);
             }
-            this.sb.append(");");
+            this.src.add(");");
         }
         return null;
     }
@@ -264,92 +264,92 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     @Override
     public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction sayTextAction) {
         if ( !this.brickConfiguration.getRobotName().equals("ev3lejosv0") ) {
-            this.sb.append("hal.sayText(");
+            this.src.add("hal.sayText(");
             if ( !sayTextAction.msg.getKind().hasName("STRING_CONST") ) {
-                this.sb.append("String.valueOf(");
+                this.src.add("String.valueOf(");
                 sayTextAction.msg.accept(this);
-                this.sb.append(")");
+                this.src.add(")");
             } else {
                 sayTextAction.msg.accept(this);
             }
-            this.sb.append(",");
+            this.src.add(",");
             sayTextAction.speed.accept(this);
-            this.sb.append(",");
+            this.src.add(",");
             sayTextAction.pitch.accept(this);
-            this.sb.append(");");
+            this.src.add(");");
         }
         return null;
     }
 
     @Override
     public Void visitLightAction(LightAction lightAction) {
-        this.sb.append("hal.ledOn(" + getEnumCode(lightAction.color) + ", BlinkMode." + lightAction.mode + ");");
+        this.src.add("hal.ledOn(", getEnumCode(lightAction.color), ", BlinkMode.", lightAction.mode, ");");
         return null;
     }
 
     @Override
     public Void visitBrickLightResetAction(BrickLightResetAction brickLightResetAction) {
-        this.sb.append("hal.resetLED();");
+        this.src.add("hal.resetLED();");
         return null;
     }
 
     @Override
     public Void visitBrickLightOffAction(BrickLightOffAction brickLightOffAction) {
-        this.sb.append("hal.ledOff();");
+        this.src.add("hal.ledOff();");
         return null;
     }
 
     @Override
     public Void visitPlayFileAction(PlayFileAction playFileAction) {
-        this.sb.append("hal.playFile(" + playFileAction.fileName + ");");
+        this.src.add("hal.playFile(", playFileAction.fileName, ");");
         return null;
     }
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction showPictureAction) {
-        this.sb.append("hal.drawPicture(predefinedImages.get(\"" + showPictureAction.pic + "\"), ");
+        this.src.add("hal.drawPicture(predefinedImages.get(\"", showPictureAction.pic, "\"), ");
         showPictureAction.x.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         showPictureAction.y.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitShowTextAction(ShowTextAction showTextAction) {
-        this.sb.append("hal.drawText(");
+        this.src.add("hal.drawText(");
         if ( !showTextAction.msg.getKind().hasName("STRING_CONST") ) {
-            this.sb.append("String.valueOf(");
+            this.src.add("String.valueOf(");
             showTextAction.msg.accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         } else {
             showTextAction.msg.accept(this);
         }
-        this.sb.append(", ");
+        this.src.add(", ");
         showTextAction.x.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         showTextAction.y.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitToneAction(ToneAction toneAction) {
-        this.sb.append("hal.playTone(");
+        this.src.add("hal.playTone(");
         toneAction.frequency.accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         toneAction.duration.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
-        this.sb.append("hal.playTone(");
-        this.sb.append(" (float) " + playNoteAction.frequency);
-        this.sb.append(", ");
-        this.sb.append(" (float) " + playNoteAction.duration);
-        this.sb.append(");");
+        this.src.add("hal.playTone(");
+        this.src.add(" (float) ", playNoteAction.frequency);
+        this.src.add(", ");
+        this.src.add(" (float) ", playNoteAction.duration);
+        this.src.add(");");
         return null;
     }
 
@@ -373,14 +373,13 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
             } else {
                 methodName = isRegulated ? "hal.turnOnRegulatedMotor(" : "hal.turnOnUnregulatedMotor(";
             }
-            this.sb.append(methodName + "ActorPort." + userDefinedPort + ", ");
+            this.src.add(methodName, "ActorPort.", userDefinedPort, ", ");
             motorOnAction.param.getSpeed().accept(this);
             if ( duration ) {
-                this.sb.append(", " + getEnumCode(motorOnAction.getDurationMode()));
-                this.sb.append(", ");
+                this.src.add(", ", getEnumCode(motorOnAction.getDurationMode()), ", ");
                 motorOnAction.getDurationValue().accept(this);
             }
-            this.sb.append(");");
+            this.src.add(");");
         }
         return null;
     }
@@ -391,9 +390,9 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         if ( isActorOnPort(userDefinedPort) ) {
             boolean isRegulated = this.brickConfiguration.isMotorRegulated(userDefinedPort);
             String methodName = isRegulated ? "hal.setRegulatedMotorSpeed(" : "hal.setUnregulatedMotorSpeed(";
-            this.sb.append(methodName + "ActorPort." + userDefinedPort + ", ");
+            this.src.add(methodName, "ActorPort.", userDefinedPort, ", ");
             motorSetPowerAction.power.accept(this);
-            this.sb.append(");");
+            this.src.add(");");
         }
         return null;
     }
@@ -404,7 +403,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         if ( isActorOnPort(userDefinedPort) ) {
             boolean isRegulated = this.brickConfiguration.isMotorRegulated(userDefinedPort);
             String methodName = isRegulated ? "hal.getRegulatedMotorSpeed(" : "hal.getUnregulatedMotorSpeed(";
-            this.sb.append(methodName + "ActorPort." + userDefinedPort + ")");
+            this.src.add(methodName, "ActorPort.", userDefinedPort, ")");
         }
         return null;
     }
@@ -415,7 +414,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         if ( isActorOnPort(userDefinedPort) ) {
             boolean isRegulated = this.brickConfiguration.isMotorRegulated(userDefinedPort);
             String methodName = isRegulated ? "hal.stopRegulatedMotor(" : "hal.stopUnregulatedMotor(";
-            this.sb.append(methodName + "ActorPort." + userDefinedPort + ", " + getEnumCode(motorStopAction.mode) + ");");
+            this.src.add(methodName, "ActorPort.", userDefinedPort, ", ", getEnumCode(motorStopAction.mode), ");");
         }
         return null;
     }
@@ -424,14 +423,14 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     public Void visitDriveAction(DriveAction driveAction) {
         boolean isDuration = driveAction.param.getDuration() != null;
         String methodName = isDuration ? "hal.driveDistance(" : "hal.regulatedDrive(";
-        this.sb.append(methodName);
-        this.sb.append(getEnumCode(driveAction.direction) + ", ");
+        this.src.add(methodName);
+        this.src.add(getEnumCode(driveAction.direction), ", ");
         driveAction.param.getSpeed().accept(this);
         if ( isDuration ) {
-            this.sb.append(", ");
+            this.src.add(", ");
             driveAction.param.getDuration().getValue().accept(this);
         }
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
@@ -439,16 +438,16 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     public Void visitCurveAction(CurveAction curveAction) {
         MotorDuration duration = curveAction.paramLeft.getDuration();
 
-        this.sb.append("hal.driveInCurve(");
-        this.sb.append(getEnumCode(curveAction.direction) + ", ");
+        this.src.add("hal.driveInCurve(");
+        this.src.add(getEnumCode(curveAction.direction), ", ");
         curveAction.paramLeft.getSpeed().accept(this);
-        this.sb.append(", ");
+        this.src.add(", ");
         curveAction.paramRight.getSpeed().accept(this);
         if ( duration != null ) {
-            this.sb.append(", ");
+            this.src.add(", ");
             duration.getValue().accept(this);
         }
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
@@ -456,20 +455,20 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     public Void visitTurnAction(TurnAction turnAction) {
         boolean isDuration = turnAction.param.getDuration() != null;
         String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : "Regulated") + "(";
-        this.sb.append(methodName);
-        this.sb.append(getEnumCode(turnAction.direction) + ", ");
+        this.src.add(methodName);
+        this.src.add(getEnumCode(turnAction.direction), ", ");
         turnAction.param.getSpeed().accept(this);
         if ( isDuration ) {
-            this.sb.append(", ");
+            this.src.add(", ");
             turnAction.param.getDuration().getValue().accept(this);
         }
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
-        this.sb.append("hal.stopRegulatedDrive();");
+        this.src.add("hal.stopRegulatedDrive();");
         return null;
     }
 
@@ -478,10 +477,10 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         String brickSensorPort = "BrickKey." + keysSensor.getUserDefinedPort();
         switch ( keysSensor.getMode() ) {
             case SC.PRESSED:
-                this.sb.append("hal.isPressed(" + brickSensorPort + ")");
+                this.src.add("hal.isPressed(", brickSensorPort, ")");
                 break;
             case SC.WAIT_FOR_PRESS_AND_RELEASE:
-                this.sb.append("hal.isPressedAndReleased(" + brickSensorPort + ")");
+                this.src.add("hal.isPressedAndReleased(", brickSensorPort, ")");
                 break;
             default:
                 throw new DbcException("Invalide mode for KeysSensor!");
@@ -510,7 +509,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
             default:
                 throw new DbcException("Invalid mode for EV3 Color Sensor!");
         }
-        this.sb.append(methodName).append("(").append(port).append(")");
+        this.src.add(methodName, "(", port, ")");
         return null;
     }
 
@@ -535,7 +534,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
             default:
                 throw new DbcException("Invalid mode for EV3 Color Sensor!");
         }
-        this.sb.append(methodName).append("(").append(port).append(")");
+        this.src.add(methodName, "(", port, ")");
         return null;
     }
 
@@ -544,7 +543,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         String encoderMotorPort = encoderSensor.getUserDefinedPort();
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(encoderMotorPort);
         String methodName = isRegulated ? "hal.getRegulatedMotorTachoValue(" : "hal.getUnregulatedMotorTachoValue(";
-        this.sb.append(methodName).append("ActorPort.").append(encoderMotorPort).append(", MotorTachoMode.").append(encoderSensor.getMode()).append(")");
+        this.src.add(methodName, "ActorPort.", encoderMotorPort, ", MotorTachoMode.", encoderSensor.getMode(), ")");
         return null;
     }
 
@@ -553,7 +552,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         String encoderMotorPort = encoderReset.sensorPort;
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(encoderMotorPort);
         String methodName = isRegulated ? "hal.resetRegulatedMotorTacho(" : "hal.resetUnregulatedMotorTacho(";
-        this.sb.append(methodName).append("ActorPort.").append(encoderMotorPort).append(");");
+        this.src.add(methodName, "ActorPort.", encoderMotorPort, ");");
         return null;
     }
 
@@ -562,10 +561,10 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         String gyroSensorPort = "SensorPort.S" + gyroSensor.getUserDefinedPort();
         switch ( gyroSensor.getMode() ) {
             case SC.ANGLE:
-                this.sb.append("hal.getGyroSensorAngle(" + gyroSensorPort + ")");
+                this.src.add("hal.getGyroSensorAngle(", gyroSensorPort, ")");
                 break;
             case SC.RATE:
-                this.sb.append("hal.getGyroSensorRate(" + gyroSensorPort + ")");
+                this.src.add("hal.getGyroSensorRate(", gyroSensorPort, ")");
                 break;
             default:
                 throw new DbcException("Invalid GyroSensorMode");
@@ -576,7 +575,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     @Override
     public Void visitGyroReset(GyroReset gyroReset) {
         String gyroSensorPort = "SensorPort.S" + gyroReset.sensorPort;
-        this.sb.append("hal.resetGyroSensor(" + gyroSensorPort + ");");
+        this.src.add("hal.resetGyroSensor(", gyroSensorPort, ");");
         return null;
     }
 
@@ -585,10 +584,10 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         String infraredSensorPort = "SensorPort.S" + infraredSensor.getUserDefinedPort();
         switch ( infraredSensor.getMode() ) {
             case SC.DISTANCE:
-                this.sb.append("hal.getInfraredSensorDistance(" + infraredSensorPort + ")");
+                this.src.add("hal.getInfraredSensorDistance(", infraredSensorPort, ")");
                 break;
             case SC.PRESENCE:
-                this.sb.append("hal.getInfraredSensorSeek(" + infraredSensorPort + ")");
+                this.src.add("hal.getInfraredSensorSeek(", infraredSensorPort, ")");
                 break;
             default:
                 throw new DbcException("Invalid Infrared Sensor Mode: " + infraredSensor.getMode());
@@ -599,20 +598,20 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
         String timerNumber = timerSensor.getUserDefinedPort();
-        this.sb.append("hal.getTimerValue(").append(timerNumber).append(")");
+        this.src.add("hal.getTimerValue(", timerNumber, ")");
         return null;
     }
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
         String timerNumber = timerReset.sensorPort;
-        this.sb.append("hal.resetTimer(").append(timerNumber).append(");");
+        this.src.add("hal.resetTimer(", timerNumber, ");");
         return null;
     }
 
     @Override
     public Void visitTouchSensor(TouchSensor touchSensor) {
-        this.sb.append("hal.isPressed(" + "SensorPort.S" + touchSensor.getUserDefinedPort() + ")");
+        this.src.add("hal.isPressed(", "SensorPort.S", touchSensor.getUserDefinedPort(), ")");
         return null;
     }
 
@@ -620,16 +619,16 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         String ultrasonicSensorPort = "SensorPort.S" + ultrasonicSensor.getUserDefinedPort();
         if ( ultrasonicSensor.getMode().equals(SC.DISTANCE) ) {
-            this.sb.append("hal.getUltraSonicSensorDistance(" + ultrasonicSensorPort + ")");
+            this.src.add("hal.getUltraSonicSensorDistance(", ultrasonicSensorPort, ")");
         } else {
-            this.sb.append("hal.getUltraSonicSensorPresence(" + ultrasonicSensorPort + ")");
+            this.src.add("hal.getUltraSonicSensorPresence(", ultrasonicSensorPort, ")");
         }
         return null;
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
-        this.sb.append("hal.getSoundLevel(" + "SensorPort.S" + soundSensor.getUserDefinedPort() + ")");
+        this.src.add("hal.getSoundLevel(", "SensorPort.S", soundSensor.getUserDefinedPort(), ")");
         return null;
     }
 
@@ -638,10 +637,10 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         String compassSensorPort = "SensorPort.S" + compassSensor.getUserDefinedPort();
         switch ( compassSensor.getMode() ) {
             case SC.ANGLE:
-                this.sb.append("hal.getHiTecCompassAngle(").append(compassSensorPort).append(")");
+                this.src.add("hal.getHiTecCompassAngle(", compassSensorPort, ")");
                 break;
             case SC.COMPASS:
-                this.sb.append("hal.getHiTecCompassCompass(").append(compassSensorPort).append(")");
+                this.src.add("hal.getHiTecCompassCompass(", compassSensorPort, ")");
                 break;
             default:
                 throw new DbcException("Invalid Compass Mode!");
@@ -652,11 +651,11 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     @Override
     public Void visitCompassCalibrate(CompassCalibrate compassCalibrate) {
         String compassSensorPort = "SensorPort.S" + compassCalibrate.getUserDefinedPort();
-        this.sb.append("hal.hiTecCompassStartCalibration(").append(compassSensorPort).append(");");
+        this.src.add("hal.hiTecCompassStartCalibration(", compassSensorPort, ");");
         nlIndent();
-        this.sb.append("hal.waitFor(40000);");
+        this.src.add("hal.waitFor(40000);");
         nlIndent();
-        this.sb.append("hal.hiTecCompassStopCalibration(").append(compassSensorPort).append(");");
+        this.src.add("hal.hiTecCompassStopCalibration(", compassSensorPort, ");");
         return null;
     }
 
@@ -665,10 +664,10 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         String irSeekerSensorPort = "SensorPort.S" + irSeekerSensor.getUserDefinedPort();
         switch ( irSeekerSensor.getMode() ) {
             case SC.MODULATED:
-                this.sb.append("hal.getHiTecIRSeekerModulated(" + irSeekerSensorPort + ")");
+                this.src.add("hal.getHiTecIRSeekerModulated(", irSeekerSensorPort, ")");
                 break;
             case SC.UNMODULATED:
-                this.sb.append("hal.getHiTecIRSeekerUnmodulated(" + irSeekerSensorPort + ")");
+                this.src.add("hal.getHiTecIRSeekerUnmodulated(", irSeekerSensorPort, ")");
                 break;
             default:
                 throw new DbcException("Invalid IRSeeker Mode!");
@@ -681,19 +680,19 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         mainTask.variables.accept(this);
         nlIndent();
         nlIndent();
-        this.sb.append("public void run() throws Exception {");
+        this.src.add("public void run() throws Exception {");
         incrIndentation();
         // this is needed for testing
         if ( mainTask.debug.equals("TRUE") ) {
             nlIndent();
-            this.sb.append("hal.startLogging();");
+            this.src.add("hal.startLogging();");
             this.isInDebugMode = true;
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.VOICE) && !this.brickConfiguration.getRobotName().equals("ev3lejosv0") ) {
             nlIndent();
-            this.sb.append("hal.setLanguage(\"");
-            this.sb.append(TTSLanguageMapper.getLanguageString(this.language));
-            this.sb.append("\");");
+            this.src.add("hal.setLanguage(\"");
+            this.src.add(TTSLanguageMapper.getLanguageString(this.language));
+            this.src.add("\");");
         }
         return null;
     }
@@ -704,45 +703,45 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         IndexLocation loc1 = (IndexLocation) getSubFunct.strParam.get(1);
 
         boolean isLeftAParam = loc0 == FROM_START || loc0 == FROM_END;
-        this.sb.append("new ArrayList<>(");
+        this.src.add("new ArrayList<>(");
         getSubFunct.param.get(0).accept(this);
-        this.sb.append(".subList(");
+        this.src.add(".subList(");
 
         switch ( loc0 ) {
             case FIRST:
-                this.sb.append("0");
+                this.src.add("0");
                 break;
             case LAST:
                 getSubFunct.param.get(0).accept(this);
-                this.sb.append(".size() - 1");
+                this.src.add(".size() - 1");
                 break;
             case FROM_START:
-                this.sb.append("(int) ");
+                this.src.add("(int) ");
                 getSubFunct.param.get(1).accept(this);
                 break;
             case FROM_END:
-                this.sb.append("(");
+                this.src.add("(");
                 getSubFunct.param.get(0).accept(this);
-                this.sb.append(".size() - 1) - ");
-                this.sb.append("(int) ");
+                this.src.add(".size() - 1) - ");
+                this.src.add("(int) ");
                 getSubFunct.param.get(1).accept(this);
                 break;
             case RANDOM:
                 throw new DbcException("RANDOM is invalid (has been removed)");
         }
 
-        this.sb.append(", ");
+        this.src.add(", ");
 
         switch ( loc1 ) {
             case FIRST:
-                this.sb.append("0");
+                this.src.add("0");
                 break;
             case LAST:
                 getSubFunct.param.get(0).accept(this);
-                this.sb.append(".size()");
+                this.src.add(".size()");
                 break;
             case FROM_START:
-                this.sb.append("(int) ");
+                this.src.add("(int) ");
                 if ( isLeftAParam ) {
                     getSubFunct.param.get(2).accept(this);
                 } else {
@@ -750,10 +749,10 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 }
                 break;
             case FROM_END:
-                this.sb.append("(");
+                this.src.add("(");
                 getSubFunct.param.get(0).accept(this);
-                this.sb.append(".size() - 1) - ");
-                this.sb.append("(int) ");
+                this.src.add(".size() - 1) - ");
+                this.src.add("(int) ");
                 if ( isLeftAParam ) {
                     getSubFunct.param.get(2).accept(this);
                 } else {
@@ -763,7 +762,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
             case RANDOM:
                 throw new DbcException("RANDOM is invalid (has been removed)");
         }
-        this.sb.append("))");
+        this.src.add("))");
         return null;
 
     }
@@ -773,82 +772,80 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         indexOfFunct.value.accept(this);
         switch ( (IndexLocation) indexOfFunct.location ) {
             case FIRST:
-                this.sb.append(".indexOf(");
+                this.src.add(".indexOf(");
                 break;
             case LAST:
-                this.sb.append(".lastIndexOf(");
+                this.src.add(".lastIndexOf(");
                 break;
             default:
                 // nothing to do
         }
         if ( indexOfFunct.find.getVarType() == BlocklyType.NUMBER ) {
-            this.sb.append(" (float) ");
+            this.src.add(" (float) ");
         }
         indexOfFunct.find.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
         lengthOfListFunct.value.accept(this);
-        this.sb.append(".size()");
+        this.src.add(".size()");
         return null;
     }
 
     @Override
     public Void visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
         isListEmptyFunct.value.accept(this);
-        this.sb.append(".isEmpty()");
+        this.src.add(".isEmpty()");
         return null;
     }
 
     @Override
     public Void visitEmptyList(EmptyList emptyList) {
-        this.sb
-            .append(
-                "new ArrayList<"
-                    + getLanguageVarTypeFromBlocklyType(emptyList.typeVar).substring(0, 1).toUpperCase()
-                    + getLanguageVarTypeFromBlocklyType(emptyList.typeVar).substring(1).toLowerCase()
-                    + ">()");
+        this.src.add("new ArrayList<",
+            getLanguageVarTypeFromBlocklyType(emptyList.typeVar).substring(0, 1).toUpperCase(),
+            getLanguageVarTypeFromBlocklyType(emptyList.typeVar).substring(1).toLowerCase(),
+            ">()");
         return null;
     }
 
     @Override
     public Void visitListCreate(ListCreate listCreate) {
-        this.sb.append("new ArrayList<>(");
+        this.src.add("new ArrayList<>(");
 
         if ( listCreate.exprList.get().size() > 0 ) {
-            this.sb.append("Arrays.");
+            this.src.add("Arrays.");
             if ( listCreate.getVarType() == BlocklyType.CONNECTION ) {
-                this.sb.append("<NXTConnection>");
+                this.src.add("<NXTConnection>");
             } else if ( listCreate.getVarType() == BlocklyType.COLOR ) {
-                this.sb.append("<PickColor>");
+                this.src.add("<PickColor>");
             } else if ( listCreate.getVarType() == BlocklyType.STRING ) {
-                this.sb.append("<String>");
+                this.src.add("<String>");
             } else if ( listCreate.getVarType() == BlocklyType.BOOLEAN ) {
-                this.sb.append("<Boolean>");
+                this.src.add("<Boolean>");
             }
 
-            this.sb.append("asList(");
+            this.src.add("asList(");
             // manually go through value list to cast numbers to float
             if ( listCreate.getVarType() == BlocklyType.NUMBER ) {
                 List<Expr> expressions = listCreate.exprList.get();
                 for ( int i = 0; i < expressions.size(); i++ ) {
-                    this.sb.append("(float) ");
+                    this.src.add("(float) ");
                     expressions.get(i).accept(this);
                     if ( i != expressions.size() - 1 ) {
-                        this.sb.append(", ");
+                        this.src.add(", ");
                     }
                 }
 
             } else {
                 listCreate.exprList.accept(this);
             }
-            this.sb.append(")");
+            this.src.add(")");
         }
 
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
@@ -859,36 +856,36 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
         listGetIndex.param.get(0).accept(this);
         if ( op == GET ) {
-            this.sb.append(".get( (int) (");
+            this.src.add(".get( (int) (");
         } else if ( op == GET_REMOVE || op == REMOVE ) {
-            this.sb.append(".remove( (int) (");
+            this.src.add(".remove( (int) (");
         }
         switch ( loc ) {
             case FIRST:
-                this.sb.append("0");
+                this.src.add("0");
                 break;
             case LAST:
                 listGetIndex.param.get(0).accept(this);
-                this.sb.append(".size() - 1");
+                this.src.add(".size() - 1");
                 break;
             case FROM_START:
                 listGetIndex.param.get(1).accept(this);
                 break;
             case FROM_END:
-                this.sb.append("(");
+                this.src.add("(");
                 listGetIndex.param.get(0).accept(this);
-                this.sb.append(".size() - 1) - ");
+                this.src.add(".size() - 1) - ");
                 listGetIndex.param.get(1).accept(this);
                 break;
             case RANDOM:
-                this.sb.append("0 /* absolutely random number */");
+                this.src.add("0 /* absolutely random number */");
                 break;
         }
-        this.sb.append("))");
+        this.src.add("))");
 
         // This means its a remove statement and a semicolon is required
         if ( op == REMOVE ) {
-            this.sb.append(";");
+            this.src.add(";");
         }
         return null;
     }
@@ -900,91 +897,91 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
         listSetIndex.param.get(0).accept(this);
         if ( op == SET ) {
-            this.sb.append(".set(");
+            this.src.add(".set(");
         } else if ( op == INSERT ) {
-            this.sb.append(".add(");
+            this.src.add(".add(");
         }
         switch ( loc ) {
             case FIRST:
-                this.sb.append("0, ");
+                this.src.add("0, ");
                 break;
             case LAST:
                 if ( op == SET ) {
-                    this.sb.append("(int) (");
+                    this.src.add("(int) (");
                     listSetIndex.param.get(0).accept(this);
-                    this.sb.append(".size() - 1");
-                    this.sb.append("), ");
+                    this.src.add(".size() - 1");
+                    this.src.add("), ");
                 }
                 break;
             case FROM_START:
-                this.sb.append("(int) (");
+                this.src.add("(int) (");
                 listSetIndex.param.get(2).accept(this);
-                this.sb.append("), ");
+                this.src.add("), ");
                 break;
             case FROM_END:
-                this.sb.append("(int) (");
-                this.sb.append("(");
+                this.src.add("(int) (");
+                this.src.add("(");
                 listSetIndex.param.get(0).accept(this);
-                this.sb.append(".size() - 1) - ");
+                this.src.add(".size() - 1) - ");
                 listSetIndex.param.get(2).accept(this);
-                this.sb.append("), ");
+                this.src.add("), ");
                 break;
             case RANDOM:
-                this.sb.append("0 /* absolutely random number */");
+                this.src.add("0 /* absolutely random number */");
                 break;
         }
 
         if ( listSetIndex.param.get(1).getVarType() == BlocklyType.NUMBER ) {
-            this.sb.append("(float) ");
+            this.src.add("(float) ");
         }
 
         listSetIndex.param.get(1).accept(this);
 
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction bluetoothReadAction) {
-        this.sb.append("hal.readMessage(");
+        this.src.add("hal.readMessage(");
         bluetoothReadAction.connection.accept(this);
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitBluetoothConnectAction(BluetoothConnectAction bluetoothConnectAction) {
-        this.sb.append("hal.establishConnectionTo(");
+        this.src.add("hal.establishConnectionTo(");
         if ( !bluetoothConnectAction.address.getKind().hasName("STRING_CONST") ) {
-            this.sb.append("String.valueOf(");
+            this.src.add("String.valueOf(");
             bluetoothConnectAction.address.accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         } else {
             bluetoothConnectAction.address.accept(this);
         }
-        this.sb.append(")");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction bluetoothSendAction) {
-        this.sb.append("hal.sendMessage(");
+        this.src.add("hal.sendMessage(");
         if ( !bluetoothSendAction.msg.getKind().hasName("STRING_CONST") ) {
-            this.sb.append("String.valueOf(");
+            this.src.add("String.valueOf(");
             bluetoothSendAction.msg.accept(this);
-            this.sb.append(")");
+            this.src.add(")");
         } else {
             bluetoothSendAction.msg.accept(this);
         }
-        this.sb.append(", ");
+        this.src.add(", ");
         bluetoothSendAction.connection.accept(this);
-        this.sb.append(");");
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction bluetoothWaitForConnection) {
-        this.sb.append("hal.waitForConnection()");
+        this.src.add("hal.waitForConnection()");
         return null;
     }
 
@@ -994,71 +991,71 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     }
 
     private void generateRegenerateConfiguration() {
-        this.sb.append(" brickConfiguration = new EV3Configuration.Builder()");
+        this.src.add(" brickConfiguration = new EV3Configuration.Builder()");
         incrIndentation();
         nlIndent();
-        this.sb.append(".setWheelDiameter(").append(this.brickConfiguration.getWheelDiameter()).append(")");
+        this.src.add(".setWheelDiameter(", this.brickConfiguration.getWheelDiameter(), ")");
         nlIndent();
-        this.sb.append(".setTrackWidth(").append(this.brickConfiguration.getTrackWidth()).append(")");
+        this.src.add(".setTrackWidth(", this.brickConfiguration.getTrackWidth(), ")");
         nlIndent();
         appendActors();
         appendSensors();
-        this.sb.append(".build();");
+        this.src.add(".build();");
         decrIndentation();
     }
 
     private void generateUsedImages() {
         for ( String image : this.getBean(UsedHardwareBean.class).getUsedImages() ) {
-            this.sb.append("predefinedImages.put(\"" + image + "\", \"" + this.predefinedImage.get(image) + "\");");
+            this.src.add("predefinedImages.put(\"", image, "\", \"", this.predefinedImage.get(image), "\");");
             nlIndent();
         }
     }
 
     private void generateImports() {
-        this.sb.append("package generated.main;");
+        this.src.add("package generated.main;");
         nlIndent();
         nlIndent();
-        this.sb.append("import de.fhg.iais.roberta.runtime.*;");
+        this.src.add("import de.fhg.iais.roberta.runtime.*;");
         nlIndent();
-        this.sb.append("import de.fhg.iais.roberta.runtime.ev3.*;");
-        nlIndent();
-        nlIndent();
-
-        this.sb.append("import de.fhg.iais.roberta.mode.general.*;");
-        nlIndent();
-        this.sb.append("import de.fhg.iais.roberta.mode.action.*;");
-        nlIndent();
-        this.sb.append("import de.fhg.iais.roberta.mode.sensor.*;");
-        nlIndent();
-        this.sb.append("import de.fhg.iais.roberta.mode.action.ev3.*;");
-        nlIndent();
-        this.sb.append("import de.fhg.iais.roberta.mode.sensor.ev3.*;");
+        this.src.add("import de.fhg.iais.roberta.runtime.ev3.*;");
         nlIndent();
         nlIndent();
 
-        this.sb.append("import de.fhg.iais.roberta.components.*;");
+        this.src.add("import de.fhg.iais.roberta.mode.general.*;");
+        nlIndent();
+        this.src.add("import de.fhg.iais.roberta.mode.action.*;");
+        nlIndent();
+        this.src.add("import de.fhg.iais.roberta.mode.sensor.*;");
+        nlIndent();
+        this.src.add("import de.fhg.iais.roberta.mode.action.ev3.*;");
+        nlIndent();
+        this.src.add("import de.fhg.iais.roberta.mode.sensor.ev3.*;");
         nlIndent();
         nlIndent();
 
-        this.sb.append("import java.util.LinkedHashSet;");
-        nlIndent();
-        this.sb.append("import java.util.HashMap;");
-        nlIndent();
-        this.sb.append("import java.util.Set;");
-        nlIndent();
-        this.sb.append("import java.util.Map;");
-        nlIndent();
-        this.sb.append("import java.util.List;");
-        nlIndent();
-        this.sb.append("import java.util.ArrayList;");
-        nlIndent();
-        this.sb.append("import java.util.Arrays;");
-        nlIndent();
-        this.sb.append("import java.util.Collections;");
+        this.src.add("import de.fhg.iais.roberta.components.*;");
         nlIndent();
         nlIndent();
 
-        this.sb.append("import lejos.remote.nxt.NXTConnection;");
+        this.src.add("import java.util.LinkedHashSet;");
+        nlIndent();
+        this.src.add("import java.util.HashMap;");
+        nlIndent();
+        this.src.add("import java.util.Set;");
+        nlIndent();
+        this.src.add("import java.util.Map;");
+        nlIndent();
+        this.src.add("import java.util.List;");
+        nlIndent();
+        this.src.add("import java.util.ArrayList;");
+        nlIndent();
+        this.src.add("import java.util.Arrays;");
+        nlIndent();
+        this.src.add("import java.util.Collections;");
+        nlIndent();
+        nlIndent();
+
+        this.src.add("import lejos.remote.nxt.NXTConnection;");
         nlIndent();
         nlIndent();
     }
@@ -1072,10 +1069,10 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 }
             }
             if ( isUsed ) {
-                this.sb.append(".addSensor(");
-                this.sb.append("SensorPort.S" + sensor.userDefinedPortName).append(", ");
-                this.sb.append(generateRegenerateSensor(sensor));
-                this.sb.append(")");
+                this.src.add(".addSensor(");
+                this.src.add("SensorPort.S", sensor.userDefinedPortName, ", ");
+                this.src.add(generateRegenerateSensor(sensor));
+                this.src.add(")");
                 nlIndent();
             }
         }
@@ -1090,10 +1087,9 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 }
             }
             if ( isUsed ) {
-                this.sb.append(".addActor(");
-                this.sb.append("ActorPort." + actor.userDefinedPortName).append(", ");
-                this.sb.append(generateRegenerateActor(actor));
-                this.sb.append(")");
+                this.src.add(".addActor(ActorPort.", actor.userDefinedPortName, ", ");
+                this.src.add(generateRegenerateActor(actor));
+                this.src.add(")");
                 nlIndent();
             }
         }
@@ -1256,7 +1252,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
             default:
                 throw new DbcException("Invalid color constant: " + colorConst.getHexValueAsString());
         }
-        this.sb.append("PickColor." + color);
+        this.src.add("PickColor.", color);
         return null;
     }
 
