@@ -163,22 +163,22 @@ public class IsResetPasswordLinkExpiredResponse extends BaseResponse {
     private IsResetPasswordLinkExpiredResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "IsResetPasswordLinkExpiredResponse-object is already immutable: " + this;
+            _message = "IsResetPasswordLinkExpiredResponse-object is already immutable: " + toString();
         }
         if ( rc == null ) {
-            _message = "required property rc of IsResetPasswordLinkExpiredResponse-object is not set: " + this;
+            _message = "required property rc of IsResetPasswordLinkExpiredResponse-object is not set: " + toString();
         }
         if ( initToken == null ) {
-            _message = "required property initToken of IsResetPasswordLinkExpiredResponse-object is not set: " + this;
+            _message = "required property initToken of IsResetPasswordLinkExpiredResponse-object is not set: " + toString();
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of IsResetPasswordLinkExpiredResponse-object is not set: " + this;
+            _message = "required property serverTime of IsResetPasswordLinkExpiredResponse-object is not set: " + toString();
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of IsResetPasswordLinkExpiredResponse-object is not set: " + this;
+            _message = "required property serverVersion of IsResetPasswordLinkExpiredResponse-object is not set: " + toString();
         }
         if ( !resetPasswordLinkExpiredDefined ) {
-            _message = "required property resetPasswordLinkExpired of IsResetPasswordLinkExpiredResponse-object is not set: " + this;
+            _message = "required property resetPasswordLinkExpired of IsResetPasswordLinkExpiredResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -192,7 +192,7 @@ public class IsResetPasswordLinkExpiredResponse extends BaseResponse {
      */
     public boolean getResetPasswordLinkExpired() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no resetPasswordLinkExpired from an object under construction: " + this);
+            throw new RuntimeException("no resetPasswordLinkExpired from an object under construction: " + toString());
         }
         return this.resetPasswordLinkExpired;
     }
@@ -202,7 +202,7 @@ public class IsResetPasswordLinkExpiredResponse extends BaseResponse {
      */
     public IsResetPasswordLinkExpiredResponse setResetPasswordLinkExpired(boolean resetPasswordLinkExpired) {
         if ( this.immutable ) {
-            throw new RuntimeException("resetPasswordLinkExpired assigned to an immutable object: " + this);
+            throw new RuntimeException("resetPasswordLinkExpired assigned to an immutable object: " + toString());
         }
         this.resetPasswordLinkExpired = resetPasswordLinkExpired;
         this.resetPasswordLinkExpiredDefined = true;
@@ -215,7 +215,7 @@ public class IsResetPasswordLinkExpiredResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

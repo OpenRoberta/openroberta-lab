@@ -199,34 +199,34 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
     private ProjectSourceSimulationResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ProjectSourceSimulationResponse-object is already immutable: " + this;
+            _message = "ProjectSourceSimulationResponse-object is already immutable: " + toString();
         }
         if ( rc == null ) {
-            _message = "required property rc of ProjectSourceSimulationResponse-object is not set: " + this;
+            _message = "required property rc of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
         if ( initToken == null ) {
-            _message = "required property initToken of ProjectSourceSimulationResponse-object is not set: " + this;
+            _message = "required property initToken of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of ProjectSourceSimulationResponse-object is not set: " + this;
+            _message = "required property serverTime of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of ProjectSourceSimulationResponse-object is not set: " + this;
+            _message = "required property serverVersion of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
         if ( javaScriptProgram == null ) {
-            _message = "required property javaScriptProgram of ProjectSourceSimulationResponse-object is not set: " + this;
+            _message = "required property javaScriptProgram of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
         if ( fileExtension == null ) {
-            _message = "required property fileExtension of ProjectSourceSimulationResponse-object is not set: " + this;
+            _message = "required property fileExtension of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
         if ( progXML == null ) {
-            _message = "required property progXML of ProjectSourceSimulationResponse-object is not set: " + this;
+            _message = "required property progXML of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
         if ( confAnnos == null ) {
-            _message = "required property confAnnos of ProjectSourceSimulationResponse-object is not set: " + this;
+            _message = "required property confAnnos of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
         if ( configuration == null ) {
-            _message = "required property configuration of ProjectSourceSimulationResponse-object is not set: " + this;
+            _message = "required property configuration of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -240,7 +240,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
      */
     public String getProgramName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no programName from an object under construction: " + this);
+            throw new RuntimeException("no programName from an object under construction: " + toString());
         }
         return this.programName;
     }
@@ -259,7 +259,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
      */
     public ProjectSourceSimulationResponse setProgramName(String programName) {
         if ( this.immutable ) {
-            throw new RuntimeException("programName assigned to an immutable object: " + this);
+            throw new RuntimeException("programName assigned to an immutable object: " + toString());
         }
         this.programName = programName;
         return this;
@@ -270,7 +270,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
      */
     public String getJavaScriptProgram() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no javaScriptProgram from an object under construction: " + this);
+            throw new RuntimeException("no javaScriptProgram from an object under construction: " + toString());
         }
         return this.javaScriptProgram;
     }
@@ -280,7 +280,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
      */
     public ProjectSourceSimulationResponse setJavaScriptProgram(String javaScriptProgram) {
         if ( this.immutable ) {
-            throw new RuntimeException("javaScriptProgram assigned to an immutable object: " + this);
+            throw new RuntimeException("javaScriptProgram assigned to an immutable object: " + toString());
         }
         this.javaScriptProgram = javaScriptProgram;
         return this;
@@ -291,7 +291,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
      */
     public String getFileExtension() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no fileExtension from an object under construction: " + this);
+            throw new RuntimeException("no fileExtension from an object under construction: " + toString());
         }
         return this.fileExtension;
     }
@@ -301,7 +301,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
      */
     public ProjectSourceSimulationResponse setFileExtension(String fileExtension) {
         if ( this.immutable ) {
-            throw new RuntimeException("fileExtension assigned to an immutable object: " + this);
+            throw new RuntimeException("fileExtension assigned to an immutable object: " + toString());
         }
         this.fileExtension = fileExtension;
         return this;
@@ -312,7 +312,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
      */
     public String getProgXML() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no progXML from an object under construction: " + this);
+            throw new RuntimeException("no progXML from an object under construction: " + toString());
         }
         return this.progXML;
     }
@@ -322,7 +322,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
      */
     public ProjectSourceSimulationResponse setProgXML(String progXML) {
         if ( this.immutable ) {
-            throw new RuntimeException("progXML assigned to an immutable object: " + this);
+            throw new RuntimeException("progXML assigned to an immutable object: " + toString());
         }
         this.progXML = progXML;
         return this;
@@ -333,7 +333,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
      */
     public Map<String, JSONObject> getConfAnnos() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no confAnnos from an object under construction: " + this);
+            throw new RuntimeException("no confAnnos from an object under construction: " + toString());
         }
         return this.confAnnos;
     }
@@ -343,7 +343,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
      */
     public ProjectSourceSimulationResponse setConfAnnos(Map<String, JSONObject> confAnnos) {
         if ( this.immutable ) {
-            throw new RuntimeException("confAnnos assigned to an immutable object: " + this);
+            throw new RuntimeException("confAnnos assigned to an immutable object: " + toString());
         }
         if ( this.confAnnos == null ) {
             this.confAnnos = new HashMap<String, JSONObject>();
@@ -361,7 +361,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
      */
     public ProjectSourceSimulationResponse putConfAnnos(String key, JSONObject value) {
         if ( this.immutable ) {
-            throw new RuntimeException("confAnnos assigned to an immutable object: " + this);
+            throw new RuntimeException("confAnnos assigned to an immutable object: " + toString());
         }
         if ( this.confAnnos == null ) {
             this.confAnnos = new HashMap<String, JSONObject>();
@@ -375,7 +375,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
      */
     public JSONObject getConfiguration() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no configuration from an object under construction: " + this);
+            throw new RuntimeException("no configuration from an object under construction: " + toString());
         }
         return this.configuration;
     }
@@ -385,7 +385,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
      */
     public ProjectSourceSimulationResponse setConfiguration(JSONObject configuration) {
         if ( this.immutable ) {
-            throw new RuntimeException("configuration assigned to an immutable object: " + this);
+            throw new RuntimeException("configuration assigned to an immutable object: " + toString());
         }
         this.configuration = configuration;
         return this;
@@ -397,7 +397,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

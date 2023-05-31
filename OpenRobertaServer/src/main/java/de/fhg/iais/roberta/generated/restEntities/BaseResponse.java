@@ -179,19 +179,19 @@ public class BaseResponse {
     private BaseResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "BaseResponse-object is already immutable: " + this;
+            _message = "BaseResponse-object is already immutable: " + toString();
         }
         if ( rc == null ) {
-            _message = "required property rc of BaseResponse-object is not set: " + this;
+            _message = "required property rc of BaseResponse-object is not set: " + toString();
         }
         if ( initToken == null ) {
-            _message = "required property initToken of BaseResponse-object is not set: " + this;
+            _message = "required property initToken of BaseResponse-object is not set: " + toString();
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of BaseResponse-object is not set: " + this;
+            _message = "required property serverTime of BaseResponse-object is not set: " + toString();
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of BaseResponse-object is not set: " + this;
+            _message = "required property serverVersion of BaseResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -205,7 +205,7 @@ public class BaseResponse {
      */
     public String getCmd() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no cmd from an object under construction: " + this);
+            throw new RuntimeException("no cmd from an object under construction: " + toString());
         }
         return this.cmd;
     }
@@ -224,7 +224,7 @@ public class BaseResponse {
      */
     public BaseResponse setCmd(String cmd) {
         if ( this.immutable ) {
-            throw new RuntimeException("cmd assigned to an immutable object: " + this);
+            throw new RuntimeException("cmd assigned to an immutable object: " + toString());
         }
         this.cmd = cmd;
         return this;
@@ -235,7 +235,7 @@ public class BaseResponse {
      */
     public String getRc() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no rc from an object under construction: " + this);
+            throw new RuntimeException("no rc from an object under construction: " + toString());
         }
         return this.rc;
     }
@@ -245,7 +245,7 @@ public class BaseResponse {
      */
     public BaseResponse setRc(String rc) {
         if ( this.immutable ) {
-            throw new RuntimeException("rc assigned to an immutable object: " + this);
+            throw new RuntimeException("rc assigned to an immutable object: " + toString());
         }
         this.rc = rc;
         return this;
@@ -256,7 +256,7 @@ public class BaseResponse {
      */
     public String getMessage() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no message from an object under construction: " + this);
+            throw new RuntimeException("no message from an object under construction: " + toString());
         }
         return this.message;
     }
@@ -275,7 +275,7 @@ public class BaseResponse {
      */
     public BaseResponse setMessage(String message) {
         if ( this.immutable ) {
-            throw new RuntimeException("message assigned to an immutable object: " + this);
+            throw new RuntimeException("message assigned to an immutable object: " + toString());
         }
         this.message = message;
         return this;
@@ -286,7 +286,7 @@ public class BaseResponse {
      */
     public String getCause() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no cause from an object under construction: " + this);
+            throw new RuntimeException("no cause from an object under construction: " + toString());
         }
         return this.cause;
     }
@@ -305,7 +305,7 @@ public class BaseResponse {
      */
     public BaseResponse setCause(String cause) {
         if ( this.immutable ) {
-            throw new RuntimeException("cause assigned to an immutable object: " + this);
+            throw new RuntimeException("cause assigned to an immutable object: " + toString());
         }
         this.cause = cause;
         return this;
@@ -316,7 +316,7 @@ public class BaseResponse {
      */
     public JSONObject getParameters() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no parameters from an object under construction: " + this);
+            throw new RuntimeException("no parameters from an object under construction: " + toString());
         }
         return this.parameters;
     }
@@ -335,7 +335,7 @@ public class BaseResponse {
      */
     public BaseResponse setParameters(JSONObject parameters) {
         if ( this.immutable ) {
-            throw new RuntimeException("parameters assigned to an immutable object: " + this);
+            throw new RuntimeException("parameters assigned to an immutable object: " + toString());
         }
         this.parameters = parameters;
         return this;
@@ -346,7 +346,7 @@ public class BaseResponse {
      */
     public String getInitToken() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no initToken from an object under construction: " + this);
+            throw new RuntimeException("no initToken from an object under construction: " + toString());
         }
         return this.initToken;
     }
@@ -356,7 +356,7 @@ public class BaseResponse {
      */
     public BaseResponse setInitToken(String initToken) {
         if ( this.immutable ) {
-            throw new RuntimeException("initToken assigned to an immutable object: " + this);
+            throw new RuntimeException("initToken assigned to an immutable object: " + toString());
         }
         this.initToken = initToken;
         return this;
@@ -367,7 +367,7 @@ public class BaseResponse {
      */
     public long getServerTime() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no serverTime from an object under construction: " + this);
+            throw new RuntimeException("no serverTime from an object under construction: " + toString());
         }
         return this.serverTime;
     }
@@ -377,7 +377,7 @@ public class BaseResponse {
      */
     public BaseResponse setServerTime(long serverTime) {
         if ( this.immutable ) {
-            throw new RuntimeException("serverTime assigned to an immutable object: " + this);
+            throw new RuntimeException("serverTime assigned to an immutable object: " + toString());
         }
         this.serverTime = serverTime;
         this.serverTimeDefined = true;
@@ -389,7 +389,7 @@ public class BaseResponse {
      */
     public String getServerVersion() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no serverVersion from an object under construction: " + this);
+            throw new RuntimeException("no serverVersion from an object under construction: " + toString());
         }
         return this.serverVersion;
     }
@@ -399,7 +399,7 @@ public class BaseResponse {
      */
     public BaseResponse setServerVersion(String serverVersion) {
         if ( this.immutable ) {
-            throw new RuntimeException("serverVersion assigned to an immutable object: " + this);
+            throw new RuntimeException("serverVersion assigned to an immutable object: " + toString());
         }
         this.serverVersion = serverVersion;
         return this;
@@ -410,7 +410,7 @@ public class BaseResponse {
      */
     public long getRobotWait() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no robotWait from an object under construction: " + this);
+            throw new RuntimeException("no robotWait from an object under construction: " + toString());
         }
         return this.robotWait;
     }
@@ -429,7 +429,7 @@ public class BaseResponse {
      */
     public BaseResponse setRobotWait(long robotWait) {
         if ( this.immutable ) {
-            throw new RuntimeException("robotWait assigned to an immutable object: " + this);
+            throw new RuntimeException("robotWait assigned to an immutable object: " + toString());
         }
         this.robotWait = robotWait;
         this.robotWaitDefined = true;
@@ -441,7 +441,7 @@ public class BaseResponse {
      */
     public String getRobotBattery() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no robotBattery from an object under construction: " + this);
+            throw new RuntimeException("no robotBattery from an object under construction: " + toString());
         }
         return this.robotBattery;
     }
@@ -460,7 +460,7 @@ public class BaseResponse {
      */
     public BaseResponse setRobotBattery(String robotBattery) {
         if ( this.immutable ) {
-            throw new RuntimeException("robotBattery assigned to an immutable object: " + this);
+            throw new RuntimeException("robotBattery assigned to an immutable object: " + toString());
         }
         this.robotBattery = robotBattery;
         return this;
@@ -471,7 +471,7 @@ public class BaseResponse {
      */
     public String getRobotName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no robotName from an object under construction: " + this);
+            throw new RuntimeException("no robotName from an object under construction: " + toString());
         }
         return this.robotName;
     }
@@ -490,7 +490,7 @@ public class BaseResponse {
      */
     public BaseResponse setRobotName(String robotName) {
         if ( this.immutable ) {
-            throw new RuntimeException("robotName assigned to an immutable object: " + this);
+            throw new RuntimeException("robotName assigned to an immutable object: " + toString());
         }
         this.robotName = robotName;
         return this;
@@ -501,7 +501,7 @@ public class BaseResponse {
      */
     public String getRobotVersion() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no robotVersion from an object under construction: " + this);
+            throw new RuntimeException("no robotVersion from an object under construction: " + toString());
         }
         return this.robotVersion;
     }
@@ -520,7 +520,7 @@ public class BaseResponse {
      */
     public BaseResponse setRobotVersion(String robotVersion) {
         if ( this.immutable ) {
-            throw new RuntimeException("robotVersion assigned to an immutable object: " + this);
+            throw new RuntimeException("robotVersion assigned to an immutable object: " + toString());
         }
         this.robotVersion = robotVersion;
         return this;
@@ -531,7 +531,7 @@ public class BaseResponse {
      */
     public String getRobotFirmwareName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no robotFirmwareName from an object under construction: " + this);
+            throw new RuntimeException("no robotFirmwareName from an object under construction: " + toString());
         }
         return this.robotFirmwareName;
     }
@@ -550,7 +550,7 @@ public class BaseResponse {
      */
     public BaseResponse setRobotFirmwareName(String robotFirmwareName) {
         if ( this.immutable ) {
-            throw new RuntimeException("robotFirmwareName assigned to an immutable object: " + this);
+            throw new RuntimeException("robotFirmwareName assigned to an immutable object: " + toString());
         }
         this.robotFirmwareName = robotFirmwareName;
         return this;
@@ -561,7 +561,7 @@ public class BaseResponse {
      */
     public JSONObject getRobotSensorvalues() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no robotSensorvalues from an object under construction: " + this);
+            throw new RuntimeException("no robotSensorvalues from an object under construction: " + toString());
         }
         return this.robotSensorvalues;
     }
@@ -580,7 +580,7 @@ public class BaseResponse {
      */
     public BaseResponse setRobotSensorvalues(JSONObject robotSensorvalues) {
         if ( this.immutable ) {
-            throw new RuntimeException("robotSensorvalues assigned to an immutable object: " + this);
+            throw new RuntimeException("robotSensorvalues assigned to an immutable object: " + toString());
         }
         this.robotSensorvalues = robotSensorvalues;
         return this;
@@ -591,7 +591,7 @@ public class BaseResponse {
      */
     public int getRobotNepoexitvalue() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no robotNepoexitvalue from an object under construction: " + this);
+            throw new RuntimeException("no robotNepoexitvalue from an object under construction: " + toString());
         }
         return this.robotNepoexitvalue;
     }
@@ -610,7 +610,7 @@ public class BaseResponse {
      */
     public BaseResponse setRobotNepoexitvalue(int robotNepoexitvalue) {
         if ( this.immutable ) {
-            throw new RuntimeException("robotNepoexitvalue assigned to an immutable object: " + this);
+            throw new RuntimeException("robotNepoexitvalue assigned to an immutable object: " + toString());
         }
         this.robotNepoexitvalue = robotNepoexitvalue;
         this.robotNepoexitvalueDefined = true;
@@ -622,7 +622,7 @@ public class BaseResponse {
      */
     public String getRobotState() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no robotState from an object under construction: " + this);
+            throw new RuntimeException("no robotState from an object under construction: " + toString());
         }
         return this.robotState;
     }
@@ -641,7 +641,7 @@ public class BaseResponse {
      */
     public BaseResponse setRobotState(String robotState) {
         if ( this.immutable ) {
-            throw new RuntimeException("robotState assigned to an immutable object: " + this);
+            throw new RuntimeException("robotState assigned to an immutable object: " + toString());
         }
         this.robotState = robotState;
         return this;
@@ -652,7 +652,7 @@ public class BaseResponse {
      */
     public boolean getNotificationsAvailable() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no notificationsAvailable from an object under construction: " + this);
+            throw new RuntimeException("no notificationsAvailable from an object under construction: " + toString());
         }
         return this.notificationsAvailable;
     }
@@ -671,7 +671,7 @@ public class BaseResponse {
      */
     public BaseResponse setNotificationsAvailable(boolean notificationsAvailable) {
         if ( this.immutable ) {
-            throw new RuntimeException("notificationsAvailable assigned to an immutable object: " + this);
+            throw new RuntimeException("notificationsAvailable assigned to an immutable object: " + toString());
         }
         this.notificationsAvailable = notificationsAvailable;
         this.notificationsAvailableDefined = true;
@@ -684,7 +684,7 @@ public class BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

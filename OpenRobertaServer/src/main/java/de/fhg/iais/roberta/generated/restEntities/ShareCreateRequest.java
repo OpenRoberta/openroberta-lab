@@ -96,10 +96,10 @@ public class ShareCreateRequest extends BaseRequest {
     private ShareCreateRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ShareCreateRequest-object is already immutable: " + this;
+            _message = "ShareCreateRequest-object is already immutable: " + toString();
         }
         if ( programName == null ) {
-            _message = "required property programName of ShareCreateRequest-object is not set: " + this;
+            _message = "required property programName of ShareCreateRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -113,7 +113,7 @@ public class ShareCreateRequest extends BaseRequest {
      */
     public String getProgramName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no programName from an object under construction: " + this);
+            throw new RuntimeException("no programName from an object under construction: " + toString());
         }
         return this.programName;
     }
@@ -123,7 +123,7 @@ public class ShareCreateRequest extends BaseRequest {
      */
     public ShareCreateRequest setProgramName(String programName) {
         if ( this.immutable ) {
-            throw new RuntimeException("programName assigned to an immutable object: " + this);
+            throw new RuntimeException("programName assigned to an immutable object: " + toString());
         }
         this.programName = programName;
         return this;
@@ -135,7 +135,7 @@ public class ShareCreateRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

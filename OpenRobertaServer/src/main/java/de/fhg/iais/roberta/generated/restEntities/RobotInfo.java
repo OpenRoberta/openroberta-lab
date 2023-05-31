@@ -127,28 +127,28 @@ public class RobotInfo {
     private RobotInfo validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "RobotInfo-object is already immutable: " + this;
+            _message = "RobotInfo-object is already immutable: " + toString();
         }
         if ( !waitDefined ) {
-            _message = "required property wait of RobotInfo-object is not set: " + this;
+            _message = "required property wait of RobotInfo-object is not set: " + toString();
         }
         if ( battery == null ) {
-            _message = "required property battery of RobotInfo-object is not set: " + this;
+            _message = "required property battery of RobotInfo-object is not set: " + toString();
         }
         if ( name == null ) {
-            _message = "required property name of RobotInfo-object is not set: " + this;
+            _message = "required property name of RobotInfo-object is not set: " + toString();
         }
         if ( version == null ) {
-            _message = "required property version of RobotInfo-object is not set: " + this;
+            _message = "required property version of RobotInfo-object is not set: " + toString();
         }
         if ( firmwareName == null ) {
-            _message = "required property firmwareName of RobotInfo-object is not set: " + this;
+            _message = "required property firmwareName of RobotInfo-object is not set: " + toString();
         }
         if ( sensorvalues == null ) {
-            _message = "required property sensorvalues of RobotInfo-object is not set: " + this;
+            _message = "required property sensorvalues of RobotInfo-object is not set: " + toString();
         }
         if ( !nepoexitvalueDefined ) {
-            _message = "required property nepoexitvalue of RobotInfo-object is not set: " + this;
+            _message = "required property nepoexitvalue of RobotInfo-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -162,7 +162,7 @@ public class RobotInfo {
      */
     public long getWait() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no wait from an object under construction: " + this);
+            throw new RuntimeException("no wait from an object under construction: " + toString());
         }
         return this.wait;
     }
@@ -172,7 +172,7 @@ public class RobotInfo {
      */
     public RobotInfo setWait(long wait) {
         if ( this.immutable ) {
-            throw new RuntimeException("wait assigned to an immutable object: " + this);
+            throw new RuntimeException("wait assigned to an immutable object: " + toString());
         }
         this.wait = wait;
         this.waitDefined = true;
@@ -184,7 +184,7 @@ public class RobotInfo {
      */
     public String getBattery() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no battery from an object under construction: " + this);
+            throw new RuntimeException("no battery from an object under construction: " + toString());
         }
         return this.battery;
     }
@@ -194,7 +194,7 @@ public class RobotInfo {
      */
     public RobotInfo setBattery(String battery) {
         if ( this.immutable ) {
-            throw new RuntimeException("battery assigned to an immutable object: " + this);
+            throw new RuntimeException("battery assigned to an immutable object: " + toString());
         }
         this.battery = battery;
         return this;
@@ -205,7 +205,7 @@ public class RobotInfo {
      */
     public String getName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no name from an object under construction: " + this);
+            throw new RuntimeException("no name from an object under construction: " + toString());
         }
         return this.name;
     }
@@ -215,7 +215,7 @@ public class RobotInfo {
      */
     public RobotInfo setName(String name) {
         if ( this.immutable ) {
-            throw new RuntimeException("name assigned to an immutable object: " + this);
+            throw new RuntimeException("name assigned to an immutable object: " + toString());
         }
         this.name = name;
         return this;
@@ -226,7 +226,7 @@ public class RobotInfo {
      */
     public String getVersion() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no version from an object under construction: " + this);
+            throw new RuntimeException("no version from an object under construction: " + toString());
         }
         return this.version;
     }
@@ -236,7 +236,7 @@ public class RobotInfo {
      */
     public RobotInfo setVersion(String version) {
         if ( this.immutable ) {
-            throw new RuntimeException("version assigned to an immutable object: " + this);
+            throw new RuntimeException("version assigned to an immutable object: " + toString());
         }
         this.version = version;
         return this;
@@ -247,7 +247,7 @@ public class RobotInfo {
      */
     public String getFirmwareName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no firmwareName from an object under construction: " + this);
+            throw new RuntimeException("no firmwareName from an object under construction: " + toString());
         }
         return this.firmwareName;
     }
@@ -257,7 +257,7 @@ public class RobotInfo {
      */
     public RobotInfo setFirmwareName(String firmwareName) {
         if ( this.immutable ) {
-            throw new RuntimeException("firmwareName assigned to an immutable object: " + this);
+            throw new RuntimeException("firmwareName assigned to an immutable object: " + toString());
         }
         this.firmwareName = firmwareName;
         return this;
@@ -268,7 +268,7 @@ public class RobotInfo {
      */
     public JSONObject getSensorvalues() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no sensorvalues from an object under construction: " + this);
+            throw new RuntimeException("no sensorvalues from an object under construction: " + toString());
         }
         return this.sensorvalues;
     }
@@ -278,7 +278,7 @@ public class RobotInfo {
      */
     public RobotInfo setSensorvalues(JSONObject sensorvalues) {
         if ( this.immutable ) {
-            throw new RuntimeException("sensorvalues assigned to an immutable object: " + this);
+            throw new RuntimeException("sensorvalues assigned to an immutable object: " + toString());
         }
         this.sensorvalues = sensorvalues;
         return this;
@@ -289,7 +289,7 @@ public class RobotInfo {
      */
     public int getNepoexitvalue() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no nepoexitvalue from an object under construction: " + this);
+            throw new RuntimeException("no nepoexitvalue from an object under construction: " + toString());
         }
         return this.nepoexitvalue;
     }
@@ -299,7 +299,7 @@ public class RobotInfo {
      */
     public RobotInfo setNepoexitvalue(int nepoexitvalue) {
         if ( this.immutable ) {
-            throw new RuntimeException("nepoexitvalue assigned to an immutable object: " + this);
+            throw new RuntimeException("nepoexitvalue assigned to an immutable object: " + toString());
         }
         this.nepoexitvalue = nepoexitvalue;
         this.nepoexitvalueDefined = true;
@@ -312,7 +312,7 @@ public class RobotInfo {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

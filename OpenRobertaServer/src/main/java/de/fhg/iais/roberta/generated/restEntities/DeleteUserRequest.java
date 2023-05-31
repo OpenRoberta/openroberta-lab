@@ -100,13 +100,13 @@ public class DeleteUserRequest extends BaseRequest {
     private DeleteUserRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "DeleteUserRequest-object is already immutable: " + this;
+            _message = "DeleteUserRequest-object is already immutable: " + toString();
         }
         if ( accountName == null ) {
-            _message = "required property accountName of DeleteUserRequest-object is not set: " + this;
+            _message = "required property accountName of DeleteUserRequest-object is not set: " + toString();
         }
         if ( password == null ) {
-            _message = "required property password of DeleteUserRequest-object is not set: " + this;
+            _message = "required property password of DeleteUserRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -120,7 +120,7 @@ public class DeleteUserRequest extends BaseRequest {
      */
     public String getAccountName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no accountName from an object under construction: " + this);
+            throw new RuntimeException("no accountName from an object under construction: " + toString());
         }
         return this.accountName;
     }
@@ -130,7 +130,7 @@ public class DeleteUserRequest extends BaseRequest {
      */
     public DeleteUserRequest setAccountName(String accountName) {
         if ( this.immutable ) {
-            throw new RuntimeException("accountName assigned to an immutable object: " + this);
+            throw new RuntimeException("accountName assigned to an immutable object: " + toString());
         }
         this.accountName = accountName;
         return this;
@@ -141,7 +141,7 @@ public class DeleteUserRequest extends BaseRequest {
      */
     public String getPassword() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no password from an object under construction: " + this);
+            throw new RuntimeException("no password from an object under construction: " + toString());
         }
         return this.password;
     }
@@ -151,7 +151,7 @@ public class DeleteUserRequest extends BaseRequest {
      */
     public DeleteUserRequest setPassword(String password) {
         if ( this.immutable ) {
-            throw new RuntimeException("password assigned to an immutable object: " + this);
+            throw new RuntimeException("password assigned to an immutable object: " + toString());
         }
         this.password = password;
         return this;
@@ -163,7 +163,7 @@ public class DeleteUserRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

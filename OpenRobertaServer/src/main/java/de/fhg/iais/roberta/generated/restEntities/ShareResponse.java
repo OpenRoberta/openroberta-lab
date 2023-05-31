@@ -163,22 +163,22 @@ public class ShareResponse extends BaseResponse {
     private ShareResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ShareResponse-object is already immutable: " + this;
+            _message = "ShareResponse-object is already immutable: " + toString();
         }
         if ( rc == null ) {
-            _message = "required property rc of ShareResponse-object is not set: " + this;
+            _message = "required property rc of ShareResponse-object is not set: " + toString();
         }
         if ( initToken == null ) {
-            _message = "required property initToken of ShareResponse-object is not set: " + this;
+            _message = "required property initToken of ShareResponse-object is not set: " + toString();
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of ShareResponse-object is not set: " + this;
+            _message = "required property serverTime of ShareResponse-object is not set: " + toString();
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of ShareResponse-object is not set: " + this;
+            _message = "required property serverVersion of ShareResponse-object is not set: " + toString();
         }
         if ( sharedWith == null ) {
-            _message = "required property sharedWith of ShareResponse-object is not set: " + this;
+            _message = "required property sharedWith of ShareResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -192,7 +192,7 @@ public class ShareResponse extends BaseResponse {
      */
     public JSONArray getSharedWith() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no sharedWith from an object under construction: " + this);
+            throw new RuntimeException("no sharedWith from an object under construction: " + toString());
         }
         return this.sharedWith;
     }
@@ -202,7 +202,7 @@ public class ShareResponse extends BaseResponse {
      */
     public ShareResponse setSharedWith(JSONArray sharedWith) {
         if ( this.immutable ) {
-            throw new RuntimeException("sharedWith assigned to an immutable object: " + this);
+            throw new RuntimeException("sharedWith assigned to an immutable object: " + toString());
         }
         this.sharedWith = sharedWith;
         return this;
@@ -214,7 +214,7 @@ public class ShareResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

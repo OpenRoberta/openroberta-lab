@@ -194,22 +194,22 @@ public class ProjectNepoResponse extends BaseResponse {
     private ProjectNepoResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ProjectNepoResponse-object is already immutable: " + this;
+            _message = "ProjectNepoResponse-object is already immutable: " + toString();
         }
         if ( rc == null ) {
-            _message = "required property rc of ProjectNepoResponse-object is not set: " + this;
+            _message = "required property rc of ProjectNepoResponse-object is not set: " + toString();
         }
         if ( initToken == null ) {
-            _message = "required property initToken of ProjectNepoResponse-object is not set: " + this;
+            _message = "required property initToken of ProjectNepoResponse-object is not set: " + toString();
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of ProjectNepoResponse-object is not set: " + this;
+            _message = "required property serverTime of ProjectNepoResponse-object is not set: " + toString();
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of ProjectNepoResponse-object is not set: " + this;
+            _message = "required property serverVersion of ProjectNepoResponse-object is not set: " + toString();
         }
         if ( compiledCode == null ) {
-            _message = "required property compiledCode of ProjectNepoResponse-object is not set: " + this;
+            _message = "required property compiledCode of ProjectNepoResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -223,7 +223,7 @@ public class ProjectNepoResponse extends BaseResponse {
      */
     public String getProgramName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no programName from an object under construction: " + this);
+            throw new RuntimeException("no programName from an object under construction: " + toString());
         }
         return this.programName;
     }
@@ -242,7 +242,7 @@ public class ProjectNepoResponse extends BaseResponse {
      */
     public ProjectNepoResponse setProgramName(String programName) {
         if ( this.immutable ) {
-            throw new RuntimeException("programName assigned to an immutable object: " + this);
+            throw new RuntimeException("programName assigned to an immutable object: " + toString());
         }
         this.programName = programName;
         return this;
@@ -253,7 +253,7 @@ public class ProjectNepoResponse extends BaseResponse {
      */
     public String getProgXML() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no progXML from an object under construction: " + this);
+            throw new RuntimeException("no progXML from an object under construction: " + toString());
         }
         return this.progXML;
     }
@@ -272,7 +272,7 @@ public class ProjectNepoResponse extends BaseResponse {
      */
     public ProjectNepoResponse setProgXML(String progXML) {
         if ( this.immutable ) {
-            throw new RuntimeException("progXML assigned to an immutable object: " + this);
+            throw new RuntimeException("progXML assigned to an immutable object: " + toString());
         }
         this.progXML = progXML;
         return this;
@@ -283,7 +283,7 @@ public class ProjectNepoResponse extends BaseResponse {
      */
     public Map<String, JSONObject> getConfAnnos() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no confAnnos from an object under construction: " + this);
+            throw new RuntimeException("no confAnnos from an object under construction: " + toString());
         }
         return this.confAnnos;
     }
@@ -302,7 +302,7 @@ public class ProjectNepoResponse extends BaseResponse {
      */
     public ProjectNepoResponse setConfAnnos(Map<String, JSONObject> confAnnos) {
         if ( this.immutable ) {
-            throw new RuntimeException("confAnnos assigned to an immutable object: " + this);
+            throw new RuntimeException("confAnnos assigned to an immutable object: " + toString());
         }
         if ( this.confAnnos == null ) {
             this.confAnnos = new HashMap<String, JSONObject>();
@@ -320,7 +320,7 @@ public class ProjectNepoResponse extends BaseResponse {
      */
     public ProjectNepoResponse putConfAnnos(String key, JSONObject value) {
         if ( this.immutable ) {
-            throw new RuntimeException("confAnnos assigned to an immutable object: " + this);
+            throw new RuntimeException("confAnnos assigned to an immutable object: " + toString());
         }
         if ( this.confAnnos == null ) {
             this.confAnnos = new HashMap<String, JSONObject>();
@@ -334,7 +334,7 @@ public class ProjectNepoResponse extends BaseResponse {
      */
     public String getCompiledCode() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no compiledCode from an object under construction: " + this);
+            throw new RuntimeException("no compiledCode from an object under construction: " + toString());
         }
         return this.compiledCode;
     }
@@ -344,7 +344,7 @@ public class ProjectNepoResponse extends BaseResponse {
      */
     public ProjectNepoResponse setCompiledCode(String compiledCode) {
         if ( this.immutable ) {
-            throw new RuntimeException("compiledCode assigned to an immutable object: " + this);
+            throw new RuntimeException("compiledCode assigned to an immutable object: " + toString());
         }
         this.compiledCode = compiledCode;
         return this;
@@ -355,7 +355,7 @@ public class ProjectNepoResponse extends BaseResponse {
      */
     public JSONObject getConfiguration() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no configuration from an object under construction: " + this);
+            throw new RuntimeException("no configuration from an object under construction: " + toString());
         }
         return this.configuration;
     }
@@ -374,7 +374,7 @@ public class ProjectNepoResponse extends BaseResponse {
      */
     public ProjectNepoResponse setConfiguration(JSONObject configuration) {
         if ( this.immutable ) {
-            throw new RuntimeException("configuration assigned to an immutable object: " + this);
+            throw new RuntimeException("configuration assigned to an immutable object: " + toString());
         }
         this.configuration = configuration;
         return this;
@@ -386,7 +386,7 @@ public class ProjectNepoResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

@@ -109,10 +109,10 @@ public class UserGroupsRequest extends BaseRequest {
     private UserGroupsRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "UserGroupsRequest-object is already immutable: " + this;
+            _message = "UserGroupsRequest-object is already immutable: " + toString();
         }
         if ( groupNames == null ) {
-            _message = "required property groupNames of UserGroupsRequest-object is not set: " + this;
+            _message = "required property groupNames of UserGroupsRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -126,7 +126,7 @@ public class UserGroupsRequest extends BaseRequest {
      */
     public List<String> getGroupNames() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no groupNames from an object under construction: " + this);
+            throw new RuntimeException("no groupNames from an object under construction: " + toString());
         }
         return this.groupNames;
     }
@@ -136,7 +136,7 @@ public class UserGroupsRequest extends BaseRequest {
      */
     public UserGroupsRequest setGroupNames(List<String> groupNames) {
         if ( this.immutable ) {
-            throw new RuntimeException("groupNames assigned to an immutable object: " + this);
+            throw new RuntimeException("groupNames assigned to an immutable object: " + toString());
         }
         if ( this.groupNames == null ) {
             this.groupNames = new ArrayList<String>();
@@ -150,7 +150,7 @@ public class UserGroupsRequest extends BaseRequest {
      */
     public UserGroupsRequest addGroupNames(String groupNames) {
         if ( this.immutable ) {
-            throw new RuntimeException("groupNames assigned to an immutable object: " + this);
+            throw new RuntimeException("groupNames assigned to an immutable object: " + toString());
         }
         if ( this.groupNames == null ) {
             this.groupNames = new ArrayList<String>();
@@ -164,7 +164,7 @@ public class UserGroupsRequest extends BaseRequest {
      */
     public UserGroupsRequest addAllGroupNames(List<String> groupNames) {
         if ( this.immutable ) {
-            throw new RuntimeException("groupNames assigned to an immutable object: " + this);
+            throw new RuntimeException("groupNames assigned to an immutable object: " + toString());
         }
         if ( this.groupNames == null ) {
             this.groupNames = new ArrayList<String>();
@@ -179,7 +179,7 @@ public class UserGroupsRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

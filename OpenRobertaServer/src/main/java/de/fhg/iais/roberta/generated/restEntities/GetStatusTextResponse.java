@@ -163,22 +163,22 @@ public class GetStatusTextResponse extends BaseResponse {
     private GetStatusTextResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "GetStatusTextResponse-object is already immutable: " + this;
+            _message = "GetStatusTextResponse-object is already immutable: " + toString();
         }
         if ( rc == null ) {
-            _message = "required property rc of GetStatusTextResponse-object is not set: " + this;
+            _message = "required property rc of GetStatusTextResponse-object is not set: " + toString();
         }
         if ( initToken == null ) {
-            _message = "required property initToken of GetStatusTextResponse-object is not set: " + this;
+            _message = "required property initToken of GetStatusTextResponse-object is not set: " + toString();
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of GetStatusTextResponse-object is not set: " + this;
+            _message = "required property serverTime of GetStatusTextResponse-object is not set: " + toString();
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of GetStatusTextResponse-object is not set: " + this;
+            _message = "required property serverVersion of GetStatusTextResponse-object is not set: " + toString();
         }
         if ( statustext == null ) {
-            _message = "required property statustext of GetStatusTextResponse-object is not set: " + this;
+            _message = "required property statustext of GetStatusTextResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -192,7 +192,7 @@ public class GetStatusTextResponse extends BaseResponse {
      */
     public JSONArray getStatustext() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no statustext from an object under construction: " + this);
+            throw new RuntimeException("no statustext from an object under construction: " + toString());
         }
         return this.statustext;
     }
@@ -202,7 +202,7 @@ public class GetStatusTextResponse extends BaseResponse {
      */
     public GetStatusTextResponse setStatustext(JSONArray statustext) {
         if ( this.immutable ) {
-            throw new RuntimeException("statustext assigned to an immutable object: " + this);
+            throw new RuntimeException("statustext assigned to an immutable object: " + toString());
         }
         this.statustext = statustext;
         return this;
@@ -214,7 +214,7 @@ public class GetStatusTextResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

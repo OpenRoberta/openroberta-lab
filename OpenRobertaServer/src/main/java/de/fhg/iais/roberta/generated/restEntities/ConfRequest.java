@@ -100,10 +100,10 @@ public class ConfRequest extends BaseRequest {
     private ConfRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ConfRequest-object is already immutable: " + this;
+            _message = "ConfRequest-object is already immutable: " + toString();
         }
         if ( name == null ) {
-            _message = "required property name of ConfRequest-object is not set: " + this;
+            _message = "required property name of ConfRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -117,7 +117,7 @@ public class ConfRequest extends BaseRequest {
      */
     public String getName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no name from an object under construction: " + this);
+            throw new RuntimeException("no name from an object under construction: " + toString());
         }
         return this.name;
     }
@@ -127,7 +127,7 @@ public class ConfRequest extends BaseRequest {
      */
     public ConfRequest setName(String name) {
         if ( this.immutable ) {
-            throw new RuntimeException("name assigned to an immutable object: " + this);
+            throw new RuntimeException("name assigned to an immutable object: " + toString());
         }
         this.name = name;
         return this;
@@ -138,7 +138,7 @@ public class ConfRequest extends BaseRequest {
      */
     public String getOwner() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no owner from an object under construction: " + this);
+            throw new RuntimeException("no owner from an object under construction: " + toString());
         }
         return this.owner;
     }
@@ -157,7 +157,7 @@ public class ConfRequest extends BaseRequest {
      */
     public ConfRequest setOwner(String owner) {
         if ( this.immutable ) {
-            throw new RuntimeException("owner assigned to an immutable object: " + this);
+            throw new RuntimeException("owner assigned to an immutable object: " + toString());
         }
         this.owner = owner;
         return this;
@@ -169,7 +169,7 @@ public class ConfRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

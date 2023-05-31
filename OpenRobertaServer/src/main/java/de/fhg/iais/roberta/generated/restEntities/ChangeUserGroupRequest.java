@@ -113,13 +113,13 @@ public class ChangeUserGroupRequest extends BaseRequest {
     private ChangeUserGroupRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ChangeUserGroupRequest-object is already immutable: " + this;
+            _message = "ChangeUserGroupRequest-object is already immutable: " + toString();
         }
         if ( groupName == null ) {
-            _message = "required property groupName of ChangeUserGroupRequest-object is not set: " + this;
+            _message = "required property groupName of ChangeUserGroupRequest-object is not set: " + toString();
         }
         if ( groupMemberNames == null ) {
-            _message = "required property groupMemberNames of ChangeUserGroupRequest-object is not set: " + this;
+            _message = "required property groupMemberNames of ChangeUserGroupRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -133,7 +133,7 @@ public class ChangeUserGroupRequest extends BaseRequest {
      */
     public String getGroupName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no groupName from an object under construction: " + this);
+            throw new RuntimeException("no groupName from an object under construction: " + toString());
         }
         return this.groupName;
     }
@@ -143,7 +143,7 @@ public class ChangeUserGroupRequest extends BaseRequest {
      */
     public ChangeUserGroupRequest setGroupName(String groupName) {
         if ( this.immutable ) {
-            throw new RuntimeException("groupName assigned to an immutable object: " + this);
+            throw new RuntimeException("groupName assigned to an immutable object: " + toString());
         }
         this.groupName = groupName;
         return this;
@@ -154,7 +154,7 @@ public class ChangeUserGroupRequest extends BaseRequest {
      */
     public List<String> getGroupMemberNames() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no groupMemberNames from an object under construction: " + this);
+            throw new RuntimeException("no groupMemberNames from an object under construction: " + toString());
         }
         return this.groupMemberNames;
     }
@@ -164,7 +164,7 @@ public class ChangeUserGroupRequest extends BaseRequest {
      */
     public ChangeUserGroupRequest setGroupMemberNames(List<String> groupMemberNames) {
         if ( this.immutable ) {
-            throw new RuntimeException("groupMemberNames assigned to an immutable object: " + this);
+            throw new RuntimeException("groupMemberNames assigned to an immutable object: " + toString());
         }
         if ( this.groupMemberNames == null ) {
             this.groupMemberNames = new ArrayList<String>();
@@ -178,7 +178,7 @@ public class ChangeUserGroupRequest extends BaseRequest {
      */
     public ChangeUserGroupRequest addGroupMemberNames(String groupMemberNames) {
         if ( this.immutable ) {
-            throw new RuntimeException("groupMemberNames assigned to an immutable object: " + this);
+            throw new RuntimeException("groupMemberNames assigned to an immutable object: " + toString());
         }
         if ( this.groupMemberNames == null ) {
             this.groupMemberNames = new ArrayList<String>();
@@ -192,7 +192,7 @@ public class ChangeUserGroupRequest extends BaseRequest {
      */
     public ChangeUserGroupRequest addAllGroupMemberNames(List<String> groupMemberNames) {
         if ( this.immutable ) {
-            throw new RuntimeException("groupMemberNames assigned to an immutable object: " + this);
+            throw new RuntimeException("groupMemberNames assigned to an immutable object: " + toString());
         }
         if ( this.groupMemberNames == null ) {
             this.groupMemberNames = new ArrayList<String>();
@@ -207,7 +207,7 @@ public class ChangeUserGroupRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

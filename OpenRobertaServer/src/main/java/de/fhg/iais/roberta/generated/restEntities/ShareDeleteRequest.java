@@ -104,16 +104,16 @@ public class ShareDeleteRequest extends BaseRequest {
     private ShareDeleteRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ShareDeleteRequest-object is already immutable: " + this;
+            _message = "ShareDeleteRequest-object is already immutable: " + toString();
         }
         if ( programName == null ) {
-            _message = "required property programName of ShareDeleteRequest-object is not set: " + this;
+            _message = "required property programName of ShareDeleteRequest-object is not set: " + toString();
         }
         if ( owner == null ) {
-            _message = "required property owner of ShareDeleteRequest-object is not set: " + this;
+            _message = "required property owner of ShareDeleteRequest-object is not set: " + toString();
         }
         if ( author == null ) {
-            _message = "required property author of ShareDeleteRequest-object is not set: " + this;
+            _message = "required property author of ShareDeleteRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -127,7 +127,7 @@ public class ShareDeleteRequest extends BaseRequest {
      */
     public String getProgramName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no programName from an object under construction: " + this);
+            throw new RuntimeException("no programName from an object under construction: " + toString());
         }
         return this.programName;
     }
@@ -137,7 +137,7 @@ public class ShareDeleteRequest extends BaseRequest {
      */
     public ShareDeleteRequest setProgramName(String programName) {
         if ( this.immutable ) {
-            throw new RuntimeException("programName assigned to an immutable object: " + this);
+            throw new RuntimeException("programName assigned to an immutable object: " + toString());
         }
         this.programName = programName;
         return this;
@@ -148,7 +148,7 @@ public class ShareDeleteRequest extends BaseRequest {
      */
     public String getOwner() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no owner from an object under construction: " + this);
+            throw new RuntimeException("no owner from an object under construction: " + toString());
         }
         return this.owner;
     }
@@ -158,7 +158,7 @@ public class ShareDeleteRequest extends BaseRequest {
      */
     public ShareDeleteRequest setOwner(String owner) {
         if ( this.immutable ) {
-            throw new RuntimeException("owner assigned to an immutable object: " + this);
+            throw new RuntimeException("owner assigned to an immutable object: " + toString());
         }
         this.owner = owner;
         return this;
@@ -169,7 +169,7 @@ public class ShareDeleteRequest extends BaseRequest {
      */
     public String getAuthor() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no author from an object under construction: " + this);
+            throw new RuntimeException("no author from an object under construction: " + toString());
         }
         return this.author;
     }
@@ -179,7 +179,7 @@ public class ShareDeleteRequest extends BaseRequest {
      */
     public ShareDeleteRequest setAuthor(String author) {
         if ( this.immutable ) {
-            throw new RuntimeException("author assigned to an immutable object: " + this);
+            throw new RuntimeException("author assigned to an immutable object: " + toString());
         }
         this.author = author;
         return this;
@@ -191,7 +191,7 @@ public class ShareDeleteRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

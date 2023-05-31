@@ -111,13 +111,13 @@ public class InitRequest {
     private InitRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "InitRequest-object is already immutable: " + this;
+            _message = "InitRequest-object is already immutable: " + toString();
         }
         if ( log == null ) {
-            _message = "required property log of InitRequest-object is not set: " + this;
+            _message = "required property log of InitRequest-object is not set: " + toString();
         }
         if ( data == null ) {
-            _message = "required property data of InitRequest-object is not set: " + this;
+            _message = "required property data of InitRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -131,7 +131,7 @@ public class InitRequest {
      */
     public List<String> getLog() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no log from an object under construction: " + this);
+            throw new RuntimeException("no log from an object under construction: " + toString());
         }
         return this.log;
     }
@@ -141,7 +141,7 @@ public class InitRequest {
      */
     public InitRequest setLog(List<String> log) {
         if ( this.immutable ) {
-            throw new RuntimeException("log assigned to an immutable object: " + this);
+            throw new RuntimeException("log assigned to an immutable object: " + toString());
         }
         if ( this.log == null ) {
             this.log = new ArrayList<String>();
@@ -155,7 +155,7 @@ public class InitRequest {
      */
     public InitRequest addLog(String log) {
         if ( this.immutable ) {
-            throw new RuntimeException("log assigned to an immutable object: " + this);
+            throw new RuntimeException("log assigned to an immutable object: " + toString());
         }
         if ( this.log == null ) {
             this.log = new ArrayList<String>();
@@ -169,7 +169,7 @@ public class InitRequest {
      */
     public InitRequest addAllLog(List<String> log) {
         if ( this.immutable ) {
-            throw new RuntimeException("log assigned to an immutable object: " + this);
+            throw new RuntimeException("log assigned to an immutable object: " + toString());
         }
         if ( this.log == null ) {
             this.log = new ArrayList<String>();
@@ -183,7 +183,7 @@ public class InitRequest {
      */
     public JSONObject getData() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no data from an object under construction: " + this);
+            throw new RuntimeException("no data from an object under construction: " + toString());
         }
         return this.data;
     }
@@ -193,7 +193,7 @@ public class InitRequest {
      */
     public InitRequest setData(JSONObject data) {
         if ( this.immutable ) {
-            throw new RuntimeException("data assigned to an immutable object: " + this);
+            throw new RuntimeException("data assigned to an immutable object: " + toString());
         }
         this.data = data;
         return this;
@@ -205,7 +205,7 @@ public class InitRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

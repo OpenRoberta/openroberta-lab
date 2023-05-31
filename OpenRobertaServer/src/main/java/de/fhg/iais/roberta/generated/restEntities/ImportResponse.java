@@ -172,28 +172,28 @@ public class ImportResponse extends BaseResponse {
     private ImportResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ImportResponse-object is already immutable: " + this;
+            _message = "ImportResponse-object is already immutable: " + toString();
         }
         if ( rc == null ) {
-            _message = "required property rc of ImportResponse-object is not set: " + this;
+            _message = "required property rc of ImportResponse-object is not set: " + toString();
         }
         if ( initToken == null ) {
-            _message = "required property initToken of ImportResponse-object is not set: " + this;
+            _message = "required property initToken of ImportResponse-object is not set: " + toString();
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of ImportResponse-object is not set: " + this;
+            _message = "required property serverTime of ImportResponse-object is not set: " + toString();
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of ImportResponse-object is not set: " + this;
+            _message = "required property serverVersion of ImportResponse-object is not set: " + toString();
         }
         if ( programName == null ) {
-            _message = "required property programName of ImportResponse-object is not set: " + this;
+            _message = "required property programName of ImportResponse-object is not set: " + toString();
         }
         if ( progXML == null ) {
-            _message = "required property progXML of ImportResponse-object is not set: " + this;
+            _message = "required property progXML of ImportResponse-object is not set: " + toString();
         }
         if ( confXML == null ) {
-            _message = "required property confXML of ImportResponse-object is not set: " + this;
+            _message = "required property confXML of ImportResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -207,7 +207,7 @@ public class ImportResponse extends BaseResponse {
      */
     public String getProgramName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no programName from an object under construction: " + this);
+            throw new RuntimeException("no programName from an object under construction: " + toString());
         }
         return this.programName;
     }
@@ -217,7 +217,7 @@ public class ImportResponse extends BaseResponse {
      */
     public ImportResponse setProgramName(String programName) {
         if ( this.immutable ) {
-            throw new RuntimeException("programName assigned to an immutable object: " + this);
+            throw new RuntimeException("programName assigned to an immutable object: " + toString());
         }
         this.programName = programName;
         return this;
@@ -228,7 +228,7 @@ public class ImportResponse extends BaseResponse {
      */
     public String getProgXML() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no progXML from an object under construction: " + this);
+            throw new RuntimeException("no progXML from an object under construction: " + toString());
         }
         return this.progXML;
     }
@@ -238,7 +238,7 @@ public class ImportResponse extends BaseResponse {
      */
     public ImportResponse setProgXML(String progXML) {
         if ( this.immutable ) {
-            throw new RuntimeException("progXML assigned to an immutable object: " + this);
+            throw new RuntimeException("progXML assigned to an immutable object: " + toString());
         }
         this.progXML = progXML;
         return this;
@@ -249,7 +249,7 @@ public class ImportResponse extends BaseResponse {
      */
     public String getConfXML() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no confXML from an object under construction: " + this);
+            throw new RuntimeException("no confXML from an object under construction: " + toString());
         }
         return this.confXML;
     }
@@ -259,7 +259,7 @@ public class ImportResponse extends BaseResponse {
      */
     public ImportResponse setConfXML(String confXML) {
         if ( this.immutable ) {
-            throw new RuntimeException("confXML assigned to an immutable object: " + this);
+            throw new RuntimeException("confXML assigned to an immutable object: " + toString());
         }
         this.confXML = confXML;
         return this;
@@ -271,7 +271,7 @@ public class ImportResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

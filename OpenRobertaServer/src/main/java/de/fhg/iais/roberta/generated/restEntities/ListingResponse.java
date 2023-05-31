@@ -183,25 +183,25 @@ public class ListingResponse extends BaseResponse {
     private ListingResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ListingResponse-object is already immutable: " + this;
+            _message = "ListingResponse-object is already immutable: " + toString();
         }
         if ( rc == null ) {
-            _message = "required property rc of ListingResponse-object is not set: " + this;
+            _message = "required property rc of ListingResponse-object is not set: " + toString();
         }
         if ( initToken == null ) {
-            _message = "required property initToken of ListingResponse-object is not set: " + this;
+            _message = "required property initToken of ListingResponse-object is not set: " + toString();
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of ListingResponse-object is not set: " + this;
+            _message = "required property serverTime of ListingResponse-object is not set: " + toString();
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of ListingResponse-object is not set: " + this;
+            _message = "required property serverVersion of ListingResponse-object is not set: " + toString();
         }
         if ( progXML == null ) {
-            _message = "required property progXML of ListingResponse-object is not set: " + this;
+            _message = "required property progXML of ListingResponse-object is not set: " + toString();
         }
         if ( !lastChangedDefined ) {
-            _message = "required property lastChanged of ListingResponse-object is not set: " + this;
+            _message = "required property lastChanged of ListingResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -215,7 +215,7 @@ public class ListingResponse extends BaseResponse {
      */
     public String getProgramName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no programName from an object under construction: " + this);
+            throw new RuntimeException("no programName from an object under construction: " + toString());
         }
         return this.programName;
     }
@@ -234,7 +234,7 @@ public class ListingResponse extends BaseResponse {
      */
     public ListingResponse setProgramName(String programName) {
         if ( this.immutable ) {
-            throw new RuntimeException("programName assigned to an immutable object: " + this);
+            throw new RuntimeException("programName assigned to an immutable object: " + toString());
         }
         this.programName = programName;
         return this;
@@ -245,7 +245,7 @@ public class ListingResponse extends BaseResponse {
      */
     public String getProgXML() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no progXML from an object under construction: " + this);
+            throw new RuntimeException("no progXML from an object under construction: " + toString());
         }
         return this.progXML;
     }
@@ -255,7 +255,7 @@ public class ListingResponse extends BaseResponse {
      */
     public ListingResponse setProgXML(String progXML) {
         if ( this.immutable ) {
-            throw new RuntimeException("progXML assigned to an immutable object: " + this);
+            throw new RuntimeException("progXML assigned to an immutable object: " + toString());
         }
         this.progXML = progXML;
         return this;
@@ -266,7 +266,7 @@ public class ListingResponse extends BaseResponse {
      */
     public String getConfigName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no configName from an object under construction: " + this);
+            throw new RuntimeException("no configName from an object under construction: " + toString());
         }
         return this.configName;
     }
@@ -285,7 +285,7 @@ public class ListingResponse extends BaseResponse {
      */
     public ListingResponse setConfigName(String configName) {
         if ( this.immutable ) {
-            throw new RuntimeException("configName assigned to an immutable object: " + this);
+            throw new RuntimeException("configName assigned to an immutable object: " + toString());
         }
         this.configName = configName;
         return this;
@@ -296,7 +296,7 @@ public class ListingResponse extends BaseResponse {
      */
     public String getConfXML() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no confXML from an object under construction: " + this);
+            throw new RuntimeException("no confXML from an object under construction: " + toString());
         }
         return this.confXML;
     }
@@ -315,7 +315,7 @@ public class ListingResponse extends BaseResponse {
      */
     public ListingResponse setConfXML(String confXML) {
         if ( this.immutable ) {
-            throw new RuntimeException("confXML assigned to an immutable object: " + this);
+            throw new RuntimeException("confXML assigned to an immutable object: " + toString());
         }
         this.confXML = confXML;
         return this;
@@ -326,7 +326,7 @@ public class ListingResponse extends BaseResponse {
      */
     public long getLastChanged() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no lastChanged from an object under construction: " + this);
+            throw new RuntimeException("no lastChanged from an object under construction: " + toString());
         }
         return this.lastChanged;
     }
@@ -336,7 +336,7 @@ public class ListingResponse extends BaseResponse {
      */
     public ListingResponse setLastChanged(long lastChanged) {
         if ( this.immutable ) {
-            throw new RuntimeException("lastChanged assigned to an immutable object: " + this);
+            throw new RuntimeException("lastChanged assigned to an immutable object: " + toString());
         }
         this.lastChanged = lastChanged;
         this.lastChangedDefined = true;
@@ -349,7 +349,7 @@ public class ListingResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

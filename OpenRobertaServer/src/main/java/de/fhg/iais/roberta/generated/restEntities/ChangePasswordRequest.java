@@ -104,13 +104,13 @@ public class ChangePasswordRequest extends BaseRequest {
     private ChangePasswordRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ChangePasswordRequest-object is already immutable: " + this;
+            _message = "ChangePasswordRequest-object is already immutable: " + toString();
         }
         if ( accountName == null ) {
-            _message = "required property accountName of ChangePasswordRequest-object is not set: " + this;
+            _message = "required property accountName of ChangePasswordRequest-object is not set: " + toString();
         }
         if ( oldPassword == null ) {
-            _message = "required property oldPassword of ChangePasswordRequest-object is not set: " + this;
+            _message = "required property oldPassword of ChangePasswordRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -124,7 +124,7 @@ public class ChangePasswordRequest extends BaseRequest {
      */
     public String getAccountName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no accountName from an object under construction: " + this);
+            throw new RuntimeException("no accountName from an object under construction: " + toString());
         }
         return this.accountName;
     }
@@ -134,7 +134,7 @@ public class ChangePasswordRequest extends BaseRequest {
      */
     public ChangePasswordRequest setAccountName(String accountName) {
         if ( this.immutable ) {
-            throw new RuntimeException("accountName assigned to an immutable object: " + this);
+            throw new RuntimeException("accountName assigned to an immutable object: " + toString());
         }
         this.accountName = accountName;
         return this;
@@ -145,7 +145,7 @@ public class ChangePasswordRequest extends BaseRequest {
      */
     public String getOldPassword() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no oldPassword from an object under construction: " + this);
+            throw new RuntimeException("no oldPassword from an object under construction: " + toString());
         }
         return this.oldPassword;
     }
@@ -155,7 +155,7 @@ public class ChangePasswordRequest extends BaseRequest {
      */
     public ChangePasswordRequest setOldPassword(String oldPassword) {
         if ( this.immutable ) {
-            throw new RuntimeException("oldPassword assigned to an immutable object: " + this);
+            throw new RuntimeException("oldPassword assigned to an immutable object: " + toString());
         }
         this.oldPassword = oldPassword;
         return this;
@@ -166,7 +166,7 @@ public class ChangePasswordRequest extends BaseRequest {
      */
     public String getNewPassword() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no newPassword from an object under construction: " + this);
+            throw new RuntimeException("no newPassword from an object under construction: " + toString());
         }
         return this.newPassword;
     }
@@ -185,7 +185,7 @@ public class ChangePasswordRequest extends BaseRequest {
      */
     public ChangePasswordRequest setNewPassword(String newPassword) {
         if ( this.immutable ) {
-            throw new RuntimeException("newPassword assigned to an immutable object: " + this);
+            throw new RuntimeException("newPassword assigned to an immutable object: " + toString());
         }
         this.newPassword = newPassword;
         return this;
@@ -197,7 +197,7 @@ public class ChangePasswordRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

@@ -123,13 +123,13 @@ public class SaveRequest extends BaseRequest {
     private SaveRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "SaveRequest-object is already immutable: " + this;
+            _message = "SaveRequest-object is already immutable: " + toString();
         }
         if ( programName == null ) {
-            _message = "required property programName of SaveRequest-object is not set: " + this;
+            _message = "required property programName of SaveRequest-object is not set: " + toString();
         }
         if ( progXML == null ) {
-            _message = "required property progXML of SaveRequest-object is not set: " + this;
+            _message = "required property progXML of SaveRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -143,7 +143,7 @@ public class SaveRequest extends BaseRequest {
      */
     public Long getTimestamp() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no timestamp from an object under construction: " + this);
+            throw new RuntimeException("no timestamp from an object under construction: " + toString());
         }
         return this.timestamp;
     }
@@ -162,7 +162,7 @@ public class SaveRequest extends BaseRequest {
      */
     public SaveRequest setTimestamp(Long timestamp) {
         if ( this.immutable ) {
-            throw new RuntimeException("timestamp assigned to an immutable object: " + this);
+            throw new RuntimeException("timestamp assigned to an immutable object: " + toString());
         }
         this.timestamp = timestamp;
         return this;
@@ -173,7 +173,7 @@ public class SaveRequest extends BaseRequest {
      */
     public String getProgramName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no programName from an object under construction: " + this);
+            throw new RuntimeException("no programName from an object under construction: " + toString());
         }
         return this.programName;
     }
@@ -183,7 +183,7 @@ public class SaveRequest extends BaseRequest {
      */
     public SaveRequest setProgramName(String programName) {
         if ( this.immutable ) {
-            throw new RuntimeException("programName assigned to an immutable object: " + this);
+            throw new RuntimeException("programName assigned to an immutable object: " + toString());
         }
         this.programName = programName;
         return this;
@@ -194,7 +194,7 @@ public class SaveRequest extends BaseRequest {
      */
     public String getProgXML() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no progXML from an object under construction: " + this);
+            throw new RuntimeException("no progXML from an object under construction: " + toString());
         }
         return this.progXML;
     }
@@ -204,7 +204,7 @@ public class SaveRequest extends BaseRequest {
      */
     public SaveRequest setProgXML(String progXML) {
         if ( this.immutable ) {
-            throw new RuntimeException("progXML assigned to an immutable object: " + this);
+            throw new RuntimeException("progXML assigned to an immutable object: " + toString());
         }
         this.progXML = progXML;
         return this;
@@ -215,7 +215,7 @@ public class SaveRequest extends BaseRequest {
      */
     public String getConfigName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no configName from an object under construction: " + this);
+            throw new RuntimeException("no configName from an object under construction: " + toString());
         }
         return this.configName;
     }
@@ -234,7 +234,7 @@ public class SaveRequest extends BaseRequest {
      */
     public SaveRequest setConfigName(String configName) {
         if ( this.immutable ) {
-            throw new RuntimeException("configName assigned to an immutable object: " + this);
+            throw new RuntimeException("configName assigned to an immutable object: " + toString());
         }
         this.configName = configName;
         return this;
@@ -245,7 +245,7 @@ public class SaveRequest extends BaseRequest {
      */
     public String getConfXML() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no confXML from an object under construction: " + this);
+            throw new RuntimeException("no confXML from an object under construction: " + toString());
         }
         return this.confXML;
     }
@@ -264,7 +264,7 @@ public class SaveRequest extends BaseRequest {
      */
     public SaveRequest setConfXML(String confXML) {
         if ( this.immutable ) {
-            throw new RuntimeException("confXML assigned to an immutable object: " + this);
+            throw new RuntimeException("confXML assigned to an immutable object: " + toString());
         }
         this.confXML = confXML;
         return this;
@@ -275,7 +275,7 @@ public class SaveRequest extends BaseRequest {
      */
     public String getOwnerAccount() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no ownerAccount from an object under construction: " + this);
+            throw new RuntimeException("no ownerAccount from an object under construction: " + toString());
         }
         return this.ownerAccount;
     }
@@ -294,7 +294,7 @@ public class SaveRequest extends BaseRequest {
      */
     public SaveRequest setOwnerAccount(String ownerAccount) {
         if ( this.immutable ) {
-            throw new RuntimeException("ownerAccount assigned to an immutable object: " + this);
+            throw new RuntimeException("ownerAccount assigned to an immutable object: " + toString());
         }
         this.ownerAccount = ownerAccount;
         return this;
@@ -306,7 +306,7 @@ public class SaveRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

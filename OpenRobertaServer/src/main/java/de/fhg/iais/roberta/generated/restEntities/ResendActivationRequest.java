@@ -100,13 +100,13 @@ public class ResendActivationRequest extends BaseRequest {
     private ResendActivationRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ResendActivationRequest-object is already immutable: " + this;
+            _message = "ResendActivationRequest-object is already immutable: " + toString();
         }
         if ( accountName == null ) {
-            _message = "required property accountName of ResendActivationRequest-object is not set: " + this;
+            _message = "required property accountName of ResendActivationRequest-object is not set: " + toString();
         }
         if ( language == null ) {
-            _message = "required property language of ResendActivationRequest-object is not set: " + this;
+            _message = "required property language of ResendActivationRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -120,7 +120,7 @@ public class ResendActivationRequest extends BaseRequest {
      */
     public String getAccountName() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no accountName from an object under construction: " + this);
+            throw new RuntimeException("no accountName from an object under construction: " + toString());
         }
         return this.accountName;
     }
@@ -130,7 +130,7 @@ public class ResendActivationRequest extends BaseRequest {
      */
     public ResendActivationRequest setAccountName(String accountName) {
         if ( this.immutable ) {
-            throw new RuntimeException("accountName assigned to an immutable object: " + this);
+            throw new RuntimeException("accountName assigned to an immutable object: " + toString());
         }
         this.accountName = accountName;
         return this;
@@ -141,7 +141,7 @@ public class ResendActivationRequest extends BaseRequest {
      */
     public String getLanguage() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no language from an object under construction: " + this);
+            throw new RuntimeException("no language from an object under construction: " + toString());
         }
         return this.language;
     }
@@ -151,7 +151,7 @@ public class ResendActivationRequest extends BaseRequest {
      */
     public ResendActivationRequest setLanguage(String language) {
         if ( this.immutable ) {
-            throw new RuntimeException("language assigned to an immutable object: " + this);
+            throw new RuntimeException("language assigned to an immutable object: " + toString());
         }
         this.language = language;
         return this;
@@ -163,7 +163,7 @@ public class ResendActivationRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

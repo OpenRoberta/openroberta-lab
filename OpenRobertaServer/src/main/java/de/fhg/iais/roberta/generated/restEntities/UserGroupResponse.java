@@ -162,22 +162,22 @@ public class UserGroupResponse extends BaseResponse {
     private UserGroupResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "UserGroupResponse-object is already immutable: " + this;
+            _message = "UserGroupResponse-object is already immutable: " + toString();
         }
         if ( rc == null ) {
-            _message = "required property rc of UserGroupResponse-object is not set: " + this;
+            _message = "required property rc of UserGroupResponse-object is not set: " + toString();
         }
         if ( initToken == null ) {
-            _message = "required property initToken of UserGroupResponse-object is not set: " + this;
+            _message = "required property initToken of UserGroupResponse-object is not set: " + toString();
         }
         if ( !serverTimeDefined ) {
-            _message = "required property serverTime of UserGroupResponse-object is not set: " + this;
+            _message = "required property serverTime of UserGroupResponse-object is not set: " + toString();
         }
         if ( serverVersion == null ) {
-            _message = "required property serverVersion of UserGroupResponse-object is not set: " + this;
+            _message = "required property serverVersion of UserGroupResponse-object is not set: " + toString();
         }
         if ( userGroup == null ) {
-            _message = "required property userGroup of UserGroupResponse-object is not set: " + this;
+            _message = "required property userGroup of UserGroupResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -191,7 +191,7 @@ public class UserGroupResponse extends BaseResponse {
      */
     public JSONObject getUserGroup() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no userGroup from an object under construction: " + this);
+            throw new RuntimeException("no userGroup from an object under construction: " + toString());
         }
         return this.userGroup;
     }
@@ -201,7 +201,7 @@ public class UserGroupResponse extends BaseResponse {
      */
     public UserGroupResponse setUserGroup(JSONObject userGroup) {
         if ( this.immutable ) {
-            throw new RuntimeException("userGroup assigned to an immutable object: " + this);
+            throw new RuntimeException("userGroup assigned to an immutable object: " + toString());
         }
         this.userGroup = userGroup;
         return this;
@@ -213,7 +213,7 @@ public class UserGroupResponse extends BaseResponse {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {

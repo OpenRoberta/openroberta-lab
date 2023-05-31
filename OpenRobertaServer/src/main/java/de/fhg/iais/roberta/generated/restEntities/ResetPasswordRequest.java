@@ -100,10 +100,10 @@ public class ResetPasswordRequest extends BaseRequest {
     private ResetPasswordRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ResetPasswordRequest-object is already immutable: " + this;
+            _message = "ResetPasswordRequest-object is already immutable: " + toString();
         }
         if ( resetPasswordLink == null ) {
-            _message = "required property resetPasswordLink of ResetPasswordRequest-object is not set: " + this;
+            _message = "required property resetPasswordLink of ResetPasswordRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -117,7 +117,7 @@ public class ResetPasswordRequest extends BaseRequest {
      */
     public String getResetPasswordLink() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no resetPasswordLink from an object under construction: " + this);
+            throw new RuntimeException("no resetPasswordLink from an object under construction: " + toString());
         }
         return this.resetPasswordLink;
     }
@@ -127,7 +127,7 @@ public class ResetPasswordRequest extends BaseRequest {
      */
     public ResetPasswordRequest setResetPasswordLink(String resetPasswordLink) {
         if ( this.immutable ) {
-            throw new RuntimeException("resetPasswordLink assigned to an immutable object: " + this);
+            throw new RuntimeException("resetPasswordLink assigned to an immutable object: " + toString());
         }
         this.resetPasswordLink = resetPasswordLink;
         return this;
@@ -138,7 +138,7 @@ public class ResetPasswordRequest extends BaseRequest {
      */
     public String getNewPassword() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no newPassword from an object under construction: " + this);
+            throw new RuntimeException("no newPassword from an object under construction: " + toString());
         }
         return this.newPassword;
     }
@@ -157,7 +157,7 @@ public class ResetPasswordRequest extends BaseRequest {
      */
     public ResetPasswordRequest setNewPassword(String newPassword) {
         if ( this.immutable ) {
-            throw new RuntimeException("newPassword assigned to an immutable object: " + this);
+            throw new RuntimeException("newPassword assigned to an immutable object: " + toString());
         }
         this.newPassword = newPassword;
         return this;
@@ -169,7 +169,7 @@ public class ResetPasswordRequest extends BaseRequest {
      */
     public JSONObject toJson() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no JSON from an object under construction: " + this);
+            throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {
