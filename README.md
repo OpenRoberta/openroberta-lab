@@ -4,43 +4,38 @@ Open Roberta Lab
 [![Unit Test](https://github.com/OpenRoberta/openroberta-lab/actions/workflows/unit_test_triggered_by_develop_push.yml/badge.svg?branch=develop)](https://github.com/OpenRoberta/openroberta-lab/actions/workflows/unit_test.yml)
 [![Integration Test (Nightly)](https://github.com/OpenRoberta/openroberta-lab/actions/workflows/integration_test_triggered_by_cron.yml/badge.svg?branch=develop&event=schedule)](https://github.com/OpenRoberta/openroberta-lab/actions/workflows/integration_test_triggered_by_cron.yml)
 
-### Note about the default branch
-
-For a short time, we use ``develop`` to the default branch of our repository. If you clone our repository, you'll get ``develop`` first. In general this is a
-stable version. You can deploy a local version as described below. If you want the currently deployed version, please checkout ``master`` before building.
-
-The local version needs data for the cross compiler. They are stored in the separate repository ``ora-cc-rsc``. Note:
-
-- ``master``(version 4.1.3, the currently deployed version) needs the data stored in tag ``25``
-- ``develop`` (version 4.1.4-SNAPSHOT) needs the data stored in tag ``26``
-
 ### Introduction
 
-The source of the OpenRoberta Lab is stored in the Github repository '[openroberta-lab](https://github.com/OpenRoberta/openroberta-lab)'.
+The steps below explain how to get started with the _sources_ of the OpenRoberta lab. If you just want to run the server locally only, please have a look into
+the [Wiki - Docker Installation](https://github.com/OpenRoberta/openroberta-lab/wiki/Instructions-to-run-a-openroberta-lab-server-using-DOCKER) or the
+(outdated, but working) description [Wiki - Installation](https://github.com/OpenRoberta/openroberta-lab/wiki/Installation).
 
-The steps below explain how to get started with the sources. If you just want to run the server locally, please have a look into
-the [Wiki - Installation](https://github.com/OpenRoberta/openroberta-lab/wiki/Installation). If you want to contribute, please get in touch with us,
-see [Wiki - Community](https://github.com/OpenRoberta/openroberta-lab/wiki/Community), before you start.
+If you want to contribute, please get in touch with us, see [Wiki - Community](https://github.com/OpenRoberta/openroberta-lab/wiki/Community), before you start.
+Please also check our wiki for development procedure, coding conventions and further reading. We use the Github issue tracking system. Please file issues in the
+main project **openroberta-lab**.
 
-After a fresh git clone you get the **openroberta-lab** project folder. It includes almost everything you need to setup and extend your own openrobertalab
-server. License information is available in the **docs** folder.
+All of our production and test systems run on _Linux_ servers. Most of our developers use Linux laptops. The following instructions are valid for Linux
+machines. Nevertheless you can follow the steps on a Win* machine. Please leave out the installation of cross compilers, because not all exist/work on Win*.
+Without crosscompiler you can do almost everything (start the server, experiment with the frontend, create user, use the data base, change the lab by editing
+our sources, ...), except cross compilation of course (not completely correct: target code for Lego ev3 systems can be compiled, because it is Java).
 
 #### Prerequisites
 
-* Java JDK >= 1.8 (e.g. `openjdk-11-jdk` on Ubuntu) and JAVA JDK <= 13.0.2
+Tools you need:
 
-> For Windows, we recommend the Java installation [found here](https://docs.microsoft.com/en-us/java/openjdk/download#openjdk-11015-lts).
-
+* Java JDK >= 1.8 (e.g. `openjdk-11-jdk` on Ubuntu) and JAVA JDK <= 13.0.2. For Windows, we recommend the Java
+  installation [found here](https://docs.microsoft.com/en-us/java/openjdk/download#openjdk-11015-lts).
 * Maven
 * NPM
 * Git
 * Web browser
 
-If you would like your local server to compile code for the different systems, you need to install additional software (crosscompilers, libraries, ...).
+### Cross Compiler (optional)
 
-> It is recommended to download additional software to a user-defined directory, such as `/opt/compilers/`, as this will save us the trouble of finding the correct path to the binaries later on!
+#### Binaries
 
-**on Ubuntu**:
+If you would like your local server to compile code for the different systems, you need to install software (crosscompilers, libraries, ...). It is recommended
+to download them to a user-defined directory, such as `/opt/compilers/`, as this will save us the trouble of finding the correct path to the binaries later on!
 
 * Arduino based robots
     * `sudo apt-get install libusb-0.1-4`
@@ -66,97 +61,66 @@ If you would like your local server to compile code for the different systems, y
     * download and unpack [xtensa-esp32-elf](https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz) to a directory of your
       choice.
 
-Next, add the downloaded binaries to the `PATH`. The `<path-to-the-compiler-folder>` should be replaced with the download directory (created earlier) + the
-compiler folder:
+Next, add all of the downloaded binaries to the `PATH`. The `<path-to-the-compiler-folder>` should be replaced with the download directory (created earlier)
+followed by the compiler folder:
 
 ```shell
 echo export PATH="$PATH:<path-to-the-compiler-folder>/bin" >> ~/.profile`
 ```
 
-**on Windows**:
+#### Resources
 
-* Arduino based robots
-    * download and unpack [avr-gcc](https://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-i686-w64-mingw32.zip) to a directory of your choice.
-  > Arduino Nano 33 BLE and Arduino Uno Wifi Rev 2 do not compile on Windows at the moment :(
-* Calliope
-    * download and unpack the
-      latest [gcc-arm-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) to a
-      directory of your choice.
-    * download and unpack [srecord](https://sourceforge.net/projects/srecord/files/) to a directory of your choice.
-* micro:bit
-    * install Python 3
-    * `pip install uflash`
-* EV3 c4ev3
-  > No compiler is made available for Windows :(
-* Edison
-    * install Python 2
-* Bionics4Education
-    * install [xtensa-esp32-elf with ESP-IDF Tools](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/windows-setup.html) as per the
-      guide.
-
-Next, add the downloaded and installed binaries to the `PATH`:
-
-* most libraries provide an option of adding the binaries to the system `PATH` during installation.
-* for others, navigate to _Edit the system environment variables_ and add the path manually. The path here is the download directory (created earlier) + the
-  compiler folder.
-* for Python 2, rename the executable file from `python.exe` to `python2.exe`.
-
-The cross-compiler needs resources to work properly (header files, libraries, ...). These resources change little over time and are stored in
+The cross-compiler need resources to work properly (header files, libraries, ...). These resources change little over time and are stored in
 the '[ora-cc-rsc](https://github.com/OpenRoberta/ora-cc-rsc)' repository.
 
-Please clone that directory and build it using `mvn clean install`. When the openroberta-lab server is started, you have to supply the path to these resources (
-see below). If the resources are not available, everything works fine (writing programs, import, export, creating accounts, etc.), but running programs on real
+Please clone that directory and build it using `mvn clean install`. If the resources are not available, everything works fine, but running programs on real
 robots doesn't work, because the cross-compiler will fail.
 
-Please also check our wiki for detailed installation instructions, development procedure, coding conventions and further reading. We also use the Github issue
-tracking system. Please file issues in the main project **openroberta-lab**.
-
-### Fast installation with maven
+### Installation
 
 #### Step 1: Clone the repository and compile
 
+The source of the OpenRoberta Lab is stored in the Github repository '[openroberta-lab](https://github.com/OpenRoberta/openroberta-lab)'. We use ``develop`` to
+the default branch of our repository. If you clone our repository, you'll get ``develop`` first. In general this is a stable version. You can deploy a local
+version as described below. If you want to run the currently deployed version, please checkout ``master`` before building.
+
+After a fresh git clone you get the **openroberta-lab** project folder. It includes almost everything you need to setup and extend your own openrobertalab
+server. License information is available in the **docs** folder. Btw: if you use many repositories, put all of them into a common directoy as ``~/git``.
+
     git clone https://github.com/OpenRoberta/openroberta-lab.git # get the repository
     cd openroberta-lab                                           # cd into repository
-    mvn clean install                                            # generate the server
-    npm install && npm run build                                 # build the frontend
+    mvn clean install                                            # generate the server, at the end: build success
+    npm install && npm run build                                 # build the frontend, some lines, must show no error
 
-Might take some time. The last lines of a successful build looks like:
+Might take some time.
 
-    ...
-    [INFO] ------------------------------------------------------------------------
-    [INFO] BUILD SUCCESS
-    [INFO] ------------------------------------------------------------------------
-    [INFO] Total time:  03:24 min
-    [INFO] Finished at: 2020-09-08T14:13:10+02:00
-    [INFO] ------------------------------------------------------------------------
+#### Step 2: Make sure you have a database and start the server
 
-#### Step 2: Make sure you have a database
-
-The two main shell scripts to work with are `./admin.sh` and `./ora.sh`. To use them, you need a bash-compatible shell. On linux system they are available, on
-win* systems you get one for free if you have installed git. Call the scripts without parameter or with `-h` to get a help message.
-`./admin.sh` is used for data base administration, `./ora.sh` for server export and start as well as for docker administration. If you have a fresh clone of the
-server, make sure that the OpenRobertaServer folder has a subfolder **db-embedded** with the database inside. If you don't have a database, you can create an
-empty database with
+The two main shell scripts to work with are `./admin.sh` and `./ora.sh`. _They have a lot of commands and options._
+Call the scripts without parameter or with `-h` to get a help message.
+`./admin.sh` is used for data base administration and server start, `./ora.sh` for server export and start. If you have a fresh clone of the server, make sure
+that the OpenRobertaServer folder has a subfolder **db-embedded** with a database inside. If you don't have a database, you can create an empty database with
 
     ./admin.sh -git-mode create-empty-db
 
 If you try to create a new database, but one exists, the old one is *not* changed and the command has no effect. The new database is found in the folder **
-OpenRobertaServer/db-embedded**.
+OpenRobertaServer/db-embedded**. We needs a database to store user accounts, programs, etc. We use HyperSQL. Other database systems (MySql, Postgres, ...,
+oracle, db2, ...) would work, too. There are no special requirements on the database, that would exclude one. Only a Hibernate binding and a full transaction
+support is needed.
 
-#### Step 3: Starting your own server
+Now use one of the following commands to start the server
 
-    ./ora.sh [-oraccrsc <optional-path-to-crosscompiler-resources, defaults-to '../ora-cc-rsc'>] start-from-git
+    ./admin.sh -git-mode  start-from-git     # writes logging to ./admin
+    ./ora.sh  start-from-git                 # writes logging to the console
 
 If you did not install the crosscompiler resources, everything works fine (programming, simulation, code generation, user management, ...), except of generation
 of binaries for robot systems.
 
-#### Step 4: Accessing your openroberta installation
-
-Start your browser at [http://localhost:1999](http://localhost:1999) That's it!
+The URL for your browser is [http://localhost:1999](http://localhost:1999) That's it!
 
 ### Creating an installation outside of the git repo
 
-Often you want to run an openroberta installation of a fixed version for a long time. This is easy. Let's assume, that you want to use the (non-existing)
+Often you want to run an openroberta installation of a fixed version for some time. This is easy. Let's assume, that you want to use the (non-existing)
 directory /data/my-openroberta.
 
     mvn clean install && npm run build         # generate the server in the git repo
@@ -165,51 +129,15 @@ directory /data/my-openroberta.
     ./admin.sh create-empty-db                 # create an empty db at ./db-server - of course you may copy an old database to that location
     ./admin.sh start-server                    # spawns two processes: a database server and the openroberta jetty server
 
-The following administrative commands are useful:
-
-    ./admin.sh backup ./admin/dbBackup   # create a backup in the folder given as parameter. Copy the tgz-file to another machine (cron will automate everything)
-    ./admin.sh shutdown                  # shutdown of the database. The openroberta jetty server continues to run, but database access will fail, of course.
-                                         # get the pid of the server using **ps** and execute a **kill <pid>** to stop the server
-    ./admin.sh sqlgui                    # access the database concurrently with the server. Be careful not to block the server, e.g. by an update without commit
-                                         # the database server must be running, of course.
-    ./admin.sh sqlguiEmbedded            # if the database server is stopped, this allows to access the database. The access is exclusive. Terminate the sql client
-                                         # before you start the openroberta installation again.
-
-This kind of installation is useful for small productive systems (e.g. an a RaspberryPi). Large productive systems,
-
-* if you want to run many servers (maybe of different versions) concurrently,
-* if you want to use continous deployment based on incoming git commits
-* ...
-
-needs more support as available with the scripts **ora.sh** and **admin.sh**. We deploy our openroberta installation using docker. It is described in detail in
-file **Docker/README.md**. Inside the
-**Docker** directory everything is contained which is needed to create images and start them. You can try it. If there are problems, you can contact us.
-
-### Remarks about the database
-
-OpenRoberta needs a database to store user accounts, programs, etc. It uses HyperSQL. Other database systems (MySql, Postgres, ..., oracle, db2, ...) would
-work, too. There are no special requirements on the database, that would exclude one. Only a Hibernate binding and a full transaction support is needed.
-
-As described above either **db-embedded** or **db-server** is the name of the directory, in which the database files reside. Sometimes the database must be
-upgraded, e.g. new tables or new columns for new features. The java class **DbUpgrader** is responsible for detecting the need for an upgrade and executing the
-upgrade (once and only once) when the database is openend at server startup. If a database needs more than one upgrade, this is no problem. They are executed
-one after the other.
-
-There is _no_ need for the developer to care about database upgrades. But note, that is _not_ possible to upgrade databases with versions before **3.1.0**. As
-this is a very old version, this should never be necessary. If this is needed, please contact the OpenRoberta team.
-
-### Importing the Project
-
-You can also import the project into IDE's such as [Eclipse](https://github.com/OpenRoberta/openroberta-lab/wiki/Importing-into-Eclipse)
-and [IntelliJ](https://github.com/OpenRoberta/openroberta-lab/wiki/Importing-into-IntelliJ)!
+This kind of installation is useful for small installations. True productive systems need more support. We deploy our openroberta installation using docker. It
+is described in detail in the file `README.md` of the repository `openroberta-docker`. In the repository you will find everything needed to create images and
+start them. You can try it. If there are problems, you can contact us.
 
 ### Development notes
 
-Development happens in the [develop](https://github.com/OpenRoberta/openroberta-lab/tree/develop) branch. Please send PRs against that branch.
-
-    git clone https://github.com/OpenRoberta/openroberta-lab.git
-    cd openroberta-lab
-    git checkout develop
+You should import the projects of the openroberta-lab repository locally into IDE's such as
+[Eclipse](https://github.com/OpenRoberta/openroberta-lab/wiki/Importing-into-Eclipse)
+or [IntelliJ](https://github.com/OpenRoberta/openroberta-lab/wiki/Importing-into-IntelliJ)!
 
 The project OpenRobertaServer contains the server logic, that accesses
 
@@ -222,19 +150,19 @@ The server is made of
 
 * an embedded jetty server exposing REST services
 * the services are based on jersey
-* JSON (sometimes XML or plain text) is used for data exchange between front, robots and server
+* JSON (sometimes XML or plain text) is used for data exchange between front end, robots and server
 
 Furthermore, the project OpenRobertaServer contains in directory staticResources for the browser client
 
 * HTML and CSS
-* Generated Javascript under `/js` (**this should not be edited!**)
+* _Generated_ Javascript under `/js` (**this should not be edited!**)
     * Javascript libraries based on jquery and bootstrap for the frontend
     * assertions (DBC), ajax-based server calls (COMM), logging (LOG) and
     * javascript resources for [blockly](https://developers.google.com/blockly)
     * controller and models written in Javascript, which implement the GUI
 
-**The original Javascript sources can be found in `OpenRobertaWeb/`**  
-To work with the frontend (e.g. compiling the sources) we defined the following npm scripts:
+**The TypeScript and Javascript _sources_ can be found in `OpenRobertaWeb/`**  
+To work with the frontend (e.g. compiling the sources) we use the following npm scripts:
 
 * `npm run build` - build the sources
 * `npm run build:sourceMap` - build the sources and generated source maps for debugging
@@ -249,10 +177,7 @@ To work with the frontend (e.g. compiling the sources) we defined the following 
 
 To run backend tests, use `mvn test`. Running `mvn clean install` will make a stable, reproducible build with all unit tests executed.
 
-To run the integration tests you have to supply an additional flag: `mvn clean install -PrunIT`. For these you need an environment
-variable `robot_crosscompiler_resourcebase` pointing to your `ora-cc-rsc` directory.
-
-> The integration tests don't run successfully on Windows at the moment, as compilers for some robots (Arduino Nano 33 BLE, Arduino Uno Wifi Rev 2 and C4EV3) are not available.
+To run the integration tests you have to supply an additional flag: `mvn clean install -PrunIT`. These tests expects, that all crosscompiler are installed.
 
 #### Some Frameworks used
 

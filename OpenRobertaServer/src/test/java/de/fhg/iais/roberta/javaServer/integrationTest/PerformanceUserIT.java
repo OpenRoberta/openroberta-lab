@@ -93,16 +93,16 @@ public class PerformanceUserIT {
         this.sessionFactoryWrapper = tc.getSessionFactoryWrapper();
         this.memoryDbSetup = tc.getMemoryDbSetup();
 
+        ServerStarter.initLoggingBeforeFirstUse(EMPTY_STRING_LIST.toArray(new String[0]));
+        this.robotPlugins = ServerStarter.configureRobotPlugins(this.robotCommunicator, this.serverProperties, EMPTY_STRING_LIST);
+
         this.restUser = new ClientUser(this.robotCommunicator, this.serverProperties, null);
-        this.restProject = new ClientProgramController(this.serverProperties, null);
+        this.restProject = new ClientProgramController(this.serverProperties, robotPlugins);
         this.restBlocks = new ClientAdmin(this.robotCommunicator, this.serverProperties);
         this.downloadJar = new RobotDownloadProgram(this.robotCommunicator, this.serverProperties);
         this.brickCommand = new RobotCommand(this.robotCommunicator);
         this.theProgramOfAllUserLol = Resources.toString(PerformanceUserIT.class.getResource("/restInterfaceTest/action_BrickLight.xml"), Charsets.UTF_8);
         this.executorService = Executors.newFixedThreadPool(PerformanceUserIT.MAX_PARALLEL_USERS + 10);
-
-        ServerStarter.initLoggingBeforeFirstUse(EMPTY_STRING_LIST.toArray(new String[0]));
-        this.robotPlugins = ServerStarter.configureRobotPlugins(this.robotCommunicator, this.serverProperties, EMPTY_STRING_LIST);
     }
 
     @After

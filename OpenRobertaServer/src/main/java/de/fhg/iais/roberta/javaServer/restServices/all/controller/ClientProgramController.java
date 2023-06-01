@@ -480,42 +480,6 @@ public class ClientProgramController {
         return UtilForREST.makeBaseResponseForError(Key.PROGRAM_IMPORT_ERROR, httpSessionState, null);
     }
 
-    @POST
-    @Path("/transform")
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response transform(@XsltTrans XsltTransformer xsltTransformer, String toTransform) {
-        String transformed = "";
-        try {
-            toTransform = UtilForHtmlXml.checkProgramTextForXSS(toTransform);
-            toTransform = xsltTransformer.transform(toTransform);
-            if ( toTransform != null ) {
-                Export jaxbImportExport = JaxbHelper.xml2Element(toTransform, Export.class);
-                if ( jaxbImportExport != null ) {
-                    String robotType1 = jaxbImportExport.getProgram().getBlockSet().getRobottype();
-                    String robotType2 = jaxbImportExport.getConfig().getBlockSet().getRobottype();
-                    RobotFactory robotFactory = getArbitraryPluginOfAPluginGroup(robotType1, robotPluginMap);
-                    if ( robotFactory != null && robotType1.equals(robotType2) ) {
-                        BlockSet jaxbProgram = jaxbImportExport.getProgram().getBlockSet();
-                        checkAndAddNnDataForPlugin(robotFactory.getPluginProperties().getRobotName(), jaxbProgram);
-                        String progXml = JaxbHelper.blockSet2xml(jaxbProgram);
-                        String configXml = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
-                        Pair<String, String> progConfPair =
-                            UtilForXmlTransformation.transformBetweenVersions(robotFactory, jaxbProgram.getXmlversion(), progXml, configXml);
-                        progXml = progConfPair == null ? progXml : progConfPair.getFirst();
-                        configXml = progConfPair == null ? configXml : progConfPair.getSecond();
-                        transformed = "<export xmlns=\"http://de.fhg.iais.roberta.blockly\"><program>" + progXml + "</program><config>" + configXml + "</config></export>";
-                        Statistics.info("ProgramTransForm", "success", true);
-                    }
-                }
-            }
-        } catch ( Exception e ) {
-            transformed = "";
-            Statistics.info("ProgramTransForm", "success", false);
-        }
-        return Response.ok(transformed).build();
-    }
-
     /**
      * used to export all Programs of every robot of the current user.
      * To get give appropriate feedback logincheck from ClientUser.java should be called before this.
@@ -831,15 +795,6 @@ public class ClientProgramController {
         return httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup().isEmpty()
             ? httpSessionState.getRobotName()
             : httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
-    }
-
-    private RobotFactory getArbitraryPluginOfAPluginGroup(String pluginNameOrPluginGroup, Map<String, RobotFactory> robotPluginMap) {
-        for ( RobotFactory robotPlugin : robotPluginMap.values() ) {
-            if ( pluginNameOrPluginGroup.equals(robotPlugin.getGroup()) ) {
-                return robotPlugin;
-            }
-        }
-        return null;
     }
 
     private void checkAndAddNnDataForPlugin(String robotName, BlockSet jaxbImportExport) {

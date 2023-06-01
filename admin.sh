@@ -131,10 +131,10 @@ case "$CMD" in
                    esac
                      
                    java $RDBG $XMX -cp ${JAVA_LIB_DIR}/\* de.fhg.iais.roberta.main.ServerStarter \
-                        -d server.staticresources.dir="$STATIC_RESOURCES" \
                         -d database.mode="$DB_MODE" \
                         -d database.parentdir=$DB_PARENTDIR \
                         -d database.name=$DB_NAME \
+                        -d server.staticresources.dir="$STATIC_RESOURCES" \
                         -d server.admin.dir=$ADMIN_DIR \
                         $* >>$SERVER_LOG_FILE 2>&1
                    ;;
