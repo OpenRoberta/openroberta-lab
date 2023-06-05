@@ -10,7 +10,7 @@ import 'jquery-validate';
 export function init() {
     $('#tabNN').onWrap(
         'show.bs.tab',
-        function (e) {
+        function(e) {
             $('#nn').show();
             GUISTATE_C.setView('tabNN');
         },
@@ -19,7 +19,7 @@ export function init() {
 
     $('#tabNN').onWrap(
         'shown.bs.tab',
-        function (e) {
+        function(e) {
             GUISTATE_C.setProgramSaved(false);
             mkNNfromNNStepDataAndRunNNEditor();
         },
@@ -28,18 +28,18 @@ export function init() {
 
     $('#tabNN').onWrap(
         'hide.bs.tab',
-        function (e) {
+        function(e) {
             saveNN2Blockly();
             $('#nn').hide();
         },
         'hide tabNN'
     );
 
-    $('#tabNN').onWrap('hidden.bs.tab', function (e) {}, 'hidden tabNN');
+    $('#tabNN').onWrap('hidden.bs.tab', function(e) {}, 'hidden tabNN');
 
     $('#tabNNlearn').onWrap(
         'show.bs.tab',
-        function (e) {
+        function(e) {
             $('#nn-learn').show();
             GUISTATE_C.setView('tabNNlearn');
         },
@@ -48,7 +48,7 @@ export function init() {
 
     $('#tabNNlearn').onWrap(
         'shown.bs.tab',
-        function (e) {
+        function(e) {
             GUISTATE_C.setProgramSaved(false);
             mkNNfromNNStepDataAndRunNNEditorForTabLearn();
         },
@@ -57,14 +57,14 @@ export function init() {
 
     $('#tabNNlearn').onWrap(
         'hide.bs.tab',
-        function (e) {
+        function(e) {
             saveNN2Blockly();
             $('#nn-learn').hide();
         },
         'hide tabNNlearn'
     );
 
-    $('#tabNNlearn').onWrap('hidden.bs.tab', function (e) {}, 'hidden tabNNlearn');
+    $('#tabNNlearn').onWrap('hidden.bs.tab', function(e) {}, 'hidden tabNNlearn');
 }
 
 /**

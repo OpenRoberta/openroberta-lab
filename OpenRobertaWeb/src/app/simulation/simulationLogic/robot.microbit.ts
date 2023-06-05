@@ -1,8 +1,8 @@
 // @ts-ignore
 import * as Blockly from 'blockly';
-import RobotCalliope from './robot.calliope';
-import { CalliopeLightSensor, CompassSensor, GestureSensor, MicrobitPins, TemperatureSensor, TouchKeys } from './robot.sensors';
-import { MbedDisplay, PinActuators, RGBLed, WebAudio } from './robot.actuators';
+import RobotCalliope from 'robot.calliope';
+import { CalliopeLightSensor, CompassSensor, GestureSensor, MicrobitPins, TemperatureSensor, TouchKeys } from 'robot.sensors';
+import { MbedDisplay, PinActuators, RGBLed, WebAudio } from 'robot.actuators';
 
 export default class RobotMicrobit extends RobotCalliope {
     protected override configure(configuration): void {

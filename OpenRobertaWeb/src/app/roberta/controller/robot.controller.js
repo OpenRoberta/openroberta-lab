@@ -19,12 +19,12 @@ var robotPort;
 /**
  * Initialize robot
  */
-function init() {
+function init(robot) {
     var ready = $.Deferred();
     $.when(
-        ROBOT.setRobot(GUISTATE_C.getRobot(), function (result) {
+        ROBOT.setRobot(robot, function (result) {
             if (result.rc == 'ok') {
-                GUISTATE_C.setRobot(GUISTATE_C.getRobot(), result, true);
+                GUISTATE_C.setRobot(robot, result, true);
             }
         })
     ).then(function () {
@@ -142,7 +142,7 @@ function initRobotForms() {
 
     $('#connectionsTable').bootstrapTable({
         formatNoMatches: function () {
-            return '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>';
+            return '<div class="lds-ellipsis"></div>';
         },
         columns: [
             {
@@ -205,7 +205,7 @@ function showSetTokenModal() {
     UTIL.showSingleModal(
         function () {
             $('#singleModalInput').attr('type', 'text');
-            $('#single-modal h3').text(Blockly.Msg['MENU_CONNECT']);
+            $('#single-modal h5').text(Blockly.Msg['MENU_CONNECT']);
             $('#single-modal label').text(Blockly.Msg['POPUP_VALUE']);
             $('#singleModalInput').addClass('capitalLetters');
             $('#single-modal a[href]').text(Blockly.Msg['POPUP_STARTUP_HELP']);
@@ -272,37 +272,37 @@ function showListModal() {
  * Show robot info
  */
 function showRobotInfo() {
-    if (GUISTATE_C.isRobotConnected()) {
-        $('#robotName').text(GUISTATE_C.getRobotName());
-        $('#robotSystem').text(GUISTATE_C.getRobotFWName());
-        if (GUISTATE_C.getRobotState() === 'wait') {
-            $('#robotStateWait').css('display', 'inline');
-            $('#robotStateDisconnected').css('display', 'none');
-            $('#robotStateBusy').css('display', 'none');
-        } else if (GUISTATE_C.getRobotState() === 'busy') {
-            $('#robotStateWait').css('display', 'none');
-            $('#robotStateDisconnected').css('display', 'none');
-            $('#robotStateBusy').css('display', 'inline');
-        } else {
-            $('#robotStateWait').css('display', 'none');
-            $('#robotStateDisconnected').css('display', 'inline');
-            $('#robotStateBusy').css('display', 'none');
-        }
-        if (GUISTATE_C.getLanguage() == 'EN') {
-            $('#robotBattery').text(GUISTATE_C.getRobotBattery() + ' V');
-        } else {
-            $('#robotBattery').text(GUISTATE_C.getRobotBattery().toString().replace('.', ',') + ' V');
-        }
-        var robotWait = parseInt(GUISTATE_C.getRobotTime(), 10);
-        if (robotWait < 1000) {
-            $('#robotWait').text(robotWait + ' ms');
-        } else {
-            $('#robotWait').text(Math.round(robotWait / 1000) + ' s');
-        }
-        $('#show-robot-info').modal('show');
+    if (GUISTATE_C.getRobotName().length !== 0) {
+        $('#robotName').html(GUISTATE_C.getRobotName());
     } else {
-        MSG.displayMessage('ORA_ROBOT_NOT_CONNECTED', 'POPUP', '');
+        $('#robotName').html('-');
     }
+    $('#robotSystem').html(GUISTATE_C.getRobotRealName());
+    if (GUISTATE_C.getRobotState() === 'wait' || $('#head-navi-icon-robot').hasClass('wait')) {
+        $('#robotStateWait').css('display', 'inline');
+        $('#robotStateDisconnected').css('display', 'none');
+        $('#robotStateBusy').css('display', 'none');
+    } else if (GUISTATE_C.getRobotState() === 'busy') {
+        $('#robotStateWait').css('display', 'none');
+        $('#robotStateDisconnected').css('display', 'none');
+        $('#robotStateBusy').css('display', 'inline');
+    } else {
+        $('#robotStateWait').css('display', 'none');
+        $('#robotStateDisconnected').css('display', 'inline');
+        $('#robotStateBusy').css('display', 'none');
+    }
+    if (GUISTATE_C.getLanguage() == 'EN') {
+        $('#robotBattery').text(GUISTATE_C.getRobotBattery() + ' V');
+    } else {
+        $('#robotBattery').text(GUISTATE_C.getRobotBattery().toString().replace('.', ',') + ' V');
+    }
+    var robotWait = parseInt(GUISTATE_C.getRobotTime(), 10);
+    if (robotWait < 1000) {
+        $('#robotWait').text(robotWait + ' ms');
+    } else {
+        $('#robotWait').text(Math.round(robotWait / 1000) + ' s');
+    }
+    $('#show-robot-info').modal('show');
 }
 
 /**

@@ -1,6 +1,6 @@
 import { SelectionListener } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
-import { EdisonChassis, EdisonLeds, WebAudio } from './robot.actuators';
+import { EdisonChassis, EdisonLeds, WebAudio } from 'robot.actuators';
 import { RobotBaseMobile } from 'robot.base.mobile';
 import { EdisonInfraredSensors, EV3Keys, Keys, LineSensor, SoundSensorBoolean } from 'robot.sensors';
 import * as $ from 'jquery';

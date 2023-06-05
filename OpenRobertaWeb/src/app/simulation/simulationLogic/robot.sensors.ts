@@ -11,7 +11,7 @@ import * as Blockly from 'blockly';
 import * as VolumeMeter from 'volume-meter';
 import * as $ from 'jquery';
 import { SimulationRoberta } from 'simulation.roberta';
-import RobotRobotino from './robot.robotino';
+import RobotRobotino from 'robot.robotino';
 
 export interface ISensor {
     updateSensor(
@@ -1813,10 +1813,10 @@ export class CompassSensor implements ISensor, ILabel {
 
     constructor() {
         $('#mbedButtons').append(
-            '<label for="rangeCompass" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_COMPASS">' +
+            '<div><label for="rangeCompass" lkey="Blockly.Msg.SENSOR_COMPASS" style="margin: 12px 8px 8px 0">' +
                 Blockly.Msg.SENSOR_COMPASS +
-                '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0" id="rangeCompass" name="rangeCompass" class="range" />' +
-                '<div style="margin:8px 0; "><input id="sliderCompass" type="range" min="0" max="360" value="0" step="5" /></div>'
+                '</label><input class="range" id="rangeCompass" name="rangeCompass" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0" type="text" value="0" /></div>' +
+                '<div style="margin:8px 0; "><input id="sliderCompass" max="360" min="0" step="5" type="range" value="0" /></div>'
         );
         createSlider($('#sliderCompass'), $('#rangeCompass'), this, 'degree', { min: 0, max: 360 });
     }
@@ -1850,9 +1850,9 @@ export class CalliopeLightSensor implements ISensor, ILabel, IDrawable {
 
     constructor() {
         $('#mbedButtons').append(
-            '<label for="rangeLight" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_LIGHT">' +
+            '<div><label for="rangeLight" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_LIGHT">' +
                 Blockly.Msg.SENSOR_LIGHT +
-                '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeLight" name="rangeLight" class="range" />' +
+                '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeLight" name="rangeLight" class="range" /></div>' +
                 '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="100" value="0" /></div>'
         );
         createSlider($('#sliderLight'), $('#rangeLight'), this, 'lightLevel', { min: 0, max: 100 });
@@ -1900,9 +1900,9 @@ export class Rob3rtaInfraredSensor implements ISensor, ILabel {
 
     constructor() {
         $('#mbedButtons').append(
-            '<label for="rangeLight" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_INFRARED">' +
+            '<div><label for="rangeLight" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_INFRARED">' +
                 Blockly.Msg.SENSOR_INFRARED +
-                '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeLight" name="rangeLight" class="range" />' +
+                '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeLight" name="rangeLight" class="range" /></div>' +
                 '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="1023" value="0" /></div>'
         );
         createSlider($('#sliderLight'), $('#rangeLight'), this, 'lightLevel', { min: 0, max: 1023 });
@@ -1934,9 +1934,9 @@ export class TemperatureSensor implements ISensor, ILabel {
 
     constructor() {
         $('#mbedButtons').append(
-            '<label for="rangeTemperature" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_TEMPERATURE">' +
+            '<div><label for="rangeTemperature" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_TEMPERATURE">' +
                 Blockly.Msg.SENSOR_TEMPERATURE +
-                '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeTemperature" name="rangeTemperature" class="range" />' +
+                '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeTemperature" name="rangeTemperature" class="range" /></div>' +
                 '<div style="margin:8px 0; "><input id="sliderTemperature" type="range" min="-25" max="75" value="0" step="1" /></div>'
         );
         createSlider($('#sliderTemperature'), $('#rangeTemperature'), this, 'degree', { min: -15, max: 75 });

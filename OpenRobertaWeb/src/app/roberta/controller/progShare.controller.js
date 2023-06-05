@@ -1,16 +1,14 @@
-import * as require from 'require';
-
 import * as LOG from 'log';
 import * as UTIL from 'util.roberta';
 import * as MSG from 'message';
-import * as COMM from 'comm';
 import * as GUISTATE_C from 'guiState.controller';
 import * as LANG from 'language.controller';
-import * as GALLERY_C from 'galleryList.controller';
+import { eventsLike, formatLike, rowAttributes } from 'galleryList.controller';
 import * as PROGRAM from 'program.model';
 import * as USERGROUP from 'userGroup.model';
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
+import { CardView } from 'table';
 import 'bootstrap-table';
 
 function init() {
@@ -22,6 +20,7 @@ export { init };
 function initView() {
     $('#relationsTable').bootstrapTable({
         height: 400,
+        theadClasses: 'table-dark',
         iconsPrefix: 'typcn',
         icons: {
             paginationSwitchDown: 'typcn-document-text',
@@ -65,53 +64,70 @@ function initView() {
             },
         ],
     });
-    $('#galleryPreview').bootstrapTable({
-        height: 410,
-        cardView: 'true',
-        rowStyle: GALLERY_C.rowStyle,
-        rowAttributes: GALLERY_C.rowAttributes,
-        resizable: 'true',
-        iconsPrefix: 'typcn',
+    const myOptions = {
         columns: [
             {
                 sortable: true,
-                //visible : false,
-                formatter: GALLERY_C.formatRobot,
+                title: '',
+                formatter: CardView.robot,
+            },
+            {
+                title: '',
+                sortable: true,
+                formatter: CardView.name,
+            },
+            {
+                title: '',
+                sortable: true,
+                formatter: CardView.programDescription,
+            },
+            {
+                title: '',
+                sortable: true,
+                formatter: function (goal) {
+                    return CardView.titleLabel(goal, 'GALLERY_BY', 'cardViewInfo');
+                },
             },
             {
                 sortable: true,
-                formatter: GALLERY_C.formatProgramName,
+                title: '',
+                formatter: function (date) {
+                    return CardView.titleLabel(UTIL.formatDate(date), 'GALLERY_DATE', 'cardViewInfo');
+                },
             },
             {
-                sortable: true,
-                formatter: GALLERY_C.formatProgramDescription,
-            },
-            {
-                title: GALLERY_C.titleAuthor,
-                sortable: true,
-            },
-            {
-                title: GALLERY_C.titleDate,
-                sortable: true,
-                formatter: UTIL.formatDate,
-            },
-            {
-                title: GALLERY_C.titleNumberOfViews,
+                title: '',
+                formatter: function (num) {
+                    return CardView.titleTypcn(num, 'eye-outline');
+                },
                 sortable: true,
             },
             {
-                title: GALLERY_C.titleLikes,
+                title: '',
+                formatter: function (num) {
+                    return CardView.titleTypcn(num, 'heart-full-outline');
+                },
                 sortable: true,
             },
             {
+                title: '',
                 sortable: true,
-                formatter: GALLERY_C.formatTags,
+                formatter: function (value, row) {
+                    return CardView.programTags(row[2]);
+                },
             },
             {
-                visible: false,
+                title: '',
+                events: eventsLike,
+                formatter: formatLike,
             },
         ],
-    });
+        rowAttributes: rowAttributes,
+        height: 410,
+        search: false,
+    };
+    const options = { ...CardView.options, ...myOptions };
+    $('#galleryPreview').bootstrapTable(options);
 }
 
 function initEvents() {
@@ -179,10 +195,13 @@ function showShareWithUser(data) {
     if (!$.isEmptyObject(data[2])) {
         shared = data[2];
     }
-    $('#show-relations h3')
+    $('#show-relations h5')
         .text(Blockly.Msg.BUTTON_DO_SHARE + ' »' + progName + '«')
         .end();
-    // $('#show-relations').find('.modal-header>h3').text(Blockly.Msg.BUTTON_DO_SHARE + ' »' + progName + '«').end();
+    $('#show-relations')
+        .find('.modal-header>h5')
+        .text(Blockly.Msg.BUTTON_DO_SHARE + ' »' + progName + '«')
+        .end();
     $('#relationsTable').bootstrapTable('removeAll');
     if (shared) {
         $.each(shared.sharedWith, function (i, shareObj) {
@@ -240,7 +259,7 @@ function showShareWithUser(data) {
 function showShareWithGallery(row) {
     var progName = row[0];
     var authorName = row[3];
-    $('#share-with-gallery h3').html('');
+    $('#share-with-gallery h5').html('');
     $('#galleryPreview').html('');
     $('#textShareGallery').html('');
     $('#share-with-gallery').data('progName', progName);
@@ -257,7 +276,7 @@ function showShareWithGallery(row) {
             PROGRAM.loadProgramEntity(progName, GUISTATE_C.getUserAccountName(), GUISTATE_C.getUserAccountName(), function (result) {
                 if (result.rc === 'ok') {
                     var progName = row[0];
-                    $('#share-with-gallery h3').text(Blockly.Msg.BUTTON_DO_UPLOAD_GALLERY.replace('$', progName));
+                    $('#share-with-gallery h5').text(Blockly.Msg.BUTTON_DO_UPLOAD_GALLERY.replace('$', progName));
                     $('#galleryPreview').bootstrapTable('load', new Array(result.program));
                     $('.infoTags').tagsinput();
                     $('#galleryPreview .bootstrap-tagsinput').addClass('galleryTags');
@@ -456,12 +475,12 @@ var formatSharedWith = function (value, row, index) {
             var $html = $(
                 '<div class="input-group">' +
                     '<label class="input-group-btn" for="shareWithUserInput">' +
-                    '<button type="button" style="height:34px" class="btn disabled editor">' +
+                    '<button type="button" style="height:48px" class="btn disabled editor">' +
                     '<i class="typcn typcn-user"></i>' +
                     '</button>' +
                     '</label>' +
                     '<span class="input-group-btn">' +
-                    '<button class="addShare btn" type="button" style="height: 34px">' +
+                    '<button class="addShare btn" type="button" style="height: 48px">' +
                     '<i class="typcn typcn-plus"></i>' +
                     '</button>' +
                     '</span>' +
@@ -487,14 +506,14 @@ var formatSharedWith = function (value, row, index) {
                             html;
 
                         html =
-                            '<div class="input-group" title="" data-original-title lkey="Blockly.Msg.SHARE_WITH_USERGROUP" data-translation-targets="title data-original-title">' +
+                            '<div class="input-group" title="" data-bs-original-title lkey="Blockly.Msg.SHARE_WITH_USERGROUP" data-translation-targets="title data-bs-original-title">' +
                             '<label class="input-group-btn" for="shareWithUserGroupInput">' +
-                            '<button type="button" style="height:34px" class="btn disabled editor">' +
+                            '<button type="button" style="height:48px" class="btn disabled editor">' +
                             '<i class="typcn typcn-group"></i>' +
                             '</button>' +
                             '</label>' +
                             '<span class="input-group-btn">' +
-                            '<button class="addShare btn" type="button" style="height: 34px">' +
+                            '<button class="addShare btn" type="button" style="height: 48px">' +
                             '<i class="typcn typcn-plus"></i>' +
                             '</button>' +
                             '</span>' +

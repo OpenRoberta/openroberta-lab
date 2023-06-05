@@ -4,20 +4,13 @@
  */
 import * as UTIL from 'util.roberta';
 import * as $ from 'jquery';
-import {
-    BaseSimulationObject,
-    Ground,
-    ISimulationObstacle,
-    MarkerSimulationObject,
-    RectangleSimulationObject,
-    SimObjectFactory,
-    SimObjectShape,
-    SimObjectType,
-} from 'simulation.objects';
+import { BaseSimulationObject, Ground, ISimulationObstacle, MarkerSimulationObject, RectangleSimulationObject, SimObjectFactory, SimObjectShape, SimObjectType } from 'simulation.objects';
 import { SimulationRoberta } from 'simulation.roberta';
 import { IDestroyable, RobotBase, RobotFactory } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
+
+const RESIZE_CONST: number = 3;
 
 /**
  * Creates a new Scene.
@@ -32,13 +25,13 @@ export class SimulationScene {
     ground: Ground = new Ground(0, 0, 0, 0);
     images: {};
     imgBackgroundList: any[] = [];
-    imgPath = '/js/app/simulation/simBackgrounds/';
+    imgPath = '/css/img/simBackgrounds/';
     objectToCopy: BaseSimulationObject;
     playground = {
         x: 0,
         y: 0,
         w: 0,
-        h: 0,
+        h: 0
     };
     sim: SimulationRoberta;
     private _colorAreaList: BaseSimulationObject[] = [];
@@ -224,7 +217,7 @@ export class SimulationScene {
             type,
             {
                 x: x,
-                y: y,
+                y: y
             },
             this.backgroundImg.width
         );
@@ -409,11 +402,11 @@ export class SimulationScene {
                     if (UTIL.isIE()) {
                         imgType = '.png';
                     }
-                    scene.loadBackgroundImages(function () {
+                    scene.loadBackgroundImages(function() {
                         let mobile: boolean = scene.robots[0].mobile;
                         if (mobile) {
                             $('.simMobile').show();
-                            scene.images = scene.loadImages(['roadWorks', 'pattern'], ['roadWorks' + imgType, 'wallPattern.png'], function () {
+                            scene.images = scene.loadImages(['roadWorks', 'pattern'], ['roadWorks' + imgType, 'wallPattern.png'], function() {
                                 scene.ground = new Ground(
                                     10,
                                     10,
@@ -428,7 +421,7 @@ export class SimulationScene {
                                     SimObjectType.Obstacle,
                                     {
                                         x: (scene.backgroundImg.width * 7) / 9,
-                                        y: scene.backgroundImg.height - (scene.backgroundImg.width * 2) / 9,
+                                        y: scene.backgroundImg.height - (scene.backgroundImg.width * 2) / 9
                                     },
                                     scene.backgroundImg.width
                                 );
@@ -503,7 +496,7 @@ export class SimulationScene {
         $robotIndex.off('change.sim');
         if (this.robots.length > 1) {
             let scene = this;
-            $robotIndex.on('change.sim', function () {
+            $robotIndex.on('change.sim', function() {
                 let indexNew = Number($(this).val());
                 scene.robots[indexNew].selected = true;
                 scene.sim.selectionListener.fire(null);
@@ -512,10 +505,17 @@ export class SimulationScene {
     }
 
     initEvents() {
+        let that = this;
+        let num = 0;
         $(window)
             .off('resize.sim')
-            .on('resize.sim', () => {
-                this.centerBackground(false);
+            .on('resize.sim', function(event, param) {
+                if (num > RESIZE_CONST) {
+                    that.centerBackground(false);
+                    num = 0;
+                } else {
+                    num++;
+                }
             });
         let $robotLayer: JQuery<HTMLElement> = $('#robotLayer');
         $robotLayer.off('keydown.sim').on('keydown.sim', this.handleKeyEvent.bind(this));
@@ -543,7 +543,7 @@ export class SimulationScene {
         }
         let numLoading = myImgList.length;
         let scene = this;
-        const onload = function () {
+        const onload = function() {
             if (--numLoading === 0) {
                 callback();
                 if (UTIL.isLocalStorageAvailable() && scene.robots[0].mobile) {
@@ -557,7 +557,7 @@ export class SimulationScene {
                                 'customBackground',
                                 JSON.stringify({
                                     image: customBackground,
-                                    timestamp: new Date().getTime(),
+                                    timestamp: new Date().getTime()
                                 })
                             );
                             customBackground = localStorage.getItem('customBackground');
@@ -584,7 +584,7 @@ export class SimulationScene {
         while (i < myImgList.length) {
             const img = (this.imgBackgroundList[i] = new Image());
             img.onload = onload;
-            img.onerror = function (e) {
+            img.onerror = function(e) {
                 console.error(e);
             };
             img.src = this.imgPath + myImgList[i++];
@@ -594,14 +594,14 @@ export class SimulationScene {
     loadImages(names: string[], files: string[], onAllLoaded: { (): void; (): any }) {
         let i = 0;
         let numLoading = names.length;
-        const onload = function () {
+        const onload = function() {
             --numLoading === 0 && onAllLoaded();
         };
         const images = {};
         while (i < names.length) {
             const img = (images[names[i]] = new Image());
             img.onload = onload;
-            img.onerror = function (e) {
+            img.onerror = function(e) {
                 console.error(e);
             };
             img.src = this.imgPath + files[i++];
@@ -637,7 +637,7 @@ export class SimulationScene {
         if ($simDiv.hasClass('shifting') && $simDiv.hasClass('rightActive')) {
             $canvasDiv.css({
                 top: top + 'px',
-                left: left + 'px',
+                left: left + 'px'
             });
         }
         this.oCtx.canvas.width = w;
@@ -685,7 +685,7 @@ export class SimulationScene {
         let top = (this.playground.h - (this.backgroundImg.height + 20) * this.sim.scale) / 2.0;
         $canvasDiv.css({
             top: top + 'px',
-            left: left + 'px',
+            left: left + 'px'
         });
         this.resetAllCanvas(backgroundChanged);
     }

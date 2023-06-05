@@ -1,15 +1,16 @@
 require.config({
-    baseUrl: 'js',
+    baseUrl: '.',
     paths: {
         codeflask: 'libs/codeflask/codeflask.min',
-        blockly: '../blockly/blockly_compressed',
-        bootstrap: 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min',
-        'bootstrap-table': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-table.min',
-        'bootstrap-tagsinput': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-tagsinput.min',
-        'bootstrap.wysiwyg': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-wysiwyg.min',
+        blockly: 'blockly/blockly_compressed',
+        bootstrap: 'libs/bootstrap/bootstrap.bundle.min',
+        'bootstrap-table': 'libs/bootstrap/bootstrap-table-1.22.1-dist/js/bootstrap-table.min',
+        'bootstrap-table-locals': 'libs/bootstrap/bootstrap-table-1.22.1-dist/js/bootstrap-table-locale-all.min',
+        'bootstrap-tagsinput': 'libs/bootstrap/bootstrap-tagsinput.min',
+        'bootstrap.wysiwyg': 'libs/bootstrap/bootstrap-wysiwyg.min',
         enjoyHint: 'libs/enjoyHint/enjoyhint.min',
         huebee: 'libs/huebee/huebee.min',
-        jquery: 'libs/jquery/jquery-3.3.1.min',
+        jquery: 'libs/jquery/jquery.min',
         'jquery-scrollto': 'libs/jquery/jquery.scrollTo-2.1.2.min',
         'jquery-validate': 'libs/jquery/jquery.validate-1.17.0.min',
         'jquery-hotkeys': 'libs/jquery/jquery.hotkeys-0.2.0',
@@ -24,110 +25,111 @@ require.config({
         'webots.wren': 'libs/webots/wrenjs',
         dapjs: 'libs/dapjs/dap.umd',
 
-        'confDelete.controller': 'app/roberta/controller/confDelete.controller',
-        'configuration.controller': 'app/roberta/controller/configuration.controller',
-        'configuration.model': 'app/roberta/models/configuration.model',
-        'confList.controller': 'app/roberta/controller/confList.controller',
-        'confList.model': 'app/roberta/models/confList.model',
-        'galleryList.controller': 'app/roberta/controller/galleryList.controller',
-        'tutorialList.controller': 'app/roberta/controller/tutorialList.controller',
-        'guiState.controller': 'app/roberta/controller/guiState.controller',
-        'guiState.model': 'app/roberta/models/guiState.model',
-        'import.controller': 'app/roberta/controller/import.controller',
-        'language.controller': 'app/roberta/controller/language.controller',
-        'legal.controller': 'app/roberta/controller/legal.controller',
-        'logList.controller': 'app/roberta/controller/logList.controller',
-        'logList.model': 'app/roberta/models/logList.model',
-        'menu.controller': 'app/roberta/controller/menu.controller',
-        'notification.controller': 'app/roberta/controller/notification.controller',
-        'notification.model': 'app/roberta/models/notification.model',
-        'nn.controller': 'app/roberta/controller/nn.controller',
-        'progCode.controller': 'app/roberta/controller/progCode.controller',
-        'progDelete.controller': 'app/roberta/controller/progDelete.controller',
-        'progHelp.controller': 'app/roberta/controller/progHelp.controller',
-        'progInfo.controller': 'app/roberta/controller/progInfo.controller',
-        'progSim.controller': 'app/roberta/controller/progSim.controller',
-        'progRun.controller': 'app/roberta/controller/progRun.controller',
-        'progList.controller': 'app/roberta/controller/progList.controller',
-        'progList.model': 'app/roberta/models/progList.model',
-        'program.controller': 'app/roberta/controller/program.controller',
-        'program.model': 'app/roberta/models/program.model',
-        'progTutorial.controller': 'app/roberta/controller/progTutorial.controller',
-        'progShare.controller': 'app/roberta/controller/progShare.controller',
-        'progSim.controller': 'app/roberta/controller/progSim.controller',
-        'robot.controller': 'app/roberta/controller/robot.controller',
-        'robot.model': 'app/roberta/models/robot.model',
-        'tour.controller': 'app/roberta/controller/tour.controller',
-        'user.controller': 'app/roberta/controller/user.controller',
-        'userGroup.controller': 'app/roberta/controller/userGroup.controller',
-        'userGroup.model': 'app/roberta/models/userGroup.model',
-        'user.model': 'app/roberta/models/user.model',
-        'rest.robot': 'app/roberta/rest/robot',
-        'socket.controller': 'app/roberta/controller/socket.controller',
-        'webview.controller': 'app/roberta/controller/webview.controller',
-        'sourceCodeEditor.controller': 'app/roberta/controller/sourceCodeEditor.controller',
-        'thymioSocket.controller': 'app/roberta/controller/thymioSocket.controller',
-        'webUsb.controller': 'app/roberta/controller/webUsb.controller',
+        'startView.controller': 'js/app/roberta/controller/startView.controller',
+        'confDelete.controller': 'js/app/roberta/controller/confDelete.controller',
+        'configuration.controller': 'js/app/roberta/controller/configuration.controller',
+        'configuration.model': 'js/app/roberta/models/configuration.model',
+        'confList.controller': 'js/app/roberta/controller/confList.controller',
+        'confList.model': 'js/app/roberta/models/confList.model',
+        'galleryList.controller': 'js/app/roberta/controller/galleryList.controller',
+        'tutorialList.controller': 'js/app/roberta/controller/tutorialList.controller',
+        'guiState.controller': 'js/app/roberta/controller/guiState.controller',
+        'guiState.model': 'js/app/roberta/models/guiState.model',
+        'import.controller': 'js/app/roberta/controller/import.controller',
+        'language.controller': 'js/app/roberta/controller/language.controller',
+        'legal.controller': 'js/app/roberta/controller/legal.controller',
+        'logList.controller': 'js/app/roberta/controller/logList.controller',
+        'logList.model': 'js/app/roberta/models/logList.model',
+        'menu.controller': 'js/app/roberta/controller/menu.controller',
+        'notification.controller': 'js/app/roberta/controller/notification.controller',
+        'notification.model': 'js/app/roberta/models/notification.model',
+        'nn.controller': 'js/app/roberta/controller/nn.controller',
+        'progCode.controller': 'js/app/roberta/controller/progCode.controller',
+        'progDelete.controller': 'js/app/roberta/controller/progDelete.controller',
+        'progHelp.controller': 'js/app/roberta/controller/progHelp.controller',
+        'progInfo.controller': 'js/app/roberta/controller/progInfo.controller',
+        'progSim.controller': 'js/app/roberta/controller/progSim.controller',
+        'progRun.controller': 'js/app/roberta/controller/progRun.controller',
+        'progList.controller': 'js/app/roberta/controller/progList.controller',
+        'progList.model': 'js/app/roberta/models/progList.model',
+        'program.controller': 'js/app/roberta/controller/program.controller',
+        'program.model': 'js/app/roberta/models/program.model',
+        'progTutorial.controller': 'js/app/roberta/controller/progTutorial.controller',
+        'progShare.controller': 'js/app/roberta/controller/progShare.controller',
+        'robot.controller': 'js/app/roberta/controller/robot.controller',
+        'robot.model': 'js/app/roberta/models/robot.model',
+        'tour.controller': 'js/app/roberta/controller/tour.controller',
+        'user.controller': 'js/app/roberta/controller/user.controller',
+        'userGroup.controller': 'js/app/roberta/controller/userGroup.controller',
+        'userGroup.model': 'js/app/roberta/models/userGroup.model',
+        'user.model': 'js/app/roberta/models/user.model',
+        'rest.robot': 'js/app/roberta/rest/robot',
+        'startView.model': 'js/app/roberta/models/startView.model',
+        'socket.controller': 'js/app/roberta/controller/socket.controller',
+        'webview.controller': 'js/app/roberta/controller/webview.controller',
+        'sourceCodeEditor.controller': 'js/app/roberta/controller/sourceCodeEditor.controller',
+        'thymioSocket.controller': 'js/app/roberta/controller/thymioSocket.controller',
+        'webUsb.controller': 'js/app/roberta/controller/webUsb.controller',
+        'simulation.constants': 'js/app/simulation/simulationLogic/constants',
+        'simulation.math': 'js/app/simulation/simulationLogic/math',
+        'robot.calliope': 'js/app/simulation/simulationLogic/robot.calliope',
+        'robot.mbot': 'js/app/simulation/simulationLogic/robot.mbot',
+        'robot.microbit': 'js/app/simulation/simulationLogic/robot.microbit',
+        'robot.microbitv2': 'js/app/simulation/simulationLogic/robot.microbitv2',
+        'robot.math': 'js/app/simulation/simulationLogic/robot.math',
+        'robot.rob3rta': 'js/app/simulation/simulationLogic/robot.rob3rta',
+        'robot.ev3': 'js/app/simulation/simulationLogic/robot.ev3',
+        'robot.nxt': 'js/app/simulation/simulationLogic/robot.nxt',
+        'robot.xnn': 'js/app/simulation/simulationLogic/robot.xnn',
+        'robot.thymio': 'js/app/simulation/simulationLogic/robot.thymio',
+        'robot.edison': 'js/app/simulation/simulationLogic/robot.edison',
+        'robot.robotino': 'js/app/simulation/simulationLogic/robot.robotino',
+        'robot.base.mobile': 'js/app/simulation/simulationLogic/robot.base.mobile',
+        'robot.base.stationary': 'js/app/simulation/simulationLogic/robot.base.stationary',
+        'robot.base': 'js/app/simulation/simulationLogic/robot.base',
+        'simulation.objects': 'js/app/simulation/simulationLogic/simulation.objects',
+        'robot.sensors': 'js/app/simulation/simulationLogic/robot.sensors',
+        'robot.actuators': 'js/app/simulation/simulationLogic/robot.actuators',
+        'simulation.types': 'js/app/simulation/simulationLogic/types',
+        'simulation.scene': 'js/app/simulation/simulationLogic/simulation.scene',
+        'simulation.roberta': 'js/app/simulation/simulationLogic/simulation.roberta',
+        'simulation.webots': 'js/app/simulation/simulationLogic/simulation.webots',
+        maze: 'js/app/simulation/simulationLogic/maze',
 
-        'simulation.constants': 'app/simulation/simulationLogic/constants',
-        'simulation.math': 'app/simulation/simulationLogic/math',
-        'robot.calliope': 'app/simulation/simulationLogic/robot.calliope',
-        'robot.mbot': 'app/simulation/simulationLogic/robot.mbot',
-        'robot.microbit': 'app/simulation/simulationLogic/robot.microbit',
-        'robot.microbitv2': 'app/simulation/simulationLogic/robot.microbitv2',
-        'robot.math': 'app/simulation/simulationLogic/robot.math',
-        'robot.rob3rta': 'app/simulation/simulationLogic/robot.rob3rta',
-        'robot.ev3': 'app/simulation/simulationLogic/robot.ev3',
-        'robot.nxt': 'app/simulation/simulationLogic/robot.nxt',
-        'robot.xnn': 'app/simulation/simulationLogic/robot.xnn',
-        'robot.thymio': 'app/simulation/simulationLogic/robot.thymio',
-        'robot.edison': 'app/simulation/simulationLogic/robot.edison',
-        'robot.robotino': 'app/simulation/simulationLogic/robot.robotino',
-        'robot.base.mobile': 'app/simulation/simulationLogic/robot.base.mobile',
-        'robot.base.stationary': 'app/simulation/simulationLogic/robot.base.stationary',
-        'robot.base': 'app/simulation/simulationLogic/robot.base',
-        'simulation.objects': 'app/simulation/simulationLogic/simulation.objects',
-        'robot.sensors': 'app/simulation/simulationLogic/robot.sensors',
-        'robot.actuators': 'app/simulation/simulationLogic/robot.actuators',
-        'simulation.types': 'app/simulation/simulationLogic/types',
-        'simulation.scene': 'app/simulation/simulationLogic/simulation.scene',
-        'simulation.roberta': 'app/simulation/simulationLogic/simulation.roberta',
-        'simulation.webots': 'app/simulation/simulationLogic/simulation.webots',
-        maze: 'app/simulation/simulationLogic/maze',
+        comm: 'js/helper/comm',
+        log: 'js/helper/log',
+        message: 'js/helper/msg',
+        'util.roberta': 'js/helper/util',
+        wrap: 'js/helper/wrap',
+        table: 'js/helper/table',
 
-        comm: 'helper/comm',
-        log: 'helper/log',
-        message: 'helper/msg',
-        'util.roberta': 'helper/util',
-        wrap: 'helper/wrap',
+        'interpreter.constants': 'js/app/nepostackmachine/interpreter.constants',
+        'interpreter.interpreter': 'js/app/nepostackmachine/interpreter.interpreter',
+        'interpreter.aRobotBehaviour': 'js/app/nepostackmachine/interpreter.aRobotBehaviour',
+        'interpreter.robotWeDoBehaviour': 'js/app/nepostackmachine/interpreter.robotWeDoBehaviour',
+        'interpreter.robotSimBehaviour': 'js/app/nepostackmachine/interpreter.robotSimBehaviour',
+        'interpreter.state': 'js/app/nepostackmachine/interpreter.state',
+        'interpreter.util': 'js/app/nepostackmachine/interpreter.util',
 
-        'interpreter.constants': 'app/nepostackmachine/interpreter.constants',
-        'interpreter.interpreter': 'app/nepostackmachine/interpreter.interpreter',
-        'interpreter.aRobotBehaviour': 'app/nepostackmachine/interpreter.aRobotBehaviour',
-        'interpreter.robotWeDoBehaviour': 'app/nepostackmachine/interpreter.robotWeDoBehaviour',
-        'interpreter.robotSimBehaviour': 'app/nepostackmachine/interpreter.robotSimBehaviour',
-        'interpreter.state': 'app/nepostackmachine/interpreter.state',
-        'interpreter.util': 'app/nepostackmachine/interpreter.util',
+        'neuralnetwork.nn': 'js/app/neuralnetwork/neuralnetwork.nn',
+        'neuralnetwork.uistate': 'js/app/neuralnetwork/neuralnetwork.uistate',
+        'neuralnetwork.ui': 'js/app/neuralnetwork/neuralnetwork.ui',
+        'neuralnetwork.linechart': 'js/app/neuralnetwork/neuralnetwork.linechart',
+        'neuralnetwork.helper': 'js/app/neuralnetwork/neuralnetwork.helper',
+        'neuralnetwork.msg': 'js/app/neuralnetwork/neuralnetwork.msg',
 
-        'neuralnetwork.nn': 'app/neuralnetwork/neuralnetwork.nn',
-        'neuralnetwork.uistate': 'app/neuralnetwork/neuralnetwork.uistate',
-        'neuralnetwork.ui': 'app/neuralnetwork/neuralnetwork.ui',
-        'neuralnetwork.linechart': 'app/neuralnetwork/neuralnetwork.linechart',
-        'neuralnetwork.helper': 'app/neuralnetwork/neuralnetwork.helper',
-        'neuralnetwork.msg': 'app/neuralnetwork/neuralnetwork.msg',
-
-        thymio: 'app/roberta/models/thymio',
-        thymio_generated: 'app/roberta/models/thymio_generated',
+        thymio: 'js/app/roberta/models/thymio',
+        thymio_generated: 'js/app/roberta/models/thymio_generated',
         flatbuffers: 'libs/thymio/flatbuffers',
         '@cor3ntin/flexbuffers-wasm': 'libs/thymio/flexbuffers',
         'isomorphic-ws': 'libs/thymio/browser',
         'lodash.isequal': 'libs/thymio/lodash/isEqual',
 
-        confVisualization: 'app/configVisualization/confVisualization',
-        'const.robots': 'app/configVisualization/const.robots',
-        port: 'app/configVisualization/port',
-        robotBlock: 'app/configVisualization/robotBlock',
-        wires: 'app/configVisualization/wires',
+        confVisualization: 'js/app/configVisualization/confVisualization',
+        'const.robots': 'js/app/configVisualization/const.robots',
+        port: 'js/app/configVisualization/port',
+        robotBlock: 'js/app/configVisualization/robotBlock',
+        wires: 'js/app/configVisualization/wires',
     },
     shim: {
         webots: {
@@ -150,6 +152,21 @@ require.config({
         },
         bootstrap: {
             deps: ['jquery'],
+        },
+        'jquery-hotkeys': {
+            deps: ['jquery'],
+        },
+        'bootstrap-table': {
+            deps: ['bootstrap'],
+        },
+        'bootstrap-table-locals': {
+            deps: ['bootstrap-table'],
+        },
+        'bootstrap-tagsinput': {
+            deps: ['bootstrap-table'],
+        },
+        'bootstrap.wysiwyg': {
+            deps: ['bootstrap-table'],
         },
         blockly: {
             exports: 'Blockly',
@@ -182,7 +199,7 @@ require([
     'huebee',
     'wrap',
     'log',
-    'jquery',
+    'bootstrap-table-locals',
     'blockly',
     'guiState.controller',
     'progList.controller',
@@ -217,9 +234,12 @@ require([
     'codeflask',
     'confVisualization',
     'robotBlock',
+    'startView.controller',
     'webUsb.controller',
 ], function (require) {
-    $ = require('jquery');
+    //window.Popper = require('popper.js').default;
+    window.$ = window.jQuery = require('jquery');
+    require('bootstrap');
     WRAP = require('wrap');
     LOG = require('log');
     COMM = require('comm');
@@ -250,13 +270,13 @@ require([
     userModel = require('user.model');
     socketController = require('socket.controller');
     tutorialController = require('progTutorial.controller');
-    tutorialListController = require('tutorialList.controller');
     userGroupController = require('userGroup.controller');
     webviewController = require('webview.controller');
     sourceCodeEditorController = require('sourceCodeEditor.controller');
     codeflask = require('codeflask');
     confVisualization = require('confVisualization');
     robotBlock = require('robotBlock');
+    startViewController = require('startView.controller');
     webUsbController = require('webUsb.controller');
 
     $(document).ready(WRAP.wrapTotal(init, 'page init'));
@@ -274,23 +294,39 @@ function init() {
         .then(function (language, opt_data) {
             return guiStateController.init(language, opt_data);
         })
-        .then(function () {
+        /*.then(function () {
             return robotController.init();
-        })
+        })*/
         .then(function () {
             return userController.init();
         })
         .then(function () {
             galleryListController.init();
             tutorialListController.init();
-            progListController.init();
-            progDeleteController.init();
-            confListController.init();
-            confDeleteController.init();
-            progShareController.init();
             logListController.init();
             legalController.init();
             sourceCodeEditorController.init();
+            tutorialController.init();
+            userGroupController.init();
+            notificationController.init();
+            menuController.init(initProgramming);
+            startViewController.init(initProgramming);
+            $('.navbar-nav > li > ul > .login').addClass('disabled');
+            $('#head-navi-icon-user').addClass('error');
+            $('.cover').fadeOut(100);
+            $('body>.pace').fadeOut(500);
+        });
+}
+
+var mainCallbackCalled = false;
+function initProgramming(robot, opt_callback, opt_params) {
+    if (!mainCallbackCalled) {
+        mainCallbackCalled = true;
+        $.when(robotController.init(robot)).then(function () {
+            $('#tabProgram, #tabConfiguration').parent().toggleClass('invisible');
+            $('.notStart').toggleClass('disabled');
+            $('#header').toggleClass('shadow');
+            $('#main-section').toggleClass('mainPadding');
             programController.init();
             configurationController.init();
             progHelpController.init();
@@ -300,33 +336,34 @@ function init() {
             progSimController.createProgSimDebugInstance();
             progSimController.createProgSimMultiInstance();
             progRunController.init();
-            tutorialController.init();
-            userGroupController.init();
-            notificationController.init();
             nnController.init();
-            menuController.init();
+            progListController.init();
+            progDeleteController.init();
+            confListController.init();
+            confDeleteController.init();
+            progShareController.init();
             webUsbController.init();
-
-            $('.cover').fadeOut(100, function () {
-                if (guiStateController.getStartWithoutPopup()) {
-                    userModel.getStatusText(function (result) {
-                        if (result.statustext[0] !== '' && result.statustext[1] !== '') {
-                            $('#modal-statustext').modal('show');
-                        }
-                    });
-                } else {
-                    $('#show-startup-message').modal('show');
-                }
+            guiStateController.setInitialState();
+            $('#tabProgram').oneWrap('shown.bs.tab', function () {
+                opt_callback && typeof opt_callback === 'function' && opt_callback(...opt_params);
             });
-
-            $('body>.pace').fadeOut(500);
+            $('#tabProgram').tabWrapShow();
         });
+    } else {
+        robotController.switchRobot(robot, true, function () {
+            $('#tabProgram, #tabConfiguration').parent().toggleClass('invisible');
+            $('#header').toggleClass('shadow');
+            $('.notStart').toggleClass('disabled');
+            $('#main-section').toggleClass('mainPadding');
+            $('#tabProgram').oneWrap('shown.bs.tab', function () {
+                opt_callback && typeof opt_callback === 'function' && opt_callback(...opt_params);
+            });
+            $('#tabProgram').tabWrapShow();
+        });
+    }
 }
 
-/**
- * Handle server errors
- */
-ALLOWED_PING_NUM = 5;
+var ALLOWED_PING_NUM = 5;
 
 function handleServerErrors(jqXHR) {
     // TODO more?

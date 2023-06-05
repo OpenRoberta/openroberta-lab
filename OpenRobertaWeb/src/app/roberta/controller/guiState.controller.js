@@ -11,6 +11,15 @@ import * as Blockly from 'blockly';
 import * as THYMIO_C from 'thymioSocket.controller';
 import * as NOTIFICATION_C from 'notification.controller';
 import * as WEBUSB_C from 'webUsb.controller';
+import * as PROGRAM_C from 'program.controller';
+import * as CONFIGURATION_C from 'configuration.controller';
+import * as USER_C from 'user.controller';
+import { switchLanguage as PROGLIST_C_switchLanguage } from 'progList.controller';
+import { switchLanguage as CONFLIST_C_switchLanguage } from 'confList.controller';
+import { switchLanguage as GALLERYLIST_C_switchLanguage } from 'galleryList.controller';
+import { switchLanguage as TUTORIALLIST_C_switchLanguage } from 'tutorialList.controller';
+import { switchLanguage as LOGLIST_C_switchLanguage } from 'logList.controller';
+import { switchLanguage as PROGINFO_C_switchLanguage } from 'progInfo.controller';
 
 var LONG = 300000; // Ping time 5min
 var SHORT = 3000; // Ping time 3sec
@@ -32,9 +41,6 @@ function init(language, opt_data) {
         GUISTATE.gui.prevView = 'tabProgram';
         GUISTATE.gui.language = language;
         GUISTATE.gui.startWithoutPopup = false;
-
-        GUISTATE.gui.robot = GUISTATE.server.defaultRobot;
-        GUISTATE.gui.defaultRobot = GUISTATE.server.defaultRobot;
 
         GUISTATE.user.id = -1;
         GUISTATE.user.accountName = '';
@@ -74,14 +80,11 @@ function init(language, opt_data) {
 }
 
 function setInitialState() {
-    // User not logged in?
-    $('.nav > li > ul > .login').addClass('disabled');
-    $('#head-navi-icon-user').addClass('error');
     // Toolbox?
     $('.level').removeClass('disabled');
     $('.level.' + GUISTATE.program.toolbox.level).addClass('disabled');
     // View?
-    if (GUISTATE.gui.view === 'tabProgram') {
+    if (GUISTATE.gui.view === 'tabProgram' || GUISTATE.gui.view === 'start') {
         $('#head-navigation-configuration-edit').css('display', 'none');
         GUISTATE.gui.blocklyWorkspace.markFocused();
     } else if (GUISTATE.gui.view === 'tabConfiguration') {
@@ -421,10 +424,7 @@ function setRobot(robot, result, opt_init) {
 
     if (GUISTATE.gui.nn) {
         $('#nn-activations').empty();
-        $('#tabNNctxt').show();
-        $('#tabNNlearnctxt').show();
-        $('#menuTabNNctxt').show();
-        $('#menuTabNNLearnctxt').show();
+        $('.tabLinkNN').show();
         $.each(GUISTATE.gui.nnActivations, function (_, item) {
             $('#nn-activations').append(
                 $('<option>', {
@@ -434,10 +434,7 @@ function setRobot(robot, result, opt_init) {
             );
         });
     } else {
-        $('#tabNNctxt').hide();
-        $('#tabNNlearnctxt').hide();
-        $('#menuTabNNctxt').hide();
-        $('#menuTabNNLearnctxt').hide();
+        $('.tabLinkNN').hide();
     }
     if (getHasRobotStopButton(robot)) {
         GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.showStopProgram();
@@ -445,6 +442,10 @@ function setRobot(robot, result, opt_init) {
         GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.hideStopProgram();
     }
     UTIL.clearTabAlert('tabConfiguration'); // also clear tab alert when switching robots
+}
+
+export function resetRobot() {
+    GUISTATE.gui.robot = undefined;
 }
 
 function setKioskMode(kiosk) {
@@ -664,13 +665,15 @@ function hasRobotDefaultFirmware() {
 }
 
 function setView(view) {
-    $('#head-navi-tooltip-program').attr('data-toggle', 'dropdown');
-    $('#head-navi-tooltip-configuration').attr('data-toggle', 'dropdown');
-    $('#head-navi-tooltip-robot').attr('data-toggle', 'dropdown');
+    if (GUISTATE.gui.view === view) {
+        return;
+    }
+    $('#head-navi-tooltip-program').attr('data-bs-toggle', 'dropdown');
+    $('#head-navi-tooltip-configuration').attr('data-bs-toggle', 'dropdown');
+    $('#head-navi-tooltip-robot').attr('data-bs-toggle', 'dropdown');
     $('#head-navigation-program-edit').removeClass('disabled');
     $('.robotType').removeClass('disabled');
     $('#head-navigation-configuration-edit').removeClass('disabled');
-    $('.modal').modal('hide');
     GUISTATE.gui.prevView = GUISTATE.gui.view;
     GUISTATE.gui.view = view;
     if (!isRobotConnected()) {
@@ -718,11 +721,11 @@ function setView(view) {
         $('#menuTabNNLearn').parent().removeClass('disabled');
         $('#head-navigation-program-edit').addClass('disabled');
         $('.robotType').addClass('disabled');
-        $('#head-navi-tooltip-program').attr('data-toggle', '');
-        $('#head-navi-tooltip-configuration').attr('data-toggle', '');
+        $('#head-navi-tooltip-program').attr('data-bs-toggle', '');
+        $('#head-navi-tooltip-configuration').attr('data-bs-toggle', '');
     } else {
-        $('#head-navi-tooltip-program').attr('data-toggle', '');
-        $('#head-navi-tooltip-configuration').attr('data-toggle', '');
+        $('#head-navi-tooltip-program').attr('data-bs-toggle', '');
+        $('#head-navi-tooltip-configuration').attr('data-bs-toggle', '');
         $('#head-navigation-program-edit').addClass('disabled');
         $('#head-navigation-configuration-edit').addClass('disabled');
     }
@@ -755,9 +758,30 @@ function setLanguage(language) {
     GUISTATE.gui.language = language;
     HELP_C.initView();
     LEGAL_C.loadLegalTexts();
-    $('#infoContent').attr('data-placeholder', Blockly.Msg.INFO_DOCUMENTATION_HINT || 'Document your program here ...');
-    $('.bootstrap-tagsinput input').attr('placeholder', Blockly.Msg.INFO_TAGS || 'Tags');
-    updateTutorialMenu();
+    USER_C.initValidationMessages();
+    NOTIFICATION_C.reloadNotifications();
+    if (getView() !== 'tabStart') {
+        PROGRAM_C.reloadView();
+        CONFIGURATION_C.reloadView();
+        PROGLIST_C_switchLanguage();
+        CONFLIST_C_switchLanguage();
+        GALLERYLIST_C_switchLanguage();
+        TUTORIALLIST_C_switchLanguage();
+        LOGLIST_C_switchLanguage();
+        PROGINFO_C_switchLanguage();
+        NN_C.reloadViews();
+        var value = Blockly.Msg.MENU_START_BRICK;
+        if (value.indexOf('$') >= 0) {
+            value = value.replace('$', getRobotRealName());
+        }
+        $('#menuRunProg').text(value);
+        if (getBlocklyWorkspace()) {
+            getBlocklyWorkspace().robControls.refreshTooltips(getRobotRealName());
+        }
+        $('#infoContent').attr('data-placeholder', Blockly.Msg.INFO_DOCUMENTATION_HINT || 'Document your program here ...');
+        $('.bootstrap-tagsinput input').attr('placeholder', Blockly.Msg.INFO_TAGS || 'Tags');
+        updateTutorialMenu();
+    }
 }
 
 function getLanguage() {
@@ -934,14 +958,6 @@ function getConfToolbox() {
     return GUISTATE.conf.toolbox;
 }
 
-function getDefaultRobot() {
-    return GUISTATE.gui.defaultRobot;
-}
-
-function setDefaultRobot(robot) {
-    GUISTATE.gui.defaultRobot = robot;
-}
-
 function getRobotFWName() {
     return GUISTATE.robot.fWName;
 }
@@ -1055,23 +1071,25 @@ function setLogin(result) {
     GUISTATE.user.userGroup = result.userGroupName;
     GUISTATE.user.userGroupOwner = result.userGroupOwner;
 
-    $('.nav > li > ul > .login, .logout').removeClass('disabled');
-    $('.nav > li > ul > .login.unavailable').addClass('disabled');
-    $('.nav > li > ul > .logout').addClass('disabled');
+    $('.navbar-nav > li > ul > .login, .logout').removeClass('disabled');
+    $('.navbar-nav > li > ul > .login.unavailable').addClass('disabled');
+    $('.navbar-nav > li > ul > .logout').addClass('disabled');
     $('#head-navi-icon-user').removeClass('error');
     $('#head-navi-icon-user').addClass('ok');
+    $('.menuLogin').addClass('pe-none');
     $('#menuSaveProg').parent().addClass('disabled');
     $('#menuSaveConfig').parent().addClass('disabled');
-    setProgramSaved(true);
-    setConfigurationSaved(true);
 
+    if (getRobot()) {
+        setProgramSaved(true);
+        setConfigurationSaved(true);
+        if (GUISTATE.gui.view == 'tabGalleryList') {
+            $('#galleryList').find('button[name="refresh"]').clickWrap();
+        }
+    }
     if (isUserMemberOfUserGroup()) {
         $('#registerUserName, #registerUserEmail').prop('disabled', true);
         $('#userGroupMemberDefaultPasswordHint').removeClass('hidden');
-    }
-
-    if (GUISTATE.gui.view == 'tabGalleryList') {
-        $('#galleryList').find('button[name="refresh"]').clickWrap();
     }
 }
 
@@ -1087,24 +1105,25 @@ function setLogout() {
     GUISTATE.user.userGroup = '';
     GUISTATE.user.userGroupOwner = '';
     if (getView() === 'tabUserGroupList') {
-        $('#tabProgram').clickWrap();
+        $('#tabProgram').tabWrapShow();
     }
     setProgramName('NEPOprog');
     setProgramOwnerName(null);
     setProgramAuthorName(null);
     setProgramShareRelation(null);
     GUISTATE.program.shared = false;
-    $('.nav > li > ul > .logout, .login').removeClass('disabled');
-    $('.nav > li > ul > .login').addClass('disabled');
+    $('.navbar-nav > li > ul > .logout, .login').removeClass('disabled');
+    $('.navbar-nav > li > ul > .login').addClass('disabled');
     $('#head-navi-icon-user').removeClass('ok');
     $('#head-navi-icon-user').addClass('error');
     if (GUISTATE.gui.view == 'tabProgList') {
-        $('#tabProgram').clickWrap();
+        $('#tabProgram').tabWrapShow();
     } else if (GUISTATE.gui.view == 'tabConfList') {
         $('#tabConfiguration').clickWrap();
     } else if (GUISTATE.gui.view == 'tabGalleryList') {
         $('#galleryList').find('button[name="refresh"]').clickWrap();
     }
+    $('.menuLogin').removeClass('pe-none');
 }
 
 function setProgram(result, opt_owner, opt_author) {
@@ -1406,8 +1425,6 @@ export {
     getProgramToolboxLevel,
     getToolbox,
     getConfToolbox,
-    getDefaultRobot,
-    setDefaultRobot,
     getRobotFWName,
     setRobotToken,
     setConfigurationXML,

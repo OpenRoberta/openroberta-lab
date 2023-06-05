@@ -339,7 +339,7 @@ export async function runNNEditor(hasSim: boolean) {
     });
 
     D3.select('#nn-explore-upload').on('click', () => {
-        tableDiv.modal('hide');
+        tableDiv.hide();
         let fileInputEl = $('#nn-test-data-upload');
         processUserInputTable(fileInputEl, tableDiv, tableEl, false);
     });
@@ -372,7 +372,7 @@ export async function runNNEditor(hasSim: boolean) {
     const acceptUserInputPopupTableListener = () => {
         inputsForExploringEnteringMode = false;
         currentInputRowForLearning = 0;
-        tableDiv.modal('hide');
+        tableDiv.hide();
         $('#nn-explore-upload-popup').trigger('blur');
         numTableRowsChanged = 0;
         userInputsForExploring = tableToArray(tableEl);
@@ -384,7 +384,7 @@ export async function runNNEditor(hasSim: boolean) {
             inputTableNumRowsForExploring -= numTableRowsChanged;
         }
         numTableRowsChanged = 0;
-        tableDiv.modal('hide');
+        tableDiv.hide();
         $('#nn-explore-upload-popup').trigger('blur');
     };
 
@@ -409,7 +409,7 @@ export async function runNNEditor(hasSim: boolean) {
 
     D3.select('#nn-show-next-neuron').html('');
 
-    tableDiv.modal('hide');
+    tableDiv.hide();
 
     $('#nn-show-next-neuron-all').hide();
     $('#nn-show-iteration-all').hide();
@@ -443,7 +443,6 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
     tableDiv.draggable({
         handle: '.modal-header'
     });
-
     if (trainingLossLineChart === null) trainingLossLineChart = new AppendingLineChart(D3.select('#nn-learn-training-loss-linechart'), '#AAA', true);
     if (trainingBiasLineChart === null) trainingBiasLineChart = new AppendingLineChart(D3.select('#nn-learn-training-bias-linechart'), '#AAA', false);
     if (trainingWeightLineChart === null) trainingWeightLineChart = new AppendingLineChart(D3.select('#nn-learn-training-weight-linechart'), '#AAA', false);
@@ -582,7 +581,7 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
     });
 
     D3.select('#nn-learn-upload').on('click', () => {
-        tableDiv.modal('hide');
+        tableDiv.hide();
         let fileInputEl = $('#nn-training-data-upload');
         processUserInputTable(fileInputEl, tableDiv, tableEl, true);
     });
@@ -615,7 +614,7 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
     const acceptUserInputPopupTableListener = () => {
         inputsForLearningEnteringMode = false;
         currentInputRowForLearning = 0;
-        tableDiv.modal('hide');
+        tableDiv.hide();
         $('#nn-learn-upload-popup').trigger('blur');
         numTableRowsChanged = 0;
         userInputsForLearning = tableToArray(tableEl);
@@ -627,7 +626,7 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
             inputTableNumRowsForLearning -= numTableRowsChanged;
         }
         numTableRowsChanged = 0;
-        tableDiv.modal('hide');
+        tableDiv.hide();
         $('#nn-learn-upload-popup').trigger('blur');
     };
 
@@ -675,7 +674,7 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
 
     D3.select('#nn-learn-show-activation').html(UTIL.activationDisplayName[state.activationKey]);
 
-    tableDiv.modal('hide');
+    tableDiv.hide();
     trainingLossLineChart.reset();
     network.forEachNode(true, (node) => (node.biasHistory = []));
     network.forEachLink((link) => (link.weightHistory = []));

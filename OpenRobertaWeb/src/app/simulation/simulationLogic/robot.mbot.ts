@@ -1,7 +1,7 @@
 import { SelectionListener } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import RobotEv3 from 'robot.ev3';
-import { MbotChassis, MbotDisplay, MbotRGBLed } from './robot.actuators';
+import { MbotChassis, MbotDisplay, MbotRGBLed } from 'robot.actuators';
 import { DistanceSensor, MbotButton, MbotInfraredSensor, UltrasonicSensor } from 'robot.sensors';
 import { Pose } from 'robot.base.mobile';
 

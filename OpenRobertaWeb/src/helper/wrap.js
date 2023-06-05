@@ -185,9 +185,9 @@ $.fn.clickWrap = function (callback) {
     numberOfActiveActions--;
     try {
         if (callback === undefined) {
-            this.click();
+            this.trigger('click');
         } else {
-            this.click(callback);
+            this.trigger('click',callback);
         }
         numberOfActiveActions++;
     } catch (e) {

@@ -19,7 +19,6 @@ public class ServerProperties {
     public static final String CROSSCOMPILER_RESOURCE_BASE = "robot.crosscompiler.resourcebase";
     public static final String DEFAULT_NEURAL_NETWORK = "{\"learningRate\":0.03,\"regularizationRate\":0,\"noise\":0,\"batchSize\":10,\"discretize\":false,\"percTrainData\":50,\"activationKey\":\"linear\",\"activation\":{},\"regularization\":null,\"initUntil\":null,\"collectStats\":false,\"numHiddenLayers\":0,\"networkShape\":[],\"weights\":[[[\"1\"]],[[]]],\"biases\":[[\"0\"],[\"0\"]],\"precision\":\"2\",\"weightArcMaxSize\":8,\"weightSuppressMultOp\":true,\"inputs\":[\"n1\"],\"outputs\":[\"n2\"],\"hiddenNeurons\":[]}";
     private final Properties serverProperties;
-    private final String defaultRobot;
     private final List<String> robotsOnWhiteList;
     private final String crosscompilerResourceDir;
     private final String tempDir;
@@ -42,20 +41,7 @@ public class ServerProperties {
         Assert.notNull(whiteList, "Property \"" + WHITE_LIST_KEY + "\" not found");
         String[] whiteListItems = whiteList.split("\\s*,\\s*");
         Assert.isTrue(whiteListItems.length >= 1, "Property \"" + WHITE_LIST_KEY + "\" must contain at least one real robot");
-        String defaultRobot = getStringProperty(ROBOT_DEFAULT_PROPERTY_KEY);
-        if ( defaultRobot != null ) {
-            this.defaultRobot = defaultRobot;
-        } else if ( whiteListItems[0].equals(NAME_OF_SIM) ) {
-            if ( whiteListItems.length < 2 ) {
-                String errorMsg = "Property \"" + WHITE_LIST_KEY + "\" must contain at least one robot different from \"" + NAME_OF_SIM + "\"";
-                Assert.fail(errorMsg);
-            }
-            this.defaultRobot = whiteListItems[1];
-        } else {
-            this.defaultRobot = whiteListItems[0];
-        }
         this.robotsOnWhiteList = Collections.unmodifiableList(Arrays.asList(whiteListItems));
-        this.serverProperties.put(ROBOT_DEFAULT_PROPERTY_KEY, this.defaultRobot);
 
         // made a robust choice about the crosscompiler resource directory
         String crosscompilerResourceDir = getStringProperty(CROSSCOMPILER_RESOURCE_BASE);
@@ -121,10 +107,6 @@ public class ServerProperties {
 
     public List<String> getRobotWhitelist() {
         return this.robotsOnWhiteList;
-    }
-
-    public String getDefaultRobot() {
-        return this.defaultRobot;
     }
 
     public String getCrosscompilerResourceDir() {

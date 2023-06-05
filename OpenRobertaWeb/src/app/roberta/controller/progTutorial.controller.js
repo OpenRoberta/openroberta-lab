@@ -7,6 +7,7 @@ import * as IMPORT_C from 'import.controller';
 import * as Blockly from 'blockly';
 import * as U from 'util.roberta';
 import * as $ from 'jquery';
+import { Modal } from 'bootstrap';
 
 const INITIAL_WIDTH = 0.5;
 var blocklyWorkspace;
@@ -44,7 +45,7 @@ function loadFromTutorial(tutId) {
     }
 
     function startTutorial() {
-        $('#tabProgram').clickWrap();
+        $('#tabProgram').tabWrapShow();
         if (GUISTATE_C.isKioskMode()) {
             $('#infoButton').hide();
             $('#feedbackButton').hide();
@@ -68,11 +69,11 @@ function loadFromTutorial(tutId) {
                 break;
             }
         }
-        $('#tutorial-list').empty();
+        $('#tutorialHeader').empty();
 
         // create this tutorial navigation
         for (var i = 0; i < tutorial.step.length; i++) {
-            $('#tutorial-list').append(
+            $('#tutorialHeader').append(
                 $('<li>')
                     .attr('class', 'step')
                     .append(
@@ -84,14 +85,14 @@ function loadFromTutorial(tutId) {
                     )
             );
         }
-        $('#tutorial-list li:last-child').addClass('last');
+        $('#tutorialHeader li:last-child').addClass('last');
         $('#tutorial-header').html(tutorial.name);
 
         // prepare the view
-        $('#tutorial-navigation').fadeIn(750);
-        $('#head-navigation').fadeOut(750);
+        $('#tutorial-navigation, #tutorialEnd').toggle();
+        $('#head-navigation, #tab-navigation').toggle();
 
-        $('#tutorial-list :first-child').addClass('active');
+        $('#tutorialHeader :first-child').addClass('active');
         $('#tutorialButton').show();
         $('.blocklyToolboxDiv>.levelTabs').addClass('invisible');
 
@@ -104,7 +105,7 @@ function loadFromTutorial(tutId) {
 export { init, loadFromTutorial };
 
 function initStepEvents() {
-    $('#tutorial-list.nav li.step a').on('click', function () {
+    $('#tutorialHeader.nav li.step a').on('click', function () {
         step = $(this).text() - 2;
         nextStep();
         openTutorialView();
@@ -163,15 +164,11 @@ function showOverview() {
         },
         'tuorial continue'
     );
-
-    $('#tutorialOverview').modal(
-        {
-            backdrop: 'static',
-            keyboard: false,
-            show: true,
-        },
-        'tutorial overview'
-    );
+    var myModal = new Modal(document.getElementById('tutorialOverview'), {
+        backdrop: 'static',
+        keyboard: false,
+    });
+    myModal.show();
 }
 
 function createInstruction() {
@@ -321,12 +318,12 @@ function createQuiz() {
 function nextStep() {
     step += 1;
     if (step < maxSteps) {
-        $('#tutorial-list .active').removeClass('active');
-        $('#tutorial-list .preActive').removeClass('preActive');
-        $("#tutorial-list .step a:contains('" + (step + 1) + "')")
+        $('#tutorialHeader .active').removeClass('active');
+        $('#tutorialHeader .preActive').removeClass('preActive');
+        $("#tutorialHeader .step a:contains('" + (step + 1) + "')")
             .parent()
             .addClass('active');
-        $("#tutorial-list .step a:contains('" + step + "')")
+        $("#tutorialHeader .step a:contains('" + step + "')")
             .parent()
             .addClass('preActive');
         createInstruction();
@@ -474,7 +471,7 @@ function shuffle(answers) {
 
 function toggleTutorial($button) {
     if ($('#tutorialButton').hasClass('rightActive')) {
-        $('#blockly').closeRightView();
+        $('#blocklyDiv').closeRightView();
     } else {
         $button.openRightView($('#tutorialDiv'), INITIAL_WIDTH);
     }
@@ -484,9 +481,9 @@ function openTutorialView() {
     if ($('#tutorialDiv').hasClass('rightActive')) {
         return;
     }
-    if ($('#blockly').hasClass('rightActive')) {
+    if ($('#blocklyDiv').hasClass('rightActive')) {
         function waitForClose() {
-            if (!$('#blockly').hasClass('rightActive')) {
+            if (!$('#blocklyDiv').hasClass('rightActive')) {
                 toggleTutorial();
             } else {
                 setTimeout(waitForClose, 50);
@@ -505,9 +502,8 @@ function closeTutorialView() {
 }
 
 function exitTutorial() {
-    $('#tutorial-navigation').fadeOut(750);
-    $('#head-navigation').fadeIn(750);
-    $('#tutorialButton').fadeOut();
+    $('#tutorial-navigation, #tutorialEnd').toggle();
+    $('#head-navigation, #tab-navigation').toggle();
     $('.blocklyToolboxDiv>.levelTabs').removeClass('invisible');
     GUISTATE_C.resetDynamicProgramToolbox();
     PROG_C.loadExternalToolbox(GUISTATE_C.getProgramToolbox());
@@ -517,6 +513,6 @@ function exitTutorial() {
         loadFromTutorial(tutorialId);
     } else {
         closeTutorialView();
-        $('#tabTutorialList').clickWrap();
+        $('#tabTutorialList').tabWrapShow();
     }
 }

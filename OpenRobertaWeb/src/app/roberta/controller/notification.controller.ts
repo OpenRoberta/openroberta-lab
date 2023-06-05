@@ -435,7 +435,12 @@ class StartScreenNotificationState extends NotificationState {
     constructor(startScreen: StartScreenSpec) {
         super(startScreen.time || defaultStartScreenTime);
         this.content = parseLocalized(startScreen.content);
-        this.$element = $('<h4 style="display: none">' + this.content + '</h4>');
+        this.$element = $(
+            '<h4 style="display: none">' +
+                '<button aria-hidden="true" class="btn-close btn-close-white float-end" onclick="$(this).parent().slideUp(400)" type="button"></button>\n' +
+                this.content +
+                '</h4>'
+        );
     }
 
     protected showAction() {

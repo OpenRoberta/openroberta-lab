@@ -6,12 +6,11 @@ import * as PROGRAM_C from 'program.controller';
 import * as NN_C from 'nn.controller';
 import * as CONFIGURATION_C from 'configuration.controller';
 import * as PROGRAM from 'program.model';
-import * as ROBOT_C from 'robot.controller';
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
 import 'jquery-validate';
 
-function init(callback) {
+function init(callback, opt_callback) {
     $('#fileSelector').val(null);
     $('#fileSelector').off();
     $('#fileSelector').onWrap(
@@ -21,8 +20,8 @@ function init(callback) {
             var reader = new FileReader();
             reader.onload = function (event) {
                 var name = UTIL.getBasename(file.name);
-                if ($.isFunction(callback)) {
-                    callback(name, event.target.result);
+                if (callback && typeof callback === 'function') {
+                    callback(name, event.target.result, opt_callback);
                 }
             };
             reader.readAsText(file);
@@ -38,19 +37,37 @@ function importXml() {
     $('#fileSelector').clickWrap(); // opening dialog
 }
 
+export function importXmlFromStart(startCallback) {
+    init(loadProgramFromXMLStart, startCallback);
+    $('#fileSelector').attr('accept', '.xml');
+    $('#fileSelector').clickWrap(); // opening dialog
+}
 function importSourceCode(callback) {
     init(callback);
     $('#fileSelector').attr('accept', '.' + GUISTATE_C.getSourceCodeFileExtension());
     $('#fileSelector').clickWrap(); // opening dialog
 }
 
-function openProgramFromXML(target) {
-    var robotType = target[1];
-    var programName = target[2];
-    var programXml = target[3];
-    ROBOT_C.switchRobot(robotType, true, function () {
-        loadProgramFromXML(programName, programXml);
-    });
+function loadProgramFromXMLStart(name, xml, opt_callback) {
+    var start = xml.indexOf('robottype="');
+    start += 11;
+    var end = xml.indexOf('"', start);
+    var robot = xml.substring(start, end);
+    var robotType;
+    var robotRealNames = [];
+    for (const [key, value] of Object.entries(GUISTATE_C.getRobots())) {
+        if (value['name'] === robot) {
+            robotType = value['group'];
+        }
+        if (value['group'] === robot) {
+            robotRealNames.push(value['realName']);
+        }
+    }
+    if (robotType) {
+        opt_callback && typeof opt_callback === 'function' && opt_callback(robotType, loadProgramFromXML, name, xml);
+    } else {
+        MSG.displayInformation({ rx: 'error' }, '', Blockly.Msg.PROGRAM_IMPORT_ERROR_MISSING_ROBOT_TYPE, robotRealNames.toString());
+    }
 }
 
 function loadProgramFromXML(name, xml) {

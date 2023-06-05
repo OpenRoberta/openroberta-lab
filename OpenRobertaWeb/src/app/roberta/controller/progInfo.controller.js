@@ -25,6 +25,11 @@ function initView() {
     $('.bootstrap-tagsinput input').attr('placeholder', Blockly.Msg.INFO_TAGS || 'Tags');
 }
 
+export function switchLanguage() {
+    $('#infoContent').attr('data-placeholder', Blockly.Msg.INFO_DOCUMENTATION_HINT || 'Document your program here ...');
+    $('.bootstrap-tagsinput input').attr('placeholder', Blockly.Msg.INFO_TAGS || 'Tags');
+}
+
 function initEvents() {
     $('#infoButton').off('click touchend');
     $('#infoButton').onWrap('click touchend', function (event) {
@@ -72,7 +77,7 @@ function initEvents() {
 
 function toggleInfo($button) {
     if ($('#infoButton').hasClass('rightActive')) {
-        $('#blockly').closeRightView();
+        $('#blocklyDiv').closeRightView();
     } else {
         $('#infoContent').html(blocklyWorkspace.description);
         $('.bootstrap-tagsinput input').attr('placeholder', Blockly.Msg.INFO_TAGS || 'Tags');

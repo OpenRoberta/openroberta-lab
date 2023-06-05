@@ -1,6 +1,6 @@
 import RobotEv3 from 'robot.ev3';
-import { NXTChassis } from './robot.actuators';
-import { ColorSensor, DistanceSensor, EV3Keys, LightSensor, NXTColorSensor, SoundSensor, Timer, TouchSensor, UltrasonicSensor } from './robot.sensors';
+import { NXTChassis } from 'robot.actuators';
+import { ColorSensor, DistanceSensor, EV3Keys, LightSensor, NXTColorSensor, SoundSensor, Timer, TouchSensor, UltrasonicSensor } from 'robot.sensors';
 import { Pose } from 'robot.base.mobile';
 import * as $ from 'jquery';
 
@@ -11,7 +11,6 @@ export default class RobotNxt extends RobotEv3 {
         this.chassis = new NXTChassis(this.id, configuration, 2, this.pose);
         let sensors: object = configuration['SENSORS'];
         for (const c in sensors) {
-            console.log(sensors[c]['TYPE']);
             switch (sensors[c]['TYPE']) {
                 case 'TOUCH':
                     // only one is drawable as bumper

@@ -152,6 +152,9 @@
       "webUsb.controller": [
         "app/roberta/controller/webUsb.controller"
       ],
+      "startView.controller": [
+        "app/roberta/controller/startView.controller"
+      ],
       "simulation.constants": [
         "app/simulation/simulationLogic/constants"
       ],
@@ -164,14 +167,17 @@
       "robot.mbot": [
         "app/simulation/simulationLogic/robot.mbot"
       ],
+      "robot.robotino": [
+        "app/simulation/simulationLogic/robot.robotino"
+      ],
+      "robot.ev3": [
+        "app/simulation/simulationLogic/robot.ev3"
+      ],
       "robot.microbit": [
         "app/simulation/simulationLogic/robot.microbit"
       ],
       "robot.roberta": [
         "app/simulation/simulationLogic/robot.roberta"
-      ],
-      "robot.ev3": [
-        "app/simulation/simulationLogic/robot.ev3"
       ],
       "robot.nxt": [
         "app/simulation/simulationLogic/robot.nxt"
@@ -230,6 +236,9 @@
       "wrap": [
         "helper/wrap"
       ],
+      "table": [
+        "helper/table"
+      ],
       "interpreter.constants": [
         "app/nepostackmachine/interpreter.constants"
       ],
@@ -286,6 +295,9 @@
       ],
       "@cor3ntin/flexbuffers-wasm": [
         "../node_modules/@cor3ntin/flexbuffers-wasm/flexbuffers"
+      ],
+      "startView.model": [
+        "app/roberta/models/startView.model"
       ]
     },
     "allowSyntheticDefaultImports": true
@@ -303,5 +315,6 @@
   "compileOnSave": false,
   "buildOnSave": false,
   "sourceMap": true,
+  "sourceRoot": "",
   "inlineSources": true
 }

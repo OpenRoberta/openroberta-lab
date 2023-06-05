@@ -24,21 +24,21 @@ function init(workspace) {
 }
 
 function initEvents() {
-    Blockly.bindEvent_(blocklyWorkspace.robControls.runOnBrick, 'mousedown', null, function (e) {
+    Blockly.bindEvent_(blocklyWorkspace.robControls.runOnBrick, 'mousedown', null, function(e) {
         if ($('#runOnBrick').hasClass('disabled')) {
             let notificationElement = $('#releaseInfo');
             let notificationElementTitle = notificationElement.children('#releaseInfoTitle');
             let notificationElementDescription = notificationElement.children('#releaseInfoContent');
             notificationElementDescription.html(Blockly.Msg.POPUP_RUN_NOTIFICATION);
             notificationElementTitle.html(Blockly.Msg.POPUP_ATTENTION);
-            let a = notificationElement.on('notificationFadeInComplete', function () {
+            let a = notificationElement.on('notificationFadeInComplete', function() {
                 clearTimeout(a.data('hideInteval'));
-                var id = setTimeout(function () {
+                var id = setTimeout(function() {
                     notificationElement.fadeOut(500);
                 }, 10000);
                 a.data('hideInteval', id);
             });
-            notificationElement.fadeIn(500, function () {
+            notificationElement.fadeIn(500, function() {
                 $(this).trigger('notificationFadeInComplete');
             });
 
@@ -48,12 +48,12 @@ function initEvents() {
         runOnBrick();
         return false;
     });
-    Blockly.bindEvent_(blocklyWorkspace.robControls.stopBrick, 'mousedown', null, function (e) {
+    Blockly.bindEvent_(blocklyWorkspace.robControls.stopBrick, 'mousedown', null, function(e) {
         LOG.info('stopBrick from blockly button');
         stopBrick();
         return false;
     });
-    Blockly.bindEvent_(blocklyWorkspace.robControls.stopProgram, 'mousedown', null, function (e) {
+    Blockly.bindEvent_(blocklyWorkspace.robControls.stopProgram, 'mousedown', null, function(e) {
         LOG.info('stopProgram from blockly button');
         stopProgram();
         return false;
@@ -72,7 +72,7 @@ function runNative(sourceCode) {
     GUISTATE_C.setConnectionState('busy');
     LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick from source code editor');
     var callback = getConnectionTypeCallbackForEditor();
-    PROGRAM.runNative(GUISTATE_C.getProgramName(), sourceCode, GUISTATE_C.getLanguage(), function (result) {
+    PROGRAM.runNative(GUISTATE_C.getProgramName(), sourceCode, GUISTATE_C.getLanguage(), function(result) {
         callback(result);
         GUISTATE_C.setPing(true);
     });
@@ -125,31 +125,31 @@ function runOnBrick(opt_program) {
 function getConnectionTypeCallbackForEditor() {
     var connectionType = GUISTATE_C.getConnectionTypeEnum();
     if (GUISTATE_C.getConnection() === connectionType.AUTO || GUISTATE_C.getConnection() === connectionType.LOCAL) {
-        return function (result) {
+        return function(result) {
             runForAutoConnection(result);
         };
     }
     if (GUISTATE_C.getConnection() === connectionType.AGENT || (GUISTATE_C.getConnection() === connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent())) {
-        return function (result) {
+        return function(result) {
             runForAgentConnection(result);
         };
     }
     if (GUISTATE_C.getConnection() === connectionType.TDM) {
-        return function (result) {
+        return function(result) {
             runForTDMConnection(result);
         };
     }
     if (GUISTATE_C.getConnection() === connectionType.WEBVIEW) {
-        return function (result) {
+        return function(result) {
             runForWebviewConnection(result);
         };
     }
     if (GUISTATE_C.getConnection() === connectionType.JSPLAY) {
-        return function (result) {
+        return function(result) {
             runForJSPlayConnection(result);
         };
     }
-    return function (result) {
+    return function(result) {
         runForToken(result);
     };
 }
@@ -157,21 +157,21 @@ function getConnectionTypeCallbackForEditor() {
 function getConnectionTypeCallback() {
     var connectionType = GUISTATE_C.getConnectionTypeEnum();
     if (GUISTATE_C.getConnection() === connectionType.AUTO || GUISTATE_C.getConnection() === connectionType.LOCAL) {
-        return function (result) {
+        return function(result) {
             runForAutoConnection(result);
             PROG_C.reloadProgram(result);
             GUISTATE_C.setPing(true);
         };
     }
     if (GUISTATE_C.getConnection() === connectionType.AGENT || (GUISTATE_C.getConnection() === connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent())) {
-        return function (result) {
+        return function(result) {
             runForAgentConnection(result);
             PROG_C.reloadProgram(result);
             GUISTATE_C.setPing(true);
         };
     }
     if (GUISTATE_C.getConnection() === connectionType.TDM) {
-        return function (result) {
+        return function(result) {
             runForTDMConnection(result);
             PROG_C.reloadProgram(result);
             GUISTATE_C.setPing(true);
@@ -179,20 +179,20 @@ function getConnectionTypeCallback() {
     }
 
     if (GUISTATE_C.getConnection() === connectionType.WEBVIEW) {
-        return function (result) {
+        return function(result) {
             runForWebviewConnection(result);
             PROG_C.reloadProgram(result);
             GUISTATE_C.setPing(true);
         };
     }
     if (GUISTATE_C.getConnection() === connectionType.JSPLAY) {
-        return function (result) {
+        return function(result) {
             runForJSPlayConnection(result);
             PROG_C.reloadProgram(result);
             GUISTATE_C.setPing(true);
         };
     }
-    return function (result) {
+    return function(result) {
         runForToken(result);
         PROG_C.reloadProgram(result);
         GUISTATE_C.setPing(true);
@@ -298,12 +298,12 @@ function runFileDownload(result) {
     if (GUISTATE_C.isProgramToDownload() || navigator.userAgent.toLowerCase().match(/iPad|iPhone|android/i) !== null) {
         // either the user doesn't want to see the modal anymore or he uses a smartphone / tablet, where you cannot choose the download folder.
         UTIL.download(filename, result.compiledCode);
-        setTimeout(function () {
+        setTimeout(function() {
             GUISTATE_C.setConnectionState('wait');
         }, 5000);
         MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
     } else if (GUISTATE_C.getConnection() == GUISTATE_C.getConnectionTypeEnum().LOCAL) {
-        setTimeout(function () {
+        setTimeout(function() {
             GUISTATE_C.setConnectionState('wait');
         }, 5000);
         MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
@@ -322,19 +322,19 @@ function runFileDownload(result) {
         }
 
         var substituteName = GUISTATE_C.getRobotGroup().toUpperCase();
-        $('#download-instructions li').each(function (index) {
+        $('#download-instructions li').each(function(index) {
             if (GUISTATE_C.getRobotGroup() === 'calliope') {
                 substituteName = 'MINI';
             }
             $(this).html($(this).html().replace('$', substituteName));
         });
 
-        $('#download-instructions li').each(function (index) {
-            $(this)
-                .delay(750 * index)
-                .animate(
-                    {
-                        opacity: 1,
+        $('#download-instructions li').each(function(index) {
+                    $(this)
+                        .delay(750 * index)
+                        .animate(
+                            {
+                                opacity: 1
                     },
                     1000
                 );
@@ -373,7 +373,7 @@ function runForJSPlayConnection(result) {
             //All non-IE browsers can play WAV files in the browser, see: https://www.w3schools.com/html/html5_audio.asp
             $('#OKButtonModalFooter').addClass('hidden');
             var contentAsBlob = new Blob([wavFileContent], {
-                type: 'audio/wav',
+                type: 'audio/wav'
             });
             audio = new Audio(window.URL.createObjectURL(contentAsBlob));
             createPlayButton(audio);
@@ -392,20 +392,20 @@ function runForJSPlayConnection(result) {
             $('#download-instructions').append(step);
         }
 
-        $('#save-client-compiled-program').oneWrap('shown.bs.modal', function (e) {
-            $('#download-instructions li').each(function (index) {
+        $('#save-client-compiled-program').oneWrap('shown.bs.modal', function(e) {
+            $('#download-instructions li').each(function(index) {
                 $(this)
                     .delay(750 * index)
                     .animate(
                         {
-                            opacity: 1,
+                            opacity: 1
                         },
                         1000
                     );
             });
         });
 
-        $('#save-client-compiled-program').oneWrap('hidden.bs.modal', function (e) {
+        $('#save-client-compiled-program').oneWrap('hidden.bs.modal', function(e) {
             if (!window.msCrypto) {
                 audio.pause();
                 audio.load();
@@ -432,7 +432,7 @@ function runForAgentConnection(result) {
     GUISTATE_C.setState(result);
     if (result.rc == 'ok') {
         SOCKET_C.uploadProgram(result.compiledCode, GUISTATE_C.getRobotPort());
-        setTimeout(function () {
+        setTimeout(function() {
             GUISTATE_C.setConnectionState('error');
         }, 5000);
     } else {
@@ -457,7 +457,7 @@ function runForTDMConnection(result) {
                 MSG.displayInformation({ rc: 'error' }, null, err, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
             }
         );
-        setTimeout(function () {
+        setTimeout(function() {
             GUISTATE_C.setConnectionState('wait');
             GUISTATE.robot.state = 'wait';
         }, 1000);
@@ -488,7 +488,7 @@ function stopBrick() {
 
 function stopProgram() {
     if (GUISTATE_C.getConnection() == GUISTATE_C.getConnectionTypeEnum().TOKEN) {
-        PROGRAM.stopProgram(function () {
+        PROGRAM.stopProgram(function() {
             GUISTATE_C.setState(result);
             MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
             if (result.rc != 'ok') {
@@ -588,7 +588,7 @@ function createDownloadLink(fileName, content) {
     var downloadLink;
     if ('Blob' in window) {
         var contentAsBlob = new Blob([content], {
-            type: 'application/octet-stream',
+            type: 'application/octet-stream'
         });
         if ('msSaveOrOpenBlob' in navigator) {
             navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
@@ -642,12 +642,12 @@ function createPlayButton(audio) {
         playButton.setAttribute('class', 'btn btn-primary');
 
         var playing = false;
-        playButton.onclick = function () {
+        playButton.onclick = function() {
             if (playing == false) {
                 audio.play();
                 playIcon.setAttribute('class', 'typcn typcn-media-stop');
                 playing = true;
-                audio.addEventListener('ended', function () {
+                audio.addEventListener('ended', function() {
                     $('#save-client-compiled-program').modal('hide');
                 });
             } else {
@@ -680,22 +680,22 @@ function reset2DefaultFirmware() {
     if (GUISTATE_C.hasRobotDefaultFirmware()) {
         var connectionType = GUISTATE_C.getConnectionTypeEnum();
         if (GUISTATE_C.getConnection() == connectionType.AUTO || GUISTATE_C.getConnection() == connectionType.LOCAL) {
-            PROGRAM.resetProgram(function (result) {
+            PROGRAM.resetProgram(function(result) {
                 runForAutoConnection(result);
             });
         } else if (GUISTATE_C.getConnection() == connectionType.AGENTORTOKEN) {
-            PROGRAM.resetProgram(function (result) {
+            PROGRAM.resetProgram(function(result) {
                 runForAgentConnection(result);
             });
         } else {
-            PROGRAM.resetProgram(function (result) {
+            PROGRAM.resetProgram(function(result) {
                 runForToken(result);
             });
         }
     } else {
         MSG.displayInformation(
             {
-                rc: 'error',
+                rc: 'error'
             },
             '',
             'should not happen!'

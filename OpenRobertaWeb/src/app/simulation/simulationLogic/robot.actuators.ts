@@ -304,11 +304,13 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
         }
         // check if the action is done
         const chassis = this;
+
         function resetSpeed() {
             myRobot.interpreter.getRobotBehaviour().setBlocking(false);
             chassis.right.speed = 0;
             chassis.left.speed = 0;
         }
+
         if (this.angle) {
             if (myRobot.thetaDiff >= 0) {
                 this.angle -= myRobot.thetaDiff;
@@ -358,6 +360,7 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
                 p.bumped = true;
             }
         }
+
         let myCheckPoints: PointRobotWorldBumped[] = [
             this.frontLeft,
             this.frontRight,
@@ -536,11 +539,13 @@ export class RobotinoChassis extends ChassisMobile {
     updateAction(myRobot: RobotBase, dt: number, interpreterRunning: boolean): void {
         let robot: RobotBaseMobile = myRobot as RobotBaseMobile;
         const omniDrive = myRobot.interpreter.getRobotBehaviour().getActionState('omniDrive', true);
+
         function constrain(speed): number {
             let cSpeed = speed > 100 ? 100 : speed;
             cSpeed = speed < -100 ? -100 : cSpeed;
             return cSpeed;
         }
+
         if (omniDrive) {
             if (omniDrive.reset) {
                 switch (omniDrive.reset) {
@@ -1080,7 +1085,9 @@ export class NXTChassis extends LegoChassis {
         '<rect x="7" y="1" style="stroke-width: 2px;" stroke="black" id="backgroundConnectors" width="240" height="398" fill="#6D6E6C" />' +
         '<rect x="1" y="24" style="stroke-width: 2px;" stroke="black" id="backgroundSides" width="252" height="352" fill="#F2F3F2" />' +
         '<rect x="44" y="68" style="stroke-width: 4px;" stroke="#cccccc" width="170" height="106" fill="#DDDDDD" rx="4" ry="4" />' +
-        '<g id="display" clip-path="url(#clipPath)" fill="#000" transform="translate(50, 72)" font-family="Courier New" letter-spacing="2px" font-size="10pt"></g>' +
+        '<g id="display' +
+        this.id +
+        '" clip-path="url(#clipPath)" fill="#000" transform="translate(50, 72)" font-family="Courier New" letter-spacing="2px" font-size="10pt"></g>' +
         '<defs><clipPath id="clipPath"><rect x="0" y="0" width="160" height="96"/></clipPath></defs>' +
         '<rect x="101" y="216" style="stroke-width: 2px;" stroke="#cccccc" id="bg-center" width="52" height="90" fill="#cccccc" rx="4" ry="4" />' +
         '<rect x="105" y="220" style="stroke-width: 1px;" stroke="black" id="enter' +
@@ -1113,10 +1120,10 @@ export class NXTChassis extends LegoChassis {
         let display = myRobot.interpreter.getRobotBehaviour().getActionState('display', true);
         if (display) {
             if (display.text) {
-                $('#display').html($('#display').html() + '<text x=' + display.x * 1.5 + ' "y=' + display.y * 12 + '">' + display.text + '</text>');
+                $('#display' + this.id).html($('#display').html() + '<text x=' + display.x * 1.5 + ' y=' + display.y * 12 + '>' + display.text + '</text>');
             }
             if (display.clear) {
-                $('#display').html('');
+                $('#display' + this.id).html('');
             }
         }
     }

@@ -1,0 +1,60 @@
+/*************************************
+***** Custom Variables ***** 
+*************************************/
+$primary: #39378B;
+$secondary: #FDC300;
+$tertiary: #33B8CA;
+$quaternary: #88BCE2;
+
+$border-radius--standard: rem(5px);
+
+/*************************************
+***** Functions ***** 
+*************************************/
+
+@function svg-icon-arrow($farbe) {
+    @return url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="'+$farbe+'" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>');
+}
+
+/*************************************
+***** Animations ***** 
+*************************************/
+
+/*************************************
+***** Repeating Classes ***** 
+*************************************/
+
+.transition {
+    transition: all .3s;
+}
+
+.button-big--arrow {
+    content: "";
+    height: rem(30px);
+    width: rem(30px);
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    bottom: rem(15px);
+    right: rem(20px);
+    @extend .transition;
+    @media (hover: hover) {
+        &:hover {
+            right: rem(15px);
+        }
+    }	
+}
+
+/*************************************
+***** Adding more Breakpoints to Bootstrap ***** 
+*************************************/
+
+$grid-breakpoints: (
+    xs: 0,
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+    xxl: 1400px,
+    xxxl: 2000px
+) !default;

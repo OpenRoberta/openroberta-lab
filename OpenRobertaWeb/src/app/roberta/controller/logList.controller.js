@@ -1,34 +1,32 @@
-import * as require from 'require';
-
-import * as LOG from 'log';
 import * as UTIL from 'util.roberta';
-import * as COMM from 'comm';
 import * as GUISTATE_C from 'guiState.controller';
-import * as LOGLIST from 'logList.model';
 import * as $ from 'jquery';
-import * as Blockly from 'blockly';
 import 'bootstrap-table';
 
 /**
  * Initialize table of programs
  */
-function init() {
+export function init() {
     initLogList();
     initLogListEvents();
 }
-export { init };
+
+export function switchLanguage() {
+    $('#logTable').bootstrapTable('destroy');
+    init();
+}
 
 function initLogList() {
     $('#logTable').bootstrapTable({
-        height: UTIL.calcDataTableHeight(),
+        locale: GUISTATE_C.getLanguage(),
         pageList: '[ 10, 25, All ]',
         toolbar: '#logListToolbar',
+        theadClasses: 'table-dark',
         showRefresh: 'true',
         showPaginationSwitch: 'true',
         pagination: 'true',
         buttonsAlign: 'right',
         rowStyle: rowStyle,
-        resizable: 'true',
         iconsPrefix: 'typcn',
         icons: {
             paginationSwitchDown: 'typcn-document-text',
@@ -63,8 +61,8 @@ function initLogList() {
         .attr('rel', 'tooltip')
         .attr('data-placement', 'left')
         .attr('lkey', 'Blockly.Msg.BUTTON_EMPTY_LIST')
-        .attr('data-original-title', Blockly.Msg.BUTTON_EMPTY_LIST)
-        .tooltip('fixTitle');
+        .attr('data-bs-original-title', Blockly.Msg.BUTTON_EMPTY_LIST)
+        .tooltip('_fixTitle');
 }
 
 function initLogListEvents() {
@@ -92,7 +90,7 @@ function initLogListEvents() {
     $('#backLogList').onWrap(
         'click',
         function () {
-            $('#' + GUISTATE_C.getPrevView()).clickWrap();
+            $('#' + GUISTATE_C.getPrevView()).tabWrapShow();
             return false;
         },
         'back to previous view'

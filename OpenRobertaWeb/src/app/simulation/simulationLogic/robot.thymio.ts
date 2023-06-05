@@ -1,16 +1,7 @@
 import { SelectionListener } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import RobotEv3 from 'robot.ev3';
-import {
-    ThymioButtonLeds,
-    ThymioChassis,
-    ThymioCircleLeds,
-    ThymioProxHLeds,
-    ThymioRGBLeds,
-    ThymioSoundLed,
-    ThymioTemperatureLeds,
-    WebAudio,
-} from './robot.actuators';
+import { ThymioButtonLeds, ThymioChassis, ThymioCircleLeds, ThymioProxHLeds, ThymioRGBLeds, ThymioSoundLed, ThymioTemperatureLeds, WebAudio } from 'robot.actuators';
 import { EV3Keys, TapSensor, ThymioInfraredSensors, ThymioLineSensors, VolumeMeterSensor } from 'robot.sensors';
 import * as $ from 'jquery';
 

@@ -1,6 +1,6 @@
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
 import { CameraSensor, Keys, OdometrySensor, OpticalSensor, RobotinoInfraredSensors, RobotinoTouchSensor, Timer } from 'robot.sensors';
-import { RobotinoChassis, TTS, WebAudio } from './robot.actuators';
+import { RobotinoChassis, TTS, WebAudio } from 'robot.actuators';
 import { RobotBase, SelectionListener } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 

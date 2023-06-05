@@ -192,7 +192,7 @@ export class SimObjectFactory {
                 object.type,
                 {
                     x: -1000,
-                    y: -1000,
+                    y: -1000
                 },
                 null,
                 object.color,
@@ -207,7 +207,7 @@ export class SimObjectFactory {
                 object.type,
                 {
                     x: -1000,
-                    y: -1000,
+                    y: -1000
                 },
                 null,
                 object.color,
@@ -222,7 +222,7 @@ export class SimObjectFactory {
                 object.type,
                 {
                     x: -1000,
-                    y: -1000,
+                    y: -1000
                 },
                 null,
                 object.color,
@@ -1106,20 +1106,20 @@ export class TriangleSimulationObject extends BaseSimulationObject {
                 x1: this.ax,
                 x2: this.bx,
                 y1: this.ay,
-                y2: this.by,
+                y2: this.by
             },
             {
                 x1: this.bx,
                 x2: this.cx,
                 y1: this.by,
-                y2: this.cy,
+                y2: this.cy
             },
             {
                 x1: this.ax,
                 x2: this.cx,
                 y1: this.ay,
-                y2: this.cy,
-            },
+                y2: this.cy
+            }
         ];
     }
 
@@ -1177,26 +1177,26 @@ export class Ground implements ISimulationObstacle {
                 x1: this.x,
                 x2: this.x,
                 y1: this.y,
-                y2: this.y + this.h,
+                y2: this.y + this.h
             },
             {
                 x1: this.x,
                 x2: this.x + this.w,
                 y1: this.y,
-                y2: this.y,
+                y2: this.y
             },
             {
                 x1: this.x + this.w,
                 x2: this.x,
                 y1: this.y + this.h,
-                y2: this.y + this.h,
+                y2: this.y + this.h
             },
             {
                 x1: this.x + this.w,
                 x2: this.x + this.w,
                 y1: this.y + this.h,
-                y2: this.y,
-            },
+                y2: this.y
+            }
         ];
     }
 

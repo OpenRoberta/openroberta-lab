@@ -5,7 +5,6 @@ import * as ROBOT_C from 'robot.controller';
 import * as SOCKET_C from 'socket.controller';
 import * as USER_C from 'user.controller';
 import * as NOTIFICATION_C from 'notification.controller';
-import * as USERGROUP_C from 'userGroup.controller';
 import * as GUISTATE_C from 'guiState.controller';
 import * as PROGRAM_C from 'program.controller';
 import * as RUN_C from 'progRun.controller';
@@ -17,6 +16,7 @@ import * as $ from 'jquery';
 import * as Blockly from 'blockly';
 import 'slick';
 import * as TUTORIAL_C from 'progTutorial.controller';
+import * as UTIL from 'util.roberta';
 
 var n = 0;
 
@@ -27,12 +27,7 @@ const LOAD_SYSTEM_CALL = 'loadSystem';
 const TUTORIAL = 'tutorial';
 const KIOSK = 'kiosk';
 const EXAMPLE_VIEW = 'exampleView';
-
-function cleanUri() {
-    var uri = window.location.toString();
-    var clean_uri = uri.substring(0, uri.lastIndexOf('/'));
-    window.history.replaceState({}, document.title, clean_uri);
-}
+var mainCallback;
 
 // from https://stackoverflow.com/questions/19491336/get-url-parameter-jquery-or-how-to-get-query-string-values-in-js/21903119#21903119
 function getUrlParameter(sParam) {
@@ -65,10 +60,10 @@ function handleQuery() {
         TOUR_C.start('overview');
     } else if (target[0] === '#gallery') {
         GUISTATE_C.setStartWithoutPopup();
-        $('#tabGalleryList').clickWrap();
+        $('.navbahead-navigation-configuration-editr-nav a[href="#galleryList"]').tab('show');
     } else if (target[0] === '#tutorial') {
         GUISTATE_C.setStartWithoutPopup();
-        $('#tabTutorialList').clickWrap();
+        $('.navbar-nav a[href="#tutorialList"]').tab('show');
     } else if (target[0] === '#loadSystem' && target.length >= 2) {
         GUISTATE_C.setStartWithoutPopup();
         ROBOT_C.switchRobot(target[1], true);
@@ -78,13 +73,17 @@ function handleQuery() {
     var loadSystem = getUrlParameter(LOAD_SYSTEM_CALL);
     if (loadSystem) {
         GUISTATE_C.setStartWithoutPopup();
-        ROBOT_C.switchRobot(loadSystem, true);
+        if (mainCallback && mainCallback instanceof Function) {
+            mainCallback(loadSystem);
+        } else {
+            alert('Problem');
+        }
     }
     let tutorial = getUrlParameter(TUTORIAL);
     if (tutorial) {
         if (tutorial === 'true' || tutorial === true) {
             GUISTATE_C.setStartWithoutPopup();
-            $('#tabTutorialList').clickWrap();
+            $('.navbar-nav a[href="#tutorialList"]').tab('show');
         } else {
             let kiosk = getUrlParameter(KIOSK);
             if (kiosk && kiosk === 'true') {
@@ -100,8 +99,14 @@ function handleQuery() {
     }
 }
 
-function init() {
-    initMenu();
+export function init(callback) {
+    if (callback && callback instanceof Function) {
+        mainCallback = callback;
+    } else {
+        alert('Problem');
+        return;
+    }
+    $('#startupVersion').text(GUISTATE_C.getServerVersion());
     initMenuEvents();
     /**
      * Regularly ping the server to keep status information up-to-date
@@ -119,235 +124,41 @@ function init() {
         }, 1000);
     }
     pingServer();
-
     handleQuery();
-    cleanUri();
-
-    var firsttime = true;
-    $('#show-startup-message').on('shown.bs.modal', function (e) {
-        $(function () {
-            if (firsttime) {
-                // *******************
-                // This is a draft to make other/more robots visible.
-                var autoplaySpeed = 2000;
-                var autoplayOn = true;
-                $('#popup-robot-main').on('init', function () {
-                    $('#slick-container').mouseenter(function () {
-                        autoplayOn = false;
-                    });
-                    $('#slick-container').mouseleave(function () {
-                        autoplayOn = true;
-                    });
-
-                    window.setInterval(function () {
-                        if (!autoplayOn) return;
-                        $('#popup-robot-main').slick('slickPrev');
-                    }, autoplaySpeed);
-                });
-                // ******************
-                $('#popup-robot-main').slick({
-                    centerMode: true,
-                    dots: true,
-                    infinite: true,
-                    centerPadding: '60px',
-                    slidesToShow: 3,
-                    index: 2,
-                    swipeToSlide: true,
-                    setPosition: true,
-                    prevArrow: "<button type='button' class='slick-prev slick-arrow typcn typcn-arrow-left-outline'></button>",
-                    nextArrow: "<button type='button' class='slick-next slick-arrow typcn typcn-arrow-right-outline'></button>",
-                    responsive: [
-                        {
-                            breakpoint: 992,
-                            settings: {
-                                centerPadding: '5px',
-                                slidesToShow: 1,
-                                swipeToSlide: true,
-                                variableWidth: true,
-                            },
-                        },
-                    ],
-                });
-                firsttime = false;
-            } else {
-                $('#popup-robot-main').slick('refresh');
-            }
-        });
-    });
+    UTIL.cleanUri();
 }
 
-export { init };
-
-function initMenu() {
-    // fill dropdown menu robot
-    $('#startupVersion').text(GUISTATE_C.getServerVersion());
-    var robots = GUISTATE_C.getRobots();
-    var proto = $('.robotType');
-    var length = Object.keys(robots).length;
-
-    for (var i = 0; i < length; i++) {
-        if (robots[i].name == 'sim') {
-            proto.attr('data-type', GUISTATE_C.getDefaultRobot());
-            i++;
-        }
-        var clone = proto.clone();
-        var robotName = robots[i].name;
-        var robotGroup = robots[i].group;
-        clone.find('.typcn').addClass('typcn-' + robotGroup);
-        clone.find('.typcn').html(robots[i].realName);
-        clone.find('.typcn').attr('id', 'menu-' + robotName);
-        clone.attr('data-type', robotName);
-        clone.addClass(robotName);
-        $('#navigation-robot>.anchor').before(clone);
-    }
-    proto.remove();
-    // fill start popup
-    proto = $('#popup-sim');
-
-    var groupsDict = {};
-
-    var addPair = function (key, value) {
-        if (typeof groupsDict[key] != 'undefined') {
-            groupsDict[key].push(value);
-        } else {
-            groupsDict[key] = [value];
-        }
-    };
-
-    var giveValue = function (key) {
-        return groupsDict[key];
-    };
-
-    /**
-     * This method either changes or removes the info link for further
-     * information to the buttons in the carousel/group member view
-     */
-    var addInfoLink = function (clone, robotName) {
-        var robotInfoDE = GUISTATE_C.getRobotInfoDE(robotName);
-        var robotInfoEN = GUISTATE_C.getRobotInfoEN(robotName);
-        if (robotInfoDE !== '#' || robotInfoEN !== '#') {
-            var $de = clone.find('a');
-            var $en = $de.clone();
-            if (robotInfoDE === '#') {
-                robotInfoDE = robotInfoEN;
-            }
-            if (robotInfoEN === '#') {
-                robotInfoEN = robotInfoDE;
-            }
-            $de.attr({
-                onclick: 'window.open("' + robotInfoDE + '");return false;',
-                class: 'DE',
-            });
-            $en.attr({
-                onclick: 'window.open("' + robotInfoEN + '");return false;',
-                class: 'EN',
-            });
-            $de.after($en);
-        } else {
-            clone.find('a').css('visibility', 'hidden');
-        }
-        return clone;
-    };
-
-    for (var i = 0; i < length; i++) {
-        if (robots[i].name == 'sim') {
-            i++;
-            // TODO check this hardcoded Open Roberta Sim again (maybe some day there is a better choice for us)
-            proto.attr('data-type', GUISTATE_C.getDefaultRobot());
-        }
-        addPair(robots[i].group, robots[i].name);
-    }
-    for (var key in groupsDict) {
-        if (groupsDict.hasOwnProperty(key)) {
-            if (groupsDict[key].length == 1 || key === 'calliope') {
-                //this means that a robot has no subgroup
-
-                var robotName = key; // robot name is the same as robot group
-                var clone = proto.clone().prop('id', 'menu-' + robotName);
-                clone.find('span:eq( 0 )').removeClass('typcn-open');
-                clone.find('span:eq( 0 )').addClass('typcn-' + robotName);
-                if (key === 'calliope') {
-                    robotName = 'calliope2017NoBlue';
-                }
-                clone.find('span:eq( 2 )').html(GUISTATE_C.getMenuRobotRealName(robotName));
-                clone.attr('data-type', robotName);
-                addInfoLink(clone, robotName);
-                if (GUISTATE_C.isRobotBeta(robotName)) {
-                    clone.find('img.img-beta').css('visibility', 'visible');
-                }
-                if (GUISTATE_C.isRobotDeprecated(robotName)) {
-                    clone.find('img.img-deprecated').css('visibility', 'visible');
-                }
-                $('#popup-robot-main').append(clone);
-            } else {
-                // till the next for loop we create groups for robots
-                var robotGroup = key;
-                var clone = proto.clone().prop('id', 'menu-' + robotGroup);
-                clone.attr('data-type', robotGroup);
-                if (robotGroup == 'arduino') {
-                    clone.find('span:eq( 2 )').html('Nepo4Arduino');
-                } else {
-                    clone.find('span:eq( 2 )').html(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1)); // we have no real name for group
-                }
-                clone.find('span:eq( 0 )').removeClass('typcn-open');
-                clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup); // so we just capitalize the first letter + add typicon
-                addInfoLink(clone, robotGroup); // this will just kill the link tag, because no description for group
-                clone.attr('data-group', true);
-                $('#popup-robot-main').append(clone);
-                for (var i = 0; i < groupsDict[key].length; i++) {
-                    // and here we put robots in subgroups
-                    var robotName = groupsDict[key][i];
-                    var clone = proto.clone().prop('id', 'menu-' + robotName);
-                    clone.addClass('hidden');
-                    clone.addClass('robotSubGroup');
-                    clone.addClass(robotGroup);
-                    if (GUISTATE_C.isRobotBeta(robotName)) {
-                        clone.find('img.img-beta').css('visibility', 'visible');
-                    }
-                    if (GUISTATE_C.isRobotDeprecated(robotName)) {
-                        clone.find('img.img-deprecated').css('visibility', 'visible');
-                    }
-                    addInfoLink(clone, robotName);
-                    clone.attr('data-type', robotName);
-                    clone.find('span:eq( 0 )').removeClass('typcn-open');
-                    clone.find('span:eq( 0 )').addClass('img-' + robotName); // there are no typicons for robots
-                    clone.find('span:eq( 3 )').html(GUISTATE_C.getMenuRobotRealName(robotName)); // instead we use images
-                    clone.attr('data-type', robotName);
-                    $('#popup-robot-subgroup').append(clone);
-                }
-            }
-        }
-    }
-
-    proto.find('.img-beta').css('visibility', 'hidden');
-    proto.find('a[href]').css('visibility', 'hidden');
-    $('#show-startup-message>.modal-body').append(
-        '<input type="button" class="btn backButton hidden" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>'
-    );
-    if (GUISTATE_C.getLanguage() === 'de') {
-        $('.popup-robot .EN').css('display', 'none');
-        $('.popup-robot .DE').css('display', 'inline');
+function backToStartView() {
+    if ($('.fromRight.rightActive').length > 0) {
+        $('#blocklyDiv').closeRightView(function () {
+            UTIL.closeSimRobotWindow();
+            return $('#tabStart').tabWrapShow();
+        });
     } else {
-        $('.popup-robot .DE').css('display', 'none');
-        $('.popup-robot .EN').css('display', 'inline');
+        $('#tabStart').tabWrapShow();
     }
-    GUISTATE_C.setInitialState();
 }
 
 /**
  * Initialize the navigation bar in the head of the page
  */
 function initMenuEvents() {
-    // TODO check if this prevents iPads and iPhones to only react on double clicks
+    // TODO check if this prevents iPads and iPhones to only react on double clicks'
+    $('.navbar-collapse a:not(.dropdown-toggle)').click(function () {
+        $('.dropdown-menu.show').collapse('hide');
+        $('.navbar-collapse.show').collapse('hide');
+    });
 
     if (!navigator.userAgent.match(/iPad/i) && !navigator.userAgent.match(/iPhone/i)) {
         $('[rel="tooltip"]').not('.rightMenuButton').tooltip({
             container: 'body',
             placement: 'right',
+            trigger: 'hover',
         });
         $('[rel="tooltip"].rightMenuButton').tooltip({
             container: 'body',
             placement: 'left',
+            trigger: 'hover',
         });
     }
     // prevent Safari 10. from zooming
@@ -366,7 +177,7 @@ function initMenuEvents() {
             if ($(e.target).filter('.blocklyHtmlInput').length > 0 && !e.metaKey) {
                 return;
             }
-            Blockly.hideChaff();
+            Blockly && Blockly.getMainWorkspace() && Blockly.hideChaff(); //TODO
         }
     });
 
@@ -374,11 +185,11 @@ function initMenuEvents() {
         $(this).find('[autofocus]').focus();
     });
 
-    $('#navbarCollapse').collapse({
+    /* TODO $('#navbarCollapse').collapse({
         toggle: false,
-    });
+    });*/
 
-    $('#navbarCollapse').on('click', '.dropdown-menu a,.visible-xs', function (event) {
+    $('.navbar-collapse').on('click', '.dropdown-menu a,.visible-xs', function (event) {
         $('#navbarCollapse').collapse('hide');
     });
     // for gallery
@@ -387,7 +198,7 @@ function initMenuEvents() {
     });
     if (GUISTATE_C.isPublicServerVersion()) {
         var feedbackButton =
-            '<div href="#" id="feedbackButton" class="rightMenuButton" rel="tooltip" data-original-title="" title="">' +
+            '<div href="#" id="feedbackButton" class="rightMenuButton" rel="tooltip" data-bs-original-title="" title="">' +
             '<span id="" class="feedbackButton typcn typcn-feedback"></span>' +
             '</div>';
         $('#rightMenuDiv').append(feedbackButton);
@@ -412,17 +223,14 @@ function initMenuEvents() {
                     $('#feedbackIframe').attr('src', 'https://www.roberta-home.de/en/lab/feedback/');
                 }
             });
-            $('#feedbackModal').modal({ show: true });
+            $('#feedbackModal').modal('show');
         });
     }
 
     // EDIT Menu  --- don't use onWrap here, because the export xml target must be enabled always
     $('#head-navigation-program-edit').on('click', '.dropdown-menu li:not(.disabled) a', function (event) {
         var fn = function (event) {
-            var targetId =
-                event.target.id ||
-                (event.target.children[0] && event.target.children[0].id) ||
-                (event.target.previousSibling && event.target.previousSibling.id);
+            var targetId = event.target.id || event.currentTarget.id;
             switch (targetId) {
                 case 'menuRunProg':
                     RUN_C.runOnBrick();
@@ -437,12 +245,12 @@ function initMenuEvents() {
                     PROGRAM_C.newProgram();
                     break;
                 case 'menuListProg':
-                    $('#tabProgList').data('type', 'userProgram');
-                    $('#tabProgList').clickWrap();
+                    $('#tabProgList').data('type', 'Programs');
+                    $('#tabProgList').tabWrapShow();
                     break;
                 case 'menuListExamples':
-                    $('#tabProgList').data('type', 'exampleProgram');
-                    $('#tabProgList').clickWrap();
+                    $('#tabProgList').data('type', 'Examples');
+                    $('#tabProgList').tabWrapShow();
                     break;
                 case 'menuSaveProg':
                     PROGRAM_C.saveToServer();
@@ -455,9 +263,6 @@ function initMenuEvents() {
                     break;
                 case 'menuSourceCodeEditor':
                     SOURCECODE_C.clickSourceCodeEditor();
-                    break;
-                case 'menuImportProg':
-                    IMPORT_C.importXml();
                     break;
                 case 'menuExportProg':
                     PROGRAM_C.exportXml();
@@ -498,7 +303,7 @@ function initMenuEvents() {
                     CONFIGURATION_C.newConfiguration();
                     break;
                 case 'menuListConfig':
-                    $('#tabConfList').clickWrap();
+                    $('#tabConfList').tabWrapShow();
                     break;
                 case 'menuSaveConfig':
                     CONFIGURATION_C.saveToServer();
@@ -525,10 +330,8 @@ function initMenuEvents() {
             if (choosenRobotType) {
                 ROBOT_C.switchRobot(choosenRobotType);
             } else {
-                var domId = event.target.id;
+                var domId = event.currentTarget.id;
                 if (domId === 'menuConnect') {
-                    //console.log(GUISTATE_C.getIsAgent());
-                    //console.log(GUISTATE_C.getConnection());
                     if (
                         GUISTATE_C.getConnection() == 'arduinoAgent' ||
                         (GUISTATE_C.getConnection() == 'arduinoAgentOrToken' && GUISTATE_C.getIsAgent() == true)
@@ -553,6 +356,8 @@ function initMenuEvents() {
                     ROBOT_C.showRobotInfo();
                 } else if (domId === 'menuWlan') {
                     ROBOT_C.showWlanForm();
+                } else if (domId === 'menuRobotSwitch') {
+                    backToStartView();
                 }
             }
         },
@@ -567,14 +372,13 @@ function initMenuEvents() {
             var domId = event.target.id;
             if (domId === 'menuShowStart') {
                 // Submenu 'Help'
-                $('#show-startup-message').modal('show');
+                backToStartView();
             } else if (domId === 'menuAbout') {
                 // Submenu 'Help'
                 $('#version').text(GUISTATE_C.getServerVersion());
                 $('#show-about').modal('show');
             } else if (domId === 'menuLogging') {
-                // Submenu 'Help'
-                $('#tabLogList').clickWrap();
+                $('#tabLogList').tabWrapShow();
             }
         },
         'help clicked'
@@ -586,9 +390,6 @@ function initMenuEvents() {
         function (event) {
             $('.modal').modal('hide'); // close all opened popups
             switch (event.target.id) {
-                case 'menuLogin':
-                    USER_C.showLoginForm();
-                    break;
                 case 'menuUserGroupLogin':
                     USER_C.showUserGroupLoginForm();
                     break;
@@ -596,7 +397,7 @@ function initMenuEvents() {
                     USER_C.logout();
                     break;
                 case 'menuGroupPanel':
-                    USERGROUP_C.showPanel();
+                    $('#tabUserGroupList').tabWrapShow();
                     break;
                 case 'menuChangeUser':
                     USER_C.showUserDataForm();
@@ -618,22 +419,7 @@ function initMenuEvents() {
         'user clicked'
     );
 
-    $('#head-navigation-gallery').onWrap(
-        'click',
-        function (event) {
-            $('#tabGalleryList').clickWrap();
-            return false;
-        },
-        'gallery clicked'
-    );
-    $('#head-navigation-tutorial').onWrap(
-        'click',
-        function (event) {
-            $('#tabTutorialList').clickWrap();
-            return false;
-        },
-        'tutorial clicked'
-    );
+    $('#logoShowStart').onWrap('click', () => backToStartView());
 
     $('#menuTabProgram').onWrap(
         'click',
@@ -643,9 +429,26 @@ function initMenuEvents() {
                 $('.scroller-left').clickWrap();
             }
             $('.scroller-left').clickWrap();
-            $('#tabProgram').clickWrap();
+            $('#tabProgram').tabWrapShow();
         },
         'tabProgram clicked'
+    );
+
+    $('#head-navigation-gallery').onWrap(
+        'click',
+        function (event) {
+            $('#tabGalleryList').tabWrapShow();
+            return false;
+        },
+        'gallery clicked'
+    );
+    $('#head-navigation-tutorial').onWrap(
+        'click',
+        function (event) {
+            $('#tabTutorialList').tabWrapShow();
+            return false;
+        },
+        'tutorial clicked'
     );
 
     $('#menuTabConfiguration').onWrap(
@@ -697,14 +500,6 @@ function initMenuEvents() {
         $('.navbar-fixed-top .dropdown').removeClass('open');
     });
 
-    $('#img-nepo').onWrap(
-        'click',
-        function () {
-            $('#show-startup-message').modal('show');
-        },
-        'logo was clicked'
-    );
-
     $('.menuGeneral').onWrap(
         'click',
         function (event) {
@@ -737,6 +532,17 @@ function initMenuEvents() {
         },
         'head navigation menu item about clicked'
     );
+    $('.menuLogin').onWrap(
+        'click',
+        function (event) {
+            USER_C.showLoginForm();
+        },
+        'head navigation menu item login clicked'
+    );
+    $('.menuImportProg').onWrap('click', function (event) {
+        IMPORT_C.importXml();
+    }),
+        'import program clicked';
 
     $('#startPopupBack').on('click', function (event) {
         $('#popup-robot-main').removeClass('hidden', 1000);
@@ -773,14 +579,14 @@ function initMenuEvents() {
                         return;
                     } else {
                         if ($('#checkbox_id').is(':checked')) {
-                            cleanUri(); // removes # which may potentially be added by other operations
+                            UTIL.cleanUri(); // removes # which may potentially be added by other operations
                             var uri = window.location.toString();
                             uri += QUERY_START + LOAD_SYSTEM_CALL + QUERY_ASSIGNMENT + choosenRobotType;
                             window.history.replaceState({}, document.title, uri);
 
                             $('#show-message').oneWrap('hidden.bs.modal', function (e) {
                                 e.preventDefault();
-                                cleanUri();
+                                UTIL.cleanUri();
                                 ROBOT_C.switchRobot(choosenRobotType, true);
                             });
                             MSG.displayMessage('POPUP_CREATE_BOOKMARK', 'POPUP', '');
@@ -806,24 +612,6 @@ function initMenuEvents() {
             });
         },
         'show more releases clicked'
-    );
-
-    $('#takeATour').onWrap(
-        'click',
-        function (event) {
-            if (GUISTATE_C.getView() !== 'tabProgram') {
-                $('#tabProgram').clickWrap();
-            }
-            if (GUISTATE_C.getRobotGroup() !== 'ev3') {
-                ROBOT_C.switchRobot('ev3lejosv1', true);
-            }
-            if (GUISTATE_C.getProgramToolboxLevel() !== 'beginner') {
-                $('#beginner').clickWrap();
-            }
-            PROGRAM_C.newProgram(true);
-            TOUR_C.start('welcome');
-        },
-        'take a tour clicked'
     );
 
     $('#goToWiki').onWrap(
@@ -871,7 +659,7 @@ function initMenuEvents() {
 
     // help Bootstrap to calculate the correct size for the collapse element when the screen height is smaller than the elements height.
     $('#navbarCollapse').on('shown.bs.collapse', function () {
-        var newHeight = Math.min($(this).height(), Math.max($('#blockly').height(), $('#brickly').height(), $('#nn').height()));
+        var newHeight = Math.min($(this).height(), Math.max($('#blocklyDiv').height(), $('#brickly').height(), $('#nn').height()));
         $(this).css('height', newHeight);
     });
 
@@ -949,8 +737,8 @@ function initMenuEvents() {
         if ((e.metaKey || e.ctrlKey) && e.which == 77) {
             e.preventDefault();
             if (GUISTATE_C.isUserLoggedIn()) {
-                $('#tabProgList').data('type', 'userProgram');
-                $('#tabProgList').clickWrap();
+                $('#progList').trigger('Programs');
+                $('.navbar-nav a[href="#progList"]').tab('show');
             } else {
                 MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '');
             }

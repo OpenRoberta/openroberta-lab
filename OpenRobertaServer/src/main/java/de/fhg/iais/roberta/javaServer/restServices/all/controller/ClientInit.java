@@ -87,7 +87,6 @@ public class ClientInit {
             Statistics.infoUserAgent("Initialization", userAgent, httpSessionState.getCountryCode(), fullRequest.getData());
 
             JSONObject server = new JSONObject();
-            server.put("defaultRobot", this.serverProperties.getDefaultRobot());
             JSONObject robots = new JSONObject();
             Collection<String> availableRobots = this.serverProperties.getRobotWhitelist();
             int i = 0;
@@ -103,6 +102,9 @@ public class ClientInit {
                     robotDescription.put("announcement", httpSessionState.getRobotFactory(robot).getRobotAnnouncement());
                     robotDescription.put("stopButton", httpSessionState.getRobotFactory(robot).hasStopButton());
                     robotDescription.put("group", httpSessionState.getRobotFactory(robot).getGroup());
+                    robotDescription.put("sim", httpSessionState.getRobotFactory(robot).hasSim());
+                    robotDescription.put("nn", httpSessionState.getRobotFactory(robot).hasNN());
+                    robotDescription.put("progLanguage", httpSessionState.getRobotFactory(robot).getSourceCodeFileExtension());
                 }
                 robots.put("" + i, robotDescription);
                 i++;

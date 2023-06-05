@@ -1,11 +1,7 @@
-import * as require from 'require';
-
 import * as LOG from 'log';
 import * as UTIL from 'util.roberta';
 import * as MSG from 'message';
-import * as COMM from 'comm';
 import * as PROGRAM from 'program.model';
-import * as Blockly from 'blockly';
 import * as $ from 'jquery';
 import 'bootstrap-table';
 
@@ -21,7 +17,7 @@ function initEvents() {
     /**
      * Delete the programs that were selected in program list
      */
-    $('#doDeleteProgram').onWrap('click', function () {
+    $('#doDeleteProgram').onWrap('click', function() {
         var programs = $('#confirmDeleteProgram').data('programs');
         for (var i = 0; i < programs.length; i++) {
             var prog = programs[i];
@@ -30,7 +26,7 @@ function initEvents() {
             var progRight = prog[2];
             var author = prog[3];
             if (progRight.sharedFrom) {
-                PROGRAM.deleteShare(progName, progOwner, author, function (result, progName) {
+                PROGRAM.deleteShare(progName, progOwner, author, function(result, progName) {
                     UTIL.response(result);
                     if (result.rc === 'ok') {
                         MSG.displayInformation(result, 'MESSAGE_PROGRAM_DELETED', result.message, progName);
@@ -39,7 +35,7 @@ function initEvents() {
                     }
                 });
             } else {
-                PROGRAM.deleteProgramFromListing(progName, author, function (result, progName) {
+                PROGRAM.deleteProgramFromListing(progName, author, function(result, progName) {
                     UTIL.response(result);
                     if (result.rc === 'ok') {
                         MSG.displayInformation(result, 'MESSAGE_PROGRAM_DELETED', result.message, progName);

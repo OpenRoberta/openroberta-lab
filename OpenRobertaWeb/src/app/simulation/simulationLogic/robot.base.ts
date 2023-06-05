@@ -184,20 +184,20 @@ export abstract class RobotBase implements IRobot, ISelectable {
             let objectCorners = [
                 {
                     x: Math.round((this as unknown as RobotBaseMobile).chassis.frontRight.x),
-                    y: Math.round((this as unknown as RobotBaseMobile).chassis.frontRight.y),
+                    y: Math.round((this as unknown as RobotBaseMobile).chassis.frontRight.y)
                 },
                 {
                     x: Math.round((this as unknown as RobotBaseMobile).chassis.backRight.x),
-                    y: Math.round((this as unknown as RobotBaseMobile).chassis.backRight.y),
+                    y: Math.round((this as unknown as RobotBaseMobile).chassis.backRight.y)
                 },
                 {
                     x: Math.round((this as unknown as RobotBaseMobile).chassis.backLeft.x),
-                    y: Math.round((this as unknown as RobotBaseMobile).chassis.backLeft.y),
+                    y: Math.round((this as unknown as RobotBaseMobile).chassis.backLeft.y)
                 },
                 {
                     x: Math.round((this as unknown as RobotBaseMobile).chassis.frontLeft.x),
-                    y: Math.round((this as unknown as RobotBaseMobile).chassis.frontLeft.y),
-                },
+                    y: Math.round((this as unknown as RobotBaseMobile).chassis.frontLeft.y)
+                }
             ];
             for (let c in objectCorners) {
                 rCtx.beginPath();
@@ -340,7 +340,7 @@ export class RobotFactory {
         [235, 106, 10],
         [186, 204, 30],
         [242, 148, 0],
-        [0, 90, 148],
+        [0, 90, 148]
     ];
 
     static async createRobots(
@@ -358,8 +358,8 @@ export class RobotFactory {
             if (index > MAX_SIM_ROBOTS - 1) {
                 alert(
                     'The maximum number of robots that can be simulated at the same time is ' +
-                        MAX_SIM_ROBOTS +
-                        '. The number of robots exceeding this number is not simulated!'
+                    MAX_SIM_ROBOTS +
+                    '. The number of robots exceeding this number is not simulated!'
                 );
                 return { robots: myRobots, robotClass: myRobotClass };
             }

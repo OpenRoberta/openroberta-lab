@@ -41,7 +41,6 @@ public class HttpSessionState implements Serializable {
     private final String initToken;
     private final long sessionNumber;
     private final Map<String, RobotFactory> robotPluginMap;
-    private final String defaultRobotName;
     private final String countryCode;
 
     private final long initTime;
@@ -67,13 +66,11 @@ public class HttpSessionState implements Serializable {
         this.initToken = initToken;
         this.sessionNumber = sessionNumber;
         this.robotPluginMap = robotPluginMap;
-        this.defaultRobotName = serverProperties.getDefaultRobot();
         this.countryCode = countryCode;
         this.initTime = new Date().getTime();
         this.lastAccessTime = 0;
 
         this.userId = HttpSessionState.NO_USER;
-        this.robotName = this.defaultRobotName;
         this.token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
         this.programName = null;
         this.program = null;

@@ -1,6 +1,3 @@
-import * as COMM from 'comm';
-import * as MSG from 'message';
-import * as LOG from 'log';
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
 import 'jquery-scrollto';
@@ -19,26 +16,42 @@ function is_touch_device() {
 }
 
 function start(tour) {
+    function end() {
+        $('#enjoyHintAnchor').remove();
+        Blockly.mainWorkspace.clear();
+        enjoyhint_instance = {};
+        if ($('.rightMenuButton.rightActive')) {
+            $('.rightMenuButton.rightActive').clickWrap();
+        }
+        $('#tabStart').tabWrapShow();
+    }
     enjoyhint_instance = new EnjoyHint({
-        onSkip: function () {
-            Blockly.mainWorkspace.clear();
-            enjoyhint_instance = {};
-            $('#tabProgram').clickWrap();
-            if ($('.rightMenuButton.rightActive')) {
-                $('.rightMenuButton.rightActive').clickWrap();
+        onStart: function () {
+            var size, x, y;
+            if ($(window).width() < 768) {
+                size = Math.min($(window).width() / 3, $(window).height() / 2);
+                x = 100;
+                y = ($(window).height() * 2) / 5;
+            } else if ($(window).width() < $(window).height()) {
+                size = Math.min($(window).width() / 3, $(window).height() / 2);
+                x = $(window).width() / 2;
+                y = ($(window).height() - size) / 2;
+            } else {
+                size = Math.min($(window).width() / 3, $(window).height() / 2);
+                x = $(window).width() / 2;
+                y = ($(window).height() - size) / 3;
             }
-            $('#show-startup-message').modal('show');
+            $('<div>', {
+                id: 'enjoyHintAnchor',
+            })
+                .css({ width: size, height: size, top: y, left: x, position: 'absolute' })
+                .appendTo('body');
+        },
+        onSkip: function () {
+            end();
         },
         onEnd: function () {
-            Blockly.mainWorkspace.clear();
-            enjoyhint_instance = {};
-            $('#tabProgram').clickWrap();
-            if ($('.rightMenuButton.rightActive')) {
-                $('.rightMenuButton.rightActive').clickWrap();
-            }
-            setTimeout(function () {
-                $('#show-startup-message').modal('show');
-            }, 1000);
+            end();
         },
     });
     var enjoyhint_script_steps = [{}];
@@ -57,7 +70,7 @@ function start(tour) {
             return;
     }
 
-    // async translation
+    // translation
     var key, keyParts, translation;
     for (var i = 0; i < enjoyhint_script_steps.length; i++) {
         if (enjoyhint_script_steps[i].description) {
@@ -100,12 +113,14 @@ function getInstance() {
 }
 export { start, getInstance };
 
-var offsetLeft = $('#blockly').width() * -0.15;
-var offsetTop = $('#blockly').height() * -0.1;
+var offsetLeft = $('#blocklyDiv').width() * -0.15;
+var offsetTop = $('#blocklyDiv').height() * -0.1;
+var circleRadius = Math.min($(window).width() / 3, $(window).height() / 3);
+var circleOffset = $(window).height() / 4;
 var welcome = [
     {
         event_type: 'next',
-        selector: '.logo',
+        selector: '#imgLogo',
         description: 'Blockly.Msg.TOUR1_DESCRIPTION01',
         top: 77,
         nextButton: {
@@ -157,12 +172,9 @@ var welcome = [
     },
     {
         event_type: 'next',
-        selector: '#simDiv',
+        selector: '#enjoyHintAnchor',
         description: 'Blockly.Msg.TOUR1_DESCRIPTION15',
         shape: 'circle',
-        radius: $('#blockly').width() / 10 + $('#blockly').height() / 10,
-        top: offsetTop,
-        left: offsetLeft,
         nextButton: {
             text: 'Blockly.Msg.TOUR1_DESCRIPTION00',
         },
@@ -173,6 +185,17 @@ var welcome = [
         selector: '#simButton',
         description: 'Blockly.Msg.TOUR1_DESCRIPTION16',
         showSkip: false,
+    },
+    {
+        event: 'mousedown touchstart',
+        selector: '#simButton',
+        timeout: 1000,
+        showSkip: false,
+        onBeforeStart: function () {
+            setTimeout(function () {
+                $('.enjoyhint_close_btn').trigger('click');
+            }, 1000);
+        },
     },
 ];
 
@@ -246,7 +269,7 @@ var overview = [
         },
         showSkip: false,
         onBeforeStart: function () {
-            $('#tabProgram').clickWrap();
+            $('#tabProgram').tabWrapShow();
         },
     },
     {
@@ -331,7 +354,7 @@ var overview = [
         selector: '#simDiv',
         description: 'Blockly.Msg.TOUR1_DESCRIPTION15',
         shape: 'circle',
-        radius: $('#blockly').width() / 10 + $('#blockly').height() / 10,
+        radius: $('#blocklyDiv').width() / 10 + $('#blocklyDiv').height() / 10,
         top: offsetTop,
         left: offsetLeft,
         nextButton: {

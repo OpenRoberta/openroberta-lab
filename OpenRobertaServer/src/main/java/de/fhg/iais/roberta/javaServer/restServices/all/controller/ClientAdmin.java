@@ -207,7 +207,7 @@ public class ClientAdmin {
                     response.setHasWlan(robotFactory.hasWlanCredentials());
                     response.setFirmwareDefault(robotFactory.getFirmwareDefaultProgramName());
                     LOG.info("set robot to {}", robot);
-                    Statistics.info("ChangeRobot", "success", true);
+                    Statistics.info("ChangeRobot", "success", true, "robot", robot);
                 } else {
                     LOG.info("set Robot: robot {} was already set", robot);
                     Statistics.info("ChangeRobot", "success", true);

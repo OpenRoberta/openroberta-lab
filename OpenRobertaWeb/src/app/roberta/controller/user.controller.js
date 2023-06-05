@@ -1,4 +1,3 @@
-import * as LOG from 'log';
 import * as MSG from 'message';
 import * as UTIL from 'util.roberta';
 import * as USER from 'user.model';
@@ -40,7 +39,7 @@ function createUserToServer() {
             $('#registerPass').val(),
             $('#registerUserAge').val(),
             GUISTATE_C.getLanguage(),
-            function (result) {
+            function(result) {
                 if (result.rc === 'ok') {
                     $('#loginAccountName').val($('#registerAccountName').val());
                     $('#loginPassword').val($('#registerPass').val());
@@ -69,9 +68,9 @@ function updateUserToServer() {
             $('#registerUserEmail').val(),
             $('#registerUserAge').val(),
             GUISTATE_C.getLanguage(),
-            function (result) {
+            function(result) {
                 if (result.rc === 'ok') {
-                    USER.getUserFromServer(function (result) {
+                    USER.getUserFromServer(function(result) {
                         if (result.rc === 'ok') {
                             GUISTATE_C.setLogin(result);
                         }
@@ -91,7 +90,7 @@ function updateUserPasswordOnServer() {
     $formUserPasswordChange.validate();
     if ($formUserPasswordChange.valid()) {
         if (restPasswordLink) {
-            USER.resetPasswordToServer(restPasswordLink, $('#passNew').val(), function (result) {
+            USER.resetPasswordToServer(restPasswordLink, $('#passNew').val(), function(result) {
                 if (result.rc === 'ok') {
                     $('#change-user-password').modal('hide');
                     $('#resetPassLink').val(undefined);
@@ -102,7 +101,7 @@ function updateUserPasswordOnServer() {
                 }
             });
         } else {
-            USER.updateUserPasswordToServer(GUISTATE_C.getUserAccountName(), $('#passOld').val(), $('#passNew').val(), function (result) {
+            USER.updateUserPasswordToServer(GUISTATE_C.getUserAccountName(), $('#passOld').val(), $('#passNew').val(), function(result) {
                 if (result.rc === 'ok') {
                     $('#change-user-password').modal('hide');
                 }
@@ -116,7 +115,7 @@ function updateUserPasswordOnServer() {
  * Get user from server
  */
 function getUserFromServer() {
-    USER.getUserFromServer(GUISTATE_C.getUserAccountName(), function (result) {
+    USER.getUserFromServer(GUISTATE_C.getUserAccountName(), function(result) {
         if (result.rc === 'ok') {
             $('#registerAccountName').val(result.userAccountName);
             $('#registerUserEmail').val(result.userEmail);
@@ -131,7 +130,7 @@ function getUserFromServer() {
  */
 function sendAccountActivation() {
     //        if ($("#registerUserEmail").val() != "") {
-    USER.userSendAccountActivation(GUISTATE_C.getUserAccountName(), GUISTATE_C.getLanguage(), function (result) {
+    USER.userSendAccountActivation(GUISTATE_C.getUserAccountName(), GUISTATE_C.getLanguage(), function(result) {
         MSG.displayInformation(result, result.message, result.message);
     });
     //        }
@@ -141,7 +140,7 @@ function sendAccountActivation() {
  * account activation
  */
 function activateAccount(url) {
-    USER.userActivateAccount(url, function (result) {
+    USER.userActivateAccount(url, function(result) {
         MSG.displayInformation(result, result.message, result.message);
     });
 }
@@ -152,7 +151,7 @@ function activateAccount(url) {
 function login() {
     $formLogin.validate();
     if ($formLogin.valid()) {
-        USER.login($('#loginAccountName').val(), $('#loginPassword').val(), function (result) {
+        USER.login($('#loginAccountName').val(), $('#loginPassword').val(), function(result) {
             if (result.rc === 'ok') {
                 GUISTATE_C.setLogin(result);
                 if (result.userId === 1) {
@@ -184,7 +183,7 @@ function loginToUserGroup() {
             valuesObj.userGroupName,
             valuesObj.userGroupName + ':' + valuesObj.accountName,
             valuesObj.password,
-            function (result) {
+            function(result) {
                 if (result.rc === 'ok') {
                     $('#menuDeleteUser, #menuGroupPanel').parent().addClass('unavailable');
                     GUISTATE_C.setLogin(result);
@@ -206,7 +205,7 @@ function loginToUserGroup() {
  * Logout user
  */
 function logout() {
-    USER.logout(function (result) {
+    USER.logout(function(result) {
         UTIL.response(result);
         if (result.rc === 'ok') {
             if (GUISTATE_C.isUserMemberOfUserGroup()) {
@@ -224,7 +223,7 @@ function logout() {
 function userPasswordRecovery() {
     $formLost.validate();
     if ($formLost.valid()) {
-        USER.userPasswordRecovery($('#lost_email').val(), GUISTATE_C.getLanguage(), function (result) {
+        USER.userPasswordRecovery($('#lost_email').val(), GUISTATE_C.getLanguage(), function(result) {
             MSG.displayInformation(result, result.message, result.message);
         });
     }
@@ -236,7 +235,7 @@ function userPasswordRecovery() {
 function deleteUserOnServer() {
     $formSingleModal.validate();
     if ($formSingleModal.valid()) {
-        USER.deleteUserOnServer(GUISTATE_C.getUserAccountName(), $('#singleModalInput').val(), function (result) {
+        USER.deleteUserOnServer(GUISTATE_C.getUserAccountName(), $('#singleModalInput').val(), function(result) {
             if (result.rc === 'ok') {
                 logout();
             }
@@ -248,7 +247,7 @@ function validateLoginUser() {
     $formLogin.removeData('validator');
     $.validator.addMethod(
         'loginRegex',
-        function (value, element) {
+        function(value, element) {
             return this.optional(element) || /^[a-zA-Z0-9=+!?.,%#+&^@_\- ]+$/gi.test(value);
         },
         'This field contains nonvalid symbols.'
@@ -257,25 +256,25 @@ function validateLoginUser() {
         rules: {
             loginAccountName: {
                 required: true,
-                loginRegex: true,
+                loginRegex: true
             },
             loginPassword: {
-                required: true,
-            },
+                required: true
+            }
         },
         errorClass: 'form-invalid',
-        errorPlacement: function (label, element) {
+        errorPlacement: function(label, element) {
             label.insertBefore(element.parent());
         },
         messages: {
             loginAccountName: {
                 required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-                loginRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS'],
+                loginRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS']
             },
             loginPassword: {
-                required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-            },
-        },
+                required: Blockly.Msg['VALIDATION_FIELD_REQUIRED']
+            }
+        }
     });
 }
 
@@ -283,7 +282,7 @@ function validateLoginUserGroupMember() {
     $formUserGroupLogin.removeData('validator');
     $.validator.addMethod(
         'loginRegex',
-        function (value, element) {
+        function(value, element) {
             return this.optional(element) || /^[a-zA-Z0-9=+!?.,%#+&^@_\- ]+$/gi.test(value);
         },
         'This field contains nonvalid symbols.'
@@ -292,39 +291,39 @@ function validateLoginUserGroupMember() {
         rules: {
             usergroupLoginOwner: {
                 required: true,
-                loginRegex: true,
+                loginRegex: true
             },
             usergroupLoginUserGroup: {
-                required: true,
+                required: true
             },
             usergroupLoginAccount: {
                 required: true,
-                loginRegex: true,
+                loginRegex: true
             },
             usergroupLoginPassword: {
-                required: true,
-            },
+                required: true
+            }
         },
         errorClass: 'form-invalid',
-        errorPlacement: function (label, element) {
+        errorPlacement: function(label, element) {
             label.insertBefore(element.parent());
         },
         messages: {
             usergroupLoginOwner: {
                 required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-                loginRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS'],
+                loginRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS']
             },
             usergroupLoginUserGroup: {
-                required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
+                required: Blockly.Msg['VALIDATION_FIELD_REQUIRED']
             },
             loginAccountName: {
                 required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-                loginRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS'],
+                loginRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS']
             },
             loginPassword: {
-                required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-            },
-        },
+                required: Blockly.Msg['VALIDATION_FIELD_REQUIRED']
+            }
+        }
     });
 }
 
@@ -332,7 +331,7 @@ function validateRegisterUser() {
     $formRegister.removeData('validator');
     $.validator.addMethod(
         'emailRegex',
-        function (value, element) {
+        function(value, element) {
             return (
                 this.optional(element) ||
                 /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i.test(
@@ -344,7 +343,7 @@ function validateRegisterUser() {
     );
     $.validator.addMethod(
         'loginRegex',
-        function (value, element) {
+        function(value, element) {
             return this.optional(element) || /^[a-zA-Z0-9=+!?.,%#+&^@_\- ]+$/gi.test(value);
         },
         'This field must contain only letters, numbers, or dashes.'
@@ -354,37 +353,37 @@ function validateRegisterUser() {
             registerAccountName: {
                 required: true,
                 maxlength: 25,
-                loginRegex: true,
+                loginRegex: true
             },
             registerPass: {
                 required: true,
-                minlength: 6,
+                minlength: 6
             },
             registerPassConfirm: {
                 required: true,
-                equalTo: '#registerPass',
+                equalTo: '#registerPass'
             },
             registerUserName: {
                 required: false,
                 maxlength: 25,
-                loginRegex: true,
+                loginRegex: true
             },
             registerUserEmail: {
                 required: false,
-                emailRegex: true,
+                emailRegex: true
             },
             registerUserAge: {
-                required: function (element) {
+                required: function(element) {
                     return $('#registerUserEmail').val() != '';
-                },
-            },
+                }
+            }
         },
         onfocusout: false,
         errorClass: 'form-invalid',
-        errorPlacement: function (label, element) {
+        errorPlacement: function(label, element) {
             label.insertBefore(element.parent());
         },
-        showErrors: function (errorMap, errorList) {
+        showErrors: function(errorMap, errorList) {
             if (errorList.length) {
                 var firstError = errorList.shift();
                 this.errorList = [firstError];
@@ -395,29 +394,29 @@ function validateRegisterUser() {
             registerAccountName: {
                 required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
                 maxlength: Blockly.Msg['VALIDATION_MAX_LENGTH'],
-                loginRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS'],
+                loginRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS']
             },
             registerPass: {
                 required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-                minlength: Blockly.Msg['VALIDATION_PASSWORD_MIN_LENGTH'],
+                minlength: Blockly.Msg['VALIDATION_PASSWORD_MIN_LENGTH']
             },
             registerPassConfirm: {
                 required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-                equalTo: Blockly.Msg['VALIDATION_SECOND_PASSWORD_EQUAL'],
+                equalTo: Blockly.Msg['VALIDATION_SECOND_PASSWORD_EQUAL']
             },
             registerUserName: {
                 required: jQuery.validator.format(Blockly.Msg['VALIDATION_FIELD_REQUIRED']),
                 maxlength: Blockly.Msg['VALIDATION_MAX_LENGTH'],
-                loginRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS'],
+                loginRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS']
             },
             registerUserEmail: {
                 required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-                emailRegex: Blockly.Msg['VALIDATION_VALID_EMAIL_ADDRESS'],
+                emailRegex: Blockly.Msg['VALIDATION_VALID_EMAIL_ADDRESS']
             },
             registerUserAge: {
-                required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-            },
-        },
+                required: Blockly.Msg['VALIDATION_FIELD_REQUIRED']
+            }
+        }
     });
 }
 
@@ -428,30 +427,30 @@ function validateUserPasswordChange() {
             passOld: 'required',
             passNew: {
                 required: true,
-                minlength: 6,
+                minlength: 6
             },
             passNewRepeat: {
                 required: true,
-                equalTo: '#passNew',
-            },
+                equalTo: '#passNew'
+            }
         },
         errorClass: 'form-invalid',
-        errorPlacement: function (label, element) {
+        errorPlacement: function(label, element) {
             label.insertBefore(element.parent());
         },
         messages: {
             passOld: {
-                required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
+                required: Blockly.Msg['VALIDATION_FIELD_REQUIRED']
             },
             passNew: {
                 required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-                minlength: Blockly.Msg['VALIDATION_PASSWORD_MIN_LENGTH'],
+                minlength: Blockly.Msg['VALIDATION_PASSWORD_MIN_LENGTH']
             },
             passNewRepeat: {
                 required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-                equalTo: Blockly.Msg['VALIDATION_SECOND_PASSWORD_EQUAL'],
-            },
-        },
+                equalTo: Blockly.Msg['VALIDATION_SECOND_PASSWORD_EQUAL']
+            }
+        }
     });
 }
 
@@ -461,31 +460,31 @@ function validateLostPassword() {
         rules: {
             lost_email: {
                 required: true,
-                email: true,
-            },
+                email: true
+            }
         },
         errorClass: 'form-invalid',
-        errorPlacement: function (label, element) {
+        errorPlacement: function(label, element) {
             label.insertBefore(element.parent());
         },
         messages: {
             lost_email: {
                 required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-                email: Blockly.Msg['VALIDATION_VALID_EMAIL_ADDRESS'],
-            },
-        },
+                email: Blockly.Msg['VALIDATION_VALID_EMAIL_ADDRESS']
+            }
+        }
     });
 }
 
 //Animate between forms in login modal
 function modalAnimate($oldForm, $newForm) {
-    $oldForm.fadeToggle($modalAnimateTime, function () {
+    $oldForm.fadeToggle($modalAnimateTime, function() {
         $newForm.fadeToggle();
     });
 }
 
 function msgFade($msgId, $msgText) {
-    $msgId.fadeOut($msgAnimateTime, function () {
+    $msgId.fadeOut($msgAnimateTime, function() {
         $(this).text($msgText).fadeIn($msgAnimateTime);
     });
 }
@@ -519,7 +518,7 @@ function showRegisterForm() {
     $formRegister.off('submit');
     $formRegister.onWrap(
         'submit',
-        function (e) {
+        function(e) {
             e.preventDefault();
             createUserToServer();
         },
@@ -540,14 +539,14 @@ function showRegisterForm() {
 }
 
 function initLoginModal() {
-    $('#login-user').onWrap('hidden.bs.modal', function () {
+    $('#login-user').onWrap('hidden.bs.modal', function() {
         resetForm();
         clearInputs();
     });
 
     $formLost.onWrap(
         'submit',
-        function (e) {
+        function(e) {
             e.preventDefault();
             userPasswordRecovery();
         },
@@ -555,19 +554,19 @@ function initLoginModal() {
     );
     $formLogin.onWrap(
         'submit',
-        function (e) {
+        function(e) {
             e.preventDefault();
             login();
         },
         'submit login data'
     );
-    $('#register-form input.form-control, #register-form select.form-control').focus(function (e) {
+    $('#register-form input.form-control, #register-form select.form-control').focus(function(e) {
         var $hint = $(this).parent().next('.hint');
         $('#register-form .hint').not($hint).slideUp($msgAnimateTime);
         $hint.slideDown($msgAnimateTime);
     });
 
-    $('#registerUserEmail').on('change paste keyup', function () {
+    $('#registerUserEmail').on('change paste keyup', function() {
         if ($('#registerUserEmail').val() == '') {
             $('#fgUserAge').fadeOut();
         } else {
@@ -578,7 +577,7 @@ function initLoginModal() {
     // Login form change between sub-form
     $('#login_register_btn').onWrap(
         'click',
-        function () {
+        function() {
             showRegisterForm();
             headerChange($h3Login, $h3Register);
             modalAnimate($formLogin, $formRegister);
@@ -588,7 +587,7 @@ function initLoginModal() {
     );
     $('#register_login_btn').onWrap(
         'click',
-        function () {
+        function() {
             headerChange($h3Register, $h3Login);
             modalAnimate($formRegister, $formLogin);
             UTIL.setFocusOnElement($('#loginAccountName'));
@@ -597,7 +596,7 @@ function initLoginModal() {
     );
     $('#login_lost_btn').onWrap(
         'click',
-        function () {
+        function() {
             headerChange($h3Login, $h3Lost);
             modalAnimate($formLogin, $formLost);
             UTIL.setFocusOnElement($('#lost_email'));
@@ -606,7 +605,7 @@ function initLoginModal() {
     );
     $('#lost_login_btn').onWrap(
         'click',
-        function () {
+        function() {
             headerChange($h3Lost, $h3Login);
             modalAnimate($formLost, $formLogin);
             UTIL.setFocusOnElement($('#loginAccountName'));
@@ -615,7 +614,7 @@ function initLoginModal() {
     );
     $('#lost_register_btn').onWrap(
         'click',
-        function () {
+        function() {
             headerChange($h3Lost, $h3Register);
             modalAnimate($formLost, $formRegister);
             UTIL.setFocusOnElement($('#registerAccountName'));
@@ -624,7 +623,7 @@ function initLoginModal() {
     );
     $('#register_lost_btn').onWrap(
         'click',
-        function () {
+        function() {
             headerChange($h3Register, $h3Lost);
             modalAnimate($formRegister, $formLost);
             UTIL.setFocusOnElement($('#lost_email'));
@@ -638,28 +637,28 @@ function initLoginModal() {
 }
 
 function initUserGroupLoginModal() {
-    $('#usergroupLoginPopup').onWrap('hidden.bs.modal', function () {
+    $('#usergroupLoginPopup').onWrap('hidden.bs.modal', function() {
         $formUserGroupLogin.validate().resetForm();
         $formUserGroupLogin.find('input, select').val('');
     });
-    $formUserGroupLogin.onWrap('submit', function (e) {
+    $formUserGroupLogin.onWrap('submit', function(e) {
         e.preventDefault();
         loginToUserGroup();
     });
 
-    $formUserGroupLogin.find('input, select').focus(function (e) {
+    $formUserGroupLogin.find('input, select').focus(function(e) {
         var $hint = $(this).parent().next('.hint');
         $formUserGroupLogin.find('.hint').not($hint).slideUp($msgAnimateTime);
         $hint.slideDown($msgAnimateTime);
     });
 
     // Login form change between sub-form
-    $('#lostPasswordUsergroupLogin').onWrap('click', function () {
+    $('#lostPasswordUsergroupLogin').onWrap('click', function() {
         headerChange($h3LoginUserGroupLogin, $h3LostPasswordUsergroupLogin);
         modalAnimate($formUserGroupLogin, $articleLostUserGroupPassword);
         UTIL.setFocusOnElement($articleLostUserGroupPassword);
     });
-    $('#loginUsergroupLogin').onWrap('click', function () {
+    $('#loginUsergroupLogin').onWrap('click', function() {
         headerChange($h3LostPasswordUsergroupLogin, $h3LoginUserGroupLogin);
         modalAnimate($articleLostUserGroupPassword, $formUserGroupLogin);
         UTIL.setFocusOnElement($('#usergroupLoginOwner'));
@@ -669,20 +668,22 @@ function initUserGroupLoginModal() {
 }
 
 function initUserPasswordChangeModal() {
-    $formUserPasswordChange.onWrap('submit', function (e) {
+    $formUserPasswordChange.onWrap('submit', function(e) {
         e.preventDefault();
         updateUserPasswordOnServer();
     });
 
-    $('#showChangeUserPassword').onWrap('click', function () {
+    $('#showChangeUserPassword').onWrap('click', function() {
+        /* $('.modal.show').modal('hide');
+         $('.modal.show').one('bs');*/
         $('#change-user-password').modal('show');
     });
 
-    $('#resendActivation').onWrap('click', function () {
+    $('#resendActivation').onWrap('click', function() {
         sendAccountActivation();
     });
 
-    $('#change-user-password').onWrap('hidden.bs.modal', function () {
+    $('#change-user-password').onWrap('hidden.bs.modal', function() {
         $formUserPasswordChange.validate().resetForm();
         $('#grOldPassword').show();
         $('#passOld').val('');
@@ -699,10 +700,10 @@ function initUserPasswordChangeModal() {
 function init() {
     var ready = $.Deferred();
     $.when(
-        USER.clear(function (result) {
+        USER.clear(function(result) {
             UTIL.response(result);
         })
-    ).then(function () {
+    ).then(function() {
         $divForms = $('#div-login-forms');
         $formLogin = $('#login-form');
         $formLost = $('#lost-form');
@@ -722,7 +723,7 @@ function init() {
 
         $('#iconDisplayLogin').onWrap(
             'click',
-            function () {
+            function() {
                 showUserInfo();
             },
             'icon user click'
@@ -739,7 +740,7 @@ function init() {
 function showUserDataForm() {
     getUserFromServer();
     $formRegister.off('submit');
-    $formRegister.onWrap('submit', function (e) {
+    $formRegister.onWrap('submit', function(e) {
         e.preventDefault();
         updateUserToServer();
     });
@@ -785,33 +786,33 @@ function showUserGroupLoginForm() {
 
 function showDeleteUserModal() {
     UTIL.showSingleModal(
-        function () {
+        function() {
             $('#singleModalInput').attr('type', 'password');
-            $('#single-modal h3').text(Blockly.Msg['MENU_DELETE_USER']);
+            $('#single-modal h5').text(Blockly.Msg['MENU_DELETE_USER']);
             $('#single-modal label').text(Blockly.Msg['POPUP_PASSWORD']);
             $('#single-modal span').removeClass('typcn-pencil');
             $('#single-modal span').addClass('typcn-lock-closed');
         },
         deleteUserOnServer,
-        function () {
+        function() {
             $('#single-modal span').addClass('typcn-pencil');
             $('#single-modal span').removeClass('typcn-lock-closed');
         },
         {
             rules: {
                 singleModalInput: {
-                    required: true,
-                },
+                    required: true
+                }
             },
             errorClass: 'form-invalid',
-            errorPlacement: function (label, element) {
+            errorPlacement: function(label, element) {
                 label.insertBefore(element.parent());
             },
             messages: {
                 singleModalInput: {
-                    required: jQuery.validator.format(Blockly.Msg['VALIDATION_FIELD_REQUIRED']),
-                },
-            },
+                    required: jQuery.validator.format(Blockly.Msg['VALIDATION_FIELD_REQUIRED'])
+                }
+            }
         }
     );
 }
@@ -837,7 +838,7 @@ function showUserInfo() {
 }
 
 function showResetPassword(target) {
-    USER.checkTargetRecovery(target, function (result) {
+    USER.checkTargetRecovery(target, function(result) {
         if (result.rc === 'ok') {
             $('#passOld').val(target);
             $('#resetPassLink').val(target);
@@ -865,5 +866,5 @@ export {
     showDeleteUserModal,
     showUserInfo,
     showResetPassword,
-    initValidationMessages,
+    initValidationMessages
 };

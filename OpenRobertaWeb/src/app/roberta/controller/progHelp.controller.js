@@ -54,7 +54,7 @@ function initEvents() {
 
 function toggleHelp($button) {
     if ($('#helpButton').hasClass('rightActive')) {
-        $('#blockly').closeRightView();
+        $('#blocklyDiv').closeRightView();
     } else {
         if (GUISTATE_C.getProgramToolboxLevel() === 'beginner') {
             $('.help.expert').hide();

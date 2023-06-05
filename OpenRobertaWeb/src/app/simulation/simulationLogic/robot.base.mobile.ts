@@ -67,7 +67,7 @@ export abstract class RobotBaseMobile extends RobotBase {
         y: 0,
         rx: 0,
         ry: 0,
-        r: 30,
+        r: 30
     };
 
     protected constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, mySelectionListener: SelectionListener) {

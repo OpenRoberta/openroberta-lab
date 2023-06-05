@@ -19,14 +19,7 @@ import * as Blockly from 'blockly';
 import * as NN_CTRL from 'nn.controller';
 import { SimulationScene } from 'simulation.scene';
 import { SelectionListener } from 'robot.base';
-import {
-    BaseSimulationObject,
-    CircleSimulationObject,
-    MarkerSimulationObject,
-    RectangleSimulationObject,
-    SimObjectShape,
-    TriangleSimulationObject,
-} from './simulation.objects';
+import { BaseSimulationObject, CircleSimulationObject, MarkerSimulationObject, RectangleSimulationObject, SimObjectShape, TriangleSimulationObject } from './simulation.objects';
 import { Pose } from 'robot.base.mobile';
 import { Simulation } from 'progSim.controller';
 
@@ -225,7 +218,7 @@ export class SimulationRoberta implements Simulation {
         }
         Blockly.getMainWorkspace()
             .getAllBlocks()
-            .forEach(function (block) {
+            .forEach(function(block) {
                 $(block.svgPath_).stop(true, true).removeAttr('style');
             });
         this.breakpoints = [];
@@ -262,7 +255,7 @@ export class SimulationRoberta implements Simulation {
                         color: object.color,
                         form: SimObjectShape.Rectangle,
                         type: object.type,
-                        markerId: myId,
+                        markerId: myId
                     };
                 } else {
                     return {
@@ -273,7 +266,7 @@ export class SimulationRoberta implements Simulation {
                         theta: object.theta,
                         color: object.color,
                         form: SimObjectShape.Rectangle,
-                        type: object.type,
+                        type: object.type
                     };
                 }
             } else if (object instanceof TriangleSimulationObject) {
@@ -286,7 +279,7 @@ export class SimulationRoberta implements Simulation {
                     cy: object.cy / height,
                     color: object.color,
                     form: SimObjectShape.Triangle,
-                    type: object.type,
+                    type: object.type
                 };
             } else if (object instanceof CircleSimulationObject) {
                 return {
@@ -295,33 +288,33 @@ export class SimulationRoberta implements Simulation {
                     r: object.r / height / width,
                     color: object.color,
                     form: SimObjectShape.Circle,
-                    type: object.type,
+                    type: object.type
                 };
             }
         }
 
         let robotPosesList: Pose[][] = this.scene.getRobotPoses();
-        config.robotPoses = robotPosesList.map(function (pose) {
+        config.robotPoses = robotPosesList.map(function(pose) {
             return [
                 {
                     x: pose[0].x / width,
                     y: pose[0].y / height,
-                    theta: pose[0].theta,
+                    theta: pose[0].theta
                 },
                 {
                     x: pose[1].x / width,
                     y: pose[1].y / height,
-                    theta: pose[1].theta,
-                },
+                    theta: pose[1].theta
+                }
             ];
         });
-        config.obstacles = this.scene.obstacleList.map(function (object) {
+        config.obstacles = this.scene.obstacleList.map(function(object) {
             return calculateShape(object);
         });
-        config.colorAreas = this.scene.colorAreaList.map(function (object) {
+        config.colorAreas = this.scene.colorAreaList.map(function(object) {
             return calculateShape(object);
         });
-        config.marker = this.scene.markerList.map(function (object) {
+        config.marker = this.scene.markerList.map(function(object) {
             return calculateShape(object);
         });
         return config;
@@ -345,7 +338,7 @@ export class SimulationRoberta implements Simulation {
             UTIL.extendMouseEvent(e, this.scale, $('#robotLayer'));
             this.lastMousePosition = {
                 x: e.startX,
-                y: e.startY,
+                y: e.startY
             };
         }
         switch (e.type) {
@@ -438,10 +431,10 @@ export class SimulationRoberta implements Simulation {
         $('#backgroundFileSelector').attr('accept', '.json');
         $('#backgroundFileSelector').off();
         let sim = this;
-        $('#backgroundFileSelector').onWrap('change', function (event) {
+        $('#backgroundFileSelector').onWrap('change', function(event) {
             let file = event.target['files'][0];
             let reader = new FileReader();
-            reader.onload = function (event) {
+            reader.onload = function(event) {
                 try {
                     const configData = JSON.parse((event as any).target.result);
                     sim.setNewConfig(configData);
@@ -462,12 +455,12 @@ export class SimulationRoberta implements Simulation {
         $backgroundFileSelector.attr('accept', '.png, .jpg, .jpeg, .svg');
         $backgroundFileSelector.clickWrap(); // opening dialog
         let sim = this;
-        $backgroundFileSelector.on('change', function (event) {
+        $backgroundFileSelector.on('change', function(event) {
             let file = event.target['files'][0];
             let reader = new FileReader();
-            reader.onload = function () {
+            reader.onload = function() {
                 let img = new Image();
-                img.onload = function () {
+                img.onload = function() {
                     let canvas = document.createElement('canvas');
                     canvas.width = img.width;
                     canvas.height = img.height;
@@ -476,7 +469,7 @@ export class SimulationRoberta implements Simulation {
                     let dataURL = canvas.toDataURL('image/png');
                     let image = new Image(canvas.width, canvas.height);
                     image.src = dataURL;
-                    image.onload = function () {
+                    image.onload = function() {
                         if (sim.scene.customBackgroundLoaded) {
                             // replace previous image
                             sim.scene.imgBackgroundList[sim.scene.imgBackgroundList.length - 1] = image;
@@ -486,20 +479,20 @@ export class SimulationRoberta implements Simulation {
                         sim.setBackground(sim.scene.imgBackgroundList.length - 1);
                     };
                     if (UTIL.isLocalStorageAvailable()) {
-                        $('#show-message-confirm').oneWrap('shown.bs.modal', function () {
+                        $('#show-message-confirm').oneWrap('shown.bs.modal', function() {
                             $('#confirm').off();
-                            $('#confirm').on('click', function (e) {
+                            $('#confirm').on('click', function(e) {
                                 e.preventDefault();
                                 localStorage.setItem(
                                     'customBackground',
                                     JSON.stringify({
                                         image: dataURL.replace(/^data:image\/(png|jpg);base64,/, ''),
-                                        timestamp: new Date().getTime(),
+                                        timestamp: new Date().getTime()
                                     })
                                 );
                             });
                             $('#confirmCancel').off();
-                            $('#confirmCancel').on('click', function (e) {
+                            $('#confirmCancel').on('click', function(e) {
                                 e.preventDefault();
                             });
                         });
@@ -545,20 +538,20 @@ export class SimulationRoberta implements Simulation {
                 shades: 1,
                 hues: 8,
                 customColors: robotColors,
-                setText: false,
+                setText: false
             });
         } else {
             this.colorpicker = new HUEBEE('#colorpicker', {
                 shades: 1,
                 hues: 8,
-                setText: false,
+                setText: false
             });
         }
-        this.colorpicker.on('change', function (color) {
+        this.colorpicker.on('change', function(color) {
             sim.scene.changeColorWithColorPicker(color);
         });
         let close = HUEBEE.prototype.close;
-        HUEBEE.prototype.close = function () {
+        HUEBEE.prototype.close = function() {
             $('.huebee__container').off('mouseup touchend', (e) => {
                 e.stopPropagation();
                 sim.resetColorpickerCursor();
@@ -566,7 +559,7 @@ export class SimulationRoberta implements Simulation {
             close.call(this);
         };
         let open = HUEBEE.prototype.open;
-        HUEBEE.prototype.open = function () {
+        HUEBEE.prototype.open = function() {
             open.call(this);
             $('.huebee__container').on('mouseup touchend', (e) => {
                 sim.resetColorpickerCursor();
@@ -582,13 +575,13 @@ export class SimulationRoberta implements Simulation {
             // handle any mouse event that is not captured by the object's mouse listener on the specific layers
             this.handleMouse(e);
         });
-        $('#robotLayer').on('click touchstart', function (e) {
+        $('#robotLayer').on('click touchstart', function(e) {
             $('#robotLayer').attr('tabindex', 0);
             $('#robotLayer').trigger('focus');
             e.preventDefault();
         });
-        $('#blocklyDiv').on('click touchstart', function (e) {
-            $('#blocklyDiv').attr('tabindex', 0);
+        $('#blocklyDiv').on('click touchstart', function(e) {
+            // $('#blocklyDiv').attr('tabindex', 0);
             $('#blocklyDiv').trigger('focus');
             e.preventDefault();
         });
@@ -671,7 +664,7 @@ export class SimulationRoberta implements Simulation {
         this.callbackOnEnd = callbackOnEnd;
         let simulation = this;
         this.init(result, false, () => {
-            setTimeout(function () {
+            setTimeout(function() {
                 simulation.interpreterRunning = true;
             }, 250);
         });
@@ -710,7 +703,7 @@ export class SimulationRoberta implements Simulation {
                 case 'circle':
                     newObject.p = {
                         x: object.x * width,
-                        y: object.y * height,
+                        y: object.y * height
                     };
                     newObject.params = [object.r * height * width];
                     break;
@@ -753,9 +746,9 @@ export class SimulationRoberta implements Simulation {
 
         let importMarker = [];
         relatives.marker &&
-            relatives.marker.forEach((marker) => {
-                importMarker.push(calculateShape(marker));
-            });
+        relatives.marker.forEach((marker) => {
+            importMarker.push(calculateShape(marker));
+        });
         this.scene.addImportMarkerList(importMarker);
     }
 
@@ -805,14 +798,14 @@ export class SimulationRoberta implements Simulation {
         if (this.debugMode) {
             Blockly.getMainWorkspace()
                 .getAllBlocks()
-                .forEach(function (block) {
+                .forEach(function(block) {
                     if (!$(block.svgGroup_).hasClass('blocklyDisabled')) {
                         if (sim.observers.hasOwnProperty(block.id)) {
                             sim.observers[block.id].disconnect();
                         }
 
-                        let observer = new MutationObserver(function (mutations) {
-                            mutations.forEach(function (mutation) {
+                        let observer = new MutationObserver(function(mutations) {
+                            mutations.forEach(function(mutation) {
                                 if ($(block.svgGroup_).hasClass('blocklyDisabled')) {
                                     sim.removeBreakPoint(block);
                                     $(block.svgPath_).removeClass('breakpoint').removeClass('selectedBreakpoint');
@@ -839,7 +832,7 @@ export class SimulationRoberta implements Simulation {
         } else {
             Blockly.getMainWorkspace()
                 .getAllBlocks()
-                .forEach(function (block) {
+                .forEach(function(block) {
                     if (sim.observers.hasOwnProperty(block.id)) {
                         sim.observers[block.id].disconnect();
                     }
@@ -867,7 +860,7 @@ export class SimulationRoberta implements Simulation {
 // Added high resolution timing. This window.performance.now() polyfill can be used: https://gist.github.com/jalbam/cc805ac3cfe14004ecdf323159ecf40e
 // MIT license
 // Gist: https://gist.github.com/jalbam/5fe05443270fa6d8136238ec72accbc0
-(function () {
+(function() {
     var vendors = ['webkit', 'moz', 'ms', 'o'],
         vp = null;
     for (var x = 0; x < vendors.length && !window.requestAnimationFrame && !window.cancelAnimationFrame; x++) {
@@ -879,10 +872,10 @@ export class SimulationRoberta implements Simulation {
         //iOS6 is buggy.
         var lastTime = 0;
         // @ts-ignore
-        window.requestAnimationFrame = function (callback, element) {
+        window.requestAnimationFrame = function(callback, element) {
             var now = window.performance.now();
             var nextTime = Math.max(lastTime + 16, now); //First time will execute it immediately but barely noticeable and performance is gained.
-            return setTimeout(function () {
+            return setTimeout(function() {
                 callback((lastTime = nextTime));
             }, nextTime - now);
         };

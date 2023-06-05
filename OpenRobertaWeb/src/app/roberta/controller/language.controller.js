@@ -1,12 +1,8 @@
 import * as LOG from 'log';
 import * as $ from 'jquery';
+import 'bootstrap';
 import * as GUISTATE_C from 'guiState.controller';
-import * as PROGRAM_C from 'program.controller';
-import * as CONFIGURATION_C from 'configuration.controller';
-import * as USER_C from 'user.controller';
-import * as NOTIFICATION_C from 'notification.controller';
 import * as Blockly from 'blockly';
-import * as NN_C from 'nn.controller';
 
 /**
  * Initialize language switching
@@ -97,19 +93,6 @@ function switchLanguage(language) {
     getCachedScript(url).done(function (data) {
         translate();
         GUISTATE_C.setLanguage(language);
-        PROGRAM_C.reloadView();
-        CONFIGURATION_C.reloadView();
-        USER_C.initValidationMessages();
-        NOTIFICATION_C.reloadNotifications();
-        NN_C.reloadViews();
-        var value = Blockly.Msg.MENU_START_BRICK;
-        if (value.indexOf('$') >= 0) {
-            value = value.replace('$', GUISTATE_C.getRobotRealName());
-        }
-        $('#menuRunProg').text(value);
-        if (GUISTATE_C.getBlocklyWorkspace()) {
-            GUISTATE_C.getBlocklyWorkspace().robControls.refreshTooltips(GUISTATE_C.getRobotRealName());
-        }
     });
     LOG.info('language switched to ' + language);
 }
@@ -135,117 +118,118 @@ function translate($domElement) {
         if (value == undefined) {
             console.log('UNDEFINED    key : value = ' + key + ' : ' + value);
         }
+        $(this).attr('data-bs-original-title', value);
         if (lkey === 'Blockly.Msg.SOURCE_CODE_EDITOR_PLACEHOLDER') {
             $('#sourceCodeEditorTextArea').attr('placeholder', value);
         } else if (lkey === 'Blockly.Msg.SOURCE_CODE_EDITOR_UPLOAD_TOOLTIP') {
-            $('#uploadSourceCodeEditor').attr('data-original-title', value);
+            $('#uploadSourceCodeEditor').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP') {
-            $('#importSourceCodeEditor').attr('data-original-title', value);
+            $('#importSourceCodeEditor').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.SOURCE_CODE_EDITOR_BUILD_TOOLTIP') {
-            $('#buildSourceCodeEditor').attr('data-original-title', value);
+            $('#buildSourceCodeEditor').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.SOURCE_CODE_EDITOR_RUN_TOOLTIP') {
-            $('#runSourceCodeEditor').attr('data-original-title', value);
+            $('#runSourceCodeEditor').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_EDIT_TOOLTIP') {
-            $('#head-navi-tooltip-program').attr('data-original-title', value);
-            $('#head-navi-tooltip-configuration').attr('data-original-title', value);
-        } else if (lkey == 'Blockly.Msg.MENU_RIGHT_CODE_TOOLTIP') {
-            $('#codeButton').attr('data-original-title', value);
-        } else if (lkey == 'Blockly.Msg.MENU_RIGHT_SIM_TOOLTIP') {
-            $('#simButton').attr('data-original-title', value);
-        } else if (lkey == 'Blockly.Msg.MENU_RIGHT_SIM_DEBUG_TOOLTIP') {
-            $('#simDebugButton').attr('data-original-title', value);
-        } else if (lkey == 'Blockly.Msg.MENU_RIGHT_INFO_TOOLTIP') {
-            $('#infoButton').attr('data-original-title', value);
-        } else if (lkey == 'Blockly.Msg.MENU_RIGHT_HELP_TOOLTIP') {
-            $('#helpButton').attr('data-original-title', value);
-        } else if (lkey == 'Blockly.Msg.MENU_RIGHT_LEGAL_TOOLTIP') {
-            $('#legalButton').attr('data-original-title', value);
+            $('#head-navi-tooltip-program').attr('data-bs-original-title', value);
+            $('#head-navi-tooltip-configuration').attr('data-bs-original-title', value);
+        } else if (lkey === 'Blockly.Msg.MENU_RIGHT_CODE_TOOLTIP') {
+            $('#codeButton').attr('data-bs-original-title', value);
+        } else if (lkey === 'Blockly.Msg.MENU_RIGHT_SIM_TOOLTIP') {
+            $('#simButton').attr('data-bs-original-title', value);
+        } else if (lkey === 'Blockly.Msg.MENU_RIGHT_SIM_DEBUG_TOOLTIP') {
+            $('#simDebugButton').attr('data-bs-original-title', value);
+        } else if (lkey === 'Blockly.Msg.MENU_RIGHT_INFO_TOOLTIP') {
+            $('#infoButton').attr('data-bs-original-title', value);
+        } else if (lkey === 'Blockly.Msg.MENU_RIGHT_HELP_TOOLTIP') {
+            $('#helpButton').attr('data-bs-original-title', value);
+        } else if (lkey === 'Blockly.Msg.MENU_RIGHT_LEGAL_TOOLTIP') {
+            $('#legalButton').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_ROBOT_TOOLTIP') {
-            $('#head-navi-tooltip-robot').attr('data-original-title', value);
+            $('#head-navi-tooltip-robot').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_HELP_TOOLTIP') {
-            $('#head-navi-tooltip-help').attr('data-original-title', value);
+            $('#head-navi-tooltip-help').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_USER_TOOLTIP') {
-            $('#head-navi-tooltip-user').attr('data-original-title', value);
+            $('#head-navi-tooltip-user').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_GALLERY_TOOLTIP') {
-            $('#head-navi-tooltip-gallery').attr('data-original-title', value);
+            $('#head-navi-tooltip-gallery').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_LANGUAGE_TOOLTIP') {
-            $('#head-navi-tooltip-language').attr('data-original-title', value);
+            $('#head-navi-tooltip-language').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_USER_STATE_TOOLTIP') {
-            $('#iconDisplayLogin').attr('data-original-title', value);
+            $('#iconDisplayLogin').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_ROBOT_STATE_TOOLTIP') {
-            $('#iconDisplayRobotState').attr('data-original-title', value);
+            $('#iconDisplayRobotState').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_SIM_START_TOOLTIP') {
-            $('#simControl').attr('data-original-title', value);
-            $('#goto-sim').attr('data-original-title', value).tooltip({ placement: 'top' });
-            $('#explore-goto-sim').attr('data-original-title', value).tooltip({ placement: 'top' });
-            $('#learn-goto-sim').attr('data-original-title', value).tooltip({ placement: 'top' });
+            $('#simControl').attr('data-bs-original-title', value);
+            $('#goto-sim') && $('#goto-sim').attr('data-bs-original-title', value).tooltip({ placement: 'top' });
+            $('#explore-goto-sim') && $('#explore-goto-sim').attr('data-bs-original-title', value).tooltip({ placement: 'top' });
+            $('#learn-goto-sim') && $('#learn-goto-sim').attr('data-bs-original-title', value).tooltip({ placement: 'top' });
         } else if (lkey === 'Blockly.Msg.MENU_SIM_STOP_TOOLTIP') {
-            $('#simCancel').attr('data-original-title', value);
+            $('#simCancel').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_SIM_SCENE_TOOLTIP') {
-            $('#simScene').attr('data-original-title', value);
+            $('#simScene').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_SIM_ADD_COLOR_OBJECT_TOOLTIP') {
-            $('#simCustomColorObject').attr('data-original-title', value);
+            $('#simCustomColorObject').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_SIM_ADD_OBSTACLE_TOOLTIP') {
-            $('#simCustomObstacle').attr('data-original-title', value);
+            $('#simCustomObstacle').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_SIM_ADD_MARKER_OBJECT_TOOLTIP') {
-            $('#simMarkerObject').attr('data-original-title', value);
+            $('#simMarkerObject').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_SIM_DELETE_ELEMENTS_TOOLTIP') {
-            $('#simDeleteElements').attr('data-original-title', value);
+            $('#simDeleteElements').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_SIM_CHANGE_COLOR_TOOLTIP') {
-            $('#simChangeObjectColor').attr('data-original-title', value);
+            $('#simChangeObjectColor').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_SIM_DELETE_OBJECT_TOOLTIP') {
-            $('#simDeleteObject').attr('data-original-title', value);
+            $('#simDeleteObject').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_SIM_CONFIG_EXPORT') {
-            $('#simDownloadConfig').attr('data-original-title', value);
+            $('#simDownloadConfig').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_SIM_CONFIG_IMPORT') {
-            $('#simUploadConfig').attr('data-original-title', value);
+            $('#simUploadConfig').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP') {
-            $('#simRobot').attr('data-original-title', value);
+            $('#simRobot').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.MENU_SIM_VALUES_TOOLTIP') {
-            $('#simValues').attr('data-original-title', value);
+            $('#simValues').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.MENU_SIM_TRAIL_TOOLTIP') {
-            $('#simTrail').attr('data-original-title', value);
+            $('#simTrail').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.MENU_SIM_IMPORT_TOOLTIP') {
-            $('#simImport').attr('data-original-title', value);
+            $('#simImport').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.MENU_SIM_POSE_TOOLTIP') {
-            $('#simResetPose').attr('data-original-title', value);
+            $('#simResetPose').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.MENU_DEBUG_START_TOOLTIP') {
-            $('#debugMode').attr('data-original-title', value);
+            $('#debugMode').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP') {
-            $('#simControlBreakPoint').attr('data-original-title', value);
+            $('#simControlBreakPoint').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.MENU_DEBUG_STEP_INTO_TOOLTIP') {
-            $('#simControlStepInto').attr('data-original-title', value);
+            $('#simControlStepInto').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.MENU_DEBUG_STEP_OVER_TOOLTIP') {
-            $('#simControlStepOver').attr('data-original-title', value);
+            $('#simControlStepOver').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.MENU_CODE_DOWNLOAD_TOOLTIP') {
-            $('#codeDownload').attr('data-original-title', value);
-            $('#downloadSourceCodeEditor').attr('data-original-title', value);
+            $('#codeDownload').attr('data-bs-original-title', value);
+            $('#downloadSourceCodeEditor').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.MENU_CODE_REFRESH_TOOLTIP') {
-            $('#codeRefresh').attr('data-original-title', value);
+            $('#codeRefresh').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.MENU_TUTORIAL_TOOLTIP') {
-            $('#head-navi-tooltip-tutorials').attr('data-original-title', value);
+            $('#head-navi-tooltip-tutorials').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.MENU_RIGHT_TUTORIAL_TOOLTIP') {
-            $('#tutorialButton').attr('data-original-title', value);
+            $('#tutorialButton').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.BUTTON_EMPTY_LIST') {
-            $('#logList>.bootstrap-table').find('button[name="refresh"]').attr('data-original-title', value);
+            $('#logList>.bootstrap-table').find('button[name="refresh"]').attr('data-bs-original-title', value);
         } else if (lkey === 'Blockly.Msg.LIST_BACK_TOOLTIP') {
-            $('.bootstrap-table').find('.backList').attr('data-original-title', value);
+            $('.bootstrap-table').find('.backList').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP') {
-            $('#deleteSomeProg').attr('data-original-title', value);
+            $('#deleteSomeProg').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.PROGLIST_DELETE_TOOLTIP') {
-            $('#programNameTable').find('.delete').attr('data-original-title', value);
+            $('#programNameTable').find('.delete').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.PROGLIST_SHARE_TOOLTIP') {
-            $('#programNameTable').find('.share').attr('data-original-title', value);
+            $('#programNameTable').find('.share').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP') {
-            $('#programNameTable').find('.gallery').attr('data-original-title', value);
+            $('#programNameTable').find('.gallery').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.PROGLIST_LOAD_TOOLTIP') {
-            $('#programNameTable').find('.load').attr('data-original-title', value);
+            $('#programNameTable').find('.load').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP') {
-            $('#deleteSomeConf').attr('data-original-title', value);
+            $('#deleteSomeConf').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.CONFLIST_DELETE_TOOLTIP') {
-            $('#confNameTable').find('.delete').attr('data-original-title', value);
+            $('#confNameTable').find('.delete').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.CONFLIST_LOAD_TOOLTIP') {
-            $('#confNameTable').find('.load').attr('data-original-title', value);
+            $('#confNameTable').find('.load').attr('data-bs-original-title', value);
         } else if (lkey == 'Blockly.Msg.OLDER_THEN_14' || lkey == 'Blockly.Msg.YOUNGER_THEN_14') {
             $(this).html(value);
         } else if (lkey == 'Blockly.Msg.NN_EXPLORE_RUN_FULL') {
@@ -270,6 +254,8 @@ function translate($domElement) {
         } else if (lkey == 'Blockly.Msg.NN_LEARN_UPLOAD_POPUP') {
             $('#nn-explore-upload-popup').attr('data-original-title', value).tooltip({ placement: 'top' });
             $('#nn-learn-upload-popup').attr('data-original-title', value).tooltip({ placement: 'top' });
+            let searchPlaceholder = Blockly.Msg.START_FORMATSEARCH;
+            $('#start input.form-control.search-input').attr('placeholder', searchPlaceholder);
         } else if ($(this).data('translationTargets')) {
             var attributeTargets = $(this).data('translationTargets').split(' ');
             for (var key in attributeTargets) {
@@ -284,6 +270,7 @@ function translate($domElement) {
             $(this).attr('value', value);
         }
     });
+    $('#start input.form-control.search-input').attr('placeholder', Blockly.Msg.START_FORMATSEARC);
 }
 export { init, translate };
 
