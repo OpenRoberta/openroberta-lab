@@ -1,57 +1,57 @@
-define(["require", "exports", "util", "message", "guiState.controller", "progList.model", "program.model", "program.controller", "blockly", "jquery", "bootstrap-table", "bootstrap-tagsinput"], function (require, exports, UTIL, MSG, GUISTATE_C, PROGLIST, PROGRAM, PROGRAM_C, Blockly, $) {
+define(["require", "exports", "util", "message", "guiState.controller", "progList.model", "program.model", "program.controller", "blockly", "cardView", "jquery", "bootstrap-table", "bootstrap-tagsinput"], function (require, exports, UTIL, MSG, GUISTATE_C, PROGLIST, PROGRAM, PROGRAM_C, Blockly, CardView, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.formatTags = exports.formatDate = exports.formatAuthor = exports.formatProgramDescription = exports.formatProgramName = exports.formatRobot = exports.titleLikes = exports.titleNumberOfViews = exports.rowAttributes = exports.rowStyle = exports.init = void 0;
+    exports.titleLikes = exports.titleNumberOfViews = exports.rowAttributes = exports.rowStyle = exports.init = exports.switchLanguage = void 0;
     var BACKGROUND_COLORS = ['#33B8CA', '#EBC300', '#005A94', '#179C7D', '#F29400', '#E2001A', '#EB6A0A', '#8FA402', '#BACC1E', '#9085BA', '#FF69B4', '#DF01D7'];
     var currentColorIndex;
     var currentViewMode = 'gallery';
+    var allRows = [];
     /**
      * Initialize table of programs
      */
     function init() {
-        initGalleryToolbar();
         initGalleryList();
+        initGalleryToolbar();
         initGalleryListEvents();
     }
     exports.init = init;
-    //TODO: Robot group names exists in plugin properties
-    function getRobotGroups() {
-        var robots = GUISTATE_C.getRobots();
-        var groups = {};
-        var coerceName = function (name, group) {
-            if (group === 'arduino')
-                return 'Nepo4Arduino';
-            if (group === 'ev3')
-                return 'Ev3';
-            return GUISTATE_C.getMenuRobotRealName(name);
-        };
-        for (var propt in robots) {
-            var group = robots[propt].group;
-            var name = robots[propt].name;
-            if (group && !groups[group]) {
-                groups[group] = coerceName(name, group);
-            }
+    function switchLanguage() {
+        $('#galleryTable').bootstrapTable('destroy');
+        init();
+        if (GUISTATE_C.getView() === 'tabGalleryList') {
+            showView();
         }
-        return groups;
     }
+    exports.switchLanguage = switchLanguage;
     function initGalleryToolbar() {
+        var $selectRobot = $('<select id="filterRobot" class="filter form-select"></select>');
+        $('#galleryList .search').prepend($selectRobot);
         var groups = getRobotGroups();
-        var filterField = $('#filterRobot');
+        var $filterField = $('#filterRobot');
         for (var group in groups) {
-            filterField.append(new Option(groups[group], group));
+            $filterField.append(new Option(groups[group], group));
         }
-        filterField.append(new Option('All robots', 'all', true, true));
+        $filterField.append(new Option('All robots', 'all', true, true));
+        var $selectOrderBy = $('<label>Order by:</label> <select class="filter form-select" id="fieldOrderBy">' +
+            '<option selected="" value="4:desc">Newest</option>' +
+            '<option value="4:asc">Oldest</option>' +
+            '<option value="1:asc">Program name</option>' +
+            '<option value="0:asc">Robot</option>' +
+            '</select>');
+        $('#galleryList .search').append($selectOrderBy);
     }
     function initGalleryList() {
         $('#galleryTable').bootstrapTable({
-            height: UTIL.calcDataTableHeight(),
+            locale: GUISTATE_C.getLanguage(),
             toolbar: '#galleryListToolbar',
-            showRefresh: 'true',
+            height: UTIL.calcDataTableHeight(),
             cardView: 'true',
             rowStyle: rowStyle,
             rowAttributes: rowAttributes,
+            search: true,
+            showRefresh: 'true',
             sortName: 4,
             sortOrder: 'desc',
-            search: true,
+            filterControl: true,
             buttonsAlign: 'right',
             resizable: 'true',
             iconsPrefix: 'typcn',
@@ -65,38 +65,50 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
             columns: [
                 {
                     sortable: true,
-                    //visible : false,
-                    formatter: formatRobot,
+                    title: '',
+                    formatter: CardView.robot,
+                },
+                {
+                    title: '',
+                    sortable: true,
+                    formatter: CardView.name,
+                },
+                {
+                    title: '',
+                    sortable: true,
+                    formatter: CardView.programDescription,
+                },
+                {
+                    title: '',
+                    sortable: true,
+                    formatter: function (goal) {
+                        return CardView.label(goal, 'GALLERY_BY', 'cardViewInfo');
+                    },
                 },
                 {
                     sortable: true,
-                    formatter: formatProgramName,
+                    title: '',
+                    formatter: function (date) {
+                        return CardView.label(UTIL.formatDate(date.replace(/\s/, 'T')), 'GALLERY_DATE', 'cardViewInfo');
+                    },
                 },
                 {
-                    sortable: true,
-                    formatter: formatProgramDescription,
-                },
-                {
-                    formatter: formatAuthor,
-                    sortable: true,
-                },
-                {
-                    sortable: true,
-                    formatter: formatDate,
-                },
-                {
-                    title: titleNumberOfViews,
+                    title: CardView.titleTypcn('eye-outline'),
                     sortable: true,
                 },
                 {
-                    title: titleLikes,
+                    title: CardView.titleTypcn('heart-full-outline'),
                     sortable: true,
                 },
                 {
+                    title: '',
                     sortable: true,
-                    formatter: formatTags,
+                    formatter: function (value, row) {
+                        return CardView.programTags(row[2]);
+                    },
                 },
                 {
+                    title: '',
                     events: eventsLike,
                     formatter: formatLike,
                 },
@@ -105,23 +117,20 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
         $('#galleryTable').bootstrapTable('togglePagination');
     }
     function initGalleryListEvents() {
+        $('#tabGalleryList').onWrap('shown.bs.tab', function () {
+            guiStateController.setView('tabGalleryList');
+            showView();
+            return false;
+        }, 'gallery clicked');
         $(window).resize(function () {
             $('#galleryTable').bootstrapTable('resetView', {
                 height: UTIL.calcDataTableHeight(),
             });
         });
-        $('#tabGalleryList').onWrap('show.bs.tab', function (e) {
-            $('#filterRobot').val(GUISTATE_C.getRobotGroup());
-            guiStateController.setView('tabGalleryList');
-            if ($('#galleryTable').bootstrapTable('getData').length === 0) {
-                $('.pace').show(); // Show loading icon and hide gallery table
-            }
-            loadGalleryData();
-        }, 'show gallery list');
         $('#tabGalleryList').onWrap('shown.bs.tab', function (e) {
             $(window).trigger('resize');
         }, 'shown gallery list');
-        $('#galleryTable').onWrap('page-change.bs.table', function (e) {
+        $('#galleryTable').onWrap('post-body.bs.table', function (e) {
             configureTagsInput();
         }, 'page-change gallery list');
         $('#galleryList')
@@ -144,8 +153,8 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
         $('#fieldOrderBy').change(function (e) {
             var fieldData = e.target.value.split(':');
             var row = parseInt(fieldData[0]);
-            $('#galleryTable').bootstrapTable('refreshOptions', {
-                sortName: row,
+            $('#galleryTable').bootstrapTable('sortBy', {
+                field: row,
                 sortOrder: fieldData[1],
             });
             configureTagsInput();
@@ -176,25 +185,48 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
     function update(result) {
         UTIL.response(result);
         if (result.rc === 'ok') {
+            allRows = result.programNames;
             $('#galleryTable').bootstrapTable('load', result.programNames);
             configureTagsInput();
         }
         $('.pace').fadeOut(300); // Hide loading icon and show gallery table
     }
     function updateLike(value, index, row) {
-        var likes = row[6] + value;
-        $('#galleryTable').bootstrapTable('updateCell', {
-            index: index,
-            field: 6,
-            value: likes,
-        });
-        var like = value > 0 ? true : false;
-        $('#galleryTable').bootstrapTable('updateCell', {
-            index: index,
-            field: 8,
-            value: like,
+        var myIndex = allRows.indexOf(row);
+        row[6] += value;
+        row[8] = value > 0 ? true : false;
+        $('#galleryTable').bootstrapTable('updateRow', {
+            index: myIndex,
+            row: row,
         });
         configureTagsInput();
+    }
+    function showView() {
+        $('#filterRobot').val(GUISTATE_C.getRobotGroup());
+        if ($('#galleryTable').bootstrapTable('getData').length === 0) {
+            $('.pace').show(); // Show loading icon and hide gallery table
+        }
+        loadGalleryData();
+    }
+    //TODO: Robot group names exists in plugin properties
+    function getRobotGroups() {
+        var robots = GUISTATE_C.getRobots();
+        var groups = {};
+        var coerceName = function (name, group) {
+            if (group === 'arduino')
+                return 'Nepo4Arduino';
+            if (group === 'ev3')
+                return 'Ev3';
+            return GUISTATE_C.getMenuRobotRealName(name);
+        };
+        for (var propt in robots) {
+            var group = robots[propt].group;
+            var name = robots[propt].name;
+            if (group && !groups[group]) {
+                groups[group] = coerceName(name, group);
+            }
+        }
+        return groups;
     }
     var eventsLike = {
         'click .like': function (e, value, row, index) {
@@ -234,7 +266,7 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
     };
     var rowStyle = function (row, index) {
         return {
-            classes: currentViewMode === 'gallery' ? 'galleryNode col-xl-2 col-lg-3 col-md-4 col-sm-6' : 'listNode',
+            classes: currentViewMode === 'gallery' ? 'galleryNode col-xxl-2 col-lg-3 col-md-4 col-sm-6' : 'listNode',
         };
     };
     exports.rowStyle = rowStyle;
@@ -243,7 +275,7 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
         var hash = UTIL.getHashFrom(row[0] + row[1] + row[3]);
         currentColorIndex = hash % BACKGROUND_COLORS.length;
         return {
-            style: 'background-color :' + BACKGROUND_COLORS[currentColorIndex] + ';' + 'border: solid 12px white; cursor: pointer;  z-index: 1;',
+            style: 'background-color :' + BACKGROUND_COLORS[currentColorIndex] + ';' + 'cursor: pointer;  z-index: 1;',
         };
     };
     exports.rowAttributes = rowAttributes;
@@ -251,58 +283,17 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
     exports.titleNumberOfViews = titleNumberOfViews;
     var titleLikes = '<span class="galleryIcon typcn typcn-heart-full-outline" />';
     exports.titleLikes = titleLikes;
-    var formatRobot = function (value, row, index) {
-        return '<div class="typcn typcn-' + row[0] + '"></div>';
-    };
-    exports.formatRobot = formatRobot;
-    var formatProgramName = function (value, row, index) {
-        return '<div class="galleryProgramname">' + value + '</div>';
-    };
-    exports.formatProgramName = formatProgramName;
-    var formatProgramDescription = function (value, row, index) {
-        var xmlDoc = Blockly.Xml.textToDom(value, Blockly.getMainWorkspace());
-        var description = xmlDoc.getAttribute('description');
-        if (!description) {
-            description = '&nbsp;';
-        }
-        return '<div class="galleryDescription color' + currentColorIndex + '">' + description + '</div>';
-    };
-    exports.formatProgramDescription = formatProgramDescription;
-    var formatAuthor = function (value, row, index) {
-        return ("<div class='galleryAuthor'><span class='title' lkey='Blockly.Msg.GALLERY_BY'>" +
-            (Blockly.Msg.GALLERY_BY || 'von') +
-            '</span>' +
-            value +
-            '</span></div>');
-    };
-    exports.formatAuthor = formatAuthor;
-    var formatDate = function (value, row, index) {
-        return ("<span class='title' lkey='Blockly.Msg.GALLERY_DATE'>" +
-            (Blockly.Msg.GALLERY_DATE || 'erstellt') +
-            '</span>' +
-            UTIL.formatDate(value.replace(/\s/, 'T')));
-    };
-    exports.formatDate = formatDate;
-    var formatTags = function (value, row, index) {
-        var xmlDoc = Blockly.Xml.textToDom(row[2], Blockly.getMainWorkspace());
-        var tags = xmlDoc.getAttribute('tags');
-        if (!tags) {
-            tags = '&nbsp;';
-        }
-        return '<input class="infoTags" type="text" value="' + tags + '" data-role="tagsinput"/>';
-    };
-    exports.formatTags = formatTags;
     var formatLike = function (value, row, index) {
         if (GUISTATE_C.isUserLoggedIn()) {
             if (value) {
-                return ('<div class="galleryLike"><a href="#" class="dislike galleryLike typcn typcn-heart-half-outline"><span lkey="Blockly.Msg.GALLERY_DISLIKE">' +
-                    (Blockly.Msg.GALLERY_DISLIKE || 'gefällt mir nicht mehr') +
-                    '</span></a></div>');
+                return ('<div class="galleryLike"><button href="#" class="dislike galleryLike btn"><span lkey="Blockly.Msg.GALLERY_DISLIKE">' +
+                    (Blockly.Msg.GALLERY_DISLIKE || 'GALLERY_DISLIKE') +
+                    '</span></button></div>');
             }
             else {
-                return ('<div class="galleryLike"><a href="#" class="like galleryLike typcn typcn-heart-full-outline"><span lkey="Blockly.Msg.GALLERY_LIKE">' +
-                    (Blockly.Msg.GALLERY_LIKE || 'gefällt mir') +
-                    '</span></a></div>');
+                return ('<div class="galleryLike"><button href="#" class="like galleryLike btn"><span lkey="Blockly.Msg.GALLERY_LIKE">' +
+                    (Blockly.Msg.GALLERY_LIKE || 'GALLERY_LIKE') +
+                    '</span></button></div>');
             }
         }
         else {

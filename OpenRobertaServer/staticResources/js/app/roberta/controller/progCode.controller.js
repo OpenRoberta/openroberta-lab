@@ -79,7 +79,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "program
     }
     function toggleCode($button) {
         if ($('#codeButton').hasClass('rightActive')) {
-            $('#blockly').closeRightView();
+            $('#blocklyDiv').closeRightView();
         }
         else {
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);

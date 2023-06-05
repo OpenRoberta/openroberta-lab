@@ -1,7 +1,7 @@
 // @ts-ignore
 import RobotMicrobit from 'robot.microbit';
-import { CalliopeLightSensor, CompassSensor, GestureSensor, MicrobitPins, Pins, TemperatureSensor, TouchKeys, VolumeMeterSensor } from './robot.sensors';
-import { MbedDisplay, PinActuators, RGBLed, WebAudio } from './robot.actuators';
+import { CalliopeLightSensor, CompassSensor, GestureSensor, MicrobitPins, Pins, TemperatureSensor, TouchKeys, VolumeMeterSensor } from 'robot.sensors';
+import { MbedDisplay, PinActuators, RGBLed, WebAudio } from 'robot.actuators';
 
 export default class RobotMicrobitv2 extends RobotMicrobit {
     logoSensor: Pins;

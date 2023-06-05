@@ -106,7 +106,7 @@ function initEvents() {
 
 function toggleCode($button) {
     if ($('#codeButton').hasClass('rightActive')) {
-        $('#blockly').closeRightView();
+        $('#blocklyDiv').closeRightView();
     } else {
         var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xmlProgram = Blockly.Xml.domToText(dom);

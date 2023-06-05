@@ -13,7 +13,7 @@ export default class RobotRob3rta extends RobotBaseStationary {
     private ledRight: RGBLed;
     private pinSensors: Pins;
     topView: string =
-        '<div id="mbedContent"><form id="mbed-form"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons"></div></form></div>';
+        '<div id="mbedContent"><form id="mbed-form"><div id="mbedButtons" class="btn-group btn-group-vertical" data-bs-toggle="buttons"></div></form></div>';
     private infraredSensor: Rob3rtaInfraredSensor;
     override timer: Timer = new Timer(1);
     private temperatureSensor: TemperatureSensor;

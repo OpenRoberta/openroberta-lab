@@ -11,7 +11,7 @@ import * as Blockly from 'blockly';
 import * as VolumeMeter from 'volume-meter';
 import * as $ from 'jquery';
 import { SimulationRoberta } from 'simulation.roberta';
-import RobotRobotino from './robot.robotino';
+import RobotRobotino from 'robot.robotino';
 
 export interface ISensor {
     updateSensor(

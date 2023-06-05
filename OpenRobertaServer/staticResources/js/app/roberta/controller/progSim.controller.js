@@ -28,7 +28,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -91,12 +91,12 @@ define(["require", "exports", "message", "util", "guiState.controller", "tour.co
                         if (result.rc == 'ok') {
                             MSG.displayMessage('MESSAGE_EDIT_START', 'TOAST', GUISTATE_C.getProgramName(), null, null);
                             $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
-                            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
+                            $('#simControl').attr('data-bs-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
                             result.savedName = GUISTATE_C.getProgramName();
                             result.updateNNView = true;
                             SIM.run([result], function () {
                                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
-                                $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+                                $('#simControl').attr('data-bs-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
                             });
                         }
                         else {
@@ -108,7 +108,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "tour.co
                 }
                 else {
                     $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
-                    $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+                    $('#simControl').attr('data-bs-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
                     SIM.stopProgram();
                 }
                 return false;
@@ -240,7 +240,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "tour.co
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play').removeClass('typcn-media-stop');
                 C.SIM.endDebugging && C.SIM.endDebugging();
                 C.SIM.stopProgram();
-                $('#blockly').closeRightView(function () {
+                $('#blocklyDiv').closeRightView(function () {
                     C.SIM.stop();
                 });
                 UTIL.closeSimRobotWindow();
@@ -272,7 +272,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "tour.co
         };
         ProgSimController.prototype.resetButtons = function () {
             $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop debug');
-            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+            $('#simControl').attr('data-bs-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
             $('#simTrail').addClass('typcn-chart-line-outline').removeClass('typcn-chart-line');
             $('.simChangeObject').removeClass('disabled').addClass('disabled');
             $('.debug').hide();
@@ -354,7 +354,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "tour.co
             else {
                 if ($('#simControl').hasClass('typcn-media-stop')) {
                     $('#simControl').addClass('blue').removeClass('typcn-media-stop');
-                    $('#simControl').attr('data-original-title', Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP);
+                    $('#simControl').attr('data-bs-original-title', Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP);
                     $('#simStop').show();
                 }
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
@@ -365,7 +365,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "tour.co
             _super.prototype.resetButtons.call(this);
             $('#simStop').addClass('disabled');
             $('#simControl').addClass('debug');
-            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP);
+            $('#simControl').attr('data-bs-original-title', Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP);
             $('.debug').show();
         };
         return ProgSimDebugController;
@@ -435,9 +435,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "tour.co
         ProgSimMultiController.prototype.initEvents = function () {
             var C = this;
             $('#head-navigation-program-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function (event) {
-                var targetId = event.target.id ||
-                    (event.target.children[0] && event.target.children[0].id) ||
-                    (event.target.previousSibling && event.target.previousSibling.id);
+                var targetId = event.target.id || event.currentTarget.id;
                 if (targetId === 'menuRunMulipleSim') {
                     C.SIM = simulation_roberta_1.SimulationRoberta.Instance;
                     C.showListProg();
@@ -464,7 +462,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "tour.co
                             C.toggleMultiSim($('#simButton'), C.getSortedExtractedPrograms());
                         }
                     }, function (values) {
-                        $('#blockly').closeRightView(function () {
+                        $('#blocklyDiv').closeRightView(function () {
                             C.SIM.stop();
                         });
                         MSG.displayInformation({ rc: 'error' }, '', values.message, values.name, null);
@@ -594,6 +592,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "tour.co
             $('#multipleRobotsTable').bootstrapTable({
                 sortName: 'name',
                 toggle: 'multipleRobotsTable',
+                theadClasses: 'table-dark',
                 iconsPrefix: 'typcn',
                 search: true,
                 icons: {
@@ -659,15 +658,15 @@ define(["require", "exports", "message", "util", "guiState.controller", "tour.co
                 var _this = this;
                 if (!SIM.isInterpreterRunning()) {
                     $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
-                    $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
+                    $('#simControl').attr('data-bs-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
                     C.loadProgramms().then(function (loadedPrograms) {
                         Promise.all(loadedPrograms).then(function (values) {
                             SIM.run(C.getSortedExtractedPrograms(), function () {
                                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
-                                $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+                                $('#simControl').attr('data-bs-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
                             });
                         }, function (values) {
-                            $('#blockly').closeRightView(function () {
+                            $('#blocklyDiv').closeRightView(function () {
                                 _this.SIM.stop();
                             });
                             MSG.displayInformation({ rc: 'error' }, '', values.message, values.name, null);
@@ -676,7 +675,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "tour.co
                 }
                 else {
                     $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
-                    $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+                    $('#simControl').attr('data-bs-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
                     SIM.stopProgram();
                 }
                 return false;

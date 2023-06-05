@@ -474,7 +474,7 @@ function shuffle(answers) {
 
 function toggleTutorial($button) {
     if ($('#tutorialButton').hasClass('rightActive')) {
-        $('#blockly').closeRightView();
+        $('#blocklyDiv').closeRightView();
     } else {
         $button.openRightView($('#tutorialDiv'), INITIAL_WIDTH);
     }
@@ -484,9 +484,9 @@ function openTutorialView() {
     if ($('#tutorialDiv').hasClass('rightActive')) {
         return;
     }
-    if ($('#blockly').hasClass('rightActive')) {
+    if ($('#blocklyDiv').hasClass('rightActive')) {
         function waitForClose() {
-            if (!$('#blockly').hasClass('rightActive')) {
+            if (!$('#blocklyDiv').hasClass('rightActive')) {
                 toggleTutorial();
             } else {
                 setTimeout(waitForClose, 50);

@@ -1,4 +1,4 @@
-define(["require", "exports", "util", "guiState.controller", "jquery", "blockly", "bootstrap-table"], function (require, exports, UTIL, GUISTATE_C, $, Blockly) {
+define(["require", "exports", "util", "guiState.controller", "jquery", "bootstrap-table"], function (require, exports, UTIL, GUISTATE_C, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.init = void 0;
     /**
@@ -11,15 +11,14 @@ define(["require", "exports", "util", "guiState.controller", "jquery", "blockly"
     exports.init = init;
     function initLogList() {
         $('#logTable').bootstrapTable({
-            height: UTIL.calcDataTableHeight(),
             pageList: '[ 10, 25, All ]',
             toolbar: '#logListToolbar',
+            theadClasses: 'table-dark',
             showRefresh: 'true',
             showPaginationSwitch: 'true',
             pagination: 'true',
             buttonsAlign: 'right',
             rowStyle: rowStyle,
-            resizable: 'true',
             iconsPrefix: 'typcn',
             icons: {
                 paginationSwitchDown: 'typcn-document-text',
@@ -54,8 +53,8 @@ define(["require", "exports", "util", "guiState.controller", "jquery", "blockly"
             .attr('rel', 'tooltip')
             .attr('data-placement', 'left')
             .attr('lkey', 'Blockly.Msg.BUTTON_EMPTY_LIST')
-            .attr('data-original-title', Blockly.Msg.BUTTON_EMPTY_LIST)
-            .tooltip('fixTitle');
+            .attr('data-bs-original-title', Blockly.Msg.BUTTON_EMPTY_LIST)
+            .tooltip('_fixTitle');
     }
     function initLogListEvents() {
         $('#tabLogList').onWrap('show.bs.tab', function () {

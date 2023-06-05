@@ -72,7 +72,7 @@ function initEvents() {
 
 function toggleInfo($button) {
     if ($('#infoButton').hasClass('rightActive')) {
-        $('#blockly').closeRightView();
+        $('#blocklyDiv').closeRightView();
     } else {
         $('#infoContent').html(blocklyWorkspace.description);
         $('.bootstrap-tagsinput input').attr('placeholder', Blockly.Msg.INFO_TAGS || 'Tags');

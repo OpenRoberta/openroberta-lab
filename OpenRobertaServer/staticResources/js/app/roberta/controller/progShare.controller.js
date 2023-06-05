@@ -1,4 +1,4 @@
-define(["require", "exports", "log", "util", "message", "guiState.controller", "language.controller", "galleryList.controller", "program.model", "userGroup.model", "blockly", "jquery", "bootstrap-table"], function (require, exports, LOG, UTIL, MSG, GUISTATE_C, LANG, GALLERY_C, PROGRAM, USERGROUP, Blockly, $) {
+define(["require", "exports", "log", "util", "message", "guiState.controller", "language.controller", "galleryList.controller", "program.model", "userGroup.model", "blockly", "jquery", "cardView", "bootstrap-table"], function (require, exports, LOG, UTIL, MSG, GUISTATE_C, LANG, GALLERY_C, PROGRAM, USERGROUP, Blockly, $, CardView) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.init = void 0;
     function init() {
@@ -9,6 +9,7 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
     function initView() {
         $('#relationsTable').bootstrapTable({
             height: 400,
+            theadClasses: 'table-dark',
             iconsPrefix: 'typcn',
             icons: {
                 paginationSwitchDown: 'typcn-document-text',
@@ -62,37 +63,47 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
             columns: [
                 {
                     sortable: true,
-                    //visible : false,
-                    formatter: GALLERY_C.formatRobot,
+                    title: '',
+                    formatter: CardView.robot,
+                },
+                {
+                    title: '',
+                    sortable: true,
+                    formatter: CardView.name,
+                },
+                {
+                    title: '',
+                    sortable: true,
+                    formatter: CardView.programDescription,
+                },
+                {
+                    title: '',
+                    sortable: true,
+                    formatter: function (goal) {
+                        return CardView.label(goal, 'GALLERY_BY', 'cardViewInfo');
+                    },
                 },
                 {
                     sortable: true,
-                    formatter: GALLERY_C.formatProgramName,
+                    title: '',
+                    formatter: function (date) {
+                        return CardView.label(UTIL.formatDate(date), 'GALLERY_DATE', 'cardViewInfo');
+                    },
                 },
                 {
-                    sortable: true,
-                    formatter: GALLERY_C.formatProgramDescription,
-                },
-                {
-                    title: GALLERY_C.titleAuthor,
-                    sortable: true,
-                },
-                {
-                    title: GALLERY_C.titleDate,
-                    sortable: true,
-                    formatter: UTIL.formatDate,
-                },
-                {
-                    title: GALLERY_C.titleNumberOfViews,
+                    title: CardView.titleTypcn('eye-outline'),
                     sortable: true,
                 },
                 {
-                    title: GALLERY_C.titleLikes,
+                    title: CardView.titleTypcn('heart-full-outline'),
                     sortable: true,
                 },
                 {
+                    title: '',
                     sortable: true,
-                    formatter: GALLERY_C.formatTags,
+                    formatter: function (value, row) {
+                        return CardView.programTags(row[2]);
+                    },
                 },
                 {
                     visible: false,
@@ -422,7 +433,7 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                                 return dataEntry.sharedWith.label;
                             }), $td = $('#relationsTable tr[data-index="' + index + '"] script').parent(), html;
                             html =
-                                '<div class="input-group" title="" data-original-title lkey="Blockly.Msg.SHARE_WITH_USERGROUP" data-translation-targets="title data-original-title">' +
+                                '<div class="input-group" title="" data-bs-original-title lkey="Blockly.Msg.SHARE_WITH_USERGROUP" data-translation-targets="title data-bs-original-title">' +
                                     '<label class="input-group-btn" for="shareWithUserGroupInput">' +
                                     '<button type="button" style="height:34px" class="btn disabled editor">' +
                                     '<i class="typcn typcn-group"></i>' +

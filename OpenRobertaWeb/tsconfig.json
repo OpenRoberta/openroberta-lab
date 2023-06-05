@@ -11,6 +11,7 @@
       "./node_modules/@types"
     ],
     "module": "amd",
+    "moduleResolution": "node",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "allowJs": true,
@@ -160,15 +161,19 @@
       "robot.mbot": [
         "app/simulation/simulationLogic/robot.mbot"
       ],
+      "robot.robotino": [
+        "app/simulation/simulationLogic/robot.robotino"
+      ],
+      "robot.ev3": [
+        "app/simulation/simulationLogic/robot.ev3"
+      ],
       "robot.microbit": [
         "app/simulation/simulationLogic/robot.microbit"
       ],
       "robot.roberta": [
         "app/simulation/simulationLogic/robot.roberta"
       ],
-      "simulation.robot.ev3": [
-        "app/simulation/simulationLogic/robot.ev3"
-      ],
+
       "robot.nxt": [
         "app/simulation/simulationLogic/robot.nxt"
       ],
@@ -205,7 +210,7 @@
       "robot.sensors": [
         "app/simulation/simulationLogic/robot.sensors"
       ],
-      "simulation.actuators": [
+      "robot.actuators": [
         "app/simulation/simulationLogic/robot.actuators"
       ],
       "simulation.objects": [
@@ -225,6 +230,9 @@
       ],
       "wrap": [
         "helper/wrap"
+      ],
+      "cardview": [
+        "helper/cardview"
       ],
       "interpreter.constants": [
         "app/nepostackmachine/interpreter.constants"
@@ -282,12 +290,12 @@
       ],
       "@cor3ntin/flexbuffers-wasm": [
         "../node_modules/@cor3ntin/flexbuffers-wasm/flexbuffers"
-      ]
+      ],
     },
     "allowSyntheticDefaultImports": true
   },
   "types": [
-    "@cor3ntin/flexbuffers-wasm"
+    "@cor3ntin/flexbuffers-wasm",
   ],
   "include": [
     "src/**/*"

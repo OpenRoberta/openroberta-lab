@@ -1,4 +1,4 @@
-define(["require", "exports", "message", "comm", "wrap", "robot.controller", "socket.controller", "user.controller", "notification.controller", "userGroup.controller", "guiState.controller", "program.controller", "progRun.controller", "configuration.controller", "import.controller", "tour.controller", "sourceCodeEditor.controller", "jquery", "blockly", "progTutorial.controller", "slick"], function (require, exports, MSG, COMM, WRAP, ROBOT_C, SOCKET_C, USER_C, NOTIFICATION_C, USERGROUP_C, GUISTATE_C, PROGRAM_C, RUN_C, CONFIGURATION_C, IMPORT_C, TOUR_C, SOURCECODE_C, $, Blockly, TUTORIAL_C) {
+define(["require", "exports", "message", "comm", "wrap", "robot.controller", "socket.controller", "user.controller", "notification.controller", "guiState.controller", "program.controller", "progRun.controller", "configuration.controller", "import.controller", "tour.controller", "sourceCodeEditor.controller", "jquery", "blockly", "progTutorial.controller", "slick"], function (require, exports, MSG, COMM, WRAP, ROBOT_C, SOCKET_C, USER_C, NOTIFICATION_C, GUISTATE_C, PROGRAM_C, RUN_C, CONFIGURATION_C, IMPORT_C, TOUR_C, SOURCECODE_C, $, Blockly, TUTORIAL_C) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.init = void 0;
     var n = 0;
@@ -43,11 +43,11 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
         }
         else if (target[0] === '#gallery') {
             GUISTATE_C.setStartWithoutPopup();
-            $('#tabGalleryList').clickWrap();
+            $('.navbar-nav a[href="#galleryList"]').tab('show');
         }
         else if (target[0] === '#tutorial') {
             GUISTATE_C.setStartWithoutPopup();
-            $('#tabTutorialList').clickWrap();
+            $('.navbar-nav a[href="#tutorialList"]').tab('show');
         }
         else if (target[0] === '#loadSystem' && target.length >= 2) {
             GUISTATE_C.setStartWithoutPopup();
@@ -63,7 +63,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
         if (tutorial) {
             if (tutorial === 'true' || tutorial === true) {
                 GUISTATE_C.setStartWithoutPopup();
-                $('#tabTutorialList').clickWrap();
+                $('.navbar-nav a[href="#tutorialList"]').tab('show');
             }
             else {
                 var kiosk = getUrlParameter(KIOSK);
@@ -293,7 +293,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
         }
         proto.find('.img-beta').css('visibility', 'hidden');
         proto.find('a[href]').css('visibility', 'hidden');
-        $('#show-startup-message>.modal-body').append('<input type="button" class="btn backButton hidden" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>');
+        $('#show-startup-message>.modal-body').append('<input type="button" class="btn backButton hidden" data-bs-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>');
         if (GUISTATE_C.getLanguage() === 'de') {
             $('.popup-robot .EN').css('display', 'none');
             $('.popup-robot .DE').css('display', 'inline');
@@ -309,6 +309,10 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
      */
     function initMenuEvents() {
         // TODO check if this prevents iPads and iPhones to only react on double clicks
+        $('.navbar-collapse a:not(.dropdown-toggle)').click(function () {
+            $('.dropdown-menu.show').collapse('hide');
+            $('.navbar-collapse.show').collapse('hide');
+        });
         if (!navigator.userAgent.match(/iPad/i) && !navigator.userAgent.match(/iPhone/i)) {
             $('[rel="tooltip"]').not('.rightMenuButton').tooltip({
                 container: 'body',
@@ -336,10 +340,10 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
         $('.modal').onWrap('shown.bs.modal', function () {
             $(this).find('[autofocus]').focus();
         });
-        $('#navbarCollapse').collapse({
+        /* TODO $('#navbarCollapse').collapse({
             toggle: false,
-        });
-        $('#navbarCollapse').on('click', '.dropdown-menu a,.visible-xs', function (event) {
+        });*/
+        $('.navbar-collapse').on('click', '.dropdown-menu a,.visible-xs', function (event) {
             $('#navbarCollapse').collapse('hide');
         });
         // for gallery
@@ -347,7 +351,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             $('#navbarCollapse').collapse('hide');
         });
         if (GUISTATE_C.isPublicServerVersion()) {
-            var feedbackButton = '<div href="#" id="feedbackButton" class="rightMenuButton" rel="tooltip" data-original-title="" title="">' +
+            var feedbackButton = '<div href="#" id="feedbackButton" class="rightMenuButton" rel="tooltip" data-bs-original-title="" title="">' +
                 '<span id="" class="feedbackButton typcn typcn-feedback"></span>' +
                 '</div>';
             $('#rightMenuDiv').append(feedbackButton);
@@ -380,9 +384,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
         // EDIT Menu  --- don't use onWrap here, because the export xml target must be enabled always
         $('#head-navigation-program-edit').on('click', '.dropdown-menu li:not(.disabled) a', function (event) {
             var fn = function (event) {
-                var targetId = event.target.id ||
-                    (event.target.children[0] && event.target.children[0].id) ||
-                    (event.target.previousSibling && event.target.previousSibling.id);
+                var targetId = event.target.id || event.currentTarget.id;
                 switch (targetId) {
                     case 'menuRunProg':
                         RUN_C.runOnBrick();
@@ -397,12 +399,12 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                         PROGRAM_C.newProgram();
                         break;
                     case 'menuListProg':
-                        $('#tabProgList').data('type', 'userProgram');
-                        $('#tabProgList').clickWrap();
+                        $('#tabProgList').data('type', 'Programs');
+                        $('#tabProgList').tabWrapShow();
                         break;
                     case 'menuListExamples':
-                        $('#tabProgList').data('type', 'exampleProgram');
-                        $('#tabProgList').clickWrap();
+                        $('#tabProgList').data('type', 'Examples');
+                        $('#tabProgList').tabWrapShow();
                         break;
                     case 'menuSaveProg':
                         PROGRAM_C.saveToServer();
@@ -454,7 +456,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                     CONFIGURATION_C.newConfiguration();
                     break;
                 case 'menuListConfig':
-                    $('#tabConfList').clickWrap();
+                    $('.navbar-nav a[href="#confList"]').tab('show');
                     break;
                 case 'menuSaveConfig':
                     CONFIGURATION_C.saveToServer();
@@ -522,8 +524,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                 $('#show-about').modal('show');
             }
             else if (domId === 'menuLogging') {
-                // Submenu 'Help'
-                $('#tabLogList').clickWrap();
+                $('.navbar-nav a[href="#logList"]').tab('show');
             }
         }, 'help clicked');
         $('#head-navigation-user').onWrap('click', '.dropdown-menu li:not(.disabled) a', function (event) {
@@ -539,7 +540,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                     USER_C.logout();
                     break;
                 case 'menuGroupPanel':
-                    USERGROUP_C.showPanel();
+                    $('#tabUserGroupList').tabWrapShow();
                     break;
                 case 'menuChangeUser':
                     USER_C.showUserDataForm();
@@ -558,14 +559,6 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             }
             return false;
         }, 'user clicked');
-        $('#head-navigation-gallery').onWrap('click', function (event) {
-            $('#tabGalleryList').clickWrap();
-            return false;
-        }, 'gallery clicked');
-        $('#head-navigation-tutorial').onWrap('click', function (event) {
-            $('#tabTutorialList').clickWrap();
-            return false;
-        }, 'tutorial clicked');
         $('#menuTabProgram').onWrap('click', '', function (event) {
             if ($('#tabSimulation').hasClass('tabClicked')) {
                 $('.scroller-left').clickWrap();
@@ -573,6 +566,14 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             $('.scroller-left').clickWrap();
             $('#tabProgram').clickWrap();
         }, 'tabProgram clicked');
+        $('#head-navigation-gallery').onWrap('click', function (event) {
+            $('#tabGalleryList').tabWrapShow();
+            return false;
+        }, 'gallery clicked');
+        $('#head-navigation-tutorial').onWrap('click', function (event) {
+            $('#tabTutorialList').tabWrapShow();
+            return false;
+        }, 'tutorial clicked');
         $('#menuTabConfiguration').onWrap('click', '', function (event) {
             if ($('#tabProgram').hasClass('tabClicked')) {
                 $('.scroller-right').clickWrap();
@@ -732,7 +733,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
         });
         // help Bootstrap to calculate the correct size for the collapse element when the screen height is smaller than the elements height.
         $('#navbarCollapse').on('shown.bs.collapse', function () {
-            var newHeight = Math.min($(this).height(), Math.max($('#blockly').height(), $('#brickly').height(), $('#nn').height()));
+            var newHeight = Math.min($(this).height(), Math.max($('#blocklyDiv').height(), $('#brickly').height(), $('#nn').height()));
             $(this).css('height', newHeight);
         });
         $(document).onWrap('keydown', function (e) {
@@ -816,8 +817,8 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             if ((e.metaKey || e.ctrlKey) && e.which == 77) {
                 e.preventDefault();
                 if (GUISTATE_C.isUserLoggedIn()) {
-                    $('#tabProgList').data('type', 'userProgram');
-                    $('#tabProgList').clickWrap();
+                    $('#progList').trigger('Programs');
+                    $('.navbar-nav a[href="#progList"]').tab('show');
                 }
                 else {
                     MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '');

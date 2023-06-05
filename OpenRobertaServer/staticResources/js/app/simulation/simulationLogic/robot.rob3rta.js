@@ -19,7 +19,7 @@ define(["require", "exports", "robot.sensors", "robot.actuators", "robot.base.st
         __extends(RobotRob3rta, _super);
         function RobotRob3rta(id, configuration, interpreter, savedName, myListener) {
             var _this = _super.call(this, id, configuration, interpreter, savedName, myListener) || this;
-            _this.topView = '<div id="mbedContent"><form id="mbed-form"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons"></div></form></div>';
+            _this.topView = '<div id="mbedContent"><form id="mbed-form"><div id="mbedButtons" class="btn-group btn-group-vertical" data-bs-toggle="buttons"></div></form></div>';
             _this.timer = new robot_sensors_1.Timer(1);
             _this.configure(configuration);
             return _this;

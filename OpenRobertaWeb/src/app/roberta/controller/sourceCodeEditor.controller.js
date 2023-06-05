@@ -1,10 +1,5 @@
-import * as require from 'require';
-
 import * as MSG from 'message';
-import * as LOG from 'log';
 import * as UTIL from 'util';
-import * as COMM from 'comm';
-import * as WRAP from 'wrap';
 import * as GUISTATE_C from 'guiState.controller';
 import * as PROGRAM from 'program.model';
 import * as PROG_C from 'program.controller';
@@ -184,8 +179,8 @@ function initEvents() {
         .attr('rel', 'tooltip')
         .attr('data-placement', 'left')
         .attr('lkey', 'Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP')
-        .attr('data-original-title', Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP)
-        .tooltip('fixTitle');
+        .attr('data-bs-original-title', Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP)
+        .tooltip('_fixTitle');
 }
 
 function getSourceCode(reload) {
@@ -200,7 +195,7 @@ function getSourceCode(reload) {
         PROG_C.reloadProgram(result);
         if (result.rc == 'ok') {
             if (reload) {
-                $('#tabSourceCodeEditor').clickWrap();
+                $('#tabSourceCodeEditor').tabWrapShow();
             }
             GUISTATE_C.setState(result);
             flask.updateCode(result.sourceCode);

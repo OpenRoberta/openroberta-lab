@@ -94,7 +94,7 @@ define(["require", "exports", "log", "guiState.controller", "jquery", "jquery-va
     exports.loadLegalTexts = loadLegalTexts;
     function toggleLegal($button) {
         if ($('#legalButton').hasClass('rightActive')) {
-            $('#blockly').closeRightView();
+            $('#blocklyDiv').closeRightView();
         }
         else {
             LOG.info('legal view opened');

@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "robot.microbit", "./robot.sensors", "./robot.actuators"], function (require, exports, robot_microbit_1, robot_sensors_1, robot_actuators_1) {
+define(["require", "exports", "robot.microbit", "robot.sensors", "robot.actuators"], function (require, exports, robot_microbit_1, robot_sensors_1, robot_actuators_1) {
     Object.defineProperty(exports, "__esModule", { value: true });
     var RobotMicrobitv2 = /** @class */ (function (_super) {
         __extends(RobotMicrobitv2, _super);

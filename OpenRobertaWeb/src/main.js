@@ -3,13 +3,14 @@ require.config({
     paths: {
         codeflask: 'libs/codeflask/codeflask.min',
         blockly: '../blockly/blockly_compressed',
-        bootstrap: 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min',
-        'bootstrap-table': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-table.min',
-        'bootstrap-tagsinput': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-tagsinput.min',
-        'bootstrap.wysiwyg': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-wysiwyg.min',
+        bootstrap: 'libs/bootstrap/bootstrap-5.3.2-dist/js/bootstrap.bundle.min',
+        'bootstrap-table': 'libs/bootstrap/bootstrap-table-1.22.1-dist/js/bootstrap-table.min',
+        'bootstrap-table-locals': 'libs/bootstrap/bootstrap-table-1.22.1-dist/js/bootstrap-table-locale-all.min',
+        'bootstrap-tagsinput': 'libs/bootstrap/bootstrap-tagsinput.min',
+        'bootstrap.wysiwyg': 'libs/bootstrap/bootstrap-wysiwyg.min',
         enjoyHint: 'libs/enjoyHint/enjoyhint.min',
         huebee: 'libs/huebee/huebee.min',
-        jquery: 'libs/jquery/jquery-3.3.1.min',
+        jquery: 'libs/jquery/jquery.min',
         'jquery-scrollto': 'libs/jquery/jquery.scrollTo-2.1.2.min',
         'jquery-validate': 'libs/jquery/jquery.validate-1.17.0.min',
         'jquery-hotkeys': 'libs/jquery/jquery.hotkeys-0.2.0',
@@ -98,6 +99,7 @@ require.config({
         message: 'helper/msg',
         util: 'helper/util',
         wrap: 'helper/wrap',
+        cardView: 'helper/cardView',
 
         'interpreter.constants': 'app/nepostackmachine/interpreter.constants',
         'interpreter.interpreter': 'app/nepostackmachine/interpreter.interpreter',
@@ -149,6 +151,12 @@ require.config({
         bootstrap: {
             deps: ['jquery'],
         },
+        'bootstrap-table': {
+            deps: ['bootstrap'],
+        },
+        'bootstrap-table-locals': {
+            deps: ['bootstrap-table'],
+        },
         blockly: {
             exports: 'Blockly',
         },
@@ -180,7 +188,7 @@ require([
     'huebee',
     'wrap',
     'log',
-    'jquery',
+    'bootstrap-table-locals',
     'blockly',
     'guiState.controller',
     'progList.controller',
@@ -216,7 +224,7 @@ require([
     'confVisualization',
     'robotBlock',
 ], function (require) {
-    $ = require('jquery');
+    /* window.jQuery = window.$ = require('jquery');*/
     WRAP = require('wrap');
     LOG = require('log');
     COMM = require('comm');
@@ -310,7 +318,7 @@ function init() {
                         }
                     });
                 } else {
-                    $('#show-startup-message').modal('show');
+                    //$('#show-startup-message').modal('show'); TODO decide if we want to have the old popup with bootstrap 5 (much work for short usage!)
                 }
             });
 

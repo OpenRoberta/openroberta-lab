@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "robot.sensors", "./robot.actuators", "robot.base.stationary"], function (require, exports, robot_sensors_1, robot_actuators_1, robot_base_stationary_1) {
+define(["require", "exports", "robot.sensors", "robot.actuators", "robot.base.stationary"], function (require, exports, robot_sensors_1, robot_actuators_1, robot_base_stationary_1) {
     Object.defineProperty(exports, "__esModule", { value: true });
     var RobotCalliope = /** @class */ (function (_super) {
         __extends(RobotCalliope, _super);
@@ -21,7 +21,7 @@ define(["require", "exports", "robot.sensors", "./robot.actuators", "robot.base.
             var _this = _super.call(this, id, configuration, interpreter, savedName, myListener) || this;
             _this.volume = 0.5;
             _this.webAudio = new robot_actuators_1.WebAudio();
-            _this.topView = '<div id="mbedContent"><form id="mbed-form"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons"></div></form></div>';
+            _this.topView = '<div id="mbedContent"><form id="mbed-form"><div id="mbedButtons" class="btn-group btn-group-vertical" data-bs-toggle="buttons"></div></form></div>';
             _this.timer = new robot_sensors_1.Timer(1);
             _this.configure(configuration);
             return _this;

@@ -1,4 +1,3 @@
-import * as LOG from 'log';
 import * as MSG from 'message';
 import * as UTIL from 'util';
 import * as USER from 'user.model';
@@ -675,6 +674,8 @@ function initUserPasswordChangeModal() {
     });
 
     $('#showChangeUserPassword').onWrap('click', function () {
+        /* $('.modal.show').modal('hide');
+         $('.modal.show').one('bs');*/
         $('#change-user-password').modal('show');
     });
 
@@ -787,7 +788,7 @@ function showDeleteUserModal() {
     UTIL.showSingleModal(
         function () {
             $('#singleModalInput').attr('type', 'password');
-            $('#single-modal h3').text(Blockly.Msg['MENU_DELETE_USER']);
+            $('#single-modal h5').text(Blockly.Msg['MENU_DELETE_USER']);
             $('#single-modal label').text(Blockly.Msg['POPUP_PASSWORD']);
             $('#single-modal span').removeClass('typcn-pencil');
             $('#single-modal span').addClass('typcn-lock-closed');

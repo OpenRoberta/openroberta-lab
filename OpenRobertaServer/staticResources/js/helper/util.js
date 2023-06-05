@@ -360,12 +360,12 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "interprete
      *
      */
     function showMsgOnTop(msg) {
-        $('#show-message').find('button').removeAttr('data-dismiss');
+        $('#show-message').find('button').removeAttr('data-bs-dismiss');
         $('#show-message')
             .find('button')
             .oneWrap('click', function (e) {
             $('#show-message').modal('hide');
-            $('#show-message').find('button').attr('data-dismiss', 'modal');
+            $('#show-message').find('button').attr('data-bs-dismiss', 'modal');
         });
         MSG.displayInformation({
             rc: 'not ok',
@@ -589,21 +589,21 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "interprete
                 // special case movable slider between workspace and right divs
                 if (opt.axis == 'x') {
                     var left = pageX + pos_x - drg_w;
-                    var left = Math.min(left, $('#main-section').width() - 80);
+                    var left = Math.min(left, $('#main-section').width() - 24);
                     var left = Math.max(left, 42);
                     $selected.offset({
                         top: 0,
-                        left: left - 4,
+                        left: left,
                     });
-                    $('#blockly').width(left + 3);
-                    $('.rightMenuButton').css({
+                    $('#blocklyDiv').outerWidth(left);
+                    /* $('.rightMenuButton').css({
                         right: $(window).width() - left,
-                    });
+                    });*/
                     $('.fromRight').css({
-                        width: $(window).width() - $('#blockly').width(),
+                        width: $('#main-section').width() - $('#blocklyDiv').outerWidth(),
                     });
-                    ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
-                    $(window).resize();
+                    ratioWorkspace = $('#blocklyDiv').outerWidth() / $('#main-section').width();
+                    $(window).trigger('resize');
                 }
                 else {
                     $selected.offset({
@@ -669,7 +669,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "interprete
         }
         $('.fromRight.rightActive').addClass('shifting');
         $('.blocklyToolboxDiv').css('display', 'inherit');
-        var that = this; //$('#blockly')
+        var that = this; //$('#blocklyDiv')
         $('.fromRight.rightActive').animate({
             width: 0,
         }, {
@@ -680,13 +680,13 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "interprete
             },
             step: function (now) {
                 $(window).trigger('resize');
-                that.width($('#main-section').outerWidth() - Math.ceil(now));
-                $('.rightMenuButton').css('right', now);
-                ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
+                that.width($('#main-section').width() - Math.ceil(now));
+                /*$('.rightMenuButton').css('right', now);*/
+                ratioWorkspace = $('#blocklyDiv').outerWidth() / $('#main-section').outerWidth();
             },
             done: function () {
                 that.width($('#main-section').outerWidth());
-                $('.rightMenuButton').css('right', 0);
+                /* $('.rightMenuButton').css('right', 0);*/
                 ratioWorkspace = 1;
                 $('.fromRight').width(0);
                 that.removeClass('rightActive');
@@ -707,16 +707,16 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "interprete
         if ($('.fromRight.rightActive').hasClass('shifting')) {
             return;
         }
-        var $blockly = $('#blockly');
+        var $blockly = $('#blocklyDiv');
         var width;
         var smallScreen;
         if ($(window).width() < 768) {
             smallScreen = true;
-            width = $blockly.width() - 52;
+            width = $blockly.outerWidth() - 52;
         }
         else {
             smallScreen = false;
-            width = $blockly.width() * initialViewWidth;
+            width = $blockly.outerWidth() * initialViewWidth;
         }
         if ($blockly.hasClass('rightActive')) {
             $('.fromRight.rightActive').removeClass('rightActive');
@@ -744,22 +744,22 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "interprete
         }, {
             duration: ANIMATION_DURATION,
             step: function (now, tween) {
-                $blockly.width($('#main-section').outerWidth() - now);
-                $('.rightMenuButton').css('right', Math.floor(now));
-                ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
+                $blockly.outerWidth($('#main-section').width() - now);
+                /*$('.rightMenuButton').css('right', Math.floor(now));*/
+                ratioWorkspace = $('#blocklyDiv').outerWidth() / $('#main-section').width();
                 $(window).trigger('resize');
             },
             done: function () {
                 $('#sliderDiv').show();
-                $blockly.width($('#main-section').outerWidth() - $('.fromRight.rightActive').width());
-                $('.rightMenuButton').css('right', $('.fromRight.rightActive').width());
-                ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
+                $blockly.outerWidth($('#main-section').width() - $('.fromRight.rightActive').width());
+                /*  $('.rightMenuButton').css('right', $('.fromRight.rightActive').width());*/
+                ratioWorkspace = $('#blocklyDiv').outerWidth() / $('#main-section').width();
                 $(window).trigger('resize');
                 if (smallScreen) {
                     $('.blocklyToolboxDiv').css('display', 'none');
                 }
                 $('#sliderDiv').css({
-                    left: $blockly.width() - 7,
+                    left: $blockly.outerWidth(),
                 });
                 if (typeof opt_callBack == 'function') {
                     opt_callBack();
@@ -771,23 +771,24 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "interprete
         });
     };
     $(window).on('resize', function () {
-        var parentWidth = $('#main-section').outerWidth();
-        var height = Math.max($('#blockly').outerHeight(), $('#brickly').outerHeight());
+        var mainWidth = $('#main-section').width();
+        var parentWidth = mainWidth;
+        var height = $('#main-section').height(); //Math.max($('#blocklyDiv').outerHeight(), $('#brickly').outerHeight());
         var rightWidth = (1 - ratioWorkspace) * parentWidth;
         var leftWidth = ratioWorkspace * parentWidth;
         if (!$('.fromRight.rightActive.shifting').length > 0) {
             if ($('.fromRight.rightActive').length > 0) {
                 $('.fromRight.rightActive').width(rightWidth);
-                $('.rightMenuButton').css('right', rightWidth);
-                $('#sliderDiv').css('left', leftWidth - 7);
+                /*$('.rightMenuButton').css('right', rightWidth);*/
+                $('#sliderDiv').css('left', leftWidth);
             }
-            $('#blockly').width(leftWidth);
+            $('#blocklyDiv').outerWidth(leftWidth);
         }
         else {
-            leftWidth = $('#blockly').outerWidth();
+            leftWidth = $('#blocklyDiv').outerWidth();
         }
         if ($('#blocklyDiv')) {
-            $('#blocklyDiv').width(leftWidth - 4);
+            $('#blocklyDiv').outerWidth(leftWidth);
             $('#blocklyDiv').height(height);
         }
         if ($('#bricklyDiv')) {
@@ -810,9 +811,9 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "interprete
         // here comes a fix for a strange browser behavior while zoom is not 100%. It is just in case (e.g. chrome 125% works fine, 110% not).
         // Seems that either the returned sizes from the browser sometimes include margins/borders and sometimes not or that the assigned sizes behave
         // different (with and without margins/borders).
-        var diff = $('#main-section').outerWidth() - $('#blocklyDiv').outerWidth() - rightWidth;
+        var diff = mainWidth - $('#blocklyDiv').outerWidth() - rightWidth;
         if (diff != 0) {
-            $('#blocklyDiv').width(leftWidth - 4 + diff);
+            $('#blocklyDiv').outerWidth(leftWidth + diff);
         }
         var workspace = Blockly.getMainWorkspace();
         if (workspace) {

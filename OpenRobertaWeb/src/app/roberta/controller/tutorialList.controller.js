@@ -6,16 +6,10 @@
  *
  * @author Beate Jost <beate.jost@smail.inf.h-brs.de>
  */
-import * as require from 'require';
-
-import * as LOG from 'log';
 import * as UTIL from 'util';
-import * as COMM from 'comm';
-import * as MSG from 'message';
 import * as GUISTATE_C from 'guiState.controller';
 import * as TUTORIAL_C from 'progTutorial.controller';
-import * as GALLERYLIST_C from 'galleryList.controller';
-import * as Blockly from 'blockly';
+import * as CardView from 'cardView';
 import * as $ from 'jquery';
 import 'bootstrap-table';
 import 'bootstrap-tagsinput';
@@ -26,7 +20,7 @@ var tutorialList;
 /**
  * Initialize table of tutorials
  */
-function init() {
+export function init() {
     tutorialList = GUISTATE_C.getListOfTutorials();
     for (var tutorial in tutorialList) {
         if (tutorialList.hasOwnProperty(tutorial)) {
@@ -47,17 +41,25 @@ function init() {
     initTutorialListEvents();
 }
 
+export function switchLanguage() {
+    $('#tutorialTable').bootstrapTable('destroy');
+    init();
+    if (GUISTATE_C.getView() === 'tabTutorialList') {
+        updateTutorialList();
+    }
+}
+
 function initTutorialList() {
     $('#tutorialTable').bootstrapTable({
-        height: UTIL.calcDataTableHeight(),
+        locale: GUISTATE_C.getLanguage(),
         toolbar: '#tutorialListToolbar',
-        showRefresh: 'true',
+        height: UTIL.calcDataTableHeight(),
         cardView: 'true',
-        rowStyle: GALLERYLIST_C.rowStyle,
         rowAttributes: rowAttributes,
+        search: 'true',
+        showRefresh: 'true',
         sortName: 'index',
         sortOrder: 'asc',
-        search: true,
         buttonsAlign: 'right',
         resizable: 'true',
         iconsPrefix: 'typcn',
@@ -69,62 +71,74 @@ function initTutorialList() {
         columns: [
             {
                 field: 'robot',
+                title: '',
                 sortable: true,
-                formatter: formatRobot,
+                formatter: CardView.robot,
             },
             {
                 field: 'name',
+                title: '',
                 sortable: true,
-                formatter: formatName,
+                formatter: CardView.name,
             },
             {
                 field: 'overview.description',
+                title: '',
                 sortable: true,
-                formatter: formatTutorialOverview,
+                formatter: CardView.description,
             },
             {
                 field: 'overview.goal',
+                title: '',
                 sortable: true,
-                formatter: formatTutorialOverview,
+                formatter: function (goal) {
+                    return CardView.label(goal, 'TITLE_GOAL', 'cardViewDescription');
+                },
             },
             {
                 field: 'overview.previous',
+                title: '',
                 sortable: true,
-                formatter: formatTutorialOverview,
+                formatter: function (goal) {
+                    return CardView.label(goal, 'TITLE_PREVIOUS', 'cardViewDescription');
+                },
             },
             {
                 field: 'time',
-                title: titleTime,
+                title: CardView.titleTypcn('stopwatch'),
                 sortable: true,
             },
             {
                 field: 'age',
-                title: titleAge,
+                title: CardView.titleTypcn('group'),
                 sortable: true,
             },
             {
                 field: 'sim',
-                title: titleSim,
+                title: CardView.titleTypcn('simulation'),
                 sortable: true,
                 formatter: formatSim,
             },
             {
                 field: 'level',
-                title: titleLevel,
+                title: CardView.titleTypcn('mortar-board'),
                 sortable: true,
                 formatter: formatLevel,
             },
             {
                 field: 'tags',
+                title: '',
                 sortable: true,
-                formatter: formatTags,
+                formatter: CardView.tags,
             },
             {
                 field: 'index',
+                title: '',
                 visible: false,
             },
             {
                 field: 'group',
+                title: '',
                 visible: false,
             },
         ],
@@ -133,24 +147,27 @@ function initTutorialList() {
 }
 
 function initTutorialListEvents() {
+    $('#tabTutorialList').onWrap(
+        'shown.bs.tab',
+        function () {
+            guiStateController.setView('tabTutorialList');
+            updateTutorialList();
+            return false;
+        },
+        'tutorial clicked'
+    );
     $(window).resize(function () {
         $('#tutorialTable').bootstrapTable('resetView', {
             height: UTIL.calcDataTableHeight(),
         });
     });
-
-    $('#tabTutorialList').onWrap(
-        'show.bs.tab',
+    $('#tutorialTable').onWrap(
+        'post-body.bs.table',
         function (e) {
-            guiStateController.setView('tabTutorialList');
-            updateTutorialList();
+            configureTagsInput();
         },
-        'show tutorial list'
+        'page-change tutorial list'
     );
-
-    $('#tutorialTable').on('page-change.bs.table', function (e) {
-        configureTagsInput();
-    });
 
     $('#tutorialList')
         .find('button[name="refresh"]')
@@ -185,72 +202,45 @@ function initTutorialListEvents() {
     $('#tutorialTable').on('shown.bs.collapse hidden.bs.collapse', function (e) {
         $('#tutorialTable').bootstrapTable('resetWidth');
     });
+}
 
-    function updateTutorialList() {
-        var tutorialArray = [];
-        for (var tutorial in tutorialList) {
-            if (tutorialList.hasOwnProperty(tutorial) && tutorialList[tutorial].language === GUISTATE_C.getLanguage().toUpperCase()) {
-                tutorialList[tutorial].id = tutorial;
-                tutorialArray.push(tutorialList[tutorial]);
-            }
+function updateTutorialList() {
+    var tutorialArray = [];
+    for (var tutorial in tutorialList) {
+        if (tutorialList.hasOwnProperty(tutorial) && tutorialList[tutorial].language === GUISTATE_C.getLanguage().toUpperCase()) {
+            tutorialList[tutorial].id = tutorial;
+            tutorialArray.push(tutorialList[tutorial]);
         }
-        $('#tutorialTable').bootstrapTable('load', tutorialArray);
-        configureTagsInput();
     }
+    $('#tutorialTable').bootstrapTable('load', tutorialArray);
+    configureTagsInput();
 }
 var rowAttributes = function (row, index) {
     var hash = UTIL.getHashFrom(row.robot + row.name + row.index);
     currentColorIndex = hash % BACKGROUND_COLORS.length;
     return {
+        class: 'col-xxl-2 col-lg-3 col-md-4 col-sm-6',
         style:
             'background-color :' +
             BACKGROUND_COLORS[currentColorIndex] +
             ';' + //
-            'padding: 24px 24px 6px 24px; border: solid 12px white; z-index: 1; cursor: pointer;',
+            '', // 'border: 4px solid #EEEEEE; z-index: 1; cursor: pointer;',
     };
 };
-var titleTime = '<span class="tutorialIcon typcn typcn-stopwatch" />';
 
-var titleSim = '<span class="tutorialIcon typcn typcn-simulation" />';
-
-var titleAge = '<span class="tutorialIcon typcn typcn-group" />';
-
-var titleLevel = '<span class="tutorialIcon typcn typcn-mortar-board"/>';
-
-var formatRobot = function (robot, row, index) {
-    return '<div class="typcn typcn-' + GUISTATE_C.findGroup(robot) + '"></div>';
+var emptyTitle = function () {
+    return '<span style="display:none"></span>';
 };
 
-var formatName = function (value, row, index) {
-    return '<div class="galleryProgramname">' + value + '</div>';
+var formatTutorialOverview = function (overview, row, index, field) {
+    return CardView.description(overview, row, index, field);
 };
-
-var formatTutorialOverview = function (overview, row, index) {
-    switch (overview) {
-        case row.overview.description:
-            return '<div class="tutorialOverview color' + currentColorIndex + '">' + overview + '</div>';
-        case row.overview.goal:
-            return '<div class="tutorialOverview color' + currentColorIndex + '"><b>Lernziel: </b>' + overview + '</div>';
-        case row.overview.previous:
-            return '<div class="tutorialOverview color' + currentColorIndex + '"><b>Vorkenntnisse: </b>' + overview + '</div>';
-        default:
-            return '';
-    }
-};
-
-var formatTags = function (tags, row, index) {
-    if (!tags) {
-        tags = '&nbsp;';
-    }
-    return '<input class="infoTags" type="text" value="' + tags + '" data-role="tagsinput"/>';
-};
-export { init, formatTags };
 
 var formatSim = function (sim, row, index) {
     if (sim && (sim === 'sim' || sim === 1)) {
-        return 'ja<span style="display:none;">simulation</span>';
+        return 'ja';
     } else {
-        return 'nein<span style="display:none;">real</span>';
+        return 'nein';
     }
 };
 

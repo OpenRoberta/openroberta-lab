@@ -1,12 +1,6 @@
-import * as require from 'require';
-
-import * as LOG from 'log';
 import * as UTIL from 'util';
-import * as COMM from 'comm';
 import * as GUISTATE_C from 'guiState.controller';
-import * as LOGLIST from 'logList.model';
 import * as $ from 'jquery';
-import * as Blockly from 'blockly';
 import 'bootstrap-table';
 
 /**
@@ -20,15 +14,14 @@ export { init };
 
 function initLogList() {
     $('#logTable').bootstrapTable({
-        height: UTIL.calcDataTableHeight(),
         pageList: '[ 10, 25, All ]',
         toolbar: '#logListToolbar',
+        theadClasses: 'table-dark',
         showRefresh: 'true',
         showPaginationSwitch: 'true',
         pagination: 'true',
         buttonsAlign: 'right',
         rowStyle: rowStyle,
-        resizable: 'true',
         iconsPrefix: 'typcn',
         icons: {
             paginationSwitchDown: 'typcn-document-text',
@@ -63,8 +56,8 @@ function initLogList() {
         .attr('rel', 'tooltip')
         .attr('data-placement', 'left')
         .attr('lkey', 'Blockly.Msg.BUTTON_EMPTY_LIST')
-        .attr('data-original-title', Blockly.Msg.BUTTON_EMPTY_LIST)
-        .tooltip('fixTitle');
+        .attr('data-bs-original-title', Blockly.Msg.BUTTON_EMPTY_LIST)
+        .tooltip('_fixTitle');
 }
 
 function initLogListEvents() {

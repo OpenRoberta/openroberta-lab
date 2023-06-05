@@ -19,6 +19,8 @@ import { IDestroyable, RobotBase, RobotFactory } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
 
+const RESIZE_CONST: number = 3;
+
 /**
  * Creates a new Scene.
  *
@@ -512,10 +514,17 @@ export class SimulationScene {
     }
 
     initEvents() {
+        let that = this;
+        let num = 0;
         $(window)
             .off('resize.sim')
-            .on('resize.sim', () => {
-                this.centerBackground(false);
+            .on('resize.sim', function (event, param) {
+                if (num > RESIZE_CONST) {
+                    that.centerBackground(false);
+                    num = 0;
+                } else {
+                    num++;
+                }
             });
         let $robotLayer: JQuery<HTMLElement> = $('#robotLayer');
         $robotLayer.off('keydown.sim').on('keydown.sim', this.handleKeyEvent.bind(this));

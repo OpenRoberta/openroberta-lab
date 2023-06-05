@@ -1,10 +1,5 @@
-import * as require from 'require';
-
-import * as LOG from 'log';
 import * as UTIL from 'util';
-import * as COMM from 'comm';
 import * as CONFLIST from 'confList.model';
-import * as CONFIGURATION from 'configuration.model';
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
 import 'bootstrap-table';
@@ -211,13 +206,19 @@ function initConfListEvents() {
             $('#confNameTable').bootstrapTable('hideColumn', '2');
             $('#confNameTable').bootstrapTable('hideColumn', '3');
         }
-        $('#deleteSomeConf').attr('data-original-title', Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP || 'Click here to delete all selected robot configurations.');
+        $('#deleteSomeConf').attr(
+            'data-bs-original-title',
+            Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP || 'Click here to delete all selected robot configurations.'
+        );
         $('#confNameTable')
             .find('.delete')
-            .attr('data-original-title', Blockly.Msg.CONFLIST_DELETE_TOOLTIP || 'Click here to delete your robot configuration.');
+            .attr('data-bs-original-title', Blockly.Msg.CONFLIST_DELETE_TOOLTIP || 'Click here to delete your robot configuration.');
         $('#confNameTable')
             .find('.load')
-            .attr('data-original-title', Blockly.Msg.CONFLIST_LOAD_TOOLTIP || 'Click here to load your robot configuration in the configuration environment.');
+            .attr(
+                'data-bs-original-title',
+                Blockly.Msg.CONFLIST_LOAD_TOOLTIP || 'Click here to load your robot configuration in the configuration environment.'
+            );
         $('#confNameTable').find('[rel="tooltip"]').tooltip();
     }
 }
@@ -290,7 +291,7 @@ var formatRelations = function (value, row, index) {
                     result += user;
                     result +=
                         '</span><a class="collapsed showRelations" href="#" style="float:right;"' +
-                        'href="#" data-toggle="collapse" data-target=".relation' +
+                        'href="#" data-bs-toggle="collapse" data-bs-target=".relation' +
                         index +
                         '"></a></div>';
                 } else {
@@ -313,9 +314,9 @@ var formatRelations = function (value, row, index) {
 var formatDeleteShareLoad = function (value, row, index) {
     var result = '';
     result +=
-        '<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-delete"></span></a>';
+        '<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_TOOLTIP" data-bs-original-title="" title=""><span class="typcn typcn-delete"></span></a>';
     result +=
-        '<a href="#" class="load" rel="tooltip" lkey="Blockly.Msg.CONFLIST_LOAD_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-document"></span></a>';
+        '<a href="#" class="load" rel="tooltip" lkey="Blockly.Msg.CONFLIST_LOAD_TOOLTIP" data-bs-original-title="" title=""><span class="typcn typcn-document"></span></a>';
     return result;
 };
 
@@ -360,5 +361,5 @@ var sortRelations = function (a, b) {
     return -1;
 };
 var titleActions =
-    '<a href="#" id="deleteSomeConf" class="deleteSomeConf disabled" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP" data-original-title="" data-container="body" title="">' +
+    '<a href="#" id="deleteSomeConf" class="deleteSomeConf disabled" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP" data-bs-original-title="" data-container="body" title="">' +
     '<span class="typcn typcn-delete"></span></a>';

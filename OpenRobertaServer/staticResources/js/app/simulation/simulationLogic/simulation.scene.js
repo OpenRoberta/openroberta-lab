@@ -10,6 +10,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 define(["require", "exports", "util", "jquery", "simulation.objects", "robot.base", "robot.base.mobile"], function (require, exports, UTIL, $, simulation_objects_1, robot_base_1, robot_base_mobile_1) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.SimulationScene = void 0;
+    var RESIZE_CONST = 3;
     /**
      * Creates a new Scene.
      *
@@ -456,11 +457,18 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             }
         };
         SimulationScene.prototype.initEvents = function () {
-            var _this = this;
+            var that = this;
+            var num = 0;
             $(window)
                 .off('resize.sim')
-                .on('resize.sim', function () {
-                _this.centerBackground(false);
+                .on('resize.sim', function (event, param) {
+                if (num > RESIZE_CONST) {
+                    that.centerBackground(false);
+                    num = 0;
+                }
+                else {
+                    num++;
+                }
             });
             var $robotLayer = $('#robotLayer');
             $robotLayer.off('keydown.sim').on('keydown.sim', this.handleKeyEvent.bind(this));

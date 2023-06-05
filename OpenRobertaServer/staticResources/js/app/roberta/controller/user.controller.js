@@ -560,6 +560,8 @@ define(["require", "exports", "message", "util", "user.model", "guiState.control
             updateUserPasswordOnServer();
         });
         $('#showChangeUserPassword').onWrap('click', function () {
+            /* $('.modal.show').modal('hide');
+             $('.modal.show').one('bs');*/
             $('#change-user-password').modal('show');
         });
         $('#resendActivation').onWrap('click', function () {
@@ -657,7 +659,7 @@ define(["require", "exports", "message", "util", "user.model", "guiState.control
     function showDeleteUserModal() {
         UTIL.showSingleModal(function () {
             $('#singleModalInput').attr('type', 'password');
-            $('#single-modal h3').text(Blockly.Msg['MENU_DELETE_USER']);
+            $('#single-modal h5').text(Blockly.Msg['MENU_DELETE_USER']);
             $('#single-modal label').text(Blockly.Msg['POPUP_PASSWORD']);
             $('#single-modal span').removeClass('typcn-pencil');
             $('#single-modal span').addClass('typcn-lock-closed');

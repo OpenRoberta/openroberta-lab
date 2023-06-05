@@ -406,7 +406,7 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
     }
     function toggleTutorial($button) {
         if ($('#tutorialButton').hasClass('rightActive')) {
-            $('#blockly').closeRightView();
+            $('#blocklyDiv').closeRightView();
         }
         else {
             $button.openRightView($('#tutorialDiv'), INITIAL_WIDTH);
@@ -416,9 +416,9 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
         if ($('#tutorialDiv').hasClass('rightActive')) {
             return;
         }
-        if ($('#blockly').hasClass('rightActive')) {
+        if ($('#blocklyDiv').hasClass('rightActive')) {
             function waitForClose() {
-                if (!$('#blockly').hasClass('rightActive')) {
+                if (!$('#blocklyDiv').hasClass('rightActive')) {
                     toggleTutorial();
                 }
                 else {

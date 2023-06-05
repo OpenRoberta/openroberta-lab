@@ -1,4 +1,4 @@
-define(["require", "exports", "util", "message", "guiState.model", "progHelp.controller", "legal.controller", "webview.controller", "confVisualization", "socket.controller", "jquery", "blockly", "thymioSocket.controller", "notification.controller"], function (require, exports, UTIL, MSG, GUISTATE, HELP_C, LEGAL_C, WEBVIEW_C, CV, SOCKET_C, $, Blockly, THYMIO_C, NOTIFICATION_C) {
+define(["require", "exports", "util", "message", "guiState.model", "progHelp.controller", "legal.controller", "webview.controller", "confVisualization", "socket.controller", "jquery", "blockly", "thymioSocket.controller", "notification.controller", "program.controller", "configuration.controller", "user.controller", "nn.controller", "progList.controller", "galleryList.controller", "tutorialList.controller"], function (require, exports, UTIL, MSG, GUISTATE, HELP_C, LEGAL_C, WEBVIEW_C, CV, SOCKET_C, $, Blockly, THYMIO_C, NOTIFICATION_C, PROGRAM_C, CONFIGURATION_C, USER_C, NN_C, progList_controller_1, galleryList_controller_1, tutorialList_controller_1) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getLegalTextsMap = exports.updateTutorialMenu = exports.updateMenuStatus = exports.setWebview = exports.inWebview = exports.getTheme = exports.getAvailableHelp = exports.getSocket = exports.setSocket = exports.getPingTime = exports.setPingTime = exports.doPing = exports.setPing = exports.isProgramToDownload = exports.setProgramToDownload = exports.getCommandLine = exports.getSignature = exports.getVendor = exports.getConnection = exports.getConnectionTypeEnum = exports.getListOfTutorials = exports.getWebotsUrl = exports.hasWebotsSim = exports.hasNN = exports.hasMarkerSim = exports.hasMultiSim = exports.hasSim = exports.checkSim = exports.setConfiguration = exports.setProgram = exports.setLogout = exports.setLogin = exports.getUserUserGroupOwner = exports.getUserUserGroup = exports.isUserMemberOfUserGroup = exports.isUserAccountActivated = exports.getUserAccountName = exports.getUserName = exports.isPublicServerVersion = exports.getServerVersion = exports.setStartWithoutPopup = exports.getStartWithoutPopup = exports.getConfigurationConf = exports.getProgramProg = exports.getConfigurationToolbox = exports.getProgramToolbox = exports.getRobots = exports.getProgramXML = exports.setProgramXML = exports.getConfigurationXML = exports.setConfigurationXML = exports.setRobotToken = exports.getRobotFWName = exports.setDefaultRobot = exports.getDefaultRobot = exports.getConfToolbox = exports.getToolbox = exports.getProgramToolboxLevel = exports.setProgramToolboxLevel = exports.setConfigurationNameDefault = exports.setConfigurationName = exports.getConfigurationName = exports.setProgramShareRelation = exports.getProgramShareRelation = exports.setProgramAuthorName = exports.getProgramAuthorName = exports.setProgramOwnerName = exports.getProgramOwnerName = exports.setProgramName = exports.getProgramName = exports.setProgramTimestamp = exports.getProgramTimestamp = exports.isUserLoggedIn = exports.getBinaryFileExtension = exports.getSourceCodeFileExtension = exports.getProgramSource = exports.setProgramSource = exports.getProgramShared = exports.setConfigurationSaved = exports.isConfigurationSaved = exports.setProgramSaved = exports.isProgramSaved = exports.getLanguage = exports.setLanguage = exports.getPrevView = exports.getView = exports.setView = exports.hasRobotDefaultFirmware = exports.getRobotVersion = exports.getRobotState = exports.getRobotBattery = exports.getRobotName = exports.getRobotTime = exports.isRobotDisconnected = exports.isConfigurationUsed = exports.isRobotConnected = exports.getRobotInfoEN = exports.getRobotInfoDE = exports.isRobotBeta = exports.getMenuRobotRealName = exports.getRobotRealName = exports.getRobotPort = exports.setRobotPort = exports.getRobotGroup = exports.getRobot = exports.setRunEnabled = exports.isRunEnabled = exports.setConnectionState = exports.findRobot = exports.findGroup = exports.setKioskMode = exports.setRobot = exports.setBricklyWorkspace = exports.getBricklyWorkspace = exports.setBlocklyWorkspace = exports.getBlocklyWorkspace = exports.setIsAgent = exports.getIsAgent = exports.setState = exports.isKioskMode = exports.isConfigurationAnonymous = exports.getConfigurationStandardName = exports.isConfigurationStandard = exports.isProgramWritable = exports.isProgramStandard = exports.setInitialState = exports.init = exports.resetDynamicProgramToolbox = exports.setDynamicProgramToolbox = exports.getRobotDeprecatedData = exports.isRobotDeprecated = void 0;
     var LONG = 300000; // Ping time 5min
@@ -55,7 +55,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
     exports.init = init;
     function setInitialState() {
         // User not logged in?
-        $('.nav > li > ul > .login').addClass('disabled');
+        $('.navbar-nav > li > ul > .login').addClass('disabled');
         $('#head-navi-icon-user').addClass('error');
         // Toolbox?
         $('.level').removeClass('disabled');
@@ -402,10 +402,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         }
         if (GUISTATE.gui.nn) {
             $('#nn-activations').empty();
-            $('#tabNNctxt').show();
-            $('#tabNNlearnctxt').show();
-            $('#menuTabNNctxt').show();
-            $('#menuTabNNLearnctxt').show();
+            $('.tabLinkNN').show();
             $.each(GUISTATE.gui.nnActivations, function (_, item) {
                 $('#nn-activations').append($('<option>', {
                     value: item,
@@ -414,10 +411,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             });
         }
         else {
-            $('#tabNNctxt').hide();
-            $('#tabNNlearnctxt').hide();
-            $('#menuTabNNctxt').hide();
-            $('#menuTabNNLearnctxt').hide();
+            $('.tabLinkNN').hide();
         }
         if (getHasRobotStopButton(robot)) {
             GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.showStopProgram();
@@ -644,9 +638,10 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
     }
     exports.hasRobotDefaultFirmware = hasRobotDefaultFirmware;
     function setView(view) {
-        $('#head-navi-tooltip-program').attr('data-toggle', 'dropdown');
-        $('#head-navi-tooltip-configuration').attr('data-toggle', 'dropdown');
-        $('#head-navi-tooltip-robot').attr('data-toggle', 'dropdown');
+        $('#main-section').css('padding-right', '12px');
+        $('#head-navi-tooltip-program').attr('data-bs-toggle', 'dropdown');
+        $('#head-navi-tooltip-configuration').attr('data-bs-toggle', 'dropdown');
+        $('#head-navi-tooltip-robot').attr('data-bs-toggle', 'dropdown');
         $('#head-navigation-program-edit').removeClass('disabled');
         $('.robotType').removeClass('disabled');
         $('#head-navigation-configuration-edit').removeClass('disabled');
@@ -676,6 +671,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             $('#menuTabNN').parent().removeClass('disabled');
             $('#menuTabNNLearn').parent().removeClass('disabled');
             $('#menuTabProgram').parent().addClass('disabled');
+            $('#main-section').css('padding-right', 0);
         }
         else if (view === 'tabNN') {
             $('#head-navigation-configuration-edit').css('display', 'none');
@@ -702,12 +698,12 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             $('#menuTabNNLearn').parent().removeClass('disabled');
             $('#head-navigation-program-edit').addClass('disabled');
             $('.robotType').addClass('disabled');
-            $('#head-navi-tooltip-program').attr('data-toggle', '');
-            $('#head-navi-tooltip-configuration').attr('data-toggle', '');
+            $('#head-navi-tooltip-program').attr('data-bs-toggle', '');
+            $('#head-navi-tooltip-configuration').attr('data-bs-toggle', '');
         }
         else {
-            $('#head-navi-tooltip-program').attr('data-toggle', '');
-            $('#head-navi-tooltip-configuration').attr('data-toggle', '');
+            $('#head-navi-tooltip-program').attr('data-bs-toggle', '');
+            $('#head-navi-tooltip-configuration').attr('data-bs-toggle', '');
             $('#head-navigation-program-edit').addClass('disabled');
             $('#head-navigation-configuration-edit').addClass('disabled');
         }
@@ -741,6 +737,22 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         GUISTATE.gui.language = language;
         HELP_C.initView();
         LEGAL_C.loadLegalTexts();
+        PROGRAM_C.reloadView();
+        CONFIGURATION_C.reloadView();
+        USER_C.initValidationMessages();
+        NOTIFICATION_C.reloadNotifications();
+        (0, progList_controller_1.switchLanguage)();
+        (0, galleryList_controller_1.switchLanguage)();
+        (0, tutorialList_controller_1.switchLanguage)();
+        NN_C.reloadViews();
+        var value = Blockly.Msg.MENU_START_BRICK;
+        if (value.indexOf('$') >= 0) {
+            value = value.replace('$', getRobotRealName());
+        }
+        $('#menuRunProg').text(value);
+        if (getBlocklyWorkspace()) {
+            getBlocklyWorkspace().robControls.refreshTooltips(getRobotRealName());
+        }
         $('#infoContent').attr('data-placeholder', Blockly.Msg.INFO_DOCUMENTATION_HINT || 'Document your program here ...');
         $('.bootstrap-tagsinput input').attr('placeholder', Blockly.Msg.INFO_TAGS || 'Tags');
         updateTutorialMenu();
@@ -1041,9 +1053,9 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         GUISTATE.user.isAccountActivated = result.isAccountActivated;
         GUISTATE.user.userGroup = result.userGroupName;
         GUISTATE.user.userGroupOwner = result.userGroupOwner;
-        $('.nav > li > ul > .login, .logout').removeClass('disabled');
-        $('.nav > li > ul > .login.unavailable').addClass('disabled');
-        $('.nav > li > ul > .logout').addClass('disabled');
+        $('.navbar-nav > li > ul > .login, .logout').removeClass('disabled');
+        $('.navbar-nav > li > ul > .login.unavailable').addClass('disabled');
+        $('.navbar-nav > li > ul > .logout').addClass('disabled');
         $('#head-navi-icon-user').removeClass('error');
         $('#head-navi-icon-user').addClass('ok');
         $('#menuSaveProg').parent().addClass('disabled');
@@ -1077,8 +1089,8 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         setProgramAuthorName(null);
         setProgramShareRelation(null);
         GUISTATE.program.shared = false;
-        $('.nav > li > ul > .logout, .login').removeClass('disabled');
-        $('.nav > li > ul > .login').addClass('disabled');
+        $('.navbar-nav > li > ul > .logout, .login').removeClass('disabled');
+        $('.navbar-nav > li > ul > .login').addClass('disabled');
         $('#head-navi-icon-user').removeClass('ok');
         $('#head-navi-icon-user').addClass('error');
         if (GUISTATE.gui.view == 'tabProgList') {

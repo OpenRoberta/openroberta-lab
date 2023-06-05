@@ -1,6 +1,3 @@
-import * as COMM from 'comm';
-import * as MSG from 'message';
-import * as LOG from 'log';
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
 import 'jquery-scrollto';
@@ -100,8 +97,8 @@ function getInstance() {
 }
 export { start, getInstance };
 
-var offsetLeft = $('#blockly').width() * -0.15;
-var offsetTop = $('#blockly').height() * -0.1;
+var offsetLeft = $('#blocklyDiv').width() * -0.15;
+var offsetTop = $('#blocklyDiv').height() * -0.1;
 var welcome = [
     {
         event_type: 'next',
@@ -160,7 +157,7 @@ var welcome = [
         selector: '#simDiv',
         description: 'Blockly.Msg.TOUR1_DESCRIPTION15',
         shape: 'circle',
-        radius: $('#blockly').width() / 10 + $('#blockly').height() / 10,
+        radius: $('#blocklyDiv').width() / 10 + $('#blocklyDiv').height() / 10,
         top: offsetTop,
         left: offsetLeft,
         nextButton: {
@@ -331,7 +328,7 @@ var overview = [
         selector: '#simDiv',
         description: 'Blockly.Msg.TOUR1_DESCRIPTION15',
         shape: 'circle',
-        radius: $('#blockly').width() / 10 + $('#blockly').height() / 10,
+        radius: $('#blocklyDiv').width() / 10 + $('#blocklyDiv').height() / 10,
         top: offsetTop,
         left: offsetLeft,
         nextButton: {

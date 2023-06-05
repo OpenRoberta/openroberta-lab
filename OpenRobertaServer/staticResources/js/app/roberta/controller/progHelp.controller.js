@@ -51,7 +51,7 @@ define(["require", "exports", "guiState.controller", "blockly", "jquery", "jquer
     }
     function toggleHelp($button) {
         if ($('#helpButton').hasClass('rightActive')) {
-            $('#blockly').closeRightView();
+            $('#blocklyDiv').closeRightView();
         }
         else {
             if (GUISTATE_C.getProgramToolboxLevel() === 'beginner') {

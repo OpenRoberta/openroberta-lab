@@ -96,12 +96,12 @@ define(["require", "exports", "./interpreter.state", "./neuralnetwork.ui", "./in
         Interpreter.prototype.setDebugMode = function (mode) {
             this.state.setDebugMode(mode);
             if (mode) {
-                $('#blockly').addClass('debug');
+                $('#blocklyDiv').addClass('debug');
                 this.state.addHighlights(this.breakpoints);
             }
             else {
                 this.state.removeHighlights(this.breakpoints);
-                $('#blockly').removeClass('debug');
+                $('#blocklyDiv').removeClass('debug');
             }
         };
         /** sets relevant event value to true */

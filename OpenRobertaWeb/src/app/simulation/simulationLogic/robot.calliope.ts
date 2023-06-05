@@ -1,5 +1,5 @@
 import { CalliopeLightSensor, CompassSensor, GestureSensor, Pins, TemperatureSensor, Timer, TouchKeys, VolumeMeterSensor } from 'robot.sensors';
-import { MatrixDisplay, MbedDisplay, Motors, PinActuators, RGBLed, WebAudio } from './robot.actuators';
+import { MatrixDisplay, MbedDisplay, Motors, PinActuators, RGBLed, WebAudio } from 'robot.actuators';
 import { ISelectable, RobotBase, SelectionListener } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import { RobotBaseStationary } from 'robot.base.stationary';
@@ -28,7 +28,7 @@ export default class RobotCalliope extends RobotBaseStationary {
     gestureSensor: GestureSensor;
     display: MatrixDisplay;
     topView: string =
-        '<div id="mbedContent"><form id="mbed-form"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons"></div></form></div>';
+        '<div id="mbedContent"><form id="mbed-form"><div id="mbedButtons" class="btn-group btn-group-vertical" data-bs-toggle="buttons"></div></form></div>';
 
     constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, myListener: SelectionListener) {
         super(id, configuration, interpreter, savedName, myListener);

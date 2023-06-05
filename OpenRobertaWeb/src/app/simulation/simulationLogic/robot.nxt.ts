@@ -1,6 +1,6 @@
 import RobotEv3 from 'robot.ev3';
-import { NXTChassis } from './robot.actuators';
-import { ColorSensor, DistanceSensor, EV3Keys, LightSensor, NXTColorSensor, SoundSensor, Timer, TouchSensor, UltrasonicSensor } from './robot.sensors';
+import { NXTChassis } from 'robot.actuators';
+import { ColorSensor, DistanceSensor, EV3Keys, LightSensor, NXTColorSensor, SoundSensor, Timer, TouchSensor, UltrasonicSensor } from 'robot.sensors';
 import { Pose } from 'robot.base.mobile';
 import * as $ from 'jquery';
 

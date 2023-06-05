@@ -262,7 +262,7 @@ function showSaveAsModal() {
     UTIL.showSingleModal(
         function () {
             $('#singleModalInput').attr('type', 'text');
-            $('#single-modal h3').text(Blockly.Msg['MENU_SAVE_AS']);
+            $('#single-modal h5').text(Blockly.Msg['MENU_SAVE_AS']);
             $('#single-modal label').text(Blockly.Msg['POPUP_NAME']);
         },
         saveAsToServer,

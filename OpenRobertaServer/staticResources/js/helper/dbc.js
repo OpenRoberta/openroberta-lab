@@ -1,4 +1,4 @@
-define(["require", "exports", "log"], function (require, exports, LOG) {
+define(["require", "exports", "exports", "log"], function (require, exports, exports, LOG) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.assertTrue = exports.assertEq = void 0;
     /**

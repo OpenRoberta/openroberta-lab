@@ -182,10 +182,10 @@ define(["require", "exports", "comm", "log", "jquery"], function (require, expor
         numberOfActiveActions--;
         try {
             if (callback === undefined) {
-                this.click();
+                this.trigger('click');
             }
             else {
-                this.click(callback);
+                this.trigger('click', callback);
             }
             numberOfActiveActions++;
         }

@@ -67,7 +67,7 @@ define(["require", "exports", "guiState.controller", "blockly", "jquery", "jquer
     }
     function toggleInfo($button) {
         if ($('#infoButton').hasClass('rightActive')) {
-            $('#blockly').closeRightView();
+            $('#blocklyDiv').closeRightView();
         }
         else {
             $('#infoContent').html(blocklyWorkspace.description);

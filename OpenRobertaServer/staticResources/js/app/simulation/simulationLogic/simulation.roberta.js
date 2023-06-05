@@ -562,7 +562,7 @@ define(["require", "exports", "interpreter.constants", "util", "interpreter.inte
                 e.preventDefault();
             });
             $('#blocklyDiv').on('click touchstart', function (e) {
-                $('#blocklyDiv').attr('tabindex', 0);
+                // $('#blocklyDiv').attr('tabindex', 0);
                 $('#blocklyDiv').trigger('focus');
                 e.preventDefault();
             });

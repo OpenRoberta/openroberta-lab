@@ -228,7 +228,7 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
         }, 'No special Characters allowed here. Use only upper and lowercase letters (A through Z; a through z) and numbers.');
         UTIL.showSingleModal(function () {
             $('#singleModalInput').attr('type', 'text');
-            $('#single-modal h3').text(Blockly.Msg['MENU_SAVE_AS']);
+            $('#single-modal h5').text(Blockly.Msg['MENU_SAVE_AS']);
             $('#single-modal label').text(Blockly.Msg['POPUP_NAME']);
         }, saveAsToServer, function () { }, {
             rules: {

@@ -47,8 +47,8 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
         blocklyWorkspace.robControls.disable('saveProgram');
         blocklyWorkspace.robControls.refreshTooltips(GUISTATE_C.getRobotRealName());
         GUISTATE_C.checkSim();
-        var toolbox = $('#blockly .blocklyToolboxDiv');
-        toolbox.prepend('<ul class="nav nav-tabs levelTabs"><li class="active"><a class="typcn typcn-media-stop-outline" href="#beginner" data-toggle="tab">1</a></li><li class=""><a href="#expert" class="typcn typcn-star-outline" data-toggle="tab">2</a></li></ul>');
+        var toolbox = $('#program .blocklyToolboxDiv');
+        toolbox.prepend('<ul class="nav nav-tabs levelTabs"><li class="nav-item"><a class="nav-link typcn typcn-media-stop-outline active beginner" href="#beginner" data-bs-toggle="tab">1</a></li><li class="nav-item"><a href="#expert" class="nav-link typcn typcn-star-outline expert" data-bs-toggle="tab">2</a></li></ul>');
     }
     function initEvents() {
         $('#sliderDiv').draggable({
@@ -102,13 +102,10 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
         $('#tabProgram').onWrap('hidden.bs.tab', function (e) {
             blocklyWorkspace.setVisible(false);
         });
-        // work around for touch devices
-        $('.levelTabs').on('touchend', function (e) {
-            var target = $(e.target).attr('href');
+        $('.expert, .beginner').onWrap('click', function (e) {
+            var target = ($(e.target).attr('href') && $(e.target).attr('href').substring(1)) ||
+                ($(e.target.parentElement).attr('href') && $(e.target.parentElement).attr('href').substring(1)); // activated tab
             $('.levelTabs a[href="' + target + '"]').tabWrapShow();
-        });
-        $('.levelTabs a[data-toggle="tab"]').onWrap('shown.bs.tab', function (e) {
-            var target = $(e.target).attr('href').substring(1); // activated tab
             e.preventDefault();
             loadToolbox(target);
             e.stopPropagation();
@@ -125,7 +122,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
                 }
             }
             $('.selectedHelp').removeClass('selectedHelp');
-            if (Blockly.selected && $('#blockly').hasClass('rightActive')) {
+            if (Blockly.selected && $('#blocklyDiv').hasClass('rightActive')) {
                 var block = Blockly.selected.type;
                 $('#' + block).addClass('selectedHelp');
                 $('#helpContent').scrollTo('#' + block, 1000, {
@@ -278,7 +275,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
         }, 'No special Characters allowed here. Use only upper and lowercase letters (A through Z; a through z) and numbers.');
         UTIL.showSingleModal(function () {
             $('#singleModalInput').attr('type', 'text');
-            $('#single-modal h3').text(Blockly.Msg['MENU_SAVE_AS']);
+            $('#single-modal h5').text(Blockly.Msg['MENU_SAVE_AS']);
             $('#single-modal label').text(Blockly.Msg['POPUP_NAME']);
         }, saveAsProgramToServer, function () { }, {
             rules: {

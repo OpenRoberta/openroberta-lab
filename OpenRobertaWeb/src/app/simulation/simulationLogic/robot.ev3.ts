@@ -1,6 +1,6 @@
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
 import { ColorSensor, DistanceSensor, EV3Keys, GyroSensorExt, InfraredSensor, Keys, Timer, TouchSensor, UltrasonicSensor } from 'robot.sensors';
-import { ChassisDiffDrive, EV3Chassis, StatusLed, TTS, WebAudio } from './robot.actuators';
+import { ChassisDiffDrive, EV3Chassis, StatusLed, TTS, WebAudio } from 'robot.actuators';
 import { RobotBase, SelectionListener } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import * as $ from 'jquery';

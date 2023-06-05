@@ -1,9 +1,6 @@
-import * as require from 'require';
-
 import * as LOG from 'log';
 import * as UTIL from 'util';
 import * as MSG from 'message';
-import * as COMM from 'comm';
 import * as GUISTATE_C from 'guiState.controller';
 import * as LANG from 'language.controller';
 import * as GALLERY_C from 'galleryList.controller';
@@ -11,6 +8,7 @@ import * as PROGRAM from 'program.model';
 import * as USERGROUP from 'userGroup.model';
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
+import * as CardView from 'cardView';
 import 'bootstrap-table';
 
 function init() {
@@ -22,6 +20,7 @@ export { init };
 function initView() {
     $('#relationsTable').bootstrapTable({
         height: 400,
+        theadClasses: 'table-dark',
         iconsPrefix: 'typcn',
         icons: {
             paginationSwitchDown: 'typcn-document-text',
@@ -75,37 +74,47 @@ function initView() {
         columns: [
             {
                 sortable: true,
-                //visible : false,
-                formatter: GALLERY_C.formatRobot,
+                title: '',
+                formatter: CardView.robot,
+            },
+            {
+                title: '',
+                sortable: true,
+                formatter: CardView.name,
+            },
+            {
+                title: '',
+                sortable: true,
+                formatter: CardView.programDescription,
+            },
+            {
+                title: '',
+                sortable: true,
+                formatter: function (goal) {
+                    return CardView.label(goal, 'GALLERY_BY', 'cardViewInfo');
+                },
             },
             {
                 sortable: true,
-                formatter: GALLERY_C.formatProgramName,
+                title: '',
+                formatter: function (date) {
+                    return CardView.label(UTIL.formatDate(date), 'GALLERY_DATE', 'cardViewInfo');
+                },
             },
             {
-                sortable: true,
-                formatter: GALLERY_C.formatProgramDescription,
-            },
-            {
-                title: GALLERY_C.titleAuthor,
-                sortable: true,
-            },
-            {
-                title: GALLERY_C.titleDate,
-                sortable: true,
-                formatter: UTIL.formatDate,
-            },
-            {
-                title: GALLERY_C.titleNumberOfViews,
+                title: CardView.titleTypcn('eye-outline'),
                 sortable: true,
             },
             {
-                title: GALLERY_C.titleLikes,
+                title: CardView.titleTypcn('heart-full-outline'),
                 sortable: true,
             },
             {
+                title: '',
                 sortable: true,
-                formatter: GALLERY_C.formatTags,
+                formatter: function (value, row) {
+                    return CardView.programTags(row[2]);
+                },
             },
             {
                 visible: false,
@@ -487,7 +496,7 @@ var formatSharedWith = function (value, row, index) {
                             html;
 
                         html =
-                            '<div class="input-group" title="" data-original-title lkey="Blockly.Msg.SHARE_WITH_USERGROUP" data-translation-targets="title data-original-title">' +
+                            '<div class="input-group" title="" data-bs-original-title lkey="Blockly.Msg.SHARE_WITH_USERGROUP" data-translation-targets="title data-bs-original-title">' +
                             '<label class="input-group-btn" for="shareWithUserGroupInput">' +
                             '<button type="button" style="height:34px" class="btn disabled editor">' +
                             '<i class="typcn typcn-group"></i>' +

@@ -10,6 +10,13 @@ import * as $ from 'jquery';
 import * as Blockly from 'blockly';
 import * as THYMIO_C from 'thymioSocket.controller';
 import * as NOTIFICATION_C from 'notification.controller';
+import * as PROGRAM_C from 'program.controller';
+import * as CONFIGURATION_C from 'configuration.controller';
+import * as USER_C from 'user.controller';
+import * as NN_C from 'nn.controller';
+import { switchLanguage as PROGLIST_C_switchLanguage } from 'progList.controller';
+import { switchLanguage as GALLERYLIST_C_switchLanguage } from 'galleryList.controller';
+import { switchLanguage as TUTORIALLIST_C_switchLanguage } from 'tutorialList.controller';
 
 var LONG = 300000; // Ping time 5min
 var SHORT = 3000; // Ping time 3sec
@@ -73,7 +80,7 @@ function init(language, opt_data) {
 
 function setInitialState() {
     // User not logged in?
-    $('.nav > li > ul > .login').addClass('disabled');
+    $('.navbar-nav > li > ul > .login').addClass('disabled');
     $('#head-navi-icon-user').addClass('error');
     // Toolbox?
     $('.level').removeClass('disabled');
@@ -415,10 +422,7 @@ function setRobot(robot, result, opt_init) {
 
     if (GUISTATE.gui.nn) {
         $('#nn-activations').empty();
-        $('#tabNNctxt').show();
-        $('#tabNNlearnctxt').show();
-        $('#menuTabNNctxt').show();
-        $('#menuTabNNLearnctxt').show();
+        $('.tabLinkNN').show();
         $.each(GUISTATE.gui.nnActivations, function (_, item) {
             $('#nn-activations').append(
                 $('<option>', {
@@ -428,10 +432,7 @@ function setRobot(robot, result, opt_init) {
             );
         });
     } else {
-        $('#tabNNctxt').hide();
-        $('#tabNNlearnctxt').hide();
-        $('#menuTabNNctxt').hide();
-        $('#menuTabNNLearnctxt').hide();
+        $('.tabLinkNN').hide();
     }
     if (getHasRobotStopButton(robot)) {
         GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.showStopProgram();
@@ -658,9 +659,10 @@ function hasRobotDefaultFirmware() {
 }
 
 function setView(view) {
-    $('#head-navi-tooltip-program').attr('data-toggle', 'dropdown');
-    $('#head-navi-tooltip-configuration').attr('data-toggle', 'dropdown');
-    $('#head-navi-tooltip-robot').attr('data-toggle', 'dropdown');
+    $('#main-section').css('padding-right', '12px');
+    $('#head-navi-tooltip-program').attr('data-bs-toggle', 'dropdown');
+    $('#head-navi-tooltip-configuration').attr('data-bs-toggle', 'dropdown');
+    $('#head-navi-tooltip-robot').attr('data-bs-toggle', 'dropdown');
     $('#head-navigation-program-edit').removeClass('disabled');
     $('.robotType').removeClass('disabled');
     $('#head-navigation-configuration-edit').removeClass('disabled');
@@ -689,6 +691,7 @@ function setView(view) {
         $('#menuTabNN').parent().removeClass('disabled');
         $('#menuTabNNLearn').parent().removeClass('disabled');
         $('#menuTabProgram').parent().addClass('disabled');
+        $('#main-section').css('padding-right', 0);
     } else if (view === 'tabNN') {
         $('#head-navigation-configuration-edit').css('display', 'none');
         $('#head-navigation-program-edit').css('display', 'inline');
@@ -712,11 +715,11 @@ function setView(view) {
         $('#menuTabNNLearn').parent().removeClass('disabled');
         $('#head-navigation-program-edit').addClass('disabled');
         $('.robotType').addClass('disabled');
-        $('#head-navi-tooltip-program').attr('data-toggle', '');
-        $('#head-navi-tooltip-configuration').attr('data-toggle', '');
+        $('#head-navi-tooltip-program').attr('data-bs-toggle', '');
+        $('#head-navi-tooltip-configuration').attr('data-bs-toggle', '');
     } else {
-        $('#head-navi-tooltip-program').attr('data-toggle', '');
-        $('#head-navi-tooltip-configuration').attr('data-toggle', '');
+        $('#head-navi-tooltip-program').attr('data-bs-toggle', '');
+        $('#head-navi-tooltip-configuration').attr('data-bs-toggle', '');
         $('#head-navigation-program-edit').addClass('disabled');
         $('#head-navigation-configuration-edit').addClass('disabled');
     }
@@ -749,6 +752,22 @@ function setLanguage(language) {
     GUISTATE.gui.language = language;
     HELP_C.initView();
     LEGAL_C.loadLegalTexts();
+    PROGRAM_C.reloadView();
+    CONFIGURATION_C.reloadView();
+    USER_C.initValidationMessages();
+    NOTIFICATION_C.reloadNotifications();
+    PROGLIST_C_switchLanguage();
+    GALLERYLIST_C_switchLanguage();
+    TUTORIALLIST_C_switchLanguage();
+    NN_C.reloadViews();
+    var value = Blockly.Msg.MENU_START_BRICK;
+    if (value.indexOf('$') >= 0) {
+        value = value.replace('$', getRobotRealName());
+    }
+    $('#menuRunProg').text(value);
+    if (getBlocklyWorkspace()) {
+        getBlocklyWorkspace().robControls.refreshTooltips(getRobotRealName());
+    }
     $('#infoContent').attr('data-placeholder', Blockly.Msg.INFO_DOCUMENTATION_HINT || 'Document your program here ...');
     $('.bootstrap-tagsinput input').attr('placeholder', Blockly.Msg.INFO_TAGS || 'Tags');
     updateTutorialMenu();
@@ -1049,9 +1068,9 @@ function setLogin(result) {
     GUISTATE.user.userGroup = result.userGroupName;
     GUISTATE.user.userGroupOwner = result.userGroupOwner;
 
-    $('.nav > li > ul > .login, .logout').removeClass('disabled');
-    $('.nav > li > ul > .login.unavailable').addClass('disabled');
-    $('.nav > li > ul > .logout').addClass('disabled');
+    $('.navbar-nav > li > ul > .login, .logout').removeClass('disabled');
+    $('.navbar-nav > li > ul > .login.unavailable').addClass('disabled');
+    $('.navbar-nav > li > ul > .logout').addClass('disabled');
     $('#head-navi-icon-user').removeClass('error');
     $('#head-navi-icon-user').addClass('ok');
     $('#menuSaveProg').parent().addClass('disabled');
@@ -1088,8 +1107,8 @@ function setLogout() {
     setProgramAuthorName(null);
     setProgramShareRelation(null);
     GUISTATE.program.shared = false;
-    $('.nav > li > ul > .logout, .login').removeClass('disabled');
-    $('.nav > li > ul > .login').addClass('disabled');
+    $('.navbar-nav > li > ul > .logout, .login').removeClass('disabled');
+    $('.navbar-nav > li > ul > .login').addClass('disabled');
     $('#head-navi-icon-user').removeClass('ok');
     $('#head-navi-icon-user').addClass('error');
     if (GUISTATE.gui.view == 'tabProgList') {
