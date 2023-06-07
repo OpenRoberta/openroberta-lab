@@ -36,7 +36,7 @@ jobs:
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
-          file: ./Docker/openroberta/conf/y-standalone-lab/Dockerfile
+          file: ./Resources/dockerStandalone/Dockerfile
           build-args: BASEVERSION=latest
           platforms: linux/amd64
           push: true
