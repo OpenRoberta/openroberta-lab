@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 @NepoConfiguration(name = "RGBLED", category = "CONFIGURATION_ACTOR",
-    blocklyNames = {"robConf_rgbled"})
+    blocklyNames = {"robConf_rgbled", "robConf_rgbledh"})
 public final class RgbledActor extends ConfigurationComponent {
     private RgbledActor() {
         super(null, null, null, null, null);

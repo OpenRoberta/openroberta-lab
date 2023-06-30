@@ -7,14 +7,14 @@
                 </block>
             </value>
         </block>
-        <block type="makeblockActions_leds_on">
-            <value name="COLOR">
+        <block type="actions_rgbLed_on">
+            <value name="COLOUR">
                 <block type="robColour_picker">
                     <field name="COLOUR">#cc0000</field>
                 </block>
             </value>
         </block>
-        <block type="makeblockActions_leds_off"/>
+        <block type="actions_rgbLed_off"/>
         <block type="festobionicActions_stepmotor">
             <value name="VALUE">
                 <block type="math_number" intask="true">

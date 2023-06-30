@@ -1,10 +1,10 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:b="http://de.fhg.iais.roberta.blockly" version="1.0">
-    <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" />
-    <xsl:strip-space elements="*" />
+    <xsl:output method="xml" omit-xml-declaration="yes" indent="yes"/>
+    <xsl:strip-space elements="*"/>
     <!-- identity -->
     <xsl:template match="@* | node()">
         <xsl:copy>
-            <xsl:apply-templates select="@* | node()" />
+            <xsl:apply-templates select="@* | node()"/>
         </xsl:copy>
     </xsl:template>
     <!-- block_set attributes may be missing -->
@@ -18,28 +18,28 @@
             </xsl:if>
 
             <xsl:if test="not(./@tags)">
-                <xsl:attribute name="tags" />
+                <xsl:attribute name="tags"/>
             </xsl:if>
             <xsl:if test="not(./@description)">
-                <xsl:attribute name="description" />
+                <xsl:attribute name="description"/>
             </xsl:if>
-            <xsl:apply-templates select="@* | node()" />
+            <xsl:apply-templates select="@* | node()"/>
         </xsl:copy>
     </xsl:template>
     <!-- description should not be escaped -->
     <xsl:template match="b:block_set/@description">
         <xsl:copy>
-            <xsl:value-of select="." disable-output-escaping="yes" />
+            <xsl:value-of select="." disable-output-escaping="yes"/>
         </xsl:copy>
     </xsl:template>
     <!-- intask attribute may be missing -->
     <xsl:template match="b:block">
         <xsl:copy>
-            <xsl:apply-templates select="@*" />
+            <xsl:apply-templates select="@*"/>
             <xsl:if test="not(./@intask)">
                 <xsl:attribute name="intask">true</xsl:attribute>
             </xsl:if>
-            <xsl:apply-templates />
+            <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
     <!-- debug flag may be missing -->
@@ -49,8 +49,8 @@
             <xsl:if test="not(./@intask)">
                 <xsl:attribute name="intask">true</xsl:attribute>
             </xsl:if>
-            <xsl:apply-templates select="@*" />
-            <xsl:apply-templates select="b:mutation" />
+            <xsl:apply-templates select="@*"/>
+            <xsl:apply-templates select="b:mutation"/>
             <xsl:if test="not(./b:mutation[./@declare])">
                 <xsl:element name="{'mutation'}" namespace="">
                     <xsl:attribute name="declare">false</xsl:attribute>
@@ -62,13 +62,13 @@
                     <xsl:text>FALSE</xsl:text>
                 </xsl:element>
             </xsl:if>
-            <xsl:apply-templates select="*[not(self::b:mutation)]" />
+            <xsl:apply-templates select="*[not(self::b:mutation)]"/>
         </xsl:copy>
     </xsl:template>
     <!-- _getSample blocks have a different structure, they always need port, slot and mode, sometimes the mutation needs to be adapted as well -->
     <xsl:template match="b:block[contains(./@type, '_getSample')]">
         <xsl:copy>
-            <xsl:apply-templates select="@*" />
+            <xsl:apply-templates select="@*"/>
             <!-- intask attribute may be missing -->
             <xsl:if test="not(./@intask)">
                 <xsl:attribute name="intask">true</xsl:attribute>
@@ -81,17 +81,17 @@
                     </xsl:when>
                     <!-- use the existing mode if one exists -->
                     <xsl:when test="./b:mutation/@input">
-                        <xsl:value-of select="./b:mutation/@input" />
+                        <xsl:value-of select="./b:mutation/@input"/>
                     </xsl:when>
                     <xsl:when
-                        test="./b:field[./@name != 'KEY' and ./@name != 'SENSORPORT' and ./@name != 'PIN' and ./@name != 'ARM' and ./@name != 'ARMPAIR' and ./@name != 'DIRECTION']">
-                        <xsl:value-of select="./b:field" />
+                            test="./b:field[./@name != 'KEY' and ./@name != 'SENSORPORT' and ./@name != 'PIN' and ./@name != 'ARM' and ./@name != 'ARMPAIR' and ./@name != 'DIRECTION']">
+                        <xsl:value-of select="./b:field"/>
                     </xsl:when>
                     <!-- otherwise use default values -->
                     <xsl:when test="./@type = 'robSensors_accelerometer_getSample'">
                         <xsl:choose>
                             <xsl:when
-                                test="ancestor::b:block_set/@robottype = 'mbot' or ancestor::b:block_set/@robottype = 'sensebox' or ancestor::b:block_set/@robottype = 'arduino'">
+                                    test="ancestor::b:block_set/@robottype = 'mbot' or ancestor::b:block_set/@robottype = 'sensebox' or ancestor::b:block_set/@robottype = 'arduino'">
                                 <xsl:text>X</xsl:text>
                             </xsl:when>
                             <xsl:otherwise>VALUE</xsl:otherwise>
@@ -117,7 +117,7 @@
                     <xsl:when test="./@type = 'robSensors_gyro_getSample'">
                         <xsl:choose>
                             <xsl:when
-                                test="ancestor::b:block_set/@robottype = 'mbot' or ancestor::b:block_set/@robottype = 'sensebox' or ancestor::b:block_set/@robottype = 'arduino'">
+                                    test="ancestor::b:block_set/@robottype = 'mbot' or ancestor::b:block_set/@robottype = 'sensebox' or ancestor::b:block_set/@robottype = 'arduino'">
                                 <xsl:text>X</xsl:text>
                             </xsl:when>
                             <xsl:when test="ancestor::b:block_set/@robottype = 'wedo'">TILTED</xsl:when>
@@ -176,7 +176,7 @@
             <xsl:variable name="newPort">
                 <xsl:choose>
                     <xsl:when
-                        test="./b:mutation/@input = 'GYRO_ANGLE' and (ancestor::b:block_set/@robottype = 'calliope' or ancestor::b:block_set/@robottype = 'microbit')">
+                            test="./b:mutation/@input = 'GYRO_ANGLE' and (ancestor::b:block_set/@robottype = 'calliope' or ancestor::b:block_set/@robottype = 'microbit')">
                         X
                     </xsl:when>
                     <xsl:when test=".. = 'ANGLE' and (ancestor::b:block_set/@robottype = 'calliope' or ancestor::b:block_set/@robottype = 'microbit')">X
@@ -184,32 +184,32 @@
                     <xsl:when test=".. = 'ROLL' and (ancestor::b:block_set/@robottype = 'calliope' or ancestor::b:block_set/@robottype = 'microbit')">Y
                     </xsl:when>
                     <xsl:when
-                        test="./b:field[./@name = 'SENSORPORT' or ./@name = 'KEY' or ./@name = 'PIN' or ./@name = 'ARM' or ./@name = 'DIRECTION' or ./@name = 'MOTORPORT']">
+                            test="./b:field[./@name = 'SENSORPORT' or ./@name = 'KEY' or ./@name = 'PIN' or ./@name = 'ARM' or ./@name = 'DIRECTION' or ./@name = 'MOTORPORT']">
                         <xsl:value-of
-                            select="./b:field[./@name = 'SENSORPORT' or ./@name = 'KEY' or ./@name = 'PIN' or ./@name = 'ARM' or ./@name = 'DIRECTION' or ./@name = 'MOTORPORT']" />
+                                select="./b:field[./@name = 'SENSORPORT' or ./@name = 'KEY' or ./@name = 'PIN' or ./@name = 'ARM' or ./@name = 'DIRECTION' or ./@name = 'MOTORPORT']"/>
                     </xsl:when>
                     <xsl:when
-                        test="./b:field[./@name = 'SENSORTYPE'] = 'NAO_RECOGNIZEWORD' or ./b:field[./@name = 'SENSORTYPE'] = 'NAO_TOUCHSENSOR' and ancestor::b:block_set/@robottype = 'nao'">
+                            test="./b:field[./@name = 'SENSORTYPE'] = 'NAO_RECOGNIZEWORD' or ./b:field[./@name = 'SENSORTYPE'] = 'NAO_TOUCHSENSOR' and ancestor::b:block_set/@robottype = 'nao'">
                         <xsl:text>HEAD</xsl:text>
                     </xsl:when>
-                    <xsl:otherwise />
+                    <xsl:otherwise/>
                 </xsl:choose>
             </xsl:variable>
             <xsl:variable name="newSlot">
                 <xsl:choose>
                     <xsl:when test="./b:field[./@name = 'ARMPAIR'] and ancestor::b:block_set/@robottype = 'bob3'">
-                        <xsl:value-of select="./b:field[./@name = 'ARMPAIR']" />
+                        <xsl:value-of select="./b:field[./@name = 'ARMPAIR']"/>
                     </xsl:when>
                     <xsl:when
-                        test="(./b:field[./@name = 'SENSORTYPE'] = 'NAO_RECOGNIZEWORD' or ./b:field[./@name = 'SENSORTYPE'] = 'NAO_TOUCHSENSOR') and ancestor::b:block_set/@robottype = 'nao'">
+                            test="(./b:field[./@name = 'SENSORTYPE'] = 'NAO_RECOGNIZEWORD' or ./b:field[./@name = 'SENSORTYPE'] = 'NAO_TOUCHSENSOR') and ancestor::b:block_set/@robottype = 'nao'">
                         <xsl:text>FRONT</xsl:text>
                     </xsl:when>
-                    <xsl:otherwise />
+                    <xsl:otherwise/>
                 </xsl:choose>
             </xsl:variable>
             <xsl:choose>
                 <xsl:when test="./b:mutation and not(./b:mutation/@protocol)">
-                    <xsl:copy-of select="./b:mutation" />
+                    <xsl:copy-of select="./b:mutation"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:element name="{'mutation'}" namespace="">
@@ -219,11 +219,11 @@
                                     <xsl:text>DEGREE</xsl:text>
                                 </xsl:when>
                                 <xsl:when
-                                    test="./@type = 'robSensors_gyro_getSample' and (ancestor::b:block_set/@robottype = 'calliope' or ancestor::b:block_set/@robottype = 'microbit')">
+                                        test="./@type = 'robSensors_gyro_getSample' and (ancestor::b:block_set/@robottype = 'calliope' or ancestor::b:block_set/@robottype = 'microbit')">
                                     <xsl:text>ANGLE</xsl:text>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <xsl:value-of select="$newMode" />
+                                    <xsl:value-of select="$newMode"/>
                                 </xsl:otherwise>
                             </xsl:choose>
                         </xsl:attribute>
@@ -233,40 +233,40 @@
             <xsl:choose>
                 <xsl:when test="(./b:field/@name = 'MODE' or ./b:field/@name = 'SENSORTYPE')
                  and (not(./b:field[@name = 'MODE']/text() = 'ROLL') and (ancestor::b:block_set/@robottype = 'calliope' or ancestor::b:block_set/@robottype = 'microbit'))">
-                    <xsl:copy-of select="./b:field[./@name = 'MODE']" />
+                    <xsl:copy-of select="./b:field[./@name = 'MODE']"/>
                 </xsl:when>
                 <!-- do not output MODE if SENSORTYPE already exists -->
-                <xsl:when test="./b:field/@name = 'SENSORTYPE'" />
+                <xsl:when test="./b:field/@name = 'SENSORTYPE'"/>
                 <xsl:otherwise>
                     <xsl:element name="{'field'}" namespace="">
                         <xsl:attribute name="name">MODE</xsl:attribute>
-                        <xsl:value-of select="$newMode" />
+                        <xsl:value-of select="$newMode"/>
                     </xsl:element>
                 </xsl:otherwise>
             </xsl:choose>
-            <xsl:copy-of select="./b:field[./@name = 'SENSORTYPE']" />
+            <xsl:copy-of select="./b:field[./@name = 'SENSORTYPE']"/>
             <xsl:choose>
                 <xsl:when test="./b:field/@name = 'SENSORPORT'">
-                    <xsl:copy-of select="./b:field[./@name = 'SENSORPORT']" />
+                    <xsl:copy-of select="./b:field[./@name = 'SENSORPORT']"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:element name="{'field'}" namespace="">
                         <xsl:attribute name="name">SENSORPORT</xsl:attribute>
                         <xsl:if test="$newPort">
-                            <xsl:value-of select="$newPort" />
+                            <xsl:value-of select="$newPort"/>
                         </xsl:if>
                     </xsl:element>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:choose>
                 <xsl:when test="./b:field/@name = 'SLOT'">
-                    <xsl:copy-of select="./b:field[./@name = 'SLOT']" />
+                    <xsl:copy-of select="./b:field[./@name = 'SLOT']"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:element name="{'field'}" namespace="">
                         <xsl:attribute name="name">SLOT</xsl:attribute>
                         <xsl:if test="$newSlot">
-                            <xsl:value-of select="$newSlot" />
+                            <xsl:value-of select="$newSlot"/>
                         </xsl:if>
                     </xsl:element>
                 </xsl:otherwise>
@@ -276,7 +276,7 @@
     <!-- some action blocks may need additional fields -->
     <xsl:template match="b:block[contains(./@type, 'Actions')]">
         <xsl:copy>
-            <xsl:apply-templates select="@*" />
+            <xsl:apply-templates select="@*"/>
             <!-- intask attribute may be missing -->
             <xsl:if test="not(./@intask)">
                 <xsl:attribute name="intask">true</xsl:attribute>
@@ -285,16 +285,8 @@
                 <xsl:if test="not(b:mutation)">
                     <xsl:element name="{'mutation'}" namespace="">
                         <xsl:attribute name="protocol">
-                            <xsl:value-of select="b:field[./@name = 'MODE']" />
+                            <xsl:value-of select="b:field[./@name = 'MODE']"/>
                         </xsl:attribute>
-                    </xsl:element>
-                </xsl:if>
-            </xsl:if>
-            <xsl:if test="./@type = 'mbedActions_leds_off' or ./@type = 'mbedActions_leds_on'">
-                <xsl:if test="not(b:field/@name = 'ACTORPORT')">
-                    <xsl:element name="{'field'}" namespace="">
-                        <xsl:attribute name="name">ACTORPORT</xsl:attribute>
-                        <xsl:text>0</xsl:text>
                     </xsl:element>
                 </xsl:if>
             </xsl:if>
@@ -322,13 +314,125 @@
                     </xsl:element>
                 </xsl:if>
             </xsl:if>
-            <xsl:apply-templates />
+            <xsl:if test="./@type = 'robActions_led_off' and ancestor::b:block_set/@robottype = 'edison'">
+                <xsl:attribute name="type">actions_led_edison</xsl:attribute>
+                <xsl:element name="{'field'}" namespace="">
+                    <xsl:attribute name="name">MODE</xsl:attribute>
+                    <xsl:text>OFF</xsl:text>
+                </xsl:element>
+            </xsl:if>
+            <xsl:if test="./@type = 'robActions_led_on' and ancestor::b:block_set/@robottype = 'edison'">
+                <xsl:attribute name="type">actions_led_edison</xsl:attribute>
+                <xsl:element name="{'field'}" namespace="">
+                    <xsl:attribute name="name">MODE</xsl:attribute>
+                    <xsl:text>ON</xsl:text>
+                </xsl:element>
+            </xsl:if>
+            <xsl:if test="./@type = 'naoActions_ledOff'">
+                <xsl:choose>
+                    <xsl:when
+                            test="b:field/text() = 'EYES' or b:field/text() = 'LEFTEYE' or b:field/text() = 'RIGHTEYE' or b:field/text() = 'LEFTFOOT' or
+                                b:field/text() = 'RIGHTFOOT'">
+                        <xsl:attribute name="type">actions_rgbLed_off_nao</xsl:attribute>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:attribute name="type">actions_led_off_nao</xsl:attribute>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:element name="{'field'}" namespace="">
+                    <xsl:attribute name="name">MODE</xsl:attribute>
+                    <xsl:text>OFF</xsl:text>
+                </xsl:element>
+            </xsl:if>
+            <xsl:if test="./@type = 'naoActions_ledReset'">
+                <xsl:choose>
+                    <xsl:when
+                            test="b:field/text() = 'EYES' or b:field/text() = 'LEFTEYE' or b:field/text() = 'RIGHTEYE' or b:field/text() = 'LEFTFOOT' or
+                                b:field/text() = 'RIGHTFOOT'">
+                        <xsl:attribute name="type">actions_rgbLed_off_nao</xsl:attribute>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:attribute name="type">actions_led_off_nao</xsl:attribute>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:element name="{'field'}" namespace="">
+                    <xsl:attribute name="name">MODE</xsl:attribute>
+                    <xsl:text>RESET</xsl:text>
+                </xsl:element>
+            </xsl:if>
+            <xsl:if test="./@type = 'robActions_brickLight_off' and (ancestor::b:block_set/@robottype = 'ev3' or ancestor::b:block_set/@robottype = 'xNN')">
+                <xsl:attribute name="type">actions_bricklight_off_ev3</xsl:attribute>
+                <xsl:element name="{'field'}" namespace="">
+                    <xsl:attribute name="name">MODE</xsl:attribute>
+                    <xsl:text>OFF</xsl:text>
+                </xsl:element>
+            </xsl:if>
+            <xsl:if
+                    test="./@type = 'robActions_brickLight_reset' and (ancestor::b:block_set/@robottype = 'ev3' or ancestor::b:block_set/@robottype = 'xNN')">
+                <xsl:attribute name="type">actions_bricklight_off_ev3</xsl:attribute>
+                <xsl:element name="{'field'}" namespace="">
+                    <xsl:attribute name="name">MODE</xsl:attribute>
+                    <xsl:text>RESET</xsl:text>
+                </xsl:element>
+            </xsl:if>
+            <xsl:apply-templates/>
+        </xsl:copy>
+    </xsl:template>
+    <!-- mbedActions_leds_on block needs to be restructured -->
+    <xsl:template match="b:block[./@type = 'mbedActions_leds_on']">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:if test="not(b:field/@name = 'ACTORPORT')">
+                <xsl:element name="{'field'}" namespace="">
+                    <xsl:attribute name="name">ACTORPORT</xsl:attribute>
+                    <xsl:text>0</xsl:text>
+                </xsl:element>
+            </xsl:if>
+            <xsl:choose>
+                <xsl:when test="b:field[./@name = 'ACTORPORT']/text() = '_R'">
+                    <xsl:attribute name="type">actions_rgbLed_hidden_on_calliope</xsl:attribute>
+                    <xsl:element name="{'hide'}" namespace="">
+                        <xsl:attribute name="name">ACTORPORT</xsl:attribute>
+                        <xsl:attribute name="value">_R</xsl:attribute>
+                    </xsl:element>
+                    <xsl:apply-templates select="b:value"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="type">actions_rgbLed_on</xsl:attribute>
+                    <xsl:apply-templates/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:copy>
+    </xsl:template>
+    <!-- mbedActions_leds_off blocks needs to be restructured -->
+    <xsl:template match="b:block[./@type = 'mbedActions_leds_off']">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:if test="not(b:field/@name = 'ACTORPORT')">
+                <xsl:element name="{'field'}" namespace="">
+                    <xsl:attribute name="name">ACTORPORT</xsl:attribute>
+                    <xsl:text>0</xsl:text>
+                </xsl:element>
+            </xsl:if>
+            <xsl:choose>
+                <xsl:when test="b:field[./@name = 'ACTORPORT']/text() = '_R'">
+                    <xsl:attribute name="type">actions_rgbLed_hidden_off_calliope</xsl:attribute>
+                    <xsl:element name="{'hide'}" namespace="">
+                        <xsl:attribute name="name">ACTORPORT</xsl:attribute>
+                        <xsl:attribute name="value">_R</xsl:attribute>
+                    </xsl:element>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="type">actions_rgbLed_off</xsl:attribute>
+                    <xsl:apply-templates/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:copy>
     </xsl:template>
     <!-- mbedCommunication blocks may need additional fields -->
     <xsl:template match="b:block[./@type = 'mbedCommunication_receiveBlock' or ./@type = 'mbedCommunication_sendBlock']">
         <xsl:copy>
-            <xsl:apply-templates select="@*" />
+            <xsl:apply-templates select="@*"/>
             <!-- intask attribute may be missing -->
             <xsl:if test="not(./@intask)">
                 <xsl:attribute name="intask">true</xsl:attribute>
@@ -338,21 +442,21 @@
                     <xsl:attribute name="datatype">Number</xsl:attribute>
                 </xsl:element>
             </xsl:if>
-            <xsl:apply-templates select="b:mutation" />
-            <xsl:apply-templates select="b:field[@name = 'TYPE']" />
+            <xsl:apply-templates select="b:mutation"/>
+            <xsl:apply-templates select="b:field[@name = 'TYPE']"/>
             <xsl:if test="./@type = 'mbedCommunication_sendBlock' and not(b:field/@name = 'POWER')">
                 <xsl:element name="{'field'}" namespace="">
                     <xsl:attribute name="name">POWER</xsl:attribute>
                     <xsl:text>0</xsl:text>
                 </xsl:element>
             </xsl:if>
-            <xsl:apply-templates select="*[not(self::b:mutation) and not(self::b:field/@name = 'TYPE')]" />
+            <xsl:apply-templates select="*[not(self::b:mutation) and not(self::b:field/@name = 'TYPE')]"/>
         </xsl:copy>
     </xsl:template>
     <!-- mbedCommunication blocks may need additional fields -->
     <xsl:template match="b:block[./@type = 'robCommunication_receiveBlock' or ./@type = 'robCommunication_sendBlock']">
         <xsl:copy>
-            <xsl:apply-templates select="@*" />
+            <xsl:apply-templates select="@*"/>
             <!-- intask attribute may be missing -->
             <xsl:if test="not(./@intask)">
                 <xsl:attribute name="intask">true</xsl:attribute>
@@ -374,29 +478,128 @@
                     <xsl:text>BLUETOOTH</xsl:text>
                 </xsl:element>
             </xsl:if>
-            <xsl:apply-templates />
+            <xsl:apply-templates/>
+        </xsl:copy>
+    </xsl:template>
+    <!-- mbot2 led blocks needs to be restructured -->
+    <xsl:template match="b:block[./@type = 'actions_rgbLed_hidden_on_mbot2']">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:element name="{'field'}" namespace="">
+                <xsl:attribute name="name">SLOT</xsl:attribute>
+                <xsl:value-of select="b:field[./@name = 'LED']"/>
+            </xsl:element>
+            <xsl:element name="{'hide'}" namespace="">
+                <xsl:attribute name="name">ACTORPORT</xsl:attribute>
+                <xsl:attribute name="value">_R</xsl:attribute>
+            </xsl:element>
+            <xsl:apply-templates select="b:value"/>
+        </xsl:copy>
+    </xsl:template>
+    <xsl:template match="b:block[./@type = 'actions_rgbLed_hidden_off_mbot2']">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:element name="{'field'}" namespace="">
+                <xsl:attribute name="name">SLOT</xsl:attribute>
+                <xsl:value-of select="substring-after(b:field[./@name = 'LED'], 'LED')"/>
+            </xsl:element>
+            <xsl:element name="{'hide'}" namespace="">
+                <xsl:attribute name="name">ACTORPORT</xsl:attribute>
+                <xsl:attribute name="value">_R</xsl:attribute>
+            </xsl:element>
+        </xsl:copy>
+    </xsl:template>
+    <!-- nxt sensorlight block needs to be restructured -->
+    <xsl:template match="b:block[./@type = 'robActions_sensorLight_on']">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:choose>
+                <xsl:when test="b:field[./@name = 'SWITCH_STATE']/text() = 'ON'">
+                    <xsl:attribute name="type">actions_rgbled_on_nxt</xsl:attribute>
+                    <xsl:apply-templates select="b:field[./@name='ACTORPORT']"/>
+                    <xsl:apply-templates select="b:field[./@name='COLOUR']"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="type">actions_rgbled_off_nxt</xsl:attribute>
+                    <xsl:apply-templates select="b:field[./@name='ACTORPORT']"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:copy>
+    </xsl:template>
+    <!-- callibot config block needs to be restructured -->
+    <xsl:template match="b:block[./@type = 'robConf_callibot']">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:attribute name="type">robConf_callibot2</xsl:attribute>
+            <xsl:attribute name="deletable">false</xsl:attribute>
+            <xsl:apply-templates select="b:field[@name = 'NAME']"/>
+            <xsl:element name="{'statement'}" namespace="">
+                <xsl:attribute name="name">BUS</xsl:attribute>
+                <xsl:for-each select="b:field">
+                    <xsl:if test="not(./@name = 'NAME' or ./@name = 'RGBLED_A' or ./@name = 'LED_B')">
+                        <xsl:element name="{'block'}" namespace="">
+                            <xsl:attribute name="type">
+                                <xsl:text>robConf_</xsl:text>
+                                <xsl:choose>
+                                    <xsl:when test="./@name = 'ULTRASONIC'">
+                                        <xsl:value-of
+                                                select="concat(translate(./@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'c')"/>
+                                    </xsl:when>
+                                    <xsl:when test="contains(./@name, 'MOTOR_') or contains(./@name, 'SERVO_')">
+                                        <xsl:value-of
+                                                select="concat(substring-before(translate(./@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '_'), 'c')"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of
+                                                select="substring-before(translate(./@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '_')"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:attribute>
+                            <xsl:attribute name="intask">true</xsl:attribute>
+                            <xsl:attribute name="movable">false</xsl:attribute>
+                            <xsl:element name="{'field'}" namespace="">
+                                <xsl:attribute name="name">NAME</xsl:attribute>
+                                <xsl:value-of select="."/>
+                            </xsl:element>
+                            <xsl:if test="not(./@name = 'ULTRASONIC')">
+                                <xsl:element name="{'field'}" namespace="">
+                                    <xsl:attribute name="name">PORT</xsl:attribute>
+                                    <xsl:value-of select="./@name"/>
+                                </xsl:element>
+                            </xsl:if>
+                        </xsl:element>
+                    </xsl:if>
+                </xsl:for-each>
+            </xsl:element>
+        </xsl:copy>
+    </xsl:template>
+    <!-- wedo robConf_rgbled needs to be restructured -->
+    <xsl:template match="b:block[./@type = 'robConf_rgbled' and ancestor::b:block_set/@robottype = 'wedo']">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:apply-templates select="*[not(self::b:field[./@name = 'VAR'])]"/>
         </xsl:copy>
     </xsl:template>
     <!-- return_type should be removed if the mutation has a value -->
     <xsl:template match="b:mutation[./@value]">
         <xsl:copy>
-            <xsl:apply-templates select="@value" />
+            <xsl:apply-templates select="@value"/>
         </xsl:copy>
     </xsl:template>
     <!-- elseif should be lowercase -->
     <xsl:template match="b:mutation[./@elseIf]">
         <xsl:copy>
             <xsl:attribute name="elseif">
-                <xsl:value-of select="./@elseIf" />
+                <xsl:value-of select="./@elseIf"/>
             </xsl:attribute>
         </xsl:copy>
     </xsl:template>
     <!-- mutation operator_range does not exist anymore (?) -->
-    <xsl:template match="b:mutation[./@operator_range and (ancestor::b:block_set/@robottype = 'ev3' or not(ancestor::b:block_set/@robottype))]" />
+    <xsl:template match="b:mutation[./@operator_range and (ancestor::b:block_set/@robottype = 'ev3' or not(ancestor::b:block_set/@robottype))]"/>
     <!-- mutation datatype is always required for statements -->
     <xsl:template match="b:mutation[./@statement]">
         <xsl:copy>
-            <xsl:apply-templates select="@*" />
+            <xsl:apply-templates select="@*"/>
             <xsl:if test="not(./@datatype)">
                 <xsl:choose>
                     <xsl:when test="../b:value[./@name = 'VALUE']/descendant::b:mutation/@datatype = 'Array_Number'">
@@ -415,11 +618,11 @@
                         <xsl:attribute name="datatype">Image</xsl:attribute>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="datatype" />
+                        <xsl:attribute name="datatype"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:if>
-            <xsl:apply-templates />
+            <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
     <!-- these blocks do not require the inline attribute -->
@@ -436,5 +639,5 @@
     or ancestor::b:block/@type = 'robCommunication_sendBlock'
     or ancestor::b:block/@type = 'robCommunication_receiveBlock'
     or ancestor::b:block/@type = 'robCommunication_startConnection'
-    or ancestor::b:block/@type = 'robControls_for')]" />
+    or ancestor::b:block/@type = 'robControls_for')]"/>
 </xsl:stylesheet>

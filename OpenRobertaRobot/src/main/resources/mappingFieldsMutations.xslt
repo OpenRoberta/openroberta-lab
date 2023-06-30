@@ -146,6 +146,80 @@
                     <xsl:value-of select="."/>
                 </xsl:copy>
             </xsl:when>
+            <xsl:when test="./@name = 'LEDSIDE'">
+                <xsl:copy>
+                    <xsl:attribute name="name">ACTORPORT</xsl:attribute>
+                    <xsl:choose>
+                        <xsl:when test="(../@type = 'actions_rgbLed_on_nibo') or (../@type = 'actions_rgbLed_off_nibo')">
+                            <xsl:choose>
+                                <xsl:when test="./text() = 'Left'">
+                                    <xsl:value-of select="'EYE_2'"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="'EYE_1'"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:when>
+                        <xsl:when test="(ancestor::b:block_set/@robottype = 'festobionicflower')">
+                            <xsl:value-of select="'R'"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="."/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:copy>
+            </xsl:when>
+            <xsl:when test="./@name = 'SWITCH_BLINK'">
+                <xsl:copy>
+                    <xsl:attribute name="name">MODE</xsl:attribute>
+                    <xsl:value-of select="."/>
+                </xsl:copy>
+            </xsl:when>
+            <xsl:when test="./@name = 'SWITCH_COLOR'">
+                <xsl:copy>
+                    <xsl:attribute name="name">COLOUR</xsl:attribute>
+                    <xsl:value-of select="."/>
+                </xsl:copy>
+            </xsl:when>
+            <xsl:when test="./@name = 'LEDSTATE'">
+                <xsl:copy>
+                    <xsl:attribute name="name">MODE</xsl:attribute>
+                    <xsl:value-of select="."/>
+                </xsl:copy>
+            </xsl:when>
+            <xsl:when test="./@name = 'SENSORPORT' and ../@type = 'robActions_sensorLight_on'">
+                <xsl:copy>
+                    <xsl:attribute name="name">ACTORPORT</xsl:attribute>
+                    <xsl:value-of select="."/>
+                </xsl:copy>
+            </xsl:when>
+            <xsl:when test="./@name = 'LED' and ancestor::b:block_set/@robottype = 'nao'">
+                <xsl:copy>
+                    <xsl:attribute name="name">ACTORPORT</xsl:attribute>
+                    <xsl:value-of select="."/>
+                </xsl:copy>
+            </xsl:when>
+            <xsl:when test="./@name = 'LED' and ancestor::b:block_set/@robottype = 'nao'">
+                <xsl:copy>
+                    <xsl:attribute name="name">ACTORPORT</xsl:attribute>
+                    <xsl:value-of select="."/>
+                </xsl:copy>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy>
+                    <xsl:apply-templates select="@* | node()"/>
+                </xsl:copy>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:template match="b:value">
+        <xsl:choose>
+            <xsl:when test="./@name = 'COLOR'">
+                <xsl:copy>
+                    <xsl:attribute name="name">COLOUR</xsl:attribute>
+                    <xsl:copy-of select="./b:block"/>
+                </xsl:copy>
+            </xsl:when>
             <xsl:otherwise>
                 <xsl:copy>
                     <xsl:apply-templates select="@* | node()"/>

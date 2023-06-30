@@ -18,9 +18,8 @@
         </block>
     </instance>
     <instance x="43" y="257">
-        <block type="robConf_led" id="4" intask="true">
-            <field name="NAME">L</field>
-            <field name="VAR">W</field>
+        <block type="robConf_rgbled" id="4" intask="true">
+            <field name="NAME">R</field>
         </block>
     </instance>
     <instance x="45" y="327">

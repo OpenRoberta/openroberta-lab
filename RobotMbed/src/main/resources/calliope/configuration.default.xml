@@ -21,7 +21,7 @@
         </block>
     </instance>
     <instance x="-34" y="422">
-        <block type="robConf_rgbled" id="lgi%C3,J!smR:eP0aal_" intask="true" deletable="false">
+        <block type="robConf_rgbledh" id="lgi%C3,J!smR:eP0aal_" intask="true" deletable="false">
             <field name="NAME">_R</field>
         </block>
     </instance>

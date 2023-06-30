@@ -96,14 +96,14 @@
                 </block>
             </value>
         </block>
-        <block type="robActions_led_on_new_config">
-            <value name="COLOR">
+        <block type="actions_rgbLed_hidden_on_mbot2">
+            <value name="COLOUR">
                 <block type="robColour_picker">
                     <field name="COLOUR">#cc0000</field>
                 </block>
             </value>
         </block>
-        <block type="robActions_leds_off"/>
+        <block type="actions_rgbLed_hidden_off_mbot2"/>
         <block type="robActions_led_setBrightness">
             <value name="BRIGHTNESS">
                 <block type="math_number">

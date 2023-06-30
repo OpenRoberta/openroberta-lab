@@ -137,14 +137,14 @@
             <block type="mbedActions_play_note"/>
         </category>
         <category name="TOOLBOX_LIGHT" svg="true">
-            <block type="robActions_led_on">
-                <value name="COLOR">
+            <block type="actions_rgbLed_on_mbot">
+                <value name="COLOUR">
                     <block type="robColour_picker">
                         <field name="COLOUR">#cc0000</field>
                     </block>
                 </value>
             </block>
-            <block type="robActions_led_off"/>
+            <block type="actions_rgbLed_off_mbot"/>
         </category>
     </category>
     <category name="TOOLBOX_SENSOR" svg="true">

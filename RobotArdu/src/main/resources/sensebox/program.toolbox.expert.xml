@@ -37,15 +37,15 @@
                 </block>
             </value>
         </block>
-        <block type="robActions_brickLight_on"/>
-        <block type="robActions_led_on">
-            <value name="COLOR">
+        <block type="actions_led"/>
+        <block type="actions_rgbLed_on">
+            <value name="COLOUR">
                 <block type="robColour_picker">
                     <field name="COLOUR">#cc0000</field>
                 </block>
             </value>
         </block>
-        <block type="robActions_led_off"/>
+        <block type="actions_rgbLed_off"/>
         <block type="robActions_sendData"/>
         <block type="robActions_plot_clear"/>
         <block type="robActions_plot_point"/>

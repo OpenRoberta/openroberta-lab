@@ -7,7 +7,7 @@
                 </block>
             </value>
         </block>
-        <block type="robActions_brickLight_on" />
+        <block type="actions_led"/>
         <block type="robActions_write_pin">
             <value name="VALUE">
                 <block type="math_number">
@@ -17,17 +17,17 @@
         </block>
     </category>
     <category name="TOOLBOX_SENSOR" svg="true">
-        <block type="robSensors_out_getSample" />
-        <block type="robSensors_timer_getSample" />
-        <block type="robSensors_timer_reset" />
-        <block type="robSensors_key_getSample" />
-        <block type="robSensors_motion_getSample" />
-        <block type="robSensors_light_getSample" />
+        <block type="robSensors_out_getSample"/>
+        <block type="robSensors_timer_getSample"/>
+        <block type="robSensors_timer_reset"/>
+        <block type="robSensors_key_getSample"/>
+        <block type="robSensors_motion_getSample"/>
+        <block type="robSensors_light_getSample"/>
     </category>
     <category name="TOOLBOX_CONTROL" svg="true">
-        <block type="robControls_if" />
-        <block type="robControls_ifElse" />
-        <block type="robControls_loopForever" />
+        <block type="robControls_if"/>
+        <block type="robControls_ifElse"/>
+        <block type="robControls_loopForever"/>
         <block type="controls_repeat_ext">
             <value name="TIMES">
                 <block type="math_number">
@@ -47,7 +47,7 @@
                 <block type="logic_compare">
                     <field name="OP">GT</field>
                     <value name="A">
-                        <block type="robSensors_getSample">                           
+                        <block type="robSensors_getSample">
                         </block>
                     </value>
                     <value name="B">
@@ -60,17 +60,17 @@
         </block>
     </category>
     <category name="TOOLBOX_LOGIC" svg="true">
-        <block type="logic_compare" />
-        <block type="logic_operation" />
-        <block type="logic_boolean" />
+        <block type="logic_compare"/>
+        <block type="logic_operation"/>
+        <block type="logic_boolean"/>
     </category>
     <category name="TOOLBOX_MATH" svg="true">
-        <block type="math_number" />
-        <block type="math_arithmetic" />
+        <block type="math_number"/>
+        <block type="math_arithmetic"/>
     </category>
     <category name="TOOLBOX_TEXT" svg="true">
-        <block type="text" />
-        <block type="text_comment" />
+        <block type="text"/>
+        <block type="text_comment"/>
     </category>
-    <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true" />
+    <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true"/>
 </toolbox_set>

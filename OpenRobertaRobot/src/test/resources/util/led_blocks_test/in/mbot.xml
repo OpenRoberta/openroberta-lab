@@ -1,0 +1,65 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="mbot" xmlversion="3.1" description="" tags="">
+            <instance x="384" y="50">
+                <block type="robControls_start_ardu" id="l9Lp`gNd]GQJ_0PBfA?z" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG"></field>
+                </block>
+                <block type="robControls_loopForever_ardu" id="`mIJB4z:(3D;T%:]?^Iz" intask="true" deletable="false" movable="false">
+                    <statement name="DO">
+                        <block type="robActions_led_on" id="CW7#GQ)=/UVIlm!s;y=y" intask="true">
+                            <field name="ACTORPORT">2</field>
+                            <value name="COLOR">
+                                <block type="robColour_picker" id="ga//iZ6vhciD~`ZX4oRS" intask="true">
+                                    <field name="COLOUR">#cc0000</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_led_off" id="ysyOa@-]orqLO/1lp~)O" intask="true">
+                            <field name="ACTORPORT">2</field>
+                        </block>
+                        <block type="robActions_led_on" id="RFM^hBLGgu4JrlZ4oU7O" intask="true">
+                            <field name="ACTORPORT">1</field>
+                            <value name="COLOR">
+                                <block type="robColour_picker" id="Z1SVNQts5Px0O;ngUjE2" intask="true">
+                                    <field name="COLOUR">#cc0000</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_led_off" id="ftc]xhm4:^ww+ExAFuv9" intask="true">
+                            <field name="ACTORPORT">1</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="mbot" xmlversion="3.1" description="" tags="">
+            <instance x="564" y="186">
+                <block type="robBrick_mBot-Brick" id="1" intask="true" deletable="false">
+                    <value name="PORT_1">
+                        <block type="robBrick_led_matrix" id="48!uVipQJ5t-GeDF*c!f" intask="true"></block>
+                    </value>
+                    <value name="PORT_2">
+                        <block type="robBrick_infrared" id="3" intask="true"></block>
+                    </value>
+                    <value name="PORT_3">
+                        <block type="robBrick_ultrasonic" id="2" intask="true"></block>
+                    </value>
+                    <value name="M1">
+                        <block type="robBrick_motor_geared" id="4" intask="true">
+                            <field name="MOTOR_DRIVE">LEFT</field>
+                        </block>
+                    </value>
+                    <value name="M2">
+                        <block type="robBrick_motor_geared" id="5" intask="true">
+                            <field name="MOTOR_DRIVE">RIGHT</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

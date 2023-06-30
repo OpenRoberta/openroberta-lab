@@ -1,0 +1,23 @@
+<!--This is not a real program, it is just for testing the xsl transformation-->
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance>
+        <block type="robConf_callibot" id="Wiit}e7N*lzjLs|HqbRz" intask="true">
+            <field name="NAME">C</field>
+            <field name="MOTOR_L">M</field>
+            <field name="MOTOR_R">M2</field>
+            <field name="RGBLED_LF">R</field>
+            <field name="RGBLED_RF">R2</field>
+            <field name="RGBLED_LR">R3</field>
+            <field name="RGBLED_RR">R4</field>
+            <field name="RGBLED_A">R5</field>
+            <field name="LED_L">L</field>
+            <field name="LED_R">L2</field>
+            <field name="LED_B">L3</field>
+            <field name="INFRARED_L">I</field>
+            <field name="INFRARED_R">I2</field>
+            <field name="ULTRASONIC">U</field>
+            <field name="SERVO_S1">S</field>
+            <field name="SERVO_S2">S2</field>
+        </block>
+    </instance>
+</block_set>

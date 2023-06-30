@@ -180,9 +180,13 @@
             </block>
         </category>
         <category name="TOOLBOX_LIGHT" svg="true">
-            <block type="robActions_brickLight_on"/>
-            <block type="robActions_brickLight_off"/>
-            <block type="robActions_brickLight_reset"/>
+            <block type="actions_bricklight_on_ev3"/>
+            <block type="actions_bricklight_off_ev3">
+                <field name="MODE">OFF</field>
+            </block>
+            <block type="actions_bricklight_off_ev3">
+                <field name="MODE">RESET</field>
+            </block>
         </category>
     </category>
     <category name="TOOLBOX_SENSOR" svg="true">

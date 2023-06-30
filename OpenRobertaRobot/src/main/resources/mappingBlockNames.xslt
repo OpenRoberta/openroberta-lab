@@ -53,6 +53,46 @@
                 <xsl:when test=". = 'sim_motor_stop'">robActions_motor_stop</xsl:when>
                 <xsl:when test=". = 'robActions_write_to_pin'">robActions_write_pin</xsl:when>
                 <xsl:when test=". = 'robSensors_pin_getSample' and ancestor::b:block_set/@robottype = 'arduino'">robSensors_out_getSample</xsl:when>
+                <xsl:when test=". = 'robActions_brickLight_on' and ancestor::b:block_set/@robottype = 'arduino'">actions_led</xsl:when>
+                <xsl:when test=". = 'robActions_led_off' and ancestor::b:block_set/@robottype = 'arduino'">actions_rgbLed_off</xsl:when>
+                <xsl:when test=". = 'robActions_led_on' and ancestor::b:block_set/@robottype = 'arduino'">actions_rgbLed_on</xsl:when>
+                <xsl:when test=". = 'bob3Actions_set_led' and ((ancestor::b:block_set/@robottype = 'bob3') or (ancestor::b:block_set/@robottype = 'rob3rta'))">
+                    <xsl:text>actions_led_nibo</xsl:text>
+                </xsl:when>
+                <xsl:when test=". = 'makeblockActions_leds_off' and (ancestor::b:block_set/@robottype = 'bob3' or ancestor::b:block_set/@robottype = 'rob3rta')">
+                    <xsl:text>actions_rgbLed_off_nibo</xsl:text>
+                </xsl:when>
+                <xsl:when test=". = 'makeblockActions_leds_on' and (ancestor::b:block_set/@robottype = 'bob3' or ancestor::b:block_set/@robottype = 'rob3rta')">
+                    <xsl:text>actions_rgbLed_on_nibo</xsl:text>
+                </xsl:when>
+                <xsl:when test=". = 'robActions_brickLight_on' and ancestor::b:block_set/@robottype = 'botnroll'">actions_led_botnroll</xsl:when>
+                <xsl:when test=". = 'robActions_brickLight_on' and (ancestor::b:block_set/@robottype = 'ev3' or ancestor::b:block_set/@robottype = 'xNN')">
+                    <xsl:text>actions_bricklight_on_ev3</xsl:text>
+                </xsl:when>
+                <xsl:when test=". = 'robActions_brickLight_on' and ancestor::b:block_set/@robottype = 'festobionic'">actions_led</xsl:when>
+                <xsl:when test=". = 'makeblockActions_leds_off' and ancestor::b:block_set/@robottype = 'festobionicflower'">actions_rgbLed_off</xsl:when>
+                <xsl:when test=". = 'makeblockActions_leds_on' and ancestor::b:block_set/@robottype = 'festobionicflower'">actions_rgbLed_on</xsl:when>
+                <xsl:when test=". = 'robActions_led_off' and ancestor::b:block_set/@robottype = 'mbot'">actions_rgbLed_off_mbot</xsl:when>
+                <xsl:when test=". = 'robActions_led_on' and ancestor::b:block_set/@robottype = 'mbot'">actions_rgbLed_on_mbot</xsl:when>
+                <xsl:when test=". = 'robActions_led_on_new_config' and ancestor::b:block_set/@robottype = 'mbot2'">actions_rgbLed_hidden_on_mbot2</xsl:when>
+                <xsl:when test=". = 'robActions_leds_off' and ancestor::b:block_set/@robottype = 'mbot2'">actions_rgbLed_hidden_off_mbot2</xsl:when>
+                <xsl:when test=". = 'naoActions_rgbLeds' and ancestor::b:block_set/@robottype = 'nao'">actions_rgbLed_on_nao</xsl:when>
+                <xsl:when test=". = 'naoActions_setIntensity' and ancestor::b:block_set/@robottype = 'nao'">actions_led_on_nao</xsl:when>
+                <xsl:when test=". = 'robActions_brickLight_on' and ancestor::b:block_set/@robottype = 'sensebox'">actions_led</xsl:when>
+                <xsl:when test=". = 'robActions_led_off' and ancestor::b:block_set/@robottype = 'sensebox'">actions_rgbLed_off</xsl:when>
+                <xsl:when test=". = 'robActions_led_on' and ancestor::b:block_set/@robottype = 'sensebox'">actions_rgbLed_on</xsl:when>
+                <xsl:when test=". = 'actions_brickLed_off' and ancestor::b:block_set/@robottype = 'spike'">actions_rgbLed_hidden_off</xsl:when>
+                <xsl:when test=". = 'actions_brickLed_on' and ancestor::b:block_set/@robottype = 'spike'">actions_rgbLed_hidden_on</xsl:when>
+                <xsl:when test=". = 'robActions_led_on' and ancestor::b:block_set/@robottype = 'thymio'">actions_rgbLed_on_thymio</xsl:when>
+                <xsl:when test=". = 'robActions_leds_off' and ancestor::b:block_set/@robottype = 'thymio'">actions_rgbLed_off_thymio</xsl:when>
+                <xsl:when test=". = 'robActions_led_on' and ancestor::b:block_set/@robottype = 'wedo'">actions_rgbLed_on</xsl:when>
+                <xsl:when test=". = 'robActions_led_off' and ancestor::b:block_set/@robottype = 'wedo'">actions_rgbLed_off</xsl:when>
+                <xsl:when test=". = 'robActions_brickLight_on' and ancestor::b:block_set/@robottype = 'calliope'">actions_led</xsl:when>
+                <xsl:when test=". = 'robActions_brickLight_on' and ancestor::b:block_set/@robottype = 'nano33ble'">actions_led</xsl:when>
+                <xsl:when test=". = 'robActions_led_off' and ancestor::b:block_set/@robottype = 'nano33ble'">actions_rgbLed_off</xsl:when>
+                <xsl:when test=". = 'robActions_led_on' and ancestor::b:block_set/@robottype = 'nano33ble'">actions_rgbLed_on</xsl:when>
+                <xsl:when test=". = 'robConf_rgbled' and ancestor::b:block_set/@robottype = 'calliope'">robConf_rgbledh</xsl:when>
+                <xsl:when test=". = 'robConf_led' and ancestor::b:block_set/@robottype = 'wedo'">robConf_rgbled</xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="."/>
                 </xsl:otherwise>

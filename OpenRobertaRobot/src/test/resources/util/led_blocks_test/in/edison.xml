@@ -1,0 +1,31 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.1" description="" tags="">
+            <instance x="384" y="50">
+                <block type="robControls_start" id="ECb{onS{=9@nFBuvHV!m" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG">TRUE</field>
+                </block>
+                <block type="robActions_led_on" id="CKRm8l/@}Sa|Mj.,PrSd" intask="true">
+                    <field name="ACTORPORT">LLED</field>
+                </block>
+                <block type="robActions_led_off" id="A[E0{.1aj.9_V-_EFfys" intask="true">
+                    <field name="ACTORPORT">LLED</field>
+                </block>
+                <block type="robActions_led_on" id="fX+Ai/hxz_ryaLGEB-gR" intask="true">
+                    <field name="ACTORPORT">RLED</field>
+                </block>
+                <block type="robActions_led_off" id="2(qZ+ce9woRs!N2MD[)@" intask="true">
+                    <field name="ACTORPORT">RLED</field>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.1" description="" tags="">
+            <instance x="213" y="213">
+                <block type="robBrick_Edison-Brick" id="1" intask="true" deletable="false"></block>
+            </instance>
+        </block_set>
+    </config>
+</export>

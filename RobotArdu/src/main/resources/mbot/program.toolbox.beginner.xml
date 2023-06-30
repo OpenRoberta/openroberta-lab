@@ -19,7 +19,7 @@
                 </block>
             </value>
         </block>
-        <block type="robActions_motorDiff_stop" />
+        <block type="robActions_motorDiff_stop"/>
         <block type="robActions_motorDiff_turn_for">
             <value name="POWER">
                 <block type="math_number">
@@ -84,32 +84,32 @@
         </block>
         <block type="mBotActions_display_image">
             <value name="VALUE">
-                <block type="mBotImage_image" />
+                <block type="mBotImage_image"/>
             </value>
         </block>
-        <block type="mBotActions_display_clear" />
-        <block type="mbedActions_play_note" />
-        <block type="robActions_led_on">
-            <value name="COLOR">
+        <block type="mBotActions_display_clear"/>
+        <block type="mbedActions_play_note"/>
+        <block type="actions_rgbLed_on_mbot">
+            <value name="COLOUR">
                 <block type="robColour_picker">
                     <field name="COLOUR">#cc0000</field>
                 </block>
             </value>
         </block>
-        <block type="robActions_led_off" />
+        <block type="actions_rgbLed_off_mbot"/>
     </category>
     <category name="TOOLBOX_SENSOR" svg="true">
-        <block type="robSensors_key_getSample" />
-        <block type="robSensors_ultrasonic_getSample" />
-        <block type="robSensors_infrared_getSample" />
-        <block type="robSensors_light_getSample" />
-        <block type="robSensors_timer_getSample" />
-        <block type="robSensors_timer_reset" />
+        <block type="robSensors_key_getSample"/>
+        <block type="robSensors_ultrasonic_getSample"/>
+        <block type="robSensors_infrared_getSample"/>
+        <block type="robSensors_light_getSample"/>
+        <block type="robSensors_timer_getSample"/>
+        <block type="robSensors_timer_reset"/>
     </category>
     <category name="TOOLBOX_CONTROL" svg="true">
-        <block type="robControls_if" />
-        <block type="robControls_ifElse" />
-        <block type="robControls_loopForever" />
+        <block type="robControls_if"/>
+        <block type="robControls_ifElse"/>
+        <block type="robControls_loopForever"/>
         <block type="controls_repeat_ext">
             <value name="TIMES">
                 <block type="math_number">
@@ -128,26 +128,26 @@
             <value name="WAIT0">
                 <block type="logic_compare">
                     <value name="A">
-                        <block type="robSensors_getSample" />
+                        <block type="robSensors_getSample"/>
                     </value>
                     <value name="B">
-                        <block type="logic_boolean" />
+                        <block type="logic_boolean"/>
                     </value>
                 </block>
             </value>
         </block>
     </category>
     <category name="TOOLBOX_LOGIC" svg="true">
-        <block type="logic_compare" />
-        <block type="logic_operation" />
-        <block type="logic_boolean" />
+        <block type="logic_compare"/>
+        <block type="logic_operation"/>
+        <block type="logic_boolean"/>
     </category>
     <category name="TOOLBOX_MATH" svg="true">
-        <block type="math_number" />
-        <block type="math_arithmetic" />
+        <block type="math_number"/>
+        <block type="math_arithmetic"/>
     </category>
     <category name="TOOLBOX_TEXT" svg="true">
-        <block type="text" />
+        <block type="text"/>
     </category>
     <category name="TOOLBOX_COLOUR" svg="true">
         <block type="robColour_picker">
@@ -176,7 +176,7 @@
         </block>
     </category>
     <category name="TOOLBOX_IMAGE" svg="true">
-        <block type="mBotImage_image" />
+        <block type="mBotImage_image"/>
     </category>
-    <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true" />
+    <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true"/>
 </toolbox_set>

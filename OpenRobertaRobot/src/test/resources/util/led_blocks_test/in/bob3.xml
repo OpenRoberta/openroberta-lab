@@ -1,0 +1,61 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="bob3" xmlversion="3.1" description="" tags="">
+            <instance x="384" y="50">
+                <block type="robControls_start_ardu" id="l9Lp`gNd]GQJ_0PBfA?z" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG"></field>
+                </block>
+                <block type="robControls_loopForever_ardu" id="`mIJB4z:(3D;T%:]?^Iz" intask="true" deletable="false" movable="false">
+                    <statement name="DO">
+                        <block type="makeblockActions_leds_on" id="R)2r@xjT?dRso-=g2S``" intask="true">
+                            <field name="LEDSIDE">Left</field>
+                            <value name="COLOR">
+                                <block type="robColour_picker" id="{JI9XGkb`mpe(s=T6b_5" intask="true">
+                                    <field name="COLOUR">#FF0000</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="makeblockActions_leds_off" id=":MP+}+D8873OPV]REDu2" intask="true">
+                            <field name="LEDSIDE">Left</field>
+                        </block>
+                        <block type="makeblockActions_leds_on" id="cHFk+kE]57nxd}T{Clm#" intask="true">
+                            <field name="LEDSIDE">Right</field>
+                            <value name="COLOR">
+                                <block type="robColour_picker" id=",5x/_}nb}VA,t+eRGcZX" intask="true">
+                                    <field name="COLOUR">#FF0000</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="makeblockActions_leds_off" id="+dBX4.Vs:3xycth3x5sL" intask="true">
+                            <field name="LEDSIDE">Right</field>
+                        </block>
+                        <block type="bob3Actions_set_led" id="M*u+4^;A`0OI~wDX1yOj" intask="true">
+                            <field name="LEDSIDE">LED_4</field>
+                            <field name="LEDSTATE">ON</field>
+                        </block>
+                        <block type="bob3Actions_set_led" id="?/bT7Dd@SAIyY#x.]X)(" intask="true">
+                            <field name="LEDSIDE">LED_3</field>
+                            <field name="LEDSTATE">ON</field>
+                        </block>
+                        <block type="bob3Actions_set_led" id="w,l7.dpN[M*LD!j%pjMp" intask="true">
+                            <field name="LEDSIDE">LED_4</field>
+                            <field name="LEDSTATE">OFF</field>
+                        </block>
+                        <block type="bob3Actions_set_led" id="nT?rHI!MaLf:fogU-F[%" intask="true">
+                            <field name="LEDSIDE">LED_3</field>
+                            <field name="LEDSTATE">OFF</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="bob3" xmlversion="3.1" description="" tags="">
+            <instance x="213" y="213">
+                <block type="robControls_loopForever_ardu" id="1" intask="true" deletable="false" movable="false"></block>
+            </instance>
+        </block_set>
+    </config>
+</export>

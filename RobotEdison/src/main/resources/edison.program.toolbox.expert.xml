@@ -101,8 +101,12 @@
             <block type="robActions_play_file"></block>
         </category>
         <category name="TOOLBOX_LIGHT" svg="true">
-            <block type="robActions_led_on"></block>
-            <block type="robActions_led_off"></block>
+            <block type="actions_led_edison">
+                <field name="MODE">ON</field>
+            </block>
+            <block type="actions_led_edison">
+                <field name="MODE">OFF</field>
+            </block>
         </category>
     </category>
     <category name="TOOLBOX_SENSOR" svg="true">

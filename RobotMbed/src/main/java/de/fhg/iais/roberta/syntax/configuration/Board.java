@@ -4,7 +4,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 @NepoConfiguration(name = "CALLIBOT", category = "CONFIGURATION_ACTOR",
-    blocklyNames = {"robConf_callibot"})
+    blocklyNames = {"robConf_callibot", "robConf_callibot2"})
 public final class Board extends ConfigurationComponent {
     private Board() {
         super(null, null, null, null, null);

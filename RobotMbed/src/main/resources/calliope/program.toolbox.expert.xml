@@ -83,14 +83,34 @@
             <block type="mbedActions_fourDigitDisplay_clear"/>
         </category>
         <category name="TOOLBOX_LIGHT" svg="true">
-            <block type="mbedActions_leds_on">
-                <value name="COLOR">
+            <block type="actions_rgbLed_hidden_on_calliope">
+                <value name="COLOUR">
                     <block type="mbedColour_picker">
                         <field name="COLOUR">#ff0000</field>
                     </block>
                 </value>
             </block>
-            <block type="mbedActions_leds_off"/>
+            <block type="actions_rgbLed_on">
+                <value name="COLOUR">
+                    <block type="mbedColour_picker">
+                        <field name="COLOUR">#ff0000</field>
+                    </block>
+                </value>
+            </block>
+            <block type="actions_rgbLed_hidden_off_calliope">
+                <value name="COLOUR">
+                    <block type="mbedColour_picker">
+                        <field name="COLOUR">#ff0000</field>
+                    </block>
+                </value>
+            </block>
+            <block type="actions_rgbLed_off">
+                <value name="COLOUR">
+                    <block type="mbedColour_picker">
+                        <field name="COLOUR">#ff0000</field>
+                    </block>
+                </value>
+            </block>
             <block type="mbedActions_ledBar_set">
                 <value name="X">
                     <block type="math_number">
@@ -103,7 +123,7 @@
                     </block>
                 </value>
             </block>
-            <block type="robActions_brickLight_on"/>
+            <block type="actions_led"/>
         </category>
         <category name="TOOLBOX_MOVE" svg="true">
             <block type="mbedActions_motors_on">

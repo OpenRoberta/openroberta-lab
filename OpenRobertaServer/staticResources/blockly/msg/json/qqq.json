@@ -690,6 +690,7 @@
 	"TOOLBOX_ANIMATION": "",
 	"TOOLBOX_VISION": "",
 	"TOOLBOX_CLEANING": "",
+	"TOOLBOX_ADD_ON": "",
 	"MENU_EDIT": "These texts are used outside of Blockly, but are placed in the Blockly namespace",
 	"MENU_ROBOT": "",
 	"MENU_HELP": "",
@@ -2008,5 +2009,8 @@
 	"SOUND_JUMP_UP": "",
 	"SOUND_JUMP_DOWN": "",
 	"SOUND_POWER_UP": "",
-	"SOUND_POWER_DOWN": ""
+	"SOUND_POWER_DOWN": "",
+	"TURN_BRICKLIGHT": "",
+	"RESET": "",
+	"TURN_RGBLED": ""
 }

@@ -116,14 +116,14 @@
             </block>
         </category>
         <category name="TOOLBOX_LIGHT" svg="true">
-            <block type='robActions_led_on'>
-                <value name='COLOR'>
+            <block type='actions_rgbLed_on_thymio'>
+                <value name='COLOUR'>
                     <block type='robColour_picker'>
                         <field name='COLOUR'>#cc0000</field>
                     </block>
                 </value>
             </block>
-            <block type='robActions_leds_off'/>
+            <block type='actions_rgbLed_off_thymio'/>
             <block type='robActions_led_button'>
                 <value name='LED1'>
                     <block type='math_integer'>

@@ -1,0 +1,69 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="xNN" xmlversion="3.1" description="" tags="">
+            <instance x="384" y="50">
+                <block type="robControls_start" id="W%HF)6WVWx79S4wv3UV:" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG">FALSE</field>
+                    <data>
+                        {"learningRate":0.03,"regularizationRate":0,"noise":0,"batchSize":10,"discretize":false,"percTrainData":50,"activationKey":"linear","activation":{},"regularization":null,"initUntil":null,"collectStats":false,"numHiddenLayers":0,"networkShape":[],"weights":[[["1"]],[[]]],"biases":[["0"],["0"]],"precision":"2","weightArcMaxSize":8,"weightSuppressMultOp":true,"inputs":["n1"],"outputs":["n2"]}
+                    </data>
+                </block>
+                <block type="actions_bricklight_on_ev3" id="M~YiRtNKp_?1b2~p+@LE" intask="true">
+                    <field name="COLOUR">GREEN</field>
+                    <field name="MODE">ON</field>
+                </block>
+                <block type="actions_bricklight_on_ev3" id="X4{PG9D:B@q@;SCga/7D" intask="true">
+                    <field name="COLOUR">ORANGE</field>
+                    <field name="MODE">FLASH</field>
+                </block>
+                <block type="actions_bricklight_on_ev3" id="@o4n)vmCk4tN6r`8p?-[" intask="true">
+                    <field name="COLOUR">RED</field>
+                    <field name="MODE">DOUBLE_FLASH</field>
+                </block>
+                <block type="actions_bricklight_off_ev3" id="gL/Z3XMJ=l(5%@:Kaj2I" intask="true">
+                    <field name="MODE">OFF</field>
+                </block>
+                <block type="actions_bricklight_off_ev3" id="..(+c!LR?:F{L`Dn~+ZN" intask="true">
+                    <field name="MODE">RESET</field>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set robottype="xNN" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="213" y="213">
+                <block type="robBrick_EV3-Brick" id="1" intask="true" deletable="false">
+                    <field name="WHEEL_DIAMETER">5.6</field>
+                    <field name="TRACK_WIDTH">18</field>
+                    <value name="S1">
+                        <block type="robBrick_touch" id="2" intask="true"/>
+                    </value>
+                    <value name="S2">
+                        <block type="robBrick_gyro" id="3" intask="true"/>
+                    </value>
+                    <value name="S3">
+                        <block type="robBrick_colour" id="4" intask="true"/>
+                    </value>
+                    <value name="S4">
+                        <block type="robBrick_ultrasonic" id="5" intask="true"/>
+                    </value>
+                    <value name="MB">
+                        <block type="robBrick_motor_big" id="6" intask="true">
+                            <field name="MOTOR_REGULATION">TRUE</field>
+                            <field name="MOTOR_REVERSE">OFF</field>
+                            <field name="MOTOR_DRIVE">RIGHT</field>
+                        </block>
+                    </value>
+                    <value name="MC">
+                        <block type="robBrick_motor_big" id="7" intask="true">
+                            <field name="MOTOR_REGULATION">TRUE</field>
+                            <field name="MOTOR_REVERSE">OFF</field>
+                            <field name="MOTOR_DRIVE">LEFT</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

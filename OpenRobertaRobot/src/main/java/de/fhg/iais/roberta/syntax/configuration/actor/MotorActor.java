@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 @NepoConfiguration(name = "MOTOR", category = "CONFIGURATION_ACTOR",
-    blocklyNames = {"robConf_motor"})
+    blocklyNames = {"robConf_motor", "robConf_motorc"})
 public final class MotorActor extends ConfigurationComponent {
     private MotorActor() {
         super(null, null, null, null, null);

@@ -20,7 +20,7 @@
                     </block>
                 </value>
             </block>
-            <block type="robActions_motor_stop"> </block>
+            <block type="robActions_motor_stop"></block>
         </category>
         <category name="TOOLBOX_DRIVE" svg="true">
             <block type="robActions_motorDiff_on_for">
@@ -158,14 +158,14 @@
             <block type="robActions_play_recording"/>
         </category>
         <category name="TOOLBOX_LIGHT" svg="true">
-            <block type="robActions_led_on_new_config">
-                <value name="COLOR">
+            <block type="actions_rgbLed_hidden_on_mbot2">
+                <value name="COLOUR">
                     <block type="robColour_picker">
                         <field name="COLOUR">#cc0000</field>
                     </block>
                 </value>
             </block>
-            <block type="robActions_leds_off"/>
+            <block type="actions_rgbLed_hidden_off_mbot2"/>
             <block type="robActions_led_setBrightness">
                 <value name="BRIGHTNESS">
                     <block type="math_number">
@@ -328,18 +328,18 @@
     </category>
     <category name="TOOLBOX_LIST" svg="true">
         <block type="robLists_create_with">
-            <mutation items="0" list_type="Number" />
+            <mutation items="0" list_type="Number"/>
         </block>
         <block type="robLists_create_with">
-            <mutation items="3" list_type="Number" />
+            <mutation items="3" list_type="Number"/>
             <value name="ADD0">
-                <block type="math_number" />
+                <block type="math_number"/>
             </value>
             <value name="ADD1">
-                <block type="math_number" />
+                <block type="math_number"/>
             </value>
             <value name="ADD2">
-                <block type="math_number" />
+                <block type="math_number"/>
             </value>
         </block>
         <block type="robLists_repeat">
@@ -349,12 +349,12 @@
                 </block>
             </value>
         </block>
-        <block type="robLists_length" />
-        <block type="robLists_isEmpty" />
-        <block type="robLists_indexOf" />
-        <block type="robLists_getIndex" />
-        <block type="robLists_setIndex" />
-        <block type="robLists_getSublist" />
+        <block type="robLists_length"/>
+        <block type="robLists_isEmpty"/>
+        <block type="robLists_indexOf"/>
+        <block type="robLists_getIndex"/>
+        <block type="robLists_setIndex"/>
+        <block type="robLists_getSublist"/>
     </category>
     <category name="TOOLBOX_COLOUR" svg="true">
         <block type="robColour_picker">
