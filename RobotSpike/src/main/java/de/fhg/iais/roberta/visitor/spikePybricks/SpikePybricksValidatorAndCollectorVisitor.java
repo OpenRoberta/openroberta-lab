@@ -231,7 +231,6 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     @Override
     final public Void visitColorSensor(ColorSensor colorSensor) {
         super.visitColorSensor(colorSensor);
-        System.out.println(colorSensor.getMode());
         switch ( colorSensor.getMode() ) {
             case "GREENCHANNEL":
             case "REDCHANNEL":
