@@ -37,7 +37,8 @@ robots:
   edison:
     template: edison
     dir: edison
-    suffix: ".wav"
+    suffix: ".py"
+    pythonIgnoredModules: [ "Ed" ]
   ev3c4ev3:
     template: ev3
     dir: ev3
@@ -46,6 +47,7 @@ robots:
     template: ev3
     dir: ev3
     suffix: ".py"
+    pythonIgnoredModules: [ "ev3dev", "roberta" ]
   ev3lejosv1:
     template: ev3
     dir: ev3
@@ -66,14 +68,17 @@ robots:
     template: microbit
     dir: microbit
     suffix: ".py"
+    pythonIgnoredModules: [ "microbit", "radio", "music", "machine" ]
   microbitv2:
     template: microbitv2
     dir: microbitv2
     suffix: ".py"
+    pythonIgnoredModules: [ "microbit", "radio", "music", "machine" ]
   joycar:
     template: joycar
     dir: joycar
     suffix: ".py"
+    pythonIgnoredModules: [ "microbit", "radio", "music", "machine", "neopixel" ]
   mbot:
     template: mbot
     dir: mbot
@@ -82,10 +87,12 @@ robots:
     template: mbot2
     dir: mbot2
     suffix: ".py"
+    pythonIgnoredModules: [ "mbot2", "mbuild", "cyberpi" ]
   nao:
     template: nao
     dir: nao
     suffix: ".py"
+    pythonIgnoredModules: [ "roberta" ]
   nxt:
     template: nxt
     dir: nxt
@@ -102,6 +109,7 @@ robots:
     template: robotino
     dir: robotino
     suffix: ".py"
+    pythonIgnoredModules: [ "requests" ]
   thymio:
     template: thymio
     dir: thymio
@@ -123,6 +131,7 @@ robots:
     template: spike
     dir: spike
     suffix: ".py"
+    pythonIgnoredModules: [ "spike", "hub" ]
 
 progs:
   assign:

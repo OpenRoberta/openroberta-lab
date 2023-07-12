@@ -219,7 +219,8 @@ directory `OpenRoertaWeb` and follow the instructions.
 
 To run backend tests, use `mvn test`. Running `mvn clean install` will make a stable, reproducible build with all unit tests executed.
 
-To run the integration tests you have to supply an additional flag: `mvn clean install -PrunIT`. These tests expects, that all crosscompiler are installed.
+To run the integration tests you have to supply an additional flag: `mvn clean install -PrunIT`. These tests expects, that all crosscompiler are installed
+and Python3 including the `pylint` module version 3.x.
 
 #### Some Frameworks used
 
