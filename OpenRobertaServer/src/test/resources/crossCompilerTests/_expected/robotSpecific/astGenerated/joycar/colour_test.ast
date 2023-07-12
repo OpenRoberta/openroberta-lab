@@ -1,0 +1,4 @@
+
+(repeat [FOR_EACH, Binary [IN, VarDeclaration [COLOR, item2, EmptyExpr [defVal=COLOR], false, false], Var [item]]]
+AktionStmt [RgbLedOnActionJoycar[colour: Var [item2], slot: 0, port: FL]]WaitTimeStmt[time: NumConst[value: 2000]]
+)

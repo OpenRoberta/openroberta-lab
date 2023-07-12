@@ -1,0 +1,53 @@
+SerialWriteAction[value: StringConst[value: Encoder Test press A to stop]]
+DriveAction [FOREWARD, MotionParam [speed=NumConst[value: 35], duration=null]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+AktionStmt [SerialWriteAction[value: SensorExpr [EncoderSensor [EL, VALUE, - EMPTY_SLOT -]]]]WaitTimeStmt[time: NumConst[value: 500]]
+if SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+
+)
+SerialWriteAction[value: StringConst[value: Pin 0 press A to stop]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+AktionStmt [SerialWriteAction[value: SensorExpr [PinGetValueSensor [S3, ANALOG, - EMPTY_SLOT -]]]]
+if SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+WaitTimeStmt[time: NumConst[value: 500]]
+)
+LogoSetTouchMode[mode: RESISTIVE]
+SerialWriteAction[value: StringConst[value: Press logo resistive]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if SensorExpr [LogoTouchSensor [_LO, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+WaitTimeStmt[time: NumConst[value: 500]]
+)
+SerialWriteAction[value: StringConst[value: Compass A to stop]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+AktionStmt [SerialWriteAction[value: SensorExpr [CompassSensor [_C, ANGLE, - EMPTY_SLOT -]]]]
+if SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+WaitTimeStmt[time: NumConst[value: 500]]
+)
+SerialWriteAction[value: StringConst[value: Light A to stop]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+AktionStmt [SerialWriteAction[value: SensorExpr [LightSensor [_L, VALUE, - EMPTY_SLOT -]]]]
+if SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+WaitTimeStmt[time: NumConst[value: 500]]
+)
+SerialWriteAction[value: StringConst[value: Sound A to stop]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+AktionStmt [SerialWriteAction[value: SensorExpr [SoundSensor [_S, SOUND, - EMPTY_SLOT -]]]]
+if SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+WaitTimeStmt[time: NumConst[value: 500]]
+)
+SerialWriteAction[value: StringConst[value: Press B to Finish]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [B, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]

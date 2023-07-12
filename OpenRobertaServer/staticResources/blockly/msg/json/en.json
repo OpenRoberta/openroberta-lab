@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2023-06-30 07:50:55.718336",
+		"lastupdated": "2023-07-21 11:58:53.122080",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -724,6 +724,7 @@
 	"MENU_FAQ": "FAQ",
 	"MENU_GENERAL": "general help",
 	"MBUILD_PORT_TOOLTIP": "Block for the mBuild Port. The order of the compatible mbuild sensor blocks should be identical to the real system.",
+	"I2CBUS_TOOLTIP": "Represents one byte of the I2C address space.",
 	"MENU_SHOW_AGAIN": "show welcome note again",
 	"MENU_ROBOT_STATE_INFO": "info",
 	"MENU_STATE_INFO": "state information",
@@ -1569,7 +1570,7 @@
 	"RELAY_TOOLTIP": "Represents a relay.",
 	"RGBLED_TOOLTIP": "Represents an RGB LED.",
 	"LED_TOOLTIP": "Represents an LED.",
-	"MOTOR_TOOLTOP": "Represents a motor.",
+	"MOTOR_TOOLTIP": "Represents a motor.",
 	"STEPMOTOR_TOOLTIP": "Represents a step motor.",
 	"SERVO_TOOLTIP": "Represents a servo motor.",
 	"JOYSTICK_TOOLTIP": "Represents a joystick.",
@@ -1578,6 +1579,8 @@
 	"OPTICAL_TOOLTIP": "Represent an optical sensor also called reflected light sensor.",
 	"ODOMETRY_TOOLTIP": "Represents the availability of odometry data.",
 	"OMNIDRIVE_TOOLTIP": "Represents an omnidirectional drive system.",
+	"LOGOTOUCH_TOOLTIP": "Represents a touch sensor shaped like the Micro:bit logo.",
+	"LINE_TOOLTIP": "Represents an infrared line sensor.",
 	"SENSOR_MOISTURE_GETSAMPLE_TOOLTIP": "Gets the current reading from the moisture sensor in percent.",
 	"SENSOR_POTENTIOMETER_GETSAMPLE_TOOLTIP": "Gets the current reading from the potentiometer in volts (0-5V).",
 	"SENSOR_HUMIDITY_GETSAMPLE_TOOLTIP": "Gets the current reading from the humidity sensor in percent.",

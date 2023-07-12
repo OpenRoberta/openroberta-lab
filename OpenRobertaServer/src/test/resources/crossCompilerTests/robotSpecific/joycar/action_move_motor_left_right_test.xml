@@ -1,0 +1,376 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="joycar" xmlversion="3.1" description="" tags="">
+            <instance x="680" y="50">
+                <block type="robControls_start" id="@#@oA+EH;{KKH7uf)Y|h" intask="true" deletable="false">
+                    <mutation declare="true"></mutation>
+                    <field name="DEBUG">TRUE</field>
+                    <statement name="ST">
+                        <block type="robGlobalVariables_declare" id="kZJ/O.ig{CWSysdc?!k{" intask="true" deletable="false" movable="false">
+                            <mutation next="false" declaration_type="Number"></mutation>
+                            <field name="VAR">speed</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="math_number" id="P3LJkH3MC(mAE`aJI4Dg" intask="true">
+                                    <field name="NUM">-100</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="text_comment" id=")3Y*7;([*8:/6m;bAMPq" intask="true">
+                    <field name="TEXT">This program tests the move motor left/right blocks</field>
+                </block>
+                <block type="robProcedures_callnoreturn" id="j2#C.hb[QSgrb7I,6.nj" intask="true">
+                    <mutation name="motorLeftRightOnForMS"></mutation>
+                </block>
+                <block type="robProcedures_callnoreturn" id="{XH3n4XF*,|V%p,O!mMI" intask="true">
+                    <mutation name="motorLeftRightOn"></mutation>
+                </block>
+            </instance>
+            <instance x="1098" y="72">
+                <block type="robProcedures_defnoreturn" id="h8]=j55C2O95Br*U;Gzz" intask="true">
+                    <mutation declare="false"></mutation>
+                    <field name="NAME">motorLeftRightOnForMS</field>
+                    <statement name="STACK">
+                        <block type="text_comment" id="*@w9E*we59iyg3dZS#.g" intask="true">
+                            <field name="TEXT">sets the speed for motor left and right from -100 to +100</field>
+                        </block>
+                        <block type="controls_whileUntil" id="zSIL+):rVu,b-hMOL=_9" intask="true">
+                            <field name="MODE">UNTIL</field>
+                            <value name="BOOL">
+                                <block type="logic_compare" id="BAmZ`}NqQr%FPGPS9q?r" intask="true">
+                                    <field name="OP">GT</field>
+                                    <value name="A">
+                                        <block type="variables_get" id="k3-Xq(6-peA[)ncKU#G!" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">speed</field>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="math_number" id="kM5d.IHJ(}APdoK.VIv)" intask="true">
+                                            <field name="NUM">100</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                            <statement name="DO">
+                                <block type="mbedActions_display_text" id="4(z,7CRu)9L%Kr_|!@DJ" intask="true">
+                                    <field name="TYPE">TEXT</field>
+                                    <value name="OUT">
+                                        <block type="variables_get" id="v[*MG6K;U[gMMBpp^6SG" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">speed</field>
+                                        </block>
+                                    </value>
+                                </block>
+                                <block type="robActions_motor_on_for" id="[3`HuEQ4o?ZDlbtp3Bm|" intask="true">
+                                    <field name="MOTORPORT">MR</field>
+                                    <value name="POWER">
+                                        <block type="variables_get" id="Ct)P3e_aBZ]{MB8O-Eh3" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">speed</field>
+                                        </block>
+                                    </value>
+                                    <value name="VALUE">
+                                        <block type="math_number" id="6x6fhJgxUI5ju.hpZ(sX" intask="true">
+                                            <field name="NUM">1000</field>
+                                        </block>
+                                    </value>
+                                </block>
+                                <block type="robActions_motor_on_for" id="POJp6Ej@/E@?2J@Ombu!" intask="true">
+                                    <field name="MOTORPORT">ML</field>
+                                    <value name="POWER">
+                                        <block type="variables_get" id="}3gcN+uJ4DOd:8%o/OY|" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">speed</field>
+                                        </block>
+                                    </value>
+                                    <value name="VALUE">
+                                        <block type="math_number" id="_Ee@(x^I[aIW4)?^#3FY" intask="true">
+                                            <field name="NUM">1000</field>
+                                        </block>
+                                    </value>
+                                </block>
+                                <block type="variables_set" id="wemBKX(p]XC!j%D-S;W;" intask="true">
+                                    <mutation datatype="Number"></mutation>
+                                    <field name="VAR">speed</field>
+                                    <value name="VALUE">
+                                        <block type="math_arithmetic" id="mJsJS;_D3;B4pyp^v9J#" intask="true">
+                                            <field name="OP">ADD</field>
+                                            <value name="A">
+                                                <block type="variables_get" id="ah,IZ4x(m#/BW`13YN.a" intask="true">
+                                                    <mutation datatype="Number"></mutation>
+                                                    <field name="VAR">speed</field>
+                                                </block>
+                                            </value>
+                                            <value name="B">
+                                                <block type="math_number" id="Xeb]GUT^VM?|*fb*4#4e" intask="true">
+                                                    <field name="NUM">10</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                </block>
+                            </statement>
+                        </block>
+                        <block type="robActions_motor_stop" id="Eqra0qWYajv[G2mJB]0f" intask="true">
+                            <field name="MOTORPORT">MR</field>
+                        </block>
+                        <block type="robActions_motor_stop" id="(a3pKW0Fg0BOpP6~Aucl" intask="true">
+                            <field name="MOTORPORT">ML</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="1648" y="81">
+                <block type="robProcedures_defnoreturn" id="Q+BlY{^Q]]}h~/f`?MG5" intask="true">
+                    <mutation declare="false"></mutation>
+                    <field name="NAME">motorLeftRightOn</field>
+                    <statement name="STACK">
+                        <block type="text_comment" id="tAK4i-CW4bnb!gH!!N;P" intask="true">
+                            <field name="TEXT">sets the speed for motor left and right from -100 to +100</field>
+                        </block>
+                        <block type="variables_set" id="3vXDl1~8^908wO%S.Qk#" intask="true">
+                            <mutation datatype="Number"></mutation>
+                            <field name="VAR">speed</field>
+                            <value name="VALUE">
+                                <block type="math_number" id="C;f3q;iW!Oir867#}}TS" intask="true">
+                                    <field name="NUM">-100</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="controls_whileUntil" id="iP6+]AxHw~f)an^r|Rp%" intask="true">
+                            <field name="MODE">UNTIL</field>
+                            <value name="BOOL">
+                                <block type="logic_compare" id="nB60)~FSdjQPFp}5`IPd" intask="true">
+                                    <field name="OP">GT</field>
+                                    <value name="A">
+                                        <block type="variables_get" id="bx`ZH)@6ONw32y-em=x-" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">speed</field>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="math_number" id="s;}@klEBtfzo,wPAxA.-" intask="true">
+                                            <field name="NUM">100</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                            <statement name="DO">
+                                <block type="mbedActions_display_text" id="U_Jsf%oy3GbR!o7rH(N_" intask="true">
+                                    <field name="TYPE">TEXT</field>
+                                    <value name="OUT">
+                                        <block type="variables_get" id="]hei6tUa{*EMsVMXcOnR" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">speed</field>
+                                        </block>
+                                    </value>
+                                </block>
+                                <block type="robActions_motor_on" id="Gy(W(5lOmf3O3jgMIG%q" intask="true">
+                                    <field name="MOTORPORT">MR</field>
+                                    <value name="POWER">
+                                        <block type="variables_get" id=",=_q#(}/c6u/JbYc@_IG" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">speed</field>
+                                        </block>
+                                    </value>
+                                </block>
+                                <block type="robActions_motor_on" id="H_@4}9C(+7HL|4}wt0Z[" intask="true">
+                                    <field name="MOTORPORT">ML</field>
+                                    <value name="POWER">
+                                        <block type="variables_get" id="eYGYECXztQEVNA~PTWnr" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">speed</field>
+                                        </block>
+                                    </value>
+                                </block>
+                                <block type="variables_set" id="socm~kZ74F5jHvHZdOv=" intask="true">
+                                    <mutation datatype="Number"></mutation>
+                                    <field name="VAR">speed</field>
+                                    <value name="VALUE">
+                                        <block type="math_arithmetic" id="v-CrQ{Boz?4,Du{j6t-h" intask="true">
+                                            <field name="OP">ADD</field>
+                                            <value name="A">
+                                                <block type="variables_get" id="DySr@Z!1hbCuFUYPmnWj" intask="true">
+                                                    <mutation datatype="Number"></mutation>
+                                                    <field name="VAR">speed</field>
+                                                </block>
+                                            </value>
+                                            <value name="B">
+                                                <block type="math_number" id="Q9HuT}up/1+qB*~mbrhw" intask="true">
+                                                    <field name="NUM">10</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                </block>
+                            </statement>
+                        </block>
+                        <block type="robActions_motor_stop" id="vt?ne2yMc-Dhc_R}Uu=b" intask="true">
+                            <field name="MOTORPORT">MR</field>
+                        </block>
+                        <block type="robActions_motor_stop" id="OL1Co-61lu4ZX2*F=o%-" intask="true">
+                            <field name="MOTORPORT">ML</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="joycar" xmlversion="3.1" description="" tags="">
+            <instance x="380" y="47">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="713" y="48">
+                <block type="robConf_sound" id="qL1P2J};PfSuwPf#!n93" intask="true" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="266" y="84">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="483" y="82">
+                <block type="robConf_differentialdrive" id="AM=n{?7R#nO#1~?a3j~u" intask="true" deletable="false">
+                    <field name="NAME">_D</field>
+                    <field name="BRICK_WHEEL_DIAMETER">6,5</field>
+                    <field name="BRICK_TRACK_WIDTH">15</field>
+                    <field name="MOTOR_L">MOT_L</field>
+                    <field name="MOTOR_R">MOT_R</field>
+                </block>
+            </instance>
+            <instance x="712" y="92">
+                <block type="robConf_light" id="9Ktt(7_4XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="286" y="128">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="177" y="138">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="717" y="138">
+                <block type="robConf_logotouch" id="iLsHeX}C+}Zb7jzAuaNo" intask="true" deletable="false">
+                    <field name="NAME">_LO</field>
+                </block>
+            </instance>
+            <instance x="845" y="146">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="348" y="205">
+                <block type="robConf_robot" id="robot" intask="true" deletable="false">
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
+            <instance x="171" y="228">
+                <block type="robConf_motor" id="g)[bSyslSNkl)+BHmAc`" intask="true" deletable="false">
+                    <field name="NAME">MR</field>
+                    <field name="PORT">MOT_R</field>
+                </block>
+            </instance>
+            <instance x="841" y="228">
+                <block type="robConf_motor" id="S(Xm/UHHH;N[4Km1TML0" intask="true" deletable="false">
+                    <field name="NAME">ML</field>
+                    <field name="PORT">MOT_L</field>
+                </block>
+            </instance>
+            <instance x="176" y="320">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+            <instance x="793" y="401">
+                <block type="robConf_i2c_bus" id="@|CnfJ?*ctRADR{@t@][" intask="true" deletable="false">
+                    <field name="NAME">IO_Extender</field>
+                    <field name="ADDRESS">0x38</field>
+                    <statement name="BUS">
+                        <block type="robConf_encoder" id="S(Xm/UHHH;N[4Km1TML1" intask="true" movable="false">
+                            <field name="NAME">EL</field>
+                            <field name="PORT">SPEED_L</field>
+                        </block>
+                        <block type="robConf_encoder" id="S(Xm/UHHH;N[4Km1TML2" intask="true" movable="false">
+                            <field name="NAME">ER</field>
+                            <field name="PORT">SPEED_R</field>
+                        </block>
+                        <block type="robConf_infrared" id="S(Xm/UHHH;N[4Km1TML6" intask="true" movable="false">
+                            <field name="NAME">OL</field>
+                            <field name="PORT">OBSTCL_L</field>
+                        </block>
+                        <block type="robConf_infrared" id="S(Xm/UHHH;N[4Km1TML7" intask="true" movable="false">
+                            <field name="NAME">OR</field>
+                            <field name="PORT">OBSTCL_R</field>
+                        </block>
+                        <block type="robConf_line" id="S(Xm/UHHH;N[4Km1TML3" intask="true" movable="false">
+                            <field name="NAME">LL</field>
+                            <field name="PORT">LINE_TRK_L</field>
+                        </block>
+                        <block type="robConf_line" id="S(Xm/UHHH;N[4Km1TML4" intask="true" movable="false">
+                            <field name="NAME">LM</field>
+                            <field name="PORT">LINE_TRK_M</field>
+                        </block>
+                        <block type="robConf_line" id="S(Xm/UHHH;N[4Km1TML5" intask="true" movable="false">
+                            <field name="NAME">LR</field>
+                            <field name="PORT">LINE_TRK_R</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="161" y="452">
+                <block type="robConf_rgbled" id="?:_l?rc?~FAjXmA#]}rE" intask="true" deletable="false">
+                    <field name="NAME">FL</field>
+                    <field name="PORT">B0</field>
+                </block>
+            </instance>
+            <instance x="289" y="504">
+                <block type="robConf_rgbled" id="Wr2-Zy-a|Ok%8qCY/rkb" intask="true" deletable="false">
+                    <field name="NAME">FR</field>
+                    <field name="PORT">B2</field>
+                </block>
+            </instance>
+            <instance x="161" y="536">
+                <block type="robConf_rgbled" id="YC)K{Vw@p!FRB,*e9!2t" intask="true" deletable="false">
+                    <field name="NAME">RL</field>
+                    <field name="PORT">B4</field>
+                </block>
+            </instance>
+            <instance x="285" y="587">
+                <block type="robConf_rgbled" id="K-ixjkG8K.(v~a1f^4B]" intask="true" deletable="false">
+                    <field name="NAME">RR</field>
+                    <field name="PORT">B6</field>
+                </block>
+            </instance>
+            <instance x="152" y="643">
+                <block type="robConf_ultrasonic" id="Z5a?AUX(BKNfDVeH/-Dz" intask="true" deletable="false">
+                    <field name="NAME">U</field>
+                </block>
+            </instance>
+            <instance x="314" y="698">
+                <block type="robConf_servo" id="AqNY(e(XV=kcA0N!{#:{" intask="true" deletable="false">
+                    <field name="NAME">S1</field>
+                    <field name="PORT">SERVO1</field>
+                </block>
+            </instance>
+            <instance x="171" y="754">
+                <block type="robConf_servo" id="v!HajR)LoCJ@)vEga0^N" intask="true" deletable="false">
+                    <field name="NAME">S2</field>
+                    <field name="PORT">SERVO2</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

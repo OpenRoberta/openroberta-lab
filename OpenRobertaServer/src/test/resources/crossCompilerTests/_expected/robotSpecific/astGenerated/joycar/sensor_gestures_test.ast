@@ -1,0 +1,42 @@
+
+(repeat [FOREVER, BoolConst[value: true]]
+if SensorExpr [GestureSensor [- EMPTY_PORT -, UP, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: Image [[, , #, , ]
+[, #, #, #, ]
+[#, , #, , #]
+[, , #, , ]
+[, , #, , ]]]]
+,else if SensorExpr [GestureSensor [- EMPTY_PORT -, DOWN, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: Image [[, , #, , ]
+[, , #, , ]
+[#, , #, , #]
+[, #, #, #, ]
+[, , #, , ]]]]
+,else if SensorExpr [GestureSensor [- EMPTY_PORT -, FACE_DOWN, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: Image [[#, #, #, #, #]
+[#, , #, , #]
+[#, , #, , #]
+[, , #, , ]
+[, , #, , ]]]]
+,else if SensorExpr [GestureSensor [- EMPTY_PORT -, FACE_UP, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: Image [[, , #, , ]
+[, , #, , ]
+[#, , #, , #]
+[#, , #, , #]
+[#, #, #, #, #]]]]
+,else if SensorExpr [GestureSensor [- EMPTY_PORT -, SHAKE, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: Image [[, #, , #, ]
+[#, , #, , #]
+[, #, , #, ]
+[#, , #, , #]
+[, #, , #, ]]]]
+,else if SensorExpr [GestureSensor [- EMPTY_PORT -, FREEFALL, - EMPTY_SLOT -]]
+,then
+AktionStmt [PlayNoteAction[duration: 2000, frequency: 261.626, port: _B]]
+
+)

@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -12,6 +13,7 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.mbed.joycar.RgbLedOffActionJoycar;
 import de.fhg.iais.roberta.syntax.action.mbed.joycar.RgbLedOnActionJoycar;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
@@ -32,6 +34,7 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
@@ -299,8 +302,8 @@ public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoy
         return null;
     }
 
-    private void i2cCodeGeneration(ExternalSensor infrared) {
-        String sensorName = infrared.getUserDefinedPort();
+    private void i2cCodeGeneration(ExternalSensor sensorBlock) {
+        String sensorName = sensorBlock.getUserDefinedPort();
         ConfigurationComponent bus = getI2CBusWithSensor(sensorName);
         ConfigurationComponent sensor = getBusSubComponent(bus, sensorName);
 
@@ -472,6 +475,45 @@ public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoy
         nlIndent();
         this.src.add("main()");
         decrIndentation();
+    }
+
+    @Override
+    public Void visitMbedPinWriteValueAction(MbedPinWriteValueAction mbedPinWriteValueAction) {
+        String port = mbedPinWriteValueAction.port;
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+        pin1 = pin1.replaceAll("\\D+", "");
+        this.src.add("microbit.pin", pin1);
+        String valueType = mbedPinWriteValueAction.pinValue.equals(SC.DIGITAL) ? "digital(" : "analog(";
+        this.src.add(".write_", valueType);
+        mbedPinWriteValueAction.value.accept(this);
+        this.src.add(");");
+        return null;
+    }
+
+    @Override
+    public Void visitPinGetValueSensor(PinGetValueSensor pinValueSensor) {
+        String port = pinValueSensor.getUserDefinedPort();
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+        pin1 = pin1.replaceAll("\\D+", "");
+        String valueType = pinValueSensor.getMode().toLowerCase(Locale.ENGLISH);
+        if ( valueType.equalsIgnoreCase(SC.PULSEHIGH) ) {
+            this.src.add("machine.time_pulse_us(microbit.pin");
+            this.src.add(pin1);
+            this.src.add(", 1)");
+        } else if ( valueType.equalsIgnoreCase(SC.PULSELOW) ) {
+            this.src.add("machine.time_pulse_us(microbit.pin");
+            this.src.add(pin1);
+            this.src.add(", 0)");
+        } else {
+            this.src.add("microbit.pin");
+            this.src.add(pin1);
+            this.src.add(".read_");
+            this.src.add(valueType);
+            this.src.add("()");
+        }
+        return null;
     }
 }
 

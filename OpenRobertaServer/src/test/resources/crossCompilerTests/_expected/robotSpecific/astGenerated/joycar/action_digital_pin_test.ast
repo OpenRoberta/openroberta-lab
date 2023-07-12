@@ -1,0 +1,6 @@
+SwitchLedMatrixAction[activated: OFF]
+SerialWriteAction[value: StringConst[value: A to start true on Pin 11]]
+WaitStmt [
+(repeat [WAIT, SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]]
+)]
+MbedPinWriteValueAction[pinValue: DIGITAL, port: A2, value: NumConst[value: 1]]

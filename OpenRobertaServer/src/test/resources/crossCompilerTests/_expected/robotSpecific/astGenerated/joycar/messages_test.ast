@@ -1,0 +1,11 @@
+RadioSetChannelAction[channel: NumConst[value: 0]]
+SerialWriteAction[value: StringConst[value: Press A to send on channel 0]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]
+,then
+AktionStmt [RadioSendAction[type: Number, power: 7, message: NumConst[value: 1]]]
+AktionStmt [SerialWriteAction[value: StringConst[value: Sending 1 with strength 7]]]
+WaitTimeStmt[time: NumConst[value: 500]]
+AktionStmt [SerialWriteAction[value: ActionExpr [RadioReceiveAction[type: Number]]]]
+)

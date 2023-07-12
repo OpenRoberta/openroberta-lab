@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [, DISPLAY], UsedActor [MR, I2C], UsedActor [MR, MOTOR], UsedActor [ML, I2C], UsedActor [ML, MOTOR]]
+Methods: 
+[SCALE, SETSPEED]

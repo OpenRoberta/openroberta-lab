@@ -6,5 +6,6 @@ public enum JoycarMethods {
     I2C_GET_SENSORDATA,
     SERVO_SET_ANGLE,
     LED_SET_COLOUR,
-    SETSPEED
+    SETSPEED,
+    SCALE
 }

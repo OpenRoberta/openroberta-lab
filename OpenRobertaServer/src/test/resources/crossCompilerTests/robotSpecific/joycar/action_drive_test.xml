@@ -1,0 +1,331 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="joycar" xmlversion="3.1" description="" tags="">
+            <instance x="288" y="50">
+                <block type="robControls_start" id="X*U3Az;Q5_I:|u5+uA_1" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG">TRUE</field>
+                </block>
+                <block type="robActions_motorDiff_on_for" id="v48/~?29-5HA8+d.V6uB" intask="true">
+                    <field name="DIRECTION">FOREWARD</field>
+                    <comment pinned="false" h="80" w="160">drive forwards and speed up</comment>
+                    <value name="POWER">
+                        <block type="math_integer" id="du%aa:|g^LQ+CwTn-GhE" intask="true">
+                            <field name="NUM">70</field>
+                        </block>
+                    </value>
+                    <value name="DISTANCE">
+                        <block type="math_integer" id="k|TE@^da*AGF%}^NGQlw" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_motorDiff_on_for" id=",~~ach)o;YUVmfbL,!yb" intask="true">
+                    <field name="DIRECTION">FOREWARD</field>
+                    <value name="POWER">
+                        <block type="math_integer" id="!FdjMnL:F-n5yTIOk}2i" intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                    <value name="DISTANCE">
+                        <block type="math_integer" id="n/OKP==TEbVRVGq!ee!@" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="e]33?U;gSJY`6o!.naiW" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="]8|eA~UQsqFva.oU;uzh" intask="true">
+                            <field name="NUM">500</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_motorDiff_on_for" id=")s3mMW0T(e^E=!hLy{BZ" intask="true">
+                    <field name="DIRECTION">BACKWARDS</field>
+                    <comment pinned="false" h="80" w="160">drive backwards and speed up</comment>
+                    <value name="POWER">
+                        <block type="math_integer" id="mH81.CbP[h0aCfGU~))K" intask="true">
+                            <field name="NUM">70</field>
+                        </block>
+                    </value>
+                    <value name="DISTANCE">
+                        <block type="math_integer" id="TzycbW@H^g5.-e0Wn!vP" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_motorDiff_on_for" id="6sCP?y{:+9cb+leIr6a*" intask="true">
+                    <field name="DIRECTION">BACKWARDS</field>
+                    <value name="POWER">
+                        <block type="math_integer" id="/hwyWxFDTU1Ze9}xl~7M" intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                    <value name="DISTANCE">
+                        <block type="math_integer" id="ons/A^LJzKbQ+q[tk#ud" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="XIrd`B`K(kGdx+xqf(bu" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="L1Q6Bv:XhwL-K:]oV|]*" intask="true">
+                            <field name="NUM">500</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_motorDiff_turn_for" id="s6X:-y7]Z1N]Z@Xh|,^}" intask="true">
+                    <field name="DIRECTION">RIGHT</field>
+                    <comment pinned="false" h="80" w="160">turn right and left, including negative speed %</comment>
+                    <value name="POWER">
+                        <block type="math_integer" id="ygzoM#ZAYU]8bkW8)`M?" intask="true">
+                            <field name="NUM">70</field>
+                        </block>
+                    </value>
+                    <value name="DEGREE">
+                        <block type="math_integer" id="n:KWwc51Q7yE8-=lg|#r" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_motorDiff_turn_for" id="Gu`fBBplkt8guK+LW!ct" intask="true">
+                    <field name="DIRECTION">RIGHT</field>
+                    <value name="POWER">
+                        <block type="math_integer" id="PFU-v9B2F@FS5=OJl/|L" intask="true">
+                            <field name="NUM">-70</field>
+                        </block>
+                    </value>
+                    <value name="DEGREE">
+                        <block type="math_integer" id="m]5=3M]@5e2kDHrT%t^o" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_motorDiff_turn_for" id="#bQ02tX%E4}m2gSC~NF8" intask="true">
+                    <field name="DIRECTION">LEFT</field>
+                    <value name="POWER">
+                        <block type="math_integer" id=",Gy#flB/XzxYDJah,TT," intask="true">
+                            <field name="NUM">70</field>
+                        </block>
+                    </value>
+                    <value name="DEGREE">
+                        <block type="math_integer" id="f-J7*rEC8l*r3@w0@CcD" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_motorDiff_turn_for" id="_DaG)UEgV@F5k74Kz:_L" intask="true">
+                    <field name="DIRECTION">LEFT</field>
+                    <value name="POWER">
+                        <block type="math_integer" id="8vW/@|fT,/5ME;1%=9*J" intask="true">
+                            <field name="NUM">-70</field>
+                        </block>
+                    </value>
+                    <value name="DEGREE">
+                        <block type="math_integer" id="`;-uctfoTx4]Bxw#r.ap" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="e|?{Tj/lqfSS0q3!rGK!" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="RDF]]HF,Av`~U~.V%/ZA" intask="true">
+                            <field name="NUM">500</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_motorDiff_curve_for" id="InYmo,{f4|OE,MyMX8qT" intask="true">
+                    <field name="DIRECTION">FOREWARD</field>
+                    <comment pinned="false" h="80" w="160">steer forewards left and right</comment>
+                    <value name="POWER_LEFT">
+                        <block type="math_integer" id="0B%;TcWl[C.xGjW8:FrU" intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                    <value name="POWER_RIGHT">
+                        <block type="math_integer" id="X+;KsD~oafmvPQ@oXiyC" intask="true">
+                            <field name="NUM">70</field>
+                        </block>
+                    </value>
+                    <value name="DISTANCE">
+                        <block type="math_integer" id="{z0g20Q?{ci`M4z_k@MJ" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_motorDiff_curve_for" id="4~;@Hli`A.ps=,(x!B-p" intask="true">
+                    <field name="DIRECTION">FOREWARD</field>
+                    <value name="POWER_LEFT">
+                        <block type="math_integer" id=";6RpwJlJl./)K*5ekkKp" intask="true">
+                            <field name="NUM">70</field>
+                        </block>
+                    </value>
+                    <value name="POWER_RIGHT">
+                        <block type="math_integer" id="otMRff=I}T!;TPVkoGIm" intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                    <value name="DISTANCE">
+                        <block type="math_integer" id="o/pbjTkfEWOui[5m@X9X" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="joycar" xmlversion="3.1" description="" tags="">
+            <instance x="380" y="47">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="713" y="48">
+                <block type="robConf_sound" id="qL1P2J};PfSuwPf#!n93" intask="true" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="266" y="84">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="483" y="82">
+                <block type="robConf_differentialdrive" id="AM=n{?7R#nO#1~?a3j~u" intask="true" deletable="false">
+                    <field name="NAME">_D</field>
+                    <field name="BRICK_WHEEL_DIAMETER">6,5</field>
+                    <field name="BRICK_TRACK_WIDTH">15</field>
+                    <field name="MOTOR_L">MOT_L</field>
+                    <field name="MOTOR_R">MOT_R</field>
+                </block>
+            </instance>
+            <instance x="712" y="92">
+                <block type="robConf_light" id="9Ktt(7_4XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="286" y="128">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="177" y="138">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="717" y="138">
+                <block type="robConf_logotouch" id="iLsHeX}C+}Zb7jzAuaNo" intask="true" deletable="false">
+                    <field name="NAME">_LO</field>
+                </block>
+            </instance>
+            <instance x="845" y="146">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="348" y="205">
+                <block type="robConf_robot" id="robot" intask="true" deletable="false">
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
+            <instance x="171" y="228">
+                <block type="robConf_motor" id="g)[bSyslSNkl)+BHmAc`" intask="true" deletable="false">
+                    <field name="NAME">MR</field>
+                    <field name="PORT">MOT_R</field>
+                </block>
+            </instance>
+            <instance x="841" y="228">
+                <block type="robConf_motor" id="S(Xm/UHHH;N[4Km1TML0" intask="true" deletable="false">
+                    <field name="NAME">ML</field>
+                    <field name="PORT">MOT_L</field>
+                </block>
+            </instance>
+            <instance x="176" y="320">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+            <instance x="793" y="401">
+                <block type="robConf_i2c_bus" id="@|CnfJ?*ctRADR{@t@][" intask="true" deletable="false">
+                    <field name="NAME">IO_Extender</field>
+                    <field name="ADDRESS">0x38</field>
+                    <statement name="BUS">
+                        <block type="robConf_encoder" id="S(Xm/UHHH;N[4Km1TML1" intask="true" movable="false">
+                            <field name="NAME">EL</field>
+                            <field name="PORT">SPEED_L</field>
+                        </block>
+                        <block type="robConf_encoder" id="S(Xm/UHHH;N[4Km1TML2" intask="true" movable="false">
+                            <field name="NAME">ER</field>
+                            <field name="PORT">SPEED_R</field>
+                        </block>
+                        <block type="robConf_infrared" id="S(Xm/UHHH;N[4Km1TML6" intask="true" movable="false">
+                            <field name="NAME">OL</field>
+                            <field name="PORT">OBSTCL_L</field>
+                        </block>
+                        <block type="robConf_infrared" id="S(Xm/UHHH;N[4Km1TML7" intask="true" movable="false">
+                            <field name="NAME">OR</field>
+                            <field name="PORT">OBSTCL_R</field>
+                        </block>
+                        <block type="robConf_line" id="S(Xm/UHHH;N[4Km1TML3" intask="true" movable="false">
+                            <field name="NAME">LL</field>
+                            <field name="PORT">LINE_TRK_L</field>
+                        </block>
+                        <block type="robConf_line" id="S(Xm/UHHH;N[4Km1TML4" intask="true" movable="false">
+                            <field name="NAME">LM</field>
+                            <field name="PORT">LINE_TRK_M</field>
+                        </block>
+                        <block type="robConf_line" id="S(Xm/UHHH;N[4Km1TML5" intask="true" movable="false">
+                            <field name="NAME">LR</field>
+                            <field name="PORT">LINE_TRK_R</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="161" y="452">
+                <block type="robConf_rgbled" id="?:_l?rc?~FAjXmA#]}rE" intask="true" deletable="false">
+                    <field name="NAME">FL</field>
+                    <field name="PORT">B0</field>
+                </block>
+            </instance>
+            <instance x="289" y="504">
+                <block type="robConf_rgbled" id="Wr2-Zy-a|Ok%8qCY/rkb" intask="true" deletable="false">
+                    <field name="NAME">FR</field>
+                    <field name="PORT">B2</field>
+                </block>
+            </instance>
+            <instance x="161" y="536">
+                <block type="robConf_rgbled" id="YC)K{Vw@p!FRB,*e9!2t" intask="true" deletable="false">
+                    <field name="NAME">RL</field>
+                    <field name="PORT">B4</field>
+                </block>
+            </instance>
+            <instance x="285" y="587">
+                <block type="robConf_rgbled" id="K-ixjkG8K.(v~a1f^4B]" intask="true" deletable="false">
+                    <field name="NAME">RR</field>
+                    <field name="PORT">B6</field>
+                </block>
+            </instance>
+            <instance x="152" y="643">
+                <block type="robConf_ultrasonic" id="Z5a?AUX(BKNfDVeH/-Dz" intask="true" deletable="false">
+                    <field name="NAME">U</field>
+                </block>
+            </instance>
+            <instance x="314" y="698">
+                <block type="robConf_servo" id="AqNY(e(XV=kcA0N!{#:{" intask="true" deletable="false">
+                    <field name="NAME">S1</field>
+                    <field name="PORT">SERVO1</field>
+                </block>
+            </instance>
+            <instance x="171" y="754">
+                <block type="robConf_servo" id="v!HajR)LoCJ@)vEga0^N" intask="true" deletable="false">
+                    <field name="NAME">S2</field>
+                    <field name="PORT">SERVO2</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [OL, I2C], UsedActor [OR, I2C], UsedActor [, DISPLAY_GRAYSCALE], UsedActor [, DISPLAY], UsedActor [- EMPTY_PORT -, DIFFERENTIALDRIVE], UsedActor [- EMPTY_PORT -, I2C], UsedActor [, KEY]]
+Methods: 
+[DIFFDRIVE, I2C_GET_SENSORDATA, SCALE]

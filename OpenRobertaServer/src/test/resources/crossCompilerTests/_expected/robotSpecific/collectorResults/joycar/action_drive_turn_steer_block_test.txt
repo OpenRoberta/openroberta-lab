@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [, DISPLAY], UsedActor [- EMPTY_PORT -, DIFFERENTIALDRIVE], UsedActor [- EMPTY_PORT -, I2C], UsedActor [, MUSIC]]
+Methods: 
+[DIFFDRIVE, SCALE]

@@ -1,0 +1,54 @@
+DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: Image [[#, , , , #]
+[, #, , #, ]
+[, , #, , ]
+[, #, , #, ]
+[#, , , , #]]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if Binary [LT, Binary [MINUS, SensorExpr [AccelerometerSensor [_A, VALUE, X]], Var [accX]], NumConst[value: -500]]
+,then
+AktionStmt [PlayNoteAction[duration: 500, frequency: 987.767, port: _B]]
+,else if Binary [GT, Binary [MINUS, SensorExpr [AccelerometerSensor [_A, VALUE, X]], Var [accX]], NumConst[value: 500]]
+,then
+AktionStmt [PlayNoteAction[duration: 500, frequency: 130.813, port: _B]]
+
+if SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]
+,thenWaitTimeStmt[time: NumConst[value: 500]]StmtFlowCon[flow: BREAK]
+
+)
+DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: Image [[#, , , , #]
+[, #, , #, ]
+[, , #, , ]
+[, , #, , ]
+[, , #, , ]]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if Binary [LT, Binary [MINUS, SensorExpr [AccelerometerSensor [_A, VALUE, Y]], Var [accY]], NumConst[value: -500]]
+,then
+AktionStmt [PlayNoteAction[duration: 500, frequency: 987.767, port: _B]]
+,else if Binary [GT, Binary [MINUS, SensorExpr [AccelerometerSensor [_A, VALUE, Y]], Var [accY]], NumConst[value: 500]]
+,then
+AktionStmt [PlayNoteAction[duration: 500, frequency: 130.813, port: _B]]
+
+if SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]
+,thenWaitTimeStmt[time: NumConst[value: 500]]StmtFlowCon[flow: BREAK]
+
+)
+DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: Image [[#, #, #, #, #]
+[, , , #, ]
+[, , #, , ]
+[, #, , , ]
+[#, #, #, #, #]]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if Binary [LT, Binary [MINUS, SensorExpr [AccelerometerSensor [_A, VALUE, Z]], Var [accZ]], NumConst[value: -500]]
+,then
+AktionStmt [PlayNoteAction[duration: 500, frequency: 987.767, port: _B]]
+,else if Binary [GT, Binary [MINUS, SensorExpr [AccelerometerSensor [_A, VALUE, Z]], Var [accZ]], NumConst[value: 500]]
+,then
+AktionStmt [PlayNoteAction[duration: 500, frequency: 130.813, port: _B]]
+
+if SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+
+)

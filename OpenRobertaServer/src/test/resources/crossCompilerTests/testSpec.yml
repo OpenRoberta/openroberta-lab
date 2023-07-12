@@ -74,6 +74,10 @@ robots:
     template: microbitv2
     dir: microbitv2
     suffix: ".py"
+  joycar:
+    template: joycar
+    dir: joycar
+    suffix: ".py"
   mbot:
     template: mbot
     dir: mbot

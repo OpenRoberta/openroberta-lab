@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [LOGOTOUCH, LOGOTOUCH, RESISTIVE], UsedSensor [_LO, LOGOTOUCH, - EMPTY_SLOT -], UsedSensor [_C, COMPASS, ANGLE], UsedSensor [_L, LIGHT, VALUE], UsedSensor [_S, SOUND, - EMPTY_SLOT -]]
+Actors: 
+[UsedActor [- EMPTY_PORT -, DIFFERENTIALDRIVE], UsedActor [- EMPTY_PORT -, I2C], UsedActor [EL, I2C], UsedActor [, KEY], UsedActor [S3, PIN_VALUE]]
+Methods: 
+[DIFFDRIVE, I2C_GET_SENSORDATA, SCALE]

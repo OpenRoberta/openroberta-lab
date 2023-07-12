@@ -1,0 +1,31 @@
+StmtTextComment[textComment: This program tests the buttons on the microbit, press button A, B and the logo to see the display turn on]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: Image [[, , #, , ]
+[, #, , #, ]
+[, #, #, #, ]
+[, #, , #, ]
+[, #, , #, ]]]]WaitTimeStmt[time: NumConst[value: 500]]
+AktionStmt [ClearDisplayAction[port: - EMPTY_PORT -]]
+
+if SensorExpr [KeysSensor [B, PRESSED, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: Image [[, #, #, , ]
+[, #, , #, ]
+[, #, #, , ]
+[, #, , #, ]
+[, #, #, , ]]]]WaitTimeStmt[time: NumConst[value: 500]]
+AktionStmt [ClearDisplayAction[port: - EMPTY_PORT -]]
+
+if SensorExpr [LogoTouchSensor [_LO, PRESSED, - EMPTY_SLOT -]]
+,then
+AktionStmt [DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: Image [[, #, #, #, ]
+[#, , , , #]
+[#, #, , #, #]
+[#, , , , #]
+[, #, #, #, ]]]]WaitTimeStmt[time: NumConst[value: 500]]
+AktionStmt [ClearDisplayAction[port: - EMPTY_PORT -]]
+
+)

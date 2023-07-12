@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [- EMPTY_PORT -, DIFFERENTIALDRIVE], UsedActor [- EMPTY_PORT -, I2C]]
+Methods: 
+[DIFFDRIVE, SCALE]

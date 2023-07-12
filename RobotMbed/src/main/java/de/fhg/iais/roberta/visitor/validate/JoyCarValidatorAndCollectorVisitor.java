@@ -70,6 +70,7 @@ public class JoyCarValidatorAndCollectorVisitor extends MicrobitV2ValidatorAndCo
         usedHardwareBuilder.addUsedActor(new UsedActor(driveAction.port, SC.DIFFERENTIALDRIVE));
         usedHardwareBuilder.addUsedActor(new UsedActor(driveAction.port, "I2C"));
         usedMethodBuilder.addUsedMethod(JoycarMethods.DIFFDRIVE);
+        usedMethodBuilder.addUsedMethod(JoycarMethods.SCALE);
         return null;
     }
 
@@ -82,6 +83,7 @@ public class JoyCarValidatorAndCollectorVisitor extends MicrobitV2ValidatorAndCo
         usedHardwareBuilder.addUsedActor(new UsedActor(turnAction.port, SC.DIFFERENTIALDRIVE));
         usedHardwareBuilder.addUsedActor(new UsedActor(turnAction.port, "I2C"));
         usedMethodBuilder.addUsedMethod(JoycarMethods.DIFFDRIVE);
+        usedMethodBuilder.addUsedMethod(JoycarMethods.SCALE);
         return null;
     }
 
@@ -94,6 +96,7 @@ public class JoyCarValidatorAndCollectorVisitor extends MicrobitV2ValidatorAndCo
         usedHardwareBuilder.addUsedActor(new UsedActor(curveAction.port, SC.DIFFERENTIALDRIVE));
         usedHardwareBuilder.addUsedActor(new UsedActor(curveAction.port, "I2C"));
         usedMethodBuilder.addUsedMethod(JoycarMethods.DIFFDRIVE);
+        usedMethodBuilder.addUsedMethod(JoycarMethods.SCALE);
         return null;
     }
 
@@ -118,6 +121,7 @@ public class JoyCarValidatorAndCollectorVisitor extends MicrobitV2ValidatorAndCo
     public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor(motorStopAction.port, "I2C"));
         usedMethodBuilder.addUsedMethod(JoycarMethods.SETSPEED);
+        usedMethodBuilder.addUsedMethod(JoycarMethods.SCALE);
         usedHardwareBuilder.addUsedActor(new UsedActor(motorStopAction.port, SC.MOTOR));
 
         return null;
@@ -141,6 +145,7 @@ public class JoyCarValidatorAndCollectorVisitor extends MicrobitV2ValidatorAndCo
         } else {
             usedHardwareBuilder.addUsedActor(new UsedActor(motorOnAction.port, "I2C"));
             usedMethodBuilder.addUsedMethod(JoycarMethods.SETSPEED);
+            usedMethodBuilder.addUsedMethod(JoycarMethods.SCALE);
             usedHardwareBuilder.addUsedActor(new UsedActor(motorOnAction.port, SC.MOTOR));
         }
         return null;
@@ -151,6 +156,7 @@ public class JoyCarValidatorAndCollectorVisitor extends MicrobitV2ValidatorAndCo
         usedHardwareBuilder.addUsedActor(new UsedActor(motorDriveStopAction.port, SC.DIFFERENTIALDRIVE));
         usedHardwareBuilder.addUsedActor(new UsedActor(motorDriveStopAction.port, "I2C"));
         usedMethodBuilder.addUsedMethod(JoycarMethods.DIFFDRIVE);
+        usedMethodBuilder.addUsedMethod(JoycarMethods.SCALE);
         return null;
     }
 

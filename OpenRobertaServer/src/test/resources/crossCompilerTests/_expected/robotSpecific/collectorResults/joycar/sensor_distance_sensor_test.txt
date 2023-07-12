@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [U, ULTRASONIC, DISTANCE]]
+Actors: 
+[UsedActor [, DISPLAY], UsedActor [, MUSIC]]
+Methods: 
+[ULTRASONIC_GET_DISTANCE]

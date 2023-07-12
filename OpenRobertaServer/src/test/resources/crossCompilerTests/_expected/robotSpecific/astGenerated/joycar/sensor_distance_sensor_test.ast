@@ -1,0 +1,14 @@
+
+(repeat [FOREVER, BoolConst[value: true]]StmtTextComment[textComment: shows ultrasonic distance on display and plays c tone if distance smaller 5cm and h" tone if distance larger than
+                                20cm
+                            ]
+AktionStmt [DisplayTextAction[mode: TEXT, msg: SensorExpr [UltrasonicSensor [U, DISTANCE, - EMPTY_SLOT -]]]]
+if Binary [LT, SensorExpr [UltrasonicSensor [U, DISTANCE, - EMPTY_SLOT -]], NumConst[value: 5]]
+,then
+AktionStmt [PlayNoteAction[duration: 250, frequency: 130.813, port: _B]]
+
+if Binary [GT, SensorExpr [UltrasonicSensor [U, DISTANCE, - EMPTY_SLOT -]], NumConst[value: 20]]
+,then
+AktionStmt [PlayNoteAction[duration: 125, frequency: 987.767, port: _B]]
+
+)

@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [_A, ACCELEROMETER, VALUE]]
+Actors: 
+[UsedActor [, DISPLAY_GRAYSCALE], UsedActor [, DISPLAY], UsedActor [, MUSIC], UsedActor [, KEY]]
+Methods: 
+[]

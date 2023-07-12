@@ -1,0 +1,10 @@
+StmtTextComment[textComment: This program tests the timer of the robot]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if Binary [GT, SensorExpr [TimerSensor [1, VALUE, - EMPTY_SLOT -]], NumConst[value: 10000]]
+,then
+AktionStmt [PlayNoteAction[duration: 2000, frequency: 261.626, port: _B]]
+AktionStmt [DisplayTextAction[mode: TEXT, msg: StringConst[value: 10 seconds over]]]
+SensorStmt TimerReset[sensorPort: 1]
+
+)

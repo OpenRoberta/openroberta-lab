@@ -17,39 +17,52 @@ ULTRASONIC_GET_DISTANCE:
 DIFFDRIVE:
   PYTHON: |
     def drive(speedLeft, speedRight):
-        speedRight = -round(speedRight * 2.55)
-        speedLeft = -round(speedLeft * 2.55)
-        if speedRight >= 0:
-            microbit.i2c.write(0x70, b'\x02' + bytes([abs(speedRight)]))
-            microbit.i2c.write(0x70, b'\x03' + bytes([0]))
+        sR = scale(speedRight)
+        sL = scale(speedLeft)
+        b2 = b3 = b4 = b5 = 0
+        if speedRight < 0:
+            b2 = b'\x02' + bytes([sR])
+            b3 = b'\x03' + bytes([0])
         else:
-            microbit.i2c.write(0x70, b'\x02' + bytes([0]))
-            microbit.i2c.write(0x70, b'\x03' + bytes([abs(speedRight)]))
-        if speedLeft >= 0:
-            microbit.i2c.write(0x70, b'\x04' + bytes([abs(speedLeft)]))
-            microbit.i2c.write(0x70, b'\x05' + bytes([0]))
+            b2 = b'\x02' + bytes([0])
+            b3 = b'\x03' + bytes([sR])
+        if speedLeft < 0:
+            b4 = b'\x04' + bytes([sL])
+            b5 = b'\x05' + bytes([0])
         else:
-            microbit.i2c.write(0x70, b'\x04' + bytes([0]))
-            microbit.i2c.write(0x70, b'\x05' + bytes([abs(speedLeft)]))
+            b4 = b'\x04' + bytes([0])
+            b5 = b'\x05' + bytes([sL])
+        microbit.i2c.write(0x70, b2)
+        microbit.i2c.write(0x70, b3)
+        microbit.i2c.write(0x70, b4)
+        microbit.i2c.write(0x70, b5)
 
 SETSPEED:
   PYTHON: |
     def setSpeed(port, speed):
-        speed = -round(speed * 2.55)
+        s = scale(speed)
         if port == "MOT_R":
-            if speed >= 0:
-                microbit.i2c.write(0x70, b'\x02' + bytes([abs(speed)]))
+            if speed < 0:
+                microbit.i2c.write(0x70, b'\x02' + bytes([s]))
                 microbit.i2c.write(0x70, b'\x03' + bytes([0]))
             else:
                 microbit.i2c.write(0x70, b'\x02' + bytes([0]))
-                microbit.i2c.write(0x70, b'\x03' + bytes([abs(speed)]))
+                microbit.i2c.write(0x70, b'\x03' + bytes([s]))
         elif port == "MOT_L":
-            if speed >= 0:
-                microbit.i2c.write(0x70, b'\x04' + bytes([abs(speed)]))
+            if speed < 0:
+                microbit.i2c.write(0x70, b'\x04' + bytes([s]))
                 microbit.i2c.write(0x70, b'\x05' + bytes([0]))
             else:
                 microbit.i2c.write(0x70, b'\x04' + bytes([0]))
-                microbit.i2c.write(0x70, b'\x05' + bytes([abs(speed)]))
+                microbit.i2c.write(0x70, b'\x05' + bytes([s]))
+
+SCALE:
+  PYTHON: |
+    def scale(speed):
+        if speed == 0:
+            return 0
+        else:
+            return round(abs(speed) * 446.25 / 255 + 80)
 
 zfill:
   PYTHON: |
