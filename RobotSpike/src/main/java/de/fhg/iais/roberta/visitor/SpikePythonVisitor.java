@@ -702,10 +702,8 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
             nlIndent();
             this.src.add("timer = Timer()");
         }
-        if ( usedHardwareBean.isActorUsed("HUB") ) {
-            nlIndent();
-            this.src.add("hub = spike.PrimeHub()");
-        }
+        nlIndent();
+        this.src.add("hub = spike.PrimeHub()");
         generateNNStuff("python");
     }
 

@@ -72,7 +72,6 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
 
     @Override
     public Void visitDisplayClearAction(DisplayClearAction displayClearAction) {
-        usedHardwareBuilder.addUsedActor(new UsedActor("", "HUB"));
         return null;
     }
 
@@ -89,19 +88,16 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
         requiredComponentVisited(displayTextAction, displayTextAction.textToDisplay);
         checkActorPort(displayTextAction);
         usedHardwareBuilder.addUsedActor(new UsedActor("", "DISPLAY"));
-        usedHardwareBuilder.addUsedActor(new UsedActor("", "HUB"));
         return null;
     }
 
     @Override
     public Void visitGestureSensor(GestureSensor gestureSensor) {
-        usedHardwareBuilder.addUsedActor(new UsedActor("", "HUB"));
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor gyroSensor) {
-        usedHardwareBuilder.addUsedActor(new UsedActor("", "HUB"));
         return null;
     }
 
@@ -113,13 +109,11 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
         checkSensorPort(keysSensor);
-        usedHardwareBuilder.addUsedActor(new UsedActor("", "HUB"));
         return null;
     }
 
     @Override
     public Void visitRgbLedOffHiddenAction(RgbLedOffHiddenAction rgbLedOffHiddenAction) {
-        usedHardwareBuilder.addUsedActor(new UsedActor("", "HUB"));
         return null;
     }
 
@@ -127,7 +121,6 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
     public Void visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
         requiredComponentVisited(rgbLedOnHiddenAction, rgbLedOnHiddenAction.colour);
         usedMethodBuilder.addUsedMethod(SpikeMethods.SETSTATUSLIGHT);
-        usedHardwareBuilder.addUsedActor(new UsedActor("", "HUB"));
         return null;
     }
 
@@ -211,7 +204,6 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         checkActorPort(playNoteAction);
-        usedHardwareBuilder.addUsedActor(new UsedActor("", "HUB"));
         return null;
     }
 
@@ -219,7 +211,6 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
     public Void visitPlayToneAction(PlayToneAction playToneAction) {
         requiredComponentVisited(playToneAction, playToneAction.frequency, playToneAction.duration);
         checkActorPort(playToneAction);
-        usedHardwareBuilder.addUsedActor(new UsedActor("", "HUB"));
         usedMethodBuilder.addUsedMethod(SpikeMethods.GETMIDI);
         return null;
     }
