@@ -1,7 +1,6 @@
 import spike
 import math
 from spike.control import wait_for_seconds, wait_until, Timer
-
 touch_sensor_B = spike.ForceSensor('F')
 touch_sensor_B = spike.ForceSensor('F')
 ultrasonic_sensor_U = spike.DistanceSensor('D')

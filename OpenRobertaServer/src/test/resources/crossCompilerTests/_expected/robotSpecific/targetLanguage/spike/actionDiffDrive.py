@@ -4,6 +4,7 @@ from spike.control import wait_for_seconds, wait_until
 TRACKWIDTH = 11.5
 diff_drive = spike.MotorPair('A', 'B')
 diff_drive.set_motor_rotation(5.6 * math.pi, 'cm')
+hub = spike.PrimeHub()
 
 def run():
     # drive

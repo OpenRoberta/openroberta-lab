@@ -1,7 +1,6 @@
 import spike
 import math
 from spike.control import wait_for_seconds, wait_until
-
 touch_sensor_B = spike.ForceSensor('F')
 hub = spike.PrimeHub()
 
