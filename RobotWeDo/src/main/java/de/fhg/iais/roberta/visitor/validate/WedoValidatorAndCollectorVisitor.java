@@ -13,8 +13,8 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
@@ -65,14 +65,14 @@ public class WedoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
+    public Void visitLightAction(LedAction lightAction) {
         checkActorPresence(lightAction);
         requiredComponentVisited(lightAction, lightAction.rgbLedColor);
         return null;
     }
 
     @Override
-    public Void visitLightOffAction(LightOffAction lightOffAction) {
+    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
         checkActorPresence(lightOffAction);
         return null;
     }

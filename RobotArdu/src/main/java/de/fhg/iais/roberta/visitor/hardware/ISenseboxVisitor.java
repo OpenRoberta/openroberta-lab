@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.visitor.hardware;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -65,9 +65,9 @@ public interface ISenseboxVisitor<V> extends IVisitor<V> {
 
     V visitPlotPointAction(PlotPointAction plotPointAction);
 
-    V visitLightAction(LightAction lightAction);
+    V visitLightAction(LedAction lightAction);
 
-    V visitLightOffAction(LightOffAction lightOffAction);
+    V visitLightOffAction(RgbLedOffAction lightOffAction);
 
     V visitRelayAction(RelayAction relayAction);
 

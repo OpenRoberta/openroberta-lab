@@ -6,8 +6,8 @@ import org.json.JSONObject;
 
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -15,7 +15,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
-import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.MotionKitDualSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.MotionKitSingleSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
@@ -45,7 +44,7 @@ public class CalliopeStackMachineVisitor extends MbedStackMachineVisitor impleme
     }
 
     @Override
-    public Void visitLightOffAction(LightOffAction lightOffAction) {
+    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
         JSONObject o = makeNode(C.LED_OFF_ACTION).put(C.NAME, "calliope");
         return add(o);
     }
@@ -143,7 +142,7 @@ public class CalliopeStackMachineVisitor extends MbedStackMachineVisitor impleme
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
+    public Void visitLightAction(LedAction lightAction) {
         return null;
     }
 

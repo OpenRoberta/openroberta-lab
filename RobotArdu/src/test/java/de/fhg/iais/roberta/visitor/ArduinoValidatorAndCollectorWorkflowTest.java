@@ -16,8 +16,8 @@ import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
@@ -382,7 +382,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
         RgbColor rgbColor = new RgbColor(bp, new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"));
 
-        LightAction lightAction = new LightAction("P1", BrickLedColor.ORANGE, LightMode.DEFAULT, rgbColor, bp);
+        LedAction lightAction = new LedAction("P1", BrickLedColor.ORANGE, LightMode.DEFAULT, rgbColor, bp);
         phrases.add(lightAction);
 
         executeWorkflow();
@@ -394,7 +394,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitLightAction_noActor() {
         RgbColor rgbColor = new RgbColor(bp, new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"));
 
-        LightAction lightAction = new LightAction("P1", BrickLedColor.ORANGE, LightMode.DEFAULT, rgbColor, bp);
+        LedAction lightAction = new LedAction("P1", BrickLedColor.ORANGE, LightMode.DEFAULT, rgbColor, bp);
         phrases.add(lightAction);
 
         executeWorkflow();
@@ -428,7 +428,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     public void visitLightOffAction() {
         configurationComponents.add(new ConfigurationComponent(SC.RGBLED, "CONFIGURATION_ACTOR", "P1", "P1", new HashMap<>()));
 
-        LightOffAction lightOffAction = new LightOffAction(bp, "P1");
+        RgbLedOffAction lightOffAction = new RgbLedOffAction(bp, "P1");
         phrases.add(lightOffAction);
 
         executeWorkflow();
@@ -437,7 +437,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
 
     @Test
     public void visitLightOffAction_noPort() {
-        LightOffAction lightOffAction = new LightOffAction(bp, "P1");
+        RgbLedOffAction lightOffAction = new RgbLedOffAction(bp, "P1");
         phrases.add(lightOffAction);
 
         executeWorkflow();

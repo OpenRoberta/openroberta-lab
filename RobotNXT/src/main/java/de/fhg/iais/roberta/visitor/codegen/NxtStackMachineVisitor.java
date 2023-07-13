@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -278,7 +278,7 @@ public class NxtStackMachineVisitor extends AbstractStackMachineVisitor implemen
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
+    public Void visitLightAction(LedAction lightAction) {
         String mode = lightAction.mode.toString().toLowerCase();
         String color = lightAction.color.toString().toLowerCase();
         String port = lightAction.port;

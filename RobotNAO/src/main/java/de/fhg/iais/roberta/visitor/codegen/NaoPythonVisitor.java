@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
 import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
@@ -31,7 +32,6 @@ import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
 import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
-import de.fhg.iais.roberta.syntax.action.nao.SetLeds;
 import de.fhg.iais.roberta.syntax.action.nao.SetMode;
 import de.fhg.iais.roberta.syntax.action.nao.SetStiffness;
 import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
@@ -613,9 +613,9 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitSetLeds(SetLeds setLeds) {
+    public Void visitSetLeds(RgbLedOnAction rgbLedOnAction) {
         this.src.add("h.setLeds(");
-        switch ( setLeds.led ) {
+        switch ( rgbLedOnAction.port ) {
             case "ALL":
                 this.src.add("\"AllLeds\", ");
                 break;
@@ -650,9 +650,9 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 this.src.add("\"RightFootLeds\", ");
                 break;
             default:
-                throw new DbcException("Invalid SetLeds LED: " + setLeds.led);
+                throw new DbcException("Invalid SetLeds LED: " + rgbLedOnAction.port);
         }
-        setLeds.Color.accept(this);
+        rgbLedOnAction.color.accept(this);
         this.src.add(", 0.1)");
         return null;
     }

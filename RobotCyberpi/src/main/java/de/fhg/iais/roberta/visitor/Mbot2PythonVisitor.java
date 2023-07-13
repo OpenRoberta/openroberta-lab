@@ -21,11 +21,11 @@ import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationSendAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.DisplaySetColourAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.LedBrightnessAction;
-import de.fhg.iais.roberta.syntax.action.mbot2.LedOnActionWithIndex;
 import de.fhg.iais.roberta.syntax.action.mbot2.PlayRecordingAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.PrintlnAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.QuadRGBLightOffAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.QuadRGBLightOnAction;
+import de.fhg.iais.roberta.syntax.action.mbot2.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.Ultrasonic2LEDAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
@@ -271,11 +271,11 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     }
 
     @Override
-    public Void visitLedOnActionWithIndex(LedOnActionWithIndex ledOnActionWithIndex) {
+    public Void visitLedOnActionWithIndex(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
         this.src.add("cyberpi.led.on(");
-        appendRGBAsArguments(ledOnActionWithIndex.color);
+        appendRGBAsArguments(rgbLedOnHiddenAction.color);
         this.src.add(", ");
-        appendLedNumber(ledOnActionWithIndex.led);
+        appendLedNumber(rgbLedOnHiddenAction.slot);
         this.src.add(")");
         return null;
     }

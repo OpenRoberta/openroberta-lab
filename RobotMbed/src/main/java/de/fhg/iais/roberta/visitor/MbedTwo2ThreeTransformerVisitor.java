@@ -5,14 +5,13 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
-import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
@@ -85,23 +84,23 @@ public class MbedTwo2ThreeTransformerVisitor extends MbedTransformerVisitor {
     }
 
     @Override
-    public Phrase visitLightAction(LightAction lightAction) {
+    public Phrase visitLightAction(LedAction lightAction) {
         Pair<ConfigurationComponent, String> compAndName =
             this.helper.getComponentAndName(lightAction.getKind().getName(), lightAction.mode.toString(), lightAction.port);
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-        return new LightAction(compAndName.getSecond(), lightAction.color, lightAction.mode, (Expr) lightAction.rgbLedColor.modify(this), lightAction.getProperty());
+        return new LedAction(compAndName.getSecond(), lightAction.color, lightAction.mode, (Expr) lightAction.rgbLedColor.modify(this), lightAction.getProperty());
     }
 
     @Override
-    public Phrase visitLightOffAction(LightOffAction lightOffAction) {
+    public Phrase visitLightOffAction(RgbLedOffAction lightOffAction) {
         Pair<ConfigurationComponent, String> compAndName =
             this.helper.getComponentAndName(lightOffAction.getKind().getName(), SC.OFF, lightOffAction.port);
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-        return new LightOffAction(lightOffAction.getProperty(), compAndName.getSecond());
+        return new RgbLedOffAction(lightOffAction.getProperty(), compAndName.getSecond());
     }
 
     @Override

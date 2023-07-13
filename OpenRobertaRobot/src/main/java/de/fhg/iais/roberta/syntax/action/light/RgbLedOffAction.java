@@ -6,13 +6,14 @@ import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
-@NepoPhrase(name = "LIGHT_OFF_ACTION", category = "ACTOR", blocklyNames = {"mbedActions_leds_off", "robActions_led_off"})
-public final class LightOffAction extends Action implements WithUserDefinedPort {
+@NepoPhrase(name = "RGBLED_OFF_ACTION", category = "ACTOR", blocklyNames = {"actions_rgbLed_off", "actions_rgbLed_off_mbot", "actions_rgbLed_off_nao",
+    "actions_rgbLed_off_nibo", "actions_rgbled_off_nxt", "actions_rgbLed_off_thymio"})
+public final class RgbLedOffAction extends Action implements WithUserDefinedPort {
 
     @NepoField(name = "ACTORPORT")
     public final String port;
 
-    public LightOffAction(BlocklyProperties properties, String port) {
+    public RgbLedOffAction(BlocklyProperties properties, String port) {
         super(properties);
         this.port = port;
         setReadOnly();

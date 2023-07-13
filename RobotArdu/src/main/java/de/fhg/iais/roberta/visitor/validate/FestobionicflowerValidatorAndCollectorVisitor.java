@@ -5,8 +5,6 @@ import com.google.common.collect.ClassToInstanceMap;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
-import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;

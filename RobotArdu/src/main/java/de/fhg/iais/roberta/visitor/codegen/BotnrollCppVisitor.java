@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
@@ -104,7 +104,7 @@ public final class BotnrollCppVisitor extends NepoArduinoCppVisitor implements I
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
+    public Void visitLightAction(LedAction lightAction) {
         this.src.add("one.led(", lightAction.mode.getValues()[0], ");");
         return null;
 

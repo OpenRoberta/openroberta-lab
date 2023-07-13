@@ -7,8 +7,8 @@ import com.google.common.collect.ClassToInstanceMap;
 import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -575,12 +575,12 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to turn on the LEDs visit a {@link LightAction} for the block "robActions_led_on"
+     * Function to turn on the LEDs visit a {@link LedAction} for the block "robActions_led_on"
      *
      * @param lightAction to be visited
      */
     @Override
-    public Void visitLightAction(LightAction lightAction) {
+    public Void visitLightAction(LedAction lightAction) {
         switch ( lightAction.port ) {
             case "RLED":
                 this.src.add("Ed.RightLed(Ed.ON)");
@@ -596,12 +596,12 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to turn off the LEDs visit a {@link LightOffAction} for the block "robActions_led_off"
+     * Function to turn off the LEDs visit a {@link RgbLedOffAction} for the block "robActions_led_off"
      *
      * @param lightOffAction to be visited
      */
     @Override
-    public Void visitLightOffAction(LightOffAction lightOffAction) {
+    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
         switch ( lightOffAction.port ) {
             case "1":
             case "RLED":

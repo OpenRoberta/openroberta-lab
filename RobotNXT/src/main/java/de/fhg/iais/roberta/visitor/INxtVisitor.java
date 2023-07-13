@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -71,7 +71,7 @@ public interface INxtVisitor<V> extends IVisitor<V> {
 
     V visitMotorDriveStopAction(MotorDriveStopAction stopAction);
 
-    V visitLightAction(LightAction lightAction);
+    V visitLightAction(LedAction lightAction);
 
     V visitLightSensor(LightSensor lightSensor);
 

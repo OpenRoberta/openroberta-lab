@@ -17,8 +17,8 @@ import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.BrickLightOffAction;
 import de.fhg.iais.roberta.syntax.action.light.BrickLightResetAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -246,8 +246,8 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
         return new ShowTextAction(showTextAction.getProperty(), (Expr) showTextAction.msg.modify(this), (Expr) showTextAction.x.modify(this), (Expr) showTextAction.y.modify(this), showTextAction.port, null);
     }
 
-    public Phrase visitLightAction(LightAction lightAction) {
-        return new LightAction(lightAction.port, lightAction.color, lightAction.mode, (Expr) lightAction.rgbLedColor.modify(this), lightAction.getProperty());
+    public Phrase visitLightAction(LedAction lightAction) {
+        return new LedAction(lightAction.port, lightAction.color, lightAction.mode, (Expr) lightAction.rgbLedColor.modify(this), lightAction.getProperty());
     }
 
     public Phrase visitBrickLightOffAction(BrickLightOffAction brickLightOffAction) {
@@ -258,8 +258,8 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
         return new BrickLightOffAction(brickLightResetAction.getProperty());
     }
 
-    public Phrase visitLightOffAction(LightOffAction lightOffAction) {
-        return new LightOffAction(lightOffAction.getProperty(), lightOffAction.port);
+    public Phrase visitLightOffAction(RgbLedOffAction lightOffAction) {
+        return new RgbLedOffAction(lightOffAction.getProperty(), lightOffAction.port);
     }
 
     public Phrase visitToneAction(ToneAction toneAction) {

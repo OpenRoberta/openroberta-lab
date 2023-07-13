@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.visitor;
 
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -9,7 +9,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
-import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.MotionKitDualSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.MotionKitSingleSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
@@ -30,7 +29,7 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
 public interface ICalliopeVisitor<V> extends IMbedVisitor<V> {
-    V visitLightOffAction(LightOffAction lightOffAction);
+    V visitLightOffAction(RgbLedOffAction lightOffAction);
 
     V visitMotorOnAction(MotorOnAction motorOnAction);
 
@@ -50,7 +49,7 @@ public interface ICalliopeVisitor<V> extends IMbedVisitor<V> {
 
     V visitLedOnAction(LedOnAction ledOnAction);
 
-    V visitLightAction(LightAction lightAction);
+    V visitLightAction(LedAction lightAction);
 
     V visitRadioRssiSensor(RadioRssiSensor radioRssiSensor);
 

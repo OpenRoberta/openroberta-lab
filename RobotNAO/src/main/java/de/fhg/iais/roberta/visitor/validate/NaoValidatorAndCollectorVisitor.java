@@ -5,6 +5,7 @@ import com.google.common.collect.ClassToInstanceMap;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
 import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
@@ -22,7 +23,6 @@ import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
 import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
-import de.fhg.iais.roberta.syntax.action.nao.SetLeds;
 import de.fhg.iais.roberta.syntax.action.nao.SetMode;
 import de.fhg.iais.roberta.syntax.action.nao.SetStiffness;
 import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
@@ -117,8 +117,8 @@ public class NaoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
     }
 
     @Override
-    public Void visitSetLeds(SetLeds setLeds) {
-        requiredComponentVisited(setLeds, setLeds.Color);
+    public Void visitSetLeds(RgbLedOnAction rgbLedOnAction) {
+        requiredComponentVisited(rgbLedOnAction, rgbLedOnAction.color);
         return null;
     }
 

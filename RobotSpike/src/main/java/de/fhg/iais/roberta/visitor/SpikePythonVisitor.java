@@ -10,11 +10,11 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffHiddenAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.spike.DisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.spike.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.spike.DisplayTextAction;
-import de.fhg.iais.roberta.syntax.action.spike.LedOffAction;
-import de.fhg.iais.roberta.syntax.action.spike.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorDiffCurveAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorDiffCurveForAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorDiffOnAction;
@@ -486,15 +486,15 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
     }
 
     @Override
-    public Void visitLedOnAction(LedOnAction ledOnAction) {
+    public Void visitLedOnAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
         this.src.add("set_status_light(");
-        ledOnAction.colour.accept(this);
+        rgbLedOnHiddenAction.colour.accept(this);
         this.src.add(");");
         return null;
     }
 
     @Override
-    public Void visitLedOffAction(LedOffAction ledOffAction) {
+    public Void visitLedOffAction(RgbLedOffHiddenAction ledOffAction) {
         this.src.add("hub.status_light.off()");
         return null;
     }

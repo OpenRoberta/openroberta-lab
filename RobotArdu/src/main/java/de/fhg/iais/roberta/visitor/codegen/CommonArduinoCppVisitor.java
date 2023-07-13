@@ -17,8 +17,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -101,7 +101,7 @@ public abstract class CommonArduinoCppVisitor extends NepoArduinoCppVisitor impl
 
     @SuppressWarnings("unchecked")
     @Override
-    public final Void visitLightAction(LightAction lightAction) {
+    public final Void visitLightAction(LedAction lightAction) {
         if ( !lightAction.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
             this.src.add("digitalWrite(_led_", lightAction.port, ", ", lightAction.mode.getValues()[0], ");");
         } else {
@@ -168,7 +168,7 @@ public abstract class CommonArduinoCppVisitor extends NepoArduinoCppVisitor impl
     }
 
     @Override
-    public final Void visitLightOffAction(LightOffAction lightOffAction) {
+    public final Void visitLightOffAction(RgbLedOffAction lightOffAction) {
         String[] colors =
             {
                 "red",

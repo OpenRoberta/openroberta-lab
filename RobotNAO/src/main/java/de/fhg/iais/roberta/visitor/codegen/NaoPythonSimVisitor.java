@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
 import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
@@ -31,7 +32,6 @@ import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
 import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
-import de.fhg.iais.roberta.syntax.action.nao.SetLeds;
 import de.fhg.iais.roberta.syntax.action.nao.SetMode;
 import de.fhg.iais.roberta.syntax.action.nao.SetStiffness;
 import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
@@ -310,11 +310,11 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitSetLeds(SetLeds setLeds) {
+    public Void visitSetLeds(RgbLedOnAction rgbLedOnAction) {
         this.src.add("set_led(robot, Led.");
-        this.src.add(setLeds.led.toString());
+        this.src.add(rgbLedOnAction.port.toString());
         this.src.add(", ");
-        setLeds.Color.accept(this);
+        rgbLedOnAction.color.accept(this);
         this.src.add(")");
         return null;
     }

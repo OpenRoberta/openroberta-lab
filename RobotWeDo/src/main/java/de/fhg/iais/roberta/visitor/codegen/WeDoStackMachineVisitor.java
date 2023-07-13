@@ -5,8 +5,8 @@ import org.json.JSONObject;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
@@ -37,7 +37,7 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
+    public Void visitLightAction(LedAction lightAction) {
         ConfigurationComponent confLedBlock = getConfigurationComponent(lightAction.port);
         String brickName = confLedBlock.getProperty("VAR");
         if ( brickName != null ) {
@@ -50,7 +50,7 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
     }
 
     @Override
-    public Void visitLightOffAction(LightOffAction lightOffAction) {
+    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
         ConfigurationComponent confLedBlock = getConfigurationComponent(lightOffAction.port);
         String brickName = confLedBlock.getProperty("VAR");
         if ( brickName != null ) {

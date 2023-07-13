@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.visitor;
 
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
 import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
@@ -17,7 +18,6 @@ import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
 import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
-import de.fhg.iais.roberta.syntax.action.nao.SetLeds;
 import de.fhg.iais.roberta.syntax.action.nao.SetMode;
 import de.fhg.iais.roberta.syntax.action.nao.SetStiffness;
 import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
@@ -73,7 +73,7 @@ public interface INaoVisitor<V> extends IVisitor<V> {
 
     V visitTurnDegrees(TurnDegrees turnDegrees);
 
-    V visitSetLeds(SetLeds setLeds);
+    V visitSetLeds(RgbLedOnAction rgbLedOnAction);
 
     V visitLedOff(LedOff ledOff);
 

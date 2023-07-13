@@ -1,10 +1,10 @@
 package de.fhg.iais.roberta.visitor;
 
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffHiddenAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.spike.DisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.spike.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.spike.DisplayTextAction;
-import de.fhg.iais.roberta.syntax.action.spike.LedOffAction;
-import de.fhg.iais.roberta.syntax.action.spike.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorDiffCurveAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorDiffCurveForAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorDiffOnAction;
@@ -63,9 +63,9 @@ public interface ISpikeVisitor<V> extends IVisitor<V> {
 
     V visitPlayToneAction(PlayToneAction playToneAction);
 
-    V visitLedOnAction(LedOnAction ledOnAction);
+    V visitLedOnAction(RgbLedOnHiddenAction rgbLedOnHiddenAction);
 
-    V visitLedOffAction(LedOffAction ledOffAction);
+    V visitLedOffAction(RgbLedOffHiddenAction ledOffAction);
 
     V visitDisplayImageAction(DisplayImageAction displayImageAction);
 

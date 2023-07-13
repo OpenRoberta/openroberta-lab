@@ -18,8 +18,8 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -161,7 +161,7 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
+    public Void visitLightAction(LedAction lightAction) {
         if ( lightAction.rgbLedColor.getClass().equals(Var.class) ) {
             String tempVarName = "___" + ((Var) lightAction.rgbLedColor).name;
             generateCodeForRgbLed(lightAction, tempVarName);
@@ -210,7 +210,7 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
         return null;
     }
 
-    private void generateCodeForRgbLed(LightAction lightAction, String tempVarName) {
+    private void generateCodeForRgbLed(LedAction lightAction, String tempVarName) {
         this.src.add("_meRgbLed.setColor(");
         this.src.add(lightAction.port);
         this.src.add(", ");
@@ -228,7 +228,7 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
     }
 
     @Override
-    public Void visitLightOffAction(LightOffAction lightOffAction) {
+    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
         this.src.add("_meRgbLed.setColor(", lightOffAction.port);
         this.src.add(", 0, 0, 0);");
         nlIndent();

@@ -11,11 +11,11 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffHiddenAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.spike.DisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.spike.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.spike.DisplayTextAction;
-import de.fhg.iais.roberta.syntax.action.spike.LedOffAction;
-import de.fhg.iais.roberta.syntax.action.spike.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorDiffCurveAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorDiffCurveForAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorDiffOnAction;
@@ -119,16 +119,16 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
     }
 
     @Override
-    public Void visitLedOffAction(LedOffAction ledOffAction) {
+    public Void visitLedOffAction(RgbLedOffHiddenAction ledOffAction) {
         checkActorPort(ledOffAction);
         usedHardwareBuilder.addUsedActor(new UsedActor("", "HUB"));
         return null;
     }
 
     @Override
-    public Void visitLedOnAction(LedOnAction ledOnAction) {
-        requiredComponentVisited(ledOnAction, ledOnAction.colour);
-        checkActorPort(ledOnAction);
+    public Void visitLedOnAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
+        requiredComponentVisited(rgbLedOnHiddenAction, rgbLedOnHiddenAction.colour);
+        checkActorPort(rgbLedOnHiddenAction);
         usedMethodBuilder.addUsedMethod(SpikeMethods.SETSTATUSLIGHT);
         usedHardwareBuilder.addUsedActor(new UsedActor("", "HUB"));
         return null;

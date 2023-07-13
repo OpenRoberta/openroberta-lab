@@ -21,8 +21,8 @@ import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -34,7 +34,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
-import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.MotionKitDualSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.MotionKitSingleSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
@@ -370,7 +369,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     }
 
     @Override
-    public Void visitLightOffAction(LightOffAction lightOffAction) {
+    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
         String port = lightOffAction.port;
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : "0";
@@ -913,7 +912,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
+    public Void visitLightAction(LedAction lightAction) {
         String port = lightAction.port;
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");

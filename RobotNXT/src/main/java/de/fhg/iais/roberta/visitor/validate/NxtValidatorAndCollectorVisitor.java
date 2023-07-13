@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
@@ -147,7 +147,7 @@ public class NxtValidatorAndCollectorVisitor extends CommonNepoAndMotorValidator
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
+    public Void visitLightAction(LedAction lightAction) {
         ConfigurationComponent configurationComponent = robotConfiguration.optConfigurationComponent(lightAction.port);
         if ( configurationComponent == null ) {
             addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_SENSOR_MISSING");

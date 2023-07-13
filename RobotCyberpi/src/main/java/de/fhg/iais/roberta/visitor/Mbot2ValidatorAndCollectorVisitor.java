@@ -22,11 +22,11 @@ import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationSendAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.DisplaySetColourAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.LedBrightnessAction;
-import de.fhg.iais.roberta.syntax.action.mbot2.LedOnActionWithIndex;
 import de.fhg.iais.roberta.syntax.action.mbot2.PlayRecordingAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.PrintlnAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.QuadRGBLightOffAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.QuadRGBLightOnAction;
+import de.fhg.iais.roberta.syntax.action.mbot2.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.Ultrasonic2LEDAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -240,10 +240,10 @@ public class Mbot2ValidatorAndCollectorVisitor extends CommonNepoAndMotorValidat
     }
 
     @Override
-    public Void visitLedOnActionWithIndex(LedOnActionWithIndex ledOnActionWithIndex) {
-        checkActorPort(ledOnActionWithIndex);
-        requiredComponentVisited(ledOnActionWithIndex, ledOnActionWithIndex.color);
-        usedHardwareBuilder.addUsedActor(new UsedActor(ledOnActionWithIndex.getUserDefinedPort(), SC.RGBLED));
+    public Void visitLedOnActionWithIndex(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
+        checkActorPort(rgbLedOnHiddenAction);
+        requiredComponentVisited(rgbLedOnHiddenAction, rgbLedOnHiddenAction.color);
+        usedHardwareBuilder.addUsedActor(new UsedActor(rgbLedOnHiddenAction.getUserDefinedPort(), SC.RGBLED));
         return null;
     }
 

@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.light.BrickLightOffAction;
 import de.fhg.iais.roberta.syntax.action.light.BrickLightResetAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -45,7 +45,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 
 public interface IEv3Visitor<V> extends IVisitor<V> {
-    V visitLightAction(LightAction lightAction);
+    V visitLightAction(LedAction lightAction);
 
     V visitBrickLightOffAction(BrickLightOffAction brickLightOffAction);
 

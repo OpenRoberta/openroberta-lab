@@ -2,8 +2,8 @@ package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
@@ -19,9 +19,9 @@ public interface IWeDoVisitor<V> extends IVisitor<V> {
 
     V visitShowTextAction(ShowTextAction showTextAction);
 
-    V visitLightAction(LightAction lightAction);
+    V visitLightAction(LedAction lightAction);
 
-    V visitLightOffAction(LightOffAction lightOffAction);
+    V visitLightOffAction(RgbLedOffAction lightOffAction);
 
     V visitMotorOnAction(MotorOnAction motorOnAction);
 

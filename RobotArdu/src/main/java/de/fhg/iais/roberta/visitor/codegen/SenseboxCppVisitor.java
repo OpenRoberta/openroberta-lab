@@ -17,8 +17,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -248,7 +248,7 @@ public class SenseboxCppVisitor extends NepoArduinoCppVisitor implements ISenseb
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
+    public Void visitLightAction(LedAction lightAction) {
         if ( !lightAction.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
             this.src.add("digitalWrite(_led_", lightAction.port, ", ", lightAction.mode.getValues()[0], ");");
         } else {
@@ -292,7 +292,7 @@ public class SenseboxCppVisitor extends NepoArduinoCppVisitor implements ISenseb
     }
 
     @Override
-    public Void visitLightOffAction(LightOffAction lightOffAction) {
+    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
         this.src.add("_rgbled_", lightOffAction.port, ".setPixelColor(0, _rgbled_", lightOffAction.port, ".Color(0,0,0));");
         this.nlIndent();
         this.src.add("_rgbled_", lightOffAction.port, ".show();");

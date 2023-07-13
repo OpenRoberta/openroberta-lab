@@ -14,8 +14,8 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightOffAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -143,7 +143,7 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoAndMotorValid
     }
 
     @Override
-    public Void visitLightAction(LightAction lightAction) {
+    public Void visitLightAction(LedAction lightAction) {
         if ( !lightAction.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
             optionalComponentVisited(lightAction.rgbLedColor);
             if ( !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
@@ -169,7 +169,7 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoAndMotorValid
     }
 
     @Override
-    public Void visitLightOffAction(LightOffAction lightOffAction) {
+    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
         if ( lightOffAction.getInfos().getErrorCount() == 0 ) {
             if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
                 addErrorToPhrase(lightOffAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
