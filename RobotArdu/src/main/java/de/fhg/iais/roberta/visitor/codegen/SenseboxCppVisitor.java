@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -53,7 +54,6 @@ import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.hardware.ISenseboxVisitor;
 
@@ -248,55 +248,59 @@ public class SenseboxCppVisitor extends NepoArduinoCppVisitor implements ISenseb
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        if ( !lightAction.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
-            this.src.add("digitalWrite(_led_", lightAction.port, ", ", lightAction.mode.getValues()[0], ");");
-        } else {
-            if ( lightAction.rgbLedColor.getClass().equals(ColorConst.class) ) {
-                ColorConst colorConst = (ColorConst) lightAction.rgbLedColor;
-                this.src.add("_rgbled_", lightAction.port, ".setPixelColor(0, _rgbled_", lightAction.port, ".Color(", colorConst.getRedChannelInt(),
-                    ", ", colorConst.getGreenChannelInt(), ", ", colorConst.getBlueChannelInt(), "));");
-            } else if ( lightAction.rgbLedColor.getClass().equals(Var.class) ) {
-                String tempVarName = "___" + ((Var) lightAction.rgbLedColor).name;
-                this.src.add("_rgbled_", lightAction.port, ".setPixelColor(0, _rgbled_", lightAction.port, ".Color(RCHANNEL(",
-                    tempVarName, "), GCHANNEL(", tempVarName, "), BCHANNEL(", tempVarName, ")));");
-            } else if ( lightAction.rgbLedColor.getClass().equals(MethodExpr.class) ) {
-                String tempVarName = "_v_colour_temp";
-                this.src.add(tempVarName, " = ");
-                visitMethodCall((MethodCall) ((MethodExpr) lightAction.rgbLedColor).method);
-                this.src.add(";");
-                nlIndent();
-                this.src.add("_rgbled_", lightAction.port, ".setPixelColor(0, _rgbled_", lightAction.port,
-                    ".Color(RCHANNEL(", tempVarName, "), GCHANNEL(", tempVarName, "), BCHANNEL(", tempVarName, ")));");
-            } else if ( lightAction.rgbLedColor.getClass().equals(FunctionExpr.class) ) {
-                String tempVarName = "_v_colour_temp";
-                this.src.add(tempVarName, " = ");
-                ((FunctionExpr) lightAction.rgbLedColor).function.accept(this);
-                this.src.add(";");
-                nlIndent();
-                this.src.add("_rgbled_", lightAction.port, ".setPixelColor(0, _rgbled_", lightAction.port,
-                    ".Color(RCHANNEL(", tempVarName, "), GCHANNEL(", tempVarName, "), BCHANNEL(", tempVarName, ")));");
-            } else {
-                this.src.add("_rgbled_", lightAction.port, ".setPixelColor(0, _rgbled_", lightAction.port, ".Color(");
-                ((RgbColor) lightAction.rgbLedColor).R.accept(this);
-                this.src.add(", ");
-                ((RgbColor) lightAction.rgbLedColor).G.accept(this);
-                this.src.add(", ");
-                ((RgbColor) lightAction.rgbLedColor).B.accept(this);
-                this.src.add("));");
-            }
-            nlIndent();
-            this.src.add("_rgbled_", lightAction.port, ".show();");
-        }
+    public Void visitLedAction(LedAction ledAction) {
+        String mode = transformOnOff2HighLow(ledAction);
+        this.src.add("digitalWrite(_led_", ledAction.port, ", ", mode, ");");
+        return null;
+    }
+
+
+    @Override
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
+        this.src.add("_rgbled_", rgbLedOffAction.port, ".setPixelColor(0, _rgbled_", rgbLedOffAction.port, ".Color(0,0,0));");
+        this.nlIndent();
+        this.src.add("_rgbled_", rgbLedOffAction.port, ".show();");
+        this.nlIndent();
         return null;
     }
 
     @Override
-    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
-        this.src.add("_rgbled_", lightOffAction.port, ".setPixelColor(0, _rgbled_", lightOffAction.port, ".Color(0,0,0));");
-        this.nlIndent();
-        this.src.add("_rgbled_", lightOffAction.port, ".show();");
-        this.nlIndent();
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        if ( rgbLedOnAction.colour.getClass().equals(ColorConst.class) ) {
+            ColorConst colorConst = (ColorConst) rgbLedOnAction.colour;
+            this.src.add("_rgbled_", rgbLedOnAction.port, ".setPixelColor(0, _rgbled_", rgbLedOnAction.port, ".Color(", colorConst.getRedChannelInt(),
+                ", ", colorConst.getGreenChannelInt(), ", ", colorConst.getBlueChannelInt(), "));");
+        } else if ( rgbLedOnAction.colour.getClass().equals(Var.class) ) {
+            String tempVarName = "___" + ((Var) rgbLedOnAction.colour).name;
+            this.src.add("_rgbled_", rgbLedOnAction.port, ".setPixelColor(0, _rgbled_", rgbLedOnAction.port, ".Color(RCHANNEL(",
+                tempVarName, "), GCHANNEL(", tempVarName, "), BCHANNEL(", tempVarName, ")));");
+        } else if ( rgbLedOnAction.colour.getClass().equals(MethodExpr.class) ) {
+            String tempVarName = "_v_colour_temp";
+            this.src.add(tempVarName, " = ");
+            visitMethodCall((MethodCall) ((MethodExpr) rgbLedOnAction.colour).method);
+            this.src.add(";");
+            nlIndent();
+            this.src.add("_rgbled_", rgbLedOnAction.port, ".setPixelColor(0, _rgbled_", rgbLedOnAction.port,
+                ".Color(RCHANNEL(", tempVarName, "), GCHANNEL(", tempVarName, "), BCHANNEL(", tempVarName, ")));");
+        } else if ( rgbLedOnAction.colour.getClass().equals(FunctionExpr.class) ) {
+            String tempVarName = "_v_colour_temp";
+            this.src.add(tempVarName, " = ");
+            ((FunctionExpr) rgbLedOnAction.colour).function.accept(this);
+            this.src.add(";");
+            nlIndent();
+            this.src.add("_rgbled_", rgbLedOnAction.port, ".setPixelColor(0, _rgbled_", rgbLedOnAction.port,
+                ".Color(RCHANNEL(", tempVarName, "), GCHANNEL(", tempVarName, "), BCHANNEL(", tempVarName, ")));");
+        } else {
+            this.src.add("_rgbled_", rgbLedOnAction.port, ".setPixelColor(0, _rgbled_", rgbLedOnAction.port, ".Color(");
+            ((RgbColor) rgbLedOnAction.colour).R.accept(this);
+            this.src.add(", ");
+            ((RgbColor) rgbLedOnAction.colour).G.accept(this);
+            this.src.add(", ");
+            ((RgbColor) rgbLedOnAction.colour).B.accept(this);
+            this.src.add("));");
+        }
+        nlIndent();
+        this.src.add("_rgbled_", rgbLedOnAction.port, ".show();");
         return null;
     }
 

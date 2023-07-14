@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
@@ -23,15 +24,13 @@ import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.Hand;
 import de.fhg.iais.roberta.syntax.action.nao.LearnFace;
-import de.fhg.iais.roberta.syntax.action.nao.LedOff;
-import de.fhg.iais.roberta.syntax.action.nao.LedReset;
 import de.fhg.iais.roberta.syntax.action.nao.MoveJoint;
+import de.fhg.iais.roberta.syntax.action.nao.NaoLedOnAction;
 import de.fhg.iais.roberta.syntax.action.nao.PlayFile;
 import de.fhg.iais.roberta.syntax.action.nao.PointLookAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
-import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
 import de.fhg.iais.roberta.syntax.action.nao.SetMode;
 import de.fhg.iais.roberta.syntax.action.nao.SetStiffness;
 import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
@@ -310,37 +309,29 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitSetLeds(RgbLedOnAction rgbLedOnAction) {
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
         this.src.add("set_led(robot, Led.");
         this.src.add(rgbLedOnAction.port.toString());
         this.src.add(", ");
-        rgbLedOnAction.color.accept(this);
+        rgbLedOnAction.colour.accept(this);
         this.src.add(")");
         return null;
     }
 
     @Override
-    public Void visitSetIntensity(SetIntensity setIntensity) {
+    public Void visitNaoLedOnAction(NaoLedOnAction naoLedOnAction) {
         this.src.add("set_intensity(robot, Led.");
-        this.src.add(setIntensity.led.toString());
+        this.src.add(naoLedOnAction.port.toString());
         this.src.add(", ");
-        setIntensity.Intensity.accept(this);
+        naoLedOnAction.intensity.accept(this);
         this.src.add(")");
         return null;
     }
 
     @Override
-    public Void visitLedOff(LedOff ledOff) {
+    public Void visitLedAction(LedAction ledAction) {
         this.src.add("set_led(robot, Led.");
-        this.src.add(ledOff.led.toString());
-        this.src.add(", 0)");
-        return null;
-    }
-
-    @Override
-    public Void visitLedReset(LedReset ledReset) {
-        this.src.add("set_led(robot, Led.");
-        this.src.add(ledReset.led.toString());
+        this.src.add(ledAction.port.toString());
         this.src.add(", 0)");
         return null;
     }

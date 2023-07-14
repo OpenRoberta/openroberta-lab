@@ -11,6 +11,8 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -78,16 +80,16 @@ public final class FestobionicflowerCppVisitor extends NepoArduinoCppVisitor imp
     }
 
     @Override
-    public Void visitLedOnAction(LedOnAction ledOnAction) {
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
         this.src.add("set_color(");
-        ledOnAction.ledColor.accept(this);
+        rgbLedOnAction.colour.accept(this);
         this.src.add(");");
 
         return null;
     }
 
     @Override
-    public Void visitLedOffAction(LedOffAction ledOffAction) {
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
         this.src.add("set_color(RGB(0x00, 0x00, 0x00));");
         return null;
     }

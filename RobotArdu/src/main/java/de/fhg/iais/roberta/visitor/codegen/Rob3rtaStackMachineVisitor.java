@@ -8,7 +8,9 @@ import org.json.JSONObject;
 
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
@@ -59,10 +61,10 @@ public final class Rob3rtaStackMachineVisitor extends AbstractStackMachineVisito
     }
 
     @Override
-    public Void visitLedOnAction(LedOnAction ledOnAction) {
-        ledOnAction.ledColor.accept(this);
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        rgbLedOnAction.colour.accept(this);
         int port;
-        if ( ledOnAction.side.equals("Left") ) {
+        if ( rgbLedOnAction.port.equals("EYE_2") ) {
             port = 1;
         } else {
             port = 2;
@@ -72,19 +74,19 @@ public final class Rob3rtaStackMachineVisitor extends AbstractStackMachineVisito
     }
 
     @Override
-    public Void visitBodyLEDAction(BodyLEDAction bodyLEDAction) {
+    public Void visitLedAction(LedAction ledAction) {
         int port = 0;
-        if ( bodyLEDAction.side.equals("LED_3") ) {
+        if ( ledAction.port.equals("LED_3") ) {
             port = 3;
-        } else if ( bodyLEDAction.side.equals("LED_4") ) {
+        } else if ( ledAction.port.equals("LED_4") ) {
             port = 4;
         }
-        if ( bodyLEDAction.ledState.equals("ON") ) {
+        if ( ledAction.mode.equals("ON") ) {
             JSONObject o = makeNode(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, new JSONArray(Arrays.asList(0xFF, 0xFF, 0x99)));
             add(o);
             JSONObject oOn = makeNode(C.LED_ON_ACTION).put(C.NAME, "rob3rta").put(C.PORT, port);
             return add(oOn);
-        } else if ( bodyLEDAction.ledState.equals("OFF") ) {
+        } else if ( ledAction.mode.equals("OFF") ) {
             JSONObject oOff = makeNode(C.LED_OFF_ACTION).put(C.NAME, "rob3rta").put(C.PORT, port);
             return add(oOff);
         }
@@ -92,9 +94,9 @@ public final class Rob3rtaStackMachineVisitor extends AbstractStackMachineVisito
     }
 
     @Override
-    public Void visitLedOffAction(LedOffAction ledOffAction) {
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
         int port;
-        if ( ledOffAction.side.equals("Left") ) {
+        if ( rgbLedOffAction.port.equals("EYE_2") ) {
             port = 1;
         } else {
             port = 2;

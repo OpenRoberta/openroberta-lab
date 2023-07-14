@@ -5,7 +5,9 @@ import com.google.common.collect.ClassToInstanceMap;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
@@ -28,7 +30,7 @@ public abstract class NIBOValidatorAndCollectorVisitor extends CommonNepoValidat
     }
 
     @Override
-    public Void visitBodyLEDAction(BodyLEDAction bodyLEDAction) {
+    public Void visitLedAction(LedAction ledAction) {
         return null;
     }
 
@@ -57,13 +59,13 @@ public abstract class NIBOValidatorAndCollectorVisitor extends CommonNepoValidat
     }
 
     @Override
-    public Void visitLedOffAction(LedOffAction ledOffAction) {
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
         return null;
     }
 
     @Override
-    public Void visitLedOnAction(LedOnAction ledOnAction) {
-        requiredComponentVisited(ledOnAction, ledOnAction.ledColor);
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        requiredComponentVisited(rgbLedOnAction, rgbLedOnAction.colour);
         return null;
     }
 

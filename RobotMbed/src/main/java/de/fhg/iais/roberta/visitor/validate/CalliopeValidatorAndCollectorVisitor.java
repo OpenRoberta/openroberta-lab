@@ -8,6 +8,9 @@ import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffHiddenAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -110,20 +113,39 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
     }
 
     @Override
-    public Void visitLedOnAction(LedOnAction ledOnAction) {
-        requiredComponentVisited(ledOnAction, ledOnAction.ledColor);
-        return addActorMaybeCallibot(ledOnAction, SC.RGBLED);
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        addToPhraseIfUnsupportedInSim(rgbLedOnAction, false, isSim);
+        checkActorByTypeExists(rgbLedOnAction, SC.CALLIBOT);
+        requiredComponentVisited(rgbLedOnAction, rgbLedOnAction.colour);
+        usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
+        return null;
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        // TODO: design better blockly blocks and don't reuse blocks with different number of parameters and don't use EmptyExpr
-        addToPhraseIfUnsupportedInSim(lightAction, false, isSim);
-        String blocktype = lightAction.getProperty().getBlockType();
-        checkActorByPortExists(lightAction, lightAction.port);
-        if ( !blocktype.equals("robActions_brickLight_on") ) {
-            requiredComponentVisited(lightAction, lightAction.rgbLedColor);
-        }
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
+        addToPhraseIfUnsupportedInSim(rgbLedOffAction, false, isSim);
+        checkActorByTypeExists(rgbLedOffAction, SC.CALLIBOT);
+        usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
+        return null;
+    }
+
+    @Override
+    public Void visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
+        requiredComponentVisited(rgbLedOnHiddenAction, rgbLedOnHiddenAction.colour);
+        usedHardwareBuilder.addUsedActor(new UsedActor(rgbLedOnHiddenAction.hide.getValue(), SC.RGBLED));
+        return null;
+    }
+
+    @Override
+    public Void visitRgbLedOffHiddenAction(RgbLedOffHiddenAction rgbLedOffHiddenAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(rgbLedOffHiddenAction.hide.getValue(), SC.RGBLED));
+        return null;
+    }
+
+    @Override
+    public Void visitLedAction(LedAction ledAction) {
+        addToPhraseIfUnsupportedInSim(ledAction, false, isSim);
+        checkActorByTypeExists(ledAction, SC.CALLIBOT);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
         return null;
     }
@@ -175,11 +197,6 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
             addErrorToPhrase(pinValueSensor, "SIM_BLOCK_NOT_SUPPORTED");
         }
         return super.visitPinGetValueSensor(pinValueSensor);
-    }
-
-    @Override
-    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
-        return addActorMaybeCallibot(lightOffAction, SC.LIGHT);
     }
 
     @Override

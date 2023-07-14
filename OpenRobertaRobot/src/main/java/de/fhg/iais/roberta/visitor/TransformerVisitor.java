@@ -15,10 +15,11 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectio
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
-import de.fhg.iais.roberta.syntax.action.light.BrickLightOffAction;
-import de.fhg.iais.roberta.syntax.action.light.BrickLightResetAction;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffHiddenAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -246,20 +247,24 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
         return new ShowTextAction(showTextAction.getProperty(), (Expr) showTextAction.msg.modify(this), (Expr) showTextAction.x.modify(this), (Expr) showTextAction.y.modify(this), showTextAction.port, null);
     }
 
-    public Phrase visitLightAction(LedAction lightAction) {
-        return new LedAction(lightAction.port, lightAction.color, lightAction.mode, (Expr) lightAction.rgbLedColor.modify(this), lightAction.getProperty());
+    public Phrase visitLedAction(LedAction ledAction) {
+        return new LedAction(ledAction.getProperty(), ledAction.port, ledAction.mode);
     }
 
-    public Phrase visitBrickLightOffAction(BrickLightOffAction brickLightOffAction) {
-        return new BrickLightOffAction(brickLightOffAction.getProperty());
+    public Phrase visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
+        return new RgbLedOffAction(rgbLedOffAction.getProperty(), rgbLedOffAction.port);
     }
 
-    public Phrase visitBrickLightResetAction(BrickLightResetAction brickLightResetAction) {
-        return new BrickLightOffAction(brickLightResetAction.getProperty());
+    public Phrase visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        return new RgbLedOnAction(rgbLedOnAction.getProperty(), rgbLedOnAction.port, (Expr) rgbLedOnAction.colour.modify(this));
     }
 
-    public Phrase visitLightOffAction(RgbLedOffAction lightOffAction) {
-        return new RgbLedOffAction(lightOffAction.getProperty(), lightOffAction.port);
+    public Phrase visitRgbLedOffHiddenAction(RgbLedOffHiddenAction rgbLedOffHiddenAction) {
+        return new RgbLedOffHiddenAction(rgbLedOffHiddenAction.getProperty(), rgbLedOffHiddenAction.hide);
+    }
+
+    public Phrase visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
+        return new RgbLedOnHiddenAction(rgbLedOnHiddenAction.getProperty(), (Expr) rgbLedOnHiddenAction.colour.modify(this), rgbLedOnHiddenAction.hide);
     }
 
     public Phrase visitToneAction(ToneAction toneAction) {

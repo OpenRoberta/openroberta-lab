@@ -17,16 +17,16 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LedsOffAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationSendAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.DisplaySetColourAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.LedBrightnessAction;
+import de.fhg.iais.roberta.syntax.action.mbot2.Mbot2RgbLedOffHiddenAction;
+import de.fhg.iais.roberta.syntax.action.mbot2.Mbot2RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.PlayRecordingAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.PrintlnAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.QuadRGBLightOffAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.QuadRGBLightOnAction;
-import de.fhg.iais.roberta.syntax.action.mbot2.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.Ultrasonic2LEDAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -240,10 +240,9 @@ public class Mbot2ValidatorAndCollectorVisitor extends CommonNepoAndMotorValidat
     }
 
     @Override
-    public Void visitLedOnActionWithIndex(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
-        checkActorPort(rgbLedOnHiddenAction);
-        requiredComponentVisited(rgbLedOnHiddenAction, rgbLedOnHiddenAction.color);
-        usedHardwareBuilder.addUsedActor(new UsedActor(rgbLedOnHiddenAction.getUserDefinedPort(), SC.RGBLED));
+    public Void visitMbot2RgbLedOnHiddenAction(Mbot2RgbLedOnHiddenAction mbot2RgbLedOnHiddenAction) {
+        requiredComponentVisited(mbot2RgbLedOnHiddenAction, mbot2RgbLedOnHiddenAction.color);
+        usedHardwareBuilder.addUsedActor(new UsedActor(mbot2RgbLedOnHiddenAction.hide.getValue(), SC.RGBLED));
         return null;
     }
 
@@ -258,9 +257,8 @@ public class Mbot2ValidatorAndCollectorVisitor extends CommonNepoAndMotorValidat
     }
 
     @Override
-    public Void visitLedsOffAction(LedsOffAction ledsOffAction) {
-        checkActorPort(ledsOffAction);
-        usedHardwareBuilder.addUsedActor(new UsedActor(ledsOffAction.getUserDefinedPort(), SC.RGBLED));
+    public Void visitMbot2RgbLedOffHiddenAction(Mbot2RgbLedOffHiddenAction mbot2RgbLedOffHiddenAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(mbot2RgbLedOffHiddenAction.hide.getValue(), SC.RGBLED));
         return null;
     }
 

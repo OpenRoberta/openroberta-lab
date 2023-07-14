@@ -8,8 +8,6 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
-import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
@@ -78,13 +76,6 @@ public class MbedThree2ThreeOneTransformerVisitor extends MbedTransformerVisitor
     }
 
     @Override
-    public Phrase visitLedOnAction(LedOnAction ledOnAction) {
-        String newName = getNewName(ledOnAction.getUserDefinedPort());
-
-        return new LedOnAction(ledOnAction.getProperty(), (Expr) ledOnAction.ledColor.modify(this), newName, ledOnAction.hide);
-    }
-
-    @Override
     public Phrase visitSingleMotorOnAction(SingleMotorOnAction singleMotorOnAction) {
         return null;
     }
@@ -92,20 +83,6 @@ public class MbedThree2ThreeOneTransformerVisitor extends MbedTransformerVisitor
     @Override
     public Phrase visitSingleMotorStopAction(SingleMotorStopAction singleMotorStopAction) {
         return null;
-    }
-
-    @Override
-    public Phrase visitLightAction(LedAction lightAction) {
-        String newName = getNewName(lightAction.port);
-
-        return new LedAction(newName, lightAction.color, lightAction.mode, (Expr) lightAction.rgbLedColor.modify(this), lightAction.getProperty());
-    }
-
-    @Override
-    public Phrase visitLightOffAction(RgbLedOffAction lightOffAction) {
-        String newName = getNewName(lightOffAction.port);
-
-        return new RgbLedOffAction(lightOffAction.getProperty(), newName);
     }
 
     @Override

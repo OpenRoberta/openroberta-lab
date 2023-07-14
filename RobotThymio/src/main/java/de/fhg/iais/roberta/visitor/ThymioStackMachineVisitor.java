@@ -10,8 +10,8 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
-import de.fhg.iais.roberta.syntax.action.light.LedsOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -184,16 +184,16 @@ public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor
     }
 
     @Override
-    public Void visitLedsOffAction(LedsOffAction ledsOffAction) {
-        String port = ledsOffAction.port.toLowerCase();
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
+        String port = rgbLedOffAction.port.toLowerCase();
         JSONObject o = makeNode(C.LED_OFF_ACTION).put(C.PORT, port);
         return add(o);
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        lightAction.rgbLedColor.accept(this);
-        String port = lightAction.port.toLowerCase();
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        rgbLedOnAction.colour.accept(this);
+        String port = rgbLedOnAction.port.toLowerCase();
         JSONObject o = makeNode(C.LED_ON_ACTION).put(C.PORT, port);
         return add(o);
     }

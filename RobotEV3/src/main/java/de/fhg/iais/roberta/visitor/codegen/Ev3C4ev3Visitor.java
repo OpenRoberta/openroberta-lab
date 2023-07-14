@@ -36,8 +36,7 @@ import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.light.BrickLightOffAction;
-import de.fhg.iais.roberta.syntax.action.light.BrickLightResetAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -1213,8 +1212,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        String pattern = getLedPattern(lightAction.color, lightAction.mode);
+    public Void visitBrickLightOnAction(BrickLightOnAction brickLightOnAction) {
+        String pattern = getLedPattern(brickLightOnAction.colour, brickLightOnAction.mode);
         this.src.add("SetLedPattern(", pattern, ");");
         return null;
     }
@@ -1241,15 +1240,17 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitBrickLightResetAction(BrickLightResetAction brickLightResetAction) {
-        // TODO: Light reset not implemented for C4EV3 yet...;
-        return null;
-
-    }
-
-    @Override
     public Void visitBrickLightOffAction(BrickLightOffAction brickLightOffAction) {
-        this.src.add("SetLedPattern(LED_BLACK);");
+        switch ( brickLightOffAction.mode ) {
+            case "OFF":
+                this.src.add("SetLedPattern(LED_BLACK);");
+                break;
+            case "RESET":
+                // TODO: Light reset not implemented for C4EV3 yet...;
+                break;
+            default:
+                throw new DbcException("Invalid MODE encountered in BrickLightOffAction: " + brickLightOffAction.mode);
+        }
         return null;
     }
 

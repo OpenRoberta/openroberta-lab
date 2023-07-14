@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
-import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -46,7 +45,7 @@ public interface IEdisonVisitor<V> extends IVisitor<V> {
 
     V visitMotorDriveStopAction(MotorDriveStopAction stopAction);
 
-    V visitLightAction(LedAction lightAction);
+    V visitLedAction(LedAction ledAction);
 
     V visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction);
 
@@ -71,8 +70,6 @@ public interface IEdisonVisitor<V> extends IVisitor<V> {
     V visitIRSeekerSensor(IRSeekerSensor irSeekerSensor);
 
     V visitLightSensor(LightSensor lightSensor);
-
-    V visitLightOffAction(RgbLedOffAction lightOffAction);
 
     V visitSoundSensor(SoundSensor soundSensor);
 

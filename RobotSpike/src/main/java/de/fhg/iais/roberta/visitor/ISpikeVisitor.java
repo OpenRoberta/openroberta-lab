@@ -63,9 +63,9 @@ public interface ISpikeVisitor<V> extends IVisitor<V> {
 
     V visitPlayToneAction(PlayToneAction playToneAction);
 
-    V visitLedOnAction(RgbLedOnHiddenAction rgbLedOnHiddenAction);
+    V visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction);
 
-    V visitLedOffAction(RgbLedOffHiddenAction ledOffAction);
+    V visitRgbLedOffHiddenAction(RgbLedOffHiddenAction rgbLedOffHiddenAction);
 
     V visitDisplayImageAction(DisplayImageAction displayImageAction);
 

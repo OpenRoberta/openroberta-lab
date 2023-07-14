@@ -25,7 +25,7 @@ public interface IBotnrollVisitor<V> extends IVisitor<V> {
 
     V visitClearDisplayAction(ClearDisplayAction clearDisplayAction);
 
-    V visitLightAction(LedAction lightAction);
+    V visitLedAction(LedAction ledAction);
 
     V visitToneAction(ToneAction toneAction);
 

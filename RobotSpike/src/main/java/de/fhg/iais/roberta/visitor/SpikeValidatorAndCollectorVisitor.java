@@ -119,16 +119,14 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
     }
 
     @Override
-    public Void visitLedOffAction(RgbLedOffHiddenAction ledOffAction) {
-        checkActorPort(ledOffAction);
+    public Void visitRgbLedOffHiddenAction(RgbLedOffHiddenAction rgbLedOffHiddenAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor("", "HUB"));
         return null;
     }
 
     @Override
-    public Void visitLedOnAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
+    public Void visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
         requiredComponentVisited(rgbLedOnHiddenAction, rgbLedOnHiddenAction.colour);
-        checkActorPort(rgbLedOnHiddenAction);
         usedMethodBuilder.addUsedMethod(SpikeMethods.SETSTATUSLIGHT);
         usedHardwareBuilder.addUsedActor(new UsedActor("", "HUB"));
         return null;

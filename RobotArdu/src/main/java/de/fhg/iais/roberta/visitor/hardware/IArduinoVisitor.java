@@ -5,6 +5,7 @@ import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -61,9 +62,11 @@ public interface IArduinoVisitor<V> extends IVisitor<V> {
 
     V visitClearDisplayAction(ClearDisplayAction clearDisplayAction);
 
-    V visitLightAction(LedAction lightAction);
+    V visitLedAction(LedAction ledAction);
 
-    V visitLightOffAction(RgbLedOffAction lightOffAction);
+    V visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction);
+
+    V visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction);
 
     V visitMotorOnAction(MotorOnAction motorOnAction);
 

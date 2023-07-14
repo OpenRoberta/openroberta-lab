@@ -5,8 +5,8 @@ import org.json.JSONObject;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
@@ -37,30 +37,16 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        ConfigurationComponent confLedBlock = getConfigurationComponent(lightAction.port);
-        String brickName = confLedBlock.getProperty("VAR");
-        if ( brickName != null ) {
-            lightAction.rgbLedColor.accept(this);
-            JSONObject o = makeNode(C.LED_ON_ACTION).put(C.NAME, brickName);
-            return add(o);
-        } else {
-            throw new DbcException("No robot name or no port!");
-        }
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        rgbLedOnAction.colour.accept(this);
+        JSONObject o = makeNode(C.LED_ON_ACTION).put(C.NAME, "W");
+        return add(o);
     }
 
     @Override
-    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
-        ConfigurationComponent confLedBlock = getConfigurationComponent(lightOffAction.port);
-        String brickName = confLedBlock.getProperty("VAR");
-        if ( brickName != null ) {
-            // for wedo this block is only for setting off the led, so no test for status required
-
-            JSONObject o = makeNode(C.LED_OFF_ACTION).put(C.NAME, brickName);
-            return add(o);
-        } else {
-            throw new DbcException("No robot name or no port!");
-        }
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
+        JSONObject o = makeNode(C.LED_OFF_ACTION).put(C.NAME, "W");
+        return add(o);
     }
 
     @Override

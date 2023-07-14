@@ -16,16 +16,16 @@ import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LedsOffAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationSendAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.DisplaySetColourAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.LedBrightnessAction;
+import de.fhg.iais.roberta.syntax.action.mbot2.Mbot2RgbLedOffHiddenAction;
+import de.fhg.iais.roberta.syntax.action.mbot2.Mbot2RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.PlayRecordingAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.PrintlnAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.QuadRGBLightOffAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.QuadRGBLightOnAction;
-import de.fhg.iais.roberta.syntax.action.mbot2.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.Ultrasonic2LEDAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
@@ -271,11 +271,11 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     }
 
     @Override
-    public Void visitLedOnActionWithIndex(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
+    public Void visitMbot2RgbLedOnHiddenAction(Mbot2RgbLedOnHiddenAction mbot2RgbLedOnHiddenAction) {
         this.src.add("cyberpi.led.on(");
-        appendRGBAsArguments(rgbLedOnHiddenAction.color);
+        appendRGBAsArguments(mbot2RgbLedOnHiddenAction.color);
         this.src.add(", ");
-        appendLedNumber(rgbLedOnHiddenAction.slot);
+        appendLedNumber(mbot2RgbLedOnHiddenAction.slot);
         this.src.add(")");
         return null;
     }
@@ -299,9 +299,9 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     }
 
     @Override
-    public Void visitLedsOffAction(LedsOffAction ledsOffAction) {
+    public Void visitMbot2RgbLedOffHiddenAction(Mbot2RgbLedOffHiddenAction mbot2RgbLedOffHiddenAction) {
         this.src.add("cyberpi.led.off(");
-        appendLedNumber(ledsOffAction.led);
+        appendLedNumber(mbot2RgbLedOffHiddenAction.slot);
         this.src.add(")");
         return null;
     }

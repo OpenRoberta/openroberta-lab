@@ -5,6 +5,8 @@ import com.google.common.collect.ClassToInstanceMap;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
@@ -18,21 +20,21 @@ public final class FestobionicflowerValidatorAndCollectorVisitor extends Arduino
     }
 
     @Override
-    public Void visitLedOffAction(LedOffAction ledOffAction) {
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
-            addErrorToPhrase(ledOffAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
+            addErrorToPhrase(rgbLedOffAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
         return null;
     }
 
     @Override
-    public Void visitLedOnAction(LedOnAction ledOnAction) {
-        if ( ledOnAction.ledColor.hasName("EMPTY_EXPR") ) {
-            addErrorToPhrase(ledOnAction, "CONFIGURATION_ERROR_SENSOR_MISSING");
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        if ( rgbLedOnAction.colour.hasName("EMPTY_EXPR") ) {
+            addErrorToPhrase(rgbLedOnAction, "CONFIGURATION_ERROR_SENSOR_MISSING");
         } else if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
-            addErrorToPhrase(ledOnAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
+            addErrorToPhrase(rgbLedOnAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
-        requiredComponentVisited(ledOnAction, ledOnAction.ledColor);
+        requiredComponentVisited(rgbLedOnAction, rgbLedOnAction.colour);
         usedHardwareBuilder.addUsedActor(new UsedActor("internal", SC.RGBLED));
         return null;
     }

@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
-import de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
@@ -23,11 +25,11 @@ public interface INIBOVisitor<V> extends IVisitor<V> {
 
     V visitMainTask(MainTask mainTask);
 
-    V visitLedOnAction(LedOnAction ledOnAction);
+    V visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction);
 
-    V visitLedOffAction(LedOffAction ledOffAction);
+    V visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction);
 
-    V visitBodyLEDAction(BodyLEDAction bodyLEDAction);
+    V visitLedAction(LedAction ledAction);
 
     V visitSendIRAction(SendIRAction sendIRAction);
 

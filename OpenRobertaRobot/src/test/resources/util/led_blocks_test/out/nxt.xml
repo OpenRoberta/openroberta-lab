@@ -37,18 +37,16 @@
                     <field name="WHEEL_DIAMETER">5.6</field>
                     <field name="TRACK_WIDTH">12</field>
                     <value name="S1">
-                        <block type="robBrick_touch" id="2" intask="true"/>
+                        <block type="robBrick_colour" id="#WwMZHE-z0%vK6luw}UE" intask="true"/>
                     </value>
                     <value name="S2">
-                        <block type="robBrick_sound" id="3" intask="true">
-                            <data>nxt</data>
-                        </block>
+                        <block type="robBrick_colour" id="H:;7=i_8UH5_]3uyyn)b" intask="true"/>
                     </value>
                     <value name="S3">
-                        <block type="robBrick_light" id="4" intask="true"/>
+                        <block type="robBrick_colour" id="@Gq[T8f8c/)/mL9zHYJ/" intask="true"/>
                     </value>
                     <value name="S4">
-                        <block type="robBrick_ultrasonic" id="5" intask="true"/>
+                        <block type="robBrick_colour" id="HIdCA1Vftz5e;,SIt/ki" intask="true"/>
                     </value>
                     <value name="MB">
                         <block type="robBrick_motor_big" id="6" intask="true">

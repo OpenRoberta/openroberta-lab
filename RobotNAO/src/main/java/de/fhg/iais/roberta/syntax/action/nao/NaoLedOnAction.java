@@ -9,20 +9,20 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
-@NepoPhrase(name = "SET_INTENSITY", category = "ACTOR", blocklyNames = {"naoActions_setIntensity"})
-public final class SetIntensity extends Action {
+@NepoPhrase(name = "SET_INTENSITY", category = "ACTOR", blocklyNames = {"actions_led_on_nao"})
+public final class NaoLedOnAction extends Action {
 
-    @NepoField(name = "LED")
-    public final String led;
+    @NepoField(name = "ACTORPORT")
+    public final String port;
 
     @NepoValue(name = "INTENSITY", type = BlocklyType.NUMBER_INT)
-    public final Expr Intensity;
+    public final Expr intensity;
 
-    public SetIntensity(BlocklyProperties properties, String led, Expr Intensity) {
+    public NaoLedOnAction(BlocklyProperties properties, String port, Expr Intensity) {
         super(properties);
-        this.led = led;
+        this.port = port;
         Assert.notNull(Intensity);
-        this.Intensity = Intensity;
+        this.intensity = Intensity;
         setReadOnly();
     }
 }

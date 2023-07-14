@@ -8,7 +8,6 @@ import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
-import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -575,48 +574,37 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to turn on the LEDs visit a {@link LedAction} for the block "robActions_led_on"
+     * Function to turn the LEDs on or off
+     * Visit a {@link LedAction} for the block "actions_led_edison"
      *
-     * @param lightAction to be visited
+     * @param ledAction to be visited
      */
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        switch ( lightAction.port ) {
-            case "RLED":
-                this.src.add("Ed.RightLed(Ed.ON)");
-                break;
-            case "LLED":
-                this.src.add("Ed.LeftLed(Ed.ON)");
-                break;
-            default:
-                break;
-        }
-
-        return null;
-    }
-
-    /**
-     * Function to turn off the LEDs visit a {@link RgbLedOffAction} for the block "robActions_led_off"
-     *
-     * @param lightOffAction to be visited
-     */
-    @Override
-    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
-        switch ( lightOffAction.port ) {
+    public Void visitLedAction(LedAction ledAction) {
+        String edPort = "", edMode = "";
+        switch ( ledAction.port ) {
             case "1":
             case "RLED":
-                this.src.add("Ed.RightLed(Ed.OFF)");
+                edPort = "Ed.RightLed";
                 break;
             case "2":
             case "LLED":
-                this.src.add("Ed.LeftLed(Ed.OFF)");
+                edPort = "Ed.LeftLed";
                 break;
             default:
-                this.src.add("Ed.LeftLed(Ed.OFF) #there is an error in your program");
-                this.src.add("Ed.RightLed(Ed.OFF)");
-                break;
+                throw new DbcException("Invalid PORT encountered in LedAction: " + ledAction.port);
         }
-
+        switch ( ledAction.mode ) {
+            case "OFF":
+                edMode = "(Ed.OFF)";
+                break;
+            case "ON":
+                edMode = "(Ed.ON)";
+                break;
+            default:
+                throw new DbcException("Invalid MODE encountered in LedAction: " + ledAction.mode);
+        }
+        this.src.add(edPort, edMode);
         return null;
     }
 

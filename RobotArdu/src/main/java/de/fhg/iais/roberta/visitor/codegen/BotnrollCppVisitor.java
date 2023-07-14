@@ -14,7 +14,6 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
@@ -23,6 +22,7 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.botnroll.BotnrollLedAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -104,8 +104,9 @@ public final class BotnrollCppVisitor extends NepoArduinoCppVisitor implements I
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        this.src.add("one.led(", lightAction.mode.getValues()[0], ");");
+    public Void visitBotnrollLedAction(BotnrollLedAction botnrollLedAction) {
+        String mode = transformOnOff2HighLow(botnrollLedAction.mode);
+        this.src.add("one.led(", mode, ");");
         return null;
 
     }

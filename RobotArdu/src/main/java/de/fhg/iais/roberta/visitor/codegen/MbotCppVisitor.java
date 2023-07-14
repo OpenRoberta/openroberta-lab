@@ -18,8 +18,8 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -161,14 +161,14 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        if ( lightAction.rgbLedColor.getClass().equals(Var.class) ) {
-            String tempVarName = "___" + ((Var) lightAction.rgbLedColor).name;
-            generateCodeForRgbLed(lightAction, tempVarName);
-        } else if ( lightAction.rgbLedColor.getClass().equals(ColorConst.class) ) {
-            ColorConst colorConst = (ColorConst) lightAction.rgbLedColor;
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        if ( rgbLedOnAction.colour.getClass().equals(Var.class) ) {
+            String tempVarName = "___" + ((Var) rgbLedOnAction.colour).name;
+            generateCodeForRgbLed(rgbLedOnAction, tempVarName);
+        } else if ( rgbLedOnAction.colour.getClass().equals(ColorConst.class) ) {
+            ColorConst colorConst = (ColorConst) rgbLedOnAction.colour;
             this.src.add("_meRgbLed.setColor(");
-            this.src.add(lightAction.port);
+            this.src.add(rgbLedOnAction.port);
             this.src.add(", ");
             this.src.add(colorConst.getRedChannelHex());
             this.src.add(", ");
@@ -178,27 +178,27 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
             this.src.add(");");
             nlIndent();
             this.src.add("_meRgbLed.show();");
-        } else if ( lightAction.rgbLedColor.getClass().equals(MethodExpr.class) ) {
+        } else if ( rgbLedOnAction.colour.getClass().equals(MethodExpr.class) ) {
             String tempVarName = "_v_colour_temp";
             this.src.add(tempVarName, " = ");
-            visitMethodCall((MethodCall) ((MethodExpr) lightAction.rgbLedColor).method);
+            visitMethodCall((MethodCall) ((MethodExpr) rgbLedOnAction.colour).method);
             this.src.add(";");
             nlIndent();
-            generateCodeForRgbLed(lightAction, tempVarName);
-        } else if ( lightAction.rgbLedColor.getClass().equals(FunctionExpr.class) ) {
+            generateCodeForRgbLed(rgbLedOnAction, tempVarName);
+        } else if ( rgbLedOnAction.colour.getClass().equals(FunctionExpr.class) ) {
             String tempVarName = "_v_colour_temp";
             this.src.add(tempVarName, " = ");
-            ((FunctionExpr) lightAction.rgbLedColor).function.accept(this);
+            ((FunctionExpr) rgbLedOnAction.colour).function.accept(this);
             this.src.add(";");
             nlIndent();
-            generateCodeForRgbLed(lightAction, tempVarName);
+            generateCodeForRgbLed(rgbLedOnAction, tempVarName);
         } else {
             Map<String, Expr> Channels = new HashMap<>();
             this.src.add("_meRgbLed.setColor(");
-            this.src.add(lightAction.port);
-            Channels.put("red", ((RgbColor) lightAction.rgbLedColor).R);
-            Channels.put("green", ((RgbColor) lightAction.rgbLedColor).G);
-            Channels.put("blue", ((RgbColor) lightAction.rgbLedColor).B);
+            this.src.add(rgbLedOnAction.port);
+            Channels.put("red", ((RgbColor) rgbLedOnAction.colour).R);
+            Channels.put("green", ((RgbColor) rgbLedOnAction.colour).G);
+            Channels.put("blue", ((RgbColor) rgbLedOnAction.colour).B);
             Channels.forEach((k, v) -> {
                 this.src.add(", ");
                 v.accept(this);
@@ -210,9 +210,9 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
         return null;
     }
 
-    private void generateCodeForRgbLed(LedAction lightAction, String tempVarName) {
+    private void generateCodeForRgbLed(RgbLedOnAction rgbLedOnAction, String tempVarName) {
         this.src.add("_meRgbLed.setColor(");
-        this.src.add(lightAction.port);
+        this.src.add(rgbLedOnAction.port);
         this.src.add(", ");
         this.src.add("RCHANNEL(");
         this.src.add(tempVarName);
@@ -228,8 +228,8 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
     }
 
     @Override
-    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
-        this.src.add("_meRgbLed.setColor(", lightOffAction.port);
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
+        this.src.add("_meRgbLed.setColor(", rgbLedOffAction.port);
         this.src.add(", 0, 0, 0);");
         nlIndent();
         this.src.add("_meRgbLed.show();");

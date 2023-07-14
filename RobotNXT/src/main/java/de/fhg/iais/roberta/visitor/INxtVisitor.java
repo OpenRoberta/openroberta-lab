@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.visitor.syntax.light.NxtRgbLedOnAction;
 
 public interface INxtVisitor<V> extends IVisitor<V> {
     V visitBluetoothCheckConnectAction(BluetoothCheckConnectAction bluetoothCheckConnectAction);
@@ -71,7 +72,9 @@ public interface INxtVisitor<V> extends IVisitor<V> {
 
     V visitMotorDriveStopAction(MotorDriveStopAction stopAction);
 
-    V visitLightAction(LedAction lightAction);
+    V visitNxtRgbLedOnAction(NxtRgbLedOnAction nxtRgbLedOnAction);
+
+    V visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction);
 
     V visitLightSensor(LightSensor lightSensor);
 

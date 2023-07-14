@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -51,7 +52,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
@@ -143,21 +143,11 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoAndMotorValid
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        if ( !lightAction.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
-            optionalComponentVisited(lightAction.rgbLedColor);
-            if ( !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
-                addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
-            } else {
-                this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(lightAction.port, SC.LED));
-            }
+    public Void visitLedAction(LedAction ledAction) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
+            addErrorToPhrase(ledAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         } else {
-            requiredComponentVisited(lightAction, lightAction.rgbLedColor);
-            if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
-                addErrorToPhrase(lightAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
-            } else {
-                this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(lightAction.port, SC.RGBLED));
-            }
+            this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(ledAction.port, SC.LED));
         }
         return null;
     }
@@ -169,11 +159,22 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoAndMotorValid
     }
 
     @Override
-    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
-        if ( lightOffAction.getInfos().getErrorCount() == 0 ) {
-            if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
-                addErrorToPhrase(lightOffAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
-            }
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
+            addErrorToPhrase(rgbLedOffAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
+        } else {
+            this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(rgbLedOffAction.port, SC.RGBLED));
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        requiredComponentVisited(rgbLedOnAction, rgbLedOnAction.colour);
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
+            addErrorToPhrase(rgbLedOnAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
+        } else {
+            this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(rgbLedOnAction.port, SC.RGBLED));
         }
         return null;
     }

@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -91,6 +91,7 @@ import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.INxtVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
+import de.fhg.iais.roberta.visitor.syntax.light.NxtRgbLedOnAction;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable NXC code representation of a phrase to a
@@ -655,13 +656,17 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        if ( lightAction.mode.toString().equals("ON") ) {
-            this.src.add("SetSensorColor", lightAction.color.getValues()[0], "(");
-        } else {
-            this.src.add("SetSensorColorNone(");
-        }
-        String port = this.brickConfiguration.getConfigurationComponent(lightAction.port).internalPortName;
+    public Void visitNxtRgbLedOnAction(NxtRgbLedOnAction nxtRgbLedOnAction) {
+        this.src.add("SetSensorColor", nxtRgbLedOnAction.colour.getValues()[0], "(");
+        String port = this.brickConfiguration.getConfigurationComponent(nxtRgbLedOnAction.port).internalPortName;
+        this.src.add(port, ");");
+        return null;
+    }
+
+    @Override
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
+        this.src.add("SetSensorColorNone(");
+        String port = this.brickConfiguration.getConfigurationComponent(rgbLedOffAction.port).internalPortName;
         this.src.add(port, ");");
         return null;
     }

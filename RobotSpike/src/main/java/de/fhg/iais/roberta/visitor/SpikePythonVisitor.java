@@ -486,7 +486,7 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
     }
 
     @Override
-    public Void visitLedOnAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
+    public Void visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
         this.src.add("set_status_light(");
         rgbLedOnHiddenAction.colour.accept(this);
         this.src.add(");");
@@ -494,7 +494,7 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
     }
 
     @Override
-    public Void visitLedOffAction(RgbLedOffHiddenAction ledOffAction) {
+    public Void visitRgbLedOffHiddenAction(RgbLedOffHiddenAction rgbLedOffHiddenAction) {
         this.src.add("hub.status_light.off()");
         return null;
     }

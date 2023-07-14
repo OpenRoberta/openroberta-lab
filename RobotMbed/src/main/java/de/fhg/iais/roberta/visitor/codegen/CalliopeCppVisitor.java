@@ -23,6 +23,9 @@ import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffHiddenAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -100,7 +103,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.CalliopeMethods;
 import de.fhg.iais.roberta.visitor.ICalliopeVisitor;
@@ -142,10 +144,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         CALLIBOT_TO_PIN_MAP.put("RGBLED_RF", "4");
         CALLIBOT_TO_PIN_MAP.put("RGBLED_LR", "2");
         CALLIBOT_TO_PIN_MAP.put("RGBLED_RR", "3");
-        CALLIBOT_TO_PIN_MAP.put("RGBLED_A", "5");
         CALLIBOT_TO_PIN_MAP.put("LED_L", "1");
         CALLIBOT_TO_PIN_MAP.put("LED_R", "2");
-        CALLIBOT_TO_PIN_MAP.put("LED_B", "3");
         CALLIBOT_TO_PIN_MAP.put("INFRARED_L", "2");
         CALLIBOT_TO_PIN_MAP.put("INFRARED_R", "1");
         CALLIBOT_TO_PIN_MAP.put("ULTRASONIC", "2");
@@ -167,16 +167,20 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     }
 
     private static String getCallibotPin(ConfigurationComponent confComp, String port) {
-        String s =
-            confComp
-                .getComponentProperties()
-                .entrySet()
-                .stream()
-                .filter(entry -> port.equals(entry.getValue()))
-                .map(Map.Entry::getKey)
-                .findFirst()
-                .orElseThrow(() -> new DbcException("Invalid port!"));
-        return CALLIBOT_TO_PIN_MAP.get(s);
+        String portName = "";
+        for ( List<ConfigurationComponent> ccList : confComp.getSubComponents().values() ) {
+            for ( ConfigurationComponent cc : ccList ) {
+                if ( port.equals(cc.userDefinedPortName) ) {
+                    portName = cc.componentProperties.get("PORT");
+                    break;
+                }
+            }
+        }
+        if ( !portName.equals("") ) {
+            return CALLIBOT_TO_PIN_MAP.get(portName);
+        } else {
+            throw new DbcException("Invalid port!");
+        }
     }
 
     @Override
@@ -365,28 +369,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         this.src.add("_uBit.display.clear();");
-        return null;
-    }
-
-    @Override
-    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
-        String port = lightOffAction.port;
-        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : "0";
-        switch ( pin1 ) {
-            case "0":
-                this.src.add("_uBit.rgb.off();");
-                break;
-            case "1":
-            case "2":
-            case "3":
-            case "4":
-            case "5":
-                this.src.add("_cbSetRGBLed(_buf, &_i2c, ", pin1, ", 0);");
-                break;
-            default:
-                throw new DbcException("LightOffAction; invalid port: " + pin1);
-        }
         return null;
     }
 
@@ -886,43 +868,51 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     }
 
     @Override
-    public Void visitLedOnAction(LedOnAction ledOnAction) {
-        String port = ledOnAction.getUserDefinedPort();
-        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : "0";
-        switch ( pin1 ) {
-            case "0":
-                this.src.add("_uBit.rgb.setColour(");
-                ledOnAction.ledColor.accept(this);
-                this.src.add(");");
-                break;
-            case "1":
-            case "2":
-            case "3":
-            case "4":
-            case "5":
-                this.src.add("_cbSetRGBLed(_buf, &_i2c, ", pin1, ", ");
-                ledOnAction.ledColor.accept(this);
-                this.src.add(");");
-                break;
-            default:
-                throw new DbcException("LedOnAction; invalid port: " + pin1);
-        }
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        ConfigurationComponent confComp = this.robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT);
+        String pin1 = getCallibotPin(confComp, rgbLedOnAction.port);
+        this.src.add("_cbSetRGBLed(_buf, &_i2c, ", pin1, ", ");
+        rgbLedOnAction.colour.accept(this);
+        this.src.add(");");
         return null;
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        String port = lightAction.port;
-        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
-        String mode = lightAction.mode.getValues()[0];
-        if ( mode.equals(BlocklyConstants.HIGH) ) {
-            mode = "1";
-        } else if ( mode.equals("LOW") ) {
-            mode = "0";
-        } else {
-            throw new DbcException("LightAction; invalid mode: " + mode);
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
+        ConfigurationComponent confComp = this.robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT);
+        String pin1 = getCallibotPin(confComp, rgbLedOffAction.port);
+        this.src.add("_cbSetRGBLed(_buf, &_i2c, ", pin1, ", 0);");
+        return null;
+    }
+
+    @Override
+    public Void visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
+        this.src.add("_uBit.rgb.setColour(");
+        rgbLedOnHiddenAction.colour.accept(this);
+        this.src.add(");");
+        return null;
+    }
+
+    @Override
+    public Void visitRgbLedOffHiddenAction(RgbLedOffHiddenAction rgbLedOffHiddenAction) {
+        this.src.add("_uBit.rgb.off();");
+        return null;
+    }
+
+    @Override
+    public Void visitLedAction(LedAction ledAction) {
+        ConfigurationComponent confComp = this.robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT);
+        String pin1 = getCallibotPin(confComp, ledAction.port);
+        String mode = "";
+        switch ( ledAction.mode ) {
+            case "OFF":
+                mode = "0";
+                break;
+            case "ON":
+                mode = "1";
+                break;
+            default:
+                throw new DbcException("Invalid MODE encountered in LedAction: " + ledAction.mode);
         }
         this.src.add("_cbSetLed(_buf, &_i2c, _cbLedState, ", pin1, ", ", mode, ");");
         return null;

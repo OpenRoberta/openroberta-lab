@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
@@ -23,15 +24,13 @@ import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.Hand;
 import de.fhg.iais.roberta.syntax.action.nao.LearnFace;
-import de.fhg.iais.roberta.syntax.action.nao.LedOff;
-import de.fhg.iais.roberta.syntax.action.nao.LedReset;
 import de.fhg.iais.roberta.syntax.action.nao.MoveJoint;
+import de.fhg.iais.roberta.syntax.action.nao.NaoLedOnAction;
 import de.fhg.iais.roberta.syntax.action.nao.PlayFile;
 import de.fhg.iais.roberta.syntax.action.nao.PointLookAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
-import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
 import de.fhg.iais.roberta.syntax.action.nao.SetMode;
 import de.fhg.iais.roberta.syntax.action.nao.SetStiffness;
 import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
@@ -613,35 +612,20 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitSetLeds(RgbLedOnAction rgbLedOnAction) {
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
         this.src.add("h.setLeds(");
         switch ( rgbLedOnAction.port ) {
             case "ALL":
                 this.src.add("\"AllLeds\", ");
                 break;
-            case "CHEST":
-                this.src.add("\"ChestLeds\", ");
-                break;
-            case "EARS":
-                this.src.add("\"EarLeds\", ");
-                break;
             case "EYES":
                 this.src.add("\"FaceLeds\", ");
-                break;
-            case "HEAD":
-                this.src.add("\"BrainLeds\", ");
-                break;
-            case "LEFTEAR":
-                this.src.add("\"LeftEarLeds\", ");
                 break;
             case "LEFTEYE":
                 this.src.add("\"LeftFaceLeds\", ");
                 break;
             case "LEFTFOOT":
                 this.src.add("\"LeftFootLeds\", ");
-                break;
-            case "RIGHTEAR":
-                this.src.add("\"RightEarLeds\", ");
                 break;
             case "RIGHTEYE":
                 this.src.add("\"RightFaceLeds\", ");
@@ -652,15 +636,15 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
             default:
                 throw new DbcException("Invalid SetLeds LED: " + rgbLedOnAction.port);
         }
-        rgbLedOnAction.color.accept(this);
+        rgbLedOnAction.colour.accept(this);
         this.src.add(", 0.1)");
         return null;
     }
 
     @Override
-    public Void visitSetIntensity(SetIntensity setIntensity) {
+    public Void visitNaoLedOnAction(NaoLedOnAction naoLedOnAction) {
         this.src.add("h.setIntensity(");
-        switch ( setIntensity.led ) {
+        switch ( naoLedOnAction.port ) {
             case "ALL":
                 this.src.add("\"AllLeds\", ");
                 break;
@@ -670,34 +654,19 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
             case "EARS":
                 this.src.add("\"EarLeds\", ");
                 break;
-            case "EYES":
-                this.src.add("\"FaceLeds\", ");
-                break;
             case "HEAD":
                 this.src.add("\"BrainLeds\", ");
                 break;
             case "LEFTEAR":
                 this.src.add("\"LeftEarLeds\", ");
                 break;
-            case "LEFTEYE":
-                this.src.add("\"LeftFaceLeds\", ");
-                break;
-            case "LEFTFOOT":
-                this.src.add("\"LeftFootLeds\", ");
-                break;
             case "RIGHTEAR":
                 this.src.add("\"RightEarLeds\", ");
                 break;
-            case "RIGHTEYE":
-                this.src.add("\"RightFaceLeds\", ");
-                break;
-            case "RIGHTFOOT":
-                this.src.add("\"RightFootLeds\", ");
-                break;
             default:
-                throw new DbcException("Invalid SetIntensity LED: " + setIntensity.led);
+                throw new DbcException("Invalid SetIntensity LED: " + naoLedOnAction.port);
         }
-        setIntensity.Intensity.accept(this);
+        naoLedOnAction.intensity.accept(this);
         this.src.add(")");
         return null;
     }
@@ -709,53 +678,18 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }*/
 
     @Override
-    public Void visitLedOff(LedOff ledOff) {
-        this.src.add("h.ledOff(");
-        switch ( ledOff.led ) {
-            case "ALL":
-                this.src.add("\"AllLeds\"");
+    public Void visitLedAction(LedAction ledAction) {
+        switch ( ledAction.mode ) {
+            case "OFF":
+                this.src.add("h.ledOff(");
                 break;
-            case "CHEST":
-                this.src.add("\"ChestLeds\"");
-                break;
-            case "EARS":
-                this.src.add("\"EarLeds\"");
-                break;
-            case "EYES":
-                this.src.add("\"FaceLeds\"");
-                break;
-            case "HEAD":
-                this.src.add("\"BrainLeds\"");
-                break;
-            case "LEFTEAR":
-                this.src.add("\"LeftEarLeds\"");
-                break;
-            case "LEFTEYE":
-                this.src.add("\"LeftFaceLeds\"");
-                break;
-            case "LEFTFOOT":
-                this.src.add("\"LeftFootLeds\"");
-                break;
-            case "RIGHTEAR":
-                this.src.add("\"RightEarLeds\"");
-                break;
-            case "RIGHTEYE":
-                this.src.add("\"RightFaceLeds\"");
-                break;
-            case "RIGHTFOOT":
-                this.src.add("\"RightFootLeds\"");
+            case "RESET":
+                this.src.add("h.ledReset(");
                 break;
             default:
-                throw new DbcException("Invalid LedOff LED: " + ledOff.led);
+                throw new DbcException("Invalid MODE encountered in LedAction: " + ledAction.mode);
         }
-        this.src.add(")");
-        return null;
-    }
-
-    @Override
-    public Void visitLedReset(LedReset ledReset) {
-        this.src.add("h.ledReset(");
-        switch ( ledReset.led ) {
+        switch ( ledAction.port ) {
             case "ALL":
                 this.src.add("\"AllLeds\"");
                 break;
@@ -790,7 +724,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 this.src.add("\"RightFootLeds\"");
                 break;
             default:
-                throw new DbcException("Invalid LedReset LED:" + ledReset.led);
+                throw new DbcException("Invalid PORT encountered in LedAction: " + ledAction.port);
         }
         this.src.add(")");
         return null;

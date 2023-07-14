@@ -1,8 +1,8 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -46,9 +46,9 @@ public interface IMbotVisitor<V> extends IVisitor<V> {
 
     V visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction ledMatrixSetBrightnessAction);
 
-    V visitLightAction(LedAction lightAction);
+    V visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction);
 
-    V visitLightOffAction(RgbLedOffAction lightOffAction);
+    V visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction);
 
     V visitToneAction(ToneAction toneAction);
 

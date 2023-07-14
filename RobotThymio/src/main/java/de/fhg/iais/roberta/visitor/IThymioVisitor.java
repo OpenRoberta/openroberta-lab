@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.visitor;
 
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
-import de.fhg.iais.roberta.syntax.action.light.LedsOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -60,9 +60,9 @@ public interface IThymioVisitor<V> extends IVisitor<V> {
 
     V visitLedTemperatureOnAction(LedTemperatureOnAction ledTemperatureOnAction);
 
-    V visitLedsOffAction(LedsOffAction ledsOffAction);
+    V visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction);
 
-    V visitLightAction(LedAction lightAction);
+    V visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction);
 
     V visitMotorDriveStopAction(MotorDriveStopAction stopAction);
 

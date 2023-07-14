@@ -2,81 +2,81 @@
 <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
     <instance>
         <block type="robSensors_getSample" id="" intask="true">
-            <mutation input="LIGHT_VALUE" />
+            <mutation input="LIGHT_VALUE"/>
             <field name="MODE">LIGHT_VALUE</field>
-            <field name="SENSORPORT" />
-            <field name="SLOT" />
+            <field name="SENSORPORT"/>
+            <field name="SLOT"/>
         </block>
         <block type="robSensors_getSample" id="" intask="true">
-            <mutation mode="LIGHT_VALUE" />
+            <mutation mode="LIGHT_VALUE"/>
             <field name="MODE">LIGHT_VALUE</field>
-            <field name="SENSORPORT" />
-            <field name="SLOT" />
+            <field name="SENSORPORT"/>
+            <field name="SLOT"/>
         </block>
         <block type="robControls_start" id="" intask="true">
-            <field name="" />
+            <field name=""/>
         </block>
         <block type="robSensors_key_getSample" id="G,1Afdt@0BR=Wuk~H~~M" intask="true">
-            <mutation mode="PRESSED" />
+            <mutation mode="PRESSED"/>
             <field name="MODE">PRESSED</field>
             <field name="SENSORPORT">A</field>
-            <field name="SLOT" />
+            <field name="SLOT"/>
         </block>
         <block type="robSensors_timer_getSample" id="-*|5yE3o;8zCMSoCg-NU" intask="true">
-            <mutation mode="VALUE" />
+            <mutation mode="VALUE"/>
             <field name="MODE">VALUE</field>
             <field name="SENSORPORT">1</field>
-            <field name="SLOT" />
+            <field name="SLOT"/>
         </block>
         <block type="mbedSensors_timer_reset" id="Kmlp,1c^)S[rsN|G+IZ2" intask="true">
             <field name="SENSORPORT">1</field>
         </block>
         <block type="robSensors_pintouch_getSample" id="/qS~uA|UEx;-%OHc#XST" intask="true">
-            <mutation mode="PRESSED" />
+            <mutation mode="PRESSED"/>
             <field name="MODE">PRESSED</field>
             <field name="SENSORPORT">2</field>
-            <field name="SLOT" />
+            <field name="SLOT"/>
         </block>
         <block type="robSensors_timer_getSample" id="j)bs+%bXgb1|mDS*;`.b" intask="true">
-            <mutation mode="VALUE" />
+            <mutation mode="VALUE"/>
             <field name="MODE">VALUE</field>
             <field name="SENSORPORT">1</field>
-            <field name="SLOT" />
+            <field name="SLOT"/>
         </block>
         <block type="robSensors_getSample" id="O,2NaUzm)uP78|w`7Al{" intask="true" deletable="false" movable="false">
-            <mutation input="KEY_PRESSED" />
+            <mutation input="KEY_PRESSED"/>
             <field name="SENSORTYPE">KEY_PRESSED</field>
             <field name="SENSORPORT">A</field>
-            <field name="SLOT" />
+            <field name="SLOT"/>
         </block>
         <block type="robSensors_getSample" id="6wBrpMb}0LaLu2kIT7jR" intask="true" deletable="false" movable="false">
-            <mutation input="SOUND_SOUND" />
+            <mutation input="SOUND_SOUND"/>
             <field name="SENSORTYPE">SOUND_SOUND</field>
-            <field name="SENSORPORT" />
-            <field name="SLOT" />
+            <field name="SENSORPORT"/>
+            <field name="SLOT"/>
         </block>
         <block type="robSensors_gesture_getSample" id="E#H~CI4A#zW4Fn!cfJhS" intask="true">
-            <mutation mode="SHAKE" />
+            <mutation mode="SHAKE"/>
             <field name="MODE">SHAKE</field>
-            <field name="SENSORPORT" />
-            <field name="SLOT" />
+            <field name="SENSORPORT"/>
+            <field name="SLOT"/>
         </block>
         <block type="mbedActions_leds_off" id="@6op=+wd%BeWn*2w@uSb" intask="true">
             <field name="ACTORPORT">0</field>
         </block>
         <block type="mbedActions_leds_on" id=",8m4r@D6[TYulG4fLLGH" intask="true">
             <field name="ACTORPORT">0</field>
-            <value name="COLOR">
+            <value name="COLOUR">
                 <block type="mbedColour_picker" id="{hag|O}W^M,z5b.!vd/W" intask="true">
                     <field name="COLOUR">#009900</field>
                 </block>
             </value>
         </block>
         <block type="robSensors_compass_getSample" id="uDUqSoeP7zdkG|J:bp,Z" intask="true">
-            <mutation mode="ANGLE" />
+            <mutation mode="ANGLE"/>
             <field name="MODE">ANGLE</field>
-            <field name="SENSORPORT" />
-            <field name="SLOT" />
+            <field name="SENSORPORT"/>
+            <field name="SLOT"/>
         </block>
     </instance>
     <instance x="14" y="535">
@@ -273,7 +273,7 @@
     </instance>
     <instance x="5155" y="6116">
         <block type="mbedCommunication_sendBlock" id="09s{(Mp!:]*,a}hgs6H-" intask="true">
-            <mutation datatype="String" />
+            <mutation datatype="String"/>
             <field name="TYPE">String</field>
             <field name="POWER">7</field>
             <value name="sendData">

@@ -3,6 +3,11 @@ package de.fhg.iais.roberta.visitor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffHiddenAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -58,10 +63,26 @@ public abstract class MbedTransformerVisitor extends TransformerVisitor {
     }
 
 
-    public Phrase visitLedOnAction(LedOnAction ledOnAction) {
-        return new LedOnAction(ledOnAction.getProperty(), (Expr) ledOnAction.ledColor.modify(this), ledOnAction.getUserDefinedPort(), ledOnAction.hide);
+    public Phrase visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        return new RgbLedOnAction(rgbLedOnAction.getProperty(), rgbLedOnAction.port, (Expr) rgbLedOnAction.colour.modify(this));
     }
 
+    public Phrase visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
+        return new RgbLedOffAction(rgbLedOffAction.getProperty(), rgbLedOffAction.port);
+    }
+
+    public Phrase visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
+        return new RgbLedOnHiddenAction(rgbLedOnHiddenAction.getProperty(), (Expr) rgbLedOnHiddenAction.colour.modify(this), rgbLedOnHiddenAction.hide);
+    }
+
+    public Phrase visitRgbLedOffHiddenAction(RgbLedOffHiddenAction rgbLedOffHiddenAction) {
+        return new RgbLedOffHiddenAction(rgbLedOffHiddenAction.getProperty(), rgbLedOffHiddenAction.hide);
+    }
+
+
+    public Phrase visitLedAction(LedAction ledAction) {
+        return new LedAction(ledAction.getProperty(), ledAction.port, ledAction.mode);
+    }
 
     public Phrase visitRadioSendAction(RadioSendAction radioSendAction) {
         return new RadioSendAction(radioSendAction.getProperty(), radioSendAction.mutation, radioSendAction.type, radioSendAction.power, (Expr) radioSendAction.message.modify(this));

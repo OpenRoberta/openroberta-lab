@@ -7,6 +7,9 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffHiddenAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
@@ -41,7 +44,6 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
-import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.worker.MbedTwo2ThreeTransformerHelper;
 
 /**
@@ -70,37 +72,53 @@ public class MbedTwo2ThreeTransformerVisitor extends MbedTransformerVisitor {
     }
 
     @Override
-    public Phrase visitLedOnAction(LedOnAction ledOnAction) {
-        Pair<ConfigurationComponent, String> compAndName = this.helper.getComponentAndName(ledOnAction.getKind().getName(), "", ledOnAction.getUserDefinedPort());
+    public Phrase visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        Pair<ConfigurationComponent, String> compAndName =
+            this.helper.getComponentAndName(rgbLedOnAction.getKind().getName(), "", rgbLedOnAction.getUserDefinedPort());
+
+        this.builder.addUsedConfigurationComponent(compAndName.getFirst());
+        return new RgbLedOnAction(rgbLedOnAction.getProperty(), compAndName.getSecond(), (Expr) rgbLedOnAction.colour.modify(this));
+    }
+
+    @Override
+    public Phrase visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
+        Pair<ConfigurationComponent, String> compAndName =
+            this.helper.getComponentAndName(rgbLedOffAction.getKind().getName(), "", rgbLedOffAction.getUserDefinedPort());
+
+        this.builder.addUsedConfigurationComponent(compAndName.getFirst());
+        return new RgbLedOffAction(rgbLedOffAction.getProperty(), compAndName.getSecond());
+    }
+
+    @Override
+    public Phrase visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
+        Pair<ConfigurationComponent, String> compAndName =
+            this.helper.getComponentAndName(rgbLedOnHiddenAction.getKind().getName(), "", rgbLedOnHiddenAction.hide.getValue());
+
+        this.builder.addUsedConfigurationComponent(compAndName.getFirst());
+        return new RgbLedOnHiddenAction(rgbLedOnHiddenAction.getProperty(), (Expr) rgbLedOnHiddenAction.colour.modify(this), rgbLedOnHiddenAction.hide);
+    }
+
+    @Override
+    public Phrase visitRgbLedOffHiddenAction(RgbLedOffHiddenAction rgbLedOffHiddenAction) {
+        Pair<ConfigurationComponent, String> compAndName =
+            this.helper.getComponentAndName(rgbLedOffHiddenAction.getKind().getName(), "", rgbLedOffHiddenAction.hide.getValue());
+
+        this.builder.addUsedConfigurationComponent(compAndName.getFirst());
+        return new RgbLedOffHiddenAction(rgbLedOffHiddenAction.getProperty(), rgbLedOffHiddenAction.hide);
+    }
+
+    @Override
+    public Phrase visitLedAction(LedAction ledAction) {
+        Pair<ConfigurationComponent, String> compAndName = this.helper.getComponentAndName(ledAction.getKind().getName(), ledAction.mode, ledAction.getUserDefinedPort());
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
-        return new LedOnAction(ledOnAction.getProperty(), (Expr) ledOnAction.ledColor.modify(this), compAndName.getSecond(), ledOnAction.hide);
+        return new LedAction(ledAction.getProperty(), compAndName.getSecond(), ledAction.mode);
     }
 
     @Override
     public BlocklyDropdownFactory getBlocklyDropdownFactory() {
         return this.blocklyDropdownFactory;
-    }
-
-    @Override
-    public Phrase visitLightAction(LedAction lightAction) {
-        Pair<ConfigurationComponent, String> compAndName =
-            this.helper.getComponentAndName(lightAction.getKind().getName(), lightAction.mode.toString(), lightAction.port);
-
-        this.builder.addUsedConfigurationComponent(compAndName.getFirst());
-
-        return new LedAction(compAndName.getSecond(), lightAction.color, lightAction.mode, (Expr) lightAction.rgbLedColor.modify(this), lightAction.getProperty());
-    }
-
-    @Override
-    public Phrase visitLightOffAction(RgbLedOffAction lightOffAction) {
-        Pair<ConfigurationComponent, String> compAndName =
-            this.helper.getComponentAndName(lightOffAction.getKind().getName(), SC.OFF, lightOffAction.port);
-
-        this.builder.addUsedConfigurationComponent(compAndName.getFirst());
-
-        return new RgbLedOffAction(lightOffAction.getProperty(), compAndName.getSecond());
     }
 
     @Override

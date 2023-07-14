@@ -315,4 +315,19 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
         throw new DbcException("Not supported!");
     }
+
+    protected final String transformOnOff2HighLow(String actionMode) {
+        String mode = "";
+        switch ( actionMode ) {
+            case "OFF":
+                mode = "LOW";
+                break;
+            case "ON":
+                mode = "HIGH";
+                break;
+            default:
+                throw new DbcException("Invalid MODE encountered in LedAction: " + actionMode);
+        }
+        return mode;
+    }
 }

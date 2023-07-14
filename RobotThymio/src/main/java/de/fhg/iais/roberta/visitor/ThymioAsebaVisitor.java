@@ -11,8 +11,8 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
-import de.fhg.iais.roberta.syntax.action.light.LedsOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -124,10 +124,10 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        lightAction.rgbLedColor.accept(this);
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        rgbLedOnAction.colour.accept(this);
         nlIndent();
-        this.src.add("call leds.", lightAction.port.toLowerCase(), "(___color_[0] / _RGB_DIV, ___color_[1] / _RGB_DIV, ___color_[2] / _RGB_DIV)");
+        this.src.add("call leds.", rgbLedOnAction.port.toLowerCase(), "(___color_[0] / _RGB_DIV, ___color_[1] / _RGB_DIV, ___color_[2] / _RGB_DIV)");
         return null;
     }
 
@@ -623,8 +623,8 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
     }
 
     @Override
-    public Void visitLedsOffAction(LedsOffAction ledsOffAction) {
-        this.src.add("call leds.", ledsOffAction.port.toLowerCase(), "(0, 0, 0)");
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
+        this.src.add("call leds.", rgbLedOffAction.port.toLowerCase(), "(0, 0, 0)");
         return null;
     }
 

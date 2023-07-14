@@ -13,8 +13,8 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
@@ -41,8 +41,8 @@ public class WedoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     private static final Map<String, String> ACTOR_COMPONENT_TYPE_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
         put("MOTOR_ON_ACTION", SC.MOTOR);
         put("MOTOR_STOP_ACTION", SC.MOTOR);
-        put("LIGHT_ACTION", SC.LED);
-        put("LIGHT_OFF_ACTION", SC.LED);
+        put("RGBLED_ON_ACTION", SC.RGBLED);
+        put("RGBLED_OFF_ACTION", SC.RGBLED);
         put("TONE_ACTION", SC.BUZZER);
         put("PLAY_NOTE_ACTION", SC.BUZZER);
     }});
@@ -65,15 +65,15 @@ public class WedoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        checkActorPresence(lightAction);
-        requiredComponentVisited(lightAction, lightAction.rgbLedColor);
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        checkActorPresence(rgbLedOnAction);
+        requiredComponentVisited(rgbLedOnAction, rgbLedOnAction.colour);
         return null;
     }
 
     @Override
-    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
-        checkActorPresence(lightOffAction);
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
+        checkActorPresence(rgbLedOffAction);
         return null;
     }
 

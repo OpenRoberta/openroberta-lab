@@ -21,8 +21,7 @@ import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.light.BrickLightOffAction;
-import de.fhg.iais.roberta.syntax.action.light.BrickLightResetAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -122,12 +121,6 @@ public class Ev3StackMachineVisitor extends AbstractStackMachineVisitor implemen
     public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         JSONObject o = makeNode(C.CLEAR_DISPLAY_ACTION);
 
-        return add(o);
-    }
-
-    @Override
-    public Void visitBrickLightResetAction(BrickLightResetAction brickLightResetAction) {
-        JSONObject o = makeNode(C.LED_OFF_ACTION).put(C.NAME, "ev3").put(C.PORT, "internal");
         return add(o);
     }
 
@@ -326,9 +319,9 @@ public class Ev3StackMachineVisitor extends AbstractStackMachineVisitor implemen
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        String mode = lightAction.mode.toString().toLowerCase();
-        String color = lightAction.color.toString().toLowerCase();
+    public Void visitBrickLightOnAction(BrickLightOnAction brickLightOnAction) {
+        String mode = brickLightOnAction.mode.toString().toLowerCase();
+        String color = brickLightOnAction.colour.toString().toLowerCase();
         JSONObject o = makeNode(C.LIGHT_ACTION).put(C.MODE, mode).put(C.COLOR, color);
         return add(o);
     }

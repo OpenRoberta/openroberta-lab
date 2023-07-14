@@ -47,8 +47,9 @@ public final class FestobionicCppVisitor extends NepoArduinoCppVisitor implement
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        this.src.add("digitalWrite(_led_", lightAction.port, ", ", lightAction.mode.getValues()[0], ");");
+    public Void visitLedAction(LedAction ledAction) {
+        String mode = transformOnOff2HighLow(ledAction);
+        this.src.add("digitalWrite(_led_", ledAction.port, ", ", mode, ");");
         return null;
     }
 

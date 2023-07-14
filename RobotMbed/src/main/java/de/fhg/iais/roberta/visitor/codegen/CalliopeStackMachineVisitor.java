@@ -8,6 +8,9 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffHiddenAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -41,12 +44,6 @@ public class CalliopeStackMachineVisitor extends MbedStackMachineVisitor impleme
         super(configuration, phrases);
         Assert.isTrue(!phrases.isEmpty());
 
-    }
-
-    @Override
-    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
-        JSONObject o = makeNode(C.LED_OFF_ACTION).put(C.NAME, "calliope");
-        return add(o);
     }
 
     @Override
@@ -89,10 +86,33 @@ public class CalliopeStackMachineVisitor extends MbedStackMachineVisitor impleme
     }
 
     @Override
-    public Void visitLedOnAction(LedOnAction ledOnAction) {
-        ledOnAction.ledColor.accept(this);
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        return null;
+
+    }
+
+    @Override
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
+        return null;
+
+    }
+
+    @Override
+    public Void visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
+        rgbLedOnHiddenAction.colour.accept(this);
         JSONObject o = makeNode(C.LED_ON_ACTION);
         return add(o);
+    }
+
+    @Override
+    public Void visitRgbLedOffHiddenAction(RgbLedOffHiddenAction rgbLedOffHiddenAction) {
+        JSONObject o = makeNode(C.LED_OFF_ACTION).put(C.NAME, "calliope");
+        return add(o);
+    }
+
+    @Override
+    public Void visitLedAction(LedAction ledAction) {
+        return null;
     }
 
     @Override
@@ -138,11 +158,6 @@ public class CalliopeStackMachineVisitor extends MbedStackMachineVisitor impleme
 
     @Override
     public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLightAction(LedAction lightAction) {
         return null;
     }
 

@@ -2,16 +2,16 @@ package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LedsOffAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationSendAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.DisplaySetColourAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.LedBrightnessAction;
+import de.fhg.iais.roberta.syntax.action.mbot2.Mbot2RgbLedOffHiddenAction;
+import de.fhg.iais.roberta.syntax.action.mbot2.Mbot2RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.PlayRecordingAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.PrintlnAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.QuadRGBLightOffAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.QuadRGBLightOnAction;
-import de.fhg.iais.roberta.syntax.action.mbot2.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.Ultrasonic2LEDAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
@@ -87,7 +87,7 @@ public interface IMbot2Visitor<V> extends IVisitor<V> {
 
     V visitUltrasonic2LEDAction(Ultrasonic2LEDAction ultrasonic2LEDAction);
 
-    V visitLedsOffAction(LedsOffAction ledsOffAction);
+    V visitMbot2RgbLedOffHiddenAction(Mbot2RgbLedOffHiddenAction mbot2RgbLedOffHiddenAction);
 
     V visitLedBrightnessAction(LedBrightnessAction ledBrightnessAction);
 
@@ -101,7 +101,7 @@ public interface IMbot2Visitor<V> extends IVisitor<V> {
 
     V visitClearDisplayAction(ClearDisplayAction clearDisplayAction);
 
-    V visitLedOnActionWithIndex(RgbLedOnHiddenAction rgbLedOnHiddenAction);
+    V visitMbot2RgbLedOnHiddenAction(Mbot2RgbLedOnHiddenAction mbot2RgbLedOnHiddenAction);
 
     V visitCommunicationSendAction(CommunicationSendAction communicationSendAction);
 

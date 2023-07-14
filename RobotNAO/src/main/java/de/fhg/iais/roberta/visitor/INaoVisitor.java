@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.visitor;
 
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
@@ -9,15 +10,13 @@ import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.Hand;
 import de.fhg.iais.roberta.syntax.action.nao.LearnFace;
-import de.fhg.iais.roberta.syntax.action.nao.LedOff;
-import de.fhg.iais.roberta.syntax.action.nao.LedReset;
 import de.fhg.iais.roberta.syntax.action.nao.MoveJoint;
+import de.fhg.iais.roberta.syntax.action.nao.NaoLedOnAction;
 import de.fhg.iais.roberta.syntax.action.nao.PlayFile;
 import de.fhg.iais.roberta.syntax.action.nao.PointLookAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
-import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
 import de.fhg.iais.roberta.syntax.action.nao.SetMode;
 import de.fhg.iais.roberta.syntax.action.nao.SetStiffness;
 import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
@@ -61,7 +60,7 @@ public interface INaoVisitor<V> extends IVisitor<V> {
 
     V visitAccelerometerSensor(AccelerometerSensor accelerometerSensor);
 
-    V visitSetIntensity(SetIntensity setIntensity);
+    V visitNaoLedOnAction(NaoLedOnAction naoLedOnAction);
 
     V visitFsrSensor(FsrSensor forceSensor);
 
@@ -73,11 +72,9 @@ public interface INaoVisitor<V> extends IVisitor<V> {
 
     V visitTurnDegrees(TurnDegrees turnDegrees);
 
-    V visitSetLeds(RgbLedOnAction rgbLedOnAction);
+    V visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction);
 
-    V visitLedOff(LedOff ledOff);
-
-    V visitLedReset(LedReset ledReset);
+    V visitLedAction(LedAction ledAction);
 
     V visitWalkAsync(WalkAsync walkAsync);
 

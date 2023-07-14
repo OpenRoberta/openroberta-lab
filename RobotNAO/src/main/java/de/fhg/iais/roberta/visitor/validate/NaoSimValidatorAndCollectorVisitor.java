@@ -9,6 +9,7 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
@@ -18,15 +19,13 @@ import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.Hand;
 import de.fhg.iais.roberta.syntax.action.nao.LearnFace;
-import de.fhg.iais.roberta.syntax.action.nao.LedOff;
-import de.fhg.iais.roberta.syntax.action.nao.LedReset;
 import de.fhg.iais.roberta.syntax.action.nao.MoveJoint;
+import de.fhg.iais.roberta.syntax.action.nao.NaoLedOnAction;
 import de.fhg.iais.roberta.syntax.action.nao.PlayFile;
 import de.fhg.iais.roberta.syntax.action.nao.PointLookAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
-import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
 import de.fhg.iais.roberta.syntax.action.nao.SetMode;
 import de.fhg.iais.roberta.syntax.action.nao.SetStiffness;
 import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
@@ -119,10 +118,10 @@ public class NaoSimValidatorAndCollectorVisitor extends NaoValidatorAndCollector
     }
 
     @Override
-    public Void visitSetIntensity(SetIntensity setIntensity) {
+    public Void visitNaoLedOnAction(NaoLedOnAction naoLedOnAction) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.SET_LED);
         usedMethodBuilder.addUsedMethod(NaoSimMethods.SET_INTENSITY);
-        return super.visitSetIntensity(setIntensity);
+        return super.visitNaoLedOnAction(naoLedOnAction);
     }
 
     @Override
@@ -158,21 +157,15 @@ public class NaoSimValidatorAndCollectorVisitor extends NaoValidatorAndCollector
     }
 
     @Override
-    public Void visitSetLeds(RgbLedOnAction rgbLedOnAction) {
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.SET_LED);
-        return super.visitSetLeds(rgbLedOnAction);
+        return super.visitRgbLedOnAction(rgbLedOnAction);
     }
 
     @Override
-    public Void visitLedOff(LedOff ledOff) {
-        usedMethodBuilder.addUsedMethod(NaoSimMethods.SET_LED);
-        return super.visitLedOff(ledOff);
-    }
-
-    @Override
-    public Void visitLedReset(LedReset ledReset) {
+    public Void visitLedAction(LedAction ledAction) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.LED_OFF);
-        return super.visitLedReset(ledReset);
+        return super.visitLedAction(ledAction);
     }
 
     @Override

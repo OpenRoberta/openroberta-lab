@@ -6,7 +6,6 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
-import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -91,7 +90,7 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
+    public Void visitLedAction(LedAction ledAction) {
         return null;
     }
 
@@ -236,11 +235,6 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
             default:
                 break;
         }
-        return null;
-    }
-
-    @Override
-    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
         return null;
     }
 

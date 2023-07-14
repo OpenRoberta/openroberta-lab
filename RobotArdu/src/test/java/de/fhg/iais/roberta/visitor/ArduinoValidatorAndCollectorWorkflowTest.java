@@ -9,8 +9,6 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.mode.action.BrickLedColor;
-import de.fhg.iais.roberta.mode.action.LightMode;
 import de.fhg.iais.roberta.mode.action.RelayMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
@@ -18,6 +16,7 @@ import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
@@ -377,29 +376,51 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper
     }
 
     @Test
-    public void visitLightAction() {
+    public void visitLedAction() {
+        configurationComponents.add(new ConfigurationComponent(SC.LED, "CONFIGURATION_ACTOR", "P1", "P1", new HashMap<>()));
+
+        LedAction ledAction = new LedAction(bp, "P1", "ON");
+        phrases.add(ledAction);
+
+        executeWorkflow();
+
+        assertHasNoNepoInfo(ledAction);
+    }
+
+    @Test
+    public void visitLedAction_noActor() {
+        LedAction ledAction = new LedAction(bp, "P1", "ON");
+        phrases.add(ledAction);
+
+        executeWorkflow();
+
+        assertHasNepoInfo(ledAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
+    }
+
+    @Test
+    public void visitRgbLedOnAction() {
         configurationComponents.add(new ConfigurationComponent(SC.RGBLED, "CONFIGURATION_ACTOR", "P1", "P1", new HashMap<>()));
 
         RgbColor rgbColor = new RgbColor(bp, new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"));
 
-        LedAction lightAction = new LedAction("P1", BrickLedColor.ORANGE, LightMode.DEFAULT, rgbColor, bp);
-        phrases.add(lightAction);
+        RgbLedOnAction rgbLedOnAction = new RgbLedOnAction(bp, "P1", rgbColor);
+        phrases.add(rgbLedOnAction);
 
         executeWorkflow();
 
-        assertHasNoNepoInfo(lightAction);
+        assertHasNoNepoInfo(rgbLedOnAction);
     }
 
     @Test
-    public void visitLightAction_noActor() {
+    public void visitRgbLedOnAction_noActor() {
         RgbColor rgbColor = new RgbColor(bp, new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"), new NumConst(null, "10"));
 
-        LedAction lightAction = new LedAction("P1", BrickLedColor.ORANGE, LightMode.DEFAULT, rgbColor, bp);
-        phrases.add(lightAction);
+        RgbLedOnAction rgbLedOnAction = new RgbLedOnAction(bp, "P1", rgbColor);
+        phrases.add(rgbLedOnAction);
 
         executeWorkflow();
 
-        assertHasNepoInfo(lightAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
+        assertHasNepoInfo(rgbLedOnAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
     }
 
     @Test

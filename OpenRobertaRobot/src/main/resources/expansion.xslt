@@ -538,6 +538,9 @@
                 <xsl:for-each select="b:field">
                     <xsl:if test="not(./@name = 'NAME' or ./@name = 'RGBLED_A' or ./@name = 'LED_B')">
                         <xsl:element name="{'block'}" namespace="">
+                            <xsl:attribute name="id">
+                                <xsl:value-of select="generate-id()"/>
+                            </xsl:attribute>
                             <xsl:attribute name="type">
                                 <xsl:text>robConf_</xsl:text>
                                 <xsl:choose>

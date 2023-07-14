@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -51,6 +51,7 @@ import de.fhg.iais.roberta.util.syntax.MotorDuration;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.INxtVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
+import de.fhg.iais.roberta.visitor.syntax.light.NxtRgbLedOnAction;
 
 public class NxtStackMachineVisitor extends AbstractStackMachineVisitor implements INxtVisitor<Void> {
 
@@ -278,11 +279,17 @@ public class NxtStackMachineVisitor extends AbstractStackMachineVisitor implemen
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        String mode = lightAction.mode.toString().toLowerCase();
-        String color = lightAction.color.toString().toLowerCase();
-        String port = lightAction.port;
-        JSONObject o = makeNode(C.LIGHT_ACTION).put(C.MODE, mode).put(C.PORT, port).put(C.COLOR, color);
+    public Void visitNxtRgbLedOnAction(NxtRgbLedOnAction nxtRgbLedOnAction) {
+        String color = nxtRgbLedOnAction.colour.toString().toLowerCase();
+        String port = nxtRgbLedOnAction.port;
+        JSONObject o = makeNode(C.LIGHT_ACTION).put(C.MODE, "on").put(C.PORT, port).put(C.COLOR, color);
+        return add(o);
+    }
+
+    @Override
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
+        String port = rgbLedOffAction.port;
+        JSONObject o = makeNode(C.LIGHT_ACTION).put(C.MODE, "off").put(C.PORT, port);
         return add(o);
     }
 

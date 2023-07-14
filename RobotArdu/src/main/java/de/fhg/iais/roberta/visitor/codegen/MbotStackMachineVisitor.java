@@ -13,8 +13,8 @@ import de.fhg.iais.roberta.inter.mode.general.IDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -99,20 +99,19 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        String mode = lightAction.mode.toString().toLowerCase();
-        lightAction.rgbLedColor.accept(this);
-        String port = lightAction.port;
-        JSONObject o = makeNode(C.LIGHT_ACTION).put(C.MODE, mode).put(C.PORT, port).put(C.NAME, "mbot");
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        rgbLedOnAction.colour.accept(this);
+        String port = rgbLedOnAction.port;
+        JSONObject o = makeNode(C.LIGHT_ACTION).put(C.MODE, SC.ON).put(C.PORT, port).put(C.NAME, "mbot");
         return add(o);
     }
 
     @Override
-    public Void visitLightOffAction(RgbLedOffAction lightOffAction) {
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
         JSONObject o =
             makeNode(C.LED_OFF_ACTION)
                 .put(C.MODE, SC.OFF)
-                .put(C.PORT, lightOffAction.port)
+                .put(C.PORT, rgbLedOffAction.port)
                 .put(C.NAME, "mbot");
         return add(o);
     }

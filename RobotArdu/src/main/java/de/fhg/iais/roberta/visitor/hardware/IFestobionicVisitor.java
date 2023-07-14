@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 
 
 public interface IFestobionicVisitor<V> extends IVisitor<V> {
-    V visitLightAction(LedAction lightAction);
+    V visitLedAction(LedAction ledAction);
 
     V visitMotorOnAction(MotorOnAction motorOnAction);
 }

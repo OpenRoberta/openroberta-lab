@@ -34,7 +34,7 @@ public class XsltTest {
         String expected = Resources.toString(Resources.getResource("util/Xslt_calliope_out.xml"), Charsets.UTF_8);
         Assert.assertNull(UnitTestHelper.runXmlUnit(expected, xsltTransformer.transform(input)));
     }
-    
+
     @Ignore
     @Test
     public void transform_test() throws Exception {

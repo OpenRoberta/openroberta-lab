@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoHide;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 @NepoPhrase(name = "RGBLED_OFF_HIDDEN_MBOT2_ACTION", category = "ACTOR", blocklyNames = {"actions_rgbLed_hidden_off_mbot2"})
-public class RgbLedOffHiddenAction extends Action {
+public final class Mbot2RgbLedOffHiddenAction extends Action {
 
     @NepoField(name = "SLOT")
     public final String slot;
@@ -16,7 +16,7 @@ public class RgbLedOffHiddenAction extends Action {
     @NepoHide
     public final Hide hide;
 
-    public RgbLedOffHiddenAction(BlocklyProperties properties, String slot, Hide hide) {
+    public Mbot2RgbLedOffHiddenAction(BlocklyProperties properties, String slot, Hide hide) {
         super(properties);
         this.slot = slot;
         this.hide = hide;

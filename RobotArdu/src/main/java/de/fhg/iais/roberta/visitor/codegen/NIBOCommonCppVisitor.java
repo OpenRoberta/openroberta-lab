@@ -7,7 +7,9 @@ import com.google.common.collect.ClassToInstanceMap;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
@@ -111,34 +113,22 @@ public abstract class NIBOCommonCppVisitor extends NepoArduinoCppVisitor impleme
     }
 
     @Override
-    public Void visitLedOnAction(LedOnAction ledOnAction) {
-        this.src.add("rob.setLed(");
-        if ( ledOnAction.side.equals("Left") ) {
-            this.src.add("EYE_2, ");
-        } else {
-            this.src.add("EYE_1, ");
-        }
-        ledOnAction.ledColor.accept(this);
+    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
+        this.src.add("rob.setLed(", rgbLedOnAction.port, ", ");
+        rgbLedOnAction.colour.accept(this);
         this.src.add(");");
         return null;
     }
 
     @Override
-    public Void visitLedOffAction(LedOffAction ledOffAction) {
-        this.src.add("rob.setLed(");
-        if ( ledOffAction.side.equals("Left") ) {
-            this.src.add("EYE_2, OFF);");
-        } else {
-            this.src.add("EYE_1, OFF);");
-        }
+    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
+        this.src.add("rob.setLed(", rgbLedOffAction.port, ", OFF);");
         return null;
     }
 
     @Override
-    public Void visitBodyLEDAction(BodyLEDAction bodyLEDAction) {
-        this.src.add("rob.setLed(");
-        this.src.add(bodyLEDAction.side, ", ");
-        this.src.add(bodyLEDAction.ledState, ");");
+    public Void visitLedAction(LedAction ledAction) {
+        this.src.add("rob.setLed(", ledAction.port, ", ", ledAction.mode, ");");
         return null;
     }
 

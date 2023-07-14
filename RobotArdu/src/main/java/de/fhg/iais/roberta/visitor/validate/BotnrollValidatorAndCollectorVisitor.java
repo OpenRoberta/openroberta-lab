@@ -52,7 +52,7 @@ public class BotnrollValidatorAndCollectorVisitor extends ArduinoDifferentialMot
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
+    public Void visitLedAction(LedAction ledAction) {
         return null;
     }
 

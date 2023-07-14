@@ -34,8 +34,7 @@ import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.light.BrickLightOffAction;
-import de.fhg.iais.roberta.syntax.action.light.BrickLightResetAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.BrickLightOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -282,20 +281,23 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     }
 
     @Override
-    public Void visitLightAction(LedAction lightAction) {
-        this.src.add("hal.ledOn(", getEnumCode(lightAction.color), ", BlinkMode.", lightAction.mode, ");");
-        return null;
-    }
-
-    @Override
-    public Void visitBrickLightResetAction(BrickLightResetAction brickLightResetAction) {
-        this.src.add("hal.resetLED();");
+    public Void visitBrickLightOnAction(BrickLightOnAction brickLightOnAction) {
+        this.src.add("hal.ledOn(", getEnumCode(brickLightOnAction.colour), ", BlinkMode.", brickLightOnAction.mode, ");");
         return null;
     }
 
     @Override
     public Void visitBrickLightOffAction(BrickLightOffAction brickLightOffAction) {
-        this.src.add("hal.ledOff();");
+        switch ( brickLightOffAction.mode ) {
+            case "OFF":
+                this.src.add("hal.ledOff();");
+                break;
+            case "RESET":
+                this.src.add("hal.resetLED();");
+                break;
+            default:
+                throw new DbcException("Invalid MODE encountered in BrickLightOffAction: " + brickLightOffAction.mode);
+        }
         return null;
     }
 
