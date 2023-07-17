@@ -97,9 +97,9 @@ public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoy
             nlIndent();
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.SERVOMOTOR) ) {
-            this.src.add("microbit.pin1.set_analog_period(10)");
+            this.src.add("microbit.pin1.set_analog_period(20)");
             nlIndent();
-            this.src.add("microbit.pin13.set_analog_period(10)");
+            this.src.add("microbit.pin13.set_analog_period(20)");
             nlIndent();
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RGBLED) ) {

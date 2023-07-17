@@ -9,12 +9,11 @@ ULTRASONIC_GET_DISTANCE:
         microbit.sleep(10) 
         trigger.write_digital(0) 
 
-
         duration = machine.time_pulse_us(echo, 1)  
         distance = duration * 0.0343 / 2  
 
         return round(distance, 2)   
-    
+
 DIFFDRIVE:
   PYTHON: |
     def drive(speedLeft, speedRight):
@@ -81,12 +80,14 @@ I2C_GET_SENSORDATA:
 
 SERVO_SET_ANGLE:
   PYTHON: |
-    def servo_set_angle(x, y):
-        y = round(min(max((y * 100) / 180 + 100, 100), 200))
-        if x == 1:
-            microbit.pin1.write_analog(y)
-        elif x == 2:
-            microbit.pin13.write_analog(y)
+    def servo_set_angle(pin, angle):
+        if (angle < 0): angle = 0
+        if (angle > 180): angle = 180
+        duty = round(0.55 * angle) + 25
+        if pin == 1:
+            microbit.pin1.write_analog(duty)
+        elif pin == 2:
+            microbit.pin13.write_analog(duty)
 
 LED_SET_COLOUR:
   PYTHON: |
