@@ -2129,15 +2129,15 @@ export abstract class MatrixDisplay implements IUpdateAction, IDrawable, IReset 
         '`': [2, 1, 7],
         '´': [2, 2, 6],
         '0': [4, 2, 3, 4, 6, 10, 11, 15, 17, 18, 19],
-        '1': [3, 2, 5, 6, 7, 8, 9, 10, 15],
+        '1': [3, 3, 7, 11, 12, 13, 14, 15],
         '2': [4, 1, 4, 5, 6, 8, 10, 11, 13, 15, 17, 20],
         '3': [5, 1, 4, 6, 10, 11, 13, 15, 16, 17, 19],
-        '4': [5, 3, 4, 7, 9, 11, 14, 16, 17, 18, 19, 20, 24],
+        '4': [5, 4, 8, 9, 12, 14, 16, 18, 19, 20, 24],
         '5': [5, 1, 2, 3, 5, 6, 8, 10, 11, 13, 15, 16, 18, 20, 21, 24],
-        '6': [5, 4, 8, 10, 12, 13, 15, 16, 18, 20, 24],
+        '6': [4, 2, 3, 4, 6, 8, 10, 11, 13, 15, 19],
         '7': [5, 1, 5, 6, 9, 11, 13, 16, 17, 21],
         '8': [5, 2, 4, 6, 8, 10, 11, 13, 15, 16, 18, 20, 22, 24],
-        '9': [5, 2, 6, 8, 10, 11, 13, 14, 16, 18, 22],
+        '9': [4, 2, 6, 8, 10, 11, 13, 15, 17, 18, 19],
     };
     lightLevel: number = 100;
 
@@ -2208,7 +2208,7 @@ export abstract class MatrixDisplay implements IUpdateAction, IDrawable, IReset 
                     that.leds = JSON.parse(JSON.stringify(shallow));
                     if (textArray.length > that.leds.length) {
                         textArray.shift();
-                        that.timeout = setTimeout(myText, 150, textArray, that);
+                        that.timeout = setTimeout(myText, 300, textArray, that);
                     } else {
                         myRobot.interpreter.getRobotBehaviour().setBlocking(false);
                     }
@@ -2333,6 +2333,8 @@ export abstract class MatrixDisplay implements IUpdateAction, IDrawable, IReset 
             string.push(myColumn);
         }
         if (this.leds.length === 5) {
+            string.push(myColumn);
+            string.push(myColumn);
             string.push(myColumn);
             string.push(myColumn);
             string.push(myColumn);
