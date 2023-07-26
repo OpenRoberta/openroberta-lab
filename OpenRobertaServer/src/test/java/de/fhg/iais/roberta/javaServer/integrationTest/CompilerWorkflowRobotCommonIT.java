@@ -112,7 +112,7 @@ public class CompilerWorkflowRobotCommonIT {
             LOG.error(msg);
             Assert.fail(msg);
         }
-        Properties baseServerProperties = Util.loadProperties(null);
+        Properties baseServerProperties = Util.loadPropertiesRecursively("classpath:/openRoberta.properties");
         serverProperties = new ServerProperties(baseServerProperties);
         robotCommunicator = new RobotCommunicator();
         pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
@@ -571,7 +571,7 @@ public class CompilerWorkflowRobotCommonIT {
 
     private static String getTemplateWithConfigReplaced(String robotDir, String robotName) {
         String template = Util.readResourceContent(RESOURCE_BASE + "template/" + robotDir + ".xml");
-        Properties robotProperties = Util.loadProperties("classpath:/" + robotName + ".properties");
+        Properties robotProperties = Util.loadPropertiesRecursively("classpath:/" + robotName + ".properties");
         String defaultConfigurationURI = robotProperties.getProperty("robot.configuration.default");
         String defaultConfig = Util.readResourceContent(defaultConfigurationURI);
         final String templateWithConfig = template.replaceAll("\\[\\[conf\\]\\]", defaultConfig);

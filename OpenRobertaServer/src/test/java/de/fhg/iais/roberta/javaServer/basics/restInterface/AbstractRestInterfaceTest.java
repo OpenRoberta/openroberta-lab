@@ -117,7 +117,7 @@ public abstract class AbstractRestInterfaceTest {
     protected void setup() throws Exception {
         ServerStarter.initLoggingBeforeFirstUse(new String[0]);
 
-        this.serverProperties = new ServerProperties(Util.loadProperties(null));
+        this.serverProperties = new ServerProperties(Util.loadPropertiesRecursively("classpath:/openRoberta.properties"));
         this.serverProperties.getserverProperties().put("server.public", "true"); // not dangerous! For this.restUser the mail management is set to null
 
         this.robotCommunicator = new RobotCommunicator();

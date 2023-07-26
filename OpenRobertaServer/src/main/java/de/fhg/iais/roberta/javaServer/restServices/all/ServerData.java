@@ -110,7 +110,7 @@ public class ServerData {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("name", robotName);
             if ( !Objects.equals(robotName, "sim") ) {
-                Properties robotProperties = Util.loadProperties("classpath:/" + robotName + ".properties");
+                Properties robotProperties = Util.loadPropertiesRecursively("classpath:/" + robotName + ".properties");
                 jsonObject.put("realName", robotProperties.getProperty("robot.real.name"));
                 jsonObject.put("group", robotProperties.getProperty("robot.plugin.group", robotName));
             }
@@ -128,7 +128,7 @@ public class ServerData {
         JSONObject toolboxObject = new JSONObject();
         JSONObject configurationObject = new JSONObject();
 
-        Properties robotProperties = Util.loadProperties("classpath:/" + robotName + ".properties");
+        Properties robotProperties = Util.loadPropertiesRecursively("classpath:/" + robotName + ".properties");
         List<String> robotXml =
             Stream
                 .of("robot.program.toolbox.beginner", "robot.program.toolbox.expert", "robot.configuration.toolbox", "robot.configuration.default", "robot.program.default")

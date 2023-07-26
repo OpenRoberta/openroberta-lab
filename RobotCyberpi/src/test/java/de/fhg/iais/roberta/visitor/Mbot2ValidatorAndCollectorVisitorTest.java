@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.visitor;
 
 
+import java.util.Properties;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -13,13 +15,14 @@ public class Mbot2ValidatorAndCollectorVisitorTest {
 
     @BeforeClass
     public static void setup() {
-        testFactory = new RobotFactory(new PluginProperties("mbot2", "", "", Util.loadProperties("classpath:/mbot2.properties")));
+        Properties properties = Util.loadPropertiesRecursively("classpath:/mbot2.properties");
+        testFactory = new RobotFactory(new PluginProperties("mbot2", "", "", properties));
     }
 
     public static final String DEFAULT_XML = "/mbot2/configuration.default.xml";
 
     @Test
-    public void driveActionTest(){
-       // List<List<Phrase>> phrases = UnitTestHelper.getProgramAst(testFactory, DEFAULT_XML);
+    public void driveActionTest() {
+        // List<List<Phrase>> phrases = UnitTestHelper.getProgramAst(testFactory, DEFAULT_XML);
     }
 }

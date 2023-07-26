@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.factory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -126,6 +127,15 @@ public class RobotFactory {
             return "#";
         } else {
             return robotInfoEN;
+        }
+    }
+
+    public final List<String> getFreePins() {
+        String freePinsString = this.pluginProperties.getStringProperty("free.pins");
+        if ( freePinsString == null ) {
+            return Collections.emptyList();
+        } else {
+            return Arrays.asList(freePinsString.split("\\s*,\\s*"));
         }
     }
 

@@ -267,7 +267,7 @@ public class ReuseIntegrationAsUnitTest {
 
     private static String getTemplateWithConfigReplaced(String robotDir, String robotName) {
         String template = Util.readResourceContent(CROSS_COMPILER_TESTS + COMMON + "template/" + robotDir + ".xml");
-        Properties robotProperties = Util.loadProperties("classpath:/" + robotName + ".properties");
+        Properties robotProperties = Util.loadPropertiesRecursively("classpath:/" + robotName + ".properties");
         String defaultConfigurationURI = robotProperties.getProperty("robot.configuration.default");
         String defaultConfig = Util.readResourceContent(defaultConfigurationURI);
         final String templateWithConfig = template.replaceAll("\\[\\[conf\\]\\]", defaultConfig);
@@ -309,8 +309,8 @@ public class ReuseIntegrationAsUnitTest {
     @Ignore
     @Test
     public void testOneRobotSpecificProgramAsUnitTests() throws Exception {
-        String robotName = "nxt";
-        String programName = "text_colours_messages_functions";
+        String robotName = "festobionic";
+        String programName = "action";
         LOG.info("========= testing program " + programName + " for robot " + robotName);
         final String resourceDirectory = setupRobotFactoryAndGetResourceDirForRobotSpecificTests(robotName);
         runRegenerateAndCodeGenerationForOneRobotSpecificProgram(resourceDirectory, programName + ".xml", robotName, Collections.emptyList());

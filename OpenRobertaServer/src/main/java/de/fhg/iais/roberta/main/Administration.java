@@ -109,7 +109,7 @@ public class Administration {
     }
 
     private String version() {
-        Properties serverProperties = Util.loadProperties(null);
+        Properties serverProperties = Util.loadPropertiesRecursively("classpath:/openRoberta.properties");
         return serverProperties.getProperty("openRobertaServer.version");
     }
 

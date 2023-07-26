@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta;
 
+import java.util.Properties;
+
 import org.junit.BeforeClass;
 
 import de.fhg.iais.roberta.factory.RobotFactory;
@@ -12,6 +14,7 @@ public class Ev3LejosAstTest extends Ev3AstTest {
     @BeforeClass
     public static void setup() {
         AstFactory.loadBlocks();
-        testFactory = new RobotFactory(new PluginProperties("ev3lejosv1", "", "", Util.loadProperties("classpath:/ev3lejosv1.properties")));
+        Properties properties = Util.loadPropertiesRecursively("classpath:/ev3lejosv1.properties");
+        testFactory = new RobotFactory(new PluginProperties("ev3lejosv1", "", "", properties));
     }
 }

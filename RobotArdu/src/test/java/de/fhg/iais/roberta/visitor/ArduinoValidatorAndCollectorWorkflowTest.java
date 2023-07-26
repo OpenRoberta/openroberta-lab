@@ -45,14 +45,14 @@ import de.fhg.iais.roberta.util.syntax.FunctionNames;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
 import de.fhg.iais.roberta.util.syntax.SC;
-import de.fhg.iais.roberta.worker.validate.UnoValidatorAndCollectorWorker;
+import de.fhg.iais.roberta.worker.validate.ArduinoValidatorAndCollectorWorker;
 import static org.junit.Assert.assertEquals;
 
 public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTestHelper {
 
     public ArduinoValidatorAndCollectorWorkflowTest() {
         setupRobotFactory("uno");
-        workerChain = Collections.singletonList(new UnoValidatorAndCollectorWorker());
+        workerChain = Collections.singletonList(new ArduinoValidatorAndCollectorWorker());
     }
 
     @Test

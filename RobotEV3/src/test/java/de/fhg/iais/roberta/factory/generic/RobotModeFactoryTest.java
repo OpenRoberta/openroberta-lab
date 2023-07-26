@@ -1,6 +1,9 @@
 package de.fhg.iais.roberta.factory.generic;
 
+import java.util.Properties;
+
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
@@ -14,15 +17,21 @@ import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
-import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.SC;
 
 public class RobotModeFactoryTest {
-    RobotFactory factory = new RobotFactory(new PluginProperties("ev3lejosv0", "", "", Util.loadProperties("classpath:/ev3lejosv0.properties")));
-    BlocklyDropdownFactory dropdownFactory = this.factory.getBlocklyDropdownFactory();
+    private static BlocklyDropdownFactory dropdownFactory;
+
+    @BeforeClass
+    public static void setup() {
+        Properties properties = Util.loadPropertiesRecursively("classpath:/ev3lejosv0.properties");
+        RobotFactory factory = new RobotFactory(new PluginProperties("ev3lejosv0", "", "", properties));
+        dropdownFactory = factory.getBlocklyDropdownFactory();
+    }
 
     @Test
     public void getIndexLocationFromString() {

@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.syntax;
 
+import java.util.Properties;
+
 import org.junit.BeforeClass;
 
 import de.fhg.iais.roberta.AstTest;
@@ -12,7 +14,8 @@ public class NaoAstTest extends AstTest {
 
     @BeforeClass
     public static void setup() {
-        testFactory = new RobotFactory(new PluginProperties("nao", "", "", Util.loadProperties("classpath:/nao.properties")));
+        Properties properties = Util.loadPropertiesRecursively("classpath:/nao.properties");
+        testFactory = new RobotFactory(new PluginProperties("nao", "", "", properties));
     }
 
     protected static ConfigurationAst makeStandard() {

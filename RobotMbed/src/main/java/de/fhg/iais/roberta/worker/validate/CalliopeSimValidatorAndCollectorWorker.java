@@ -11,7 +11,7 @@ public class CalliopeSimValidatorAndCollectorWorker extends CalliopeValidatorAnd
 
     @Override
     protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
-        return new CalliopeValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, true);
+        return new CalliopeValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, true, false);
     }
 
 }

@@ -34,6 +34,7 @@ public class CalliopeValidatorAndCollectorWorker extends MbedValidatorAndCollect
 
     @Override
     protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
-        return new CalliopeValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, false);
+        boolean hasBlueTooth = project.getRobotFactory().getPluginProperties().getBooleanProperty("robot.has.bluetooth");
+        return new CalliopeValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, false, hasBlueTooth);
     }
 }

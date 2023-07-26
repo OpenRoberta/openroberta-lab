@@ -1,10 +1,5 @@
 package de.fhg.iais.roberta.util;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -13,6 +8,10 @@ import java.util.stream.Stream;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class FileUtils {
     /**
@@ -57,9 +56,9 @@ public class FileUtils {
         } catch ( Exception e ) {
             // ok!
         }
-        assertNotNull(Util.getInputStream(true, "classpath:/yaml/y1.yml"));
+        assertNotNull(Util.getInputStream("classpath:/yaml/y1.yml"));
         try {
-            Util.getInputStream(true, "classpath:yaml/y1.yml");
+            Util.getInputStream("classpath:yaml/y1.yml");
             fail("resource found and that is an error");
         } catch ( Exception e ) {
             // ok!

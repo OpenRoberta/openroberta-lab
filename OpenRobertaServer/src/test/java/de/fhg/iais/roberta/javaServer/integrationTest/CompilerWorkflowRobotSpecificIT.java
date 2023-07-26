@@ -106,7 +106,7 @@ public class CompilerWorkflowRobotSpecificIT {
             LOG.error("the environment variable \"" + ORA_CC_RSC_ENVVAR + "\" must contain the absolute path to the ora-cc-rsc repository - test fails");
             // fail();
         }
-        Properties baseServerProperties = Util.loadProperties(null);
+        Properties baseServerProperties = Util.loadPropertiesRecursively("classpath:/openRoberta.properties");
         serverProperties = new ServerProperties(baseServerProperties);
         robotCommunicator = new RobotCommunicator();
         pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);

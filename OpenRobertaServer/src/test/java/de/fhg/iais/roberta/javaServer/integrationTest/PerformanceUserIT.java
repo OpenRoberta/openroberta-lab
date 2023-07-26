@@ -85,7 +85,7 @@ public class PerformanceUserIT {
 
     @Before
     public void setupTest() throws Exception {
-        this.serverProperties = new ServerProperties(Util.loadProperties(null));
+        this.serverProperties = new ServerProperties(Util.loadPropertiesRecursively("classpath:/openRoberta.properties"));
         this.serverProperties.getserverProperties().put("server.public", "false");
         this.robotCommunicator = new RobotCommunicator();
 

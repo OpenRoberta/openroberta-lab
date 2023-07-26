@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.worker.validate;
 
-import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
@@ -11,16 +10,11 @@ import de.fhg.iais.roberta.visitor.validate.ArduinoValidatorAndCollectorVisitor;
 import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 import de.fhg.iais.roberta.worker.AbstractValidatorAndCollectorWorker;
 
-public abstract class ArduinoValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
-    private final List<String> freePins;
-
-    public ArduinoValidatorAndCollectorWorker(List<String> freePins) {
-        this.freePins = Collections.unmodifiableList(freePins);
-    }
-
+public class ArduinoValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
     @Override
     public void execute(Project project) {
         ArduinoConfigurationValidator arduinoConfigurationValidator = new ArduinoConfigurationValidator(project);
+        List<String> freePins = project.getRobotFactory().getFreePins();
         arduinoConfigurationValidator.validateConfiguration(freePins);
         super.execute(project);
     }

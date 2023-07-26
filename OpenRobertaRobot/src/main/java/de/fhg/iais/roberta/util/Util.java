@@ -42,7 +42,6 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class Util {
     private static final Logger LOG = LoggerFactory.getLogger(Util.class);
-    private static final String PROPERTY_DEFAULT_PATH = "classpath:/openRoberta.properties";
     // see: https://stackoverflow.com/questions/201323/how-can-i-validate-an-email-address-using-a-regular-expression
     private static final Pattern VALID_EMAIL = Pattern.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
     private static final Pattern PROGRAM_NAME_PATTERN = Pattern.compile("^[a-zA-Z][a-zA-Z_$0-9]*$");
@@ -102,6 +101,31 @@ public class Util {
     }
 
     /**
+     * load the OpenRoberta properties. The URI of the properties refers either to the file system or to the classpath. It is used in both production and test.
+     * <br>
+     * If the URI-parameters start with "file:" the properties are loaded from the file system.<br>
+     * If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.
+     *
+     * @param propertyURI URI of the property file. Not null.
+     * @return the properties. Never null, maybe empty
+     */
+    public static Properties loadAndMergeOpenRobertaServerProperties(String propertyURI, List<String> defines) {
+        Properties serverProperties = loadPropertiesRecursively(propertyURI);
+        if ( defines != null ) {
+            for ( String define : defines ) {
+                String[] property = define.split("\\s*=\\s*");
+                if ( property.length == 2 ) {
+                    LOG.info("new server property from command line: " + define);
+                    serverProperties.put(property[0], property[1]);
+                } else {
+                    LOG.info("command line server property is invalid and thus ignored: " + define);
+                }
+            }
+        }
+        return serverProperties;
+    }
+
+    /**
      * configure a plugin by reading the plugin properties and creating a factory used later for code generation and cross compilation
      *
      * @param robotName the name of the plugin. Used to access the plugin's properties. Never null.
@@ -111,10 +135,7 @@ public class Util {
      * @return the factory for this plugin
      */
     public static RobotFactory configureRobotPlugin(String robotName, String resourceDir, String tempDir, List<String> pluginDefines) {
-        Properties basicPluginProperties = Util.loadProperties("classpath:/" + robotName + ".properties");
-        if ( basicPluginProperties == null ) {
-            throw new DbcException("robot plugin " + robotName + " has no property file " + robotName + ".properties -  Server does NOT start");
-        }
+        Properties basicPluginProperties = Util.loadPropertiesRecursively("classpath:/" + robotName + ".properties");
         String robotNameColon = robotName + ":";
         if ( pluginDefines != null ) {
             for ( String pluginDefine : pluginDefines ) {
@@ -143,45 +164,57 @@ public class Util {
     }
 
     /**
-     * load the OpenRoberta properties. The URI of the properties refers either to the file system or to the classpath. It is used in both production and test.
+     * load properties, potentially recursively by following #include directives. Convenience method.<br>
+     * The URI of the properties refers either to the file system or to the classpath. It is used in both production and test.
      * <br>
-     * <b>This methods loads the properties. It does NOT store them. See class {@link ServerProperties}</b> <br>
-     * If the URI-parameter is null, the classpath is searched for the default resource "openRoberta.properties".<br>
      * If the URI-parameters start with "file:" the properties are loaded from the file system.<br>
      * If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.
      *
-     * @param propertyURI URI of the property file. May be null
-     * @return the properties. Never null, may be empty
+     * @param propertyURI URI of the property file. Not null
+     * @return the properties read, potentially recursively by following #include directives
      */
-    public static Properties loadProperties(String propertyURI) {
-        return loadProperties(false, propertyURI);
+    public static Properties loadPropertiesRecursively(String propertyURI) {
+        Properties properties = new Properties();
+        Util.loadPropertiesRecursively(properties, propertyURI);
+        return properties;
     }
 
     /**
-     * load the OpenRoberta properties. The URI of the properties refers either to the file system or to the classpath. It is used in both production and test.
+     * load properties, potentially recursively by following #include directives.<br>
+     * The URI of the properties refers either to the file system or to the classpath. It is used in both production and test.
      * <br>
-     * <b>This methods loads the properties. It does NOT store them. See class {@link ServerProperties}</b> <br>
-     * If the URI-parameter is null, the classpath is searched for the default resource "openRoberta.properties".<br>
      * If the URI-parameters start with "file:" the properties are loaded from the file system.<br>
      * If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.
      *
-     * @param propertyURI URI of the property file. May be null
-     * @return the properties. Never null, maybe empty
+     * @param properties the property object to which the new properties have to be added. Not null
+     * @param propertyURI URI of the property file. Not null
      */
-    public static Properties loadAndMergeProperties(String propertyURI, List<String> defines) {
-        Properties serverProperties = loadProperties(propertyURI);
-        if ( defines != null ) {
-            for ( String define : defines ) {
-                String[] property = define.split("\\s*=\\s*");
-                if ( property.length == 2 ) {
-                    LOG.info("new server property from command line: " + define);
-                    serverProperties.put(property[0], property[1]);
-                } else {
-                    LOG.info("command line server property is invalid and thus ignored: " + define);
+    public static void loadPropertiesRecursively(Properties properties, String propertyURI) {
+        if ( propertyURI == null || propertyURI.trim().equals("") ) {
+            throw new DbcException("propertyURI is invalid. Load impossible");
+        }
+        try {
+            loadIncludes(properties, getInputStream(propertyURI));
+            InputStream propertyStream = null;
+            try {
+                Properties local = new Properties();
+                propertyStream = getInputStream(propertyURI);
+                local.load(propertyStream);
+                local.forEach((k, v) -> {
+                    if ( properties.containsKey(k) ) {
+                        throw new DbcException("duplicate key " + k + " when adding properties from " + propertyURI);
+                    }
+                    properties.put(k, v);
+                });
+            } finally {
+                if ( propertyStream != null ) {
+                    propertyStream.close();
                 }
             }
+
+        } catch ( IOException e ) {
+            throw new DbcException("Could not load properties of URI " + propertyURI, e);
         }
-        return serverProperties;
     }
 
     /**
@@ -191,23 +224,16 @@ public class Util {
      * - If the URI-parameters start with "file:" the properties are loaded from the file system.<br>
      * - If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.
      *
-     * @param doLogging if true: log debug info
      * @param propertyURI URI of the property file. May be null
      * @return input stream
      */
-    static InputStream getInputStream(boolean doLogging, String propertyURI) {
+    static InputStream getInputStream(String propertyURI) {
         try {
             if ( propertyURI.startsWith("file:") ) {
                 String filesystemPathName = propertyURI.substring(5);
-                if ( doLogging ) {
-                    Util.LOG.info("Operating on the file system. Using the path: " + filesystemPathName);
-                }
                 return new FileInputStream(filesystemPathName);
             } else if ( propertyURI.startsWith("classpath:") ) {
                 String classPathName = propertyURI.substring(10);
-                if ( doLogging ) {
-                    Util.LOG.info("Operating on the classpath. Using the resource: " + classPathName);
-                }
                 InputStream resourceAsStream = Util.class.getResourceAsStream(classPathName);
                 if ( resourceAsStream == null ) {
                     throw new DbcException("Could not open input stream for URI: " + propertyURI);
@@ -221,30 +247,6 @@ public class Util {
         }
     }
 
-    /**
-     * load the OpenRoberta properties. The URI of the properties refers either to the file system or to the classpath. It is used in both production and test.
-     * <br>
-     * <b>This methods loads the properties. It does NOT store them. See class {@link ServerProperties}</b> <br>
-     * If the URI-parameter is null, the classpath is searched for the default resource "openRoberta.properties".<br>
-     * If the URI-parameters start with "file:" the properties are loaded from the file system.<br>
-     * If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.
-     *
-     * @param doLogging if true: log debug info
-     * @param propertyURI URI of the property file. May be null
-     * @return the properties. Never null, maybe empty
-     */
-    private static Properties loadProperties(boolean doLogging, String propertyURI) {
-        Properties properties = new Properties();
-        propertyURI = propertyURI == null || propertyURI.trim().equals("") ? Util.PROPERTY_DEFAULT_PATH : propertyURI;
-        try {
-            loadIncludes(properties, getInputStream(doLogging, propertyURI));
-            properties.load(getInputStream(doLogging, propertyURI));
-            return properties;
-        } catch ( IOException e ) {
-            throw new DbcException("Could not load properties of URI " + propertyURI + ". Inspect the stacktrace", e);
-        }
-    }
-
     private static void loadIncludes(Properties properties, InputStream inputStream) throws IOException {
         BufferedReader reader = null;
         try {
@@ -252,9 +254,8 @@ public class Util {
             String line = null;
             while ( (line = reader.readLine()) != null ) {
                 if ( line.startsWith("#include ") ) {
-                    line = line.substring(9);
-                    Properties local = loadProperties(line);
-                    properties.putAll(local);
+                    String nameOfPropertiesToBeIncluded = line.substring(9);
+                    loadPropertiesRecursively(properties, nameOfPropertiesToBeIncluded);
                 }
             }
         } finally {
@@ -389,7 +390,7 @@ public class Util {
     public static void loadYAMLRecursive(String prefixForDebug, JSONObject accumulator, String uri, boolean override) {
         Assert.notNull(accumulator, "accumulating JSONObject must not be null");
         Assert.nonEmptyString(uri, "URI is null or empty at %s", prefixForDebug);
-        InputStream in = getInputStream(false, uri);
+        InputStream in = getInputStream(uri);
         try {
             Map<?, ?> map = YAML.load(in);
             JSONObject toAdd = new JSONObject(map);
@@ -423,7 +424,7 @@ public class Util {
      */
     public static JSONObject loadYAML(String uri) {
         Assert.nonEmptyString(uri, "URI is null or empty");
-        InputStream in = getInputStream(false, uri);
+        InputStream in = getInputStream(uri);
         try {
             Map<?, ?> map = YAML.load(in);
             return new JSONObject(map);

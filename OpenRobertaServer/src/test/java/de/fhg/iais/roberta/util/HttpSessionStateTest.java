@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.factory.RobotFactory;
-import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import joptsimple.OptionParser;
@@ -26,14 +25,14 @@ public class HttpSessionStateTest {
         List<String> serverDefines = serverDefineOpt.options();
 
         Map<String, RobotFactory> robotPluginMap = new HashMap<>();
-        robotPluginMap.put("ev3lejosv1", new RobotFactory(new PluginProperties("ev3lejosv1", "", "", Util.loadProperties("classpath:/ev3lejosv1.properties"))));
-        robotPluginMap.put("ev3lejosv0", new RobotFactory(new PluginProperties("ev3lejosv0", "", "", Util.loadProperties("classpath:/ev3lejosv0.properties"))));
+        robotPluginMap.put("ev3lejosv1", new RobotFactory(new PluginProperties("ev3lejosv1", "", "", Util.loadPropertiesRecursively("classpath:/ev3lejosv1.properties"))));
+        robotPluginMap.put("ev3lejosv0", new RobotFactory(new PluginProperties("ev3lejosv0", "", "", Util.loadPropertiesRecursively("classpath:/ev3lejosv0.properties"))));
         robotPluginMap
-            .put("calliope2017", new RobotFactory(new PluginProperties("calliope2017", "", "", Util.loadProperties("classpath:/calliope2017.properties"))));
+            .put("calliope2017", new RobotFactory(new PluginProperties("calliope2017", "", "", Util.loadPropertiesRecursively("classpath:/calliope2017.properties"))));
         robotPluginMap
-            .put("calliope2016", new RobotFactory(new PluginProperties("calliope2016", "", "", Util.loadProperties("classpath:/calliope2016.properties"))));
-        robotPluginMap.put("mbot", new RobotFactory(new PluginProperties("mbot", "", "", Util.loadProperties("classpath:/mbot.properties"))));
-        ServerProperties serverProperties = new ServerProperties(Util.loadAndMergeProperties(null, serverDefines));
+            .put("calliope2016", new RobotFactory(new PluginProperties("calliope2016", "", "", Util.loadPropertiesRecursively("classpath:/calliope2016.properties"))));
+        robotPluginMap.put("mbot", new RobotFactory(new PluginProperties("mbot", "", "", Util.loadPropertiesRecursively("classpath:/mbot.properties"))));
+        ServerProperties serverProperties = new ServerProperties(Util.loadAndMergeOpenRobertaServerProperties("classpath:/openRoberta.properties", serverDefines));
 
         this.httpSessionState = HttpSessionState.init(robotPluginMap, serverProperties, "en");
     }

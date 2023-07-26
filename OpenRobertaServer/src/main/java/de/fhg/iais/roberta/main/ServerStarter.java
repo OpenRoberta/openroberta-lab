@@ -93,7 +93,7 @@ public class ServerStarter {
         List<String> serverDefines = serverDefineOpt.values(options);
         List<String> pluginDefines = pluginDefineOpt.values(options);
 
-        final ServerStarter serverStarter = new ServerStarter(null, serverDefines);
+        final ServerStarter serverStarter = new ServerStarter("classpath:/openroberta.properties", serverDefines);
         try {
             Server server = serverStarter.start(pluginDefines);
             Statistics.info("ServerStart", "success", true);
@@ -113,7 +113,7 @@ public class ServerStarter {
      * @param serverDefines is a list of properties (from the command line ...) which overwrite the properties from the propertyPath. May be null.
      */
     public ServerStarter(String propertyPath, List<String> serverDefines) {
-        Properties properties = Util.loadAndMergeProperties(propertyPath, serverDefines);
+        Properties properties = Util.loadAndMergeOpenRobertaServerProperties(propertyPath, serverDefines);
         setupPropertyForDatabaseConnection(properties);
         this.serverProperties = new ServerProperties(properties);
         UtilForREST.setServerVersion(this.serverProperties.getStringProperty("openRobertaServer.version"));

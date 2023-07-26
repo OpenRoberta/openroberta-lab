@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import org.assertj.core.api.Assertions;
@@ -33,8 +34,10 @@ public class ArduinoUsedHardwareCollectorVisitorTest {
 
     @BeforeClass
     public static void setup() {
-        testFactory = new RobotFactory(new PluginProperties("uno", "", "", Util.loadProperties("classpath:/uno.properties")));
+        Properties properties = Util.loadPropertiesRecursively("classpath:/uno.properties");
+        testFactory = new RobotFactory(new PluginProperties("uno", "", "", properties));
     }
+
 
     public static ConfigurationAst makeValidConfig() {
         ConfigurationComponent pinS = new ConfigurationComponent("PIN", "CONFIGURATION_SENSOR", "S", "S", Collections.emptyMap());

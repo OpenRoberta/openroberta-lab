@@ -46,10 +46,17 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
     public static final double DOUBLE_EPS = 1E-7;
 
     private final boolean isSim;
+    private final boolean hasBlueTooth;
 
-    public CalliopeValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders, boolean isSim) {
+    public CalliopeValidatorAndCollectorVisitor(
+        ConfigurationAst brickConfiguration,
+        ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders,
+        boolean isSim,
+        boolean hasBlueTooth) //
+    {
         super(brickConfiguration, beanBuilders);
         this.isSim = isSim;
+        this.hasBlueTooth = hasBlueTooth;
     }
 
     @Override
@@ -124,20 +131,43 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
 
     @Override
     public Void visitRadioSendAction(RadioSendAction radioSendAction) {
-        addToPhraseIfUnsupportedInSim(radioSendAction, false, isSim);
+        if ( hasBlueTooth ) {
+            addErrorToPhrase(radioSendAction, "BLOCK_NOT_SUPPORTED");
+        } else {
+            addToPhraseIfUnsupportedInSim(radioSendAction, false, isSim);
+        }
         return super.visitRadioSendAction(radioSendAction);
     }
 
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
-        addToPhraseIfUnsupportedInSim(radioReceiveAction, true, isSim);
+        if ( hasBlueTooth ) {
+            addErrorToPhrase(radioReceiveAction, "BLOCK_NOT_SUPPORTED");
+        } else {
+            addToPhraseIfUnsupportedInSim(radioReceiveAction, true, isSim);
+        }
         return super.visitRadioReceiveAction(radioReceiveAction);
     }
 
     @Override
     public Void visitRadioSetChannelAction(RadioSetChannelAction radioSetChannelAction) {
-        addToPhraseIfUnsupportedInSim(radioSetChannelAction, false, isSim);
+        if ( hasBlueTooth ) {
+            addErrorToPhrase(radioSetChannelAction, "BLOCK_NOT_SUPPORTED");
+        } else {
+            addToPhraseIfUnsupportedInSim(radioSetChannelAction, false, isSim);
+        }
         return super.visitRadioSetChannelAction(radioSetChannelAction);
+    }
+
+    @Override
+    public Void visitRadioRssiSensor(RadioRssiSensor radioRssiSensor) {
+        if ( hasBlueTooth ) {
+            addErrorToPhrase(radioRssiSensor, "BLOCK_NOT_SUPPORTED");
+        } else {
+            addToPhraseIfUnsupportedInSim(radioRssiSensor, true, isSim);
+            usedHardwareBuilder.addUsedActor(new UsedActor("", SC.RADIO));
+        }
+        return null;
     }
 
     @Override
@@ -201,13 +231,6 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
     public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         checkMotorPort(motorStopAction);
         return addActorMaybeCallibot(motorStopAction);
-    }
-
-    @Override
-    public Void visitRadioRssiSensor(RadioRssiSensor radioRssiSensor) {
-        addToPhraseIfUnsupportedInSim(radioRssiSensor, true, isSim);
-        usedHardwareBuilder.addUsedActor(new UsedActor("", SC.RADIO));
-        return null;
     }
 
     @Override
