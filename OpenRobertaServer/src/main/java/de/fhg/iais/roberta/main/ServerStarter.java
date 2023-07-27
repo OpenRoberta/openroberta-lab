@@ -86,15 +86,16 @@ public class ServerStarter {
     public static void main(String[] args) throws Exception {
         initLoggingBeforeFirstUse(args);
 
-        OptionParser parser = new OptionParser();
-        OptionSpec<String> serverDefineOpt = parser.acceptsAll(asList("d", "server-property")).withRequiredArg().ofType(String.class);
-        OptionSpec<String> pluginDefineOpt = parser.acceptsAll(asList("D", "plugin-property")).withRequiredArg().ofType(String.class);
-        OptionSet options = parser.parse(args);
-        List<String> serverDefines = serverDefineOpt.values(options);
-        List<String> pluginDefines = pluginDefineOpt.values(options);
-
-        final ServerStarter serverStarter = new ServerStarter("classpath:/openroberta.properties", serverDefines);
         try {
+            OptionParser parser = new OptionParser();
+            OptionSpec<String> serverDefineOpt = parser.acceptsAll(asList("d", "server-property")).withRequiredArg().ofType(String.class);
+            OptionSpec<String> pluginDefineOpt = parser.acceptsAll(asList("D", "plugin-property")).withRequiredArg().ofType(String.class);
+            OptionSet options = parser.parse(args);
+            List<String> serverDefines = serverDefineOpt.values(options);
+            List<String> pluginDefines = pluginDefineOpt.values(options);
+
+            final ServerStarter serverStarter = new ServerStarter("classpath:/openRoberta.properties", serverDefines);
+
             Server server = serverStarter.start(pluginDefines);
             Statistics.info("ServerStart", "success", true);
             server.join();
@@ -257,7 +258,7 @@ public class ServerStarter {
     }
 
     /**
-     * configure robot plugins, that may be used with this server. Uses the white list and the declarations from the openroberta.properties file.
+     * configure robot plugins, that may be used with this server. Uses the white list and the declarations from the openRoberta.properties file.
      *
      * @param robotCommunicator
      * @param pluginDefines modifications of plugin properties as a list of "<pluginName>:<key>=<value>"
