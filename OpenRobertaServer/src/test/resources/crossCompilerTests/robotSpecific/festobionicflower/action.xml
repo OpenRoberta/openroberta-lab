@@ -8,16 +8,16 @@
                 </block>
                 <block type="robControls_loopForever_ardu" id="`mIJB4z:(3D;T%:]?^Iz" intask="true" deletable="false" movable="false">
                     <statement name="DO">
-                        <block type="makeblockActions_leds_on" id="Sm,DJq[R=?#fRX{X]P2*" intask="true">
-                            <field name="LEDSIDE">Left</field>
-                            <value name="COLOR">
+                        <block type="actions_rgbLed_on" id="Sm,DJq[R=?#fRX{X]P2*" intask="true">
+                            <field name="ACTORPORT">R</field>
+                            <value name="COLOUR">
                                 <block type="robColour_picker" id="?=D;in,;s2lr@p]Q~EC1" intask="true">
                                     <field name="COLOUR">#cc0000</field>
                                 </block>
                             </value>
                         </block>
-                        <block type="makeblockActions_leds_off" id="5%CsumT9[:T`#whd*!A@" intask="true">
-                            <field name="LEDSIDE">Left</field>
+                        <block type="actions_rgbLed_off" id="5%CsumT9[:T`#whd*!A@" intask="true">
+                            <field name="ACTORPORT">R</field>
                         </block>
                         <block type="festobionicActions_stepmotor" id="RpYe/O6s29XUGAqJkGRb" intask="true">
                             <value name="VALUE">
@@ -32,7 +32,7 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="festobionicflower" xmlversion="3.1" description="" tags="">
+        <block_set robottype="festobionicflower" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="138" y="80">
                 <block type="robConf_rgbled" id="%=kg52SHeud7*/CEei@q" intask="true" deletable="false">
                     <field name="NAME">R</field>

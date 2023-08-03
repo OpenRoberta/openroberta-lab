@@ -21,10 +21,8 @@ int main()
     _cbSetRGBLed(_buf, &_i2c, 4, 0);
     _cbSetRGBLed(_buf, &_i2c, 2, 0);
     _cbSetRGBLed(_buf, &_i2c, 3, 0);
-    _cbSetRGBLed(_buf, &_i2c, 5, 0);
     _cbSetLed(_buf, &_i2c, _cbLedState, 1, 1);
     _cbSetLed(_buf, &_i2c, _cbLedState, 2, 1);
-    _cbSetLed(_buf, &_i2c, _cbLedState, 3, 1);
     _cbStop(_buf, &_i2c);
     release_fiber();
 }

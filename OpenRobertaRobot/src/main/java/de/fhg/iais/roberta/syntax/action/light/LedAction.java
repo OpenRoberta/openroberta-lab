@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
-@NepoPhrase(name = "LED_ACTION", category = "ACTOR", blocklyNames = {"actions_led", "actions_led_botnroll", "actions_led_edison", "actions_led_nibo",
+@NepoPhrase(name = "LED_ACTION", category = "ACTOR", blocklyNames = {"actions_led", "actions_led_edison", "actions_led_nibo",
     "actions_rgbLed_off_nao", "actions_led_off_nao"})
 public final class LedAction extends Action implements WithUserDefinedPort {
     @NepoField(name = "ACTORPORT")

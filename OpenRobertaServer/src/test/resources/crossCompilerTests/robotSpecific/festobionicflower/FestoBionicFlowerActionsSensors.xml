@@ -18,9 +18,9 @@
                                 </block>
                             </value>
                             <statement name="DO0">
-                                <block type="makeblockActions_leds_on" id="[rjKDOA!VEmN#5BZB32h" intask="true">
-                                    <field name="LEDSIDE">Left</field>
-                                    <value name="COLOR">
+                                <block type="actions_rgbLed_on" id="[rjKDOA!VEmN#5BZB32h" intask="true">
+                                    <field name="ACTORPORT">R</field>
+                                    <value name="COLOUR">
                                         <block type="robColour_picker" id=";#OV+_`!R6aSb3Je))Z9" intask="true">
                                             <field name="COLOUR">#cc0000</field>
                                         </block>
@@ -38,9 +38,9 @@
                                 </block>
                             </value>
                             <statement name="DO0">
-                                <block type="makeblockActions_leds_on" id="LD]vi]j`At1)]?SO+hUp" intask="true">
-                                    <field name="LEDSIDE">Left</field>
-                                    <value name="COLOR">
+                                <block type="actions_rgbLed_on" id="LD]vi]j`At1)]?SO+hUp" intask="true">
+                                    <field name="ACTORPORT">R</field>
+                                    <value name="COLOUR">
                                         <block type="robColour_picker" id="JS#L|oY@DNzwEf1k1KzC" intask="true">
                                             <field name="COLOUR">#33ff33</field>
                                         </block>
@@ -74,7 +74,7 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="festobionicflower" xmlversion="3.1" description="" tags="">
+        <block_set robottype="festobionicflower" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="390" y="123">
                 <block type="robConf_rgbled" id="%=kg52SHeud7*/CEei@q" intask="true" deletable="false">
                     <field name="NAME">R</field>

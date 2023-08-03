@@ -102,6 +102,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.CalliopeMethods;
@@ -181,6 +182,15 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         } else {
             throw new DbcException("Invalid port!");
         }
+    }
+
+    private ConfigurationComponent getBusSubComponentForCallibot(ConfigurationComponent callibot, String userDefinedName) {
+        for ( ConfigurationComponent subComponent : callibot.getSubComponents().get("BUS") ) {
+            if ( subComponent.userDefinedPortName.equals(userDefinedName) ) {
+                return subComponent;
+            }
+        }
+        throw new DbcException("Invalid structure for Callibot encountered.");
     }
 
     @Override
@@ -395,12 +405,22 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         String port = motorOnAction.getUserDefinedPort();
-        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
-        switch ( pin1 ) {
+        String pin;
+        ConfigurationComponent confComp = this.robotConfiguration.optConfigurationComponent(port);
+        ConfigurationComponent confCompCallibot = this.robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT);
+
+        boolean isCallibotMotor = confComp == null && confCompCallibot != null;
+        Assert.isTrue(confComp != null || confCompCallibot != null, "Missing both external motor and Callibot.");
+
+        if ( isCallibotMotor ) {
+            pin = getCallibotPin(confCompCallibot, port);
+        } else {
+            pin = confComp.getProperty("PIN1");
+        }
+        switch ( pin ) {
             case "0":
             case "2":
-                this.src.add("_cbSetMotor(_buf, &_i2c, ", pin1, ", ");
+                this.src.add("_cbSetMotor(_buf, &_i2c, ", pin, ", ");
                 motorOnAction.param.getSpeed().accept(this);
                 this.src.add(");");
                 break;
@@ -408,14 +428,14 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
             case "B":
                 this.src.add("_uBit.soundmotor.motor");
                 if ( isDualMode() ) {
-                    this.src.add(pin1);
+                    this.src.add(pin);
                 }
                 this.src.add("On(");
                 motorOnAction.param.getSpeed().accept(this);
                 this.src.add(");");
                 break;
             default:
-                throw new DbcException("visitMotorOnAction; Invalid motor port: " + pin1);
+                throw new DbcException("visitMotorOnAction; Invalid motor port: " + pin);
         }
         return null;
     }
@@ -433,17 +453,27 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         String port = motorStopAction.getUserDefinedPort();
-        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
-        switch ( pin1 ) {
+        String pin;
+        ConfigurationComponent confComp = this.robotConfiguration.optConfigurationComponent(port);
+        ConfigurationComponent confCompCallibot = this.robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT);
+
+        boolean isCallibotMotor = confComp == null && confCompCallibot != null;
+        Assert.isTrue(confComp != null || confCompCallibot != null, "Missing both external motor and Callibot.");
+
+        if ( isCallibotMotor ) {
+            pin = getCallibotPin(confCompCallibot, port);
+        } else {
+            pin = confComp.getProperty("PIN1");
+        }
+        switch ( pin ) {
             case "0":
             case "2":
-                this.src.add("_cbSetMotor(_buf, &_i2c, ", pin1, ", 0);");
+                this.src.add("_cbSetMotor(_buf, &_i2c, ", pin, ", 0);");
                 break;
             case "A":
             case "B":
                 if ( isDualMode() ) {
-                    this.src.add("_uBit.soundmotor.motor", pin1, "Off();"); // Coast vs OFF
+                    this.src.add("_uBit.soundmotor.motor", pin, "Off();"); // Coast vs OFF
                     this.src.add("//float, break and sleep doesn't work with more than one motor connected");
                 } else {
                     this.src.add("_uBit.soundmotor.motor");
@@ -463,7 +493,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
                 }
                 break;
             default:
-                throw new DbcException("visitMotorStopAction; Invalide motor port: " + pin1);
+                throw new DbcException("visitMotorStopAction; Invalide motor port: " + pin);
         }
         return null;
     }
@@ -519,12 +549,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
-        String port = ultrasonicSensor.getUserDefinedPort();
-        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        boolean isCallibot = confComp.componentType.equals("CALLIBOT");
-        if ( isCallibot ) {
+        ConfigurationComponent confCompCallibot = this.robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT);
+        if ( confCompCallibot != null ) {
             this.src.add("_cbGetSampleUltrasonic(_buf, &_i2c)");
         } else {
+            // Safe to say that an external ultrasonic sensor is being used in the configuration
             this.src.add("(_uBit.io.P2.readPulseHigh() * 0.017)");
         }
         return null;
@@ -532,13 +561,17 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
 
     @Override
     public Void visitInfraredSensor(InfraredSensor infraredSensor) {
-        String port = infraredSensor.getUserDefinedPort();
-        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = confComp.componentType.equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
-        if ( pin1.equals("1") || pin1.contentEquals("2") ) {
-            this.src.add("_cbGetSampleInfrared(_buf, &_i2c, ", pin1, ")");
+        ConfigurationComponent confComp = this.robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT);
+        if ( confComp != null ) {
+            String port = infraredSensor.getUserDefinedPort();
+            String pin = getCallibotPin(confComp, port);
+            if ( pin.equals("1") || pin.contentEquals("2") ) {
+                this.src.add("_cbGetSampleInfrared(_buf, &_i2c, ", pin, ")");
+            } else {
+                throw new DbcException("InfraredSensor; Invalid infrared port: " + port);
+            }
         } else {
-            throw new DbcException("InfraredSensor; Invalid infrared port: " + port);
+            throw new DbcException("Infrared sensor only supported with Callibot block.");
         }
         return null;
     }
@@ -1234,12 +1267,15 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     public Void visitBothMotorsOnAction(BothMotorsOnAction bothMotorsOnAction) {
         String portA = bothMotorsOnAction.portA;
         String portB = bothMotorsOnAction.portB;
-        ConfigurationComponent confCompA = this.robotConfiguration.getConfigurationComponent(portA);
-        ConfigurationComponent confCompB = this.robotConfiguration.getConfigurationComponent(portB);
+        ConfigurationComponent confCompA = this.robotConfiguration.optConfigurationComponent(portA);
+        ConfigurationComponent confCompB = this.robotConfiguration.optConfigurationComponent(portB);
+        ConfigurationComponent confCompCallibot = this.robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT);
 
-        if ( confCompA.componentType.equals("CALLIBOT") ) {
+        boolean isCallibotMotor = confCompA == null && confCompB == null && confCompCallibot != null;
+        if ( isCallibotMotor ) {
+            ConfigurationComponent subComponentForCallibot = getBusSubComponentForCallibot(confCompCallibot, portA);
             this.src.add("_cbSetMotors(_buf, &_i2c, ");
-            if ( confCompA.getProperty("MOTOR_L").equals(portA) ) {
+            if ( subComponentForCallibot.componentProperties.get("PORT").equals("MOTOR_L") ) {
                 bothMotorsOnAction.speedA.accept(this);
                 this.src.add(", ");
                 bothMotorsOnAction.speedB.accept(this);
@@ -1389,10 +1425,14 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitServoSetAction(ServoSetAction servoSetAction) {
         String port = servoSetAction.getUserDefinedPort();
-        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        if ( confComp.componentType.equals("CALLIBOT") ) {
+        ConfigurationComponent confComp = this.robotConfiguration.optConfigurationComponent(port);
+        ConfigurationComponent confCompCallibot = this.robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT);
+
+        boolean isCallibotServoMotor = confComp == null && confCompCallibot != null;
+        Assert.isTrue(confComp != null || confCompCallibot != null, "Missing both external servo motor and Callibot.");
+        if ( isCallibotServoMotor ) {
             this.src.add("_cbSetServo(_buf, &_i2c, ");
-            String i2cAddress = getCallibotPin(confComp, port);
+            String i2cAddress = getCallibotPin(confCompCallibot, port);
             this.src.add(i2cAddress);
             this.src.add(", ");
         } else {
@@ -1517,9 +1557,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
             if ( componentType.equals("MOTOR") ) {
                 motorPins.add(confComp.getProperty("PIN1"));
             } else if ( componentType.equals("CALLIBOT") ) {
-                for ( Map.Entry<String, String> entry : confComp.getComponentProperties().entrySet() ) {
-                    if ( entry.getKey().startsWith("MOTOR_") ) {
-                        motorPins.add(CALLIBOT_TO_PIN_MAP.get(entry.getKey()));
+                for ( List<ConfigurationComponent> ccList : confComp.getSubComponents().values() ) {
+                    for ( ConfigurationComponent cc : ccList ) {
+                        if ( cc.componentType.equals("MOTOR") ) {
+                            motorPins.add(CALLIBOT_TO_PIN_MAP.get(cc.componentProperties.get("PORT")));
+                        }
                     }
                 }
             }

@@ -91,7 +91,10 @@
                 <xsl:when test=". = 'robActions_brickLight_on' and ancestor::b:block_set/@robottype = 'nano33ble'">actions_led</xsl:when>
                 <xsl:when test=". = 'robActions_led_off' and ancestor::b:block_set/@robottype = 'nano33ble'">actions_rgbLed_off</xsl:when>
                 <xsl:when test=". = 'robActions_led_on' and ancestor::b:block_set/@robottype = 'nano33ble'">actions_rgbLed_on</xsl:when>
-                <xsl:when test=". = 'robConf_rgbled' and ancestor::b:block_set/@robottype = 'calliope'">robConf_rgbledh</xsl:when>
+                <xsl:when
+                        test=". = 'robConf_rgbled' and ancestor::b:block_set/@robottype = 'calliope' and not(ancestor::b:block/@type = 'robConf_callibot2')">
+                    <xsl:text>robConf_rgbledh</xsl:text>
+                </xsl:when>
                 <xsl:when test=". = 'robConf_led' and ancestor::b:block_set/@robottype = 'wedo'">robConf_rgbled</xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="."/>

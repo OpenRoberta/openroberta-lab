@@ -1,5 +1,5 @@
 
 (repeat [FOREVER_ARDU, BoolConst[value: true]]
-AktionStmt [LedOnAction[side: Left, ledColor: ColorConst[hexValue: #33ffff]]]
-AktionStmt [LedOnAction[side: Right, ledColor: ColorConst[hexValue: #FF0000]]]WaitTimeStmt[time: NumConst[value: 1000]]MethodStmt [MethodCall [sensors, , , VOID]]MethodStmt [MethodCall [sensorsWaitUntil, , , VOID]]
+AktionStmt [RgbLedOnAction[port: EYE_2, colour: ColorConst[hexValue: #33ffff]]]
+AktionStmt [RgbLedOnAction[port: EYE_1, colour: ColorConst[hexValue: #FF0000]]]WaitTimeStmt[time: NumConst[value: 1000]]MethodStmt [MethodCall [sensors, , , VOID]]MethodStmt [MethodCall [sensorsWaitUntil, , , VOID]]
 )

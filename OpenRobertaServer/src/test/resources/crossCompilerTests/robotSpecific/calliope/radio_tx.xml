@@ -118,10 +118,9 @@
                         </block>
                     </value>
                     <statement name="DO">
-                        <block type="mbedActions_leds_on" id="GJj2de#nKspqq*@_md3|" intask="true">
-                            <field name="ACTORPORT">R</field>
-                            <hide name="ACTORPORT" value="R"></hide>
-                            <value name="COLOR">
+                        <block type="actions_rgbLed_hidden_on_calliope" id="dOR5%7A;.).U7l-En`ZF" intask="true">
+                            <hide name="ACTORPORT" value="_R"></hide>
+                            <value name="COLOUR">
                                 <block type="robLists_getIndex" id="9`:3;*A-}/]l~ukt[m|C" intask="true">
                                     <mutation statement="false" at="true" datatype="Colour"></mutation>
                                     <field name="MODE">GET</field>
@@ -163,8 +162,8 @@
                         </block>
                     </statement>
                 </block>
-                <block type="mbedActions_leds_off" id="VyhRL`fPfcC4)ozBgldt" intask="true">
-                    <field name="ACTORPORT">R</field>
+                <block type="actions_rgbLed_hidden_off_calliope" id="q=:`U`Ug,8r0/R2]IC.~" intask="true">
+                    <hide name="ACTORPORT" value="_R"></hide>
                 </block>
                 <block type="mbedActions_display_image" id="Xp@=@.u.;CT7a[3(Ctm`" intask="true">
                     <mutation type="IMAGE"></mutation>
@@ -278,22 +277,21 @@
         </block_set>
     </program>
     <config>
-        <block_set robottype="calliope" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
-            <instance x="1136" y="-1065">
-                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true">
-                    <field name="NAME">Acc</field>
-                </block>
-            </instance>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
             <instance x="1269" y="-1254">
                 <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true">
                     <field name="NAME">A</field>
                     <field name="PIN1">A</field>
                 </block>
             </instance>
+            <instance x="1400" y="-1254">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true">
+                    <field name="NAME">L</field>
+                </block>
+            </instance>
             <instance x="1662" y="-1251">
-                <block type="robConf_rgbled" id="lgi%C3,J!smR:eP0aal_" intask="true">
-                    <field name="NAME">R</field>
-                    <field name="PIN1">0</field>
+                <block type="robConf_rgbledh" id="lgi%C3,J!smR:eP0aal_" intask="true">
+                    <field name="NAME">_R</field>
                 </block>
             </instance>
             <instance x="1269" y="-1190">
@@ -307,9 +305,9 @@
                     <field name="NAME">C</field>
                 </block>
             </instance>
-            <instance x="1348" y="-974">
-                <block type="robConf_gyro" id="lIT?C5y|(7FWCQIUn~pc" intask="true">
-                    <field name="NAME">G</field>
+            <instance x="1400" y="-1123">
+                <block type="robConf_sound" id="e:4V0FcDx%9,.7xO,Ns@" intask="true">
+                    <field name="NAME">M</field>
                 </block>
             </instance>
             <instance x="1692" y="-1133">
@@ -317,19 +315,24 @@
                     <field name="NAME">BZ</field>
                 </block>
             </instance>
+            <instance x="1136" y="-1065">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true">
+                    <field name="NAME">Acc</field>
+                </block>
+            </instance>
             <instance x="1428" y="-1061">
                 <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true">
                     <field name="NAME">TM</field>
                 </block>
             </instance>
-            <instance x="1400" y="-1254">
-                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true">
-                    <field name="NAME">L</field>
+            <instance x="1348" y="-974">
+                <block type="robConf_gyro" id="lIT?C5y|(7FWCQIUn~pc" intask="true">
+                    <field name="NAME">G</field>
                 </block>
             </instance>
-            <instance x="1400" y="-1123">
-                <block type="robConf_sound" id="e:4V0FcDx%9,.7xO,Ns@" intask="true">
-                    <field name="NAME">M</field>
+            <instance x="250" y="250">
+                <block type="robConf_robot" id="robot" intask="true">
+                    <field name="ROBOT">undefined</field>
                 </block>
             </instance>
         </block_set>

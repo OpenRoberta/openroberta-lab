@@ -633,6 +633,7 @@
                             <field name="FREQUENCE">391.995</field>
                         </block>
                         <block type="robActions_play_setVolume" id="Jp-+MMGXs%[qcS(*XgtG" intask="true">
+                            <hide name="ACTORPORT" value="NO PORT"></hide>
                             <value name="VOLUME">
                                 <block type="variables_get" id="tYBBU9]@=u93TA~2-Z%[" intask="true">
                                     <mutation datatype="Number"></mutation>
@@ -665,125 +666,89 @@
                     <mutation declare="false"></mutation>
                     <field name="NAME">lights</field>
                     <statement name="STACK">
-                        <block type="robActions_sensorLight_on" id="8i9H)=oZZWXd-8TOWykI" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">RED</field>
-                            <field name="SWITCH_STATE">ON</field>
-                            <field name="SENSORPORT">1</field>
+                        <block type="actions_rgbled_on_nxt" id="8i9H)=oZZWXd-8TOWykI" inline="true" intask="true">
+                            <field name="ACTORPORT">1</field>
+                            <field name="COLOUR">RED</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="MktUb!nIr~F.,[]C!M=c" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">RED</field>
-                            <field name="SWITCH_STATE">ON</field>
-                            <field name="SENSORPORT">2</field>
+                        <block type="actions_rgbled_on_nxt" id="MktUb!nIr~F.,[]C!M=c" inline="true" intask="true">
+                            <field name="ACTORPORT">2</field>
+                            <field name="COLOUR">RED</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="YacFPVfEl{1o%N4dcx[o" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">RED</field>
-                            <field name="SWITCH_STATE">ON</field>
-                            <field name="SENSORPORT">3</field>
+                        <block type="actions_rgbled_on_nxt" id="YacFPVfEl{1o%N4dcx[o" inline="true" intask="true">
+                            <field name="ACTORPORT">3</field>
+                            <field name="COLOUR">RED</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="i1NZ{/U5gc*^dB##+#m|" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">RED</field>
-                            <field name="SWITCH_STATE">ON</field>
-                            <field name="SENSORPORT">4</field>
+                        <block type="actions_rgbled_on_nxt" id="i1NZ{/U5gc*^dB##+#m|" inline="true" intask="true">
+                            <field name="ACTORPORT">4</field>
+                            <field name="COLOUR">RED</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="/@qL#W0ALx%c8D[xc,L8" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">RED</field>
-                            <field name="SWITCH_STATE">OFF</field>
-                            <field name="SENSORPORT">1</field>
+                        <block type="actions_rgbled_off_nxt" id="/@qL#W0ALx%c8D[xc,L8" inline="true" intask="true">
+                            <field name="ACTORPORT">1</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="Q+%F~HNJ[^#0W(XE]W0=" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">RED</field>
-                            <field name="SWITCH_STATE">OFF</field>
-                            <field name="SENSORPORT">2</field>
+                        <block type="actions_rgbled_off_nxt" id="Q+%F~HNJ[^#0W(XE]W0=" inline="true" intask="true">
+                            <field name="ACTORPORT">2</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="smDCjTmZe_9Z.F-{LY,," inline="true" intask="true">
-                            <field name="SWITCH_COLOR">RED</field>
-                            <field name="SWITCH_STATE">OFF</field>
-                            <field name="SENSORPORT">3</field>
+                        <block type="actions_rgbled_off_nxt" id="smDCjTmZe_9Z.F-{LY,," inline="true" intask="true">
+                            <field name="ACTORPORT">3</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="Q@guo%ji.rR1vIt2+}PS" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">RED</field>
-                            <field name="SWITCH_STATE">OFF</field>
-                            <field name="SENSORPORT">4</field>
+                        <block type="actions_rgbled_off_nxt" id="Q@guo%ji.rR1vIt2+}PS" inline="true" intask="true">
+                            <field name="ACTORPORT">4</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="PN:TxzbnwHMHx|OQ_:^F" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">GREEN</field>
-                            <field name="SWITCH_STATE">ON</field>
-                            <field name="SENSORPORT">1</field>
+                        <block type="actions_rgbled_on_nxt" id="PN:TxzbnwHMHx|OQ_:^F" inline="true" intask="true">
+                            <field name="ACTORPORT">1</field>
+                            <field name="COLOUR">GREEN</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="#MDQnm2Eaj`s-mueU6];" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">GREEN</field>
-                            <field name="SWITCH_STATE">ON</field>
-                            <field name="SENSORPORT">2</field>
+                        <block type="actions_rgbled_on_nxt" id="#MDQnm2Eaj`s-mueU6];" inline="true" intask="true">
+                            <field name="ACTORPORT">2</field>
+                            <field name="COLOUR">GREEN</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="ne2[9:?Q!UcqI3(MCP+3" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">GREEN</field>
-                            <field name="SWITCH_STATE">ON</field>
-                            <field name="SENSORPORT">3</field>
+                        <block type="actions_rgbled_on_nxt" id="ne2[9:?Q!UcqI3(MCP+3" inline="true" intask="true">
+                            <field name="ACTORPORT">3</field>
+                            <field name="COLOUR">GREEN</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="RH2@0MsAsrsNu2}Tza7|" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">GREEN</field>
-                            <field name="SWITCH_STATE">ON</field>
-                            <field name="SENSORPORT">4</field>
+                        <block type="actions_rgbled_on_nxt" id="RH2@0MsAsrsNu2}Tza7|" inline="true" intask="true">
+                            <field name="ACTORPORT">4</field>
+                            <field name="COLOUR">GREEN</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="Xg*13+e^05czz,s/*YM@" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">GREEN</field>
-                            <field name="SWITCH_STATE">OFF</field>
-                            <field name="SENSORPORT">1</field>
+                        <block type="actions_rgbled_off_nxt" id="Xg*13+e^05czz,s/*YM@" inline="true" intask="true">
+                            <field name="ACTORPORT">1</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id=".hi)wy/SO*2z3!DOi5}S" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">GREEN</field>
-                            <field name="SWITCH_STATE">OFF</field>
-                            <field name="SENSORPORT">2</field>
+                        <block type="actions_rgbled_off_nxt" id=".hi)wy/SO*2z3!DOi5}S" inline="true" intask="true">
+                            <field name="ACTORPORT">2</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="281r*U79P~,Bz[UQNYYL" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">GREEN</field>
-                            <field name="SWITCH_STATE">OFF</field>
-                            <field name="SENSORPORT">3</field>
+                        <block type="actions_rgbled_off_nxt" id="281r*U79P~,Bz[UQNYYL" inline="true" intask="true">
+                            <field name="ACTORPORT">3</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="^T7V#qkmJ|*lW_hwNkBi" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">GREEN</field>
-                            <field name="SWITCH_STATE">OFF</field>
-                            <field name="SENSORPORT">4</field>
+                        <block type="actions_rgbled_off_nxt" id="^T7V#qkmJ|*lW_hwNkBi" inline="true" intask="true">
+                            <field name="ACTORPORT">4</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="oOX#s0RN(/7,rE/uOuP)" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">BLUE</field>
-                            <field name="SWITCH_STATE">ON</field>
-                            <field name="SENSORPORT">1</field>
+                        <block type="actions_rgbled_on_nxt" id="oOX#s0RN(/7,rE/uOuP)" inline="true" intask="true">
+                            <field name="ACTORPORT">1</field>
+                            <field name="COLOUR">BLUE</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="04cq#tTkAc9T~3_Pz1V;" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">BLUE</field>
-                            <field name="SWITCH_STATE">ON</field>
-                            <field name="SENSORPORT">2</field>
+                        <block type="actions_rgbled_on_nxt" id="04cq#tTkAc9T~3_Pz1V;" inline="true" intask="true">
+                            <field name="ACTORPORT">2</field>
+                            <field name="COLOUR">BLUE</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="P)7r2L`R20:BqOo@`-x[" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">BLUE</field>
-                            <field name="SWITCH_STATE">ON</field>
-                            <field name="SENSORPORT">3</field>
+                        <block type="actions_rgbled_on_nxt" id="P)7r2L`R20:BqOo@`-x[" inline="true" intask="true">
+                            <field name="ACTORPORT">3</field>
+                            <field name="COLOUR">BLUE</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="{=LCqxD9juDl]l^zp!dY" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">BLUE</field>
-                            <field name="SWITCH_STATE">ON</field>
-                            <field name="SENSORPORT">4</field>
+                        <block type="actions_rgbled_on_nxt" id="{=LCqxD9juDl]l^zp!dY" inline="true" intask="true">
+                            <field name="ACTORPORT">4</field>
+                            <field name="COLOUR">BLUE</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="DVBkLkk1O/*}r?p`R;e." inline="true" intask="true">
-                            <field name="SWITCH_COLOR">BLUE</field>
-                            <field name="SWITCH_STATE">OFF</field>
-                            <field name="SENSORPORT">1</field>
+                        <block type="actions_rgbled_off_nxt" id="DVBkLkk1O/*}r?p`R;e." inline="true" intask="true">
+                            <field name="ACTORPORT">1</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="K/go3;MwuZ,F7%j.+4pA" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">BLUE</field>
-                            <field name="SWITCH_STATE">OFF</field>
-                            <field name="SENSORPORT">2</field>
+                        <block type="actions_rgbled_off_nxt" id="K/go3;MwuZ,F7%j.+4pA" inline="true" intask="true">
+                            <field name="ACTORPORT">2</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="LrBQzB#h/,yv~(B?ys@M" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">BLUE</field>
-                            <field name="SWITCH_STATE">OFF</field>
-                            <field name="SENSORPORT">3</field>
+                        <block type="actions_rgbled_off_nxt" id="LrBQzB#h/,yv~(B?ys@M" inline="true" intask="true">
+                            <field name="ACTORPORT">3</field>
                         </block>
-                        <block type="robActions_sensorLight_on" id="2D82I7y1RO_vbnViJUqQ" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">BLUE</field>
-                            <field name="SWITCH_STATE">OFF</field>
-                            <field name="SENSORPORT">4</field>
+                        <block type="actions_rgbled_off_nxt" id="2D82I7y1RO_vbnViJUqQ" inline="true" intask="true">
+                            <field name="ACTORPORT">4</field>
                         </block>
                     </statement>
                 </block>
@@ -791,25 +756,25 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.1" description="" tags="">
+        <block_set robottype="nxt" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="237" y="43">
                 <block type="robBrick_EV3-Brick" id="1" intask="true" deletable="false">
                     <field name="WHEEL_DIAMETER">5.6</field>
                     <field name="TRACK_WIDTH">12</field>
                     <value name="S1">
-                        <block type="robBrick_colour" id="!^/v=x[DnNw8S~/FU:~H" intask="true"></block>
+                        <block type="robBrick_colour" id="!^/v=x[DnNw8S~/FU:~H" intask="true"/>
                     </value>
                     <value name="S2">
-                        <block type="robBrick_colour" id="xcw)J@P9OMsUEg?rZq@y" intask="true"></block>
+                        <block type="robBrick_colour" id="xcw)J@P9OMsUEg?rZq@y" intask="true"/>
                     </value>
                     <value name="S3">
-                        <block type="robBrick_colour" id="fcksizV*Ztin2DO7Et/Z" intask="true"></block>
+                        <block type="robBrick_colour" id="fcksizV*Ztin2DO7Et/Z" intask="true"/>
                     </value>
                     <value name="S4">
-                        <block type="robBrick_colour" id="bP.!GO0yiuRHWqp^3I{m" intask="true"></block>
+                        <block type="robBrick_colour" id="bP.!GO0yiuRHWqp^3I{m" intask="true"/>
                     </value>
                     <value name="MA">
-                        <block type="robBrick_actor" id="7%{M[5mrXL,QQAhui%Md" intask="true"></block>
+                        <block type="robBrick_actor" id="7%{M[5mrXL,QQAhui%Md" intask="true"/>
                     </value>
                     <value name="MB">
                         <block type="robBrick_motor_big" id="6" intask="true">
@@ -828,7 +793,7 @@
                 </block>
             </instance>
             <instance x="466" y="138">
-                <block type="robBrick_touch" id="2" intask="false"></block>
+                <block type="robBrick_touch" id="2" intask="false"/>
             </instance>
             <instance x="466" y="163">
                 <block type="robBrick_sound" id="3" intask="false">
@@ -836,10 +801,10 @@
                 </block>
             </instance>
             <instance x="466" y="188">
-                <block type="robBrick_light" id="4" intask="false"></block>
+                <block type="robBrick_light" id="4" intask="false"/>
             </instance>
             <instance x="466" y="213">
-                <block type="robBrick_ultrasonic" id="5" intask="false"></block>
+                <block type="robBrick_ultrasonic" id="5" intask="false"/>
             </instance>
         </block_set>
     </config>

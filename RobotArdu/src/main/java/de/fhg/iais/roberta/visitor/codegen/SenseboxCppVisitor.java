@@ -249,7 +249,7 @@ public class SenseboxCppVisitor extends NepoArduinoCppVisitor implements ISenseb
 
     @Override
     public Void visitLedAction(LedAction ledAction) {
-        String mode = transformOnOff2HighLow(ledAction);
+        String mode = transformOnOff2HighLow(ledAction.mode);
         this.src.add("digitalWrite(_led_", ledAction.port, ", ", mode, ");");
         return null;
     }

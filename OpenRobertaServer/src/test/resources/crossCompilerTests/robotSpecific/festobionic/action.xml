@@ -122,13 +122,13 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robActions_brickLight_on" id="_*cGox03}ksE9[7)U[ST" intask="true">
+                        <block type="actions_led" id="_*cGox03}ksE9[7)U[ST" intask="true">
                             <field name="ACTORPORT">L</field>
-                            <field name="SWITCH_BLINK">ON</field>
+                            <field name="MODE">ON</field>
                         </block>
-                        <block type="robActions_brickLight_on" id="oqZl83V9f*WDH^!,p|K?" intask="true">
+                        <block type="actions_led" id="oqZl83V9f*WDH^!,p|K?" intask="true">
                             <field name="ACTORPORT">L</field>
-                            <field name="SWITCH_BLINK">OFF</field>
+                            <field name="MODE">OFF</field>
                         </block>
                         <block type="robActions_motor_on_for_ardu" id="*r53@XJ|PuxozaKYTL60" intask="true">
                             <field name="MOTORPORT">S</field>

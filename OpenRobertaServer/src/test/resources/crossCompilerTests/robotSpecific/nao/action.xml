@@ -1334,56 +1334,56 @@
                     <mutation declare="false"></mutation>
                     <field name="NAME">lights</field>
                     <statement name="STACK">
-                        <block type="naoActions_rgbLeds" id="T%j%7u^T?##SHH[AlRmB" inline="true" intask="true">
-                            <field name="LED">EYES</field>
-                            <value name="COLOR">
+                        <block type="actions_rgbLed_on_nao" id="T%j%7u^T?##SHH[AlRmB" inline="true" intask="true">
+                            <field name="ACTORPORT">EYES</field>
+                            <value name="COLOUR">
                                 <block type="naoColour_picker" id="nG)Y9J0|!vwRPfvbNk8q" intask="true">
                                     <field name="COLOUR">#ff0000</field>
                                 </block>
                             </value>
                         </block>
-                        <block type="naoActions_rgbLeds" id="M_*v2M{L0WDOu=;xD5iZ" inline="true" intask="true">
-                            <field name="LED">LEFTEYE</field>
-                            <value name="COLOR">
+                        <block type="actions_rgbLed_on_nao" id="M_*v2M{L0WDOu=;xD5iZ" inline="true" intask="true">
+                            <field name="ACTORPORT">LEFTEYE</field>
+                            <value name="COLOUR">
                                 <block type="naoColour_picker" id="=Ox-!tmG7ik=eDnG{pIT" intask="true">
                                     <field name="COLOUR">#ffff00</field>
                                 </block>
                             </value>
                         </block>
-                        <block type="naoActions_rgbLeds" id="r[@n`pfT*)AI-fvLd}gM" inline="true" intask="true">
-                            <field name="LED">RIGHTEYE</field>
-                            <value name="COLOR">
+                        <block type="actions_rgbLed_on_nao" id="r[@n`pfT*)AI-fvLd}gM" inline="true" intask="true">
+                            <field name="ACTORPORT">RIGHTEYE</field>
+                            <value name="COLOUR">
                                 <block type="naoColour_picker" id="1pBa!PF~hEGOHoZ352@L" intask="true">
                                     <field name="COLOUR">#33ff33</field>
                                 </block>
                             </value>
                         </block>
-                        <block type="naoActions_rgbLeds" id=";K:/!(8qyPba_eq3Ey@J" inline="true" intask="true">
-                            <field name="LED">LEFTFOOT</field>
-                            <value name="COLOR">
+                        <block type="actions_rgbLed_on_nao" id=";K:/!(8qyPba_eq3Ey@J" inline="true" intask="true">
+                            <field name="ACTORPORT">LEFTFOOT</field>
+                            <value name="COLOUR">
                                 <block type="naoColour_picker" id="4zg|0:ySg!,*Vtl)eAeO" intask="true">
                                     <field name="COLOUR">#33ccff</field>
                                 </block>
                             </value>
                         </block>
-                        <block type="naoActions_rgbLeds" id="mfNrT(ODO37Jlz{Ba`uh" inline="true" intask="true">
-                            <field name="LED">RIGHTFOOT</field>
-                            <value name="COLOR">
+                        <block type="actions_rgbLed_on_nao" id="mfNrT(ODO37Jlz{Ba`uh" inline="true" intask="true">
+                            <field name="ACTORPORT">RIGHTFOOT</field>
+                            <value name="COLOUR">
                                 <block type="naoColour_picker" id="g,g_m/}Xn!***m|UOqwD" intask="true">
                                     <field name="COLOUR">#ffffff</field>
                                 </block>
                             </value>
                         </block>
-                        <block type="naoActions_rgbLeds" id="FucW#s}6(+W4(}3Y4*J?" inline="true" intask="true">
-                            <field name="LED">ALL</field>
-                            <value name="COLOR">
+                        <block type="actions_rgbLed_on_nao" id="FucW#s}6(+W4(}3Y4*J?" inline="true" intask="true">
+                            <field name="ACTORPORT">ALL</field>
+                            <value name="COLOUR">
                                 <block type="naoColour_picker" id="h-DL)v.*:NEQryj*cf)#" intask="true">
                                     <field name="COLOUR">#000000</field>
                                 </block>
                             </value>
                         </block>
-                        <block type="naoActions_setIntensity" id="XUK9Ge%zV;XJo4n|14[," inline="true" intask="true">
-                            <field name="LED">HEAD</field>
+                        <block type="actions_led_on_nao" id="XUK9Ge%zV;XJo4n|14[," inline="true" intask="true">
+                            <field name="ACTORPORT">HEAD</field>
                             <value name="INTENSITY">
                                 <block type="variables_get" id="/;(Clh^lBDm:5MiDp^.;" intask="true">
                                     <mutation datatype="Number"></mutation>
@@ -1391,8 +1391,8 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="naoActions_setIntensity" id="|mX~pmfjyRXxAq)y=sT=" inline="true" intask="true">
-                            <field name="LED">EARS</field>
+                        <block type="actions_led_on_nao" id="|mX~pmfjyRXxAq)y=sT=" inline="true" intask="true">
+                            <field name="ACTORPORT">EARS</field>
                             <value name="INTENSITY">
                                 <block type="variables_get" id="O[Y~iUk@|7!S{H@5@.@w" intask="true">
                                     <mutation datatype="Number"></mutation>
@@ -1400,8 +1400,8 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="naoActions_setIntensity" id="l{pG2[9cEV.Dj5,Xlh6V" inline="true" intask="true">
-                            <field name="LED">LEFTEAR</field>
+                        <block type="actions_led_on_nao" id="l{pG2[9cEV.Dj5,Xlh6V" inline="true" intask="true">
+                            <field name="ACTORPORT">LEFTEAR</field>
                             <value name="INTENSITY">
                                 <block type="variables_get" id="6XLvXv`Z[jZP%d5=[nxe" intask="true">
                                     <mutation datatype="Number"></mutation>
@@ -1409,8 +1409,8 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="naoActions_setIntensity" id="Q0va!P`Zd+g2IZ}_1lL0" inline="true" intask="true">
-                            <field name="LED">RIGHTEAR</field>
+                        <block type="actions_led_on_nao" id="Q0va!P`Zd+g2IZ}_1lL0" inline="true" intask="true">
+                            <field name="ACTORPORT">RIGHTEAR</field>
                             <value name="INTENSITY">
                                 <block type="variables_get" id="[to.=*EL@U5dcaXz?K+Q" intask="true">
                                     <mutation datatype="Number"></mutation>
@@ -1418,8 +1418,8 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="naoActions_setIntensity" id="{Dxjy2LmYyzS5PgC7A.A" inline="true" intask="true">
-                            <field name="LED">CHEST</field>
+                        <block type="actions_led_on_nao" id="{Dxjy2LmYyzS5PgC7A.A" inline="true" intask="true">
+                            <field name="ACTORPORT">CHEST</field>
                             <value name="INTENSITY">
                                 <block type="variables_get" id="E2:oWUqTh+D4H0kwB(u6" intask="true">
                                     <mutation datatype="Number"></mutation>
@@ -1427,71 +1427,93 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="naoActions_ledOff" id="f:66iHqQlsj[/UAOd5p?" intask="true">
-                            <field name="LED">EYES</field>
+                        <block type="actions_rgbLed_off_nao" id="f:66iHqQlsj[/UAOd5p?" intask="true">
+                            <field name="ACTORPORT">EYES</field>
+                            <field name="MODE">OFF</field>
                         </block>
-                        <block type="naoActions_ledOff" id="]@!X?`sI=0!2^PZ29Ktu" intask="true">
-                            <field name="LED">LEFTEYE</field>
+                        <block type="actions_rgbLed_off_nao" id="]@!X?`sI=0!2^PZ29Ktu" intask="true">
+                            <field name="ACTORPORT">LEFTEYE</field>
+                            <field name="MODE">OFF</field>
                         </block>
-                        <block type="naoActions_ledOff" id="Dm9G6[pwE|}z^Q/VRKtE" intask="true">
-                            <field name="LED">RIGHTEYE</field>
+                        <block type="actions_rgbLed_off_nao" id="Dm9G6[pwE|}z^Q/VRKtE" intask="true">
+                            <field name="ACTORPORT">RIGHTEYE</field>
+                            <field name="MODE">OFF</field>
                         </block>
-                        <block type="naoActions_ledOff" id="NV@)Y/r~B-mwl00wtjFH" intask="true">
-                            <field name="LED">LEFTFOOT</field>
+                        <block type="actions_rgbLed_off_nao" id="NV@)Y/r~B-mwl00wtjFH" intask="true">
+                            <field name="ACTORPORT">LEFTFOOT</field>
+                            <field name="MODE">OFF</field>
                         </block>
-                        <block type="naoActions_ledOff" id=")v^d;(xaCHw|(7mg[?B)" intask="true">
-                            <field name="LED">RIGHTFOOT</field>
+                        <block type="actions_rgbLed_off_nao" id=")v^d;(xaCHw|(7mg[?B)" intask="true">
+                            <field name="ACTORPORT">RIGHTFOOT</field>
+                            <field name="MODE">OFF</field>
                         </block>
-                        <block type="naoActions_ledOff" id="~8u9DWmiZeB19w|^kx9#" intask="true">
-                            <field name="LED">EARS</field>
+                        <block type="actions_led_off_nao" id="~8u9DWmiZeB19w|^kx9#" intask="true">
+                            <field name="ACTORPORT">EARS</field>
+                            <field name="MODE">OFF</field>
                         </block>
-                        <block type="naoActions_ledOff" id="zJoz6w/eSdvk8eM3/ssb" intask="true">
-                            <field name="LED">LEFTEAR</field>
+                        <block type="actions_led_off_nao" id="zJoz6w/eSdvk8eM3/ssb" intask="true">
+                            <field name="ACTORPORT">LEFTEAR</field>
+                            <field name="MODE">OFF</field>
                         </block>
-                        <block type="naoActions_ledOff" id="gmf3Y}7lh1|k6av#gunC" intask="true">
-                            <field name="LED">RIGHTEAR</field>
+                        <block type="actions_led_off_nao" id="gmf3Y}7lh1|k6av#gunC" intask="true">
+                            <field name="ACTORPORT">RIGHTEAR</field>
+                            <field name="MODE">OFF</field>
                         </block>
-                        <block type="naoActions_ledOff" id="cje{)GrFEt6Qkt,@gm,I" intask="true">
-                            <field name="LED">CHEST</field>
+                        <block type="actions_led_off_nao" id="cje{)GrFEt6Qkt,@gm,I" intask="true">
+                            <field name="ACTORPORT">CHEST</field>
+                            <field name="MODE">OFF</field>
                         </block>
-                        <block type="naoActions_ledOff" id="1SA7CW[;Xnh1D1+gR6E}" intask="true">
-                            <field name="LED">HEAD</field>
+                        <block type="actions_led_off_nao" id="1SA7CW[;Xnh1D1+gR6E}" intask="true">
+                            <field name="ACTORPORT">HEAD</field>
+                            <field name="MODE">OFF</field>
                         </block>
-                        <block type="naoActions_ledOff" id="0j.Q{3P]fu5n28jTL2?^" intask="true">
-                            <field name="LED">ALL</field>
+                        <block type="actions_led_off_nao" id="0j.Q{3P]fu5n28jTL2?^" intask="true">
+                            <field name="ACTORPORT">ALL</field>
+                            <field name="MODE">OFF</field>
                         </block>
-                        <block type="naoActions_ledReset" id="E`vHD~C9YG=44i,s53SV" intask="true">
-                            <field name="LED">EYES</field>
+                        <block type="actions_rgbLed_off_nao" id="E`vHD~C9YG=44i,s53SV" intask="true">
+                            <field name="ACTORPORT">EYES</field>
+                            <field name="MODE">RESET</field>
                         </block>
-                        <block type="naoActions_ledReset" id="Q8,(*sc9tC#PtSpwWUy1" intask="true">
-                            <field name="LED">LEFTEYE</field>
+                        <block type="actions_rgbLed_off_nao" id="Q8,(*sc9tC#PtSpwWUy1" intask="true">
+                            <field name="ACTORPORT">LEFTEYE</field>
+                            <field name="MODE">RESET</field>
                         </block>
-                        <block type="naoActions_ledReset" id="GYm.qK[vLt,`u*Fv5@KH" intask="true">
-                            <field name="LED">RIGHTEYE</field>
+                        <block type="actions_rgbLed_off_nao" id="GYm.qK[vLt,`u*Fv5@KH" intask="true">
+                            <field name="ACTORPORT">RIGHTEYE</field>
+                            <field name="MODE">RESET</field>
                         </block>
-                        <block type="naoActions_ledReset" id="{)Tz;8Of9}M67,10]c(a" intask="true">
-                            <field name="LED">LEFTFOOT</field>
+                        <block type="actions_rgbLed_off_nao" id="{)Tz;8Of9}M67,10]c(a" intask="true">
+                            <field name="ACTORPORT">LEFTFOOT</field>
+                            <field name="MODE">RESET</field>
                         </block>
-                        <block type="naoActions_ledReset" id="d:!SnP.8la^`=1klfr~p" intask="true">
-                            <field name="LED">RIGHTFOOT</field>
+                        <block type="actions_rgbLed_off_nao" id="d:!SnP.8la^`=1klfr~p" intask="true">
+                            <field name="ACTORPORT">RIGHTFOOT</field>
+                            <field name="MODE">RESET</field>
                         </block>
-                        <block type="naoActions_ledReset" id="P?q+pz*SCSN@4rN,wwd4" intask="true">
-                            <field name="LED">EARS</field>
+                        <block type="actions_led_off_nao" id="P?q+pz*SCSN@4rN,wwd4" intask="true">
+                            <field name="ACTORPORT">EARS</field>
+                            <field name="MODE">RESET</field>
                         </block>
-                        <block type="naoActions_ledReset" id="KtB)+q|Q`pd!px9fPb.H" intask="true">
-                            <field name="LED">LEFTEAR</field>
+                        <block type="actions_led_off_nao" id="KtB)+q|Q`pd!px9fPb.H" intask="true">
+                            <field name="ACTORPORT">LEFTEAR</field>
+                            <field name="MODE">RESET</field>
                         </block>
-                        <block type="naoActions_ledReset" id="XaKx|3KuK=NUB4E@6O:j" intask="true">
-                            <field name="LED">RIGHTEAR</field>
+                        <block type="actions_led_off_nao" id="XaKx|3KuK=NUB4E@6O:j" intask="true">
+                            <field name="ACTORPORT">RIGHTEAR</field>
+                            <field name="MODE">RESET</field>
                         </block>
-                        <block type="naoActions_ledReset" id="d@XY9s.4Hb_6#EvXmJZS" intask="true">
-                            <field name="LED">CHEST</field>
+                        <block type="actions_led_off_nao" id="d@XY9s.4Hb_6#EvXmJZS" intask="true">
+                            <field name="ACTORPORT">CHEST</field>
+                            <field name="MODE">RESET</field>
                         </block>
-                        <block type="naoActions_ledReset" id="a][%?pbkIx5#PGjtiqTL" intask="true">
-                            <field name="LED">HEAD</field>
+                        <block type="actions_led_off_nao" id="a][%?pbkIx5#PGjtiqTL" intask="true">
+                            <field name="ACTORPORT">HEAD</field>
+                            <field name="MODE">RESET</field>
                         </block>
-                        <block type="naoActions_ledReset" id="6/?hD}@ww6%pIc}8*vNS" intask="true">
-                            <field name="LED">ALL</field>
+                        <block type="actions_led_off_nao" id="6/?hD}@ww6%pIc}8*vNS" intask="true">
+                            <field name="ACTORPORT">ALL</field>
+                            <field name="MODE">RESET</field>
                         </block>
                         <block type="naoActions_randomEyes" id="^ex/g1{{Pv~,Fr~L?Sd+" intask="true">
                             <value name="DURATION">
@@ -1515,9 +1537,9 @@
         </block_set>
     </program>
     <config>
-        <block_set robottype="nao" xmlversion="3.1" xmlns="http://de.fhg.iais.roberta.blockly">
+        <block_set robottype="nao" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="138" y="88">
-                <block type="naoBrick_NAO-Brick" id="1">
+                <block type="naoBrick_NAO-Brick" id="1" intask="true">
                     <field name="IP_ADDRESS">0.0.0.0</field>
                     <field name="PORT">22</field>
                     <field name="USERNAME">nao</field>

@@ -1,7 +1,6 @@
-package de.fhg.iais.roberta.visitor.syntax.light;
+package de.fhg.iais.roberta.syntax.action;
 
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
-import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;

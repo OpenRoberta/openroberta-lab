@@ -9,7 +9,6 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.MoveAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
@@ -260,8 +259,11 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     protected ConfigurationComponent checkSensorExists(ExternalSensor sensor) {
         ConfigurationComponent usedSensor = robotConfiguration.optConfigurationComponent(sensor.getUserDefinedPort());
-        if ( usedSensor == null ) {
+        ConfigurationComponent isCallibotUsed = robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT);
+        if ( usedSensor == null && isCallibotUsed == null ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
+        } else if ( isCallibotUsed != null ) {
+//            addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
         } else {
             String type = usedSensor.componentType;
             switch ( sensor.getKind().getName() ) {
@@ -307,15 +309,6 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return usedSensor;
     }
 
-
-    protected ConfigurationComponent checkMotorPort(MoveAction action) {
-        ConfigurationComponent configurationComponent = robotConfiguration.optConfigurationComponent(action.getUserDefinedPort());
-        if ( configurationComponent == null ) {
-            addErrorToPhrase(action, "CONFIGURATION_ERROR_MOTOR_MISSING");
-        }
-        return configurationComponent;
-    }
-
     protected void checkForZeroSpeed(Phrase action, Expr speed) {
         if ( speed.getKind().hasName("NUM_CONST") ) {
             NumConst speedNumConst = (NumConst) speed;
@@ -327,23 +320,12 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     protected Void addActorMaybeCallibot(WithUserDefinedPort phrase) {
         final String userDefinedPort = phrase.getUserDefinedPort();
-        ConfigurationComponent configurationComponent = checkActorByPortExists((Phrase) phrase, userDefinedPort);
+        ConfigurationComponent configurationComponent = robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT);
         if ( configurationComponent != null ) {
-            return addActorMaybeCallibot(phrase, configurationComponent.componentType);
+            usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
         } else {
-            return null; // checkActorByPortExists added the error message
-        }
-    }
-
-    protected Void addActorMaybeCallibot(WithUserDefinedPort phrase, String componentType) {
-        final String userDefinedPort = phrase.getUserDefinedPort();
-        ConfigurationComponent configurationComponent = checkActorByPortExists((Phrase) phrase, userDefinedPort);
-        if ( configurationComponent != null ) {
-            if ( configurationComponent.componentType.equals(SC.CALLIBOT) ) {
-                usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
-            } else {
-                usedHardwareBuilder.addUsedActor(new UsedActor(userDefinedPort, componentType));
-            }
+            configurationComponent = checkActorByPortExists((Phrase) phrase, userDefinedPort);
+            usedHardwareBuilder.addUsedActor(new UsedActor(userDefinedPort, configurationComponent.componentType));
         }
         return null;
     }

@@ -201,16 +201,16 @@
                     <mutation declare="false"></mutation>
                     <field name="NAME">lights</field>
                     <statement name="STACK">
-                        <block type="robActions_led_on" id="}OjhML~05cS=x-GX|.pI" intask="true">
+                        <block type="actions_rgbLed_on" id="}OjhML~05cS=x-GX|.pI" intask="true">
                             <field name="ACTORPORT">L</field>
-                            <value name="COLOR">
+                            <value name="COLOUR">
                                 <block type="variables_get" id="|V)}dAGjBLH6Jv--Jam^" intask="true">
                                     <mutation datatype="Colour"></mutation>
                                     <field name="VAR">colourVar</field>
                                 </block>
                             </value>
                         </block>
-                        <block type="robActions_led_off" id="{i~-Ix45NkRMgp,I~@r2" intask="true">
+                        <block type="actions_rgbLed_off" id="{i~-Ix45NkRMgp,I~@r2" intask="true">
                             <field name="ACTORPORT">L</field>
                         </block>
                     </statement>
@@ -239,9 +239,8 @@
                 </block>
             </instance>
             <instance x="224" y="300">
-                <block type="robConf_led" id="4" intask="true">
+                <block type="robConf_rgbled" id="4" intask="true">
                     <field name="NAME">L</field>
-                    <field name="VAR">W</field>
                 </block>
             </instance>
             <instance x="226" y="370">

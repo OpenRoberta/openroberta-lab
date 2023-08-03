@@ -677,7 +677,7 @@
                         </value>
                     </repetitions>
                 </block>
-                <block type="actions_brickLed_on" id="yS*2cfpkMx~-TSwD6+aC" intask="true">
+                <block type="actions_rgbLed_hidden_on" id="yS*2cfpkMx~-TSwD6+aC" intask="true">
                     <hide name="ACTORPORT" value="_R"></hide>
                     <value name="COLOUR">
                         <block type="colour_picker_spike" id="Q`H.{;Vx*`x7{qY5gJL;" intask="true">

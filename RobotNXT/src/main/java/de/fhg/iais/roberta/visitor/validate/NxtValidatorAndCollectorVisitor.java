@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.syntax.action.NxtRgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
@@ -50,7 +51,6 @@ import de.fhg.iais.roberta.util.syntax.FunctionNames;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.INxtVisitor;
 import de.fhg.iais.roberta.visitor.NxtMethods;
-import de.fhg.iais.roberta.visitor.syntax.light.NxtRgbLedOnAction;
 
 public class NxtValidatorAndCollectorVisitor extends CommonNepoAndMotorValidatorAndCollectorVisitor implements INxtVisitor<Void> {
 

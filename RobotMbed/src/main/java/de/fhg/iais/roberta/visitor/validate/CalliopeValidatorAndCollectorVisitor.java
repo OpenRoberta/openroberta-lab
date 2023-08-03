@@ -245,7 +245,6 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
 
     @Override
     public Void visitMotorStopAction(MotorStopAction motorStopAction) {
-        checkMotorPort(motorStopAction);
         return addActorMaybeCallibot(motorStopAction);
     }
 
@@ -259,7 +258,7 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
     public Void visitServoSetAction(ServoSetAction servoSetAction) {
         addToPhraseIfUnsupportedInSim(servoSetAction, false, isSim);
         requiredComponentVisited(servoSetAction, servoSetAction.value);
-        return addActorMaybeCallibot(servoSetAction, SC.SERVOMOTOR);
+        return addActorMaybeCallibot(servoSetAction);
     }
 
     @Override
@@ -280,7 +279,7 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         addToPhraseIfUnsupportedInSim(ultrasonicSensor, true, isSim);
         checkSensorExists(ultrasonicSensor);
-        return addActorMaybeCallibot(ultrasonicSensor, SC.ULTRASONIC);
+        return addActorMaybeCallibot(ultrasonicSensor);
     }
 
 
@@ -288,13 +287,14 @@ public class CalliopeValidatorAndCollectorVisitor extends MbedValidatorAndCollec
     public Void visitBothMotorsOnAction(BothMotorsOnAction bothMotorsOnAction) {
         ConfigurationComponent usedActorA = robotConfiguration.optConfigurationComponent(bothMotorsOnAction.portA);
         ConfigurationComponent usedActorB = robotConfiguration.optConfigurationComponent(bothMotorsOnAction.portB);
+        ConfigurationComponent usedActorCallibot = robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT);
         boolean allActorsPresent = (usedActorA != null) && (usedActorB != null);
-        if ( !allActorsPresent ) {
-            addErrorToPhrase(bothMotorsOnAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
+        if ( usedActorCallibot != null && usedActorCallibot.componentType.equals("CALLIBOT") ) {
+            usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
         } else if ( bothMotorsOnAction.portA.equals(bothMotorsOnAction.portB) || !usedActorA.componentType.equals(usedActorB.componentType) ) {
             addErrorToPhrase(bothMotorsOnAction, "BLOCK_NOT_EXECUTED");
-        } else if ( usedActorA.componentType.equals("CALLIBOT") ) {
-            usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
+        } else if ( !allActorsPresent ) {
+            addErrorToPhrase(bothMotorsOnAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
         checkDifferentialDrive();
         requiredComponentVisited(bothMotorsOnAction, bothMotorsOnAction.speedA, bothMotorsOnAction.speedB);

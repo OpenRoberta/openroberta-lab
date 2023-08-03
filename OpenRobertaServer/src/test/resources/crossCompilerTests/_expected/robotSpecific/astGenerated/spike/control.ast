@@ -5,5 +5,5 @@ WaitStmt [
 )]
 
 (repeat [FOR_EACH, Binary [IN, VarDeclaration [COLOR, Element, EmptyExpr [defVal=COLOR], false, false], Var [Element2]]]
-AktionStmt [LedOnAction[colour: Var [Element]]]WaitTimeStmt[time: NumConst[value: 500]]
+AktionStmt [RgbLedOnHiddenAction[colour: Var [Element]]]WaitTimeStmt[time: NumConst[value: 500]]
 )

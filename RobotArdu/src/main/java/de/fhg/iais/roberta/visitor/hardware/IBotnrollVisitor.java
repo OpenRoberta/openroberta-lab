@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.visitor.hardware;
 
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
@@ -11,6 +10,7 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.botnroll.BotnrollLedAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -25,7 +25,7 @@ public interface IBotnrollVisitor<V> extends IVisitor<V> {
 
     V visitClearDisplayAction(ClearDisplayAction clearDisplayAction);
 
-    V visitLedAction(LedAction ledAction);
+    V visitBotnrollLedAction(BotnrollLedAction botnrollLedAction);
 
     V visitToneAction(ToneAction toneAction);
 

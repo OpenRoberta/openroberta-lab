@@ -71,4 +71,4 @@ WaitStmt [
 )
 (repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [TimerSensor [1, VALUE, - EMPTY_SLOT -]]], NumConst[value: 500]]]
 )]
-LedOnAction[colour: ColorConst[hexValue: #E701A7]]
+RgbLedOnHiddenAction[colour: ColorConst[hexValue: #E701A7]]

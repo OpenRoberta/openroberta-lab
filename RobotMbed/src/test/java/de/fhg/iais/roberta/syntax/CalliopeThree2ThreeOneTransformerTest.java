@@ -8,6 +8,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.XsltTransformer;
 import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.MbedThree2ThreeOneTransformerWorker;
@@ -115,10 +116,12 @@ public class CalliopeThree2ThreeOneTransformerTest {
             + "    </instance>"
             + "</block_set>";
     private static RobotFactory testFactory;
+    private static XsltTransformer xsltTransformer;
 
     @BeforeClass
     public static void setupBefore() throws Exception {
         AstFactory.loadBlocks();
+        xsltTransformer = new XsltTransformer();
         testFactory = Util.configureRobotPlugin("calliope2017NoBlue", "", "", Collections.emptyList());
     }
 
@@ -133,9 +136,10 @@ public class CalliopeThree2ThreeOneTransformerTest {
                 "ConfigurationComponent[componentType=COMPASS,category=CONFIGURATION_SENSOR,userDefinedName=_C,portName=_C,componentProperties={}]"
             };
 
+
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/three2threeone/old_compass.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_compass.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);
@@ -146,39 +150,34 @@ public class CalliopeThree2ThreeOneTransformerTest {
     @Test
     public void executeTransformer_ShouldReturnTransformedLedRgbled_WhenGivenOldLedRgbled() {
         String expectedProgramAst =
-            "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "LedOnAction[ledColor:ColorConst[hexValue:#ff0000],port:_R],"
-                + "LedOnAction[ledColor:ColorConst[hexValue:#ff0000],port:CalliBot_links_vorne],"
-                + "LedOnAction[ledColor:ColorConst[hexValue:#ff0000],port:CalliBot_rechts_vorne],"
-                + "LedOnAction[ledColor:ColorConst[hexValue:#ff0000],port:CalliBot_links_hinten],"
-                + "LedOnAction[ledColor:ColorConst[hexValue:#ff0000],port:CalliBot_rechts_hinten],"
-                + "LedOnAction[ledColor:ColorConst[hexValue:#ff0000],port:CalliBot_alle],"
-                + "LightOffAction[port:_R],"
-                + "LightOffAction[port:CalliBot_links_vorne],"
-                + "LightOffAction[port:CalliBot_rechts_vorne],"
-                + "LightOffAction[port:CalliBot_links_hinten],"
-                + "LightOffAction[port:CalliBot_rechts_hinten],"
-                + "LightOffAction[port:CalliBot_alle],"
-                + "LightAction[L_CalliBot_links,ON,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CalliBot_links,OFF,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CalliBot_rechts,ON,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CalliBot_rechts,OFF,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CalliBot_beide,ON,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CalliBot_beide,OFF,DEFAULT,EmptyExpr[defVal=COLOR]]]]]";
+            "BlockAST[project=[[Location[x=512,y=50],MainTask[]," +
+                "RgbLedOnAction[port:R,colour:ColorConst[hexValue:#ff0000]]," +
+                "RgbLedOnAction[port:CalliBot_links_vorne,colour:ColorConst[hexValue:#ff0000]]," +
+                "RgbLedOnAction[port:CalliBot_rechts_vorne,colour:ColorConst[hexValue:#ff0000]]," +
+                "RgbLedOnAction[port:CalliBot_links_hinten,colour:ColorConst[hexValue:#ff0000]]," +
+                "RgbLedOnAction[port:CalliBot_rechts_hinten,colour:ColorConst[hexValue:#ff0000]]," +
+                "RgbLedOnAction[port:CalliBot_alle,colour:ColorConst[hexValue:#ff0000]]," +
+                "RgbLedOffAction[port:R]," +
+                "RgbLedOffAction[port:CalliBot_links_vorne]," +
+                "RgbLedOffAction[port:CalliBot_rechts_vorne]," +
+                "RgbLedOffAction[port:CalliBot_links_hinten]," +
+                "RgbLedOffAction[port:CalliBot_rechts_hinten]," +
+                "RgbLedOffAction[port:CalliBot_alle]," +
+                "LedAction[port:L_CalliBot_links,mode:ON]," +
+                "LedAction[port:L_CalliBot_links,mode:OFF]," +
+                "LedAction[port:L_CalliBot_rechts,mode:ON]," +
+                "LedAction[port:L_CalliBot_rechts,mode:OFF]," +
+                "LedAction[port:L_CalliBot_beide,mode:ON]," +
+                "LedAction[port:L_CalliBot_beide,mode:OFF]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=RGBLED,category=CONFIGURATION_ACTOR,userDefinedName=_R,portName=_R,componentProperties={PIN1=0}]",
-                "ConfigurationComponent[componentType=CALLIBOT, category=CONFIGURATION_ACTOR, userDefinedName=CalliBot, portName=CalliBot,"
-                    + "componentProperties={MOTOR_L=CalliBot_links, MOTOR_R=CalliBot_rechts, RGBLED_LF=CalliBot_links_vorne,"
-                    + "RGBLED_RF=CalliBot_rechts_vorne, RGBLED_LR=CalliBot_links_hinten, RGBLED_RR=CalliBot_rechts_hinten,"
-                    + "RGBLED_A=CalliBot_alle, LED_L=L_CalliBot_links, LED_R=L_CalliBot_rechts, LED_B=L_CalliBot_beide,"
-                    + "INFRARED_L=I_CalliBot_links, INFRARED_R=I_CalliBot_rechts, ULTRASONIC=CalliBot_vorne, SERVO_S1=S, SERVO_S2=S5}]"
+                "ConfigurationComponent [componentType=CALLIBOT, category=CONFIGURATION_ACTOR, userDefinedName=CalliBot, portName=CalliBot, componentProperties={}]"
             };
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/three2threeone/old_led_rgbled.xml"), OLD_CONFIGURATION_XML)
-
+                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_led_rgbled.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);
@@ -199,7 +198,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/three2threeone/old_light.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_light.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);
@@ -220,7 +219,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/three2threeone/old_sound.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_sound.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);
@@ -241,8 +240,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/three2threeone/old_temperature.xml"), OLD_CONFIGURATION_XML)
-
+                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_temperature.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);
@@ -261,16 +259,12 @@ public class CalliopeThree2ThreeOneTransformerTest {
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=ULTRASONIC,category=CONFIGURATION_SENSOR,userDefinedName=A1,portName=A1,componentProperties={PIN1=1}]",
-                "ConfigurationComponent[componentType=CALLIBOT, category=CONFIGURATION_ACTOR, userDefinedName=CalliBot, portName=CalliBot,"
-                    + "componentProperties={MOTOR_L=CalliBot_links, MOTOR_R=CalliBot_rechts, RGBLED_LF=CalliBot_links_vorne,"
-                    + "RGBLED_RF=CalliBot_rechts_vorne, RGBLED_LR=CalliBot_links_hinten, RGBLED_RR=CalliBot_rechts_hinten,"
-                    + "RGBLED_A=CalliBot_alle, LED_L=L_CalliBot_links, LED_R=L_CalliBot_rechts, LED_B=L_CalliBot_beide,"
-                    + "INFRARED_L=I_CalliBot_links, INFRARED_R=I_CalliBot_rechts, ULTRASONIC=CalliBot_vorne, SERVO_S1=S, SERVO_S2=S5}]"
+                "ConfigurationComponent [componentType=CALLIBOT, category=CONFIGURATION_ACTOR, userDefinedName=CalliBot, portName=CalliBot, componentProperties={}]"
             };
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/three2threeone/old_ultrasonic.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_ultrasonic.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -298,8 +292,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/three2threeone/old_accelerometer.xml"), OLD_CONFIGURATION_XML)
-
+                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_accelerometer.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);
@@ -322,7 +315,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/three2threeone/old_gyro.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_gyro.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);
@@ -347,7 +340,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/three2threeone/old_sounds.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_sounds.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);
@@ -393,7 +386,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/three2threeone/old_wait_for.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_wait_for.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);

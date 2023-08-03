@@ -118,23 +118,61 @@
                 </block>
             </instance>
             <instance x="742" y="-659">
-                <block type="robConf_callibot" id="A`]]^h1xvKyMp3aTtCT." intask="true">
+                <block type="robConf_callibot2" id="A`]]^h1xvKyMp3aTtCT." intask="true" deletable="false">
                     <field name="NAME">C</field>
-                    <field name="MOTOR_L">M</field>
-                    <field name="MOTOR_R">M3</field>
-                    <field name="RGBLED_LF">R</field>
-                    <field name="RGBLED_RF">R2</field>
-                    <field name="RGBLED_LR">R3</field>
-                    <field name="RGBLED_RR">R4</field>
-                    <field name="RGBLED_A">R5</field>
-                    <field name="LED_L">L</field>
-                    <field name="LED_R">L2</field>
-                    <field name="LED_B">L3</field>
-                    <field name="INFRARED_L">I</field>
-                    <field name="INFRARED_R">I2</field>
-                    <field name="ULTRASONIC">U</field>
-                    <field name="SERVO_S1">S</field>
-                    <field name="SERVO_S2">S5</field>
+                    <statement name="BUS">
+                        <block type="robConf_motorc" id="N65797" intask="true" movable="false">
+                            <field name="NAME">M</field>
+                            <field name="PORT">MOTOR_L</field>
+                        </block>
+                        <block type="robConf_motorc" id="N65800" intask="true" movable="false">
+                            <field name="NAME">M3</field>
+                            <field name="PORT">MOTOR_R</field>
+                        </block>
+                        <block type="robConf_rgbled" id="N65803" intask="true" movable="false">
+                            <field name="NAME">R</field>
+                            <field name="PORT">RGBLED_LF</field>
+                        </block>
+                        <block type="robConf_rgbled" id="N65806" intask="true" movable="false">
+                            <field name="NAME">R2</field>
+                            <field name="PORT">RGBLED_RF</field>
+                        </block>
+                        <block type="robConf_rgbled" id="N65809" intask="true" movable="false">
+                            <field name="NAME">R3</field>
+                            <field name="PORT">RGBLED_LR</field>
+                        </block>
+                        <block type="robConf_rgbled" id="N65812" intask="true" movable="false">
+                            <field name="NAME">R4</field>
+                            <field name="PORT">RGBLED_RR</field>
+                        </block>
+                        <block type="robConf_led" id="N65818" intask="true" movable="false">
+                            <field name="NAME">L</field>
+                            <field name="PORT">LED_L</field>
+                        </block>
+                        <block type="robConf_led" id="N65821" intask="true" movable="false">
+                            <field name="NAME">L2</field>
+                            <field name="PORT">LED_R</field>
+                        </block>
+                        <block type="robConf_infrared" id="N65827" intask="true" movable="false">
+                            <field name="NAME">I</field>
+                            <field name="PORT">INFRARED_L</field>
+                        </block>
+                        <block type="robConf_infrared" id="N65830" intask="true" movable="false">
+                            <field name="NAME">I2</field>
+                            <field name="PORT">INFRARED_R</field>
+                        </block>
+                        <block type="robConf_ultrasonicc" id="N65833" intask="true" movable="false">
+                            <field name="NAME">U</field>
+                        </block>
+                        <block type="robConf_servoc" id="N65836" intask="true" movable="false">
+                            <field name="NAME">S</field>
+                            <field name="PORT">SERVO_S1</field>
+                        </block>
+                        <block type="robConf_servoc" id="N65839" intask="true" movable="false">
+                            <field name="NAME">S5</field>
+                            <field name="PORT">SERVO_S2</field>
+                        </block>
+                    </statement>
                 </block>
             </instance>
             <instance x="-35" y="-255">
@@ -163,7 +201,7 @@
                 </block>
             </instance>
             <instance x="-35" y="-283">
-                <block type="robConf_rgbled" id="lgi%C3,J!smR:eP0aal_" intask="true" deletable="false">
+                <block type="robConf_rgbledh" id="lgi%C3,J!smR:eP0aal_" intask="true" deletable="false">
                     <field name="NAME">_R</field>
                 </block>
             </instance>

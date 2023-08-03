@@ -30,17 +30,17 @@
                 </block>
                 <block type="robControls_loopForever_ardu" id="`mIJB4z:(3D;T%:]?^Iz" intask="true" deletable="false" movable="false">
                     <statement name="DO">
-                        <block type="makeblockActions_leds_on" id="5=:x^2;QksR)8+#hdmW#" intask="true">
-                            <field name="LEDSIDE">Left</field>
-                            <value name="COLOR">
+                        <block type="actions_rgbLed_on_nibo" id="5=:x^2;QksR)8+#hdmW#" intask="true">
+                            <field name="ACTORPORT">EYE_2</field>
+                            <value name="COLOUR">
                                 <block type="robColour_picker" id="cL[d0|-ZNrOgUlAyD5Uc" intask="true">
                                     <field name="COLOUR">#33ffff</field>
                                 </block>
                             </value>
                         </block>
-                        <block type="makeblockActions_leds_on" id="(7k/eh*_Dqp60zwO^UJ{" intask="true">
-                            <field name="LEDSIDE">Right</field>
-                            <value name="COLOR">
+                        <block type="actions_rgbLed_on_nibo" id="(7k/eh*_Dqp60zwO^UJ{" intask="true">
+                            <field name="ACTORPORT">EYE_1</field>
+                            <value name="COLOUR">
                                 <block type="robColour_picker" id="6G7[)X}b.XB1B+i)}ye?" intask="true">
                                     <field name="COLOUR">#FF0000</field>
                                 </block>

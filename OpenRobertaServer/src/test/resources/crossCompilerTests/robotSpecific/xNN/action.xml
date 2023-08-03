@@ -750,6 +750,7 @@
                             <field name="FILE">4</field>
                         </block>
                         <block type="robActions_play_setVolume" id="r7`DlJua:ri!aP]K3*U/" intask="true">
+                            <hide name="ACTORPORT" value="NO PORT"></hide>
                             <value name="VOLUME">
                                 <block type="variables_get" id="gilNzw[.#Ki#.3dPF?XG" intask="true">
                                     <mutation datatype="Number"></mutation>
@@ -849,44 +850,48 @@
                     <mutation declare="false"></mutation>
                     <field name="NAME">lights</field>
                     <statement name="STACK">
-                        <block type="robActions_brickLight_on" id="{%N~7_Ft9XKz!E{jK4n;" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">GREEN</field>
-                            <field name="SWITCH_BLINK">ON</field>
+                        <block type="actions_bricklight_on_ev3" id="{%N~7_Ft9XKz!E{jK4n;" inline="true" intask="true">
+                            <field name="COLOUR">GREEN</field>
+                            <field name="MODE">ON</field>
                         </block>
-                        <block type="robActions_brickLight_on" id="`k^|}P1/^|*b~Yv:4gc!" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">GREEN</field>
-                            <field name="SWITCH_BLINK">FLASH</field>
+                        <block type="actions_bricklight_on_ev3" id="`k^|}P1/^|*b~Yv:4gc!" inline="true" intask="true">
+                            <field name="COLOUR">GREEN</field>
+                            <field name="MODE">FLASH</field>
                         </block>
-                        <block type="robActions_brickLight_on" id="3HF%*]acX}pkVvss:_)T" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">GREEN</field>
-                            <field name="SWITCH_BLINK">DOUBLE_FLASH</field>
+                        <block type="actions_bricklight_on_ev3" id="3HF%*]acX}pkVvss:_)T" inline="true" intask="true">
+                            <field name="COLOUR">GREEN</field>
+                            <field name="MODE">DOUBLE_FLASH</field>
                         </block>
-                        <block type="robActions_brickLight_on" id="t20bJ-Q3mYTx*^u_ngsk" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">ORANGE</field>
-                            <field name="SWITCH_BLINK">ON</field>
+                        <block type="actions_bricklight_on_ev3" id="t20bJ-Q3mYTx*^u_ngsk" inline="true" intask="true">
+                            <field name="COLOUR">ORANGE</field>
+                            <field name="MODE">ON</field>
                         </block>
-                        <block type="robActions_brickLight_on" id="GiW1=?sO@B+u1:b+B7D?" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">ORANGE</field>
-                            <field name="SWITCH_BLINK">FLASH</field>
+                        <block type="actions_bricklight_on_ev3" id="GiW1=?sO@B+u1:b+B7D?" inline="true" intask="true">
+                            <field name="COLOUR">ORANGE</field>
+                            <field name="MODE">FLASH</field>
                         </block>
-                        <block type="robActions_brickLight_on" id="C[(=MsQo2W]*X;z(/VMm" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">ORANGE</field>
-                            <field name="SWITCH_BLINK">DOUBLE_FLASH</field>
+                        <block type="actions_bricklight_on_ev3" id="C[(=MsQo2W]*X;z(/VMm" inline="true" intask="true">
+                            <field name="COLOUR">ORANGE</field>
+                            <field name="MODE">DOUBLE_FLASH</field>
                         </block>
-                        <block type="robActions_brickLight_on" id="cxX9}NwW?(xIKMq7sbL," inline="true" intask="true">
-                            <field name="SWITCH_COLOR">RED</field>
-                            <field name="SWITCH_BLINK">ON</field>
+                        <block type="actions_bricklight_on_ev3" id="cxX9}NwW?(xIKMq7sbL," inline="true" intask="true">
+                            <field name="COLOUR">RED</field>
+                            <field name="MODE">ON</field>
                         </block>
-                        <block type="robActions_brickLight_on" id="SpEM04ZUSu_bn-/s?J_h" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">RED</field>
-                            <field name="SWITCH_BLINK">FLASH</field>
+                        <block type="actions_bricklight_on_ev3" id="SpEM04ZUSu_bn-/s?J_h" inline="true" intask="true">
+                            <field name="COLOUR">RED</field>
+                            <field name="MODE">FLASH</field>
                         </block>
-                        <block type="robActions_brickLight_on" id="{qup]5Pds(/zy1+C65K2" inline="true" intask="true">
-                            <field name="SWITCH_COLOR">RED</field>
-                            <field name="SWITCH_BLINK">DOUBLE_FLASH</field>
+                        <block type="actions_bricklight_on_ev3" id="{qup]5Pds(/zy1+C65K2" inline="true" intask="true">
+                            <field name="COLOUR">RED</field>
+                            <field name="MODE">DOUBLE_FLASH</field>
                         </block>
-                        <block type="robActions_brickLight_off" id="jFTH_XXWU(HOmBFWEYD1" intask="true"></block>
-                        <block type="robActions_brickLight_reset" id="w)=omC:(tAoWN2*iDW#r" intask="true"></block>
+                        <block type="actions_bricklight_off_ev3" id="jFTH_XXWU(HOmBFWEYD1" intask="true">
+                            <field name="MODE">OFF</field>
+                        </block>
+                        <block type="actions_bricklight_off_ev3" id="w)=omC:(tAoWN2*iDW#r" intask="true">
+                            <field name="MODE">RESET</field>
+                        </block>
                     </statement>
                 </block>
             </instance>

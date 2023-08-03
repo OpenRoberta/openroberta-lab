@@ -55,9 +55,11 @@ public final class ConfigurationAst {
         this.password = password;
         this.componentTypes = new ArrayList<>();
         for ( ConfigurationComponent confComp : this.configurationComponents.values() ) {
-            if ( isSuperBlock(confComp) ) {
-                for ( Map.Entry<String, String> entry : confComp.getComponentProperties().entrySet() ) {
-                    this.componentTypes.add(entry.getKey().split("_")[0]);
+            if ( hasSubComponents(confComp) ) {
+                for ( List<ConfigurationComponent> ccList : confComp.getSubComponents().values() ) {
+                    for ( ConfigurationComponent cc : ccList ) {
+                        this.componentTypes.add(cc.componentType.split("_")[0]);
+                    }
                 }
             } else {
                 this.componentTypes.add(confComp.componentType);
@@ -73,8 +75,8 @@ public final class ConfigurationAst {
         return map;
     }
 
-    // TODO add better differentiation
-    private static boolean isSuperBlock(ConfigurationComponent confComp) {
+    // TODO - what about sub components of mBot2 and Joycar?
+    private static boolean hasSubComponents(ConfigurationComponent confComp) {
         return confComp.componentType.equals("CALLIBOT");
     }
 
@@ -194,7 +196,7 @@ public final class ConfigurationAst {
                 this.configurationComponents
                     .values()
                     .stream()
-                    .filter(ConfigurationAst::isSuperBlock)
+                    .filter(ConfigurationAst::hasSubComponents)
                     .filter(cc -> cc.getComponentProperties().entrySet().stream().anyMatch(entry -> entry.getValue().equals(userDefinedName)))
                     .findFirst()
                     .orElseThrow(() -> new DbcException("configuration component missing for user defined name " + userDefinedName));
@@ -210,7 +212,7 @@ public final class ConfigurationAst {
                 this.configurationComponents
                     .values()
                     .stream()
-                    .filter(ConfigurationAst::isSuperBlock)
+                    .filter(ConfigurationAst::hasSubComponents)
                     .filter(cc -> cc.getComponentProperties().entrySet().stream().anyMatch(entry -> entry.getValue().equals(userDefinedName)))
                     .findFirst()
                     .orElse(null);
